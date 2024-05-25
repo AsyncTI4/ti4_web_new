@@ -16,7 +16,7 @@ function MapScreen() {
       })
    })
    
-   return <div><img ref={imgref}></img></div>
+   return <div><img alt="map" ref={imgref}></img></div>
 }
 
 export default MapScreen;
