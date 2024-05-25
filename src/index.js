@@ -11,7 +11,7 @@ import MapScreen from './MapScreen';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>TI4 Web mk. 2</div>,
+    element: <div>TI4 Web mk. 2 blah</div>,
   },
   {
     path: "/map/:mapid",
