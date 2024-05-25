@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <div>TI4 Web mk. 2 blah</div>,
   },
   {
-    path: "/map/:mapid",
+    path: "/game/:mapid",
     element: <MapScreen />
   },
 ]);
