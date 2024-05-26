@@ -20,7 +20,7 @@ function MapScreen() {
     
    useEffect(() => {
     sendJsonMessage({"command":"map", "map":params.mapid})
-   }, [])
+   }, [sendJsonMessage, params.mapid])
 
    useEffect(() => {
     fetch("https://ti4.westaddisonheavyindustries.com/maps.json")
@@ -31,7 +31,7 @@ function MapScreen() {
         const u = pl.find(x => x.MapName === params.mapid).MapURL
         imgref.current.src=u
       })
-   }, [])
+   }, [params.mapid])
    
    return <div className='main'><img alt="map" ref={imgref}></img></div>
 }
