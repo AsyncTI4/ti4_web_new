@@ -20,7 +20,7 @@
     "react-loading-indicators": "^1.0.0",
     "react-router-dom": "^6.26.2",
     "react-use-websocket": "^4.8.1",
-    "react-zoom-pan-pinch": "^3.6.1"
+    "react-zoom-pan-pinch": "3.4.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

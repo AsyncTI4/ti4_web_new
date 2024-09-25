@@ -130,7 +130,13 @@ function MapScreen(props) {
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
-        <Group align="center" h="100%" px="sm" gap="sm" style={{ flexWrap: 'nowrap' }}>
+        <Group
+          align="center"
+          h="100%"
+          px="sm"
+          gap="sm"
+          style={{ flexWrap: "nowrap" }}
+        >
           <img
             src={logo}
             alt="banner"
@@ -145,7 +151,7 @@ function MapScreen(props) {
               onChange={(value) => changeTab(value)}
               value={params.mapid}
             >
-              <Tabs.List style={{ flexWrap: 'nowrap', overflowX: 'hidden' }}>
+              <Tabs.List style={{ flexWrap: "nowrap", overflowX: "hidden" }}>
                 {activeTabs.map((tab) => (
                   <Tabs.Tab
                     key={tab}
@@ -217,6 +223,7 @@ function MapScreen(props) {
                   initialScale={imageScale}
                   minScale={imageScale * 0.5}
                   maxScale={imageScale * zoomFactor}
+                  centerZoomedOut={false}
                 >
                   <TransformComponent
                     wrapperStyle={{
