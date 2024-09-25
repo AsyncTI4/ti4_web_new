@@ -1,11 +1,36 @@
-
-
-
-
 .main {
-    background-color: #030306;
-    width: fit-content;
+  background-color: #030306;
 }
 
+body {
+  background-color: #030306;
+}
 
+.zoomContainer {
+  position: sticky;
+  top: 15px;
+  right: 15px;
+  float: right;
+}
 
+.logo {
+  width: 120px;
+  padding-left: 8px;
+  padding-top: 4px;
+}
+
+.logo-divider {
+  width: 1px;
+  height: 40%;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-left: 8px;
+}
+
+.imageContainer {
+  width: 100vw;
+  height: calc(100vh - 60px);
+  position: relative;
+  overflow: scroll;
+  padding-left: 10px;
+  padding-right: 10px;
+}
