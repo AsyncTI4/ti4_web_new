@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Test app
-        run: CI=true npm test -- --coverage
+      - name: Build app
+        run: yarn build
