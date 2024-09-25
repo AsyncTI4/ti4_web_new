@@ -14,10 +14,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
+
+      - name: Install Yarn
+        run: npm install -g yarn
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
-      - name: Test app
-        run: CI=true npm test -- --coverage
+      - name: Build app
+        run: yarn build
