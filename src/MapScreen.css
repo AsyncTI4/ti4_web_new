@@ -29,8 +29,5 @@ body {
 .imageContainer {
   width: 100vw;
   height: calc(100vh - 60px);
-  position: relative;
-  overflow: scroll;
-  padding-left: 10px;
-  padding-right: 10px;
+
 }
