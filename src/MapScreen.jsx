@@ -13,7 +13,7 @@ import { Atom } from "react-loading-indicators";
 import logo from "./assets/banner.png";
 import { useMaps } from "./useMaps";
 import { useMapSocket } from "./useMapSocket";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, getMatrixTransformStyles } from "react-zoom-pan-pinch";
 
 function MapScreen(props) {
   const navigate = useNavigate();
@@ -125,7 +125,6 @@ function MapScreen(props) {
     image.src = derivedImageUrl;
   }, [derivedImageUrl]);
 
-  console.log("derivedImageUrl", derivedImageUrl);
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -224,11 +223,15 @@ function MapScreen(props) {
                   minScale={imageScale * 0.5}
                   maxScale={imageScale * zoomFactor}
                   centerZoomedOut={false}
+                  customTransform={getMatrixTransformStyles}
                 >
                   <TransformComponent
                     wrapperStyle={{
                       width: "100%",
                       height: "100%",
+                    }}
+                    contentStyle={{
+                      willChange: "transform",
                     }}
                   >
                     {derivedImageUrl ? (
