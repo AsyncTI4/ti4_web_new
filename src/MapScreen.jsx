@@ -125,12 +125,12 @@ function MapScreen(props) {
     image.src = derivedImageUrl;
   }, [derivedImageUrl]);
 
-  console.log('derivedImageUrl', derivedImageUrl)
+  console.log("derivedImageUrl", derivedImageUrl);
 
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
-        <Group align="center" h="100%" px="sm" gap="sm">
+        <Group align="center" h="100%" px="sm" gap="sm" style={{ flexWrap: 'nowrap' }}>
           <img
             src={logo}
             alt="banner"
@@ -139,13 +139,13 @@ function MapScreen(props) {
             style={{ cursor: "pointer" }}
           />
           <div className="logo-divider" />
-          <Group>
+          <div style={{ overflow: "hidden", flexGrow: 1 }}>
             <Tabs
               variant="pills"
               onChange={(value) => changeTab(value)}
               value={params.mapid}
             >
-              <Tabs.List>
+              <Tabs.List style={{ flexWrap: 'nowrap', overflowX: 'hidden' }}>
                 {activeTabs.map((tab) => (
                   <Tabs.Tab
                     key={tab}
@@ -176,7 +176,7 @@ function MapScreen(props) {
                 ))}
               </Tabs.List>
             </Tabs>
-          </Group>
+          </div>
         </Group>
       </AppShell.Header>
 
@@ -196,17 +196,17 @@ function MapScreen(props) {
               {!derivedImageUrl ? (
                 <div
                   style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "calc(100vh - 110px)",
-                  width: "100%",
-                }}
-              >
-                <Atom
-                  color={theme.colors.blue[5]}
-                  size="large"
-                  text="Loading"
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "calc(100vh - 110px)",
+                    width: "100%",
+                  }}
+                >
+                  <Atom
+                    color={theme.colors.blue[5]}
+                    size="large"
+                    text="Loading"
                   />
                 </div>
               ) : undefined}
@@ -230,8 +230,6 @@ function MapScreen(props) {
                   </TransformComponent>
                 </TransformWrapper>
               ) : undefined}
-
-
             </div>
           </div>
         </div>
