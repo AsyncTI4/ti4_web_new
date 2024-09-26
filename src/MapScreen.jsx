@@ -16,6 +16,7 @@ import { useMaps } from "./useMaps";
 import { useMapSocket } from "./useMapSocket";
 import PinchZoomMap from "./PinchZoomMap";
 import { ScrollMap } from "./ScrollMap";
+import "dragscroll/dragscroll.js";
 
 function MapScreen(props) {
   const navigate = useNavigate();

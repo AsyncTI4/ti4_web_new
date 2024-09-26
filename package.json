@@ -15,6 +15,7 @@
     "@tabler/icons-react": "^3.17.0",
     "@tanstack/react-query": "^5.56.2",
     "@widgetbot/react-embed": "^1.9.0",
+    "dragscroll": "^0.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-loading-indicators": "^1.0.0",
