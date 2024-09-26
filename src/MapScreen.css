@@ -1,22 +1,20 @@
 .main {
-  background-color: #030306;
+  background-color: #222;
 }
 
 body {
-  background-color: #030306;
+  background-color: #222;
 }
 
 .zoomContainer {
-  position: sticky;
-  top: 15px;
+  position: fixed;
+  top: 75px;
   right: 15px;
-  float: right;
+  /* float: right; */
 }
 
 .logo {
   width: 120px;
-  padding-left: 8px;
-  padding-top: 4px;
 }
 
 .logo-divider {
@@ -27,7 +25,7 @@ body {
 }
 
 .imageContainer {
-  width: 100vw;
+  width: calc(100vw - 15px);
   height: calc(100vh - 60px);
 
 }

@@ -2,22 +2,20 @@ import {
   AppShell,
   Button,
   Group,
+  Image as MantineImage,
   Loader,
   Tabs,
   useMantineTheme,
 } from "@mantine/core";
 import "./MapScreen.css";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Atom } from "react-loading-indicators";
 import logo from "./assets/banner.png";
 import { useMaps } from "./useMaps";
 import { useMapSocket } from "./useMapSocket";
-import {
-  TransformWrapper,
-  TransformComponent,
-  getMatrixTransformStyles,
-} from "react-zoom-pan-pinch";
+import PinchZoomMap from "./PinchZoomMap";
+import { ScrollMap } from "./ScrollMap";
 
 function MapScreen(props) {
   const navigate = useNavigate();
@@ -68,70 +66,6 @@ function MapScreen(props) {
 
   const derivedImageUrl = imageUrl ?? defaultImageUrl;
 
-  const [container, setContainer] = useState(null);
-
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
-
-  const [imageNaturalWidth, setImageNaturalWidth] = useState(0);
-  const [imageNaturalHeight, setImageNaturalHeight] = useState(0);
-
-  const scaleUp = true;
-  const zoomFactor = 8;
-
-  const imageScale = useMemo(() => {
-    if (
-      containerWidth === 0 ||
-      containerHeight === 0 ||
-      imageNaturalWidth === 0 ||
-      imageNaturalHeight === 0
-    )
-      return 0;
-
-    const scale = containerWidth / imageNaturalWidth;
-    return scaleUp ? scale : Math.max(scale, 1);
-  }, [
-    scaleUp,
-    containerWidth,
-    containerHeight,
-    imageNaturalWidth,
-    imageNaturalHeight,
-  ]);
-
-  const handleResize = useCallback(() => {
-    if (container !== null) {
-      const rect = container.getBoundingClientRect();
-      setContainerWidth(rect.width);
-      setContainerHeight(rect.height);
-    } else {
-      setContainerWidth(0);
-      setContainerHeight(0);
-    }
-  }, [container]);
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [handleResize]);
-
-  const handleImageOnLoad = (image) => {
-    setImageNaturalWidth(image.naturalWidth);
-    setImageNaturalHeight(image.naturalHeight);
-  };
-
-  useEffect(() => {
-    if (!derivedImageUrl) return;
-    const image = new Image();
-    image.onload = () => handleImageOnLoad(image);
-    image.src = derivedImageUrl;
-  }, [derivedImageUrl]);
-
-  const initialScale = Math.max(imageScale, 0.3)
-
-
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
@@ -142,12 +76,16 @@ function MapScreen(props) {
           gap="sm"
           style={{ flexWrap: "nowrap" }}
         >
-          <img
+          <MantineImage
             src={logo}
             alt="banner"
             className="logo"
             onClick={() => navigate("/")}
             style={{ cursor: "pointer" }}
+            h={{ base: 12, sm: 25 }}
+            p={{ base: 0, sm: 4 }}
+            w="auto"
+            fit="contain"
           />
           <div className="logo-divider" />
           <div style={{ overflow: "hidden", flexGrow: 1 }}>
@@ -156,7 +94,13 @@ function MapScreen(props) {
               onChange={(value) => changeTab(value)}
               value={params.mapid}
             >
-              <Tabs.List style={{ flexWrap: "nowrap", overflowX: "hidden" }}>
+              <Tabs.List
+                style={{
+                  flexWrap: "nowrap",
+                  overflowX: "auto",
+                  scrollbarWidth: "none",
+                }}
+              >
                 {activeTabs.map((tab) => (
                   <Tabs.Tab
                     key={tab}
@@ -192,63 +136,42 @@ function MapScreen(props) {
       </AppShell.Header>
 
       <AppShell.Main>
-        <div
-          className="main"
-          style={{ color: "white", backgroundColor: "#222" }}
-        >
+        <div className="main">
           <div className="imageContainer">
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              ref={(el) => setContainer(el)}
-            >
-              {!derivedImageUrl ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "calc(100vh - 110px)",
-                    width: "100%",
-                  }}
-                >
-                  <Atom
-                    color={theme.colors.blue[5]}
-                    size="large"
-                    text="Loading"
-                  />
-                </div>
-              ) : undefined}
-
-              {imageScale > 0 ? (
-                <TransformWrapper
-                  key={`${containerWidth}x${containerHeight}`}
-                  initialScale={initialScale}
-                  minScale={Math.min(imageScale, 0.3)}
-                  maxScale={imageScale * zoomFactor}
-                  centerZoomedOut={false}
-                  initialPositionX={initialScale > imageScale ? -imageNaturalWidth * initialScale / 6 : 0}
-                  initialPositionY={-imageNaturalHeight * initialScale / 8}
-                >
-                  <TransformComponent
-                    wrapperStyle={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
-                    {derivedImageUrl ? (
-                      <img alt="map" src={derivedImageUrl} />
-                    ) : undefined}
-                  </TransformComponent>
-                </TransformWrapper>
-              ) : undefined}
-            </div>
+            {!derivedImageUrl ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "calc(100vh - 110px)",
+                  width: "100%",
+                }}
+              >
+                <Atom
+                  color={theme.colors.blue[5]}
+                  size="large"
+                  text="Loading"
+                />
+              </div>
+            ) : undefined}
+            {isTouchDevice() ? (
+              <PinchZoomMap imageUrl={derivedImageUrl} />
+            ) : (
+              <ScrollMap imageUrl={derivedImageUrl} />
+            )}
           </div>
         </div>
       </AppShell.Main>
     </AppShell>
+  );
+}
+
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
   );
 }
 
