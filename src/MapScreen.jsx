@@ -129,6 +129,9 @@ function MapScreen(props) {
     image.src = derivedImageUrl;
   }, [derivedImageUrl]);
 
+  const initialScale = Math.max(imageScale, 0.3)
+
+
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
@@ -222,10 +225,12 @@ function MapScreen(props) {
               {imageScale > 0 ? (
                 <TransformWrapper
                   key={`${containerWidth}x${containerHeight}`}
-                  initialScale={imageScale}
+                  initialScale={initialScale}
                   minScale={Math.min(imageScale, 0.3)}
                   maxScale={imageScale * zoomFactor}
                   centerZoomedOut={false}
+                  initialPositionX={initialScale > imageScale ? -imageNaturalWidth * initialScale / 6 : 0}
+                  initialPositionY={-imageNaturalHeight * initialScale / 8}
                 >
                   <TransformComponent
                     wrapperStyle={{
