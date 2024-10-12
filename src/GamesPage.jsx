@@ -1,5 +1,3 @@
-import "./MapScreen.css";
-
 import {
   Alert,
   AppShell,
@@ -10,13 +8,14 @@ import {
   SimpleGrid,
   Text,
 } from "@mantine/core";
-import logo from "./assets/banner.png";
-import { useMaps } from "./useMaps";
-import { FullScreenLoader } from "./FullScreenLoader";
+import { useMaps } from "./hooks/useMaps";
+import { FullScreenLoader } from "./components/FullScreenLoader";
 import { useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
+import Logo from "./components/Logo";
+import { DiscordLogin } from "./components/DiscordLogin";
 
-function MapScreen() {
+function GamesPage() {
   const navigate = useNavigate();
 
   const mapsQuery = useMaps();
@@ -26,8 +25,12 @@ function MapScreen() {
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
         <Group align="center" h="100%" px="sm" gap="sm">
-          <img src={logo} alt="banner" className="logo" />
+          <Logo />
           <div className="logo-divider" />
+          <div style={{ flexGrow: 1 }} />
+          <Box visibleFrom="sm">
+            <DiscordLogin />
+          </Box>
         </Group>
       </AppShell.Header>
       <AppShell.Main>
@@ -82,4 +85,4 @@ function MapScreen() {
   );
 }
 
-export default MapScreen;
+export default GamesPage;

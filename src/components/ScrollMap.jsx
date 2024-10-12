@@ -2,32 +2,28 @@ import { useState } from "react";
 import { ZoomControls } from "./ZoomControls";
 
 export function ScrollMap({ imageUrl }) {
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.75);
 
   const handleZoomIn = () => {
     setZoom((prevZoom) => {
       if (prevZoom === undefined) return 1;
-      return Math.min(prevZoom + 0.25, 2);
+      return Math.min(prevZoom + 0.1, 2);
     });
   };
 
   const handleZoomOut = () => {
     setZoom((prevZoom) => {
       if (prevZoom === undefined) return 1;
-      return Math.max(prevZoom - 0.25, 0.5);
+      return Math.max(prevZoom - 0.1, 0.5);
     });
   };
 
   const handleZoomReset = () => {
-    setZoom(1);
+    setZoom(0.5);
   };
 
-  const zoomPercent = zoom
-    ? (zoom * 100).toFixed(0).toString() + "%"
-    : undefined;
-
   return (
-    <>
+    <div style={{ width: "100%", position: "relative" }}>
       <ZoomControls
         zoom={zoom}
         onZoomIn={handleZoomIn}
@@ -40,11 +36,11 @@ export function ScrollMap({ imageUrl }) {
           alt="map"
           src={imageUrl}
           style={{
-            width: zoomPercent,
+            zoom,
             imageRendering: "crisp-edges",
           }}
         />
       ) : undefined}
-    </>
+    </div>
   );
 }

@@ -3,21 +3,27 @@ import "@mantine/core/styles.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import MapScreen from "./MapScreen";
-import GamesScreen from "./GamesScreen";
+import GamePage from "./GamePage";
+import GamesPage from "./GamesPage";
 import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import LoginPage, { loginLoader } from "./LoginPage";
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <GamesScreen />,
+    element: <GamesPage />,
   },
   {
     path: "/game/:mapid",
-    element: <MapScreen />,
+    element: <GamePage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    loader: loginLoader,
   },
 ]);
 
