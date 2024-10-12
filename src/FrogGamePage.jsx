@@ -4,9 +4,9 @@ import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import MapUI from "./components/MapUI";
 import { useFrogMap } from "./hooks/useFrogMap";
 import { useUser } from "./hooks/useUser";
+import { getDiscordOauthUrl } from "./components/DiscordLogin";
 
 import "dragscroll/dragscroll.js";
-import { DISCORD_OAUTH_URL } from "./components/DiscordLogin";
 
 function FrogGamePage() {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function FrogGamePage() {
             <Text size="xl">Please log in with Discord to continue</Text>
             <Button
               component="a"
-              href={DISCORD_OAUTH_URL}
+              href={getDiscordOauthUrl()}
               size="xl"
               leftSection={<IconBrandDiscordFilled />}
             >
