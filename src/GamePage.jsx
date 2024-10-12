@@ -10,6 +10,9 @@ import "dragscroll/dragscroll.js";
 function GamePage() {
   const navigate = useNavigate();
   const params = useParams();
+  useEffect(() => {
+    document.title = `${params.mapid} - | Async TI`;
+  }, [params.mapid]);
 
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => setImageUrl(null), [params.mapid]);

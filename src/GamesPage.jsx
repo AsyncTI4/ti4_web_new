@@ -14,10 +14,13 @@ import { useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
 import Logo from "./components/Logo";
 import { DiscordLogin } from "./components/DiscordLogin";
+import { useEffect } from "react";
 
 function GamesPage() {
+  useEffect(() => {
+    document.title = `Async TI`;
+  }, []);
   const navigate = useNavigate();
-
   const mapsQuery = useMaps();
   const games = mapsQuery.data?.filter((v) => !v.MapName.includes("fow")) ?? [];
 

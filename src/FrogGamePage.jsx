@@ -11,6 +11,9 @@ import "dragscroll/dragscroll.js";
 function FrogGamePage() {
   const navigate = useNavigate();
   const params = useParams();
+  useEffect(() => {
+    document.title = `${params.mapid} - | Async TI`;
+  }, [params.mapid]);
   const frogMap = useFrogMap(params.discordid, params.mapid);
   const imageUrl = frogMap?.data;
   const user = useUser();
