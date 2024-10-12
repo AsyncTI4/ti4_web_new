@@ -2,14 +2,12 @@ import {
   AppShell,
   Button,
   Group,
-  Image as MantineImage,
   Loader,
   Tabs,
   useMantineTheme,
   Box,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
-import logo from "../assets/banner.png";
 import PinchZoomMap from "./PinchZoomMap";
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
@@ -26,7 +24,6 @@ function MapUI({
   imageUrl,
   derivedImageUrl,
   defaultImageUrl,
-  navigate,
 }) {
   const theme = useMantineTheme();
 

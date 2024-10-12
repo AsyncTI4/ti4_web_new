@@ -19,7 +19,7 @@ function GamesPage() {
   const navigate = useNavigate();
 
   const mapsQuery = useMaps();
-  const games = mapsQuery.data ?? [];
+  const games = mapsQuery.data?.filter((v) => !v.MapName.includes("fow")) ?? [];
 
   return (
     <AppShell header={{ height: 60 }}>
