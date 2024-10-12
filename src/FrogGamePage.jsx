@@ -7,6 +7,7 @@ import { useUser } from "./hooks/useUser";
 import { getDiscordOauthUrl } from "./components/DiscordLogin";
 
 import "dragscroll/dragscroll.js";
+import { useEffect } from "react";
 
 function FrogGamePage() {
   const navigate = useNavigate();

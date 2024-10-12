@@ -50,7 +50,7 @@ function GamesPage() {
             </Alert>
           )}
           <SimpleGrid
-            cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
+            cols={{ base: 2, sm: 4, md: 4, lg: 8 }}
             spacing="md"
             verticalSpacing="md"
           >
@@ -58,15 +58,13 @@ function GamesPage() {
               <Card
                 key={game.MapName}
                 shadow="sm"
-                padding="lg"
-                radius="md"
+                padding="xs"
+                radius="sm"
                 withBorder
                 onClick={() => navigate(`/game/${game.MapName}`)}
                 style={{ cursor: "pointer" }}
               >
-                <Card.Section></Card.Section>
-
-                <Text fw={500} size="lg" mt="md">
+                <Text fw={500} size="sm" truncate>
                   {game.MapName}
                 </Text>
 
@@ -74,10 +72,11 @@ function GamesPage() {
                   variant="light"
                   color="blue"
                   fullWidth
-                  mt="md"
-                  radius="md"
+                  size="compact-xs"
+                  mt="xs"
+                  radius="sm"
                 >
-                  View Now
+                  View
                 </Button>
               </Card>
             ))}
