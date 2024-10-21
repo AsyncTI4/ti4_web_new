@@ -72,17 +72,17 @@ export const getOverlayContent = () => {
   ];
 
   const relicSources = [
-    'absol',
-    'codexii',
-    'dane_leaks',
-    'ds',
-    'fake_relics',
-    'ignis_aurora',
-    'pbd100',
-    'pok',
-    'project_pi',
-    'sigma'
-  ]
+    "absol",
+    "codexii",
+    "dane_leaks",
+    "ds",
+    "fake_relics",
+    "ignis_aurora",
+    "pbd100",
+    "pok",
+    "project_pi",
+    "sigma",
+  ];
 
   const fetchUrls = [
     ...publicObjectiveSources.map(
@@ -97,14 +97,31 @@ export const getOverlayContent = () => {
     ...relicSources.map((source) => `${baseUrl}/relics/${source}.json`),
   ];
 
+  // this is such a dumb way of doing this lol
+  const dataSourcePrefixes = [
+    ...Array(publicObjectiveSources.length).fill("objective"),
+    ...Array(techSources.length).fill("tech"),
+    ...Array(leaderSources.length).fill("leader"),
+    ...Array(secretObjectiveSources.length).fill("so"),
+    ...Array(pnSources.length).fill("pn"),
+    ...Array(relicSources.length).fill("relic"),
+  ];
+
+
   return Promise.all(
     fetchUrls.map((url) => fetch(url).then((res) => res.json()))
   ).then((results) => {
-    return results.flatMap(Object.values).reduce((acc, data) => {
-      const key = data.alias ?? data.id;
-      acc[key] = data;
-      return acc;
-    }, {});
+
+    let accumulator = {};
+    results.forEach((dataArray, idx) => {
+      const currentPrefix = dataSourcePrefixes[idx];
+      Object.values(dataArray).forEach((data) => {
+        const key = data.alias ?? data.id;
+        accumulator[`${currentPrefix}:${key}`] = data;
+      });
+    });
+    return accumulator;
+
   });
 };
 

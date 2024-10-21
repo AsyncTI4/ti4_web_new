@@ -16,6 +16,7 @@ export function ScrollMap({ gameId, imageUrl }) {
     handleMouseLeave,
   } = useOverlay(gameId);
   const { zoom, handleZoomIn, handleZoomOut, handleZoomReset } = useZoom();
+  console.log("overlayContent", overlayContent);
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -45,9 +46,12 @@ export function ScrollMap({ gameId, imageUrl }) {
       ) : undefined}
 
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
-        const content = overlayContent?.[overlay.cardID];
+        const content =
+          overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
         const text = content?.text ?? content?.abilityText;
         if (!text || !content) return null;
+        const imageURL = content.imageURL;
+
         return (
           <div
             key={key}
@@ -62,22 +66,26 @@ export function ScrollMap({ gameId, imageUrl }) {
             onMouseEnter={() => handleMouseEnter(key)}
             onMouseLeave={handleMouseLeave}
           >
-            {/* <img
-            src={overlay.imageURL}
-            alt={overlay.name}
-            className={`tooltip-image ${activeTooltip === key ? "active" : ""}`}
-            style={{
-              position: "absolute",
-              zIndex: 1000,
-              maxWidth: "250px",
-              boxShadow: "0 0 10px rgba(0,0,0,0.5)",
-            }}
-          /> */}
-
-            <div className={`tooltip ${activeTooltip === key ? "active" : ""}`}>
-              <h3 className="tooltip-title">{content?.name}</h3>
-              <p className="tooltip-text">{text}</p>
-            </div>
+            {imageURL !== undefined ? (
+              <img
+                src={imageURL}
+                alt={content.name}
+                className={`tooltip-image ${activeTooltip === key ? "active" : ""}`}
+                style={{
+                  position: "absolute",
+                  zIndex: 1000,
+                  maxWidth: "250px",
+                  boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+                }}
+              />
+            ) : (
+              <div
+                className={`tooltip ${activeTooltip === key ? "active" : ""}`}
+              >
+                <h3 className="tooltip-title">{content?.name}</h3>
+                <p className="tooltip-text">{text}</p>
+              </div>
+            )}
           </div>
         );
       })}
