@@ -40,7 +40,7 @@ export function ScrollMap({ imageUrl }) {
           style={{
             ...(isFirefox ? {} : { zoom: zoomLevels[zoomIndex] }),
             [`-moz-transform`]: `scale(${zoomLevels[zoomIndex]})`,
-            [`-moz-transform-origin`]: "center center",
+            [`-moz-transform-origin`]: "top left",
           }}
         />
       ) : undefined}
