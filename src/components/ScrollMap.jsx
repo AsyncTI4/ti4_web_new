@@ -5,6 +5,10 @@ export function ScrollMap({ imageUrl }) {
   const zoomLevels = [0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
   const [zoomIndex, setZoomIndex] = useState(1); // Start at 0.75 (index 1)
 
+  const isFirefox =
+    typeof navigator !== "undefined" &&
+    navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+
   const handleZoomIn = () => {
     setZoomIndex((prevIndex) => Math.min(prevIndex + 1, zoomLevels.length - 1));
   };
@@ -32,7 +36,9 @@ export function ScrollMap({ imageUrl }) {
           alt="map"
           src={imageUrl}
           style={{
-            zoom: zoomLevels[zoomIndex],
+            ...(isFirefox ? {} : { zoom: zoomLevels[zoomIndex] }),
+            [`-moz-transform`]: `scale(${zoomLevels[zoomIndex]})`,
+            [`-moz-transform-origin`]: "center center",
           }}
         />
       ) : undefined}

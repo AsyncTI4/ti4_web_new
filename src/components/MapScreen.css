@@ -10,6 +10,7 @@ body {
   position: fixed;
   top: 75px;
   right: 15px;
+  z-index: 1;
   /* float: right; */
 }
 
