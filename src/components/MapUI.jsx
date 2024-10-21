@@ -42,11 +42,7 @@ function MapUI({
   };
 
   const handleTabRename = (oldTab, newTab) => {
-    if (oldTab !== newTab) {
-      localStorage.setItem(oldTab, newTab);
-      // You might want to update the activeTabs state here as well
-      // and propagate the change to the parent component
-    }
+    if (oldTab !== newTab) localStorage.setItem(oldTab, newTab);
     setEditingTab(null);
   };
 
