@@ -6,6 +6,7 @@ import {
   Tabs,
   useMantineTheme,
   Box,
+  TextInput,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 
@@ -15,6 +16,8 @@ import { DiscordLogin } from "./DiscordLogin";
 import "./MapScreen.css";
 import "dragscroll/dragscroll.js";
 import Logo from "./Logo";
+import { useRef, useState } from "react";
+import { IconPencil } from "@tabler/icons-react";
 
 function MapUI({
   activeTabs,
@@ -25,6 +28,28 @@ function MapUI({
   derivedImageUrl,
   defaultImageUrl,
 }) {
+  const inputRef = useRef(null);
+  const [editingTab, setEditingTab] = useState(null);
+
+  const handleEditClick = (tab, event) => {
+    event.stopPropagation();
+    if (editingTab === tab) {
+      if (inputRef.current) handleTabRename(tab, inputRef.current.value);
+      setEditingTab(null);
+    } else {
+      setEditingTab(tab);
+    }
+  };
+
+  const handleTabRename = (oldTab, newTab) => {
+    if (oldTab !== newTab) {
+      localStorage.setItem(oldTab, newTab);
+      // You might want to update the activeTabs state here as well
+      // and propagate the change to the parent component
+    }
+    setEditingTab(null);
+  };
+
   const theme = useMantineTheme();
 
   return (
@@ -45,19 +70,18 @@ function MapUI({
               onChange={(value) => changeTab(value)}
               value={params.mapid}
             >
-              <Tabs.List
-                style={{
-                  flexWrap: "nowrap",
-                  overflowX: "auto",
-                  scrollbarWidth: "none",
-                }}
-              >
+              <Tabs.List>
                 {activeTabs.map((tab) => (
                   <Tabs.Tab
                     key={tab}
                     value={tab}
                     rightSection={
                       <Group gap="xs">
+                        <IconPencil
+                          size={14}
+                          style={{ cursor: "pointer" }}
+                          onClick={(event) => handleEditClick(tab, event)}
+                        />
                         {tab === params.mapid &&
                         !imageUrl &&
                         defaultImageUrl ? (
@@ -77,7 +101,27 @@ function MapUI({
                       </Group>
                     }
                   >
-                    {tab}
+                    {editingTab === tab ? (
+                      <TextInput
+                        ref={inputRef}
+                        size="xs"
+                        defaultValue={localStorage.getItem(tab) || tab}
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            handleTabRename(tab, e.currentTarget.value);
+                          } else if (e.key === "Escape") {
+                            setEditingTab(null);
+                          }
+                        }}
+                        onBlur={(e) =>
+                          handleTabRename(tab, e.currentTarget.value)
+                        }
+                        autoFocus
+                      />
+                    ) : (
+                      localStorage.getItem(tab) || tab
+                    )}
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
