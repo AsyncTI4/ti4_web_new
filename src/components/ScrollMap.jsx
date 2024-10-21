@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { ZoomControls } from "./ZoomControls";
 
+const defaultZoomIndex = 2;
 export function ScrollMap({ imageUrl }) {
   const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
-  const [zoomIndex, setZoomIndex] = useState(isTouchDevice() ? 0 : 2); // Start at 0.75 (index 1)
+  const [zoomIndex, setZoomIndex] = useState(
+    isTouchDevice() ? 0 : defaultZoomIndex
+  ); // Start at 0.75 (index 1)
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -18,8 +21,7 @@ export function ScrollMap({ imageUrl }) {
   };
 
   const handleZoomReset = () => {
-    // setZoom(0.75);
-    setZoomIndex(1);
+    setZoomIndex(defaultZoomIndex);
   };
 
   return (
