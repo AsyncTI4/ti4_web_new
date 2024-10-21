@@ -153,8 +153,7 @@ function MapUI({
                 />
               </div>
             ) : undefined}
-
-            <ScrollMap imageUrl={derivedImageUrl} />
+            <ScrollMap gameId={params.mapid} imageUrl={derivedImageUrl} />
           </div>
         </div>
       </AppShell.Main>

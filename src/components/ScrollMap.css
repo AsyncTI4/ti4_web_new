@@ -1,0 +1,55 @@
+.scroll-map {
+    width: 100%;
+    position: relative;
+  }
+
+  .overlay-box {
+    position: absolute;
+    box-sizing: border-box;
+  }
+
+  .tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 300px;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+
+  .tooltip.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .tooltip-title {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .tooltip-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .tooltip-image {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+
+  .tooltip-image.active {
+    opacity: 1;
+    visibility: visible;
+  }
