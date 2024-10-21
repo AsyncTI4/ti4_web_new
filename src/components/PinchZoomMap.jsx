@@ -1,5 +1,7 @@
+import { Box } from "@mantine/core";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { DiscordLogin } from "./DiscordLogin";
 
 function PinchZoomMap({ imageUrl }) {
   const [imageNaturalWidth, setImageNaturalWidth] = useState(0);
@@ -73,7 +75,7 @@ function PinchZoomMap({ imageUrl }) {
     <div
       style={{
         width: "100%",
-        height: "100%",
+        height: "calc(100vh - 110px)",
       }}
       ref={(el) => setContainer(el)}
     >
@@ -97,6 +99,9 @@ function PinchZoomMap({ imageUrl }) {
               height: "100%",
             }}
           >
+            <Box p="xs" hiddenFrom="sm">
+              <DiscordLogin />
+            </Box>
             <img alt="map" src={imageUrl} />
           </TransformComponent>
         </TransformWrapper>

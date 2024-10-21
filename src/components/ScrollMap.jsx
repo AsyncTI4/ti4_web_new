@@ -2,30 +2,26 @@ import { useState } from "react";
 import { ZoomControls } from "./ZoomControls";
 
 export function ScrollMap({ imageUrl }) {
-  const [zoom, setZoom] = useState(0.75);
+  const zoomLevels = [0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
+  const [zoomIndex, setZoomIndex] = useState(1); // Start at 0.75 (index 1)
 
   const handleZoomIn = () => {
-    setZoom((prevZoom) => {
-      if (prevZoom === undefined) return 1;
-      return Math.min(prevZoom + 0.1, 2);
-    });
+    setZoomIndex((prevIndex) => Math.min(prevIndex + 1, zoomLevels.length - 1));
   };
 
   const handleZoomOut = () => {
-    setZoom((prevZoom) => {
-      if (prevZoom === undefined) return 1;
-      return Math.max(prevZoom - 0.1, 0.5);
-    });
+    setZoomIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
   const handleZoomReset = () => {
-    setZoom(0.5);
+    // setZoom(0.75);
+    setZoomIndex(1);
   };
 
   return (
     <div style={{ width: "100%", position: "relative" }}>
       <ZoomControls
-        zoom={zoom}
+        zoom={zoomLevels[zoomIndex]}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onZoomReset={handleZoomReset}
@@ -36,8 +32,7 @@ export function ScrollMap({ imageUrl }) {
           alt="map"
           src={imageUrl}
           style={{
-            zoom,
-            imageRendering: "crisp-edges",
+            zoom: zoomLevels[zoomIndex],
           }}
         />
       ) : undefined}

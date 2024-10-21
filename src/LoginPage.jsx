@@ -2,7 +2,11 @@ import { redirect, useLoaderData } from "react-router-dom";
 import { getLocalUser, setLocalUser } from "./hooks/useUser";
 
 async function login(code, userId) {
-  const response = await fetch("/auth/login", {
+  const apiUrl = import.meta.env.DEV
+    ? "/auth/login"
+    : "https://bbg9uiqewd.execute-api.us-east-1.amazonaws.com/Prod/login";
+
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

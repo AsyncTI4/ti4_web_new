@@ -90,12 +90,13 @@ function MapUI({
       </AppShell.Header>
 
       <AppShell.Main>
-        {" "}
         <div className="main">
           <div className="imageContainer">
-            <Box p="xs" hiddenFrom="sm">
-              <DiscordLogin />
-            </Box>
+            {!isTouchDevice() && (
+              <Box p="xs" hiddenFrom="sm">
+                <DiscordLogin />
+              </Box>
+            )}
             {!derivedImageUrl ? (
               <div
                 style={{
@@ -113,6 +114,7 @@ function MapUI({
                 />
               </div>
             ) : undefined}
+
             {isTouchDevice() ? (
               <PinchZoomMap imageUrl={derivedImageUrl} />
             ) : (

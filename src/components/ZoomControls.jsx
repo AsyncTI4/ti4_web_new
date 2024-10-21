@@ -1,9 +1,10 @@
-import { Button, Group } from "@mantine/core";
+import { Button, Group, Text } from "@mantine/core";
 import { IconZoomCancel, IconZoomIn, IconZoomOut } from "@tabler/icons-react";
 
 export function ZoomControls({ zoom, onZoomIn, onZoomOut, onZoomReset }) {
   return (
     <Group className="zoomContainer" gap="xs">
+      <Text>{zoom.toFixed(2) * 100}%</Text>
       <Button
         onClick={onZoomIn}
         size="compact-md"
