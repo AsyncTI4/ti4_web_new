@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
-import PinchZoomMap from "./PinchZoomMap";
+
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
 
@@ -92,11 +92,10 @@ function MapUI({
       <AppShell.Main>
         <div className="main">
           <div className="imageContainer">
-            {!isTouchDevice() && (
-              <Box p="xs" hiddenFrom="sm">
-                <DiscordLogin />
-              </Box>
-            )}
+            <Box p="xs" hiddenFrom="sm">
+              <DiscordLogin />
+            </Box>
+
             {!derivedImageUrl ? (
               <div
                 style={{
@@ -115,23 +114,11 @@ function MapUI({
               </div>
             ) : undefined}
 
-            {isTouchDevice() ? (
-              <PinchZoomMap imageUrl={derivedImageUrl} />
-            ) : (
-              <ScrollMap imageUrl={derivedImageUrl} />
-            )}
+            <ScrollMap imageUrl={derivedImageUrl} />
           </div>
         </div>
       </AppShell.Main>
     </AppShell>
-  );
-}
-
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0
   );
 }
 

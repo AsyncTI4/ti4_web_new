@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ZoomControls } from "./ZoomControls";
 
 export function ScrollMap({ imageUrl }) {
-  const zoomLevels = [0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
-  const [zoomIndex, setZoomIndex] = useState(1); // Start at 0.75 (index 1)
+  const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
+  const [zoomIndex, setZoomIndex] = useState(isTouchDevice() ? 0 : 2); // Start at 0.75 (index 1)
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -24,12 +24,14 @@ export function ScrollMap({ imageUrl }) {
 
   return (
     <div style={{ width: "100%", position: "relative" }}>
-      <ZoomControls
-        zoom={zoomLevels[zoomIndex]}
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onZoomReset={handleZoomReset}
-      />
+      {!isTouchDevice() && (
+        <ZoomControls
+          zoom={zoomLevels[zoomIndex]}
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onZoomReset={handleZoomReset}
+        />
+      )}
 
       {imageUrl ? (
         <img
@@ -43,5 +45,13 @@ export function ScrollMap({ imageUrl }) {
         />
       ) : undefined}
     </div>
+  );
+}
+
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
   );
 }
