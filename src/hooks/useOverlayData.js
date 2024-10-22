@@ -85,6 +85,7 @@ export const getOverlayContent = () => {
   ];
 
   const abilitySources = [
+    "base",
     "ds",
     "keleresplus",
     "miltymod",
