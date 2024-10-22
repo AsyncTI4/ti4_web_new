@@ -84,6 +84,17 @@ export const getOverlayContent = () => {
     "sigma",
   ];
 
+  const abilitySources = [
+    "base",
+    "ds",
+    "keleresplus",
+    "miltymod",
+    "other",
+    "pbd2000",
+    "pok",
+    "project_pi",
+  ];
+
   const fetchUrls = [
     ...publicObjectiveSources.map(
       (source) => `${baseUrl}/public_objectives/${source}.json`
@@ -95,6 +106,7 @@ export const getOverlayContent = () => {
     ),
     ...pnSources.map((source) => `${baseUrl}/promissory_notes/${source}.json`),
     ...relicSources.map((source) => `${baseUrl}/relics/${source}.json`),
+    ...abilitySources.map((source) => `${baseUrl}/abilities/${source}.json`),
   ];
 
   // this is such a dumb way of doing this lol
@@ -105,6 +117,7 @@ export const getOverlayContent = () => {
     ...Array(secretObjectiveSources.length).fill("so"),
     ...Array(pnSources.length).fill("pn"),
     ...Array(relicSources.length).fill("relic"),
+    ...Array(abilitySources.length).fill("ability"),
   ];
 
 

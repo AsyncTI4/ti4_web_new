@@ -16,7 +16,6 @@ export function ScrollMap({ gameId, imageUrl }) {
     handleMouseLeave,
   } = useOverlay(gameId);
   const { zoom, handleZoomIn, handleZoomOut, handleZoomReset } = useZoom();
-  console.log("overlayContent", overlayContent);
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -48,7 +47,16 @@ export function ScrollMap({ gameId, imageUrl }) {
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
         const content =
           overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
-        const text = content?.text ?? content?.abilityText;
+        let text;
+        if(key.startsWith("ability")) {
+          if(content?.window) {
+            text = content?.window + ": " + content?.windowEffect;
+          } else if(content?.permanentEffect) {
+            text = content?.permanentEffect;
+          }
+        } else {
+          text = content?.text ?? content?.abilityText;
+        }
         if (!text || !content) return null;
         const imageURL = content.imageURL;
 
@@ -130,7 +138,8 @@ const filterOverlays = (overlays) =>
         key.startsWith("pn") ||
         key.startsWith("relic") ||
         key.startsWith("so") ||
-        key.startsWith("tech")
+        key.startsWith("tech") ||
+        key.startsWith("ability")
     )
   );
 
