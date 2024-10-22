@@ -3,6 +3,7 @@ import { ZoomControls } from "./ZoomControls";
 import { useOverlayContent, useOverlayData } from "../hooks/useOverlayData";
 
 import "./ScrollMap.css";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const defaultZoomIndex = 2;
 const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
@@ -54,10 +55,14 @@ export function ScrollMap({ gameId, imageUrl }) {
           } else if(content?.permanentEffect) {
             text = content?.permanentEffect;
           }
+        } else if(key.startsWith("strategyCard")) {
+          text = content?.primaryTexts.join(" ");
+          text += " " + content?.secondaryTexts.join(" ");
         } else {
           text = content?.text ?? content?.abilityText;
         }
         if (!text || !content) return null;
+
         const imageURL = content.imageURL;
 
         return (
@@ -69,7 +74,7 @@ export function ScrollMap({ gameId, imageUrl }) {
               top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
               width: `${(overlay.boxXYWH[2] + 2) * zoom}px`,
               height: `${(overlay.boxXYWH[3] + 2) * zoom}px`,
-              border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
+              //border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
             }}
             onMouseEnter={() => handleMouseEnter(key)}
             onMouseLeave={handleMouseLeave}
@@ -139,7 +144,8 @@ const filterOverlays = (overlays) =>
         key.startsWith("relic") ||
         key.startsWith("so") ||
         key.startsWith("tech") ||
-        key.startsWith("ability")
+        key.startsWith("ability") ||
+        key.startsWith("strategyCard")
     )
   );
 
