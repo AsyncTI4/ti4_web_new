@@ -130,7 +130,8 @@ const filterOverlays = (overlays) =>
         key.startsWith("pn") ||
         key.startsWith("relic") ||
         key.startsWith("so") ||
-        key.startsWith("tech")
+        key.startsWith("tech") ||
+        key.startsWith("ability")
     )
   );
 
