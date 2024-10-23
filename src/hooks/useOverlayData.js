@@ -94,7 +94,7 @@ export const getOverlayContent = () => {
     "pok",
     "project_pi",
   ];
-  
+
   const strategyCardSources = [
     "alexg9830",
     "anarchy",
