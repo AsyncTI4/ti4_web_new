@@ -5,8 +5,6 @@ import { useMapSocket } from "./hooks/useMapSocket";
 import { useTabManagement } from "./hooks/useTabManagement";
 import MapUI from "./components/MapUI";
 
-import "dragscroll/dragscroll.js";
-
 function GamePage() {
   const navigate = useNavigate();
   const params = useParams();
