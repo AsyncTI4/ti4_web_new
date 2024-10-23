@@ -14,7 +14,6 @@ import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
 
 import "./MapScreen.css";
-import "dragscroll/dragscroll.js";
 import Logo from "./Logo";
 import { useRef, useState } from "react";
 import { IconPencil } from "@tabler/icons-react";
