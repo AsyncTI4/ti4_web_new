@@ -51,7 +51,10 @@ export function ScrollMap({ gameId, imageUrl }) {
         let text;
         if(key.startsWith("ability")) {
           if(content?.window) {
-            text = content?.window + ": " + content?.windowEffect;
+            text = content?.window;
+            if(content?.windowEffect) {
+              text += ": " + content?.windowEffect;
+            }
           } else if(content?.permanentEffect) {
             text = content?.permanentEffect;
           }
