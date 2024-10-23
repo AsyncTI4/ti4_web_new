@@ -57,25 +57,32 @@ export function ScrollMap({ gameId, imageUrl }) {
           }
         } else if(key.startsWith("strategyCard")) {
           text = content?.primaryTexts.join(" ");
-          text += " " + content?.secondaryTexts.join(" ");
+          if(content?.secondaryTexts) {
+            text += " " + content?.secondaryTexts.join(" ");
+          }
         } else {
           text = content?.text ?? content?.abilityText;
         }
         if (!text || !content) return null;
 
         const imageURL = content.imageURL;
+        let style = {
+          left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
+          top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
+          width: `${(overlay.boxXYWH[2] + 2) * zoom}px`,
+          height: `${(overlay.boxXYWH[3] + 2) * zoom}px`,
+          border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
+        };
+
+        if(key.startsWith("strategyCard")) {
+          delete style.border;
+        }
 
         return (
           <div
             key={key}
             className="overlay-box"
-            style={{
-              left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
-              top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
-              width: `${(overlay.boxXYWH[2] + 2) * zoom}px`,
-              height: `${(overlay.boxXYWH[3] + 2) * zoom}px`,
-              //border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
-            }}
+            style={style}
             onMouseEnter={() => handleMouseEnter(key)}
             onMouseLeave={handleMouseLeave}
           >
