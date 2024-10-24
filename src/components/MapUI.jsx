@@ -7,6 +7,11 @@ import {
   useMantineTheme,
   Box,
   TextInput,
+  Paper,
+  ActionIcon,
+  Image,
+  Text,
+  Collapse,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 
@@ -17,7 +22,12 @@ import "./MapScreen.css";
 import "dragscroll/dragscroll.js";
 import Logo from "./Logo";
 import { useRef, useState } from "react";
-import { IconPencil } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconPencil,
+} from "@tabler/icons-react";
+import PlayerCard from "./PlayerCard";
 
 function MapUI({
   activeTabs,
@@ -47,6 +57,8 @@ function MapUI({
   };
 
   const theme = useMantineTheme();
+
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -136,7 +148,9 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            {!derivedImageUrl ? (
+            <PlayerCard />
+
+            {/* {!derivedImageUrl ? (
               <div
                 style={{
                   display: "flex",
@@ -154,6 +168,59 @@ function MapUI({
               </div>
             ) : undefined}
             <ScrollMap gameId={params.mapid} imageUrl={derivedImageUrl} />
+
+            <Paper
+              shadow="sm"
+              style={{
+                width: 350,
+                position: "fixed",
+                bottom: 20,
+                right: 20,
+                zIndex: 1000,
+                backgroundColor: "transparent",
+              }}
+            >
+              <Group
+                justify="space-between"
+                align="center"
+                bg="dark.8"
+                className="title-bar"
+                style={{
+                  borderTopLeftRadius: 4,
+                  borderTopRightRadius: 4,
+                  borderBottom: !isPanelCollapsed
+                    ? "1px solid #2C2E33"
+                    : "none",
+                }}
+              >
+                <Text m="xs" c="gray.4" fz="xs" fw={500} ff="monospace">
+                  Active System
+                </Text>
+                <ActionIcon
+                  onClick={() => setIsPanelCollapsed(!isPanelCollapsed)}
+                  color="gray"
+                  variant="subtle"
+                  size="sm"
+                  mr="xs"
+                >
+                  {!isPanelCollapsed ? (
+                    <IconChevronUp size={14} />
+                  ) : (
+                    <IconChevronDown size={14} />
+                  )}
+                </ActionIcon>
+              </Group>
+              <Collapse in={!isPanelCollapsed}>
+                <Paper p="xs" bg="dark.7">
+                  <Image
+                    src="https://cdn.discordapp.com/attachments/1297368312136732673/1297368315685240925/pbd5497_2024.10.20_-_01.18.29.520.jpg?ex=6718f7a6&is=6717a626&hm=84e59ef6d63649c5d68f1fbf6a4b323e1c9afaddb814c00f026e66608f964ea7&"
+                    alt="Active System Visualization"
+                    radius="sm"
+                    style={{ border: "1px solid #2C2E33" }}
+                  />
+                </Paper>
+              </Collapse>
+            </Paper> */}
           </div>
         </div>
       </AppShell.Main>
