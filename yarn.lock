@@ -492,7 +492,7 @@
 
 "@widgetbot/react-embed@^1.9.0":
   version "1.9.0"
-  resolved "https://registry.npmjs.org/@widgetbot/react-embed/-/react-embed-1.9.0.tgz"
+  resolved "https://registry.yarnpkg.com/@widgetbot/react-embed/-/react-embed-1.9.0.tgz#775dee7cde04409d62c8246f04ebac4e32361611"
   integrity sha512-+Qgqy7lwLy++lIiHmSsgxUjwcX80iFIHR0QJpKq4W82ePUmq4bTuxvUbxcE+VQH5IjNrWaydGNR8zROV5vUQsA==
   dependencies:
     "@widgetbot/embed-api" "^1.2.11"
