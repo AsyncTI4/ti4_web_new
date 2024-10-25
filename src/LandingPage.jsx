@@ -129,7 +129,20 @@ export default function LandingPage() {
                     <List spacing="xl" size="lg" center icon={<></>}>
                       <List.Item>
                         <Text size="xl" fw={700} c="orange.4">
-                          Input via Discord
+                          Play at your pace
+                        </Text>
+                        <Text size="lg" c="orange.2" mt="xs">
+                          Take your turns when it's convenient for you, no
+                          real-time commitment needed. Our asynchronous play
+                          system allows you to enjoy the epic scale of Twilight
+                          Imperium without the need for marathon gaming
+                          sessions.
+                        </Text>
+                      </List.Item>
+
+                      <List.Item>
+                        <Text size="xl" fw={700} c="orange.4">
+                          Easy to use interface
                         </Text>
                         <Text size="lg" c="orange.2" mt="xs">
                           The Discord bot provides buttons and commands for all
@@ -141,19 +154,7 @@ export default function LandingPage() {
 
                       <List.Item>
                         <Text size="xl" fw={700} c="orange.4">
-                          Fully reversible
-                        </Text>
-                        <Text size="lg" c="orange.2" mt="xs">
-                          Easily undo actions and correct mistakes. Game masters
-                          can manually adjust the game state, allowing for house
-                          rules and creative solutions. Our flexible system
-                          enhances gameplay without limiting your options.
-                        </Text>
-                      </List.Item>
-
-                      <List.Item>
-                        <Text size="xl" fw={700} c="orange.4">
-                          Receive map updates
+                          Constantly updating map
                         </Text>
                         <Text size="lg" c="orange.2" mt="xs">
                           As players input commands, our system automatically
@@ -167,14 +168,13 @@ export default function LandingPage() {
 
                       <List.Item>
                         <Text size="xl" fw={700} c="orange.4">
-                          Play at your pace
+                          Fully reversible
                         </Text>
                         <Text size="lg" c="orange.2" mt="xs">
-                          Take your turns when it's convenient for you, no
-                          real-time commitment needed. Our asynchronous play
-                          system allows you to enjoy the epic scale of Twilight
-                          Imperium without the need for marathon gaming
-                          sessions.
+                          Easily undo actions and correct mistakes. Game masters
+                          can manually adjust the game state, allowing for house
+                          rules and creative solutions. Our flexible system
+                          enhances gameplay without limiting your options.
                         </Text>
                       </List.Item>
                     </List>
