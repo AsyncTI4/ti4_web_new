@@ -55,15 +55,24 @@ export default function LandingPage() {
             }}
           >
             <Container size={1400}>
-              <Grid gutter={64} align="center" mt="xl">
+              <Grid align="center" mt="xl">
                 <Grid.Col span={{ base: 12, lg: 6 }}>
                   <Stack spacing="xl">
                     <Title
                       order={1}
                       className="gradient-text space-title"
                       size={80}
+                      visibleFrom="md"
                     >
-                      Asynchronous Twilight Imperium
+                      Async Twilight Imperium
+                    </Title>
+                    <Title
+                      order={1}
+                      className="gradient-text space-title"
+                      size={60}
+                      hiddenFrom="md"
+                    >
+                      Async Twilight Imperium
                     </Title>
                     <Text size={28} lh={1.2} fw={500} c="orange.1">
                       Conquer the galaxy at your own pace. Experience the epic
@@ -124,7 +133,7 @@ export default function LandingPage() {
               </Title>
 
               <Box id="how-it-works" className="section">
-                <Grid gutter={48} align="center">
+                <Grid align="center">
                   <Grid.Col span={{ base: 12, lg: 6 }}>
                     <List spacing="xl" size="lg" center icon={<></>}>
                       <List.Item>
@@ -210,7 +219,7 @@ export default function LandingPage() {
                 like!
               </Text>
 
-              <Grid gutter="lg">
+              <Grid>
                 {gameNames.map((gameName, index) => (
                   <Grid.Col
                     key={index}
