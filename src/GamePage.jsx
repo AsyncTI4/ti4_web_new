@@ -4,6 +4,7 @@ import { useMaps } from "./hooks/useMaps";
 import { useMapSocket } from "./hooks/useMapSocket";
 import { useTabManagement } from "./hooks/useTabManagement";
 import MapUI from "./components/MapUI";
+import { ReadyState } from "react-use-websocket";
 
 function GamePage() {
   const navigate = useNavigate();
@@ -16,15 +17,10 @@ function GamePage() {
   useEffect(() => setImageUrl(null), [params.mapid]);
 
   const { activeTabs, changeTab, removeTab } = useTabManagement();
-
-  const mapsQuery = useMaps();
-  useMapSocket(params.mapid, setImageUrl);
-
-  const defaultImageUrl = mapsQuery.data?.find(
-    (v) => v.MapName === params.mapid
-  )?.MapURL;
-
-  const derivedImageUrl = imageUrl ?? defaultImageUrl;
+  const { readyState, reconnect, isReconnecting } = useMapSocket(
+    params.mapid,
+    setImageUrl
+  );
 
   return (
     <MapUI
@@ -33,9 +29,10 @@ function GamePage() {
       changeTab={changeTab}
       removeTab={removeTab}
       imageUrl={imageUrl}
-      derivedImageUrl={derivedImageUrl}
-      defaultImageUrl={defaultImageUrl}
       navigate={navigate}
+      showRefresh={readyState === ReadyState.CLOSED}
+      reconnect={reconnect}
+      isReconnecting={isReconnecting}
     />
   );
 }

@@ -7,6 +7,7 @@ import {
   useMantineTheme,
   Box,
   TextInput,
+  ActionIcon,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 
@@ -16,7 +17,7 @@ import { DiscordLogin } from "./DiscordLogin";
 import "./MapScreen.css";
 import Logo from "./Logo";
 import { useRef, useState } from "react";
-import { IconPencil } from "@tabler/icons-react";
+import { IconPencil, IconRefresh } from "@tabler/icons-react";
 
 function MapUI({
   activeTabs,
@@ -24,8 +25,9 @@ function MapUI({
   changeTab,
   removeTab,
   imageUrl,
-  derivedImageUrl,
-  defaultImageUrl,
+  reconnect,
+  isReconnecting,
+  showRefresh,
 }) {
   const inputRef = useRef(null);
   const [editingTab, setEditingTab] = useState(null);
@@ -77,22 +79,17 @@ function MapUI({
                           style={{ cursor: "pointer" }}
                           onClick={(event) => handleEditClick(tab, event)}
                         />
-                        {tab === params.mapid &&
-                        !imageUrl &&
-                        defaultImageUrl ? (
-                          <Loader size="xs" color={theme.colors.blue[1]} />
-                        ) : (
-                          <Button
-                            size="compact-xs"
-                            color="red"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              removeTab(tab);
-                            }}
-                          >
-                            x
-                          </Button>
-                        )}
+
+                        <Button
+                          size="compact-xs"
+                          color="red"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            removeTab(tab);
+                          }}
+                        >
+                          x
+                        </Button>
                       </Group>
                     }
                   >
@@ -135,7 +132,7 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            {!derivedImageUrl ? (
+            {!imageUrl ? (
               <div
                 style={{
                   display: "flex",
@@ -152,7 +149,28 @@ function MapUI({
                 />
               </div>
             ) : undefined}
-            <ScrollMap gameId={params.mapid} imageUrl={derivedImageUrl} />
+            <ScrollMap gameId={params.mapid} imageUrl={imageUrl} />
+
+            {/* New refresh button */}
+            {showRefresh && (
+              <Button
+                variant="filled"
+                size="md"
+                radius="xl"
+                leftSection={<IconRefresh size={20} />}
+                style={{
+                  position: "fixed",
+                  top: "80px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 1000,
+                }}
+                onClick={reconnect}
+                loading={isReconnecting}
+              >
+                Refresh
+              </Button>
+            )}
           </div>
         </div>
       </AppShell.Main>

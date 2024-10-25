@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage />,
+    element: <GamesPage />,
   },
   {
     path: "/game/:mapid",
