@@ -19,17 +19,43 @@ import { DiscordLogin } from "./components/DiscordLogin";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
+import { useMaps } from "./hooks/useMaps";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { useMemo } from "react";
+
+function useMapDetails(mapIds) {
+  const baseApiUrl =
+    "https://bbg9uiqewd.execute-api.us-east-1.amazonaws.com/Prod/map/";
+
+  return useQuery({
+    queryKey: ["mapDetails", mapIds],
+    queryFn: () =>
+      Promise.all(
+        mapIds.map((id) =>
+          fetch(`${baseApiUrl}${id}`).then((res) => res.json())
+        )
+      ).then((results) => results.flat()),
+    enabled: !!mapIds && mapIds.length > 0,
+  });
+}
 
 export default function LandingPage() {
   const theme = useMantineTheme();
-  const gameNames = [
-    "#empyrean-strikes-back",
-    "#return-of-the-mahactans",
-    "#the-phantom-mentak",
-    "#a-new-hacan",
-    "#revenge-of-the-xxcha",
-    "#the-last-jol-nar",
-  ];
+  const mapsQuery = useMaps();
+  const maps = mapsQuery.data ?? [];
+
+  const mapsToHighlight = useMemo(() => {
+    return maps.length > 6
+      ? maps
+          .map((m) => m.MapName)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 6)
+      : maps.map((m) => m.MapName);
+  }, [maps]);
+
+  const mapDetailsQuery = useMapDetails(mapsToHighlight);
+  const mapDetails = mapDetailsQuery.data ?? [];
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -220,7 +246,7 @@ export default function LandingPage() {
               </Text>
 
               <Grid>
-                {gameNames.map((gameName, index) => (
+                {mapDetails.map((mapDetail, index) => (
                   <Grid.Col
                     key={index}
                     span={{
@@ -241,15 +267,33 @@ export default function LandingPage() {
                       }}
                     >
                       <Card.Section withBorder>
-                        <Text size="xl" fw={700} c="orange.4" p="md">
-                          {gameName}
+                        <Text
+                          size="xl"
+                          fw={700}
+                          c="orange.4"
+                          p="md"
+                          style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {mapDetail.customName}
                         </Text>
                       </Card.Section>
 
                       <Stack spacing={2} mt="md">
-                        <Text c="orange.2">Players: 6/6</Text>
-                        <Text c="orange.2">Current Round: 3</Text>
-                        <Text c="orange.2">Last Move: 2 hours ago</Text>
+                        {mapDetail.mapTemplateID != "null" ? (
+                          <Text c="orange.2">
+                            Type: {mapDetail.mapTemplateID}
+                          </Text>
+                        ) : (
+                          <Text c="orange.2">Type: Other</Text>
+                        )}
+                        <Text c="orange.2">
+                          Current Round: {mapDetail.round}
+                        </Text>
+                        <Text c="orange.2">VPs: {mapDetail.vp}</Text>
                       </Stack>
 
                       <Button
@@ -258,6 +302,8 @@ export default function LandingPage() {
                         size="md"
                         variant="gradient"
                         gradient={{ from: "orange", to: "red" }}
+                        component={Link}
+                        to={`/game/${mapDetail.name}`}
                       >
                         Observe Game
                       </Button>
@@ -267,7 +313,7 @@ export default function LandingPage() {
               </Grid>
             </Container>
           </Box>
-          <Box pt={30} pb={120} bg="dark.9">
+          <Box pt={120} pb={120} bg="dark.9">
             <Container size={1600}>
               <Title
                 order={2}
@@ -290,8 +336,8 @@ export default function LandingPage() {
               </Text>
 
               <WidgetBot
-                server="299881420891881473"
-                channel="355719584830980096"
+                server="943410040369479690"
+                channel="1025083568839471165"
                 width="100%"
                 height="600px"
               />
