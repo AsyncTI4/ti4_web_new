@@ -106,6 +106,10 @@ export default function LandingPage() {
                       Discord.
                     </Text>
                     <Button
+                      component="a"
+                      href="https://discord.gg/YeAhUxUB"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       size="xl"
                       variant="filled"
                       color="orange.6"
