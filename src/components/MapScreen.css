@@ -28,5 +28,40 @@ body {
 .imageContainer {
   width: calc(100vw - 15px);
   height: calc(100vh - 60px);
+}
 
+.burger {
+  display: none;
+}
+
+.desktopMenu {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+@media (max-width: 568px) {
+  .burger {
+    display: block;
+    margin-left: auto;
+  }
+
+  .desktopMenu {
+    display: none;
+  }
+}
+
+
+.tabs-scrollable {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.tabs-scrollable::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+.tabs-scrollable [role="tab"] {
+  flex-shrink: 0;
 }

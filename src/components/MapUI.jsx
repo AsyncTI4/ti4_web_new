@@ -1,23 +1,13 @@
-import {
-  AppShell,
-  Button,
-  Group,
-  Loader,
-  Tabs,
-  useMantineTheme,
-  Box,
-  TextInput,
-  ActionIcon,
-} from "@mantine/core";
+import { AppShell, Button, Group, useMantineTheme, Box } from "@mantine/core";
+import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
 
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
+import Logo from "./Logo";
+import { HeaderMenu } from "./HeaderMenu";
 
 import "./MapScreen.css";
-import Logo from "./Logo";
-import { useRef, useState } from "react";
-import { IconPencil, IconRefresh } from "@tabler/icons-react";
 
 function MapUI({
   activeTabs,
@@ -29,24 +19,6 @@ function MapUI({
   isReconnecting,
   showRefresh,
 }) {
-  const inputRef = useRef(null);
-  const [editingTab, setEditingTab] = useState(null);
-
-  const handleEditClick = (tab, event) => {
-    event.stopPropagation();
-    if (editingTab === tab) {
-      if (inputRef.current) handleTabRename(tab, inputRef.current.value);
-      setEditingTab(null);
-    } else {
-      setEditingTab(tab);
-    }
-  };
-
-  const handleTabRename = (oldTab, newTab) => {
-    if (oldTab !== newTab) localStorage.setItem(oldTab, newTab);
-    setEditingTab(null);
-  };
-
   const theme = useMantineTheme();
 
   return (
@@ -61,67 +33,12 @@ function MapUI({
         >
           <Logo />
           <div className="logo-divider" />
-          <div style={{ overflow: "hidden", flexGrow: 1 }}>
-            <Tabs
-              variant="pills"
-              onChange={(value) => changeTab(value)}
-              value={params.mapid}
-            >
-              <Tabs.List>
-                {activeTabs.map((tab) => (
-                  <Tabs.Tab
-                    key={tab}
-                    value={tab}
-                    rightSection={
-                      <Group gap="xs">
-                        <IconPencil
-                          size={14}
-                          style={{ cursor: "pointer" }}
-                          onClick={(event) => handleEditClick(tab, event)}
-                        />
-
-                        <Button
-                          size="compact-xs"
-                          color="red"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            removeTab(tab);
-                          }}
-                        >
-                          x
-                        </Button>
-                      </Group>
-                    }
-                  >
-                    {editingTab === tab ? (
-                      <TextInput
-                        ref={inputRef}
-                        size="xs"
-                        defaultValue={localStorage.getItem(tab) || tab}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            handleTabRename(tab, e.currentTarget.value);
-                          } else if (e.key === "Escape") {
-                            setEditingTab(null);
-                          }
-                        }}
-                        onBlur={(e) =>
-                          handleTabRename(tab, e.currentTarget.value)
-                        }
-                        autoFocus
-                      />
-                    ) : (
-                      localStorage.getItem(tab) || tab
-                    )}
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
-            </Tabs>
-          </div>
-          <Box visibleFrom="sm">
-            <DiscordLogin />
-          </Box>
+          <HeaderMenu
+            mapId={params.mapid}
+            activeTabs={activeTabs}
+            changeTab={changeTab}
+            removeTab={removeTab}
+          />
         </Group>
       </AppShell.Header>
 
