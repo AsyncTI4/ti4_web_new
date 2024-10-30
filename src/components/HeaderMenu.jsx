@@ -17,7 +17,7 @@ import { DiscordLogin } from "./DiscordLogin";
 import "./MapScreen.css";
 
 export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDesktopDropdown, setShowDesktopDropdown] = useState(false);
   const [widthThreshold, setWidthThreshold] = useState(null);
 
   const tabsListRef = useRef(null);
@@ -26,7 +26,7 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
     const checkForOverflow = () => {
       if (widthThreshold && window.innerWidth > widthThreshold) {
         setWidthThreshold(null);
-        setShowDropdown(false);
+        setShowDesktopDropdown(false);
         return;
       }
 
@@ -34,16 +34,16 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
       const { scrollWidth, clientWidth } = tabsListRef.current;
 
       // Store the threshold width when switching to dropdown
-      if (scrollWidth > clientWidth && !showDropdown) {
+      if (scrollWidth > clientWidth && !showDesktopDropdown) {
         setWidthThreshold(window.innerWidth);
-        setShowDropdown(true);
+        setShowDesktopDropdown(true);
       }
     };
 
     checkForOverflow();
     window.addEventListener("resize", checkForOverflow);
     return () => window.removeEventListener("resize", checkForOverflow);
-  }, [activeTabs, showDropdown, widthThreshold]);
+  }, [activeTabs, showDesktopDropdown, widthThreshold]);
 
   const inputRef = useRef(null);
   const [editingTab, setEditingTab] = useState(null);
@@ -66,6 +66,8 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
+
+  const showDropdown = showDesktopDropdown || isTouchDevice();
 
   return (
     <>
@@ -256,5 +258,13 @@ function DropdownView({
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
+  );
+}
+
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
   );
 }

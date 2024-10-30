@@ -29,7 +29,7 @@ function MapUI({
           h="100%"
           px="sm"
           gap="sm"
-          style={{ flexWrap: "nowrap" }}
+          style={{ flexWrap: "nowrap", maxWidth: "100vw" }}
         >
           <Logo />
           <div className="logo-divider" />
