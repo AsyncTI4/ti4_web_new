@@ -112,6 +112,23 @@ export const getOverlayContent = () => {
     "voice_of_the_council",
   ];
 
+  const unitSources = [
+    "absol",
+    "admins",
+    "baseUnits",
+    "drahn",
+    "ds",
+    "flagshipping",
+    "ignis_aurora",
+    "keleres",
+    "lazax",
+    "miltymod",
+    "pbd2000",
+    "pok",
+    "project_pi",
+    "qulane"
+  ];
+
   const fetchUrls = [
     ...publicObjectiveSources.map(
       (source) => `${baseUrl}/public_objectives/${source}.json`
@@ -125,6 +142,7 @@ export const getOverlayContent = () => {
     ...relicSources.map((source) => `${baseUrl}/relics/${source}.json`),
     ...abilitySources.map((source) => `${baseUrl}/abilities/${source}.json`),
     ...strategyCardSources.map((source) => `${baseUrl}/strategy_cards/${source}.json`),
+    ...unitSources.map((source) => `${baseUrl}/units/${source}.json`),
   ];
 
   // this is such a dumb way of doing this lol
@@ -137,6 +155,7 @@ export const getOverlayContent = () => {
     ...Array(relicSources.length).fill("relic"),
     ...Array(abilitySources.length).fill("ability"),
     ...Array(strategyCardSources.length).fill("strategyCard"),
+    ...Array(unitSources.length).fill("unit"),
   ];
 
 
