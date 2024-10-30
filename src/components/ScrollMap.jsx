@@ -63,6 +63,8 @@ export function ScrollMap({ gameId, imageUrl }) {
           if(content?.secondaryTexts) {
             text += " " + content?.secondaryTexts.join(" ");
           }
+        } else if(key.startsWith("unit") && content?.ability) {
+            text = content?.ability;
         } else {
           text = content?.text ?? content?.abilityText;
         }
@@ -77,7 +79,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        if(key.startsWith("strategyCard")) {
+        if(key.startsWith("strategyCard") || key.startsWith("unit")) {
           delete style.border;
         }
 
@@ -155,7 +157,8 @@ const filterOverlays = (overlays) =>
         key.startsWith("so") ||
         key.startsWith("tech") ||
         key.startsWith("ability") ||
-        key.startsWith("strategyCard")
+        key.startsWith("strategyCard") || 
+        key.startsWith("unit") 
     )
   );
 
