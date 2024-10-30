@@ -48,9 +48,6 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
   const inputRef = useRef(null);
   const [editingTab, setEditingTab] = useState(null);
 
-  const [value, setValue] = useState(null);
-  const [search, setSearch] = useState("");
-
   const handleEditClick = (tab, event) => {
     event.stopPropagation();
     if (editingTab === tab) {
@@ -70,6 +67,117 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
+  return (
+    <>
+      <div style={{ flex: 1 }}>
+        {!showDropdown ? (
+          <TabView
+            mapId={mapId}
+            activeTabs={activeTabs}
+            changeTab={changeTab}
+            tabsListRef={tabsListRef}
+            editingTab={editingTab}
+            inputRef={inputRef}
+            handleEditClick={handleEditClick}
+            handleTabRename={handleTabRename}
+            removeTab={removeTab}
+          />
+        ) : (
+          <DropdownView
+            mapId={mapId}
+            combobox={combobox}
+            changeTab={changeTab}
+            activeTabs={activeTabs}
+            editingTab={editingTab}
+            inputRef={inputRef}
+            handleEditClick={handleEditClick}
+            handleTabRename={handleTabRename}
+            removeTab={removeTab}
+          />
+        )}
+      </div>
+      <Box visibleFrom="sm">
+        <DiscordLogin />
+      </Box>
+    </>
+  );
+}
+
+function TabView({
+  mapId,
+  activeTabs,
+  changeTab,
+  tabsListRef,
+  editingTab,
+  inputRef,
+  handleEditClick,
+  handleTabRename,
+  removeTab,
+}) {
+  return (
+    <Tabs variant="pills" onChange={changeTab} value={mapId}>
+      <Tabs.List className="tabs-scrollable" ref={tabsListRef}>
+        {activeTabs.map((tab) => (
+          <Tabs.Tab
+            key={tab}
+            value={tab}
+            rightSection={
+              <Group gap="xs">
+                <IconPencil
+                  size={14}
+                  style={{ cursor: "pointer" }}
+                  onClick={(event) => handleEditClick(tab, event)}
+                />
+                <Button
+                  size="compact-xs"
+                  color="red"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeTab(tab);
+                  }}
+                >
+                  x
+                </Button>
+              </Group>
+            }
+          >
+            {editingTab === tab ? (
+              <TextInput
+                ref={inputRef}
+                size="xs"
+                defaultValue={localStorage.getItem(tab) || tab}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleTabRename(tab, e.currentTarget.value);
+                  } else if (e.key === "Escape") {
+                    handleTabRename(tab, tab); // Reset to original value
+                  }
+                }}
+                onBlur={(e) => handleTabRename(tab, e.currentTarget.value)}
+                autoFocus
+              />
+            ) : (
+              localStorage.getItem(tab) || tab
+            )}
+          </Tabs.Tab>
+        ))}
+      </Tabs.List>
+    </Tabs>
+  );
+}
+
+function DropdownView({
+  mapId,
+  combobox,
+  changeTab,
+  activeTabs,
+  editingTab,
+  inputRef,
+  handleEditClick,
+  handleTabRename,
+  removeTab,
+}) {
   const options = activeTabs.map((item) => (
     <Combobox.Option value={item} key={item} active={item == mapId}>
       <Group gap="xs" style={{ width: "100%" }}>
@@ -119,104 +227,34 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
   ));
 
   return (
-    <>
-      <div style={{ flex: 1 }}>
-        {!showDropdown && (
-          <Tabs
-            variant="pills"
-            onChange={(value) => changeTab(value)}
-            value={mapId}
-          >
-            <Tabs.List className="tabs-scrollable" ref={tabsListRef}>
-              {activeTabs.map((tab) => (
-                <Tabs.Tab
-                  key={tab}
-                  value={tab}
-                  rightSection={
-                    <Group gap="xs">
-                      <IconPencil
-                        size={14}
-                        style={{ cursor: "pointer" }}
-                        onClick={(event) => handleEditClick(tab, event)}
-                      />
+    <Combobox
+      store={combobox}
+      onOptionSubmit={(val) => {
+        combobox.closeDropdown();
+        changeTab(val);
+      }}
+    >
+      <Combobox.Target>
+        <InputBase
+          rightSection={<Combobox.Chevron />}
+          rightSectionPointerEvents="none"
+          onClick={() => combobox.openDropdown()}
+          onFocus={() => combobox.openDropdown()}
+          onBlur={() => combobox.closeDropdown()}
+          value={localStorage.getItem(mapId) || mapId}
+          styles={{ input: { cursor: "pointer" } }}
+        />
+      </Combobox.Target>
 
-                      <Button
-                        size="compact-xs"
-                        color="red"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          removeTab(tab);
-                        }}
-                      >
-                        x
-                      </Button>
-                    </Group>
-                  }
-                >
-                  {editingTab === tab ? (
-                    <TextInput
-                      ref={inputRef}
-                      size="xs"
-                      defaultValue={localStorage.getItem(tab) || tab}
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleTabRename(tab, e.currentTarget.value);
-                        } else if (e.key === "Escape") {
-                          setEditingTab(null);
-                        }
-                      }}
-                      onBlur={(e) =>
-                        handleTabRename(tab, e.currentTarget.value)
-                      }
-                      autoFocus
-                    />
-                  ) : (
-                    localStorage.getItem(tab) || tab
-                  )}
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs>
-        )}
-
-        {showDropdown && (
-          <Combobox
-            store={combobox}
-            onOptionSubmit={(val) => {
-              combobox.closeDropdown();
-              changeTab(val);
-            }}
-          >
-            <Combobox.Target>
-              <InputBase
-                rightSection={<Combobox.Chevron />}
-                rightSectionPointerEvents="none"
-                onClick={() => combobox.openDropdown()}
-                onFocus={() => combobox.openDropdown()}
-                onBlur={() => {
-                  combobox.closeDropdown();
-                }}
-                value={localStorage.getItem(mapId) || mapId}
-                styles={{ input: { cursor: "pointer" } }}
-              />
-            </Combobox.Target>
-
-            <Combobox.Dropdown>
-              <Combobox.Options>
-                {options.length > 0 ? (
-                  options
-                ) : (
-                  <Combobox.Empty>Nothing found</Combobox.Empty>
-                )}
-              </Combobox.Options>
-            </Combobox.Dropdown>
-          </Combobox>
-        )}
-      </div>
-      <Box visibleFrom="sm">
-        <DiscordLogin />
-      </Box>
-    </>
+      <Combobox.Dropdown>
+        <Combobox.Options>
+          {options.length > 0 ? (
+            options
+          ) : (
+            <Combobox.Empty>Nothing found</Combobox.Empty>
+          )}
+        </Combobox.Options>
+      </Combobox.Dropdown>
+    </Combobox>
   );
 }
