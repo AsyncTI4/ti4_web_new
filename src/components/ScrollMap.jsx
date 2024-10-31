@@ -48,6 +48,7 @@ export function ScrollMap({ gameId, imageUrl }) {
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
         const content =
           overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
+        let title = content?.name;
         let text;
         if(key.startsWith("ability")) {
           if(content?.window) {
@@ -63,14 +64,20 @@ export function ScrollMap({ gameId, imageUrl }) {
           if(content?.secondaryTexts) {
             text += " " + content?.secondaryTexts.join(" ");
           }
-        } else if(key.startsWith("unit") && content?.ability) {
-            text = content?.ability;
+        } else if (overlay.cardType === "stasisCapsule") {
+          title = "Gen Synthesis";
+          text = "Count of Infantry II to Revive";
+        } else if (overlay.cardType === "unitCombatSummary") {
+          title = "Fleet Stats";
+          text = "Total Resources | Total Hit Points | Total Expected Hits";
+        } else if (overlay.cardType === "unit") {
+          text = content?.ability ?? content?.baseType;
         } else {
           text = content?.text ?? content?.abilityText;
         }
-        if (!text || !content) return null;
+        // if (!text || !title) return null;
 
-        const imageURL = content.imageURL;
+        const imageURL = content?.imageURL ?? undefined;
         let style = {
           left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
           top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
@@ -94,7 +101,7 @@ export function ScrollMap({ gameId, imageUrl }) {
             {imageURL !== undefined ? (
               <img
                 src={imageURL}
-                alt={content.name}
+                alt={title}
                 className={`tooltip-image ${activeTooltip === key ? "active" : ""}`}
                 style={{
                   position: "absolute",
@@ -107,7 +114,7 @@ export function ScrollMap({ gameId, imageUrl }) {
               <div
                 className={`tooltip ${activeTooltip === key ? "active" : ""}`}
               >
-                <h3 className="tooltip-title">{content?.name}</h3>
+                <h3 className="tooltip-title">{title}</h3>
                 <p className="tooltip-text">{text}</p>
               </div>
             )}
@@ -158,6 +165,7 @@ const filterOverlays = (overlays) =>
         key.startsWith("tech") ||
         key.startsWith("ability") ||
         key.startsWith("strategyCard") || 
+        key.startsWith("stasisCapsule") || 
         key.startsWith("unit") 
     )
   );
