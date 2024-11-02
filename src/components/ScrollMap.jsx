@@ -48,34 +48,53 @@ export function ScrollMap({ gameId, imageUrl }) {
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
         const content =
           overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
-        let title = content?.name;
-        let text;
-        if(key.startsWith("ability")) {
-          if(content?.window) {
-            text = content?.window;
-            if(content?.windowEffect) {
-              text += ": " + content?.windowEffect;
-            }
-          } else if(content?.permanentEffect) {
-            text = content?.permanentEffect;
+
+        const getCardContent = (key, content, overlay) => {
+          if (!content) return { title: undefined, text: undefined };
+
+          if (key.startsWith("ability") && content?.window) {
+            return {
+              title: content.name,
+              text:
+                content.window +
+                (content.windowEffect ? `: ${content.windowEffect}` : ""),
+            };
           }
-        } else if(key.startsWith("strategyCard")) {
-          text = content?.primaryTexts.join(" ");
-          if(content?.secondaryTexts) {
-            text += " " + content?.secondaryTexts.join(" ");
+
+          if (key.startsWith("strategyCard")) {
+            const primary = content.primaryTexts?.join(" ") || "";
+            const secondary = content.secondaryTexts?.join(" ") || "";
+            return {
+              title: content.name,
+              text: primary + (secondary ? ` ${secondary}` : ""),
+            };
           }
-        } else if (overlay.cardType === "stasisCapsule") {
-          title = "Gen Synthesis";
-          text = "Count of Infantry II to Revive";
-        } else if (overlay.cardType === "unitCombatSummary") {
-          title = "Fleet Stats";
-          text = "Total Resources | Total Hit Points | Total Expected Hits";
-        } else if (overlay.cardType === "unit") {
-          text = content?.ability ?? content?.baseType;
-        } else {
-          text = content?.text ?? content?.abilityText;
-        }
-        // if (!text || !title) return null;
+
+          switch (overlay.cardType) {
+            case "stasisCapsule":
+              return {
+                title: "Gen Synthesis",
+                text: "Count of Infantry II to Revive",
+              };
+            case "unitCombatSummary":
+              return {
+                title: "Fleet Stats",
+                text: "Total Resources | Total Hit Points | Total Expected Hits",
+              };
+            case "unit":
+              return {
+                title: content?.name,
+                text: content?.ability ?? content?.baseType,
+              };
+            default:
+              return {
+                title: content?.name,
+                text: content?.text ?? content?.abilityText,
+              };
+          }
+        };
+        const { title, text } = getCardContent(key, content, overlay);
+        if (!title || !text) return null;
 
         const imageURL = content?.imageURL ?? undefined;
         let style = {
@@ -86,9 +105,11 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        if(key.startsWith("strategyCard") || key.startsWith("unit")) {
+        if (key.startsWith("strategyCard") || key.startsWith("unit")) {
           delete style.border;
         }
+
+        const overlayMaxWidth = overlayMaxWidths[overlay.cardType] || 250;
 
         return (
           <div
@@ -106,7 +127,7 @@ export function ScrollMap({ gameId, imageUrl }) {
                 style={{
                   position: "absolute",
                   zIndex: 1000,
-                  maxWidth: "250px",
+                  maxWidth: `${overlayMaxWidth}px`,
                   boxShadow: "0 0 10px rgba(0,0,0,0.5)",
                 }}
               />
@@ -164,9 +185,9 @@ const filterOverlays = (overlays) =>
         key.startsWith("so") ||
         key.startsWith("tech") ||
         key.startsWith("ability") ||
-        key.startsWith("strategyCard") || 
-        key.startsWith("stasisCapsule") || 
-        key.startsWith("unit") 
+        key.startsWith("strategyCard") ||
+        key.startsWith("stasisCapsule") ||
+        key.startsWith("unit")
     )
   );
 
@@ -212,4 +233,14 @@ const useZoom = () => {
   const zoom = zoomLevels[zoomIndex];
 
   return { zoom, handleZoomIn, handleZoomOut, handleZoomReset };
+};
+
+const overlayMaxWidths = {
+  tech: 350,
+  so: 250,
+  relic: 250,
+  objective: 250,
+  leader: 250,
+  unit: 350,
+  strategyCard: 350,
 };
