@@ -107,7 +107,7 @@ export default function LandingPage() {
                     </Text>
                     <Button
                       component="a"
-                      href="https://discord.gg/YeAhUxUB"
+                      href="https://discord.asyncti4.com"
                       target="_blank"
                       rel="noopener noreferrer"
                       size="xl"
