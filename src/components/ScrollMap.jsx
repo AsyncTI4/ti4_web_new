@@ -46,57 +46,54 @@ export function ScrollMap({ gameId, imageUrl }) {
       ) : undefined}
 
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
-        const content =
-          overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
+        const dataModel =
+          overlayContent?.[`${overlay.dataModel}:${overlay.dataModelID}`];
 
-        const getCardContent = (key, content, overlay) => {
-          if (!content) return { title: undefined, text: undefined };
+        const getCardContent = (dataModel, overlay) => {
+          let title, text;
 
-          if (key.startsWith("ability") && content?.window) {
-            return {
-              title: content.name,
-              text:
-                content.window +
-                (content.windowEffect ? `: ${content.windowEffect}` : ""),
-            };
+          switch (overlay.dataModel) {
+            case "AbilityModel": {
+              const permanentEffect = dataModel?.permanentEffect ?? "";
+              const window = dataModel?.window ?? "";
+              const windowEffect = dataModel.windowEffect ? `: ${dataModel.windowEffect}` : "";
+
+              title = dataModel.name
+              text = permanentEffect + "\n" + window + windowEffect
+              break;
+            }
+            case "UnitModel": {
+              title = dataModel?.name;
+              text = dataModel?.ability ?? dataModel?.baseType;
+              break
+            }
+            case "StrategyCardModel": {
+              const primary = dataModel.primaryTexts?.join(" ") || "";
+              const secondary = dataModel.secondaryTexts?.join(" ") || "";
+
+              title = dataModel.name;
+              text = primary + (secondary ? ` ${secondary}` : "");
+              break;
+            }
+            default: {
+              if (!dataModel) {
+                return {
+                  title: overlay.title,
+                  text: overlay.text
+                };
+              };
+              return {
+                title: dataModel?.name,
+                text: dataModel?.text ?? dataModel?.abilityText
+              };
+            }
           }
-
-          if (key.startsWith("strategyCard")) {
-            const primary = content.primaryTexts?.join(" ") || "";
-            const secondary = content.secondaryTexts?.join(" ") || "";
-            return {
-              title: content.name,
-              text: primary + (secondary ? ` ${secondary}` : ""),
-            };
-          }
-
-          switch (overlay.cardType) {
-            case "stasisCapsule":
-              return {
-                title: "Gen Synthesis",
-                text: "Count of Infantry II to Revive",
-              };
-            case "unitCombatSummary":
-              return {
-                title: "Fleet Stats",
-                text: "Total Resources | Total Hit Points | Total Expected Hits",
-              };
-            case "unit":
-              return {
-                title: content?.name,
-                text: content?.ability ?? content?.baseType,
-              };
-            default:
-              return {
-                title: content?.name,
-                text: content?.text ?? content?.abilityText,
-              };
-          }
+          return { title, text };
         };
-        const { title, text } = getCardContent(key, content, overlay);
-        if (!title || !text) return null;
+        const { title, text } = getCardContent(dataModel, overlay);
+        if (!title && !text) return null;
 
-        const imageURL = content?.imageURL ?? undefined;
+        const imageURL = dataModel?.imageURL ?? undefined;
         let style = {
           left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
           top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,

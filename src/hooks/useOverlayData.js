@@ -147,15 +147,15 @@ export const getOverlayContent = () => {
 
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [
-    ...Array(publicObjectiveSources.length).fill("objective"),
-    ...Array(techSources.length).fill("tech"),
-    ...Array(leaderSources.length).fill("leader"),
-    ...Array(secretObjectiveSources.length).fill("so"),
-    ...Array(pnSources.length).fill("pn"),
-    ...Array(relicSources.length).fill("relic"),
-    ...Array(abilitySources.length).fill("ability"),
-    ...Array(strategyCardSources.length).fill("strategyCard"),
-    ...Array(unitSources.length).fill("unit"),
+    ...Array(publicObjectiveSources.length).fill("PublicObjectiveModel"),
+    ...Array(techSources.length).fill("TechnologyModel"),
+    ...Array(leaderSources.length).fill("LeaderModel"),
+    ...Array(secretObjectiveSources.length).fill("SecretObjectiveModel"),
+    ...Array(pnSources.length).fill("PromissoryNoteModel"),
+    ...Array(relicSources.length).fill("RelicModel"),
+    ...Array(abilitySources.length).fill("AbilityModel"),
+    ...Array(strategyCardSources.length).fill("StrategyCardModel"),
+    ...Array(unitSources.length).fill("UnitModel"),
   ];
 
 
