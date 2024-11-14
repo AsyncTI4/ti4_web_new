@@ -6,6 +6,7 @@
   .overlay-box {
     position: absolute;
     box-sizing: border-box;
+    white-space: pre-line;
   }
 
   .tooltip {
