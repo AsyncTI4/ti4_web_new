@@ -130,14 +130,10 @@ export const getOverlayContent = () => {
   ];
 
   const fetchUrls = [
-    ...publicObjectiveSources.map(
-      (source) => `${baseUrl}/public_objectives/${source}.json`
-    ),
+    ...publicObjectiveSources.map((source) => `${baseUrl}/public_objectives/${source}.json`),
     ...techSources.map((source) => `${baseUrl}/technologies/${source}.json`),
     ...leaderSources.map((source) => `${baseUrl}/leaders/${source}.json`),
-    ...secretObjectiveSources.map(
-      (source) => `${baseUrl}/secret_objectives/${source}.json`
-    ),
+    ...secretObjectiveSources.map((source) => `${baseUrl}/secret_objectives/${source}.json`),
     ...pnSources.map((source) => `${baseUrl}/promissory_notes/${source}.json`),
     ...relicSources.map((source) => `${baseUrl}/relics/${source}.json`),
     ...abilitySources.map((source) => `${baseUrl}/abilities/${source}.json`),

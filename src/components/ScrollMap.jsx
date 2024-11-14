@@ -56,9 +56,9 @@ export function ScrollMap({ gameId, imageUrl }) {
             case "AbilityModel": {
               const permanentEffect = dataModel?.permanentEffect ?? "";
               const window = dataModel?.window ?? "";
-              const windowEffect = dataModel.windowEffect ? `: ${dataModel.windowEffect}` : "";
+              const windowEffect = dataModel?.windowEffect ? `: ${dataModel.windowEffect}` : "";
 
-              title = dataModel.name
+              title = dataModel?.name
               text = permanentEffect + "\n" + window + windowEffect
               break;
             }
@@ -68,10 +68,10 @@ export function ScrollMap({ gameId, imageUrl }) {
               break
             }
             case "StrategyCardModel": {
-              const primary = dataModel.primaryTexts?.join(" ") || "";
-              const secondary = dataModel.secondaryTexts?.join(" ") || "";
+              const primary = dataModel?.primaryTexts?.join(" ") || "";
+              const secondary = dataModel?.secondaryTexts?.join(" ") || "";
 
-              title = dataModel.name;
+              title = dataModel?.name;
               text = primary + (secondary ? ` ${secondary}` : "");
               break;
             }
@@ -102,7 +102,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        if (key.startsWith("strategyCard") || key.startsWith("unit")) {
+        if (!dataModel || ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel)) {
           delete style.border;
         }
 
@@ -171,22 +171,7 @@ const useOverlay = (gameId) => {
   };
 };
 
-const filterOverlays = (overlays) =>
-  Object.fromEntries(
-    Object.entries(overlays).filter(
-      ([key]) =>
-        key.startsWith("leader") ||
-        key.startsWith("objective") ||
-        key.startsWith("pn") ||
-        key.startsWith("relic") ||
-        key.startsWith("so") ||
-        key.startsWith("tech") ||
-        key.startsWith("ability") ||
-        key.startsWith("strategyCard") ||
-        key.startsWith("stasisCapsule") ||
-        key.startsWith("unit")
-    )
-  );
+const filterOverlays = (overlays) => Object.values(overlays);
 
 function isTouchDevice() {
   return (
