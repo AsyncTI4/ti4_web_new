@@ -56,23 +56,25 @@ export function ScrollMap({ gameId, imageUrl }) {
             case "AbilityModel": {
               const permanentEffect = dataModel?.permanentEffect ?? "";
               const window = dataModel?.window ?? "";
-              const windowEffect = dataModel?.windowEffect ? `: ${dataModel.windowEffect}` : "";
+              const windowEffect = dataModel?.windowEffect ?? "";
 
               title = dataModel?.name
-              text = permanentEffect + "\n" + window + windowEffect
+              text = (permanentEffect ? permanentEffect + "\n\n" : "") + (window ? `${window}:\n` : "") + windowEffect
               break;
             }
             case "UnitModel": {
-              title = dataModel?.name;
+              const faction = dataModel?.faction ?? "";
+              const baseType = dataModel?.baseType ?? "";
+              title = dataModel?.name + " (" + faction + (!faction ? "" : " ") + baseType + ")";
               text = dataModel?.ability ?? dataModel?.baseType;
-              break
+              break;
             }
             case "StrategyCardModel": {
-              const primary = dataModel?.primaryTexts?.join(" ") || "";
-              const secondary = dataModel?.secondaryTexts?.join(" ") || "";
+              const primary = dataModel?.primaryTexts?.join("\n") || "";
+              const secondary = dataModel?.secondaryTexts?.join("\n") || "";
 
               title = dataModel?.name;
-              text = primary + (secondary ? ` ${secondary}` : "");
+              text = "Primary:\n" + primary + (secondary ? `\n\nSecondary:\n${secondary}` : "");
               break;
             }
             default: {
@@ -102,11 +104,12 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        if (!dataModel || ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel)) {
+        const deleteBorder = ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel);
+        if (!dataModel || deleteBorder) {
           delete style.border;
         }
 
-        const overlayMaxWidth = overlayMaxWidths[overlay.cardType] || 250;
+        const overlayMaxWidth = overlayMaxWidths[overlay.dataModel] || 250;
 
         return (
           <div
@@ -218,11 +221,11 @@ const useZoom = () => {
 };
 
 const overlayMaxWidths = {
-  tech: 350,
-  so: 250,
-  relic: 250,
-  objective: 250,
-  leader: 250,
-  unit: 350,
-  strategyCard: 350,
+  TechnologyModel: 350,
+  SecretObjectiveModel: 250,
+  RelicModel: 250,
+  PublicObjectiveModel: 250,
+  LeaderModel: 250,
+  UnitModel: 350,
+  StrategyCardModel: 350,
 };
