@@ -110,6 +110,8 @@ export const getOverlayContent = () => {
     "tispoon",
     "tribunal",
     "voice_of_the_council",
+    "monuments",
+    "unfulvio",
   ];
 
   const unitSources = [
