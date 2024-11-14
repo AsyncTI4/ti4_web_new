@@ -46,57 +46,56 @@ export function ScrollMap({ gameId, imageUrl }) {
       ) : undefined}
 
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
-        const content =
-          overlayContent?.[`${overlay.cardType}:${overlay.cardID}`];
+        const dataModel =
+          overlayContent?.[`${overlay.dataModel}:${overlay.dataModelID}`];
 
-        const getCardContent = (key, content, overlay) => {
-          if (!content) return { title: undefined, text: undefined };
+        const getCardContent = (dataModel, overlay) => {
+          let title, text;
 
-          if (key.startsWith("ability") && content?.window) {
-            return {
-              title: content.name,
-              text:
-                content.window +
-                (content.windowEffect ? `: ${content.windowEffect}` : ""),
-            };
+          switch (overlay.dataModel) {
+            case "AbilityModel": {
+              const permanentEffect = dataModel?.permanentEffect ?? "";
+              const window = dataModel?.window ?? "";
+              const windowEffect = dataModel?.windowEffect ?? "";
+
+              title = dataModel?.name
+              text = (permanentEffect ? permanentEffect + "\n\n" : "") + (window ? `${window}:\n` : "") + windowEffect
+              break;
+            }
+            case "UnitModel": {
+              const faction = dataModel?.faction ?? "";
+              const baseType = dataModel?.baseType ?? "";
+              title = dataModel?.name + " (" + faction + (!faction ? "" : " ") + baseType + ")";
+              text = dataModel?.ability ?? dataModel?.baseType;
+              break;
+            }
+            case "StrategyCardModel": {
+              const primary = dataModel?.primaryTexts?.join("\n") || "";
+              const secondary = dataModel?.secondaryTexts?.join("\n") || "";
+
+              title = dataModel?.name;
+              text = "Primary:\n" + primary + (secondary ? `\n\nSecondary:\n${secondary}` : "");
+              break;
+            }
+            default: {
+              if (!dataModel) {
+                return {
+                  title: overlay.title,
+                  text: overlay.text
+                };
+              };
+              return {
+                title: dataModel?.name,
+                text: dataModel?.text ?? dataModel?.abilityText
+              };
+            }
           }
-
-          if (key.startsWith("strategyCard")) {
-            const primary = content.primaryTexts?.join(" ") || "";
-            const secondary = content.secondaryTexts?.join(" ") || "";
-            return {
-              title: content.name,
-              text: primary + (secondary ? ` ${secondary}` : ""),
-            };
-          }
-
-          switch (overlay.cardType) {
-            case "stasisCapsule":
-              return {
-                title: "Gen Synthesis",
-                text: "Count of Infantry II to Revive",
-              };
-            case "unitCombatSummary":
-              return {
-                title: "Fleet Stats",
-                text: "Total Resources | Total Hit Points | Total Expected Hits",
-              };
-            case "unit":
-              return {
-                title: content?.name,
-                text: content?.ability ?? content?.baseType,
-              };
-            default:
-              return {
-                title: content?.name,
-                text: content?.text ?? content?.abilityText,
-              };
-          }
+          return { title, text };
         };
-        const { title, text } = getCardContent(key, content, overlay);
-        if (!title || !text) return null;
+        const { title, text } = getCardContent(dataModel, overlay);
+        if (!title && !text) return null;
 
-        const imageURL = content?.imageURL ?? undefined;
+        const imageURL = dataModel?.imageURL ?? undefined;
         let style = {
           left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
           top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
@@ -105,11 +104,12 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        if (key.startsWith("strategyCard") || key.startsWith("unit")) {
+        const deleteBorder = ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel);
+        if (!dataModel || deleteBorder) {
           delete style.border;
         }
 
-        const overlayMaxWidth = overlayMaxWidths[overlay.cardType] || 250;
+        const overlayMaxWidth = overlayMaxWidths[overlay.dataModel] || 250;
 
         return (
           <div
@@ -174,22 +174,7 @@ const useOverlay = (gameId) => {
   };
 };
 
-const filterOverlays = (overlays) =>
-  Object.fromEntries(
-    Object.entries(overlays).filter(
-      ([key]) =>
-        key.startsWith("leader") ||
-        key.startsWith("objective") ||
-        key.startsWith("pn") ||
-        key.startsWith("relic") ||
-        key.startsWith("so") ||
-        key.startsWith("tech") ||
-        key.startsWith("ability") ||
-        key.startsWith("strategyCard") ||
-        key.startsWith("stasisCapsule") ||
-        key.startsWith("unit")
-    )
-  );
+const filterOverlays = (overlays) => Object.values(overlays);
 
 function isTouchDevice() {
   return (
@@ -236,11 +221,11 @@ const useZoom = () => {
 };
 
 const overlayMaxWidths = {
-  tech: 350,
-  so: 250,
-  relic: 250,
-  objective: 250,
-  leader: 250,
-  unit: 350,
-  strategyCard: 350,
+  TechnologyModel: 350,
+  SecretObjectiveModel: 250,
+  RelicModel: 250,
+  PublicObjectiveModel: 250,
+  LeaderModel: 250,
+  UnitModel: 350,
+  StrategyCardModel: 350,
 };
