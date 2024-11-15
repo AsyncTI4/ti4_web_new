@@ -62,6 +62,14 @@ export function ScrollMap({ gameId, imageUrl }) {
               text = (permanentEffect ? permanentEffect + "\n\n" : "") + (window ? `${window}:\n` : "") + windowEffect
               break;
             }
+            case "AgendaModel": {
+              const text1 = dataModel?.text1 ?? "";
+              const text2 = dataModel?.text2 ?? "";
+
+              title = dataModel?.name + " (" + dataModel?.type + ")";
+              text = (text1 ? text1 + "\n\n" : "") + (text2 || "");
+              break;
+            }
             case "UnitModel": {
               const faction = dataModel?.faction ?? "";
               const baseType = dataModel?.baseType ?? "";
