@@ -104,7 +104,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        const deleteBorder = ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel);
+        const deleteBorder = ["StrategyCardModel", "UnitModel", "ExploreModel"].includes(overlay.dataModel);
         if (!dataModel || deleteBorder) {
           delete style.border;
         }

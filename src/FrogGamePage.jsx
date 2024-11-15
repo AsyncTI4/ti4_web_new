@@ -12,7 +12,7 @@ function FrogGamePage() {
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
-    document.title = `${params.mapid} - | Async TI`;
+    document.title = `${params.mapid} - | AsyncTI4`;
   }, [params.mapid]);
   const frogMap = useFrogMap(params.discordid, params.mapid);
   const imageUrl = frogMap?.data;

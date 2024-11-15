@@ -18,7 +18,7 @@ import { useEffect } from "react";
 
 function GamesPage() {
   useEffect(() => {
-    document.title = `Async TI`;
+    document.title = `AsyncTI4`;
   }, []);
   const navigate = useNavigate();
   const mapsQuery = useMaps();

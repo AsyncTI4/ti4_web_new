@@ -24,6 +24,19 @@ export const getOverlayContent = () => {
     "sigma",
   ];
 
+  const agendaSources = [
+    "absol",
+    "base",
+    "byz_agendas",
+    "ignis_aurora",
+    "little_omega",
+    "miltymod",
+    "pok",
+    "project_pi",
+    "sigma",
+    "voice_of_the_council",
+  ];
+
   const techSources = [
     "absol",
     "admins",
@@ -131,8 +144,18 @@ export const getOverlayContent = () => {
     "qulane"
   ];
 
+  const exploreSources = [
+    "asteroid",
+    "codex3",
+    "explores",
+    "project_pi",
+    "sigma",
+    "uncharted_space",
+  ];
+
   const fetchUrls = [
     ...publicObjectiveSources.map((source) => `${baseUrl}/public_objectives/${source}.json`),
+    ...agendaSources.map((source) => `${baseUrl}/agendas/${source}.json`),
     ...techSources.map((source) => `${baseUrl}/technologies/${source}.json`),
     ...leaderSources.map((source) => `${baseUrl}/leaders/${source}.json`),
     ...secretObjectiveSources.map((source) => `${baseUrl}/secret_objectives/${source}.json`),
@@ -141,11 +164,13 @@ export const getOverlayContent = () => {
     ...abilitySources.map((source) => `${baseUrl}/abilities/${source}.json`),
     ...strategyCardSources.map((source) => `${baseUrl}/strategy_cards/${source}.json`),
     ...unitSources.map((source) => `${baseUrl}/units/${source}.json`),
+    ...exploreSources.map((source) => `${baseUrl}/explores/${source}.json`),
   ];
 
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [
     ...Array(publicObjectiveSources.length).fill("PublicObjectiveModel"),
+    ...Array(agendaSources.length).fill("AgendaModel"),
     ...Array(techSources.length).fill("TechnologyModel"),
     ...Array(leaderSources.length).fill("LeaderModel"),
     ...Array(secretObjectiveSources.length).fill("SecretObjectiveModel"),
@@ -154,6 +179,7 @@ export const getOverlayContent = () => {
     ...Array(abilitySources.length).fill("AbilityModel"),
     ...Array(strategyCardSources.length).fill("StrategyCardModel"),
     ...Array(unitSources.length).fill("UnitModel"),
+    ...Array(exploreSources.length).fill("ExploreModel"),
   ];
 
 
