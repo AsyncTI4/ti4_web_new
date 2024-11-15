@@ -77,6 +77,14 @@ export function ScrollMap({ gameId, imageUrl }) {
               text = "Primary:\n" + primary + (secondary ? `\n\nSecondary:\n${secondary}` : "");
               break;
             }
+            case "LeaderModel": {
+              const abilityWindow = dataModel?.abilityWindow ?? "";
+              const abilityText = dataModel?.abilityText ?? "";
+
+              title = dataModel?.name;
+              text = `${abilityWindow}\n${abilityText}\n\nUnlock: ${dataModel?.unlockCondition}`;
+              break;
+            }
             default: {
               if (!dataModel) {
                 return {
