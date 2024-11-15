@@ -93,6 +93,10 @@ export function ScrollMap({ gameId, imageUrl }) {
               text = `${abilityWindow}\n${abilityText}\n\nUnlock: ${dataModel?.unlockCondition}`;
               break;
             }
+            case "FactionModel": {
+              title = dataModel?.factionName;
+              break;
+            }
             default: {
               if (!dataModel) {
                 return {
@@ -102,7 +106,7 @@ export function ScrollMap({ gameId, imageUrl }) {
               };
               return {
                 title: dataModel?.name,
-                text: dataModel?.text ?? dataModel?.abilityText
+                text: dataModel?.text || ""
               };
             }
           }
@@ -120,7 +124,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        const deleteBorder = ["StrategyCardModel", "UnitModel", "ExploreModel"].includes(overlay.dataModel);
+        const deleteBorder = ["FactionModel", "StrategyCardModel", "UnitModel", "ExploreModel"].includes(overlay.dataModel);
         if (!dataModel || deleteBorder) {
           delete style.border;
         }

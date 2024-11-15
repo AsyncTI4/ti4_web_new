@@ -16,6 +16,21 @@ export const getOverlayContent = () => {
   const baseUrl =
     "https://raw.githubusercontent.com/AsyncTI4/TI4_map_generator_bot/refs/heads/master/src/main/resources/data";
 
+  const factionSources = [
+    "base",
+    "ds",
+    "franken",
+    "ignisaurora",
+    "keleres",
+    "keleresplus",
+    "memephilosopher",
+    "miltymod",
+    "other",
+    "pbd2000",
+    "pok",
+    "project_pi",
+  ];
+
   const publicObjectiveSources = [
     "little_omega",
     "miltymod",
@@ -154,6 +169,7 @@ export const getOverlayContent = () => {
   ];
 
   const fetchUrls = [
+    ...factionSources.map((source) => `${baseUrl}/factions/${source}.json`),
     ...publicObjectiveSources.map((source) => `${baseUrl}/public_objectives/${source}.json`),
     ...agendaSources.map((source) => `${baseUrl}/agendas/${source}.json`),
     ...techSources.map((source) => `${baseUrl}/technologies/${source}.json`),
@@ -169,6 +185,7 @@ export const getOverlayContent = () => {
 
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [
+    ...Array(factionSources.length).fill("FactionModel"),
     ...Array(publicObjectiveSources.length).fill("PublicObjectiveModel"),
     ...Array(agendaSources.length).fill("AgendaModel"),
     ...Array(techSources.length).fill("TechnologyModel"),
