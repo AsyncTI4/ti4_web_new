@@ -62,6 +62,14 @@ export function ScrollMap({ gameId, imageUrl }) {
               text = (permanentEffect ? permanentEffect + "\n\n" : "") + (window ? `${window}:\n` : "") + windowEffect
               break;
             }
+            case "AgendaModel": {
+              const text1 = dataModel?.text1 ?? "";
+              const text2 = dataModel?.text2 ?? "";
+
+              title = dataModel?.name + " (" + dataModel?.type + ")";
+              text = (text1 ? text1 + "\n\n" : "") + (text2 || "");
+              break;
+            }
             case "UnitModel": {
               const faction = dataModel?.faction ?? "";
               const baseType = dataModel?.baseType ?? "";
@@ -77,6 +85,18 @@ export function ScrollMap({ gameId, imageUrl }) {
               text = "Primary:\n" + primary + (secondary ? `\n\nSecondary:\n${secondary}` : "");
               break;
             }
+            case "LeaderModel": {
+              const abilityWindow = dataModel?.abilityWindow ?? "";
+              const abilityText = dataModel?.abilityText ?? "";
+
+              title = dataModel?.name;
+              text = `${abilityWindow}\n${abilityText}\n\nUnlock: ${dataModel?.unlockCondition}`;
+              break;
+            }
+            case "FactionModel": {
+              title = dataModel?.factionName;
+              break;
+            }
             default: {
               if (!dataModel) {
                 return {
@@ -86,7 +106,7 @@ export function ScrollMap({ gameId, imageUrl }) {
               };
               return {
                 title: dataModel?.name,
-                text: dataModel?.text ?? dataModel?.abilityText
+                text: dataModel?.text || ""
               };
             }
           }
@@ -104,7 +124,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        const deleteBorder = ["StrategyCardModel", "UnitModel"].includes(overlay.dataModel);
+        const deleteBorder = ["FactionModel", "StrategyCardModel", "UnitModel", "ExploreModel"].includes(overlay.dataModel);
         if (!dataModel || deleteBorder) {
           delete style.border;
         }

@@ -16,12 +16,40 @@ export const getOverlayContent = () => {
   const baseUrl =
     "https://raw.githubusercontent.com/AsyncTI4/TI4_map_generator_bot/refs/heads/master/src/main/resources/data";
 
+  const factionSources = [
+    "base",
+    "ds",
+    "franken",
+    "ignisaurora",
+    "keleres",
+    "keleresplus",
+    "memephilosopher",
+    "miltymod",
+    "other",
+    "pbd2000",
+    "pok",
+    "project_pi",
+  ];
+
   const publicObjectiveSources = [
     "little_omega",
     "miltymod",
     "project_pi",
     "public_objectives",
     "sigma",
+  ];
+
+  const agendaSources = [
+    "absol",
+    "base",
+    "byz_agendas",
+    "ignis_aurora",
+    "little_omega",
+    "miltymod",
+    "pok",
+    "project_pi",
+    "sigma",
+    "voice_of_the_council",
   ];
 
   const techSources = [
@@ -131,8 +159,19 @@ export const getOverlayContent = () => {
     "qulane"
   ];
 
+  const exploreSources = [
+    "asteroid",
+    "codex3",
+    "explores",
+    "project_pi",
+    "sigma",
+    "uncharted_space",
+  ];
+
   const fetchUrls = [
+    ...factionSources.map((source) => `${baseUrl}/factions/${source}.json`),
     ...publicObjectiveSources.map((source) => `${baseUrl}/public_objectives/${source}.json`),
+    ...agendaSources.map((source) => `${baseUrl}/agendas/${source}.json`),
     ...techSources.map((source) => `${baseUrl}/technologies/${source}.json`),
     ...leaderSources.map((source) => `${baseUrl}/leaders/${source}.json`),
     ...secretObjectiveSources.map((source) => `${baseUrl}/secret_objectives/${source}.json`),
@@ -141,11 +180,14 @@ export const getOverlayContent = () => {
     ...abilitySources.map((source) => `${baseUrl}/abilities/${source}.json`),
     ...strategyCardSources.map((source) => `${baseUrl}/strategy_cards/${source}.json`),
     ...unitSources.map((source) => `${baseUrl}/units/${source}.json`),
+    ...exploreSources.map((source) => `${baseUrl}/explores/${source}.json`),
   ];
 
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [
+    ...Array(factionSources.length).fill("FactionModel"),
     ...Array(publicObjectiveSources.length).fill("PublicObjectiveModel"),
+    ...Array(agendaSources.length).fill("AgendaModel"),
     ...Array(techSources.length).fill("TechnologyModel"),
     ...Array(leaderSources.length).fill("LeaderModel"),
     ...Array(secretObjectiveSources.length).fill("SecretObjectiveModel"),
@@ -154,6 +196,7 @@ export const getOverlayContent = () => {
     ...Array(abilitySources.length).fill("AbilityModel"),
     ...Array(strategyCardSources.length).fill("StrategyCardModel"),
     ...Array(unitSources.length).fill("UnitModel"),
+    ...Array(exploreSources.length).fill("ExploreModel"),
   ];
 
 

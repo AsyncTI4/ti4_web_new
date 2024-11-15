@@ -198,7 +198,7 @@ export default function LandingPage() {
                         <Text size="lg" c="orange.2" mt="xs">
                           As players input commands, our system automatically
                           updates a visual map of the game state. This map is
-                          accessible through the Async TI website or directly
+                          accessible through the AsyncTI4 website or directly
                           within Discord. You'll always have a clear, up-to-date
                           view of the galaxy, including unit positions,
                           controlled systems, and other crucial information.
