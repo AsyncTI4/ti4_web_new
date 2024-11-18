@@ -23,6 +23,10 @@ const router = createBrowserRouter([
     element: <GamePage />,
   },
   {
+    path: "/games",
+    element: <GamesPage />,
+  },
+  {
     path: "/froggame/:discordid/:mapid",
     element: <FrogGamePage />,
   },
