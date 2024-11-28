@@ -22,7 +22,7 @@ function GamesPage() {
   }, []);
   const navigate = useNavigate();
   const mapsQuery = useMaps();
-  const games = mapsQuery.data?.filter((v) => !v.MapName.includes("fow")) ?? [];
+  const games = mapsQuery.data?.filter((v) => !v.MapName.includes("fow")).sort((a, b) => a.MapName.localeCompare(b.MapName)) ?? [];
 
   return (
     <AppShell header={{ height: 60 }}>

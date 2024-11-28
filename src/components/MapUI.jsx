@@ -40,6 +40,15 @@ function MapUI({
             removeTab={removeTab}
           />
         </Group>
+        <Group position="right" style={{ position: "absolute", top: 10, right: 200 }}>
+          <Button
+            component="a"
+            href="/games"
+            variant="transparent"
+          >
+            All Games
+          </Button>
+        </Group>
       </AppShell.Header>
 
       <AppShell.Main>
