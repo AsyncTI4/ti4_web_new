@@ -1,5 +1,6 @@
 import {
   Alert,
+  Anchor,
   AppShell,
   Box,
   Button,
@@ -10,7 +11,7 @@ import {
 } from "@mantine/core";
 import { useMaps } from "./hooks/useMaps";
 import { FullScreenLoader } from "./components/FullScreenLoader";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
 import Logo from "./components/Logo";
 import { DiscordLogin } from "./components/DiscordLogin";
@@ -22,7 +23,10 @@ function GamesPage() {
   }, []);
   const navigate = useNavigate();
   const mapsQuery = useMaps();
-  const games = mapsQuery.data?.filter((v) => !v.MapName.includes("fow")).sort((a, b) => a.MapName.localeCompare(b.MapName)) ?? [];
+  const games =
+    mapsQuery.data
+      ?.filter((v) => !v.MapName.includes("fow"))
+      .sort((a, b) => a.MapName.localeCompare(b.MapName)) ?? [];
 
   return (
     <AppShell header={{ height: 60 }}>

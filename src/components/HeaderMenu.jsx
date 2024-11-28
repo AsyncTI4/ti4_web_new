@@ -4,17 +4,18 @@ import {
   Tabs,
   Box,
   TextInput,
-  Select,
   useCombobox,
   Combobox,
   InputBase,
   CheckIcon,
+  Anchor,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { IconPencil } from "@tabler/icons-react";
 import { DiscordLogin } from "./DiscordLogin";
 
 import "./MapScreen.css";
+import { Link } from "react-router-dom";
 
 export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
   const [showDesktopDropdown, setShowDesktopDropdown] = useState(false);
@@ -71,6 +72,18 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
 
   return (
     <>
+      <Anchor
+        to="/games"
+        size="sm"
+        fw={600}
+        underline="hover"
+        c="orange"
+        ml="sm"
+        mr="sm"
+        component={Link}
+      >
+        All Games
+      </Anchor>
       <div style={{ flex: 1 }}>
         {!showDropdown ? (
           <TabView

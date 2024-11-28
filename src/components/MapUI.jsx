@@ -1,4 +1,11 @@
-import { AppShell, Button, Group, useMantineTheme, Box } from "@mantine/core";
+import {
+  AppShell,
+  Button,
+  Group,
+  useMantineTheme,
+  Box,
+  Anchor,
+} from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
 
@@ -39,15 +46,6 @@ function MapUI({
             changeTab={changeTab}
             removeTab={removeTab}
           />
-        </Group>
-        <Group position="right" style={{ position: "absolute", top: 10, right: 200 }}>
-          <Button
-            component="a"
-            href="/games"
-            variant="transparent"
-          >
-            All Games
-          </Button>
         </Group>
       </AppShell.Header>
 

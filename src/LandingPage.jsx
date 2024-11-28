@@ -1,4 +1,5 @@
 import {
+  Anchor,
   AppShell,
   Box,
   Button,
@@ -63,19 +64,22 @@ export default function LandingPage() {
         <Group align="center" h="100%" px="sm" gap="sm">
           <Logo />
           <div className="logo-divider" />
+          <Anchor
+            to="/games"
+            size="sm"
+            fw={600}
+            underline="hover"
+            c="orange"
+            ml="sm"
+            mr="sm"
+            component={Link}
+          >
+            All Games
+          </Anchor>
           <div style={{ flexGrow: 1 }} />
           <Box visibleFrom="sm">
             <DiscordLogin />
           </Box>
-        </Group>
-        <Group position="right" style={{ position: "absolute", top: 10, right: 200 }}>
-          <Button
-            component="a"
-            href="/games"
-            variant="transparent"
-          >
-            All Games
-          </Button>
         </Group>
       </AppShell.Header>
       <AppShell.Main>
