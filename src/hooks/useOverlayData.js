@@ -156,7 +156,6 @@ export const getOverlayContent = () => {
     "pbd2000",
     "pok",
     "project_pi",
-    "qulane"
   ];
 
   const exploreSources = [
