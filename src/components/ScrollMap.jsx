@@ -283,7 +283,7 @@ const useZoom = () => {
   const zoom = zoomLevels[zoomIndex];
 
   return {
-    zoom,
+    zoom: zoomFitToScreen ? 1 : zoom,
     zoomFitToScreen,
     handleZoomIn,
     handleZoomOut,
