@@ -16,7 +16,14 @@ export function ScrollMap({ gameId, imageUrl }) {
     handleMouseEnter,
     handleMouseLeave,
   } = useOverlay(gameId);
-  const { zoom, handleZoomIn, handleZoomOut, handleZoomReset } = useZoom();
+  const {
+    zoom,
+    handleZoomIn,
+    handleZoomOut,
+    handleZoomReset,
+    handleZoomScreenSize,
+    zoomFitToScreen,
+  } = useZoom();
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -30,6 +37,8 @@ export function ScrollMap({ gameId, imageUrl }) {
           onZoomIn={handleZoomIn}
           onZoomOut={handleZoomOut}
           onZoomReset={handleZoomReset}
+          onZoomScreenSize={handleZoomScreenSize}
+          zoomFitToScreen={zoomFitToScreen}
         />
       )}
 
@@ -41,6 +50,7 @@ export function ScrollMap({ gameId, imageUrl }) {
             ...(isFirefox ? {} : { zoom: zoom }),
             [`-moz-transform`]: `scale(${zoom})`,
             [`-moz-transform-origin`]: "top left",
+            ...(zoomFitToScreen ? { width: "100%", height: "100%" } : {}),
           }}
         />
       ) : undefined}
@@ -58,8 +68,11 @@ export function ScrollMap({ gameId, imageUrl }) {
               const window = dataModel?.window ?? "";
               const windowEffect = dataModel?.windowEffect ?? "";
 
-              title = dataModel?.name
-              text = (permanentEffect ? permanentEffect + "\n\n" : "") + (window ? `${window}:\n` : "") + windowEffect
+              title = dataModel?.name;
+              text =
+                (permanentEffect ? permanentEffect + "\n\n" : "") +
+                (window ? `${window}:\n` : "") +
+                windowEffect;
               break;
             }
             case "AgendaModel": {
@@ -73,7 +86,13 @@ export function ScrollMap({ gameId, imageUrl }) {
             case "UnitModel": {
               const faction = dataModel?.faction ?? "";
               const baseType = dataModel?.baseType ?? "";
-              title = dataModel?.name + " (" + faction + (!faction ? "" : " ") + baseType + ")";
+              title =
+                dataModel?.name +
+                " (" +
+                faction +
+                (!faction ? "" : " ") +
+                baseType +
+                ")";
               text = dataModel?.ability ?? dataModel?.baseType;
               break;
             }
@@ -82,7 +101,10 @@ export function ScrollMap({ gameId, imageUrl }) {
               const secondary = dataModel?.secondaryTexts?.join("\n") || "";
 
               title = dataModel?.name;
-              text = "Primary:\n" + primary + (secondary ? `\n\nSecondary:\n${secondary}` : "");
+              text =
+                "Primary:\n" +
+                primary +
+                (secondary ? `\n\nSecondary:\n${secondary}` : "");
               break;
             }
             case "LeaderModel": {
@@ -101,12 +123,12 @@ export function ScrollMap({ gameId, imageUrl }) {
               if (!dataModel) {
                 return {
                   title: overlay.title,
-                  text: overlay.text
+                  text: overlay.text,
                 };
-              };
+              }
               return {
                 title: dataModel?.name,
-                text: dataModel?.text || ""
+                text: dataModel?.text || "",
               };
             }
           }
@@ -124,7 +146,12 @@ export function ScrollMap({ gameId, imageUrl }) {
           border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
-        const deleteBorder = ["FactionModel", "StrategyCardModel", "UnitModel", "ExploreModel"].includes(overlay.dataModel);
+        const deleteBorder = [
+          "FactionModel",
+          "StrategyCardModel",
+          "UnitModel",
+          "ExploreModel",
+        ].includes(overlay.dataModel);
         if (!dataModel || deleteBorder) {
           delete style.border;
         }
@@ -213,10 +240,16 @@ const useZoom = () => {
     return isTouchDevice() ? 0 : defaultZoomIndex;
   });
 
+  const [zoomFitToScreen, setZoomFitToScreen] = useState(() => {
+    const savedZoomFitToScreen = localStorage.getItem("zoomFitToScreen");
+    return savedZoomFitToScreen === "true";
+  });
+
   const handleZoomIn = () => {
     setZoomIndex((prevIndex) => {
       const newIndex = Math.min(prevIndex + 1, zoomLevels.length - 1);
-      localStorage.setItem("zoomIndex", newIndex.toString());
+      changeZoomIndex(newIndex);
+      changeZoomFitToScreen(false);
       return newIndex;
     });
   };
@@ -224,20 +257,39 @@ const useZoom = () => {
   const handleZoomOut = () => {
     setZoomIndex((prevIndex) => {
       const newIndex = Math.max(prevIndex - 1, 0);
-      localStorage.setItem("zoomIndex", newIndex.toString());
+      changeZoomIndex(newIndex);
+      changeZoomFitToScreen(false);
       return newIndex;
     });
   };
 
   const handleZoomReset = () => {
     const resetIndex = isTouchDevice() ? 0 : defaultZoomIndex;
-    setZoomIndex(resetIndex);
-    localStorage.setItem("zoomIndex", resetIndex.toString());
+    changeZoomIndex(resetIndex);
+    changeZoomFitToScreen(false);
   };
+
+  const changeZoomIndex = (val) => {
+    setZoomIndex(val);
+    localStorage.setItem("zoomIndex", val.toString());
+  };
+
+  const changeZoomFitToScreen = (val) => {
+    setZoomFitToScreen(val);
+    localStorage.setItem("zoomFitToScreen", val.toString());
+  };
+  const handleZoomScreenSize = () => changeZoomFitToScreen(!zoomFitToScreen);
 
   const zoom = zoomLevels[zoomIndex];
 
-  return { zoom, handleZoomIn, handleZoomOut, handleZoomReset };
+  return {
+    zoom,
+    zoomFitToScreen,
+    handleZoomIn,
+    handleZoomOut,
+    handleZoomReset,
+    handleZoomScreenSize,
+  };
 };
 
 const overlayMaxWidths = {

@@ -26,7 +26,7 @@ body {
 }
 
 .imageContainer {
-  width: calc(100vw - 15px);
+  width: 100vw;
   height: calc(100vh - 60px);
 }
 
