@@ -281,9 +281,13 @@ const useZoom = () => {
   const handleZoomScreenSize = () => changeZoomFitToScreen(!zoomFitToScreen);
 
   const zoom = zoomLevels[zoomIndex];
+  
+  const [imageNaturalWidth, setImageNaturalWidth] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
+  const fitWidthZoom = width / imageNaturalWidth;
 
   return {
-    zoom: zoomFitToScreen ? 1 : zoom,
+    zoom: zoomFitToScreen ? fitWidthZoom : zoom,
     zoomFitToScreen,
     handleZoomIn,
     handleZoomOut,
