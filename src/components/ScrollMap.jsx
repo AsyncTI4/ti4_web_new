@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { ZoomControls } from "./ZoomControls";
 import { useOverlayContent, useOverlayData } from "../hooks/useOverlayData";
 
@@ -9,6 +9,7 @@ const defaultZoomIndex = 2;
 const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
 
 export function ScrollMap({ gameId, imageUrl }) {
+  const [imageNaturalWidth, setImageNaturalWidth] = useState(undefined);
   const {
     filteredOverlays,
     overlayContent,
@@ -18,12 +19,13 @@ export function ScrollMap({ gameId, imageUrl }) {
   } = useOverlay(gameId);
   const {
     zoom,
+    overlayZoom,
     handleZoomIn,
     handleZoomOut,
     handleZoomReset,
     handleZoomScreenSize,
     zoomFitToScreen,
-  } = useZoom();
+  } = useZoom(imageNaturalWidth);
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -46,6 +48,7 @@ export function ScrollMap({ gameId, imageUrl }) {
         <img
           alt="map"
           src={imageUrl}
+          onLoad={(e) => setImageNaturalWidth(e.target.naturalWidth)}
           style={{
             ...(isFirefox ? {} : { zoom: zoom }),
             [`-moz-transform`]: `scale(${zoom})`,
@@ -139,11 +142,11 @@ export function ScrollMap({ gameId, imageUrl }) {
 
         const imageURL = dataModel?.imageURL ?? undefined;
         let style = {
-          left: `${(overlay.boxXYWH[0] - 1) * zoom}px`,
-          top: `${(overlay.boxXYWH[1] - 1) * zoom}px`,
-          width: `${(overlay.boxXYWH[2] + 2) * zoom}px`,
-          height: `${(overlay.boxXYWH[3] + 2) * zoom}px`,
-          border: `${zoom * 4}px solid rgba(255, 255, 0, 0.2)`,
+          left: `${(overlay.boxXYWH[0] - 1) * overlayZoom}px`,
+          top: `${(overlay.boxXYWH[1] - 1) * overlayZoom}px`,
+          width: `${(overlay.boxXYWH[2] + 2) * overlayZoom}px`,
+          height: `${(overlay.boxXYWH[3] + 2) * overlayZoom}px`,
+          border: `${overlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
         const deleteBorder = [
@@ -231,7 +234,7 @@ function isTouchDevice() {
   );
 }
 
-const useZoom = () => {
+const useZoom = (imageNaturalWidth) => {
   const [zoomIndex, setZoomIndex] = useState(() => {
     const savedZoomIndex = localStorage.getItem("zoomIndex");
     if (savedZoomIndex !== null) {
@@ -244,6 +247,14 @@ const useZoom = () => {
     const savedZoomFitToScreen = localStorage.getItem("zoomFitToScreen");
     return savedZoomFitToScreen === "true";
   });
+
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const overlayZoom = imageNaturalWidth ? width / imageNaturalWidth : 1;
 
   const handleZoomIn = () => {
     setZoomIndex((prevIndex) => {
@@ -284,6 +295,7 @@ const useZoom = () => {
 
   return {
     zoom: zoomFitToScreen ? 1 : zoom,
+    overlayZoom: zoomFitToScreen ? overlayZoom : zoom,
     zoomFitToScreen,
     handleZoomIn,
     handleZoomOut,
