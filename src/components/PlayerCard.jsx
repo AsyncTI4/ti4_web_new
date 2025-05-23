@@ -148,13 +148,13 @@ export default function PlayerCard({
     <Paper
       p="sm"
       bg="blueGray.9"
-      style={{ maxWidth: "100%", width: "1200px" }}
+      style={{ maxWidth: "100%" }}
       radius="md"
       shadow="lg"
     >
       <Group justify="space-between" mb="xs">
         <Group>
-          <Group gap="xs" p="xs" bg={color} style={{ borderRadius: "4px" }}>
+          <Group gap="xs" p="xs">
             <Box bg="white" style={{ borderRadius: "20px" }} px={4} py={2}>
               <Image src="/sol.png" alt="faction" style={{ width: "20px" }} />
             </Box>
@@ -162,14 +162,14 @@ export default function PlayerCard({
               <Text fw={700} span c="white">
                 {playerName}
               </Text>
-              <Text size="xs" span ml={4} opacity={0.9} c="white">
-                ({faction})
+              <Text size="sm" span ml={4} opacity={0.9} c="white">
+                [{faction}]
               </Text>
             </Box>
           </Group>
 
           <Badge variant="outline" color="green" size="lg">
-            Strategy Card: {strategyCard}
+            {strategyCard}: CONSTRUCTION
           </Badge>
         </Group>
 
@@ -223,16 +223,9 @@ export default function PlayerCard({
 
       <Group gap="xs" mb="xs">
         {leaders.map((leader, index) => (
-          <Tooltip key={index} label={leader}>
-            <Badge
-              color="gray.2"
-              c="black"
-              leftSection={<IconCrown size={12} />}
-              opacity={index === 0 ? 1 : 0.5}
-            >
-              {leader}
-            </Badge>
-          </Tooltip>
+          <Box bg="gray.9" p="xs" style={{ borderRadius: "4px" }}>
+            <Text>{leader}</Text>
+          </Box>
         ))}
       </Group>
 

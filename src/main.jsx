@@ -1,4 +1,5 @@
 import "@mantine/core/styles.css";
+import "./styles/fonts.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -48,6 +49,10 @@ const myColor = [
 const theme = createTheme({
   colors: {
     blueGray: myColor,
+  },
+  // fontFamily: "Slider, sans-serif",
+  headings: {
+    fontFamily: "Slider, sans-serif",
   },
 });
 
