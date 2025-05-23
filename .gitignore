@@ -26,3 +26,6 @@ yarn-error.log*
 # Ignore language Servers.
 /.lsp
 /.clj-kondo
+
+login
+public/tiles
