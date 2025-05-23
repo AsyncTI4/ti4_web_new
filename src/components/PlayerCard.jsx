@@ -278,9 +278,246 @@ export default function PlayerCard({
         </Grid.Col>
       </Grid>
 
+      <Grid gutter={2} mt="xl">
+        <Grid.Col span={3}>
+          <Stack gap={0}>
+            {[
+              "Anti-Mass Deflectors",
+              "Gravity Drive",
+              "Fleet Logistics",
+              "Lightwave Deflectors",
+            ].map((tech, index) => {
+              if (index === 2 || index === 1) {
+                return (
+                  <Group gap="xs" bg="blue.9" px="xs">
+                    <Image
+                      src={`/blue.png`}
+                      alt={tech}
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    <Text c="white" fw={700}>
+                      {tech}
+                    </Text>
+                  </Group>
+                );
+              }
+
+              return (
+                <Group gap="xs" bg="transparent" px="xs">
+                  <Image
+                    src={`/blue.png`}
+                    alt={tech}
+                    style={{ width: "16px", height: "16px" }}
+                  />
+                  <Text c="dimmed">{tech}</Text>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Stack gap={0}>
+            {[
+              "Neural Motivator",
+              "Daxcive Animators",
+              "Hyper Metabolism",
+              "X-89 whatever its called",
+            ].map((tech, index) => {
+              if (index === 9) {
+                return (
+                  <Group gap="xs" bg="green.9" px="xs">
+                    <Image
+                      src={`/green.png`}
+                      alt={tech}
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    <Text c="white" fw={700}>
+                      {tech}
+                    </Text>
+                  </Group>
+                );
+              }
+
+              return (
+                <Group gap="xs" bg="transparent" px="xs">
+                  <Image
+                    src={`/green.png`}
+                    alt={tech}
+                    style={{ width: "16px", height: "16px" }}
+                  />
+                  <Text c="dimmed">{tech}</Text>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Stack gap={0}>
+            {[
+              "Sarween Tools",
+              "Graviton Laser System",
+              "Transit Diodes",
+              "Integrated Economy",
+            ].map((tech, index) => {
+              if (index === 0) {
+                return (
+                  <Group gap="xs" bg="yellow.9" px="xs">
+                    <Image
+                      src={`/yellow.png`}
+                      alt={tech}
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    <Text c="white" fw={700}>
+                      {tech}
+                    </Text>
+                  </Group>
+                );
+              }
+
+              return (
+                <Group gap="xs" bg="transparent" px="xs">
+                  <Image
+                    src={`/yellow.png`}
+                    alt={tech}
+                    style={{ width: "16px", height: "16px" }}
+                  />
+                  <Text c="dimmed">{tech}</Text>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Stack gap={0}>
+            {[
+              "Plasma Scoring",
+              "Mageon Defense Grid",
+              "Duranium Armopr",
+              "Assault Cannon",
+            ].map((tech, index) => {
+              if (index === 0 || index === 3) {
+                return (
+                  <Group gap="xs" bg="red.9" px="xs">
+                    <Image
+                      src={`/red.png`}
+                      alt={tech}
+                      style={{ width: "16px", height: "16px" }}
+                    />
+                    <Text c="white" fw={700}>
+                      {tech}
+                    </Text>
+                  </Group>
+                );
+              }
+
+              return (
+                <Group gap="xs" bg="transparent" px="xs">
+                  <Image
+                    src={`/red.png`}
+                    alt={tech}
+                    style={{ width: "16px", height: "16px" }}
+                  />
+                  <Text c="dimmed">{tech}</Text>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Grid.Col>
+      </Grid>
+
       <Box mt="xl">
-        <Group gap="xs" mb="xs">
-          {sortedTechs.map((tech, index) => (
+        <Stack gap="xs" mb="xs">
+          <Box>
+            <Group gap="xs">
+              {sortedTechs
+                .filter((v) => v.color === "blue")
+                .map((tech, index) => (
+                  <Tooltip key={index} label={tech.name}>
+                    <Badge
+                      color={tech.color}
+                      leftSection={
+                        <Image
+                          src={`/${tech.color}.png`}
+                          alt={tech.name}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                      }
+                    >
+                      {tech.name}
+                    </Badge>
+                  </Tooltip>
+                ))}
+            </Group>
+          </Box>
+          <Box>
+            <Group gap="xs">
+              {sortedTechs
+                .filter((v) => v.color === "yellow")
+                .map((tech, index) => (
+                  <Tooltip key={index} label={tech.name}>
+                    <Badge
+                      color={tech.color}
+                      leftSection={
+                        <Image
+                          src={`/${tech.color}.png`}
+                          alt={tech.name}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                      }
+                    >
+                      {tech.name}
+                    </Badge>
+                  </Tooltip>
+                ))}
+            </Group>
+          </Box>
+
+          <Box>
+            <Group gap="xs">
+              {sortedTechs
+                .filter((v) => v.color === "green")
+                .map((tech, index) => (
+                  <Tooltip key={index} label={tech.name}>
+                    <Badge
+                      color={tech.color}
+                      leftSection={
+                        <Image
+                          src={`/${tech.color}.png`}
+                          alt={tech.name}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                      }
+                    >
+                      {tech.name}
+                    </Badge>
+                  </Tooltip>
+                ))}
+            </Group>
+          </Box>
+          <Box>
+            <Group gap="xs">
+              {sortedTechs
+                .filter((v) => v.color === "red")
+                .map((tech, index) => (
+                  <Tooltip key={index} label={tech.name}>
+                    <Badge
+                      color={tech.color}
+                      leftSection={
+                        <Image
+                          src={`/${tech.color}.png`}
+                          alt={tech.name}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                      }
+                    >
+                      {tech.name}
+                    </Badge>
+                  </Tooltip>
+                ))}
+            </Group>
+          </Box>
+
+          {/* {sortedTechs.map((tech, index) => (
             <Tooltip key={index} label={tech.name}>
               <Badge
                 color={tech.color}
@@ -295,8 +532,8 @@ export default function PlayerCard({
                 {tech.name}
               </Badge>
             </Tooltip>
-          ))}
-        </Group>
+          ))} */}
+        </Stack>
       </Box>
 
       <Box mt="xl">
