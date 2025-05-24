@@ -43,16 +43,36 @@ export default function PlayerCard({
     "3. Jace X. 4th Air Legion",
   ],
   techs = [
-    { name: "Anti-Mass Deflectors", color: "blue", isUnitUpgrade: false },
-    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false },
-    { name: "Fleet Logistics", color: "blue", isUnitUpgrade: false },
-    { name: "Light-Wave Deflector", color: "blue", isUnitUpgrade: false },
+    {
+      name: "Anti-Mass Deflectors",
+      color: "blue",
+      isUnitUpgrade: false,
+      tier: 1,
+    },
+    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false, tier: 2 },
+    { name: "Fleet Logistics", color: "blue", isUnitUpgrade: false, tier: 2 },
+    {
+      name: "Light-Wave Deflector",
+      color: "blue",
+      isUnitUpgrade: false,
+      tier: 4,
+    },
 
-    { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false },
-    { name: "Plasma Scoring", color: "red", isUnitUpgrade: false },
-    { name: "Daxcive Animators", color: "green", isUnitUpgrade: false },
-    { name: "Hyper Metabolism", color: "green", isUnitUpgrade: false },
-    { name: "Integrated Economy", color: "yellow", isUnitUpgrade: false },
+    { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false, tier: 2 },
+    { name: "Plasma Scoring", color: "red", isUnitUpgrade: false, tier: 1 },
+    {
+      name: "Daxcive Animators",
+      color: "green",
+      isUnitUpgrade: false,
+      tier: 2,
+    },
+    { name: "Hyper Metabolism", color: "green", isUnitUpgrade: false, tier: 3 },
+    {
+      name: "Integrated Economy",
+      color: "yellow",
+      isUnitUpgrade: false,
+      tier: 4,
+    },
 
     // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
     // { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
@@ -762,6 +782,35 @@ export default function PlayerCard({
                                 "linear-gradient(180deg, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.2) 100%)",
                             }}
                           />
+                          {/* Tier indicator dots in top-right */}
+                          {tech.tier && (
+                            <Box
+                              style={{
+                                position: "absolute",
+                                top: "3px",
+                                right: "4px",
+                                display: "flex",
+                                gap: "2px",
+                                flexWrap: "wrap",
+                                width: "12px",
+                                justifyContent: "flex-end",
+                              }}
+                            >
+                              {[...Array(tech.tier)].map((_, dotIndex) => (
+                                <Box
+                                  key={dotIndex}
+                                  style={{
+                                    width: "3px",
+                                    height: "3px",
+                                    borderRadius: "50%",
+                                    background: "rgba(59, 130, 246, 0.9)",
+                                    boxShadow:
+                                      "0 0 3px rgba(59, 130, 246, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+                                  }}
+                                />
+                              ))}
+                            </Box>
+                          )}
                           <Group gap={4} style={{ position: "relative" }}>
                             <Image
                               src={`/${tech.color}.png`}
@@ -779,6 +828,7 @@ export default function PlayerCard({
                               fw={600}
                               style={{
                                 textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                                paddingRight: "16px",
                               }}
                             >
                               {tech.name}
@@ -816,6 +866,35 @@ export default function PlayerCard({
                                   "linear-gradient(180deg, rgba(234, 179, 8, 0.6) 0%, rgba(234, 179, 8, 0.2) 100%)",
                               }}
                             />
+                            {/* Tier indicator dots in top-right */}
+                            {tech.tier && (
+                              <Box
+                                style={{
+                                  position: "absolute",
+                                  top: "3px",
+                                  right: "4px",
+                                  display: "flex",
+                                  gap: "2px",
+                                  flexWrap: "wrap",
+                                  width: "12px",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {[...Array(tech.tier)].map((_, dotIndex) => (
+                                  <Box
+                                    key={dotIndex}
+                                    style={{
+                                      width: "3px",
+                                      height: "3px",
+                                      borderRadius: "50%",
+                                      background: "rgba(234, 179, 8, 0.9)",
+                                      boxShadow:
+                                        "0 0 3px rgba(234, 179, 8, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            )}
                             <Group gap={4} style={{ position: "relative" }}>
                               <Image
                                 src={`/${tech.color}.png`}
@@ -833,6 +912,7 @@ export default function PlayerCard({
                                 fw={600}
                                 style={{
                                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                                  paddingRight: "16px",
                                 }}
                               >
                                 {tech.name}
@@ -871,6 +951,35 @@ export default function PlayerCard({
                                   "linear-gradient(180deg, rgba(34, 197, 94, 0.6) 0%, rgba(34, 197, 94, 0.2) 100%)",
                               }}
                             />
+                            {/* Tier indicator dots in top-right */}
+                            {tech.tier && (
+                              <Box
+                                style={{
+                                  position: "absolute",
+                                  top: "3px",
+                                  right: "4px",
+                                  display: "flex",
+                                  gap: "2px",
+                                  flexWrap: "wrap",
+                                  width: "12px",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {[...Array(tech.tier)].map((_, dotIndex) => (
+                                  <Box
+                                    key={dotIndex}
+                                    style={{
+                                      width: "3px",
+                                      height: "3px",
+                                      borderRadius: "50%",
+                                      background: "rgba(34, 197, 94, 0.9)",
+                                      boxShadow:
+                                        "0 0 3px rgba(34, 197, 94, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            )}
                             <Group gap={4} style={{ position: "relative" }}>
                               <Image
                                 src={`/${tech.color}.png`}
@@ -888,6 +997,7 @@ export default function PlayerCard({
                                 fw={600}
                                 style={{
                                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                                  paddingRight: "16px",
                                 }}
                               >
                                 {tech.name}
@@ -926,6 +1036,35 @@ export default function PlayerCard({
                                   "linear-gradient(180deg, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.2) 100%)",
                               }}
                             />
+                            {/* Tier indicator dots in top-right */}
+                            {tech.tier && (
+                              <Box
+                                style={{
+                                  position: "absolute",
+                                  top: "3px",
+                                  right: "4px",
+                                  display: "flex",
+                                  gap: "2px",
+                                  flexWrap: "wrap",
+                                  width: "12px",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {[...Array(tech.tier)].map((_, dotIndex) => (
+                                  <Box
+                                    key={dotIndex}
+                                    style={{
+                                      width: "3px",
+                                      height: "3px",
+                                      borderRadius: "50%",
+                                      background: "rgba(239, 68, 68, 0.9)",
+                                      boxShadow:
+                                        "0 0 3px rgba(239, 68, 68, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            )}
                             <Group gap={4} style={{ position: "relative" }}>
                               <Image
                                 src={`/${tech.color}.png`}
@@ -943,6 +1082,7 @@ export default function PlayerCard({
                                 fw={600}
                                 style={{
                                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                                  paddingRight: "16px",
                                 }}
                               >
                                 {tech.name}
@@ -1724,6 +1864,26 @@ export default function PlayerCard({
             style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
         </Box>
+      </Box>
+
+      <Box
+        style={{
+          position: "absolute",
+          bottom: -60,
+          right: -40,
+          opacity: 0.15,
+          zIndex: 0,
+          pointerEvents: "none",
+          width: "240px",
+          height: "240px",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src="/sol.png"
+          alt="faction"
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
       </Box>
     </Paper>
   );
