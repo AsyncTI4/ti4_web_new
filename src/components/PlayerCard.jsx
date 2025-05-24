@@ -13,6 +13,7 @@ import {
   Image,
   Chip,
   Divider,
+  Table,
 } from "@mantine/core";
 import {
   IconAnchor,
@@ -21,6 +22,7 @@ import {
   IconLeaf,
   IconMountain,
   IconFlag,
+  IconRocket,
 } from "@tabler/icons-react";
 import StrategyCard from "./StrategyCard";
 
@@ -1897,7 +1899,64 @@ export default function PlayerCard({
                   ))}
                 </Stack>
               </Group>
-              <div>hi</div>
+              <Box>
+                <Table horizontalSpacing={6} verticalSpacing={4}>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th style={{ width: "22px" }}></Table.Th>
+                      <Table.Th>Space</Table.Th>
+                      <Table.Th>Ground</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td>
+                        <IconRocket size={14} color="#94a3b8" />
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          8
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          12
+                        </Text>
+                      </Table.Td>
+                    </Table.Tr>
+                    <Table.Tr>
+                      <Table.Td>
+                        <IconUsers size={14} color="#94a3b8" />
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          4
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          6
+                        </Text>
+                      </Table.Td>
+                    </Table.Tr>
+                    <Table.Tr>
+                      <Table.Td>
+                        <IconFlag size={14} color="#94a3b8" />
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          2
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="md" fw={700} c="white">
+                          3
+                        </Text>
+                      </Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                </Table>
+              </Box>
             </Group>
           </Grid.Col>
         </Grid>
