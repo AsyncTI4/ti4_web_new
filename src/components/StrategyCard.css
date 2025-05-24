@@ -1,0 +1,167 @@
+/* Strategy Card Component */
+.strategy-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 700;
+  margin: 4px;
+}
+
+/* Main card body with angled design */
+.strategy-card-main {
+  position: relative;
+  background: var(--bg-color);
+  color: var(--text-color);
+  padding: 12px 24px 12px 40px;
+  min-width: 140px;
+
+  /* Create angled shape */
+  clip-path: polygon(24px 0%, calc(100% - 8px) 0%, 100% 100%, 8px 100%);
+
+  /* Modern shadow */
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Subtle border effect */
+  border: 2px solid var(--border-color);
+  border-radius: 2px;
+}
+
+/* Text styling */
+.strategy-card-text {
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Number circle that bleeds outside */
+.strategy-card-number {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 32px;
+  height: 32px;
+
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  color: var(--text-color);
+
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  /* Elevated shadow */
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+
+  z-index: 10;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Size variants */
+.strategy-card.small .strategy-card-main {
+  padding: 8px 18px 8px 32px;
+  min-width: 110px;
+  clip-path: polygon(20px 0%, calc(100% - 6px) 0%, 100% 100%, 6px 100%);
+}
+
+.strategy-card.small .strategy-card-text {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.strategy-card.small .strategy-card-number {
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+  left: 6px;
+}
+
+.strategy-card.large .strategy-card-main {
+  padding: 16px 30px 16px 48px;
+  min-width: 180px;
+  clip-path: polygon(28px 0%, calc(100% - 10px) 0%, 100% 100%, 10px 100%);
+}
+
+.strategy-card.large .strategy-card-text {
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.strategy-card.large .strategy-card-number {
+  width: 38px;
+  height: 38px;
+  font-size: 22px;
+  left: 10px;
+}
+
+/* Hover effects */
+.strategy-card:hover .strategy-card-main {
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.strategy-card:hover .strategy-card-number {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth transitions */
+.strategy-card-main {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.strategy-card-number {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .strategy-card {
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 480px) {
+  .strategy-card {
+    transform: scale(0.8);
+  }
+
+  .strategy-card-text {
+    letter-spacing: 1px;
+  }
+}
+
+/* Focus states for accessibility */
+.strategy-card:focus-within .strategy-card-main {
+  outline: 2px solid var(--border-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .strategy-card-main {
+    border-width: 3px;
+  }
+
+  .strategy-card-number {
+    border-width: 3px;
+  }
+}

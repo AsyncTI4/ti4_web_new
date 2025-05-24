@@ -15,8 +15,6 @@ import {
   Divider,
 } from "@mantine/core";
 import {
-  IconCircle,
-  IconCrown,
   IconAnchor,
   IconBuilding,
   IconUsers,
@@ -44,17 +42,20 @@ export default function PlayerCard({
     "3. Jace X. 4th Air Legion",
   ],
   techs = [
-    { name: "Neural Motivator", color: "blue", isUnitUpgrade: false },
+    { name: "Anti-Mass Deflectors", color: "blue", isUnitUpgrade: false },
+    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false },
+    { name: "Fleet Logistics", color: "blue", isUnitUpgrade: false },
+    { name: "Light-Wave Deflector", color: "blue", isUnitUpgrade: false },
+
     { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false },
     { name: "Plasma Scoring", color: "red", isUnitUpgrade: false },
-    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false },
     { name: "Daxcive Animators", color: "green", isUnitUpgrade: false },
     { name: "Hyper Metabolism", color: "green", isUnitUpgrade: false },
     { name: "Integrated Economy", color: "yellow", isUnitUpgrade: false },
-    { name: "Light-Wave Deflector", color: "blue", isUnitUpgrade: false },
-    { name: "Carrier II", color: "blue", isUnitUpgrade: true },
-    { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
-    { name: "Fighter II", color: "green", isUnitUpgrade: true },
+
+    // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
+    // { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
+    // { name: "Fighter II", color: "green", isUnitUpgrade: true },
   ],
   relics = [
     "Shard of the Throne",
@@ -64,7 +65,7 @@ export default function PlayerCard({
   ],
   promissoryNotes = ["Support for the Throne", "Trade Agreement"],
   planets = [
-    { name: "Mecatol Rex", resources: 1, influence: 6, trait: "cultural" },
+    { name: "Mecatol Rex", resources: 1, influence: 6 },
     {
       name: "Abyz",
       resources: 3,
@@ -88,7 +89,11 @@ export default function PlayerCard({
     { name: "Winnu", resources: 3, influence: 1, trait: "cultural" },
   ],
   neighbors = ["Player 2", "Player 3"],
-  scoredSecrets = ["Cut Supply Lines", "Destroy Their Greatest Ship"],
+  scoredSecrets = [
+    "(685) Gather a Mighty Fleet",
+    "(583) Monopolize Production",
+    "(189) Unveil Flagship",
+  ],
 }) {
   const totalResources = planets.reduce(
     (sum, planet) => sum + planet.resources,
@@ -103,6 +108,30 @@ export default function PlayerCard({
     cultural: <IconLeaf size={12} color="green" />,
     hazardous: <IconMountain size={12} color="red" />,
     industrial: <IconBuilding size={12} color="yellow" />,
+  };
+
+  const planetTraitIcons = {
+    cultural: (
+      <Image
+        src={`/planet_attributes/pc_attribute_cultural.png`}
+        alt="cultural"
+        style={{ width: "16px", height: "16px" }}
+      />
+    ),
+    hazardous: (
+      <Image
+        src={`/planet_attributes/pc_attribute_hazardous.png`}
+        alt="hazardous"
+        style={{ width: "16px", height: "16px" }}
+      />
+    ),
+    industrial: (
+      <Image
+        src={`/planet_attributes/pc_attribute_industrial.png`}
+        alt="industrial"
+        style={{ width: "16px", height: "16px" }}
+      />
+    ),
   };
 
   const techSkipIcons = {
@@ -136,41 +165,30 @@ export default function PlayerCard({
     ),
   };
 
-  const sortedTechs = techs.sort((a, b) => {
-    if (a.color !== b.color) return a.color.localeCompare(b.color);
-    if (a.isUnitUpgrade !== b.isUnitUpgrade) return a.isUnitUpgrade ? 1 : -1;
-    return a.name.localeCompare(b.name);
-  });
-
   const theme = useMantineTheme();
 
   return (
     <Paper
       p="sm"
       bg="blueGray.9"
-      style={{ maxWidth: "100%" }}
+      style={{ maxWidth: "100%", border: "2px solid #ffc0cb7d", margin: "5px" }}
       radius="md"
       shadow="lg"
+      pos="relative"
     >
-      <Group justify="space-between" mb="xs">
-        <Group>
-          <Group gap="xs" p="xs">
-            <Box bg="white" style={{ borderRadius: "20px" }} px={4} py={2}>
-              <Image src="/sol.png" alt="faction" style={{ width: "20px" }} />
-            </Box>
-            <Box>
-              <Text fw={700} span c="white">
-                {playerName}
-              </Text>
-              <Text size="sm" span ml={4} opacity={0.9} c="white">
-                [{faction}]
-              </Text>
-            </Box>
+      <Group justify="space-between" mb="lg">
+        <Group gap={30}>
+          <Group gap={4} py={2}>
+            <Text span c="white" size="lg" ff="heading">
+              {playerName}
+            </Text>
+            <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
+              [{faction}]
+            </Text>
+            <Text size="sm" span ml={4} ff="heading" c="pink">
+              (pink)
+            </Text>
           </Group>
-
-          <Badge variant="outline" color="green" size="lg">
-            {strategyCard}: CONSTRUCTION
-          </Badge>
         </Group>
 
         <Group gap="xs">
@@ -186,22 +204,7 @@ export default function PlayerCard({
             <IconSword size={16} color="red" />
             {publicObjectives}
           </Group> */}
-          <Group gap={4}>
-            <Image
-              src={`/tg.png`}
-              alt="trade goods"
-              style={{ width: "16px", height: "16px" }}
-            />
-            {tradeGoods}
-          </Group>
-          <Group gap={4}>
-            <Image
-              src={`/comms.png`}
-              alt="trade goods"
-              style={{ width: "16px", height: "16px" }}
-            />
-            {commodities}
-          </Group>
+
           {/* <Group gap={4} bg="dark.7" px="xs" style={{ borderRadius: "4px" }}>
             <Tooltip label="Tactics">
               <Text>T</Text>
@@ -221,10 +224,349 @@ export default function PlayerCard({
         </Group>
       </Group>
 
-      <Group gap="xs" mb="xs">
+      <Grid gutter={0} columns={12}>
+        <Grid.Col span={2}>
+          <Stack>
+            <Group gap={4}>
+              <Box pos="relative">
+                <Box
+                  style={{
+                    width: "45px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image src="/cardback/cardback_so.png" alt="action cards" />
+                </Box>
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  pos="absolute"
+                  left={12}
+                  bottom={2}
+                  px={5}
+                >
+                  0
+                </Text>
+              </Box>
+
+              <Box pos="relative">
+                <Box
+                  style={{
+                    width: "45px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src="/cardback/cardback_action.png"
+                    alt="action cards"
+                  />
+                </Box>
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  pos="absolute"
+                  left={12}
+                  bottom={2}
+                  px={5}
+                >
+                  4
+                </Text>
+              </Box>
+              <Box pos="relative">
+                <Box
+                  style={{
+                    width: "45px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image src="/cardback/cardback_pn.png" alt="action cards" />
+                </Box>
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  pos="absolute"
+                  left={12}
+                  bottom={2}
+                  px={5}
+                >
+                  7
+                </Text>
+              </Box>
+              <Box pos="relative">
+                <Box
+                  style={{
+                    width: "45px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image src="/cardback/cardback_tg.png" alt="action cards" />
+                </Box>
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  pos="absolute"
+                  left={8}
+                  bottom={2}
+                  px={5}
+                >
+                  17
+                </Text>
+              </Box>
+              <Box pos="relative">
+                <Box
+                  style={{
+                    width: "45px",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src="/cardback/cardback_comms.png"
+                    alt="action cards"
+                  />
+                </Box>
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  pos="absolute"
+                  left={4}
+                  bottom={2}
+                  px={5}
+                >
+                  0/6
+                </Text>
+              </Box>
+            </Group>
+            <Stack gap={2}>
+              {scoredSecrets.map((secret, index) => (
+                <Badge
+                  radius="sm"
+                  variant="light"
+                  color="red"
+                  fw={700}
+                  leftSection={
+                    <Image
+                      src="/so_icon.png"
+                      style={{ width: "12px", height: "12px" }}
+                    />
+                  }
+                >
+                  {secret}
+                </Badge>
+              ))}
+            </Stack>
+          </Stack>
+        </Grid.Col>
+        <Grid.Col span={10} style={{ display: "flex", alignItems: "center" }}>
+          <Stack gap="xs">
+            <Group
+              bg="rgba(0, 0, 0, 0.5)"
+              w="fit-content"
+              p="xs"
+              style={{
+                borderRadius: "10px",
+              }}
+            >
+              <Group gap="xs" align="top">
+                <Stack gap="xs">
+                  {techs
+                    .filter((v) => v.color === "blue")
+                    .map((tech, index) => (
+                      <Badge
+                        w="100%"
+                        color={`${tech.color}.2`}
+                        leftSection={
+                          <Image
+                            src={`/${tech.color}.png`}
+                            alt={tech.name}
+                            style={{ width: "16px", height: "16px" }}
+                          />
+                        }
+                        c="blue.9"
+                      >
+                        {tech.name}
+                      </Badge>
+                    ))}
+                </Stack>
+
+                <Stack gap="xs">
+                  {techs
+                    .filter((v) => v.color === "yellow")
+                    .map((tech, index) => (
+                      <Tooltip key={index} label={tech.name}>
+                        <Badge
+                          w="100%"
+                          color={`${tech.color}.2`}
+                          leftSection={
+                            <Image
+                              src={`/${tech.color}.png`}
+                              alt={tech.name}
+                              style={{ width: "16px", height: "16px" }}
+                            />
+                          }
+                        >
+                          {tech.name}
+                        </Badge>
+                      </Tooltip>
+                    ))}
+                </Stack>
+
+                <Stack gap="xs">
+                  {techs
+                    .filter((v) => v.color === "green")
+                    .map((tech, index) => (
+                      <Tooltip key={index} label={tech.name}>
+                        <Badge
+                          w="100%"
+                          color={tech.color}
+                          leftSection={
+                            <Image
+                              src={`/${tech.color}.png`}
+                              alt={tech.name}
+                              style={{ width: "16px", height: "16px" }}
+                            />
+                          }
+                        >
+                          {tech.name}
+                        </Badge>
+                      </Tooltip>
+                    ))}
+                </Stack>
+
+                <Stack gap="xs">
+                  {techs
+                    .filter((v) => v.color === "red")
+                    .map((tech, index) => (
+                      <Tooltip key={index} label={tech.name}>
+                        <Badge
+                          w="100%"
+                          color={tech.color}
+                          leftSection={
+                            <Image
+                              src={`/${tech.color}.png`}
+                              alt={tech.name}
+                              style={{ width: "16px", height: "16px" }}
+                            />
+                          }
+                        >
+                          {tech.name}
+                        </Badge>
+                      </Tooltip>
+                    ))}
+                </Stack>
+              </Group>
+              <Box>
+                <Image
+                  src="/mockunitupgrades.png"
+                  alt="unit upgrades"
+                  style={{
+                    width: "auto",
+                    height: "110px",
+                  }}
+                />
+              </Box>
+            </Group>
+            <Box>
+              <Group gap="xs">
+                {planets.map((planet, index) => (
+                  <Stack
+                    key={index}
+                    bg={
+                      planet.trait === "cultural"
+                        ? "rgba(0, 100, 255, 0.1)"
+                        : planet.trait === "hazardous"
+                          ? "rgba(255, 50, 50, 0.1)"
+                          : "rgba(50, 200, 50, 0.1)"
+                    }
+                    py={4}
+                    px="xs"
+                    justify="space-between"
+                    h={140}
+                    style={{
+                      borderRadius: "12px",
+                      border: "1px solid",
+                      borderColor:
+                        planet.trait === "cultural"
+                          ? "rgba(0, 100, 255, 0.3)"
+                          : planet.trait === "hazardous"
+                            ? "rgba(255, 50, 50, 0.3)"
+                            : "rgba(50, 200, 50, 0.3)",
+                    }}
+                  >
+                    <Stack gap={6}>
+                      {planetTraitIcons[planet.trait]}
+                      <Text
+                        size="xs"
+                        c="white"
+                        fw={700}
+                        style={{
+                          writingMode: "vertical-rl",
+                          textOrientation: "sideways",
+                          whiteSpace: "nowrap",
+                          transform: "rotate(180deg)",
+                        }}
+                      >
+                        {planet.name}
+                      </Text>
+                    </Stack>
+                    <Stack gap={4}>
+                      {planet.techSkip && techSkipIcons[planet.techSkip]}
+                      <Stack gap={2}>
+                        <Text
+                          size="xs"
+                          bg="blue"
+                          px={4}
+                          c="white"
+                          fw={700}
+                          style={{ borderRadius: "4px" }}
+                        >
+                          {planet.resources}
+                        </Text>
+
+                        <Text
+                          size="xs"
+                          bg="yellow"
+                          px={4}
+                          c="white"
+                          fw={700}
+                          style={{ borderRadius: "4px" }}
+                        >
+                          {planet.influence}
+                        </Text>
+                      </Stack>
+                    </Stack>
+                  </Stack>
+                ))}
+              </Group>
+            </Box>
+          </Stack>
+        </Grid.Col>
+      </Grid>
+
+      <Group gap={2} mb="xs" mt="lg">
         {leaders.map((leader, index) => (
-          <Box bg="gray.9" p="xs" style={{ borderRadius: "4px" }}>
-            <Text>{leader}</Text>
+          <Box
+            p={2}
+            px="sm"
+            style={{ borderRadius: "4px", border: "2px solid white" }}
+          >
+            <Text size="sm" fw={700} c="white">
+              {leader}
+            </Text>
           </Box>
         ))}
       </Group>
@@ -250,28 +592,12 @@ export default function PlayerCard({
 
         <Grid.Col span={6}>
           <Box>
-            <Group gap="xs">
-              {scoredSecrets.map((secret, index) => (
-                <Tooltip key={index} label={secret}>
-                  <Chip
-                    size="xs"
-                    radius="sm"
-                    variant="light"
-                    color="red"
-                    fw={700}
-                    checked={true}
-                    leftSection={<IconFlag size={12} />}
-                  >
-                    {secret}
-                  </Chip>
-                </Tooltip>
-              ))}
-            </Group>
+            <Group gap="xs"></Group>
           </Box>
         </Grid.Col>
       </Grid>
-
-      <Grid gutter={2} mt="xl">
+      {/*
+      <Grid gutter={2} mt="xl" w="70%">
         <Grid.Col span={3}>
           <Stack gap={0}>
             {[
@@ -288,7 +614,7 @@ export default function PlayerCard({
                       alt={tech}
                       style={{ width: "16px", height: "16px" }}
                     />
-                    <Text c="white" fw={700}>
+                    <Text c="white" fw={700} size="sm">
                       {tech}
                     </Text>
                   </Group>
@@ -302,7 +628,9 @@ export default function PlayerCard({
                     alt={tech}
                     style={{ width: "16px", height: "16px" }}
                   />
-                  <Text c="dimmed">{tech}</Text>
+                  <Text c="dimmed" size="sm">
+                    {tech}
+                  </Text>
                 </Group>
               );
             })}
@@ -314,7 +642,7 @@ export default function PlayerCard({
               "Neural Motivator",
               "Daxcive Animators",
               "Hyper Metabolism",
-              "X-89 whatever its called",
+              "X-89 Bacterial Weapon",
             ].map((tech, index) => {
               if (index === 9) {
                 return (
@@ -324,7 +652,7 @@ export default function PlayerCard({
                       alt={tech}
                       style={{ width: "16px", height: "16px" }}
                     />
-                    <Text c="white" fw={700}>
+                    <Text c="white" fw={700} size="sm">
                       {tech}
                     </Text>
                   </Group>
@@ -338,7 +666,9 @@ export default function PlayerCard({
                     alt={tech}
                     style={{ width: "16px", height: "16px" }}
                   />
-                  <Text c="dimmed">{tech}</Text>
+                  <Text c="dimmed" size="sm">
+                    {tech}
+                  </Text>
                 </Group>
               );
             })}
@@ -360,7 +690,7 @@ export default function PlayerCard({
                       alt={tech}
                       style={{ width: "16px", height: "16px" }}
                     />
-                    <Text c="white" fw={700}>
+                    <Text c="white" fw={700} size="sm">
                       {tech}
                     </Text>
                   </Group>
@@ -374,7 +704,9 @@ export default function PlayerCard({
                     alt={tech}
                     style={{ width: "16px", height: "16px" }}
                   />
-                  <Text c="dimmed">{tech}</Text>
+                  <Text c="dimmed" size="sm">
+                    {tech}
+                  </Text>
                 </Group>
               );
             })}
@@ -396,7 +728,7 @@ export default function PlayerCard({
                       alt={tech}
                       style={{ width: "16px", height: "16px" }}
                     />
-                    <Text c="white" fw={700}>
+                    <Text c="white" fw={700} size="sm">
                       {tech}
                     </Text>
                   </Group>
@@ -410,177 +742,15 @@ export default function PlayerCard({
                     alt={tech}
                     style={{ width: "16px", height: "16px" }}
                   />
-                  <Text c="dimmed">{tech}</Text>
+                  <Text c="dimmed" size="sm">
+                    {tech}
+                  </Text>
                 </Group>
               );
             })}
           </Stack>
         </Grid.Col>
-      </Grid>
-
-      <Box mt="xl">
-        <Stack gap="xs" mb="xs">
-          <Box>
-            <Group gap="xs">
-              {sortedTechs
-                .filter((v) => v.color === "blue")
-                .map((tech, index) => (
-                  <Tooltip key={index} label={tech.name}>
-                    <Badge
-                      color={tech.color}
-                      leftSection={
-                        <Image
-                          src={`/${tech.color}.png`}
-                          alt={tech.name}
-                          style={{ width: "16px", height: "16px" }}
-                        />
-                      }
-                    >
-                      {tech.name}
-                    </Badge>
-                  </Tooltip>
-                ))}
-            </Group>
-          </Box>
-          <Box>
-            <Group gap="xs">
-              {sortedTechs
-                .filter((v) => v.color === "yellow")
-                .map((tech, index) => (
-                  <Tooltip key={index} label={tech.name}>
-                    <Badge
-                      color={tech.color}
-                      leftSection={
-                        <Image
-                          src={`/${tech.color}.png`}
-                          alt={tech.name}
-                          style={{ width: "16px", height: "16px" }}
-                        />
-                      }
-                    >
-                      {tech.name}
-                    </Badge>
-                  </Tooltip>
-                ))}
-            </Group>
-          </Box>
-
-          <Box>
-            <Group gap="xs">
-              {sortedTechs
-                .filter((v) => v.color === "green")
-                .map((tech, index) => (
-                  <Tooltip key={index} label={tech.name}>
-                    <Badge
-                      color={tech.color}
-                      leftSection={
-                        <Image
-                          src={`/${tech.color}.png`}
-                          alt={tech.name}
-                          style={{ width: "16px", height: "16px" }}
-                        />
-                      }
-                    >
-                      {tech.name}
-                    </Badge>
-                  </Tooltip>
-                ))}
-            </Group>
-          </Box>
-          <Box>
-            <Group gap="xs">
-              {sortedTechs
-                .filter((v) => v.color === "red")
-                .map((tech, index) => (
-                  <Tooltip key={index} label={tech.name}>
-                    <Badge
-                      color={tech.color}
-                      leftSection={
-                        <Image
-                          src={`/${tech.color}.png`}
-                          alt={tech.name}
-                          style={{ width: "16px", height: "16px" }}
-                        />
-                      }
-                    >
-                      {tech.name}
-                    </Badge>
-                  </Tooltip>
-                ))}
-            </Group>
-          </Box>
-
-          {/* {sortedTechs.map((tech, index) => (
-            <Tooltip key={index} label={tech.name}>
-              <Badge
-                color={tech.color}
-                leftSection={
-                  <Image
-                    src={`/${tech.color}.png`}
-                    alt={tech.name}
-                    style={{ width: "16px", height: "16px" }}
-                  />
-                }
-              >
-                {tech.name}
-              </Badge>
-            </Tooltip>
-          ))} */}
-        </Stack>
-      </Box>
-
-      <Box mt="xl">
-        <Grid gutter="xs" mb="xs">
-          {planets.map((planet, index) => (
-            <Grid.Col key={index} span={{ base: 4, sm: 4, md: 4, lg: 2 }}>
-              <Tooltip
-                label={`${planet.name}: ${planet.resources} resources, ${planet.influence} influence, ${planet.trait} planet${planet.techSkip ? `, ${planet.techSkip} tech skip` : ""}`}
-              >
-                <Group
-                  flex={1}
-                  justify="space-between"
-                  bg="blueGray.5"
-                  py={4}
-                  px="xs"
-                  style={{
-                    borderRadius: "12px",
-                    border: "1px solid",
-                    borderColor: theme.colors.blueGray[2],
-                  }}
-                >
-                  <Text size="xs" c="white" fw={700}>
-                    {planet.name}
-                  </Text>
-                  <Group gap={4}>
-                    {planet.techSkip && techSkipIcons[planet.techSkip]}
-                    <Text
-                      size="xs"
-                      bg="blue"
-                      px={4}
-                      c="white"
-                      fw={700}
-                      style={{ borderRadius: "4px" }}
-                    >
-                      {planet.resources}
-                    </Text>
-
-                    <Text
-                      size="xs"
-                      bg="yellow"
-                      px={4}
-                      c="white"
-                      fw={700}
-                      style={{ borderRadius: "4px" }}
-                    >
-                      {planet.influence}
-                    </Text>
-                  </Group>
-                </Group>
-              </Tooltip>
-            </Grid.Col>
-          ))}
-        </Grid>
-      </Box>
+      </Grid> */}
 
       <Group justify="space-between" align="center" mt="lg">
         <Group gap="xs">
@@ -602,6 +772,27 @@ export default function PlayerCard({
           ))}
         </Group>
       </Group>
+
+      <Box
+        style={{
+          position: "absolute",
+          bottom: -20,
+          right: -10,
+          opacity: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          height: "50%",
+          overflow: "hidden",
+        }}
+        px={4}
+        py={2}
+      >
+        <Image
+          src="/sol.png"
+          alt="faction"
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </Box>
     </Paper>
   );
 }
