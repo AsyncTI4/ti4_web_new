@@ -233,34 +233,77 @@ export default function PlayerCard({
             </Group>
 
             <Box
-              bg="red"
-              px="xs"
+              p={2}
+              px="sm"
               pl="lg"
-              style={{ borderRadius: "4px" }}
+              style={{
+                borderRadius: "8px",
+                background:
+                  "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
+                boxShadow:
+                  "0 4px 12px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                position: "relative",
+                marginLeft: "10px",
+                // overflow: "hidden",
+              }}
               pos="relative"
               align="center"
               display="flex"
             >
+              {/* Top shimmer */}
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "1px",
+                  background:
+                    "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
+                }}
+              />
+              {/* Bottom shimmer */}
+              <Box
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "1px",
+                  background:
+                    "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
+                }}
+              />
               <Box
                 bg="white"
                 style={{
                   border: "3px solid var(--mantine-color-red-7)",
                   borderRadius: "999px",
-                  width: "25px",
-                  height: "25px",
+                  width: "35px",
+                  height: "35px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   position: "absolute",
                   top: "0px",
                   left: "-10px",
+                  filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
                 }}
               >
-                <Text ff="heading" c="red.9" size="xl">
+                <Text ff="heading" c="red.9" size="30px">
                   1
                 </Text>
               </Box>
-              <Text ff="heading" c="white" size="md">
+              <Text
+                ff="heading"
+                c="white"
+                size="xl"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                  position: "relative",
+                  padding: "0 20px",
+                }}
+              >
                 LEADERSHIP
               </Text>
             </Box>
@@ -270,7 +313,7 @@ export default function PlayerCard({
         <Grid gutter="md" columns={12}>
           <Grid.Col span={2}>
             <Stack>
-              <Group gap={4}>
+              <Group gap={6}>
                 <Box pos="relative">
                   <Box
                     style={{
@@ -278,21 +321,46 @@ export default function PlayerCard({
                       borderRadius: "8px",
                       overflow: "hidden",
                       position: "relative",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                      border: "1px solid rgba(148, 163, 184, 0.2)",
+                      boxShadow:
+                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                     }}
                   >
-                    <Image src="/cardback/cardback_so.png" alt="action cards" />
+                    <Image
+                      src="/cardback/cardback_so.png"
+                      alt="secret objectives"
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                      }}
+                    />
                   </Box>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    pos="absolute"
-                    left={12}
-                    bottom={2}
-                    px={5}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      left: 10,
+                      bottom: 1,
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+                      borderRadius: "4px",
+                      boxShadow:
+                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                    }}
+                    px={6}
+                    py={1}
                   >
-                    0
-                  </Text>
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      0
+                    </Text>
+                  </Box>
                 </Box>
 
                 <Box pos="relative">
@@ -302,25 +370,48 @@ export default function PlayerCard({
                       borderRadius: "8px",
                       overflow: "hidden",
                       position: "relative",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                      border: "1px solid rgba(148, 163, 184, 0.2)",
+                      boxShadow:
+                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                     }}
                   >
                     <Image
                       src="/cardback/cardback_action.png"
                       alt="action cards"
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                      }}
                     />
                   </Box>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    pos="absolute"
-                    left={12}
-                    bottom={2}
-                    px={5}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      left: 10,
+                      bottom: 1,
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+                      borderRadius: "4px",
+                      boxShadow:
+                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                    }}
+                    px={6}
+                    py={1}
                   >
-                    4
-                  </Text>
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      4
+                    </Text>
+                  </Box>
                 </Box>
+
                 <Box pos="relative">
                   <Box
                     style={{
@@ -328,22 +419,48 @@ export default function PlayerCard({
                       borderRadius: "8px",
                       overflow: "hidden",
                       position: "relative",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                      border: "1px solid rgba(148, 163, 184, 0.2)",
+                      boxShadow:
+                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                     }}
                   >
-                    <Image src="/cardback/cardback_pn.png" alt="action cards" />
+                    <Image
+                      src="/cardback/cardback_pn.png"
+                      alt="promissory notes"
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                      }}
+                    />
                   </Box>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    pos="absolute"
-                    left={12}
-                    bottom={2}
-                    px={5}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      left: 10,
+                      bottom: 1,
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+                      borderRadius: "4px",
+                      boxShadow:
+                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                    }}
+                    px={6}
+                    py={1}
                   >
-                    7
-                  </Text>
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      7
+                    </Text>
+                  </Box>
                 </Box>
+
                 <Box pos="relative">
                   <Box
                     style={{
@@ -351,22 +468,48 @@ export default function PlayerCard({
                       borderRadius: "8px",
                       overflow: "hidden",
                       position: "relative",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                      border: "1px solid rgba(148, 163, 184, 0.2)",
+                      boxShadow:
+                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                     }}
                   >
-                    <Image src="/cardback/cardback_tg.png" alt="action cards" />
+                    <Image
+                      src="/cardback/cardback_tg.png"
+                      alt="trade goods"
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                      }}
+                    />
                   </Box>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    pos="absolute"
-                    left={8}
-                    bottom={2}
-                    px={5}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      left: 6,
+                      bottom: 1,
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+                      borderRadius: "4px",
+                      boxShadow:
+                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                    }}
+                    px={6}
+                    py={1}
                   >
-                    17
-                  </Text>
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      17
+                    </Text>
+                  </Box>
                 </Box>
+
                 <Box pos="relative">
                   <Box
                     style={{
@@ -374,24 +517,46 @@ export default function PlayerCard({
                       borderRadius: "8px",
                       overflow: "hidden",
                       position: "relative",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                      border: "1px solid rgba(148, 163, 184, 0.2)",
+                      boxShadow:
+                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                     }}
                   >
                     <Image
                       src="/cardback/cardback_comms.png"
-                      alt="action cards"
+                      alt="commodities"
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                      }}
                     />
                   </Box>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    pos="absolute"
-                    left={4}
-                    bottom={2}
-                    px={5}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      left: 2,
+                      bottom: 1,
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+                      borderRadius: "4px",
+                      boxShadow:
+                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                    }}
+                    px={6}
+                    py={1}
                   >
-                    0/6
-                  </Text>
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      0/6
+                    </Text>
+                  </Box>
                 </Box>
               </Group>
               <Stack gap={2}>
