@@ -1602,244 +1602,239 @@ export default function PlayerCard({
             </Stack>
           </Grid.Col>
           <Grid.Col span={4}>
-            <Stack>
-              <Group>
-                <Group
-                  p={2}
-                  px="sm"
-                  style={{
-                    borderRadius: "8px",
-                    background:
-                      "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                    boxShadow:
-                      "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                    position: "relative",
-                    overflow: "hidden",
-                    minWidth: "150px",
-                  }}
-                  w="fit-content"
-                >
-                  {/* Top shimmer */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background:
-                        "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                    }}
-                  />
-                  {/* Bottom shimmer */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background:
-                        "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Image
-                      src="/commanders/solagent.webp"
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
-                    <Stack gap={0}>
-                      <Text
-                        size="sm"
-                        fw={700}
-                        c="white"
-                        style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                      >
-                        Evelyn Delouis
-                      </Text>
-                      <Text
-                        size="xs"
-                        c="green.3"
-                        fw={500}
-                        style={{ opacity: 0.8 }}
-                      >
-                        Agent
-                      </Text>
-                    </Stack>
-                  </Box>
-                </Group>
-
-                <Group
-                  p={2}
-                  px="sm"
-                  style={{
-                    borderRadius: "8px",
-                    border: "1px solid #6b7280",
-                    background:
-                      "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
-                    position: "relative",
-                    overflow: "hidden",
-                    opacity: 0.7,
-                    minWidth: "100px",
-                  }}
-                  w="fit-content"
-                >
-                  <Box
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Image
-                      src="/commanders/solcommander.webp"
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                        filter: "grayscale(50%)",
-                      }}
-                    />
-                    <Stack gap={0}>
-                      <Text
-                        size="sm"
-                        fw={700}
-                        c="gray.4"
-                        style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                      >
-                        Claire Gibson
-                      </Text>
-                      <Text
-                        size="xs"
-                        c="gray.5"
-                        fw={500}
-                        style={{ opacity: 0.8 }}
-                      >
-                        Commander
-                      </Text>
-                    </Stack>
-                  </Box>
-                </Group>
-
-                <Group
-                  p={2}
-                  px="sm"
-                  style={{
-                    borderRadius: "8px",
-                    background:
-                      "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                    boxShadow:
-                      "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                    position: "relative",
-                    overflow: "hidden",
-                    minWidth: "150px",
-                  }}
-                  w="fit-content"
-                >
-                  {/* Top shimmer */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background:
-                        "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                    }}
-                  />
-                  {/* Bottom shimmer */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background:
-                        "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Image
-                      src="/commanders/solhero.webp"
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
-                    <Stack gap={0}>
-                      <Text
-                        size="sm"
-                        fw={700}
-                        c="white"
-                        style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                      >
-                        Jace X.
-                      </Text>
-                      <Text
-                        size="xs"
-                        c="green.3"
-                        fw={500}
-                        style={{ opacity: 0.8 }}
-                      >
-                        Hero
-                      </Text>
-                    </Stack>
-                  </Box>
-                </Group>
-              </Group>
-
-              <Group gap="xs">
-                {relics.map((relic, index) => (
-                  <Box
-                    key={index}
-                    py="xs"
+            <Group justify="space-between" align="start">
+              <Group align="start">
+                <Stack gap={4}>
+                  <Group
+                    p={2}
                     px="sm"
                     style={{
-                      borderRadius: "6px",
+                      borderRadius: "8px",
                       background:
-                        "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
-                      border: "1px solid rgba(251, 191, 36, 0.4)",
+                        "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+                      boxShadow:
+                        "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
                       position: "relative",
                       overflow: "hidden",
+                      width: "100%",
                     }}
                   >
-                    {/* Diagonal stripe pattern */}
+                    {/* Top shimmer */}
                     <Box
                       style={{
                         position: "absolute",
                         top: 0,
                         left: 0,
                         right: 0,
+                        height: "1px",
+                        background:
+                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                      }}
+                    />
+                    {/* Bottom shimmer */}
+                    <Box
+                      style={{
+                        position: "absolute",
                         bottom: 0,
-                        backgroundImage: `
+                        left: 0,
+                        right: 0,
+                        height: "1px",
+                        background:
+                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                      }}
+                    />
+                    <Box
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Image
+                        src="/commanders/solagent.webp"
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                      <Stack gap={0}>
+                        <Text
+                          size="sm"
+                          fw={700}
+                          c="white"
+                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
+                        >
+                          Evelyn Delouis
+                        </Text>
+                        <Text
+                          size="xs"
+                          c="green.3"
+                          fw={500}
+                          style={{ opacity: 0.8 }}
+                        >
+                          Agent
+                        </Text>
+                      </Stack>
+                    </Box>
+                  </Group>
+                  <Group
+                    p={2}
+                    px="sm"
+                    style={{
+                      borderRadius: "8px",
+                      border: "1px solid #6b7280",
+                      background:
+                        "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
+                      position: "relative",
+                      overflow: "hidden",
+                      opacity: 0.7,
+                      width: "100%",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Image
+                        src="/commanders/solcommander.webp"
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          filter: "grayscale(50%)",
+                        }}
+                      />
+                      <Stack gap={0}>
+                        <Text
+                          size="sm"
+                          fw={700}
+                          c="gray.4"
+                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
+                        >
+                          Claire Gibson
+                        </Text>
+                        <Text
+                          size="xs"
+                          c="gray.5"
+                          fw={500}
+                          style={{ opacity: 0.8 }}
+                        >
+                          Commander
+                        </Text>
+                      </Stack>
+                    </Box>
+                  </Group>
+                  <Group
+                    p={2}
+                    px="sm"
+                    style={{
+                      borderRadius: "8px",
+                      background:
+                        "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+                      boxShadow:
+                        "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                      position: "relative",
+                      overflow: "hidden",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Top shimmer */}
+                    <Box
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: "1px",
+                        background:
+                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                      }}
+                    />
+                    {/* Bottom shimmer */}
+                    <Box
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "1px",
+                        background:
+                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                      }}
+                    />
+                    <Box
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Image
+                        src="/commanders/solhero.webp"
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                      <Stack gap={0}>
+                        <Text
+                          size="sm"
+                          fw={700}
+                          c="white"
+                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
+                        >
+                          Jace X.
+                        </Text>
+                        <Text
+                          size="xs"
+                          c="green.3"
+                          fw={500}
+                          style={{ opacity: 0.8 }}
+                        >
+                          Hero
+                        </Text>
+                      </Stack>
+                    </Box>
+                  </Group>
+                </Stack>
+                <Stack gap={4}>
+                  {relics.map((relic, index) => (
+                    <Box
+                      key={index}
+                      py={4}
+                      px={6}
+                      style={{
+                        borderRadius: "6px",
+                        background:
+                          "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
+                        border: "1px solid rgba(251, 191, 36, 0.4)",
+                        position: "relative",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {/* Diagonal stripe pattern */}
+                      <Box
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          backgroundImage: `
                           repeating-linear-gradient(
                             45deg,
                             rgba(251, 191, 36, 0.08) 0px,
@@ -1848,60 +1843,62 @@ export default function PlayerCard({
                             transparent 16px
                           )
                         `,
-                        pointerEvents: "none",
-                        opacity: 0.5,
-                      }}
-                    />
-
-                    {/* Stronger inner glow */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background:
-                          "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    <Box
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        height: "100%",
-                        position: "relative",
-                        zIndex: 1,
-                      }}
-                    >
-                      <Image
-                        src="/relicicon.webp"
-                        style={{
-                          width: "16px",
-                          height: "16px",
-                          filter:
-                            "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+                          pointerEvents: "none",
+                          opacity: 0.5,
                         }}
                       />
-                      <Text
-                        size="sm"
-                        fw={700}
-                        c="white"
+
+                      {/* Stronger inner glow */}
+                      <Box
                         style={{
-                          fontFamily: "SLIDER, monospace",
-                          textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background:
+                            "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
+                          pointerEvents: "none",
+                        }}
+                      />
+
+                      <Box
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          height: "100%",
+                          position: "relative",
+                          zIndex: 1,
                         }}
                       >
-                        {relic}
-                      </Text>
+                        <Image
+                          src="/relicicon.webp"
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            filter:
+                              "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+                          }}
+                        />
+                        <Text
+                          size="sm"
+                          fw={700}
+                          c="white"
+                          style={{
+                            fontFamily: "SLIDER, monospace",
+                            textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+                          }}
+                        >
+                          {relic}
+                        </Text>
+                      </Box>
                     </Box>
-                  </Box>
-                ))}
+                  ))}
+                </Stack>
               </Group>
-            </Stack>
+              <div>hi</div>
+            </Group>
           </Grid.Col>
         </Grid>
 
