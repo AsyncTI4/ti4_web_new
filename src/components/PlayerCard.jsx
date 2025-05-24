@@ -236,99 +236,160 @@ export default function PlayerCard({
 
       {/* Content wrapper with higher z-index */}
       <Box style={{ position: "relative", zIndex: 1 }}>
-        <Group justify="space-between" mb="lg">
-          <Group gap={30}>
-            <Group gap={4} py={2}>
-              <Text span c="white" size="lg" ff="heading">
-                {playerName}
-              </Text>
-              <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
-                [{faction}]
-              </Text>
-              <Text size="sm" span ml={4} ff="heading" c="pink">
-                (pink)
-              </Text>
-            </Group>
-          </Group>
-
-          <Box
-            p={2}
-            px="sm"
-            pl="lg"
-            style={{
-              borderRadius: "8px",
-              background:
-                "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
-              boxShadow:
-                "0 4px 12px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-              position: "relative",
-            }}
-            pos="relative"
-            align="center"
-            display="flex"
-          >
-            {/* Top shimmer */}
-            <Box
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "1px",
-                background:
-                  "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
-              }}
-            />
-            {/* Bottom shimmer */}
-            <Box
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "1px",
-                background:
-                  "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
-              }}
-            />
-            <Box
-              bg="white"
-              style={{
-                border: "3px solid var(--mantine-color-red-7)",
-                borderRadius: "999px",
-                width: "35px",
-                height: "35px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "absolute",
-                top: "0px",
-                left: "-10px",
-                filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-              }}
-            >
-              <Text ff="heading" c="red.9" size="30px">
-                1
-              </Text>
-            </Box>
-            <Text
-              ff="heading"
-              c="white"
-              size="xl"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                position: "relative",
-                padding: "0 20px",
-              }}
-            >
-              LEADERSHIP
-            </Text>
-          </Box>
-        </Group>
-
         <Grid gutter="md" columns={12}>
           <Grid.Col span={2}>
+            {/* Header Section */}
+            <Box
+              p="sm"
+              mb="lg"
+              style={{
+                borderRadius: 0,
+                borderBottomRightRadius: 8,
+                background:
+                  "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
+                border: "1px solid rgba(148, 163, 184, 0.4)",
+                position: "relative",
+                overflow: "hidden",
+                boxShadow:
+                  "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
+                marginTop: "-16px",
+                marginLeft: "-16px",
+                marginRight: "-8px",
+              }}
+            >
+              {/* Header diagonal pattern overlay */}
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundImage: `
+                repeating-linear-gradient(
+                  45deg,
+                  rgba(148, 163, 184, 0.03) 0px,
+                  rgba(148, 163, 184, 0.03) 1px,
+                  transparent 1px,
+                  transparent 20px
+                )
+              `,
+                  pointerEvents: "none",
+                  opacity: 0.6,
+                }}
+              />
+
+              {/* Header bottom border accent */}
+              <Box
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  // background:
+                  //   "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
+                  background:
+                    "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+                }}
+              />
+
+              <Group justify="space-between" align="center">
+                <Group gap={4} px={4}>
+                  <Text span c="white" size="lg" ff="heading">
+                    {playerName}
+                  </Text>
+                  <Text
+                    size="md"
+                    span
+                    ml={4}
+                    opacity={0.9}
+                    c="white"
+                    ff="heading"
+                  >
+                    [{faction}]
+                  </Text>
+                  <Text size="sm" span ml={4} ff="heading" c="pink">
+                    (pink)
+                  </Text>
+                </Group>
+              </Group>
+            </Box>
             <Stack>
+              <Box
+                p={2}
+                px="sm"
+                pl="lg"
+                style={{
+                  borderRadius: "8px",
+                  background:
+                    "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
+                  boxShadow:
+                    "0 4px 12px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                  position: "relative",
+                }}
+                pos="relative"
+                align="center"
+                display="flex"
+              >
+                {/* Top shimmer */}
+                <Box
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "1px",
+                    background:
+                      "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
+                  }}
+                />
+                {/* Bottom shimmer */}
+                <Box
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "1px",
+                    background:
+                      "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
+                  }}
+                />
+                <Box
+                  bg="white"
+                  style={{
+                    border: "3px solid var(--mantine-color-red-7)",
+                    borderRadius: "999px",
+                    width: "35px",
+                    height: "35px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: "0px",
+                    left: "0px",
+                    filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+                  }}
+                >
+                  <Text ff="heading" c="red.9" size="30px">
+                    1
+                  </Text>
+                </Box>
+                <Text
+                  ff="heading"
+                  c="white"
+                  size="xl"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    position: "relative",
+                    padding: "0 24px",
+                  }}
+                >
+                  LEADERSHIP
+                </Text>
+              </Box>
+
               <Group gap={6}>
                 <Box pos="relative">
                   <Box
@@ -1759,8 +1820,8 @@ export default function PlayerCard({
                 {relics.map((relic, index) => (
                   <Box
                     key={index}
-                    p="sm"
-                    px="md"
+                    py="xs"
+                    px="sm"
                     style={{
                       borderRadius: "6px",
                       background:
@@ -1819,8 +1880,8 @@ export default function PlayerCard({
                       <Image
                         src="/relicicon.webp"
                         style={{
-                          width: "20px",
-                          height: "20px",
+                          width: "16px",
+                          height: "16px",
                           filter:
                             "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
                         }}
