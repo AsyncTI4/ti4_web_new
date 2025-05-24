@@ -630,7 +630,7 @@ export default function PlayerCard({
               </Stack>
             </Stack>
           </Grid.Col>
-          <Grid.Col span={7}>
+          <Grid.Col span={6}>
             <Stack gap="md">
               <Group
                 p="md"
@@ -966,202 +966,441 @@ export default function PlayerCard({
                 </Box>
               </Group>
 
-              <Box
-                p="md"
-                style={{
-                  borderRadius: "12px",
-                  background:
-                    "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow:
-                    "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                }}
-              >
-                <Text
-                  size="xs"
-                  fw={700}
-                  c="blueGray.3"
+              <Group gap="md" align="stretch">
+                <Box
+                  w={200}
+                  p="md"
                   style={{
-                    textTransform: "uppercase",
-                    bottom: 15,
-                    position: "absolute",
-                    right: 20,
+                    borderRadius: "12px",
+                    background:
+                      "linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%)",
+                    border: "1px solid rgba(148, 163, 184, 0.15)",
+                    position: "relative",
+                    overflow: "hidden",
+                    boxShadow:
+                      "0 6px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(148, 163, 184, 0.08)",
                   }}
                 >
-                  Planets
-                </Text>
+                  {/* Subtle corner accents */}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      top: "6px",
+                      left: "6px",
+                      width: "16px",
+                      height: "16px",
+                      border: "1px solid rgba(148, 163, 184, 0.08)",
+                      borderRight: "none",
+                      borderBottom: "none",
+                      borderRadius: "3px 0 0 0",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "absolute",
+                      bottom: "6px",
+                      right: "6px",
+                      width: "16px",
+                      height: "16px",
+                      border: "1px solid rgba(148, 163, 184, 0.08)",
+                      borderLeft: "none",
+                      borderTop: "none",
+                      borderRadius: "0 0 3px 0",
+                    }}
+                  />
 
-                {/* Animated corner accents */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: "8px",
-                    left: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderRight: "none",
-                    borderBottom: "none",
-                    borderRadius: "4px 0 0 0",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: "8px",
-                    right: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderLeft: "none",
-                    borderBottom: "none",
-                    borderRadius: "0 4px 0 0",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    left: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderRight: "none",
-                    borderTop: "none",
-                    borderRadius: "0 0 0 4px",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderLeft: "none",
-                    borderTop: "none",
-                    borderRadius: "0 0 4px 0",
-                  }}
-                />
-
-                <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
-                  {planets.map((planet, index) => (
-                    <Stack
-                      key={index}
-                      py={4}
-                      px="xs"
-                      justify="space-between"
-                      h={140}
-                      style={{
-                        borderRadius: "12px",
-                        background: `linear-gradient(135deg, ${
-                          planet.trait === "cultural"
-                            ? "rgba(59, 130, 246, 0.12)"
-                            : planet.trait === "hazardous"
-                              ? "rgba(239, 68, 68, 0.12)"
-                              : "rgba(34, 197, 94, 0.12)"
-                        } 0%, rgba(15, 23, 42, 0.6) 100%)`,
-                        border: `1px solid ${
-                          planet.trait === "cultural"
-                            ? "rgba(59, 130, 246, 0.3)"
-                            : planet.trait === "hazardous"
-                              ? "rgba(239, 68, 68, 0.3)"
-                              : "rgba(34, 197, 94, 0.3)"
-                        }`,
-                        position: "relative",
-                        overflow: "hidden",
-                        boxShadow: `0 2px 8px ${
-                          planet.trait === "cultural"
-                            ? "rgba(59, 130, 246, 0.08)"
-                            : planet.trait === "hazardous"
-                              ? "rgba(239, 68, 68, 0.08)"
-                              : "rgba(34, 197, 94, 0.08)"
-                        }, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
-                      }}
-                    >
-                      {/* Subtle top highlight */}
-                      <Box
+                  <Stack
+                    justify="center"
+                    h="100%"
+                    style={{ position: "relative", zIndex: 1 }}
+                  >
+                    {/* Total Section */}
+                    <Stack gap="sm">
+                      <Text
+                        size="xs"
+                        c="gray.3"
+                        opacity={0.6}
+                        fw={700}
                         style={{
-                          position: "absolute",
-                          top: 0,
-                          left: "20%",
-                          right: "20%",
-                          height: "1px",
-                          background: `linear-gradient(90deg, transparent 0%, ${
-                            planet.trait === "cultural"
-                              ? "rgba(59, 130, 246, 0.4)"
-                              : planet.trait === "hazardous"
-                                ? "rgba(239, 68, 68, 0.4)"
-                                : "rgba(34, 197, 94, 0.4)"
-                          } 50%, transparent 100%)`,
+                          textTransform: "uppercase",
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                          alignSelf: "flex-start",
+                          fontSize: "10px",
+                          lineHeight: 1,
                         }}
-                      />
-
-                      <Stack
-                        gap={6}
-                        style={{ position: "relative", zIndex: 1 }}
                       >
-                        {planetTraitIcons[planet.trait]}
-                        <Text
-                          size="xs"
-                          c="white"
-                          fw={700}
-                          style={{
-                            writingMode: "vertical-rl",
-                            textOrientation: "sideways",
-                            whiteSpace: "nowrap",
-                            transform: "rotate(180deg)",
-                            textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
-                          }}
-                        >
-                          {planet.name}
-                        </Text>
-                      </Stack>
-                      <Stack
-                        gap={4}
-                        style={{ position: "relative", zIndex: 1 }}
-                      >
-                        {planet.techSkip && techSkipIcons[planet.techSkip]}
-                        <Stack gap={2}>
+                        Total
+                      </Text>
+                      <Group gap="lg" justify="center">
+                        {/* Resources */}
+                        <Group gap={4} align="baseline">
+                          <svg width="12" height="12" viewBox="0 0 24 24">
+                            <polygon
+                              points="6,2 18,2 22,12 18,22 6,22 2,12"
+                              fill="transparent"
+                              stroke="#eab308"
+                              strokeWidth="2"
+                            />
+                          </svg>
                           <Text
-                            size="xs"
-                            bg="blue"
-                            px={4}
-                            c="white"
+                            size="lg"
                             fw={700}
+                            c="yellow.3"
                             style={{
-                              borderRadius: "4px",
-                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                              lineHeight: 1,
                             }}
                           >
-                            {planet.resources}
+                            {totalResources - 3}
                           </Text>
+                          <Text
+                            size="sm"
+                            c="yellow.5"
+                            fw={500}
+                            style={{ lineHeight: 1 }}
+                          >
+                            / {totalResources}
+                          </Text>
+                        </Group>
+                        {/* Influence */}
+                        <Group gap={4} align="baseline">
+                          <svg width="12" height="12" viewBox="0 0 24 24">
+                            <polygon
+                              points="6,2 18,2 22,12 18,22 6,22 2,12"
+                              fill="transparent"
+                              stroke="#3b82f6"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                          <Text
+                            size="lg"
+                            fw={700}
+                            c="blue.3"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                              lineHeight: 1,
+                            }}
+                          >
+                            {totalInfluence - 1}
+                          </Text>
+                          <Text
+                            size="sm"
+                            c="blue.5"
+                            fw={500}
+                            style={{ lineHeight: 1 }}
+                          >
+                            / {totalInfluence}
+                          </Text>
+                        </Group>
+                      </Group>
+                    </Stack>
 
+                    {/* Divider */}
+                    <Box
+                      style={{
+                        height: "1px",
+                        background:
+                          "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 20%, rgba(148, 163, 184, 0.3) 80%, transparent 100%)",
+                        margin: "2px 12px",
+                      }}
+                    />
+
+                    {/* Optimal Section */}
+                    <Stack gap="sm">
+                      <Text
+                        size="xs"
+                        c="gray.3"
+                        opacity={0.6}
+                        fw={700}
+                        style={{
+                          textTransform: "uppercase",
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                          alignSelf: "flex-start",
+                          fontSize: "10px",
+                          lineHeight: 1,
+                        }}
+                      >
+                        Optimal
+                      </Text>
+                      <Group gap="lg" justify="center">
+                        {/* Resources */}
+                        <Group gap={4} align="baseline">
+                          <svg width="12" height="12" viewBox="0 0 24 24">
+                            <polygon
+                              points="6,2 18,2 22,12 18,22 6,22 2,12"
+                              fill="transparent"
+                              stroke="#eab308"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                          <Text
+                            size="lg"
+                            fw={700}
+                            c="yellow.3"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                              lineHeight: 1,
+                            }}
+                          >
+                            {totalResources - 3}
+                          </Text>
+                          <Text
+                            size="sm"
+                            c="yellow.5"
+                            fw={500}
+                            style={{ lineHeight: 1 }}
+                          >
+                            / {totalResources}
+                          </Text>
+                        </Group>
+                        {/* Influence */}
+                        <Group gap={4} align="baseline">
+                          <svg width="12" height="12" viewBox="0 0 24 24">
+                            <polygon
+                              points="6,2 18,2 22,12 18,22 6,22 2,12"
+                              fill="transparent"
+                              stroke="#3b82f6"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                          <Text
+                            size="lg"
+                            fw={700}
+                            c="blue.3"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                              lineHeight: 1,
+                            }}
+                          >
+                            {totalInfluence - 1}
+                          </Text>
+                          <Text
+                            size="sm"
+                            c="blue.5"
+                            fw={500}
+                            style={{ lineHeight: 1 }}
+                          >
+                            / {totalInfluence}
+                          </Text>
+                        </Group>
+                      </Group>
+                    </Stack>
+                  </Stack>
+                </Box>
+
+                <Box
+                  flex={1}
+                  p="md"
+                  style={{
+                    borderRadius: "12px",
+                    background:
+                      "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                    border: "1px solid rgba(148, 163, 184, 0.2)",
+                    position: "relative",
+                    overflow: "hidden",
+                    boxShadow:
+                      "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    fw={700}
+                    c="blueGray.3"
+                    style={{
+                      textTransform: "uppercase",
+                      bottom: 15,
+                      position: "absolute",
+                      right: 20,
+                    }}
+                  >
+                    Planets
+                  </Text>
+
+                  {/* Animated corner accents */}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      top: "8px",
+                      left: "8px",
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(59, 130, 246, 0.1)",
+                      borderRight: "none",
+                      borderBottom: "none",
+                      borderRadius: "4px 0 0 0",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "absolute",
+                      top: "8px",
+                      right: "8px",
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(59, 130, 246, 0.1)",
+                      borderLeft: "none",
+                      borderBottom: "none",
+                      borderRadius: "0 4px 0 0",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "absolute",
+                      bottom: "8px",
+                      left: "8px",
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(59, 130, 246, 0.1)",
+                      borderRight: "none",
+                      borderTop: "none",
+                      borderRadius: "0 0 0 4px",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "absolute",
+                      bottom: "8px",
+                      right: "8px",
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid rgba(59, 130, 246, 0.1)",
+                      borderLeft: "none",
+                      borderTop: "none",
+                      borderRadius: "0 0 4px 0",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      // backgroundSize: "16px 16px",
+                      pointerEvents: "none",
+                      backgroundColor: "rgba(148, 163, 184, 0.02)",
+                      opacity: 0.5,
+                      backgroundImage:
+                        "repeating-radial-gradient(circle at 0 0, transparent 0, rgba(148, 163, 184, 0.02) 10px), repeating-linear-gradient(rgba(148, 163, 184, 0.03), rgba(148, 163, 184, 0.01))",
+                    }}
+                  />
+
+                  <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
+                    {planets.map((planet, index) => (
+                      <Stack
+                        key={index}
+                        py={4}
+                        px="xs"
+                        justify="space-between"
+                        h={140}
+                        style={{
+                          borderRadius: "12px",
+                          background: `linear-gradient(135deg, ${
+                            planet.trait === "cultural"
+                              ? "rgba(59, 130, 246, 0.12)"
+                              : planet.trait === "hazardous"
+                                ? "rgba(239, 68, 68, 0.12)"
+                                : "rgba(34, 197, 94, 0.12)"
+                          } 0%, rgba(15, 23, 42, 0.6) 100%)`,
+                          border: `1px solid ${
+                            planet.trait === "cultural"
+                              ? "rgba(59, 130, 246, 0.3)"
+                              : planet.trait === "hazardous"
+                                ? "rgba(239, 68, 68, 0.3)"
+                                : "rgba(34, 197, 94, 0.3)"
+                          }`,
+                          position: "relative",
+                          overflow: "hidden",
+                          boxShadow: `0 2px 8px ${
+                            planet.trait === "cultural"
+                              ? "rgba(59, 130, 246, 0.08)"
+                              : planet.trait === "hazardous"
+                                ? "rgba(239, 68, 68, 0.08)"
+                                : "rgba(34, 197, 94, 0.08)"
+                          }, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+                        }}
+                      >
+                        {/* Subtle top highlight */}
+                        <Box
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: "20%",
+                            right: "20%",
+                            height: "1px",
+                            background: `linear-gradient(90deg, transparent 0%, ${
+                              planet.trait === "cultural"
+                                ? "rgba(59, 130, 246, 0.4)"
+                                : planet.trait === "hazardous"
+                                  ? "rgba(239, 68, 68, 0.4)"
+                                  : "rgba(34, 197, 94, 0.4)"
+                            } 50%, transparent 100%)`,
+                          }}
+                        />
+
+                        <Stack
+                          gap={6}
+                          style={{ position: "relative", zIndex: 1 }}
+                        >
+                          {planetTraitIcons[planet.trait]}
                           <Text
                             size="xs"
-                            bg="yellow"
-                            px={4}
                             c="white"
                             fw={700}
                             style={{
-                              borderRadius: "4px",
-                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+                              writingMode: "vertical-rl",
+                              textOrientation: "sideways",
+                              whiteSpace: "nowrap",
+                              transform: "rotate(180deg)",
+                              textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
                             }}
                           >
-                            {planet.influence}
+                            {planet.name}
                           </Text>
                         </Stack>
+                        <Stack
+                          gap={4}
+                          style={{ position: "relative", zIndex: 1 }}
+                        >
+                          {planet.techSkip && techSkipIcons[planet.techSkip]}
+                          <Stack gap={2}>
+                            <Text
+                              size="xs"
+                              bg="blue"
+                              px={4}
+                              c="white"
+                              fw={700}
+                              style={{
+                                borderRadius: "4px",
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+                              }}
+                            >
+                              {planet.resources}
+                            </Text>
+
+                            <Text
+                              size="xs"
+                              bg="yellow"
+                              px={4}
+                              c="white"
+                              fw={700}
+                              style={{
+                                borderRadius: "4px",
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+                              }}
+                            >
+                              {planet.influence}
+                            </Text>
+                          </Stack>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  ))}
-                </Group>
-              </Box>
+                    ))}
+                  </Group>
+                </Box>
+              </Group>
             </Stack>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col span={4}>
             <Stack>
               <Group>
                 <Group
@@ -1391,7 +1630,7 @@ export default function PlayerCard({
                       overflow: "hidden",
                     }}
                   >
-                    {/* Very subtle background grid */}
+                    {/* Diagonal stripe pattern */}
                     <Box
                       style={{
                         position: "absolute",
@@ -1400,16 +1639,20 @@ export default function PlayerCard({
                         right: 0,
                         bottom: 0,
                         backgroundImage: `
-                          linear-gradient(rgba(251, 191, 36, 0.08) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(251, 191, 36, 0.08) 1px, transparent 1px)
+                          repeating-linear-gradient(
+                            45deg,
+                            rgba(251, 191, 36, 0.08) 0px,
+                            rgba(251, 191, 36, 0.08) 1px,
+                            transparent 1px,
+                            transparent 16px
+                          )
                         `,
-                        backgroundSize: "20px 20px",
                         pointerEvents: "none",
                         opacity: 0.5,
                       }}
                     />
 
-                    {/* Subtle inner glow */}
+                    {/* Stronger inner glow */}
                     <Box
                       style={{
                         position: "absolute",
@@ -1418,7 +1661,7 @@ export default function PlayerCard({
                         right: 0,
                         bottom: 0,
                         background:
-                          "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.08) 0%, transparent 70%)",
+                          "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
                         pointerEvents: "none",
                       }}
                     />
@@ -1448,7 +1691,7 @@ export default function PlayerCard({
                         c="white"
                         style={{
                           fontFamily: "SLIDER, monospace",
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                          textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
                         {relic}
@@ -1460,53 +1703,6 @@ export default function PlayerCard({
             </Stack>
           </Grid.Col>
         </Grid>
-
-        <Group gap={2} mb="xs" mt="lg">
-          {leaders.map((leader, index) => (
-            <Box
-              p={2}
-              px="sm"
-              style={{ borderRadius: "4px", border: "2px solid white" }}
-            >
-              <Text size="sm" fw={700} c="white">
-                {leader}
-              </Text>
-            </Box>
-          ))}
-        </Group>
-
-        <Grid gutter="xs" mt="xl">
-          <Grid.Col span={6}>
-            <Box></Box>
-          </Grid.Col>
-
-          <Grid.Col span={6}>
-            <Box>
-              <Group gap="xs"></Group>
-            </Box>
-          </Grid.Col>
-        </Grid>
-
-        <Group justify="space-between" align="center" mt="lg">
-          <Group gap="xs">
-            <Badge color="yellow" size="lg">
-              Total Resources: {totalResources}
-            </Badge>
-            <Badge color="blue" size="lg">
-              Total Influence: {totalInfluence}
-            </Badge>
-          </Group>
-          <Group align="center">
-            <Text size="xs">Neighbors:</Text>
-            {neighbors.map((neighbor, index) => (
-              <Tooltip key={index} label={neighbor}>
-                <ActionIcon variant="outline" color="gray" size="sm">
-                  <IconUsers size={16} />
-                </ActionIcon>
-              </Tooltip>
-            ))}
-          </Group>
-        </Group>
 
         <Box
           style={{
