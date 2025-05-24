@@ -265,41 +265,9 @@ export default function PlayerCard({
               </Text>
             </Box>
           </Group>
-
-          <Group gap="xs">
-            {/* <Group gap={4}>
-            <IconCircle size={16} color="yellow" />
-            {actionCards}
-          </Group> */}
-            {/* <Group gap={4}>
-            <IconShield size={16} color="blue" />
-            {secretObjectives}
-          </Group>
-          <Group gap={4}>
-            <IconSword size={16} color="red" />
-            {publicObjectives}
-          </Group> */}
-
-            {/* <Group gap={4} bg="dark.7" px="xs" style={{ borderRadius: "4px" }}>
-            <Tooltip label="Tactics">
-              <Text>T</Text>
-            </Tooltip>
-            <Text>{tactics}</Text>
-            <Text>/</Text>
-            <Tooltip label="Fleet">
-              <Text>F</Text>
-            </Tooltip>
-            <Text>{fleet}</Text>
-            <Text>/</Text>
-            <Tooltip label="Strategy">
-              <Text>S</Text>
-            </Tooltip>
-            <Text>{strategy}</Text>
-          </Group> */}
-          </Group>
         </Group>
 
-        <Grid gutter={0} columns={12}>
+        <Grid gutter="md" columns={12}>
           <Grid.Col span={2}>
             <Stack>
               <Group gap={4}>
@@ -501,10 +469,9 @@ export default function PlayerCard({
               </Stack>
             </Stack>
           </Grid.Col>
-          <Grid.Col span={10} style={{ display: "flex", alignItems: "center" }}>
-            <Stack gap="xs">
+          <Grid.Col span={7}>
+            <Stack gap="md">
               <Group
-                w="fit-content"
                 p="md"
                 style={{
                   borderRadius: "12px",
@@ -517,6 +484,19 @@ export default function PlayerCard({
                     "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                 }}
               >
+                <Text
+                  size="xs"
+                  fw={700}
+                  c="blueGray.3"
+                  style={{
+                    textTransform: "uppercase",
+                    bottom: 15,
+                    position: "absolute",
+                    right: 20,
+                  }}
+                >
+                  TECH
+                </Text>
                 {/* Animated corner accents */}
                 <Box
                   style={{
@@ -824,8 +804,8 @@ export default function PlayerCard({
                   />
                 </Box>
               </Group>
+
               <Box
-                w="fit-content"
                 p="md"
                 style={{
                   borderRadius: "12px",
@@ -838,6 +818,20 @@ export default function PlayerCard({
                     "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                 }}
               >
+                <Text
+                  size="xs"
+                  fw={700}
+                  c="blueGray.3"
+                  style={{
+                    textTransform: "uppercase",
+                    bottom: 15,
+                    position: "absolute",
+                    right: 20,
+                  }}
+                >
+                  Planets
+                </Text>
+
                 {/* Animated corner accents */}
                 <Box
                   style={{
@@ -846,7 +840,7 @@ export default function PlayerCard({
                     left: "8px",
                     width: "20px",
                     height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.4)",
+                    border: "2px solid rgba(59, 130, 246, 0.1)",
                     borderRight: "none",
                     borderBottom: "none",
                     borderRadius: "4px 0 0 0",
@@ -859,7 +853,7 @@ export default function PlayerCard({
                     right: "8px",
                     width: "20px",
                     height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.4)",
+                    border: "2px solid rgba(59, 130, 246, 0.1)",
                     borderLeft: "none",
                     borderBottom: "none",
                     borderRadius: "0 4px 0 0",
@@ -872,7 +866,7 @@ export default function PlayerCard({
                     left: "8px",
                     width: "20px",
                     height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.4)",
+                    border: "2px solid rgba(59, 130, 246, 0.1)",
                     borderRight: "none",
                     borderTop: "none",
                     borderRadius: "0 0 0 4px",
@@ -885,7 +879,7 @@ export default function PlayerCard({
                     right: "8px",
                     width: "20px",
                     height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.4)",
+                    border: "2px solid rgba(59, 130, 246, 0.1)",
                     borderLeft: "none",
                     borderTop: "none",
                     borderRadius: "0 0 4px 0",
