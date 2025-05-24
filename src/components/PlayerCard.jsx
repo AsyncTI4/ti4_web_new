@@ -22,6 +22,7 @@ import {
   IconMountain,
   IconFlag,
 } from "@tabler/icons-react";
+import StrategyCard from "./StrategyCard";
 
 export default function PlayerCard({
   playerName = "Alice",
@@ -189,6 +190,39 @@ export default function PlayerCard({
               (pink)
             </Text>
           </Group>
+
+          <Box
+            bg="red"
+            px="xs"
+            pl="lg"
+            style={{ borderRadius: "4px" }}
+            pos="relative"
+            align="center"
+            display="flex"
+          >
+            <Box
+              bg="white"
+              style={{
+                border: "3px solid var(--mantine-color-red-7)",
+                borderRadius: "999px",
+                width: "25px",
+                height: "25px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "absolute",
+                top: "0px",
+                left: "-10px",
+              }}
+            >
+              <Text ff="heading" c="red.9" size="xl">
+                1
+              </Text>
+            </Box>
+            <Text ff="heading" c="white" size="md">
+              LEADERSHIP
+            </Text>
+          </Box>
         </Group>
 
         <Group gap="xs">
@@ -353,20 +387,74 @@ export default function PlayerCard({
             </Group>
             <Stack gap={2}>
               {scoredSecrets.map((secret, index) => (
-                <Badge
-                  radius="sm"
-                  variant="light"
-                  color="red"
-                  fw={700}
-                  leftSection={
+                <Box
+                  key={index}
+                  p={2}
+                  px="sm"
+                  style={{
+                    borderRadius: "8px",
+                    background:
+                      "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%)",
+                    boxShadow:
+                      "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                    border: "1px solid rgba(239, 68, 68, 0.25)",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* Top shimmer */}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: "1px",
+                      background:
+                        "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.6) 50%, transparent 100%)",
+                    }}
+                  />
+                  {/* Bottom shimmer */}
+                  <Box
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: "1px",
+                      background:
+                        "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.6) 50%, transparent 100%)",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
                     <Image
                       src="/so_icon.png"
-                      style={{ width: "12px", height: "12px" }}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+                      }}
                     />
-                  }
-                >
-                  {secret}
-                </Badge>
+                    <Text
+                      size="xs"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.7)",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {secret}
+                    </Text>
+                  </Box>
+                </Box>
               ))}
             </Stack>
           </Stack>
@@ -386,20 +474,14 @@ export default function PlayerCard({
                   {techs
                     .filter((v) => v.color === "blue")
                     .map((tech, index) => (
-                      <Badge
-                        w="100%"
-                        color={`${tech.color}.2`}
-                        leftSection={
-                          <Image
-                            src={`/${tech.color}.png`}
-                            alt={tech.name}
-                            style={{ width: "16px", height: "16px" }}
-                          />
-                        }
-                        c="blue.9"
-                      >
-                        {tech.name}
-                      </Badge>
+                      <Group gap={4}>
+                        <Image
+                          src={`/${tech.color}.png`}
+                          alt={tech.name}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                        <Badge color={`${tech.color}`}>{tech.name}</Badge>
+                      </Group>
                     ))}
                 </Stack>
 
@@ -410,7 +492,7 @@ export default function PlayerCard({
                       <Tooltip key={index} label={tech.name}>
                         <Badge
                           w="100%"
-                          color={`${tech.color}.2`}
+                          color={`${tech.color}`}
                           leftSection={
                             <Image
                               src={`/${tech.color}.png`}
@@ -558,6 +640,125 @@ export default function PlayerCard({
       </Grid>
 
       <Group gap={2} mb="xs" mt="lg">
+        <Group
+          p={2}
+          px="sm"
+          style={{
+            borderRadius: "8px",
+            background:
+              "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+            boxShadow:
+              "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Top shimmer */}
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "1px",
+              background:
+                "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+            }}
+          />
+          {/* Bottom shimmer */}
+          <Box
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "1px",
+              background:
+                "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+            }}
+          />
+          <Box
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <Image
+              src="/commanders/solagent.webp"
+              style={{
+                width: "35px",
+                height: "35px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+            <Stack gap={0}>
+              <Text
+                size="sm"
+                fw={700}
+                c="white"
+                style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
+              >
+                Claire Gibson
+              </Text>
+              <Text size="xs" c="green.3" fw={500} style={{ opacity: 0.8 }}>
+                Agent
+              </Text>
+            </Stack>
+          </Box>
+        </Group>
+
+        <Group
+          p={2}
+          px="sm"
+          style={{
+            borderRadius: "8px",
+            border: "1px solid #6b7280",
+            background:
+              "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
+            position: "relative",
+            overflow: "hidden",
+            opacity: 0.7,
+          }}
+        >
+          <Box
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <Image
+              src="/commanders/solagent.webp"
+              style={{
+                width: "35px",
+                height: "35px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                objectPosition: "center",
+                filter: "grayscale(50%)",
+              }}
+            />
+            <Stack gap={0}>
+              <Text
+                size="sm"
+                fw={700}
+                c="gray.4"
+                style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
+              >
+                Claire Gibson
+              </Text>
+              <Text size="xs" c="gray.5" fw={500} style={{ opacity: 0.8 }}>
+                Agent
+              </Text>
+            </Stack>
+          </Box>
+        </Group>
+
         {leaders.map((leader, index) => (
           <Box
             p={2}

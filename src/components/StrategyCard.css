@@ -3,7 +3,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Slider', 'Segoe UI', system-ui, sans-serif;
   font-weight: 700;
   margin: 4px;
 }
@@ -17,16 +17,16 @@
   min-width: 140px;
 
   /* Create angled shape */
-  clip-path: polygon(24px 0%, calc(100% - 8px) 0%, 100% 100%, 8px 100%);
+  /* clip-path: polygon(24px 0%, calc(100% - 8px) 0%, 100% 100%, 8px 100%); */
 
   /* Modern shadow */
-  box-shadow:
+  /* box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1);
+    0 2px 4px rgba(0, 0, 0, 0.1); */
 
   /* Subtle border effect */
   border: 2px solid var(--border-color);
-  border-radius: 2px;
+  border-radius: 9px;
 }
 
 /* Text styling */
