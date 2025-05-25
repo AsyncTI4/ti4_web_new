@@ -77,6 +77,81 @@ const SHIMMER_COLORS = {
   },
 };
 
+function Caption({ children }) {
+  return (
+    <Text
+      size="xs"
+      c="gray.3"
+      opacity={0.6}
+      fw={700}
+      style={{
+        textTransform: "uppercase",
+        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+        alignSelf: "flex-start",
+        fontSize: "10px",
+        lineHeight: 1,
+      }}
+    >
+      {children}
+    </Text>
+  );
+}
+
+function ResourceInfluenceDisplay({
+  resources,
+  totalResources,
+  influence,
+  totalInfluence,
+}) {
+  return (
+    <Group gap="lg" justify="center">
+      {/* Resources */}
+      <Group gap={4} align="baseline">
+        <svg width="12" height="12" viewBox="0 0 24 24">
+          <polygon
+            points="6,2 18,2 22,12 18,22 6,22 2,12"
+            fill="transparent"
+            stroke="#eab308"
+            strokeWidth="2"
+          />
+        </svg>
+        <Text
+          size="lg"
+          fw={700}
+          c="yellow.3"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+            lineHeight: 1,
+          }}
+        >
+          {resources}
+        </Text>
+        <Text size="sm" c="yellow.5" fw={500} style={{ lineHeight: 1 }}>
+          / {totalResources}
+        </Text>
+      </Group>
+      {/* Influence */}
+      <Group gap={4} align="baseline">
+        <InfluenceIcon size={12} />
+        <Text
+          size="lg"
+          fw={700}
+          c="blue.3"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+            lineHeight: 1,
+          }}
+        >
+          {influence}
+        </Text>
+        <Text size="sm" c="blue.5" fw={500} style={{ lineHeight: 1 }}>
+          / {totalInfluence}
+        </Text>
+      </Group>
+    </Group>
+  );
+}
+
 function Relic({ name }) {
   return (
     <Box
@@ -493,6 +568,66 @@ function Shimmer({ color = "blue", children, ...boxProps }) {
       )}
 
       {children}
+    </Box>
+  );
+}
+
+function Cardback({ src, alt, count, style, ...boxProps }) {
+  return (
+    <Box pos="relative" {...boxProps}>
+      <Box
+        style={{
+          width: "45px",
+          borderRadius: "8px",
+          overflow: "hidden",
+          position: "relative",
+          background:
+            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+          border: "1px solid rgba(148, 163, 184, 0.2)",
+          boxShadow:
+            "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+          ...style,
+        }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          style={{
+            filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+          }}
+        />
+      </Box>
+      <Box
+        style={{
+          position: "absolute",
+          bottom: "4px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background:
+            "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
+          borderRadius: "4px",
+          boxShadow:
+            "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+          minWidth: "24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        px={6}
+        py={1}
+      >
+        <Text
+          size="lg"
+          fw={700}
+          c="white"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+            lineHeight: 1,
+          }}
+        >
+          {count}
+        </Text>
+      </Box>
     </Box>
   );
 }
@@ -1064,246 +1199,31 @@ export default function PlayerCard({
               </Shimmer>
 
               <Group gap={6} justify="center">
-                <Box pos="relative">
-                  <Box
-                    style={{
-                      width: "45px",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      boxShadow:
-                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                  >
-                    <Image
-                      src="/cardback/cardback_so.png"
-                      alt="secret objectives"
-                      style={{
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    style={{
-                      position: "absolute",
-                      left: 10,
-                      bottom: 1,
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-                      borderRadius: "4px",
-                      boxShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                    px={6}
-                    py={1}
-                  >
-                    <Text
-                      size="lg"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      0
-                    </Text>
-                  </Box>
-                </Box>
-                <Box pos="relative">
-                  <Box
-                    style={{
-                      width: "45px",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      boxShadow:
-                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                  >
-                    <Image
-                      src="/cardback/cardback_action.png"
-                      alt="action cards"
-                      style={{
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    style={{
-                      position: "absolute",
-                      left: 10,
-                      bottom: 1,
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-                      borderRadius: "4px",
-                      boxShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                    px={6}
-                    py={1}
-                  >
-                    <Text
-                      size="lg"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      4
-                    </Text>
-                  </Box>
-                </Box>
-                <Box pos="relative">
-                  <Box
-                    style={{
-                      width: "45px",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      boxShadow:
-                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                  >
-                    <Image
-                      src="/cardback/cardback_pn.png"
-                      alt="promissory notes"
-                      style={{
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    style={{
-                      position: "absolute",
-                      left: 10,
-                      bottom: 1,
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-                      borderRadius: "4px",
-                      boxShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                    px={6}
-                    py={1}
-                  >
-                    <Text
-                      size="lg"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      7
-                    </Text>
-                  </Box>
-                </Box>
-                <Box pos="relative">
-                  <Box
-                    style={{
-                      width: "45px",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      boxShadow:
-                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                  >
-                    <Image
-                      src="/cardback/cardback_tg.png"
-                      alt="trade goods"
-                      style={{
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    style={{
-                      position: "absolute",
-                      left: 6,
-                      bottom: 1,
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-                      borderRadius: "4px",
-                      boxShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                    px={6}
-                    py={1}
-                  >
-                    <Text
-                      size="lg"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      17
-                    </Text>
-                  </Box>
-                </Box>
-                <Box pos="relative">
-                  <Box
-                    style={{
-                      width: "45px",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      position: "relative",
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                      border: "1px solid rgba(148, 163, 184, 0.2)",
-                      boxShadow:
-                        "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                  >
-                    <Image
-                      src="/cardback/cardback_comms.png"
-                      alt="commodities"
-                      style={{
-                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    style={{
-                      position: "absolute",
-                      left: 2,
-                      bottom: 1,
-                      background:
-                        "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-                      borderRadius: "4px",
-                      boxShadow:
-                        "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                    }}
-                    px={6}
-                    py={1}
-                  >
-                    <Text
-                      size="lg"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      0/6
-                    </Text>
-                  </Box>
-                </Box>
+                <Cardback
+                  src="/cardback/cardback_so.png"
+                  alt="secret objectives"
+                  count={0}
+                />
+                <Cardback
+                  src="/cardback/cardback_action.png"
+                  alt="action cards"
+                  count={4}
+                />
+                <Cardback
+                  src="/cardback/cardback_pn.png"
+                  alt="promissory notes"
+                  count={7}
+                />
+                <Cardback
+                  src="/cardback/cardback_tg.png"
+                  alt="trade goods"
+                  count={17}
+                />
+                <Cardback
+                  src="/cardback/cardback_comms.png"
+                  alt="commodities"
+                  count="0/6"
+                />
               </Group>
               <Group gap="xs" justify="center">
                 <Group gap={0}>
@@ -1360,15 +1280,7 @@ export default function PlayerCard({
                             "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
                         }}
                       />
-                      <Text
-                        size="xs"
-                        fw={700}
-                        c="white"
-                        style={{
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.7)",
-                          lineHeight: 1.2,
-                        }}
-                      >
+                      <Text size="xs" fw={700} c="white">
                         {secret}
                       </Text>
                     </Box>
@@ -1441,76 +1353,13 @@ export default function PlayerCard({
                   >
                     {/* Total Section */}
                     <Stack gap="sm">
-                      <Text
-                        size="xs"
-                        c="gray.3"
-                        opacity={0.6}
-                        fw={700}
-                        style={{
-                          textTransform: "uppercase",
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                          alignSelf: "flex-start",
-                          fontSize: "10px",
-                          lineHeight: 1,
-                        }}
-                      >
-                        Total
-                      </Text>
-                      <Group gap="lg" justify="center">
-                        {/* Resources */}
-                        <Group gap={4} align="baseline">
-                          <svg width="12" height="12" viewBox="0 0 24 24">
-                            <polygon
-                              points="6,2 18,2 22,12 18,22 6,22 2,12"
-                              fill="transparent"
-                              stroke="#eab308"
-                              strokeWidth="2"
-                            />
-                          </svg>
-                          <Text
-                            size="lg"
-                            fw={700}
-                            c="yellow.3"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                              lineHeight: 1,
-                            }}
-                          >
-                            {totalResources - 3}
-                          </Text>
-                          <Text
-                            size="sm"
-                            c="yellow.5"
-                            fw={500}
-                            style={{ lineHeight: 1 }}
-                          >
-                            / {totalResources}
-                          </Text>
-                        </Group>
-                        {/* Influence */}
-                        <Group gap={4} align="baseline">
-                          <InfluenceIcon size={12} />
-                          <Text
-                            size="lg"
-                            fw={700}
-                            c="blue.3"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                              lineHeight: 1,
-                            }}
-                          >
-                            {totalInfluence - 1}
-                          </Text>
-                          <Text
-                            size="sm"
-                            c="blue.5"
-                            fw={500}
-                            style={{ lineHeight: 1 }}
-                          >
-                            / {totalInfluence}
-                          </Text>
-                        </Group>
-                      </Group>
+                      <Caption>Total</Caption>
+                      <ResourceInfluenceDisplay
+                        resources={totalResources - 3}
+                        totalResources={totalResources}
+                        influence={totalInfluence - 1}
+                        totalInfluence={totalInfluence}
+                      />
                     </Stack>
 
                     {/* Divider */}
@@ -1525,76 +1374,13 @@ export default function PlayerCard({
 
                     {/* Optimal Section */}
                     <Stack gap="sm">
-                      <Text
-                        size="xs"
-                        c="gray.3"
-                        opacity={0.6}
-                        fw={700}
-                        style={{
-                          textTransform: "uppercase",
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                          alignSelf: "flex-start",
-                          fontSize: "10px",
-                          lineHeight: 1,
-                        }}
-                      >
-                        Optimal
-                      </Text>
-                      <Group gap="lg" justify="center">
-                        {/* Resources */}
-                        <Group gap={4} align="baseline">
-                          <svg width="12" height="12" viewBox="0 0 24 24">
-                            <polygon
-                              points="6,2 18,2 22,12 18,22 6,22 2,12"
-                              fill="transparent"
-                              stroke="#eab308"
-                              strokeWidth="2"
-                            />
-                          </svg>
-                          <Text
-                            size="lg"
-                            fw={700}
-                            c="yellow.3"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                              lineHeight: 1,
-                            }}
-                          >
-                            {totalResources - 3}
-                          </Text>
-                          <Text
-                            size="sm"
-                            c="yellow.5"
-                            fw={500}
-                            style={{ lineHeight: 1 }}
-                          >
-                            / {totalResources}
-                          </Text>
-                        </Group>
-                        {/* Influence */}
-                        <Group gap={4} align="baseline">
-                          <InfluenceIcon size={12} />
-                          <Text
-                            size="lg"
-                            fw={700}
-                            c="blue.3"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                              lineHeight: 1,
-                            }}
-                          >
-                            {totalInfluence - 1}
-                          </Text>
-                          <Text
-                            size="sm"
-                            c="blue.5"
-                            fw={500}
-                            style={{ lineHeight: 1 }}
-                          >
-                            / {totalInfluence}
-                          </Text>
-                        </Group>
-                      </Group>
+                      <Caption>Optimal</Caption>
+                      <ResourceInfluenceDisplay
+                        resources={totalResources - 3}
+                        totalResources={totalResources}
+                        influence={totalInfluence - 1}
+                        totalInfluence={totalInfluence}
+                      />
                     </Stack>
                   </Stack>
                 </Surface>
