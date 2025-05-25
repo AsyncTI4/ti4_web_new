@@ -77,6 +77,358 @@ const SHIMMER_COLORS = {
   },
 };
 
+function Relic({ name }) {
+  return (
+    <Box
+      py={4}
+      px={6}
+      style={{
+        borderRadius: "6px",
+        background:
+          "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
+        border: "1px solid rgba(251, 191, 36, 0.4)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Diagonal stripe pattern */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+            repeating-linear-gradient(
+              45deg,
+              rgba(251, 191, 36, 0.08) 0px,
+              rgba(251, 191, 36, 0.08) 1px,
+              transparent 1px,
+              transparent 16px
+            )
+          `,
+          pointerEvents: "none",
+          opacity: 0.5,
+        }}
+      />
+
+      {/* Stronger inner glow */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <Box
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          height: "100%",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Image
+          src="/relicicon.webp"
+          style={{
+            width: "16px",
+            height: "16px",
+            filter: "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+          }}
+        />
+        <Text
+          size="sm"
+          fw={700}
+          c="white"
+          style={{
+            fontFamily: "SLIDER, monospace",
+            textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+          }}
+        >
+          {name}
+        </Text>
+      </Box>
+    </Box>
+  );
+}
+
+function Tech({ tech }) {
+  const colorConfig = {
+    blue: {
+      background:
+        "linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)",
+      border: "rgba(59, 130, 246, 0.2)",
+      leftBorder:
+        "linear-gradient(180deg, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.2) 100%)",
+      tierDot: "rgba(59, 130, 246, 0.9)",
+      tierShadow:
+        "0 0 3px rgba(59, 130, 246, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+      iconFilter: "drop-shadow(0 0 3px rgba(59, 130, 246, 0.3))",
+    },
+    yellow: {
+      background:
+        "linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.05) 100%)",
+      border: "rgba(234, 179, 8, 0.2)",
+      leftBorder:
+        "linear-gradient(180deg, rgba(234, 179, 8, 0.6) 0%, rgba(234, 179, 8, 0.2) 100%)",
+      tierDot: "rgba(234, 179, 8, 0.9)",
+      tierShadow:
+        "0 0 3px rgba(234, 179, 8, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+      iconFilter: "drop-shadow(0 0 3px rgba(234, 179, 8, 0.3))",
+    },
+    green: {
+      background:
+        "linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+      border: "rgba(34, 197, 94, 0.2)",
+      leftBorder:
+        "linear-gradient(180deg, rgba(34, 197, 94, 0.6) 0%, rgba(34, 197, 94, 0.2) 100%)",
+      tierDot: "rgba(34, 197, 94, 0.9)",
+      tierShadow:
+        "0 0 3px rgba(34, 197, 94, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+      iconFilter: "drop-shadow(0 0 3px rgba(34, 197, 94, 0.3))",
+    },
+    red: {
+      background:
+        "linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
+      border: "rgba(239, 68, 68, 0.2)",
+      leftBorder:
+        "linear-gradient(180deg, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.2) 100%)",
+      tierDot: "rgba(239, 68, 68, 0.9)",
+      tierShadow:
+        "0 0 3px rgba(239, 68, 68, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+      iconFilter: "drop-shadow(0 0 3px rgba(239, 68, 68, 0.3))",
+    },
+  };
+
+  const config = colorConfig[tech.color] || colorConfig.blue;
+
+  return (
+    <Tooltip label={tech.name}>
+      <Box
+        py={1}
+        px="xs"
+        style={{
+          borderRadius: "4px",
+          background: config.background,
+          border: `1px solid ${config.border}`,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: "2px",
+            background: config.leftBorder,
+          }}
+        />
+        {/* Tier indicator dots in top-right */}
+        {tech.tier > 0 && (
+          <Box
+            style={{
+              position: "absolute",
+              top: "3px",
+              right: "4px",
+              display: "flex",
+              gap: "2px",
+              flexWrap: "wrap",
+              width: "12px",
+              justifyContent: "flex-end",
+            }}
+          >
+            {[...Array(tech.tier)].map((_, dotIndex) => (
+              <Box
+                key={dotIndex}
+                style={{
+                  width: "3px",
+                  height: "3px",
+                  borderRadius: "50%",
+                  background: config.tierDot,
+                  boxShadow: config.tierShadow,
+                }}
+              />
+            ))}
+          </Box>
+        )}
+        <Group gap={4} style={{ position: "relative" }}>
+          <Image
+            src={`/${tech.color}.png`}
+            alt={tech.name}
+            style={{
+              width: "14px",
+              height: "14px",
+              filter: config.iconFilter,
+            }}
+          />
+          <Text
+            size="xs"
+            c="white"
+            fw={600}
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+              paddingRight: "16px",
+            }}
+          >
+            {tech.name}
+          </Text>
+        </Group>
+      </Box>
+    </Tooltip>
+  );
+}
+
+function Surface({
+  children,
+  pattern = "none",
+  label,
+  cornerAccents = false,
+  ...boxProps
+}) {
+  const getPatternOverlay = () => {
+    switch (pattern) {
+      case "grid":
+        return {
+          backgroundImage: `
+            linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "20px 20px",
+        };
+      case "circle":
+        return {
+          backgroundColor: "rgba(148, 163, 184, 0.02)",
+          backgroundImage:
+            "repeating-radial-gradient(circle at 0 0, transparent 0, rgba(148, 163, 184, 0.02) 10px), repeating-linear-gradient(rgba(148, 163, 184, 0.03), rgba(148, 163, 184, 0.01))",
+        };
+      default:
+        return {};
+    }
+  };
+
+  return (
+    <Box
+      {...boxProps}
+      style={{
+        borderRadius: "12px",
+        background:
+          "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+        border: "1px solid rgba(148, 163, 184, 0.2)",
+        position: "relative",
+        overflow: "hidden",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+        ...boxProps.style,
+      }}
+    >
+      {/* Pattern overlay */}
+      {pattern !== "none" && (
+        <Box
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            pointerEvents: "none",
+            opacity: 0.5,
+            ...getPatternOverlay(),
+          }}
+        />
+      )}
+
+      {/* Corner accents */}
+      {cornerAccents && (
+        <>
+          <Box
+            style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              width: "20px",
+              height: "20px",
+              border: "2px solid rgba(59, 130, 246, 0.1)",
+              borderRight: "none",
+              borderBottom: "none",
+              borderRadius: "4px 0 0 0",
+            }}
+          />
+          <Box
+            style={{
+              position: "absolute",
+              top: "8px",
+              right: "8px",
+              width: "20px",
+              height: "20px",
+              border: "2px solid rgba(59, 130, 246, 0.1)",
+              borderLeft: "none",
+              borderBottom: "none",
+              borderRadius: "0 4px 0 0",
+            }}
+          />
+          <Box
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              left: "8px",
+              width: "20px",
+              height: "20px",
+              border: "2px solid rgba(59, 130, 246, 0.1)",
+              borderRight: "none",
+              borderTop: "none",
+              borderRadius: "0 0 0 4px",
+            }}
+          />
+          <Box
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              right: "8px",
+              width: "20px",
+              height: "20px",
+              border: "2px solid rgba(59, 130, 246, 0.1)",
+              borderLeft: "none",
+              borderTop: "none",
+              borderRadius: "0 0 4px 0",
+            }}
+          />
+        </>
+      )}
+
+      {/* Label */}
+      {label && (
+        <Text
+          size="xs"
+          fw={700}
+          c="blueGray.3"
+          style={{
+            textTransform: "uppercase",
+            bottom: 15,
+            position: "absolute",
+            right: 20,
+            zIndex: 1,
+          }}
+        >
+          {label}
+        </Text>
+      )}
+
+      {children}
+    </Box>
+  );
+}
+
 function Shimmer({ color = "blue", children, ...boxProps }) {
   const shimmerConfig = SHIMMER_COLORS[color] || SHIMMER_COLORS.blue;
 
@@ -1027,440 +1379,43 @@ export default function PlayerCard({
           </Grid.Col>
           <Grid.Col span={6}>
             <Stack gap="md">
-              <Group
+              <Surface
+                pattern="grid"
+                cornerAccents={true}
+                label="TECH"
                 p="md"
                 style={{
-                  borderRadius: "12px",
-                  background:
-                    "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow:
-                    "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                  display: "flex",
+                  flexDirection: "row",
                 }}
               >
-                <Text
-                  size="xs"
-                  fw={700}
-                  c="blueGray.3"
-                  style={{
-                    textTransform: "uppercase",
-                    bottom: 15,
-                    position: "absolute",
-                    right: 20,
-                  }}
-                >
-                  TECH
-                </Text>
-                {/* Animated corner accents */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: "8px",
-                    left: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderRight: "none",
-                    borderBottom: "none",
-                    borderRadius: "4px 0 0 0",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: "8px",
-                    right: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderLeft: "none",
-                    borderBottom: "none",
-                    borderRadius: "0 4px 0 0",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    left: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderRight: "none",
-                    borderTop: "none",
-                    borderRadius: "0 0 0 4px",
-                  }}
-                />
-                <Box
-                  style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: "8px",
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid rgba(59, 130, 246, 0.1)",
-                    borderLeft: "none",
-                    borderTop: "none",
-                    borderRadius: "0 0 4px 0",
-                  }}
-                />
-
-                {/* Subtle grid pattern overlay */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundImage: `
-                      linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px)
-                    `,
-                    backgroundSize: "20px 20px",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                <Group gap="xs" align="top">
+                <Group gap="xs" align="top" flex={1}>
                   <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "blue")
                       .map((tech, index) => (
-                        <Box
-                          key={index}
-                          py={1}
-                          px="xs"
-                          style={{
-                            borderRadius: "4px",
-                            background:
-                              "linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)",
-                            border: "1px solid rgba(59, 130, 246, 0.2)",
-                            position: "relative",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              position: "absolute",
-                              left: 0,
-                              top: 0,
-                              bottom: 0,
-                              width: "2px",
-                              background:
-                                "linear-gradient(180deg, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.2) 100%)",
-                            }}
-                          />
-                          {/* Tier indicator dots in top-right */}
-                          {tech.tier > 0 && (
-                            <Box
-                              style={{
-                                position: "absolute",
-                                top: "3px",
-                                right: "4px",
-                                display: "flex",
-                                gap: "2px",
-                                flexWrap: "wrap",
-                                width: "12px",
-                                justifyContent: "flex-end",
-                              }}
-                            >
-                              {[...Array(tech.tier)].map((_, dotIndex) => (
-                                <Box
-                                  key={dotIndex}
-                                  style={{
-                                    width: "3px",
-                                    height: "3px",
-                                    borderRadius: "50%",
-                                    background: "rgba(59, 130, 246, 0.9)",
-                                    boxShadow:
-                                      "0 0 3px rgba(59, 130, 246, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-                                  }}
-                                />
-                              ))}
-                            </Box>
-                          )}
-                          <Group gap={4} style={{ position: "relative" }}>
-                            <Image
-                              src={`/${tech.color}.png`}
-                              alt={tech.name}
-                              style={{
-                                width: "14px",
-                                height: "14px",
-                                filter:
-                                  "drop-shadow(0 0 3px rgba(59, 130, 246, 0.3))",
-                              }}
-                            />
-                            <Text
-                              size="xs"
-                              c="white"
-                              fw={600}
-                              style={{
-                                textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                                paddingRight: "16px",
-                              }}
-                            >
-                              {tech.name}
-                            </Text>
-                          </Group>
-                        </Box>
+                        <Tech key={index} tech={tech} />
                       ))}
                   </Stack>
-
                   <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "yellow")
                       .map((tech, index) => (
-                        <Tooltip key={index} label={tech.name}>
-                          <Box
-                            py={1}
-                            px="xs"
-                            style={{
-                              borderRadius: "4px",
-                              background:
-                                "linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.05) 100%)",
-                              border: "1px solid rgba(234, 179, 8, 0.2)",
-                              position: "relative",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <Box
-                              style={{
-                                position: "absolute",
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: "2px",
-                                background:
-                                  "linear-gradient(180deg, rgba(234, 179, 8, 0.6) 0%, rgba(234, 179, 8, 0.2) 100%)",
-                              }}
-                            />
-                            {/* Tier indicator dots in top-right */}
-                            {tech.tier > 0 && (
-                              <Box
-                                style={{
-                                  position: "absolute",
-                                  top: "3px",
-                                  right: "4px",
-                                  display: "flex",
-                                  gap: "2px",
-                                  flexWrap: "wrap",
-                                  width: "12px",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {[...Array(tech.tier)].map((_, dotIndex) => (
-                                  <Box
-                                    key={dotIndex}
-                                    style={{
-                                      width: "3px",
-                                      height: "3px",
-                                      borderRadius: "50%",
-                                      background: "rgba(234, 179, 8, 0.9)",
-                                      boxShadow:
-                                        "0 0 3px rgba(234, 179, 8, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-                                    }}
-                                  />
-                                ))}
-                              </Box>
-                            )}
-                            <Group gap={4} style={{ position: "relative" }}>
-                              <Image
-                                src={`/${tech.color}.png`}
-                                alt={tech.name}
-                                style={{
-                                  width: "14px",
-                                  height: "14px",
-                                  filter:
-                                    "drop-shadow(0 0 3px rgba(234, 179, 8, 0.3))",
-                                }}
-                              />
-                              <Text
-                                size="xs"
-                                c="white"
-                                fw={600}
-                                style={{
-                                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                                  paddingRight: "16px",
-                                }}
-                              >
-                                {tech.name}
-                              </Text>
-                            </Group>
-                          </Box>
-                        </Tooltip>
+                        <Tech key={index} tech={tech} />
                       ))}
                   </Stack>
-
                   <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "green")
                       .map((tech, index) => (
-                        <Tooltip key={index} label={tech.name}>
-                          <Box
-                            py={1}
-                            px="xs"
-                            style={{
-                              borderRadius: "4px",
-                              background:
-                                "linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                              border: "1px solid rgba(34, 197, 94, 0.2)",
-                              position: "relative",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <Box
-                              style={{
-                                position: "absolute",
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: "2px",
-                                background:
-                                  "linear-gradient(180deg, rgba(34, 197, 94, 0.6) 0%, rgba(34, 197, 94, 0.2) 100%)",
-                              }}
-                            />
-                            {/* Tier indicator dots in top-right */}
-                            {tech.tier > 0 && (
-                              <Box
-                                style={{
-                                  position: "absolute",
-                                  top: "3px",
-                                  right: "4px",
-                                  display: "flex",
-                                  gap: "2px",
-                                  flexWrap: "wrap",
-                                  width: "12px",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {[...Array(tech.tier)].map((_, dotIndex) => (
-                                  <Box
-                                    key={dotIndex}
-                                    style={{
-                                      width: "3px",
-                                      height: "3px",
-                                      borderRadius: "50%",
-                                      background: "rgba(34, 197, 94, 0.9)",
-                                      boxShadow:
-                                        "0 0 3px rgba(34, 197, 94, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-                                    }}
-                                  />
-                                ))}
-                              </Box>
-                            )}
-                            <Group gap={4} style={{ position: "relative" }}>
-                              <Image
-                                src={`/${tech.color}.png`}
-                                alt={tech.name}
-                                style={{
-                                  width: "14px",
-                                  height: "14px",
-                                  filter:
-                                    "drop-shadow(0 0 3px rgba(34, 197, 94, 0.3))",
-                                }}
-                              />
-                              <Text
-                                size="xs"
-                                c="white"
-                                fw={600}
-                                style={{
-                                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                                  paddingRight: "16px",
-                                }}
-                              >
-                                {tech.name}
-                              </Text>
-                            </Group>
-                          </Box>
-                        </Tooltip>
+                        <Tech key={index} tech={tech} />
                       ))}
                   </Stack>
-
                   <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "red")
                       .map((tech, index) => (
-                        <Tooltip key={index} label={tech.name}>
-                          <Box
-                            py={1}
-                            px="xs"
-                            style={{
-                              borderRadius: "4px",
-                              background:
-                                "linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
-                              border: "1px solid rgba(239, 68, 68, 0.2)",
-                              position: "relative",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <Box
-                              style={{
-                                position: "absolute",
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: "2px",
-                                background:
-                                  "linear-gradient(180deg, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.2) 100%)",
-                              }}
-                            />
-                            {/* Tier indicator dots in top-right */}
-                            {tech.tier > 0 && (
-                              <Box
-                                style={{
-                                  position: "absolute",
-                                  top: "3px",
-                                  right: "4px",
-                                  display: "flex",
-                                  gap: "2px",
-                                  flexWrap: "wrap",
-                                  width: "12px",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {[...Array(tech.tier)].map((_, dotIndex) => (
-                                  <Box
-                                    key={dotIndex}
-                                    style={{
-                                      width: "3px",
-                                      height: "3px",
-                                      borderRadius: "50%",
-                                      background: "rgba(239, 68, 68, 0.9)",
-                                      boxShadow:
-                                        "0 0 3px rgba(239, 68, 68, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-                                    }}
-                                  />
-                                ))}
-                              </Box>
-                            )}
-                            <Group gap={4} style={{ position: "relative" }}>
-                              <Image
-                                src={`/${tech.color}.png`}
-                                alt={tech.name}
-                                style={{
-                                  width: "14px",
-                                  height: "14px",
-                                  filter:
-                                    "drop-shadow(0 0 3px rgba(239, 68, 68, 0.3))",
-                                }}
-                              />
-                              <Text
-                                size="xs"
-                                c="white"
-                                fw={600}
-                                style={{
-                                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                                  paddingRight: "16px",
-                                }}
-                              >
-                                {tech.name}
-                              </Text>
-                            </Group>
-                          </Box>
-                        </Tooltip>
+                        <Tech key={index} tech={tech} />
                       ))}
                   </Stack>
                 </Group>
@@ -1475,51 +1430,10 @@ export default function PlayerCard({
                     }}
                   />
                 </Box>
-              </Group>
+              </Surface>
 
               <Group gap="md" align="stretch">
-                <Box
-                  w={200}
-                  p="md"
-                  style={{
-                    borderRadius: "12px",
-                    background:
-                      "linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%)",
-                    border: "1px solid rgba(148, 163, 184, 0.15)",
-                    position: "relative",
-                    overflow: "hidden",
-                    boxShadow:
-                      "0 6px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(148, 163, 184, 0.08)",
-                  }}
-                >
-                  {/* Subtle corner accents */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: "6px",
-                      left: "6px",
-                      width: "16px",
-                      height: "16px",
-                      border: "1px solid rgba(148, 163, 184, 0.08)",
-                      borderRight: "none",
-                      borderBottom: "none",
-                      borderRadius: "3px 0 0 0",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "absolute",
-                      bottom: "6px",
-                      right: "6px",
-                      width: "16px",
-                      height: "16px",
-                      border: "1px solid rgba(148, 163, 184, 0.08)",
-                      borderLeft: "none",
-                      borderTop: "none",
-                      borderRadius: "0 0 3px 0",
-                    }}
-                  />
-
+                <Surface w={200} p="md" pattern="none" cornerAccents>
                   <Stack
                     justify="center"
                     h="100%"
@@ -1683,105 +1597,15 @@ export default function PlayerCard({
                       </Group>
                     </Stack>
                   </Stack>
-                </Box>
+                </Surface>
 
-                <Box
+                <Surface
                   flex={1}
                   p="md"
-                  style={{
-                    borderRadius: "12px",
-                    background:
-                      "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                    border: "1px solid rgba(148, 163, 184, 0.2)",
-                    position: "relative",
-                    overflow: "hidden",
-                    boxShadow:
-                      "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                  }}
+                  pattern="circle"
+                  cornerAccents={true}
+                  label="Planets"
                 >
-                  <Text
-                    size="xs"
-                    fw={700}
-                    c="blueGray.3"
-                    style={{
-                      textTransform: "uppercase",
-                      bottom: 15,
-                      position: "absolute",
-                      right: 20,
-                    }}
-                  >
-                    Planets
-                  </Text>
-
-                  {/* Animated corner accents */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: "8px",
-                      left: "8px",
-                      width: "20px",
-                      height: "20px",
-                      border: "2px solid rgba(59, 130, 246, 0.1)",
-                      borderRight: "none",
-                      borderBottom: "none",
-                      borderRadius: "4px 0 0 0",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: "8px",
-                      right: "8px",
-                      width: "20px",
-                      height: "20px",
-                      border: "2px solid rgba(59, 130, 246, 0.1)",
-                      borderLeft: "none",
-                      borderBottom: "none",
-                      borderRadius: "0 4px 0 0",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "absolute",
-                      bottom: "8px",
-                      left: "8px",
-                      width: "20px",
-                      height: "20px",
-                      border: "2px solid rgba(59, 130, 246, 0.1)",
-                      borderRight: "none",
-                      borderTop: "none",
-                      borderRadius: "0 0 0 4px",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "absolute",
-                      bottom: "8px",
-                      right: "8px",
-                      width: "20px",
-                      height: "20px",
-                      border: "2px solid rgba(59, 130, 246, 0.1)",
-                      borderLeft: "none",
-                      borderTop: "none",
-                      borderRadius: "0 0 4px 0",
-                    }}
-                  />
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      // backgroundSize: "16px 16px",
-                      pointerEvents: "none",
-                      backgroundColor: "rgba(148, 163, 184, 0.02)",
-                      opacity: 0.5,
-                      backgroundImage:
-                        "repeating-radial-gradient(circle at 0 0, transparent 0, rgba(148, 163, 184, 0.02) 10px), repeating-linear-gradient(rgba(148, 163, 184, 0.03), rgba(148, 163, 184, 0.01))",
-                    }}
-                  />
-
                   <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
                     {planets.map((planet, index) => (
                       <PlanetCard
@@ -1792,7 +1616,7 @@ export default function PlayerCard({
                       />
                     ))}
                   </Group>
-                </Box>
+                </Surface>
               </Group>
             </Stack>
           </Grid.Col>
@@ -1822,87 +1646,7 @@ export default function PlayerCard({
                   </Stack>
                   <Stack gap={4}>
                     {relics.map((relic, index) => (
-                      <Box
-                        key={index}
-                        py={4}
-                        px={6}
-                        style={{
-                          borderRadius: "6px",
-                          background:
-                            "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
-                          border: "1px solid rgba(251, 191, 36, 0.4)",
-                          position: "relative",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {/* Diagonal stripe pattern */}
-                        <Box
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundImage: `
-                          repeating-linear-gradient(
-                            45deg,
-                            rgba(251, 191, 36, 0.08) 0px,
-                            rgba(251, 191, 36, 0.08) 1px,
-                            transparent 1px,
-                            transparent 16px
-                          )
-                        `,
-                            pointerEvents: "none",
-                            opacity: 0.5,
-                          }}
-                        />
-
-                        {/* Stronger inner glow */}
-                        <Box
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background:
-                              "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
-                            pointerEvents: "none",
-                          }}
-                        />
-
-                        <Box
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            height: "100%",
-                            position: "relative",
-                            zIndex: 1,
-                          }}
-                        >
-                          <Image
-                            src="/relicicon.webp"
-                            style={{
-                              width: "16px",
-                              height: "16px",
-                              filter:
-                                "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
-                            }}
-                          />
-                          <Text
-                            size="sm"
-                            fw={700}
-                            c="white"
-                            style={{
-                              fontFamily: "SLIDER, monospace",
-                              textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
-                            }}
-                          >
-                            {relic}
-                          </Text>
-                        </Box>
-                      </Box>
+                      <Relic key={index} name={relic} />
                     ))}
                   </Stack>
                 </Group>
