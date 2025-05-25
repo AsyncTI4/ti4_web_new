@@ -15,16 +15,239 @@ import {
   Divider,
   Table,
 } from "@mantine/core";
-import {
-  IconAnchor,
-  IconBuilding,
-  IconUsers,
-  IconLeaf,
-  IconMountain,
-  IconFlag,
-  IconRocket,
-} from "@tabler/icons-react";
-import StrategyCard from "./StrategyCard";
+import InfluenceIcon from "./InfluenceIcon";
+
+// Planet color configurations by trait
+const PLANET_COLORS = {
+  cultural: {
+    background: "rgba(59, 130, 246, 0.12)",
+    border: "rgba(59, 130, 246, 0.3)",
+    shadow: "rgba(59, 130, 246, 0.08)",
+    highlight: "rgba(59, 130, 246, 0.4)",
+  },
+  hazardous: {
+    background: "rgba(239, 68, 68, 0.12)",
+    border: "rgba(239, 68, 68, 0.3)",
+    shadow: "rgba(239, 68, 68, 0.08)",
+    highlight: "rgba(239, 68, 68, 0.4)",
+  },
+  industrial: {
+    background: "rgba(34, 197, 94, 0.12)",
+    border: "rgba(34, 197, 94, 0.3)",
+    shadow: "rgba(34, 197, 94, 0.08)",
+    highlight: "rgba(34, 197, 94, 0.4)",
+  },
+  // Default for planets without traits (like Mecatol Rex)
+  default: {
+    background: "rgba(107, 114, 128, 0.12)",
+    border: "rgba(107, 114, 128, 0.3)",
+    shadow: "rgba(107, 114, 128, 0.08)",
+    highlight: "rgba(107, 114, 128, 0.4)",
+  },
+};
+
+function PlanetCard({ planet, planetTraitIcons, techSkipIcons }) {
+  const colors = PLANET_COLORS[planet.trait] || PLANET_COLORS.default;
+
+  return (
+    <Stack
+      py={6}
+      px={3}
+      justify="space-between"
+      h={140}
+      style={{
+        borderRadius: "12px",
+        background: `linear-gradient(135deg, ${colors.background} 0%, rgba(15, 23, 42, 0.6) 100%)`,
+        border: `1px solid ${colors.border}`,
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: `0 2px 8px ${colors.shadow}, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+      }}
+    >
+      {/* Subtle top highlight */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "20%",
+          right: "20%",
+          height: "1px",
+          background: `linear-gradient(90deg, transparent 0%, ${colors.highlight} 50%, transparent 100%)`,
+        }}
+      />
+
+      <Box align="center">{planet.trait && planetTraitIcons[planet.trait]}</Box>
+      <Stack gap={4} style={{ position: "relative", zIndex: 1 }}>
+        <Group gap={0} align="flex-end">
+          <Text
+            size="xs"
+            c="white"
+            fw={700}
+            style={{
+              writingMode: "vertical-rl",
+              textOrientation: "sideways",
+              whiteSpace: "nowrap",
+              transform: "rotate(180deg)",
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
+            }}
+          >
+            {planet.name}
+          </Text>
+          <Stack gap={2} align="top">
+            {planet.techSkip && techSkipIcons[planet.techSkip]}
+            <Box
+              pos="relative"
+              style={{
+                width: "16px",
+                height: "16px",
+              }}
+            >
+              <Image
+                src="/pa_resources.png"
+                style={{
+                  width: "16px",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  // height: "16px",
+                }}
+              />
+              <Text
+                size="xs"
+                c="white"
+                fw={700}
+                style={{
+                  position: "absolute",
+                  top: 1,
+                  left: 5,
+                }}
+              >
+                {planet.resources}
+              </Text>
+            </Box>
+
+            <Box
+              pos="relative"
+              style={{
+                width: "16px",
+                height: "16px",
+              }}
+            >
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                <InfluenceIcon size={18} />
+              </Box>
+              <Text
+                size="xs"
+                c="white"
+                fw={700}
+                style={{ position: "absolute", top: 2, left: 5 }}
+              >
+                {planet.influence}
+              </Text>
+            </Box>
+          </Stack>
+        </Group>
+      </Stack>
+    </Stack>
+  );
+}
+
+function PromissoryNote({ name, factionIcon }) {
+  return (
+    <Box
+      py={2}
+      px={6}
+      style={{
+        borderRadius: "6px",
+        background:
+          "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%)",
+        border: "1px solid rgba(59, 130, 246, 0.25)",
+        position: "relative",
+        overflow: "hidden",
+        boxShadow:
+          "0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+      }}
+    >
+      {/* Top shimmer */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.6) 50%, transparent 100%)",
+        }}
+      />
+      {/* Bottom shimmer */}
+      <Box
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.6) 50%, transparent 100%)",
+        }}
+      />
+
+      {/* Subtle diagonal pattern */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                rgba(59, 130, 246, 0.03) 0px,
+                rgba(59, 130, 246, 0.03) 1px,
+                transparent 1px,
+                transparent 16px
+              )
+            `,
+          pointerEvents: "none",
+          opacity: 0.5,
+        }}
+      />
+
+      <Group justify="space-between">
+        <Box
+          style={{
+            display: "flex",
+            gap: "10px",
+            height: "100%",
+            position: "relative",
+          }}
+        >
+          <Image src="/pnicon.png" style={{ width: "20px" }} />
+          <Text
+            size="xs"
+            fw={700}
+            c="white"
+            style={{
+              fontFamily: "SLIDER, monospace",
+              textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+            }}
+          >
+            {name}
+          </Text>
+        </Box>
+        {factionIcon && <Image src={factionIcon} style={{ width: "20px" }} />}
+      </Group>
+    </Box>
+  );
+}
 
 export default function PlayerCard({
   playerName = "Alice",
@@ -49,31 +272,31 @@ export default function PlayerCard({
       name: "Anti-Mass Deflectors",
       color: "blue",
       isUnitUpgrade: false,
-      tier: 1,
+      tier: 0,
     },
-    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false, tier: 2 },
+    { name: "Gravity Drive", color: "blue", isUnitUpgrade: false, tier: 1 },
     { name: "Fleet Logistics", color: "blue", isUnitUpgrade: false, tier: 2 },
     {
       name: "Light-Wave Deflector",
       color: "blue",
       isUnitUpgrade: false,
-      tier: 4,
+      tier: 3,
     },
 
-    { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false, tier: 2 },
-    { name: "Plasma Scoring", color: "red", isUnitUpgrade: false, tier: 1 },
+    { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false, tier: 0 },
+    { name: "Plasma Scoring", color: "red", isUnitUpgrade: false, tier: 0 },
     {
       name: "Daxcive Animators",
       color: "green",
       isUnitUpgrade: false,
-      tier: 2,
+      tier: 1,
     },
-    { name: "Hyper Metabolism", color: "green", isUnitUpgrade: false, tier: 3 },
+    { name: "Hyper Metabolism", color: "green", isUnitUpgrade: false, tier: 2 },
     {
       name: "Integrated Economy",
       color: "yellow",
       isUnitUpgrade: false,
-      tier: 4,
+      tier: 3,
     },
 
     // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
@@ -127,32 +350,26 @@ export default function PlayerCard({
     0
   );
 
-  const traitIcons = {
-    cultural: <IconLeaf size={12} color="green" />,
-    hazardous: <IconMountain size={12} color="red" />,
-    industrial: <IconBuilding size={12} color="yellow" />,
-  };
-
   const planetTraitIcons = {
     cultural: (
       <Image
         src={`/planet_attributes/pc_attribute_cultural.png`}
         alt="cultural"
-        style={{ width: "16px", height: "16px" }}
+        style={{ width: "24px", height: "24px" }}
       />
     ),
     hazardous: (
       <Image
         src={`/planet_attributes/pc_attribute_hazardous.png`}
         alt="hazardous"
-        style={{ width: "16px", height: "16px" }}
+        style={{ width: "24px", height: "24px" }}
       />
     ),
     industrial: (
       <Image
         src={`/planet_attributes/pc_attribute_industrial.png`}
         alt="industrial"
-        style={{ width: "16px", height: "16px" }}
+        style={{ width: "24px", height: "24px" }}
       />
     ),
   };
@@ -249,7 +466,7 @@ export default function PlayerCard({
                 borderBottomRightRadius: 8,
                 background:
                   "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
-                border: "1px solid rgba(148, 163, 184, 0.4)",
+                border: "1px solid rgba(148, 163, 184, 0.2)",
                 position: "relative",
                 overflow: "hidden",
                 boxShadow:
@@ -288,7 +505,7 @@ export default function PlayerCard({
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: "2px",
+                  height: "4px",
                   // background:
                   //   "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
                   background:
@@ -392,7 +609,7 @@ export default function PlayerCard({
                 </Text>
               </Box>
 
-              <Group gap={6}>
+              <Group gap={6} justify="center">
                 <Box pos="relative">
                   <Box
                     style={{
@@ -441,7 +658,6 @@ export default function PlayerCard({
                     </Text>
                   </Box>
                 </Box>
-
                 <Box pos="relative">
                   <Box
                     style={{
@@ -490,7 +706,6 @@ export default function PlayerCard({
                     </Text>
                   </Box>
                 </Box>
-
                 <Box pos="relative">
                   <Box
                     style={{
@@ -539,7 +754,6 @@ export default function PlayerCard({
                     </Text>
                   </Box>
                 </Box>
-
                 <Box pos="relative">
                   <Box
                     style={{
@@ -588,7 +802,6 @@ export default function PlayerCard({
                     </Text>
                   </Box>
                 </Box>
-
                 <Box pos="relative">
                   <Box
                     style={{
@@ -637,6 +850,41 @@ export default function PlayerCard({
                     </Text>
                   </Box>
                 </Box>
+              </Group>
+              <Group gap="xs" justify="center">
+                <Group gap={0}>
+                  <Image src="/pa_fragment_crf.png" style={{ width: "25px" }} />
+                  <Image
+                    src="/pa_fragment_crf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                  <Image
+                    src="/pa_fragment_crf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                </Group>
+                <Group gap={0}>
+                  <Image src="/pa_fragment_hrf.png" style={{ width: "20px" }} />
+                  <Image
+                    src="/pa_fragment_hrf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                  <Image
+                    src="/pa_fragment_hrf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                </Group>
+                <Group gap={0}>
+                  <Image src="/pa_fragment_urf.png" style={{ width: "25px" }} />
+                  <Image
+                    src="/pa_fragment_urf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                  <Image
+                    src="/pa_fragment_urf.png"
+                    style={{ width: "25px", marginLeft: -8 }}
+                  />
+                </Group>
               </Group>
               <Stack gap={2}>
                 {scoredSecrets.map((secret, index) => (
@@ -812,18 +1060,14 @@ export default function PlayerCard({
                   }}
                 />
 
-                <Group
-                  gap="xs"
-                  align="top"
-                  style={{ position: "relative", zIndex: 1 }}
-                >
-                  <Stack gap="xs">
+                <Group gap="xs" align="top">
+                  <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "blue")
                       .map((tech, index) => (
                         <Box
                           key={index}
-                          py={2}
+                          py={1}
                           px="xs"
                           style={{
                             borderRadius: "4px",
@@ -846,7 +1090,7 @@ export default function PlayerCard({
                             }}
                           />
                           {/* Tier indicator dots in top-right */}
-                          {tech.tier && (
+                          {tech.tier > 0 && (
                             <Box
                               style={{
                                 position: "absolute",
@@ -901,13 +1145,13 @@ export default function PlayerCard({
                       ))}
                   </Stack>
 
-                  <Stack gap="xs">
+                  <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "yellow")
                       .map((tech, index) => (
                         <Tooltip key={index} label={tech.name}>
                           <Box
-                            py={2}
+                            py={1}
                             px="xs"
                             style={{
                               borderRadius: "4px",
@@ -930,7 +1174,7 @@ export default function PlayerCard({
                               }}
                             />
                             {/* Tier indicator dots in top-right */}
-                            {tech.tier && (
+                            {tech.tier > 0 && (
                               <Box
                                 style={{
                                   position: "absolute",
@@ -986,13 +1230,13 @@ export default function PlayerCard({
                       ))}
                   </Stack>
 
-                  <Stack gap="xs">
+                  <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "green")
                       .map((tech, index) => (
                         <Tooltip key={index} label={tech.name}>
                           <Box
-                            py={2}
+                            py={1}
                             px="xs"
                             style={{
                               borderRadius: "4px",
@@ -1015,7 +1259,7 @@ export default function PlayerCard({
                               }}
                             />
                             {/* Tier indicator dots in top-right */}
-                            {tech.tier && (
+                            {tech.tier > 0 && (
                               <Box
                                 style={{
                                   position: "absolute",
@@ -1071,13 +1315,13 @@ export default function PlayerCard({
                       ))}
                   </Stack>
 
-                  <Stack gap="xs">
+                  <Stack gap={4}>
                     {techs
                       .filter((v) => v.color === "red")
                       .map((tech, index) => (
                         <Tooltip key={index} label={tech.name}>
                           <Box
-                            py={2}
+                            py={1}
                             px="xs"
                             style={{
                               borderRadius: "4px",
@@ -1100,7 +1344,7 @@ export default function PlayerCard({
                               }}
                             />
                             {/* Tier indicator dots in top-right */}
-                            {tech.tier && (
+                            {tech.tier > 0 && (
                               <Box
                                 style={{
                                   position: "absolute",
@@ -1267,14 +1511,7 @@ export default function PlayerCard({
                         </Group>
                         {/* Influence */}
                         <Group gap={4} align="baseline">
-                          <svg width="12" height="12" viewBox="0 0 24 24">
-                            <polygon
-                              points="6,2 18,2 22,12 18,22 6,22 2,12"
-                              fill="transparent"
-                              stroke="#3b82f6"
-                              strokeWidth="2"
-                            />
-                          </svg>
+                          <InfluenceIcon size={12} />
                           <Text
                             size="lg"
                             fw={700}
@@ -1358,14 +1595,7 @@ export default function PlayerCard({
                         </Group>
                         {/* Influence */}
                         <Group gap={4} align="baseline">
-                          <svg width="12" height="12" viewBox="0 0 24 24">
-                            <polygon
-                              points="6,2 18,2 22,12 18,22 6,22 2,12"
-                              fill="transparent"
-                              stroke="#3b82f6"
-                              strokeWidth="2"
-                            />
-                          </svg>
+                          <InfluenceIcon size={12} />
                           <Text
                             size="lg"
                             fw={700}
@@ -1490,113 +1720,12 @@ export default function PlayerCard({
 
                   <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
                     {planets.map((planet, index) => (
-                      <Stack
+                      <PlanetCard
                         key={index}
-                        py={4}
-                        px="xs"
-                        justify="space-between"
-                        h={140}
-                        style={{
-                          borderRadius: "12px",
-                          background: `linear-gradient(135deg, ${
-                            planet.trait === "cultural"
-                              ? "rgba(59, 130, 246, 0.12)"
-                              : planet.trait === "hazardous"
-                                ? "rgba(239, 68, 68, 0.12)"
-                                : "rgba(34, 197, 94, 0.12)"
-                          } 0%, rgba(15, 23, 42, 0.6) 100%)`,
-                          border: `1px solid ${
-                            planet.trait === "cultural"
-                              ? "rgba(59, 130, 246, 0.3)"
-                              : planet.trait === "hazardous"
-                                ? "rgba(239, 68, 68, 0.3)"
-                                : "rgba(34, 197, 94, 0.3)"
-                          }`,
-                          position: "relative",
-                          overflow: "hidden",
-                          boxShadow: `0 2px 8px ${
-                            planet.trait === "cultural"
-                              ? "rgba(59, 130, 246, 0.08)"
-                              : planet.trait === "hazardous"
-                                ? "rgba(239, 68, 68, 0.08)"
-                                : "rgba(34, 197, 94, 0.08)"
-                          }, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
-                        }}
-                      >
-                        {/* Subtle top highlight */}
-                        <Box
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: "20%",
-                            right: "20%",
-                            height: "1px",
-                            background: `linear-gradient(90deg, transparent 0%, ${
-                              planet.trait === "cultural"
-                                ? "rgba(59, 130, 246, 0.4)"
-                                : planet.trait === "hazardous"
-                                  ? "rgba(239, 68, 68, 0.4)"
-                                  : "rgba(34, 197, 94, 0.4)"
-                            } 50%, transparent 100%)`,
-                          }}
-                        />
-
-                        <Stack
-                          gap={6}
-                          style={{ position: "relative", zIndex: 1 }}
-                        >
-                          {planetTraitIcons[planet.trait]}
-                          <Text
-                            size="xs"
-                            c="white"
-                            fw={700}
-                            style={{
-                              writingMode: "vertical-rl",
-                              textOrientation: "sideways",
-                              whiteSpace: "nowrap",
-                              transform: "rotate(180deg)",
-                              textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
-                            }}
-                          >
-                            {planet.name}
-                          </Text>
-                        </Stack>
-                        <Stack
-                          gap={4}
-                          style={{ position: "relative", zIndex: 1 }}
-                        >
-                          {planet.techSkip && techSkipIcons[planet.techSkip]}
-                          <Stack gap={2}>
-                            <Text
-                              size="xs"
-                              bg="blue"
-                              px={4}
-                              c="white"
-                              fw={700}
-                              style={{
-                                borderRadius: "4px",
-                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
-                              }}
-                            >
-                              {planet.resources}
-                            </Text>
-
-                            <Text
-                              size="xs"
-                              bg="yellow"
-                              px={4}
-                              c="white"
-                              fw={700}
-                              style={{
-                                borderRadius: "4px",
-                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
-                              }}
-                            >
-                              {planet.influence}
-                            </Text>
-                          </Stack>
-                        </Stack>
-                      </Stack>
+                        planet={planet}
+                        planetTraitIcons={planetTraitIcons}
+                        techSkipIcons={techSkipIcons}
+                      />
                     ))}
                   </Group>
                 </Box>
@@ -1605,238 +1734,245 @@ export default function PlayerCard({
           </Grid.Col>
           <Grid.Col span={4}>
             <Group justify="space-between" align="start">
-              <Group align="start">
-                <Stack gap={4}>
-                  <Group
-                    p={2}
-                    px="sm"
-                    style={{
-                      borderRadius: "8px",
-                      background:
-                        "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                      boxShadow:
-                        "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                  >
-                    {/* Top shimmer */}
-                    <Box
+              <Stack>
+                <Group align="start">
+                  <Stack gap={4}>
+                    <Group
+                      p={2}
+                      px="sm"
                       style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
+                        borderRadius: "8px",
                         background:
-                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                      }}
-                    />
-                    {/* Bottom shimmer */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                      }}
-                    />
-                    <Box
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Image
-                        src="/commanders/solagent.webp"
-                        style={{
-                          width: "35px",
-                          height: "35px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                        }}
-                      />
-                      <Stack gap={0}>
-                        <Text
-                          size="sm"
-                          fw={700}
-                          c="white"
-                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                        >
-                          Evelyn Delouis
-                        </Text>
-                        <Text
-                          size="xs"
-                          c="green.3"
-                          fw={500}
-                          style={{ opacity: 0.8 }}
-                        >
-                          Agent
-                        </Text>
-                      </Stack>
-                    </Box>
-                  </Group>
-                  <Group
-                    p={2}
-                    px="sm"
-                    style={{
-                      borderRadius: "8px",
-                      border: "1px solid #6b7280",
-                      background:
-                        "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
-                      position: "relative",
-                      overflow: "hidden",
-                      opacity: 0.7,
-                      width: "100%",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Image
-                        src="/commanders/solcommander.webp"
-                        style={{
-                          width: "35px",
-                          height: "35px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                          filter: "grayscale(50%)",
-                        }}
-                      />
-                      <Stack gap={0}>
-                        <Text
-                          size="sm"
-                          fw={700}
-                          c="gray.4"
-                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                        >
-                          Claire Gibson
-                        </Text>
-                        <Text
-                          size="xs"
-                          c="gray.5"
-                          fw={500}
-                          style={{ opacity: 0.8 }}
-                        >
-                          Commander
-                        </Text>
-                      </Stack>
-                    </Box>
-                  </Group>
-                  <Group
-                    p={2}
-                    px="sm"
-                    style={{
-                      borderRadius: "8px",
-                      background:
-                        "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                      boxShadow:
-                        "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                  >
-                    {/* Top shimmer */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                      }}
-                    />
-                    {/* Bottom shimmer */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                      }}
-                    />
-                    <Box
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Image
-                        src="/commanders/solhero.webp"
-                        style={{
-                          width: "35px",
-                          height: "35px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                        }}
-                      />
-                      <Stack gap={0}>
-                        <Text
-                          size="sm"
-                          fw={700}
-                          c="white"
-                          style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }}
-                        >
-                          Jace X.
-                        </Text>
-                        <Text
-                          size="xs"
-                          c="green.3"
-                          fw={500}
-                          style={{ opacity: 0.8 }}
-                        >
-                          Hero
-                        </Text>
-                      </Stack>
-                    </Box>
-                  </Group>
-                </Stack>
-                <Stack gap={4}>
-                  {relics.map((relic, index) => (
-                    <Box
-                      key={index}
-                      py={4}
-                      px={6}
-                      style={{
-                        borderRadius: "6px",
-                        background:
-                          "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
-                        border: "1px solid rgba(251, 191, 36, 0.4)",
+                          "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+                        // boxShadow:
+                        //   "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
                         position: "relative",
                         overflow: "hidden",
+                        width: "100%",
                       }}
                     >
-                      {/* Diagonal stripe pattern */}
+                      {/* Top shimmer */}
                       <Box
                         style={{
                           position: "absolute",
                           top: 0,
                           left: 0,
                           right: 0,
+                          height: "1px",
+                          background:
+                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                        }}
+                      />
+                      {/* Bottom shimmer */}
+                      <Box
+                        style={{
+                          position: "absolute",
                           bottom: 0,
-                          backgroundImage: `
+                          left: 0,
+                          right: 0,
+                          height: "1px",
+                          background:
+                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                        }}
+                      />
+                      <Box
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Image
+                          src="/commanders/solagent.webp"
+                          style={{
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                        />
+                        <Stack gap={0}>
+                          <Text
+                            size="sm"
+                            fw={700}
+                            c="white"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                            }}
+                          >
+                            Evelyn Delouis
+                          </Text>
+                          <Text
+                            size="xs"
+                            c="green.3"
+                            fw={500}
+                            style={{ opacity: 0.8 }}
+                          >
+                            Agent
+                          </Text>
+                        </Stack>
+                      </Box>
+                    </Group>
+                    <Group
+                      p={2}
+                      px="sm"
+                      style={{
+                        borderRadius: "8px",
+                        border: "1px solid #6b7280",
+                        background:
+                          "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
+                        position: "relative",
+                        overflow: "hidden",
+                        opacity: 0.7,
+                        width: "100%",
+                      }}
+                    >
+                      <Box
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Image
+                          src="/commanders/solcommander.webp"
+                          style={{
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            filter: "grayscale(50%)",
+                          }}
+                        />
+                        <Stack gap={0}>
+                          <Text
+                            size="sm"
+                            fw={700}
+                            c="gray.4"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                            }}
+                          >
+                            Claire Gibson
+                          </Text>
+                          <Text
+                            size="xs"
+                            c="gray.5"
+                            fw={500}
+                            style={{ opacity: 0.8 }}
+                          >
+                            Commander
+                          </Text>
+                        </Stack>
+                      </Box>
+                    </Group>
+                    <Group
+                      p={2}
+                      px="sm"
+                      style={{
+                        borderRadius: "8px",
+                        background:
+                          "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+                        // boxShadow:
+                        //   "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                        position: "relative",
+                        overflow: "hidden",
+                        width: "100%",
+                      }}
+                    >
+                      {/* Top shimmer */}
+                      <Box
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: "1px",
+                          background:
+                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                        }}
+                      />
+                      {/* Bottom shimmer */}
+                      <Box
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          height: "1px",
+                          background:
+                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+                        }}
+                      />
+                      <Box
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Image
+                          src="/commanders/solhero.webp"
+                          style={{
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                        />
+                        <Stack gap={0}>
+                          <Text
+                            size="sm"
+                            fw={700}
+                            c="white"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                            }}
+                          >
+                            Jace X.
+                          </Text>
+                          <Text
+                            size="xs"
+                            c="green.3"
+                            fw={500}
+                            style={{ opacity: 0.8 }}
+                          >
+                            Hero
+                          </Text>
+                        </Stack>
+                      </Box>
+                    </Group>
+                  </Stack>
+                  <Stack gap={4}>
+                    {relics.map((relic, index) => (
+                      <Box
+                        key={index}
+                        py={4}
+                        px={6}
+                        style={{
+                          borderRadius: "6px",
+                          background:
+                            "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
+                          border: "1px solid rgba(251, 191, 36, 0.4)",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {/* Diagonal stripe pattern */}
+                        <Box
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage: `
                           repeating-linear-gradient(
                             45deg,
                             rgba(251, 191, 36, 0.08) 0px,
@@ -1845,61 +1981,79 @@ export default function PlayerCard({
                             transparent 16px
                           )
                         `,
-                          pointerEvents: "none",
-                          opacity: 0.5,
-                        }}
-                      />
-
-                      {/* Stronger inner glow */}
-                      <Box
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background:
-                            "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
-                          pointerEvents: "none",
-                        }}
-                      />
-
-                      <Box
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          height: "100%",
-                          position: "relative",
-                          zIndex: 1,
-                        }}
-                      >
-                        <Image
-                          src="/relicicon.webp"
-                          style={{
-                            width: "16px",
-                            height: "16px",
-                            filter:
-                              "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+                            pointerEvents: "none",
+                            opacity: 0.5,
                           }}
                         />
-                        <Text
-                          size="sm"
-                          fw={700}
-                          c="white"
+
+                        {/* Stronger inner glow */}
+                        <Box
                           style={{
-                            fontFamily: "SLIDER, monospace",
-                            textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background:
+                              "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
+                            pointerEvents: "none",
+                          }}
+                        />
+
+                        <Box
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            height: "100%",
+                            position: "relative",
+                            zIndex: 1,
                           }}
                         >
-                          {relic}
-                        </Text>
+                          <Image
+                            src="/relicicon.webp"
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              filter:
+                                "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+                            }}
+                          />
+                          <Text
+                            size="sm"
+                            fw={700}
+                            c="white"
+                            style={{
+                              fontFamily: "SLIDER, monospace",
+                              textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+                            }}
+                          >
+                            {relic}
+                          </Text>
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
-                </Stack>
-              </Group>
-              <Box>
+                    ))}
+                  </Stack>
+                </Group>
+                <Group gap={4}>
+                  <Stack gap={4}>
+                    <PromissoryNote
+                      name="Alliance"
+                      factionIcon="/factions/hacan.png"
+                    />
+                    <PromissoryNote
+                      name="Support for the Throne"
+                      factionIcon="/factions/titans.png"
+                    />
+                    <PromissoryNote
+                      name="Alliance"
+                      factionIcon="/factions/letnev.png"
+                    />
+                  </Stack>
+                </Group>
+              </Stack>
+
+              <Box style={{ zoom: 0.8 }}>
                 <Table horizontalSpacing={6} verticalSpacing={4}>
                   <Table.Thead>
                     <Table.Tr>
@@ -1911,7 +2065,7 @@ export default function PlayerCard({
                   <Table.Tbody>
                     <Table.Tr>
                       <Table.Td>
-                        <IconRocket size={14} color="#94a3b8" />
+                        <Image src="/pa_health.png" style={{ width: "20px" }} />
                       </Table.Td>
                       <Table.Td>
                         <Text size="md" fw={700} c="white">
@@ -1926,7 +2080,7 @@ export default function PlayerCard({
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>
-                        <IconUsers size={14} color="#94a3b8" />
+                        <Image src="/pa_hit.png" style={{ width: "20px" }} />
                       </Table.Td>
                       <Table.Td>
                         <Text size="md" fw={700} c="white">
@@ -1941,7 +2095,10 @@ export default function PlayerCard({
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>
-                        <IconFlag size={14} color="#94a3b8" />
+                        <Image
+                          src="/pa_unitimage.png"
+                          style={{ width: "20px" }}
+                        />
                       </Table.Td>
                       <Table.Td>
                         <Text size="md" fw={700} c="white">
@@ -1964,21 +2121,28 @@ export default function PlayerCard({
         <Box
           style={{
             position: "absolute",
-            bottom: -20,
-            right: -10,
-            opacity: 0,
-            zIndex: 0,
+            bottom: -5,
+            right: -30,
+            opacity: 1,
             pointerEvents: "none",
-            height: "50%",
-            overflow: "hidden",
+            background:
+              "linear-gradient(135deg, rgba(15, 23, 42, 0.5) 0%, rgba(30, 41, 59, 0.5) 50%, rgba(15, 23, 42, 0.5) 100%)",
+            border: "1px solid rgba(148, 163, 184, 0.1)",
+            borderBottomLeftRadius: 0,
+            padding: "10px",
+            borderRadius: "10px",
+            boxShadow:
+              "0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+            backdropFilter: "blur(3px)",
           }}
           px={4}
           py={2}
         >
           <Image
-            src="/sol.png"
-            alt="faction"
-            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            src="/pa_reinforcements.png"
+            style={{
+              width: "280px",
+            }}
           />
         </Box>
       </Box>
@@ -1991,8 +2155,8 @@ export default function PlayerCard({
           opacity: 0.15,
           zIndex: 0,
           pointerEvents: "none",
-          width: "240px",
-          height: "240px",
+          // width: "240px",
+          height: "300px",
           overflow: "hidden",
         }}
       >
