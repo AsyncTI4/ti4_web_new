@@ -75,6 +75,15 @@ const SHIMMER_COLORS = {
     shadow:
       "0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
   },
+  cyan: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.6) 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(6, 182, 212, 0.06) 100%)",
+    border: "rgba(6, 182, 212, 0.25)",
+    shadow:
+      "0 2px 8px rgba(6, 182, 212, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+  },
 };
 
 function Caption({ children }) {
@@ -94,6 +103,19 @@ function Caption({ children }) {
     >
       {children}
     </Text>
+  );
+}
+
+function ShimmerDivider() {
+  return (
+    <Box
+      style={{
+        height: "1px",
+        background:
+          "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 20%, rgba(148, 163, 184, 0.3) 80%, transparent 100%)",
+        margin: "2px 12px",
+      }}
+    />
   );
 }
 
@@ -838,9 +860,11 @@ function Leader({ imageUrl, title, description, active = false }) {
   );
 }
 
-function PromissoryNote({ name, factionIcon }) {
+function PromissoryNote({ name, factionIcon, isOtherFaction = false }) {
+  const shimmerColor = isOtherFaction ? "cyan" : "blue";
+
   return (
-    <Shimmer color="blue" py={2} px={6}>
+    <Shimmer color={shimmerColor} py={2} px={6}>
       <Group justify="space-between">
         <Box
           style={{
@@ -869,6 +893,79 @@ function PromissoryNote({ name, factionIcon }) {
   );
 }
 
+function ScoredSecret({ text }) {
+  return (
+    <Shimmer color="red" p={2} px="sm">
+      <Box
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        <Image
+          src="/so_icon.png"
+          style={{
+            width: "20px",
+            height: "20px",
+            filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+          }}
+        />
+        <Text size="xs" fw={700} c="white">
+          {text}
+        </Text>
+      </Box>
+    </Shimmer>
+  );
+}
+
+function FragmentStack({ count, type }) {
+  const getFragmentSrc = () => {
+    switch (type) {
+      case "crf":
+        return "/pa_fragment_crf.png";
+      case "hrf":
+        return "/pa_fragment_hrf.png";
+      case "urf":
+        return "/pa_fragment_urf.png";
+      default:
+        return "/pa_fragment_crf.png";
+    }
+  };
+
+  const getFragmentSize = () => {
+    // HRF fragments are slightly smaller
+    return type === "hrf" ? "20px" : "25px";
+  };
+
+  const fragmentSrc = getFragmentSrc();
+  const fragmentSize = getFragmentSize();
+
+  // Don't render anything if count is 0
+  if (count === 0) {
+    return null;
+  }
+
+  // Render up to 3 fragments max for visual clarity
+  const fragmentsToShow = Math.min(count, 3);
+
+  return (
+    <Group gap={0}>
+      {Array.from({ length: fragmentsToShow }, (_, index) => (
+        <Image
+          key={index}
+          src={fragmentSrc}
+          style={{
+            width: fragmentSize,
+            marginLeft: index === 0 ? 0 : -8,
+          }}
+        />
+      ))}
+    </Group>
+  );
+}
+
 export default function PlayerCard({
   playerName = "Alice",
   faction = "Federation of Sol",
@@ -882,6 +979,7 @@ export default function PlayerCard({
   tactics = 1,
   fleet = 4,
   strategy = 2,
+  hasPassed = false,
   leaders = [
     "1. Evelyn Delouis",
     "2. Claire Gibson",
@@ -1041,24 +1139,6 @@ export default function PlayerCard({
       shadow="xl"
       pos="relative"
     >
-      {/* Very subtle background grid */}
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-            linear-gradient(rgba(148, 163, 184, 0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(148, 163, 184, 0.015) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-          pointerEvents: "none",
-          opacity: 0.5,
-        }}
-      />
-
       {/* Subtle inner glow */}
       <Box
         style={{
@@ -1073,7 +1153,6 @@ export default function PlayerCard({
         }}
       />
 
-      {/* Content wrapper with higher z-index */}
       <Box style={{ position: "relative", zIndex: 1 }}>
         <Grid gutter="md" columns={12}>
           <Grid.Col span={2}>
@@ -1152,6 +1231,38 @@ export default function PlayerCard({
                     (pink)
                   </Text>
                 </Group>
+
+                {/* Status Indicator */}
+                <Box
+                  px={8}
+                  py={2}
+                  style={{
+                    borderRadius: "4px",
+                    background: hasPassed
+                      ? "linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(75, 85, 99, 0.15) 100%)"
+                      : "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.15) 100%)",
+                    border: hasPassed
+                      ? "1px solid rgba(107, 114, 128, 0.3)"
+                      : "1px solid rgba(34, 197, 94, 0.3)",
+                    boxShadow: hasPassed
+                      ? "0 2px 4px rgba(107, 114, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+                      : "0 2px 4px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+                  }}
+                >
+                  <Text
+                    size="xs"
+                    fw={700}
+                    c={hasPassed ? "gray.4" : "green.3"}
+                    style={{
+                      textTransform: "uppercase",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                      letterSpacing: "0.5px",
+                      fontSize: "10px",
+                    }}
+                  >
+                    {hasPassed ? "PASSED" : "ACTIVE"}
+                  </Text>
+                </Box>
               </Group>
             </Box>
             <Stack>
@@ -1197,7 +1308,6 @@ export default function PlayerCard({
                   LEADERSHIP
                 </Text>
               </Shimmer>
-
               <Group gap={6} justify="center">
                 <Cardback
                   src="/cardback/cardback_so.png"
@@ -1226,189 +1336,77 @@ export default function PlayerCard({
                 />
               </Group>
               <Group gap="xs" justify="center">
-                <Group gap={0}>
-                  <Image src="/pa_fragment_crf.png" style={{ width: "25px" }} />
-                  <Image
-                    src="/pa_fragment_crf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                  <Image
-                    src="/pa_fragment_crf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                </Group>
-                <Group gap={0}>
-                  <Image src="/pa_fragment_hrf.png" style={{ width: "20px" }} />
-                  <Image
-                    src="/pa_fragment_hrf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                  <Image
-                    src="/pa_fragment_hrf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                </Group>
-                <Group gap={0}>
-                  <Image src="/pa_fragment_urf.png" style={{ width: "25px" }} />
-                  <Image
-                    src="/pa_fragment_urf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                  <Image
-                    src="/pa_fragment_urf.png"
-                    style={{ width: "25px", marginLeft: -8 }}
-                  />
-                </Group>
+                <FragmentStack count={3} type="crf" />
+                <FragmentStack count={2} type="hrf" />
+                <FragmentStack count={1} type="urf" />
               </Group>
               <Stack gap={2}>
                 {scoredSecrets.map((secret, index) => (
-                  <Shimmer key={index} color="red" p={2} px="sm">
-                    <Box
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Image
-                        src="/so_icon.png"
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          filter:
-                            "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-                        }}
-                      />
-                      <Text size="xs" fw={700} c="white">
-                        {secret}
-                      </Text>
-                    </Box>
-                  </Shimmer>
+                  <ScoredSecret key={index} text={secret} />
                 ))}
               </Stack>
             </Stack>
           </Grid.Col>
-          <Grid.Col span={6}>
-            <Stack gap="md">
-              <Surface
-                pattern="grid"
-                cornerAccents={true}
-                label="TECH"
-                p="md"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <Group gap="xs" align="top" flex={1}>
-                  <Stack gap={4}>
-                    {techs
-                      .filter((v) => v.color === "blue")
-                      .map((tech, index) => (
-                        <Tech key={index} tech={tech} />
-                      ))}
-                  </Stack>
-                  <Stack gap={4}>
-                    {techs
-                      .filter((v) => v.color === "yellow")
-                      .map((tech, index) => (
-                        <Tech key={index} tech={tech} />
-                      ))}
-                  </Stack>
-                  <Stack gap={4}>
-                    {techs
-                      .filter((v) => v.color === "green")
-                      .map((tech, index) => (
-                        <Tech key={index} tech={tech} />
-                      ))}
-                  </Stack>
-                  <Stack gap={4}>
-                    {techs
-                      .filter((v) => v.color === "red")
-                      .map((tech, index) => (
-                        <Tech key={index} tech={tech} />
-                      ))}
-                  </Stack>
-                </Group>
-                <Box style={{ position: "relative", zIndex: 1 }}>
-                  <Image
-                    src="/mockunitupgrades.png"
-                    alt="unit upgrades"
+
+          <Grid.Col span={10}>
+            <Grid>
+              <Grid.Col span={8}>
+                <Stack gap="md">
+                  <Surface
+                    pattern="grid"
+                    cornerAccents={true}
+                    label="TECH"
+                    p="md"
                     style={{
-                      width: "auto",
-                      height: "110px",
-                      filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                      display: "flex",
+                      flexDirection: "row",
                     }}
-                  />
-                </Box>
-              </Surface>
-
-              <Group gap="md" align="stretch">
-                <Surface w={200} p="md" pattern="none" cornerAccents>
-                  <Stack
-                    justify="center"
-                    h="100%"
-                    style={{ position: "relative", zIndex: 1 }}
                   >
-                    {/* Total Section */}
-                    <Stack gap="sm">
-                      <Caption>Total</Caption>
-                      <ResourceInfluenceDisplay
-                        resources={totalResources - 3}
-                        totalResources={totalResources}
-                        influence={totalInfluence - 1}
-                        totalInfluence={totalInfluence}
+                    <Group gap="xs" align="top" flex={1}>
+                      <Stack gap={4}>
+                        {techs
+                          .filter((v) => v.color === "blue")
+                          .map((tech, index) => (
+                            <Tech key={index} tech={tech} />
+                          ))}
+                      </Stack>
+                      <Stack gap={4}>
+                        {techs
+                          .filter((v) => v.color === "yellow")
+                          .map((tech, index) => (
+                            <Tech key={index} tech={tech} />
+                          ))}
+                      </Stack>
+                      <Stack gap={4}>
+                        {techs
+                          .filter((v) => v.color === "green")
+                          .map((tech, index) => (
+                            <Tech key={index} tech={tech} />
+                          ))}
+                      </Stack>
+                      <Stack gap={4}>
+                        {techs
+                          .filter((v) => v.color === "red")
+                          .map((tech, index) => (
+                            <Tech key={index} tech={tech} />
+                          ))}
+                      </Stack>
+                    </Group>
+                    <Box style={{ position: "relative", zIndex: 1 }}>
+                      <Image
+                        src="/mockunitupgrades.png"
+                        alt="unit upgrades"
+                        style={{
+                          width: "auto",
+                          height: "110px",
+                          filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
+                        }}
                       />
-                    </Stack>
-
-                    {/* Divider */}
-                    <Box
-                      style={{
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 20%, rgba(148, 163, 184, 0.3) 80%, transparent 100%)",
-                        margin: "2px 12px",
-                      }}
-                    />
-
-                    {/* Optimal Section */}
-                    <Stack gap="sm">
-                      <Caption>Optimal</Caption>
-                      <ResourceInfluenceDisplay
-                        resources={totalResources - 3}
-                        totalResources={totalResources}
-                        influence={totalInfluence - 1}
-                        totalInfluence={totalInfluence}
-                      />
-                    </Stack>
-                  </Stack>
-                </Surface>
-
-                <Surface
-                  flex={1}
-                  p="md"
-                  pattern="circle"
-                  cornerAccents={true}
-                  label="Planets"
-                >
-                  <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
-                    {planets.map((planet, index) => (
-                      <PlanetCard
-                        key={index}
-                        planet={planet}
-                        planetTraitIcons={planetTraitIcons}
-                        techSkipIcons={techSkipIcons}
-                      />
-                    ))}
-                  </Group>
-                </Surface>
-              </Group>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Group justify="space-between" align="start">
-              <Stack>
+                    </Box>
+                  </Surface>
+                </Stack>
+              </Grid.Col>
+              <Grid.Col span={3}>
                 <Group align="start">
                   <Stack gap={4}>
                     <Leader
@@ -1436,86 +1434,154 @@ export default function PlayerCard({
                     ))}
                   </Stack>
                 </Group>
-                <Group gap={4}>
-                  <Stack gap={4}>
-                    <PromissoryNote
-                      name="Alliance"
-                      factionIcon="/factions/hacan.png"
-                    />
-                    <PromissoryNote
-                      name="Support for the Throne"
-                      factionIcon="/factions/titans.png"
-                    />
-                    <PromissoryNote
-                      name="Alliance"
-                      factionIcon="/factions/letnev.png"
-                    />
-                  </Stack>
-                </Group>
-              </Stack>
-
-              <Box style={{ zoom: 0.8 }}>
-                <Table horizontalSpacing={6} verticalSpacing={4}>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th style={{ width: "22px" }}></Table.Th>
-                      <Table.Th>Space</Table.Th>
-                      <Table.Th>Ground</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td>
-                        <Image src="/pa_health.png" style={{ width: "20px" }} />
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          8
-                        </Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          12
-                        </Text>
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td>
-                        <Image src="/pa_hit.png" style={{ width: "20px" }} />
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          4
-                        </Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          6
-                        </Text>
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td>
-                        <Image
-                          src="/pa_unitimage.png"
-                          style={{ width: "20px" }}
+              </Grid.Col>
+              <Grid.Col span={1}>
+                <Box style={{ zoom: 0.8 }}>
+                  <Table horizontalSpacing={6} verticalSpacing={4}>
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th style={{ width: "22px" }}></Table.Th>
+                        <Table.Th>Space</Table.Th>
+                        <Table.Th>Ground</Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      <Table.Tr>
+                        <Table.Td>
+                          <Image
+                            src="/pa_health.png"
+                            style={{ width: "20px" }}
+                          />
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            8
+                          </Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            12
+                          </Text>
+                        </Table.Td>
+                      </Table.Tr>
+                      <Table.Tr>
+                        <Table.Td>
+                          <Image src="/pa_hit.png" style={{ width: "20px" }} />
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            4
+                          </Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            6
+                          </Text>
+                        </Table.Td>
+                      </Table.Tr>
+                      <Table.Tr>
+                        <Table.Td>
+                          <Image
+                            src="/pa_unitimage.png"
+                            style={{ width: "20px" }}
+                          />
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            2
+                          </Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="md" fw={700} c="white">
+                            3
+                          </Text>
+                        </Table.Td>
+                      </Table.Tr>
+                    </Table.Tbody>
+                  </Table>
+                </Box>
+              </Grid.Col>
+              <Grid.Col span={8}>
+                <Group gap="md" align="stretch">
+                  <Surface w={200} p="md" pattern="none" cornerAccents>
+                    <Stack
+                      justify="center"
+                      h="100%"
+                      style={{ position: "relative", zIndex: 1 }}
+                    >
+                      {/* Total Section */}
+                      <Stack gap="sm">
+                        <Caption>Total</Caption>
+                        <ResourceInfluenceDisplay
+                          resources={totalResources - 3}
+                          totalResources={totalResources}
+                          influence={totalInfluence - 1}
+                          totalInfluence={totalInfluence}
                         />
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          2
-                        </Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="md" fw={700} c="white">
-                          3
-                        </Text>
-                      </Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
-                </Table>
-              </Box>
-            </Group>
+                      </Stack>
+
+                      {/* Divider */}
+                      <ShimmerDivider />
+
+                      {/* Optimal Section */}
+                      <Stack gap="sm">
+                        <Caption>Optimal</Caption>
+                        <ResourceInfluenceDisplay
+                          resources={totalResources - 3}
+                          totalResources={totalResources}
+                          influence={totalInfluence - 1}
+                          totalInfluence={totalInfluence}
+                        />
+                      </Stack>
+                    </Stack>
+                  </Surface>
+
+                  <Surface
+                    flex={1}
+                    p="md"
+                    pattern="circle"
+                    cornerAccents={true}
+                    label="Planets"
+                  >
+                    <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
+                      {planets.map((planet, index) => (
+                        <PlanetCard
+                          key={index}
+                          planet={planet}
+                          planetTraitIcons={planetTraitIcons}
+                          techSkipIcons={techSkipIcons}
+                        />
+                      ))}
+                    </Group>
+                  </Surface>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={1.5}>
+                <Stack gap={4}>
+                  <PromissoryNote
+                    name="Military Support"
+                    factionIcon="/factions/sol.png"
+                  />
+                  <ShimmerDivider />
+                  <PromissoryNote
+                    name="Alliance"
+                    factionIcon="/factions/hacan.png"
+                    isOtherFaction={true}
+                  />
+                  <PromissoryNote
+                    name="Alliance"
+                    factionIcon="/factions/letnev.png"
+                    isOtherFaction={true}
+                  />
+                  <PromissoryNote
+                    name="Support for the Throne"
+                    factionIcon="/factions/titans.png"
+                    isOtherFaction={true}
+                  />
+                </Stack>
+              </Grid.Col>
+              <Grid.Col span={1.5}></Grid.Col>
+            </Grid>
           </Grid.Col>
         </Grid>
 
