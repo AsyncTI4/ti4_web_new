@@ -46,6 +46,105 @@ const PLANET_COLORS = {
   },
 };
 
+// Shimmer color configurations
+const SHIMMER_COLORS = {
+  red: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
+    border: "rgba(239, 68, 68, 0.25)",
+    shadow:
+      "0 4px 12px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+  },
+  green: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+    border: "rgba(34, 197, 94, 0.25)",
+    shadow:
+      "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+  },
+  blue: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.6) 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%)",
+    border: "rgba(59, 130, 246, 0.25)",
+    shadow:
+      "0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+  },
+};
+
+function Shimmer({ color = "blue", children, ...boxProps }) {
+  const shimmerConfig = SHIMMER_COLORS[color] || SHIMMER_COLORS.blue;
+
+  return (
+    <Box
+      style={{
+        borderRadius: "8px",
+        background: shimmerConfig.background,
+        border: `1px solid ${shimmerConfig.border}`,
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: shimmerConfig.shadow,
+        ...boxProps.style,
+      }}
+      {...boxProps}
+    >
+      {/* Top shimmer */}
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background: shimmerConfig.gradient,
+        }}
+      />
+      {/* Bottom shimmer */}
+      <Box
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background: shimmerConfig.gradient,
+        }}
+      />
+
+      {/* Subtle diagonal pattern for blue shimmers */}
+      {color === "blue" && (
+        <Box
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                rgba(59, 130, 246, 0.03) 0px,
+                rgba(59, 130, 246, 0.03) 1px,
+                transparent 1px,
+                transparent 16px
+              )
+            `,
+            pointerEvents: "none",
+            opacity: 0.5,
+          }}
+        />
+      )}
+
+      {children}
+    </Box>
+  );
+}
+
 function PlanetCard({ planet, planetTraitIcons, techSkipIcons }) {
   const colors = PLANET_COLORS[planet.trait] || PLANET_COLORS.default;
 
@@ -158,69 +257,103 @@ function PlanetCard({ planet, planetTraitIcons, techSkipIcons }) {
   );
 }
 
-function PromissoryNote({ name, factionIcon }) {
+function Leader({ imageUrl, title, description, active = false }) {
+  if (active) {
+    return (
+      <Shimmer color="green" p={2} px="sm">
+        <Group
+          style={{
+            position: "relative",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <Image
+            src={imageUrl}
+            style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+          <Stack gap={0}>
+            <Text
+              size="sm"
+              fw={700}
+              c="white"
+              style={{
+                textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              {title}
+            </Text>
+            <Text size="xs" c="green.3" fw={500} style={{ opacity: 0.8 }}>
+              {description}
+            </Text>
+          </Stack>
+        </Group>
+      </Shimmer>
+    );
+  }
+
   return (
-    <Box
-      py={2}
-      px={6}
+    <Group
+      p={2}
+      px="sm"
       style={{
-        borderRadius: "6px",
+        borderRadius: "8px",
+        border: "1px solid #6b7280",
         background:
-          "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%)",
-        border: "1px solid rgba(59, 130, 246, 0.25)",
+          "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
         position: "relative",
         overflow: "hidden",
-        boxShadow:
-          "0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+        opacity: 0.7,
+        width: "100%",
       }}
     >
-      {/* Top shimmer */}
-      <Box
+      <Group
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "1px",
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.6) 50%, transparent 100%)",
+          position: "relative",
+          alignItems: "center",
+          gap: "8px",
         }}
-      />
-      {/* Bottom shimmer */}
-      <Box
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "1px",
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.6) 50%, transparent 100%)",
-        }}
-      />
+      >
+        <Image
+          src={imageUrl}
+          style={{
+            width: "35px",
+            height: "35px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            objectPosition: "center",
+            filter: "grayscale(50%)",
+          }}
+        />
+        <Stack gap={0}>
+          <Text
+            size="sm"
+            fw={700}
+            c="gray.4"
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            {title}
+          </Text>
+          <Text size="xs" c="gray.5" fw={500} style={{ opacity: 0.8 }}>
+            {description}
+          </Text>
+        </Stack>
+      </Group>
+    </Group>
+  );
+}
 
-      {/* Subtle diagonal pattern */}
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `
-              repeating-linear-gradient(
-                45deg,
-                rgba(59, 130, 246, 0.03) 0px,
-                rgba(59, 130, 246, 0.03) 1px,
-                transparent 1px,
-                transparent 16px
-              )
-            `,
-          pointerEvents: "none",
-          opacity: 0.5,
-        }}
-      />
-
+function PromissoryNote({ name, factionIcon }) {
+  return (
+    <Shimmer color="blue" py={2} px={6}>
       <Group justify="space-between">
         <Box
           style={{
@@ -245,7 +378,7 @@ function PromissoryNote({ name, factionIcon }) {
         </Box>
         {factionIcon && <Image src={factionIcon} style={{ width: "20px" }} />}
       </Group>
-    </Box>
+    </Shimmer>
   );
 }
 
@@ -535,46 +668,15 @@ export default function PlayerCard({
               </Group>
             </Box>
             <Stack>
-              <Box
+              <Shimmer
+                color="red"
                 p={2}
                 px="sm"
                 pl="lg"
-                style={{
-                  borderRadius: "8px",
-                  background:
-                    "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
-                  boxShadow:
-                    "0 4px 12px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                  position: "relative",
-                }}
                 pos="relative"
                 align="center"
                 display="flex"
               >
-                {/* Top shimmer */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "1px",
-                    background:
-                      "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
-                  }}
-                />
-                {/* Bottom shimmer */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "1px",
-                    background:
-                      "linear-gradient(90deg, transparent 0%, #ef4444 50%, transparent 100%)",
-                  }}
-                />
                 <Box
                   bg="white"
                   style={{
@@ -607,7 +709,7 @@ export default function PlayerCard({
                 >
                   LEADERSHIP
                 </Text>
-              </Box>
+              </Shimmer>
 
               <Group gap={6} justify="center">
                 <Box pos="relative">
@@ -888,45 +990,7 @@ export default function PlayerCard({
               </Group>
               <Stack gap={2}>
                 {scoredSecrets.map((secret, index) => (
-                  <Box
-                    key={index}
-                    p={2}
-                    px="sm"
-                    style={{
-                      borderRadius: "8px",
-                      background:
-                        "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%)",
-                      boxShadow:
-                        "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
-                      border: "1px solid rgba(239, 68, 68, 0.25)",
-                      position: "relative",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {/* Top shimmer */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.6) 50%, transparent 100%)",
-                      }}
-                    />
-                    {/* Bottom shimmer */}
-                    <Box
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: "1px",
-                        background:
-                          "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.6) 50%, transparent 100%)",
-                      }}
-                    />
+                  <Shimmer key={index} color="red" p={2} px="sm">
                     <Box
                       style={{
                         position: "relative",
@@ -956,7 +1020,7 @@ export default function PlayerCard({
                         {secret}
                       </Text>
                     </Box>
-                  </Box>
+                  </Shimmer>
                 ))}
               </Stack>
             </Stack>
@@ -1737,217 +1801,24 @@ export default function PlayerCard({
               <Stack>
                 <Group align="start">
                   <Stack gap={4}>
-                    <Group
-                      p={2}
-                      px="sm"
-                      style={{
-                        borderRadius: "8px",
-                        background:
-                          "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                        // boxShadow:
-                        //   "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                        position: "relative",
-                        overflow: "hidden",
-                        width: "100%",
-                      }}
-                    >
-                      {/* Top shimmer */}
-                      <Box
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: "1px",
-                          background:
-                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                        }}
-                      />
-                      {/* Bottom shimmer */}
-                      <Box
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          height: "1px",
-                          background:
-                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                        }}
-                      />
-                      <Box
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <Image
-                          src="/commanders/solagent.webp"
-                          style={{
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                          }}
-                        />
-                        <Stack gap={0}>
-                          <Text
-                            size="sm"
-                            fw={700}
-                            c="white"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                            }}
-                          >
-                            Evelyn Delouis
-                          </Text>
-                          <Text
-                            size="xs"
-                            c="green.3"
-                            fw={500}
-                            style={{ opacity: 0.8 }}
-                          >
-                            Agent
-                          </Text>
-                        </Stack>
-                      </Box>
-                    </Group>
-                    <Group
-                      p={2}
-                      px="sm"
-                      style={{
-                        borderRadius: "8px",
-                        border: "1px solid #6b7280",
-                        background:
-                          "linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)",
-                        position: "relative",
-                        overflow: "hidden",
-                        opacity: 0.7,
-                        width: "100%",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <Image
-                          src="/commanders/solcommander.webp"
-                          style={{
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                            filter: "grayscale(50%)",
-                          }}
-                        />
-                        <Stack gap={0}>
-                          <Text
-                            size="sm"
-                            fw={700}
-                            c="gray.4"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                            }}
-                          >
-                            Claire Gibson
-                          </Text>
-                          <Text
-                            size="xs"
-                            c="gray.5"
-                            fw={500}
-                            style={{ opacity: 0.8 }}
-                          >
-                            Commander
-                          </Text>
-                        </Stack>
-                      </Box>
-                    </Group>
-                    <Group
-                      p={2}
-                      px="sm"
-                      style={{
-                        borderRadius: "8px",
-                        background:
-                          "linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-                        // boxShadow:
-                        //   "0 4px 12px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                        position: "relative",
-                        overflow: "hidden",
-                        width: "100%",
-                      }}
-                    >
-                      {/* Top shimmer */}
-                      <Box
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: "1px",
-                          background:
-                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                        }}
-                      />
-                      {/* Bottom shimmer */}
-                      <Box
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          height: "1px",
-                          background:
-                            "linear-gradient(90deg, transparent 0%, #22c55e 50%, transparent 100%)",
-                        }}
-                      />
-                      <Box
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <Image
-                          src="/commanders/solhero.webp"
-                          style={{
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                          }}
-                        />
-                        <Stack gap={0}>
-                          <Text
-                            size="sm"
-                            fw={700}
-                            c="white"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                            }}
-                          >
-                            Jace X.
-                          </Text>
-                          <Text
-                            size="xs"
-                            c="green.3"
-                            fw={500}
-                            style={{ opacity: 0.8 }}
-                          >
-                            Hero
-                          </Text>
-                        </Stack>
-                      </Box>
-                    </Group>
+                    <Leader
+                      imageUrl="/commanders/solagent.webp"
+                      title="Evelyn Delouis"
+                      description="Agent"
+                      active={true}
+                    />
+                    <Leader
+                      imageUrl="/commanders/solcommander.webp"
+                      title="Claire Gibson"
+                      description="Commander"
+                      active={false}
+                    />
+                    <Leader
+                      imageUrl="/commanders/solhero.webp"
+                      title="Jace X."
+                      description="Hero"
+                      active={true}
+                    />
                   </Stack>
                   <Stack gap={4}>
                     {relics.map((relic, index) => (
