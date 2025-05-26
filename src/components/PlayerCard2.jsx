@@ -50,12 +50,26 @@ const PLANET_COLORS = {
 // Mock unit data - only two units have captured values
 const UNIT_DATA = [
   { type: "dd", reinforcements: 3, captured: 0 },
-  { type: "cr", reinforcements: 2, captured: 1, isUpgraded: true },
-  { type: "cv", reinforcements: 4, captured: 0 },
+  { type: "ca", reinforcements: 2, captured: 1, isUpgraded: true },
+  {
+    type: "cv",
+    reinforcements: 4,
+    captured: 0,
+    isUpgraded: true,
+    isFaction: true,
+    factionIcon: "/sol.png",
+  },
   { type: "fs", reinforcements: 1, captured: 2 },
   { type: "ws", reinforcements: 5, captured: 0 },
   { type: "ff", reinforcements: 2, captured: 0 },
-  { type: "inf", reinforcements: 3, captured: 0 },
+  {
+    type: "inf",
+    reinforcements: 3,
+    captured: 0,
+    isUpgraded: false,
+    isFaction: true,
+    factionIcon: "/sol.png",
+  },
   { type: "me", reinforcements: 1, captured: 0 },
   { type: "pd", reinforcements: 4, captured: 0 },
   { type: "sd", reinforcements: 2, captured: 0 },
@@ -1868,6 +1882,29 @@ export default function PlayerCard2({
                                     />
                                   </>
                                 )}
+
+                                {/* Faction icon badge for faction-specific units */}
+                                {unit.isFaction && unit.factionIcon && (
+                                  <Box
+                                    style={{
+                                      position: "absolute",
+                                      top: "4px",
+                                      right: "4px",
+                                      zIndex: 10,
+                                    }}
+                                  >
+                                    <Image
+                                      src={unit.factionIcon}
+                                      style={{
+                                        width: "16px",
+                                        height: "16px",
+                                        filter:
+                                          "drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8))",
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+
                                 <Box
                                   style={{
                                     display: "flex",
