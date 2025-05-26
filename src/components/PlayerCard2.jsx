@@ -1814,6 +1814,60 @@ export default function PlayerCard2({
                                     />
                                   </>
                                 )}
+
+                                {/* Red glow for captured units - bottom only */}
+                                {unit.captured > 0 && (
+                                  <>
+                                    {/* Radial red glow from bottom center */}
+                                    <Box
+                                      style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: isUpgraded
+                                          ? "radial-gradient(ellipse 120% 80% at center bottom, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.08) 40%, rgba(239, 68, 68, 0.04) 60%, transparent 80%)"
+                                          : "radial-gradient(ellipse 120% 80% at center bottom, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.06) 40%, rgba(239, 68, 68, 0.03) 60%, transparent 80%)",
+                                        pointerEvents: "none",
+                                        borderRadius: "8px",
+                                      }}
+                                    />
+
+                                    {/* Additional inner glow */}
+                                    <Box
+                                      style={{
+                                        position: "absolute",
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        height: "50%",
+                                        background: isUpgraded
+                                          ? "radial-gradient(ellipse 100% 100% at center bottom, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 50%, transparent 70%)"
+                                          : "radial-gradient(ellipse 100% 100% at center bottom, rgba(239, 68, 68, 0.06) 0%, rgba(239, 68, 68, 0.03) 50%, transparent 70%)",
+                                        pointerEvents: "none",
+                                        borderRadius: "0 0 8px 8px",
+                                      }}
+                                    />
+
+                                    {/* Bottom edge highlight */}
+                                    <Box
+                                      style={{
+                                        position: "absolute",
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        height: "2px",
+                                        background:
+                                          "linear-gradient(90deg, rgba(239, 68, 68, 0.4) 0%, rgba(220, 38, 38, 0.5) 50%, rgba(239, 68, 68, 0.4) 100%)",
+                                        pointerEvents: "none",
+                                        borderRadius: "0 0 8px 8px",
+                                        boxShadow:
+                                          "0 0 4px rgba(239, 68, 68, 0.2)",
+                                      }}
+                                    />
+                                  </>
+                                )}
                                 <Box
                                   style={{
                                     display: "flex",
