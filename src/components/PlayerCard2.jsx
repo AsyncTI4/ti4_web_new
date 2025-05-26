@@ -932,6 +932,7 @@ function PromissoryNote({ name, factionIcon, isOtherFaction = false }) {
           size="xs"
           fw={700}
           c="white"
+          flex={1}
           style={{
             fontFamily: "SLIDER, monospace",
             textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
@@ -1309,10 +1310,21 @@ export default function PlayerCard2({
 
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">
-              {/* Status Indicator - moved to left side */}
+              <Text span c="white" size="lg" ff="heading">
+                {playerName}
+              </Text>
+              <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
+                [{faction}]
+              </Text>
+              <Text size="sm" span ml={4} ff="heading" c="pink">
+                (pink)
+              </Text>
+
+              {/* Status Indicator - moved after color label */}
               <Box
                 px={8}
                 py={2}
+                ml={4}
                 style={{
                   borderRadius: "4px",
                   background: hasPassed
@@ -1341,15 +1353,100 @@ export default function PlayerCard2({
                 </Text>
               </Box>
 
-              <Text span c="white" size="lg" ff="heading">
-                {playerName}
-              </Text>
-              <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
-                [{faction}]
-              </Text>
-              <Text size="sm" span ml={4} ff="heading" c="pink">
-                (pink)
-              </Text>
+              {/* Header Neighbors Section - embossed duplicate */}
+              <Box
+                px={8}
+                py={4}
+                ml={8}
+                style={{
+                  borderRadius: "6px",
+                  background:
+                    "linear-gradient(145deg, rgba(10, 15, 30, 0.9) 0%, rgba(20, 25, 40, 0.7) 50%, rgba(15, 20, 35, 0.8) 100%)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
+                  boxShadow:
+                    "inset 2px 2px 6px rgba(0, 0, 0, 0.6), inset -1px -1px 3px rgba(255, 255, 255, 0.08)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {/* Top-left dark shadow for depth */}
+                <Box
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "60%",
+                    height: "60%",
+                    background:
+                      "linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, transparent 70%)",
+                    borderRadius: "6px 0 0 0",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Bottom-right highlight */}
+                <Box
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    width: "50%",
+                    height: "50%",
+                    background:
+                      "linear-gradient(315deg, rgba(255, 255, 255, 0.06) 0%, transparent 60%)",
+                    borderRadius: "0 0 6px 0",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                <Group
+                  gap={2}
+                  align="center"
+                  style={{ position: "relative", zIndex: 1 }}
+                >
+                  <Text
+                    size="xs"
+                    fw={600}
+                    c="gray.4"
+                    style={{
+                      textTransform: "uppercase",
+                      fontSize: "9px",
+                      letterSpacing: "0.5px",
+                      marginRight: "4px",
+                      textShadow: "0 1px 1px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    Neighbors:
+                  </Text>
+                  <Image
+                    src="/factions/hacan.png"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      filter:
+                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
+                    }}
+                  />
+                  <Image
+                    src="/factions/letnev.png"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      filter:
+                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
+                    }}
+                  />
+                  <Image
+                    src="/factions/titans.png"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      filter:
+                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
+                    }}
+                  />
+                </Group>
+              </Box>
             </Group>
 
             {/* Strategy Card and Speaker Token - moved to right side */}
@@ -1362,8 +1459,29 @@ export default function PlayerCard2({
                 pos="relative"
                 align="center"
                 display="flex"
-                style={{ minWidth: "140px" }}
+                style={{
+                  minWidth: "140px",
+                  background:
+                    "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 50%, rgba(239, 68, 68, 0.08) 100%)",
+                  border: "1px solid rgba(239, 68, 68, 0.2)",
+                  borderRadius: "8px",
+                }}
               >
+                {/* Additional subtle inner glow overlay */}
+                <Box
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background:
+                      "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
+                    pointerEvents: "none",
+                    zIndex: 0,
+                  }}
+                />
+
                 <Box
                   bg="white"
                   style={{
@@ -1376,8 +1494,9 @@ export default function PlayerCard2({
                     justifyContent: "center",
                     position: "absolute",
                     top: "0px",
-                    left: "0px",
+                    left: "-10px",
                     filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+                    zIndex: 2,
                   }}
                 >
                   <Text ff="heading" c="red.9" size="30px">
@@ -1392,6 +1511,7 @@ export default function PlayerCard2({
                     textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
                     position: "relative",
                     padding: "0 24px",
+                    zIndex: 1,
                   }}
                 >
                   LEADERSHIP
@@ -1473,12 +1593,63 @@ export default function PlayerCard2({
                   <ScoredSecret key={index} text={secret} />
                 ))}
               </Stack>
-              {/* Relics Column */}
+              {/* Promissory Notes Column - moved from right side */}
               <Stack gap={4}>
-                {relics.map((relic, index) => (
-                  <Relic key={index} name={relic} />
-                ))}
+                <PromissoryNote
+                  name="Alliance"
+                  factionIcon="/factions/hacan.png"
+                  isOtherFaction={true}
+                />
+                <PromissoryNote
+                  name="Alliance"
+                  factionIcon="/factions/letnev.png"
+                  isOtherFaction={true}
+                />
+                <PromissoryNote
+                  name="Support for the Throne"
+                  factionIcon="/factions/titans.png"
+                  isOtherFaction={true}
+                />
               </Stack>
+
+              {/* Needs to Follow Section */}
+              <Group gap={8} align="center">
+                <Box alignSelf="center">
+                  <Caption>Needs to Follow</Caption>
+                </Box>
+                <Group gap={6}>
+                  <Text
+                    size="lg"
+                    fw={700}
+                    c="blue.3"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    2
+                  </Text>
+                  <Text
+                    size="lg"
+                    fw={700}
+                    c="green.3"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    4
+                  </Text>
+                  <Text
+                    size="lg"
+                    fw={700}
+                    c="violet.3"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    8
+                  </Text>
+                </Group>
+              </Group>
             </Stack>
           </Grid.Col>
           <Grid.Col span={10}>
@@ -1975,7 +2146,7 @@ export default function PlayerCard2({
               </Grid.Col>
               <Grid.Col span={1}>
                 <Group align="start" gap="md" h="100%">
-                  {/* Promissory Notes Column */}
+                  {/* Relics Column */}
                   <Stack
                     gap={4}
                     style={{
@@ -1985,21 +2156,9 @@ export default function PlayerCard2({
                       width: "fit-content",
                     }}
                   >
-                    <PromissoryNote
-                      name="Alliance"
-                      factionIcon="/factions/hacan.png"
-                      isOtherFaction={true}
-                    />
-                    <PromissoryNote
-                      name="Alliance"
-                      factionIcon="/factions/letnev.png"
-                      isOtherFaction={true}
-                    />
-                    <PromissoryNote
-                      name="Support for the Throne"
-                      factionIcon="/factions/titans.png"
-                      isOtherFaction={true}
-                    />
+                    {relics.map((relic, index) => (
+                      <Relic key={index} name={relic} />
+                    ))}
                   </Stack>
                 </Group>
               </Grid.Col>
