@@ -340,6 +340,17 @@ function Tech({ tech }) {
         "0 0 3px rgba(239, 68, 68, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
       iconFilter: "drop-shadow(0 0 3px rgba(239, 68, 68, 0.3))",
     },
+    grey: {
+      background:
+        "linear-gradient(90deg, rgba(107, 114, 128, 0.15) 0%, rgba(107, 114, 128, 0.08) 100%)",
+      border: "rgba(107, 114, 128, 0.3)",
+      leftBorder:
+        "linear-gradient(180deg, rgba(107, 114, 128, 0.7) 0%, rgba(107, 114, 128, 0.3) 100%)",
+      tierDot: "rgba(107, 114, 128, 0.9)",
+      tierShadow:
+        "0 0 3px rgba(107, 114, 128, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
+      iconFilter: "drop-shadow(0 0 3px rgba(107, 114, 128, 0.3))",
+    },
   };
 
   const config = colorConfig[tech.color] || colorConfig.blue;
@@ -396,15 +407,28 @@ function Tech({ tech }) {
           </Box>
         )}
         <Group gap={4} style={{ position: "relative" }}>
-          <Image
-            src={`/${tech.color}.png`}
-            alt={tech.name}
-            style={{
-              width: "14px",
-              height: "14px",
-              filter: config.iconFilter,
-            }}
-          />
+          {/* Show faction icon for faction techs, otherwise show color icon */}
+          {tech.isFaction ? (
+            <Image
+              src={tech.factionIcon || "/sol.png"}
+              alt={tech.name}
+              style={{
+                width: "14px",
+                height: "14px",
+                filter: config.iconFilter,
+              }}
+            />
+          ) : (
+            <Image
+              src={`/${tech.color}.png`}
+              alt={tech.name}
+              style={{
+                width: "14px",
+                height: "14px",
+                filter: config.iconFilter,
+              }}
+            />
+          )}
           <Text
             size="xs"
             c="white"
@@ -1068,6 +1092,24 @@ export default function PlayerCard2({
       tier: 3,
     },
 
+    // Faction techs
+    {
+      name: "Advanced Carrier II",
+      color: "grey",
+      isUnitUpgrade: true,
+      isFaction: true,
+      factionIcon: "/sol.png",
+      tier: 0,
+    },
+    {
+      name: "Spec Ops II",
+      color: "grey",
+      isUnitUpgrade: true,
+      isFaction: true,
+      factionIcon: "/sol.png",
+      tier: 0,
+    },
+
     // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
     // { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
     // { name: "Fighter II", color: "green", isUnitUpgrade: true },
@@ -1209,36 +1251,34 @@ export default function PlayerCard2({
       />
 
       <Box style={{ position: "relative", zIndex: 1 }}>
-        <Grid gutter="md" columns={12}>
-          <Grid.Col span={2}>
-            {/* Header Section */}
-            <Box
-              p="sm"
-              mb="lg"
-              style={{
-                borderRadius: 0,
-                borderBottomRightRadius: 8,
-                background:
-                  "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
-                border: "1px solid rgba(148, 163, 184, 0.2)",
-                position: "relative",
-                overflow: "hidden",
-                boxShadow:
-                  "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
-                marginTop: "-16px",
-                marginLeft: "-16px",
-                marginRight: "-8px",
-              }}
-            >
-              {/* Header diagonal pattern overlay */}
-              <Box
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  backgroundImage: `
+        {/* Header Section */}
+        <Box
+          p="sm"
+          mb="lg"
+          style={{
+            borderRadius: 0,
+            borderBottomRightRadius: 8,
+            background:
+              "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
+            border: "1px solid rgba(148, 163, 184, 0.2)",
+            position: "relative",
+            overflow: "hidden",
+            boxShadow:
+              "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
+            marginTop: "-16px",
+            marginLeft: "-16px",
+            marginRight: "-8px",
+          }}
+        >
+          {/* Header diagonal pattern overlay */}
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `
                 repeating-linear-gradient(
                   45deg,
                   rgba(148, 163, 184, 0.03) 0px,
@@ -1247,164 +1287,155 @@ export default function PlayerCard2({
                   transparent 20px
                 )
               `,
-                  pointerEvents: "none",
-                  opacity: 0.6,
-                }}
-              />
+              pointerEvents: "none",
+              opacity: 0.6,
+            }}
+          />
 
-              {/* Header bottom border accent */}
+          {/* Header bottom border accent */}
+          <Box
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              // background:
+              //   "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+            }}
+          />
+
+          <Group justify="space-between" align="center">
+            <Group gap={4} px={4} align="center">
+              {/* Status Indicator - moved to left side */}
               <Box
+                px={8}
+                py={2}
                 style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: "4px",
-                  // background:
-                  //   "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
-                  background:
-                    "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+                  borderRadius: "4px",
+                  background: hasPassed
+                    ? "linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(75, 85, 99, 0.15) 100%)"
+                    : "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.15) 100%)",
+                  border: hasPassed
+                    ? "1px solid rgba(107, 114, 128, 0.3)"
+                    : "1px solid rgba(34, 197, 94, 0.3)",
+                  boxShadow: hasPassed
+                    ? "0 2px 4px rgba(107, 114, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+                    : "0 2px 4px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
                 }}
-              />
-
-              <Group justify="space-between" align="center">
-                <Group gap={4} px={4}>
-                  <Text span c="white" size="lg" ff="heading">
-                    {playerName}
-                  </Text>
-                  <Text
-                    size="md"
-                    span
-                    ml={4}
-                    opacity={0.9}
-                    c="white"
-                    ff="heading"
-                  >
-                    [{faction}]
-                  </Text>
-                  <Text size="sm" span ml={4} ff="heading" c="pink">
-                    (pink)
-                  </Text>
-                </Group>
-
-                {/* Status Indicator */}
-                <Box
-                  px={8}
-                  py={2}
+              >
+                <Text
+                  size="xs"
+                  fw={700}
+                  c={hasPassed ? "gray.4" : "green.3"}
                   style={{
-                    borderRadius: "4px",
-                    background: hasPassed
-                      ? "linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(75, 85, 99, 0.15) 100%)"
-                      : "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.15) 100%)",
-                    border: hasPassed
-                      ? "1px solid rgba(107, 114, 128, 0.3)"
-                      : "1px solid rgba(34, 197, 94, 0.3)",
-                    boxShadow: hasPassed
-                      ? "0 2px 4px rgba(107, 114, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
-                      : "0 2px 4px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+                    textTransform: "uppercase",
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    letterSpacing: "0.5px",
+                    fontSize: "10px",
                   }}
                 >
-                  <Text
-                    size="xs"
-                    fw={700}
-                    c={hasPassed ? "gray.4" : "green.3"}
-                    style={{
-                      textTransform: "uppercase",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                      letterSpacing: "0.5px",
-                      fontSize: "10px",
-                    }}
-                  >
-                    {hasPassed ? "PASSED" : "ACTIVE"}
+                  {hasPassed ? "PASSED" : "ACTIVE"}
+                </Text>
+              </Box>
+
+              <Text span c="white" size="lg" ff="heading">
+                {playerName}
+              </Text>
+              <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
+                [{faction}]
+              </Text>
+              <Text size="sm" span ml={4} ff="heading" c="pink">
+                (pink)
+              </Text>
+            </Group>
+
+            {/* Strategy Card and Speaker Token - moved to right side */}
+            <Group gap="xs" align="center">
+              <Shimmer
+                color="red"
+                p={2}
+                px="sm"
+                pl="lg"
+                pos="relative"
+                align="center"
+                display="flex"
+                style={{ minWidth: "140px" }}
+              >
+                <Box
+                  bg="white"
+                  style={{
+                    border: "3px solid var(--mantine-color-red-7)",
+                    borderRadius: "999px",
+                    width: "35px",
+                    height: "35px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: "0px",
+                    left: "0px",
+                    filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+                  }}
+                >
+                  <Text ff="heading" c="red.9" size="30px">
+                    1
                   </Text>
                 </Box>
-              </Group>
-            </Box>
-            <Stack>
-              <Group
-                gap="xs"
-                align="stretch"
-                style={{ "@media (min-width: 1200px)": { display: "flex" } }}
-              >
-                <Shimmer
-                  color="red"
-                  p={2}
-                  px="sm"
-                  pl="lg"
-                  pos="relative"
-                  align="center"
-                  display="flex"
-                  style={{ flex: hasSpeaker ? 1 : "auto" }}
+                <Text
+                  ff="heading"
+                  c="white"
+                  size="xl"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    position: "relative",
+                    padding: "0 24px",
+                  }}
                 >
-                  <Box
-                    bg="white"
-                    style={{
-                      border: "3px solid var(--mantine-color-red-7)",
-                      borderRadius: "999px",
-                      width: "35px",
-                      height: "35px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "absolute",
-                      top: "0px",
-                      left: "0px",
-                      filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-                    }}
-                  >
-                    <Text ff="heading" c="red.9" size="30px">
-                      1
-                    </Text>
-                  </Box>
-                  <Text
-                    ff="heading"
-                    c="white"
-                    size="xl"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                      position: "relative",
-                      padding: "0 24px",
-                    }}
-                  >
-                    LEADERSHIP
-                  </Text>
-                </Shimmer>
+                  LEADERSHIP
+                </Text>
+              </Shimmer>
 
-                {/* Speaker Token */}
-                {hasSpeaker && (
-                  <Box
-                    p={4}
-                    style={{
-                      borderRadius: "6px",
-                      background: "rgba(0, 0, 0, 0.0)",
-                      border: "2px solid rgba(239, 68, 68, 0.8)",
-                      position: "relative",
-                      overflow: "hidden",
-                      flex: 1,
-                      minWidth: "80px",
-                    }}
+              {/* Speaker Token */}
+              {hasSpeaker && (
+                <Box
+                  p={4}
+                  style={{
+                    borderRadius: "6px",
+                    background: "rgba(0, 0, 0, 0.0)",
+                    border: "2px solid rgba(239, 68, 68, 0.8)",
+                    position: "relative",
+                    overflow: "hidden",
+                    minWidth: "80px",
+                  }}
+                >
+                  <Group
+                    justify="center"
+                    align="center"
+                    style={{ position: "relative", zIndex: 1 }}
                   >
-                    <Group
-                      justify="center"
-                      align="center"
-                      style={{ position: "relative", zIndex: 1 }}
+                    <Text
+                      ff="heading"
+                      c="red.4"
+                      size="sm"
+                      style={{
+                        textTransform: "uppercase",
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
                     >
-                      <Text
-                        ff="heading"
-                        c="red.4"
-                        size="sm"
-                        style={{
-                          textTransform: "uppercase",
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                        }}
-                      >
-                        SPEAKER
-                      </Text>
-                    </Group>
-                  </Box>
-                )}
-              </Group>
-
+                      SPEAKER
+                    </Text>
+                  </Group>
+                </Box>
+              )}
+            </Group>
+          </Group>
+        </Box>
+        <Grid gutter="md" columns={12}>
+          <Grid.Col span={2}>
+            <Stack>
               <Group gap={6} justify="center">
                 <Cardback
                   src="/cardback/cardback_so.png"
@@ -1440,6 +1471,12 @@ export default function PlayerCard2({
               <Stack gap={2}>
                 {scoredSecrets.map((secret, index) => (
                   <ScoredSecret key={index} text={secret} />
+                ))}
+              </Stack>
+              {/* Relics Column */}
+              <Stack gap={4}>
+                {relics.map((relic, index) => (
+                  <Relic key={index} name={relic} />
                 ))}
               </Stack>
             </Stack>
@@ -1494,7 +1531,7 @@ export default function PlayerCard2({
                       <ShimmerDivider />
                       <Group gap={4} align="top" flex={1}>
                         {techs
-                          .filter((v) => v.color === "red")
+                          .filter((v) => v.color === "grey")
                           .map((tech, index) => (
                             <Tech key={index} tech={tech} />
                           ))}
@@ -1907,7 +1944,7 @@ export default function PlayerCard2({
               </Grid.Col>
               <Grid.Col
                 span={{
-                  xl2: 9.75,
+                  xl2: 7,
                   xl3: 10.75,
                 }}
               >
@@ -1934,48 +1971,36 @@ export default function PlayerCard2({
                       ))}
                     </Group>
                   </Surface>
-                  <Group align="start" gap="md" h="100%">
-                    {/* Relics Column */}
-                    <Stack
-                      gap={4}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "max-content",
-                        justifyItems: "stretch",
-                        width: "fit-content",
-                      }}
-                    >
-                      {relics.map((relic, index) => (
-                        <Relic key={index} name={relic} />
-                      ))}
-                    </Stack>
-                    {/* Promissory Notes Column */}
-                    <Stack
-                      gap={4}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "max-content",
-                        justifyItems: "stretch",
-                        width: "fit-content",
-                      }}
-                    >
-                      <PromissoryNote
-                        name="Alliance"
-                        factionIcon="/factions/hacan.png"
-                        isOtherFaction={true}
-                      />
-                      <PromissoryNote
-                        name="Alliance"
-                        factionIcon="/factions/letnev.png"
-                        isOtherFaction={true}
-                      />
-                      <PromissoryNote
-                        name="Support for the Throne"
-                        factionIcon="/factions/titans.png"
-                        isOtherFaction={true}
-                      />
-                    </Stack>
-                  </Group>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={1}>
+                <Group align="start" gap="md" h="100%">
+                  {/* Promissory Notes Column */}
+                  <Stack
+                    gap={4}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "max-content",
+                      justifyItems: "stretch",
+                      width: "fit-content",
+                    }}
+                  >
+                    <PromissoryNote
+                      name="Alliance"
+                      factionIcon="/factions/hacan.png"
+                      isOtherFaction={true}
+                    />
+                    <PromissoryNote
+                      name="Alliance"
+                      factionIcon="/factions/letnev.png"
+                      isOtherFaction={true}
+                    />
+                    <PromissoryNote
+                      name="Support for the Throne"
+                      factionIcon="/factions/titans.png"
+                      isOtherFaction={true}
+                    />
+                  </Stack>
                 </Group>
               </Grid.Col>
             </Grid>
