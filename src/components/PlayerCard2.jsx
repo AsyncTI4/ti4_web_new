@@ -49,9 +49,16 @@ const PLANET_COLORS = {
 
 // Mock unit data - only two units have captured values
 const UNIT_DATA = [
-  { type: "dd", reinforcements: 3, captured: 0 },
-  { type: "ca", reinforcements: 2, captured: 1, isUpgraded: true },
+  { name: "dest", type: "dd", reinforcements: 3, captured: 0 },
   {
+    name: "carrier",
+    type: "ca",
+    reinforcements: 2,
+    captured: 1,
+    isUpgraded: true,
+  },
+  {
+    name: "cruiser",
     type: "cv",
     reinforcements: 4,
     captured: 0,
@@ -59,10 +66,11 @@ const UNIT_DATA = [
     isFaction: true,
     factionIcon: "/sol.png",
   },
-  { type: "fs", reinforcements: 1, captured: 2 },
-  { type: "ws", reinforcements: 5, captured: 0 },
-  { type: "ff", reinforcements: 2, captured: 0 },
+  { name: "flagship", type: "fs", reinforcements: 1, captured: 2 },
+  { name: "war sun", type: "ws", reinforcements: 5, captured: 0 },
+  { name: "fighter", type: "ff", reinforcements: 2, captured: 0 },
   {
+    name: "infantry",
     type: "inf",
     reinforcements: 3,
     captured: 0,
@@ -70,10 +78,10 @@ const UNIT_DATA = [
     isFaction: true,
     factionIcon: "/sol.png",
   },
-  { type: "me", reinforcements: 1, captured: 0 },
-  { type: "pd", reinforcements: 4, captured: 0 },
-  { type: "sd", reinforcements: 2, captured: 0 },
-  { type: "dd", reinforcements: 3, captured: 0 },
+  { name: "mech", type: "me", reinforcements: 1, captured: 0 },
+  { name: "PDS", type: "pd", reinforcements: 4, captured: 0 },
+  { name: "SD", type: "sd", reinforcements: 2, captured: 0 },
+  { name: "dread", type: "dn", reinforcements: 3, captured: 0 },
   // { type: "cr", reinforcements: 1, captured: 0 },
 ];
 
@@ -1651,21 +1659,6 @@ export default function PlayerCard2({
                     }}
                   />
 
-                  {/* Inner red shimmer accent */}
-                  <Box
-                    style={{
-                      position: "absolute",
-                      top: "2px",
-                      left: "2px",
-                      right: "2px",
-                      bottom: "2px",
-                      border: "1px solid rgba(239, 68, 68, 0.3)",
-                      borderRadius: "6px",
-                      pointerEvents: "none",
-                      boxShadow: "inset 0 0 4px rgba(239, 68, 68, 0.2)",
-                    }}
-                  />
-
                   <Group
                     justify="center"
                     align="center"
@@ -2046,19 +2039,20 @@ export default function PlayerCard2({
                                   />
                                 </Box>
                                 <Stack gap={2} align="center">
-                                  <Text
-                                    size="xs"
+                                  {/* <Text
+                                    size="9px"
                                     c="white"
                                     fw={700}
                                     ta="center"
                                     style={{
                                       textShadow:
                                         "0 2px 4px rgba(0, 0, 0, 0.8)",
+                                      marginLeft: -10,
+                                      marginRight: -10,
                                     }}
                                   >
-                                    {unit.type}
-                                    {isUpgraded ? "2" : "1"}
-                                  </Text>
+                                    {unit.name}
+                                  </Text> */}
                                   <Group
                                     gap={8}
                                     justify="center"
@@ -2066,7 +2060,7 @@ export default function PlayerCard2({
                                   >
                                     {/* Reinforcements - always shown */}
                                     <Group gap={3} align="baseline">
-                                      <Text
+                                      {/* <Text
                                         size="xs"
                                         c="gray.4"
                                         fw={600}
@@ -2079,19 +2073,35 @@ export default function PlayerCard2({
                                         }}
                                       >
                                         R
-                                      </Text>
-                                      <Text
-                                        size="sm"
-                                        c="white"
-                                        fw={700}
-                                        style={{
-                                          textShadow:
-                                            "0 1px 2px rgba(0, 0, 0, 0.8)",
-                                          lineHeight: 1,
-                                        }}
-                                      >
-                                        {unit.reinforcements}
-                                      </Text>
+                                      </Text> */}
+                                      <Group gap={2} align="baseline">
+                                        <Text
+                                          size="xs"
+                                          c="white"
+                                          fw={700}
+                                          style={{
+                                            textShadow:
+                                              "0 1px 2px rgba(0, 0, 0, 0.8)",
+                                            lineHeight: 1,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          {unit.reinforcements}
+                                        </Text>
+                                        <Text
+                                          size="xs"
+                                          c="gray.5"
+                                          fw={500}
+                                          style={{
+                                            textShadow:
+                                              "0 1px 2px rgba(0, 0, 0, 0.8)",
+                                            lineHeight: 1,
+                                            fontSize: "10px",
+                                          }}
+                                        >
+                                          /8
+                                        </Text>
+                                      </Group>
                                     </Group>
 
                                     {/* Captured - only show if > 0 */}
