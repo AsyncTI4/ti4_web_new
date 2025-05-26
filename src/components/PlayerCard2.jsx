@@ -420,7 +420,7 @@ function Tech({ tech }) {
             ))}
           </Box>
         )}
-        <Group gap={4} style={{ position: "relative" }}>
+        <Group gap={4} style={{ position: "relative", minWidth: 0 }}>
           {/* Show faction icon for faction techs, otherwise show color icon */}
           {tech.isFaction ? (
             <Image
@@ -430,6 +430,7 @@ function Tech({ tech }) {
                 width: "14px",
                 height: "14px",
                 filter: config.iconFilter,
+                flexShrink: 0,
               }}
             />
           ) : (
@@ -440,6 +441,7 @@ function Tech({ tech }) {
                 width: "14px",
                 height: "14px",
                 filter: config.iconFilter,
+                flexShrink: 0,
               }}
             />
           )}
@@ -451,6 +453,11 @@ function Tech({ tech }) {
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
               paddingRight: "16px",
               letterSpacing: "-0.05em",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "clip",
+              minWidth: 0,
+              flex: 1,
             }}
           >
             {tech.name}
@@ -1683,36 +1690,44 @@ export default function PlayerCard2({
                     }}
                   >
                     <Stack>
-                      <Group gap={4} align="top" flex={1}>
-                        <Stack gap={4}>
-                          {techs
-                            .filter((v) => v.color === "blue")
-                            .map((tech, index) => (
-                              <Tech key={index} tech={tech} />
-                            ))}
-                        </Stack>
-                        <Stack gap={4}>
-                          {techs
-                            .filter((v) => v.color === "yellow")
-                            .map((tech, index) => (
-                              <Tech key={index} tech={tech} />
-                            ))}
-                        </Stack>
-                        <Stack gap={4}>
-                          {techs
-                            .filter((v) => v.color === "green")
-                            .map((tech, index) => (
-                              <Tech key={index} tech={tech} />
-                            ))}
-                        </Stack>
-                        <Stack gap={4}>
-                          {techs
-                            .filter((v) => v.color === "red")
-                            .map((tech, index) => (
-                              <Tech key={index} tech={tech} />
-                            ))}
-                        </Stack>
-                      </Group>
+                      <Grid gutter={4}>
+                        <Grid.Col span={3}>
+                          <Stack gap={4}>
+                            {techs
+                              .filter((v) => v.color === "blue")
+                              .map((tech, index) => (
+                                <Tech key={index} tech={tech} />
+                              ))}
+                          </Stack>
+                        </Grid.Col>
+                        <Grid.Col span={3}>
+                          <Stack gap={4}>
+                            {techs
+                              .filter((v) => v.color === "yellow")
+                              .map((tech, index) => (
+                                <Tech key={index} tech={tech} />
+                              ))}
+                          </Stack>
+                        </Grid.Col>
+                        <Grid.Col span={3}>
+                          <Stack gap={4}>
+                            {techs
+                              .filter((v) => v.color === "green")
+                              .map((tech, index) => (
+                                <Tech key={index} tech={tech} />
+                              ))}
+                          </Stack>
+                        </Grid.Col>
+                        <Grid.Col span={3}>
+                          <Stack gap={4}>
+                            {techs
+                              .filter((v) => v.color === "red")
+                              .map((tech, index) => (
+                                <Tech key={index} tech={tech} />
+                              ))}
+                          </Stack>
+                        </Grid.Col>
+                      </Grid>
                     </Stack>
                   </Surface>
 
