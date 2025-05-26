@@ -1108,22 +1108,22 @@ export default function PlayerCard2({
     },
 
     // Faction techs
-    {
-      name: "Advanced Carrier II",
-      color: "grey",
-      isUnitUpgrade: true,
-      isFaction: true,
-      factionIcon: "/sol.png",
-      tier: 0,
-    },
-    {
-      name: "Spec Ops II",
-      color: "grey",
-      isUnitUpgrade: true,
-      isFaction: true,
-      factionIcon: "/sol.png",
-      tier: 0,
-    },
+    // {
+    //   name: "Advanced Carrier II",
+    //   color: "grey",
+    //   isUnitUpgrade: true,
+    //   isFaction: true,
+    //   factionIcon: "/sol.png",
+    //   tier: 0,
+    // },
+    // {
+    //   name: "Spec Ops II",
+    //   color: "grey",
+    //   isUnitUpgrade: true,
+    //   isFaction: true,
+    //   factionIcon: "/sol.png",
+    //   tier: 0,
+    // },
 
     // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
     // { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
@@ -1713,14 +1713,6 @@ export default function PlayerCard2({
                             ))}
                         </Stack>
                       </Group>
-                      <ShimmerDivider />
-                      <Group gap={4} align="top" flex={1}>
-                        {techs
-                          .filter((v) => v.color === "grey")
-                          .map((tech, index) => (
-                            <Tech key={index} tech={tech} />
-                          ))}
-                      </Group>
                     </Stack>
                   </Surface>
 
@@ -1935,12 +1927,12 @@ export default function PlayerCard2({
                                     {isUpgraded ? "2" : "1"}
                                   </Text>
                                   <Group
-                                    gap={6}
+                                    gap={8}
                                     justify="center"
-                                    align="center"
+                                    align="baseline"
                                   >
                                     {/* Reinforcements - always shown */}
-                                    <Stack gap={0} align="center">
+                                    <Group gap={3} align="baseline">
                                       <Text
                                         size="xs"
                                         c="gray.4"
@@ -1967,49 +1959,38 @@ export default function PlayerCard2({
                                       >
                                         {unit.reinforcements}
                                       </Text>
-                                    </Stack>
+                                    </Group>
 
                                     {/* Captured - only show if > 0 */}
                                     {unit.captured > 0 && (
-                                      <>
-                                        <Box
+                                      <Group gap={3} align="baseline">
+                                        <Text
+                                          size="xs"
+                                          c="red.3"
+                                          fw={600}
                                           style={{
-                                            width: "1px",
-                                            height: "24px",
-                                            background:
-                                              "linear-gradient(180deg, transparent 0%, rgba(148, 163, 184, 0.2) 30%, rgba(148, 163, 184, 0.2) 70%, transparent 100%)",
+                                            fontSize: "9px",
+                                            lineHeight: 1,
+                                            textTransform: "uppercase",
+                                            textShadow:
+                                              "0 0 3px rgba(239, 68, 68, 0.8), 0 1px 2px rgba(0, 0, 0, 0.8)",
                                           }}
-                                        />
-
-                                        <Stack gap={0} align="center">
-                                          <Text
-                                            size="xs"
-                                            c="red.3"
-                                            fw={600}
-                                            style={{
-                                              fontSize: "9px",
-                                              lineHeight: 1,
-                                              textTransform: "uppercase",
-                                              textShadow:
-                                                "0 0 3px rgba(239, 68, 68, 0.8), 0 1px 2px rgba(0, 0, 0, 0.8)",
-                                            }}
-                                          >
-                                            C
-                                          </Text>
-                                          <Text
-                                            size="sm"
-                                            c="red.4"
-                                            fw={700}
-                                            style={{
-                                              textShadow:
-                                                "0 0 4px rgba(239, 68, 68, 0.6), 0 1px 2px rgba(0, 0, 0, 0.8)",
-                                              lineHeight: 1,
-                                            }}
-                                          >
-                                            {unit.captured}
-                                          </Text>
-                                        </Stack>
-                                      </>
+                                        >
+                                          C
+                                        </Text>
+                                        <Text
+                                          size="sm"
+                                          c="red.4"
+                                          fw={700}
+                                          style={{
+                                            textShadow:
+                                              "0 0 4px rgba(239, 68, 68, 0.6), 0 1px 2px rgba(0, 0, 0, 0.8)",
+                                            lineHeight: 1,
+                                          }}
+                                        >
+                                          {unit.captured}
+                                        </Text>
+                                      </Group>
                                     )}
                                   </Group>
                                 </Stack>
