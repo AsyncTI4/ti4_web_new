@@ -1447,7 +1447,7 @@ export default function PlayerCard2({
           <Grid.Col span={10}>
             <Grid gutter="xs">
               <Grid.Col span={9}>
-                <Group gap={2} h="100%">
+                <Group gap={0} h="100%">
                   <Surface
                     flex={1}
                     pattern="grid"
@@ -1455,46 +1455,61 @@ export default function PlayerCard2({
                     label="TECH"
                     p="md"
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                       height: "100%",
                     }}
                   >
-                    <Group gap={4} align="top" flex={1}>
-                      <Stack gap={4}>
-                        {techs
-                          .filter((v) => v.color === "blue")
-                          .map((tech, index) => (
-                            <Tech key={index} tech={tech} />
-                          ))}
-                      </Stack>
-                      <Stack gap={4}>
-                        {techs
-                          .filter((v) => v.color === "yellow")
-                          .map((tech, index) => (
-                            <Tech key={index} tech={tech} />
-                          ))}
-                      </Stack>
-                      <Stack gap={4}>
-                        {techs
-                          .filter((v) => v.color === "green")
-                          .map((tech, index) => (
-                            <Tech key={index} tech={tech} />
-                          ))}
-                      </Stack>
-                      <Stack gap={4}>
+                    <Stack>
+                      <Group gap={4} align="top" flex={1}>
+                        <Stack gap={4}>
+                          {techs
+                            .filter((v) => v.color === "blue")
+                            .map((tech, index) => (
+                              <Tech key={index} tech={tech} />
+                            ))}
+                        </Stack>
+                        <Stack gap={4}>
+                          {techs
+                            .filter((v) => v.color === "yellow")
+                            .map((tech, index) => (
+                              <Tech key={index} tech={tech} />
+                            ))}
+                        </Stack>
+                        <Stack gap={4}>
+                          {techs
+                            .filter((v) => v.color === "green")
+                            .map((tech, index) => (
+                              <Tech key={index} tech={tech} />
+                            ))}
+                        </Stack>
+                        <Stack gap={4}>
+                          {techs
+                            .filter((v) => v.color === "red")
+                            .map((tech, index) => (
+                              <Tech key={index} tech={tech} />
+                            ))}
+                        </Stack>
+                      </Group>
+                      <ShimmerDivider />
+                      <Group gap={4} align="top" flex={1}>
                         {techs
                           .filter((v) => v.color === "red")
                           .map((tech, index) => (
                             <Tech key={index} tech={tech} />
                           ))}
-                      </Stack>
-                    </Group>
+                      </Group>
+                    </Stack>
                   </Surface>
 
-                  <Surface h="100%" p="md" style={{ borderLeft: 0 }}>
+                  <Surface
+                    h="100%"
+                    p="md"
+                    style={{
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    }}
+                  >
                     <Grid gutter={2} h="100%">
                       {(() => {
                         return UNIT_DATA.map((unit, index) => {
@@ -1520,6 +1535,7 @@ export default function PlayerCard2({
                               <Stack
                                 py={6}
                                 px={0}
+                                gap={2}
                                 justify="space-between"
                                 style={{
                                   borderRadius: "8px",
@@ -1599,7 +1615,7 @@ export default function PlayerCard2({
                                   <Image
                                     src={`/units/pnk_${getUnitImageName(unit.type)}.png`}
                                     style={{
-                                      height: "32px",
+                                      height: "22px",
                                       marginLeft: -10,
                                       marginRight: -10,
                                     }}
