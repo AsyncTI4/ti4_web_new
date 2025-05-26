@@ -54,6 +54,17 @@ const theme = createTheme({
   headings: {
     fontFamily: "Slider, sans-serif",
   },
+  breakpoints: {
+    xs: "36em", // 576px
+    sm: "48em", // 768px
+    md: "62em", // 992px
+    lg: "75em", // 1200px
+    xl: "88em", // 1408px
+    xl2: "100em", // 1600px - custom
+    xl3: "120em", // 1920px - custom
+    xl4: "140em", // 2240px - custom
+    xl5: "160em", // 2560px - custom
+  },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

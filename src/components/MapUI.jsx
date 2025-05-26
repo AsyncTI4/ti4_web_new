@@ -28,6 +28,7 @@ import {
   IconPencil,
 } from "@tabler/icons-react";
 import PlayerCard from "./PlayerCard";
+import PlayerCard2 from "./PlayerCard2";
 
 function MapUI({
   activeTabs,
@@ -148,7 +149,8 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            <PlayerCard />
+            {/* <PlayerCard /> */}
+            <PlayerCard2 />
 
             {/* {!derivedImageUrl ? (
               <div

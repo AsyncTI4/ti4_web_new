@@ -179,6 +179,7 @@ function Relic({ name }) {
     <Box
       py={4}
       px={6}
+      w="100%"
       style={{
         borderRadius: "6px",
         background:
@@ -186,6 +187,7 @@ function Relic({ name }) {
         border: "1px solid rgba(251, 191, 36, 0.4)",
         position: "relative",
         overflow: "hidden",
+        minWidth: 0,
       }}
     >
       {/* Diagonal stripe pattern */}
@@ -232,6 +234,8 @@ function Relic({ name }) {
           height: "100%",
           position: "relative",
           zIndex: 1,
+          minWidth: 0,
+          overflow: "hidden",
         }}
       >
         <Image
@@ -240,6 +244,7 @@ function Relic({ name }) {
             width: "16px",
             height: "16px",
             filter: "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+            flexShrink: 0,
           }}
         />
         <Text
@@ -249,6 +254,11 @@ function Relic({ name }) {
           style={{
             fontFamily: "SLIDER, monospace",
             textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
+            minWidth: 0,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            flex: 1,
           }}
         >
           {name}
@@ -980,6 +990,7 @@ export default function PlayerCard({
   fleet = 4,
   strategy = 2,
   hasPassed = false,
+  hasSpeaker = true,
   leaders = [
     "1. Evelyn Delouis",
     "2. Claire Gibson",
@@ -1266,48 +1277,90 @@ export default function PlayerCard({
               </Group>
             </Box>
             <Stack>
-              <Shimmer
-                color="red"
-                p={2}
-                px="sm"
-                pl="lg"
-                pos="relative"
-                align="center"
-                display="flex"
+              <Group
+                gap="xs"
+                align="stretch"
+                style={{ "@media (min-width: 1200px)": { display: "flex" } }}
               >
-                <Box
-                  bg="white"
-                  style={{
-                    border: "3px solid var(--mantine-color-red-7)",
-                    borderRadius: "999px",
-                    width: "35px",
-                    height: "35px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: "0px",
-                    left: "0px",
-                    filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-                  }}
+                <Shimmer
+                  color="red"
+                  p={2}
+                  px="sm"
+                  pl="lg"
+                  pos="relative"
+                  align="center"
+                  display="flex"
+                  style={{ flex: hasSpeaker ? 1 : "auto" }}
                 >
-                  <Text ff="heading" c="red.9" size="30px">
-                    1
+                  <Box
+                    bg="white"
+                    style={{
+                      border: "3px solid var(--mantine-color-red-7)",
+                      borderRadius: "999px",
+                      width: "35px",
+                      height: "35px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "absolute",
+                      top: "0px",
+                      left: "0px",
+                      filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+                    }}
+                  >
+                    <Text ff="heading" c="red.9" size="30px">
+                      1
+                    </Text>
+                  </Box>
+                  <Text
+                    ff="heading"
+                    c="white"
+                    size="xl"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                      position: "relative",
+                      padding: "0 24px",
+                    }}
+                  >
+                    LEADERSHIP
                   </Text>
-                </Box>
-                <Text
-                  ff="heading"
-                  c="white"
-                  size="xl"
-                  style={{
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                    position: "relative",
-                    padding: "0 24px",
-                  }}
-                >
-                  LEADERSHIP
-                </Text>
-              </Shimmer>
+                </Shimmer>
+
+                {/* Speaker Token */}
+                {hasSpeaker && (
+                  <Box
+                    p={4}
+                    style={{
+                      borderRadius: "6px",
+                      background: "rgba(0, 0, 0, 0.0)",
+                      border: "2px solid rgba(239, 68, 68, 0.8)",
+                      position: "relative",
+                      overflow: "hidden",
+                      flex: 1,
+                      minWidth: "80px",
+                    }}
+                  >
+                    <Group
+                      justify="center"
+                      align="center"
+                      style={{ position: "relative", zIndex: 1 }}
+                    >
+                      <Text
+                        ff="heading"
+                        c="red.4"
+                        size="sm"
+                        style={{
+                          textTransform: "uppercase",
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                        }}
+                      >
+                        SPEAKER
+                      </Text>
+                    </Group>
+                  </Box>
+                )}
+              </Group>
+
               <Group gap={6} justify="center">
                 <Cardback
                   src="/cardback/cardback_so.png"
@@ -1347,12 +1400,22 @@ export default function PlayerCard({
               </Stack>
             </Stack>
           </Grid.Col>
-
           <Grid.Col span={10}>
-            <Grid>
-              <Grid.Col span={8}>
-                <Stack gap="md">
+            <Grid gutter="xs">
+              <Grid.Col
+                span={{
+                  xs: 6.5,
+                  sm: 6.5,
+                  md: 6.5,
+                  lg: 6.5,
+                  xl: 6.5,
+                  xxl: 7.5,
+                  xxxxl: 6.5,
+                }}
+              >
+                <Group gap={2} h="100%">
                   <Surface
+                    flex={1}
                     pattern="grid"
                     cornerAccents={true}
                     label="TECH"
@@ -1360,6 +1423,9 @@ export default function PlayerCard({
                     style={{
                       display: "flex",
                       flexDirection: "row",
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                      height: "100%",
                     }}
                   >
                     <Group gap="xs" align="top" flex={1}>
@@ -1392,21 +1458,56 @@ export default function PlayerCard({
                           ))}
                       </Stack>
                     </Group>
-                    <Box style={{ position: "relative", zIndex: 1 }}>
-                      <Image
-                        src="/mockunitupgrades.png"
-                        alt="unit upgrades"
-                        style={{
-                          width: "auto",
-                          height: "110px",
-                          filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))",
-                        }}
-                      />
-                    </Box>
                   </Surface>
-                </Stack>
+                  <Surface
+                    p="xs"
+                    pattern="none"
+                    style={{
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Image
+                      src="/pa_tech_unitupgrade_outlines.png"
+                      alt="unit upgrades"
+                      style={{
+                        width: "auto",
+                        height: "100px",
+                      }}
+                    />
+                  </Surface>
+                </Group>
               </Grid.Col>
-              <Grid.Col span={3}>
+              <Grid.Col span={1}>
+                <Surface
+                  pattern="none"
+                  style={{ height: "100%", width: "fit-content" }}
+                  p="md"
+                >
+                  <Image
+                    src="/pa_debtaccount.png"
+                    style={{
+                      width: "auto",
+                      height: "105px",
+                    }}
+                  />
+                </Surface>
+              </Grid.Col>
+              <Grid.Col
+                span={{
+                  xs: 4.5,
+                  sm: 4.5,
+                  md: 4.5,
+                  lg: 4.5,
+                  xl: 4.5,
+                  xxl: 3.5,
+                  xxxxl: 4.5,
+                }}
+              >
                 <Group align="start">
                   <Stack gap={4}>
                     <Leader
@@ -1435,7 +1536,7 @@ export default function PlayerCard({
                   </Stack>
                 </Group>
               </Grid.Col>
-              <Grid.Col span={1}>
+              {/* <Grid.Col span={1}>
                 <Box style={{ zoom: 0.8 }}>
                   <Table horizontalSpacing={6} verticalSpacing={4}>
                     <Table.Thead>
@@ -1500,61 +1601,59 @@ export default function PlayerCard({
                     </Table.Tbody>
                   </Table>
                 </Box>
-              </Grid.Col>
-              <Grid.Col span={8}>
-                <Group gap="md" align="stretch">
-                  <Surface w={200} p="md" pattern="none" cornerAccents>
-                    <Stack
-                      justify="center"
-                      h="100%"
-                      style={{ position: "relative", zIndex: 1 }}
-                    >
-                      {/* Total Section */}
-                      <Stack gap="sm">
-                        <Caption>Total</Caption>
-                        <ResourceInfluenceDisplay
-                          resources={totalResources - 3}
-                          totalResources={totalResources}
-                          influence={totalInfluence - 1}
-                          totalInfluence={totalInfluence}
-                        />
-                      </Stack>
-
-                      {/* Divider */}
-                      <ShimmerDivider />
-
-                      {/* Optimal Section */}
-                      <Stack gap="sm">
-                        <Caption>Optimal</Caption>
-                        <ResourceInfluenceDisplay
-                          resources={totalResources - 3}
-                          totalResources={totalResources}
-                          influence={totalInfluence - 1}
-                          totalInfluence={totalInfluence}
-                        />
-                      </Stack>
-                    </Stack>
-                  </Surface>
-
-                  <Surface
-                    flex={1}
-                    p="md"
-                    pattern="circle"
-                    cornerAccents={true}
-                    label="Planets"
+              </Grid.Col> */}
+              <Grid.Col span={1.25}>
+                <Surface p="md" pattern="none" cornerAccents h="100%">
+                  <Stack
+                    justify="center"
+                    h="100%"
+                    style={{ position: "relative", zIndex: 1 }}
                   >
-                    <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
-                      {planets.map((planet, index) => (
-                        <PlanetCard
-                          key={index}
-                          planet={planet}
-                          planetTraitIcons={planetTraitIcons}
-                          techSkipIcons={techSkipIcons}
-                        />
-                      ))}
-                    </Group>
-                  </Surface>
-                </Group>
+                    {/* Total Section */}
+                    <Stack gap="sm">
+                      <Caption>Total</Caption>
+                      <ResourceInfluenceDisplay
+                        resources={totalResources - 3}
+                        totalResources={totalResources}
+                        influence={totalInfluence - 1}
+                        totalInfluence={totalInfluence}
+                      />
+                    </Stack>
+
+                    {/* Divider */}
+                    <ShimmerDivider />
+
+                    {/* Optimal Section */}
+                    <Stack gap="sm">
+                      <Caption>Optimal</Caption>
+                      <ResourceInfluenceDisplay
+                        resources={totalResources - 3}
+                        totalResources={totalResources}
+                        influence={totalInfluence - 1}
+                        totalInfluence={totalInfluence}
+                      />
+                    </Stack>
+                  </Stack>
+                </Surface>
+              </Grid.Col>
+              <Grid.Col span={7.25}>
+                <Surface
+                  p="md"
+                  pattern="circle"
+                  cornerAccents={true}
+                  label="Planets"
+                >
+                  <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
+                    {planets.map((planet, index) => (
+                      <PlanetCard
+                        key={index}
+                        planet={planet}
+                        planetTraitIcons={planetTraitIcons}
+                        techSkipIcons={techSkipIcons}
+                      />
+                    ))}
+                  </Group>
+                </Surface>
               </Grid.Col>
               <Grid.Col span={1.5}>
                 <Stack gap={4}>
