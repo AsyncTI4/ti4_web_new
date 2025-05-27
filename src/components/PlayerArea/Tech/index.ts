@@ -1,0 +1,1 @@
+export { Tech } from "./Tech";

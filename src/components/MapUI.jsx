@@ -12,6 +12,7 @@ import {
   Image,
   Text,
   Collapse,
+  Stack,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 
@@ -27,8 +28,9 @@ import {
   IconChevronUp,
   IconPencil,
 } from "@tabler/icons-react";
-import PlayerCard from "./PlayerCard";
+
 import PlayerCard2 from "./PlayerCard2";
+import PlayerCardBack from "./PlayerCardBack";
 
 function MapUI({
   activeTabs,
@@ -149,8 +151,10 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            {/* <PlayerCard /> */}
-            <PlayerCard2 />
+            <Stack gap="md">
+              <PlayerCard2 />
+              {/* <PlayerCardBack /> */}
+            </Stack>
 
             {/* {!derivedImageUrl ? (
               <div
