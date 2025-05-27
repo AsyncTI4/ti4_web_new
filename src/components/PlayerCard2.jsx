@@ -26,70 +26,35 @@ import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 
-// Mock unit data - only two units have captured values
-const UNIT_DATA = [
-  { name: "dest", type: "dd", reinforcements: 3, captured: 0 },
-  {
-    name: "carrier",
-    type: "ca",
-    reinforcements: 2,
-    captured: 1,
-    isUpgraded: true,
+// Default player card data including all static and default prop data
+const DEFAULT_PLAYER_CARD_DATA = {
+  playerName: "Alice",
+  faction: "Federation of Sol",
+  color: "blue",
+  strategyCard: 4,
+  strategyCardName: "LEADERSHIP",
+  strategyCardNumber: 1,
+  actionCards: 7,
+  secretObjectives: 2,
+  publicObjectives: 1,
+  tradeGoods: 3,
+  commodities: 4,
+  tactics: 1,
+  fleet: 4,
+  strategy: 2,
+  fragments: {
+    cultural: 3,
+    hazardous: 2,
+    industrial: 1,
   },
-  {
-    name: "cruiser",
-    type: "cv",
-    reinforcements: 4,
-    captured: 0,
-    isUpgraded: true,
-    isFaction: true,
-    factionIcon: "/sol.png",
+  needsToFollow: {
+    blue: 2,
+    green: 4,
+    violet: 8,
   },
-  { name: "flagship", type: "fs", reinforcements: 1, captured: 2 },
-  { name: "war sun", type: "ws", reinforcements: 5, captured: 0 },
-  { name: "fighter", type: "ff", reinforcements: 2, captured: 0 },
-  {
-    name: "infantry",
-    type: "inf",
-    reinforcements: 3,
-    captured: 0,
-    isUpgraded: false,
-    isFaction: true,
-    factionIcon: "/sol.png",
-  },
-  { name: "mech", type: "me", reinforcements: 1, captured: 0 },
-  { name: "PDS", type: "pd", reinforcements: 4, captured: 0 },
-  { name: "SD", type: "sd", reinforcements: 2, captured: 0 },
-  { name: "dread", type: "dn", reinforcements: 3, captured: 0 },
-  // { type: "cr", reinforcements: 1, captured: 0 },
-];
-
-// Map unit types to their correct image file names
-const getUnitImageName = (unitType) => {
-  const imageMap = {
-    cr: "cv", // cruiser image is cv
-    inf: "gf", // infantry image is gf
-    me: "mf", // mech image is mf
-  };
-  return imageMap[unitType] || unitType;
-};
-
-export default function PlayerCard2({
-  playerName = "Alice",
-  faction = "Federation of Sol",
-  color = "blue",
-  strategyCard = 4,
-  actionCards = 7,
-  secretObjectives = 2,
-  publicObjectives = 1,
-  tradeGoods = 3,
-  commodities = 4,
-  tactics = 1,
-  fleet = 4,
-  strategy = 2,
-  hasPassed = false,
-  hasSpeaker = true,
-  armyStats = {
+  hasPassed: false,
+  hasSpeaker: true,
+  armyStats: {
     spaceHealth: 8,
     groundHealth: 12,
     spaceHit: 4,
@@ -97,17 +62,17 @@ export default function PlayerCard2({
     spaceUnits: 2,
     groundUnits: 3,
   },
-  debts = [
+  debts: [
     { factionIcon: "/factions/hacan.png" },
     { factionIcon: "/factions/hacan.png" },
     { factionIcon: "/factions/hacan.png" },
   ],
-  leaders = [
+  leaders: [
     "1. Evelyn Delouis",
     "2. Claire Gibson",
     "3. Jace X. 4th Air Legion",
   ],
-  techs = [
+  techs: [
     {
       name: "Anti-Mass Deflectors",
       color: "blue",
@@ -122,7 +87,6 @@ export default function PlayerCard2({
       isUnitUpgrade: false,
       tier: 3,
     },
-
     { name: "Sarween Tools", color: "yellow", isUnitUpgrade: false, tier: 0 },
     { name: "Plasma Scoring", color: "red", isUnitUpgrade: false, tier: 0 },
     {
@@ -138,37 +102,32 @@ export default function PlayerCard2({
       isUnitUpgrade: false,
       tier: 3,
     },
-
-    // Faction techs
-    // {
-    //   name: "Advanced Carrier II",
-    //   color: "grey",
-    //   isUnitUpgrade: true,
-    //   isFaction: true,
-    //   factionIcon: "/sol.png",
-    //   tier: 0,
-    // },
-    // {
-    //   name: "Spec Ops II",
-    //   color: "grey",
-    //   isUnitUpgrade: true,
-    //   isFaction: true,
-    //   factionIcon: "/sol.png",
-    //   tier: 0,
-    // },
-
-    // { name: "Carrier II", color: "blue", isUnitUpgrade: true },
-    // { name: "Dreadnought II", color: "yellow", isUnitUpgrade: true },
-    // { name: "Fighter II", color: "green", isUnitUpgrade: true },
   ],
-  relics = [
+  relics: [
     "Shard of the Throne",
     "Crown of Emphidia",
     "Obsidian",
     "Stellar Converter",
   ],
-  promissoryNotes = ["Support for the Throne", "Trade Agreement"],
-  planets = [
+  promissoryNotes: ["Support for the Throne", "Trade Agreement"],
+  promissoryNotesDetailed: [
+    {
+      name: "Alliance",
+      factionIcon: "/factions/hacan.png",
+      isOtherFaction: true,
+    },
+    {
+      name: "Alliance",
+      factionIcon: "/factions/letnev.png",
+      isOtherFaction: true,
+    },
+    {
+      name: "Support for the Throne",
+      factionIcon: "/factions/titans.png",
+      isOtherFaction: true,
+    },
+  ],
+  planets: [
     { name: "Mecatol Rex", resources: 1, influence: 6 },
     {
       name: "Abyz",
@@ -192,13 +151,147 @@ export default function PlayerCard2({
     { name: "Lor", resources: 1, influence: 2, trait: "industrial" },
     { name: "Winnu", resources: 3, influence: 1, trait: "cultural" },
   ],
-  neighbors = ["Player 2", "Player 3"],
-  scoredSecrets = [
+  neighbors: ["Player 2", "Player 3"],
+  neighborFactions: [
+    { factionIcon: "/factions/hacan.png" },
+    { factionIcon: "/factions/letnev.png" },
+    { factionIcon: "/factions/titans.png" },
+  ],
+  scoredSecrets: [
     "(685) Gather a Mighty Fleet",
     "(583) Monopolize Production",
     "(189) Unveil Flagship",
   ],
-}) {
+  units: [
+    { name: "dest", type: "dd", reinforcements: 3, captured: 0 },
+    {
+      name: "carrier",
+      type: "ca",
+      reinforcements: 2,
+      captured: 1,
+      isUpgraded: true,
+    },
+    {
+      name: "cruiser",
+      type: "cv",
+      reinforcements: 4,
+      captured: 0,
+      isUpgraded: true,
+      isFaction: true,
+      factionIcon: "/sol.png",
+    },
+    { name: "flagship", type: "fs", reinforcements: 1, captured: 2 },
+    { name: "war sun", type: "ws", reinforcements: 5, captured: 0 },
+    { name: "fighter", type: "ff", reinforcements: 2, captured: 0 },
+    {
+      name: "infantry",
+      type: "inf",
+      reinforcements: 3,
+      captured: 0,
+      isUpgraded: false,
+      isFaction: true,
+      factionIcon: "/sol.png",
+    },
+    { name: "mech", type: "me", reinforcements: 1, captured: 0 },
+    { name: "PDS", type: "pd", reinforcements: 4, captured: 0 },
+    { name: "SD", type: "sd", reinforcements: 2, captured: 0 },
+    { name: "dread", type: "dn", reinforcements: 3, captured: 0 },
+  ],
+  leadersDetailed: [
+    {
+      imageUrl: "/commanders/solagent.webp",
+      title: "Evelyn Delouis",
+      description: "Agent",
+      active: true,
+    },
+    {
+      imageUrl: "/commanders/solcommander.webp",
+      title: "Claire Gibson",
+      description: "Commander",
+      active: false,
+    },
+    {
+      imageUrl: "/commanders/solhero.webp",
+      title: "Jace X.",
+      description: "Hero",
+      active: true,
+    },
+  ],
+  cardbacks: [
+    {
+      src: "/cardback/cardback_so.png",
+      alt: "secret objectives",
+      count: 0,
+    },
+    {
+      src: "/cardback/cardback_action.png",
+      alt: "action cards",
+      count: 4,
+    },
+    {
+      src: "/cardback/cardback_pn.png",
+      alt: "promissory notes",
+      count: 7,
+    },
+    {
+      src: "/cardback/cardback_tg.png",
+      alt: "trade goods",
+      count: 17,
+    },
+    {
+      src: "/cardback/cardback_comms.png",
+      alt: "commodities",
+      count: "0/6",
+    },
+  ],
+};
+
+// Map unit types to their correct image file names
+const getUnitImageName = (unitType) => {
+  const imageMap = {
+    cr: "cv", // cruiser image is cv
+    inf: "gf", // infantry image is gf
+    me: "mf", // mech image is mf
+  };
+  return imageMap[unitType] || unitType;
+};
+
+export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
+  const {
+    playerName,
+    faction,
+    color,
+    strategyCard,
+    strategyCardName,
+    strategyCardNumber,
+    actionCards,
+    secretObjectives,
+    publicObjectives,
+    tradeGoods,
+    commodities,
+    tactics,
+    fleet,
+    strategy,
+    fragments,
+    needsToFollow,
+    hasPassed,
+    hasSpeaker,
+    armyStats,
+    debts,
+    leaders,
+    techs,
+    relics,
+    promissoryNotes,
+    promissoryNotesDetailed,
+    planets,
+    neighbors,
+    neighborFactions,
+    scoredSecrets,
+    units,
+    leadersDetailed,
+    cardbacks,
+  } = { ...DEFAULT_PLAYER_CARD_DATA, ...props };
+
   const totalResources = planets.reduce(
     (sum, planet) => sum + planet.resources,
     0
@@ -265,70 +358,41 @@ export default function PlayerCard2({
 
   const LeaderStack = (
     <Stack gap={4} style={{ overflow: "hidden" }}>
-      <Leader
-        imageUrl="/commanders/solagent.webp"
-        title="Evelyn Delouis"
-        description="Agent"
-        active={true}
-      />
-      <Leader
-        imageUrl="/commanders/solcommander.webp"
-        title="Claire Gibson"
-        description="Commander"
-        active={false}
-      />
-      <Leader
-        imageUrl="/commanders/solhero.webp"
-        title="Jace X."
-        description="Hero"
-        active={true}
-      />
+      {leadersDetailed.map((leader, index) => (
+        <Leader
+          key={index}
+          imageUrl={leader.imageUrl}
+          title={leader.title}
+          description={leader.description}
+          active={leader.active}
+        />
+      ))}
     </Stack>
   );
 
   const CardbackStack = (
     <Group gap={6} justify="center">
-      <Cardback
-        src="/cardback/cardback_so.png"
-        alt="secret objectives"
-        count={0}
-      />
-      <Cardback
-        src="/cardback/cardback_action.png"
-        alt="action cards"
-        count={4}
-      />
-      <Cardback
-        src="/cardback/cardback_pn.png"
-        alt="promissory notes"
-        count={7}
-      />
-      <Cardback src="/cardback/cardback_tg.png" alt="trade goods" count={17} />
-      <Cardback
-        src="/cardback/cardback_comms.png"
-        alt="commodities"
-        count="0/6"
-      />
+      {cardbacks.map((cardback, index) => (
+        <Cardback
+          key={index}
+          src={cardback.src}
+          alt={cardback.alt}
+          count={cardback.count}
+        />
+      ))}
     </Group>
   );
 
   const PromissoryNoteStack = (
     <Stack gap={4}>
-      <PromissoryNote
-        name="Alliance"
-        factionIcon="/factions/hacan.png"
-        isOtherFaction={true}
-      />
-      <PromissoryNote
-        name="Alliance"
-        factionIcon="/factions/letnev.png"
-        isOtherFaction={true}
-      />
-      <PromissoryNote
-        name="Support for the Throne"
-        factionIcon="/factions/titans.png"
-        isOtherFaction={true}
-      />
+      {promissoryNotesDetailed.map((note, index) => (
+        <PromissoryNote
+          key={index}
+          name={note.name}
+          factionIcon={note.factionIcon}
+          isOtherFaction={note.isOtherFaction}
+        />
+      ))}
     </Stack>
   );
 
@@ -343,7 +407,7 @@ export default function PlayerCard2({
       }}
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
-        {UNIT_DATA.map((unit, index) => (
+        {units.map((unit, index) => (
           <UnitCard
             key={index}
             unit={unit}
@@ -414,7 +478,7 @@ export default function PlayerCard2({
           }}
         >
           <Text ff="heading" c="red.9" size="30px">
-            1
+            {strategyCardNumber}
           </Text>
         </Box>
         <Text
@@ -428,7 +492,7 @@ export default function PlayerCard2({
             zIndex: 1,
           }}
         >
-          LEADERSHIP
+          {strategyCardName}
         </Text>
       </Shimmer>
 
@@ -620,7 +684,7 @@ export default function PlayerCard2({
                 />
 
                 <Group
-                  gap={2}
+                  gap={6}
                   align="center"
                   style={{ position: "relative", zIndex: 1 }}
                 >
@@ -638,33 +702,18 @@ export default function PlayerCard2({
                   >
                     Neighbors:
                   </Text>
-                  <Image
-                    src="/factions/hacan.png"
-                    style={{
-                      width: "18px",
-                      height: "18px",
-                      filter:
-                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
-                    }}
-                  />
-                  <Image
-                    src="/factions/letnev.png"
-                    style={{
-                      width: "18px",
-                      height: "18px",
-                      filter:
-                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
-                    }}
-                  />
-                  <Image
-                    src="/factions/titans.png"
-                    style={{
-                      width: "18px",
-                      height: "18px",
-                      filter:
-                        "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
-                    }}
-                  />
+                  {neighborFactions.map((neighbor, index) => (
+                    <Image
+                      key={index}
+                      src={neighbor.factionIcon}
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        filter:
+                          "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
+                      }}
+                    />
+                  ))}
                 </Group>
               </Box>
             </Group>
@@ -728,9 +777,9 @@ export default function PlayerCard2({
               {CardbackStack}
               <Group gap="xs" justify="space-around" align="center">
                 <Group gap="xs" justify="center" align="center">
-                  <FragmentStack count={3} type="crf" />
-                  <FragmentStack count={2} type="hrf" />
-                  <FragmentStack count={1} type="urf" />
+                  <FragmentStack count={fragments.cultural} type="crf" />
+                  <FragmentStack count={fragments.hazardous} type="hrf" />
+                  <FragmentStack count={fragments.industrial} type="urf" />
                 </Group>
                 <Box h={35}>
                   <ShimmerDivider orientation="vertical" />
@@ -740,7 +789,7 @@ export default function PlayerCard2({
                     T/F/S
                   </Text>
                   <Text ff="mono" size="sm">
-                    3/2/1
+                    {tactics}/{fleet}/{strategy}
                   </Text>
                 </Box>
               </Group>
@@ -765,7 +814,7 @@ export default function PlayerCard2({
                       textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     }}
                   >
-                    2
+                    {needsToFollow.blue}
                   </Text>
                   <Text
                     size="lg"
@@ -775,7 +824,7 @@ export default function PlayerCard2({
                       textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     }}
                   >
-                    4
+                    {needsToFollow.green}
                   </Text>
                   <Text
                     size="lg"
@@ -785,7 +834,7 @@ export default function PlayerCard2({
                       textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     }}
                   >
-                    8
+                    {needsToFollow.violet}
                   </Text>
                 </Group>
               </Group>
