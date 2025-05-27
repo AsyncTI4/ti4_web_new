@@ -8,6 +8,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
+import { ShimmerDivider } from "./PlayerArea/ShimmerDivider";
 import { Caption } from "./PlayerArea/Caption";
 import { ResourceInfluenceDisplay } from "./PlayerArea/ResourceInfluenceDisplay";
 import { Relic } from "./PlayerArea/Relic";
@@ -335,7 +336,7 @@ export default function PlayerCard2({
     <Surface
       h="100%"
       p="md"
-      w={{ base: "100%", xs: "fit-content" }}
+      w={{ base: "100%", sm: "fit-content" }}
       style={{
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
@@ -355,7 +356,7 @@ export default function PlayerCard2({
   );
 
   const RelicStack = (
-    <Stack gap={4} w={{ base: "100%", xs: "fit-content" }}>
+    <Stack gap={4} w={{ base: "100%", sm: "fit-content" }}>
       {relics.map((relic, index) => (
         <Relic key={index} name={relic} />
       ))}
@@ -669,18 +670,18 @@ export default function PlayerCard2({
             </Group>
 
             {/* Strategy Card and Speaker Token */}
-            <Box visibleFrom="xs">{StrategyAndSpeaker}</Box>
+            <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
           </Group>
         </Box>
         <Grid gutter="md" columns={12}>
-          <Grid.Col span={12} hiddenFrom="xs">
+          <Grid.Col span={12} hiddenFrom="sm">
             {StrategyAndSpeaker}
           </Grid.Col>
 
           <Grid.Col
             span={{
               base: 6,
-              xs: 3,
+              sm: 3,
             }}
             hiddenFrom="lg"
           >
@@ -689,7 +690,7 @@ export default function PlayerCard2({
           <Grid.Col
             span={{
               base: 6,
-              xs: 3,
+              sm: 3,
             }}
             hiddenFrom="lg"
           >
@@ -698,7 +699,7 @@ export default function PlayerCard2({
           <Grid.Col
             span={{
               base: 6,
-              xs: 3,
+              sm: 3,
             }}
             hiddenFrom="lg"
           >
@@ -711,25 +712,39 @@ export default function PlayerCard2({
           <Grid.Col
             span={{
               base: 6,
-              xs: 3,
+              sm: 3,
             }}
             hiddenFrom="lg"
           >
             {PromissoryNoteStack}
           </Grid.Col>
 
-          <Grid.Col span={12} hiddenFrom="xs">
+          <Grid.Col span={12} hiddenFrom="sm">
             {RelicStack}
           </Grid.Col>
 
           <Grid.Col span={2} visibleFrom="lg">
             <Stack>
               {CardbackStack}
-              <Group gap="xs" justify="center">
-                <FragmentStack count={3} type="crf" />
-                <FragmentStack count={2} type="hrf" />
-                <FragmentStack count={1} type="urf" />
+              <Group gap="xs" justify="space-around" align="center">
+                <Group gap="xs" justify="center" align="center">
+                  <FragmentStack count={3} type="crf" />
+                  <FragmentStack count={2} type="hrf" />
+                  <FragmentStack count={1} type="urf" />
+                </Group>
+                <Box h={35}>
+                  <ShimmerDivider orientation="vertical" />
+                </Box>
+                <Box>
+                  <Text ff="mono" size="sm">
+                    T/F/S
+                  </Text>
+                  <Text ff="mono" size="sm">
+                    3/2/1
+                  </Text>
+                </Box>
               </Group>
+
               <Stack gap={4}>
                 {scoredSecrets.map((secret, index) => (
                   <ScoredSecret key={index} text={secret} />
@@ -786,7 +801,7 @@ export default function PlayerCard2({
               <Grid.Col
                 span={{
                   base: 12,
-                  xs: 10,
+                  sm: 10,
                   lg: 9,
                 }}
               >
@@ -869,7 +884,7 @@ export default function PlayerCard2({
                     </Stack>
                   </Surface>
 
-                  <Box h="100%" visibleFrom="xs">
+                  <Box h="100%" visibleFrom="sm">
                     {UnitsArea}
                   </Box>
                 </Group>
@@ -877,14 +892,14 @@ export default function PlayerCard2({
               <Grid.Col span={2} visibleFrom="lg">
                 {LeaderStack}
               </Grid.Col>
-              <Grid.Col span={12} hiddenFrom="xs">
+              <Grid.Col span={12} hiddenFrom="sm">
                 {UnitsArea}
               </Grid.Col>
 
               <Grid.Col
-                visibleFrom="xs"
+                visibleFrom="sm"
                 span={{
-                  xs: 2,
+                  sm: 2,
                   lg: 1,
                 }}
               >
@@ -893,7 +908,7 @@ export default function PlayerCard2({
               <Grid.Col
                 span={{
                   base: 12,
-                  xs: 2,
+                  sm: 2,
                 }}
               >
                 <Surface p="md" pattern="none" h="100%">
@@ -935,7 +950,7 @@ export default function PlayerCard2({
               <Grid.Col
                 span={{
                   base: 12,
-                  xs: 7,
+                  sm: 7,
                 }}
               >
                 <Group h="100%">
@@ -963,7 +978,7 @@ export default function PlayerCard2({
                   </Surface>
                 </Group>
               </Grid.Col>
-              <Grid.Col span={3} visibleFrom="xs">
+              <Grid.Col span={3} visibleFrom="sm">
                 {/* Relics Column */}
                 <Stack
                   gap={4}
