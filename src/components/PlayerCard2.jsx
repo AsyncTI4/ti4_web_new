@@ -335,10 +335,10 @@ export default function PlayerCard2({
     <Surface
       h="100%"
       p="md"
+      w={{ base: "100%", xs: "fit-content" }}
       style={{
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
-        width: "fit-content",
       }}
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
@@ -355,19 +355,85 @@ export default function PlayerCard2({
   );
 
   const RelicStack = (
-    <Stack
-      gap={4}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "max-content",
-        justifyItems: "stretch",
-        width: "fit-content",
-      }}
-    >
+    <Stack gap={4} w={{ base: "100%", xs: "fit-content" }}>
       {relics.map((relic, index) => (
         <Relic key={index} name={relic} />
       ))}
     </Stack>
+  );
+
+  const StrategyAndSpeaker = (
+    <Group gap="xs" align="center">
+      <Shimmer
+        color="red"
+        p={2}
+        px="sm"
+        pl="lg"
+        pos="relative"
+        align="center"
+        display="flex"
+        style={{
+          minWidth: "140px",
+          background:
+            "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 50%, rgba(239, 68, 68, 0.08) 100%)",
+          border: "1px solid rgba(239, 68, 68, 0.2)",
+          borderRadius: "8px",
+        }}
+      >
+        {/* Additional subtle inner glow overlay */}
+        <Box
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        <Box
+          bg="white"
+          style={{
+            border: "3px solid var(--mantine-color-red-7)",
+            borderRadius: "999px",
+            width: "35px",
+            height: "35px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            top: "0px",
+            left: "-10px",
+            filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+            zIndex: 2,
+          }}
+        >
+          <Text ff="heading" c="red.9" size="30px">
+            1
+          </Text>
+        </Box>
+        <Text
+          ff="heading"
+          c="white"
+          size="xl"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+            position: "relative",
+            padding: "0 24px",
+            zIndex: 1,
+          }}
+        >
+          LEADERSHIP
+        </Text>
+      </Shimmer>
+
+      {/* Speaker Token */}
+      <SpeakerToken isVisible={hasSpeaker} />
+    </Group>
   );
 
   return (
@@ -603,80 +669,14 @@ export default function PlayerCard2({
             </Group>
 
             {/* Strategy Card and Speaker Token */}
-            <Group gap="xs" align="center">
-              <Shimmer
-                color="red"
-                p={2}
-                px="sm"
-                pl="lg"
-                pos="relative"
-                align="center"
-                display="flex"
-                style={{
-                  minWidth: "140px",
-                  background:
-                    "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 50%, rgba(239, 68, 68, 0.08) 100%)",
-                  border: "1px solid rgba(239, 68, 68, 0.2)",
-                  borderRadius: "8px",
-                }}
-              >
-                {/* Additional subtle inner glow overlay */}
-                <Box
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background:
-                      "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
-                    pointerEvents: "none",
-                    zIndex: 0,
-                  }}
-                />
-
-                <Box
-                  bg="white"
-                  style={{
-                    border: "3px solid var(--mantine-color-red-7)",
-                    borderRadius: "999px",
-                    width: "35px",
-                    height: "35px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: "0px",
-                    left: "-10px",
-                    filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-                    zIndex: 2,
-                  }}
-                >
-                  <Text ff="heading" c="red.9" size="30px">
-                    1
-                  </Text>
-                </Box>
-                <Text
-                  ff="heading"
-                  c="white"
-                  size="xl"
-                  style={{
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                    position: "relative",
-                    padding: "0 24px",
-                    zIndex: 1,
-                  }}
-                >
-                  LEADERSHIP
-                </Text>
-              </Shimmer>
-
-              {/* Speaker Token */}
-              <SpeakerToken isVisible={hasSpeaker} />
-            </Group>
+            <Box visibleFrom="xs">{StrategyAndSpeaker}</Box>
           </Group>
         </Box>
         <Grid gutter="md" columns={12}>
+          <Grid.Col span={12} hiddenFrom="xs">
+            {StrategyAndSpeaker}
+          </Grid.Col>
+
           <Grid.Col
             span={{
               base: 6,
@@ -882,8 +882,9 @@ export default function PlayerCard2({
               </Grid.Col>
 
               <Grid.Col
+                visibleFrom="xs"
                 span={{
-                  base: 4,
+                  xs: 2,
                   lg: 1,
                 }}
               >
@@ -891,7 +892,7 @@ export default function PlayerCard2({
               </Grid.Col>
               <Grid.Col
                 span={{
-                  base: 6,
+                  base: 12,
                   xs: 2,
                 }}
               >
