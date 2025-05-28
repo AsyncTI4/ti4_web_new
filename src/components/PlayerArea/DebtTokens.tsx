@@ -3,14 +3,13 @@ import { Caption } from "./Caption";
 import { DebtToken } from "./DebtToken";
 
 type Props = {
-  debts: Array<{
-    factionIcon: string;
-    amount?: number;
-  }>;
+  debts: Record<string, number>;
 };
 
 export function DebtTokens({ debts }: Props) {
-  if (debts.length === 0) {
+  const debtEntries = Object.entries(debts);
+
+  if (debtEntries.length === 0) {
     return null;
   }
 
@@ -46,13 +45,16 @@ export function DebtTokens({ debts }: Props) {
         <Caption color="red.3">Debt</Caption>
         <Group gap={0}>
           {/* Render debt tokens */}
-          {debts.map((debt, index) => (
-            <DebtToken
-              key={index}
-              factionIcon={debt.factionIcon}
-              amount={debt.amount}
-            />
-          ))}
+          {debtEntries.flatMap(([factionName, amount]) =>
+            Array(amount)
+              .fill(null)
+              .map((_, index) => (
+                <DebtToken
+                  key={`${factionName}-${index}`}
+                  factionIcon={`/factions/${factionName}.png`}
+                />
+              ))
+          )}
         </Group>
       </Stack>
     </Box>
