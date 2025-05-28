@@ -1,25 +1,29 @@
-import { Stack, Box, Image, Group, Text } from "@mantine/core";
+import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
+import { units } from "../../data/units";
 
 type Props = {
-  unit: {
-    name: string;
-    type: string;
-    reinforcements: number;
-    captured: number;
-    isUpgraded?: boolean;
-    isFaction?: boolean;
-    factionIcon?: string;
-  };
-  getUnitImageName: (unitType: string) => string;
+  unitId: string;
   maxReinforcements?: number;
 };
 
-export function UnitCard({
-  unit,
-  getUnitImageName,
-  maxReinforcements = 8,
-}: Props) {
-  const isUpgraded = unit.isUpgraded || false;
+// Helper function to get unit data by ID
+const getUnitData = (unitId: string) => {
+  return units.find((unit) => unit.id === unitId);
+};
+
+export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
+  const unitData = getUnitData(unitId);
+
+  if (!unitData) {
+    return null; // or some fallback UI
+  }
+
+  const isUpgraded = unitData.upgradesFromUnitId !== undefined;
+  const isFaction = unitData.faction !== undefined;
+
+  // For now, set reinforcements to a default value since it's not in the data structure yet
+  const reinforcements = 3; // This would come from game state in the future
+
   const colors = isUpgraded
     ? {
         background: `linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(37, 99, 235, 0.15) 30%, rgba(29, 78, 216, 0.20) 70%, rgba(59, 130, 246, 0.25) 100%)`,
@@ -39,26 +43,26 @@ export function UnitCard({
   return (
     <Stack
       py={6}
-      px={0}
+      px={4}
       gap={2}
       justify="space-between"
+      pos="relative"
       style={{
         borderRadius: "8px",
         background: colors.background,
         border: colors.border,
-        position: "relative",
         overflow: "hidden",
         boxShadow: colors.shadow,
       }}
     >
       {/* Enhanced top highlight */}
       <Box
+        pos="absolute"
+        top={0}
+        left="20%"
+        right="20%"
+        h="1px"
         style={{
-          position: "absolute",
-          top: 0,
-          left: "20%",
-          right: "20%",
-          height: "1px",
           background: colors.highlight,
         }}
       />
@@ -68,12 +72,12 @@ export function UnitCard({
         <>
           {/* Glassy sheen effect */}
           <Box
+            pos="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
               background:
                 "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.08) 100%)",
               pointerEvents: "none",
@@ -82,12 +86,12 @@ export function UnitCard({
 
           {/* Subtle inner glow */}
           <Box
+            pos="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
               background:
                 "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
               pointerEvents: "none",
@@ -96,12 +100,12 @@ export function UnitCard({
 
           {/* Animated shimmer effect */}
           <Box
+            pos="absolute"
+            top={0}
+            left="-100%"
+            w="100%"
+            h="100%"
             style={{
-              position: "absolute",
-              top: 0,
-              left: "-100%",
-              width: "100%",
-              height: "100%",
               background:
                 "linear-gradient(90deg, transparent 0%, rgba(147, 197, 253, 0.1) 50%, transparent 100%)",
               animation: "shimmer 5s ease-in-out infinite",
@@ -111,95 +115,30 @@ export function UnitCard({
         </>
       )}
 
-      {/* Red glow for captured units - bottom only */}
-      {unit.captured > 0 && (
-        <>
-          {/* Radial red glow from bottom center */}
-          <Box
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: isUpgraded
-                ? "radial-gradient(ellipse 120% 80% at center bottom, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.08) 40%, rgba(239, 68, 68, 0.04) 60%, transparent 80%)"
-                : "radial-gradient(ellipse 120% 80% at center bottom, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.06) 40%, rgba(239, 68, 68, 0.03) 60%, transparent 80%)",
-              pointerEvents: "none",
-              borderRadius: "8px",
-            }}
-          />
-
-          {/* Additional inner glow */}
-          <Box
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "50%",
-              background: isUpgraded
-                ? "radial-gradient(ellipse 100% 100% at center bottom, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 50%, transparent 70%)"
-                : "radial-gradient(ellipse 100% 100% at center bottom, rgba(239, 68, 68, 0.06) 0%, rgba(239, 68, 68, 0.03) 50%, transparent 70%)",
-              pointerEvents: "none",
-              borderRadius: "0 0 8px 8px",
-            }}
-          />
-
-          {/* Bottom edge highlight */}
-          <Box
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "2px",
-              background:
-                "linear-gradient(90deg, rgba(239, 68, 68, 0.4) 0%, rgba(220, 38, 38, 0.5) 50%, rgba(239, 68, 68, 0.4) 100%)",
-              pointerEvents: "none",
-              borderRadius: "0 0 8px 8px",
-              boxShadow: "0 0 4px rgba(239, 68, 68, 0.2)",
-            }}
-          />
-        </>
-      )}
-
       {/* Faction icon badge for faction-specific units */}
-      {unit.isFaction && unit.factionIcon && (
+      {isFaction && (
         <Box
+          pos="absolute"
+          top="4px"
+          right="4px"
           style={{
-            position: "absolute",
-            top: "4px",
-            right: "4px",
             zIndex: 10,
           }}
         >
           <Image
-            src={unit.factionIcon}
+            src={`/${unitData.faction?.toLowerCase()}.png`}
+            w="16px"
+            h="16px"
             style={{
-              width: "16px",
-              height: "16px",
               filter: "drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8))",
             }}
           />
         </Box>
       )}
 
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          src={`/units/pnk_${getUnitImageName(unit.type)}.png`}
-          style={{
-            height: "22px",
-            marginLeft: -10,
-            marginRight: -10,
-          }}
-        />
-      </Box>
+      <Flex justify="center">
+        <Image src={`/units/pnk_${unitData.asyncId}.png`} h="30px" />
+      </Flex>
 
       <Stack gap={2} align="center">
         <Group gap={8} justify="center" align="baseline">
@@ -210,22 +149,22 @@ export function UnitCard({
                 size="xs"
                 c="white"
                 fw={700}
+                fz="14px"
+                lh={1}
                 style={{
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                  lineHeight: 1,
-                  fontSize: "14px",
                 }}
               >
-                {unit.reinforcements}
+                {reinforcements}
               </Text>
               <Text
                 size="xs"
                 c="gray.5"
                 fw={500}
+                fz="10px"
+                lh={1}
                 style={{
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                  lineHeight: 1,
-                  fontSize: "10px",
                 }}
               >
                 /{maxReinforcements}
@@ -233,17 +172,18 @@ export function UnitCard({
             </Group>
           </Group>
 
-          {/* Captured - only show if > 0 */}
-          {unit.captured > 0 && (
+          {/* Captured - commented out for now as requested */}
+          <Group gap={3} align="baseline"></Group>
+          {/* {captured > 0 && (
             <Group gap={3} align="baseline">
               <Text
                 size="xs"
                 c="red.3"
                 fw={600}
+                fz="9px"
+                lh={1}
+                tt="uppercase"
                 style={{
-                  fontSize: "9px",
-                  lineHeight: 1,
-                  textTransform: "uppercase",
                   textShadow:
                     "0 0 3px rgba(239, 68, 68, 0.8), 0 1px 2px rgba(0, 0, 0, 0.8)",
                 }}
@@ -254,16 +194,16 @@ export function UnitCard({
                 size="sm"
                 c="red.4"
                 fw={700}
+                lh={1}
                 style={{
                   textShadow:
                     "0 0 4px rgba(239, 68, 68, 0.6), 0 1px 2px rgba(0, 0, 0, 0.8)",
-                  lineHeight: 1,
                 }}
               >
-                {unit.captured}
+                {captured}
               </Text>
             </Group>
-          )}
+          )} */}
         </Group>
       </Stack>
     </Stack>

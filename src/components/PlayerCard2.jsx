@@ -97,40 +97,17 @@ const DEFAULT_PLAYER_CARD_DATA = {
     "(583) Monopolize Production",
     "(189) Unveil Flagship",
   ],
-  units: [
-    { name: "dest", type: "dd", reinforcements: 3, captured: 0 },
-    {
-      name: "carrier",
-      type: "ca",
-      reinforcements: 2,
-      captured: 1,
-      isUpgraded: true,
-    },
-    {
-      name: "cruiser",
-      type: "cv",
-      reinforcements: 4,
-      captured: 0,
-      isUpgraded: true,
-      isFaction: true,
-      factionIcon: "/sol.png",
-    },
-    { name: "flagship", type: "fs", reinforcements: 1, captured: 2 },
-    { name: "war sun", type: "ws", reinforcements: 5, captured: 0 },
-    { name: "fighter", type: "ff", reinforcements: 2, captured: 0 },
-    {
-      name: "infantry",
-      type: "inf",
-      reinforcements: 3,
-      captured: 0,
-      isUpgraded: false,
-      isFaction: true,
-      factionIcon: "/sol.png",
-    },
-    { name: "mech", type: "me", reinforcements: 1, captured: 0 },
-    { name: "PDS", type: "pd", reinforcements: 4, captured: 0 },
-    { name: "SD", type: "sd", reinforcements: 2, captured: 0 },
-    { name: "dread", type: "dn", reinforcements: 3, captured: 0 },
+  unitsOwned: [
+    "sol_carrier",
+    "flagship",
+    "spacedock",
+    "destroyer",
+    "fighter",
+    "dreadnought",
+    "sol_infantry",
+    "cruiser",
+    "pds",
+    "mech",
   ],
   leaders: [
     {
@@ -187,16 +164,6 @@ const DEFAULT_PLAYER_CARD_DATA = {
   ],
 };
 
-// Map unit types to their correct image file names
-const getUnitImageName = (unitType) => {
-  const imageMap = {
-    cr: "cv", // cruiser image is cv
-    inf: "gf", // infantry image is gf
-    me: "mf", // mech image is mf
-  };
-  return imageMap[unitType] || unitType;
-};
-
 export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
   const {
     playerName,
@@ -220,6 +187,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     neighborFactions,
     scoredSecrets,
     units,
+    unitsOwned,
     leaders,
     cardbacks,
   } = { ...DEFAULT_PLAYER_CARD_DATA, ...props };
@@ -337,13 +305,8 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
       }}
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
-        {units.map((unit, index) => (
-          <UnitCard
-            key={index}
-            unit={unit}
-            getUnitImageName={getUnitImageName}
-            maxReinforcements={8}
-          />
+        {unitsOwned.map((unitId, index) => (
+          <UnitCard key={index} unitId={unitId} maxReinforcements={8} />
         ))}
       </SimpleGrid>
     </Surface>
