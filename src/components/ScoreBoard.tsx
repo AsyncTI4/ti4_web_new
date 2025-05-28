@@ -1,4 +1,4 @@
-import { Box, Group, Text, Image } from "@mantine/core";
+import { Box, Group, Text, Image, SimpleGrid } from "@mantine/core";
 import { Surface } from "./PlayerArea/Surface";
 import { Shimmer } from "./PlayerArea/Shimmer";
 
@@ -18,6 +18,114 @@ const DEFAULT_FACTION_SCORES: FactionScore[] = [
   { factionIcon: "/factions/titans.png", score: 5 },
   { factionIcon: "/factions/sol.png", score: 2 },
 ];
+
+// Laws data for demonstration
+const LAWS_IN_PLAY = [
+  "Regulated Conscription",
+  "Classified Document Leaks",
+  "Minister of Exploration",
+  "Minister of Peace",
+  "Shared Research",
+];
+
+// Law component similar to ScoredSecret but larger and yellow-themed
+function LawCard({ title }: { title: string }) {
+  return (
+    <Shimmer
+      color="cyan"
+      p="md"
+      px="lg"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(202, 138, 4, 0.05) 50%, rgba(234, 179, 8, 0.08) 100%)",
+        border: "1px solid rgba(234, 179, 8, 0.2)",
+        borderRadius: "8px",
+        boxShadow:
+          "0 4px 12px rgba(234, 179, 8, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+      }}
+    >
+      <Box
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          minWidth: 0,
+        }}
+      >
+        {/* Yellow shimmer overlay to override cyan */}
+        <Box
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "1px",
+            background:
+              "linear-gradient(90deg, transparent 0%, #eab308 50%, transparent 100%)",
+            zIndex: 2,
+          }}
+        />
+        <Box
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "1px",
+            background:
+              "linear-gradient(90deg, transparent 0%, #eab308 50%, transparent 100%)",
+            zIndex: 2,
+          }}
+        />
+
+        {/* Additional subtle inner glow overlay */}
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(234, 179, 8, 0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        <Image
+          src="/factions/saar.png"
+          style={{
+            width: "32px",
+            height: "32px",
+            filter:
+              "drop-shadow(0 2px 4px rgba(234, 179, 8, 0.4)) brightness(1.1)",
+            flexShrink: 0,
+            zIndex: 1,
+          }}
+        />
+        <Text
+          size="sm"
+          fw={700}
+          c="white"
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            minWidth: 0,
+            flex: 1,
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+            zIndex: 1,
+            fontSize: "14px",
+          }}
+        >
+          {title}
+        </Text>
+      </Box>
+    </Shimmer>
+  );
+}
 
 function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
   // Create array of score positions 0-10
@@ -48,6 +156,28 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
       }}
     >
+      {/* Laws in Play Section */}
+      <Box mb="xl">
+        <Text
+          size="lg"
+          fw={700}
+          c="yellow.3"
+          mb="md"
+          style={{
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+            textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          Laws in Play
+        </Text>
+        <SimpleGrid cols={2} spacing="md">
+          {LAWS_IN_PLAY.map((law, index) => (
+            <LawCard key={index} title={law} />
+          ))}
+        </SimpleGrid>
+      </Box>
+
       <Box
         style={{
           display: "flex",
