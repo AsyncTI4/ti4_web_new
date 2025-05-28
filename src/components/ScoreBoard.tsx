@@ -262,11 +262,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                 border: isWinningScore
                   ? "1px solid rgba(34, 197, 94, 0.3)"
                   : "1px solid rgba(148, 163, 184, 0.2)",
-                borderLeft: isFirstSquare
-                  ? undefined
-                  : isWinningScore
-                    ? "1px solid rgba(34, 197, 94, 0.3)"
-                    : "1px solid rgba(148, 163, 184, 0.2)",
+                borderLeft: isFirstSquare ? undefined : "none",
                 overflow: "visible",
                 transition: "all 0.3s ease",
               }}
@@ -286,6 +282,9 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                   transform: "translateX(-50%)",
                   zIndex: 2,
                   letterSpacing: "1px",
+                  textShadow: isWinningScore
+                    ? "0 1px 3px rgba(0, 0, 0, 0.8), 0 0 8px rgba(34, 197, 94, 0.4)"
+                    : "0 1px 3px rgba(0, 0, 0, 0.8), 0 0 4px rgba(148, 163, 184, 0.3)",
                 }}
               >
                 {score}
@@ -313,7 +312,6 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                       key={index}
                       pos="relative"
                       style={{
-                        width: "26px",
                         height: "26px",
                       }}
                     >
@@ -321,7 +319,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                       <Image
                         src="/control/control_gld.png"
                         style={{
-                          width: "26px",
+                          // width: "26px",
                           height: "26px",
                           filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4))",
                         }}
@@ -330,11 +328,11 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                       <Image
                         src={faction.factionIcon}
                         style={{
-                          width: "14px",
-                          height: "14px",
+                          width: "26px",
+                          height: "26px",
                           position: "absolute",
-                          top: "6px",
-                          left: "6px",
+                          top: 0,
+                          left: 6,
                           filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6))",
                         }}
                       />
