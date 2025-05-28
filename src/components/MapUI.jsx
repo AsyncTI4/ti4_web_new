@@ -246,9 +246,9 @@ function MapUI({
                 style={{
                   transform: `translateX(0px), translateY(-1000px)`,
                   zIndex: 1000,
-                  top: -2190,
+                  top: -2660,
                   position: "absolute",
-                  background: "black",
+                  background: "#171b2c",
                 }}
               >
                 <Stack gap="lg">

@@ -1,6 +1,8 @@
-import { Box, Group, Text, Image, SimpleGrid } from "@mantine/core";
+import { Box, Group, Text, Image, SimpleGrid, Stack } from "@mantine/core";
 import { Surface } from "./PlayerArea/Surface";
 import { Shimmer } from "./PlayerArea/Shimmer";
+import { StrategyCard } from "./PlayerArea/StrategyCard";
+import { StatusBadge } from "./PlayerArea/StatusBadge";
 
 type FactionScore = {
   factionIcon: string;
@@ -48,6 +50,17 @@ const STAGE_2_OBJECTIVES = [
 const OTHER_OBJECTIVES = [
   { text: "Custodian/Imperial", vp: 1 },
   { text: "Threaten Enemies", vp: 1 },
+];
+
+// Faction icons for current game
+const CURRENT_GAME_FACTIONS = [
+  "/factions/yin.png",
+  "/factions/xxcha.png",
+  "/factions/letnev.png",
+  "/factions/empyrean.png",
+  "/factions/titans.png",
+  "/factions/saar.png",
+  "/factions/sol.png",
 ];
 
 // Objective card component similar to ScoredSecret
@@ -152,8 +165,8 @@ function ObjectiveCard({
 function LawCard({ title }: { title: string }) {
   return (
     <Box
-      p="sm"
-      px="md"
+      p="xs"
+      px="sm"
       style={{
         background: "rgba(148, 163, 184, 0.08",
         border: "1px solid rgba(148, 163, 184, 0.2)",
@@ -269,7 +282,8 @@ function LawCard({ title }: { title: string }) {
           />
 
           <Text
-            size="sm"
+            size="md"
+            ff="heading"
             fw={600}
             c="slate.2"
             style={{
@@ -278,7 +292,6 @@ function LawCard({ title }: { title: string }) {
               whiteSpace: "nowrap",
               minWidth: 0,
               textShadow: "0 1px 1px rgba(0, 0, 0, 0.6)",
-              fontSize: "13px",
               letterSpacing: "0.5px",
               textTransform: "uppercase",
               position: "relative",
@@ -311,7 +324,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
 
   return (
     <Surface
-      p="xl"
+      p="lg"
       pattern="grid"
       cornerAccents={true}
       // label="SCOREBOARD"
@@ -321,13 +334,111 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
       }}
     >
+      {/* Game Status Section */}
+      <Box mb="lg">
+        <SimpleGrid cols={3} spacing="lg">
+          {/* Unpicked Strategy Cards */}
+          <Box>
+            <Text
+              size="sm"
+              fw={600}
+              c="gray.5"
+              mb="sm"
+              style={{
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                fontSize: "12px",
+              }}
+            >
+              Unpicked SCs
+            </Text>
+            <Group gap="sm">
+              <StrategyCard number={4} name="CONSTRUCTION" color="green" />
+              <StrategyCard number={7} name="TECHNOLOGY" color="blue" />
+            </Group>
+          </Box>
+
+          {/* Card Pool */}
+          <Box>
+            <Text
+              size="sm"
+              fw={600}
+              c="gray.5"
+              mb="sm"
+              style={{
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                fontSize: "12px",
+              }}
+            >
+              Card Pool
+            </Text>
+            {/* Empty for now */}
+          </Box>
+
+          {/* Current Game Factions */}
+          <Box>
+            <Text
+              size="sm"
+              fw={600}
+              c="gray.5"
+              mb="sm"
+              style={{
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                fontSize: "12px",
+              }}
+            >
+              Factions in Game
+            </Text>
+            <Group gap="md">
+              {CURRENT_GAME_FACTIONS.map((factionIcon, index) => {
+                // Determine if this faction should have a status badge
+                let statusBadge = null;
+                if (index === 0) {
+                  // YIN (first faction)
+                  statusBadge = <StatusBadge status="active" />;
+                } else if (index === 1) {
+                  // XXCHA (second faction)
+                  statusBadge = <StatusBadge status="next" />;
+                }
+
+                return (
+                  <Stack key={index} gap="xs" align="center">
+                    <Image
+                      src={factionIcon}
+                      w={40}
+                      h={40}
+                      style={{
+                        filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))",
+                      }}
+                    />
+                    {statusBadge}
+                  </Stack>
+                );
+              })}
+            </Group>
+          </Box>
+        </SimpleGrid>
+      </Box>
+
+      {/* Divider */}
+      <Box
+        style={{
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%)",
+          margin: "16px 0",
+        }}
+      />
+
       {/* Laws in Play Section */}
-      <Box mb="xl">
+      <Box mb="lg">
         <Text
           size="sm"
           fw={600}
           c="gray.5"
-          mb="md"
+          mb="sm"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
@@ -336,7 +447,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         >
           Laws in Play
         </Text>
-        <SimpleGrid cols={2} spacing="md">
+        <SimpleGrid cols={2} spacing="sm">
           {LAWS_IN_PLAY.map((law, index) => (
             <LawCard key={index} title={law} />
           ))}
@@ -349,17 +460,17 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           height: "1px",
           background:
             "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%)",
-          margin: "24px 0",
+          margin: "16px 0",
         }}
       />
 
       {/* Scorable Objectives Section */}
-      <Box mb="xl">
+      <Box mb="lg">
         <Text
           size="sm"
           fw={600}
           c="gray.5"
-          mb="md"
+          mb="sm"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
@@ -368,21 +479,21 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         >
           Public Objectives
         </Text>
-        <SimpleGrid cols={3} spacing="lg">
+        <SimpleGrid cols={3} spacing="md">
           {/* Stage I Objectives (Orange) */}
           <Box
             style={{
               background: "rgba(249, 115, 22, 0.04)",
               border: "1px solid rgba(249, 115, 22, 0.1)",
               borderRadius: "6px",
-              padding: "12px",
+              padding: "8px",
             }}
           >
             <Text
               size="md"
               fw={600}
               c="orange.3"
-              mb="sm"
+              mb="xs"
               style={{
                 textAlign: "center",
                 textTransform: "uppercase",
@@ -393,7 +504,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Stage I
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
             >
               {STAGE_1_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -412,14 +523,14 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               background: "rgba(59, 130, 246, 0.04)",
               border: "1px solid rgba(59, 130, 246, 0.1)",
               borderRadius: "6px",
-              padding: "12px",
+              padding: "8px",
             }}
           >
             <Text
               size="md"
               fw={600}
               c="blue.3"
-              mb="sm"
+              mb="xs"
               style={{
                 textAlign: "center",
                 textTransform: "uppercase",
@@ -430,7 +541,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Stage II
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
             >
               {STAGE_2_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -450,7 +561,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               size="md"
               fw={600}
               c="gray.3"
-              mb="sm"
+              mb="xs"
               style={{
                 textAlign: "center",
                 textTransform: "uppercase",
@@ -461,7 +572,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Other
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
             >
               {OTHER_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -481,9 +592,9 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         style={{
           display: "flex",
           width: "100%",
-          height: "100px",
+          height: "80px",
           overflow: "visible",
-          padding: "8px 0",
+          padding: "6px 0",
         }}
       >
         {scorePositions.map((score, index) => {
