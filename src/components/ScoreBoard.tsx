@@ -52,9 +52,9 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         style={{
           display: "flex",
           width: "100%",
-          height: "120px",
+          height: "100px",
           overflow: "visible",
-          padding: "12px 0", // Add padding to prevent badge cutoff
+          padding: "8px 0",
         }}
       >
         {scorePositions.map((score, index) => {
@@ -75,151 +75,260 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                 justifyContent: "center",
                 position: "relative",
                 borderRadius: isFirstSquare
-                  ? "12px 0 0 12px"
+                  ? "10px 0 0 10px"
                   : isLastSquare
-                    ? "0 12px 12px 0"
+                    ? "0 10px 10px 0"
                     : "0",
                 background: isWinningScore
-                  ? "linear-gradient(145deg, rgba(15, 35, 20, 0.95) 0%, rgba(25, 50, 30, 0.8) 50%, rgba(20, 40, 25, 0.9) 100%)"
-                  : "linear-gradient(145deg, rgba(15, 20, 35, 0.95) 0%, rgba(25, 30, 45, 0.8) 50%, rgba(20, 25, 40, 0.9) 100%)",
+                  ? `linear-gradient(145deg,
+                      rgba(8, 20, 12, 0.95) 0%,
+                      rgba(12, 28, 16, 0.9) 25%,
+                      rgba(16, 35, 20, 0.85) 50%,
+                      rgba(20, 42, 24, 0.9) 75%,
+                      rgba(24, 48, 28, 0.95) 100%)`
+                  : `linear-gradient(145deg,
+                      rgba(8, 12, 20, 0.95) 0%,
+                      rgba(12, 16, 28, 0.9) 25%,
+                      rgba(16, 20, 35, 0.85) 50%,
+                      rgba(20, 24, 42, 0.9) 75%,
+                      rgba(24, 28, 48, 0.95) 100%)`,
                 border: isWinningScore
-                  ? "2px solid rgba(34, 197, 94, 0.4)"
-                  : "1px solid rgba(71, 85, 105, 0.4)",
+                  ? "1px solid rgba(34, 197, 94, 0.3)"
+                  : "1px solid rgba(30, 41, 59, 0.6)",
                 borderLeft: isFirstSquare
                   ? undefined
                   : isWinningScore
-                    ? "2px solid rgba(34, 197, 94, 0.4)" // Keep left border for winning square
-                    : "1px solid rgba(71, 85, 105, 0.2)",
+                    ? "1px solid rgba(34, 197, 94, 0.3)"
+                    : "1px solid rgba(30, 41, 59, 0.4)",
                 boxShadow: isWinningScore
-                  ? "inset 3px 3px 8px rgba(0, 0, 0, 0.7), inset -2px -2px 6px rgba(34, 197, 94, 0.12), 0 0 20px rgba(34, 197, 94, 0.3)"
-                  : "inset 3px 3px 8px rgba(0, 0, 0, 0.7), inset -2px -2px 6px rgba(148, 163, 184, 0.08)",
-                overflow: "visible", // Allow victory badge to show
+                  ? `inset 3px 3px 10px rgba(0, 0, 0, 0.8),
+                     inset -2px -2px 6px rgba(34, 197, 94, 0.1),
+                     inset 0 0 15px rgba(0, 0, 0, 0.5)`
+                  : `inset 3px 3px 10px rgba(0, 0, 0, 0.8),
+                     inset -2px -2px 6px rgba(148, 163, 184, 0.05),
+                     inset 0 0 15px rgba(0, 0, 0, 0.5)`,
+                overflow: "visible",
                 transition: "all 0.3s ease",
               }}
             >
-              {/* Enhanced top-left dark shadow for depth */}
+              {/* Brushed metal texture overlay */}
               <Box
                 style={{
                   position: "absolute",
                   top: 0,
                   left: 0,
-                  width: "70%",
-                  height: "70%",
-                  background: isWinningScore
-                    ? "linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 80%)"
-                    : "linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.15) 50%, transparent 80%)",
-                  borderRadius: isFirstSquare ? "12px 0 0 0" : "0",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Enhanced bottom-right highlight */}
-              <Box
-                style={{
-                  position: "absolute",
-                  bottom: 0,
                   right: 0,
-                  width: "60%",
-                  height: "60%",
-                  background: isWinningScore
-                    ? "linear-gradient(315deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 40%, transparent 70%)"
-                    : "linear-gradient(315deg, rgba(148, 163, 184, 0.12) 0%, rgba(148, 163, 184, 0.04) 40%, transparent 70%)",
-                  borderRadius: isLastSquare ? "0 0 12px 0" : "0",
+                  bottom: 0,
+                  background: `
+                    repeating-linear-gradient(
+                      90deg,
+                      transparent 0px,
+                      rgba(148, 163, 184, 0.02) 1px,
+                      rgba(148, 163, 184, 0.04) 2px,
+                      transparent 3px,
+                      transparent 6px
+                    ),
+                    repeating-linear-gradient(
+                      45deg,
+                      rgba(0, 0, 0, 0.1) 0px,
+                      rgba(0, 0, 0, 0.05) 1px,
+                      transparent 2px,
+                      transparent 8px
+                    )
+                  `,
+                  borderRadius: "inherit",
                   pointerEvents: "none",
+                  opacity: 0.6,
                 }}
               />
 
-              {/* Subtle inner rim highlight */}
+              {/* Top-left dark shadow for inset effect (light from top) */}
               <Box
                 style={{
                   position: "absolute",
-                  top: "2px",
-                  left: "2px",
-                  right: "2px",
-                  bottom: "2px",
-                  border: isWinningScore
-                    ? "1px solid rgba(34, 197, 94, 0.2)"
-                    : "1px solid rgba(148, 163, 184, 0.1)",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "50%",
+                  background: isWinningScore
+                    ? "linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%)"
+                    : "linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 100%)",
                   borderRadius: isFirstSquare
-                    ? "10px 0 0 10px"
+                    ? "10px 0 0 0"
                     : isLastSquare
-                      ? "0 10px 10px 0"
+                      ? "0 10px 0 0"
                       : "0",
                   pointerEvents: "none",
                 }}
               />
 
-              {/* Score number with better styling */}
+              {/* Left dark shadow for inset effect */}
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "50%",
+                  height: "100%",
+                  background: isWinningScore
+                    ? "linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%)"
+                    : "linear-gradient(90deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 50%, transparent 100%)",
+                  borderRadius: isFirstSquare ? "10px 0 0 10px" : "0",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Bottom highlight for inset effect (light from top) */}
+              <Box
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "30%",
+                  background: isWinningScore
+                    ? "linear-gradient(0deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.03) 50%, transparent 100%)"
+                    : "linear-gradient(0deg, rgba(148, 163, 184, 0.06) 0%, rgba(148, 163, 184, 0.02) 50%, transparent 100%)",
+                  borderRadius: isFirstSquare
+                    ? "0 0 0 10px"
+                    : isLastSquare
+                      ? "0 0 10px 0"
+                      : "0",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Right highlight for inset effect */}
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  width: "30%",
+                  height: "100%",
+                  background: isWinningScore
+                    ? "linear-gradient(270deg, rgba(34, 197, 94, 0.06) 0%, rgba(34, 197, 94, 0.02) 50%, transparent 100%)"
+                    : "linear-gradient(270deg, rgba(148, 163, 184, 0.05) 0%, rgba(148, 163, 184, 0.02) 50%, transparent 100%)",
+                  borderRadius: isLastSquare ? "0 10px 10px 0" : "0",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Subtle inner rim for definition */}
+              <Box
+                style={{
+                  position: "absolute",
+                  top: "1px",
+                  left: "1px",
+                  right: "1px",
+                  bottom: "1px",
+                  border: isWinningScore
+                    ? "1px solid rgba(34, 197, 94, 0.15)"
+                    : "1px solid rgba(148, 163, 184, 0.08)",
+                  borderRadius: isFirstSquare
+                    ? "9px 0 0 9px"
+                    : isLastSquare
+                      ? "0 9px 9px 0"
+                      : "0",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Enhanced snazzy score number */}
               <Text
-                size="xl"
-                fw={700}
-                c={isWinningScore ? "green.2" : "slate.3"}
+                size="lg"
+                fw={800}
+                ff="heading"
+                c={isWinningScore ? "green.1" : "slate.1"}
                 style={{
                   textShadow: isWinningScore
-                    ? "0 2px 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(34, 197, 94, 0.3)"
-                    : "0 2px 4px rgba(0, 0, 0, 0.8)",
-                  fontSize: "28px",
-                  fontWeight: 800,
+                    ? `0 0 8px rgba(34, 197, 94, 0.8),
+                       0 0 16px rgba(34, 197, 94, 0.5),
+                       0 2px 4px rgba(0, 0, 0, 0.9),
+                       0 1px 0 rgba(255, 255, 255, 0.3)`
+                    : `0 2px 4px rgba(0, 0, 0, 0.9),
+                       0 0 6px rgba(148, 163, 184, 0.4),
+                       0 1px 0 rgba(255, 255, 255, 0.2)`,
+                  fontSize: "24px",
+                  fontWeight: 900,
                   position: "absolute",
-                  top: "12px",
+                  top: "8px",
                   left: "50%",
                   transform: "translateX(-50%)",
                   zIndex: 2,
-                  letterSpacing: "1px",
+                  letterSpacing: "2px",
+                  filter: isWinningScore
+                    ? "drop-shadow(0 0 4px rgba(34, 197, 94, 0.6))"
+                    : "drop-shadow(0 0 2px rgba(148, 163, 184, 0.3))",
                 }}
               >
                 {score}
               </Text>
 
-              {/* Faction control tokens */}
+              {/* Faction control tokens - repositioned to prevent cutoff */}
               {factionsAtScore.length > 0 && (
                 <Box
                   style={{
                     position: "absolute",
-                    bottom: "12px",
+                    bottom: "6px",
                     left: "50%",
                     transform: "translateX(-50%)",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: "6px",
+                    gap: "3px",
                     zIndex: 2,
+                    maxHeight: "50px",
+                    overflow: "visible",
                   }}
                 >
-                  {factionsAtScore.map((faction, index) => (
+                  {factionsAtScore.slice(0, 2).map((faction, index) => (
                     <Box
                       key={index}
                       pos="relative"
                       style={{
-                        width: "36px",
-                        height: "36px",
+                        width: "38px",
                       }}
                     >
                       {/* Control token background */}
                       <Image
                         src="/control/control_gld.png"
                         style={{
-                          width: "36px",
-                          height: "36px",
-                          filter:
-                            "drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6)) brightness(1.1)",
+                          width: "38px",
                         }}
                       />
                       {/* Faction icon */}
                       <Image
                         src={faction.factionIcon}
                         style={{
-                          width: "20px",
-                          height: "20px",
+                          width: "24px",
+                          height: "24px",
                           position: "absolute",
-                          top: "8px",
-                          left: "8px",
+                          top: "0px",
+                          left: "6px",
                           filter:
-                            "drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9)) brightness(1.05)",
+                            "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9)) brightness(1.05)",
                         }}
                       />
                     </Box>
                   ))}
+                  {/* Show count if more than 2 factions */}
+                  {factionsAtScore.length > 2 && (
+                    <Text
+                      size="xs"
+                      fw={700}
+                      c="yellow.3"
+                      style={{
+                        fontSize: "10px",
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                        background: "rgba(0, 0, 0, 0.6)",
+                        borderRadius: "8px",
+                        padding: "1px 4px",
+                      }}
+                    >
+                      +{factionsAtScore.length - 2}
+                    </Text>
+                  )}
                 </Box>
               )}
 
