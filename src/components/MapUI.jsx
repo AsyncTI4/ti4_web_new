@@ -18,11 +18,11 @@ import { Atom } from "react-loading-indicators";
 
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
-
+import ScoreBoard from "./ScoreBoard";
 import "./MapScreen.css";
 import "dragscroll/dragscroll.js";
 import Logo from "./Logo";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   IconChevronDown,
   IconChevronUp,
@@ -43,6 +43,24 @@ function MapUI({
 }) {
   const inputRef = useRef(null);
   const [editingTab, setEditingTab] = useState(null);
+  const playerCardRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (playerCardRef.current) {
+        const scrollLeft =
+          window.scrollX || document.documentElement.scrollLeft;
+        requestAnimationFrame(() => {
+          if (playerCardRef.current) {
+            playerCardRef.current.style.transform = `translateX(${scrollLeft}px)`;
+          }
+        });
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleEditClick = (tab, event) => {
     event.stopPropagation();
@@ -151,12 +169,7 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            <Stack gap="md">
-              <PlayerCard2 />
-              {/* <PlayerCardBack /> */}
-            </Stack>
-
-            {/* {!derivedImageUrl ? (
+            {!derivedImageUrl ? (
               <div
                 style={{
                   display: "flex",
@@ -175,7 +188,7 @@ function MapUI({
             ) : undefined}
             <ScrollMap gameId={params.mapid} imageUrl={derivedImageUrl} />
 
-            <Paper
+            {/* <Paper
               shadow="sm"
               style={{
                 width: 350,
@@ -227,6 +240,26 @@ function MapUI({
                 </Paper>
               </Collapse>
             </Paper> */}
+            <Box pos="relative">
+              <div
+                ref={playerCardRef}
+                style={{
+                  transform: `translateX(0px), translateY(-1000px)`,
+                  zIndex: 1000,
+                  top: -2190,
+                  position: "absolute",
+                  background: "black",
+                }}
+              >
+                <Stack gap="lg">
+                  <ScoreBoard />
+                  <PlayerCard2 />
+                  <PlayerCard2 />
+                  <PlayerCard2 />
+                  <PlayerCard2 />
+                </Stack>
+              </div>
+            </Box>
           </div>
         </div>
       </AppShell.Main>

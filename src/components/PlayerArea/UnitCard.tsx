@@ -44,7 +44,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
     <Stack
       py={6}
       px={4}
-      gap={2}
+      gap={4}
       justify="space-between"
       pos="relative"
       style={{
@@ -173,7 +173,6 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
           </Group>
 
           {/* Captured - commented out for now as requested */}
-          <Group gap={3} align="baseline"></Group>
           {/* {captured > 0 && (
             <Group gap={3} align="baseline">
               <Text

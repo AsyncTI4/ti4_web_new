@@ -207,54 +207,33 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
       <Image
         src={`/planet_attributes/pc_attribute_cultural.png`}
         alt="cultural"
-        style={{ width: "24px", height: "24px" }}
+        w={24}
+        h={24}
       />
     ),
     hazardous: (
       <Image
         src={`/planet_attributes/pc_attribute_hazardous.png`}
         alt="hazardous"
-        style={{ width: "24px", height: "24px" }}
+        w={24}
+        h={24}
       />
     ),
     industrial: (
       <Image
         src={`/planet_attributes/pc_attribute_industrial.png`}
         alt="industrial"
-        style={{ width: "24px", height: "24px" }}
+        w={24}
+        h={24}
       />
     ),
   };
 
   const techSkipIcons = {
-    biotic: (
-      <Image
-        src={`/green.png`}
-        alt="biotic"
-        style={{ width: "16px", height: "16px" }}
-      />
-    ),
-    propulsion: (
-      <Image
-        src={`/blue.png`}
-        alt="propulsion"
-        style={{ width: "16px", height: "16px" }}
-      />
-    ),
-    cybernetic: (
-      <Image
-        src={`/yellow.png`}
-        alt="cybernetic"
-        style={{ width: "16px", height: "16px" }}
-      />
-    ),
-    warfare: (
-      <Image
-        src={`/red.png`}
-        alt="warfare"
-        style={{ width: "16px", height: "16px" }}
-      />
-    ),
+    biotic: <Image src={`/green.png`} alt="biotic" w={16} h={16} />,
+    propulsion: <Image src={`/blue.png`} alt="propulsion" w={16} h={16} />,
+    cybernetic: <Image src={`/yellow.png`} alt="cybernetic" w={16} h={16} />,
+    warfare: <Image src={`/red.png`} alt="warfare" w={16} h={16} />,
   };
 
   const LeaderStack = (
@@ -328,7 +307,6 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
         px="sm"
         pl="lg"
         pos="relative"
-        align="center"
         display="flex"
         style={{
           minWidth: "140px",
@@ -340,12 +318,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
       >
         {/* Additional subtle inner glow overlay */}
         <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             background:
               "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
             pointerEvents: "none",
@@ -355,17 +333,17 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
 
         <Box
           bg="white"
+          pos="absolute"
+          top={0}
+          left={-10}
+          w={35}
+          h={35}
+          display="flex"
           style={{
             border: "3px solid var(--mantine-color-red-7)",
             borderRadius: "999px",
-            width: "35px",
-            height: "35px",
-            display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            position: "absolute",
-            top: "0px",
-            left: "-10px",
             filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
             zIndex: 2,
           }}
@@ -378,10 +356,10 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
           ff="heading"
           c="white"
           size="xl"
+          pos="relative"
+          px={24}
           style={{
             textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-            position: "relative",
-            padding: "0 24px",
             zIndex: 1,
           }}
         >
@@ -397,13 +375,13 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
   return (
     <Paper
       p="sm"
+      m={5}
+      pos="relative"
       style={{
         maxWidth: "100%",
-        margin: "5px",
         background:
           "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
         border: "1px solid rgba(148, 163, 184, 0.3)",
-        position: "relative",
         overflow: "hidden",
         "@keyframes shimmer": {
           "0%": { transform: "translateX(-100%)" },
@@ -412,74 +390,49 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
       }}
       radius="md"
       shadow="xl"
-      pos="relative"
     >
       {/* Subtle inner glow */}
       <Box
+        pos="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
           background:
             "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.02) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
 
-      <Box style={{ position: "relative", zIndex: 1 }}>
+      <Box pos="relative" style={{ zIndex: 1 }}>
         {/* Header Section */}
         <Box
           p="sm"
           mb="lg"
+          pos="relative"
+          mt={-16}
+          ml={-16}
+          mr={-8}
           style={{
             borderRadius: 0,
             borderBottomRightRadius: 8,
             background:
               "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
             border: "1px solid rgba(148, 163, 184, 0.2)",
-            position: "relative",
             overflow: "hidden",
             boxShadow:
               "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
-            marginTop: "-16px",
-            marginLeft: "-16px",
-            marginRight: "-8px",
           }}
         >
-          {/* Header diagonal pattern overlay */}
-          <Box
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage: `
-                repeating-linear-gradient(
-                  45deg,
-                  rgba(148, 163, 184, 0.03) 0px,
-                  rgba(148, 163, 184, 0.03) 1px,
-                  transparent 1px,
-                  transparent 20px
-                )
-              `,
-              pointerEvents: "none",
-              opacity: 0.6,
-            }}
-          />
-
           {/* Header bottom border accent */}
           <Box
+            pos="absolute"
+            bottom={0}
+            left={0}
+            right={0}
+            h={4}
             style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "4px",
-              // background:
-              //   "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
               background:
                 "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
             }}
@@ -535,6 +488,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                 px={8}
                 py={4}
                 ml={8}
+                pos="relative"
                 style={{
                   borderRadius: "6px",
                   background:
@@ -542,18 +496,17 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                   border: "1px solid rgba(0, 0, 0, 0.5)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.6), inset -1px -1px 3px rgba(255, 255, 255, 0.08)",
-                  position: "relative",
                   overflow: "hidden",
                 }}
               >
                 {/* Top-left dark shadow for depth */}
                 <Box
+                  pos="absolute"
+                  top={0}
+                  left={0}
+                  w="60%"
+                  h="60%"
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "60%",
-                    height: "60%",
                     background:
                       "linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, transparent 70%)",
                     borderRadius: "6px 0 0 0",
@@ -563,12 +516,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
 
                 {/* Bottom-right highlight */}
                 <Box
+                  pos="absolute"
+                  bottom={0}
+                  right={0}
+                  w="50%"
+                  h="50%"
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    width: "50%",
-                    height: "50%",
                     background:
                       "linear-gradient(315deg, rgba(255, 255, 255, 0.06) 0%, transparent 60%)",
                     borderRadius: "0 0 6px 0",
@@ -579,7 +532,8 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                 <Group
                   gap={6}
                   align="center"
-                  style={{ position: "relative", zIndex: 1 }}
+                  pos="relative"
+                  style={{ zIndex: 1 }}
                 >
                   <Text
                     size="xs"
@@ -599,9 +553,9 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                     <Image
                       key={index}
                       src={neighbor.factionIcon}
+                      w={18}
+                      h={18}
                       style={{
-                        width: "18px",
-                        height: "18px",
                         filter:
                           "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
                       }}
@@ -754,10 +708,10 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                     cornerAccents={true}
                     label="TECH"
                     p="md"
+                    h="100%"
                     style={{
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
-                      height: "100%",
                     }}
                   >
                     <Stack>
@@ -869,7 +823,8 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                   <Stack
                     justify="space-between"
                     h="100%"
-                    style={{ position: "relative", zIndex: 1 }}
+                    pos="relative"
+                    style={{ zIndex: 1 }}
                   >
                     {/* Total/Optimal Section */}
                     <Group gap="md" align="start">
@@ -913,13 +868,13 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                     pattern="circle"
                     cornerAccents={true}
                     label="Planets"
+                    flex={1}
+                    h="100%"
                     style={{
-                      flex: 1,
                       alignItems: "flex-start",
-                      height: "100%",
                     }}
                   >
-                    <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
+                    <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
                       {planets.map((planetId, index) => (
                         <PlanetCard
                           key={index}
@@ -952,22 +907,23 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
       </Box>
 
       <Box
+        pos="absolute"
+        bottom={-60}
+        right={-40}
+        opacity={0.05}
+        h={300}
         style={{
-          position: "absolute",
-          bottom: -60,
-          right: -40,
-          opacity: 0.05,
           zIndex: 0,
           pointerEvents: "none",
-          // width: "240px",
-          height: "300px",
           overflow: "hidden",
         }}
       >
         <Image
           src="/sol.png"
           alt="faction"
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          w="100%"
+          h="100%"
+          style={{ objectFit: "contain" }}
         />
       </Box>
     </Paper>
