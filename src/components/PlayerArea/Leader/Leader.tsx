@@ -1,20 +1,40 @@
 import { Group, Stack, Text, Image, Box } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
+import { leaders } from "../../../data/leaders";
 
 type Props = {
-  imageUrl: string;
-  title: string;
-  description: string;
-  active?: boolean;
+  id: string;
+  type: "agent" | "commander" | "hero";
+  tgCount: number;
+  exhausted: boolean;
+  locked: boolean;
+  active: boolean;
+};
+
+// Helper function to get leader data by ID
+const getLeaderData = (leaderId: string) => {
+  return leaders.find((leader) => leader.id === leaderId);
 };
 
 export function Leader({
-  imageUrl,
-  title,
-  description,
-  active = false,
+  id,
+  type,
+  tgCount,
+  exhausted,
+  locked,
+  active,
 }: Props) {
-  if (active) {
+  const leaderData = getLeaderData(id);
+
+  if (!leaderData) {
+    return null; // or some fallback UI
+  }
+
+  const isInactive = exhausted || locked;
+  const shouldShowGreen = active && !isInactive;
+  const shouldShowGrey = isInactive;
+
+  if (shouldShowGreen) {
     return (
       <Shimmer color="green" p={2} px="sm">
         <Group
@@ -26,7 +46,7 @@ export function Leader({
           }}
         >
           <Image
-            src={imageUrl}
+            src={`/commanders/${id}.webp`}
             style={{
               width: "35px",
               height: "35px",
@@ -47,7 +67,7 @@ export function Leader({
                 textOverflow: "clip",
               }}
             >
-              {title}
+              {leaderData.name}
             </Text>
             <Text
               size="xs"
@@ -58,9 +78,10 @@ export function Leader({
                 overflow: "hidden",
                 whiteSpace: "nowrap",
                 textOverflow: "clip",
+                textTransform: "capitalize",
               }}
             >
-              {description}
+              {type}
             </Text>
           </Stack>
         </Group>
@@ -86,7 +107,7 @@ export function Leader({
         }}
       >
         <Image
-          src={imageUrl}
+          src={`/commanders/${id}.webp`}
           style={{
             width: "35px",
             height: "35px",
@@ -108,7 +129,7 @@ export function Leader({
               textOverflow: "clip",
             }}
           >
-            {title}
+            {leaderData.name}
           </Text>
           <Text
             size="xs"
@@ -119,9 +140,10 @@ export function Leader({
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "clip",
+              textTransform: "capitalize",
             }}
           >
-            {description}
+            {type}
           </Text>
         </Stack>
       </Group>

@@ -132,23 +132,29 @@ const DEFAULT_PLAYER_CARD_DATA = {
     { name: "SD", type: "sd", reinforcements: 2, captured: 0 },
     { name: "dread", type: "dn", reinforcements: 3, captured: 0 },
   ],
-  leadersDetailed: [
+  leaders: [
     {
-      imageUrl: "/commanders/solagent.webp",
-      title: "Evelyn Delouis",
-      description: "Agent",
+      id: "solagent",
+      type: "agent",
+      tgCount: 0,
+      exhausted: false,
+      locked: false,
       active: true,
     },
     {
-      imageUrl: "/commanders/solcommander.webp",
-      title: "Claire Gibson",
-      description: "Commander",
+      id: "solcommander",
+      type: "commander",
+      tgCount: 0,
+      exhausted: false,
+      locked: true,
       active: false,
     },
     {
-      imageUrl: "/commanders/solhero.webp",
-      title: "Jace X.",
-      description: "Hero",
+      id: "solhero",
+      type: "hero",
+      tgCount: 0,
+      exhausted: false,
+      locked: false,
       active: true,
     },
   ],
@@ -214,7 +220,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     neighborFactions,
     scoredSecrets,
     units,
-    leadersDetailed,
+    leaders,
     cardbacks,
   } = { ...DEFAULT_PLAYER_CARD_DATA, ...props };
 
@@ -285,12 +291,14 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
 
   const LeaderStack = (
     <Stack gap={4} style={{ overflow: "hidden" }}>
-      {leadersDetailed.map((leader, index) => (
+      {leaders.map((leader, index) => (
         <Leader
           key={index}
-          imageUrl={leader.imageUrl}
-          title={leader.title}
-          description={leader.description}
+          id={leader.id}
+          type={leader.type}
+          tgCount={leader.tgCount}
+          exhausted={leader.exhausted}
+          locked={leader.locked}
           active={leader.active}
         />
       ))}

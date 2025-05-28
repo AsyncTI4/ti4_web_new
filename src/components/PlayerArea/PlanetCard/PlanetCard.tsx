@@ -39,7 +39,8 @@ export function PlanetCard({
       return (
         <Image
           src={`/factions/${planetData.factionHomeworld}.png`}
-          style={{ width: "24px", height: "24px" }}
+          w={24}
+          h={24}
         />
       );
     }
@@ -52,37 +53,31 @@ export function PlanetCard({
       px={3}
       justify="space-between"
       h={140}
+      pos="relative"
       style={{
         borderRadius: "12px",
         background: `linear-gradient(135deg, ${colors.background} 0%, rgba(15, 23, 42, 0.6) 100%)`,
         border: `1px solid ${colors.border}`,
-        position: "relative",
         overflow: "hidden",
         boxShadow: `0 2px 8px ${colors.shadow}, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
       }}
     >
       {/* Subtle top highlight */}
       <Box
+        pos="absolute"
+        top={0}
+        left="20%"
+        right="20%"
+        h={1}
         style={{
-          position: "absolute",
-          top: 0,
-          left: "20%",
-          right: "20%",
-          height: "1px",
           background: colors.highlight,
         }}
       />
 
-      <Box
-        style={{
-          justifyContent: "center",
-          display: "flex",
-          width: "100%",
-        }}
-      >
+      <Box display="flex" style={{ justifyContent: "center" }} w="100%">
         {renderIcon()}
       </Box>
-      <Stack gap={4} style={{ position: "relative", zIndex: 1 }}>
+      <Stack gap={4} pos="relative" style={{ zIndex: 1 }}>
         <Group gap={0} align="flex-end">
           <Text
             size="xs"
@@ -106,57 +101,37 @@ export function PlanetCard({
                 ))}
               </Stack>
             )}
-            <Box
-              pos="relative"
-              style={{
-                width: "16px",
-                height: "16px",
-              }}
-            >
+            <Box pos="relative" w={16} h={16}>
               <Image
                 src="/pa_resources.png"
-                style={{
-                  width: "16px",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                }}
+                w={16}
+                pos="absolute"
+                top={0}
+                left={0}
               />
               <Text
                 size="xs"
                 c="white"
                 fw={700}
-                style={{
-                  position: "absolute",
-                  top: 1,
-                  left: 5,
-                }}
+                pos="absolute"
+                top={1}
+                left={5}
               >
                 {planetData.resources}
               </Text>
             </Box>
 
-            <Box
-              pos="relative"
-              style={{
-                width: "16px",
-                height: "16px",
-              }}
-            >
-              <Box
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                }}
-              >
+            <Box pos="relative" w={16} h={16}>
+              <Box pos="absolute" top={0} left={0}>
                 <InfluenceIcon size={18} />
               </Box>
               <Text
                 size="xs"
                 c="white"
                 fw={700}
-                style={{ position: "absolute", top: 2, left: 5 }}
+                pos="absolute"
+                top={2}
+                left={5}
               >
                 {planetData.influence}
               </Text>
