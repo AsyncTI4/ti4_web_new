@@ -31,17 +31,13 @@ const LAWS_IN_PLAY = [
 // Law component similar to ScoredSecret but larger and yellow-themed
 function LawCard({ title }: { title: string }) {
   return (
-    <Shimmer
-      color="cyan"
+    <Box
       p="sm"
       px="md"
       style={{
-        background:
-          "linear-gradient(135deg, rgba(234, 179, 8, 0.12) 0%, rgba(202, 138, 4, 0.08) 50%, rgba(234, 179, 8, 0.12) 100%)",
-        border: "2px solid rgba(234, 179, 8, 0.3)",
-        borderRadius: "4px", // More angular/administrative
-        boxShadow:
-          "0 2px 8px rgba(234, 179, 8, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+        background: "rgba(148, 163, 184, 0.08",
+        border: "1px solid rgba(148, 163, 184, 0.2)",
+        position: "relative",
       }}
     >
       <Box
@@ -53,6 +49,33 @@ function LawCard({ title }: { title: string }) {
           minWidth: 0,
         }}
       >
+        {/* Law gavel badge in top right - more prominent icon, less prominent circle */}
+        <Box
+          style={{
+            position: "absolute",
+            right: "-10px",
+            width: "40px",
+            height: "40px",
+            background:
+              "linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%)",
+            border: "1px solid rgba(148, 163, 184, 0.3)",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 3,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: "28px",
+              lineHeight: 1,
+            }}
+          >
+            ⚖
+          </Text>
+        </Box>
+
         {/* Administrative badge/seal background for faction icon */}
         <Box
           style={{
@@ -60,7 +83,7 @@ function LawCard({ title }: { title: string }) {
             height: "40px",
             background:
               "linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%)",
-            border: "2px solid rgba(234, 179, 8, 0.4)",
+            border: "1px solid rgba(148, 163, 184, 0.3)",
             borderRadius: "50%",
             display: "flex",
             alignItems: "center",
@@ -68,7 +91,7 @@ function LawCard({ title }: { title: string }) {
             flexShrink: 0,
             zIndex: 1,
             boxShadow:
-              "inset 2px 2px 4px rgba(0, 0, 0, 0.6), inset -1px -1px 2px rgba(234, 179, 8, 0.1)",
+              "inset 1px 1px 2px rgba(0, 0, 0, 0.5), inset -1px -1px 1px rgba(148, 163, 184, 0.05)",
           }}
         >
           <Image
@@ -77,7 +100,7 @@ function LawCard({ title }: { title: string }) {
               width: "24px",
               height: "24px",
               filter:
-                "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+                "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6)) brightness(1.05)",
             }}
           />
         </Box>
@@ -88,12 +111,12 @@ function LawCard({ title }: { title: string }) {
             flex: 1,
             background:
               "linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%)",
-            border: "1px solid rgba(234, 179, 8, 0.25)",
+            border: "1px solid rgba(148, 163, 184, 0.2)",
             borderRadius: "3px",
             padding: "6px 12px",
             position: "relative",
             overflow: "hidden",
-            boxShadow: "inset 1px 1px 3px rgba(0, 0, 0, 0.5)",
+            boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.4)",
           }}
         >
           {/* Subtle administrative pattern */}
@@ -107,34 +130,34 @@ function LawCard({ title }: { title: string }) {
               backgroundImage: `
                 repeating-linear-gradient(
                   45deg,
-                  rgba(234, 179, 8, 0.02) 0px,
-                  rgba(234, 179, 8, 0.02) 1px,
+                  rgba(148, 163, 184, 0.015) 0px,
+                  rgba(148, 163, 184, 0.015) 1px,
                   transparent 1px,
                   transparent 12px
                 ),
                 repeating-linear-gradient(
                   -45deg,
-                  rgba(234, 179, 8, 0.01) 0px,
-                  rgba(234, 179, 8, 0.01) 1px,
+                  rgba(148, 163, 184, 0.008) 0px,
+                  rgba(148, 163, 184, 0.008) 1px,
                   transparent 1px,
                   transparent 24px
                 )
               `,
               pointerEvents: "none",
-              opacity: 0.6,
+              opacity: 0.4,
             }}
           />
 
           <Text
             size="sm"
             fw={600}
-            c="yellow.2"
+            c="slate.2"
             style={{
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
               minWidth: 0,
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+              textShadow: "0 1px 1px rgba(0, 0, 0, 0.6)",
               fontSize: "13px",
               letterSpacing: "0.5px",
               textTransform: "uppercase",
@@ -146,7 +169,7 @@ function LawCard({ title }: { title: string }) {
           </Text>
         </Box>
       </Box>
-    </Shimmer>
+    </Box>
   );
 }
 
