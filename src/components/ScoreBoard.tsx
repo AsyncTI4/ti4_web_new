@@ -101,8 +101,8 @@ function ObjectiveCard({
 
         {/* Objective text */}
         <Text
-          size="xs"
-          fw={700}
+          size="sm"
+          ff="heading"
           c={revealed ? "white" : "gray.4"}
           style={{
             overflow: "hidden",
@@ -110,7 +110,7 @@ function ObjectiveCard({
             whiteSpace: "nowrap",
             minWidth: 0,
             flex: 1,
-            fontSize: "12px",
+            // fontSize: "12px",
           }}
         >
           {text}
@@ -316,8 +316,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
       cornerAccents={true}
       // label="SCOREBOARD"
       style={{
-        width: "75vw",
-        maxWidth: "75vw",
+        width: "100vw",
         background:
           "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
       }}
@@ -325,14 +324,14 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
       {/* Laws in Play Section */}
       <Box mb="xl">
         <Text
-          size="lg"
-          fw={700}
-          c="yellow.3"
+          size="sm"
+          fw={600}
+          c="gray.5"
           mb="md"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
-            textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+            fontSize: "12px",
           }}
         >
           Laws in Play
@@ -357,17 +356,17 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
       {/* Scorable Objectives Section */}
       <Box mb="xl">
         <Text
-          size="lg"
-          fw={700}
-          c="blue.3"
+          size="sm"
+          fw={600}
+          c="gray.5"
           mb="md"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
-            textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+            fontSize: "12px",
           }}
         >
-          Scorable Objectives
+          Public Objectives
         </Text>
         <SimpleGrid cols={3} spacing="lg">
           {/* Stage I Objectives (Orange) */}
