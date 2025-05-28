@@ -33,15 +33,15 @@ function LawCard({ title }: { title: string }) {
   return (
     <Shimmer
       color="cyan"
-      p="md"
-      px="lg"
+      p="sm"
+      px="md"
       style={{
         background:
-          "linear-gradient(135deg, rgba(234, 179, 8, 0.08) 0%, rgba(202, 138, 4, 0.05) 50%, rgba(234, 179, 8, 0.08) 100%)",
-        border: "1px solid rgba(234, 179, 8, 0.2)",
-        borderRadius: "8px",
+          "linear-gradient(135deg, rgba(234, 179, 8, 0.12) 0%, rgba(202, 138, 4, 0.08) 50%, rgba(234, 179, 8, 0.12) 100%)",
+        border: "2px solid rgba(234, 179, 8, 0.3)",
+        borderRadius: "4px", // More angular/administrative
         boxShadow:
-          "0 4px 12px rgba(234, 179, 8, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          "0 2px 8px rgba(234, 179, 8, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
       }}
     >
       <Box
@@ -49,79 +49,102 @@ function LawCard({ title }: { title: string }) {
           position: "relative",
           display: "flex",
           alignItems: "center",
-          gap: "12px",
+          gap: "10px",
           minWidth: 0,
         }}
       >
-        {/* Yellow shimmer overlay to override cyan */}
+        {/* Administrative badge/seal background for faction icon */}
         <Box
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "1px",
+            width: "40px",
+            height: "40px",
             background:
-              "linear-gradient(90deg, transparent 0%, #eab308 50%, transparent 100%)",
-            zIndex: 2,
-          }}
-        />
-        <Box
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "1px",
-            background:
-              "linear-gradient(90deg, transparent 0%, #eab308 50%, transparent 100%)",
-            zIndex: 2,
-          }}
-        />
-
-        {/* Additional subtle inner glow overlay */}
-        <Box
-          pos="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(234, 179, 8, 0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        <Image
-          src="/factions/saar.png"
-          style={{
-            width: "32px",
-            height: "32px",
-            filter:
-              "drop-shadow(0 2px 4px rgba(234, 179, 8, 0.4)) brightness(1.1)",
+              "linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%)",
+            border: "2px solid rgba(234, 179, 8, 0.4)",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             flexShrink: 0,
             zIndex: 1,
-          }}
-        />
-        <Text
-          size="sm"
-          fw={700}
-          c="white"
-          style={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            minWidth: 0,
-            flex: 1,
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-            zIndex: 1,
-            fontSize: "14px",
+            boxShadow:
+              "inset 2px 2px 4px rgba(0, 0, 0, 0.6), inset -1px -1px 2px rgba(234, 179, 8, 0.1)",
           }}
         >
-          {title}
-        </Text>
+          <Image
+            src="/factions/saar.png"
+            style={{
+              width: "24px",
+              height: "24px",
+              filter:
+                "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+            }}
+          />
+        </Box>
+
+        {/* Administrative text background */}
+        <Box
+          style={{
+            flex: 1,
+            background:
+              "linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%)",
+            border: "1px solid rgba(234, 179, 8, 0.25)",
+            borderRadius: "3px",
+            padding: "6px 12px",
+            position: "relative",
+            overflow: "hidden",
+            boxShadow: "inset 1px 1px 3px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          {/* Subtle administrative pattern */}
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `
+                repeating-linear-gradient(
+                  45deg,
+                  rgba(234, 179, 8, 0.02) 0px,
+                  rgba(234, 179, 8, 0.02) 1px,
+                  transparent 1px,
+                  transparent 12px
+                ),
+                repeating-linear-gradient(
+                  -45deg,
+                  rgba(234, 179, 8, 0.01) 0px,
+                  rgba(234, 179, 8, 0.01) 1px,
+                  transparent 1px,
+                  transparent 24px
+                )
+              `,
+              pointerEvents: "none",
+              opacity: 0.6,
+            }}
+          />
+
+          <Text
+            size="sm"
+            fw={600}
+            c="yellow.2"
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              minWidth: 0,
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+              fontSize: "13px",
+              letterSpacing: "0.5px",
+              textTransform: "uppercase",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            {title}
+          </Text>
+        </Box>
       </Box>
     </Shimmer>
   );
