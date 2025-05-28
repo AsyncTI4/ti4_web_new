@@ -38,6 +38,24 @@ const SHIMMER_COLORS = {
     shadow:
       "0 2px 8px rgba(6, 182, 212, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
   },
+  orange: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.6) 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(249, 115, 22, 0.06) 100%)",
+    border: "rgba(249, 115, 22, 0.25)",
+    shadow:
+      "0 2px 8px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+  },
+  gray: {
+    gradient:
+      "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.6) 50%, transparent 100%)",
+    background:
+      "linear-gradient(135deg, rgba(148, 163, 184, 0.12) 0%, rgba(148, 163, 184, 0.06) 100%)",
+    border: "rgba(148, 163, 184, 0.25)",
+    shadow:
+      "0 2px 8px rgba(148, 163, 184, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+  },
 };
 
 type ShimmerColor = keyof typeof SHIMMER_COLORS;

@@ -28,6 +28,126 @@ const LAWS_IN_PLAY = [
   "Shared Research",
 ];
 
+// Objective data
+const STAGE_1_OBJECTIVES = [
+  { text: "Develop Weaponry", vp: 1 },
+  { text: "Explore Deep Space", vp: 1 },
+  { text: "Intimidate Council", vp: 1 },
+  { text: "Sway the Council", vp: 1 },
+  { text: "Corner the Market", vp: 1 },
+];
+
+const STAGE_2_OBJECTIVES = [
+  { text: "Command an Armada", vp: 2, revealed: true },
+  { text: "Achieve Supremacy", vp: 2, revealed: true },
+  { text: "<Unrevealed>", vp: 2, revealed: false },
+  { text: "<Unrevealed>", vp: 2, revealed: false },
+  { text: "<Unrevealed>", vp: 2, revealed: false },
+];
+
+const OTHER_OBJECTIVES = [
+  { text: "Custodian/Imperial", vp: 1 },
+  { text: "Threaten Enemies", vp: 1 },
+];
+
+// Objective card component similar to ScoredSecret
+function ObjectiveCard({
+  text,
+  vp,
+  color,
+  revealed = true,
+}: {
+  text: string;
+  vp: number;
+  color: "orange" | "blue" | "gray";
+  revealed?: boolean;
+}) {
+  return (
+    <Shimmer
+      color={color}
+      p={2}
+      px="sm"
+      style={{ opacity: revealed ? 1 : 0.6, position: "relative" }}
+    >
+      <Box
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          minWidth: 0,
+          minHeight: "32px", // Ensure enough height for control tokens
+        }}
+      >
+        {/* VP indicator */}
+        <Box
+          style={{
+            width: "24px",
+            height: "24px",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: revealed
+              ? "1px solid rgba(255, 215, 0, 0.6)"
+              : "1px solid rgba(100, 100, 100, 0.4)",
+            borderWidth: "2px",
+          }}
+        >
+          <Text size="lg" fw={900} c={revealed ? "white" : "gray.5"}>
+            {vp}
+          </Text>
+        </Box>
+
+        {/* Objective text */}
+        <Text
+          size="xs"
+          fw={700}
+          c={revealed ? "white" : "gray.4"}
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            minWidth: 0,
+            flex: 1,
+            fontSize: "12px",
+          }}
+        >
+          {text}
+        </Text>
+
+        {/* Control token area */}
+        <Box
+          style={{
+            display: "flex",
+            gap: "2px",
+            alignItems: "center",
+            flexShrink: 0,
+            minWidth: "120px", // Space for 6 tokens with minimal spacing
+            height: "20px",
+            justifyContent: "flex-end",
+          }}
+        >
+          {/* Placeholder for control tokens - you can add actual tokens here */}
+          {Array.from({ length: 6 }, (_, i) => (
+            <Box
+              key={i}
+              style={{
+                width: "18px",
+                height: "18px",
+                border: "2px dashed rgba(255, 255, 255, 0.4)",
+                borderRadius: "50%",
+                opacity: 0.6,
+                background: "rgba(255, 255, 255, 0.05)",
+              }}
+            />
+          ))}
+        </Box>
+      </Box>
+    </Shimmer>
+  );
+}
+
 // Law component similar to ScoredSecret but larger and yellow-themed
 function LawCard({ title }: { title: string }) {
   return (
@@ -221,6 +341,139 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           {LAWS_IN_PLAY.map((law, index) => (
             <LawCard key={index} title={law} />
           ))}
+        </SimpleGrid>
+      </Box>
+
+      {/* Divider */}
+      <Box
+        style={{
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%)",
+          margin: "24px 0",
+        }}
+      />
+
+      {/* Scorable Objectives Section */}
+      <Box mb="xl">
+        <Text
+          size="lg"
+          fw={700}
+          c="blue.3"
+          mb="md"
+          style={{
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+            textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          Scorable Objectives
+        </Text>
+        <SimpleGrid cols={3} spacing="lg">
+          {/* Stage I Objectives (Orange) */}
+          <Box
+            style={{
+              background: "rgba(249, 115, 22, 0.04)",
+              border: "1px solid rgba(249, 115, 22, 0.1)",
+              borderRadius: "6px",
+              padding: "12px",
+            }}
+          >
+            <Text
+              size="md"
+              fw={600}
+              c="orange.3"
+              mb="sm"
+              style={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                fontSize: "14px",
+              }}
+            >
+              Stage I
+            </Text>
+            <Box
+              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+            >
+              {STAGE_1_OBJECTIVES.map((objective, index) => (
+                <ObjectiveCard
+                  key={index}
+                  text={objective.text}
+                  vp={objective.vp}
+                  color="orange"
+                />
+              ))}
+            </Box>
+          </Box>
+
+          {/* Stage II Objectives (Blue) */}
+          <Box
+            style={{
+              background: "rgba(59, 130, 246, 0.04)",
+              border: "1px solid rgba(59, 130, 246, 0.1)",
+              borderRadius: "6px",
+              padding: "12px",
+            }}
+          >
+            <Text
+              size="md"
+              fw={600}
+              c="blue.3"
+              mb="sm"
+              style={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                fontSize: "14px",
+              }}
+            >
+              Stage II
+            </Text>
+            <Box
+              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+            >
+              {STAGE_2_OBJECTIVES.map((objective, index) => (
+                <ObjectiveCard
+                  key={index}
+                  text={objective.text}
+                  vp={objective.vp}
+                  color="blue"
+                  revealed={objective.revealed}
+                />
+              ))}
+            </Box>
+          </Box>
+
+          {/* Other Objectives (Gray) */}
+          <Box>
+            <Text
+              size="md"
+              fw={600}
+              c="gray.3"
+              mb="sm"
+              style={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                fontSize: "14px",
+              }}
+            >
+              Other
+            </Text>
+            <Box
+              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+            >
+              {OTHER_OBJECTIVES.map((objective, index) => (
+                <ObjectiveCard
+                  key={index}
+                  text={objective.text}
+                  vp={objective.vp}
+                  color="gray"
+                />
+              ))}
+            </Box>
+          </Box>
         </SimpleGrid>
       </Box>
 
