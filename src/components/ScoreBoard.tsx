@@ -479,14 +479,14 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         >
           Public Objectives
         </Text>
-        <SimpleGrid cols={3} spacing="md">
+        <SimpleGrid cols={3} spacing="sm">
           {/* Stage I Objectives (Orange) */}
           <Box
             style={{
               background: "rgba(249, 115, 22, 0.04)",
               border: "1px solid rgba(249, 115, 22, 0.1)",
               borderRadius: "6px",
-              padding: "8px",
+              padding: "6px",
             }}
           >
             <Text
@@ -504,7 +504,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Stage I
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
             >
               {STAGE_1_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -523,7 +523,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               background: "rgba(59, 130, 246, 0.04)",
               border: "1px solid rgba(59, 130, 246, 0.1)",
               borderRadius: "6px",
-              padding: "8px",
+              padding: "6px",
             }}
           >
             <Text
@@ -541,7 +541,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Stage II
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
             >
               {STAGE_2_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -572,7 +572,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               Other
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "3px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
             >
               {OTHER_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
