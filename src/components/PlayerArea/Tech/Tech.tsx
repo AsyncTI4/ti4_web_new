@@ -1,4 +1,5 @@
 import { Box, Group, Text, Image, Tooltip } from "@mantine/core";
+import { techs } from "../../../data/tech";
 
 // Tech color configurations
 const TECH_COLOR_CONFIG = {
@@ -61,21 +62,54 @@ const TECH_COLOR_CONFIG = {
 
 type TechColor = keyof typeof TECH_COLOR_CONFIG;
 
-type Props = {
-  tech: {
-    name: string;
-    color: TechColor;
-    tier: number;
-    isFaction?: boolean;
-    factionIcon?: string;
-  };
+// Helper function to get tech color from type
+const getTechColor = (techType: string): TechColor => {
+  switch (techType) {
+    case "PROPULSION":
+      return "blue";
+    case "BIOTIC":
+      return "green";
+    case "WARFARE":
+      return "red";
+    case "CYBERNETIC":
+      return "yellow";
+    default:
+      return "grey";
+  }
 };
 
-export function Tech({ tech }: Props) {
-  const config = TECH_COLOR_CONFIG[tech.color] || TECH_COLOR_CONFIG.blue;
+// Helper function to get tier from requirements
+const getTechTier = (requirements?: string): number => {
+  if (!requirements) return 0;
+
+  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
+  const matches = requirements.match(/(.)\1*/g);
+  if (matches && matches.length > 0) {
+    return matches[0].length;
+  }
+
+  return 0;
+};
+
+type Props = {
+  techId: string;
+};
+
+export function Tech({ techId }: Props) {
+  // Look up tech data
+  const techData = techs.find((tech) => tech.alias === techId);
+
+  if (!techData) {
+    console.warn(`Tech with ID "${techId}" not found`);
+    return null;
+  }
+
+  const color = getTechColor(techData.types[0]);
+  const tier = getTechTier(techData.requirements);
+  const config = TECH_COLOR_CONFIG[color] || TECH_COLOR_CONFIG.blue;
 
   return (
-    <Tooltip label={tech.name}>
+    <Tooltip label={techData.name}>
       <Box
         py={1}
         px="xs"
@@ -98,7 +132,7 @@ export function Tech({ tech }: Props) {
           }}
         />
         {/* Tier indicator dots in top-right */}
-        {tech.tier > 0 && (
+        {tier > 0 && (
           <Box
             style={{
               position: "absolute",
@@ -111,7 +145,7 @@ export function Tech({ tech }: Props) {
               justifyContent: "flex-end",
             }}
           >
-            {[...Array(tech.tier)].map((_, dotIndex) => (
+            {[...Array(tier)].map((_, dotIndex) => (
               <Box
                 key={dotIndex}
                 style={{
@@ -126,30 +160,16 @@ export function Tech({ tech }: Props) {
           </Box>
         )}
         <Group gap={4} style={{ position: "relative", minWidth: 0 }}>
-          {/* Show faction icon for faction techs, otherwise show color icon */}
-          {tech.isFaction ? (
-            <Image
-              src={tech.factionIcon || "/sol.png"}
-              alt={tech.name}
-              style={{
-                width: "14px",
-                height: "14px",
-                filter: config.iconFilter,
-                flexShrink: 0,
-              }}
-            />
-          ) : (
-            <Image
-              src={`/${tech.color}.png`}
-              alt={tech.name}
-              style={{
-                width: "14px",
-                height: "14px",
-                filter: config.iconFilter,
-                flexShrink: 0,
-              }}
-            />
-          )}
+          <Image
+            src={`/${color}.png`}
+            alt={techData.name}
+            style={{
+              width: "14px",
+              height: "14px",
+              filter: config.iconFilter,
+              flexShrink: 0,
+            }}
+          />
           <Text
             size="xs"
             c="white"
@@ -165,7 +185,7 @@ export function Tech({ tech }: Props) {
               flex: 1,
             }}
           >
-            {tech.name}
+            {techData.name}
           </Text>
         </Group>
       </Box>

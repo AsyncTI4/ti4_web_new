@@ -1,54 +1,50 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
-
-// Planet color configurations by trait
-const PLANET_COLORS = {
-  cultural: {
-    background: "rgba(59, 130, 246, 0.12)",
-    border: "rgba(59, 130, 246, 0.3)",
-    shadow: "rgba(59, 130, 246, 0.08)",
-    highlight: "rgba(59, 130, 246, 0.4)",
-  },
-  hazardous: {
-    background: "rgba(239, 68, 68, 0.12)",
-    border: "rgba(239, 68, 68, 0.3)",
-    shadow: "rgba(239, 68, 68, 0.08)",
-    highlight: "rgba(239, 68, 68, 0.4)",
-  },
-  industrial: {
-    background: "rgba(34, 197, 94, 0.12)",
-    border: "rgba(34, 197, 94, 0.3)",
-    shadow: "rgba(34, 197, 94, 0.08)",
-    highlight: "rgba(34, 197, 94, 0.4)",
-  },
-  // Default for planets without traits (like Mecatol Rex)
-  default: {
-    background: "rgba(107, 114, 128, 0.12)",
-    border: "rgba(107, 114, 128, 0.3)",
-    shadow: "rgba(107, 114, 128, 0.08)",
-    highlight: "rgba(107, 114, 128, 0.4)",
-  },
-};
-
-type PlanetTrait = keyof typeof PLANET_COLORS;
-type TechSkip = "biotic" | "propulsion" | "cybernetic" | "warfare";
+import { planets } from "../../../data/planets";
 
 type Props = {
-  planet: {
-    name: string;
-    resources: number;
-    influence: number;
-    trait?: PlanetTrait;
-    techSkip?: TechSkip;
-  };
+  planetId: string;
   planetTraitIcons: Record<string, React.ReactNode>;
   techSkipIcons: Record<string, React.ReactNode>;
 };
 
-export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
+export function PlanetCard({
+  planetId,
+  planetTraitIcons,
+  techSkipIcons,
+}: Props) {
+  const planetData = getPlanetData(planetId);
+
+  if (!planetData) {
+    console.warn(`Planet data not found for ID: ${planetId}`);
+    return null;
+  }
+
   const colors =
-    PLANET_COLORS[planet.trait || "default"] || PLANET_COLORS.default;
+    PLANET_COLORS[planetData.planetType as PlanetType] || PLANET_COLORS.default;
+
+  const traitIconKey = getTraitIconKey(planetData.planetType);
+
+  // Get all tech skip icons for this planet
+  const techSkipIconElements =
+    planetData.techSpecialties
+      ?.map((specialty) => getTechSkipIconKey(specialty))
+      .filter((key) => key !== null)
+      .map((key) => techSkipIcons[key!]) || [];
+
+  // For faction planets, render faction icon instead of trait icon
+  const renderIcon = () => {
+    if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
+      return (
+        <Image
+          src={`/factions/${planetData.factionHomeworld}.png`}
+          style={{ width: "24px", height: "24px" }}
+        />
+      );
+    }
+    return traitIconKey && planetTraitIcons[traitIconKey];
+  };
 
   return (
     <Stack
@@ -77,7 +73,15 @@ export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
         }}
       />
 
-      <Box align="center">{planet.trait && planetTraitIcons[planet.trait]}</Box>
+      <Box
+        style={{
+          justifyContent: "center",
+          display: "flex",
+          width: "100%",
+        }}
+      >
+        {renderIcon()}
+      </Box>
       <Stack gap={4} style={{ position: "relative", zIndex: 1 }}>
         <Group gap={0} align="flex-end">
           <Text
@@ -92,10 +96,16 @@ export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
             }}
           >
-            {planet.name}
+            {planetData.name}
           </Text>
           <Stack gap={2} align="top">
-            {planet.techSkip && techSkipIcons[planet.techSkip]}
+            {techSkipIconElements.length > 0 && (
+              <Stack gap={1}>
+                {techSkipIconElements.map((icon, index) => (
+                  <Box key={index}>{icon}</Box>
+                ))}
+              </Stack>
+            )}
             <Box
               pos="relative"
               style={{
@@ -122,7 +132,7 @@ export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
                   left: 5,
                 }}
               >
-                {planet.resources}
+                {planetData.resources}
               </Text>
             </Box>
 
@@ -148,7 +158,7 @@ export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
                 fw={700}
                 style={{ position: "absolute", top: 2, left: 5 }}
               >
-                {planet.influence}
+                {planetData.influence}
               </Text>
             </Box>
           </Stack>
@@ -157,3 +167,69 @@ export function PlanetCard({ planet, planetTraitIcons, techSkipIcons }: Props) {
     </Stack>
   );
 }
+
+const getPlanetData = (planetId: string) => {
+  return planets[planetId as keyof typeof planets];
+};
+
+const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
+
+const getTraitIconKey = (planetType: string): string | null => {
+  const lowercase = planetType.toLowerCase();
+  return VALID_PLANET_TYPES.has(lowercase) ? lowercase : null;
+};
+
+const VALID_TECH_SPECIALTIES = new Set([
+  "biotic",
+  "propulsion",
+  "cybernetic",
+  "warfare",
+]);
+
+const getTechSkipIconKey = (techSpecialty: string): string | null => {
+  const lowercase = techSpecialty.toLowerCase();
+  return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
+};
+
+// Planet color configurations by trait
+const PLANET_COLORS = {
+  CULTURAL: {
+    background: "rgba(59, 130, 246, 0.12)",
+    border: "rgba(59, 130, 246, 0.3)",
+    shadow: "rgba(59, 130, 246, 0.08)",
+    highlight: "rgba(59, 130, 246, 0.4)",
+  },
+  HAZARDOUS: {
+    background: "rgba(239, 68, 68, 0.12)",
+    border: "rgba(239, 68, 68, 0.3)",
+    shadow: "rgba(239, 68, 68, 0.08)",
+    highlight: "rgba(239, 68, 68, 0.4)",
+  },
+  INDUSTRIAL: {
+    background: "rgba(34, 197, 94, 0.12)",
+    border: "rgba(34, 197, 94, 0.3)",
+    shadow: "rgba(34, 197, 94, 0.08)",
+    highlight: "rgba(34, 197, 94, 0.4)",
+  },
+  FACTION: {
+    background: "rgba(107, 114, 128, 0.12)",
+    border: "rgba(107, 114, 128, 0.3)",
+    shadow: "rgba(107, 114, 128, 0.08)",
+    highlight: "rgba(107, 114, 128, 0.4)",
+  },
+  MR: {
+    background: "rgba(107, 114, 128, 0.12)",
+    border: "rgba(107, 114, 128, 0.3)",
+    shadow: "rgba(107, 114, 128, 0.08)",
+    highlight: "rgba(107, 114, 128, 0.4)",
+  },
+  // Default for planets without traits
+  default: {
+    background: "rgba(107, 114, 128, 0.12)",
+    border: "rgba(107, 114, 128, 0.3)",
+    shadow: "rgba(107, 114, 128, 0.08)",
+    highlight: "rgba(107, 114, 128, 0.4)",
+  },
+};
+
+type PlanetType = keyof typeof PLANET_COLORS;

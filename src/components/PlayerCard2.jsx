@@ -25,6 +25,18 @@ import { UnitCard } from "./PlayerArea/UnitCard";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
+import { techs as techsData } from "../data/tech";
+import { planets } from "../data/planets";
+
+// Helper function to get tech data by ID
+const getTechData = (techId) => {
+  return techsData.find((tech) => tech.alias === techId);
+};
+
+// Helper function to get planet data by ID
+const getPlanetData = (planetId) => {
+  return planets[planetId];
+};
 
 // Default player card data including all static and default prop data
 const DEFAULT_PLAYER_CARD_DATA = {
@@ -61,52 +73,19 @@ const DEFAULT_PLAYER_CARD_DATA = {
     letnev: 1,
   },
   techs: ["amd", "gd", "fl", "lwd", "st", "ps", "dxa", "hm", "ie"],
-  relics: [
-    "Shard of the Throne",
-    "Crown of Emphidia",
-    "Obsidian",
-    "Stellar Converter",
-  ],
-  promissoryNotesDetailed: [
-    {
-      name: "Alliance",
-      factionIcon: "/factions/hacan.png",
-      isOtherFaction: true,
-    },
-    {
-      name: "Alliance",
-      factionIcon: "/factions/letnev.png",
-      isOtherFaction: true,
-    },
-    {
-      name: "Support for the Throne",
-      factionIcon: "/factions/titans.png",
-      isOtherFaction: true,
-    },
-  ],
+  relics: ["shard", "emphidia", "obsidian", "stellarconverter"],
+  promissoryNotes: ["convoys", "war_funding", "terraform"],
   planets: [
-    { name: "Mecatol Rex", resources: 1, influence: 6 },
-    {
-      name: "Abyz",
-      resources: 3,
-      influence: 0,
-      trait: "hazardous",
-      techSkip: "warfare",
-    },
-    { name: "Fria", resources: 2, influence: 0, trait: "hazardous" },
-    { name: "Bereg", resources: 3, influence: 1, trait: "hazardous" },
-    { name: "Lirta IV", resources: 2, influence: 3, trait: "industrial" },
-    {
-      name: "Meer",
-      resources: 0,
-      influence: 4,
-      trait: "cultural",
-      techSkip: "biotic",
-    },
-    { name: "Arinam", resources: 1, influence: 2, trait: "industrial" },
-    { name: "Arnor", resources: 2, influence: 1, trait: "industrial" },
-    { name: "Lor", resources: 1, influence: 2, trait: "industrial" },
-    { name: "Winnu", resources: 3, influence: 1, trait: "cultural" },
+    "mr",
+    "abyz",
+    "fria",
+    "bereg",
+    "lirtaiv",
+    "meer",
+    "arinam",
+    "arnor",
+    "lor",
+    "winnu",
   ],
   neighborFactions: [
     { factionIcon: "/factions/hacan.png" },
@@ -230,7 +209,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     debts,
     techs,
     relics,
-    promissoryNotesDetailed,
+    promissoryNotes,
     planets,
     neighborFactions,
     scoredSecrets,
@@ -239,14 +218,15 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     cardbacks,
   } = { ...DEFAULT_PLAYER_CARD_DATA, ...props };
 
-  const totalResources = planets.reduce(
-    (sum, planet) => sum + planet.resources,
-    0
-  );
-  const totalInfluence = planets.reduce(
-    (sum, planet) => sum + planet.influence,
-    0
-  );
+  const totalResources = planets.reduce((sum, planetId) => {
+    const planetData = getPlanetData(planetId);
+    return sum + (planetData ? planetData.resources : 0);
+  }, 0);
+
+  const totalInfluence = planets.reduce((sum, planetId) => {
+    const planetData = getPlanetData(planetId);
+    return sum + (planetData ? planetData.influence : 0);
+  }, 0);
 
   const planetTraitIcons = {
     cultural: (
@@ -332,13 +312,8 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
 
   const PromissoryNoteStack = (
     <Stack gap={4}>
-      {promissoryNotesDetailed.map((note, index) => (
-        <PromissoryNote
-          key={index}
-          name={note.name}
-          factionIcon={note.factionIcon}
-          isOtherFaction={note.isOtherFaction}
-        />
+      {promissoryNotes.map((noteId, index) => (
+        <PromissoryNote key={index} promissoryNoteId={noteId} />
       ))}
     </Stack>
   );
@@ -368,8 +343,8 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
 
   const RelicStack = (
     <Stack gap={4} w={{ base: "100%", sm: "fit-content" }}>
-      {relics.map((relic, index) => (
-        <Relic key={index} name={relic} />
+      {relics.map((relicId, index) => (
+        <Relic key={index} relicId={relicId} />
       ))}
     </Stack>
   );
@@ -825,9 +800,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                         >
                           <Stack gap={4}>
                             {techs
-                              .filter((v) => v.color === "blue")
-                              .map((tech, index) => (
-                                <Tech key={index} tech={tech} />
+                              .filter((techId) => {
+                                const techData = getTechData(techId);
+                                return techData?.types[0] === "PROPULSION";
+                              })
+                              .map((techId, index) => (
+                                <Tech key={index} techId={techId} />
                               ))}
                           </Stack>
                         </Grid.Col>
@@ -840,9 +818,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                         >
                           <Stack gap={4}>
                             {techs
-                              .filter((v) => v.color === "yellow")
-                              .map((tech, index) => (
-                                <Tech key={index} tech={tech} />
+                              .filter((techId) => {
+                                const techData = getTechData(techId);
+                                return techData?.types[0] === "CYBERNETIC";
+                              })
+                              .map((techId, index) => (
+                                <Tech key={index} techId={techId} />
                               ))}
                           </Stack>
                         </Grid.Col>
@@ -855,9 +836,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                         >
                           <Stack gap={4}>
                             {techs
-                              .filter((v) => v.color === "green")
-                              .map((tech, index) => (
-                                <Tech key={index} tech={tech} />
+                              .filter((techId) => {
+                                const techData = getTechData(techId);
+                                return techData?.types[0] === "BIOTIC";
+                              })
+                              .map((techId, index) => (
+                                <Tech key={index} techId={techId} />
                               ))}
                           </Stack>
                         </Grid.Col>
@@ -870,9 +854,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                         >
                           <Stack gap={4}>
                             {techs
-                              .filter((v) => v.color === "red")
-                              .map((tech, index) => (
-                                <Tech key={index} tech={tech} />
+                              .filter((techId) => {
+                                const techData = getTechData(techId);
+                                return techData?.types[0] === "WARFARE";
+                              })
+                              .map((techId, index) => (
+                                <Tech key={index} techId={techId} />
                               ))}
                           </Stack>
                         </Grid.Col>
@@ -962,10 +949,10 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                     }}
                   >
                     <Group gap="xs" style={{ position: "relative", zIndex: 1 }}>
-                      {planets.map((planet, index) => (
+                      {planets.map((planetId, index) => (
                         <PlanetCard
                           key={index}
-                          planet={planet}
+                          planetId={planetId}
                           planetTraitIcons={planetTraitIcons}
                           techSkipIcons={techSkipIcons}
                         />
@@ -985,9 +972,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                     width: "fit-content",
                   }}
                 >
-                  {relics.map((relic, index) => (
-                    <Relic key={index} name={relic} />
-                  ))}
+                  {RelicStack}
                 </Stack>
               </Grid.Col>
             </Grid>
