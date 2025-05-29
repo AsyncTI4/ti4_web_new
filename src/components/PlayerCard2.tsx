@@ -26,25 +26,16 @@ import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
+import { getGradientConfig, ColorKey } from "./PlayerArea/gradients";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData } from "@/data/pbd10242";
 
-// Gradient dictionary for header bottom border accents
-const HEADER_GRADIENTS = {
-  pink: "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
-  yellow:
-    "linear-gradient(90deg, transparent 0%, rgba(234, 179, 8, 0.5) 20%, rgba(234, 179, 8, 0.5) 80%, transparent 100%)",
-  green:
-    "linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.5) 20%, rgba(34, 197, 94, 0.5) 80%, transparent 100%)",
-  purple:
-    "linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.5) 20%, rgba(147, 51, 234, 0.5) 80%, transparent 100%)",
-  gray: "linear-gradient(90deg, transparent 0%, rgba(107, 114, 128, 0.5) 20%, rgba(107, 114, 128, 0.5) 80%, transparent 100%)",
-  orange:
-    "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 20%, rgba(249, 115, 22, 0.5) 80%, transparent 100%)",
-  red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
-  blue: "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
+// Helper function to get header gradient from color
+const getHeaderGradient = (color: string): string => {
+  const gradientConfig = getGradientConfig(color as ColorKey);
+  return gradientConfig.shimmer;
 };
 
 // Helper function to get tech data by ID
@@ -393,7 +384,7 @@ export default function PlayerCard2(props: Props) {
             right={0}
             h={8}
             style={{
-              background: (HEADER_GRADIENTS as any)[color],
+              background: getHeaderGradient(color),
             }}
           />
 

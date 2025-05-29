@@ -1,69 +1,9 @@
 import { Box, Group, Text, Image, Tooltip } from "@mantine/core";
 import { techs } from "../../../data/tech";
-
-// Tech color configurations
-const TECH_COLOR_CONFIG = {
-  blue: {
-    background:
-      "linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)",
-    border: "rgba(59, 130, 246, 0.2)",
-    leftBorder:
-      "linear-gradient(180deg, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.2) 100%)",
-    tierDot: "rgba(59, 130, 246, 0.9)",
-    tierShadow:
-      "0 0 3px rgba(59, 130, 246, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-    iconFilter: "drop-shadow(0 0 3px rgba(59, 130, 246, 0.3))",
-  },
-  yellow: {
-    background:
-      "linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.05) 100%)",
-    border: "rgba(234, 179, 8, 0.2)",
-    leftBorder:
-      "linear-gradient(180deg, rgba(234, 179, 8, 0.6) 0%, rgba(234, 179, 8, 0.2) 100%)",
-    tierDot: "rgba(234, 179, 8, 0.9)",
-    tierShadow:
-      "0 0 3px rgba(234, 179, 8, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-    iconFilter: "drop-shadow(0 0 3px rgba(234, 179, 8, 0.3))",
-  },
-  green: {
-    background:
-      "linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
-    border: "rgba(34, 197, 94, 0.2)",
-    leftBorder:
-      "linear-gradient(180deg, rgba(34, 197, 94, 0.6) 0%, rgba(34, 197, 94, 0.2) 100%)",
-    tierDot: "rgba(34, 197, 94, 0.9)",
-    tierShadow:
-      "0 0 3px rgba(34, 197, 94, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-    iconFilter: "drop-shadow(0 0 3px rgba(34, 197, 94, 0.3))",
-  },
-  red: {
-    background:
-      "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
-    border: "rgba(239, 68, 68, 0.2)",
-    leftBorder:
-      "linear-gradient(180deg, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.2) 100%)",
-    tierDot: "rgba(239, 68, 68, 0.9)",
-    tierShadow:
-      "0 0 3px rgba(239, 68, 68, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-    iconFilter: "drop-shadow(0 0 3px rgba(239, 68, 68, 0.3))",
-  },
-  grey: {
-    background:
-      "linear-gradient(90deg, rgba(107, 114, 128, 0.15) 0%, rgba(107, 114, 128, 0.08) 100%)",
-    border: "rgba(107, 114, 128, 0.3)",
-    leftBorder:
-      "linear-gradient(180deg, rgba(107, 114, 128, 0.7) 0%, rgba(107, 114, 128, 0.3) 100%)",
-    tierDot: "rgba(107, 114, 128, 0.9)",
-    tierShadow:
-      "0 0 3px rgba(107, 114, 128, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3)",
-    iconFilter: "drop-shadow(0 0 3px rgba(107, 114, 128, 0.3))",
-  },
-};
-
-type TechColor = keyof typeof TECH_COLOR_CONFIG;
+import { getGradientConfig, ColorKey } from "../gradients";
 
 // Helper function to get tech color from type
-const getTechColor = (techType: string): TechColor => {
+const getTechColor = (techType: string): ColorKey => {
   switch (techType) {
     case "PROPULSION":
       return "blue";
@@ -106,7 +46,7 @@ export function Tech({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
-  const config = TECH_COLOR_CONFIG[color] || TECH_COLOR_CONFIG.blue;
+  const gradientConfig = getGradientConfig(color);
 
   return (
     <Tooltip label={techData.name}>
@@ -115,8 +55,8 @@ export function Tech({ techId }: Props) {
         px="xs"
         style={{
           borderRadius: "4px",
-          background: config.background,
-          border: `1px solid ${config.border}`,
+          background: gradientConfig.background,
+          border: `1px solid ${gradientConfig.border}`,
           position: "relative",
           overflow: "hidden",
         }}
@@ -128,7 +68,7 @@ export function Tech({ techId }: Props) {
             top: 0,
             bottom: 0,
             width: "2px",
-            background: config.leftBorder,
+            background: gradientConfig.leftBorder,
           }}
         />
         {/* Tier indicator dots in top-right */}
@@ -152,8 +92,8 @@ export function Tech({ techId }: Props) {
                   width: "3px",
                   height: "3px",
                   borderRadius: "50%",
-                  background: config.tierDot,
-                  boxShadow: config.tierShadow,
+                  background: gradientConfig.accent,
+                  boxShadow: `0 0 3px ${gradientConfig.accent}, inset 0 0 1px rgba(255, 255, 255, 0.3)`,
                 }}
               />
             ))}
@@ -166,7 +106,7 @@ export function Tech({ techId }: Props) {
             style={{
               width: "14px",
               height: "14px",
-              filter: config.iconFilter,
+              filter: gradientConfig.iconFilter,
               flexShrink: 0,
             }}
           />

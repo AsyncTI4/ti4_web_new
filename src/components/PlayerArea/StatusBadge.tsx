@@ -1,4 +1,5 @@
 import { Box, Text } from "@mantine/core";
+import { getGradientConfig } from "./gradients";
 
 type Props = {
   status: "active" | "passed" | "next" | "waiting";
@@ -7,38 +8,22 @@ type Props = {
 
 const statusConfig = {
   active: {
-    background:
-      "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
-    border: "1px solid rgba(34, 197, 94, 0.25)",
-    boxShadow:
-      "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+    color: "green" as const,
     textColor: "green.3",
     defaultText: "ACTIVE",
   },
   passed: {
-    background:
-      "linear-gradient(135deg, rgba(107, 114, 128, 0.12) 0%, rgba(75, 85, 99, 0.06) 100%)",
-    border: "1px solid rgba(107, 114, 128, 0.25)",
-    boxShadow:
-      "0 2px 8px rgba(107, 114, 128, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+    color: "grey" as const,
     textColor: "gray.4",
     defaultText: "PASSED",
   },
   next: {
-    background:
-      "linear-gradient(135deg, rgba(107, 114, 128, 0.08) 0%, rgba(75, 85, 99, 0.04) 100%)",
-    border: "1px solid rgba(107, 114, 128, 0.2)",
-    boxShadow:
-      "0 2px 8px rgba(107, 114, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+    color: "gray" as const,
     textColor: "gray.5",
     defaultText: "NEXT UP",
   },
   waiting: {
-    background:
-      "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(37, 99, 235, 0.06) 100%)",
-    border: "1px solid rgba(59, 130, 246, 0.25)",
-    boxShadow:
-      "0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+    color: "blue" as const,
     textColor: "blue.4",
     defaultText: "WAITING",
   },
@@ -46,6 +31,7 @@ const statusConfig = {
 
 export function StatusBadge({ status, text }: Props) {
   const config = statusConfig[status];
+  const gradientConfig = getGradientConfig(config.color);
   const displayText = text || config.defaultText;
 
   return (
@@ -54,9 +40,9 @@ export function StatusBadge({ status, text }: Props) {
       py={2}
       style={{
         borderRadius: "6px",
-        background: config.background,
-        border: config.border,
-        boxShadow: config.boxShadow,
+        background: gradientConfig.background,
+        border: `1px solid ${gradientConfig.border}`,
+        boxShadow: gradientConfig.shadow,
       }}
     >
       <Text

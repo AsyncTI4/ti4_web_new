@@ -1,6 +1,7 @@
 import { Box, Text, Image } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 import { secretObjectives } from "../../../data/secretObjectives";
+import { getGradientConfig } from "../gradients";
 
 type Props = {
   secretId: string;
@@ -12,6 +13,7 @@ export function ScoredSecret({ secretId, score }: Props) {
     (secret) => secret.alias === secretId
   );
   const secretName = secretData?.name || secretId;
+  const redConfig = getGradientConfig("red");
 
   return (
     <Shimmer color="red" py={2} px={6}>
@@ -29,7 +31,7 @@ export function ScoredSecret({ secretId, score }: Props) {
           style={{
             width: "20px",
             height: "20px",
-            filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
+            filter: redConfig.iconFilter,
             flexShrink: 0,
           }}
         />

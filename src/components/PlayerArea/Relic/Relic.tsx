@@ -1,5 +1,6 @@
 import { Box, Text, Image, Tooltip } from "@mantine/core";
 import { relics } from "../../../data/relics";
+import { SPECIAL_GRADIENTS } from "../gradients";
 
 type RelicData = {
   alias: string;
@@ -25,6 +26,8 @@ export function Relic({ relicId }: Props) {
     return null;
   }
 
+  const relicConfig = SPECIAL_GRADIENTS.relic;
+
   return (
     <Tooltip label={relicData.text}>
       <Box
@@ -32,9 +35,8 @@ export function Relic({ relicId }: Props) {
         px={6}
         style={{
           borderRadius: "6px",
-          background:
-            "linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%)",
-          border: "1px solid rgba(251, 191, 36, 0.4)",
+          background: relicConfig.background,
+          border: `1px solid ${relicConfig.border}`,
           position: "relative",
           overflow: "hidden",
           minWidth: 0,
@@ -48,15 +50,7 @@ export function Relic({ relicId }: Props) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: `
-              repeating-linear-gradient(
-                45deg,
-                rgba(251, 191, 36, 0.08) 0px,
-                rgba(251, 191, 36, 0.08) 1px,
-                transparent 1px,
-                transparent 16px
-              )
-            `,
+            backgroundImage: relicConfig.pattern,
             pointerEvents: "none",
             opacity: 0.5,
           }}
@@ -70,8 +64,7 @@ export function Relic({ relicId }: Props) {
             left: 0,
             right: 0,
             bottom: 0,
-            background:
-              "radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%)",
+            background: relicConfig.innerGlow,
             pointerEvents: "none",
           }}
         />
@@ -93,7 +86,7 @@ export function Relic({ relicId }: Props) {
             style={{
               width: "16px",
               height: "16px",
-              filter: "drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3))",
+              filter: relicConfig.iconFilter,
               flexShrink: 0,
             }}
           />
