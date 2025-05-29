@@ -46,10 +46,26 @@ export function Tech({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
+  const isFactionTech = !!techData.faction;
 
   return (
     <Tooltip label={techData.name}>
       <Box py={1} px="xs" className={`${styles.techCard} ${styles[color]}`}>
+        {/* Faction icon for faction techs - positioned before tier dots */}
+        {isFactionTech && (
+          <Box pos="absolute" top={3} right={tier > 0 ? 20 : 4}>
+            <Image
+              src={`/factions/${techData.faction}.png`}
+              alt={`${techData.faction} faction`}
+              w={14}
+              h={14}
+              style={{
+                flexShrink: 0,
+              }}
+            />
+          </Box>
+        )}
+
         {/* Tier indicator dots in top-right */}
         {tier > 0 && (
           <Box

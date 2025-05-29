@@ -843,11 +843,6 @@ export default function PlayerCard2(props: Props) {
                           key={index}
                           planetId={planetId}
                           exhausted={exhaustedPlanets.includes(planetId)}
-                          techSkipIcon={
-                            techSkipIcons[
-                              planetId as keyof typeof techSkipIcons
-                            ]
-                          }
                         />
                       ))}
                     </Group>

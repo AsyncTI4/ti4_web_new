@@ -52,15 +52,34 @@ export function Surface({
         ...boxProps.style,
       }}
     >
+      {/* Label */}
+      {label && (
+        <Text
+          size="xs"
+          fw={700}
+          c="blueGray.3"
+          pos="absolute"
+          bottom={15}
+          right={20}
+          style={{
+            textTransform: "uppercase",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        >
+          {label}
+        </Text>
+      )}
+
       {/* Pattern overlay */}
       {pattern !== "none" && (
         <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             pointerEvents: "none",
             opacity: 0.5,
             ...getPatternOverlay(),
@@ -72,12 +91,12 @@ export function Surface({
       {cornerAccents && (
         <>
           <Box
+            pos="absolute"
+            top={8}
+            left={8}
+            w={20}
+            h={20}
             style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              width: "20px",
-              height: "20px",
               border: "2px solid rgba(59, 130, 246, 0.1)",
               borderRight: "none",
               borderBottom: "none",
@@ -85,12 +104,12 @@ export function Surface({
             }}
           />
           <Box
+            pos="absolute"
+            top={8}
+            right={8}
+            w={20}
+            h={20}
             style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              width: "20px",
-              height: "20px",
               border: "2px solid rgba(59, 130, 246, 0.1)",
               borderLeft: "none",
               borderBottom: "none",
@@ -98,12 +117,12 @@ export function Surface({
             }}
           />
           <Box
+            pos="absolute"
+            bottom={8}
+            left={8}
+            w={20}
+            h={20}
             style={{
-              position: "absolute",
-              bottom: "8px",
-              left: "8px",
-              width: "20px",
-              height: "20px",
               border: "2px solid rgba(59, 130, 246, 0.1)",
               borderRight: "none",
               borderTop: "none",
@@ -111,12 +130,12 @@ export function Surface({
             }}
           />
           <Box
+            pos="absolute"
+            bottom={8}
+            right={8}
+            w={20}
+            h={20}
             style={{
-              position: "absolute",
-              bottom: "8px",
-              right: "8px",
-              width: "20px",
-              height: "20px",
               border: "2px solid rgba(59, 130, 246, 0.1)",
               borderLeft: "none",
               borderTop: "none",
@@ -124,24 +143,6 @@ export function Surface({
             }}
           />
         </>
-      )}
-
-      {/* Label */}
-      {label && (
-        <Text
-          size="xs"
-          fw={700}
-          c="blueGray.3"
-          style={{
-            textTransform: "uppercase",
-            bottom: 15,
-            position: "absolute",
-            right: 20,
-            zIndex: 1,
-          }}
-        >
-          {label}
-        </Text>
       )}
 
       {children}
