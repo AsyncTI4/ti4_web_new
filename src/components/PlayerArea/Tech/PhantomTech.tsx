@@ -15,7 +15,7 @@ export function PhantomTech({ techType }: Props) {
         position: "relative",
         overflow: "hidden",
         opacity: 0.3,
-        height: "20px", // Fixed height to match Tech component
+        height: "20.8px", // Fixed height to match Tech component
         display: "flex",
         alignItems: "center",
       }}

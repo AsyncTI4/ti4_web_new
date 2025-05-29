@@ -680,13 +680,64 @@ export default function PlayerCard2(props: Props) {
             <Stack>
               {CardbackStack}
               <Group gap="xs" justify="space-around" align="center">
-                <Box>
-                  <Text ff="mono" size="sm">
-                    T/F/S
-                  </Text>
-                  <Text ff="mono" size="sm">
-                    {tactics}/{fleet}/{strategy}
-                  </Text>
+                <Box
+                  p="xs"
+                  style={{
+                    borderRadius: "6px",
+                    background:
+                      "linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 50%, rgba(59, 130, 246, 0.15) 100%)",
+                    border: "1px solid rgba(59, 130, 246, 0.3)",
+                    boxShadow:
+                      "0 2px 8px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* Subtle inner glow */}
+                  <Box
+                    pos="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
+                      pointerEvents: "none",
+                    }}
+                  />
+
+                  <Stack
+                    gap={2}
+                    align="center"
+                    pos="relative"
+                    style={{ zIndex: 1 }}
+                  >
+                    <Text
+                      ff="heading"
+                      size="xs"
+                      fw={700}
+                      c="blue.3"
+                      style={{
+                        textTransform: "uppercase",
+                        letterSpacing: "1px",
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      T/F/S
+                    </Text>
+                    <Text
+                      ff="mono"
+                      size="sm"
+                      fw={600}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      {tactics}/{fleet}/{strategy}
+                    </Text>
+                  </Stack>
                 </Box>
                 {fragmentCounts.cultural +
                   fragmentCounts.hazardous +
