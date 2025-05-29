@@ -17,11 +17,6 @@
   transform: translateY(-2px);
 }
 
-.techCard:active {
-  transform: translateY(0);
-  transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 .techCard::before {
   content: '';
   position: absolute;
