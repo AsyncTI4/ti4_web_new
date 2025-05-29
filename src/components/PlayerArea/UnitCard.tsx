@@ -1,5 +1,6 @@
 import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { units } from "../../data/units";
+import { unitCardClasses } from "./gradientClasses";
 
 type Props = {
   unitId: string;
@@ -24,21 +25,12 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
   // For now, set reinforcements to a default value since it's not in the data structure yet
   const reinforcements = 3; // This would come from game state in the future
 
-  const colors = isUpgraded
-    ? {
-        background: `linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(37, 99, 235, 0.15) 30%, rgba(29, 78, 216, 0.20) 70%, rgba(59, 130, 246, 0.25) 100%)`,
-        border: `1px solid rgba(59, 130, 246, 0.6)`,
-        shadow: `0 6px 20px rgba(59, 130, 246, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(59, 130, 246, 0.4)`,
-        highlight: `linear-gradient(90deg, transparent 0%, rgba(147, 197, 253, 0.8) 50%, transparent 100%)`,
-        glow: "none",
-      }
-    : {
-        background: `linear-gradient(135deg, rgba(107, 114, 128, 0.12) 0%, rgba(15, 23, 42, 0.6) 100%)`,
-        border: `1px solid rgba(107, 114, 128, 0.3)`,
-        shadow: `0 2px 8px rgba(107, 114, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
-        highlight: `linear-gradient(90deg, transparent 0%, rgba(107, 114, 128, 0.4) 50%, transparent 100%)`,
-        glow: "none",
-      };
+  const cardClass = isUpgraded
+    ? unitCardClasses.upgraded
+    : unitCardClasses.standard;
+  const highlightClass = isUpgraded
+    ? unitCardClasses.highlight
+    : unitCardClasses.highlightStandard;
 
   return (
     <Stack
@@ -47,13 +39,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
       gap={4}
       justify="space-between"
       pos="relative"
-      style={{
-        borderRadius: "8px",
-        background: colors.background,
-        border: colors.border,
-        overflow: "hidden",
-        boxShadow: colors.shadow,
-      }}
+      className={cardClass}
     >
       {/* Enhanced top highlight */}
       <Box
@@ -62,9 +48,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
         left="20%"
         right="20%"
         h="1px"
-        style={{
-          background: colors.highlight,
-        }}
+        className={highlightClass}
       />
 
       {/* Upgraded unit special effects */}

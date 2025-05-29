@@ -26,16 +26,16 @@ import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
-import { getGradientConfig, ColorKey } from "./PlayerArea/gradients";
+import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData } from "@/data/pbd10242";
 
-// Helper function to get header gradient from color
-const getHeaderGradient = (color: string): string => {
-  const gradientConfig = getGradientConfig(color as ColorKey);
-  return gradientConfig.shimmer;
+// Helper function to get header gradient class from color
+const getHeaderGradientClass = (color: string): string => {
+  const gradientClasses = getGradientClasses(color as ColorKey);
+  return gradientClasses.shimmer;
 };
 
 // Helper function to get tech data by ID
@@ -384,7 +384,7 @@ export default function PlayerCard2(props: Props) {
             right={0}
             h={8}
             style={{
-              background: getHeaderGradient(color),
+              background: getHeaderGradientClass(color),
             }}
           />
 

@@ -1,6 +1,6 @@
 import { Box, Text, Image, Tooltip } from "@mantine/core";
 import { relics } from "../../../data/relics";
-import { SPECIAL_GRADIENTS } from "../gradients";
+import { relicClasses } from "../gradientClasses";
 
 type RelicData = {
   alias: string;
@@ -26,49 +26,9 @@ export function Relic({ relicId }: Props) {
     return null;
   }
 
-  const relicConfig = SPECIAL_GRADIENTS.relic;
-
   return (
     <Tooltip label={relicData.text}>
-      <Box
-        py={4}
-        px={6}
-        style={{
-          borderRadius: "6px",
-          background: relicConfig.background,
-          border: `1px solid ${relicConfig.border}`,
-          position: "relative",
-          overflow: "hidden",
-          minWidth: 0,
-        }}
-      >
-        {/* Diagonal stripe pattern */}
-        <Box
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: relicConfig.pattern,
-            pointerEvents: "none",
-            opacity: 0.5,
-          }}
-        />
-
-        {/* Stronger inner glow */}
-        <Box
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: relicConfig.innerGlow,
-            pointerEvents: "none",
-          }}
-        />
-
+      <Box py={4} px={6} className={relicClasses.card}>
         <Box
           style={{
             display: "flex",
@@ -83,10 +43,10 @@ export function Relic({ relicId }: Props) {
         >
           <Image
             src="/relicicon.webp"
+            className={relicClasses.icon}
             style={{
               width: "16px",
               height: "16px",
-              filter: relicConfig.iconFilter,
               flexShrink: 0,
             }}
           />

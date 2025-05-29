@@ -1,7 +1,7 @@
 import { Box, Group, Text } from "@mantine/core";
 import { SpeakerToken } from "./SpeakerToken";
 import { Shimmer } from "./Shimmer/Shimmer";
-import { getGradientConfig, ColorKey } from "./gradients";
+import { getGradientClasses, ColorKey } from "./gradientClasses";
 
 type Props = {
   number: number;
@@ -35,7 +35,7 @@ const SC_BORDER_COLORS = {
 } as const;
 
 export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
-  const gradientConfig = getGradientConfig(color as ColorKey);
+  const gradientClasses = getGradientClasses(color as ColorKey);
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const borderColor =
@@ -51,10 +51,9 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
         pl="lg"
         pos="relative"
         display="flex"
+        className={gradientClasses.strategyCardBanner}
         style={{
           minWidth: "140px",
-          background: gradientConfig.background,
-          border: `1px solid ${gradientConfig.border}`,
           borderRadius: "8px",
         }}
       >
@@ -65,8 +64,8 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
           left={0}
           right={0}
           bottom={0}
+          className={gradientClasses.innerGlow}
           style={{
-            background: gradientConfig.innerGlow,
             pointerEvents: "none",
             zIndex: 0,
           }}
@@ -80,12 +79,12 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
           w={35}
           h={35}
           display="flex"
+          className={gradientClasses.iconFilter}
           style={{
             border: `3px solid ${borderColor}`,
             borderRadius: "999px",
             alignItems: "center",
             justifyContent: "center",
-            filter: gradientConfig.iconFilter,
             zIndex: 2,
           }}
         >

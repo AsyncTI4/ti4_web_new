@@ -1,7 +1,7 @@
 import { Box, Text, Image } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 import { secretObjectives } from "../../../data/secretObjectives";
-import { getGradientConfig } from "../gradients";
+import { getGradientClasses } from "../gradientClasses";
 
 type Props = {
   secretId: string;
@@ -13,10 +13,10 @@ export function ScoredSecret({ secretId, score }: Props) {
     (secret) => secret.alias === secretId
   );
   const secretName = secretData?.name || secretId;
-  const redConfig = getGradientConfig("red");
+  const redClasses = getGradientClasses("red");
 
   return (
-    <Shimmer color="red" py={2} px={6}>
+    <Shimmer color="red" py={2} px={6} className={redClasses.border}>
       <Box
         style={{
           position: "relative",
@@ -28,10 +28,10 @@ export function ScoredSecret({ secretId, score }: Props) {
       >
         <Image
           src="/so_icon.png"
+          className={redClasses.iconFilter}
           style={{
             width: "20px",
             height: "20px",
-            filter: redConfig.iconFilter,
             flexShrink: 0,
           }}
         />

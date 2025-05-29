@@ -1,23 +1,26 @@
 import { Box, BoxProps } from "@mantine/core";
-import { getGradientConfig, ColorKey } from "../gradients";
+import { getGradientClasses, ColorKey } from "../gradientClasses";
 
 type Props = BoxProps & {
   color?: ColorKey;
   children: React.ReactNode;
 };
 
-export function Shimmer({ color = "blue", children, ...boxProps }: Props) {
-  const gradientConfig = getGradientConfig(color);
+export function Shimmer({
+  color = "blue",
+  children,
+  className,
+  ...boxProps
+}: Props) {
+  const gradientClasses = getGradientClasses(color);
+  const combinedClassName =
+    `${gradientClasses.shimmerContainer} ${className || ""}`.trim();
 
   return (
     <Box
+      className={combinedClassName}
       style={{
         borderRadius: "var(--mantine-radius-sm)",
-        background: gradientConfig.background,
-        border: `1px solid ${gradientConfig.border}`,
-        position: "relative",
-        overflow: "hidden",
-        boxShadow: gradientConfig.shadow,
         ...boxProps.style,
       }}
       {...boxProps}
@@ -30,8 +33,8 @@ export function Shimmer({ color = "blue", children, ...boxProps }: Props) {
           left: 0,
           right: 0,
           height: "1px",
-          background: gradientConfig.shimmer,
         }}
+        className={gradientClasses.shimmer}
       />
       {/* Bottom shimmer */}
       <Box
@@ -41,8 +44,8 @@ export function Shimmer({ color = "blue", children, ...boxProps }: Props) {
           left: 0,
           right: 0,
           height: "1px",
-          background: gradientConfig.shimmer,
         }}
+        className={gradientClasses.shimmer}
       />
 
       {/* Subtle diagonal pattern for blue shimmers */}
@@ -54,10 +57,10 @@ export function Shimmer({ color = "blue", children, ...boxProps }: Props) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: gradientConfig.pattern,
             pointerEvents: "none",
             opacity: 0.5,
           }}
+          className={gradientClasses.pattern}
         />
       )}
 

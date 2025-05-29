@@ -1,10 +1,11 @@
-// Export the unified gradient system
+// Export the CSS-first gradient system
 export {
-  UNIFIED_GRADIENTS,
-  SPECIAL_GRADIENTS,
+  getGradientClasses,
   getGradientConfig,
+  relicClasses,
+  unitCardClasses,
   type ColorKey,
-} from "./gradients";
+} from "./gradientClasses";
 
 // Export commonly used components
 export { Shimmer } from "./Shimmer";

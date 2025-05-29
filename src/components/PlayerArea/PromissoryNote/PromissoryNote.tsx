@@ -2,6 +2,7 @@ import { Group, Text, Image, Tooltip, Box } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 import { promissoryNotes } from "../../../data/promissoryNotes";
 import { pbdPlayerData } from "../../../data/pbd10242";
+import { getGradientClasses } from "../gradientClasses";
 
 type PromissoryNoteData = {
   alias: string;
@@ -59,13 +60,19 @@ export function PromissoryNote({ promissoryNoteId }: Props) {
   // Determine if this is from another faction (not the player's own)
   const isOtherFaction = true; // For now, assume all are from other factions
   const shimmerColor = isOtherFaction ? "cyan" : "blue";
+  const gradientClasses = getGradientClasses(shimmerColor);
 
   // Get faction icon path
   const factionIcon = `/factions/${faction}.png`;
 
   return (
     <Tooltip label={displayText}>
-      <Shimmer color={shimmerColor} py={2} px={6}>
+      <Shimmer
+        color={shimmerColor}
+        py={2}
+        px={6}
+        className={gradientClasses.border}
+      >
         <Group gap="xs" align="center" wrap="nowrap" style={{ minWidth: 0 }}>
           <Image src="/pnicon.png" style={{ width: "20px", flexShrink: 0 }} />
           <Text

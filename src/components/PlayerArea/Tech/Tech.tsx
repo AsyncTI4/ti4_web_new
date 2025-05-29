@@ -1,6 +1,6 @@
 import { Box, Group, Text, Image, Tooltip } from "@mantine/core";
 import { techs } from "../../../data/tech";
-import { getGradientConfig, ColorKey } from "../gradients";
+import { getGradientClasses, ColorKey } from "../gradientClasses";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): ColorKey => {
@@ -46,31 +46,11 @@ export function Tech({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
-  const gradientConfig = getGradientConfig(color);
+  const gradientClasses = getGradientClasses(color);
 
   return (
     <Tooltip label={techData.name}>
-      <Box
-        py={1}
-        px="xs"
-        style={{
-          borderRadius: "4px",
-          background: gradientConfig.background,
-          border: `1px solid ${gradientConfig.border}`,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "2px",
-            background: gradientConfig.leftBorder,
-          }}
-        />
+      <Box py={1} px="xs" className={gradientClasses.techCard}>
         {/* Tier indicator dots in top-right */}
         {tier > 0 && (
           <Box
@@ -86,16 +66,7 @@ export function Tech({ techId }: Props) {
             }}
           >
             {[...Array(tier)].map((_, dotIndex) => (
-              <Box
-                key={dotIndex}
-                style={{
-                  width: "3px",
-                  height: "3px",
-                  borderRadius: "50%",
-                  background: gradientConfig.accent,
-                  boxShadow: `0 0 3px ${gradientConfig.accent}, inset 0 0 1px rgba(255, 255, 255, 0.3)`,
-                }}
-              />
+              <Box key={dotIndex} className={gradientClasses.tierDot} />
             ))}
           </Box>
         )}
@@ -103,10 +74,10 @@ export function Tech({ techId }: Props) {
           <Image
             src={`/${color}.png`}
             alt={techData.name}
+            className={gradientClasses.iconFilter}
             style={{
               width: "14px",
               height: "14px",
-              filter: gradientConfig.iconFilter,
               flexShrink: 0,
             }}
           />

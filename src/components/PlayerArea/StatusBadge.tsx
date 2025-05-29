@@ -1,5 +1,5 @@
 import { Box, Text } from "@mantine/core";
-import { getGradientConfig } from "./gradients";
+import { getGradientClasses, ColorKey } from "./gradientClasses";
 
 type Props = {
   status: "active" | "passed" | "next" | "waiting";
@@ -31,20 +31,11 @@ const statusConfig = {
 
 export function StatusBadge({ status, text }: Props) {
   const config = statusConfig[status];
-  const gradientConfig = getGradientConfig(config.color);
+  const gradientClasses = getGradientClasses(config.color);
   const displayText = text || config.defaultText;
 
   return (
-    <Box
-      px={8}
-      py={2}
-      style={{
-        borderRadius: "6px",
-        background: gradientConfig.background,
-        border: `1px solid ${gradientConfig.border}`,
-        boxShadow: gradientConfig.shadow,
-      }}
-    >
+    <Box px={8} py={2} className={gradientClasses.statusBadge}>
       <Text
         size="xs"
         fw={700}

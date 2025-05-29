@@ -1,0 +1,389 @@
+/* Unified gradient and color system for all PlayerArea components */
+/* This centralizes all color-based styling to ensure consistency */
+
+:root {
+  /* Core color values (RGB values for consistency) */
+  --color-red: 239, 68, 68;
+  --color-green: 34, 197, 94;
+  --color-blue: 59, 130, 246;
+  --color-cyan: 6, 182, 212;
+  --color-orange: 249, 115, 22;
+  --color-yellow: 234, 179, 8;
+  --color-teal: 20, 184, 166;
+  --color-purple: 147, 51, 234;
+  --color-gray: 148, 163, 184;
+  --color-grey: 107, 114, 128;
+
+  /* Special colors for relic */
+  --color-relic-primary: 194, 65, 12;
+  --color-relic-secondary: 234, 88, 12;
+  --color-relic-accent: 251, 191, 36;
+}
+
+/* Base gradient utility classes */
+.gradient-bg {
+  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
+}
+
+.gradient-bg-strong {
+  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.15) 0%, rgba(var(--gradient-color), 0.08) 100%);
+}
+
+.gradient-border {
+  border: 1px solid rgba(var(--gradient-color), 0.25);
+}
+
+.gradient-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--gradient-color), 0.6) 50%, transparent 100%);
+}
+
+.gradient-left-border {
+  background: linear-gradient(180deg, rgba(var(--gradient-color), 0.6) 0%, rgba(var(--gradient-color), 0.2) 100%);
+}
+
+.gradient-shadow {
+  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.gradient-icon-filter {
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+}
+
+.gradient-accent {
+  background: rgba(var(--gradient-color), 0.9);
+}
+
+.gradient-inner-glow {
+  background: radial-gradient(ellipse at center, rgba(var(--gradient-color), 0.15) 0%, transparent 70%);
+}
+
+.gradient-pattern {
+  background-image: repeating-linear-gradient(45deg, rgba(var(--gradient-color), 0.08) 0px, rgba(var(--gradient-color), 0.08) 1px, transparent 1px, transparent 16px);
+}
+
+/* Color-specific classes */
+.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.gradient-cyan {
+  --gradient-color: var(--color-cyan);
+}
+
+.gradient-orange {
+  --gradient-color: var(--color-orange);
+}
+
+.gradient-yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.gradient-teal {
+  --gradient-color: var(--color-teal);
+}
+
+.gradient-purple {
+  --gradient-color: var(--color-purple);
+}
+
+.gradient-gray {
+  --gradient-color: var(--color-gray);
+}
+
+.gradient-grey {
+  --gradient-color: var(--color-grey);
+}
+
+/* Combined utility classes for common patterns */
+.player-area-card {
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-area-card.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.player-area-card.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.player-area-card.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.player-area-card.gradient-cyan {
+  --gradient-color: var(--color-cyan);
+}
+
+.player-area-card.gradient-orange {
+  --gradient-color: var(--color-orange);
+}
+
+.player-area-card.gradient-yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.player-area-card.gradient-teal {
+  --gradient-color: var(--color-teal);
+}
+
+.player-area-card.gradient-purple {
+  --gradient-color: var(--color-purple);
+}
+
+.player-area-card.gradient-gray {
+  --gradient-color: var(--color-gray);
+}
+
+.player-area-card.gradient-grey {
+  --gradient-color: var(--color-grey);
+}
+
+/* Status badge styles */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.status-badge.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.status-badge.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.status-badge.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.status-badge.gradient-gray {
+  --gradient-color: var(--color-gray);
+}
+
+.status-badge.gradient-grey {
+  --gradient-color: var(--color-grey);
+}
+
+/* Tech card styles */
+.tech-card {
+  padding: 1px 12px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(var(--gradient-color), 0.6) 0%, rgba(var(--gradient-color), 0.2) 100%);
+}
+
+.tech-card.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.tech-card.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.tech-card.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.tech-card.gradient-yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.tech-card.gradient-grey {
+  --gradient-color: var(--color-grey);
+}
+
+/* Tier dots */
+.tier-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(var(--gradient-color), 0.9);
+  box-shadow: 0 0 3px rgba(var(--gradient-color), 0.9), inset 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Strategy card banner styles */
+.strategy-card-banner {
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.strategy-card-banner.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.strategy-card-banner.gradient-orange {
+  --gradient-color: var(--color-orange);
+}
+
+.strategy-card-banner.gradient-yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.strategy-card-banner.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.strategy-card-banner.gradient-teal {
+  --gradient-color: var(--color-teal);
+}
+
+.strategy-card-banner.gradient-cyan {
+  --gradient-color: var(--color-cyan);
+}
+
+.strategy-card-banner.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.strategy-card-banner.gradient-purple {
+  --gradient-color: var(--color-purple);
+}
+
+/* Relic special styles */
+.relic-card {
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(var(--color-relic-primary), 0.15) 0%, rgba(var(--color-relic-secondary), 0.12) 50%, rgba(var(--color-relic-primary), 0.15) 100%);
+  border: 1px solid rgba(var(--color-relic-accent), 0.4);
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.relic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(var(--color-relic-accent), 0.08) 0px, rgba(var(--color-relic-accent), 0.08) 1px, transparent 1px, transparent 16px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.relic-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(var(--color-relic-accent), 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.relic-icon {
+  filter: drop-shadow(0 1px 2px rgba(var(--color-relic-accent), 0.3));
+}
+
+/* Unit card styles */
+.unit-card {
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.unit-card.upgraded {
+  background: linear-gradient(135deg, rgba(var(--color-blue), 0.25) 0%, rgba(37, 99, 235, 0.15) 30%, rgba(29, 78, 216, 0.20) 70%, rgba(var(--color-blue), 0.25) 100%);
+  border: 1px solid rgba(var(--color-blue), 0.6);
+  box-shadow: 0 6px 20px rgba(var(--color-blue), 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(var(--color-blue), 0.4);
+}
+
+.unit-card.standard {
+  background: linear-gradient(135deg, rgba(var(--color-grey), 0.12) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px solid rgba(var(--color-grey), 0.3);
+  box-shadow: 0 2px 8px rgba(var(--color-grey), 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.unit-card-highlight {
+  background: linear-gradient(90deg, transparent 0%, rgba(147, 197, 253, 0.8) 50%, transparent 100%);
+}
+
+.unit-card-highlight.standard {
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--color-grey), 0.4) 50%, transparent 100%);
+}
+
+/* Shimmer component styles */
+.shimmer-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(var(--gradient-color), 0.02) 0%, rgba(var(--gradient-color), 0.08) 50%, rgba(var(--gradient-color), 0.02) 100%);
+  pointer-events: none;
+}
+
+.shimmer-container.gradient-red {
+  --gradient-color: var(--color-red);
+}
+
+.shimmer-container.gradient-green {
+  --gradient-color: var(--color-green);
+}
+
+.shimmer-container.gradient-blue {
+  --gradient-color: var(--color-blue);
+}
+
+.shimmer-container.gradient-cyan {
+  --gradient-color: var(--color-cyan);
+}
+
+.shimmer-container.gradient-orange {
+  --gradient-color: var(--color-orange);
+}
+
+.shimmer-container.gradient-yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.shimmer-container.gradient-teal {
+  --gradient-color: var(--color-teal);
+}
+
+.shimmer-container.gradient-purple {
+  --gradient-color: var(--color-purple);
+}
+
+.shimmer-container.gradient-gray {
+  --gradient-color: var(--color-gray);
+}
+
+.shimmer-container.gradient-grey {
+  --gradient-color: var(--color-grey);
+}
+
+/* Special blue pattern for certain components */
+.gradient-blue .gradient-pattern {
+  background-image: repeating-linear-gradient(45deg, rgba(var(--color-blue), 0.03) 0px, rgba(var(--color-blue), 0.03) 1px, transparent 1px, transparent 16px);
+}
