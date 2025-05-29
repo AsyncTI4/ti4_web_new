@@ -583,158 +583,161 @@ export default function PlayerCard2(props: Props) {
           </Grid.Col>
 
           <Grid.Col span={2} visibleFrom="lg">
-            <Stack>
+            <Stack h="100%">
               {CardbackStack}
-              <Group gap="xs" justify="space-around" align="center">
-                <Box p="md" h="fit-content" w="100%">
-                  <Group gap={0} align="flex-end" justify="space-between">
-                    {/* T/F/S Section - harmonized with Surface component styling */}
-                    <Stack gap={4} align="center">
-                      <Text
-                        ff="heading"
-                        size="xs"
-                        fw={600}
-                        c="gray.4"
-                        style={{
-                          textTransform: "uppercase",
-                          letterSpacing: "0.5px",
-                          fontSize: "9px",
-                          opacity: 0.8,
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                        }}
-                      >
-                        CCs
-                      </Text>
-                      <Box
-                        p="sm"
-                        style={{
-                          borderRadius: "8px 0 0 8px",
-                          background:
-                            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                          border: "1px solid rgba(148, 163, 184, 0.2)",
-                          borderRight: "none",
-                          minWidth: "80px",
-                          height: "60px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          boxShadow:
-                            "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                        }}
-                      >
-                        {/* Subtle inner glow */}
-                        <Box
-                          pos="absolute"
-                          top={0}
-                          left={0}
-                          right={0}
-                          bottom={0}
-                          style={{
-                            background:
-                              "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
-                            pointerEvents: "none",
-                          }}
-                        />
 
-                        <Stack
-                          gap={2}
-                          align="center"
-                          pos="relative"
-                          style={{ zIndex: 1 }}
-                        >
-                          <Text
-                            ff="mono"
-                            size="xs"
-                            fw={600}
-                            c="gray.3"
-                            style={{
-                              textTransform: "uppercase",
-                              letterSpacing: "1px",
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                            }}
-                          >
-                            T/F/S
-                          </Text>
-                          <Text
-                            ff="mono"
-                            size="sm"
-                            fw={600}
-                            c="white"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                            }}
-                          >
-                            {tactics}/{fleet}/{strategy}
-                          </Text>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                    {/* Fragments Section - harmonized with Surface component styling */}
-                    <Stack gap={4} align="center" flex={1}>
+              <Group gap={0} align="stretch">
+                {/* T/F/S Section - harmonized with Surface component styling */}
+                <Stack gap={4} align="center">
+                  <Text
+                    ff="heading"
+                    size="xs"
+                    fw={600}
+                    c="gray.4"
+                    style={{
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                      fontSize: "9px",
+                      opacity: 0.8,
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    CCs
+                  </Text>
+                  <Surface
+                    p="sm"
+                    h="100%"
+                    style={{
+                      borderRightWidth: 0,
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }}
+                  >
+                    {/* Subtle inner glow */}
+                    <Box
+                      pos="absolute"
+                      top={0}
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      style={{
+                        background:
+                          "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    <Stack
+                      gap={2}
+                      align="center"
+                      justify="center"
+                      pos="relative"
+                      h="100%"
+                      style={{ zIndex: 1 }}
+                    >
                       <Text
-                        ff="heading"
+                        ff="mono"
                         size="xs"
                         fw={600}
-                        c="gray.4"
+                        c="gray.3"
                         style={{
                           textTransform: "uppercase",
-                          letterSpacing: "0.5px",
-                          fontSize: "9px",
-                          opacity: 0.8,
+                          letterSpacing: "1px",
                           textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
-                        Frags
+                        T/F/S
                       </Text>
-                      <Box
-                        p="sm"
-                        w="100%"
+                      <Text
+                        ff="mono"
+                        size="sm"
+                        fw={600}
+                        c="white"
                         style={{
-                          borderRadius: "0 8px 8px 0",
-                          background:
-                            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                          border: "1px solid rgba(148, 163, 184, 0.2)",
-                          borderLeft: "1px solid rgba(148, 163, 184, 0.1)",
-                          height: "60px",
-                          boxShadow:
-                            "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
-                        <Group
-                          gap="xs"
-                          justify="center"
-                          align="center"
-                          pos="relative"
-                          style={{ zIndex: 1 }}
-                        >
-                          <FragmentStack
-                            count={fragmentCounts.cultural}
-                            type="crf"
-                          />
-                          <FragmentStack
-                            count={fragmentCounts.hazardous}
-                            type="hrf"
-                          />
-                          <FragmentStack
-                            count={fragmentCounts.industrial}
-                            type="urf"
-                          />
-                        </Group>
-                      </Box>
+                        {tactics}/{fleet}/{strategy}
+                      </Text>
                     </Stack>
-                  </Group>
+                  </Surface>
+                </Stack>
+                {/* Fragments Section - harmonized with Surface component styling */}
+                <Box flex={1}>
+                  <Stack gap={4} align="center" h="100%" flex={1}>
+                    <Text
+                      ff="heading"
+                      size="xs"
+                      fw={600}
+                      c="gray.4"
+                      style={{
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                        fontSize: "9px",
+                        opacity: 0.8,
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      Frags
+                    </Text>
+                    <Surface
+                      p="sm"
+                      pattern="grid"
+                      style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                        display: "flex",
+                        height: "100%",
+                        width: "100%",
+                      }}
+                    >
+                      <Group gap="xs" justify="center" w="100%">
+                        {fragmentCounts.cultural > 0 ||
+                        fragmentCounts.hazardous > 0 ||
+                        fragmentCounts.industrial > 0 ? (
+                          <>
+                            <FragmentStack
+                              count={fragmentCounts.cultural}
+                              type="crf"
+                            />
+                            <FragmentStack
+                              count={fragmentCounts.hazardous}
+                              type="hrf"
+                            />
+                            <FragmentStack
+                              count={fragmentCounts.industrial}
+                              type="urf"
+                            />
+                          </>
+                        ) : (
+                          <Text
+                            size="xs"
+                            c="gray.6"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                              opacity: 0.5,
+                            }}
+                          >
+                            No fragments
+                          </Text>
+                        )}
+                      </Group>
+                    </Surface>
+                  </Stack>
                 </Box>
               </Group>
 
-              <Stack gap={4}>
-                {Object.entries(secretsScored).map(([secretId, score]) => (
-                  <ScoredSecret
-                    key={secretId}
-                    secretId={secretId}
-                    score={score}
-                  />
-                ))}
-              </Stack>
+              {Object.values(secretsScored).length > 0 && (
+                <Stack gap={4}>
+                  {Object.entries(secretsScored).map(([secretId, score]) => (
+                    <ScoredSecret
+                      key={secretId}
+                      secretId={secretId}
+                      score={score}
+                    />
+                  ))}
+                </Stack>
+              )}
               {PromissoryNoteStack}
               {/* Needs to Follow Section */}
               <Group gap={8} align="center">
