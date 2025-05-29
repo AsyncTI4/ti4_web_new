@@ -1,4 +1,4 @@
-import { Box, Group, Text, Image, Popover, Transition } from "@mantine/core";
+import { Box, Group, Text, Image, Popover } from "@mantine/core";
 import { techs } from "../../../data/tech";
 import styles from "./Tech.module.css";
 import { cdnImage } from "../../../data/cdnImage";
