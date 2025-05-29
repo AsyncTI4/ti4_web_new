@@ -11,6 +11,7 @@ import { createTheme, darken, MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage, { loginLoader } from "./LoginPage";
 import FrogGamePage from "./FrogGamePage";
+import PlayerAreasPage from "./PlayerAreasPage";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/game/:mapid",
     element: <GamePage />,
+  },
+  {
+    path: "/game/:gameId/playerAreas",
+    element: <PlayerAreasPage />,
   },
   {
     path: "/froggame/:discordid/:mapid",
