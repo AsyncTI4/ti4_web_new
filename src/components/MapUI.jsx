@@ -31,7 +31,7 @@ import {
 
 import PlayerCard2 from "./PlayerCard2";
 import PlayerCardBack from "./PlayerCardBack";
-
+import { pbdPlayerData } from "../data/pbd10242";
 function MapUI({
   activeTabs,
   params,
@@ -252,11 +252,14 @@ function MapUI({
                 }}
               >
                 <Stack gap="lg">
-                  <ScoreBoard />
+                  {/* <ScoreBoard /> */}
+                  {pbdPlayerData.map((player) => (
+                    <PlayerCard2 key={player.id} playerData={player} />
+                  ))}
+                  {/* <PlayerCard2 />
                   <PlayerCard2 />
                   <PlayerCard2 />
-                  <PlayerCard2 />
-                  <PlayerCard2 />
+                  <PlayerCard2 /> */}
                 </Stack>
               </div>
             </Box>

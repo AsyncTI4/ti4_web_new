@@ -27,20 +27,26 @@ import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
+import { secretObjectives } from "../data/secretObjectives";
+import { PlayerData } from "@/data/pbd10242";
 
 // Helper function to get tech data by ID
-const getTechData = (techId) => {
+const getTechData = (techId: string) => {
   return techsData.find((tech) => tech.alias === techId);
 };
 
 // Helper function to get planet data by ID
-const getPlanetData = (planetId) => {
-  return planets[planetId];
+const getPlanetData = (planetId: string) => {
+  return (planets as any)[planetId];
+};
+
+// Helper function to get secret objective data by alias
+const getSecretObjectiveData = (alias: string) => {
+  return secretObjectives.find((secret) => secret.alias === alias);
 };
 
 // Default player card data including all static and default prop data
 const DEFAULT_PLAYER_CARD_DATA = {
-  playerName: "Alice",
   faction: "Federation of Sol",
   color: "blue",
   strategyCardName: "LEADERSHIP",
@@ -48,11 +54,7 @@ const DEFAULT_PLAYER_CARD_DATA = {
   tactics: 1,
   fleet: 4,
   strategy: 2,
-  fragments: {
-    cultural: 3,
-    hazardous: 2,
-    industrial: 1,
-  },
+  fragments: ["crf1", "crf2", "crf3", "hrf1", "hrf2", "irf1"],
   needsToFollow: {
     blue: 2,
     green: 4,
@@ -92,11 +94,11 @@ const DEFAULT_PLAYER_CARD_DATA = {
     { factionIcon: "/factions/letnev.png" },
     { factionIcon: "/factions/titans.png" },
   ],
-  scoredSecrets: [
-    "(685) Gather a Mighty Fleet",
-    "(583) Monopolize Production",
-    "(189) Unveil Flagship",
-  ],
+  secretsScored: {
+    gamf: 685,
+    mp: 583,
+    uf: 189,
+  },
   unitsOwned: [
     "sol_carrier",
     "flagship",
@@ -164,9 +166,12 @@ const DEFAULT_PLAYER_CARD_DATA = {
   ],
 };
 
-export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
+type Props = {
+  playerData: PlayerData;
+};
+export default function PlayerCard2(props: Props) {
   const {
-    playerName,
+    userName,
     faction,
     color,
     strategyCardName,
@@ -182,15 +187,28 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     debts,
     techs,
     relics,
-    promissoryNotes,
     planets,
     neighborFactions,
-    scoredSecrets,
-    units,
+    secretsScored,
     unitsOwned,
     leaders,
     cardbacks,
-  } = { ...DEFAULT_PLAYER_CARD_DATA, ...props };
+  } = { ...DEFAULT_PLAYER_CARD_DATA, ...props.playerData };
+
+  // Use promissoryNotesInPlayArea from PlayerData
+  const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
+
+  // Get exhaustedPlanets from PlayerData
+  const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
+
+  // Count fragments by type
+  const fragmentCounts = {
+    cultural: fragments.filter((f: string) => f.startsWith("crf")).length,
+    hazardous: fragments.filter((f: string) => f.startsWith("hrf")).length,
+    industrial: fragments.filter(
+      (f: string) => f.startsWith("irf") || f.startsWith("urf")
+    ).length,
+  };
 
   const totalResources = planets.reduce((sum, planetId) => {
     const planetData = getPlanetData(planetId);
@@ -242,7 +260,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
         <Leader
           key={index}
           id={leader.id}
-          type={leader.type}
+          type={leader.type as "agent" | "commander" | "hero"}
           tgCount={leader.tgCount}
           exhausted={leader.exhausted}
           locked={leader.locked}
@@ -372,6 +390,21 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
     </Group>
   );
 
+  // Gradient dictionary for header bottom border accents
+  const HEADER_GRADIENTS = {
+    pink: "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+    yellow:
+      "linear-gradient(90deg, transparent 0%, rgba(234, 179, 8, 0.5) 20%, rgba(234, 179, 8, 0.5) 80%, transparent 100%)",
+    green:
+      "linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.5) 20%, rgba(34, 197, 94, 0.5) 80%, transparent 100%)",
+    purple:
+      "linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.5) 20%, rgba(147, 51, 234, 0.5) 80%, transparent 100%)",
+    gray: "linear-gradient(90deg, transparent 0%, rgba(107, 114, 128, 0.5) 20%, rgba(107, 114, 128, 0.5) 80%, transparent 100%)",
+    orange:
+      "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 20%, rgba(249, 115, 22, 0.5) 80%, transparent 100%)",
+    red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
+  };
+
   return (
     <Paper
       p="sm"
@@ -431,23 +464,22 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
             bottom={0}
             left={0}
             right={0}
-            h={4}
+            h={8}
             style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+              background: (HEADER_GRADIENTS as any)[color],
             }}
           />
 
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">
               <Text span c="white" size="lg" ff="heading">
-                {playerName}
+                {userName}
               </Text>
               <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
                 [{faction}]
               </Text>
-              <Text size="sm" span ml={4} ff="heading" c="pink">
-                (pink)
+              <Text size="sm" span ml={4} ff="heading" c={`${color}.2`}>
+                ({color})
               </Text>
 
               {/* Status Indicator - moved after color label */}
@@ -600,8 +632,12 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
             hiddenFrom="lg"
           >
             <Stack gap={2}>
-              {scoredSecrets.map((secret, index) => (
-                <ScoredSecret key={index} text={secret} />
+              {Object.entries(secretsScored).map(([secretId, score]) => (
+                <ScoredSecret
+                  key={secretId}
+                  secretId={secretId}
+                  score={score}
+                />
               ))}
             </Stack>
           </Grid.Col>
@@ -624,9 +660,9 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
               {CardbackStack}
               <Group gap="xs" justify="space-around" align="center">
                 <Group gap="xs" justify="center" align="center">
-                  <FragmentStack count={fragments.cultural} type="crf" />
-                  <FragmentStack count={fragments.hazardous} type="hrf" />
-                  <FragmentStack count={fragments.industrial} type="urf" />
+                  <FragmentStack count={fragmentCounts.cultural} type="crf" />
+                  <FragmentStack count={fragmentCounts.hazardous} type="hrf" />
+                  <FragmentStack count={fragmentCounts.industrial} type="urf" />
                 </Group>
                 <Box h={35}>
                   <ShimmerDivider orientation="vertical" />
@@ -642,14 +678,18 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
               </Group>
 
               <Stack gap={4}>
-                {scoredSecrets.map((secret, index) => (
-                  <ScoredSecret key={index} text={secret} />
+                {Object.entries(secretsScored).map(([secretId, score]) => (
+                  <ScoredSecret
+                    key={secretId}
+                    secretId={secretId}
+                    score={score}
+                  />
                 ))}
               </Stack>
               {PromissoryNoteStack}
               {/* Needs to Follow Section */}
               <Group gap={8} align="center">
-                <Box alignSelf="center">
+                <Box style={{ alignSelf: "center" }}>
                   <Caption>Needs to Follow</Caption>
                 </Box>
                 <Group gap={6}>
@@ -881,6 +921,7 @@ export default function PlayerCard2(props = DEFAULT_PLAYER_CARD_DATA) {
                           planetId={planetId}
                           planetTraitIcons={planetTraitIcons}
                           techSkipIcons={techSkipIcons}
+                          exhausted={exhaustedPlanets.includes(planetId)}
                         />
                       ))}
                     </Group>

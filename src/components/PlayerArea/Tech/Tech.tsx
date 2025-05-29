@@ -174,6 +174,7 @@ export function Tech({ techId }: Props) {
             size="xs"
             c="white"
             fw={600}
+            ff="monospace"
             style={{
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
               paddingRight: "16px",

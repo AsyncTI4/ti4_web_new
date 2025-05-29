@@ -1,13 +1,20 @@
 import { Box, Text, Image } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
+import { secretObjectives } from "../../../data/secretObjectives";
 
 type Props = {
-  text: string;
+  secretId: string;
+  score: number;
 };
 
-export function ScoredSecret({ text }: Props) {
+export function ScoredSecret({ secretId, score }: Props) {
+  const secretData = secretObjectives.find(
+    (secret) => secret.alias === secretId
+  );
+  const secretName = secretData?.name || secretId;
+
   return (
-    <Shimmer color="red" p={2} px="sm">
+    <Shimmer color="red" py={2} px={6}>
       <Box
         style={{
           position: "relative",
@@ -38,7 +45,18 @@ export function ScoredSecret({ text }: Props) {
             flex: 1,
           }}
         >
-          {text}
+          {secretName}{" "}
+          <Text
+            span
+            size="xs"
+            fw={600}
+            c="gray.4"
+            style={{
+              opacity: 0.7,
+            }}
+          >
+            ({score})
+          </Text>
         </Text>
       </Box>
     </Shimmer>

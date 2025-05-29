@@ -7,12 +7,14 @@ type Props = {
   planetId: string;
   planetTraitIcons: Record<string, React.ReactNode>;
   techSkipIcons: Record<string, React.ReactNode>;
+  exhausted?: boolean;
 };
 
 export function PlanetCard({
   planetId,
   planetTraitIcons,
   techSkipIcons,
+  exhausted = false,
 }: Props) {
   const planetData = getPlanetData(planetId);
 
@@ -60,8 +62,26 @@ export function PlanetCard({
         border: `1px solid ${colors.border}`,
         overflow: "hidden",
         boxShadow: `0 2px 8px ${colors.shadow}, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
+        filter: exhausted ? "grayscale(0.4) opacity(0.5)" : "none",
       }}
     >
+      {/* Dark overlay for exhausted planets */}
+      {exhausted && (
+        <Box
+          pos="absolute"
+          top={-1}
+          left={-1}
+          right={-1}
+          bottom={-1}
+          style={{
+            background: "rgba(0, 0, 0, 0.3)",
+            borderRadius: "12px",
+            zIndex: 10,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
       {/* Subtle top highlight */}
       <Box
         pos="absolute"
@@ -83,6 +103,7 @@ export function PlanetCard({
             size="xs"
             c="white"
             fw={700}
+            ff="monospace"
             style={{
               writingMode: "vertical-rl",
               textOrientation: "sideways",
