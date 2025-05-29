@@ -959,7 +959,7 @@ export default function PlayerCard2(props: Props) {
         bottom={-60}
         right={-40}
         opacity={0.05}
-        h={300}
+        h={250}
         style={{
           zIndex: 0,
           pointerEvents: "none",
@@ -967,7 +967,7 @@ export default function PlayerCard2(props: Props) {
         }}
       >
         <Image
-          src="/sol.png"
+          src={`/factions/${faction.toLowerCase()}.png`}
           alt="faction"
           w="100%"
           h="100%"

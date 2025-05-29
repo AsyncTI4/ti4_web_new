@@ -126,7 +126,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
           }}
         >
           <Image
-            src={`/${unitData.faction?.toLowerCase()}.png`}
+            src={`/factions/${unitData.faction?.toLowerCase()}.png`}
             w="16px"
             h="16px"
             style={{
