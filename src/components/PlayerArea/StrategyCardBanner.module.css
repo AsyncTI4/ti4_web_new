@@ -1,0 +1,51 @@
+/* Strategy card banner styles */
+.strategyCardBanner {
+  border-radius: 6px;
+  position: relative;
+  overflow: visible;
+  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
+  border: 1px solid rgba(var(--gradient-color), 0.25);
+}
+
+/* Inner glow effect */
+.innerGlow {
+  background: radial-gradient(ellipse at center, rgba(var(--gradient-color), 0.15) 0%, transparent 70%);
+}
+
+/* Icon filter */
+.iconFilter {
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+}
+
+/* Color-specific classes using global variables */
+.red {
+  --gradient-color: var(--color-red);
+}
+
+.orange {
+  --gradient-color: var(--color-orange);
+}
+
+.yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.green {
+  --gradient-color: var(--color-green);
+}
+
+.teal {
+  --gradient-color: var(--color-teal);
+}
+
+.cyan {
+  --gradient-color: var(--color-cyan);
+}
+
+.blue {
+  --gradient-color: var(--color-blue);
+}
+
+.purple {
+  --gradient-color: var(--color-purple);
+}
