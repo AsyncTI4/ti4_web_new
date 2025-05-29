@@ -24,6 +24,7 @@ import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { HeaderAccent } from "./PlayerArea/HeaderAccent";
+import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { PlayerData } from "../data/pbd10242";
@@ -364,18 +365,7 @@ export default function PlayerCard2(props: Props) {
               >
                 [{faction}]
               </Text>
-              <Text
-                size="sm"
-                span
-                ml={4}
-                ff="heading"
-                c={`${color}.2`}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                ({color})
-              </Text>
+              <PlayerColor color={color} size="sm" />
 
               {/* Status Indicator - harmonized with Shimmer component styling */}
               {(props.playerData.passed || props.playerData.active) && (
