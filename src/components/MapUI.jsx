@@ -32,6 +32,7 @@ import {
 import PlayerCard2 from "./PlayerCard2";
 import PlayerCardBack from "./PlayerCardBack";
 import { pbdPlayerData } from "../data/pbd10242";
+
 function MapUI({
   activeTabs,
   params,
@@ -44,6 +45,12 @@ function MapUI({
   const inputRef = useRef(null);
   const [editingTab, setEditingTab] = useState(null);
   const playerCardRef = useRef(null);
+
+  // Create color to faction mapping from player data
+  const colorToFaction = pbdPlayerData.reduce((acc, player) => {
+    acc[player.color] = player.faction;
+    return acc;
+  }, {});
 
   useEffect(() => {
     const handleScroll = () => {
@@ -254,7 +261,11 @@ function MapUI({
                 <Stack gap="lg">
                   {/* <ScoreBoard /> */}
                   {pbdPlayerData.map((player) => (
-                    <PlayerCard2 key={player.id} playerData={player} />
+                    <PlayerCard2
+                      key={player.id}
+                      playerData={player}
+                      colorToFaction={colorToFaction}
+                    />
                   ))}
                   {/* <PlayerCard2 />
                   <PlayerCard2 />

@@ -148,6 +148,7 @@ const SC_COLORS = {
 
 type Props = {
   playerData: PlayerData;
+  colorToFaction: Record<string, string>;
 };
 export default function PlayerCard2(props: Props) {
   const {
@@ -425,7 +426,10 @@ export default function PlayerCard2(props: Props) {
               )}
 
               {/* Header s Section - harmonized with Surface component styling */}
-              <Neighbors neighbors={props.playerData.neighbors || []} />
+              <Neighbors
+                neighbors={props.playerData.neighbors || []}
+                colorToFaction={props.colorToFaction}
+              />
             </Group>
 
             {/* Strategy Card and Speaker Token */}
@@ -475,7 +479,10 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
+            <PromissoryNotesStack
+              promissoryNotes={promissoryNotes}
+              colorToFaction={props.colorToFaction}
+            />
           </Grid.Col>
 
           <Grid.Col span={12} hiddenFrom="sm">
@@ -632,7 +639,10 @@ export default function PlayerCard2(props: Props) {
               </Group>
 
               <ScoredSecrets secretsScored={secretsScored} />
-              <PromissoryNotesStack promissoryNotes={promissoryNotes} />
+              <PromissoryNotesStack
+                promissoryNotes={promissoryNotes}
+                colorToFaction={props.colorToFaction}
+              />
               {/* Needs to Follow Section */}
               <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
             </Stack>

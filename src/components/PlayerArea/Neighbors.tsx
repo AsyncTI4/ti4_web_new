@@ -1,24 +1,25 @@
 import { Box, Group, Text, Image } from "@mantine/core";
-import { pbdPlayerData } from "../../data/pbd10242";
 import { cdnImage } from "../../data/cdnImage";
+
 type Props = {
   neighbors: string[];
+  colorToFaction: Record<string, string>;
 };
 
 // Helper function to get neighbor faction icons from neighbor colors
-const getNeighborFactionIcons = (neighbors: string[]) => {
+const getNeighborFactionIcons = (
+  neighbors: string[],
+  colorToFaction: Record<string, string>
+) => {
   return neighbors
     .map((neighborColor) => {
-      const neighborPlayer = pbdPlayerData.find(
-        (player) => player.color === neighborColor
-      );
-      return neighborPlayer ? neighborPlayer.faction : null;
+      return colorToFaction[neighborColor] || null;
     })
     .filter(Boolean); // Remove null values
 };
 
-export function Neighbors({ neighbors }: Props) {
-  const neighborFactions = getNeighborFactionIcons(neighbors);
+export function Neighbors({ neighbors, colorToFaction }: Props) {
+  const neighborFactions = getNeighborFactionIcons(neighbors, colorToFaction);
 
   return (
     <Box

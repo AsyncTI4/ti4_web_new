@@ -1,7 +1,6 @@
 import { Group, Text, Image, Tooltip, Box } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 import { promissoryNotes } from "../../../data/promissoryNotes";
-import { pbdPlayerData } from "../../../data/pbd10242";
 import { getGradientClasses } from "../gradientClasses";
 import { cdnImage } from "../../../data/cdnImage";
 
@@ -17,9 +16,10 @@ type PromissoryNoteData = {
 
 type Props = {
   promissoryNoteId: string;
+  colorToFaction: Record<string, string>;
 };
 
-export function PromissoryNote({ promissoryNoteId }: Props) {
+export function PromissoryNote({ promissoryNoteId, colorToFaction }: Props) {
   // Parse the promissory note ID (e.g., "orange_sftt" -> color: "orange", type: "sftt")
   const parts = promissoryNoteId.split("_");
   if (parts.length < 2) {
@@ -44,10 +44,7 @@ export function PromissoryNote({ promissoryNoteId }: Props) {
   }
 
   // Find the faction associated with this color
-  const playerWithColor = pbdPlayerData.find(
-    (player) => player.color === color
-  );
-  const faction = playerWithColor?.faction;
+  const faction = colorToFaction[color];
 
   if (!faction) {
     console.warn(`No faction found for color "${color}"`);
