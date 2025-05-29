@@ -101,18 +101,13 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
           top={0}
           right={0}
           style={{
-            zIndex: 2,
             background: "rgba(0, 0, 0, 0.5)",
-            borderRadius: "50%",
           }}
         >
           <Image
             src={`/factions/${unitData.faction?.toLowerCase()}.png`}
             w="24px"
             h="24px"
-            style={{
-              filter: "drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8))",
-            }}
           />
         </Box>
       )}

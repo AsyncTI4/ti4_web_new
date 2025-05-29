@@ -368,7 +368,11 @@ export default function PlayerCard2(props: Props) {
     const remainingSlots = Math.max(0, maxSlots - filteredTechs.length);
     const phantomElements = Array.from(
       { length: remainingSlots },
-      (_, index) => <PhantomTech key={`phantom-${index}`} techType={techType} />
+      (_, index) => (
+        <Box visibleFrom="md">
+          <PhantomTech key={`phantom-${index}`} techType={techType} />
+        </Box>
+      )
     );
 
     return [...techElements, ...phantomElements];
@@ -949,15 +953,19 @@ export default function PlayerCard2(props: Props) {
                   sm: 2,
                 }}
               >
-                <Surface p="md" pattern="none" h="100%">
-                  <Stack
-                    justify="space-between"
-                    h="100%"
-                    pos="relative"
-                    style={{ zIndex: 1 }}
-                  >
+                <Surface
+                  p="md"
+                  pattern="none"
+                  h="100%"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Stack>
                     {/* Total/Optimal Section */}
-                    <Group gap="md" align="start">
+                    <Group gap="md">
                       {/* Total Section */}
                       <Stack gap="xs">
                         <Caption>Total</Caption>

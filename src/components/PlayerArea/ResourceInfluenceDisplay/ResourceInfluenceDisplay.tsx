@@ -45,9 +45,9 @@ export function ResourceInfluenceDisplay({
   const totalSum = Math.floor(totalResources + totalInfluence);
 
   return (
-    <Stack gap="sm" align="stretch">
+    <Stack gap="sm">
       {/* Individual Resources and Influence */}
-      <Stack gap="xs" align="stretch">
+      <Stack gap="xs">
         {/* Resources */}
         <Group gap={4} align="baseline" justify="flex-start">
           <Box w={16} style={{ display: "flex", justifyContent: "center" }}>
