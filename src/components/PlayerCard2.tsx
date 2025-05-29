@@ -13,19 +13,12 @@ import { ResourceInfluenceDisplay } from "./PlayerArea/ResourceInfluenceDisplay"
 import { Relic } from "./PlayerArea/Relic";
 import { Tech, PhantomTech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
-import { Cardback } from "./PlayerArea/Cardback";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { Leader } from "./PlayerArea/Leader";
-import { PromissoryNote } from "./PlayerArea/PromissoryNote";
-import { EmptyPromissoryNotePlaceholder } from "./PlayerArea/PromissoryNote";
-import { ScoredSecret } from "./PlayerArea/ScoredSecret";
-import { EmptyScoredSecretsPlaceholder } from "./PlayerArea/ScoredSecret";
 import { FragmentStack } from "./PlayerArea/FragmentStack";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
 import { Neighbors } from "./PlayerArea/Neighbors";
-import { PlanetTraitIcon } from "./PlayerArea/PlanetTraitIcon";
 import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
@@ -35,7 +28,7 @@ import { TechSkipIcon } from "./PlayerArea/TechSkipIcon";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
-import { PlayerData, pbdPlayerData } from "../data/pbd10242";
+import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
 
 // Helper function to get header gradient class from color
@@ -52,11 +45,6 @@ const getTechData = (techId: string) => {
 // Helper function to get planet data by ID
 const getPlanetData = (planetId: string) => {
   return (planets as any)[planetId];
-};
-
-// Helper function to get secret objective data by alias
-const getSecretObjectiveData = (alias: string) => {
-  return secretObjectives.find((secret) => secret.alias === alias);
 };
 
 // Helper function to calculate planet economics
@@ -229,13 +217,6 @@ export default function PlayerCard2(props: Props) {
     getPlanetData
   );
 
-  const techSkipIcons = {
-    biotic: <TechSkipIcon techType="biotic" />,
-    propulsion: <TechSkipIcon techType="propulsion" />,
-    cybernetic: <TechSkipIcon techType="cybernetic" />,
-    warfare: <TechSkipIcon techType="warfare" />,
-  };
-
   const UnitsArea = (
     <Surface
       h="100%"
@@ -248,7 +229,12 @@ export default function PlayerCard2(props: Props) {
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
         {unitsOwned.map((unitId, index) => (
-          <UnitCard key={index} unitId={unitId} maxReinforcements={8} />
+          <UnitCard
+            key={index}
+            unitId={unitId}
+            maxReinforcements={8}
+            color={color}
+          />
         ))}
       </SimpleGrid>
     </Surface>

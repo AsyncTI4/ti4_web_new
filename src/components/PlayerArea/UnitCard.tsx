@@ -1,10 +1,12 @@
 import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { units } from "../../data/units";
+import { solidColors } from "../../data/solidColors";
 import styles from "./UnitCard.module.css";
 
 type Props = {
   unitId: string;
   maxReinforcements?: number;
+  color?: string;
 };
 
 // Helper function to get unit data by ID
@@ -12,18 +14,28 @@ const getUnitData = (unitId: string) => {
   return units.find((unit) => unit.id === unitId);
 };
 
-export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
-  const unitData = getUnitData(unitId);
+// Helper function to get color alias from color name
+const getColorAlias = (color?: string) => {
+  if (!color) return "pnk"; // default fallback
 
-  if (!unitData) {
-    return null; // or some fallback UI
-  }
+  const colorData = solidColors.find(
+    (solidColor) =>
+      solidColor.name === color.toLowerCase() ||
+      solidColor.aliases.includes(color.toLowerCase()) ||
+      solidColor.alias === color.toLowerCase()
+  );
+
+  return colorData?.alias || "pnk"; // fallback to pink if not found
+};
+
+export function UnitCard({ unitId, maxReinforcements = 8, color }: Props) {
+  const unitData = getUnitData(unitId);
+  const colorAlias = getColorAlias(color);
+
+  if (!unitData) return null; // or some fallback UI
 
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
-
-  // For now, set reinforcements to a default value since it's not in the data structure yet
-  const reinforcements = 3; // This would come from game state in the future
 
   const cardClass = isUpgraded
     ? `${styles.unitCard} ${styles.upgraded}`
@@ -113,7 +125,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
       )}
 
       <Flex justify="center">
-        <Image src={`/units/pnk_${unitData.asyncId}.png`} h="30px" />
+        <Image src={`/units/${colorAlias}_${unitData.asyncId}.png`} h="30px" />
       </Flex>
 
       <Stack gap={2} align="center">
