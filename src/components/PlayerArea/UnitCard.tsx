@@ -127,7 +127,7 @@ export function UnitCard({ unitId, color }: Props) {
       <Flex justify="center">
         <Image
           src={cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`)}
-          h="30px"
+          w="30px"
         />
       </Flex>
 
