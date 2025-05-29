@@ -4,7 +4,7 @@ type Props = {
   techType: string;
 };
 
-export function PhantomTech({ techType }: Props) {
+export function PhantomTech({}: Props) {
   return (
     <Box
       py={1}

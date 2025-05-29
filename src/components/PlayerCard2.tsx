@@ -208,12 +208,7 @@ export default function PlayerCard2(props: Props) {
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
         {unitsOwned.map((unitId, index) => (
-          <UnitCard
-            key={index}
-            unitId={unitId}
-            maxReinforcements={8}
-            color={color}
-          />
+          <UnitCard key={index} unitId={unitId} color={color} />
         ))}
       </SimpleGrid>
     </Surface>

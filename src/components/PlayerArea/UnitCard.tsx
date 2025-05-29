@@ -6,7 +6,6 @@ import { cdnImage } from "../../data/cdnImage";
 
 type Props = {
   unitId: string;
-  maxReinforcements?: number;
   color?: string;
 };
 
@@ -29,7 +28,7 @@ const getColorAlias = (color?: string) => {
   return colorData?.alias || "pnk"; // fallback to pink if not found
 };
 
-export function UnitCard({ unitId, maxReinforcements = 8, color }: Props) {
+export function UnitCard({ unitId, color }: Props) {
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
 

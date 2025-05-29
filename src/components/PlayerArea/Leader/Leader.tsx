@@ -12,7 +12,7 @@ type Props = {
   active: boolean;
 };
 
-export function Leader({ id, type, exhausted, locked, active }: Props) {
+export function Leader({ id, type, exhausted, locked }: Props) {
   const leaderData = getLeaderData(id);
   if (!leaderData) return null;
 

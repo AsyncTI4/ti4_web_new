@@ -5,7 +5,7 @@ type Props = {
   amount?: number;
 };
 
-export function DebtToken({ factionIcon, amount = 1 }: Props) {
+export function DebtToken({ factionIcon }: Props) {
   return (
     <Box
       pos="relative"

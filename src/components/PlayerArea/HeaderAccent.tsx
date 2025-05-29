@@ -1,5 +1,4 @@
 import { Box } from "@mantine/core";
-import { colors } from "../../data/colors";
 import { getColorValues, findColorData } from "../../utils/colorUtils";
 
 interface HeaderAccentProps {
