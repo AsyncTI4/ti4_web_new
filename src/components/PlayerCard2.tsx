@@ -12,7 +12,7 @@ import { ShimmerDivider } from "./PlayerArea/ShimmerDivider";
 import { Caption } from "./PlayerArea/Caption";
 import { ResourceInfluenceDisplay } from "./PlayerArea/ResourceInfluenceDisplay";
 import { Relic } from "./PlayerArea/Relic";
-import { Tech } from "./PlayerArea/Tech";
+import { Tech, PhantomTech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
 import { Shimmer } from "./PlayerArea/Shimmer";
 import { Cardback } from "./PlayerArea/Cardback";
@@ -405,6 +405,27 @@ export default function PlayerCard2(props: Props) {
     red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
   };
 
+  // Helper function to render techs with phantom slots
+  const renderTechColumn = (techType: string, maxSlots: number = 4) => {
+    const filteredTechs = techs.filter((techId) => {
+      const techData = getTechData(techId);
+      return techData?.types[0] === techType;
+    });
+
+    const techElements = filteredTechs.map((techId, index) => (
+      <Tech key={index} techId={techId} />
+    ));
+
+    // Add phantom techs for remaining slots
+    const remainingSlots = Math.max(0, maxSlots - filteredTechs.length);
+    const phantomElements = Array.from(
+      { length: remainingSlots },
+      (_, index) => <PhantomTech key={`phantom-${index}`} techType={techType} />
+    );
+
+    return [...techElements, ...phantomElements];
+  };
+
   return (
     <Paper
       p="sm"
@@ -659,14 +680,6 @@ export default function PlayerCard2(props: Props) {
             <Stack>
               {CardbackStack}
               <Group gap="xs" justify="space-around" align="center">
-                <Group gap="xs" justify="center" align="center">
-                  <FragmentStack count={fragmentCounts.cultural} type="crf" />
-                  <FragmentStack count={fragmentCounts.hazardous} type="hrf" />
-                  <FragmentStack count={fragmentCounts.industrial} type="urf" />
-                </Group>
-                <Box h={35}>
-                  <ShimmerDivider orientation="vertical" />
-                </Box>
                 <Box>
                   <Text ff="mono" size="sm">
                     T/F/S
@@ -675,6 +688,30 @@ export default function PlayerCard2(props: Props) {
                     {tactics}/{fleet}/{strategy}
                   </Text>
                 </Box>
+                {fragmentCounts.cultural +
+                  fragmentCounts.hazardous +
+                  fragmentCounts.industrial >
+                  0 && (
+                  <>
+                    <Box h={35}>
+                      <ShimmerDivider orientation="vertical" />
+                    </Box>
+                    <Group gap="xs" justify="center" align="center">
+                      <FragmentStack
+                        count={fragmentCounts.cultural}
+                        type="crf"
+                      />
+                      <FragmentStack
+                        count={fragmentCounts.hazardous}
+                        type="hrf"
+                      />
+                      <FragmentStack
+                        count={fragmentCounts.industrial}
+                        type="urf"
+                      />
+                    </Group>
+                  </>
+                )}
               </Group>
 
               <Stack gap={4}>
@@ -764,14 +801,7 @@ export default function PlayerCard2(props: Props) {
                           }}
                         >
                           <Stack gap={4}>
-                            {techs
-                              .filter((techId) => {
-                                const techData = getTechData(techId);
-                                return techData?.types[0] === "PROPULSION";
-                              })
-                              .map((techId, index) => (
-                                <Tech key={index} techId={techId} />
-                              ))}
+                            {renderTechColumn("PROPULSION")}
                           </Stack>
                         </Grid.Col>
                         <Grid.Col
@@ -782,14 +812,7 @@ export default function PlayerCard2(props: Props) {
                           }}
                         >
                           <Stack gap={4}>
-                            {techs
-                              .filter((techId) => {
-                                const techData = getTechData(techId);
-                                return techData?.types[0] === "CYBERNETIC";
-                              })
-                              .map((techId, index) => (
-                                <Tech key={index} techId={techId} />
-                              ))}
+                            {renderTechColumn("CYBERNETIC")}
                           </Stack>
                         </Grid.Col>
                         <Grid.Col
@@ -799,16 +822,7 @@ export default function PlayerCard2(props: Props) {
                             xl: 3,
                           }}
                         >
-                          <Stack gap={4}>
-                            {techs
-                              .filter((techId) => {
-                                const techData = getTechData(techId);
-                                return techData?.types[0] === "BIOTIC";
-                              })
-                              .map((techId, index) => (
-                                <Tech key={index} techId={techId} />
-                              ))}
-                          </Stack>
+                          <Stack gap={4}>{renderTechColumn("BIOTIC")}</Stack>
                         </Grid.Col>
                         <Grid.Col
                           span={{
@@ -817,16 +831,7 @@ export default function PlayerCard2(props: Props) {
                             xl: 3,
                           }}
                         >
-                          <Stack gap={4}>
-                            {techs
-                              .filter((techId) => {
-                                const techData = getTechData(techId);
-                                return techData?.types[0] === "WARFARE";
-                              })
-                              .map((techId, index) => (
-                                <Tech key={index} techId={techId} />
-                              ))}
-                          </Stack>
+                          <Stack gap={4}>{renderTechColumn("WARFARE")}</Stack>
                         </Grid.Col>
                       </Grid>
                     </Stack>
