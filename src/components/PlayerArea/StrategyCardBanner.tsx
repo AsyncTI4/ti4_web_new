@@ -1,7 +1,7 @@
 import { Box, Group, Text } from "@mantine/core";
 import { SpeakerToken } from "./SpeakerToken";
 import { Shimmer } from "./Shimmer/Shimmer";
-import { getGradientClasses, ColorKey } from "./gradientClasses";
+import styles from "./StrategyCardBanner.module.css";
 
 type Props = {
   number: number;
@@ -35,7 +35,6 @@ const SC_BORDER_COLORS = {
 } as const;
 
 export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
-  const gradientClasses = getGradientClasses(color as ColorKey);
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const borderColor =
@@ -45,16 +44,17 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
   return (
     <Group gap="xs" align="center">
       <Shimmer
-        color={color as ColorKey}
+        color={color as any}
         p={2}
         px="sm"
         pl="lg"
         pos="relative"
         display="flex"
-        className={gradientClasses.strategyCardBanner}
+        className={`${styles.strategyCardBanner} ${styles[color as keyof typeof styles]}`}
         style={{
           minWidth: "140px",
           borderRadius: "8px",
+          marginLeft: "15px",
         }}
       >
         {/* Additional subtle inner glow overlay */}
@@ -64,7 +64,7 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
           left={0}
           right={0}
           bottom={0}
-          className={gradientClasses.innerGlow}
+          className={`${styles.innerGlow} ${styles[color as keyof typeof styles]}`}
           style={{
             pointerEvents: "none",
             zIndex: 0,
@@ -75,11 +75,11 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
           bg="white"
           pos="absolute"
           top={0}
-          left={-10}
+          left={-15}
           w={35}
           h={35}
           display="flex"
-          className={gradientClasses.iconFilter}
+          className={`${styles.iconFilter} ${styles[color as keyof typeof styles]}`}
           style={{
             border: `3px solid ${borderColor}`,
             borderRadius: "999px",

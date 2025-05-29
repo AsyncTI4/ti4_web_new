@@ -2,8 +2,6 @@
 export {
   getGradientClasses,
   getGradientConfig,
-  relicClasses,
-  unitCardClasses,
   type ColorKey,
 } from "./gradientClasses";
 

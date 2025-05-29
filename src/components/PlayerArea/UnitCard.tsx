@@ -1,6 +1,6 @@
 import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { units } from "../../data/units";
-import { unitCardClasses } from "./gradientClasses";
+import styles from "./UnitCard.module.css";
 
 type Props = {
   unitId: string;
@@ -26,11 +26,11 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
   const reinforcements = 3; // This would come from game state in the future
 
   const cardClass = isUpgraded
-    ? unitCardClasses.upgraded
-    : unitCardClasses.standard;
+    ? `${styles.unitCard} ${styles.upgraded}`
+    : `${styles.unitCard} ${styles.standard}`;
   const highlightClass = isUpgraded
-    ? unitCardClasses.highlight
-    : unitCardClasses.highlightStandard;
+    ? styles.highlight
+    : styles.highlightStandard;
 
   return (
     <Stack
@@ -89,12 +89,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
             left="-100%"
             w="100%"
             h="100%"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, rgba(147, 197, 253, 0.1) 50%, transparent 100%)",
-              animation: "shimmer 5s ease-in-out infinite",
-              pointerEvents: "none",
-            }}
+            className={styles.shimmerEffect}
           />
         </>
       )}

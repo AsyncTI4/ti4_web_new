@@ -1,6 +1,6 @@
 import { Box, Text, Image, Tooltip } from "@mantine/core";
 import { relics } from "../../../data/relics";
-import { relicClasses } from "../gradientClasses";
+import styles from "./Relic.module.css";
 
 type RelicData = {
   alias: string;
@@ -28,7 +28,7 @@ export function Relic({ relicId }: Props) {
 
   return (
     <Tooltip label={relicData.text}>
-      <Box py={4} px={6} className={relicClasses.card}>
+      <Box py={4} px={6} className={styles.relicCard}>
         <Box
           style={{
             display: "flex",
@@ -43,7 +43,7 @@ export function Relic({ relicId }: Props) {
         >
           <Image
             src="/relicicon.webp"
-            className={relicClasses.icon}
+            className={styles.relicIcon}
             style={{
               width: "16px",
               height: "16px",

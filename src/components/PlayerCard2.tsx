@@ -383,9 +383,7 @@ export default function PlayerCard2(props: Props) {
             left={0}
             right={0}
             h={8}
-            style={{
-              background: getHeaderGradientClass(color),
-            }}
+            className={getHeaderGradientClass(color as ColorKey)}
           />
 
           <Group justify="space-between" align="center">

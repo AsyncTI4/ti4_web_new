@@ -1,9 +1,9 @@
 import { Box, Group, Text, Image, Tooltip } from "@mantine/core";
 import { techs } from "../../../data/tech";
-import { getGradientClasses, ColorKey } from "../gradientClasses";
+import styles from "./Tech.module.css";
 
 // Helper function to get tech color from type
-const getTechColor = (techType: string): ColorKey => {
+const getTechColor = (techType: string): string => {
   switch (techType) {
     case "PROPULSION":
       return "blue";
@@ -46,38 +46,40 @@ export function Tech({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
-  const gradientClasses = getGradientClasses(color);
 
   return (
     <Tooltip label={techData.name}>
-      <Box py={1} px="xs" className={gradientClasses.techCard}>
+      <Box py={1} px="xs" className={`${styles.techCard} ${styles[color]}`}>
         {/* Tier indicator dots in top-right */}
         {tier > 0 && (
           <Box
+            pos="absolute"
+            top={3}
+            right={4}
+            display="flex"
+            w={12}
             style={{
-              position: "absolute",
-              top: "3px",
-              right: "4px",
-              display: "flex",
               gap: "2px",
               flexWrap: "wrap",
-              width: "12px",
               justifyContent: "flex-end",
             }}
           >
             {[...Array(tier)].map((_, dotIndex) => (
-              <Box key={dotIndex} className={gradientClasses.tierDot} />
+              <Box
+                key={dotIndex}
+                className={`${styles.tierDot} ${styles[color]}`}
+              />
             ))}
           </Box>
         )}
-        <Group gap={4} style={{ position: "relative", minWidth: 0 }}>
+        <Group gap={4} pos="relative" miw={0}>
           <Image
             src={`/${color}.png`}
             alt={techData.name}
-            className={gradientClasses.iconFilter}
+            className={`${styles.iconFilter} ${styles[color]}`}
+            w={14}
+            h={14}
             style={{
-              width: "14px",
-              height: "14px",
               flexShrink: 0,
             }}
           />
@@ -86,6 +88,8 @@ export function Tech({ techId }: Props) {
             c="white"
             fw={600}
             ff="monospace"
+            flex={1}
+            miw={0}
             style={{
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
               paddingRight: "16px",
@@ -93,8 +97,6 @@ export function Tech({ techId }: Props) {
               overflow: "hidden",
               whiteSpace: "nowrap",
               textOverflow: "clip",
-              minWidth: 0,
-              flex: 1,
             }}
           >
             {techData.name}

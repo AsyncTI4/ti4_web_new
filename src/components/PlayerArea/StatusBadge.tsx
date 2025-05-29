@@ -1,5 +1,5 @@
 import { Box, Text } from "@mantine/core";
-import { getGradientClasses, ColorKey } from "./gradientClasses";
+import styles from "./StatusBadge.module.css";
 
 type Props = {
   status: "active" | "passed" | "next" | "waiting";
@@ -31,11 +31,14 @@ const statusConfig = {
 
 export function StatusBadge({ status, text }: Props) {
   const config = statusConfig[status];
-  const gradientClasses = getGradientClasses(config.color);
   const displayText = text || config.defaultText;
 
   return (
-    <Box px={8} py={2} className={gradientClasses.statusBadge}>
+    <Box
+      px={8}
+      py={2}
+      className={`${styles.statusBadge} ${styles[config.color]}`}
+    >
       <Text
         size="xs"
         fw={700}

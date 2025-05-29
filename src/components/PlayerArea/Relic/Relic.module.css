@@ -1,0 +1,37 @@
+/* Relic special styles */
+.relicCard {
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.relicCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.08) 0px, rgba(251, 191, 36, 0.08) 1px, transparent 1px, transparent 16px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.relicCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.relicIcon {
+  filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3));
+}
