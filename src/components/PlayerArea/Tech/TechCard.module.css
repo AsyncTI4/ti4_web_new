@@ -1,0 +1,161 @@
+.techCard {
+  position: relative;
+  width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.innerGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.backgroundPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.content {
+  padding: var(--mantine-spacing-lg);
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  position: relative;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  margin: -24px -24px 0 -24px;
+  border-radius: 16px 16px 0 0;
+}
+
+.title {
+  letter-spacing: 0.5px;
+  padding: 0 var(--mantine-spacing-sm);
+}
+
+.titleWithFaction {
+  padding-right: 32px;
+}
+
+.factionIcon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+.description {
+  flex: 1;
+  padding: 0 var(--mantine-spacing-xs);
+}
+
+.descriptionText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.bottomSection {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.techIconContainer {
+  position: absolute;
+  bottom: -24px;
+  right: -24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px 0 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Color variants */
+.blue {
+  --tech-color-rgb: 59, 130, 246; /* blue-500 - darker and more saturated */
+}
+
+.green {
+  --tech-color-rgb: 34, 197, 94; /* green-500 - darker and more saturated */
+}
+
+.red {
+  --tech-color-rgb: 239, 68, 68; /* red-500 - darker and more saturated */
+}
+
+.yellow {
+  --tech-color-rgb: 234, 179, 8; /* yellow-500 - darker and more saturated */
+}
+
+.grey {
+  --tech-color-rgb: 107, 114, 128; /* gray-500 - darker */
+}
+
+/* Dynamic styles using CSS custom properties */
+.techCard.blue,
+.techCard.green,
+.techCard.red,
+.techCard.yellow,
+.techCard.grey {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(var(--tech-color-rgb), 0.3);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(var(--tech-color-rgb), 0.15),
+    inset 0 1px 0 rgba(148, 163, 184, 0.1);
+}
+
+.innerGlow.blue,
+.innerGlow.green,
+.innerGlow.red,
+.innerGlow.yellow,
+.innerGlow.grey {
+  background: radial-gradient(ellipse at center, rgba(var(--tech-color-rgb), 0.08) 0%, transparent 70%);
+}
+
+.header.blue,
+.header.green,
+.header.red,
+.header.yellow,
+.header.grey {
+  background: linear-gradient(135deg, rgba(var(--tech-color-rgb), 0.15) 0%, rgba(var(--tech-color-rgb), 0.08) 100%);
+  border-bottom: 1px solid rgba(var(--tech-color-rgb), 0.25);
+}
+
+.techIconContainer.blue,
+.techIconContainer.green,
+.techIconContainer.red,
+.techIconContainer.yellow,
+.techIconContainer.grey {
+  background: linear-gradient(135deg, rgba(var(--tech-color-rgb), 0.15) 0%, rgba(var(--tech-color-rgb), 0.08) 100%);
+  border: 1px solid rgba(var(--tech-color-rgb), 0.3);
+  box-shadow:
+    0 4px 12px rgba(var(--tech-color-rgb), 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.techIcon.blue,
+.techIcon.green,
+.techIcon.red,
+.techIcon.yellow,
+.techIcon.grey {
+  filter: drop-shadow(0 2px 4px rgba(var(--tech-color-rgb), 0.4));
+}
