@@ -30,7 +30,7 @@ import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
-import { PlayerData } from "@/data/pbd10242";
+import { PlayerData, pbdPlayerData } from "../data/pbd10242";
 
 // Helper function to get header gradient class from color
 const getHeaderGradientClass = (color: string): string => {
@@ -80,11 +80,6 @@ const DEFAULT_PLAYER_CARD_DATA = {
     hacan: 3,
     letnev: 1,
   },
-  neighborFactions: [
-    { factionIcon: "/factions/hacan.png" },
-    { factionIcon: "/factions/letnev.png" },
-    { factionIcon: "/factions/titans.png" },
-  ],
 };
 
 // Strategy card names and colors mapping
@@ -130,7 +125,6 @@ export default function PlayerCard2(props: Props) {
     techs,
     relics,
     planets,
-    neighborFactions,
     secretsScored,
     unitsOwned,
     leaders,
@@ -163,33 +157,6 @@ export default function PlayerCard2(props: Props) {
     const planetData = getPlanetData(planetId);
     return sum + (planetData ? planetData.influence : 0);
   }, 0);
-
-  const planetTraitIcons = {
-    cultural: (
-      <Image
-        src={`/planet_attributes/pc_attribute_cultural.png`}
-        alt="cultural"
-        w={24}
-        h={24}
-      />
-    ),
-    hazardous: (
-      <Image
-        src={`/planet_attributes/pc_attribute_hazardous.png`}
-        alt="hazardous"
-        w={24}
-        h={24}
-      />
-    ),
-    industrial: (
-      <Image
-        src={`/planet_attributes/pc_attribute_industrial.png`}
-        alt="industrial"
-        w={24}
-        h={24}
-      />
-    ),
-  };
 
   const techSkipIcons = {
     biotic: <Image src={`/green.png`} alt="biotic" w={16} h={16} />,
@@ -301,6 +268,19 @@ export default function PlayerCard2(props: Props) {
     </Group>
   );
 
+  // Get neighbor faction icons from neighbor colors
+  const getNeighborFactionIcons = () => {
+    const neighbors = props.playerData.neighbors || [];
+    return neighbors
+      .map((neighborColor) => {
+        const neighborPlayer = pbdPlayerData.find(
+          (player) => player.color === neighborColor
+        );
+        return neighborPlayer ? neighborPlayer.faction : null;
+      })
+      .filter(Boolean); // Remove null values
+  };
+
   // Helper function to render techs with phantom slots
   const renderTechColumn = (techType: string, maxSlots: number = 4) => {
     const filteredTechs = techs.filter((techId) => {
@@ -339,6 +319,10 @@ export default function PlayerCard2(props: Props) {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(200%)" },
         },
+
+        filter: props.playerData.passed
+          ? "brightness(0.9) saturate(0.4)"
+          : "none",
       }}
       radius="md"
     >
@@ -374,6 +358,7 @@ export default function PlayerCard2(props: Props) {
             overflow: "hidden",
             boxShadow:
               "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
+            opacity: props.playerData.passed ? 0.9 : 1,
           }}
         >
           {/* Header bottom border accent */}
@@ -388,6 +373,17 @@ export default function PlayerCard2(props: Props) {
 
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">
+              {/* Small circular faction icon */}
+              <Image
+                src={`/factions/${faction.toLowerCase()}.png`}
+                alt={faction}
+                w={24}
+                h={24}
+                style={{
+                  filter:
+                    "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+                }}
+              />
               <Text
                 span
                 c="white"
@@ -426,39 +422,41 @@ export default function PlayerCard2(props: Props) {
               </Text>
 
               {/* Status Indicator - harmonized with Shimmer component styling */}
-              <Box
-                px={8}
-                py={2}
-                ml={4}
-                style={{
-                  borderRadius: "6px",
-                  background: hasPassed
-                    ? "linear-gradient(135deg, rgba(107, 114, 128, 0.12) 0%, rgba(75, 85, 99, 0.06) 100%)"
-                    : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
-                  border: hasPassed
-                    ? "1px solid rgba(107, 114, 128, 0.25)"
-                    : "1px solid rgba(34, 197, 94, 0.25)",
-                  boxShadow: hasPassed
-                    ? "0 2px 8px rgba(107, 114, 128, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
-                    : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
-                }}
-              >
-                <Text
-                  size="xs"
-                  fw={700}
-                  c={hasPassed ? "gray.4" : "green.3"}
+              {(props.playerData.passed || props.playerData.active) && (
+                <Box
+                  px={8}
+                  py={2}
+                  ml={4}
                   style={{
-                    textTransform: "uppercase",
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    letterSpacing: "0.5px",
-                    fontSize: "10px",
+                    borderRadius: "6px",
+                    background: props.playerData.passed
+                      ? "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%)"
+                      : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
+                    border: props.playerData.passed
+                      ? "1px solid rgba(239, 68, 68, 0.25)"
+                      : "1px solid rgba(34, 197, 94, 0.25)",
+                    boxShadow: props.playerData.passed
+                      ? "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                      : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
                   }}
                 >
-                  {hasPassed ? "PASSED" : "ACTIVE"}
-                </Text>
-              </Box>
+                  <Text
+                    size="xs"
+                    fw={700}
+                    c={props.playerData.passed ? "red.3" : "green.3"}
+                    style={{
+                      textTransform: "uppercase",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      letterSpacing: "0.5px",
+                      fontSize: "10px",
+                    }}
+                  >
+                    {props.playerData.passed ? "PASSED" : "ACTIVE"}
+                  </Text>
+                </Box>
+              )}
 
-              {/* Header Neighbors Section - harmonized with Surface component styling */}
+              {/* Header s Section - harmonized with Surface component styling */}
               <Box
                 px={8}
                 py={4}
@@ -508,10 +506,10 @@ export default function PlayerCard2(props: Props) {
                   >
                     Neighbors:
                   </Text>
-                  {neighborFactions.map((neighbor, index) => (
+                  {getNeighborFactionIcons().map((neighborFaction, index) => (
                     <Image
                       key={index}
-                      src={neighbor.factionIcon}
+                      src={`/factions/${neighborFaction}.png`}
                       w={18}
                       h={18}
                       style={{
@@ -912,7 +910,7 @@ export default function PlayerCard2(props: Props) {
                     </Group>
 
                     {/* Debt Section */}
-                    <DebtTokens debts={debts} />
+                    {/* <DebtTokens debts={debts} /> */}
                   </Stack>
                 </Surface>
               </Grid.Col>
@@ -992,3 +990,30 @@ export default function PlayerCard2(props: Props) {
     </Paper>
   );
 }
+
+const planetTraitIcons = {
+  cultural: (
+    <Image
+      src={`/planet_attributes/pc_attribute_cultural.png`}
+      alt="cultural"
+      w={24}
+      h={24}
+    />
+  ),
+  hazardous: (
+    <Image
+      src={`/planet_attributes/pc_attribute_hazardous.png`}
+      alt="hazardous"
+      w={24}
+      h={24}
+    />
+  ),
+  industrial: (
+    <Image
+      src={`/planet_attributes/pc_attribute_industrial.png`}
+      alt="industrial"
+      w={24}
+      h={24}
+    />
+  ),
+};

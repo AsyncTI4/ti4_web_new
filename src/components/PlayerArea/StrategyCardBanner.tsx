@@ -43,6 +43,9 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
 
   return (
     <Group gap="xs" align="center">
+      {/* Speaker Token */}
+      <SpeakerToken isVisible={hasSpeaker} />
+
       <Shimmer
         color={color as any}
         p={2}
@@ -106,9 +109,6 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
           {text}
         </Text>
       </Shimmer>
-
-      {/* Speaker Token */}
-      <SpeakerToken isVisible={hasSpeaker} />
     </Group>
   );
 }

@@ -4,8 +4,10 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "jolnar",
     color: "yellow",
     displayName: "null",
-    passed: false,
+    hasSpeaker: true,
+    passed: true,
     eliminated: false,
+    active: false,
     tacticalCC: 2,
     fleetCC: 5,
     strategicCC: 2,
@@ -73,14 +75,17 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: { syc: 500 },
     flexibleDisplayName: "Jolnar",
     scs: [3],
+    neighbors: ["green", "purple", "gray", "orange", "red"],
   },
   {
     userName: "newnew145 (UTC+7)",
     faction: "yin",
     color: "green",
     displayName: "null",
+    hasSpeaker: false,
     passed: false,
     eliminated: false,
+    active: true,
     tacticalCC: 4,
     fleetCC: 5,
     strategicCC: 2,
@@ -159,14 +164,17 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: {},
     flexibleDisplayName: "Yin",
     scs: [1],
+    neighbors: ["green", "purple", "gray"],
   },
   {
     userName: "xoften (UTC+2)",
     faction: "yssaril",
     color: "purple",
     displayName: "null",
+    hasSpeaker: false,
     passed: false,
     eliminated: false,
+    active: false,
     tacticalCC: 2,
     fleetCC: 3,
     strategicCC: 1,
@@ -250,14 +258,17 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: {},
     flexibleDisplayName: "Yssaril",
     scs: [7],
+    neighbors: ["green", "gray", "purple"],
   },
   {
     userName: "Olorin (UTC+1)",
     faction: "mentak",
     color: "gray",
     displayName: "null",
+    hasSpeaker: false,
     passed: false,
     eliminated: false,
+    active: false,
     tacticalCC: 6,
     fleetCC: 5,
     strategicCC: 2,
@@ -325,14 +336,17 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: {},
     flexibleDisplayName: "Mentak",
     scs: [8],
+    neighbors: ["orange", "green", "gray", "purple"],
   },
   {
     userName: "Dustangel (utc +7)",
     faction: "argent",
     color: "orange",
     displayName: "null",
-    passed: false,
+    hasSpeaker: false,
+    passed: true,
     eliminated: false,
+    active: false,
     tacticalCC: 1,
     fleetCC: 4,
     strategicCC: 2,
@@ -422,14 +436,17 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: { dtd: 527 },
     flexibleDisplayName: "Argent",
     scs: [4],
+    neighbors: ["gray", "red"],
   },
   {
     userName: "James (UTC+4)",
     faction: "hacan",
     color: "red",
     displayName: "null",
+    hasSpeaker: false,
     passed: false,
     eliminated: false,
+    active: false,
     tacticalCC: 1,
     fleetCC: 4,
     strategicCC: 2,
@@ -511,6 +528,7 @@ export const pbdPlayerData: PlayerData[] = [
     secretsScored: {},
     flexibleDisplayName: "Hacan",
     scs: [6],
+    neighbors: ["orange", "yellow"],
   },
 ];
 
@@ -528,8 +546,10 @@ export interface PlayerData {
   faction: string;
   color: string;
   displayName: string;
+  hasSpeaker: boolean;
   passed: boolean;
   eliminated: boolean;
+  active: boolean;
   tacticalCC: number;
   fleetCC: number;
   strategicCC: number;
@@ -561,4 +581,5 @@ export interface PlayerData {
   secretsScored: Record<string, number>;
   flexibleDisplayName: string;
   scs: number[];
+  neighbors: string[];
 }
