@@ -1,5 +1,5 @@
 import { Group, Image } from "@mantine/core";
-
+import { cdnImage } from "../../../data/cdnImage";
 type FragmentType = "crf" | "hrf" | "urf";
 
 type Props = {
@@ -11,13 +11,13 @@ export function FragmentStack({ count, type }: Props) {
   const getFragmentSrc = () => {
     switch (type) {
       case "crf":
-        return "/pa_fragment_crf.png";
+        return cdnImage("/player_area/pa_fragment_crf.png");
       case "hrf":
-        return "/pa_fragment_hrf.png";
+        return cdnImage("/player_area/pa_fragment_hrf.png");
       case "urf":
-        return "/pa_fragment_urf.png";
+        return cdnImage("/player_area/pa_fragment_urf.png");
       default:
-        return "/pa_fragment_crf.png";
+        return cdnImage("/player_area/pa_fragment_crf.png");
     }
   };
 

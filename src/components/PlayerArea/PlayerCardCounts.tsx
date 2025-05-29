@@ -1,5 +1,6 @@
 import { Group } from "@mantine/core";
 import { Cardback } from "./Cardback";
+import { cdnImage } from "../../data/cdnImage";
 
 type Props = {
   tg: number;
@@ -12,7 +13,7 @@ export function PlayerCardCounts({ tg, commodities, commoditiesTotal }: Props) {
     <Group gap={6} justify="center">
       {[
         {
-          src: "/cardback/cardback_so.png",
+          src: cdnImage("/player_area/pa_cardbacks_so.png"),
           alt: "secret objectives",
           count: 0, // Mock data as requested
         },
@@ -22,17 +23,17 @@ export function PlayerCardCounts({ tg, commodities, commoditiesTotal }: Props) {
           count: 4, // Mock data as requested
         },
         {
-          src: "/cardback/cardback_pn.png",
+          src: cdnImage("/player_area/pa_cardbacks_pn.png"),
           alt: "promissory notes",
           count: 7, // Mock data as requested
         },
         {
-          src: "/cardback/cardback_tg.png",
+          src: cdnImage("/player_area/pa_cardbacks_tradegoods.png"),
           alt: "trade goods",
           count: tg,
         },
         {
-          src: "/cardback/cardback_comms.png",
+          src: cdnImage("/player_area/pa_cardbacks_commodities.png"),
           alt: "commodities",
           count: `${commodities}/${commoditiesTotal}`,
         },

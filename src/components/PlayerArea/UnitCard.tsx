@@ -2,6 +2,7 @@ import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { units } from "../../data/units";
 import { solidColors } from "../../data/solidColors";
 import styles from "./UnitCard.module.css";
+import { cdnImage } from "../../data/cdnImage";
 
 type Props = {
   unitId: string;
@@ -117,7 +118,7 @@ export function UnitCard({ unitId, maxReinforcements = 8, color }: Props) {
           }}
         >
           <Image
-            src={`/factions/${unitData.faction?.toLowerCase()}.png`}
+            src={cdnImage(`/factions/${unitData.faction?.toLowerCase()}.png`)}
             w="24px"
             h="24px"
           />
@@ -125,7 +126,10 @@ export function UnitCard({ unitId, maxReinforcements = 8, color }: Props) {
       )}
 
       <Flex justify="center">
-        <Image src={`/units/${colorAlias}_${unitData.asyncId}.png`} h="30px" />
+        <Image
+          src={cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`)}
+          h="30px"
+        />
       </Flex>
 
       <Stack gap={2} align="center">

@@ -1,6 +1,6 @@
 import { Box, Group, Text, Image } from "@mantine/core";
 import { pbdPlayerData } from "../../data/pbd10242";
-
+import { cdnImage } from "../../data/cdnImage";
 type Props = {
   neighbors: string[];
 };
@@ -68,7 +68,7 @@ export function Neighbors({ neighbors }: Props) {
         {neighborFactions.map((neighborFaction, index) => (
           <Image
             key={index}
-            src={`/factions/${neighborFaction}.png`}
+            src={cdnImage(`/factions/${neighborFaction}.png`)}
             w={18}
             h={18}
             style={{

@@ -4,6 +4,7 @@ import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { planets } from "../../../data/planets";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
+import { cdnImage } from "../../../data/cdnImage";
 
 type Props = {
   planetId: string;
@@ -36,7 +37,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
     if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
       return (
         <Image
-          src={`/factions/${planetData.factionHomeworld}.png`}
+          src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
           w={24}
           h={24}
         />

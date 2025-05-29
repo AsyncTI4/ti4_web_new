@@ -1,6 +1,7 @@
 import { Box, Stack, Group } from "@mantine/core";
 import { Caption } from "./Caption";
 import { DebtToken } from "./DebtToken";
+import { cdnImage } from "../../data/cdnImage";
 
 type Props = {
   debts: Record<string, number>;
@@ -51,7 +52,7 @@ export function DebtTokens({ debts }: Props) {
               .map((_, index) => (
                 <DebtToken
                   key={`${factionName}-${index}`}
-                  factionIcon={`/factions/${factionName}.png`}
+                  factionIcon={cdnImage(`/factions/${factionName}.png`)}
                 />
               ))
           )}

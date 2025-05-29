@@ -30,6 +30,7 @@ import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
+import { cdnImage } from "../data/cdnImage";
 
 // Helper function to get header gradient class from color
 const getHeaderGradientClass = (color: string): string => {
@@ -360,7 +361,7 @@ export default function PlayerCard2(props: Props) {
             <Group gap={4} px={4} align="center">
               {/* Small circular faction icon */}
               <Image
-                src={`/factions/${faction.toLowerCase()}.png`}
+                src={cdnImage(`/factions/${faction}.png`)}
                 alt={faction}
                 w={24}
                 h={24}
@@ -869,7 +870,7 @@ export default function PlayerCard2(props: Props) {
         }}
       >
         <Image
-          src={`/factions/${faction.toLowerCase()}.png`}
+          src={cdnImage(`/factions/${faction}.png`)}
           alt="faction"
           w="100%"
           h="100%"

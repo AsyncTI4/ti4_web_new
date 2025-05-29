@@ -1,3 +1,4 @@
+import { cdnImage } from "../../data/cdnImage";
 import { Table, Image, Text } from "@mantine/core";
 import { IconRocket, IconPlanet } from "@tabler/icons-react";
 
@@ -29,7 +30,28 @@ export function ArmyStats({ stats }: Props) {
       <Table.Tbody>
         <Table.Tr>
           <Table.Td>
-            <Image src="/pa_health.png" style={{ width: "20px" }} />
+            <Image
+              src={cdnImage("/player_area/pa_resources.png")}
+              style={{ width: "20px" }}
+            />
+          </Table.Td>
+          <Table.Td>
+            <Text size="md" fw={700} c="white">
+              {stats.spaceUnits}
+            </Text>
+          </Table.Td>
+          <Table.Td>
+            <Text size="md" fw={700} c="white">
+              {stats.groundUnits}
+            </Text>
+          </Table.Td>
+        </Table.Tr>
+        <Table.Tr>
+          <Table.Td>
+            <Image
+              src={cdnImage("/player_area/pa_health.png")}
+              style={{ width: "20px" }}
+            />
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
@@ -44,7 +66,10 @@ export function ArmyStats({ stats }: Props) {
         </Table.Tr>
         <Table.Tr>
           <Table.Td>
-            <Image src="/pa_hit.png" style={{ width: "20px" }} />
+            <Image
+              src={cdnImage("/player_area/pa_hit.png")}
+              style={{ width: "20px" }}
+            />
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
@@ -54,21 +79,6 @@ export function ArmyStats({ stats }: Props) {
           <Table.Td>
             <Text size="md" fw={700} c="white">
               {stats.groundHit}
-            </Text>
-          </Table.Td>
-        </Table.Tr>
-        <Table.Tr>
-          <Table.Td>
-            <Image src="/pa_unitimage.png" style={{ width: "20px" }} />
-          </Table.Td>
-          <Table.Td>
-            <Text size="md" fw={700} c="white">
-              {stats.spaceUnits}
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <Text size="md" fw={700} c="white">
-              {stats.groundUnits}
             </Text>
           </Table.Td>
         </Table.Tr>

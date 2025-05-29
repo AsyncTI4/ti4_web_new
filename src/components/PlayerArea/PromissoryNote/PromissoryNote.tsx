@@ -3,6 +3,7 @@ import { Shimmer } from "../Shimmer";
 import { promissoryNotes } from "../../../data/promissoryNotes";
 import { pbdPlayerData } from "../../../data/pbd10242";
 import { getGradientClasses } from "../gradientClasses";
+import { cdnImage } from "../../../data/cdnImage";
 
 type PromissoryNoteData = {
   alias: string;
@@ -63,7 +64,7 @@ export function PromissoryNote({ promissoryNoteId }: Props) {
   const gradientClasses = getGradientClasses(shimmerColor);
 
   // Get faction icon path
-  const factionIcon = `/factions/${faction}.png`;
+  const factionIcon = cdnImage(`/factions/${faction}.png`);
 
   return (
     <Tooltip label={displayText}>

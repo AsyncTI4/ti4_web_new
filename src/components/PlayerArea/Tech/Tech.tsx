@@ -1,6 +1,7 @@
 import { Box, Group, Text, Image, Tooltip } from "@mantine/core";
 import { techs } from "../../../data/tech";
 import styles from "./Tech.module.css";
+import { cdnImage } from "../../../data/cdnImage";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -55,7 +56,7 @@ export function Tech({ techId }: Props) {
         {isFactionTech && (
           <Box pos="absolute" top={3} right={tier > 0 ? 20 : 4}>
             <Image
-              src={`/factions/${techData.faction}.png`}
+              src={cdnImage(`/factions/${techData.faction}.png`)}
               alt={`${techData.faction} faction`}
               w={14}
               h={14}
