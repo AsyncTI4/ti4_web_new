@@ -165,8 +165,8 @@ function ObjectiveCard({
 function LawCard({ title }: { title: string }) {
   return (
     <Box
-      p="xs"
-      px="sm"
+      p={4}
+      px="xs"
       style={{
         background: "rgba(148, 163, 184, 0.08",
         border: "1px solid rgba(148, 163, 184, 0.2)",
@@ -178,7 +178,7 @@ function LawCard({ title }: { title: string }) {
           position: "relative",
           display: "flex",
           alignItems: "center",
-          gap: "10px",
+          gap: "6px",
           minWidth: 0,
         }}
       >
@@ -186,9 +186,9 @@ function LawCard({ title }: { title: string }) {
         <Box
           style={{
             position: "absolute",
-            right: "-10px",
-            width: "40px",
-            height: "40px",
+            right: "-6px",
+            width: "28px",
+            height: "28px",
             background:
               "linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%)",
             border: "1px solid rgba(148, 163, 184, 0.3)",
@@ -201,7 +201,7 @@ function LawCard({ title }: { title: string }) {
         >
           <Text
             style={{
-              fontSize: "28px",
+              fontSize: "20px",
               lineHeight: 1,
             }}
           >
@@ -212,8 +212,8 @@ function LawCard({ title }: { title: string }) {
         {/* Administrative badge/seal background for faction icon */}
         <Box
           style={{
-            width: "40px",
-            height: "40px",
+            width: "28px",
+            height: "28px",
             background:
               "linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%)",
             border: "1px solid rgba(148, 163, 184, 0.3)",
@@ -230,8 +230,8 @@ function LawCard({ title }: { title: string }) {
           <Image
             src="/factions/saar.png"
             style={{
-              width: "24px",
-              height: "24px",
+              width: "18px",
+              height: "18px",
               filter:
                 "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6)) brightness(1.05)",
             }}
@@ -246,7 +246,7 @@ function LawCard({ title }: { title: string }) {
               "linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%)",
             border: "1px solid rgba(148, 163, 184, 0.2)",
             borderRadius: "3px",
-            padding: "6px 12px",
+            padding: "4px 8px",
             position: "relative",
             overflow: "hidden",
             boxShadow: "inset 1px 1px 2px rgba(0, 0, 0, 0.4)",
@@ -283,8 +283,8 @@ function LawCard({ title }: { title: string }) {
 
           <Text
             size="md"
-            ff="heading"
             fw={600}
+            ff="heading"
             c="slate.2"
             style={{
               overflow: "hidden",
@@ -329,21 +329,20 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
       cornerAccents={true}
       // label="SCOREBOARD"
       style={{
-        width: "100vw",
         background:
           "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
       }}
     >
       {/* Game Status Section */}
-      <Box mb="lg">
-        <SimpleGrid cols={3} spacing="lg">
+      <Box mb="md">
+        <SimpleGrid cols={3} spacing="md">
           {/* Unpicked Strategy Cards */}
           <Box>
             <Text
               size="sm"
               fw={600}
               c="gray.5"
-              mb="sm"
+              mb="xs"
               style={{
                 textTransform: "uppercase",
                 letterSpacing: "1px",
@@ -352,7 +351,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
             >
               Unpicked SCs
             </Text>
-            <Group gap="sm">
+            <Group gap="xs">
               <StrategyCard number={4} name="CONSTRUCTION" color="green" />
               <StrategyCard number={7} name="TECHNOLOGY" color="blue" />
             </Group>
@@ -364,7 +363,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               size="sm"
               fw={600}
               c="gray.5"
-              mb="sm"
+              mb="xs"
               style={{
                 textTransform: "uppercase",
                 letterSpacing: "1px",
@@ -382,7 +381,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               size="sm"
               fw={600}
               c="gray.5"
-              mb="sm"
+              mb="xs"
               style={{
                 textTransform: "uppercase",
                 letterSpacing: "1px",
@@ -391,7 +390,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
             >
               Factions in Game
             </Text>
-            <Group gap="md">
+            <Group gap="sm">
               {CURRENT_GAME_FACTIONS.map((factionIcon, index) => {
                 // Determine if this faction should have a status badge
                 let statusBadge = null;
@@ -407,8 +406,8 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                   <Stack key={index} gap="xs" align="center">
                     <Image
                       src={factionIcon}
-                      w={40}
-                      h={40}
+                      w={36}
+                      h={36}
                       style={{
                         filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))",
                       }}
@@ -428,17 +427,17 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           height: "1px",
           background:
             "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%)",
-          margin: "16px 0",
+          margin: "12px 0",
         }}
       />
 
       {/* Laws in Play Section */}
-      <Box mb="lg">
+      <Box mb="md">
         <Text
           size="sm"
           fw={600}
           c="gray.5"
-          mb="sm"
+          mb="xs"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
@@ -447,7 +446,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         >
           Laws in Play
         </Text>
-        <SimpleGrid cols={2} spacing="sm">
+        <SimpleGrid cols={2} spacing="xs">
           {LAWS_IN_PLAY.map((law, index) => (
             <LawCard key={index} title={law} />
           ))}
@@ -460,17 +459,17 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           height: "1px",
           background:
             "linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%)",
-          margin: "16px 0",
+          margin: "12px 0",
         }}
       />
 
       {/* Scorable Objectives Section */}
-      <Box mb="lg">
+      <Box mb="md">
         <Text
           size="sm"
           fw={600}
           c="gray.5"
-          mb="sm"
+          mb="xs"
           style={{
             textTransform: "uppercase",
             letterSpacing: "1px",
@@ -479,18 +478,18 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         >
           Public Objectives
         </Text>
-        <SimpleGrid cols={3} spacing="sm">
+        <SimpleGrid cols={3} spacing="xs">
           {/* Stage I Objectives (Orange) */}
           <Box
             style={{
               background: "rgba(249, 115, 22, 0.04)",
               border: "1px solid rgba(249, 115, 22, 0.1)",
               borderRadius: "6px",
-              padding: "6px",
+              padding: "4px",
             }}
           >
             <Text
-              size="md"
+              size="sm"
               fw={600}
               c="orange.3"
               mb="xs"
@@ -498,13 +497,13 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                 textAlign: "center",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
-                fontSize: "14px",
+                fontSize: "12px",
               }}
             >
               Stage I
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "1px" }}
             >
               {STAGE_1_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -523,11 +522,11 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
               background: "rgba(59, 130, 246, 0.04)",
               border: "1px solid rgba(59, 130, 246, 0.1)",
               borderRadius: "6px",
-              padding: "6px",
+              padding: "4px",
             }}
           >
             <Text
-              size="md"
+              size="sm"
               fw={600}
               c="blue.3"
               mb="xs"
@@ -535,13 +534,13 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                 textAlign: "center",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
-                fontSize: "14px",
+                fontSize: "12px",
               }}
             >
               Stage II
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "1px" }}
             >
               {STAGE_2_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -558,7 +557,7 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
           {/* Other Objectives (Gray) */}
           <Box>
             <Text
-              size="md"
+              size="sm"
               fw={600}
               c="gray.3"
               mb="xs"
@@ -566,13 +565,13 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
                 textAlign: "center",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
-                fontSize: "14px",
+                fontSize: "12px",
               }}
             >
               Other
             </Text>
             <Box
-              style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "1px" }}
             >
               {OTHER_OBJECTIVES.map((objective, index) => (
                 <ObjectiveCard
@@ -592,9 +591,9 @@ function ScoreBoard({ factionScores = DEFAULT_FACTION_SCORES }: Props) {
         style={{
           display: "flex",
           width: "100%",
-          height: "80px",
+          height: "70px",
           overflow: "visible",
-          padding: "6px 0",
+          padding: "4px 0",
         }}
       >
         {scorePositions.map((score, index) => {
