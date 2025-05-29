@@ -25,10 +25,26 @@ import { UnitCard } from "./PlayerArea/UnitCard";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
+import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData } from "@/data/pbd10242";
+
+// Gradient dictionary for header bottom border accents
+const HEADER_GRADIENTS = {
+  pink: "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
+  yellow:
+    "linear-gradient(90deg, transparent 0%, rgba(234, 179, 8, 0.5) 20%, rgba(234, 179, 8, 0.5) 80%, transparent 100%)",
+  green:
+    "linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.5) 20%, rgba(34, 197, 94, 0.5) 80%, transparent 100%)",
+  purple:
+    "linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.5) 20%, rgba(147, 51, 234, 0.5) 80%, transparent 100%)",
+  gray: "linear-gradient(90deg, transparent 0%, rgba(107, 114, 128, 0.5) 20%, rgba(107, 114, 128, 0.5) 80%, transparent 100%)",
+  orange:
+    "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 20%, rgba(249, 115, 22, 0.5) 80%, transparent 100%)",
+  red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
+};
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -54,7 +70,7 @@ const DEFAULT_PLAYER_CARD_DATA = {
   tactics: 1,
   fleet: 4,
   strategy: 2,
-  fragments: ["crf1", "crf2", "crf3", "hrf1", "hrf2", "irf1"],
+
   needsToFollow: {
     blue: 2,
     green: 4,
@@ -74,95 +90,10 @@ const DEFAULT_PLAYER_CARD_DATA = {
     hacan: 3,
     letnev: 1,
   },
-  techs: ["amd", "gd", "fl", "lwd", "st", "ps", "dxa", "hm", "ie"],
-  relics: ["shard", "emphidia", "obsidian", "stellarconverter"],
-  promissoryNotes: ["convoys", "war_funding", "terraform"],
-  planets: [
-    "mr",
-    "abyz",
-    "fria",
-    "bereg",
-    "lirtaiv",
-    "meer",
-    "arinam",
-    "arnor",
-    "lor",
-    "winnu",
-  ],
   neighborFactions: [
     { factionIcon: "/factions/hacan.png" },
     { factionIcon: "/factions/letnev.png" },
     { factionIcon: "/factions/titans.png" },
-  ],
-  secretsScored: {
-    gamf: 685,
-    mp: 583,
-    uf: 189,
-  },
-  unitsOwned: [
-    "sol_carrier",
-    "flagship",
-    "spacedock",
-    "destroyer",
-    "fighter",
-    "dreadnought",
-    "sol_infantry",
-    "cruiser",
-    "pds",
-    "mech",
-  ],
-  leaders: [
-    {
-      id: "solagent",
-      type: "agent",
-      tgCount: 0,
-      exhausted: false,
-      locked: false,
-      active: true,
-    },
-    {
-      id: "solcommander",
-      type: "commander",
-      tgCount: 0,
-      exhausted: false,
-      locked: true,
-      active: false,
-    },
-    {
-      id: "solhero",
-      type: "hero",
-      tgCount: 0,
-      exhausted: false,
-      locked: false,
-      active: true,
-    },
-  ],
-  cardbacks: [
-    {
-      src: "/cardback/cardback_so.png",
-      alt: "secret objectives",
-      count: 0,
-    },
-    {
-      src: "/cardback/cardback_action.png",
-      alt: "action cards",
-      count: 4,
-    },
-    {
-      src: "/cardback/cardback_pn.png",
-      alt: "promissory notes",
-      count: 7,
-    },
-    {
-      src: "/cardback/cardback_tg.png",
-      alt: "trade goods",
-      count: 17,
-    },
-    {
-      src: "/cardback/cardback_comms.png",
-      alt: "commodities",
-      count: "0/6",
-    },
   ],
 };
 
@@ -192,7 +123,6 @@ export default function PlayerCard2(props: Props) {
     secretsScored,
     unitsOwned,
     leaders,
-    cardbacks,
   } = { ...DEFAULT_PLAYER_CARD_DATA, ...props.playerData };
 
   // Use promissoryNotesInPlayArea from PlayerData
@@ -272,7 +202,33 @@ export default function PlayerCard2(props: Props) {
 
   const CardbackStack = (
     <Group gap={6} justify="center">
-      {cardbacks.map((cardback, index) => (
+      {[
+        {
+          src: "/cardback/cardback_so.png",
+          alt: "secret objectives",
+          count: 0, // Mock data as requested
+        },
+        {
+          src: "/cardback/cardback_action.png",
+          alt: "action cards",
+          count: 4, // Mock data as requested
+        },
+        {
+          src: "/cardback/cardback_pn.png",
+          alt: "promissory notes",
+          count: 7, // Mock data as requested
+        },
+        {
+          src: "/cardback/cardback_tg.png",
+          alt: "trade goods",
+          count: props.playerData.tg || 0,
+        },
+        {
+          src: "/cardback/cardback_comms.png",
+          alt: "commodities",
+          count: `${props.playerData.commodities || 0}/${props.playerData.commoditiesTotal || 0}`,
+        },
+      ].map((cardback, index) => (
         <Cardback
           key={index}
           src={cardback.src}
@@ -318,92 +274,12 @@ export default function PlayerCard2(props: Props) {
   );
 
   const StrategyAndSpeaker = (
-    <Group gap="xs" align="center">
-      <Shimmer
-        color="red"
-        p={2}
-        px="sm"
-        pl="lg"
-        pos="relative"
-        display="flex"
-        style={{
-          minWidth: "140px",
-          background:
-            "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 50%, rgba(239, 68, 68, 0.08) 100%)",
-          border: "1px solid rgba(239, 68, 68, 0.2)",
-          borderRadius: "8px",
-        }}
-      >
-        {/* Additional subtle inner glow overlay */}
-        <Box
-          pos="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        <Box
-          bg="white"
-          pos="absolute"
-          top={0}
-          left={-10}
-          w={35}
-          h={35}
-          display="flex"
-          style={{
-            border: "3px solid var(--mantine-color-red-7)",
-            borderRadius: "999px",
-            alignItems: "center",
-            justifyContent: "center",
-            filter: "drop-shadow(0 1px 2px rgba(239, 68, 68, 0.3))",
-            zIndex: 2,
-          }}
-        >
-          <Text ff="heading" c="red.9" size="30px">
-            {strategyCardNumber}
-          </Text>
-        </Box>
-        <Text
-          ff="heading"
-          c="white"
-          size="xl"
-          pos="relative"
-          px={24}
-          style={{
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-            zIndex: 1,
-          }}
-        >
-          {strategyCardName}
-        </Text>
-      </Shimmer>
-
-      {/* Speaker Token */}
-      <SpeakerToken isVisible={hasSpeaker} />
-    </Group>
+    <StrategyCardBanner
+      strategyCardName={strategyCardName}
+      strategyCardNumber={strategyCardNumber}
+      hasSpeaker={hasSpeaker}
+    />
   );
-
-  // Gradient dictionary for header bottom border accents
-  const HEADER_GRADIENTS = {
-    pink: "linear-gradient(90deg, transparent 0%, rgba(236, 72, 153, 0.5) 20%, rgba(236, 72, 153, 0.5) 80%, transparent 100%)",
-    yellow:
-      "linear-gradient(90deg, transparent 0%, rgba(234, 179, 8, 0.5) 20%, rgba(234, 179, 8, 0.5) 80%, transparent 100%)",
-    green:
-      "linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.5) 20%, rgba(34, 197, 94, 0.5) 80%, transparent 100%)",
-    purple:
-      "linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.5) 20%, rgba(147, 51, 234, 0.5) 80%, transparent 100%)",
-    gray: "linear-gradient(90deg, transparent 0%, rgba(107, 114, 128, 0.5) 20%, rgba(107, 114, 128, 0.5) 80%, transparent 100%)",
-    orange:
-      "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 20%, rgba(249, 115, 22, 0.5) 80%, transparent 100%)",
-    red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
-  };
 
   // Helper function to render techs with phantom slots
   const renderTechColumn = (techType: string, maxSlots: number = 4) => {
@@ -680,89 +556,136 @@ export default function PlayerCard2(props: Props) {
             <Stack>
               {CardbackStack}
               <Group gap="xs" justify="space-around" align="center">
-                <Box
-                  p="xs"
-                  style={{
-                    borderRadius: "6px",
-                    background:
-                      "linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 50%, rgba(59, 130, 246, 0.15) 100%)",
-                    border: "1px solid rgba(59, 130, 246, 0.3)",
-                    boxShadow:
-                      "0 2px 8px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* Subtle inner glow */}
-                  <Box
-                    pos="absolute"
-                    top={0}
-                    left={0}
-                    right={0}
-                    bottom={0}
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
-                      pointerEvents: "none",
-                    }}
-                  />
+                <Box p="md" h="fit-content" w="100%">
+                  <Group gap={0} align="flex-end" justify="space-between">
+                    {/* T/F/S Section */}
+                    <Stack gap={4} align="center">
+                      <Text
+                        ff="heading"
+                        size="xs"
+                        fw={600}
+                        c="gray.4"
+                        style={{
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          fontSize: "9px",
+                          opacity: 0.8,
+                        }}
+                      >
+                        CCs
+                      </Text>
+                      <Box
+                        p="sm"
+                        style={{
+                          borderRadius: "6px 0 0 6px",
+                          border: "1px solid rgba(148, 163, 184, 0.25)",
+                          borderRight: "none",
+                          minWidth: "80px",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {/* Subtle inner glow */}
+                        <Box
+                          pos="absolute"
+                          top={0}
+                          left={0}
+                          right={0}
+                          bottom={0}
+                          style={{
+                            background:
+                              "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
+                            pointerEvents: "none",
+                          }}
+                        />
 
-                  <Stack
-                    gap={2}
-                    align="center"
-                    pos="relative"
-                    style={{ zIndex: 1 }}
-                  >
-                    <Text
-                      ff="heading"
-                      size="xs"
-                      fw={700}
-                      c="blue.3"
-                      style={{
-                        textTransform: "uppercase",
-                        letterSpacing: "1px",
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      T/F/S
-                    </Text>
-                    <Text
-                      ff="mono"
-                      size="sm"
-                      fw={600}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      {tactics}/{fleet}/{strategy}
-                    </Text>
-                  </Stack>
+                        <Stack
+                          gap={2}
+                          align="center"
+                          pos="relative"
+                          style={{ zIndex: 1 }}
+                        >
+                          <Text
+                            ff="mono"
+                            size="xs"
+                            fw={600}
+                            c="gray.3"
+                            style={{
+                              textTransform: "uppercase",
+                              letterSpacing: "1px",
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                            }}
+                          >
+                            T/F/S
+                          </Text>
+                          <Text
+                            ff="mono"
+                            size="sm"
+                            fw={600}
+                            c="white"
+                            style={{
+                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                            }}
+                          >
+                            {tactics}/{fleet}/{strategy}
+                          </Text>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                    {/* Fragments Section */}
+                    <Stack gap={4} align="center" flex={1}>
+                      <Text
+                        ff="heading"
+                        size="xs"
+                        fw={600}
+                        c="gray.4"
+                        style={{
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                          fontSize: "9px",
+                          opacity: 0.8,
+                        }}
+                      >
+                        Frags
+                      </Text>
+                      <Box
+                        p="sm"
+                        w="100%"
+                        style={{
+                          borderRadius: "0 6px 6px 0",
+                          background:
+                            "linear-gradient(135deg, rgba(148, 163, 184, 0.08) 0%, rgba(100, 116, 139, 0.05) 50%, rgba(148, 163, 184, 0.08) 100%)",
+                          border: "1px solid rgba(148, 163, 184, 0.2)",
+                          borderLeft: "1px solid rgba(148, 163, 184, 0.1)",
+                          height: "60px",
+                        }}
+                      >
+                        <Group
+                          gap="xs"
+                          justify="center"
+                          align="center"
+                          pos="relative"
+                          style={{ zIndex: 1 }}
+                        >
+                          <FragmentStack
+                            count={fragmentCounts.cultural}
+                            type="crf"
+                          />
+                          <FragmentStack
+                            count={fragmentCounts.hazardous}
+                            type="hrf"
+                          />
+                          <FragmentStack
+                            count={fragmentCounts.industrial}
+                            type="urf"
+                          />
+                        </Group>
+                      </Box>
+                    </Stack>
+                  </Group>
                 </Box>
-                {fragmentCounts.cultural +
-                  fragmentCounts.hazardous +
-                  fragmentCounts.industrial >
-                  0 && (
-                  <>
-                    <Box h={35}>
-                      <ShimmerDivider orientation="vertical" />
-                    </Box>
-                    <Group gap="xs" justify="center" align="center">
-                      <FragmentStack
-                        count={fragmentCounts.cultural}
-                        type="crf"
-                      />
-                      <FragmentStack
-                        count={fragmentCounts.hazardous}
-                        type="hrf"
-                      />
-                      <FragmentStack
-                        count={fragmentCounts.industrial}
-                        type="urf"
-                      />
-                    </Group>
-                  </>
-                )}
               </Group>
 
               <Stack gap={4}>
