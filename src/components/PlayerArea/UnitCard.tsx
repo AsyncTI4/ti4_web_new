@@ -119,16 +119,18 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
       {isFaction && (
         <Box
           pos="absolute"
-          top="4px"
-          right="4px"
+          top={0}
+          right={0}
           style={{
-            zIndex: 10,
+            zIndex: 2,
+            background: "rgba(0, 0, 0, 0.5)",
+            borderRadius: "50%",
           }}
         >
           <Image
             src={`/factions/${unitData.faction?.toLowerCase()}.png`}
-            w="16px"
-            h="16px"
+            w="24px"
+            h="24px"
             style={{
               filter: "drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8))",
             }}
@@ -155,7 +157,7 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                 }}
               >
-                {reinforcements}
+                ?{/* {reinforcements} */}
               </Text>
               <Text
                 size="xs"
@@ -167,7 +169,8 @@ export function UnitCard({ unitId, maxReinforcements = 8 }: Props) {
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                 }}
               >
-                /{maxReinforcements}
+                /?
+                {/* /{maxReinforcements} */}
               </Text>
             </Group>
           </Group>
