@@ -1,18 +1,17 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
+import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { planets } from "../../../data/planets";
 
 type Props = {
   planetId: string;
-  planetTraitIcons: Record<string, React.ReactNode>;
   techSkipIcons: Record<string, React.ReactNode>;
   exhausted?: boolean;
 };
 
 export function PlanetCard({
   planetId,
-  planetTraitIcons,
   techSkipIcons,
   exhausted = false,
 }: Props) {
@@ -46,7 +45,7 @@ export function PlanetCard({
         />
       );
     }
-    return traitIconKey && planetTraitIcons[traitIconKey];
+    return traitIconKey ? <PlanetTraitIcon trait={traitIconKey} /> : null;
   };
 
   return (
@@ -170,9 +169,13 @@ const getPlanetData = (planetId: string) => {
 
 const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
 
-const getTraitIconKey = (planetType: string): string | null => {
+const getTraitIconKey = (
+  planetType: string
+): "cultural" | "hazardous" | "industrial" | null => {
   const lowercase = planetType.toLowerCase();
-  return VALID_PLANET_TYPES.has(lowercase) ? lowercase : null;
+  return VALID_PLANET_TYPES.has(lowercase)
+    ? (lowercase as "cultural" | "hazardous" | "industrial")
+    : null;
 };
 
 const VALID_TECH_SPECIALTIES = new Set([

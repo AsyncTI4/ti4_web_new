@@ -8,24 +8,25 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
-import { ShimmerDivider } from "./PlayerArea/ShimmerDivider";
 import { Caption } from "./PlayerArea/Caption";
 import { ResourceInfluenceDisplay } from "./PlayerArea/ResourceInfluenceDisplay";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech, PhantomTech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
-import { Shimmer } from "./PlayerArea/Shimmer";
 import { Cardback } from "./PlayerArea/Cardback";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { Leader } from "./PlayerArea/Leader";
 import { PromissoryNote } from "./PlayerArea/PromissoryNote";
+import { EmptyPromissoryNotePlaceholder } from "./PlayerArea/PromissoryNote";
 import { ScoredSecret } from "./PlayerArea/ScoredSecret";
+import { EmptyScoredSecretsPlaceholder } from "./PlayerArea/ScoredSecret";
 import { FragmentStack } from "./PlayerArea/FragmentStack";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
-import { DebtTokens } from "./PlayerArea/DebtTokens";
-import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
+import { Neighbors } from "./PlayerArea/Neighbors";
+import { PlanetTraitIcon } from "./PlayerArea/PlanetTraitIcon";
+import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
 import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
@@ -148,10 +149,6 @@ const DEFAULT_PLAYER_CARD_DATA = {
     spaceUnits: 2,
     groundUnits: 3,
   },
-  debts: {
-    hacan: 3,
-    letnev: 1,
-  },
 };
 
 // Strategy card names and colors mapping
@@ -190,10 +187,10 @@ export default function PlayerCard2(props: Props) {
     strategy,
     fragments,
     needsToFollow,
-    hasPassed,
+
     hasSpeaker,
     armyStats,
-    debts,
+
     techs,
     relics,
     planets,
@@ -294,9 +291,25 @@ export default function PlayerCard2(props: Props) {
 
   const PromissoryNoteStack = (
     <Stack gap={4}>
-      {promissoryNotes.map((noteId, index) => (
-        <PromissoryNote key={index} promissoryNoteId={noteId} />
-      ))}
+      {promissoryNotes.length > 0 ? (
+        promissoryNotes.map((noteId, index) => (
+          <PromissoryNote key={index} promissoryNoteId={noteId} />
+        ))
+      ) : (
+        <EmptyPromissoryNotePlaceholder />
+      )}
+    </Stack>
+  );
+
+  const ScoredSecretStack = (
+    <Stack gap={2}>
+      {Object.values(secretsScored).length > 0 ? (
+        Object.entries(secretsScored).map(([secretId, score]) => (
+          <ScoredSecret key={secretId} secretId={secretId} score={score} />
+        ))
+      ) : (
+        <EmptyScoredSecretsPlaceholder />
+      )}
     </Stack>
   );
 
@@ -339,19 +352,6 @@ export default function PlayerCard2(props: Props) {
       ))}
     </Group>
   );
-
-  // Get neighbor faction icons from neighbor colors
-  const getNeighborFactionIcons = () => {
-    const neighbors = props.playerData.neighbors || [];
-    return neighbors
-      .map((neighborColor) => {
-        const neighborPlayer = pbdPlayerData.find(
-          (player) => player.color === neighborColor
-        );
-        return neighborPlayer ? neighborPlayer.faction : null;
-      })
-      .filter(Boolean); // Remove null values
-  };
 
   // Helper function to render techs with phantom slots
   const renderTechColumn = (techType: string, maxSlots: number = 4) => {
@@ -533,69 +533,7 @@ export default function PlayerCard2(props: Props) {
               )}
 
               {/* Header s Section - harmonized with Surface component styling */}
-              <Box
-                px={8}
-                py={4}
-                ml={8}
-                pos="relative"
-                style={{
-                  borderRadius: "8px",
-                  background:
-                    "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-                  border: "1px solid rgba(148, 163, 184, 0.2)",
-                  boxShadow:
-                    "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Subtle inner glow */}
-                <Box
-                  pos="absolute"
-                  top={0}
-                  left={0}
-                  right={0}
-                  bottom={0}
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                <Group
-                  gap={6}
-                  align="center"
-                  pos="relative"
-                  style={{ zIndex: 1 }}
-                >
-                  <Text
-                    size="xs"
-                    fw={600}
-                    c="gray.4"
-                    style={{
-                      textTransform: "uppercase",
-                      fontSize: "9px",
-                      letterSpacing: "0.5px",
-                      marginRight: "4px",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    Neighbors:
-                  </Text>
-                  {getNeighborFactionIcons().map((neighborFaction, index) => (
-                    <Image
-                      key={index}
-                      src={`/factions/${neighborFaction}.png`}
-                      w={18}
-                      h={18}
-                      style={{
-                        filter:
-                          "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
-                      }}
-                    />
-                  ))}
-                </Group>
-              </Box>
+              <Neighbors neighbors={props.playerData.neighbors || []} />
             </Group>
 
             {/* Strategy Card and Speaker Token */}
@@ -632,15 +570,7 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            <Stack gap={2}>
-              {Object.entries(secretsScored).map(([secretId, score]) => (
-                <ScoredSecret
-                  key={secretId}
-                  secretId={secretId}
-                  score={score}
-                />
-              ))}
-            </Stack>
+            {ScoredSecretStack}
           </Grid.Col>
           <Grid.Col
             span={{
@@ -801,56 +731,16 @@ export default function PlayerCard2(props: Props) {
                 </Box>
               </Group>
 
-              {Object.values(secretsScored).length > 0 && (
-                <Stack gap={4}>
-                  {Object.entries(secretsScored).map(([secretId, score]) => (
-                    <ScoredSecret
-                      key={secretId}
-                      secretId={secretId}
-                      score={score}
-                    />
-                  ))}
-                </Stack>
-              )}
+              {ScoredSecretStack}
               {PromissoryNoteStack}
               {/* Needs to Follow Section */}
-              <Group gap={8} align="center">
-                <Box style={{ alignSelf: "center" }}>
-                  <Caption>Needs to Follow</Caption>
-                </Box>
-                <Group gap={6}>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="blue.3"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    {needsToFollow.blue}
-                  </Text>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="green.3"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    {needsToFollow.green}
-                  </Text>
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="violet.3"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    {needsToFollow.violet}
-                  </Text>
-                </Group>
-              </Group>
+              <NeedsToFollow
+                values={[
+                  needsToFollow.blue,
+                  needsToFollow.green,
+                  needsToFollow.violet,
+                ]}
+              />
             </Stack>
           </Grid.Col>
           <Grid.Col
@@ -1021,7 +911,6 @@ export default function PlayerCard2(props: Props) {
                         <PlanetCard
                           key={index}
                           planetId={planetId}
-                          planetTraitIcons={planetTraitIcons}
                           techSkipIcons={techSkipIcons}
                           exhausted={exhaustedPlanets.includes(planetId)}
                         />
@@ -1074,30 +963,3 @@ export default function PlayerCard2(props: Props) {
     </Paper>
   );
 }
-
-const planetTraitIcons = {
-  cultural: (
-    <Image
-      src={`/planet_attributes/pc_attribute_cultural.png`}
-      alt="cultural"
-      w={24}
-      h={24}
-    />
-  ),
-  hazardous: (
-    <Image
-      src={`/planet_attributes/pc_attribute_hazardous.png`}
-      alt="hazardous"
-      w={24}
-      h={24}
-    />
-  ),
-  industrial: (
-    <Image
-      src={`/planet_attributes/pc_attribute_industrial.png`}
-      alt="industrial"
-      w={24}
-      h={24}
-    />
-  ),
-};
