@@ -38,7 +38,7 @@ const TECH_COLOR_CONFIG = {
   },
   red: {
     background:
-      "linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
+      "linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)",
     border: "rgba(239, 68, 68, 0.2)",
     leftBorder:
       "linear-gradient(180deg, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.2) 100%)",

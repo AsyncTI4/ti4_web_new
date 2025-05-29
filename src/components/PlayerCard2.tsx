@@ -44,6 +44,7 @@ const HEADER_GRADIENTS = {
   orange:
     "linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.5) 20%, rgba(249, 115, 22, 0.5) 80%, transparent 100%)",
   red: "linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.5) 20%, rgba(239, 68, 68, 0.5) 80%, transparent 100%)",
+  blue: "linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.5) 20%, rgba(59, 130, 246, 0.5) 80%, transparent 100%)",
 };
 
 // Helper function to get tech data by ID
@@ -338,16 +339,17 @@ export default function PlayerCard2(props: Props) {
       style={{
         maxWidth: "100%",
         background:
-          "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
-        border: "1px solid rgba(148, 163, 184, 0.3)",
+          "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+        border: "1px solid rgba(148, 163, 184, 0.2)",
         overflow: "hidden",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
         "@keyframes shimmer": {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(200%)" },
         },
       }}
       radius="md"
-      shadow="xl"
     >
       {/* Subtle inner glow */}
       <Box
@@ -358,7 +360,7 @@ export default function PlayerCard2(props: Props) {
         bottom={0}
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.02) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -397,32 +399,59 @@ export default function PlayerCard2(props: Props) {
 
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">
-              <Text span c="white" size="lg" ff="heading">
+              <Text
+                span
+                c="white"
+                size="lg"
+                ff="heading"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                }}
+              >
                 {userName}
               </Text>
-              <Text size="md" span ml={4} opacity={0.9} c="white" ff="heading">
+              <Text
+                size="md"
+                span
+                ml={4}
+                opacity={0.9}
+                c="white"
+                ff="heading"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                }}
+              >
                 [{faction}]
               </Text>
-              <Text size="sm" span ml={4} ff="heading" c={`${color}.2`}>
+              <Text
+                size="sm"
+                span
+                ml={4}
+                ff="heading"
+                c={`${color}.2`}
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                }}
+              >
                 ({color})
               </Text>
 
-              {/* Status Indicator - moved after color label */}
+              {/* Status Indicator - harmonized with Shimmer component styling */}
               <Box
                 px={8}
                 py={2}
                 ml={4}
                 style={{
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   background: hasPassed
-                    ? "linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(75, 85, 99, 0.15) 100%)"
-                    : "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.15) 100%)",
+                    ? "linear-gradient(135deg, rgba(107, 114, 128, 0.12) 0%, rgba(75, 85, 99, 0.06) 100%)"
+                    : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
                   border: hasPassed
-                    ? "1px solid rgba(107, 114, 128, 0.3)"
-                    : "1px solid rgba(34, 197, 94, 0.3)",
+                    ? "1px solid rgba(107, 114, 128, 0.25)"
+                    : "1px solid rgba(34, 197, 94, 0.25)",
                   boxShadow: hasPassed
-                    ? "0 2px 4px rgba(107, 114, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
-                    : "0 2px 4px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+                    ? "0 2px 8px rgba(107, 114, 128, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                    : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
                 }}
               >
                 <Text
@@ -431,7 +460,7 @@ export default function PlayerCard2(props: Props) {
                   c={hasPassed ? "gray.4" : "green.3"}
                   style={{
                     textTransform: "uppercase",
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     letterSpacing: "0.5px",
                     fontSize: "10px",
                   }}
@@ -440,48 +469,32 @@ export default function PlayerCard2(props: Props) {
                 </Text>
               </Box>
 
-              {/* Header Neighbors Section - embossed duplicate */}
+              {/* Header Neighbors Section - harmonized with Surface component styling */}
               <Box
                 px={8}
                 py={4}
                 ml={8}
                 pos="relative"
                 style={{
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   background:
-                    "linear-gradient(145deg, rgba(10, 15, 30, 0.9) 0%, rgba(20, 25, 40, 0.7) 50%, rgba(15, 20, 35, 0.8) 100%)",
-                  border: "1px solid rgba(0, 0, 0, 0.5)",
+                    "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                  border: "1px solid rgba(148, 163, 184, 0.2)",
                   boxShadow:
-                    "inset 2px 2px 6px rgba(0, 0, 0, 0.6), inset -1px -1px 3px rgba(255, 255, 255, 0.08)",
+                    "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                   overflow: "hidden",
                 }}
               >
-                {/* Top-left dark shadow for depth */}
+                {/* Subtle inner glow */}
                 <Box
                   pos="absolute"
                   top={0}
                   left={0}
-                  w="60%"
-                  h="60%"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, transparent 70%)",
-                    borderRadius: "6px 0 0 0",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Bottom-right highlight */}
-                <Box
-                  pos="absolute"
-                  bottom={0}
                   right={0}
-                  w="50%"
-                  h="50%"
+                  bottom={0}
                   style={{
                     background:
-                      "linear-gradient(315deg, rgba(255, 255, 255, 0.06) 0%, transparent 60%)",
-                    borderRadius: "0 0 6px 0",
+                      "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
                     pointerEvents: "none",
                   }}
                 />
@@ -501,7 +514,7 @@ export default function PlayerCard2(props: Props) {
                       fontSize: "9px",
                       letterSpacing: "0.5px",
                       marginRight: "4px",
-                      textShadow: "0 1px 1px rgba(0, 0, 0, 0.8)",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     }}
                   >
                     Neighbors:
@@ -586,7 +599,7 @@ export default function PlayerCard2(props: Props) {
               <Group gap="xs" justify="space-around" align="center">
                 <Box p="md" h="fit-content" w="100%">
                   <Group gap={0} align="flex-end" justify="space-between">
-                    {/* T/F/S Section */}
+                    {/* T/F/S Section - harmonized with Surface component styling */}
                     <Stack gap={4} align="center">
                       <Text
                         ff="heading"
@@ -598,6 +611,7 @@ export default function PlayerCard2(props: Props) {
                           letterSpacing: "0.5px",
                           fontSize: "9px",
                           opacity: 0.8,
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
                         CCs
@@ -605,14 +619,18 @@ export default function PlayerCard2(props: Props) {
                       <Box
                         p="sm"
                         style={{
-                          borderRadius: "6px 0 0 6px",
-                          border: "1px solid rgba(148, 163, 184, 0.25)",
+                          borderRadius: "8px 0 0 8px",
+                          background:
+                            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+                          border: "1px solid rgba(148, 163, 184, 0.2)",
                           borderRight: "none",
                           minWidth: "80px",
                           height: "60px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          boxShadow:
+                            "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                         }}
                       >
                         {/* Subtle inner glow */}
@@ -662,7 +680,7 @@ export default function PlayerCard2(props: Props) {
                         </Stack>
                       </Box>
                     </Stack>
-                    {/* Fragments Section */}
+                    {/* Fragments Section - harmonized with Surface component styling */}
                     <Stack gap={4} align="center" flex={1}>
                       <Text
                         ff="heading"
@@ -674,6 +692,7 @@ export default function PlayerCard2(props: Props) {
                           letterSpacing: "0.5px",
                           fontSize: "9px",
                           opacity: 0.8,
+                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
                         Frags
@@ -682,12 +701,14 @@ export default function PlayerCard2(props: Props) {
                         p="sm"
                         w="100%"
                         style={{
-                          borderRadius: "0 6px 6px 0",
+                          borderRadius: "0 8px 8px 0",
                           background:
-                            "linear-gradient(135deg, rgba(148, 163, 184, 0.08) 0%, rgba(100, 116, 139, 0.05) 50%, rgba(148, 163, 184, 0.08) 100%)",
+                            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
                           border: "1px solid rgba(148, 163, 184, 0.2)",
                           borderLeft: "1px solid rgba(148, 163, 184, 0.1)",
                           height: "60px",
+                          boxShadow:
+                            "0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
                         }}
                       >
                         <Group
@@ -954,6 +975,7 @@ export default function PlayerCard2(props: Props) {
         </Grid>
       </Box>
 
+      {/* Faction background image - harmonized with consistent opacity and positioning */}
       <Box
         pos="absolute"
         bottom={-60}
@@ -964,6 +986,7 @@ export default function PlayerCard2(props: Props) {
           zIndex: 0,
           pointerEvents: "none",
           overflow: "hidden",
+          filter: "grayscale(0.2)",
         }}
       >
         <Image
