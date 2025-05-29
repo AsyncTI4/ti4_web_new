@@ -65,8 +65,6 @@ const getSecretObjectiveData = (alias: string) => {
 const DEFAULT_PLAYER_CARD_DATA = {
   faction: "Federation of Sol",
   color: "blue",
-  strategyCardName: "LEADERSHIP",
-  strategyCardNumber: 1,
   tactics: 1,
   fleet: 4,
   strategy: 2,
@@ -97,6 +95,29 @@ const DEFAULT_PLAYER_CARD_DATA = {
   ],
 };
 
+// Strategy card names and colors mapping
+const SC_NAMES = {
+  1: "LEADERSHIP",
+  2: "DIPLOMACY",
+  3: "POLITICS",
+  4: "CONSTRUCTION",
+  5: "TRADE",
+  6: "WARFARE",
+  7: "TECHNOLOGY",
+  8: "IMPERIAL",
+};
+
+const SC_COLORS = {
+  1: "red",
+  2: "orange",
+  3: "yellow",
+  4: "green",
+  5: "teal",
+  6: "cyan",
+  7: "blue",
+  8: "purple",
+};
+
 type Props = {
   playerData: PlayerData;
 };
@@ -105,8 +126,6 @@ export default function PlayerCard2(props: Props) {
     userName,
     faction,
     color,
-    strategyCardName,
-    strategyCardNumber,
     tactics,
     fleet,
     strategy,
@@ -124,6 +143,9 @@ export default function PlayerCard2(props: Props) {
     unitsOwned,
     leaders,
   } = { ...DEFAULT_PLAYER_CARD_DATA, ...props.playerData };
+
+  // Get strategy cards from player data, fallback to [1] for demo
+  const scs = props.playerData.scs || [3, 4];
 
   // Use promissoryNotesInPlayArea from PlayerData
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
@@ -274,11 +296,17 @@ export default function PlayerCard2(props: Props) {
   );
 
   const StrategyAndSpeaker = (
-    <StrategyCardBanner
-      strategyCardName={strategyCardName}
-      strategyCardNumber={strategyCardNumber}
-      hasSpeaker={hasSpeaker}
-    />
+    <Group gap="xs" align="center">
+      {scs.map((scNumber, index) => (
+        <StrategyCardBanner
+          key={scNumber}
+          number={scNumber}
+          text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+          color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+          hasSpeaker={index === 0 && hasSpeaker} // Only show speaker on first card
+        />
+      ))}
+    </Group>
   );
 
   // Helper function to render techs with phantom slots
