@@ -23,18 +23,12 @@ import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
-import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
+import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
-
-// Helper function to get header gradient class from color
-const getHeaderGradientClass = (color: string): string => {
-  const gradientClasses = getGradientClasses(color as ColorKey);
-  return gradientClasses.shimmer;
-};
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -331,14 +325,7 @@ export default function PlayerCard2(props: Props) {
           }}
         >
           {/* Header bottom border accent */}
-          <Box
-            pos="absolute"
-            bottom={0}
-            left={0}
-            right={0}
-            h={8}
-            className={getHeaderGradientClass(color as ColorKey)}
-          />
+          <HeaderAccent color={color} />
 
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">

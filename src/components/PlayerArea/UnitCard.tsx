@@ -1,6 +1,6 @@
 import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { units } from "../../data/units";
-import { solidColors } from "../../data/solidColors";
+import { colors } from "../../data/colors";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../data/cdnImage";
 
@@ -19,7 +19,7 @@ const getUnitData = (unitId: string) => {
 const getColorAlias = (color?: string) => {
   if (!color) return "pnk"; // default fallback
 
-  const colorData = solidColors.find(
+  const colorData = colors.find(
     (solidColor) =>
       solidColor.name === color.toLowerCase() ||
       solidColor.aliases.includes(color.toLowerCase()) ||
