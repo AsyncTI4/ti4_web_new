@@ -1,0 +1,54 @@
+/* Tech card styles */
+.techCard {
+  padding: 1px 12px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
+  border: 1px solid rgba(var(--gradient-color), 0.25);
+}
+
+.techCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(var(--gradient-color), 0.6) 0%, rgba(var(--gradient-color), 0.2) 100%);
+}
+
+/* Tier dots */
+.tierDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(var(--gradient-color), 0.9);
+  box-shadow: 0 0 3px rgba(var(--gradient-color), 0.9), inset 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Icon filter */
+.iconFilter {
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+}
+
+/* Color-specific classes using global variables */
+.red {
+  --gradient-color: var(--color-red);
+}
+
+.green {
+  --gradient-color: var(--color-green);
+}
+
+.blue {
+  --gradient-color: var(--color-blue);
+}
+
+.yellow {
+  --gradient-color: var(--color-yellow);
+}
+
+.grey {
+  --gradient-color: var(--color-grey);
+}

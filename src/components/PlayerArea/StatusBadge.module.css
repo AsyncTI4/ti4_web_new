@@ -1,0 +1,29 @@
+/* StatusBadge component styles */
+.statusBadge {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
+  border: 1px solid rgba(var(--gradient-color), 0.25);
+  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Color-specific classes using global variables */
+.red {
+  --gradient-color: var(--color-red);
+}
+
+.green {
+  --gradient-color: var(--color-green);
+}
+
+.blue {
+  --gradient-color: var(--color-blue);
+}
+
+.gray {
+  --gradient-color: var(--color-gray);
+}
+
+.grey {
+  --gradient-color: var(--color-grey);
+}
