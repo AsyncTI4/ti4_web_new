@@ -53,6 +53,78 @@ const getSecretObjectiveData = (alias: string) => {
   return secretObjectives.find((secret) => secret.alias === alias);
 };
 
+// Helper function to calculate planet economics
+const calculatePlanetEconomics = (
+  planets: string[],
+  exhaustedPlanets: string[],
+  getPlanetData: (planetId: string) => any
+) => {
+  return planets.reduce(
+    (acc, planetId) => {
+      const planetData = getPlanetData(planetId);
+      if (!planetData) return acc;
+
+      const isExhausted = exhaustedPlanets.includes(planetId);
+      const resources = planetData.resources;
+      const influence = planetData.influence;
+
+      // Always add to totals
+      acc.total.totalResources += resources;
+      acc.total.totalInfluence += influence;
+
+      // Add to current if not exhausted
+      if (!isExhausted) {
+        acc.total.currentResources += resources;
+        acc.total.currentInfluence += influence;
+      }
+
+      // Optimal calculation with early returns
+      const addOptimalResources = (amount: number) => {
+        acc.optimal.totalResources += amount;
+        if (!isExhausted) acc.optimal.currentResources += amount;
+      };
+
+      const addOptimalInfluence = (amount: number) => {
+        acc.optimal.totalInfluence += amount;
+        if (!isExhausted) acc.optimal.currentInfluence += amount;
+      };
+
+      // Guard clause: resources higher
+      if (resources > influence) {
+        addOptimalResources(resources);
+        return acc;
+      }
+
+      // Guard clause: influence higher
+      if (influence > resources) {
+        addOptimalInfluence(influence);
+        return acc;
+      }
+
+      // Default case: equal values, split the difference
+      const halfValue = resources / 2;
+      addOptimalResources(halfValue);
+      addOptimalInfluence(halfValue);
+
+      return acc;
+    },
+    {
+      total: {
+        currentResources: 0,
+        totalResources: 0,
+        currentInfluence: 0,
+        totalInfluence: 0,
+      },
+      optimal: {
+        currentResources: 0,
+        totalResources: 0,
+        currentInfluence: 0,
+        totalInfluence: 0,
+      },
+    }
+  );
+};
+
 // Default player card data including all static and default prop data
 const DEFAULT_PLAYER_CARD_DATA = {
   faction: "Federation of Sol",
@@ -148,15 +220,15 @@ export default function PlayerCard2(props: Props) {
     ).length,
   };
 
-  const totalResources = planets.reduce((sum, planetId) => {
-    const planetData = getPlanetData(planetId);
-    return sum + (planetData ? planetData.resources : 0);
-  }, 0);
+  // Calculate planet economics properly
+  const planetEconomics = calculatePlanetEconomics(
+    planets,
+    exhaustedPlanets,
+    getPlanetData
+  );
 
-  const totalInfluence = planets.reduce((sum, planetId) => {
-    const planetData = getPlanetData(planetId);
-    return sum + (planetData ? planetData.influence : 0);
-  }, 0);
+  const totalResources = planetEconomics.total.totalResources;
+  const totalInfluence = planetEconomics.total.totalInfluence;
 
   const techSkipIcons = {
     biotic: <Image src={`/green.png`} alt="biotic" w={16} h={16} />,
@@ -890,10 +962,10 @@ export default function PlayerCard2(props: Props) {
                       <Stack gap="xs">
                         <Caption>Total</Caption>
                         <ResourceInfluenceDisplay
-                          resources={totalResources - 3}
-                          totalResources={totalResources}
-                          influence={totalInfluence - 1}
-                          totalInfluence={totalInfluence}
+                          resources={planetEconomics.total.currentResources}
+                          totalResources={planetEconomics.total.totalResources}
+                          influence={planetEconomics.total.currentInfluence}
+                          totalInfluence={planetEconomics.total.totalInfluence}
                         />
                       </Stack>
 
@@ -901,10 +973,14 @@ export default function PlayerCard2(props: Props) {
                       <Stack gap="xs">
                         <Caption>Optimal</Caption>
                         <ResourceInfluenceDisplay
-                          resources={totalResources - 3}
-                          totalResources={totalResources}
-                          influence={totalInfluence - 1}
-                          totalInfluence={totalInfluence}
+                          resources={planetEconomics.optimal.currentResources}
+                          totalResources={
+                            planetEconomics.optimal.totalResources
+                          }
+                          influence={planetEconomics.optimal.currentInfluence}
+                          totalInfluence={
+                            planetEconomics.optimal.totalInfluence
+                          }
                         />
                       </Stack>
                     </Group>
