@@ -3,12 +3,12 @@ import { SpeakerToken } from "./SpeakerToken";
 import { Shimmer } from "./Shimmer/Shimmer";
 import styles from "./StrategyCardBanner.module.css";
 
-type Props = {
+interface Props {
   number: number;
   text: string;
   color: string;
-  hasSpeaker: boolean;
-};
+  isSpeaker: boolean;
+}
 
 // Strategy card color mapping to Mantine colors for number display
 const SC_NUMBER_COLORS = {
@@ -34,7 +34,7 @@ const SC_BORDER_COLORS = {
   purple: "var(--mantine-color-violet-7)",
 } as const;
 
-export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
+export function StrategyCardBanner({ number, text, color, isSpeaker }: Props) {
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const borderColor =
@@ -44,7 +44,7 @@ export function StrategyCardBanner({ number, text, color, hasSpeaker }: Props) {
   return (
     <Group gap="xs" align="center">
       {/* Speaker Token */}
-      <SpeakerToken isVisible={hasSpeaker} />
+      <SpeakerToken isVisible={isSpeaker} />
 
       <Shimmer
         color={color as any}

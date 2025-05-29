@@ -1,4 +1,5 @@
 import { Group, Stack, Text, Image, Box } from "@mantine/core";
+import { IconLock } from "@tabler/icons-react";
 import { Shimmer } from "../Shimmer";
 import { leaders } from "../../../data/leaders";
 
@@ -11,41 +12,16 @@ type Props = {
   active: boolean;
 };
 
-// Helper function to get leader data by ID
-const getLeaderData = (leaderId: string) => {
-  return leaders.find((leader) => leader.id === leaderId);
-};
-
-// Common image styles that can't be replaced with Mantine props
-const imageStyles = {
-  width: "35px",
-  height: "35px",
-  borderRadius: "50%",
-  objectFit: "cover" as const,
-  objectPosition: "center",
-};
-
-// Common text styles for overflow handling
-const textOverflowStyles = {
-  overflow: "hidden",
-  whiteSpace: "nowrap" as const,
-  textOverflow: "clip",
-};
-
 export function Leader({ id, type, exhausted, locked, active }: Props) {
   const leaderData = getLeaderData(id);
+  if (!leaderData) return null;
 
-  if (!leaderData) {
-    return null; // or some fallback UI
-  }
+  const shouldShowGreen = !exhausted && !locked;
 
-  const shouldShowGreen = !exhausted;
-
-  // Common leader content component to avoid duplication
   const LeaderContent = () => (
     <Group gap={8} pos="relative" align="center" wrap="nowrap">
       <Image src={`/leaders/${id}.webp`} style={imageStyles} />
-      <Stack gap={0} style={{ overflow: "hidden" }}>
+      <Stack gap={0}>
         <Text
           size="sm"
           fw={700}
@@ -68,6 +44,24 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
           {type}
         </Text>
       </Stack>
+      {locked && (
+        <Box
+          pos="absolute"
+          top={-12}
+          right={-12}
+          bg="gray.7"
+          p={4}
+          display="flex"
+          style={{
+            borderRadius: "50%",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <IconLock size={16} color="white" stroke={2.5} />
+        </Box>
+      )}
     </Group>
   );
 
@@ -87,7 +81,6 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
       style={{
         borderRadius: "var(--mantine-radius-sm)",
         border: "1px solid #6b7280",
-        overflow: "hidden",
       }}
       opacity={exhausted ? 0.5 : 1}
     >
@@ -95,3 +88,21 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
     </Box>
   );
 }
+
+const imageStyles = {
+  width: "35px",
+  height: "35px",
+  borderRadius: "50%",
+  objectFit: "cover" as const,
+  objectPosition: "center",
+};
+
+const textOverflowStyles = {
+  overflow: "hidden",
+  whiteSpace: "nowrap" as const,
+  textOverflow: "clip",
+};
+
+const getLeaderData = (leaderId: string) => {
+  return leaders.find((leader) => leader.id === leaderId);
+};

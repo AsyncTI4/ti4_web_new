@@ -1093,7 +1093,7 @@ export default function PlayerCardBack({
   fleet = 4,
   strategy = 2,
   hasPassed = false,
-  hasSpeaker = true,
+  isSpeaker = true,
   leaders = [
     "1. Evelyn Delouis",
     "2. Claire Gibson",
@@ -1557,7 +1557,7 @@ export default function PlayerCardBack({
               </Shimmer>
 
               {/* Speaker Token */}
-              {hasSpeaker && (
+              {isSpeaker && (
                 <Box
                   p={6}
                   px={8}

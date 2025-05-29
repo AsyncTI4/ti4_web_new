@@ -24,10 +24,8 @@ import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
-import { TechSkipIcon } from "./PlayerArea/TechSkipIcon";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
-import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
@@ -122,19 +120,12 @@ const calculatePlanetEconomics = (
 
 // Default player card data including all static and default prop data
 const DEFAULT_PLAYER_CARD_DATA = {
-  faction: "Federation of Sol",
-  color: "blue",
-  tactics: 1,
-  fleet: 4,
-  strategy: 2,
-
   needsToFollow: {
+    red: 2,
     blue: 2,
     green: 4,
     violet: 8,
   },
-  hasPassed: false,
-  hasSpeaker: true,
   armyStats: {
     spaceHealth: 8,
     groundHealth: 12,
@@ -176,13 +167,13 @@ export default function PlayerCard2(props: Props) {
     userName,
     faction,
     color,
-    tactics,
-    fleet,
-    strategy,
+    tacticalCC,
+    fleetCC,
+    strategicCC,
     fragments,
     needsToFollow,
 
-    hasSpeaker,
+    isSpeaker,
     armyStats,
 
     techs,
@@ -257,7 +248,7 @@ export default function PlayerCard2(props: Props) {
           number={scNumber}
           text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
           color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-          hasSpeaker={index === 0 && hasSpeaker} // Only show speaker on first card
+          isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
         />
       ))}
     </Group>
@@ -579,7 +570,7 @@ export default function PlayerCard2(props: Props) {
                           textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                         }}
                       >
-                        {tactics}/{fleet}/{strategy}
+                        {tacticalCC}/{fleetCC}/{strategicCC}
                       </Text>
                     </Stack>
                   </Surface>
@@ -654,6 +645,7 @@ export default function PlayerCard2(props: Props) {
               {/* Needs to Follow Section */}
               <NeedsToFollow
                 values={[
+                  needsToFollow.red,
                   needsToFollow.blue,
                   needsToFollow.green,
                   needsToFollow.violet,
@@ -752,6 +744,7 @@ export default function PlayerCard2(props: Props) {
                   sm: 2,
                   lg: 1,
                 }}
+                p="sm"
               >
                 <ArmyStats stats={armyStats} />
               </Grid.Col>

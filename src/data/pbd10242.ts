@@ -4,7 +4,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "jolnar",
     color: "yellow",
     displayName: "null",
-    hasSpeaker: true,
+    isSpeaker: true,
     passed: true,
     eliminated: false,
     active: false,
@@ -82,7 +82,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "yin",
     color: "green",
     displayName: "null",
-    hasSpeaker: false,
+    isSpeaker: false,
     passed: false,
     eliminated: false,
     active: true,
@@ -171,7 +171,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "yssaril",
     color: "purple",
     displayName: "null",
-    hasSpeaker: false,
+    isSpeaker: false,
     passed: false,
     eliminated: false,
     active: false,
@@ -265,7 +265,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "mentak",
     color: "gray",
     displayName: "null",
-    hasSpeaker: false,
+    isSpeaker: false,
     passed: false,
     eliminated: false,
     active: false,
@@ -343,7 +343,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "argent",
     color: "orange",
     displayName: "null",
-    hasSpeaker: false,
+    isSpeaker: false,
     passed: true,
     eliminated: false,
     active: false,
@@ -443,7 +443,7 @@ export const pbdPlayerData: PlayerData[] = [
     faction: "hacan",
     color: "red",
     displayName: "null",
-    hasSpeaker: false,
+    isSpeaker: false,
     passed: false,
     eliminated: false,
     active: false,
@@ -546,7 +546,7 @@ export interface PlayerData {
   faction: string;
   color: string;
   displayName: string;
-  hasSpeaker: boolean;
+  isSpeaker: boolean;
   passed: boolean;
   eliminated: boolean;
   active: boolean;
