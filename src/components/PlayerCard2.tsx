@@ -27,11 +27,16 @@ import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
 import { Neighbors } from "./PlayerArea/Neighbors";
 import { PlanetTraitIcon } from "./PlayerArea/PlanetTraitIcon";
 import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
+import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
+import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
+import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { getGradientClasses, ColorKey } from "./PlayerArea/gradientClasses";
+import { TechSkipIcon } from "./PlayerArea/TechSkipIcon";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { secretObjectives } from "../data/secretObjectives";
 import { PlayerData, pbdPlayerData } from "../data/pbd10242";
+import { Leaders } from "./PlayerArea/Leaders";
 
 // Helper function to get header gradient class from color
 const getHeaderGradientClass = (color: string): string => {
@@ -224,94 +229,12 @@ export default function PlayerCard2(props: Props) {
     getPlanetData
   );
 
-  const totalResources = planetEconomics.total.totalResources;
-  const totalInfluence = planetEconomics.total.totalInfluence;
-
   const techSkipIcons = {
-    biotic: <Image src={`/green.png`} alt="biotic" w={16} h={16} />,
-    propulsion: <Image src={`/blue.png`} alt="propulsion" w={16} h={16} />,
-    cybernetic: <Image src={`/yellow.png`} alt="cybernetic" w={16} h={16} />,
-    warfare: <Image src={`/red.png`} alt="warfare" w={16} h={16} />,
+    biotic: <TechSkipIcon techType="biotic" />,
+    propulsion: <TechSkipIcon techType="propulsion" />,
+    cybernetic: <TechSkipIcon techType="cybernetic" />,
+    warfare: <TechSkipIcon techType="warfare" />,
   };
-
-  const LeaderStack = (
-    <Stack gap={4} style={{ overflow: "hidden" }}>
-      {leaders.map((leader, index) => (
-        <Leader
-          key={index}
-          id={leader.id}
-          type={leader.type as "agent" | "commander" | "hero"}
-          tgCount={leader.tgCount}
-          exhausted={leader.exhausted}
-          locked={leader.locked}
-          active={leader.active}
-        />
-      ))}
-    </Stack>
-  );
-
-  const CardbackStack = (
-    <Group gap={6} justify="center">
-      {[
-        {
-          src: "/cardback/cardback_so.png",
-          alt: "secret objectives",
-          count: 0, // Mock data as requested
-        },
-        {
-          src: "/cardback/cardback_action.png",
-          alt: "action cards",
-          count: 4, // Mock data as requested
-        },
-        {
-          src: "/cardback/cardback_pn.png",
-          alt: "promissory notes",
-          count: 7, // Mock data as requested
-        },
-        {
-          src: "/cardback/cardback_tg.png",
-          alt: "trade goods",
-          count: props.playerData.tg || 0,
-        },
-        {
-          src: "/cardback/cardback_comms.png",
-          alt: "commodities",
-          count: `${props.playerData.commodities || 0}/${props.playerData.commoditiesTotal || 0}`,
-        },
-      ].map((cardback, index) => (
-        <Cardback
-          key={index}
-          src={cardback.src}
-          alt={cardback.alt}
-          count={cardback.count}
-        />
-      ))}
-    </Group>
-  );
-
-  const PromissoryNoteStack = (
-    <Stack gap={4}>
-      {promissoryNotes.length > 0 ? (
-        promissoryNotes.map((noteId, index) => (
-          <PromissoryNote key={index} promissoryNoteId={noteId} />
-        ))
-      ) : (
-        <EmptyPromissoryNotePlaceholder />
-      )}
-    </Stack>
-  );
-
-  const ScoredSecretStack = (
-    <Stack gap={2}>
-      {Object.values(secretsScored).length > 0 ? (
-        Object.entries(secretsScored).map(([secretId, score]) => (
-          <ScoredSecret key={secretId} secretId={secretId} score={score} />
-        ))
-      ) : (
-        <EmptyScoredSecretsPlaceholder />
-      )}
-    </Stack>
-  );
 
   const UnitsArea = (
     <Surface
@@ -552,7 +475,11 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            {CardbackStack}
+            <PlayerCardCounts
+              tg={props.playerData.tg || 0}
+              commodities={props.playerData.commodities || 0}
+              commoditiesTotal={props.playerData.commoditiesTotal || 0}
+            />
           </Grid.Col>
           <Grid.Col
             span={{
@@ -561,7 +488,7 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            {LeaderStack}
+            <Leaders leaders={leaders} />
           </Grid.Col>
           <Grid.Col
             span={{
@@ -570,7 +497,7 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            {ScoredSecretStack}
+            <ScoredSecrets secretsScored={secretsScored} />
           </Grid.Col>
           <Grid.Col
             span={{
@@ -579,7 +506,7 @@ export default function PlayerCard2(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            {PromissoryNoteStack}
+            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
           </Grid.Col>
 
           <Grid.Col span={12} hiddenFrom="sm">
@@ -588,7 +515,11 @@ export default function PlayerCard2(props: Props) {
 
           <Grid.Col span={2} visibleFrom="lg">
             <Stack h="100%">
-              {CardbackStack}
+              <PlayerCardCounts
+                tg={props.playerData.tg || 0}
+                commodities={props.playerData.commodities || 0}
+                commoditiesTotal={props.playerData.commoditiesTotal || 0}
+              />
 
               <Group gap={0} align="stretch">
                 {/* T/F/S Section - harmonized with Surface component styling */}
@@ -731,8 +662,8 @@ export default function PlayerCard2(props: Props) {
                 </Box>
               </Group>
 
-              {ScoredSecretStack}
-              {PromissoryNoteStack}
+              <ScoredSecrets secretsScored={secretsScored} />
+              <PromissoryNotesStack promissoryNotes={promissoryNotes} />
               {/* Needs to Follow Section */}
               <NeedsToFollow
                 values={[
@@ -822,7 +753,7 @@ export default function PlayerCard2(props: Props) {
                 </Group>
               </Grid.Col>
               <Grid.Col span={2} visibleFrom="lg">
-                {LeaderStack}
+                <Leaders leaders={leaders} />
               </Grid.Col>
               <Grid.Col span={12} hiddenFrom="sm">
                 {UnitsArea}
@@ -911,8 +842,12 @@ export default function PlayerCard2(props: Props) {
                         <PlanetCard
                           key={index}
                           planetId={planetId}
-                          techSkipIcons={techSkipIcons}
                           exhausted={exhaustedPlanets.includes(planetId)}
+                          techSkipIcon={
+                            techSkipIcons[
+                              planetId as keyof typeof techSkipIcons
+                            ]
+                          }
                         />
                       ))}
                     </Group>

@@ -3,18 +3,14 @@ import { Stack, Box, Group, Text, Image } from "@mantine/core";
 import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { planets } from "../../../data/planets";
+import { TechSkipIcon, TechType } from "../TechSkipIcon";
 
 type Props = {
   planetId: string;
-  techSkipIcons: Record<string, React.ReactNode>;
   exhausted?: boolean;
 };
 
-export function PlanetCard({
-  planetId,
-  techSkipIcons,
-  exhausted = false,
-}: Props) {
+export function PlanetCard({ planetId, exhausted = false }: Props) {
   const planetData = getPlanetData(planetId);
 
   if (!planetData) {
@@ -32,7 +28,8 @@ export function PlanetCard({
     planetData.techSpecialties
       ?.map((specialty) => getTechSkipIconKey(specialty))
       .filter((key) => key !== null)
-      .map((key) => techSkipIcons[key!]) || [];
+      .map((key) => <TechSkipIcon key={key} techType={key as TechType} />) ||
+    [];
 
   // For faction planets, render faction icon instead of trait icon
   const renderIcon = () => {
