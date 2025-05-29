@@ -5,31 +5,38 @@ type Props = {
   values: number[];
 };
 
-// Color mapping for the needs to follow values
-const COLOR_MAP = {
-  0: "blue.3",
-  1: "green.3",
-  2: "violet.3",
+// Strategy card color mapping
+const SC_COLORS = {
+  1: "red",
+  2: "orange",
+  3: "yellow",
+  4: "green",
+  5: "teal",
+  6: "cyan",
+  7: "blue",
+  8: "purple",
 } as const;
 
 export function NeedsToFollow({ values }: Props) {
   return (
     <Group gap={8} align="center">
-      <Box style={{ alignSelf: "center" }}>
-        <Caption>Needs to Follow</Caption>
-      </Box>
+      {values.length > 0 && (
+        <Box style={{ alignSelf: "center" }}>
+          <Caption>Needs to Follow</Caption>
+        </Box>
+      )}
       <Group gap={6}>
-        {values.map((value, index) => (
+        {values.map((scNumber, index) => (
           <Text
             key={index}
             size="lg"
             fw={700}
-            c={COLOR_MAP[index as keyof typeof COLOR_MAP]}
+            c={`${SC_COLORS[scNumber as keyof typeof SC_COLORS]}.3`}
             style={{
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
             }}
           >
-            {value}
+            {scNumber}
           </Text>
         ))}
       </Group>

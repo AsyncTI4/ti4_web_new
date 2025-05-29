@@ -120,20 +120,7 @@ const calculatePlanetEconomics = (
 
 // Default player card data including all static and default prop data
 const DEFAULT_PLAYER_CARD_DATA = {
-  needsToFollow: {
-    red: 2,
-    blue: 2,
-    green: 4,
-    violet: 8,
-  },
-  armyStats: {
-    spaceHealth: 8,
-    groundHealth: 12,
-    spaceHit: 4,
-    groundHit: 6,
-    spaceUnits: 2,
-    groundUnits: 3,
-  },
+  // Removed needsToFollow since we now use unfollowedSCs from playerData
 };
 
 // Strategy card names and colors mapping
@@ -171,10 +158,14 @@ export default function PlayerCard2(props: Props) {
     fleetCC,
     strategicCC,
     fragments,
-    needsToFollow,
 
     isSpeaker,
-    armyStats,
+    spaceArmyRes,
+    groundArmyRes,
+    spaceArmyHealth,
+    groundArmyHealth,
+    spaceArmyCombat,
+    groundArmyCombat,
 
     techs,
     relics,
@@ -643,14 +634,7 @@ export default function PlayerCard2(props: Props) {
               <ScoredSecrets secretsScored={secretsScored} />
               <PromissoryNotesStack promissoryNotes={promissoryNotes} />
               {/* Needs to Follow Section */}
-              <NeedsToFollow
-                values={[
-                  needsToFollow.red,
-                  needsToFollow.blue,
-                  needsToFollow.green,
-                  needsToFollow.violet,
-                ]}
-              />
+              <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
             </Stack>
           </Grid.Col>
           <Grid.Col
@@ -746,7 +730,16 @@ export default function PlayerCard2(props: Props) {
                 }}
                 p="sm"
               >
-                <ArmyStats stats={armyStats} />
+                <ArmyStats
+                  stats={{
+                    spaceArmyRes,
+                    groundArmyRes,
+                    spaceArmyHealth,
+                    groundArmyHealth,
+                    spaceArmyCombat,
+                    groundArmyCombat,
+                  }}
+                />
               </Grid.Col>
               <Grid.Col
                 span={{

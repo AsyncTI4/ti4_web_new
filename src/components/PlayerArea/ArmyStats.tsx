@@ -4,12 +4,12 @@ import { IconRocket, IconPlanet } from "@tabler/icons-react";
 
 type Props = {
   stats: {
-    spaceHealth: number;
-    groundHealth: number;
-    spaceHit: number;
-    groundHit: number;
-    spaceUnits: number;
-    groundUnits: number;
+    spaceArmyRes: number;
+    groundArmyRes: number;
+    spaceArmyHealth: number;
+    groundArmyHealth: number;
+    spaceArmyCombat: number;
+    groundArmyCombat: number;
   };
 };
 
@@ -37,12 +37,12 @@ export function ArmyStats({ stats }: Props) {
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.spaceUnits}
+              {stats.spaceArmyRes}
             </Text>
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.groundUnits}
+              {stats.groundArmyRes}
             </Text>
           </Table.Td>
         </Table.Tr>
@@ -55,12 +55,12 @@ export function ArmyStats({ stats }: Props) {
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.spaceHealth}
+              {stats.spaceArmyHealth}
             </Text>
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.groundHealth}
+              {stats.groundArmyHealth}
             </Text>
           </Table.Td>
         </Table.Tr>
@@ -73,12 +73,12 @@ export function ArmyStats({ stats }: Props) {
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.spaceHit}
+              {stats.spaceArmyCombat}
             </Text>
           </Table.Td>
           <Table.Td>
             <Text size="md" fw={700} c="white">
-              {stats.groundHit}
+              {stats.groundArmyCombat}
             </Text>
           </Table.Td>
         </Table.Tr>

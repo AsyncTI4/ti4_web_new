@@ -21,6 +21,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 0,
     expectedHitsTimes10: 5,
+    spaceArmyRes: 24,
+    groundArmyRes: 18,
+    spaceArmyHealth: 32,
+    groundArmyHealth: 28,
+    spaceArmyCombat: 15,
+    groundArmyCombat: 22,
     unitsOwned: [
       "carrier",
       "spacedock",
@@ -34,6 +40,7 @@ export const pbdPlayerData: PlayerData[] = [
       "pds",
     ],
     followedSCs: [1, 3],
+    unfollowedSCs: [2, 4],
     promissoryNotesInPlayArea: ["red_sftt", "orange_an"],
     techs: ["amd", "st", "nm", "ps", "gd", "hm", "td", "det", "ers"],
     exhaustedTechs: [],
@@ -99,6 +106,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 0,
     expectedHitsTimes10: 13,
+    spaceArmyRes: 19,
+    groundArmyRes: 26,
+    spaceArmyHealth: 41,
+    groundArmyHealth: 35,
+    spaceArmyCombat: 17,
+    groundArmyCombat: 29,
     unitsOwned: [
       "yin_flagship",
       "yin_mech",
@@ -112,6 +125,7 @@ export const pbdPlayerData: PlayerData[] = [
       "pds",
     ],
     followedSCs: [1, 3, 4],
+    unfollowedSCs: [2, 8],
     promissoryNotesInPlayArea: ["gray_sftt"],
     techs: ["st", "det", "gd", "ff2", "cv2"],
     exhaustedTechs: [],
@@ -188,6 +202,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 0,
     expectedHitsTimes10: 0,
+    spaceArmyRes: 31,
+    groundArmyRes: 14,
+    spaceArmyHealth: 27,
+    groundArmyHealth: 43,
+    spaceArmyCombat: 23,
+    groundArmyCombat: 16,
     unitsOwned: [
       "carrier",
       "yssaril_mech",
@@ -201,6 +221,7 @@ export const pbdPlayerData: PlayerData[] = [
       "pds",
     ],
     followedSCs: [1, 3, 4],
+    unfollowedSCs: [5, 6],
     promissoryNotesInPlayArea: ["green_sftt"],
     techs: ["nm", "bs", "hm", "mi"],
     exhaustedTechs: ["bs", "mi"],
@@ -282,6 +303,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 0,
     expectedHitsTimes10: 0,
+    spaceArmyRes: 12,
+    groundArmyRes: 37,
+    spaceArmyHealth: 46,
+    groundArmyHealth: 21,
+    spaceArmyCombat: 34,
+    groundArmyCombat: 19,
     unitsOwned: [
       "carrier",
       "spacedock",
@@ -295,6 +322,7 @@ export const pbdPlayerData: PlayerData[] = [
       "pds",
     ],
     followedSCs: [1, 3, 4],
+    unfollowedSCs: [],
     promissoryNotesInPlayArea: ["purple_sftt"],
     techs: ["ps", "st", "det", "amd", "so", "hm", "mc"],
     exhaustedTechs: [],
@@ -360,6 +388,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 7,
     expectedHitsTimes10: 93,
+    spaceArmyRes: 38,
+    groundArmyRes: 25,
+    spaceArmyHealth: 13,
+    groundArmyHealth: 39,
+    spaceArmyCombat: 42,
+    groundArmyCombat: 11,
     unitsOwned: [
       "carrier",
       "argent_flagship",
@@ -373,6 +407,7 @@ export const pbdPlayerData: PlayerData[] = [
       "argent_mech",
     ],
     followedSCs: [1, 3, 4],
+    unfollowedSCs: [],
     promissoryNotesInPlayArea: ["pop", "yellow_an"],
     techs: ["ps", "st", "sar", "swa2", "pds2"],
     exhaustedTechs: ["sar"],
@@ -460,6 +495,12 @@ export const pbdPlayerData: PlayerData[] = [
     stasisInfantry: 0,
     actualHits: 1,
     expectedHitsTimes10: 10,
+    spaceArmyRes: 29,
+    groundArmyRes: 33,
+    spaceArmyHealth: 18,
+    groundArmyHealth: 44,
+    spaceArmyCombat: 26,
+    groundArmyCombat: 37,
     unitsOwned: [
       "carrier",
       "hacan_mech",
@@ -473,6 +514,7 @@ export const pbdPlayerData: PlayerData[] = [
       "pds",
     ],
     followedSCs: [1, 3, 4],
+    unfollowedSCs: [],
     promissoryNotesInPlayArea: ["orange_sftt", "yellow_sftt"],
     techs: ["st", "amd", "gd", "ps", "td", "md", "sr", "da"],
     exhaustedTechs: ["sr"],
@@ -563,8 +605,15 @@ export interface PlayerData {
   stasisInfantry: number;
   actualHits: number;
   expectedHitsTimes10: number;
+  spaceArmyRes: number;
+  groundArmyRes: number;
+  spaceArmyHealth: number;
+  groundArmyHealth: number;
+  spaceArmyCombat: number;
+  groundArmyCombat: number;
   unitsOwned: string[];
   followedSCs: number[];
+  unfollowedSCs: number[];
   promissoryNotesInPlayArea: string[];
   techs: string[];
   exhaustedTechs: string[];
