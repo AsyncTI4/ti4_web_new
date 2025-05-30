@@ -8,8 +8,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
-import { Caption } from "./PlayerArea/Caption";
-import { ResourceInfluenceDisplay } from "./PlayerArea/ResourceInfluenceDisplay";
+
 import { Relic } from "./PlayerArea/Relic";
 import { Tech, PhantomTech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
@@ -25,6 +24,7 @@ import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
+import { ResourceInfluenceTable } from "./PlayerArea/ResourceInfluenceTable";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { PlayerData } from "../data/pbd10242";
@@ -56,43 +56,36 @@ const calculatePlanetEconomics = (
       const resources = planetData.resources;
       const influence = planetData.influence;
 
-      // Always add to totals
-      acc.total.totalResources += resources;
-      acc.total.totalInfluence += influence;
+      // Check if this is a flex planet (equal resources and influence)
+      const isFlex = resources === influence && resources > 0;
 
-      // Add to current if not exhausted
-      if (!isExhausted) {
-        acc.total.currentResources += resources;
-        acc.total.currentInfluence += influence;
+      if (isFlex) {
+        // Flex planets only count towards flex totals
+        acc.flex.totalFlex += resources; // Use resources value since they're equal
+        if (!isExhausted) {
+          acc.flex.currentFlex += resources;
+        }
+      } else {
+        // Non-flex planets count towards total always
+        acc.total.totalResources += resources;
+        acc.total.totalInfluence += influence;
+
+        // Add to current if not exhausted
+        if (!isExhausted) {
+          acc.total.currentResources += resources;
+          acc.total.currentInfluence += influence;
+        }
+
+        // Optimal calculation for non-flex planets
+        if (resources > influence) {
+          acc.optimal.totalResources += resources;
+          if (!isExhausted) acc.optimal.currentResources += resources;
+        } else if (influence > resources) {
+          acc.optimal.totalInfluence += influence;
+          if (!isExhausted) acc.optimal.currentInfluence += influence;
+        }
+        // Note: We don't handle the equal case here since it's already handled as flex
       }
-
-      // Optimal calculation with early returns
-      const addOptimalResources = (amount: number) => {
-        acc.optimal.totalResources += amount;
-        if (!isExhausted) acc.optimal.currentResources += amount;
-      };
-
-      const addOptimalInfluence = (amount: number) => {
-        acc.optimal.totalInfluence += amount;
-        if (!isExhausted) acc.optimal.currentInfluence += amount;
-      };
-
-      // Guard clause: resources higher
-      if (resources > influence) {
-        addOptimalResources(resources);
-        return acc;
-      }
-
-      // Guard clause: influence higher
-      if (influence > resources) {
-        addOptimalInfluence(influence);
-        return acc;
-      }
-
-      // Default case: equal values, split the difference
-      const halfValue = resources / 2;
-      addOptimalResources(halfValue);
-      addOptimalInfluence(halfValue);
 
       return acc;
     },
@@ -109,13 +102,12 @@ const calculatePlanetEconomics = (
         currentInfluence: 0,
         totalInfluence: 0,
       },
+      flex: {
+        currentFlex: 0,
+        totalFlex: 0,
+      },
     }
   );
-};
-
-// Default player card data including all static and default prop data
-const DEFAULT_PLAYER_CARD_DATA = {
-  // Removed needsToFollow since we now use unfollowedSCs from playerData
 };
 
 // Strategy card names and colors mapping
@@ -145,6 +137,7 @@ type Props = {
   playerData: PlayerData;
   colorToFaction: Record<string, string>;
 };
+
 export default function PlayerCard2(props: Props) {
   const {
     userName,
@@ -154,7 +147,6 @@ export default function PlayerCard2(props: Props) {
     fleetCC,
     strategicCC,
     fragments,
-
     isSpeaker,
     spaceArmyRes,
     groundArmyRes,
@@ -169,7 +161,7 @@ export default function PlayerCard2(props: Props) {
     secretsScored,
     unitsOwned,
     leaders,
-  } = { ...DEFAULT_PLAYER_CARD_DATA, ...props.playerData };
+  } = props.playerData;
 
   // Get strategy cards from player data, fallback to [1] for demo
   const scs = props.playerData.scs || [3, 4];
@@ -470,6 +462,9 @@ export default function PlayerCard2(props: Props) {
                 tg={props.playerData.tg || 0}
                 commodities={props.playerData.commodities || 0}
                 commoditiesTotal={props.playerData.commoditiesTotal || 0}
+                soCount={props.playerData.soCount || 0}
+                pnCount={props.playerData.pnCount || 0}
+                acCount={props.playerData.acCount || 0}
               />
 
               <Group gap={0} align="stretch">
@@ -729,7 +724,10 @@ export default function PlayerCard2(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 2,
+                  sm: 3,
+                  lg: 3,
+                  xl: 3,
+                  xl2: 2,
                 }}
               >
                 <Surface
@@ -744,33 +742,7 @@ export default function PlayerCard2(props: Props) {
                 >
                   <Stack>
                     {/* Total/Optimal Section */}
-                    <Group gap="md">
-                      {/* Total Section */}
-                      <Stack gap="xs">
-                        <Caption>Total</Caption>
-                        <ResourceInfluenceDisplay
-                          resources={planetEconomics.total.currentResources}
-                          totalResources={planetEconomics.total.totalResources}
-                          influence={planetEconomics.total.currentInfluence}
-                          totalInfluence={planetEconomics.total.totalInfluence}
-                        />
-                      </Stack>
-
-                      {/* Optimal Section */}
-                      <Stack gap="xs">
-                        <Caption>Optimal</Caption>
-                        <ResourceInfluenceDisplay
-                          resources={planetEconomics.optimal.currentResources}
-                          totalResources={
-                            planetEconomics.optimal.totalResources
-                          }
-                          influence={planetEconomics.optimal.currentInfluence}
-                          totalInfluence={
-                            planetEconomics.optimal.totalInfluence
-                          }
-                        />
-                      </Stack>
-                    </Group>
+                    <ResourceInfluenceTable planetEconomics={planetEconomics} />
 
                     {/* Debt Section */}
                     {/* <DebtTokens debts={debts} /> */}
@@ -780,7 +752,10 @@ export default function PlayerCard2(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 7,
+                  sm: 6,
+                  lg: 6,
+                  xl: 6,
+                  xl2: 7,
                 }}
               >
                 <Group h="100%">
