@@ -60,7 +60,7 @@ export function Cardback({ src, alt, count, style, ...boxProps }: Props) {
             lineHeight: 1,
           }}
         >
-          {count}
+          {(count || 0).toString()}
         </Text>
       </Box>
     </Box>

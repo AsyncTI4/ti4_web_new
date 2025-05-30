@@ -6,26 +6,36 @@ type Props = {
   tg: number;
   commodities: number;
   commoditiesTotal: number;
+  soCount: number;
+  pnCount: number;
+  acCount: number;
 };
 
-export function PlayerCardCounts({ tg, commodities, commoditiesTotal }: Props) {
+export function PlayerCardCounts({
+  tg,
+  commodities,
+  commoditiesTotal,
+  soCount,
+  pnCount,
+  acCount,
+}: Props) {
   return (
     <Group gap={6} justify="center">
       {[
         {
           src: cdnImage("/player_area/pa_cardbacks_so.png"),
           alt: "secret objectives",
-          count: 0, // Mock data as requested
+          count: soCount,
         },
         {
           src: "/cardback/cardback_action.png",
           alt: "action cards",
-          count: 4, // Mock data as requested
+          count: acCount,
         },
         {
           src: cdnImage("/player_area/pa_cardbacks_pn.png"),
           alt: "promissory notes",
-          count: 7, // Mock data as requested
+          count: pnCount,
         },
         {
           src: cdnImage("/player_area/pa_cardbacks_tradegoods.png"),

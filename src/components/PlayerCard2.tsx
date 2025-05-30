@@ -424,6 +424,9 @@ export default function PlayerCard2(props: Props) {
               tg={props.playerData.tg || 0}
               commodities={props.playerData.commodities || 0}
               commoditiesTotal={props.playerData.commoditiesTotal || 0}
+              soCount={props.playerData.soCount || 0}
+              pnCount={props.playerData.pnCount || 0}
+              acCount={props.playerData.acCount || 0}
             />
           </Grid.Col>
           <Grid.Col
