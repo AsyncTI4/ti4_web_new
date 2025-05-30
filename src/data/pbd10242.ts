@@ -60,4 +60,13 @@ export interface PlayerData {
   soCount: number;
   pnCount: number;
   acCount: number;
+
+  // unit counts (to get reinforcements total)
+  unitCounts: Record<
+    string,
+    {
+      unitCap: number;
+      deployedCount: number;
+    }
+  >;
 }

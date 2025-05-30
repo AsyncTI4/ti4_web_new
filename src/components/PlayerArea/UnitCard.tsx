@@ -7,28 +7,21 @@ import { cdnImage } from "../../data/cdnImage";
 type Props = {
   unitId: string;
   color?: string;
+  deployedCount: number;
 };
 
-// Helper function to get unit data by ID
-const getUnitData = (unitId: string) => {
-  return units.find((unit) => unit.id === unitId);
+const DEFAULT_UNIT_CAPS = {
+  carrier: 4,
+  mech: 4,
+  flagship: 1,
+  spacedock: 3,
+  dreadnought: 5,
+  destroyer: 8,
+  cruiser: 8,
+  pds: 6,
 };
 
-// Helper function to get color alias from color name
-const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
-
-  const colorData = colors.find(
-    (solidColor) =>
-      solidColor.name === color.toLowerCase() ||
-      solidColor.aliases.includes(color.toLowerCase()) ||
-      solidColor.alias === color.toLowerCase()
-  );
-
-  return colorData?.alias || "pnk"; // fallback to pink if not found
-};
-
-export function UnitCard({ unitId, color }: Props) {
+export function UnitCard({ unitId, color, deployedCount }: Props) {
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
 
@@ -43,6 +36,14 @@ export function UnitCard({ unitId, color }: Props) {
   const highlightClass = isUpgraded
     ? styles.highlight
     : styles.highlightStandard;
+
+  const unitCap =
+    DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
+
+  const reinforcements =
+    unitData.baseType === "fighter" || unitData.baseType === "infantry"
+      ? "∞"
+      : unitCap - deployedCount;
 
   return (
     <Stack
@@ -133,35 +134,49 @@ export function UnitCard({ unitId, color }: Props) {
 
       <Stack gap={2} align="center">
         <Group gap={8} justify="center" align="baseline">
-          {/* Reinforcements - always shown */}
+          {/* Reinforcements - show infinity for fighters and infantry, normal count for others */}
           <Group gap={3} align="baseline">
-            <Group gap={2} align="baseline">
+            {unitData.baseType === "fighter" ||
+            unitData.baseType === "infantry" ? (
               <Text
-                size="xs"
+                size="lg"
                 c="white"
                 fw={700}
-                fz="14px"
+                fz="18px"
                 lh={1}
                 style={{
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                 }}
               >
-                ?{/* {reinforcements} */}
+                ∞
               </Text>
-              <Text
-                size="xs"
-                c="gray.5"
-                fw={500}
-                fz="10px"
-                lh={1}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                /?
-                {/* /{maxReinforcements} */}
-              </Text>
-            </Group>
+            ) : (
+              <Group gap={2} align="baseline">
+                <Text
+                  size="xs"
+                  c="white"
+                  fw={700}
+                  fz="14px"
+                  lh={1}
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                  }}
+                >
+                  {reinforcements}
+                </Text>
+                <Text
+                  size="xs"
+                  c="gray.5"
+                  fw={500}
+                  lh={1}
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                  }}
+                >
+                  /{unitCap}
+                </Text>
+              </Group>
+            )}
           </Group>
 
           {/* Captured - commented out for now as requested */}
@@ -200,3 +215,22 @@ export function UnitCard({ unitId, color }: Props) {
     </Stack>
   );
 }
+
+// Helper function to get unit data by ID
+const getUnitData = (unitId: string) => {
+  return units.find((unit) => unit.id === unitId);
+};
+
+// Helper function to get color alias from color name
+const getColorAlias = (color?: string) => {
+  if (!color) return "pnk"; // default fallback
+
+  const colorData = colors.find(
+    (solidColor) =>
+      solidColor.name === color.toLowerCase() ||
+      solidColor.aliases.includes(color.toLowerCase()) ||
+      solidColor.alias === color.toLowerCase()
+  );
+
+  return colorData?.alias || "pnk"; // fallback to pink if not found
+};

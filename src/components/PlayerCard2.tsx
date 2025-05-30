@@ -30,6 +30,7 @@ import { planets } from "../data/planets";
 import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
+import { units } from "../data/units";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -199,9 +200,21 @@ export default function PlayerCard2(props: Props) {
       }}
     >
       <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
-        {unitsOwned.map((unitId, index) => (
-          <UnitCard key={index} unitId={unitId} color={color} />
-        ))}
+        {unitsOwned.map((unitId, index) => {
+          const asyncId = getUnitAsyncId(unitId);
+          const deployedCount = asyncId
+            ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
+            : 0;
+
+          return (
+            <UnitCard
+              key={index}
+              unitId={unitId}
+              color={color}
+              deployedCount={deployedCount}
+            />
+          );
+        })}
       </SimpleGrid>
     </Surface>
   );
@@ -826,3 +839,7 @@ export default function PlayerCard2(props: Props) {
     </Paper>
   );
 }
+
+const getUnitAsyncId = (unitId: string) => {
+  return units.find((u) => u.id === unitId)?.asyncId;
+};

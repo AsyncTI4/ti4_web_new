@@ -37,12 +37,6 @@ export function TechCard({ techId }: Props) {
 
   return (
     <Box className={`${styles.techCard} ${styles[color]}`}>
-      {/* Subtle inner glow */}
-      <Box className={`${styles.innerGlow} ${styles[color]}`} />
-
-      {/* Background pattern overlay */}
-      <Box className={styles.backgroundPattern} />
-
       {/* Content */}
       <Box className={`${styles.content} ${styles[color]}`}>
         <Stack gap="md" h="100%">
