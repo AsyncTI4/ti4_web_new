@@ -1,5 +1,6 @@
 import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
 import { leaders } from "../../data/leaders";
+import styles from "./LeaderDetailsCard.module.css";
 
 type Props = {
   leaderId: string;
@@ -11,16 +12,7 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   if (!leaderData) return null;
 
   return (
-    <Box
-      w={320}
-      p="md"
-      bg="linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)"
-      style={{
-        border: "1px solid rgba(148, 163, 184, 0.3)",
-        borderRadius: "12px",
-        backdropFilter: "blur(8px)",
-      }}
-    >
+    <Box w={320} p="md" className={styles.container}>
       <Stack gap="md">
         {/* Header with image and basic info */}
         <Group gap="md" align="flex-start">
@@ -29,43 +21,16 @@ export function LeaderDetailsCard({ leaderId }: Props) {
             w={80}
             h={80}
             radius="50%"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center",
-              border: "2px solid rgba(148, 163, 184, 0.4)",
-            }}
+            className={styles.leaderImage}
           />
           <Stack gap={4} flex={1}>
-            <Text
-              size="lg"
-              fw={700}
-              c="white"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-              }}
-            >
+            <Text size="lg" fw={700} c="white">
               {leaderData.name}
             </Text>
-            <Text
-              size="sm"
-              c="gray.3"
-              fw={500}
-              fs="italic"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-              }}
-            >
+            <Text size="sm" c="gray.3" fw={500} fs="italic">
               {leaderData.title}
             </Text>
-            <Text
-              size="xs"
-              c="blue.3"
-              fw={600}
-              tt="uppercase"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-              }}
-            >
+            <Text size="xs" c="blue.3" fw={600} tt="uppercase">
               {leaderData.type}
             </Text>
           </Stack>
@@ -75,24 +40,10 @@ export function LeaderDetailsCard({ leaderId }: Props) {
 
         {/* Unlock Condition */}
         <Box>
-          <Text
-            size="sm"
-            c="blue.3"
-            mb={4}
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-            }}
-          >
+          <Text size="sm" c="blue.3" mb={4}>
             Unlock Condition
           </Text>
-          <Text
-            size="sm"
-            c="gray.2"
-            lh={1.4}
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-            }}
-          >
+          <Text size="sm" c="gray.2" lh={1.4}>
             {leaderData.unlockCondition}
           </Text>
         </Box>
@@ -102,27 +53,12 @@ export function LeaderDetailsCard({ leaderId }: Props) {
         {/* Ability */}
         <Box>
           {leaderData.abilityWindow && (
-            <Text
-              size="sm"
-              fw={500}
-              c="blue.3"
-              mb={6}
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-              }}
-            >
+            <Text size="sm" fw={500} c="blue.3" mb={6}>
               {leaderData.abilityWindow}
             </Text>
           )}
 
-          <Text
-            size="sm"
-            c="gray.1"
-            lh={1.5}
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-            }}
-          >
+          <Text size="sm" c="gray.1" lh={1.5}>
             {leaderData.abilityText}
           </Text>
         </Box>

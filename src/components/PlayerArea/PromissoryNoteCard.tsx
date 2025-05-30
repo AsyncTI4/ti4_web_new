@@ -25,16 +25,10 @@ export function PromissoryNoteCard({
             <Image src="/pnicon.png" w={40} h={40} className={classes.icon} />
           </Box>
           <Stack gap={4} flex={1}>
-            <Text size="lg" fw={700} c="white" className={classes.title}>
+            <Text size="lg" fw={700} c="white">
               {noteData.displayName}
             </Text>
-            <Text
-              size="xs"
-              c="cyan.3"
-              fw={600}
-              tt="uppercase"
-              className={classes.subtitle}
-            >
+            <Text size="xs" c="cyan.3" fw={600} tt="uppercase">
               Promissory Note
             </Text>
             {noteData.faction && (
@@ -45,13 +39,7 @@ export function PromissoryNoteCard({
                   h={16}
                   style={{ flexShrink: 0 }}
                 />
-                <Text
-                  size="xs"
-                  c="cyan.4"
-                  fw={500}
-                  tt="capitalize"
-                  className={classes.factionText}
-                >
+                <Text size="xs" c="cyan.4" fw={500} tt="capitalize">
                   {noteData.faction}
                 </Text>
               </Group>
@@ -63,16 +51,10 @@ export function PromissoryNoteCard({
 
         {/* Note Text */}
         <Box>
-          <Text
-            size="sm"
-            c="cyan.3"
-            mb={4}
-            fw={500}
-            className={classes.sectionTitle}
-          >
+          <Text size="sm" c="cyan.3" mb={4} fw={500}>
             Effect
           </Text>
-          <Text size="sm" c="gray.1" lh={1.5} className={classes.effectText}>
+          <Text size="sm" c="gray.1" lh={1.5}>
             {noteData.displayText}
           </Text>
         </Box>
@@ -83,16 +65,10 @@ export function PromissoryNoteCard({
 
             {/* Play Area Information */}
             <Box>
-              <Text
-                size="sm"
-                c="cyan.3"
-                mb={4}
-                fw={500}
-                className={classes.sectionTitle}
-              >
+              <Text size="sm" c="cyan.3" mb={4} fw={500}>
                 Usage
               </Text>
-              <Text size="sm" c="gray.2" fw={600} className={classes.usageText}>
+              <Text size="sm" c="gray.2" fw={600}>
                 {noteData.playImmediately
                   ? "Played immediately when received"
                   : "Placed in play area"}

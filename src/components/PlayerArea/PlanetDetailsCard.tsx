@@ -24,7 +24,7 @@ export function PlanetDetailsCard({ planetId }: Props) {
 
   // Get tech specialty icons
   const techSpecialtyIcons =
-    planetData.techSpecialties?.map((specialty) => (
+    planetData.techSpecialties?.map((specialty: string) => (
       <TechSkipIcon
         key={specialty}
         techType={specialty.toLowerCase() as TechType}
@@ -69,13 +69,6 @@ export function PlanetDetailsCard({ planetId }: Props) {
           w={80}
           h={80}
           className={`${classes.planetImage} ${classes.planetIconContainer}`}
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(71, 85, 105, 0.15) 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
         >
           <PlanetTraitIcon
             trait={traitKey as "cultural" | "hazardous" | "industrial"}
@@ -91,13 +84,6 @@ export function PlanetDetailsCard({ planetId }: Props) {
         w={80}
         h={80}
         className={`${classes.planetImage} ${classes.planetIconContainer}`}
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(71, 85, 105, 0.15) 100%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
       >
         <Image
           src="/planet_icon.png"
@@ -120,17 +106,11 @@ export function PlanetDetailsCard({ planetId }: Props) {
               size="lg"
               fw={700}
               c={isLegendary ? undefined : "white"}
-              className={isLegendary ? classes.legendaryTitle : classes.title}
+              className={isLegendary ? classes.legendaryTitle : undefined}
             >
               {planetData.name}
             </Text>
-            <Text
-              size="sm"
-              c="gray.3"
-              fw={500}
-              fs="italic"
-              className={classes.subtitle}
-            >
+            <Text size="sm" c="gray.3" fw={500} fs="italic">
               {getPlanetTypeDisplay(planetData.planetType)}
             </Text>
           </Stack>
@@ -142,23 +122,13 @@ export function PlanetDetailsCard({ planetId }: Props) {
         <Group gap="lg">
           <Group gap="xs">
             <Image src="/pa_resources.png" w={20} h={20} />
-            <Text
-              size="sm"
-              c="white"
-              fw={600}
-              className={classes.resourceValue}
-            >
+            <Text size="sm" c="white" fw={600}>
               {planetData.resources} Resources
             </Text>
           </Group>
           <Group gap="xs">
             <InfluenceIcon size={20} />
-            <Text
-              size="sm"
-              c="white"
-              fw={600}
-              className={classes.resourceValue}
-            >
+            <Text size="sm" c="white" fw={600}>
               {planetData.influence} Influence
             </Text>
           </Group>
@@ -169,17 +139,12 @@ export function PlanetDetailsCard({ planetId }: Props) {
           <>
             <Divider c="gray.7" opacity={0.8} />
             <Box>
-              <Text
-                size="sm"
-                c="blue.3"
-                mb={4}
-                className={classes.sectionTitle}
-              >
+              <Text size="sm" c="blue.3" mb={4}>
                 Technology Specialties
               </Text>
               <Group gap="xs">
                 {techSpecialtyIcons}
-                <Text size="sm" c="gray.2" className={classes.sectionText}>
+                <Text size="sm" c="gray.2">
                   {planetData.techSpecialties?.join(", ")}
                 </Text>
               </Group>
@@ -198,21 +163,11 @@ export function PlanetDetailsCard({ planetId }: Props) {
                   w={16}
                   h={16}
                 />
-                <Text
-                  size="sm"
-                  c="yellow.3"
-                  fw={600}
-                  className={classes.sectionTitle}
-                >
-                  {planetData.legendaryAbilityName}
+                <Text size="sm" c="yellow.3" fw={500}>
+                  Legendary Ability
                 </Text>
               </Group>
-              <Text
-                size="sm"
-                c="gray.1"
-                lh={1.5}
-                className={classes.sectionText}
-              >
+              <Text size="sm" c="gray.1" lh={1.5}>
                 {planetData.legendaryAbilityText}
               </Text>
             </Box>
@@ -224,22 +179,10 @@ export function PlanetDetailsCard({ planetId }: Props) {
           <>
             <Divider c="gray.7" opacity={0.8} />
             <Box>
-              <Text
-                size="sm"
-                c="blue.3"
-                mb={4}
-                className={classes.sectionTitle}
-              >
+              <Text size="sm" c="blue.3" mb={4}>
                 Description
               </Text>
-              <Text
-                size="xs"
-                c="gray.4"
-                lh={1.3}
-                fs="italic"
-                opacity={0.7}
-                className={classes.sectionText}
-              >
+              <Text size="xs" c="gray.4" lh={1.3} fs="italic" opacity={0.7}>
                 {(planetData as any).flavourText}
               </Text>
             </Box>

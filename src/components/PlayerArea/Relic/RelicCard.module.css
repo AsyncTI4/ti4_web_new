@@ -1,3 +1,26 @@
+.container {
+  background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 12px;
+}
+
+.iconContainer {
+  border-radius: 50%;
+  background: rgba(255, 193, 7, 0.15);
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.relicIcon {
+  filter: brightness(1.1) sepia(0.3) saturate(1.2) hue-rotate(25deg);
+}
+
+.descriptionText {
+  white-space: pre-line;
+}
+
 .relicCard {
   position: relative;
   width: 320px;
@@ -92,12 +115,6 @@
   padding: 0 var(--mantine-spacing-xs);
 }
 
-.descriptionText {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  line-height: 1.6;
-  white-space: pre-line;
-}
-
 .flavorSection {
   padding: var(--mantine-spacing-xs);
   background: rgba(var(--relic-color-rgb), 0.08);
@@ -138,8 +155,4 @@
   font-size: 18px;
   color: rgba(var(--relic-color-secondary-rgb), 0.9);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.relicIcon {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) brightness(1.1);
 }
