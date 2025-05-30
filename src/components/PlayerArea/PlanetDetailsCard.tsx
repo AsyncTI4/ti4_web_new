@@ -1,4 +1,4 @@
-import { Stack, Box, Image, Text, Group, Divider, Badge } from "@mantine/core";
+import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
 // @ts-ignore
 import InfluenceIcon from "../InfluenceIcon";
 import { planets } from "../../data/planets";

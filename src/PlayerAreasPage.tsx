@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { AppShell, Box, Stack, Center, Alert, SimpleGrid } from "@mantine/core";
+import { AppShell, Box, Center, Alert, SimpleGrid } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { usePlayerData } from "./hooks/usePlayerData";

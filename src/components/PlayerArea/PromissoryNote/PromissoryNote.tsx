@@ -1,4 +1,4 @@
-import { Group, Text, Image, Tooltip, Box } from "@mantine/core";
+import { Group, Text, Image, Box } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 import { promissoryNotes } from "../../../data/promissoryNotes";
 import { getGradientClasses } from "../gradientClasses";
