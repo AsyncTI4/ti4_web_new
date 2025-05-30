@@ -12,7 +12,6 @@ function SmoothPopoverBase({
   children,
   opened,
   onChange,
-  width = "target",
   position = "top",
   withArrow = true,
   shadow = "xl",
@@ -20,7 +19,6 @@ function SmoothPopoverBase({
 }: SmoothPopoverProps) {
   return (
     <Popover
-      width={width}
       position={position}
       withArrow={withArrow}
       shadow={shadow}
@@ -35,17 +33,6 @@ function SmoothPopoverBase({
         },
         duration: 280,
         timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
-      styles={{
-        dropdown: {
-          transform: "translateZ(0)", // Force hardware acceleration
-          willChange: "transform, opacity", // Optimize for animations
-          backfaceVisibility: "hidden", // Prevent flickering
-          background: "transparent",
-          border: "none",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-        },
       }}
       {...props}
     >
