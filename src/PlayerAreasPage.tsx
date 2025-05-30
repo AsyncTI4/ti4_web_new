@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { AppShell, Box, Stack, Center, Alert } from "@mantine/core";
+import { AppShell, Box, Stack, Center, Alert, SimpleGrid } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { usePlayerData } from "./hooks/usePlayerData";
@@ -78,7 +78,13 @@ function PlayerAreasPage() {
           )}
 
           {playerData && (
-            <Stack gap="lg">
+            <SimpleGrid
+              cols={{
+                base: 1,
+                xl5: 2,
+              }}
+              // gutter="lg"
+            >
               {playerData.map((player) => (
                 <PlayerCard2
                   key={player.color}
@@ -86,7 +92,7 @@ function PlayerAreasPage() {
                   colorToFaction={colorToFaction}
                 />
               ))}
-            </Stack>
+            </SimpleGrid>
           )}
         </Box>
       </AppShell.Main>

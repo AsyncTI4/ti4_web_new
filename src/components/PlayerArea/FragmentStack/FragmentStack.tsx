@@ -1,6 +1,6 @@
 import { Group, Image } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
-type FragmentType = "crf" | "hrf" | "urf";
+type FragmentType = "crf" | "hrf" | "irf" | "urf";
 
 type Props = {
   count: number;
@@ -8,43 +8,19 @@ type Props = {
 };
 
 export function FragmentStack({ count, type }: Props) {
-  const getFragmentSrc = () => {
-    switch (type) {
-      case "crf":
-        return cdnImage("/player_area/pa_fragment_crf.png");
-      case "hrf":
-        return cdnImage("/player_area/pa_fragment_hrf.png");
-      case "urf":
-        return cdnImage("/player_area/pa_fragment_urf.png");
-      default:
-        return cdnImage("/player_area/pa_fragment_crf.png");
-    }
-  };
-
-  const getFragmentSize = () => {
-    // HRF fragments are slightly smaller
-    return type === "hrf" ? "20px" : "25px";
-  };
-
-  const fragmentSrc = getFragmentSrc();
-  const fragmentSize = getFragmentSize();
+  const fragmentSrc = getFragmentSrc(type);
 
   // Don't render anything if count is 0
-  if (count === 0) {
-    return null;
-  }
-
-  // Render up to 3 fragments max for visual clarity
-  const fragmentsToShow = Math.min(count, 3);
+  if (count === 0) return null;
 
   return (
     <Group gap={0}>
-      {Array.from({ length: fragmentsToShow }, (_, index) => (
+      {Array.from({ length: count }, (_, index) => (
         <Image
           key={index}
           src={fragmentSrc}
           style={{
-            width: fragmentSize,
+            width: 39,
             marginLeft: index === 0 ? 0 : -8,
           }}
         />
@@ -52,3 +28,14 @@ export function FragmentStack({ count, type }: Props) {
     </Group>
   );
 }
+
+const FRAGMENT_SOURCES: Record<FragmentType, string> = {
+  crf: cdnImage("/player_area/pa_fragment_crf.png"),
+  hrf: cdnImage("/player_area/pa_fragment_hrf.png"),
+  irf: cdnImage("/player_area/pa_fragment_irf.png"),
+  urf: cdnImage("/player_area/pa_fragment_urf.png"),
+};
+
+const getFragmentSrc = (type: FragmentType) => {
+  return FRAGMENT_SOURCES[type] || FRAGMENT_SOURCES.crf;
+};

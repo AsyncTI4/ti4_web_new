@@ -1,0 +1,51 @@
+.card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.planetImage {
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid rgba(148, 163, 184, 0.4);
+  border-radius: 50%;
+}
+
+.planetIconContainer {
+  border-radius: 50%;
+}
+
+.title {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.planetType {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.sectionTitle {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.sectionText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.resourceValue {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.legendaryCard {
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.2), 0 0 12px rgba(255, 215, 0, 0.1);
+}
+
+.legendaryTitle {
+  color: #ffd700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(255, 215, 0, 0.3);
+}

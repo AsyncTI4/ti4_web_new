@@ -1,0 +1,145 @@
+.relicCard {
+  position: relative;
+  width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  --relic-color-rgb: 255, 193, 7; /* golden yellow */
+  --relic-color-secondary-rgb: 255, 235, 59; /* brighter gold */
+  --relic-color-accent-rgb: 255, 143, 0; /* orange-gold */
+
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+  border: 2px solid rgba(var(--relic-color-rgb), 0.6);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.backgroundPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(var(--relic-color-rgb), 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--relic-color-rgb), 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.content {
+  padding: var(--mantine-spacing-lg);
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  position: relative;
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-sm);
+  margin: -24px -24px 0 -24px;
+  background: linear-gradient(135deg, rgba(var(--relic-color-accent-rgb), 0.15) 0%, rgba(var(--relic-color-rgb), 0.1) 100%);
+  border-bottom: 2px solid rgba(var(--relic-color-accent-rgb), 0.4);
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--relic-color-accent-rgb), 0.5) 50%, transparent 100%);
+}
+
+.crownShape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 16px;
+  background: linear-gradient(135deg, rgba(var(--relic-color-secondary-rgb), 0.8) 0%, rgba(var(--relic-color-rgb), 0.9) 100%);
+  border-radius: 0 0 40px 40px;
+  border: 1px solid rgba(var(--relic-color-rgb), 0.6);
+}
+
+.crownShape::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid rgba(var(--relic-color-secondary-rgb), 0.9);
+}
+
+.title {
+  letter-spacing: 0.5px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  color: white !important;
+}
+
+.description {
+  flex: 1;
+  padding: 0 var(--mantine-spacing-xs);
+}
+
+.descriptionText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.flavorSection {
+  padding: var(--mantine-spacing-xs);
+  background: rgba(var(--relic-color-rgb), 0.08);
+  border-radius: 6px;
+  margin: 0 -4px;
+}
+
+.flavorText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.4;
+  opacity: 0.9;
+  color: rgba(var(--relic-color-secondary-rgb), 0.8) !important;
+}
+
+.bottomSection {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.relicIconContainer {
+  position: absolute;
+  bottom: -24px;
+  right: -24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px 0 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(var(--relic-color-rgb), 0.15) 0%, rgba(var(--relic-color-rgb), 0.05) 100%);
+  border: 2px solid rgba(var(--relic-color-rgb), 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.relicSymbol {
+  font-size: 18px;
+  color: rgba(var(--relic-color-secondary-rgb), 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.relicIcon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6)) brightness(1.1);
+}

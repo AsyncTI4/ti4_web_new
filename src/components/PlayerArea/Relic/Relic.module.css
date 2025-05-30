@@ -7,6 +7,17 @@
   position: relative;
   overflow: hidden;
   min-width: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+.relicCard:hover {
+  background: linear-gradient(135deg, rgba(194, 65, 12, 0.22) 0%, rgba(234, 88, 12, 0.18) 50%, rgba(194, 65, 12, 0.22) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.6);
+  box-shadow:
+    0 4px 16px rgba(251, 191, 36, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
 }
 
 .relicCard::before {

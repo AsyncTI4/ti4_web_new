@@ -1,0 +1,10 @@
+/* Promissory note card styles */
+.promissoryCard {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.promissoryCard:hover {
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3), 0 0 12px rgba(34, 211, 238, 0.2);
+}

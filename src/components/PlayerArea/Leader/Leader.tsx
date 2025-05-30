@@ -1,7 +1,11 @@
 import { Group, Stack, Text, Image, Box } from "@mantine/core";
 import { IconLock } from "@tabler/icons-react";
+import { useState } from "react";
 import { Shimmer } from "../Shimmer";
 import { leaders } from "../../../data/leaders";
+import { SmoothPopover } from "../../shared/SmoothPopover";
+import { LeaderDetailsCard } from "../LeaderDetailsCard";
+import styles from "./Leader.module.css";
 
 type Props = {
   id: string;
@@ -13,6 +17,7 @@ type Props = {
 };
 
 export function Leader({ id, type, exhausted, locked }: Props) {
+  const [opened, setOpened] = useState(false);
   const leaderData = getLeaderData(id);
   if (!leaderData) return null;
 
@@ -65,27 +70,43 @@ export function Leader({ id, type, exhausted, locked }: Props) {
     </Group>
   );
 
-  if (shouldShowGreen) {
-    return (
-      <Shimmer color="green" p={2} px="sm">
-        <LeaderContent />
-      </Shimmer>
-    );
-  }
-
   return (
-    <Box
-      p={2}
-      px="sm"
-      bg="linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)"
-      style={{
-        borderRadius: "var(--mantine-radius-sm)",
-        border: "1px solid #6b7280",
-      }}
-      opacity={exhausted ? 0.5 : 1}
-    >
-      <LeaderContent />
-    </Box>
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
+        <div onClick={() => setOpened((o) => !o)}>
+          {shouldShowGreen ? (
+            <Shimmer
+              color="green"
+              p={2}
+              px="sm"
+              className={`${styles.leaderCard} ${styles.shimmerCard}`}
+              style={{
+                border: "1px solid #166534",
+                borderRadius: "8px",
+              }}
+            >
+              <LeaderContent />
+            </Shimmer>
+          ) : (
+            <Box
+              p={2}
+              px="sm"
+              bg="linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)"
+              className={`${styles.leaderCard} ${styles.standardCard}`}
+              style={{
+                border: "1px solid #6b7280",
+              }}
+              opacity={exhausted ? 0.5 : 1}
+            >
+              <LeaderContent />
+            </Box>
+          )}
+        </div>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
+        <LeaderDetailsCard leaderId={id} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
   );
 }
 

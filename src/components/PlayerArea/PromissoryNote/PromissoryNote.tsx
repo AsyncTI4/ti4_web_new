@@ -3,6 +3,7 @@ import { Shimmer } from "../Shimmer";
 import { promissoryNotes } from "../../../data/promissoryNotes";
 import { getGradientClasses } from "../gradientClasses";
 import { cdnImage } from "../../../data/cdnImage";
+import styles from "./PromissoryNote.module.css";
 
 type PromissoryNoteData = {
   alias: string;
@@ -17,9 +18,14 @@ type PromissoryNoteData = {
 type Props = {
   promissoryNoteId: string;
   colorToFaction: Record<string, string>;
+  onClick?: () => void;
 };
 
-export function PromissoryNote({ promissoryNoteId, colorToFaction }: Props) {
+export function PromissoryNote({
+  promissoryNoteId,
+  colorToFaction,
+  onClick,
+}: Props) {
   // Parse the promissory note ID (e.g., "orange_sftt" -> color: "orange", type: "sftt")
   const parts = promissoryNoteId.split("_");
   if (parts.length < 2) {
@@ -53,7 +59,6 @@ export function PromissoryNote({ promissoryNoteId, colorToFaction }: Props) {
 
   // Replace <color> placeholders in the name and text
   const displayName = noteData.name.replace(/<color>/g, color);
-  const displayText = noteData.text.replace(/<color>/g, color);
 
   // Determine if this is from another faction (not the player's own)
   const isOtherFaction = true; // For now, assume all are from other factions
@@ -64,7 +69,7 @@ export function PromissoryNote({ promissoryNoteId, colorToFaction }: Props) {
   const factionIcon = cdnImage(`/factions/${faction}.png`);
 
   return (
-    <Tooltip label={displayText}>
+    <Box className={styles.promissoryCard} onClick={onClick}>
       <Shimmer
         color={shimmerColor}
         py={2}
@@ -107,6 +112,6 @@ export function PromissoryNote({ promissoryNoteId, colorToFaction }: Props) {
           </Box>
         </Group>
       </Shimmer>
-    </Tooltip>
+    </Box>
   );
 }

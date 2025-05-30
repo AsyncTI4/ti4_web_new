@@ -1,6 +1,7 @@
-import { Table, Group, Text } from "@mantine/core";
+import { Table, Group, Text, Image } from "@mantine/core";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
+import { cdnImage } from "../../../data/cdnImage";
 
 // Component for the half-yellow, half-blue combined icon
 function CombinedResourceInfluenceIcon({ size = 12 }: { size?: number }) {
@@ -83,17 +84,11 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
         <Table.Tr>
           <Table.Td>
             <Group gap={4} align="center">
-              <svg width="12" height="12" viewBox="0 0 24 24">
-                <polygon
-                  points="6,2 18,2 22,12 18,22 6,22 2,12"
-                  fill="transparent"
-                  stroke="#eab308"
-                  strokeWidth="2"
-                />
-              </svg>
-              <Text size="xs" c="gray.4" fw={600}>
-                Res.
-              </Text>
+              <Image
+                src={cdnImage("/player_area/pa_resources.png")}
+                width={16}
+                height={16}
+              />
             </Group>
           </Table.Td>
           <Table.Td>
@@ -150,10 +145,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
         <Table.Tr>
           <Table.Td>
             <Group gap={4} align="center">
-              <InfluenceIcon size={12} />
-              <Text size="xs" c="gray.4" fw={600}>
-                Inf.
-              </Text>
+              <InfluenceIcon size={16} />
             </Group>
           </Table.Td>
           <Table.Td>
@@ -210,10 +202,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
         <Table.Tr>
           <Table.Td>
             <Group gap={4} align="center">
-              <CombinedResourceInfluenceIcon size={12} />
-              <Text size="xs" c="gray.4" fw={600}>
-                Flex
-              </Text>
+              <CombinedResourceInfluenceIcon size={16} />
             </Group>
           </Table.Td>
           <Table.Td colSpan={2} style={{ textAlign: "center" }}>

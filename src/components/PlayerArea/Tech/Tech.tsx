@@ -1,8 +1,9 @@
-import { Box, Group, Text, Image, Popover } from "@mantine/core";
+import { Box, Group, Text, Image } from "@mantine/core";
 import { techs } from "../../../data/tech";
 import styles from "./Tech.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { TechCard } from "./TechCard";
+import { SmoothPopover } from "../../shared/SmoothPopover";
 import { useState } from "react";
 
 // Helper function to get tech color from type
@@ -54,34 +55,10 @@ export function Tech({ techId }: Props) {
   const isFactionTech = !!techData.faction;
 
   return (
-    <Popover
-      width="target"
-      position="top"
-      withArrow
-      shadow="xl"
-      opened={opened}
-      onChange={setOpened}
-      transitionProps={{
-        transition: {
-          in: { opacity: 1, transform: "translateY(0) translateZ(0)" },
-          out: { opacity: 0, transform: "translateY(16px) translateZ(0)" },
-          common: { transformOrigin: "bottom" },
-          transitionProperty: "transform, opacity",
-        },
-        duration: 280,
-        timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
-      styles={{
-        dropdown: {
-          transform: "translateZ(0)", // Force hardware acceleration
-          willChange: "transform, opacity", // Optimize for animations
-          backfaceVisibility: "hidden", // Prevent flickering
-        },
-      }}
-    >
-      <Popover.Target>
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
         <Box
-          py={3}
+          py={4}
           px="xs"
           className={`${styles.techCard} ${styles[color]}`}
           style={{ cursor: "pointer" }}
@@ -155,18 +132,10 @@ export function Tech({ techId }: Props) {
             </Text>
           </Group>
         </Box>
-      </Popover.Target>
-      <Popover.Dropdown
-        p={0}
-        style={{
-          background: "transparent",
-          border: "none",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-        }}
-      >
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
         <TechCard techId={techId} />
-      </Popover.Dropdown>
-    </Popover>
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
   );
 }

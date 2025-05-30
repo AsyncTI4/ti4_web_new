@@ -13,7 +13,7 @@ import { Relic } from "./PlayerArea/Relic";
 import { Tech, PhantomTech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { FragmentStack } from "./PlayerArea/FragmentStack";
+import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
@@ -25,6 +25,7 @@ import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceTable } from "./PlayerArea/ResourceInfluenceTable";
+import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
 import { PlayerData } from "../data/pbd10242";
@@ -173,15 +174,6 @@ export default function PlayerCard2(props: Props) {
   // Get exhaustedPlanets from PlayerData
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
 
-  // Count fragments by type
-  const fragmentCounts = {
-    cultural: fragments.filter((f: string) => f.startsWith("crf")).length,
-    hazardous: fragments.filter((f: string) => f.startsWith("hrf")).length,
-    industrial: fragments.filter(
-      (f: string) => f.startsWith("irf") || f.startsWith("urf")
-    ).length,
-  };
-
   // Calculate planet economics properly
   const planetEconomics = calculatePlanetEconomics(
     planets,
@@ -265,6 +257,19 @@ export default function PlayerCard2(props: Props) {
 
     return [...techElements, ...phantomElements];
   };
+
+  const FragmentsAndCCSection = (
+    <Group gap={0} align="stretch">
+      {/* T/F/S Section - harmonized with Surface component styling */}
+      <CCPool
+        tacticalCC={tacticalCC}
+        fleetCC={fleetCC}
+        strategicCC={strategicCC}
+      />
+      {/* Fragments Section - harmonized with Surface component styling */}
+      <FragmentsPool fragments={fragments} />
+    </Group>
+  );
 
   return (
     <Paper
@@ -465,7 +470,32 @@ export default function PlayerCard2(props: Props) {
             />
           </Grid.Col>
 
-          <Grid.Col span={12} hiddenFrom="sm">
+          <Grid.Col span={6} hiddenFrom="lg">
+            <Group gap={4}>
+              {relics.map((relicId, index) => (
+                <Relic key={index} relicId={relicId} />
+              ))}
+            </Group>
+          </Grid.Col>
+
+          <Grid.Col hiddenFrom="lg" span={8}>
+            {FragmentsAndCCSection}
+          </Grid.Col>
+
+          <Grid.Col hiddenFrom="lg" span={4} p="sm">
+            <ArmyStats
+              stats={{
+                spaceArmyRes,
+                groundArmyRes,
+                spaceArmyHealth,
+                groundArmyHealth,
+                spaceArmyCombat,
+                groundArmyCombat,
+              }}
+            />
+          </Grid.Col>
+
+          <Grid.Col span={12} hiddenFrom="md">
             {RelicStack}
           </Grid.Col>
 
@@ -479,148 +509,7 @@ export default function PlayerCard2(props: Props) {
                 pnCount={props.playerData.pnCount || 0}
                 acCount={props.playerData.acCount || 0}
               />
-
-              <Group gap={0} align="stretch">
-                {/* T/F/S Section - harmonized with Surface component styling */}
-                <Stack gap={4} align="center">
-                  <Text
-                    ff="heading"
-                    size="xs"
-                    fw={600}
-                    c="gray.4"
-                    style={{
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                      fontSize: "9px",
-                      opacity: 0.8,
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    CCs
-                  </Text>
-                  <Surface
-                    p="sm"
-                    h="100%"
-                    style={{
-                      borderRightWidth: 0,
-                      borderTopRightRadius: 0,
-                      borderBottomRightRadius: 0,
-                    }}
-                  >
-                    {/* Subtle inner glow */}
-                    <Box
-                      pos="absolute"
-                      top={0}
-                      left={0}
-                      right={0}
-                      bottom={0}
-                      style={{
-                        background:
-                          "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    <Stack
-                      gap={2}
-                      align="center"
-                      justify="center"
-                      pos="relative"
-                      h="100%"
-                      style={{ zIndex: 1 }}
-                    >
-                      <Text
-                        ff="mono"
-                        size="xs"
-                        fw={600}
-                        c="gray.3"
-                        style={{
-                          textTransform: "uppercase",
-                          letterSpacing: "1px",
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                        }}
-                      >
-                        T/F/S
-                      </Text>
-                      <Text
-                        ff="mono"
-                        size="sm"
-                        fw={600}
-                        c="white"
-                        style={{
-                          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                        }}
-                      >
-                        {tacticalCC}/{fleetCC}/{strategicCC}
-                      </Text>
-                    </Stack>
-                  </Surface>
-                </Stack>
-                {/* Fragments Section - harmonized with Surface component styling */}
-                <Box flex={1}>
-                  <Stack gap={4} align="center" h="100%" flex={1}>
-                    <Text
-                      ff="heading"
-                      size="xs"
-                      fw={600}
-                      c="gray.4"
-                      style={{
-                        textTransform: "uppercase",
-                        letterSpacing: "0.5px",
-                        fontSize: "9px",
-                        opacity: 0.8,
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      }}
-                    >
-                      Frags
-                    </Text>
-                    <Surface
-                      p="sm"
-                      pattern="grid"
-                      style={{
-                        borderTopLeftRadius: 0,
-                        borderBottomLeftRadius: 0,
-                        display: "flex",
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    >
-                      <Group gap="xs" justify="center" w="100%">
-                        {fragmentCounts.cultural > 0 ||
-                        fragmentCounts.hazardous > 0 ||
-                        fragmentCounts.industrial > 0 ? (
-                          <>
-                            <FragmentStack
-                              count={fragmentCounts.cultural}
-                              type="crf"
-                            />
-                            <FragmentStack
-                              count={fragmentCounts.hazardous}
-                              type="hrf"
-                            />
-                            <FragmentStack
-                              count={fragmentCounts.industrial}
-                              type="urf"
-                            />
-                          </>
-                        ) : (
-                          <Text
-                            size="xs"
-                            c="gray.6"
-                            style={{
-                              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                              opacity: 0.5,
-                            }}
-                          >
-                            No fragments
-                          </Text>
-                        )}
-                      </Group>
-                    </Surface>
-                  </Stack>
-                </Box>
-              </Group>
-
+              {FragmentsAndCCSection}
               <ScoredSecrets secretsScored={secretsScored} />
               <PromissoryNotesStack
                 promissoryNotes={promissoryNotes}
@@ -640,7 +529,6 @@ export default function PlayerCard2(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 10,
                   lg: 9,
                 }}
               >
@@ -664,6 +552,7 @@ export default function PlayerCard2(props: Props) {
                             base: 12,
                             md: 6,
                             xl: 3,
+                            xl5: 6,
                           }}
                         >
                           <Stack gap={4}>
@@ -675,6 +564,7 @@ export default function PlayerCard2(props: Props) {
                             base: 12,
                             md: 6,
                             xl: 3,
+                            xl5: 6,
                           }}
                         >
                           <Stack gap={4}>
@@ -686,6 +576,7 @@ export default function PlayerCard2(props: Props) {
                             base: 12,
                             md: 6,
                             xl: 3,
+                            xl5: 6,
                           }}
                         >
                           <Stack gap={4}>{renderTechColumn("BIOTIC")}</Stack>
@@ -695,6 +586,7 @@ export default function PlayerCard2(props: Props) {
                             base: 12,
                             md: 6,
                             xl: 3,
+                            xl5: 6,
                           }}
                         >
                           <Stack gap={4}>{renderTechColumn("WARFARE")}</Stack>
@@ -716,7 +608,7 @@ export default function PlayerCard2(props: Props) {
               </Grid.Col>
 
               <Grid.Col
-                visibleFrom="sm"
+                visibleFrom="lg"
                 span={{
                   sm: 2,
                   lg: 1,
@@ -737,7 +629,7 @@ export default function PlayerCard2(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 3,
+                  sm: 4,
                   lg: 3,
                   xl: 3,
                   xl2: 2,
@@ -765,9 +657,9 @@ export default function PlayerCard2(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 6,
+                  sm: 8,
+                  md: 8,
                   lg: 6,
-                  xl: 6,
                   xl2: 7,
                 }}
               >
@@ -795,19 +687,14 @@ export default function PlayerCard2(props: Props) {
                   </Surface>
                 </Group>
               </Grid.Col>
-              <Grid.Col span={3} visibleFrom="sm">
-                {/* Relics Column */}
-                <Stack
-                  gap={4}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "max-content",
-                    justifyItems: "stretch",
-                    width: "fit-content",
-                  }}
-                >
-                  {RelicStack}
-                </Stack>
+              <Grid.Col
+                span={{
+                  base: 2,
+                  lg: 3,
+                }}
+                visibleFrom="lg"
+              >
+                {RelicStack}
               </Grid.Col>
             </Grid>
           </Grid.Col>

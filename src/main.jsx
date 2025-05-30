@@ -89,6 +89,8 @@ const theme = createTheme({
     xl3: "120em", // 1920px - custom
     xl4: "140em", // 2240px - custom
     xl5: "160em", // 2560px - custom
+    xl6: "180em", // 2880px - custom
+    xl7: "200em", // 3200px - custom
   },
 });
 
