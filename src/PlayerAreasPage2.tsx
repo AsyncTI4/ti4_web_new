@@ -6,13 +6,13 @@ import { IconAlertCircle } from "@tabler/icons-react";
 import * as PIXI from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { usePlayerData } from "./hooks/usePlayerData";
-import PlayerCard2 from "./components/PlayerCard2";
 // @ts-ignore
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
+import PlayerCardCompact from "./components/PlayerCard2Compact";
 
-function PlayerAreasPage() {
+function PlayerAreasPage2() {
   const params = useParams<{ gameId: string }>();
   const gameId = params.gameId!;
   const pixiContainerRef = useRef<HTMLDivElement>(null);
@@ -30,10 +30,19 @@ function PlayerAreasPage() {
       // Wait a frame to ensure container is properly mounted
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
-      const getViewportSize = () => ({
-        width: Math.floor(window.innerWidth),
-        height: Math.floor(window.innerHeight * 0.85),
-      });
+      const getViewportSize = () => {
+        const container = pixiContainerRef.current;
+        if (!container) {
+          return {
+            width: Math.floor(window.innerWidth * 0.75),
+            height: Math.floor(window.innerHeight),
+          };
+        }
+        return {
+          width: container.clientWidth,
+          height: container.clientHeight,
+        };
+      };
 
       const initialSize = getViewportSize();
 
@@ -219,62 +228,79 @@ function PlayerAreasPage() {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Box p="md" style={{ background: "#171b2c", minHeight: "100vh" }}>
-          <Box p="xs" hiddenFrom="sm">
-            <DiscordLogin />
-          </Box>
-
-          {/* PIXI Viewport Container */}
-          <Box style={{ display: "flex", justifyContent: "center" }}>
+        <Box
+          style={{ background: "#171b2c", minHeight: "100vh", display: "flex" }}
+        >
+          {/* PIXI Viewport - Left Side (75% width) */}
+          <Box
+            style={{
+              width: "75%",
+              height: "100vh",
+            }}
+          >
             <div
               ref={pixiContainerRef}
               style={{
+                width: "100%",
+                height: "100%",
                 overflow: "hidden",
               }}
             />
           </Box>
 
-          {isLoading && (
-            <Center h="calc(100vh - 200px)">
-              <Atom color="#3b82f6" size="large" text="Loading Player Areas" />
-            </Center>
-          )}
+          {/* Player Areas - Right Side (25% width) */}
+          <Box
+            style={{
+              width: "25%",
+              height: "100vh",
+              overflowY: "auto",
+              padding: "16px",
+              borderLeft: "1px solid #2c2e33",
+            }}
+          >
+            <Box mb="md" hiddenFrom="sm">
+              <DiscordLogin />
+            </Box>
 
-          {isError && (
-            <Center h="calc(100vh - 200px)">
+            {isLoading && (
+              <Center h="200px">
+                <Atom
+                  color="#3b82f6"
+                  size="medium"
+                  text="Loading Player Areas"
+                />
+              </Center>
+            )}
+
+            {isError && (
               <Alert
                 variant="light"
                 color="red"
                 title="Error loading player data"
                 icon={<IconAlertCircle />}
+                mb="md"
               >
                 Could not load player data for game {gameId}. Please try again
                 later.
               </Alert>
-            </Center>
-          )}
+            )}
 
-          {playerData && (
-            <SimpleGrid
-              cols={{
-                base: 1,
-                xl5: 2,
-              }}
-              // gutter="lg"
-            >
-              {playerData.map((player) => (
-                <PlayerCard2
-                  key={player.color}
-                  playerData={player}
-                  colorToFaction={colorToFaction}
-                />
-              ))}
-            </SimpleGrid>
-          )}
+            {playerData && (
+              <SimpleGrid cols={1} spacing="md">
+                {playerData.map((player) => (
+                  <PlayerCardCompact
+                    key={player.color}
+                    playerData={player}
+                    colorToFaction={colorToFaction}
+                  />
+                ))}
+              </SimpleGrid>
+            )}
+          </Box>
         </Box>
       </AppShell.Main>
     </AppShell>
   );
 }
 
-export default PlayerAreasPage;
+export default PlayerAreasPage2;
