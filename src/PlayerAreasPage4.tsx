@@ -1,9 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { AppShell, Box, Center, Alert, SimpleGrid, Tabs } from "@mantine/core";
+import {
+  AppShell,
+  Box,
+  Center,
+  Alert,
+  SimpleGrid,
+  Tabs,
+  Button,
+} from "@mantine/core";
 import { Atom } from "react-loading-indicators";
-import { IconAlertCircle } from "@tabler/icons-react";
+import { IconAlertCircle, IconRefresh } from "@tabler/icons-react";
 import { usePlayerData } from "./hooks/usePlayerData";
+// @ts-ignore
+import { useMapSocket } from "./hooks/useMapSocket";
+import { ReadyState } from "react-use-websocket";
 // @ts-ignore
 import { ZoomControls } from "./components/ZoomControls";
 // @ts-ignore
@@ -31,6 +42,15 @@ function PlayerAreasPage4() {
   useEffect(() => {
     dragscroll.reset();
   }, []);
+
+  // Dynamic image loading like MapUI
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  useEffect(() => setImageUrl(null), [gameId]);
+
+  const { readyState, reconnect, isReconnecting } = useMapSocket(
+    gameId,
+    setImageUrl
+  );
 
   const [imageNaturalWidth, setImageNaturalWidth] = useState<
     number | undefined
@@ -71,8 +91,6 @@ function PlayerAreasPage4() {
       },
       {} as Record<string, string>
     ) || {};
-
-  const imageUrl = `https://ti4.westaddisonheavyindustries.com/map/pbd9302b/2025-06-04T13%3A58%3A53.674912119.jpg`;
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -191,6 +209,27 @@ function PlayerAreasPage4() {
                   <Center h="100%">
                     <Atom color="#3b82f6" size="medium" text="Loading Map" />
                   </Center>
+                )}
+
+                {/* Refresh button when connection is closed, like MapUI */}
+                {readyState === ReadyState.CLOSED && (
+                  <Button
+                    variant="filled"
+                    size="md"
+                    radius="xl"
+                    leftSection={<IconRefresh size={20} />}
+                    style={{
+                      position: "fixed",
+                      top: "200px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      zIndex: 1000,
+                    }}
+                    onClick={reconnect}
+                    loading={isReconnecting}
+                  >
+                    Refresh
+                  </Button>
                 )}
               </Box>
             </Tabs.Panel>

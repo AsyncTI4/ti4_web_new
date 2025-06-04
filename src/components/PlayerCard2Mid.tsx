@@ -586,16 +586,7 @@ export default function PlayerCard2Mid(props: Props) {
                   xl2: 2,
                 }}
               >
-                <Surface
-                  p="md"
-                  pattern="none"
-                  h="100%"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <Surface p="xs" pattern="none" h="100%">
                   <Stack>
                     {/* Total/Optimal Section */}
                     <ResourceInfluenceTable planetEconomics={planetEconomics} />

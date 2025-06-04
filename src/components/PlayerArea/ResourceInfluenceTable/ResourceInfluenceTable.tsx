@@ -1,4 +1,4 @@
-import { Table, Group, Text, Image } from "@mantine/core";
+import { Tabs, Group, Text, Image, Stack } from "@mantine/core";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
 import { cdnImage } from "../../../data/cdnImage";
@@ -56,183 +56,174 @@ type Props = {
 
 export function ResourceInfluenceTable({ planetEconomics }: Props) {
   return (
-    <Table horizontalSpacing={6} verticalSpacing={4}>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th></Table.Th>
-          <Table.Th>
-            <Text
-              size="xs"
-              c="gray.4"
-              fw={600}
-              style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}
-            >
-              Total
+    <Tabs defaultValue="optimal" variant="pills">
+      <Stack gap="xs">
+        <Tabs.List grow>
+          <Tabs.Tab value="total" size="xs" h={20} p={4}>
+            <Text size="xs" fw={600}>
+              Tot
             </Text>
-          </Table.Th>
-          <Table.Th>
-            <Text
-              size="xs"
-              c="gray.4"
-              fw={600}
-              style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}
-            >
-              Optimal
+          </Tabs.Tab>
+          <Tabs.Tab value="optimal" size="xs" h={20} p={4}>
+            <Text size="xs" fw={600}>
+              Opt
             </Text>
-          </Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        <Table.Tr>
-          <Table.Td>
-            <Group gap={3} align="center">
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="total" pt={4}>
+          <Group gap="xs" wrap="nowrap">
+            <Group gap={3} align="center" wrap="nowrap">
               <Image
                 src={cdnImage("/player_area/pa_resources.png")}
                 width={16}
                 height={16}
               />
+              <Group gap={3} align="baseline" wrap="nowrap">
+                <Text
+                  size="md"
+                  fw={700}
+                  c="yellow.3"
+                  ff="mono"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {padNumber(planetEconomics.total.currentResources)}
+                </Text>
+                <Text
+                  size="xs"
+                  c="yellow.5"
+                  fw={500}
+                  ff="mono"
+                  style={{ lineHeight: 1 }}
+                >
+                  / {padNumber(planetEconomics.total.totalResources)}
+                </Text>
+              </Group>
             </Group>
-          </Table.Td>
-          <Table.Td>
-            <Group gap={3} align="baseline">
-              <Text
-                size="md"
-                fw={700}
-                c="yellow.3"
-                ff="mono"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                  lineHeight: 1,
-                }}
-              >
-                {padNumber(planetEconomics.total.currentResources)}
-              </Text>
-              <Text
-                size="xs"
-                c="yellow.5"
-                fw={500}
-                ff="mono"
-                style={{ lineHeight: 1 }}
-              >
-                / {padNumber(planetEconomics.total.totalResources)}
-              </Text>
-            </Group>
-          </Table.Td>
-          <Table.Td>
-            <Group gap={3} align="baseline">
-              <Text
-                size="md"
-                fw={700}
-                c="yellow.3"
-                ff="mono"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                  lineHeight: 1,
-                }}
-              >
-                {padNumber(planetEconomics.optimal.currentResources)}
-              </Text>
-              <Text
-                size="xs"
-                c="yellow.5"
-                fw={500}
-                ff="mono"
-                style={{ lineHeight: 1 }}
-              >
-                / {padNumber(planetEconomics.optimal.totalResources)}
-              </Text>
-            </Group>
-          </Table.Td>
-        </Table.Tr>
-        <Table.Tr>
-          <Table.Td>
-            <Group gap={3} align="center">
+
+            <Group gap={3} align="center" wrap="nowrap">
               <InfluenceIcon size={16} />
+              <Group gap={3} align="baseline" wrap="nowrap">
+                <Text
+                  size="md"
+                  fw={700}
+                  c="blue.3"
+                  ff="mono"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {padNumber(planetEconomics.total.currentInfluence)}
+                </Text>
+                <Text
+                  size="xs"
+                  c="blue.5"
+                  fw={500}
+                  ff="mono"
+                  style={{ lineHeight: 1 }}
+                >
+                  / {padNumber(planetEconomics.total.totalInfluence)}
+                </Text>
+              </Group>
             </Group>
-          </Table.Td>
-          <Table.Td>
-            <Group gap={3} align="baseline">
-              <Text
-                size="md"
-                fw={700}
-                c="blue.3"
-                ff="mono"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                  lineHeight: 1,
-                }}
-              >
-                {padNumber(planetEconomics.total.currentInfluence)}
-              </Text>
-              <Text
-                size="xs"
-                c="blue.5"
-                fw={500}
-                ff="mono"
-                style={{ lineHeight: 1 }}
-              >
-                / {padNumber(planetEconomics.total.totalInfluence)}
-              </Text>
+          </Group>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="optimal" pt={4}>
+          <Stack gap="xs">
+            <Group gap="xs" wrap="nowrap">
+              <Group gap={3} align="center" wrap="nowrap">
+                <Image
+                  src={cdnImage("/player_area/pa_resources.png")}
+                  width={16}
+                  height={16}
+                />
+                <Group gap={3} align="baseline" wrap="nowrap">
+                  <Text
+                    size="md"
+                    fw={700}
+                    c="yellow.3"
+                    ff="mono"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                      lineHeight: 1,
+                    }}
+                  >
+                    {padNumber(planetEconomics.optimal.currentResources)}
+                  </Text>
+                  <Text
+                    size="xs"
+                    c="yellow.5"
+                    fw={500}
+                    ff="mono"
+                    style={{ lineHeight: 1 }}
+                  >
+                    / {padNumber(planetEconomics.optimal.totalResources)}
+                  </Text>
+                </Group>
+              </Group>
+
+              <Group gap={3} align="center" wrap="nowrap">
+                <InfluenceIcon size={16} />
+                <Group gap={3} align="baseline" wrap="nowrap">
+                  <Text
+                    size="md"
+                    fw={700}
+                    c="blue.3"
+                    ff="mono"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                      lineHeight: 1,
+                    }}
+                  >
+                    {padNumber(planetEconomics.optimal.currentInfluence)}
+                  </Text>
+                  <Text
+                    size="xs"
+                    c="blue.5"
+                    fw={500}
+                    ff="mono"
+                    style={{ lineHeight: 1 }}
+                  >
+                    / {padNumber(planetEconomics.optimal.totalInfluence)}
+                  </Text>
+                </Group>
+              </Group>
             </Group>
-          </Table.Td>
-          <Table.Td>
-            <Group gap={3} align="baseline">
-              <Text
-                size="md"
-                fw={700}
-                c="blue.3"
-                ff="mono"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                  lineHeight: 1,
-                }}
-              >
-                {padNumber(planetEconomics.optimal.currentInfluence)}
-              </Text>
-              <Text
-                size="xs"
-                c="blue.5"
-                fw={500}
-                ff="mono"
-                style={{ lineHeight: 1 }}
-              >
-                / {padNumber(planetEconomics.optimal.totalInfluence)}
-              </Text>
+
+            <Group gap={3} align="center" wrap="nowrap" mt={6} justify="center">
+              <CombinedResourceInfluenceIcon size={16} />
+              <Group gap={4} align="baseline" wrap="nowrap">
+                <Text
+                  size="md"
+                  fw={700}
+                  c="gray.3"
+                  ff="mono"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {padNumber(planetEconomics.flex.currentFlex)}
+                </Text>
+                <Text
+                  size="xs"
+                  c="gray.5"
+                  fw={500}
+                  ff="mono"
+                  style={{ lineHeight: 1 }}
+                >
+                  / {padNumber(planetEconomics.flex.totalFlex)}
+                </Text>
+              </Group>
             </Group>
-          </Table.Td>
-        </Table.Tr>
-        <Table.Tr>
-          <Table.Td>
-            <CombinedResourceInfluenceIcon size={16} />
-          </Table.Td>
-          <Table.Td></Table.Td>
-          <Table.Td>
-            <Group gap={3} align="baseline">
-              <Text
-                size="md"
-                fw={700}
-                c="gray.3"
-                ff="mono"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                  lineHeight: 1,
-                }}
-              >
-                {padNumber(planetEconomics.flex.currentFlex)}
-              </Text>
-              <Text
-                size="xs"
-                c="gray.5"
-                fw={500}
-                ff="mono"
-                style={{ lineHeight: 1 }}
-              >
-                / {padNumber(planetEconomics.flex.totalFlex)}
-              </Text>
-            </Group>
-          </Table.Td>
-        </Table.Tr>
-      </Table.Tbody>
-    </Table>
+          </Stack>
+        </Tabs.Panel>
+      </Stack>
+    </Tabs>
   );
 }
