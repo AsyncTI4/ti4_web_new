@@ -235,7 +235,7 @@ export default function PlayerCard2Mid(props: Props) {
   );
 
   // Helper function to render techs with phantom slots
-  const renderTechColumn = (techType: string, maxSlots: number = 4) => {
+  const renderTechColumn = (techType: string) => {
     const filteredTechs = techs.filter((techId) => {
       const techData = getTechData(techId);
       return techData?.types[0] === techType;
