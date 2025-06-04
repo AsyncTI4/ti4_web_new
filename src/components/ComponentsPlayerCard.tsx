@@ -7,9 +7,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
-
 import { Relic } from "./PlayerArea/Relic";
-import { Surface } from "./PlayerArea/Surface";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { ArmyStats } from "./PlayerArea/ArmyStats";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";

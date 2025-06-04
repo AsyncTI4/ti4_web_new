@@ -10,15 +10,13 @@ import { ZoomControls } from "./components/ZoomControls";
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
-import PlayerCardCompact from "./components/PlayerCard2Compact";
+
 import TechPlayerCard from "./components/TechPlayerCard";
 import ResourcesPlayerCard from "./components/ResourcesPlayerCard";
 import ComponentsPlayerCard from "./components/ComponentsPlayerCard";
 import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
-import styles from "./PlayerAreasPage3.module.css";
-import { Shimmer } from "./components/PlayerArea/Shimmer/Shimmer";
 
 // Zoom configuration from ScrollMap
 const defaultZoomIndex = 2;
