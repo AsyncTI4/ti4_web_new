@@ -14,9 +14,10 @@ export function ZoomControls({
   onZoomReset,
   onZoomScreenSize,
   zoomFitToScreen,
+  zoomClass,
 }) {
   return (
-    <Group className="zoomContainer2" gap="xs">
+    <Group className={zoomClass ?? "zoomContainer"} gap="xs">
       {!zoomFitToScreen && <Text>{zoom.toFixed(2) * 100}%</Text>}
       <Button
         onClick={onZoomIn}

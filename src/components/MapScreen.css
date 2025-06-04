@@ -21,6 +21,14 @@ body {
   z-index: 1;
 }
 
+
+.zoomContainer3 {
+  position: fixed;
+  top: 125px;
+  right: 15px;
+  z-index: 1;
+}
+
 .logo {
   width: 120px;
 }

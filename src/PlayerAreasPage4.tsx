@@ -10,19 +10,16 @@ import { ZoomControls } from "./components/ZoomControls";
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
-
-import TechPlayerCard from "./components/TechPlayerCard";
-import ResourcesPlayerCard from "./components/ResourcesPlayerCard";
-import ComponentsPlayerCard from "./components/ComponentsPlayerCard";
 import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
+import PlayerCard2Mid from "./components/PlayerCard2Mid";
 
 // Zoom configuration from ScrollMap
 const defaultZoomIndex = 2;
 const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
 
-function PlayerAreasPage3() {
+function PlayerAreasPage4() {
   const params = useParams<{ gameId: string }>();
   const gameId = params.gameId!;
 
@@ -38,9 +35,7 @@ function PlayerAreasPage3() {
   const [imageNaturalWidth, setImageNaturalWidth] = useState<
     number | undefined
   >(undefined);
-  const [containerWidth, setContainerWidth] = useState(
-    window.innerWidth * 0.75
-  );
+  const [containerWidth, setContainerWidth] = useState(window.innerWidth);
 
   const {
     zoom,
@@ -58,7 +53,7 @@ function PlayerAreasPage3() {
   // Handle window resize to update container width
   useEffect(() => {
     const handleResize = () => {
-      setContainerWidth(window.innerWidth * 0.75);
+      setContainerWidth(window.innerWidth);
     };
 
     window.addEventListener("resize", handleResize);
@@ -105,168 +100,148 @@ function PlayerAreasPage3() {
           style={{
             background: "#171b2c",
             minHeight: "calc(100vh - 60px)",
-            display: "flex",
           }}
         >
-          {/* ScrollMap Viewport - Left Side (75% width) */}
-          <Box
-            className="dragscroll"
-            style={{
-              width: "75%",
-              height: "calc(100vh - 60px)",
-              position: "relative",
-              overflow: "auto",
-            }}
-          >
-            {!isTouchDevice() && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "15px",
-                  left: "15px",
-                  zIndex: 1000,
-                }}
-              >
-                <ZoomControls
-                  zoom={zoom}
-                  onZoomIn={handleZoomIn}
-                  onZoomOut={handleZoomOut}
-                  onZoomReset={handleZoomReset}
-                  onZoomScreenSize={handleZoomScreenSize}
-                  zoomFitToScreen={zoomFitToScreen}
-                  zoomClass="zoomContainer2"
-                />
-              </div>
-            )}
-
-            {imageUrl ? (
-              <img
-                alt="map"
-                src={imageUrl}
-                onLoad={(e) =>
-                  setImageNaturalWidth(e.currentTarget.naturalWidth)
-                }
-                style={{
-                  ...(isFirefox ? {} : { zoom: zoom }),
-                  [`-moz-transform` as string]: `scale(${zoom})`,
-                  [`-moz-transform-origin` as string]: "top left",
-                  ...(zoomFitToScreen ? { width: "100%", height: "100%" } : {}),
-                  display: "block",
-                }}
-              />
-            ) : (
-              <Center h="100%">
-                <Atom color="#3b82f6" size="medium" text="Loading Map" />
-              </Center>
-            )}
+          <Box mb="md" hiddenFrom="sm" p="md">
+            <DiscordLogin />
           </Box>
 
-          {/* Player Areas - Right Side (25% width) */}
-          <Box
-            style={{
-              width: "25%",
-              height: "calc(100vh - 80px)",
-              overflowY: "auto",
-              padding: "16px",
-              borderLeft: "1px solid #2c2e33",
-              background: "black",
-            }}
-          >
-            <Box mb="md" hiddenFrom="sm">
-              <DiscordLogin />
-            </Box>
-
-            {isLoading && (
-              <Center h="200px">
-                <Atom
-                  color="#3b82f6"
-                  size="medium"
-                  text="Loading Player Areas"
-                />
-              </Center>
-            )}
-
-            {isError && (
-              <Alert
-                variant="light"
-                color="red"
-                title="Error loading player data"
-                icon={<IconAlertCircle />}
-                mb="md"
+          {/* Global Tabs */}
+          <Tabs defaultValue="map" h="calc(100vh - 60px)">
+            <Tabs.List
+              grow
+              justify="center"
+              style={{
+                borderBottom: "1px solid #2c2e33",
+                background: "#1a1b23",
+              }}
+            >
+              <Tabs.Tab
+                value="map"
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  padding: "16px 24px",
+                }}
               >
-                Could not load player data for game {gameId}. Please try again
-                later.
-              </Alert>
-            )}
+                Map
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="players"
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  padding: "16px 24px",
+                }}
+              >
+                Player Areas
+              </Tabs.Tab>
+            </Tabs.List>
 
-            {playerData && (
-              <Tabs defaultValue="tech" mb="lg">
-                <Tabs.List grow justify="center">
-                  <Tabs.Tab
-                    value="tech"
+            {/* Map Tab */}
+            <Tabs.Panel value="map" h="calc(100% - 60px)">
+              <Box
+                className="dragscroll"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "relative",
+                  overflow: "auto",
+                }}
+              >
+                {!isTouchDevice() && (
+                  <div
                     style={{
-                      fontSize: "18px",
-                      fontWeight: 600,
-                      padding: "16px 24px",
+                      position: "absolute",
+                      top: "15px",
+                      left: "15px",
+                      zIndex: 1000,
                     }}
                   >
-                    Tech
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="components"
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 600,
-                      padding: "16px 24px",
-                    }}
-                  >
-                    Components
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="resources"
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 600,
-                      padding: "16px 24px",
-                    }}
-                  >
-                    Resources
-                  </Tabs.Tab>
-                </Tabs.List>
+                    <ZoomControls
+                      zoom={zoom}
+                      onZoomIn={handleZoomIn}
+                      onZoomOut={handleZoomOut}
+                      onZoomReset={handleZoomReset}
+                      onZoomScreenSize={handleZoomScreenSize}
+                      zoomFitToScreen={zoomFitToScreen}
+                      zoomClass="zoomContainer3"
+                    />
+                  </div>
+                )}
 
-                <Tabs.Panel value="components">
-                  <SimpleGrid cols={1} spacing="md">
+                {imageUrl ? (
+                  <img
+                    alt="map"
+                    src={imageUrl}
+                    onLoad={(e) =>
+                      setImageNaturalWidth(e.currentTarget.naturalWidth)
+                    }
+                    style={{
+                      ...(isFirefox ? {} : { zoom: zoom }),
+                      [`-moz-transform` as string]: `scale(${zoom})`,
+                      [`-moz-transform-origin` as string]: "top left",
+                      ...(zoomFitToScreen
+                        ? { width: "100%", height: "100%" }
+                        : {}),
+                      display: "block",
+                    }}
+                  />
+                ) : (
+                  <Center h="100%">
+                    <Atom color="#3b82f6" size="medium" text="Loading Map" />
+                  </Center>
+                )}
+              </Box>
+            </Tabs.Panel>
+
+            {/* Player Areas Tab */}
+            <Tabs.Panel value="players" h="calc(100% - 60px)">
+              <Box
+                style={{
+                  height: "100%",
+                  overflowY: "auto",
+                  padding: "16px",
+                  background: "black",
+                }}
+              >
+                {isLoading && (
+                  <Center h="200px">
+                    <Atom
+                      color="#3b82f6"
+                      size="medium"
+                      text="Loading Player Areas"
+                    />
+                  </Center>
+                )}
+
+                {isError && (
+                  <Alert
+                    variant="light"
+                    color="red"
+                    title="Error loading player data"
+                    icon={<IconAlertCircle />}
+                    mb="md"
+                  >
+                    Could not load player data for game {gameId}. Please try
+                    again later.
+                  </Alert>
+                )}
+
+                {playerData && (
+                  <SimpleGrid cols={{ base: 1, xl3: 2 }} spacing="md">
                     {playerData.map((player) => (
-                      <ComponentsPlayerCard
+                      <PlayerCard2Mid
                         key={player.color}
                         playerData={player}
                         colorToFaction={colorToFaction}
                       />
                     ))}
                   </SimpleGrid>
-                </Tabs.Panel>
-
-                <Tabs.Panel value="tech">
-                  <SimpleGrid cols={1} spacing="md">
-                    {playerData.map((player) => (
-                      <TechPlayerCard key={player.color} playerData={player} />
-                    ))}
-                  </SimpleGrid>
-                </Tabs.Panel>
-
-                <Tabs.Panel value="resources">
-                  <SimpleGrid cols={1} spacing="md">
-                    {playerData.map((player) => (
-                      <ResourcesPlayerCard
-                        key={player.color}
-                        playerData={player}
-                      />
-                    ))}
-                  </SimpleGrid>
-                </Tabs.Panel>
-              </Tabs>
-            )}
-          </Box>
+                )}
+              </Box>
+            </Tabs.Panel>
+          </Tabs>
         </Box>
       </AppShell.Main>
     </AppShell>
@@ -353,4 +328,4 @@ function isTouchDevice() {
   );
 }
 
-export default PlayerAreasPage3;
+export default PlayerAreasPage4;
