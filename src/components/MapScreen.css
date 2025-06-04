@@ -29,6 +29,16 @@ body {
   z-index: 1;
 }
 
+
+.zoomContainer4 {
+  position: fixed;
+  top: 125px;
+  right: calc(25vw + 35px);
+  z-index: 1;
+}
+
+
+
 .logo {
   width: 120px;
 }

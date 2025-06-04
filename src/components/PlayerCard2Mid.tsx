@@ -8,6 +8,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
+import { memo } from "react";
 
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
@@ -141,7 +142,7 @@ type Props = {
   colorToFaction: Record<string, string>;
 };
 
-export default function PlayerCard2Mid(props: Props) {
+export default memo(function PlayerCard2Mid(props: Props) {
   const {
     userName,
     faction,
@@ -677,7 +678,7 @@ export default function PlayerCard2Mid(props: Props) {
       </Box>
     </Paper>
   );
-}
+});
 
 const getUnitAsyncId = (unitId: string) => {
   return units.find((u) => u.id === unitId)?.asyncId;

@@ -14,10 +14,7 @@ import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
-import { ArmyStats } from "./PlayerArea/ArmyStats";
-import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
-import { Neighbors } from "./PlayerArea/Neighbors";
-import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
+import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
@@ -139,6 +136,21 @@ type Props = {
   colorToFaction: Record<string, string>;
 };
 
+const getUnitAsyncId = (unitId: string) => {
+  return units.find((u) => u.id === unitId)?.asyncId;
+};
+
+// Helper function to get unit data by ID
+const getUnitData = (unitId: string) => {
+  return units.find((unit) => unit.id === unitId);
+};
+
+// Helper function to check if a unit is upgraded
+const isUnitUpgraded = (unitId: string) => {
+  const unitData = getUnitData(unitId);
+  return unitData?.upgradesFromUnitId !== undefined;
+};
+
 export default function PlayerCardCompact(props: Props) {
   const {
     userName,
@@ -149,12 +161,6 @@ export default function PlayerCardCompact(props: Props) {
     strategicCC,
     fragments,
     isSpeaker,
-    spaceArmyRes,
-    groundArmyRes,
-    spaceArmyHealth,
-    groundArmyHealth,
-    spaceArmyCombat,
-    groundArmyCombat,
 
     techs,
     relics,
@@ -173,25 +179,14 @@ export default function PlayerCardCompact(props: Props) {
   // Get exhaustedPlanets from PlayerData
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
 
+  // Filter units to only show upgraded ones
+  const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
+
   // Calculate planet economics properly
   const planetEconomics = calculatePlanetEconomics(
     planets,
     exhaustedPlanets,
     getPlanetData
-  );
-
-  const StrategyAndSpeaker = (
-    <Group gap="xs" align="center">
-      {scs.map((scNumber, index) => (
-        <StrategyCardBanner
-          key={scNumber}
-          number={scNumber}
-          text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-          color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-          isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
-        />
-      ))}
-    </Group>
   );
 
   const renderTechColumn = (techType: string) => {
@@ -286,99 +281,104 @@ export default function PlayerCardCompact(props: Props) {
             <Group
               gap={4}
               px={4}
+              w="100%"
               align="center"
               wrap="nowrap"
+              justify="space-between"
               style={{ minWidth: 0 }}
             >
-              {/* Small circular faction icon */}
-              <Image
-                src={cdnImage(`/factions/${faction}.png`)}
-                alt={faction}
-                w={24}
-                h={24}
-                style={{
-                  filter:
-                    "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-                  flexShrink: 0,
-                }}
-              />
-              <Text
-                span
-                c="white"
-                size="sm"
-                ff="heading"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {userName}
-              </Text>
-              <Text
-                size="xs"
-                span
-                ml={4}
-                opacity={0.9}
-                c="white"
-                ff="heading"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                  flexShrink: 0,
-                }}
-              >
-                [{faction}]
-              </Text>
-              <PlayerColor color={color} size="sm" />
-
-              {/* Status Indicator - harmonized with Shimmer component styling */}
-              {(props.playerData.passed || props.playerData.active) && (
-                <Box
-                  px={6}
-                  py={2}
-                  ml={4}
+              <Group gap={4}>
+                {/* Small circular faction icon */}
+                <Image
+                  src={cdnImage(`/factions/${faction}.png`)}
+                  alt={faction}
+                  w={24}
+                  h={24}
                   style={{
-                    borderRadius: "6px",
-                    background: props.playerData.passed
-                      ? "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%)"
-                      : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
-                    border: props.playerData.passed
-                      ? "1px solid rgba(239, 68, 68, 0.25)"
-                      : "1px solid rgba(34, 197, 94, 0.25)",
-                    boxShadow: props.playerData.passed
-                      ? "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
-                      : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                    filter:
+                      "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+                    flexShrink: 0,
+                  }}
+                />
+                <Text
+                  span
+                  c="white"
+                  size="sm"
+                  ff="heading"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {userName}
+                </Text>
+                <Text
+                  size="xs"
+                  span
+                  ml={4}
+                  opacity={0.9}
+                  c="white"
+                  ff="heading"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                     flexShrink: 0,
                   }}
                 >
-                  <Text
-                    size="xs"
-                    fw={700}
-                    c={props.playerData.passed ? "red.3" : "green.3"}
+                  [{faction}]
+                </Text>
+                <PlayerColor color={color} size="sm" />
+
+                {/* Status Indicator - harmonized with Shimmer component styling */}
+                {(props.playerData.passed || props.playerData.active) && (
+                  <Box
+                    px={6}
+                    py={2}
+                    ml={4}
                     style={{
-                      textTransform: "uppercase",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      letterSpacing: "0.5px",
-                      fontSize: "9px",
+                      borderRadius: "6px",
+                      background: props.playerData.passed
+                        ? "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%)"
+                        : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
+                      border: props.playerData.passed
+                        ? "1px solid rgba(239, 68, 68, 0.25)"
+                        : "1px solid rgba(34, 197, 94, 0.25)",
+                      boxShadow: props.playerData.passed
+                        ? "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                        : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                      flexShrink: 0,
                     }}
                   >
-                    {props.playerData.passed ? "PASSED" : "ACTIVE"}
-                  </Text>
-                </Box>
-              )}
+                    <Text
+                      size="xs"
+                      fw={700}
+                      c={props.playerData.passed ? "red.3" : "green.3"}
+                      style={{
+                        textTransform: "uppercase",
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                        letterSpacing: "0.5px",
+                        fontSize: "9px",
+                      }}
+                    >
+                      {props.playerData.passed ? "PASSED" : "ACTIVE"}
+                    </Text>
+                  </Box>
+                )}
+              </Group>
 
-              {/* Header Neighbors Section - harmonized with Surface component styling */}
-              <Neighbors
-                neighbors={props.playerData.neighbors || []}
-                colorToFaction={props.colorToFaction}
-              />
+              {scs.map((scNumber, index) => (
+                <StrategyCardBannerCompact
+                  key={scNumber}
+                  number={scNumber}
+                  text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                  color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                  isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
+                />
+              ))}
             </Group>
           </Group>
         </Box>
-
-        {/* Strategy Card Section - Always visible at top for narrow layout */}
-        <Box mb="md">{StrategyAndSpeaker}</Box>
 
         {/* Main Content - Simplified Grid for narrow layout */}
         <Stack gap="md">
@@ -401,32 +401,15 @@ export default function PlayerCardCompact(props: Props) {
               promissoryNotes={promissoryNotes}
               colorToFaction={props.colorToFaction}
             />
+            {/* Fragments and CC Section */}
+            {FragmentsAndCCSection}
+            {/* Relics */}
+            <Group gap={4} wrap="wrap">
+              {relics.map((relicId, index) => (
+                <Relic key={index} relicId={relicId} />
+              ))}
+            </Group>
           </SimpleGrid>
-
-          {/* Fragments and CC Section */}
-          {FragmentsAndCCSection}
-
-          {/* Army Stats */}
-          <ArmyStats
-            stats={{
-              spaceArmyRes,
-              groundArmyRes,
-              spaceArmyHealth,
-              groundArmyHealth,
-              spaceArmyCombat,
-              groundArmyCombat,
-            }}
-          />
-
-          {/* Needs to Follow Section */}
-          <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
-
-          {/* Relics */}
-          <Group gap={4} wrap="wrap">
-            {relics.map((relicId, index) => (
-              <Relic key={index} relicId={relicId} />
-            ))}
-          </Group>
 
           {/* Tech Section - Simplified for narrow layout */}
           <Surface pattern="grid" cornerAccents={true} label="TECH" p="md">
@@ -442,26 +425,28 @@ export default function PlayerCardCompact(props: Props) {
             </Stack>
           </Surface>
 
-          {/* Units Section */}
-          <Surface p="md" label="UNITS">
-            <SimpleGrid cols={4} spacing="8px">
-              {unitsOwned.map((unitId, index) => {
-                const asyncId = getUnitAsyncId(unitId);
-                const deployedCount = asyncId
-                  ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
-                  : 0;
+          {/* Units Section - Only show upgraded units */}
+          {upgradedUnits.length > 0 && (
+            <Surface p="md" label="UPGRADED UNITS">
+              <SimpleGrid cols={4} spacing="8px">
+                {upgradedUnits.map((unitId, index) => {
+                  const asyncId = getUnitAsyncId(unitId);
+                  const deployedCount = asyncId
+                    ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
+                    : 0;
 
-                return (
-                  <UnitCard
-                    key={index}
-                    unitId={unitId}
-                    color={color}
-                    deployedCount={deployedCount}
-                  />
-                );
-              })}
-            </SimpleGrid>
-          </Surface>
+                  return (
+                    <UnitCard
+                      key={index}
+                      unitId={unitId}
+                      color={color}
+                      deployedCount={deployedCount}
+                    />
+                  );
+                })}
+              </SimpleGrid>
+            </Surface>
+          )}
 
           {/* Resources and Planets Section */}
           <Stack gap="xs">
@@ -525,7 +510,3 @@ export default function PlayerCardCompact(props: Props) {
     </Paper>
   );
 }
-
-const getUnitAsyncId = (unitId: string) => {
-  return units.find((u) => u.id === unitId)?.asyncId;
-};

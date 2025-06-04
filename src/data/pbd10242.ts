@@ -7,6 +7,11 @@ export interface Leader {
   active: boolean;
 }
 
+export interface PlayerDataResponse {
+  playerData: PlayerData[];
+  factionCoordinates: Record<string, { x: number; y: number }>;
+}
+
 export interface PlayerData {
   userName: string;
   faction: string;

@@ -37,7 +37,7 @@ export function EmptyPromissoryNotePlaceholder() {
             opacity: 0.7,
           }}
         >
-          No promissory notes
+          No promissory notes in play
         </Text>
       </Group>
     </Box>

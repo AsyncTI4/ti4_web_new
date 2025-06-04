@@ -185,7 +185,8 @@ function PlayerAreasPage() {
     };
   }, []);
 
-  const { data: playerData, isLoading, isError } = usePlayerData(gameId);
+  const { data, isLoading, isError } = usePlayerData(gameId);
+  const playerData = data?.playerData;
 
   // Create color to faction mapping from player data
   const colorToFaction =
