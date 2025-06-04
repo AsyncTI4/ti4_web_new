@@ -20,7 +20,7 @@ import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { ResourceInfluenceTable } from "./PlayerArea/ResourceInfluenceTable";
+import { ResourceInfluenceTableCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceTableCompact";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
@@ -384,31 +384,29 @@ export default function PlayerCardCompact(props: Props) {
         <Stack gap="md">
           {/* Top Row - Cards/Stats */}
           <SimpleGrid cols={2} spacing="xs">
-            <PlayerCardCounts
-              tg={props.playerData.tg || 0}
-              commodities={props.playerData.commodities || 0}
-              commoditiesTotal={props.playerData.commoditiesTotal || 0}
-              soCount={props.playerData.soCount || 0}
-              pnCount={props.playerData.pnCount || 0}
-              acCount={props.playerData.acCount || 0}
-            />
-            <Leaders leaders={leaders} />
-          </SimpleGrid>
-
-          <SimpleGrid cols={2} spacing="xs">
-            <ScoredSecrets secretsScored={secretsScored} />
-            <PromissoryNotesStack
-              promissoryNotes={promissoryNotes}
-              colorToFaction={props.colorToFaction}
-            />
-            {/* Fragments and CC Section */}
-            {FragmentsAndCCSection}
-            {/* Relics */}
-            <Group gap={4} wrap="wrap">
+            <Stack gap={8}>
+              <PlayerCardCounts
+                tg={props.playerData.tg || 0}
+                commodities={props.playerData.commodities || 0}
+                commoditiesTotal={props.playerData.commoditiesTotal || 0}
+                soCount={props.playerData.soCount || 0}
+                pnCount={props.playerData.pnCount || 0}
+                acCount={props.playerData.acCount || 0}
+              />
+              {/* Fragments and CC Section */}
+              {FragmentsAndCCSection}
+              <ScoredSecrets secretsScored={secretsScored} />
+            </Stack>
+            <Stack gap={8}>
+              <Leaders leaders={leaders} />
               {relics.map((relicId, index) => (
                 <Relic key={index} relicId={relicId} />
               ))}
-            </Group>
+              <PromissoryNotesStack
+                promissoryNotes={promissoryNotes}
+                colorToFaction={props.colorToFaction}
+              />
+            </Stack>
           </SimpleGrid>
 
           {/* Tech Section - Simplified for narrow layout */}
@@ -459,7 +457,9 @@ export default function PlayerCardCompact(props: Props) {
                 justifyContent: "center",
               }}
             >
-              <ResourceInfluenceTable planetEconomics={planetEconomics} />
+              <ResourceInfluenceTableCompact
+                planetEconomics={planetEconomics}
+              />
             </Surface>
 
             <Surface
