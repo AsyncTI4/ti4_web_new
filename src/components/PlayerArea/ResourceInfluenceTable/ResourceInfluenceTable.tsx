@@ -5,10 +5,12 @@ import { cdnImage } from "../../../data/cdnImage";
 
 // Component for the half-yellow, half-blue combined icon
 function CombinedResourceInfluenceIcon({ size = 12 }: { size?: number }) {
+  const gradientId = `half-yellow-blue-${Math.random().toString(36).substr(2, 9)}`;
+
   return (
     <svg width={size} height={size} viewBox="0 0 24 24">
       <defs>
-        <linearGradient id="half-yellow-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="50%" stopColor="#eab308" />
           <stop offset="50%" stopColor="#3b82f6" />
         </linearGradient>
@@ -16,7 +18,7 @@ function CombinedResourceInfluenceIcon({ size = 12 }: { size?: number }) {
       <polygon
         points="6,2 18,2 22,12 18,22 6,22 2,12"
         fill="transparent"
-        stroke="url(#half-yellow-blue)"
+        stroke={`url(#${gradientId})`}
         strokeWidth="2"
       />
     </svg>
@@ -54,7 +56,7 @@ type Props = {
 
 export function ResourceInfluenceTable({ planetEconomics }: Props) {
   return (
-    <Table horizontalSpacing="xs" verticalSpacing="xs">
+    <Table horizontalSpacing={6} verticalSpacing={4}>
       <Table.Thead>
         <Table.Tr>
           <Table.Th></Table.Th>
@@ -83,7 +85,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
       <Table.Tbody>
         <Table.Tr>
           <Table.Td>
-            <Group gap={4} align="center">
+            <Group gap={3} align="center">
               <Image
                 src={cdnImage("/player_area/pa_resources.png")}
                 width={16}
@@ -92,7 +94,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
             </Group>
           </Table.Td>
           <Table.Td>
-            <Group gap={4} align="baseline">
+            <Group gap={3} align="baseline">
               <Text
                 size="md"
                 fw={700}
@@ -117,7 +119,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
             </Group>
           </Table.Td>
           <Table.Td>
-            <Group gap={4} align="baseline">
+            <Group gap={3} align="baseline">
               <Text
                 size="md"
                 fw={700}
@@ -144,12 +146,12 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
         </Table.Tr>
         <Table.Tr>
           <Table.Td>
-            <Group gap={4} align="center">
+            <Group gap={3} align="center">
               <InfluenceIcon size={16} />
             </Group>
           </Table.Td>
           <Table.Td>
-            <Group gap={4} align="baseline">
+            <Group gap={3} align="baseline">
               <Text
                 size="md"
                 fw={700}
@@ -174,7 +176,7 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
             </Group>
           </Table.Td>
           <Table.Td>
-            <Group gap={4} align="baseline">
+            <Group gap={3} align="baseline">
               <Text
                 size="md"
                 fw={700}
@@ -201,12 +203,11 @@ export function ResourceInfluenceTable({ planetEconomics }: Props) {
         </Table.Tr>
         <Table.Tr>
           <Table.Td>
-            <Group gap={4} align="center">
-              <CombinedResourceInfluenceIcon size={16} />
-            </Group>
+            <CombinedResourceInfluenceIcon size={16} />
           </Table.Td>
-          <Table.Td colSpan={2} style={{ textAlign: "center" }}>
-            <Group gap={4} align="baseline" justify="center">
+          <Table.Td></Table.Td>
+          <Table.Td>
+            <Group gap={3} align="baseline">
               <Text
                 size="md"
                 fw={700}

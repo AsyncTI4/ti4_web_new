@@ -14,6 +14,7 @@ import FrogGamePage from "./FrogGamePage";
 import LandingPage from "./LandingPage";
 import PlayerAreasPage from "./PlayerAreasPage";
 import PlayerAreasPage2 from "./PlayerAreasPage2";
+import PlayerAreasPage3 from "./PlayerAreasPage3";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/game/:gameId/playerAreas2",
     element: <PlayerAreasPage2 />,
+  },
+  {
+    path: "/game/:gameId/playerAreas3",
+    element: <PlayerAreasPage3 />,
   },
   {
     path: "/froggame/:discordid/:mapid",
