@@ -13,8 +13,9 @@ export function useOverlayData(gameId) {
 }
 
 export const getOverlayContent = () => {
+
   const baseUrl =
-    "https://raw.githubusercontent.com/AsyncTI4/TI4_map_generator_bot/refs/heads/master/src/main/resources/data";
+    "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/data";
 
   const factionSources = [
     "base",
@@ -49,7 +50,7 @@ export const getOverlayContent = () => {
     "pok",
     "project_pi",
     "sigma",
-    "voice_of_the_council",
+    "voices_of_the_council",
   ];
 
   const techSources = [
@@ -75,7 +76,7 @@ export const getOverlayContent = () => {
     "pbd2000",
     "pok",
     "project_pi",
-    "voice_of_the_council",
+    "voices_of_the_council",
   ];
 
   const secretObjectiveSources = [
@@ -137,7 +138,7 @@ export const getOverlayContent = () => {
     "salliance",
     "tispoon",
     "tribunal",
-    "voice_of_the_council",
+    "voices_of_the_council",
     "monuments",
     "unfulvio",
   ];
@@ -182,6 +183,8 @@ export const getOverlayContent = () => {
     ...exploreSources.map((source) => `${baseUrl}/explores/${source}.json`),
   ];
 
+  console.log("fetchUrls", fetchUrls[0]);
+
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [
     ...Array(factionSources.length).fill("FactionModel"),
@@ -200,11 +203,29 @@ export const getOverlayContent = () => {
 
 
   return Promise.all(
-    fetchUrls.map((url) => fetch(url).then((res) => res.json()))
+    fetchUrls.map((url) =>
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) {
+            console.warn(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+            return null;
+          }
+          return res.json();
+        })
+        .catch((error) => {
+          console.warn(`Error fetching ${url}:`, error);
+          return null;
+        })
+    )
   ).then((results) => {
-
     let accumulator = {};
     results.forEach((dataArray, idx) => {
+      // Skip null results from failed fetches
+      if (dataArray === null) {
+        console.warn(`Skipping failed fetch for ${fetchUrls[idx]}`);
+        return;
+      }
+
       const currentPrefix = dataSourcePrefixes[idx];
       Object.values(dataArray).forEach((data) => {
         const key = data.alias ?? data.id;
