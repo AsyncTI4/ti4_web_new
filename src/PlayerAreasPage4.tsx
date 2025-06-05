@@ -35,19 +35,105 @@ import PlayerCardCompact from "./components/PlayerCard2Compact";
 import { cdnImage } from "./data/cdnImage";
 import FactionCoordinateBoxes from "./components/FactionCoordinateBoxes";
 import classes from "./components/PlayerAreasPage4.module.css";
+import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
+import { units } from "./data/units";
+import { PlayerData } from "./data/pbd10242";
 
 // Zoom configuration from ScrollMap
 const defaultZoomIndex = 2;
 const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
 
+// Function to lookup units.ts ID from async ID and faction
+function lookupUnitId(
+  asyncId: string,
+  faction: string,
+  playerData?: PlayerData
+): string | null {
+  if (!playerData?.unitsOwned) {
+    // Fallback to old logic if no player data
+    return lookupUnitIdFallback(asyncId, faction);
+  }
+
+  // First try to find a faction-specific unit that the player owns
+  const factionSpecificUnits = units.filter(
+    (unit) =>
+      unit.asyncId === asyncId &&
+      unit.faction &&
+      unit.faction.toLowerCase() === faction.toLowerCase() &&
+      playerData.unitsOwned.includes(unit.id)
+  );
+
+  if (factionSpecificUnits.length > 0) {
+    // Prefer upgraded versions (they typically have upgradesFromUnitId)
+    const upgradedUnit = factionSpecificUnits.find(
+      (unit) => unit.upgradesFromUnitId
+    );
+    return upgradedUnit?.id || factionSpecificUnits[0].id;
+  }
+
+  // Fall back to generic units that the player owns
+  const genericUnits = units.filter(
+    (unit) =>
+      unit.asyncId === asyncId &&
+      !unit.faction &&
+      playerData.unitsOwned.includes(unit.id)
+  );
+
+  if (genericUnits.length > 0) {
+    // Prefer upgraded versions
+    const upgradedUnit = genericUnits.find((unit) => unit.upgradesFromUnitId);
+    return upgradedUnit?.id || genericUnits[0].id;
+  }
+
+  // Final fallback to old logic
+  return lookupUnitIdFallback(asyncId, faction);
+}
+
+// Fallback function (original logic)
+function lookupUnitIdFallback(asyncId: string, faction: string): string | null {
+  // First try to find a faction-specific unit
+  const factionSpecificUnit = units.find(
+    (unit) =>
+      unit.asyncId === asyncId &&
+      unit.faction &&
+      unit.faction.toLowerCase() === faction.toLowerCase()
+  );
+
+  if (factionSpecificUnit) {
+    return factionSpecificUnit.id;
+  }
+
+  // Fall back to generic unit
+  const genericUnit = units.find(
+    (unit) => unit.asyncId === asyncId && !unit.faction
+  );
+
+  return genericUnit?.id || null;
+}
+
 function PlayerAreasPage4() {
   const params = useParams<{ gameId: string }>();
   const gameId = params.gameId!;
 
-  // Add active faction state
-  const [activeFaction, setActiveFaction] = useState<string | null>(null);
+  // Add active unit state (combines faction, unitId, and coordinates)
+  const [activeUnit, setActiveUnit] = useState<{
+    faction: string;
+    unitId?: string;
+    coords: { x: number; y: number };
+  } | null>(null);
+
+  // Add separate state for delayed map tooltip
+  const [tooltipUnit, setTooltipUnit] = useState<{
+    faction: string;
+    unitId?: string;
+    coords: { x: number; y: number };
+  } | null>(null);
+
   // Add selected faction state for pinned player
   const [selectedFaction, setSelectedFaction] = useState<string | null>(null);
+
+  // Add hover delay state and ref for timeout
+  const [hoverTimeout, setHoverTimeout] = useState<number | null>(null);
 
   // Add resizable sidebar state
   const [sidebarWidth, setSidebarWidth] = useState(25); // percentage
@@ -61,6 +147,15 @@ function PlayerAreasPage4() {
   useEffect(() => {
     dragscroll.reset();
   }, []);
+
+  // Clean up hover timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    };
+  }, [hoverTimeout]);
 
   // Dynamic image loading like MapUI
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -109,7 +204,6 @@ function PlayerAreasPage4() {
   const { data, isLoading, isError } = usePlayerData(gameId);
   const playerData = data?.playerData;
   const factionCoordinates = data?.factionCoordinates;
-  console.log(factionCoordinates);
 
   // Create color to faction mapping from player data
   const colorToFaction = useMemo(
@@ -124,52 +218,61 @@ function PlayerAreasPage4() {
     [playerData]
   );
 
-  // Optimized hover handlers
-  const handleMouseEnter = useCallback((faction: string) => {
-    setActiveFaction(faction);
-  }, []);
+  // Optimized hover handlers - now include unit ID with delay
+  const handleMouseEnter = useCallback(
+    (faction: string, unitId: string, x: number, y: number) => {
+      // Immediately set activeUnit for sidebar (no delay)
+      setActiveUnit({ faction, unitId, coords: { x, y } });
+
+      // Clear any existing timeout
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+
+      // Set a new timeout for 300ms delay for map tooltip
+      const newTimeout = setTimeout(() => {
+        setTooltipUnit({ faction, unitId, coords: { x, y } });
+        setHoverTimeout(null);
+      }, 300);
+
+      setHoverTimeout(newTimeout);
+    },
+    [hoverTimeout]
+  );
 
   const handleMouseLeave = useCallback(() => {
-    setActiveFaction(null);
-  }, []);
+    // Clear any pending timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    // Immediately clear both states
+    setActiveUnit(null);
+    setTooltipUnit(null);
+  }, [hoverTimeout]);
 
   // Add click handler for pinning players
-  const handleClick = useCallback((faction: string) => {
+  const handleMouseDown = useCallback((faction: string) => {
     setSelectedFaction(faction);
   }, []);
 
   // Add tab click handler
   const handleTabClick = useCallback((faction: string) => {
     setSelectedFaction(faction);
-    setActiveFaction(null); // Clear any hover state
+    setActiveUnit(null); // Clear any hover state
   }, []);
 
-  // Create optimized faction coordinate handlers
-  const factionHandlers = useMemo(() => {
-    if (!factionCoordinates) return {};
+  // Separate handlers for faction tabs (which don't have specific unit IDs)
+  const handleTabMouseEnter = useCallback((faction: string) => {
+    setActiveUnit({ faction, coords: { x: 0, y: 0 } });
+  }, []);
 
-    const handlers: Record<
-      string,
-      {
-        onMouseEnter: () => void;
-        onClick: () => void;
-        onMouseLeave: () => void;
-      }
-    > = {};
-
-    Object.keys(factionCoordinates).forEach((faction) => {
-      handlers[faction] = {
-        onMouseEnter: () => handleMouseEnter(faction),
-        onClick: () => handleClick(faction),
-        onMouseLeave: handleMouseLeave,
-      };
-    });
-
-    return handlers;
-  }, [factionCoordinates, handleMouseEnter, handleClick, handleMouseLeave]);
+  const handleTabMouseLeave = useCallback(() => {
+    setActiveUnit(null);
+  }, []);
 
   // Add drag handlers for resizing
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleSidebarMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
   }, []);
@@ -289,10 +392,52 @@ function PlayerAreasPage4() {
                       {/* Faction coordinate boxes */}
                       <FactionCoordinateBoxes
                         factionCoordinates={factionCoordinates}
-                        factionHandlers={factionHandlers}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        onMouseDown={handleMouseDown}
                         zoom={zoom}
                         zoomFitToScreen={zoomFitToScreen}
                       />
+
+                      {/* Absolutely positioned UnitDetailsCard over hovered unit */}
+                      {tooltipUnit &&
+                        tooltipUnit.unitId &&
+                        tooltipUnit.faction &&
+                        (() => {
+                          const activePlayer = playerData?.find(
+                            (player) => player.faction === tooltipUnit.faction
+                          );
+                          if (!activePlayer) return null;
+
+                          const scaledX =
+                            tooltipUnit.coords.x * (zoomFitToScreen ? 1 : zoom);
+                          const scaledY =
+                            tooltipUnit.coords.y * (zoomFitToScreen ? 1 : zoom);
+
+                          return (
+                            <Box
+                              style={{
+                                position: "absolute",
+                                left: `${scaledX}px`,
+                                top: `${scaledY}px`,
+                                zIndex: 1000,
+                                pointerEvents: "none",
+                                transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
+                              }}
+                            >
+                              <UnitDetailsCard
+                                unitId={
+                                  lookupUnitId(
+                                    tooltipUnit.unitId,
+                                    activePlayer.faction,
+                                    activePlayer
+                                  ) || tooltipUnit.unitId
+                                }
+                                color={activePlayer.color}
+                              />
+                            </Box>
+                          );
+                        })()}
                     </>
                   ) : (
                     <Center h="100%">
@@ -319,7 +464,7 @@ function PlayerAreasPage4() {
                 {/* Drag Handle */}
                 <Box
                   className={classes.dragHandle}
-                  onMouseDown={handleMouseDown}
+                  onMouseDown={handleSidebarMouseDown}
                 >
                   <IconGripVertical
                     size={32}
@@ -337,7 +482,8 @@ function PlayerAreasPage4() {
                     <Box className={classes.factionTabBar}>
                       <Group gap={4} justify="center" wrap="wrap">
                         {playerData.map((player) => {
-                          const isActive = activeFaction === player.faction;
+                          const isActive =
+                            activeUnit?.faction === player.faction;
                           const isPinned = selectedFaction === player.faction;
 
                           return (
@@ -345,9 +491,9 @@ function PlayerAreasPage4() {
                               key={player.color}
                               onClick={() => handleTabClick(player.faction)}
                               onMouseEnter={() =>
-                                handleMouseEnter(player.faction)
+                                handleTabMouseEnter(player.faction)
                               }
-                              onMouseLeave={handleMouseLeave}
+                              onMouseLeave={() => handleTabMouseLeave()}
                               className={`${classes.factionTab} ${
                                 isPinned
                                   ? classes.factionTabPinned
@@ -407,7 +553,7 @@ function PlayerAreasPage4() {
                       {(() => {
                         // Find the player to show - hover takes priority over pinned
                         const activePlayer = playerData.find(
-                          (player) => player.faction === activeFaction
+                          (player) => player.faction === activeUnit?.faction
                         );
                         const selectedPlayer = playerData.find(
                           (player) => player.faction === selectedFaction
@@ -428,7 +574,7 @@ function PlayerAreasPage4() {
                     </Box>
                   )}
 
-                  {playerData && !activeFaction && !selectedFaction && (
+                  {playerData && !activeUnit && !selectedFaction && (
                     <Center h="200px" className={classes.hoverInstructions}>
                       <Box>
                         <div>Hover over a unit</div>

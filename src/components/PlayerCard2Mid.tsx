@@ -609,7 +609,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
 
           {/* Full-width Nombox at the bottom */}
           <Grid.Col span={12}>
-            <Nombox colorToFaction={props.colorToFaction} />
+            <Nombox
+              capturedUnits={props.playerData.nombox || {}}
+              colorToFaction={props.colorToFaction}
+            />
           </Grid.Col>
         </Grid>
       </Box>

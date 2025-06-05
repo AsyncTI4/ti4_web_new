@@ -148,6 +148,8 @@ export function UnitDetailsCard({ unitId, color }: Props) {
         {/* Abilities Section */}
         {(unitData.afbHitsOn ||
           unitData.bombardHitsOn ||
+          unitData.spaceCannonHitsOn ||
+          unitData.planetaryShield ||
           unitData.sustainDamage) && (
           <>
             <Divider c={isUpgraded ? "blue.7" : "gray.7"} opacity={0.4} />
@@ -208,6 +210,47 @@ export function UnitDetailsCard({ unitId, color }: Props) {
                         ` (x${unitData.bombardDieCount})`}
                     </Text>
                   </Group>
+                )}
+                {unitData.spaceCannonHitsOn && (
+                  <Group gap="xs" justify="flex-start">
+                    <Text
+                      size="xs"
+                      fw={600}
+                      c="gray.3"
+                      tt="uppercase"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+                      }}
+                    >
+                      Space Cannon
+                    </Text>
+                    <Text
+                      size="sm"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+                      }}
+                    >
+                      {unitData.spaceCannonHitsOn}
+                      {unitData.spaceCannonDieCount &&
+                        unitData.spaceCannonDieCount > 1 &&
+                        ` (x${unitData.spaceCannonDieCount})`}
+                    </Text>
+                  </Group>
+                )}
+                {unitData.planetaryShield && (
+                  <Text
+                    size="xs"
+                    fw={600}
+                    c="gray.3"
+                    tt="uppercase"
+                    style={{
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    Planetary Shield
+                  </Text>
                 )}
                 {unitData.sustainDamage && (
                   <Text

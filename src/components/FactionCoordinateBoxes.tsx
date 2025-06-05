@@ -5,45 +5,45 @@ import classes from "./FactionCoordinateBoxes.module.css";
 // Unit size dictionary mapping unit IDs to their hover box dimensions
 const unitSizes: Record<string, { width: number; height: number }> = {
   // Ships
-  dd: { width: 30, height: 30 }, // destroyer
-  ff: { width: 25, height: 25 }, // fighter
-  cv: { width: 35, height: 35 }, // carrier
-  dn: { width: 40, height: 40 }, // dreadnought
-  cr: { width: 32, height: 32 }, // cruiser
-  ws: { width: 50, height: 50 }, // war sun
-  fs: { width: 45, height: 45 }, // flagship
+  dd: { width: 72, height: 72 }, // destroyer
+  ff: { width: 70, height: 35 }, // fighter
+  cv: { width: 70, height: 69 }, // carrier
+  dn: { width: 77, height: 77 }, // dreadnought
+  ca: { width: 67, height: 67 }, // cruiser
+  ws: { width: 56, height: 65 }, // war sun
+  fs: { width: 80, height: 82 }, // flagship
 
   // Ground units
-  gf: { width: 25, height: 25 }, // ground forces
-  mf: { width: 28, height: 28 }, // mech
-  inf: { width: 25, height: 25 }, // infantry
+  gf: { width: 70, height: 35 }, // ground forces
+  mf: { width: 44, height: 45 }, // mech
 
   // Structures
-  sd: { width: 40, height: 40 }, // space dock
-  pd: { width: 35, height: 35 }, // pds
+  sd: { width: 42, height: 42 }, // space dock
+  pd: { width: 33, height: 37 }, // pds
 
   // Default fallback
   default: { width: 30, height: 30 },
 };
 
-interface FactionHandlers {
-  [faction: string]: {
-    onMouseEnter: () => void;
-    onClick: () => void;
-    onMouseLeave: () => void;
-  };
-}
-
 interface FactionCoordinateBoxesProps {
   factionCoordinates: any;
-  factionHandlers: FactionHandlers;
+  onMouseEnter?: (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number
+  ) => void;
+  onMouseLeave?: (faction: string) => void;
+  onMouseDown?: (faction: string, unitId: string) => void;
   zoom: number;
   zoomFitToScreen: boolean;
 }
 
 const FactionCoordinateBoxes: React.FC<FactionCoordinateBoxesProps> = ({
   factionCoordinates,
-  factionHandlers,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseDown,
   zoom,
   zoomFitToScreen,
 }) => {
@@ -76,7 +76,9 @@ const FactionCoordinateBoxes: React.FC<FactionCoordinateBoxesProps> = ({
                       width: `${scaledWidth}px`,
                       height: `${scaledHeight}px`,
                     }}
-                    {...factionHandlers[faction]}
+                    onMouseEnter={() => onMouseEnter?.(faction, unitId, x, y)}
+                    onMouseLeave={() => onMouseLeave?.(faction)}
+                    onMouseDown={() => onMouseDown?.(faction, unitId)}
                   />
                 );
               });
@@ -86,7 +88,14 @@ const FactionCoordinateBoxes: React.FC<FactionCoordinateBoxesProps> = ({
         return [];
       })
       .flat();
-  }, [factionCoordinates, factionHandlers, zoom, zoomFitToScreen]);
+  }, [
+    factionCoordinates,
+    onMouseEnter,
+    onMouseLeave,
+    onMouseDown,
+    zoom,
+    zoomFitToScreen,
+  ]);
 
   return <>{coordinateBoxes}</>;
 };

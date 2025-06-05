@@ -3,14 +3,11 @@ import { Surface } from "./PlayerArea/Surface";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
 import { colors } from "../data/colors";
+import { CapturedUnitsData } from "../data/pbd10242";
 import styles from "./Nombox.module.css";
 
-type CapturedUnitsData = {
-  [factionColor: string]: string[];
-};
-
 type Props = {
-  capturedUnits?: CapturedUnitsData;
+  capturedUnits: CapturedUnitsData;
   colorToFaction: Record<string, string>;
 };
 
@@ -45,17 +42,12 @@ const parseUnitString = (unitString: string) => {
   };
 };
 
-const HARDCODED_DATA: CapturedUnitsData = {
-  keleres: ["dreadnought,3", "carrier,4"],
-  xxcha: ["cruiser,2", "fighter,6"],
-  sol: ["destroyer,1", "infantry,8"],
-  jolnar: ["pds,2", "mech,1"],
-};
+export function Nombox({ capturedUnits, colorToFaction }: Props) {
+  // Early return if no captured units
+  if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
+    return null;
+  }
 
-export function Nombox({
-  capturedUnits = HARDCODED_DATA,
-  colorToFaction,
-}: Props) {
   // Helper function to find player color for a given faction
   const getPlayerColorForFaction = (factionName: string): string => {
     // Find the color that maps to this faction

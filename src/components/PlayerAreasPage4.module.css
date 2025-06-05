@@ -66,7 +66,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  z-index: 1002;
+  z-index: 100;
   transition: background-color 0.2s ease;
 }
 
@@ -89,6 +89,9 @@
   border-bottom: 1px solid var(--mantine-color-dark-4);
   background: var(--mantine-color-dark-7);
   padding: 8px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .factionTab {

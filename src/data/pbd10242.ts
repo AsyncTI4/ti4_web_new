@@ -7,6 +7,10 @@ export interface Leader {
   active: boolean;
 }
 
+export type CapturedUnitsData = {
+  [factionColor: string]: string[];
+};
+
 export interface PlayerDataResponse {
   playerData: PlayerData[];
   factionCoordinates: Record<string, { x: number; y: number }>;
@@ -61,6 +65,7 @@ export interface PlayerData {
   scs: number[];
   neighbors: string[];
   debtTokens: Record<string, number>;
+  nombox?: CapturedUnitsData;
 
   // card counts
   soCount: number;

@@ -58,7 +58,7 @@ export function Tech({ techId }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          className={`${styles.techCard} ${styles[color]}`}
+          className={`${styles.techCard} ${styles[color]} ${isFactionTech ? styles.factionTech : ""}`}
           onClick={() => setOpened((o) => !o)}
         >
           {/* Tier indicator dots in top-right */}
