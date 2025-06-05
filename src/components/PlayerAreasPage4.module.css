@@ -1,0 +1,160 @@
+.headerContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  height: 100%;
+  padding: 0 var(--mantine-spacing-sm);
+}
+
+.flexGrow {
+  flex-grow: 1;
+}
+
+.mainBackground {
+  background: var(--mantine-color-dark-8);
+  min-height: calc(100vh - 60px);
+}
+
+.tabsList {
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+  background: var(--mantine-color-dark-7);
+}
+
+.tabsTab {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 24px;
+}
+
+.mapContainer {
+  display: flex;
+  height: 100%;
+}
+
+.mapArea {
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}
+
+.zoomControlsFixed {
+  position: fixed;
+  top: 125px;
+  z-index: 1000;
+}
+
+.mapImage {
+  display: block;
+}
+
+.refreshButton {
+  position: fixed;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.dragHandle {
+  width: 16px;
+  height: 100%;
+  background: var(--mantine-color-dark-4);
+  border-left: 1px solid var(--mantine-color-dark-3);
+  border-right: 1px solid var(--mantine-color-dark-3);
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1002;
+  transition: background-color 0.2s ease;
+}
+
+.dragHandle:hover {
+  background-color: var(--mantine-color-dark-3);
+}
+
+.dragHandleIcon {
+  color: var(--mantine-color-gray-6);
+  pointer-events: none;
+}
+
+.sidebar {
+  height: 100%;
+  overflow-y: scroll;
+  background: var(--mantine-color-black);
+}
+
+.factionTabBar {
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+  background: var(--mantine-color-dark-7);
+  padding: 8px 12px;
+}
+
+.factionTab {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.factionTabActive {
+  border: 2px solid var(--mantine-color-gray-6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.factionTabPinned {
+  border: 2px solid var(--mantine-color-blue-5);
+  background: rgba(74, 158, 255, 0.15);
+  box-shadow: 0 0 8px rgba(74, 158, 255, 0.3);
+}
+
+.factionImage {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) brightness(0.9);
+  transition: filter 0.2s ease;
+}
+
+.factionImageActive {
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.3)) brightness(1.1);
+}
+
+.factionImagePinned {
+  filter: drop-shadow(0 2px 4px rgba(74, 158, 255, 0.4)) brightness(1.2);
+}
+
+.playerCardsContainer {
+  position: relative;
+  min-height: 400px;
+}
+
+.playerCard {
+  position: static;
+  width: auto;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.hoverInstructions {
+  text-align: center;
+  color: var(--mantine-color-gray-6);
+}
+
+.hoverInstructionsLine {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.playersTabContent {
+  height: 100%;
+  overflow-y: scroll;
+  padding: 16px;
+  background: var(--mantine-color-black);
+}

@@ -24,46 +24,22 @@ export function Leader({ id, type, exhausted, locked }: Props) {
   const shouldShowGreen = !exhausted && !locked;
 
   const LeaderContent = () => (
-    <Group gap={8} pos="relative" align="center" wrap="nowrap">
-      <Image src={`/leaders/${id}.webp`} style={imageStyles} />
-      <Stack gap={0}>
+    <Group className={styles.leaderGroup}>
+      <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
+      <Stack className={styles.leaderStack}>
         <Text
-          size="sm"
-          fw={700}
-          c={shouldShowGreen ? "white" : "gray.4"}
-          style={{
-            ...textOverflowStyles,
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-          }}
+          className={`${styles.leaderName} ${shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive}`}
         >
           {leaderData.name}
         </Text>
         <Text
-          size="xs"
-          c={shouldShowGreen ? "green.3" : "gray.5"}
-          fw={500}
-          opacity={0.8}
-          tt="capitalize"
-          style={textOverflowStyles}
+          className={`${styles.leaderType} ${shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive}`}
         >
           {type}
         </Text>
       </Stack>
       {locked && (
-        <Box
-          pos="absolute"
-          top={-12}
-          right={-12}
-          bg="gray.7"
-          p={4}
-          display="flex"
-          style={{
-            borderRadius: "50%",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <Box className={styles.lockIcon}>
           <IconLock size={16} color="white" stroke={2.5} />
         </Box>
       )}
@@ -77,26 +53,13 @@ export function Leader({ id, type, exhausted, locked }: Props) {
           {shouldShowGreen ? (
             <Shimmer
               color="green"
-              p={2}
-              px="sm"
-              className={`${styles.leaderCard} ${styles.shimmerCard}`}
-              style={{
-                border: "1px solid #166534",
-                borderRadius: "8px",
-              }}
+              className={`${styles.leaderCard} ${styles.shimmerCard} ${styles.shimmerContainer}`}
             >
               <LeaderContent />
             </Shimmer>
           ) : (
             <Box
-              p={2}
-              px="sm"
-              bg="linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%)"
-              className={`${styles.leaderCard} ${styles.standardCard}`}
-              style={{
-                border: "1px solid #6b7280",
-              }}
-              opacity={exhausted ? 0.5 : 1}
+              className={`${styles.leaderCard} ${styles.standardCard} ${styles.standardContainer} ${exhausted ? styles.exhaustedContainer : ""}`}
             >
               <LeaderContent />
             </Box>
@@ -109,20 +72,6 @@ export function Leader({ id, type, exhausted, locked }: Props) {
     </SmoothPopover>
   );
 }
-
-const imageStyles = {
-  width: "35px",
-  height: "35px",
-  borderRadius: "50%",
-  objectFit: "cover" as const,
-  objectPosition: "center",
-};
-
-const textOverflowStyles = {
-  overflow: "hidden",
-  whiteSpace: "nowrap" as const,
-  textOverflow: "clip",
-};
 
 const getLeaderData = (leaderId: string) => {
   return leaders.find((leader) => leader.id === leaderId);

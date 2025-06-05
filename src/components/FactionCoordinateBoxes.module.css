@@ -1,0 +1,8 @@
+.coordinateBox {
+  position: absolute;
+  background-color: transparent;
+  z-index: 1001;
+  pointer-events: auto;
+  opacity: 0.1;
+  cursor: pointer;
+}

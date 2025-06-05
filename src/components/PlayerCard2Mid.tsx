@@ -9,23 +9,22 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { memo } from "react";
-
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
-
+import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
+import { Nombox } from "./Nombox";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
 import { Neighbors } from "./PlayerArea/Neighbors";
 import { NeedsToFollow } from "./PlayerArea/NeedsToFollow";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
-import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { ResourceInfluenceTable } from "./PlayerArea/ResourceInfluenceTable";
+import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
@@ -34,6 +33,9 @@ import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
 import { ArmyStats } from "./PlayerArea";
+import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
+import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
+import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -209,12 +211,20 @@ export default memo(function PlayerCard2Mid(props: Props) {
             />
           );
         })}
+
+        {/* Add StasisInfantryCard if there are any stasisInfantry */}
+        {props.playerData.stasisInfantry > 0 && (
+          <StasisInfantryCard
+            reviveCount={props.playerData.stasisInfantry}
+            color={color}
+          />
+        )}
       </SimpleGrid>
     </Surface>
   );
 
   const RelicStack = (
-    <Stack gap={4} w={{ base: "100%", sm: "fit-content" }}>
+    <Stack gap={4} w={{ base: "100%" }}>
       {relics.map((relicId, index) => (
         <Relic key={index} relicId={relicId} />
       ))}
@@ -302,28 +312,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
 
       <Box pos="relative" style={{ zIndex: 1 }}>
         {/* Header Section */}
-        <Box
-          p="sm"
-          mb="lg"
-          pos="relative"
-          mt={-16}
-          ml={-16}
-          mr={-8}
-          style={{
-            borderRadius: 0,
-            borderBottomRightRadius: 8,
-            background:
-              "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
-            border: "1px solid rgba(148, 163, 184, 0.2)",
-            overflow: "hidden",
-            boxShadow:
-              "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
-            opacity: props.playerData.passed ? 0.9 : 1,
-          }}
-        >
-          {/* Header bottom border accent */}
-          <HeaderAccent color={color} />
-
+        <PlayerCardHeader color={color} passed={props.playerData.passed}>
           <Group justify="space-between" align="center">
             <Group gap={4} px={4} align="center">
               {/* Small circular faction icon */}
@@ -363,57 +352,21 @@ export default memo(function PlayerCard2Mid(props: Props) {
               </Text>
               <PlayerColor color={color} size="sm" />
 
-              {/* Status Indicator - harmonized with Shimmer component styling */}
-              {(props.playerData.passed || props.playerData.active) && (
-                <Box
-                  px={8}
-                  py={2}
-                  ml={4}
-                  style={{
-                    borderRadius: "6px",
-                    background: props.playerData.passed
-                      ? "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%)"
-                      : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
-                    border: props.playerData.passed
-                      ? "1px solid rgba(239, 68, 68, 0.25)"
-                      : "1px solid rgba(34, 197, 94, 0.25)",
-                    boxShadow: props.playerData.passed
-                      ? "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
-                      : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
-                  }}
-                >
-                  <Text
-                    size="xs"
-                    fw={700}
-                    c={props.playerData.passed ? "red.3" : "green.3"}
-                    style={{
-                      textTransform: "uppercase",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      letterSpacing: "0.5px",
-                      fontSize: "10px",
-                    }}
-                  >
-                    {props.playerData.passed ? "PASSED" : "ACTIVE"}
-                  </Text>
-                </Box>
-              )}
-
-              {/* Header s Section - harmonized with Surface component styling */}
-              <Neighbors
-                neighbors={props.playerData.neighbors || []}
-                colorToFaction={props.colorToFaction}
+              <StatusIndicator
+                passed={props.playerData.passed}
+                active={props.playerData.active}
               />
+              <Box visibleFrom="sm">
+                <Neighbors
+                  neighbors={props.playerData.neighbors || []}
+                  colorToFaction={props.colorToFaction}
+                />
+              </Box>
             </Group>
-
-            {/* Strategy Card and Speaker Token */}
             <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
           </Group>
-        </Box>
+        </PlayerCardHeader>
         <Grid gutter="md" columns={12}>
-          <Grid.Col span={12} hiddenFrom="sm">
-            {StrategyAndSpeaker}
-          </Grid.Col>
-
           <Grid.Col
             span={{
               base: 6,
@@ -421,14 +374,36 @@ export default memo(function PlayerCard2Mid(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            <PlayerCardCounts
-              tg={props.playerData.tg || 0}
-              commodities={props.playerData.commodities || 0}
-              commoditiesTotal={props.playerData.commoditiesTotal || 0}
-              soCount={props.playerData.soCount || 0}
-              pnCount={props.playerData.pnCount || 0}
-              acCount={props.playerData.acCount || 0}
-            />
+            <Stack gap={6}>
+              <Box hiddenFrom="sm" w="100%">
+                <Stack gap="xs" align="center">
+                  {scs.map((scNumber, index) => (
+                    <StrategyCardBannerCompact
+                      key={scNumber}
+                      number={scNumber}
+                      text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                      color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                      isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
+                    />
+                  ))}
+                </Stack>
+              </Box>
+
+              <PlayerCardCounts
+                tg={props.playerData.tg || 0}
+                commodities={props.playerData.commodities || 0}
+                commoditiesTotal={props.playerData.commoditiesTotal || 0}
+                soCount={props.playerData.soCount || 0}
+                pnCount={props.playerData.pnCount || 0}
+                acCount={props.playerData.acCount || 0}
+              />
+              <Box hiddenFrom="sm">
+                <Neighbors
+                  neighbors={props.playerData.neighbors || []}
+                  colorToFaction={props.colorToFaction}
+                />
+              </Box>
+            </Stack>
           </Grid.Col>
           <Grid.Col
             span={{
@@ -455,26 +430,17 @@ export default memo(function PlayerCard2Mid(props: Props) {
             }}
             hiddenFrom="lg"
           >
-            <PromissoryNotesStack
-              promissoryNotes={promissoryNotes}
-              colorToFaction={props.colorToFaction}
-            />
+            <Stack gap={4}>
+              <PromissoryNotesStack
+                promissoryNotes={promissoryNotes}
+                colorToFaction={props.colorToFaction}
+              />
+              {RelicStack}
+            </Stack>
           </Grid.Col>
 
-          <Grid.Col span={6} hiddenFrom="lg">
-            <Group gap={4}>
-              {relics.map((relicId, index) => (
-                <Relic key={index} relicId={relicId} />
-              ))}
-            </Group>
-          </Grid.Col>
-
-          <Grid.Col hiddenFrom="lg" span={8}>
+          <Grid.Col hiddenFrom="lg" span={12}>
             {FragmentsAndCCSection}
-          </Grid.Col>
-
-          <Grid.Col span={12} hiddenFrom="md">
-            {RelicStack}
           </Grid.Col>
 
           <Grid.Col span={2} visibleFrom="lg">
@@ -580,17 +546,16 @@ export default memo(function PlayerCard2Mid(props: Props) {
 
               <Grid.Col
                 span={{
-                  base: 12,
-                  sm: 4,
-                  lg: 3,
-                  xl: 3,
-                  xl2: 2,
+                  base: 9,
                 }}
               >
                 <Surface p="xs" pattern="none" h="100%">
                   <Stack>
                     {/* Total/Optimal Section */}
-                    <ResourceInfluenceTable planetEconomics={planetEconomics} />
+                    <ResourceInfluenceCompact
+                      planetEconomics={planetEconomics}
+                      debts={props.playerData.debtTokens}
+                    />
 
                     {/* Debt Section */}
                     {/* <DebtTokens debts={debts} /> */}
@@ -600,10 +565,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
               <Grid.Col
                 span={{
                   base: 12,
-                  sm: 8,
-                  md: 8,
-                  lg: 6,
-                  xl2: 7,
+                  sm: 9,
                 }}
               >
                 <Group h="100%">
@@ -630,14 +592,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
                   </Surface>
                 </Group>
               </Grid.Col>
-              <Grid.Col
-                span={{
-                  base: 2,
-                  lg: 3,
-                }}
-                visibleFrom="lg"
-                p="sm"
-              >
+              <Grid.Col span={3} p="sm">
                 <ArmyStats
                   stats={{
                     spaceArmyRes,
@@ -650,6 +605,11 @@ export default memo(function PlayerCard2Mid(props: Props) {
                 />
               </Grid.Col>
             </Grid>
+          </Grid.Col>
+
+          {/* Full-width Nombox at the bottom */}
+          <Grid.Col span={12}>
+            <Nombox colorToFaction={props.colorToFaction} />
           </Grid.Col>
         </Grid>
       </Box>

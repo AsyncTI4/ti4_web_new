@@ -1,5 +1,4 @@
 import { Tabs, Group, Text, Image, Stack } from "@mantine/core";
-// @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
 import { cdnImage } from "../../../data/cdnImage";
 

@@ -72,43 +72,15 @@ export function PromissoryNote({
     <Box className={styles.promissoryCard} onClick={onClick}>
       <Shimmer
         color={shimmerColor}
-        py={2}
-        px={6}
-        className={gradientClasses.border}
+        className={`${gradientClasses.border} ${styles.shimmerContainer}`}
       >
-        <Group gap="xs" align="center" wrap="nowrap" style={{ minWidth: 0 }}>
-          <Image src="/pnicon.png" style={{ width: "20px", flexShrink: 0 }} />
-          <Text
-            size="xs"
-            fw={700}
-            c="white"
-            flex={1}
-            style={{
-              fontFamily: "SLIDER, monospace",
-              textShadow: "0 2px 2px rgba(0, 0, 0, 0.8)",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              minWidth: 0,
-            }}
-          >
+        <Group className={styles.contentGroup}>
+          <Image src="/pnicon.png" className={styles.noteIcon} />
+          <Text className={styles.noteText}>
             {noteData.shortName || displayName}
           </Text>
-          <Box
-            pos="relative"
-            style={{
-              width: "25px",
-            }}
-          >
-            <Image
-              src={factionIcon}
-              pos="absolute"
-              top={-13}
-              left={0}
-              style={{
-                width: "25px",
-              }}
-            />
+          <Box className={styles.factionIconContainer}>
+            <Image src={factionIcon} className={styles.factionIcon} />
           </Box>
         </Group>
       </Shimmer>

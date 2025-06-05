@@ -1,2 +1,1 @@
-when creating css styles use mantine props when possible
-when not possible, put the rest of the styles in a modules.css file with the component name
+when creating css styles use css modules when possible, using mantine css variables when applicable

@@ -8,6 +8,8 @@ import {
   SimpleGrid,
   Tabs,
   Button,
+  Group,
+  Image,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
 import {
@@ -30,6 +32,9 @@ import "./components/ScrollMap.css";
 import * as dragscroll from "dragscroll";
 import PlayerCard2Mid from "./components/PlayerCard2Mid";
 import PlayerCardCompact from "./components/PlayerCard2Compact";
+import { cdnImage } from "./data/cdnImage";
+import FactionCoordinateBoxes from "./components/FactionCoordinateBoxes";
+import classes from "./components/PlayerAreasPage4.module.css";
 
 // Zoom configuration from ScrollMap
 const defaultZoomIndex = 2;
@@ -41,6 +46,8 @@ function PlayerAreasPage4() {
 
   // Add active faction state
   const [activeFaction, setActiveFaction] = useState<string | null>(null);
+  // Add selected faction state for pinned player
+  const [selectedFaction, setSelectedFaction] = useState<string | null>(null);
 
   // Add resizable sidebar state
   const [sidebarWidth, setSidebarWidth] = useState(25); // percentage
@@ -126,24 +133,40 @@ function PlayerAreasPage4() {
     setActiveFaction(null);
   }, []);
 
+  // Add click handler for pinning players
+  const handleClick = useCallback((faction: string) => {
+    setSelectedFaction(faction);
+  }, []);
+
+  // Add tab click handler
+  const handleTabClick = useCallback((faction: string) => {
+    setSelectedFaction(faction);
+    setActiveFaction(null); // Clear any hover state
+  }, []);
+
   // Create optimized faction coordinate handlers
   const factionHandlers = useMemo(() => {
     if (!factionCoordinates) return {};
 
     const handlers: Record<
       string,
-      { onMouseEnter: () => void; onMouseLeave: () => void }
+      {
+        onMouseEnter: () => void;
+        onClick: () => void;
+        onMouseLeave: () => void;
+      }
     > = {};
 
     Object.keys(factionCoordinates).forEach((faction) => {
       handlers[faction] = {
         onMouseEnter: () => handleMouseEnter(faction),
+        onClick: () => handleClick(faction),
         onMouseLeave: handleMouseLeave,
       };
     });
 
     return handlers;
-  }, [factionCoordinates, handleMouseEnter, handleMouseLeave]);
+  }, [factionCoordinates, handleMouseEnter, handleClick, handleMouseLeave]);
 
   // Add drag handlers for resizing
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -189,18 +212,10 @@ function PlayerAreasPage4() {
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
-        <Box
-          h="100%"
-          px="sm"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-          }}
-        >
+        <Box className={classes.headerContainer}>
           <Logo />
           <div className="logo-divider" />
-          <Box style={{ flexGrow: 1 }} />
+          <Box className={classes.flexGrow} />
           <Box visibleFrom="sm">
             <DiscordLogin />
           </Box>
@@ -208,73 +223,35 @@ function PlayerAreasPage4() {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Box
-          style={{
-            background: "#171b2c",
-            minHeight: "calc(100vh - 60px)",
-          }}
-        >
+        <Box className={classes.mainBackground}>
           <Box mb="md" hiddenFrom="sm" p="md">
             <DiscordLogin />
           </Box>
 
           {/* Global Tabs */}
           <Tabs defaultValue="map" h="calc(100vh - 60px)">
-            <Tabs.List
-              grow
-              justify="center"
-              style={{
-                borderBottom: "1px solid #2c2e33",
-                background: "#1a1b23",
-              }}
-            >
-              <Tabs.Tab
-                value="map"
-                style={{
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  padding: "16px 24px",
-                }}
-              >
+            <Tabs.List grow justify="center" className={classes.tabsList}>
+              <Tabs.Tab value="map" className={classes.tabsTab}>
                 Map
               </Tabs.Tab>
-              <Tabs.Tab
-                value="players"
-                style={{
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  padding: "16px 24px",
-                }}
-              >
+              <Tabs.Tab value="players" className={classes.tabsTab}>
                 Player Areas
               </Tabs.Tab>
             </Tabs.List>
 
             {/* Map Tab */}
             <Tabs.Panel value="map" h="calc(100% - 60px)">
-              <Box
-                style={{
-                  display: "flex",
-                  height: "100%",
-                }}
-              >
+              <Box className={classes.mapContainer}>
                 {/* Map Container - Left Side (dynamic width) */}
                 <Box
-                  className="dragscroll"
-                  style={{
-                    width: `${100 - sidebarWidth}%`,
-                    height: "100%",
-                    position: "relative",
-                    overflow: "auto",
-                  }}
+                  className={`dragscroll ${classes.mapArea}`}
+                  style={{ width: `${100 - sidebarWidth}%` }}
                 >
                   {!isTouchDevice() && (
                     <div
+                      className={classes.zoomControlsFixed}
                       style={{
-                        position: "fixed",
-                        top: "125px",
                         right: `calc(${sidebarWidth}vw + 35px)`,
-                        zIndex: 1000,
                         transition: isDragging ? "none" : "right 0.1s ease",
                       }}
                     >
@@ -298,6 +275,7 @@ function PlayerAreasPage4() {
                         onLoad={(e) =>
                           setImageNaturalWidth(e.currentTarget.naturalWidth)
                         }
+                        className={classes.mapImage}
                         style={{
                           ...(isFirefox ? {} : { zoom: zoom }),
                           [`-moz-transform` as string]: `scale(${zoom})`,
@@ -305,40 +283,16 @@ function PlayerAreasPage4() {
                           ...(zoomFitToScreen
                             ? { width: "100%", height: "100%" }
                             : {}),
-                          display: "block",
                         }}
                       />
 
                       {/* Faction coordinate boxes */}
-                      {factionCoordinates &&
-                        Object.entries(factionCoordinates).map(
-                          ([faction, coordinateArray]) =>
-                            (coordinateArray as any).map(
-                              (coordString: string, index: number) => {
-                                const [x, y] = coordString
-                                  .split(",")
-                                  .map(Number);
-                                return (
-                                  <Box
-                                    key={`${faction}-${index}`}
-                                    style={{
-                                      position: "absolute",
-                                      left: `${x * (zoomFitToScreen ? 1 : zoom)}px`,
-                                      top: `${y * (zoomFitToScreen ? 1 : zoom)}px`,
-                                      width: `${45 * (zoomFitToScreen ? 1 : zoom)}px`,
-                                      height: `${45 * (zoomFitToScreen ? 1 : zoom)}px`,
-                                      backgroundColor: "transparent",
-                                      zIndex: 1001,
-                                      pointerEvents: "auto",
-                                      opacity: 0.1,
-                                      cursor: "pointer",
-                                    }}
-                                    {...factionHandlers[faction]}
-                                  />
-                                );
-                              }
-                            )
-                        )}
+                      <FactionCoordinateBoxes
+                        factionCoordinates={factionCoordinates}
+                        factionHandlers={factionHandlers}
+                        zoom={zoom}
+                        zoomFitToScreen={zoomFitToScreen}
+                      />
                     </>
                   ) : (
                     <Center h="100%">
@@ -353,13 +307,7 @@ function PlayerAreasPage4() {
                       size="md"
                       radius="xl"
                       leftSection={<IconRefresh size={20} />}
-                      style={{
-                        position: "fixed",
-                        top: "200px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        zIndex: 1000,
-                      }}
+                      className={classes.refreshButton}
                       onClick={reconnect}
                       loading={isReconnecting}
                     >
@@ -370,46 +318,66 @@ function PlayerAreasPage4() {
 
                 {/* Drag Handle */}
                 <Box
-                  style={{
-                    width: "16px",
-                    height: "100%",
-                    background: "#2c2e33",
-                    borderLeft: "1px solid #3c3e44",
-                    borderRight: "1px solid #3c3e44",
-                    cursor: "col-resize",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    zIndex: 1002,
-                    transition: "background-color 0.2s ease",
-                  }}
+                  className={classes.dragHandle}
                   onMouseDown={handleMouseDown}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#3c3e44";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#2c2e33";
-                  }}
                 >
                   <IconGripVertical
                     size={32}
-                    style={{
-                      color: "#888",
-                      pointerEvents: "none",
-                    }}
+                    className={classes.dragHandleIcon}
                   />
                 </Box>
 
                 {/* Sidebar - Right Side (dynamic width) */}
                 <Box
-                  style={{
-                    width: `${sidebarWidth}%`,
-                    height: "100%",
-                    overflowY: "auto",
-                    background: "black",
-                  }}
+                  className={classes.sidebar}
+                  style={{ width: `${sidebarWidth}%` }}
                 >
+                  {/* Faction Tab Bar */}
+                  {playerData && (
+                    <Box className={classes.factionTabBar}>
+                      <Group gap={4} justify="center" wrap="wrap">
+                        {playerData.map((player) => {
+                          const isActive = activeFaction === player.faction;
+                          const isPinned = selectedFaction === player.faction;
+
+                          return (
+                            <Box
+                              key={player.color}
+                              onClick={() => handleTabClick(player.faction)}
+                              onMouseEnter={() =>
+                                handleMouseEnter(player.faction)
+                              }
+                              onMouseLeave={handleMouseLeave}
+                              className={`${classes.factionTab} ${
+                                isPinned
+                                  ? classes.factionTabPinned
+                                  : isActive
+                                    ? classes.factionTabActive
+                                    : ""
+                              }`}
+                            >
+                              <Image
+                                src={cdnImage(
+                                  `/factions/${player.faction}.png`
+                                )}
+                                alt={player.faction}
+                                w={24}
+                                h={24}
+                                className={`${classes.factionImage} ${
+                                  isPinned
+                                    ? classes.factionImagePinned
+                                    : isActive
+                                      ? classes.factionImageActive
+                                      : ""
+                                }`}
+                              />
+                            </Box>
+                          );
+                        })}
+                      </Group>
+                    </Box>
+                  )}
+
                   {isLoading && (
                     <Center h="200px">
                       <Atom
@@ -433,44 +401,42 @@ function PlayerAreasPage4() {
                     </Alert>
                   )}
 
-                  {/* Pre-render all player cards and show/hide based on activeFaction */}
+                  {/* Pre-render all player cards and show/hide based on activeFaction or selectedFaction */}
                   {playerData && (
-                    <Box style={{ position: "relative", minHeight: "400px" }}>
-                      {playerData.map((player) => {
-                        const isActive = activeFaction === player.faction;
+                    <Box className={classes.playerCardsContainer}>
+                      {(() => {
+                        // Find the player to show - hover takes priority over pinned
+                        const activePlayer = playerData.find(
+                          (player) => player.faction === activeFaction
+                        );
+                        const selectedPlayer = playerData.find(
+                          (player) => player.faction === selectedFaction
+                        );
+                        const playerToShow = activePlayer || selectedPlayer;
+
+                        if (!playerToShow) return null;
+
                         return (
-                          <Box
-                            key={player.color}
-                            style={{
-                              display: isActive ? "block" : "none",
-                              position: isActive ? "static" : "absolute",
-                              top: isActive ? "auto" : 0,
-                              left: isActive ? "auto" : 0,
-                              width: isActive ? "auto" : "100%",
-                              visibility: isActive ? "visible" : "hidden",
-                              pointerEvents: isActive ? "auto" : "none",
-                              zIndex: isActive ? 1 : -1,
-                            }}
-                          >
+                          <Box className={classes.playerCard}>
                             <PlayerCardCompact
-                              playerData={player}
+                              playerData={playerToShow}
                               colorToFaction={colorToFaction}
                             />
                           </Box>
                         );
-                      })}
+                      })()}
                     </Box>
                   )}
 
-                  {playerData && !activeFaction && (
-                    <Center
-                      h="200px"
-                      style={{ textAlign: "center", color: "#666" }}
-                    >
+                  {playerData && !activeFaction && !selectedFaction && (
+                    <Center h="200px" className={classes.hoverInstructions}>
                       <Box>
                         <div>Hover over a unit</div>
                         <div>on the map to view</div>
                         <div>player details</div>
+                        <div className={classes.hoverInstructionsLine}>
+                          Click to pin a player
+                        </div>
                       </Box>
                     </Center>
                   )}
@@ -480,14 +446,7 @@ function PlayerAreasPage4() {
 
             {/* Player Areas Tab */}
             <Tabs.Panel value="players" h="calc(100% - 60px)">
-              <Box
-                style={{
-                  height: "100%",
-                  overflowY: "auto",
-                  padding: "16px",
-                  background: "black",
-                }}
-              >
+              <Box className={classes.playersTabContent}>
                 {isLoading && (
                   <Center h="200px">
                     <Atom

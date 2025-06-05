@@ -7,7 +7,6 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
-
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
@@ -18,9 +17,9 @@ import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompac
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
-import { HeaderAccent } from "./PlayerArea/HeaderAccent";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { ResourceInfluenceTableCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceTableCompact";
+import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
+import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
 import { planets } from "../data/planets";
@@ -28,6 +27,7 @@ import { PlayerData } from "../data/pbd10242";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
+import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -255,118 +255,77 @@ export default function PlayerCardCompact(props: Props) {
 
       <Box pos="relative" style={{ zIndex: 1 }}>
         {/* Header Section */}
-        <Box
-          p="sm"
-          mb="lg"
-          pos="relative"
-          mt={-16}
-          ml={-16}
-          mr={-8}
-          style={{
-            borderRadius: 0,
-            borderBottomRightRadius: 8,
-            background:
-              "linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%)",
-            border: "1px solid rgba(148, 163, 184, 0.2)",
-            overflow: "hidden",
-            boxShadow:
-              "0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15)",
-            opacity: props.playerData.passed ? 0.9 : 1,
-          }}
-        >
-          {/* Header bottom border accent */}
-          <HeaderAccent color={color} />
-
-          <Group justify="space-between" align="center" wrap="nowrap">
-            <Group
-              gap={4}
-              px={4}
-              w="100%"
-              align="center"
-              wrap="nowrap"
-              justify="space-between"
-              style={{ minWidth: 0 }}
-            >
-              <Group gap={4}>
-                {/* Small circular faction icon */}
-                <Image
-                  src={cdnImage(`/factions/${faction}.png`)}
-                  alt={faction}
-                  w={24}
-                  h={24}
-                  style={{
-                    filter:
-                      "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-                    flexShrink: 0,
-                  }}
-                />
-                <Text
-                  span
-                  c="white"
-                  size="sm"
-                  ff="heading"
-                  style={{
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {userName}
-                </Text>
-                <Text
-                  size="xs"
-                  span
-                  ml={4}
-                  opacity={0.9}
-                  c="white"
-                  ff="heading"
-                  style={{
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    flexShrink: 0,
-                  }}
-                >
-                  [{faction}]
-                </Text>
+        <PlayerCardHeader color={color} passed={props.playerData.passed}>
+          <Group
+            gap={4}
+            px={4}
+            w="100%"
+            align="center"
+            wrap="nowrap"
+            justify="space-between"
+            style={{ minWidth: 0 }}
+          >
+            <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
+              {/* Small circular faction icon */}
+              <Image
+                src={cdnImage(`/factions/${faction}.png`)}
+                alt={faction}
+                w={24}
+                h={24}
+                style={{
+                  filter:
+                    "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+                  flexShrink: 0,
+                }}
+              />
+              <Text
+                span
+                c="white"
+                size="sm"
+                ff="heading"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0, // Username has lowest priority for truncation
+                  minWidth: 0,
+                }}
+              >
+                {userName}
+              </Text>
+              <Text
+                size="xs"
+                span
+                ml={4}
+                opacity={0.9}
+                c="white"
+                ff="heading"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                  flexShrink: 1, // Faction has medium priority for truncation
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  minWidth: 0,
+                }}
+              >
+                [{faction}]
+              </Text>
+              <Box style={{ flexShrink: 2 }}>
+                {" "}
+                {/* Color has highest priority for truncation/hiding */}
                 <PlayerColor color={color} size="sm" />
+              </Box>
 
-                {/* Status Indicator - harmonized with Shimmer component styling */}
-                {(props.playerData.passed || props.playerData.active) && (
-                  <Box
-                    px={6}
-                    py={2}
-                    ml={4}
-                    style={{
-                      borderRadius: "6px",
-                      background: props.playerData.passed
-                        ? "linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.06) 100%)"
-                        : "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.06) 100%)",
-                      border: props.playerData.passed
-                        ? "1px solid rgba(239, 68, 68, 0.25)"
-                        : "1px solid rgba(34, 197, 94, 0.25)",
-                      boxShadow: props.playerData.passed
-                        ? "0 2px 8px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
-                        : "0 2px 8px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Text
-                      size="xs"
-                      fw={700}
-                      c={props.playerData.passed ? "red.3" : "green.3"}
-                      style={{
-                        textTransform: "uppercase",
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                        letterSpacing: "0.5px",
-                        fontSize: "9px",
-                      }}
-                    >
-                      {props.playerData.passed ? "PASSED" : "ACTIVE"}
-                    </Text>
-                  </Box>
-                )}
-              </Group>
+              {/* Status Indicator - harmonized with Shimmer component styling */}
+              <StatusIndicator
+                passed={props.playerData.passed}
+                active={props.playerData.active}
+              />
+            </Group>
 
+            <Group gap={8} style={{ flexShrink: 0 }}>
               {scs.map((scNumber, index) => (
                 <StrategyCardBannerCompact
                   key={scNumber}
@@ -378,7 +337,7 @@ export default function PlayerCardCompact(props: Props) {
               ))}
             </Group>
           </Group>
-        </Box>
+        </PlayerCardHeader>
 
         {/* Main Content - Simplified Grid for narrow layout */}
         <Stack gap="md">
@@ -457,8 +416,9 @@ export default function PlayerCardCompact(props: Props) {
                 justifyContent: "center",
               }}
             >
-              <ResourceInfluenceTableCompact
+              <ResourceInfluenceCompact
                 planetEconomics={planetEconomics}
+                debts={props.playerData.debtTokens}
               />
             </Surface>
 

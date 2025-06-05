@@ -1,1 +1,1 @@
-export { PlanetDetailsCard } from "../PlanetDetailsCard";
+export { PlanetDetailsCard } from "./PlanetDetailsCard";

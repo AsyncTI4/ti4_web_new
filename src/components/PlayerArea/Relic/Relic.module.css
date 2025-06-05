@@ -1,48 +1,33 @@
-/* Relic special styles */
+/* Relic card styles */
 .relicCard {
-  padding: 4px 6px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, rgba(194, 65, 12, 0.15) 0%, rgba(234, 88, 12, 0.12) 50%, rgba(194, 65, 12, 0.15) 100%);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  position: relative;
-  overflow: hidden;
-  min-width: 0;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translateY(0);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: var(--mantine-radius-sm);
 }
 
 .relicCard:hover {
-  background: linear-gradient(135deg, rgba(194, 65, 12, 0.22) 0%, rgba(234, 88, 12, 0.18) 50%, rgba(194, 65, 12, 0.22) 100%);
-  border: 1px solid rgba(251, 191, 36, 0.6);
-  box-shadow:
-    0 4px 16px rgba(251, 191, 36, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.3), 0 0 12px rgba(255, 193, 7, 0.2);
 }
 
-.relicCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.08) 0px, rgba(251, 191, 36, 0.08) 1px, transparent 1px, transparent 16px);
-  pointer-events: none;
-  opacity: 0.5;
+.contentContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  min-width: 0;
 }
 
-.relicCard::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
-  pointer-events: none;
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
-.relicIcon {
-  filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3));
+.textContainer {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
 }

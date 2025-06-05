@@ -20,45 +20,19 @@ export function ScoredSecret({ secretId, score, onClick }: Props) {
   return (
     <Box className={styles.secretCard} onClick={onClick}>
       <Shimmer color="red" py={2} px={6} className={redClasses.border}>
-        <Box
-          style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            minWidth: 0,
-          }}
-        >
+        <Box className={styles.contentContainer}>
           <Image
             src="/so_icon.png"
-            className={redClasses.iconFilter}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexShrink: 0,
-            }}
+            className={`${redClasses.iconFilter} ${styles.icon}`}
           />
-          <Text
-            size="xs"
-            fw={700}
-            c="white"
-            style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              minWidth: 0,
-              flex: 1,
-            }}
-          >
+          <Text size="xs" fw={700} c="white" className={styles.textContainer}>
             {secretName}{" "}
             <Text
               span
               size="xs"
               fw={600}
               c="gray.4"
-              style={{
-                opacity: 0.7,
-              }}
+              className={styles.scoreText}
             >
               ({score})
             </Text>

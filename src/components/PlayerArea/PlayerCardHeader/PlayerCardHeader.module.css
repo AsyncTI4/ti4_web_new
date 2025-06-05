@@ -1,0 +1,19 @@
+.header {
+  padding: var(--mantine-spacing-sm);
+  margin-bottom: var(--mantine-spacing-lg);
+  position: relative;
+  margin-top: -16px;
+  margin-left: -16px;
+  margin-right: -8px;
+  border-radius: 0;
+  border-bottom-right-radius: 8px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(148, 163, 184, 0.15);
+  opacity: 1;
+}
+
+.passed {
+  opacity: 0.9;
+}

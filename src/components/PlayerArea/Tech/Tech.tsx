@@ -58,41 +58,12 @@ export function Tech({ techId }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          py={4}
-          px="xs"
           className={`${styles.techCard} ${styles[color]}`}
-          style={{ cursor: "pointer" }}
           onClick={() => setOpened((o) => !o)}
         >
-          {/* Faction icon for faction techs - positioned before tier dots */}
-          {isFactionTech && (
-            <Box pos="absolute" top={3} right={tier > 0 ? 20 : 4}>
-              <Image
-                src={cdnImage(`/factions/${techData.faction}.png`)}
-                alt={`${techData.faction} faction`}
-                w={14}
-                h={14}
-                style={{
-                  flexShrink: 0,
-                }}
-              />
-            </Box>
-          )}
-
           {/* Tier indicator dots in top-right */}
           {tier > 0 && (
-            <Box
-              pos="absolute"
-              top={3}
-              right={4}
-              display="flex"
-              w={12}
-              style={{
-                gap: "2px",
-                flexWrap: "wrap",
-                justifyContent: "flex-end",
-              }}
-            >
+            <Box className={styles.tierContainer}>
               {[...Array(tier)].map((_, dotIndex) => (
                 <Box
                   key={dotIndex}
@@ -101,33 +72,28 @@ export function Tech({ techId }: Props) {
               ))}
             </Box>
           )}
-          <Group gap={4} pos="relative" miw={0}>
-            <Image
-              src={`/${color}.png`}
-              alt={techData.name}
-              className={`${styles.iconFilter} ${styles[color]}`}
-              w={14}
-              h={14}
-              style={{
-                flexShrink: 0,
-              }}
-            />
-            <Text
-              size="xs"
-              c="white"
-              fw={600}
-              ff="monospace"
-              flex={1}
-              miw={0}
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-                paddingRight: "16px",
-                letterSpacing: "-0.05em",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "clip",
-              }}
-            >
+          <Group className={styles.contentGroup}>
+            {isFactionTech ? (
+              <Box
+                className={`${styles.techIcon} ${styles.factionTechIcon} ${styles[color]}`}
+              >
+                <Image
+                  src={cdnImage(`/factions/${techData.faction}.png`)}
+                  alt={`${techData.faction} faction`}
+                />
+              </Box>
+            ) : (
+              <Image
+                src={
+                  isFactionTech
+                    ? cdnImage(`/factions/${techData.faction}.png`)
+                    : `/${color}.png`
+                }
+                alt={techData.name}
+                className={`${styles.techIcon} ${styles[color]}`}
+              />
+            )}
+            <Text ff="monospace" className={styles.techName}>
               {techData.name}
             </Text>
           </Group>

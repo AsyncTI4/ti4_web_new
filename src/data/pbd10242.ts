@@ -60,6 +60,7 @@ export interface PlayerData {
   flexibleDisplayName: string;
   scs: number[];
   neighbors: string[];
+  debtTokens: Record<string, number>;
 
   // card counts
   soCount: number;

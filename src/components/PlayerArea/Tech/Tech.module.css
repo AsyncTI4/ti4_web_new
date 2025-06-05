@@ -1,6 +1,6 @@
 /* Tech card styles */
 .techCard {
-  padding: 1px 12px;
+  padding: 4px var(--mantine-spacing-xs);
   border-radius: 4px;
   position: relative;
   overflow: hidden;
@@ -8,13 +8,14 @@
   border: 1px solid rgba(var(--gradient-color), 0.25);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(0);
+  cursor: pointer;
 }
 
 .techCard:hover {
   background: linear-gradient(135deg, rgba(var(--gradient-color), 0.18) 0%, rgba(var(--gradient-color), 0.12) 100%);
   border: 1px solid rgba(var(--gradient-color), 0.4);
   box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .techCard::before {
@@ -27,6 +28,35 @@
   background: linear-gradient(180deg, rgba(var(--gradient-color), 0.6) 0%, rgba(var(--gradient-color), 0.2) 100%);
 }
 
+/* Faction icon positioning */
+.factionIcon {
+  position: absolute;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.factionIconWithTier {
+  right: 20px;
+}
+
+.factionIconWithoutTier {
+  right: 4px;
+}
+
+/* Tier dots container */
+.tierContainer {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  display: flex;
+  width: 12px;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 /* Tier dots */
 .tierDot {
   width: 3px;
@@ -34,6 +64,52 @@
   border-radius: 50%;
   background: rgba(var(--gradient-color), 0.9);
   box-shadow: 0 0 3px rgba(var(--gradient-color), 0.9), inset 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Main content group */
+.contentGroup {
+  gap: var(--mantine-spacing-xs);
+  position: relative;
+  min-width: 0;
+}
+
+/* Tech icon */
+.techIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+}
+
+/* Faction tech icon with darkening background */
+.factionTechIcon {
+  position: relative;
+  overflow: visible;
+}
+
+.factionTechIcon img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px !important;
+  height: 18px !important;
+  z-index: 1;
+}
+
+/* Tech name text */
+.techName {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-white);
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding-right: 16px;
+  letter-spacing: -0.05em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
 }
 
 /* Icon filter */

@@ -1,0 +1,1 @@
+export { ScoredSecrets } from "./ScoredSecrets";

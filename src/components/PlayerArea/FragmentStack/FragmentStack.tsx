@@ -20,7 +20,7 @@ export function FragmentStack({ count, type }: Props) {
           key={index}
           src={fragmentSrc}
           style={{
-            width: 39,
+            width: 28,
             marginLeft: index === 0 ? 0 : -8,
           }}
         />

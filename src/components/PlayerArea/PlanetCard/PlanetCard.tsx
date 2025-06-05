@@ -24,9 +24,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
     return null;
   }
 
-  const colors =
-    PLANET_COLORS[planetData.planetType as PlanetType] || PLANET_COLORS.default;
-
+  const planetType = planetData.planetType as PlanetType;
   const traitIconKey = getTraitIconKey(planetData.planetType);
 
   // Get all tech skip icons for this planet
@@ -42,8 +40,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
     <Image
       key="legendary"
       src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-      w={16}
-      h={16}
+      className={styles.legendaryIcon}
     />
   ) : null;
 
@@ -59,8 +56,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
       return (
         <Image
           src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
-          w={24}
-          h={24}
+          className={styles.factionIcon}
         />
       );
     }
@@ -70,30 +66,32 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
   // Legendary planet animation styles
   const isLegendary = !!planetData.legendaryAbilityText;
 
+  // Get CSS variable names for planet type
+  const getCSSVariables = (planetType: PlanetType) => {
+    const typeKey = planetType?.toLowerCase() || "default";
+    // Map known planet types, fallback to 'default' for unknown types
+    const validTypes = ["cultural", "hazardous", "industrial", "faction", "mr"];
+    const finalType = validTypes.includes(typeKey) ? typeKey : "default";
+
+    return {
+      "--planet-background": `var(--${finalType}-background)`,
+      "--planet-border": `var(--${finalType}-border)`,
+      "--planet-shadow": `var(--${finalType}-shadow)`,
+      "--planet-highlight": `var(--${finalType}-highlight)`,
+    };
+  };
+
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Stack
-          py={6}
-          px={3}
-          justify="space-between"
-          h={140}
-          pos="relative"
           onClick={() => setOpened((o) => !o)}
-          style={
-            {
-              borderRadius: "12px",
-              background: isLegendary
-                ? undefined
-                : `linear-gradient(135deg, ${colors.background} 0%, rgba(15, 23, 42, 0.6) 100%)`,
-              border: `1px solid ${colors.border}`,
-              overflow: "hidden",
-              boxShadow: `0 2px 8px ${colors.shadow}, inset 0 1px 0 rgba(255, 255, 255, 0.05)`,
-              filter: exhausted ? "grayscale(0.4) opacity(0.5)" : "none",
-              "--planet-bg": colors.background,
-            } as React.CSSProperties
-          }
-          className={`${isLegendary ? styles.legendaryBackground : ""} ${styles.planetCard}`}
+          className={`${styles.mainStack} ${
+            isLegendary
+              ? `${styles.legendaryBackground} ${styles.legendary}`
+              : ""
+          } ${exhausted ? styles.exhausted : ""} ${styles.planetCard}`}
+          style={getCSSVariables(planetType) as React.CSSProperties}
         >
           {/* Hover highlight overlay */}
           <Box className={styles.planetCardHighlight} />
@@ -123,97 +121,44 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
           )}
 
           {/* Dark overlay for exhausted planets */}
-          {exhausted && (
-            <Box
-              pos="absolute"
-              top={-1}
-              left={-1}
-              right={-1}
-              bottom={-1}
-              style={{
-                background: "rgba(0, 0, 0, 0.3)",
-                borderRadius: "12px",
-                zIndex: 10,
-                pointerEvents: "none",
-              }}
-            />
-          )}
+          {exhausted && <Box className={styles.exhaustedOverlay} />}
 
           {/* Subtle top highlight */}
           <Box
-            pos="absolute"
-            top={0}
-            left="20%"
-            right="20%"
-            h={1}
-            style={{
-              background: isLegendary
-                ? "rgba(255, 215, 0, 0.6)"
-                : colors.highlight,
-              zIndex: 3,
-            }}
+            className={`${styles.topHighlight} ${
+              isLegendary ? styles.legendary : ""
+            }`}
           />
 
-          <Box display="flex" style={{ justifyContent: "center" }} w="100%">
-            {renderIcon()}
-          </Box>
-          <Stack gap={4} pos="relative" style={{ zIndex: 1 }}>
-            <Group gap={0} align="flex-end" style={{ minWidth: 34 }}>
-              <Text
-                size="xs"
-                c="white"
-                fw={700}
-                ff="monospace"
-                style={{
-                  writingMode: "vertical-rl",
-                  textOrientation: "sideways",
-                  whiteSpace: "nowrap",
-                  transform: "rotate(180deg)",
-                  textShadow: "0 2px 4px rgba(0, 0, 0, 0.8)",
-                }}
-              >
+          <Box className={styles.iconContainer}>{renderIcon()}</Box>
+          <Stack className={styles.bottomStack}>
+            <Group className={styles.nameGroup}>
+              <Text className={styles.planetName} ff="monospace">
                 {planetData.name}
               </Text>
-              <Stack gap={2} align="top">
+              <Stack className={styles.valuesStack} align="top">
                 {allIcons.length > 0 && (
-                  <Stack gap={1}>
+                  <Stack className={styles.iconsStack}>
                     {allIcons.map((icon, index) => (
                       <Box key={index}>{icon}</Box>
                     ))}
                   </Stack>
                 )}
-                <Box pos="relative" w={16} h={16}>
+                <Box className={styles.valueContainer}>
                   <Image
                     src="/pa_resources.png"
-                    w={16}
-                    pos="absolute"
-                    top={0}
-                    left={0}
+                    className={styles.resourceImage}
                   />
-                  <Text
-                    size="xs"
-                    c="white"
-                    fw={700}
-                    pos="absolute"
-                    top={1}
-                    left={5}
-                  >
+                  <Text className={styles.valueText}>
                     {planetData.resources}
                   </Text>
                 </Box>
 
-                <Box pos="relative" w={16} h={16}>
-                  <Box pos="absolute" top={0} left={0}>
+                <Box className={styles.valueContainer}>
+                  <Box className={styles.influenceIconContainer}>
                     <InfluenceIcon size={18} />
                   </Box>
-                  <Text
-                    size="xs"
-                    c="white"
-                    fw={700}
-                    pos="absolute"
-                    top={2}
-                    left={5}
-                  >
+                  <Text className={styles.influenceValueText}>
                     {planetData.influence}
                   </Text>
                 </Box>
@@ -222,7 +167,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
           </Stack>
         </Stack>
       </SmoothPopover.Target>
-      <SmoothPopover.Dropdown p={0}>
+      <SmoothPopover.Dropdown className={styles.popoverDropdown}>
         <PlanetDetailsCard planetId={planetId} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
@@ -256,45 +201,10 @@ const getTechSkipIconKey = (techSpecialty: string): string | null => {
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
 
-// Planet color configurations by trait
-const PLANET_COLORS = {
-  CULTURAL: {
-    background: "rgba(59, 130, 246, 0.12)",
-    border: "rgba(59, 130, 246, 0.3)",
-    shadow: "rgba(59, 130, 246, 0.08)",
-    highlight: "rgba(59, 130, 246, 0.4)",
-  },
-  HAZARDOUS: {
-    background: "rgba(239, 68, 68, 0.12)",
-    border: "rgba(239, 68, 68, 0.3)",
-    shadow: "rgba(239, 68, 68, 0.08)",
-    highlight: "rgba(239, 68, 68, 0.4)",
-  },
-  INDUSTRIAL: {
-    background: "rgba(34, 197, 94, 0.12)",
-    border: "rgba(34, 197, 94, 0.3)",
-    shadow: "rgba(34, 197, 94, 0.08)",
-    highlight: "rgba(34, 197, 94, 0.4)",
-  },
-  FACTION: {
-    background: "rgba(107, 114, 128, 0.12)",
-    border: "rgba(107, 114, 128, 0.3)",
-    shadow: "rgba(107, 114, 128, 0.08)",
-    highlight: "rgba(107, 114, 128, 0.4)",
-  },
-  MR: {
-    background: "rgba(107, 114, 128, 0.12)",
-    border: "rgba(107, 114, 128, 0.3)",
-    shadow: "rgba(107, 114, 128, 0.08)",
-    highlight: "rgba(107, 114, 128, 0.4)",
-  },
-  // Default for planets without traits
-  default: {
-    background: "rgba(107, 114, 128, 0.12)",
-    border: "rgba(107, 114, 128, 0.3)",
-    shadow: "rgba(107, 114, 128, 0.08)",
-    highlight: "rgba(107, 114, 128, 0.4)",
-  },
-};
-
-type PlanetType = keyof typeof PLANET_COLORS;
+type PlanetType =
+  | "CULTURAL"
+  | "HAZARDOUS"
+  | "INDUSTRIAL"
+  | "FACTION"
+  | "MR"
+  | "DEFAULT";
