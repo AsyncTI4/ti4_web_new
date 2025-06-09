@@ -75,8 +75,7 @@ export function NewMapUI() {
     handleMouseDown,
   } = useTabsAndTooltips();
 
-  // Add resizable sidebar state
-  const [sidebarWidth, setSidebarWidth] = useState(25); // percentage
+  const [sidebarWidth, setSidebarWidth] = useState(25);
   const [isDragging, setIsDragging] = useState(false);
 
   const { data, isLoading, isError } = usePlayerData(gameId);
@@ -373,16 +372,6 @@ export function NewMapUI() {
                     />
                   )}
 
-                  {isLoading && (
-                    <Center h="200px">
-                      <Atom
-                        color="#3b82f6"
-                        size="medium"
-                        text="Loading Player Areas"
-                      />
-                    </Center>
-                  )}
-
                   {isError && (
                     <Alert
                       variant="light"
@@ -415,16 +404,6 @@ export function NewMapUI() {
             {/* Player Areas Tab */}
             <Tabs.Panel value="players" h="calc(100% - 60px)">
               <Box className={classes.playersTabContent}>
-                {isLoading && (
-                  <Center h="200px">
-                    <Atom
-                      color="#3b82f6"
-                      size="medium"
-                      text="Loading Player Areas"
-                    />
-                  </Center>
-                )}
-
                 {isError && (
                   <Alert
                     variant="light"
