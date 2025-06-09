@@ -4281,7 +4281,7 @@ export const planets: Planet[] = [
     tileId: "s04",
     name: "Marshen Gurn",
     shortNamePNAttach: "Marshen G.",
-    shrinkName: true,
+
     aliases: [
       "marshengurn",
       "marshen_gurn",
@@ -4765,7 +4765,6 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     legendaryAbilityFlavourText: null,
-    flavourText: null,
     spaceCannonDieCount: 0,
     spaceCannonHitsOn: 0,
     searchTags: [],
@@ -6027,7 +6026,6 @@ export const planets: Planet[] = [
     id: "sayensbeach",
     tileId: "s05",
     name: "Sayen's Beach",
-    shrinkName: true,
     shortNamePNAttach: "Sayen's B.",
     aliases: [
       "sayensbeach",

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
   AppShell,
@@ -7,20 +7,13 @@ import {
   Alert,
   SimpleGrid,
   Tabs,
-  Button,
-  Group,
-  Image,
+  Stack,
 } from "@mantine/core";
 import { Atom } from "react-loading-indicators";
-import {
-  IconAlertCircle,
-  IconRefresh,
-  IconGripVertical,
-} from "@tabler/icons-react";
-import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
+import { IconAlertCircle } from "@tabler/icons-react";
+import { usePlayerData } from "./hooks/usePlayerData";
 // @ts-ignore
 import { useMapSocket } from "./hooks/useMapSocket";
-import { ReadyState } from "react-use-websocket";
 // @ts-ignore
 import { ZoomControls } from "./components/ZoomControls";
 // @ts-ignore
@@ -31,21 +24,127 @@ import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
 import PlayerCard2Mid from "./components/PlayerCard2Mid";
+import { MapTile } from "./components/Map/MapTile";
+import { PlayerStatsArea } from "./components/Map/PlayerStatsArea";
+import classes from "./components/MapUI.module.css";
+import { calculateTilePositions } from "./mapgen/tilePositioning";
+import { useZoom } from "./hooks/useZoom";
+import { FactionTabBar } from "./components/FactionTabBar";
+import { useTabsAndTooltips } from "./hooks/useTabsAndTooltips";
 import PlayerCardSidebar from "./components/PlayerCardSidebar";
-import FactionCoordinateBoxes from "./components/FactionCoordinateBoxes";
-import classes from "./components/PlayerAreasPage4.module.css";
+import { DragHandle } from "./components/DragHandle";
 import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
 import { lookupUnitId } from "./lookup/units";
-import { FactionTabBar } from "./components/FactionTabBar";
+import PlayerCardSidebarTech from "./components/PlayerCardSidebarTech";
+import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponents";
 
-// Custom hook for resizable sidebar
-function useResizableSidebar(initialWidth: number = 25) {
-  const [sidebarWidth, setSidebarWidth] = useState(initialWidth);
+type ActiveArea =
+  | {
+      type: "faction";
+      faction: string;
+      unitId?: string;
+      coords: { x: number; y: number };
+    }
+  | { type: "tech" }
+  | { type: "components" }
+  | null;
+
+type PlayerCardDisplayProps = {
+  playerData: any[];
+  activeArea: ActiveArea;
+  factionToColor: Record<string, string>;
+  colorToFaction: Record<string, string>;
+};
+
+export function NewMapUI() {
+  const params = useParams<{ gameId: string }>();
+  const gameId = params.gameId!;
+
+  // Use tabs and tooltips hook
+  const {
+    selectedArea,
+    activeArea,
+    selectedFaction,
+    activeUnit,
+    tooltipUnit,
+    handleAreaSelect,
+    handleAreaMouseEnter,
+    handleAreaMouseLeave,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseDown,
+  } = useTabsAndTooltips();
+
+  // Add resizable sidebar state
+  const [sidebarWidth, setSidebarWidth] = useState(25); // percentage
   const [isDragging, setIsDragging] = useState(false);
-  const [containerWidth, setContainerWidth] = useState(
-    window.innerWidth * ((100 - initialWidth) / 100)
+
+  const { data, isLoading, isError } = usePlayerData(gameId);
+  const playerData = data?.playerData;
+
+  // Calculate tile positions from playerData response
+  const tilePositions = useMemo(() => {
+    if (!data?.tilePositions) return [];
+    return calculateTilePositions(data.tilePositions, 6);
+  }, [data?.tilePositions]);
+
+  // Create a mapping from systemId to position for unit lookup
+  const systemIdToPosition = useMemo(() => {
+    if (!data?.tilePositions) return {};
+    const mapping: Record<string, string> = {};
+    data.tilePositions.forEach((entry: string) => {
+      const [position, systemId] = entry.split(":");
+      mapping[systemId] = position;
+    });
+    return mapping;
+  }, [data?.tilePositions]);
+
+  const factionToColor = useMemo(
+    () =>
+      playerData?.reduce(
+        (acc, player) => {
+          acc[player.faction] = player.color;
+          return acc;
+        },
+        {} as Record<string, string>
+      ) || {},
+    [playerData]
   );
 
+  const colorToFaction = useMemo(
+    () =>
+      playerData?.reduce(
+        (acc, player) => {
+          acc[player.color] = player.faction;
+          return acc;
+        },
+        {} as Record<string, string>
+      ) || {},
+    [playerData]
+  );
+
+  useEffect(() => {
+    document.title = `${gameId} - Map Rendering | Async TI`;
+  }, [gameId]);
+
+  // Initialize dragscroll
+  useEffect(() => {
+    dragscroll.reset();
+  }, []);
+
+  const {
+    zoom,
+    handleZoomIn,
+    handleZoomOut,
+    handleZoomReset,
+    handleZoomScreenSize,
+  } = useZoom(undefined, undefined);
+
+  const isFirefox =
+    typeof navigator !== "undefined" &&
+    navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+
+  // Add drag handlers for resizing
   const handleSidebarMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -86,163 +185,6 @@ function useResizableSidebar(initialWidth: number = 25) {
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  // Handle window resize to update container width
-  useEffect(() => {
-    const handleResize = () => {
-      setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [sidebarWidth]);
-
-  // Update container width when sidebar width changes
-  useEffect(() => {
-    setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
-  }, [sidebarWidth]);
-
-  return {
-    sidebarWidth,
-    isDragging,
-    containerWidth,
-    handleSidebarMouseDown,
-  };
-}
-
-function NewMapUI() {
-  const params = useParams<{ gameId: string }>();
-  const gameId = params.gameId!;
-
-  // Add active unit state (combines faction, unitId, and coordinates)
-  const [activeUnit, setActiveUnit] = useState<{
-    faction: string;
-    unitId?: string;
-    coords: { x: number; y: number };
-  } | null>(null);
-
-  // Add separate state for delayed map tooltip
-  const [tooltipUnit, setTooltipUnit] = useState<{
-    faction: string;
-    unitId?: string;
-    coords: { x: number; y: number };
-  } | null>(null);
-
-  // Add selected faction state for pinned player
-  const [selectedFaction, setSelectedFaction] = useState<string | null>(null);
-
-  // Add hover delay state and ref for timeout
-  const [hoverTimeout, setHoverTimeout] = useState<number | null>(null);
-
-  // Use the resizable sidebar hook
-  const { sidebarWidth, isDragging, containerWidth, handleSidebarMouseDown } =
-    useResizableSidebar(25);
-
-  useEffect(() => {
-    document.title = `${gameId} - Player Areas | Async TI`;
-  }, [gameId]);
-
-  // Initialize dragscroll
-  useEffect(() => {
-    dragscroll.reset();
-  }, []);
-
-  // Clean up hover timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-    };
-  }, [hoverTimeout]);
-
-  // Dynamic image loading like MapUI
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  useEffect(() => setImageUrl(null), [gameId]);
-
-  const { readyState, reconnect, isReconnecting } = useMapSocket(
-    gameId,
-    setImageUrl
-  );
-
-  const [imageNaturalWidth, setImageNaturalWidth] = useState<
-    number | undefined
-  >(undefined);
-
-  const {
-    zoom,
-    handleZoomIn,
-    handleZoomOut,
-    handleZoomReset,
-    handleZoomScreenSize,
-    zoomFitToScreen,
-  } = useZoom(imageNaturalWidth, containerWidth);
-
-  const isFirefox =
-    typeof navigator !== "undefined" &&
-    navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
-
-  const {
-    playerData,
-    colorToFaction,
-    factionToColor,
-    factionCoordinates,
-    isLoading,
-    isError,
-  } = usePlayerDataEnhanced(gameId);
-
-  // Optimized hover handlers - now include unit ID with delay
-  const handleMouseEnter = useCallback(
-    (faction: string, unitId: string, x: number, y: number) => {
-      // Immediately set activeUnit for sidebar (no delay)
-      setActiveUnit({ faction, unitId, coords: { x, y } });
-
-      // Clear any existing timeout
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-
-      // Set a new timeout for 300ms delay for map tooltip
-      const newTimeout = setTimeout(() => {
-        setTooltipUnit({ faction, unitId, coords: { x, y } });
-        setHoverTimeout(null);
-      }, 300);
-
-      setHoverTimeout(newTimeout);
-    },
-    [hoverTimeout]
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    // Clear any pending timeout
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
-    }
-    // Immediately clear both states
-    setActiveUnit(null);
-    setTooltipUnit(null);
-  }, [hoverTimeout]);
-
-  // Add click handler for pinning players
-  const handleMouseDown = useCallback((faction: string) => {
-    setSelectedFaction(faction);
-  }, []);
-
-  // Add tab click handler
-  const handleTabClick = useCallback((faction: string) => {
-    setSelectedFaction(faction);
-    setActiveUnit(null); // Clear any hover state
-  }, []);
-
-  // Separate handlers for faction tabs (which don't have specific unit IDs)
-  const handleTabMouseEnter = useCallback((faction: string) => {
-    setActiveUnit({ faction, coords: { x: 0, y: 0 } });
-  }, []);
-
-  const handleTabMouseLeave = useCallback(() => {
-    setActiveUnit(null);
-  }, []);
-
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
@@ -274,134 +216,135 @@ function NewMapUI() {
             </Tabs.List>
 
             {/* Map Tab */}
-            <Tabs.Panel value="map" h="calc(100% - 60px)">
+            <Tabs.Panel value="map" h="calc(100% - 37px)">
               <Box className={classes.mapContainer}>
                 {/* Map Container - Left Side (dynamic width) */}
                 <Box
                   className={`dragscroll ${classes.mapArea}`}
                   style={{ width: `${100 - sidebarWidth}%` }}
                 >
-                  {!isTouchDevice() && (
-                    <div
-                      className={classes.zoomControlsFixed}
-                      style={{
-                        right: `calc(${sidebarWidth}vw + 35px)`,
-                        transition: isDragging ? "none" : "right 0.1s ease",
-                      }}
-                    >
-                      <ZoomControls
-                        zoom={zoom}
-                        onZoomIn={handleZoomIn}
-                        onZoomOut={handleZoomOut}
-                        onZoomReset={handleZoomReset}
-                        onZoomScreenSize={handleZoomScreenSize}
-                        zoomFitToScreen={zoomFitToScreen}
-                        zoomClass=""
-                      />
-                    </div>
-                  )}
+                  <div
+                    className={classes.zoomControlsFixed}
+                    style={{
+                      right: `calc(${sidebarWidth}vw + 35px)`,
+                      transition: isDragging ? "none" : "right 0.1s ease",
+                      zIndex: 10000,
+                    }}
+                  >
+                    <ZoomControls
+                      zoom={zoom}
+                      onZoomIn={handleZoomIn}
+                      onZoomOut={handleZoomOut}
+                      onZoomReset={handleZoomReset}
+                      onZoomScreenSize={handleZoomScreenSize}
+                      zoomClass=""
+                    />
+                  </div>
 
-                  {imageUrl ? (
-                    <>
-                      <img
-                        alt="map"
-                        src={imageUrl}
-                        onLoad={(e) =>
-                          setImageNaturalWidth(e.currentTarget.naturalWidth)
-                        }
-                        className={classes.mapImage}
-                        style={{
-                          ...(isFirefox ? {} : { zoom: zoom }),
-                          [`-moz-transform` as string]: `scale(${zoom})`,
-                          [`-moz-transform-origin` as string]: "top left",
-                          ...(zoomFitToScreen
-                            ? { width: "100%", height: "100%" }
-                            : {}),
-                        }}
-                      />
-
-                      {/* Faction coordinate boxes */}
-                      <FactionCoordinateBoxes
-                        factionCoordinates={factionCoordinates}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onMouseDown={handleMouseDown}
-                        zoom={zoom}
-                        zoomFitToScreen={zoomFitToScreen}
-                      />
-
-                      {/* Absolutely positioned UnitDetailsCard over hovered unit */}
-                      {tooltipUnit &&
-                        tooltipUnit.unitId &&
-                        tooltipUnit.faction &&
-                        (() => {
-                          const activePlayer = playerData?.find(
-                            (player) => player.faction === tooltipUnit.faction
+                  {/* Tile-based rendering */}
+                  <Box
+                    style={{
+                      position: "relative",
+                      ...(isFirefox ? {} : { zoom: zoom }),
+                      [`-moz-transform` as string]: `scale(${zoom})`,
+                      [`-moz-transform-origin` as string]: "top left",
+                    }}
+                  >
+                    {/* Render stat tiles for each faction */}
+                    {playerData &&
+                      data?.statTilePositions &&
+                      Object.entries(data.statTilePositions).map(
+                        ([faction, statTiles]) => {
+                          const player = playerData.find(
+                            (p) => p.faction === faction
                           );
-                          if (!activePlayer) return null;
-
-                          const scaledX =
-                            tooltipUnit.coords.x * (zoomFitToScreen ? 1 : zoom);
-                          const scaledY =
-                            tooltipUnit.coords.y * (zoomFitToScreen ? 1 : zoom);
+                          if (!player) return null;
 
                           return (
-                            <Box
-                              style={{
-                                position: "absolute",
-                                left: `${scaledX}px`,
-                                top: `${scaledY}px`,
-                                zIndex: 1000,
-                                pointerEvents: "none",
-                                transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
-                              }}
-                            >
-                              <UnitDetailsCard
-                                unitId={
-                                  lookupUnitId(
-                                    tooltipUnit.unitId,
-                                    activePlayer.faction,
-                                    activePlayer
-                                  ) || tooltipUnit.unitId
-                                }
-                                color={activePlayer.color}
-                              />
-                            </Box>
+                            <PlayerStatsArea
+                              key={faction}
+                              faction={faction}
+                              playerData={player as any}
+                              statTilePositions={statTiles as string[]}
+                              color={factionToColor[faction]}
+                              vpsToWin={data.vpsToWin}
+                            />
                           );
-                        })()}
-                    </>
-                  ) : (
-                    <Center h="100%">
-                      <Atom color="#3b82f6" size="medium" text="Loading Map" />
-                    </Center>
-                  )}
+                        }
+                      )}
+                    {/* Render tiles */}
+                    {tilePositions.map((tile, index) => {
+                      const tileKey = `${tile.systemId}-${index}`;
+                      const position = systemIdToPosition[tile.systemId];
+                      const tileData =
+                        position && data?.tileUnitData
+                          ? (data.tileUnitData as any)[position]
+                          : undefined;
 
-                  {/* Refresh button when connection is closed, like MapUI */}
-                  {readyState === ReadyState.CLOSED && (
-                    <Button
-                      variant="filled"
-                      size="md"
-                      radius="xl"
-                      leftSection={<IconRefresh size={20} />}
-                      className={classes.refreshButton}
-                      onClick={reconnect}
-                      loading={isReconnecting}
-                    >
-                      Refresh
-                    </Button>
-                  )}
+                      return (
+                        <MapTile
+                          key={tileKey}
+                          ringPosition={tile.ringPosition}
+                          systemId={tile.systemId}
+                          position={{ x: tile.x, y: tile.y }}
+                          tileUnitData={tileData}
+                          factionToColor={factionToColor}
+                          onUnitMouseOver={handleMouseEnter}
+                          onUnitMouseLeave={handleMouseLeave}
+                          onUnitSelect={handleMouseDown}
+                        />
+                      );
+                    })}
+                  </Box>
+
+                  {/* Absolutely positioned UnitDetailsCard over hovered unit - outside zoom container */}
+                  {(() => {
+                    if (
+                      !tooltipUnit ||
+                      !tooltipUnit.unitId ||
+                      !tooltipUnit.faction
+                    )
+                      return null;
+
+                    const activePlayer = playerData?.find(
+                      (player) => player.faction === tooltipUnit.faction
+                    );
+                    if (!activePlayer) return null;
+
+                    // Scale the coordinates by zoom to match the zoomed content position
+                    const scaledX = tooltipUnit.coords.x * zoom;
+                    const scaledY = tooltipUnit.coords.y * zoom;
+
+                    const unitIdToUse =
+                      lookupUnitId(
+                        tooltipUnit.unitId,
+                        activePlayer.faction,
+                        activePlayer
+                      ) || tooltipUnit.unitId;
+
+                    return (
+                      <Box
+                        key="tooltip"
+                        style={{
+                          position: "absolute",
+                          left: `${scaledX}px`,
+                          top: `${scaledY - 50}px`,
+                          zIndex: 10000000,
+                          pointerEvents: "none",
+                          transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
+                        }}
+                      >
+                        <UnitDetailsCard
+                          unitId={unitIdToUse}
+                          color={activePlayer.color}
+                        />
+                      </Box>
+                    );
+                  })()}
                 </Box>
 
                 {/* Drag Handle */}
-                <Box
-                  className={classes.dragHandle}
-                  onMouseDown={handleSidebarMouseDown}
-                >
-                  <IconGripVertical
-                    size={32}
-                    className={classes.dragHandleIcon}
-                  />
-                </Box>
+                <DragHandle onMouseDown={handleSidebarMouseDown} />
 
                 {/* Sidebar - Right Side (dynamic width) */}
                 <Box
@@ -412,11 +355,21 @@ function NewMapUI() {
                   {playerData && (
                     <FactionTabBar
                       playerData={playerData}
-                      activeUnit={activeUnit}
-                      selectedFaction={selectedFaction}
-                      onTabClick={handleTabClick}
-                      onTabMouseEnter={handleTabMouseEnter}
-                      onTabMouseLeave={handleTabMouseLeave}
+                      selectedArea={selectedArea}
+                      activeArea={activeArea}
+                      onAreaSelect={handleAreaSelect}
+                      onAreaMouseEnter={handleAreaMouseEnter}
+                      onAreaMouseLeave={handleAreaMouseLeave}
+                    />
+                  )}
+
+                  {/* Show player card based on active or selected faction */}
+                  {playerData && (
+                    <PlayerCardDisplay
+                      playerData={playerData}
+                      activeArea={activeArea || selectedArea}
+                      factionToColor={factionToColor}
+                      colorToFaction={colorToFaction}
                     />
                   )}
 
@@ -443,35 +396,7 @@ function NewMapUI() {
                     </Alert>
                   )}
 
-                  {/* Pre-render all player cards and show/hide based on activeFaction or selectedFaction */}
-                  {playerData && (
-                    <Box className={classes.playerCardsContainer}>
-                      {(() => {
-                        // Find the player to show - hover takes priority over pinned
-                        const activePlayer = playerData.find(
-                          (player) => player.faction === activeUnit?.faction
-                        );
-                        const selectedPlayer = playerData.find(
-                          (player) => player.faction === selectedFaction
-                        );
-                        const playerToShow = activePlayer || selectedPlayer;
-
-                        if (!playerToShow) return null;
-
-                        return (
-                          <Box className={classes.playerCard}>
-                            <PlayerCardSidebar
-                              playerData={playerToShow}
-                              factionToColor={factionToColor!}
-                              colorToFaction={colorToFaction!}
-                            />
-                          </Box>
-                        );
-                      })()}
-                    </Box>
-                  )}
-
-                  {playerData && !activeUnit && !selectedFaction && (
+                  {playerData && !selectedFaction && !activeUnit && (
                     <Center h="200px" className={classes.hoverInstructions}>
                       <Box>
                         <div>Hover over a unit</div>
@@ -519,8 +444,8 @@ function NewMapUI() {
                       <PlayerCard2Mid
                         key={player.color}
                         playerData={player}
-                        factionToColor={factionToColor!}
-                        colorToFaction={colorToFaction!}
+                        colorToFaction={colorToFaction}
+                        factionToColor={factionToColor}
                       />
                     ))}
                   </SimpleGrid>
@@ -532,6 +457,68 @@ function NewMapUI() {
       </AppShell.Main>
     </AppShell>
   );
+}
+
+function PlayerCardDisplay({
+  playerData,
+  activeArea,
+  factionToColor,
+  colorToFaction,
+}: PlayerCardDisplayProps) {
+  if (activeArea?.type === "faction") {
+    const playerToShow = playerData.find(
+      (player) => player.faction === activeArea.faction
+    );
+    if (!playerToShow) return null;
+
+    return (
+      <Box className={classes.playerCardsContainer}>
+        <Box className={classes.playerCard}>
+          <PlayerCardSidebar
+            playerData={playerToShow}
+            factionToColor={factionToColor}
+            colorToFaction={colorToFaction}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
+  // For tech mode (when not hovering over a unit), show all players
+  if (activeArea?.type === "tech") {
+    return (
+      <Stack className={classes.playerCardsContainer}>
+        {playerData.map((player) => (
+          <Box key={player.faction} className={classes.playerCard}>
+            <PlayerCardSidebarTech
+              playerData={player}
+              factionToColor={factionToColor}
+              colorToFaction={colorToFaction}
+            />
+          </Box>
+        ))}
+      </Stack>
+    );
+  }
+
+  // For components mode (when not hovering over a unit), show all players
+  if (activeArea?.type === "components") {
+    return (
+      <Stack className={classes.playerCardsContainer}>
+        {playerData.map((player) => (
+          <Box key={player.faction} className={classes.playerCard}>
+            <PlayerCardSidebarComponents
+              playerData={player}
+              factionToColor={factionToColor}
+              colorToFaction={colorToFaction}
+            />
+          </Box>
+        ))}
+      </Stack>
+    );
+  }
+
+  return null;
 }
 
 export default NewMapUI;

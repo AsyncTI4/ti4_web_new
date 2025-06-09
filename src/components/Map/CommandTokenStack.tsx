@@ -1,4 +1,4 @@
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import { CommandCounter } from "./CommandCounter";
 
 type CommandTokenStackProps = {

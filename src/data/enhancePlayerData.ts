@@ -6,11 +6,9 @@ import {
 
 export type EnhancedPlayerData = {
   playerData: PlayerData[];
-  factionCoordinates: Record<string, { x: number; y: number }>;
   tileUnitData: Record<string, any>;
   tilePositions: string[];
   statTilePositions: Record<string, string[]>;
-
   calculatedTilePositions: TilePosition[];
   systemIdToPosition: Record<string, string>;
   factionToColor: Record<string, string>;
@@ -53,7 +51,7 @@ export function enhancePlayerData(
 
   return {
     playerData: data.playerData,
-    factionCoordinates: data.factionCoordinates,
+
     tileUnitData: data.tileUnitData,
     tilePositions: data.tilePositions,
     statTilePositions: data.statTilePositions,

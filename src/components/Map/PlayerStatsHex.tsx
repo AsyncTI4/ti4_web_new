@@ -156,7 +156,7 @@ export function PlayerStatsHex({
       </defs>
 
       {/* Render hexagons */}
-      {hexagons.map((hex, index) => (
+      {hexagons.map((hex) => (
         <g key={hex.id}>
           {/* Filled polygon without stroke */}
           <polygon

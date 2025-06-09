@@ -23,7 +23,6 @@ import FrogGamePage from "./FrogGamePage";
 // @ts-ignore
 import LandingPage from "./LandingPage";
 import NewMapUI from "./NewMapUI";
-import NewMapUI2 from "./NewMapUI2";
 
 const queryClient = new QueryClient();
 
@@ -41,12 +40,8 @@ const router = createBrowserRouter([
     element: <GamesPage />,
   },
   {
-    path: "/game/:gameId/playerAreas4",
+    path: "/game/:gameId/newui",
     element: <NewMapUI />,
-  },
-  {
-    path: "/game/:gameId/maprendering",
-    element: <NewMapUI2 />,
   },
   {
     path: "/froggame/:discordid/:mapid",

@@ -41,9 +41,6 @@ export function UnitCard({ unitId, color, deployedCount }: Props) {
   const cardClass = isUpgraded
     ? `${styles.unitCard} ${styles.upgraded}`
     : `${styles.unitCard} ${styles.standard}`;
-  const highlightClass = isUpgraded
-    ? styles.highlight
-    : styles.highlightStandard;
 
   const unitCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];

@@ -7,34 +7,16 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
-import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { Relic } from "./PlayerArea/Relic";
-import { Tech } from "./PlayerArea/Tech";
-import { Surface } from "./PlayerArea/Surface";
-import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
-import { UnitCard } from "./PlayerArea/UnitCard";
-import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
-import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
-import { techs as techsData } from "../data/tech";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
-import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { getUnitAsyncId, isUnitUpgraded } from "@/lookup/units";
-import { calculatePlanetEconomics } from "@/lookup/planets";
-import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
-
-// Helper function to get tech data by ID
-const getTechData = (techId: string) => {
-  return techsData.find((tech) => tech.alias === techId);
-};
 
 type Props = {
   playerData: PlayerData;
@@ -51,46 +33,12 @@ export default function PlayerCardSidebarComponents(props: Props) {
     fleetCC,
     strategicCC,
     fragments,
-    isSpeaker,
 
-    techs,
     relics,
-    planets,
     secretsScored,
-    unitsOwned,
     leaders,
   } = props.playerData;
-  const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-  const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
-  const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
-  const planetEconomics = calculatePlanetEconomics(planets, exhaustedPlanets);
-
-  const renderTechColumn = (techType: string) => {
-    const filteredTechs = techs.filter((techId) => {
-      const techData = getTechData(techId);
-      return techData?.types[0] === techType;
-    });
-
-    const techElements = filteredTechs.map((techId, index) => (
-      <Tech key={index} techId={techId} />
-    ));
-
-    return techElements;
-  };
-
-  const FragmentsAndCCSection = (
-    <Group gap={0} align="stretch">
-      {/* T/F/S Section - harmonized with Surface component styling */}
-      <CCPool
-        tacticalCC={tacticalCC}
-        fleetCC={fleetCC}
-        strategicCC={strategicCC}
-      />
-      {/* Fragments Section - harmonized with Surface component styling */}
-      <FragmentsPool fragments={fragments} />
-    </Group>
-  );
 
   return (
     <Paper
@@ -198,8 +146,16 @@ export default function PlayerCardSidebarComponents(props: Props) {
               pnCount={props.playerData.pnCount || 0}
               acCount={props.playerData.acCount || 0}
             />
-            {/* Fragments and CC Section */}
-            {FragmentsAndCCSection}
+
+            <Group gap={0} align="stretch">
+              <CCPool
+                tacticalCC={tacticalCC}
+                fleetCC={fleetCC}
+                strategicCC={strategicCC}
+              />
+
+              <FragmentsPool fragments={fragments} />
+            </Group>
             <ScoredSecrets secretsScored={secretsScored} />
           </Stack>
           <Stack gap={8}>

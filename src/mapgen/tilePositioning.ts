@@ -148,11 +148,6 @@ function isValidPosition(position: string): boolean {
   return position in TILE_COORDINATES;
 }
 
-// Usage examples:
-// const inputData = ["103:56", "301:23"];
-// const positions = calculateTilePositions(inputData, 6);
-// console.log(positions);
-
 export {
   calculateTilePositions,
   calculateSingleTilePosition,
@@ -160,5 +155,4 @@ export {
   isValidPosition,
   normalizeRingCount,
   type TilePosition,
-  type TileCoordinates,
 };

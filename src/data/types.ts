@@ -62,10 +62,11 @@ export type TileUnitData = {
 
 export type PlayerDataResponse = {
   playerData: PlayerData[];
-  factionCoordinates: Record<string, { x: number; y: number }>;
   tileUnitData: Record<string, TileUnitData>;
   tilePositions: string[];
   statTilePositions: Record<string, string[]>;
+  lawsInPlay: string[];
+  vpsToWin: number;
 };
 
 export type PlayerData = {

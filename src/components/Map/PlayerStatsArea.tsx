@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Box, Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { calculateTilePositions } from "../../mapgen/tilePositioning";
 import { determineOpenSides } from "../../utils/tileAdjacency";
 import { findColorData, getColorValues } from "../../lookup/colors";
@@ -7,7 +7,7 @@ import { cdnImage } from "../../data/cdnImage";
 import { SC_COLORS, SC_NUMBER_COLORS } from "../../data/strategyCardColors";
 import { CommandTokenStack } from "./CommandTokenStack";
 import { getColorAlias } from "../../lookup/colors";
-import { PlayerStatsHex, HexagonData, SVGBounds } from "./PlayerStatsHex";
+import { PlayerStatsHex, HexagonData } from "./PlayerStatsHex";
 import styles from "./PlayerStatsArea.module.css";
 import { PlayerData } from "@/data/types";
 
@@ -27,12 +27,6 @@ export function PlayerStatsArea({
   vpsToWin,
 }: PlayerStatsAreaProps) {
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
-  const [svgBounds, setSvgBounds] = useState<SVGBounds>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
 
   // Calculate tile positions for this faction's stat tiles
   const tilePositions = useMemo(() => {
@@ -66,12 +60,8 @@ export function PlayerStatsArea({
   }, [color]);
 
   // Handle hexagons calculation callback
-  const handleHexagonsCalculated = (
-    newHexagons: HexagonData[],
-    newSvgBounds: SVGBounds
-  ) => {
+  const handleHexagonsCalculated = (newHexagons: HexagonData[]) => {
     setHexagons(newHexagons);
-    setSvgBounds(newSvgBounds);
   };
 
   // Get first, second, and third hexagon positions for HTML overlays

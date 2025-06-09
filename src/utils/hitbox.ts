@@ -6,8 +6,8 @@ export const touchesShapeRim = (
   row: number,
   col: number,
   gridSize: number,
-  squareWidth: number,
-  squareHeight: number,
+  _squareWidth: number,
+  _squareHeight: number,
   isSquareInShape: (row: number, col: number) => boolean
 ): boolean => {
   // Can't be a rim square if it's not in the shape

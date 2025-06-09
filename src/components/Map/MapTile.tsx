@@ -68,27 +68,20 @@ export const MapTile = React.memo<Props>(
             entityType={stack.entityType}
             onUnitMouseOver={
               onUnitMouseOver
-                ? (stackKey: string, event: React.MouseEvent) => {
-                    // Use unit's position on the map plus tile position
-                    const x = position.x + stack.x;
-                    const y = position.y + stack.y;
-                    onUnitMouseOver(stack.faction, stack.entityId, x, y);
-                  }
+                ? () =>
+                    onUnitMouseOver(
+                      stack.faction,
+                      stack.entityId,
+                      stack.x,
+                      stack.y
+                    )
                 : undefined
             }
             onUnitMouseLeave={
-              onUnitMouseLeave
-                ? (stackKey: string, event: React.MouseEvent) => {
-                    onUnitMouseLeave();
-                  }
-                : undefined
+              onUnitMouseLeave ? () => onUnitMouseLeave() : undefined
             }
             onUnitSelect={
-              onUnitSelect
-                ? (stackKey: string, event: React.MouseEvent) => {
-                    onUnitSelect(stack.faction);
-                  }
-                : undefined
+              onUnitSelect ? () => onUnitSelect(stack.faction) : undefined
             }
           />,
         ];

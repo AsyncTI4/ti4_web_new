@@ -1,10 +1,5 @@
 import { Box, Group, Image, Text } from "@mantine/core";
-import {
-  IconFlask,
-  IconComponents,
-  IconHandFinger,
-  IconHandStop,
-} from "@tabler/icons-react";
+import { IconFlask, IconComponents } from "@tabler/icons-react";
 import { cdnImage } from "../data/cdnImage";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
