@@ -1,0 +1,41 @@
+.wrapper {
+  position: relative;
+  margin: 5px;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.paper {
+  position: relative;
+  max-width: 100%;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
+}
+
+.innerGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.factionBackground {
+  position: absolute;
+  bottom: -60px;
+  right: -40px;
+  opacity: 0.05;
+  height: 250px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  filter: grayscale(0.2);
+}

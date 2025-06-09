@@ -54,3 +54,27 @@ export const getPrimaryColorCSS = (color: string) => {
   const { red, green, blue } = primaryColorValues;
   return `rgb(${red}, ${green}, ${blue})`;
 };
+
+// Helper function to get primary color with opacity
+export const getPrimaryColorWithOpacity = (
+  color: string,
+  opacity: number = 0.7
+) => {
+  const colorData = findColorData(color);
+
+  if (!colorData) {
+    return `rgba(148, 163, 184, ${opacity})`;
+  }
+
+  const primaryColorValues = getColorValues(
+    (colorData as any).primaryColorRef,
+    colorData.primaryColor
+  );
+
+  if (!primaryColorValues) {
+    return `rgba(148, 163, 184, ${opacity})`;
+  }
+
+  const { red, green, blue } = primaryColorValues;
+  return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+};

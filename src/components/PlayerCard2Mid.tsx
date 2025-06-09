@@ -1,5 +1,4 @@
 import {
-  Paper,
   Group,
   Text,
   Grid,
@@ -37,6 +36,7 @@ import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/Re
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { calculatePlanetEconomics } from "@/lookup/planets";
+import { PlayerCardBox } from "./PlayerCardBox";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -189,337 +189,289 @@ export default memo(function PlayerCard2Mid(props: Props) {
   );
 
   return (
-    <Paper
-      p="sm"
-      m={5}
-      pos="relative"
-      style={{
-        maxWidth: "100%",
-        background:
-          "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-        border: "1px solid rgba(148, 163, 184, 0.2)",
-        overflow: "hidden",
-        boxShadow:
-          "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-        "@keyframes shimmer": {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(200%)" },
+    <PlayerCardBox
+      color={color}
+      faction={faction}
+      paperProps={{
+        style: {
+          height: "100%",
+          "@keyframes shimmer": {
+            "0%": { transform: "translateX(-100%)" },
+            "100%": { transform: "translateX(200%)" },
+          },
         },
       }}
-      radius="md"
     >
-      {/* Subtle inner glow */}
-      <Box
-        pos="absolute"
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(148, 163, 184, 0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Header Section */}
+      <Group justify="space-between" align="center" mb="md">
+        <Group gap={4} px={4} align="center">
+          <Image
+            src={cdnImage(`/factions/${faction}.png`)}
+            alt={faction}
+            w={24}
+            h={24}
+            style={{
+              filter:
+                "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
+            }}
+          />
+          <Text
+            span
+            c="white"
+            size="lg"
+            ff="heading"
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+            }}
+          >
+            {userName}
+          </Text>
+          <Text
+            size="md"
+            span
+            ml={4}
+            opacity={0.9}
+            c="white"
+            ff="heading"
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+            }}
+          >
+            [{faction}]
+          </Text>
+          <PlayerColor color={color} size="sm" />
 
-      <Box pos="relative" style={{ zIndex: 1 }}>
-        {/* Header Section */}
-        <PlayerCardHeader color={color} passed={props.playerData.passed}>
-          <Group justify="space-between" align="center">
-            <Group gap={4} px={4} align="center">
-              {/* Small circular faction icon */}
-              <Image
-                src={cdnImage(`/factions/${faction}.png`)}
-                alt={faction}
-                w={24}
-                h={24}
-                style={{
-                  filter:
-                    "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-                }}
-              />
-              <Text
-                span
-                c="white"
-                size="lg"
-                ff="heading"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {userName}
-              </Text>
-              <Text
-                size="md"
-                span
-                ml={4}
-                opacity={0.9}
-                c="white"
-                ff="heading"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                [{faction}]
-              </Text>
-              <PlayerColor color={color} size="sm" />
+          <StatusIndicator
+            passed={props.playerData.passed}
+            active={props.playerData.active}
+          />
+          <Box visibleFrom="sm">
+            <Neighbors
+              neighbors={props.playerData.neighbors || []}
+              colorToFaction={props.colorToFaction}
+            />
+          </Box>
+        </Group>
+        <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
+      </Group>
+      <Grid gutter="md" columns={12}>
+        <Grid.Col
+          span={{
+            base: 6,
+            sm: 3,
+          }}
+          hiddenFrom="lg"
+        >
+          <Stack gap={6}>
+            <Box hiddenFrom="sm" w="100%">
+              <Stack gap="xs" align="center">
+                {scs.map((scNumber, index) => (
+                  <StrategyCardBannerCompact
+                    key={scNumber}
+                    number={scNumber}
+                    text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                    color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                    isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
+                  />
+                ))}
+              </Stack>
+            </Box>
 
-              <StatusIndicator
-                passed={props.playerData.passed}
-                active={props.playerData.active}
-              />
-              <Box visibleFrom="sm">
-                <Neighbors
-                  neighbors={props.playerData.neighbors || []}
-                  colorToFaction={props.colorToFaction}
-                />
-              </Box>
-            </Group>
-            <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
-          </Group>
-        </PlayerCardHeader>
-        <Grid gutter="md" columns={12}>
-          <Grid.Col
-            span={{
-              base: 6,
-              sm: 3,
-            }}
-            hiddenFrom="lg"
-          >
-            <Stack gap={6}>
-              <Box hiddenFrom="sm" w="100%">
-                <Stack gap="xs" align="center">
-                  {scs.map((scNumber, index) => (
-                    <StrategyCardBannerCompact
-                      key={scNumber}
-                      number={scNumber}
-                      text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                      color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                      isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
-                    />
-                  ))}
-                </Stack>
-              </Box>
-
-              <PlayerCardCounts
-                tg={props.playerData.tg || 0}
-                commodities={props.playerData.commodities || 0}
-                commoditiesTotal={props.playerData.commoditiesTotal || 0}
-                soCount={props.playerData.soCount || 0}
-                pnCount={props.playerData.pnCount || 0}
-                acCount={props.playerData.acCount || 0}
-              />
-              <Box hiddenFrom="sm">
-                <Neighbors
-                  neighbors={props.playerData.neighbors || []}
-                  colorToFaction={props.colorToFaction}
-                />
-              </Box>
-            </Stack>
-          </Grid.Col>
-          <Grid.Col
-            span={{
-              base: 6,
-              sm: 3,
-            }}
-            hiddenFrom="lg"
-          >
-            <Leaders leaders={leaders} />
-          </Grid.Col>
-          <Grid.Col
-            span={{
-              base: 6,
-              sm: 3,
-            }}
-            hiddenFrom="lg"
-          >
-            <ScoredSecrets secretsScored={secretsScored} />
-          </Grid.Col>
-          <Grid.Col
-            span={{
-              base: 6,
-              sm: 3,
-            }}
-            hiddenFrom="lg"
-          >
-            <Stack gap={4}>
-              <PromissoryNotesStack
-                promissoryNotes={promissoryNotes}
+            <PlayerCardCounts
+              tg={props.playerData.tg || 0}
+              commodities={props.playerData.commodities || 0}
+              commoditiesTotal={props.playerData.commoditiesTotal || 0}
+              soCount={props.playerData.soCount || 0}
+              pnCount={props.playerData.pnCount || 0}
+              acCount={props.playerData.acCount || 0}
+            />
+            <Box hiddenFrom="sm">
+              <Neighbors
+                neighbors={props.playerData.neighbors || []}
                 colorToFaction={props.colorToFaction}
               />
-              {RelicStack}
-            </Stack>
-          </Grid.Col>
+            </Box>
+          </Stack>
+        </Grid.Col>
+        <Grid.Col
+          span={{
+            base: 6,
+            sm: 3,
+          }}
+          hiddenFrom="lg"
+        >
+          <Leaders leaders={leaders} />
+        </Grid.Col>
+        <Grid.Col
+          span={{
+            base: 6,
+            sm: 3,
+          }}
+          hiddenFrom="lg"
+        >
+          <ScoredSecrets secretsScored={secretsScored} />
+        </Grid.Col>
+        <Grid.Col
+          span={{
+            base: 6,
+            sm: 3,
+          }}
+          hiddenFrom="lg"
+        >
+          <Stack gap={4}>
+            <PromissoryNotesStack
+              promissoryNotes={promissoryNotes}
+              colorToFaction={props.colorToFaction}
+            />
+            {RelicStack}
+          </Stack>
+        </Grid.Col>
 
-          <Grid.Col hiddenFrom="lg" span={12}>
+        <Grid.Col hiddenFrom="lg" span={12}>
+          {FragmentsAndCCSection}
+        </Grid.Col>
+
+        <Grid.Col span={2} visibleFrom="lg">
+          <Stack h="100%">
+            <PlayerCardCounts
+              tg={props.playerData.tg || 0}
+              commodities={props.playerData.commodities || 0}
+              commoditiesTotal={props.playerData.commoditiesTotal || 0}
+              soCount={props.playerData.soCount || 0}
+              pnCount={props.playerData.pnCount || 0}
+              acCount={props.playerData.acCount || 0}
+            />
             {FragmentsAndCCSection}
-          </Grid.Col>
-
-          <Grid.Col span={2} visibleFrom="lg">
-            <Stack h="100%">
-              <PlayerCardCounts
-                tg={props.playerData.tg || 0}
-                commodities={props.playerData.commodities || 0}
-                commoditiesTotal={props.playerData.commoditiesTotal || 0}
-                soCount={props.playerData.soCount || 0}
-                pnCount={props.playerData.pnCount || 0}
-                acCount={props.playerData.acCount || 0}
-              />
-              {FragmentsAndCCSection}
-              <ScoredSecrets secretsScored={secretsScored} />
-              <PromissoryNotesStack
-                promissoryNotes={promissoryNotes}
-                colorToFaction={props.colorToFaction}
-              />
-              {/* Needs to Follow Section */}
-              <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
-              {RelicStack}
-            </Stack>
-          </Grid.Col>
-          <Grid.Col
-            span={{
-              base: 12,
-              lg: 10,
-            }}
-          >
-            <Grid gutter="xs">
-              <Grid.Col
-                span={{
-                  base: 12,
-                  lg: 9,
-                }}
-              >
-                <Group gap={0} h="100%">
-                  <Surface
-                    flex={1}
-                    pattern="grid"
-                    cornerAccents={true}
-                    label="TECH"
-                    p="md"
-                    h="100%"
-                    style={{
-                      borderTopRightRadius: 0,
-                      borderBottomRightRadius: 0,
-                    }}
-                  >
-                    <Stack>
-                      <Grid gutter={4}>
-                        <DynamicTechGrid
-                          renderTechColumn={renderTechColumn}
-                          layout="grid"
-                        />
-                      </Grid>
-                    </Stack>
-                  </Surface>
-
-                  <Box h="100%" visibleFrom="sm">
-                    {UnitsArea}
-                  </Box>
-                </Group>
-              </Grid.Col>
-              <Grid.Col span={3} visibleFrom="lg">
-                <Leaders leaders={leaders} />
-              </Grid.Col>
-              <Grid.Col span={12} hiddenFrom="sm">
-                {UnitsArea}
-              </Grid.Col>
-
-              <Grid.Col
-                span={{
-                  base: 9,
-                }}
-              >
-                <Surface p="xs" pattern="none" h="100%">
+            <ScoredSecrets secretsScored={secretsScored} />
+            <PromissoryNotesStack
+              promissoryNotes={promissoryNotes}
+              colorToFaction={props.colorToFaction}
+            />
+            {/* Needs to Follow Section */}
+            <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
+            {RelicStack}
+          </Stack>
+        </Grid.Col>
+        <Grid.Col
+          span={{
+            base: 12,
+            lg: 10,
+          }}
+        >
+          <Grid gutter="xs">
+            <Grid.Col
+              span={{
+                base: 12,
+                lg: 9,
+              }}
+            >
+              <Group gap={0} h="100%">
+                <Surface
+                  flex={1}
+                  pattern="grid"
+                  cornerAccents={true}
+                  label="TECH"
+                  p="md"
+                  h="100%"
+                  style={{
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                  }}
+                >
                   <Stack>
-                    {/* Total/Optimal Section */}
-                    <ResourceInfluenceCompact
-                      planetEconomics={planetEconomics}
-                      debts={props.playerData.debtTokens}
-                    />
-
-                    {/* Debt Section */}
-                    {/* <DebtTokens debts={debts} /> */}
+                    <Grid gutter={4}>
+                      <DynamicTechGrid
+                        renderTechColumn={renderTechColumn}
+                        layout="grid"
+                      />
+                    </Grid>
                   </Stack>
                 </Surface>
-              </Grid.Col>
-              <Grid.Col
-                span={{
-                  base: 12,
-                  sm: 9,
-                }}
-              >
-                <Group h="100%">
-                  <Surface
-                    p="md"
-                    pattern="circle"
-                    cornerAccents={true}
-                    label="Planets"
-                    flex={1}
-                    h="100%"
-                    style={{
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
-                      {planets.map((planetId, index) => (
-                        <PlanetCard
-                          key={index}
-                          planetId={planetId}
-                          exhausted={exhaustedPlanets.includes(planetId)}
-                        />
-                      ))}
-                    </Group>
-                  </Surface>
-                </Group>
-              </Grid.Col>
-              <Grid.Col span={3} p="sm">
-                <ArmyStats
-                  stats={{
-                    spaceArmyRes,
-                    groundArmyRes,
-                    spaceArmyHealth,
-                    groundArmyHealth,
-                    spaceArmyCombat,
-                    groundArmyCombat,
+
+                <Box h="100%" visibleFrom="sm">
+                  {UnitsArea}
+                </Box>
+              </Group>
+            </Grid.Col>
+            <Grid.Col span={3} visibleFrom="lg">
+              <Leaders leaders={leaders} />
+            </Grid.Col>
+            <Grid.Col span={12} hiddenFrom="sm">
+              {UnitsArea}
+            </Grid.Col>
+
+            <Grid.Col
+              span={{
+                base: 9,
+              }}
+            >
+              <Surface p="xs" pattern="none" h="100%">
+                <Stack>
+                  {/* Total/Optimal Section */}
+                  <ResourceInfluenceCompact
+                    planetEconomics={planetEconomics}
+                    debts={props.playerData.debtTokens}
+                  />
+
+                  {/* Debt Section */}
+                  {/* <DebtTokens debts={debts} /> */}
+                </Stack>
+              </Surface>
+            </Grid.Col>
+            <Grid.Col
+              span={{
+                base: 12,
+                sm: 9,
+              }}
+            >
+              <Group h="100%">
+                <Surface
+                  p="md"
+                  pattern="circle"
+                  cornerAccents={true}
+                  label="Planets"
+                  flex={1}
+                  h="100%"
+                  style={{
+                    alignItems: "flex-start",
                   }}
-                />
-              </Grid.Col>
-            </Grid>
-          </Grid.Col>
+                >
+                  <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
+                    {planets.map((planetId, index) => (
+                      <PlanetCard
+                        key={index}
+                        planetId={planetId}
+                        exhausted={exhaustedPlanets.includes(planetId)}
+                      />
+                    ))}
+                  </Group>
+                </Surface>
+              </Group>
+            </Grid.Col>
+            <Grid.Col span={3} p="sm">
+              <ArmyStats
+                stats={{
+                  spaceArmyRes,
+                  groundArmyRes,
+                  spaceArmyHealth,
+                  groundArmyHealth,
+                  spaceArmyCombat,
+                  groundArmyCombat,
+                }}
+              />
+            </Grid.Col>
+          </Grid>
+        </Grid.Col>
 
-          {/* Full-width Nombox at the bottom */}
-          <Grid.Col span={12}>
-            <Nombox
-              capturedUnits={props.playerData.nombox || {}}
-              factionToColor={props.factionToColor}
-            />
-          </Grid.Col>
-        </Grid>
-      </Box>
-
-      {/* Faction background image - harmonized with consistent opacity and positioning */}
-      <Box
-        pos="absolute"
-        bottom={-60}
-        right={-40}
-        opacity={0.05}
-        h={250}
-        style={{
-          zIndex: 0,
-          pointerEvents: "none",
-          overflow: "hidden",
-          filter: "grayscale(0.2)",
-        }}
-      >
-        <Image
-          src={cdnImage(`/factions/${faction}.png`)}
-          alt="faction"
-          w="100%"
-          h="100%"
-          style={{ objectFit: "contain" }}
-        />
-      </Box>
-    </Paper>
+        {/* Full-width Nombox at the bottom */}
+        <Grid.Col span={12}>
+          <Nombox
+            capturedUnits={props.playerData.nombox || {}}
+            factionToColor={props.factionToColor}
+          />
+        </Grid.Col>
+      </Grid>
+    </PlayerCardBox>
   );
 });
 
