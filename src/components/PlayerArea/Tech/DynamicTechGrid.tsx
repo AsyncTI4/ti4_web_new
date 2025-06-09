@@ -55,12 +55,14 @@ export function DynamicTechGrid({
   return (
     <>
       {rows.map((row, rowIndex) => (
-        <SimpleGrid key={rowIndex} cols={row.length} spacing="xs">
+        <SimpleGrid key={rowIndex} cols={2} spacing="xs">
           {row.map((category) => (
             <Stack key={category.type} gap={4}>
               {category.techs}
             </Stack>
           ))}
+          {/* Add empty column if row has only 1 category */}
+          {row.length === 1 && <Stack gap={4} />}
         </SimpleGrid>
       ))}
     </>
