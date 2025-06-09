@@ -22,31 +22,32 @@
 
 /* Base gradient utility classes */
 .gradient-bg {
-  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
+  background: rgba(var(--gradient-color), 0.1);
 }
 
 .gradient-bg-strong {
-  background: linear-gradient(135deg, rgba(var(--gradient-color), 0.15) 0%, rgba(var(--gradient-color), 0.08) 100%);
+  background: rgba(var(--gradient-color), 0.15);
 }
 
 .gradient-border {
-  border: 1px solid rgba(var(--gradient-color), 0.25);
+  border: 1px solid rgba(var(--gradient-color), 0.28);
 }
 
 .gradient-shimmer {
-  background: linear-gradient(90deg, transparent 0%, rgba(var(--gradient-color), 0.6) 50%, transparent 100%);
+  background: rgba(var(--gradient-color), 0.12);
 }
 
 .gradient-left-border {
-  background: linear-gradient(180deg, rgba(var(--gradient-color), 0.6) 0%, rgba(var(--gradient-color), 0.2) 100%);
+  background: rgba(var(--gradient-color), 0.18);
+  border-left: 3px solid rgba(var(--gradient-color), 0.4);
 }
 
 .gradient-shadow {
-  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.17), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .gradient-icon-filter {
-  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.33));
 }
 
 .gradient-accent {
@@ -54,11 +55,11 @@
 }
 
 .gradient-inner-glow {
-  background: radial-gradient(ellipse at center, rgba(var(--gradient-color), 0.15) 0%, transparent 70%);
+  background: rgba(var(--gradient-color), 0.08);
 }
 
 .gradient-pattern {
-  background-image: repeating-linear-gradient(45deg, rgba(var(--gradient-color), 0.08) 0px, rgba(var(--gradient-color), 0.08) 1px, transparent 1px, transparent 16px);
+  background: rgba(var(--gradient-color), 0.06);
 }
 
 /* Color-specific classes */
@@ -162,7 +163,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(var(--gradient-color), 0.02) 0%, rgba(var(--gradient-color), 0.08) 50%, rgba(var(--gradient-color), 0.02) 100%);
+  background: rgba(var(--gradient-color), 0.05);
   pointer-events: none;
 }
 
@@ -208,5 +209,5 @@
 
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {
-  background-image: repeating-linear-gradient(45deg, rgba(var(--color-blue), 0.03) 0px, rgba(var(--color-blue), 0.03) 1px, transparent 1px, transparent 16px);
+  background: rgba(var(--color-blue), 0.04);
 }

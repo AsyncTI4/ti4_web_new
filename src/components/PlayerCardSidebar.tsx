@@ -7,6 +7,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
+import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
@@ -22,136 +23,26 @@ import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
-import { planets } from "../data/planets";
-import { PlayerData } from "../data/pbd10242";
+import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
-import { units } from "../data/units";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
+import { getUnitAsyncId, isUnitUpgraded } from "@/lookup/units";
+import { calculatePlanetEconomics } from "@/lookup/planets";
+import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
   return techsData.find((tech) => tech.alias === techId);
 };
 
-// Helper function to get planet data by ID
-const getPlanetData = (planetId: string) => {
-  return (planets as any)[planetId];
-};
-
-// Helper function to calculate planet economics
-const calculatePlanetEconomics = (
-  planets: string[],
-  exhaustedPlanets: string[],
-  getPlanetData: (planetId: string) => any
-) => {
-  return planets.reduce(
-    (acc, planetId) => {
-      const planetData = getPlanetData(planetId);
-      if (!planetData) return acc;
-
-      const isExhausted = exhaustedPlanets.includes(planetId);
-      const resources = planetData.resources;
-      const influence = planetData.influence;
-
-      // Check if this is a flex planet (equal resources and influence)
-      const isFlex = resources === influence && resources > 0;
-
-      if (isFlex) {
-        // Flex planets only count towards flex totals
-        acc.flex.totalFlex += resources; // Use resources value since they're equal
-        if (!isExhausted) {
-          acc.flex.currentFlex += resources;
-        }
-      } else {
-        // Non-flex planets count towards total always
-        acc.total.totalResources += resources;
-        acc.total.totalInfluence += influence;
-
-        // Add to current if not exhausted
-        if (!isExhausted) {
-          acc.total.currentResources += resources;
-          acc.total.currentInfluence += influence;
-        }
-
-        // Optimal calculation for non-flex planets
-        if (resources > influence) {
-          acc.optimal.totalResources += resources;
-          if (!isExhausted) acc.optimal.currentResources += resources;
-        } else if (influence > resources) {
-          acc.optimal.totalInfluence += influence;
-          if (!isExhausted) acc.optimal.currentInfluence += influence;
-        }
-        // Note: We don't handle the equal case here since it's already handled as flex
-      }
-
-      return acc;
-    },
-    {
-      total: {
-        currentResources: 0,
-        totalResources: 0,
-        currentInfluence: 0,
-        totalInfluence: 0,
-      },
-      optimal: {
-        currentResources: 0,
-        totalResources: 0,
-        currentInfluence: 0,
-        totalInfluence: 0,
-      },
-      flex: {
-        currentFlex: 0,
-        totalFlex: 0,
-      },
-    }
-  );
-};
-
-// Strategy card names and colors mapping
-const SC_NAMES = {
-  1: "LEADERSHIP",
-  2: "DIPLOMACY",
-  3: "POLITICS",
-  4: "CONSTRUCTION",
-  5: "TRADE",
-  6: "WARFARE",
-  7: "TECHNOLOGY",
-  8: "IMPERIAL",
-};
-
-const SC_COLORS = {
-  1: "red",
-  2: "orange",
-  3: "yellow",
-  4: "green",
-  5: "teal",
-  6: "cyan",
-  7: "blue",
-  8: "purple",
-};
-
 type Props = {
   playerData: PlayerData;
   colorToFaction: Record<string, string>;
+  factionToColor: Record<string, string>;
 };
 
-const getUnitAsyncId = (unitId: string) => {
-  return units.find((u) => u.id === unitId)?.asyncId;
-};
-
-// Helper function to get unit data by ID
-const getUnitData = (unitId: string) => {
-  return units.find((unit) => unit.id === unitId);
-};
-
-// Helper function to check if a unit is upgraded
-const isUnitUpgraded = (unitId: string) => {
-  const unitData = getUnitData(unitId);
-  return unitData?.upgradesFromUnitId !== undefined;
-};
-
-export default function PlayerCardCompact(props: Props) {
+export default function PlayerCardSidebar(props: Props) {
   const {
     userName,
     faction,
@@ -169,25 +60,11 @@ export default function PlayerCardCompact(props: Props) {
     unitsOwned,
     leaders,
   } = props.playerData;
-
-  // Get strategy cards from player data, fallback to [1] for demo
-  const scs = props.playerData.scs || [3, 4];
-
-  // Use promissoryNotesInPlayArea from PlayerData
+  const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-
-  // Get exhaustedPlanets from PlayerData
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
-
-  // Filter units to only show upgraded ones
   const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
-
-  // Calculate planet economics properly
-  const planetEconomics = calculatePlanetEconomics(
-    planets,
-    exhaustedPlanets,
-    getPlanetData
-  );
+  const planetEconomics = calculatePlanetEconomics(planets, exhaustedPlanets);
 
   const renderTechColumn = (techType: string) => {
     const filteredTechs = techs.filter((techId) => {
@@ -228,14 +105,6 @@ export default function PlayerCardCompact(props: Props) {
         overflow: "hidden",
         boxShadow:
           "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
-        "@keyframes shimmer": {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(200%)" },
-        },
-
-        filter: props.playerData.passed
-          ? "brightness(0.9) saturate(0.4)"
-          : "none",
       }}
       radius="md"
     >
@@ -330,8 +199,8 @@ export default function PlayerCardCompact(props: Props) {
                 <StrategyCardBannerCompact
                   key={scNumber}
                   number={scNumber}
-                  text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                  color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                  text={SC_NAMES[scNumber]}
+                  color={SC_COLORS[scNumber]}
                   isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
                 />
               ))}
@@ -368,17 +237,9 @@ export default function PlayerCardCompact(props: Props) {
             </Stack>
           </SimpleGrid>
 
-          {/* Tech Section - Simplified for narrow layout */}
           <Surface pattern="grid" cornerAccents={true} label="TECH" p="md">
             <Stack gap="xs">
-              <SimpleGrid cols={2} spacing="xs">
-                <Stack gap={4}>{renderTechColumn("PROPULSION")}</Stack>
-                <Stack gap={4}>{renderTechColumn("CYBERNETIC")}</Stack>
-              </SimpleGrid>
-              <SimpleGrid cols={2} spacing="xs">
-                <Stack gap={4}>{renderTechColumn("BIOTIC")}</Stack>
-                <Stack gap={4}>{renderTechColumn("WARFARE")}</Stack>
-              </SimpleGrid>
+              <DynamicTechGrid renderTechColumn={renderTechColumn} />
             </Stack>
           </Surface>
 
@@ -407,15 +268,7 @@ export default function PlayerCardCompact(props: Props) {
 
           {/* Resources and Planets Section */}
           <Stack gap="xs">
-            <Surface
-              p="md"
-              pattern="none"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <Surface p="md" pattern="circle">
               <ResourceInfluenceCompact
                 planetEconomics={planetEconomics}
                 debts={props.playerData.debtTokens}

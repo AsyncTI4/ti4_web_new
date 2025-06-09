@@ -41,12 +41,13 @@ body {
 
 .logo {
   width: 120px;
+  filter: hue-rotate(200deg) brightness(1.1);
 }
 
 .logo-divider {
   width: 1px;
   height: 40%;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(148, 163, 184, 0.3);
   margin-left: 8px;
 }
 

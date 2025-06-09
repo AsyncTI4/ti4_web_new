@@ -5,17 +5,25 @@ import "./styles/gradients.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+// @ts-ignore
 import GamePage from "./GamePage";
+// @ts-ignore
 import GamesPage from "./GamesPage";
-import { createTheme, darken, MantineProvider } from "@mantine/core";
+import {
+  createTheme,
+  darken,
+  MantineProvider,
+  MantineColorsTuple,
+} from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// @ts-ignore
 import LoginPage, { loginLoader } from "./LoginPage";
+// @ts-ignore
 import FrogGamePage from "./FrogGamePage";
+// @ts-ignore
 import LandingPage from "./LandingPage";
-import PlayerAreasPage from "./PlayerAreasPage";
-import PlayerAreasPage2 from "./PlayerAreasPage2";
-import PlayerAreasPage3 from "./PlayerAreasPage3";
-import PlayerAreasPage4 from "./PlayerAreasPage4";
+import NewMapUI from "./NewMapUI";
+import NewMapUI2 from "./NewMapUI2";
 
 const queryClient = new QueryClient();
 
@@ -33,20 +41,12 @@ const router = createBrowserRouter([
     element: <GamesPage />,
   },
   {
-    path: "/game/:gameId/playerAreas",
-    element: <PlayerAreasPage />,
-  },
-  {
-    path: "/game/:gameId/playerAreas2",
-    element: <PlayerAreasPage2 />,
-  },
-  {
-    path: "/game/:gameId/playerAreas3",
-    element: <PlayerAreasPage3 />,
-  },
-  {
     path: "/game/:gameId/playerAreas4",
-    element: <PlayerAreasPage4 />,
+    element: <NewMapUI />,
+  },
+  {
+    path: "/game/:gameId/maprendering",
+    element: <NewMapUI2 />,
   },
   {
     path: "/froggame/:discordid/:mapid",
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const tomatoBg = [
+const tomatoBg: MantineColorsTuple = [
   darken("#e0dcd8", 0.75),
   darken("#dcd6d0", 0.75),
   darken("#d0c8c0", 0.75),
@@ -72,7 +72,7 @@ const tomatoBg = [
   darken("#7c6650", 0.75),
 ];
 
-const myColor = [
+const myColor: MantineColorsTuple = [
   darken("#edf5ff", 0.5),
   darken("#e0e6f1", 0.5),
   darken("#c3cad9", 0.5),
@@ -109,7 +109,9 @@ const theme = createTheme({
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 root.render(
   <React.StrictMode>
     <MantineProvider forceColorScheme="dark" theme={theme}>

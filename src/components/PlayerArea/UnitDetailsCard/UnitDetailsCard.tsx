@@ -1,7 +1,7 @@
 import { Box, Text, Stack, Group, Image, Divider } from "@mantine/core";
-import { units } from "../../../data/units";
-import { cdnImage } from "../../../data/cdnImage";
-import { findColorData } from "../../../utils/colorUtils";
+import { units } from "@/data/units";
+import { cdnImage } from "@/data/cdnImage";
+import { findColorData } from "@/lookup/colors";
 
 type Props = {
   unitId: string;

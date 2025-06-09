@@ -1,6 +1,6 @@
 import { Stack } from "@mantine/core";
 import { Leader } from "../Leader";
-import { Leader as LeaderType } from "@/data/pbd10242";
+import { Leader as LeaderType } from "@/data/types";
 
 type Props = {
   leaders: LeaderType[];

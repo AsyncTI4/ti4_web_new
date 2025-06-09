@@ -1,0 +1,27 @@
+.unitBadge {
+  position: relative;
+  width: 70px;
+  height: 35px;
+}
+
+.unitIcon {
+  position: absolute;
+}
+
+.unitCountContainer {
+  position: absolute;
+  right: 12px;
+  top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.unitCount {
+  min-width: 19px;
+  font-size: 18px;
+  font-weight: 800;
+  font-family: "Slider", sans-serif;
+  text-align: center;
+  /* NOTE: THis color needs to be black for some player colors */
+  color: white;
+}

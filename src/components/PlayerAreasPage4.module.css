@@ -4,6 +4,9 @@
   gap: var(--mantine-spacing-md);
   height: 100%;
   padding: 0 var(--mantine-spacing-sm);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
 }
 
 .flexGrow {
@@ -16,19 +19,35 @@
 }
 
 .tabsList {
-  border-bottom: 1px solid var(--mantine-color-dark-4);
-  background: var(--mantine-color-dark-7);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  background: transparent;
 }
 
 .tabsTab {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 16px 24px;
+  padding: 10px 18px;
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: all 0.2s ease !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.tabsTab:hover {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.tabsTab[data-active="true"] {
+  color: rgba(255, 255, 255, 1) !important;
+  background: rgba(59, 130, 246, 0.08) !important;
+  border-bottom: 2px solid rgba(59, 130, 246, 0.7) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .mapContainer {
   display: flex;
   height: 100%;
+  background: #0e1728;
 }
 
 .mapArea {
@@ -82,55 +101,10 @@
 .sidebar {
   height: 100%;
   overflow-y: scroll;
-  background: var(--mantine-color-black);
+  background: #0e1728;
 }
 
-.factionTabBar {
-  border-bottom: 1px solid var(--mantine-color-dark-4);
-  background: var(--mantine-color-dark-7);
-  padding: 8px 12px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
 
-.factionTab {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  border: 2px solid transparent;
-  background: transparent;
-  box-shadow: none;
-}
-
-.factionTabActive {
-  border: 2px solid var(--mantine-color-gray-6);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.factionTabPinned {
-  border: 2px solid var(--mantine-color-blue-5);
-  background: rgba(74, 158, 255, 0.15);
-  box-shadow: 0 0 8px rgba(74, 158, 255, 0.3);
-}
-
-.factionImage {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) brightness(0.9);
-  transition: filter 0.2s ease;
-}
-
-.factionImageActive {
-  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.3)) brightness(1.1);
-}
-
-.factionImagePinned {
-  filter: drop-shadow(0 2px 4px rgba(74, 158, 255, 0.4)) brightness(1.2);
-}
 
 .playerCardsContainer {
   position: relative;
@@ -159,5 +133,5 @@
   height: 100%;
   overflow-y: scroll;
   padding: 16px;
-  background: var(--mantine-color-black);
+
 }

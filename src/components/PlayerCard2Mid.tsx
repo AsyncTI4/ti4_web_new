@@ -8,6 +8,7 @@ import {
   Image,
   SimpleGrid,
 } from "@mantine/core";
+import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { memo } from "react";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
@@ -27,8 +28,7 @@ import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
-import { planets } from "../data/planets";
-import { PlayerData } from "../data/pbd10242";
+import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
@@ -36,84 +36,11 @@ import { ArmyStats } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
+import { calculatePlanetEconomics } from "@/lookup/planets";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
   return techsData.find((tech) => tech.alias === techId);
-};
-
-// Helper function to get planet data by ID
-const getPlanetData = (planetId: string) => {
-  return (planets as any)[planetId];
-};
-
-// Helper function to calculate planet economics
-const calculatePlanetEconomics = (
-  planets: string[],
-  exhaustedPlanets: string[],
-  getPlanetData: (planetId: string) => any
-) => {
-  return planets.reduce(
-    (acc, planetId) => {
-      const planetData = getPlanetData(planetId);
-      if (!planetData) return acc;
-
-      const isExhausted = exhaustedPlanets.includes(planetId);
-      const resources = planetData.resources;
-      const influence = planetData.influence;
-
-      // Check if this is a flex planet (equal resources and influence)
-      const isFlex = resources === influence && resources > 0;
-
-      if (isFlex) {
-        // Flex planets only count towards flex totals
-        acc.flex.totalFlex += resources; // Use resources value since they're equal
-        if (!isExhausted) {
-          acc.flex.currentFlex += resources;
-        }
-      } else {
-        // Non-flex planets count towards total always
-        acc.total.totalResources += resources;
-        acc.total.totalInfluence += influence;
-
-        // Add to current if not exhausted
-        if (!isExhausted) {
-          acc.total.currentResources += resources;
-          acc.total.currentInfluence += influence;
-        }
-
-        // Optimal calculation for non-flex planets
-        if (resources > influence) {
-          acc.optimal.totalResources += resources;
-          if (!isExhausted) acc.optimal.currentResources += resources;
-        } else if (influence > resources) {
-          acc.optimal.totalInfluence += influence;
-          if (!isExhausted) acc.optimal.currentInfluence += influence;
-        }
-        // Note: We don't handle the equal case here since it's already handled as flex
-      }
-
-      return acc;
-    },
-    {
-      total: {
-        currentResources: 0,
-        totalResources: 0,
-        currentInfluence: 0,
-        totalInfluence: 0,
-      },
-      optimal: {
-        currentResources: 0,
-        totalResources: 0,
-        currentInfluence: 0,
-        totalInfluence: 0,
-      },
-      flex: {
-        currentFlex: 0,
-        totalFlex: 0,
-      },
-    }
-  );
 };
 
 // Strategy card names and colors mapping
@@ -141,6 +68,7 @@ const SC_COLORS = {
 
 type Props = {
   playerData: PlayerData;
+  factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
 };
 
@@ -168,22 +96,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
     unitsOwned,
     leaders,
   } = props.playerData;
-
-  // Get strategy cards from player data, fallback to [1] for demo
-  const scs = props.playerData.scs || [3, 4];
-
-  // Use promissoryNotesInPlayArea from PlayerData
+  const scs = props.playerData.scs || [];
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-
-  // Get exhaustedPlanets from PlayerData
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
-
-  // Calculate planet economics properly
-  const planetEconomics = calculatePlanetEconomics(
-    planets,
-    exhaustedPlanets,
-    getPlanetData
-  );
+  const planetEconomics = calculatePlanetEconomics(planets, exhaustedPlanets);
 
   const UnitsArea = (
     <Surface
@@ -289,10 +205,6 @@ export default memo(function PlayerCard2Mid(props: Props) {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(200%)" },
         },
-
-        filter: props.playerData.passed
-          ? "brightness(0.9) saturate(0.4)"
-          : "none",
       }}
       radius="md"
     >
@@ -492,42 +404,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
                   >
                     <Stack>
                       <Grid gutter={4}>
-                        <Grid.Col
-                          span={{
-                            base: 12,
-                            md: 6,
-                          }}
-                        >
-                          <Stack gap={4}>
-                            {renderTechColumn("PROPULSION")}
-                          </Stack>
-                        </Grid.Col>
-                        <Grid.Col
-                          span={{
-                            base: 12,
-                            md: 6,
-                          }}
-                        >
-                          <Stack gap={4}>
-                            {renderTechColumn("CYBERNETIC")}
-                          </Stack>
-                        </Grid.Col>
-                        <Grid.Col
-                          span={{
-                            base: 12,
-                            md: 6,
-                          }}
-                        >
-                          <Stack gap={4}>{renderTechColumn("BIOTIC")}</Stack>
-                        </Grid.Col>
-                        <Grid.Col
-                          span={{
-                            base: 12,
-                            md: 6,
-                          }}
-                        >
-                          <Stack gap={4}>{renderTechColumn("WARFARE")}</Stack>
-                        </Grid.Col>
+                        <DynamicTechGrid
+                          renderTechColumn={renderTechColumn}
+                          layout="grid"
+                        />
                       </Grid>
                     </Stack>
                   </Surface>
@@ -611,7 +491,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
           <Grid.Col span={12}>
             <Nombox
               capturedUnits={props.playerData.nombox || {}}
-              colorToFaction={props.colorToFaction}
+              factionToColor={props.factionToColor}
             />
           </Grid.Col>
         </Grid>

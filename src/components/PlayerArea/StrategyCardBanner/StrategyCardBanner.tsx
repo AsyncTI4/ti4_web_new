@@ -1,6 +1,7 @@
 import { Box, Group, Text } from "@mantine/core";
 import { SpeakerToken } from "../SpeakerToken";
 import { Shimmer } from "../Shimmer/Shimmer";
+import { SC_NUMBER_COLORS } from "../../../data/strategyCardColors";
 import styles from "./StrategyCardBanner.module.css";
 
 interface Props {
@@ -9,18 +10,6 @@ interface Props {
   color: string;
   isSpeaker: boolean;
 }
-
-// Strategy card color mapping to Mantine colors for number display
-const SC_NUMBER_COLORS = {
-  red: "red.9",
-  orange: "orange.9",
-  yellow: "yellow.9",
-  green: "green.9",
-  teal: "teal.9",
-  cyan: "cyan.9",
-  blue: "blue.9",
-  purple: "violet.9",
-} as const;
 
 export function StrategyCardBanner({ number, text, color, isSpeaker }: Props) {
   const numberColor =

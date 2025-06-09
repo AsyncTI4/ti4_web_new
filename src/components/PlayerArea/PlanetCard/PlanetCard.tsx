@@ -1,14 +1,13 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
 import { useState } from "react";
-// @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
-import { planets } from "../../../data/planets";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import { cdnImage } from "../../../data/cdnImage";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { PlanetDetailsCard } from "../PlanetDetailsCard";
 import styles from "./PlanetCard.module.css";
+import { getPlanetData } from "@/lookup/planets";
 
 type Props = {
   planetId: string;
@@ -24,8 +23,8 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
     return null;
   }
 
-  const planetType = planetData.planetType as PlanetType;
-  const traitIconKey = getTraitIconKey(planetData.planetType);
+  const planetType = planetData.planetType;
+  const traitIconKey = getTraitIconKey(planetData.planetType!);
 
   // Get all tech skip icons for this planet
   const techSkipIconElements =
@@ -67,7 +66,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
   const isLegendary = !!planetData.legendaryAbilityText;
 
   // Get CSS variable names for planet type
-  const getCSSVariables = (planetType: PlanetType) => {
+  const getCSSVariables = (planetType: string) => {
     const typeKey = planetType?.toLowerCase() || "default";
     // Map known planet types, fallback to 'default' for unknown types
     const validTypes = ["cultural", "hazardous", "industrial", "faction", "mr"];
@@ -91,7 +90,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
               ? `${styles.legendaryBackground} ${styles.legendary}`
               : ""
           } ${exhausted ? styles.exhausted : ""} ${styles.planetCard}`}
-          style={getCSSVariables(planetType) as React.CSSProperties}
+          style={getCSSVariables(planetType!) as React.CSSProperties}
         >
           {/* Hover highlight overlay */}
           <Box className={styles.planetCardHighlight} />
@@ -174,11 +173,14 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
   );
 }
 
-const getPlanetData = (planetId: string) => {
-  return planets[planetId as keyof typeof planets];
-};
-
 const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
+
+const VALID_TECH_SPECIALTIES = new Set([
+  "biotic",
+  "propulsion",
+  "cybernetic",
+  "warfare",
+]);
 
 const getTraitIconKey = (
   planetType: string
@@ -189,22 +191,7 @@ const getTraitIconKey = (
     : null;
 };
 
-const VALID_TECH_SPECIALTIES = new Set([
-  "biotic",
-  "propulsion",
-  "cybernetic",
-  "warfare",
-]);
-
 const getTechSkipIconKey = (techSpecialty: string): string | null => {
   const lowercase = techSpecialty.toLowerCase();
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
-
-type PlanetType =
-  | "CULTURAL"
-  | "HAZARDOUS"
-  | "INDUSTRIAL"
-  | "FACTION"
-  | "MR"
-  | "DEFAULT";

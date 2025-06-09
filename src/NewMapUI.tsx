@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   AppShell,
@@ -17,7 +17,7 @@ import {
   IconRefresh,
   IconGripVertical,
 } from "@tabler/icons-react";
-import { usePlayerData } from "./hooks/usePlayerData";
+import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
 import { useMapSocket } from "./hooks/useMapSocket";
 import { ReadyState } from "react-use-websocket";
@@ -31,87 +31,85 @@ import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
 import PlayerCard2Mid from "./components/PlayerCard2Mid";
-import PlayerCardCompact from "./components/PlayerCard2Compact";
-import { cdnImage } from "./data/cdnImage";
+import PlayerCardSidebar from "./components/PlayerCardSidebar";
 import FactionCoordinateBoxes from "./components/FactionCoordinateBoxes";
 import classes from "./components/PlayerAreasPage4.module.css";
 import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
-import { units } from "./data/units";
-import { PlayerData } from "./data/pbd10242";
+import { lookupUnitId } from "./lookup/units";
+import { FactionTabBar } from "./components/FactionTabBar";
 
-// Zoom configuration from ScrollMap
-const defaultZoomIndex = 2;
-const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
-
-// Function to lookup units.ts ID from async ID and faction
-function lookupUnitId(
-  asyncId: string,
-  faction: string,
-  playerData?: PlayerData
-): string | null {
-  if (!playerData?.unitsOwned) {
-    // Fallback to old logic if no player data
-    return lookupUnitIdFallback(asyncId, faction);
-  }
-
-  // First try to find a faction-specific unit that the player owns
-  const factionSpecificUnits = units.filter(
-    (unit) =>
-      unit.asyncId === asyncId &&
-      unit.faction &&
-      unit.faction.toLowerCase() === faction.toLowerCase() &&
-      playerData.unitsOwned.includes(unit.id)
+// Custom hook for resizable sidebar
+function useResizableSidebar(initialWidth: number = 25) {
+  const [sidebarWidth, setSidebarWidth] = useState(initialWidth);
+  const [isDragging, setIsDragging] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(
+    window.innerWidth * ((100 - initialWidth) / 100)
   );
 
-  if (factionSpecificUnits.length > 0) {
-    // Prefer upgraded versions (they typically have upgradesFromUnitId)
-    const upgradedUnit = factionSpecificUnits.find(
-      (unit) => unit.upgradesFromUnitId
-    );
-    return upgradedUnit?.id || factionSpecificUnits[0].id;
-  }
+  const handleSidebarMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
 
-  // Fall back to generic units that the player owns
-  const genericUnits = units.filter(
-    (unit) =>
-      unit.asyncId === asyncId &&
-      !unit.faction &&
-      playerData.unitsOwned.includes(unit.id)
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging) return;
+
+      const containerWidth = window.innerWidth;
+      const newSidebarWidth = Math.max(
+        15,
+        Math.min(50, ((containerWidth - e.clientX) / containerWidth) * 100)
+      );
+      setSidebarWidth(newSidebarWidth);
+    },
+    [isDragging]
   );
 
-  if (genericUnits.length > 0) {
-    // Prefer upgraded versions
-    const upgradedUnit = genericUnits.find((unit) => unit.upgradesFromUnitId);
-    return upgradedUnit?.id || genericUnits[0].id;
-  }
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
-  // Final fallback to old logic
-  return lookupUnitIdFallback(asyncId, faction);
+  // Add global mouse event listeners for dragging
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  // Handle window resize to update container width
+  useEffect(() => {
+    const handleResize = () => {
+      setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [sidebarWidth]);
+
+  // Update container width when sidebar width changes
+  useEffect(() => {
+    setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
+  }, [sidebarWidth]);
+
+  return {
+    sidebarWidth,
+    isDragging,
+    containerWidth,
+    handleSidebarMouseDown,
+  };
 }
 
-// Fallback function (original logic)
-function lookupUnitIdFallback(asyncId: string, faction: string): string | null {
-  // First try to find a faction-specific unit
-  const factionSpecificUnit = units.find(
-    (unit) =>
-      unit.asyncId === asyncId &&
-      unit.faction &&
-      unit.faction.toLowerCase() === faction.toLowerCase()
-  );
-
-  if (factionSpecificUnit) {
-    return factionSpecificUnit.id;
-  }
-
-  // Fall back to generic unit
-  const genericUnit = units.find(
-    (unit) => unit.asyncId === asyncId && !unit.faction
-  );
-
-  return genericUnit?.id || null;
-}
-
-function PlayerAreasPage4() {
+function NewMapUI() {
   const params = useParams<{ gameId: string }>();
   const gameId = params.gameId!;
 
@@ -135,9 +133,9 @@ function PlayerAreasPage4() {
   // Add hover delay state and ref for timeout
   const [hoverTimeout, setHoverTimeout] = useState<number | null>(null);
 
-  // Add resizable sidebar state
-  const [sidebarWidth, setSidebarWidth] = useState(25); // percentage
-  const [isDragging, setIsDragging] = useState(false);
+  // Use the resizable sidebar hook
+  const { sidebarWidth, isDragging, containerWidth, handleSidebarMouseDown } =
+    useResizableSidebar(25);
 
   useEffect(() => {
     document.title = `${gameId} - Player Areas | Async TI`;
@@ -169,9 +167,6 @@ function PlayerAreasPage4() {
   const [imageNaturalWidth, setImageNaturalWidth] = useState<
     number | undefined
   >(undefined);
-  const [containerWidth, setContainerWidth] = useState(
-    window.innerWidth * 0.75
-  );
 
   const {
     zoom,
@@ -186,37 +181,14 @@ function PlayerAreasPage4() {
     typeof navigator !== "undefined" &&
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
 
-  // Handle window resize to update container width
-  useEffect(() => {
-    const handleResize = () => {
-      setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [sidebarWidth]);
-
-  // Update container width when sidebar width changes
-  useEffect(() => {
-    setContainerWidth(window.innerWidth * ((100 - sidebarWidth) / 100));
-  }, [sidebarWidth]);
-
-  const { data, isLoading, isError } = usePlayerData(gameId);
-  const playerData = data?.playerData;
-  const factionCoordinates = data?.factionCoordinates;
-
-  // Create color to faction mapping from player data
-  const colorToFaction = useMemo(
-    () =>
-      playerData?.reduce(
-        (acc, player) => {
-          acc[player.color] = player.faction;
-          return acc;
-        },
-        {} as Record<string, string>
-      ) || {},
-    [playerData]
-  );
+  const {
+    playerData,
+    colorToFaction,
+    factionToColor,
+    factionCoordinates,
+    isLoading,
+    isError,
+  } = usePlayerDataEnhanced(gameId);
 
   // Optimized hover handlers - now include unit ID with delay
   const handleMouseEnter = useCallback(
@@ -270,47 +242,6 @@ function PlayerAreasPage4() {
   const handleTabMouseLeave = useCallback(() => {
     setActiveUnit(null);
   }, []);
-
-  // Add drag handlers for resizing
-  const handleSidebarMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!isDragging) return;
-
-      const containerWidth = window.innerWidth;
-      const newSidebarWidth = Math.max(
-        15,
-        Math.min(50, ((containerWidth - e.clientX) / containerWidth) * 100)
-      );
-      setSidebarWidth(newSidebarWidth);
-    },
-    [isDragging]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  // Add global mouse event listeners for dragging
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-        document.body.style.cursor = "";
-        document.body.style.userSelect = "";
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -479,49 +410,14 @@ function PlayerAreasPage4() {
                 >
                   {/* Faction Tab Bar */}
                   {playerData && (
-                    <Box className={classes.factionTabBar}>
-                      <Group gap={4} justify="center" wrap="wrap">
-                        {playerData.map((player) => {
-                          const isActive =
-                            activeUnit?.faction === player.faction;
-                          const isPinned = selectedFaction === player.faction;
-
-                          return (
-                            <Box
-                              key={player.color}
-                              onClick={() => handleTabClick(player.faction)}
-                              onMouseEnter={() =>
-                                handleTabMouseEnter(player.faction)
-                              }
-                              onMouseLeave={() => handleTabMouseLeave()}
-                              className={`${classes.factionTab} ${
-                                isPinned
-                                  ? classes.factionTabPinned
-                                  : isActive
-                                    ? classes.factionTabActive
-                                    : ""
-                              }`}
-                            >
-                              <Image
-                                src={cdnImage(
-                                  `/factions/${player.faction}.png`
-                                )}
-                                alt={player.faction}
-                                w={24}
-                                h={24}
-                                className={`${classes.factionImage} ${
-                                  isPinned
-                                    ? classes.factionImagePinned
-                                    : isActive
-                                      ? classes.factionImageActive
-                                      : ""
-                                }`}
-                              />
-                            </Box>
-                          );
-                        })}
-                      </Group>
-                    </Box>
+                    <FactionTabBar
+                      playerData={playerData}
+                      activeUnit={activeUnit}
+                      selectedFaction={selectedFaction}
+                      onTabClick={handleTabClick}
+                      onTabMouseEnter={handleTabMouseEnter}
+                      onTabMouseLeave={handleTabMouseLeave}
+                    />
                   )}
 
                   {isLoading && (
@@ -564,9 +460,10 @@ function PlayerAreasPage4() {
 
                         return (
                           <Box className={classes.playerCard}>
-                            <PlayerCardCompact
+                            <PlayerCardSidebar
                               playerData={playerToShow}
-                              colorToFaction={colorToFaction}
+                              factionToColor={factionToColor!}
+                              colorToFaction={colorToFaction!}
                             />
                           </Box>
                         );
@@ -622,7 +519,8 @@ function PlayerAreasPage4() {
                       <PlayerCard2Mid
                         key={player.color}
                         playerData={player}
-                        colorToFaction={colorToFaction}
+                        factionToColor={factionToColor!}
+                        colorToFaction={colorToFaction!}
                       />
                     ))}
                   </SimpleGrid>
@@ -636,84 +534,4 @@ function PlayerAreasPage4() {
   );
 }
 
-// Custom zoom hook adapted from ScrollMap
-function useZoom(
-  imageNaturalWidth: number | undefined,
-  containerWidth: number
-) {
-  const [zoomIndex, setZoomIndex] = useState(() => {
-    const savedZoomIndex = localStorage.getItem("zoomIndex");
-    if (savedZoomIndex !== null) {
-      return parseInt(savedZoomIndex, 10);
-    }
-    return isTouchDevice() ? 0 : defaultZoomIndex;
-  });
-
-  const [zoomFitToScreen, setZoomFitToScreen] = useState(() => {
-    const savedZoomFitToScreen = localStorage.getItem("zoomFitToScreen");
-    return savedZoomFitToScreen === "true";
-  });
-
-  const handleZoomIn = useCallback(() => {
-    setZoomIndex((prevIndex) => {
-      const newIndex = Math.min(prevIndex + 1, zoomLevels.length - 1);
-      changeZoomIndex(newIndex);
-      changeZoomFitToScreen(false);
-      return newIndex;
-    });
-  }, []);
-
-  const handleZoomOut = useCallback(() => {
-    setZoomIndex((prevIndex) => {
-      const newIndex = Math.max(prevIndex - 1, 0);
-      changeZoomIndex(newIndex);
-      changeZoomFitToScreen(false);
-      return newIndex;
-    });
-  }, []);
-
-  const handleZoomReset = useCallback(() => {
-    const resetIndex = isTouchDevice() ? 0 : defaultZoomIndex;
-    changeZoomIndex(resetIndex);
-    changeZoomFitToScreen(false);
-  }, []);
-
-  const changeZoomIndex = (val: number) => {
-    setZoomIndex(val);
-    localStorage.setItem("zoomIndex", val.toString());
-  };
-
-  const changeZoomFitToScreen = (val: boolean) => {
-    setZoomFitToScreen(val);
-    localStorage.setItem("zoomFitToScreen", val.toString());
-  };
-
-  const handleZoomScreenSize = useCallback(() => {
-    changeZoomFitToScreen(!zoomFitToScreen);
-  }, [zoomFitToScreen]);
-
-  const overlayZoom = imageNaturalWidth
-    ? containerWidth / imageNaturalWidth
-    : 1;
-  const zoom = zoomLevels[zoomIndex];
-
-  return {
-    zoom: zoomFitToScreen ? 1 : zoom,
-    overlayZoom: zoomFitToScreen ? overlayZoom : zoom,
-    zoomFitToScreen,
-    handleZoomIn,
-    handleZoomOut,
-    handleZoomReset,
-    handleZoomScreenSize,
-  };
-}
-
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    (navigator as any).msMaxTouchPoints > 0
-  );
-}
-
-export default PlayerAreasPage4;
+export default NewMapUI;

@@ -19,11 +19,6 @@ export function Shimmer({
 
   return (
     <Box className={combinedClassName} {...boxProps}>
-      {/* Top shimmer */}
-      <Box className={`${gradientClasses.shimmer} ${styles.topShimmer}`} />
-      {/* Bottom shimmer */}
-      <Box className={`${gradientClasses.shimmer} ${styles.bottomShimmer}`} />
-
       {/* Subtle diagonal pattern for blue shimmers */}
       {color === "blue" && (
         <Box

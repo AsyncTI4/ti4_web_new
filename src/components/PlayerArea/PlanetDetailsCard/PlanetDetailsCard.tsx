@@ -1,10 +1,10 @@
 import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
 import InfluenceIcon from "../../InfluenceIcon";
-import { planets } from "../../../data/planets";
-import { cdnImage } from "../../../data/cdnImage";
+import { cdnImage } from "@/data/cdnImage";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import classes from "./PlanetDetailsCard.module.css";
+import { getPlanetData } from "@/lookup/planets";
 
 type Props = {
   planetId: string;
@@ -61,7 +61,7 @@ export function PlanetDetailsCard({ planetId }: Props) {
       );
     }
 
-    const traitKey = planetData.planetType.toLowerCase();
+    const traitKey = planetData.planetType!.toLowerCase();
     if (["cultural", "hazardous", "industrial"].includes(traitKey)) {
       return (
         <Box
@@ -110,7 +110,7 @@ export function PlanetDetailsCard({ planetId }: Props) {
               {planetData.name}
             </Text>
             <Text size="sm" c="gray.3" fw={500} fs="italic">
-              {getPlanetTypeDisplay(planetData.planetType)}
+              {getPlanetTypeDisplay(planetData.planetType!)}
             </Text>
           </Stack>
         </Group>
@@ -191,8 +191,3 @@ export function PlanetDetailsCard({ planetId }: Props) {
     </Box>
   );
 }
-
-// Helper function to get planet data by ID
-const getPlanetData = (planetId: string) => {
-  return planets[planetId as keyof typeof planets];
-};

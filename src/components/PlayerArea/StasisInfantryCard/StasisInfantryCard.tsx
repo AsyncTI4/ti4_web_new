@@ -1,7 +1,7 @@
-import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
+import { Stack, Box, Group, Text, Flex } from "@mantine/core";
 import { colors } from "../../../data/colors";
 import styles from "./StasisInfantryCard.module.css";
-import { cdnImage } from "../../../data/cdnImage";
+import { Unit } from "../../shared/Unit";
 
 type Props = {
   reviveCount: number;
@@ -20,10 +20,7 @@ export function StasisInfantryCard({ reviveCount, color }: Props) {
       <Box className={styles.innerGlow} />
 
       <Flex className={styles.imageContainer}>
-        <Image
-          src={cdnImage(`/units/${colorAlias}_gf.png`)}
-          className={styles.unitImage}
-        />
+        <Unit unitType="gf" colorAlias={colorAlias} />
       </Flex>
 
       <Stack className={styles.infoStack}>

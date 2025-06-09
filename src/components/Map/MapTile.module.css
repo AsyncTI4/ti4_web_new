@@ -1,0 +1,58 @@
+.mapTile {
+  position: absolute;
+  pointer-events: none;
+}
+
+.tileContainer {
+  position: relative;
+}
+
+.tile {
+  position: absolute;
+  pointer-events: auto;
+}
+
+/* Interactive states */
+.mapTile.hovered .tile {
+  filter: brightness(1.1);
+  transition: filter 0.2s ease-in-out;
+}
+
+.mapTile.selected .tile {
+  filter: brightness(1.2) saturate(1.1);
+  outline: 3px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+  border-radius: var(--mantine-radius-sm);
+  transition: all 0.2s ease-in-out;
+}
+
+.mapTile.selected.hovered .tile {
+  filter: brightness(1.3) saturate(1.2);
+}
+
+/* Focus styles for accessibility */
+.tile:focus {
+  outline: 2px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+}
+
+.ringPosition {
+  position: absolute;
+  top: 270px;
+  left: 215px;
+  color: white;
+  font-family: 'Slider', system-ui, -apple-system, sans-serif;
+  font-weight: bold;
+  font-size: 26px;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black,
+    -2px 0 0 black,
+    2px 0 0 black,
+    0 -2px 0 black,
+    0 2px 0 black;
+  pointer-events: none;
+  z-index: 10;
+}

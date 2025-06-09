@@ -5,16 +5,9 @@
   border-radius: var(--mantine-radius-sm);
 }
 
-.leaderCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.1);
-}
 
 .shimmerCard:hover {
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3), 0 0 12px rgba(74, 222, 128, 0.2);
-}
-
-.standardCard:hover {
-  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2), 0 0 8px rgba(156, 163, 175, 0.2);
+  border-color: rgba(74, 222, 128, 0.6);
 }
 
 /* Layout components */
@@ -35,10 +28,18 @@
   border-radius: 8px;
 }
 
+.shimmerContainer:hover {
+  background: rgba(34, 197, 94, 0.1);
+}
+
 .standardContainer {
   padding: 2px 14px;
   background: linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%);
   border: 1px solid #6b7280;
+}
+
+.standardContainer:hover {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(107, 114, 128, 0.15) 100%);
 }
 
 .exhaustedContainer {

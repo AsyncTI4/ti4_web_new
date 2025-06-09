@@ -2,25 +2,13 @@ import { Box, Image, Group, Text } from "@mantine/core";
 import { Surface } from "./PlayerArea/Surface";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
-import { colors } from "../data/colors";
-import { CapturedUnitsData } from "../data/pbd10242";
+import { CapturedUnitsData } from "../data/types";
 import styles from "./Nombox.module.css";
+import { getColorAlias } from "@/lookup/colors";
 
 type Props = {
   capturedUnits: CapturedUnitsData;
-  colorToFaction: Record<string, string>;
-};
-
-// Helper function to get color alias for unit images
-const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
-
-  const colorData = colors.find(
-    (c) =>
-      c.aliases.includes(color.toLowerCase()) ||
-      c.name.toLowerCase() === color.toLowerCase()
-  );
-  return colorData?.alias || "pnk"; // fallback to pink if color not found
+  factionToColor: Record<string, string>;
 };
 
 // Parse unit string like "dread,3" or "carrier,4"
@@ -42,20 +30,11 @@ const parseUnitString = (unitString: string) => {
   };
 };
 
-export function Nombox({ capturedUnits, colorToFaction }: Props) {
+export function Nombox({ capturedUnits, factionToColor }: Props) {
   // Early return if no captured units
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
     return null;
   }
-
-  // Helper function to find player color for a given faction
-  const getPlayerColorForFaction = (factionName: string): string => {
-    // Find the color that maps to this faction
-    const colorEntry = Object.entries(colorToFaction).find(
-      ([, faction]) => faction.toLowerCase() === factionName.toLowerCase()
-    );
-    return colorEntry ? colorEntry[0] : "pnk"; // fallback to pink if not found
-  };
 
   return (
     <Surface
@@ -144,7 +123,7 @@ export function Nombox({ capturedUnits, colorToFaction }: Props) {
         }}
       >
         {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-          const playerColor = getPlayerColorForFaction(factionName);
+          const playerColor = factionToColor[factionName];
           const colorAlias = getColorAlias(playerColor);
 
           return (

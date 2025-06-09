@@ -26,7 +26,6 @@ export function ScoredSecret({ secretId, score, onClick }: Props) {
             className={`${redClasses.iconFilter} ${styles.icon}`}
           />
           <Text size="xs" fw={700} c="white" className={styles.textContainer}>
-            {secretName}{" "}
             <Text
               span
               size="xs"
@@ -34,8 +33,9 @@ export function ScoredSecret({ secretId, score, onClick }: Props) {
               c="gray.4"
               className={styles.scoreText}
             >
-              ({score})
+              ({score}){" "}
             </Text>
+            {secretName}
           </Text>
         </Box>
       </Shimmer>

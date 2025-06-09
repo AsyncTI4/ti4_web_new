@@ -6,6 +6,7 @@ import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { UnitDetailsCard } from "../UnitDetailsCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
+import { Unit } from "@/components/shared/Unit";
 
 type Props = {
   unitId: string;
@@ -56,9 +57,6 @@ export function UnitCard({ unitId, color, deployedCount }: Props) {
           className={`${cardClass} ${styles.cardStack}`}
           onClick={() => setOpened((o) => !o)}
         >
-          {/* Enhanced top highlight */}
-          <Box className={`${highlightClass} ${styles.topHighlight}`} />
-
           {/* Upgraded unit special effects */}
           {isUpgraded && (
             <>
@@ -67,9 +65,6 @@ export function UnitCard({ unitId, color, deployedCount }: Props) {
 
               {/* Subtle inner glow */}
               <Box className={styles.innerGlow} />
-
-              {/* Animated shimmer effect */}
-              <Box className={styles.shimmerEffect} />
             </>
           )}
 
@@ -86,8 +81,10 @@ export function UnitCard({ unitId, color, deployedCount }: Props) {
           )}
 
           <Flex className={styles.imageContainer}>
-            <Image
-              src={cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`)}
+            <Unit
+              unitType={unitData.asyncId}
+              colorAlias={colorAlias}
+              faction={unitData.faction}
               className={styles.unitImage}
             />
           </Flex>
