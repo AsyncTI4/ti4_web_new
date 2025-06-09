@@ -1,5 +1,5 @@
 import { Box, Group, Image, Text } from "@mantine/core";
-import { IconFlask, IconComponents } from "@tabler/icons-react";
+import { IconFlask, IconHandStop } from "@tabler/icons-react";
 import { cdnImage } from "../data/cdnImage";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
@@ -133,7 +133,7 @@ export function FactionTabBar({
                 : ""
           }`}
         >
-          <IconComponents
+          <IconHandStop
             size={16}
             className={`${classes.icon} ${classes.iconComp} ${
               selectedArea?.type === "components"
@@ -152,7 +152,7 @@ export function FactionTabBar({
                   : ""
             }`}
           >
-            PARTS
+            HAND
           </Text>
         </Box>
       </Group>

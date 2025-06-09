@@ -9,7 +9,6 @@ import {
   Tabs,
   Stack,
 } from "@mantine/core";
-import { Atom } from "react-loading-indicators";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { usePlayerData } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -78,7 +77,7 @@ export function NewMapUI() {
   const [sidebarWidth, setSidebarWidth] = useState(25);
   const [isDragging, setIsDragging] = useState(false);
 
-  const { data, isLoading, isError } = usePlayerData(gameId);
+  const { data, isError } = usePlayerData(gameId);
   const playerData = data?.playerData;
 
   // Calculate tile positions from playerData response
@@ -327,7 +326,7 @@ export function NewMapUI() {
                         style={{
                           position: "absolute",
                           left: `${scaledX}px`,
-                          top: `${scaledY - 50}px`,
+                          top: `${scaledY - 25}px`,
                           zIndex: 10000000,
                           pointerEvents: "none",
                           transform: "translate(-50%, -100%)", // Center horizontally, position above the unit

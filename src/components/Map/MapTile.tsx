@@ -68,13 +68,17 @@ export const MapTile = React.memo<Props>(
             entityType={stack.entityType}
             onUnitMouseOver={
               onUnitMouseOver
-                ? () =>
+                ? () => {
+                    // Convert relative unit position to world coordinates
+                    const worldX = position.x + stack.x;
+                    const worldY = position.y + stack.y;
                     onUnitMouseOver(
                       stack.faction,
                       stack.entityId,
-                      stack.x,
-                      stack.y
-                    )
+                      worldX,
+                      worldY
+                    );
+                  }
                 : undefined
             }
             onUnitMouseLeave={
