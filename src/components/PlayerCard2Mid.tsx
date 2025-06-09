@@ -24,7 +24,6 @@ import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { PlayerCardHeader } from "./PlayerArea/PlayerCardHeader";
 import { CCPool } from "./PlayerArea/CCPool";
 import { techs as techsData } from "../data/tech";
 import { PlayerData } from "../data/types";
@@ -193,13 +192,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
       color={color}
       faction={faction}
       paperProps={{
-        style: {
-          height: "100%",
-          "@keyframes shimmer": {
-            "0%": { transform: "translateX(-100%)" },
-            "100%": { transform: "translateX(200%)" },
-          },
-        },
+        style: { height: "100%" },
       }}
     >
       {/* Header Section */}

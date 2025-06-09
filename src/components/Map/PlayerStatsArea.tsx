@@ -161,8 +161,8 @@ export function PlayerStatsArea({
           </div>
         )}
 
-      {/* HTML overlay for third hexagon speaker token */}
-      {thirdHex && playerData?.isSpeaker && (
+      {/* HTML overlay for third hexagon trade goods and commodities */}
+      {thirdHex && playerData && (
         <div
           style={{
             position: "absolute",
@@ -172,10 +172,59 @@ export function PlayerStatsArea({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <img
-            src={cdnImage("/tokens/token_speaker.png")}
-            alt="Speaker Token"
-          />
+          <Group
+            gap="md"
+            align="center"
+            style={{ minWidth: 170, justifyContent: "center" }}
+          >
+            {/* Trade Goods */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={cdnImage("/player_area/pa_cardbacks_tradegoods.png")}
+                style={{ height: 48, marginTop: 16 }}
+              />
+              <Text size="24px" fw={600} c="white" ff="heading">
+                {playerData.tg || 0}
+              </Text>
+            </div>
+
+            {/* Commodities */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <img
+                src={cdnImage("/player_area/pa_cardbacks_commodities.png")}
+                style={{ height: 48, marginTop: 16 }}
+              />
+              <Text
+                size="24px"
+                fw={600}
+                c="white"
+                style={{ marginTop: 4 }}
+                ff="heading"
+              >
+                {playerData.commodities || 0}/{playerData.commoditiesTotal || 0}
+              </Text>
+            </div>
+          </Group>
+          {/* Speaker Token if applicable */}
+          {playerData.isSpeaker && (
+            <img
+              src={cdnImage("/tokens/token_speaker.png")}
+              alt="Speaker Token"
+            />
+          )}
         </div>
       )}
     </>
