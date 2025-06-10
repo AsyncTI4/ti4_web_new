@@ -1,0 +1,283 @@
+/* Sci-fi blue-gray theme with shimmer effects */
+
+.gamesLink {
+  color: #f97316 !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.gamesLink:hover {
+  color: #fb923c !important;
+  text-shadow: 0 1px 3px rgba(249, 115, 22, 0.4);
+}
+
+.tabsContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.tabs {
+  width: 100%;
+}
+
+.tabsList {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  background: transparent;
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  padding: 4px;
+  position: relative;
+}
+
+.tabsList::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(147, 197, 253, 0.05) 50%,
+    transparent 100%);
+  border-radius: 7px;
+  pointer-events: none;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.tabsList::-webkit-scrollbar {
+  display: none;
+}
+
+.tabsList [role="tab"] {
+  flex-shrink: 0;
+}
+
+.tab {
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 8px 12px;
+  margin: 2px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(148, 163, 184, 0.1);
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.1) 50%,
+    transparent 100%);
+  transition: left 0.5s ease;
+}
+
+.tab:hover {
+  background: rgba(37, 99, 235, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(147, 197, 253, 0.2);
+}
+
+.tab:hover::before {
+  left: 100%;
+}
+
+.tab[data-active="true"] {
+  background: rgba(37, 99, 235, 0.3);
+  border-color: rgba(59, 130, 246, 0.6);
+  color: rgba(255, 255, 255, 1) !important;
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.3),
+    inset 0 1px 0 rgba(147, 197, 253, 0.3),
+    0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+.tabText {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.tabInput {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.tabInput input {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border: none !important;
+}
+
+.editIcon {
+  color: rgba(148, 163, 184, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editIcon:hover {
+  color: rgba(59, 130, 246, 0.8);
+  transform: scale(1.1);
+}
+
+.closeButton {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: rgba(248, 113, 113, 0.9) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 6px !important;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(239, 68, 68, 0.4) !important;
+  color: rgba(255, 255, 255, 1) !important;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  transform: scale(1.05);
+}
+
+/* Combobox/Dropdown styling */
+.combobox {
+  width: 100%;
+}
+
+.comboboxInput {
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.comboboxInput::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.05) 50%,
+    transparent 100%);
+  animation: shimmer 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.comboboxInput input {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.comboboxInput:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+.dropdown {
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.dropdownOption {
+  color: rgba(255, 255, 255, 0.85) !important;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 2px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdownOption::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.1) 50%,
+    transparent 100%);
+  transition: left 0.3s ease;
+}
+
+.dropdownOption:hover {
+  background: rgba(37, 99, 235, 0.2);
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.dropdownOption:hover::before {
+  left: 100%;
+}
+
+.dropdownOption[data-combobox-selected="true"] {
+  background: rgba(37, 99, 235, 0.3);
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+.dropdownText {
+  color: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tab {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .tabsList {
+    padding: 3px;
+  }
+}

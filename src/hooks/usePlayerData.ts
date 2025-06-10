@@ -16,11 +16,12 @@ export function usePlayerData(gameId: string) {
 }
 
 export function usePlayerDataEnhanced(gameId: string) {
-  const { data, isLoading, isError } = usePlayerData(gameId);
+  const { data, isLoading, isError, refetch } = usePlayerData(gameId);
+
   const enhancedPlayerData = useMemo(
     () => (data ? enhancePlayerData(data) : undefined),
     [data]
   );
 
-  return { ...enhancedPlayerData, isLoading, isError };
+  return { ...enhancedPlayerData, isLoading, isError, refetch };
 }

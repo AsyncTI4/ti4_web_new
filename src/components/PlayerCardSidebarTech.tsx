@@ -25,7 +25,16 @@ export default function PlayerCardSidebarTech(props: Props) {
       return techData?.types[0] === techType;
     });
 
-    const techElements = filteredTechs.map((techId, index) => (
+    // Sort techs by tier (lower tier first)
+    const sortedTechs = filteredTechs.sort((a, b) => {
+      const techDataA = getTechData(a);
+      const techDataB = getTechData(b);
+      const tierA = techDataA ? getTechTier(techDataA.requirements) : 999;
+      const tierB = techDataB ? getTechTier(techDataB.requirements) : 999;
+      return tierA - tierB;
+    });
+
+    const techElements = sortedTechs.map((techId, index) => (
       <Tech key={index} techId={techId} />
     ));
 
@@ -120,4 +129,17 @@ export default function PlayerCardSidebarTech(props: Props) {
 
 const getTechData = (techId: string) => {
   return techsData.find((tech) => tech.alias === techId);
+};
+
+// Helper function to get tier from requirements
+const getTechTier = (requirements?: string): number => {
+  if (!requirements) return 0;
+
+  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
+  const matches = requirements.match(/(.)\1*/g);
+  if (matches && matches.length > 0) {
+    return matches[0].length;
+  }
+
+  return 0;
 };

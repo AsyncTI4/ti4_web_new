@@ -22,7 +22,7 @@ import LoginPage, { loginLoader } from "./LoginPage";
 import FrogGamePage from "./FrogGamePage";
 // @ts-ignore
 import LandingPage from "./LandingPage";
-import NewMapUI from "./NewMapUI";
+import MapTogglePage from "./MapTogglePage";
 
 const queryClient = new QueryClient();
 
@@ -40,8 +40,8 @@ const router = createBrowserRouter([
     element: <GamesPage />,
   },
   {
-    path: "/game/:gameId/newui",
-    element: <NewMapUI />,
+    path: "/game/:mapid/newui",
+    element: <MapTogglePage />,
   },
   {
     path: "/froggame/:discordid/:mapid",

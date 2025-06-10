@@ -58,19 +58,19 @@ export function UnitStack({
           zIndex: baseZIndex,
         }}
         onMouseEnter={
-          onUnitMouseOver
+          entityType === "unit" && onUnitMouseOver
             ? (e: React.MouseEvent<HTMLDivElement>) =>
                 onUnitMouseOver(stackKey, e)
             : undefined
         }
         onMouseLeave={
-          onUnitMouseLeave
+          entityType === "unit" && onUnitMouseLeave
             ? (e: React.MouseEvent<HTMLDivElement>) =>
                 onUnitMouseLeave(stackKey, e)
             : undefined
         }
         onMouseDown={
-          onUnitSelect
+          entityType === "unit" && onUnitSelect
             ? (e: React.MouseEvent<HTMLDivElement>) => onUnitSelect(stackKey, e)
             : undefined
         }
@@ -85,8 +85,8 @@ export function UnitStack({
         const stackOffsetX = -i * SPLAY_OFFSET_X; // Move west (left) by offset per unit
         const stackOffsetY = i * SPLAY_OFFSET_Y; // Slight movement south for depth
 
+        const unitKey = `${stackKey}-${i}`;
         const commonProps = {
-          key: `${stackKey}-${i}`,
           unitType,
           colorAlias,
           faction,
@@ -99,26 +99,29 @@ export function UnitStack({
             transform: "translate(-50%, -50%)",
             zIndex: baseZIndex + (count - 1 - i), // Higher z-index for northeast units (top of stack) + unit type priority
           },
-          onMouseEnter: onUnitMouseOver
-            ? (e: React.MouseEvent<HTMLImageElement>) =>
-                onUnitMouseOver(stackKey, e)
-            : undefined,
-          onMouseLeave: onUnitMouseLeave
-            ? (e: React.MouseEvent<HTMLImageElement>) =>
-                onUnitMouseLeave(stackKey, e)
-            : undefined,
-          onMouseDown: onUnitSelect
-            ? (e: React.MouseEvent<HTMLImageElement>) =>
-                onUnitSelect(stackKey, e)
-            : undefined,
+          onMouseEnter:
+            entityType === "unit" && onUnitMouseOver
+              ? (e: React.MouseEvent<HTMLImageElement>) =>
+                  onUnitMouseOver(stackKey, e)
+              : undefined,
+          onMouseLeave:
+            entityType === "unit" && onUnitMouseLeave
+              ? (e: React.MouseEvent<HTMLImageElement>) =>
+                  onUnitMouseLeave(stackKey, e)
+              : undefined,
+          onMouseDown:
+            entityType === "unit" && onUnitSelect
+              ? (e: React.MouseEvent<HTMLImageElement>) =>
+                  onUnitSelect(stackKey, e)
+              : undefined,
         };
 
         if (entityType === "token") {
-          return <Token {...commonProps} />;
+          return <Token key={unitKey} tokenId={unitType} {...commonProps} />;
         } else if (entityType === "attachment") {
-          return <Attachment {...commonProps} />;
+          return <Attachment key={unitKey} {...commonProps} />;
         } else {
-          return <Unit {...commonProps} />;
+          return <Unit key={unitKey} {...commonProps} />;
         }
       })}
     </>

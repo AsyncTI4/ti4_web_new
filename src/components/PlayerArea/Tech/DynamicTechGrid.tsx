@@ -28,7 +28,6 @@ export function DynamicTechGrid({
   if (categoriesWithTechs.length === 0) return null;
 
   if (layout === "grid") {
-    // For PlayerCard2Mid - uses Grid.Col layout
     return (
       <>
         {categoriesWithTechs.map((category) => (

@@ -60,13 +60,76 @@ export type TileUnitData = {
   ccs: string[];
 };
 
+export type LawInPlay = {
+  id: string;
+  name: string;
+  uniqueId: number;
+  type: string;
+  target: string;
+  text1: string;
+  text2: string;
+  mapText: string;
+  forEmoji: string;
+  againstEmoji: string;
+  source: string;
+  electedInfo: string | null;
+  electedFaction: string | null;
+  electedColor: string | null;
+  electedDisplayName: string | null;
+  electedType: string;
+  controlTokens: string[];
+  displaysElectedFaction: boolean;
+};
+
+export type StrategyCard = {
+  initiative: number;
+  name: string;
+  id: string;
+  picked: boolean;
+  played: boolean;
+  exhausted: boolean;
+  tradeGoods: number;
+  pickedByFaction: string | null;
+};
+
+type CardPoolData = {
+  secretObjectiveDeckSize: number;
+  secretObjectiveFullDeckSize: number;
+  actionCardDeckSize: number;
+  actionCardFullDeckSize: number;
+  actionCardDiscardSize: number;
+  actionCardPurgedSize: number;
+  culturalExploreDeckSize: number;
+  culturalExploreDiscardSize: number;
+  culturalExploreFullDeckSize: number;
+  industrialExploreDeckSize: number;
+  industrialExploreDiscardSize: number;
+  industrialExploreFullDeckSize: number;
+  hazardousExploreDeckSize: number;
+  hazardousExploreDiscardSize: number;
+  hazardousExploreFullDeckSize: number;
+  frontierExploreDeckSize: number;
+  frontierExploreDiscardSize: number;
+  frontierExploreFullDeckSize: number;
+  relicDeckSize: number;
+  relicFullDeckSize: number;
+  agendaDeckSize: number;
+  agendaFullDeckSize: number;
+  agendaDiscardSize: number;
+};
+
+export type { CardPoolData };
+
 export type PlayerDataResponse = {
   playerData: PlayerData[];
   tileUnitData: Record<string, TileUnitData>;
   tilePositions: string[];
   statTilePositions: Record<string, string[]>;
-  lawsInPlay: string[];
+  lawsInPlay: LawInPlay[];
+  strategyCards: StrategyCard[];
   vpsToWin: number;
+  objectives: Objectives;
+  cardPool: CardPoolData;
 };
 
 export type PlayerData = {
@@ -97,6 +160,17 @@ export type PlayerData = {
   groundArmyHealth: number;
   spaceArmyCombat: number;
   groundArmyCombat: number;
+  // Pre-calculated planet economics
+  resources: number;
+  influence: number;
+  totResources: number;
+  totInfluence: number;
+  optimalResources: number;
+  optimalInfluence: number;
+  flexValue: number;
+  totOptimalResources: number;
+  totOptimalInfluence: number;
+  totFlexValue: number;
   unitsOwned: string[];
   followedSCs: number[];
   unfollowedSCs: number[];
@@ -114,6 +188,7 @@ export type PlayerData = {
   leaders: Leader[];
   leaderIDs: string[];
   secretsScored: Record<string, number>;
+  numScoreableSecrets: number;
   flexibleDisplayName: string;
   scs: number[];
   exhaustedSCs: number[];
@@ -135,6 +210,10 @@ export type PlayerData = {
       deployedCount: number;
     }
   >;
+
+  // ghost-specific properties
+  sleeperTokensReinf?: number;
+  ghostWormholesReinf?: string[];
 };
 
 export type Planet = {
@@ -176,4 +255,21 @@ export type Planet = {
   spaceCannonDieCount?: number;
   spaceCannonHitsOn?: number;
   searchTags?: string[];
+};
+
+export type Objective = {
+  key: string;
+  name: string;
+  pointValue: number;
+  revealed: boolean;
+  scoredFactions: string[];
+  peekingFactions: string[];
+  multiScoring: boolean;
+};
+
+export type Objectives = {
+  stage1Objectives: Objective[];
+  stage2Objectives: Objective[];
+  customObjectives: Objective[];
+  allObjectives: Objective[];
 };

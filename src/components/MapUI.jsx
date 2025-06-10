@@ -8,6 +8,7 @@ import {
 } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
+import { useNavigate } from "react-router-dom";
 
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
@@ -27,6 +28,7 @@ function MapUI({
   showRefresh,
 }) {
   const theme = useMantineTheme();
+  const navigate = useNavigate();
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -46,6 +48,19 @@ function MapUI({
             changeTab={changeTab}
             removeTab={removeTab}
           />
+          {!isTouchDevice() && (
+            <Button
+              variant="light"
+              size="xs"
+              color="cyan"
+              onClick={() => {
+                localStorage.setItem("showOldUI", undefined);
+                navigate(`/game/${params.mapid}/newui`);
+              }}
+            >
+              GO TO NEW UI
+            </Button>
+          )}
         </Group>
       </AppShell.Header>
 
@@ -99,6 +114,14 @@ function MapUI({
         </div>
       </AppShell.Main>
     </AppShell>
+  );
+}
+
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
   );
 }
 

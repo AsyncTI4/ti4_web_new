@@ -1,0 +1,63 @@
+/* Public Objectives Section */
+.sectionTitle {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  color: var(--mantine-color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  margin-bottom: var(--mantine-spacing-md);
+  letter-spacing: 0.5px;
+}
+
+/* Stage Containers */
+.stage1Container,
+.stage2Container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+}
+
+/* Stage Titles */
+.stageTitle {
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+  color: var(--mantine-color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  padding: var(--mantine-spacing-xs);
+  border-radius: 4px;
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.stage1Title {
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.stage2Title {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.stage2Container .stageTitle {
+  color: var(--mantine-color-blue-3);
+}
+
+.otherTitle {
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+  color: var(--mantine-color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  padding: var(--mantine-spacing-xs);
+  border-radius: 4px;
+  background: rgba(107, 114, 128, 0.15);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+/* Objective Lists */
+.objectiveList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+}

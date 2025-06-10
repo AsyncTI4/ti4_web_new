@@ -6,15 +6,21 @@ import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import { cdnImage } from "../../../data/cdnImage";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { PlanetDetailsCard } from "../PlanetDetailsCard";
+import { getAttachmentData } from "../../../data/attachments";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
 
 type Props = {
   planetId: string;
   exhausted?: boolean;
+  attachments?: string[];
 };
 
-export function PlanetCard({ planetId, exhausted = false }: Props) {
+export function PlanetCard({
+  planetId,
+  exhausted = false,
+  attachments = [],
+}: Props) {
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
 
@@ -26,13 +32,37 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
   const planetType = planetData.planetType;
   const traitIconKey = getTraitIconKey(planetData.planetType!);
 
-  // Get all tech skip icons for this planet
-  const techSkipIconElements =
-    planetData.techSpecialties
-      ?.map((specialty) => getTechSkipIconKey(specialty))
-      .filter((key) => key !== null)
-      .map((key) => <TechSkipIcon key={key} techType={key as TechType} />) ||
-    [];
+  // Calculate attachment modifiers
+  const attachmentModifiers = attachments.reduce(
+    (totals, attachmentId) => {
+      const attachmentData = getAttachmentData(attachmentId);
+      if (attachmentData) {
+        return {
+          resources: totals.resources + (attachmentData.resourcesModifier || 0),
+          influence: totals.influence + (attachmentData.influenceModifier || 0),
+          techSpecialties: [
+            ...totals.techSpecialties,
+            ...(attachmentData.techSpeciality || []),
+          ],
+        };
+      }
+      return totals;
+    },
+    { resources: 0, influence: 0, techSpecialties: [] as string[] }
+  );
+
+  // Get all tech skip icons for this planet (native + attachment tech specialties)
+  const allTechSpecialties = [
+    ...(planetData.techSpecialties || []),
+    ...attachmentModifiers.techSpecialties,
+  ];
+
+  const techSkipIconElements = allTechSpecialties
+    .map((specialty) => getTechSkipIconKey(specialty))
+    .filter((key) => key !== null)
+    .map((key, index) => (
+      <TechSkipIcon key={`${key}-${index}`} techType={key as TechType} />
+    ));
 
   // Add legendary ability icon if planet has legendary ability text
   const legendaryAbilityIcon = planetData.legendaryAbilityText ? (
@@ -43,11 +73,28 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
     />
   ) : null;
 
-  // Combine tech skip icons and legendary ability icon
+  // Add attachment upgrade icon if there are any attachments
+  const attachmentUpgradeIcon =
+    attachments.length > 0 ? (
+      <Image
+        key="upgrade"
+        src={cdnImage("/planet_cards/pc_upgrade.png")}
+        className={styles.attachmentIcon}
+      />
+    ) : null;
+
+  // Combine all icons
   const allIcons = [...techSkipIconElements];
   if (legendaryAbilityIcon) {
     allIcons.push(legendaryAbilityIcon);
   }
+  if (attachmentUpgradeIcon) {
+    allIcons.push(attachmentUpgradeIcon);
+  }
+
+  // Calculate final resource and influence values
+  const finalResources = planetData.resources + attachmentModifiers.resources;
+  const finalInfluence = planetData.influence + attachmentModifiers.influence;
 
   // For faction planets, render faction icon instead of trait icon
   const renderIcon = () => {
@@ -148,9 +195,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
                     src="/pa_resources.png"
                     className={styles.resourceImage}
                   />
-                  <Text className={styles.valueText}>
-                    {planetData.resources}
-                  </Text>
+                  <Text className={styles.valueText}>{finalResources}</Text>
                 </Box>
 
                 <Box className={styles.valueContainer}>
@@ -158,7 +203,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
                     <InfluenceIcon size={18} />
                   </Box>
                   <Text className={styles.influenceValueText}>
-                    {planetData.influence}
+                    {finalInfluence}
                   </Text>
                 </Box>
               </Stack>
@@ -167,7 +212,7 @@ export function PlanetCard({ planetId, exhausted = false }: Props) {
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        <PlanetDetailsCard planetId={planetId} />
+        <PlanetDetailsCard planetId={planetId} attachments={attachments} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

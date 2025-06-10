@@ -16,12 +16,24 @@
   align-items: center;
   justify-content: center;
 }
+
 .unitCount {
   min-width: 19px;
   font-size: 18px;
   font-weight: 800;
   font-family: "Slider", sans-serif;
   text-align: center;
-  /* NOTE: THis color needs to be black for some player colors */
   color: white;
+}
+
+.whiteText {
+  text-shadow:
+    -1px -1px 1px #000,
+    1px -1px 1px #000,
+    -1px 1px 1px #000,
+    1px 1px 1px #000,
+    -3px 0 1px #000,
+    3px 0 1px #000,
+    0 -3px 1px #000,
+    0 3px 1px #000;
 }

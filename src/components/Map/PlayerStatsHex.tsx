@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import styles from "./PlayerStatsArea.module.css";
 
 type HexagonData = {
@@ -98,7 +98,7 @@ export function PlayerStatsHex({
   }, [tilePositions, faction, openSides]);
 
   // Call the callback with calculated data
-  useMemo(() => {
+  useEffect(() => {
     if (onHexagonsCalculated) {
       onHexagonsCalculated(hexagons, svgBounds);
     }

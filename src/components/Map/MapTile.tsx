@@ -27,6 +27,13 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
+  onPlanetHover?: (
+    systemId: string,
+    planetId: string,
+    x: number,
+    y: number
+  ) => void;
+  onPlanetMouseLeave?: () => void;
   isSelected?: boolean;
   isHovered?: boolean;
 };
@@ -44,11 +51,49 @@ export const MapTile = React.memo<Props>(
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
+    onPlanetHover,
+    onPlanetMouseLeave,
     isSelected,
     isHovered,
     ringPosition,
   }) => {
-    const unitImages: JSX.Element[] = React.useMemo(() => {
+    const hoverTimeoutRef = React.useRef<Record<string, number>>({});
+
+    const handlePlanetMouseEnter = React.useCallback(
+      (planetId: string, x: number, y: number) => {
+        if (!onPlanetHover) return;
+
+        hoverTimeoutRef.current[planetId] = setTimeout(() => {
+          // Convert relative planet position to world coordinates
+          const worldX = position.x + x;
+          const worldY = position.y + y;
+          onPlanetHover(systemId, planetId, worldX, worldY);
+        }, 1000);
+      },
+      [systemId, onPlanetHover, position.x, position.y]
+    );
+
+    const handlePlanetMouseLeave = React.useCallback(
+      (planetId: string) => {
+        if (hoverTimeoutRef.current[planetId]) {
+          clearTimeout(hoverTimeoutRef.current[planetId]);
+          delete hoverTimeoutRef.current[planetId];
+        }
+        if (onPlanetMouseLeave) {
+          onPlanetMouseLeave();
+        }
+      },
+      [onPlanetMouseLeave]
+    );
+
+    // Cleanup timeouts on unmount
+    React.useEffect(() => {
+      return () => {
+        Object.values(hoverTimeoutRef.current).forEach(clearTimeout);
+      };
+    }, []);
+
+    const unitImages: React.ReactElement[] = React.useMemo(() => {
       const allEntityPlacements = getAllEntityPlacementsForTile(
         systemId,
         tileUnitData
@@ -99,7 +144,7 @@ export const MapTile = React.memo<Props>(
       onUnitSelect,
     ]);
 
-    const controlTokens: JSX.Element[] = React.useMemo(() => {
+    const controlTokens: React.ReactElement[] = React.useMemo(() => {
       if (!tileUnitData?.planets) {
         return [];
       }
@@ -131,7 +176,38 @@ export const MapTile = React.memo<Props>(
       );
     }, [systemId, tileUnitData, factionToColor]);
 
-    const commandCounterStack: JSX.Element | null = React.useMemo(() => {
+    const planetCircles: React.ReactElement[] = React.useMemo(() => {
+      if (!tileUnitData?.planets) {
+        return [];
+      }
+
+      const planetCoords = getPlanetCoordsBySystemId(systemId);
+
+      return Object.entries(tileUnitData.planets).flatMap(([planetId, _]) => {
+        if (!planetCoords[planetId]) return [];
+        const [x, y] = planetCoords[planetId].split(",").map(Number);
+
+        return [
+          <div
+            key={`${systemId}-${planetId}-circle`}
+            className={classes.planetCircle}
+            style={{
+              left: `${x}px`,
+              top: `${y}px`,
+            }}
+            onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
+            onMouseLeave={() => handlePlanetMouseLeave(planetId)}
+          />,
+        ];
+      });
+    }, [
+      systemId,
+      tileUnitData,
+      handlePlanetMouseEnter,
+      handlePlanetMouseLeave,
+    ]);
+
+    const commandCounterStack: React.ReactElement | null = React.useMemo(() => {
       if (!tileUnitData?.ccs || tileUnitData.ccs.length === 0) {
         return null;
       }
@@ -170,6 +246,7 @@ export const MapTile = React.memo<Props>(
       >
         <div className={classes.tileContainer}>
           <Tile systemId={systemId} className={classes.tile} />
+          {planetCircles}
           {controlTokens}
           {unitImages}
           {commandCounterStack}

@@ -1,18 +1,33 @@
 import { Box, Text, Image, BoxProps } from "@mantine/core";
+import { ReactNode } from "react";
 
 type Props = BoxProps & {
   src: string;
   alt: string;
-  count: string | number;
+  count: string | number | ReactNode;
+  size?: "sm" | "md" | "lg";
   style?: React.CSSProperties;
 };
 
-export function Cardback({ src, alt, count, style, ...boxProps }: Props) {
+export function Cardback({
+  src,
+  alt,
+  count,
+  size = "sm",
+  style,
+  ...boxProps
+}: Props) {
+  const widthMap = {
+    sm: "45px",
+    md: "55px",
+    lg: "65px",
+  };
+
   return (
     <Box pos="relative" {...boxProps}>
       <Box
         style={{
-          width: "45px",
+          width: widthMap[size],
           borderRadius: "8px",
           overflow: "hidden",
           position: "relative",
@@ -51,17 +66,21 @@ export function Cardback({ src, alt, count, style, ...boxProps }: Props) {
         px={6}
         py={1}
       >
-        <Text
-          size="lg"
-          fw={700}
-          c="white"
-          style={{
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-            lineHeight: 1,
-          }}
-        >
-          {(count || 0).toString()}
-        </Text>
+        {typeof count === "string" || typeof count === "number" ? (
+          <Text
+            size="lg"
+            fw={700}
+            c="white"
+            style={{
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+              lineHeight: 1,
+            }}
+          >
+            {(count || 0).toString()}
+          </Text>
+        ) : (
+          count
+        )}
       </Box>
     </Box>
   );

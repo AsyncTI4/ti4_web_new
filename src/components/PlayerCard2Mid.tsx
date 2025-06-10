@@ -34,12 +34,26 @@ import { ArmyStats } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { calculatePlanetEconomics } from "@/lookup/planets";
+// Removed calculatePlanetEconomics import - now using pre-calculated values
 import { PlayerCardBox } from "./PlayerCardBox";
+import { getTokenImagePath } from "../data/tokens";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
   return techsData.find((tech) => tech.alias === techId);
+};
+
+// Helper function to get tier from requirements
+const getTechTier = (requirements?: string): number => {
+  if (!requirements) return 0;
+
+  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
+  const matches = requirements.match(/(.)\1*/g);
+  if (matches && matches.length > 0) {
+    return matches[0].length;
+  }
+
+  return 0;
 };
 
 // Strategy card names and colors mapping
@@ -69,6 +83,7 @@ type Props = {
   playerData: PlayerData;
   factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
+  planetAttachments?: Record<string, string[]>;
 };
 
 export default memo(function PlayerCard2Mid(props: Props) {
@@ -87,18 +102,64 @@ export default memo(function PlayerCard2Mid(props: Props) {
     groundArmyHealth,
     spaceArmyCombat,
     groundArmyCombat,
-
     techs,
     relics,
     planets,
     secretsScored,
     unitsOwned,
     leaders,
+    scs = [],
+    promissoryNotesInPlayArea = [],
+    exhaustedPlanets = [],
+    resources,
+    totResources,
+    influence,
+    totInfluence,
+    optimalResources,
+    totOptimalResources,
+    optimalInfluence,
+    totOptimalInfluence,
+    flexValue,
+    totFlexValue,
+    unitCounts,
+    stasisInfantry,
+    exhaustedSCs,
+    passed,
+    active,
+    neighbors,
+    tg,
+    commodities,
+    commoditiesTotal,
+    soCount,
+    pnCount,
+    acCount,
+    debtTokens,
+    unfollowedSCs,
+    ghostWormholesReinf,
+    sleeperTokensReinf,
+    nombox,
   } = props.playerData;
-  const scs = props.playerData.scs || [];
-  const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-  const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
-  const planetEconomics = calculatePlanetEconomics(planets, exhaustedPlanets);
+  const promissoryNotes = promissoryNotesInPlayArea;
+
+  // Create planet economics object from pre-calculated values
+  const planetEconomics = {
+    total: {
+      currentResources: resources,
+      totalResources: totResources,
+      currentInfluence: influence,
+      totalInfluence: totInfluence,
+    },
+    optimal: {
+      currentResources: optimalResources,
+      totalResources: totOptimalResources,
+      currentInfluence: optimalInfluence,
+      totalInfluence: totOptimalInfluence,
+    },
+    flex: {
+      currentFlex: flexValue,
+      totalFlex: totFlexValue,
+    },
+  };
 
   const UnitsArea = (
     <Surface
@@ -114,7 +175,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
         {unitsOwned.map((unitId, index) => {
           const asyncId = getUnitAsyncId(unitId);
           const deployedCount = asyncId
-            ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
+            ? (unitCounts[asyncId].deployedCount ?? 0)
             : 0;
 
           return (
@@ -128,11 +189,8 @@ export default memo(function PlayerCard2Mid(props: Props) {
         })}
 
         {/* Add StasisInfantryCard if there are any stasisInfantry */}
-        {props.playerData.stasisInfantry > 0 && (
-          <StasisInfantryCard
-            reviveCount={props.playerData.stasisInfantry}
-            color={color}
-          />
+        {stasisInfantry > 0 && (
+          <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
         )}
       </SimpleGrid>
     </Surface>
@@ -148,15 +206,19 @@ export default memo(function PlayerCard2Mid(props: Props) {
 
   const StrategyAndSpeaker = (
     <Group gap="xs" align="center">
-      {scs.map((scNumber, index) => (
-        <StrategyCardBanner
-          key={scNumber}
-          number={scNumber}
-          text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-          color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-          isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
-        />
-      ))}
+      {scs.map((scNumber, index) => {
+        const isExhausted = exhaustedSCs?.includes(scNumber);
+        return (
+          <StrategyCardBanner
+            key={scNumber}
+            number={scNumber}
+            text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+            color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+            isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
+            isExhausted={isExhausted}
+          />
+        );
+      })}
     </Group>
   );
 
@@ -167,7 +229,16 @@ export default memo(function PlayerCard2Mid(props: Props) {
       return techData?.types[0] === techType;
     });
 
-    const techElements = filteredTechs.map((techId, index) => (
+    // Sort techs by tier (lower tier first)
+    const sortedTechs = filteredTechs.sort((a, b) => {
+      const techDataA = getTechData(a);
+      const techDataB = getTechData(b);
+      const tierA = techDataA ? getTechTier(techDataA.requirements) : 999;
+      const tierB = techDataB ? getTechTier(techDataB.requirements) : 999;
+      return tierA - tierB;
+    });
+
+    const techElements = sortedTechs.map((techId, index) => (
       <Tech key={index} techId={techId} />
     ));
 
@@ -234,13 +305,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
           </Text>
           <PlayerColor color={color} size="sm" />
 
-          <StatusIndicator
-            passed={props.playerData.passed}
-            active={props.playerData.active}
-          />
+          <StatusIndicator passed={passed} active={active} />
           <Box visibleFrom="sm">
             <Neighbors
-              neighbors={props.playerData.neighbors || []}
+              neighbors={neighbors || []}
               colorToFaction={props.colorToFaction}
             />
           </Box>
@@ -258,29 +326,33 @@ export default memo(function PlayerCard2Mid(props: Props) {
           <Stack gap={6}>
             <Box hiddenFrom="sm" w="100%">
               <Stack gap="xs" align="center">
-                {scs.map((scNumber, index) => (
-                  <StrategyCardBannerCompact
-                    key={scNumber}
-                    number={scNumber}
-                    text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                    color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                    isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
-                  />
-                ))}
+                {scs.map((scNumber, index) => {
+                  const isExhausted = exhaustedSCs?.includes(scNumber);
+                  return (
+                    <StrategyCardBannerCompact
+                      key={scNumber}
+                      number={scNumber}
+                      text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                      color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                      isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
+                      isExhausted={isExhausted}
+                    />
+                  );
+                })}
               </Stack>
             </Box>
 
             <PlayerCardCounts
-              tg={props.playerData.tg || 0}
-              commodities={props.playerData.commodities || 0}
-              commoditiesTotal={props.playerData.commoditiesTotal || 0}
-              soCount={props.playerData.soCount || 0}
-              pnCount={props.playerData.pnCount || 0}
-              acCount={props.playerData.acCount || 0}
+              tg={tg || 0}
+              commodities={commodities || 0}
+              commoditiesTotal={commoditiesTotal || 0}
+              soCount={soCount || 0}
+              pnCount={pnCount || 0}
+              acCount={acCount || 0}
             />
             <Box hiddenFrom="sm">
               <Neighbors
-                neighbors={props.playerData.neighbors || []}
+                neighbors={neighbors || []}
                 colorToFaction={props.colorToFaction}
               />
             </Box>
@@ -327,12 +399,12 @@ export default memo(function PlayerCard2Mid(props: Props) {
         <Grid.Col span={2} visibleFrom="lg">
           <Stack h="100%">
             <PlayerCardCounts
-              tg={props.playerData.tg || 0}
-              commodities={props.playerData.commodities || 0}
-              commoditiesTotal={props.playerData.commoditiesTotal || 0}
-              soCount={props.playerData.soCount || 0}
-              pnCount={props.playerData.pnCount || 0}
-              acCount={props.playerData.acCount || 0}
+              tg={tg || 0}
+              commodities={commodities || 0}
+              commoditiesTotal={commoditiesTotal || 0}
+              soCount={soCount || 0}
+              pnCount={pnCount || 0}
+              acCount={acCount || 0}
             />
             {FragmentsAndCCSection}
             <ScoredSecrets secretsScored={secretsScored} />
@@ -340,9 +412,9 @@ export default memo(function PlayerCard2Mid(props: Props) {
               promissoryNotes={promissoryNotes}
               colorToFaction={props.colorToFaction}
             />
-            {/* Needs to Follow Section */}
-            <NeedsToFollow values={props.playerData.unfollowedSCs || []} />
             {RelicStack}
+            {/* Needs to Follow Section */}
+            <NeedsToFollow values={unfollowedSCs || []} />
           </Stack>
         </Grid.Col>
         <Grid.Col
@@ -403,7 +475,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
                   {/* Total/Optimal Section */}
                   <ResourceInfluenceCompact
                     planetEconomics={planetEconomics}
-                    debts={props.playerData.debtTokens}
+                    debts={debtTokens}
                   />
 
                   {/* Debt Section */}
@@ -435,6 +507,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
                         key={index}
                         planetId={planetId}
                         exhausted={exhaustedPlanets.includes(planetId)}
+                        attachments={props.planetAttachments?.[planetId] || []}
                       />
                     ))}
                   </Group>
@@ -442,16 +515,67 @@ export default memo(function PlayerCard2Mid(props: Props) {
               </Group>
             </Grid.Col>
             <Grid.Col span={3} p="sm">
-              <ArmyStats
-                stats={{
-                  spaceArmyRes,
-                  groundArmyRes,
-                  spaceArmyHealth,
-                  groundArmyHealth,
-                  spaceArmyCombat,
-                  groundArmyCombat,
-                }}
-              />
+              <Stack gap="xs">
+                <ArmyStats
+                  stats={{
+                    spaceArmyRes,
+                    groundArmyRes,
+                    spaceArmyHealth,
+                    groundArmyHealth,
+                    spaceArmyCombat,
+                    groundArmyCombat,
+                  }}
+                />
+
+                {/* Ghost Wormholes and Sleeper Tokens Reinforcements */}
+                {((ghostWormholesReinf && ghostWormholesReinf.length > 0) ||
+                  (sleeperTokensReinf && sleeperTokensReinf > 0)) && (
+                  <Group gap="xs" justify="center">
+                    {/* Ghost Wormholes */}
+                    {ghostWormholesReinf?.map((wormholeId, index) => (
+                      <Image
+                        key={index}
+                        src={cdnImage(
+                          `/tokens/${getTokenImagePath(wormholeId)}`
+                        )}
+                        alt={wormholeId}
+                        w={40}
+                        h={40}
+                        style={{
+                          filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
+                        }}
+                      />
+                    ))}
+
+                    {/* Sleeper Tokens */}
+                    {sleeperTokensReinf && sleeperTokensReinf > 0 && (
+                      <Group gap="xs" align="center">
+                        <Image
+                          src={cdnImage(
+                            `/tokens/${getTokenImagePath("sleeper")}`
+                          )}
+                          alt="sleeper"
+                          w={40}
+                          h={40}
+                          style={{
+                            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
+                          }}
+                        />
+                        <Text
+                          size="lg"
+                          fw={700}
+                          c="white"
+                          style={{
+                            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                          }}
+                        >
+                          {sleeperTokensReinf}
+                        </Text>
+                      </Group>
+                    )}
+                  </Group>
+                )}
+              </Stack>
             </Grid.Col>
           </Grid>
         </Grid.Col>
@@ -459,7 +583,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
         {/* Full-width Nombox at the bottom */}
         <Grid.Col span={12}>
           <Nombox
-            capturedUnits={props.playerData.nombox || {}}
+            capturedUnits={nombox || {}}
             factionToColor={props.factionToColor}
           />
         </Grid.Col>

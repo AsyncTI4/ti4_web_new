@@ -1,0 +1,163 @@
+.objectiveCard {
+  position: relative;
+  border: 1px solid transparent; /* Default transparent border to maintain sizing */
+}
+
+/* Color-specific borders */
+.objectiveCard.orange {
+  border: 1px solid rgba(249, 115, 22, 0.15);
+}
+
+.objectiveCard.blue {
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.objectiveCard.gray {
+  border: 1px solid rgba(107, 114, 128, 0.15);
+}
+
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clickable:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.unrevealed {
+  opacity: 0.6;
+}
+
+.objectiveContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 32px; /* Ensure enough height for control tokens */
+}
+
+.vpIndicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.vpIndicator.revealed {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Orange/Gold variant for Stage I */
+.vpIndicator.revealed.orange {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 4px rgba(255, 215, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Blue variant for Stage II */
+.vpIndicator.revealed.blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 4px rgba(59, 130, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Gray variant for Other */
+.vpIndicator.revealed.gray {
+  background: linear-gradient(135deg, rgba(156, 163, 175, 0.2) 0%, rgba(107, 114, 128, 0.15) 100%);
+  border-color: rgba(156, 163, 175, 0.4);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 6px rgba(156, 163, 175, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.vpIndicator.hidden {
+  background: linear-gradient(135deg, rgba(100, 100, 100, 0.15) 0%, rgba(75, 75, 75, 0.1) 100%);
+  border-color: rgba(100, 100, 100, 0.3);
+}
+
+.vpText {
+  font-size: var(--mantine-font-size-md);
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+}
+
+.vpText.revealed {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.vpText.hidden {
+  color: var(--mantine-color-gray-4);
+}
+
+.objectiveText {
+  font-size: var(--mantine-font-size-sm);
+  font-family: var(--mantine-font-family-heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.objectiveText.revealed {
+  color: white;
+}
+
+.objectiveText.hidden {
+  color: var(--mantine-color-gray-4);
+}
+
+.controlTokenArea {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 180px; /* Space for 6 larger tokens */
+  height: 32px;
+  justify-content: flex-end;
+}
+
+.controlTokenSlot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptySlot {
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.6;
+}
+
+.factionIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  opacity: 1;
+}

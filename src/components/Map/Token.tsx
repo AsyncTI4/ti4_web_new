@@ -1,14 +1,15 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
+import { getTokenImagePath } from "@/data/tokens";
 
 interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  unitType: string;
+  tokenId: string;
   colorAlias?: string;
   faction?: string;
 }
 
 export const Token = ({
-  unitType,
+  tokenId,
   colorAlias,
   faction,
   alt,
@@ -16,10 +17,10 @@ export const Token = ({
 }: TokenProps) => {
   // Short-circuit render DMZToken for token_dmz_large.png
   // to fix some DMZ token positioning issues
-  if (unitType === "token_dmz_large.png") {
+  if (tokenId === "dmz_large") {
     return (
       <DMZToken
-        unitType={unitType}
+        tokenId={tokenId}
         colorAlias={colorAlias}
         faction={faction}
         alt={alt}
@@ -28,11 +29,13 @@ export const Token = ({
     );
   }
 
-  const defaultAlt = alt || `${faction || "token"} ${unitType}`;
+  const imagePath = getTokenImagePath(tokenId);
+
+  const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
 
   return (
     <img
-      src={cdnImage(`/tokens/${unitType}`)}
+      src={cdnImage(`/tokens/${imagePath}`)}
       alt={defaultAlt}
       {...imageProps}
     />
@@ -40,13 +43,13 @@ export const Token = ({
 };
 
 const DMZToken = ({
-  unitType,
+  tokenId,
   colorAlias,
   faction,
   alt,
   ...imageProps
 }: TokenProps) => {
-  const defaultAlt = alt || `${faction || "token"} ${unitType}`;
+  const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
 
   const existingStyle = imageProps.style || {};
   const existingLeft = existingStyle.left;
@@ -63,6 +66,8 @@ const DMZToken = ({
     newLeft = `${leftValue + 20}px`;
   }
 
+  const imagePath = getTokenImagePath(tokenId);
+
   const dmzStyles = {
     ...existingStyle,
     width: "120px",
@@ -71,7 +76,7 @@ const DMZToken = ({
 
   return (
     <img
-      src={cdnImage(`/tokens/${unitType}`)}
+      src={cdnImage(`/tokens/${imagePath}`)}
       alt={defaultAlt}
       {...imageProps}
       style={dmzStyles}

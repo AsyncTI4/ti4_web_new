@@ -1,10 +1,20 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text, Group } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
 
 type Props = {
   number: number;
   name: string;
-  color?: "red" | "green" | "blue" | "yellow" | "purple" | "orange" | "gray";
+  color?:
+    | "red"
+    | "green"
+    | "blue"
+    | "yellow"
+    | "purple"
+    | "orange"
+    | "gray"
+    | "teal"
+    | "cyan";
+  tradeGoods?: number;
 };
 
 const colorMap = {
@@ -85,11 +95,37 @@ const colorMap = {
     dropShadow: "drop-shadow(0 1px 2px rgba(107, 114, 128, 0.3))",
     numberColor: "gray.9",
   },
+  teal: {
+    shimmerColor: "teal",
+    gradient:
+      "linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(13, 148, 136, 0.05) 50%, rgba(20, 184, 166, 0.08) 100%)",
+    border: "1px solid rgba(20, 184, 166, 0.2)",
+    radialGlow:
+      "radial-gradient(ellipse at center, rgba(20, 184, 166, 0.06) 0%, transparent 70%)",
+    borderColor: "var(--mantine-color-teal-7)",
+    dropShadow: "drop-shadow(0 1px 2px rgba(20, 184, 166, 0.3))",
+    numberColor: "teal.9",
+  },
+  cyan: {
+    shimmerColor: "cyan",
+    gradient:
+      "linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(8, 145, 178, 0.05) 50%, rgba(6, 182, 212, 0.08) 100%)",
+    border: "1px solid rgba(6, 182, 212, 0.2)",
+    radialGlow:
+      "radial-gradient(ellipse at center, rgba(6, 182, 212, 0.06) 0%, transparent 70%)",
+    borderColor: "var(--mantine-color-cyan-7)",
+    dropShadow: "drop-shadow(0 1px 2px rgba(6, 182, 212, 0.3))",
+    numberColor: "cyan.9",
+  },
 };
 
-export function StrategyCard({ number, name, color = "red" }: Props) {
+export function StrategyCard({
+  number,
+  name,
+  color = "red",
+  tradeGoods,
+}: Props) {
   const colorConfig = colorMap[color];
-
   return (
     <Shimmer
       color={colorConfig.shimmerColor as any}
@@ -103,6 +139,7 @@ export function StrategyCard({ number, name, color = "red" }: Props) {
         background: colorConfig.gradient,
         border: colorConfig.border,
         borderRadius: "8px",
+        overflow: "inherit",
       }}
     >
       {/* Additional subtle inner glow overlay */}
@@ -140,19 +177,49 @@ export function StrategyCard({ number, name, color = "red" }: Props) {
           {number}
         </Text>
       </Box>
-      <Text
-        ff="heading"
-        c="white"
-        size="lg"
+
+      <Group
+        gap="xs"
+        align="center"
         pos="relative"
         px={20}
-        style={{
-          textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
-          zIndex: 1,
-        }}
+        style={{ zIndex: 1 }}
       >
-        {name}
-      </Text>
+        <Text
+          ff="heading"
+          c="white"
+          size="lg"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          {name}
+        </Text>
+
+        {tradeGoods && tradeGoods > 0 && (
+          <Group gap={4} align="center">
+            <img
+              src="/tg.png"
+              alt="trade goods"
+              style={{
+                width: "18px",
+                height: "18px",
+                filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6))",
+              }}
+            />
+            <Text
+              size="xs"
+              fw={700}
+              c="white"
+              style={{
+                textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+              }}
+            >
+              {tradeGoods}
+            </Text>
+          </Group>
+        )}
+      </Group>
     </Shimmer>
   );
 }

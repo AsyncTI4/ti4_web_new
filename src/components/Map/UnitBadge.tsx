@@ -32,6 +32,8 @@ export function UnitBadge({
     zIndex: baseZIndex,
   };
 
+  const isWhiteText = textColor.toLowerCase() === "white";
+
   return (
     <div
       style={mergedStyle}
@@ -46,7 +48,10 @@ export function UnitBadge({
           className={classes.unitIcon}
         />
         <div className={classes.unitCountContainer}>
-          <span className={classes.unitCount} style={{ color: textColor }}>
+          <span
+            className={`${classes.unitCount} ${isWhiteText ? classes.whiteText : ""}`}
+            style={{ color: textColor }}
+          >
             {count}
           </span>
         </div>

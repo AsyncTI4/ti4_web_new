@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
   Box,
@@ -8,17 +8,27 @@ import {
   SimpleGrid,
   Tabs,
   Stack,
+  Button,
+  Group,
 } from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
-import { usePlayerData } from "./hooks/usePlayerData";
+import {
+  IconAlertCircle,
+  IconMap2,
+  IconTarget,
+  IconUsers,
+  IconRefresh,
+} from "@tabler/icons-react";
+import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
 import { useMapSocket } from "./hooks/useMapSocket";
+import { ReadyState } from "react-use-websocket";
 // @ts-ignore
 import { ZoomControls } from "./components/ZoomControls";
 // @ts-ignore
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
+import { HeaderMenuNew } from "./components/HeaderMenuNew";
 import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
@@ -26,16 +36,61 @@ import PlayerCard2Mid from "./components/PlayerCard2Mid";
 import { MapTile } from "./components/Map/MapTile";
 import { PlayerStatsArea } from "./components/Map/PlayerStatsArea";
 import classes from "./components/MapUI.module.css";
-import { calculateTilePositions } from "./mapgen/tilePositioning";
 import { useZoom } from "./hooks/useZoom";
 import { FactionTabBar } from "./components/FactionTabBar";
 import { useTabsAndTooltips } from "./hooks/useTabsAndTooltips";
+import { useSidebarDragHandle } from "./hooks/useSidebarDragHandle";
 import PlayerCardSidebar from "./components/PlayerCardSidebar";
 import { DragHandle } from "./components/DragHandle";
 import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
 import { lookupUnitId } from "./lookup/units";
 import PlayerCardSidebarTech from "./components/PlayerCardSidebarTech";
 import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponents";
+import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
+import ScoreBoard from "./components/ScoreBoard";
+
+// TypeScript version of useTabManagement hook for NewMapUI
+function useTabManagementNewUI() {
+  const navigate = useNavigate();
+  const params = useParams<{ mapid: string }>();
+  const [activeTabs, setActiveTabs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const storedTabs = JSON.parse(localStorage.getItem("activeTabs") || "[]");
+    const currentGame = params.mapid;
+    if (currentGame && !storedTabs.includes(currentGame)) {
+      storedTabs.push(currentGame);
+    }
+
+    setActiveTabs(storedTabs.filter((tab: string) => !!tab));
+  }, [params.mapid]);
+
+  useEffect(() => {
+    if (activeTabs.length === 0) return;
+    localStorage.setItem("activeTabs", JSON.stringify(activeTabs));
+  }, [activeTabs]);
+
+  const changeTab = (tab: string) => {
+    if (tab === params.mapid) return;
+    navigate(`/game/${tab}/newui`);
+  };
+
+  const removeTab = (tabValue: string) => {
+    const remaining = activeTabs.filter((tab) => tab !== tabValue);
+    setActiveTabs(remaining);
+    localStorage.setItem("activeTabs", JSON.stringify(remaining));
+
+    if (params.mapid !== tabValue) return;
+
+    if (remaining.length > 0) {
+      changeTab(remaining[0]);
+    } else {
+      navigate("/");
+    }
+  };
+
+  return { activeTabs, changeTab, removeTab };
+}
 
 type ActiveArea =
   | {
@@ -53,11 +108,15 @@ type PlayerCardDisplayProps = {
   activeArea: ActiveArea;
   factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
+  planetAttachments: Record<string, string[]>;
 };
 
 export function NewMapUI() {
-  const params = useParams<{ gameId: string }>();
-  const gameId = params.gameId!;
+  const params = useParams<{ mapid: string }>();
+  const gameId = params.mapid!;
+
+  // Use tab management hook for NewMapUI
+  const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
 
   // Use tabs and tooltips hook
   const {
@@ -74,55 +133,79 @@ export function NewMapUI() {
     handleMouseDown,
   } = useTabsAndTooltips();
 
-  const [sidebarWidth, setSidebarWidth] = useState(25);
-  const [isDragging, setIsDragging] = useState(false);
+  // State for tracking hovered planet
+  const [tooltipPlanet, setTooltipPlanet] = useState<{
+    systemId: string;
+    planetId: string;
+    coords: { x: number; y: number };
+  } | null>(null);
 
-  const { data, isError } = usePlayerData(gameId);
-  const playerData = data?.playerData;
-
-  // Calculate tile positions from playerData response
-  const tilePositions = useMemo(() => {
-    if (!data?.tilePositions) return [];
-    return calculateTilePositions(data.tilePositions, 6);
-  }, [data?.tilePositions]);
-
-  // Create a mapping from systemId to position for unit lookup
-  const systemIdToPosition = useMemo(() => {
-    if (!data?.tilePositions) return {};
-    const mapping: Record<string, string> = {};
-    data.tilePositions.forEach((entry: string) => {
-      const [position, systemId] = entry.split(":");
-      mapping[systemId] = position;
-    });
-    return mapping;
-  }, [data?.tilePositions]);
-
-  const factionToColor = useMemo(
-    () =>
-      playerData?.reduce(
-        (acc, player) => {
-          acc[player.faction] = player.color;
-          return acc;
-        },
-        {} as Record<string, string>
-      ) || {},
-    [playerData]
+  // Planet hover handlers
+  const handlePlanetMouseEnter = useCallback(
+    (systemId: string, planetId: string, x: number, y: number) => {
+      setTooltipPlanet({ systemId, planetId, coords: { x, y } });
+    },
+    []
   );
 
-  const colorToFaction = useMemo(
-    () =>
-      playerData?.reduce(
-        (acc, player) => {
-          acc[player.color] = player.faction;
-          return acc;
-        },
-        {} as Record<string, string>
-      ) || {},
-    [playerData]
+  const handlePlanetMouseLeave = useCallback(() => {
+    setTooltipPlanet(null);
+  }, []);
+
+  // Enhanced unit mouse handlers to clear planet tooltip
+  const handleUnitMouseEnter = useCallback(
+    (faction: string, unitId: string, x: number, y: number) => {
+      setTooltipPlanet(null); // Clear planet tooltip when hovering unit
+      handleMouseEnter(faction, unitId, x, y);
+    },
+    [handleMouseEnter]
   );
+
+  const handleUnitMouseLeave = useCallback(() => {
+    handleMouseLeave();
+  }, [handleMouseLeave]);
+
+  const { sidebarWidth, isDragging, handleSidebarMouseDown } =
+    useSidebarDragHandle(30);
+
+  // Use enhanced player data hook that computes all derived values
+  const enhancedData = usePlayerDataEnhanced(gameId);
+
+  // Track if this is the first socket connection to avoid refetching on initial connect
+  const hasConnectedBefore = useRef(false);
+  // socket connection for real-time updates
+  const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
+    if (!hasConnectedBefore.current) {
+      hasConnectedBefore.current = true;
+      return; // Ignore the first update since we already loaded the data
+    }
+    console.log("Map update received, refetching player data...");
+    enhancedData?.refetch();
+  });
+
+  const {
+    playerData = [],
+    calculatedTilePositions: tilePositions = [],
+    systemIdToPosition = {},
+    factionToColor = {},
+    colorToFaction = {},
+    planetAttachments = {},
+    objectives = {
+      stage1Objectives: [],
+      stage2Objectives: [],
+      customObjectives: [],
+      allObjectives: [],
+    },
+    lawsInPlay = [],
+    strategyCards = [],
+    vpsToWin = 10,
+    cardPool,
+    isError = false,
+  } = enhancedData || {};
+  const data = enhancedData;
 
   useEffect(() => {
-    document.title = `${gameId} - Map Rendering | Async TI`;
+    document.title = `${gameId} - Async TI`;
   }, [gameId]);
 
   // Initialize dragscroll
@@ -142,73 +225,72 @@ export function NewMapUI() {
     typeof navigator !== "undefined" &&
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
 
-  // Add drag handlers for resizing
-  const handleSidebarMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!isDragging) return;
-
-      const containerWidth = window.innerWidth;
-      const newSidebarWidth = Math.max(
-        15,
-        Math.min(50, ((containerWidth - e.clientX) / containerWidth) * 100)
-      );
-      setSidebarWidth(newSidebarWidth);
-    },
-    [isDragging]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  // Add global mouse event listeners for dragging
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-        document.body.style.cursor = "";
-        document.body.style.userSelect = "";
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  const navigate = useNavigate();
 
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header>
-        <Box className={classes.headerContainer}>
+        <Group
+          align="center"
+          h="100%"
+          px="sm"
+          gap="sm"
+          style={{
+            flexWrap: "nowrap",
+            maxWidth: "100vw",
+            background:
+              "linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
+            borderBottom: "1px solid rgba(59, 130, 246, 0.15)",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           <Logo />
           <div className="logo-divider" />
-          <Box className={classes.flexGrow} />
-          <Box visibleFrom="sm">
-            <DiscordLogin />
-          </Box>
-        </Box>
+          <HeaderMenuNew
+            mapId={gameId}
+            activeTabs={activeTabs}
+            changeTab={changeTab}
+            removeTab={removeTab}
+          />
+
+          <Button
+            variant="light"
+            size="xs"
+            color="cyan"
+            onClick={() => {
+              localStorage.setItem("showOldUI", "true");
+              navigate(`/game/${gameId}`);
+            }}
+          >
+            GO TO OLD UI
+          </Button>
+        </Group>
       </AppShell.Header>
 
       <AppShell.Main>
         <Box className={classes.mainBackground}>
-          <Box mb="md" hiddenFrom="sm" p="md">
-            <DiscordLogin />
-          </Box>
-
           {/* Global Tabs */}
           <Tabs defaultValue="map" h="calc(100vh - 60px)">
             <Tabs.List grow justify="center" className={classes.tabsList}>
-              <Tabs.Tab value="map" className={classes.tabsTab}>
+              <Tabs.Tab
+                value="map"
+                className={classes.tabsTab}
+                leftSection={<IconMap2 size={16} />}
+              >
                 Map
               </Tabs.Tab>
-              <Tabs.Tab value="players" className={classes.tabsTab}>
+              <Tabs.Tab
+                value="objectives"
+                className={classes.tabsTab}
+                leftSection={<IconTarget size={16} />}
+              >
+                Objectives
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="players"
+                className={classes.tabsTab}
+                leftSection={<IconUsers size={16} />}
+              >
                 Player Areas
               </Tabs.Tab>
             </Tabs.List>
@@ -244,8 +326,8 @@ export function NewMapUI() {
                     style={{
                       position: "relative",
                       ...(isFirefox ? {} : { zoom: zoom }),
-                      [`-moz-transform` as string]: `scale(${zoom})`,
-                      [`-moz-transform-origin` as string]: "top left",
+                      MozTransform: `scale(${zoom})`,
+                      MozTransformOrigin: "top left",
                     }}
                   >
                     {/* Render stat tiles for each faction */}
@@ -265,7 +347,7 @@ export function NewMapUI() {
                               playerData={player as any}
                               statTilePositions={statTiles as string[]}
                               color={factionToColor[faction]}
-                              vpsToWin={data.vpsToWin}
+                              vpsToWin={vpsToWin}
                             />
                           );
                         }
@@ -287,9 +369,11 @@ export function NewMapUI() {
                           position={{ x: tile.x, y: tile.y }}
                           tileUnitData={tileData}
                           factionToColor={factionToColor}
-                          onUnitMouseOver={handleMouseEnter}
-                          onUnitMouseLeave={handleMouseLeave}
+                          onUnitMouseOver={handleUnitMouseEnter}
+                          onUnitMouseLeave={handleUnitMouseLeave}
                           onUnitSelect={handleMouseDown}
+                          onPlanetHover={handlePlanetMouseEnter}
+                          onPlanetMouseLeave={handlePlanetMouseLeave}
                         />
                       );
                     })}
@@ -339,6 +423,59 @@ export function NewMapUI() {
                       </Box>
                     );
                   })()}
+
+                  {/* Absolutely positioned PlanetDetailsCard over hovered planet - outside zoom container */}
+                  {(() => {
+                    if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
+
+                    // Scale the coordinates by zoom to match the zoomed content position
+                    const scaledX = tooltipPlanet.coords.x * zoom;
+                    const scaledY = tooltipPlanet.coords.y * zoom;
+
+                    // Get planet attachments for this planet
+                    const planetAttachmentIds =
+                      planetAttachments[tooltipPlanet.planetId] || [];
+
+                    return (
+                      <Box
+                        key="planet-tooltip"
+                        style={{
+                          position: "absolute",
+                          left: `${scaledX}px`,
+                          top: `${scaledY - 25}px`,
+                          zIndex: 10000000,
+                          pointerEvents: "none",
+                          transform: "translate(-50%, -100%)", // Center horizontally, position above the planet
+                        }}
+                      >
+                        <PlanetDetailsCard
+                          planetId={tooltipPlanet.planetId}
+                          attachments={planetAttachmentIds}
+                        />
+                      </Box>
+                    );
+                  })()}
+
+                  {/* Reconnect button when disconnected */}
+                  {readyState === ReadyState.CLOSED && (
+                    <Button
+                      variant="filled"
+                      size="md"
+                      radius="xl"
+                      leftSection={<IconRefresh size={20} />}
+                      style={{
+                        position: "fixed",
+                        top: "80px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        zIndex: 1000,
+                      }}
+                      onClick={reconnect}
+                      loading={isReconnecting}
+                    >
+                      Refresh
+                    </Button>
+                  )}
                 </Box>
 
                 {/* Drag Handle */}
@@ -368,6 +505,7 @@ export function NewMapUI() {
                       activeArea={activeArea || selectedArea}
                       factionToColor={factionToColor}
                       colorToFaction={colorToFaction}
+                      planetAttachments={planetAttachments}
                     />
                   )}
 
@@ -424,9 +562,25 @@ export function NewMapUI() {
                         playerData={player}
                         colorToFaction={colorToFaction}
                         factionToColor={factionToColor}
+                        planetAttachments={planetAttachments}
                       />
                     ))}
                   </SimpleGrid>
+                )}
+              </Box>
+            </Tabs.Panel>
+
+            <Tabs.Panel value="objectives" h="calc(100% - 60px)">
+              <Box className={classes.playersTabContent}>
+                {objectives && playerData && (
+                  <ScoreBoard
+                    objectives={objectives}
+                    playerData={playerData}
+                    lawsInPlay={lawsInPlay}
+                    strategyCards={strategyCards}
+                    vpsToWin={vpsToWin}
+                    cardPool={cardPool}
+                  />
                 )}
               </Box>
             </Tabs.Panel>
@@ -442,6 +596,7 @@ function PlayerCardDisplay({
   activeArea,
   factionToColor,
   colorToFaction,
+  planetAttachments,
 }: PlayerCardDisplayProps) {
   if (activeArea?.type === "faction") {
     const playerToShow = playerData.find(
@@ -456,6 +611,7 @@ function PlayerCardDisplay({
             playerData={playerToShow}
             factionToColor={factionToColor}
             colorToFaction={colorToFaction}
+            planetAttachments={planetAttachments}
           />
         </Box>
       </Box>

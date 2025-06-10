@@ -273,8 +273,10 @@
 
 /* Legendary icon */
 .legendaryIcon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
 }
 
 /* Exhausted overlay */
@@ -311,4 +313,11 @@
 /* Popover dropdown */
 .popoverDropdown {
   padding: 0;
+}
+
+.attachmentIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
 }

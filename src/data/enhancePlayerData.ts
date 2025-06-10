@@ -1,4 +1,11 @@
-import { PlayerDataResponse, PlayerData } from "./types";
+import {
+  PlayerDataResponse,
+  PlayerData,
+  Objectives,
+  LawInPlay,
+  StrategyCard,
+  CardPoolData,
+} from "./types";
 import {
   calculateTilePositions,
   TilePosition,
@@ -13,6 +20,12 @@ export type EnhancedPlayerData = {
   systemIdToPosition: Record<string, string>;
   factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
+  planetAttachments: Record<string, string[]>;
+  objectives: Objectives;
+  lawsInPlay: LawInPlay[];
+  strategyCards: StrategyCard[];
+  vpsToWin: number;
+  cardPool: CardPoolData;
 };
 
 export function enhancePlayerData(
@@ -49,16 +62,50 @@ export function enhancePlayerData(
       {} as Record<string, string>
     ) || {};
 
+  const planetAttachments: Record<string, string[]> = {};
+  if (data.tileUnitData) {
+    Object.values(data.tileUnitData).forEach((tileData: any) => {
+      if (tileData.planets) {
+        Object.entries(tileData.planets).forEach(
+          ([planetName, planetData]: [string, any]) => {
+            if (planetData.entities) {
+              const attachments: string[] = [];
+              Object.entries(planetData.entities).forEach(
+                ([_faction, entities]) => {
+                  if (Array.isArray(entities)) {
+                    entities.forEach((entity: any) => {
+                      if (entity.entityType === "attachment") {
+                        attachments.push(entity.entityId);
+                      }
+                    });
+                  }
+                }
+              );
+              if (attachments.length > 0) {
+                planetAttachments[planetName] = attachments;
+              }
+            }
+          }
+        );
+      }
+    });
+  }
+
   return {
     playerData: data.playerData,
-
     tileUnitData: data.tileUnitData,
     tilePositions: data.tilePositions,
     statTilePositions: data.statTilePositions,
-
+    objectives: data.objectives,
+    lawsInPlay: data.lawsInPlay,
+    strategyCards: data.strategyCards,
+    vpsToWin: data.vpsToWin,
+    cardPool: data.cardPool,
+    // extra computed properties
     calculatedTilePositions,
     systemIdToPosition,
     factionToColor,
     colorToFaction,
+    planetAttachments,
   };
 }

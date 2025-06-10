@@ -81,6 +81,7 @@ export const entityZStackPriority = [
   "dn",
   "fs",
   "ws",
+  "sleeper",
 ];
 
 const calculatePlanetHeat = (

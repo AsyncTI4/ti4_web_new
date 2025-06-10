@@ -1,6 +1,5 @@
 import { cdnImage } from "../../../data/cdnImage";
 import { Table, Image, Text } from "@mantine/core";
-import { IconRocket, IconPlanet } from "@tabler/icons-react";
 
 type Props = {
   stats: {
@@ -20,10 +19,14 @@ export function ArmyStats({ stats }: Props) {
         <Table.Tr>
           <Table.Th></Table.Th>
           <Table.Th>
-            <IconRocket size={16} />
+            <Text size="sm" fw={700} c="white">
+              Space
+            </Text>
           </Table.Th>
           <Table.Th>
-            <IconPlanet size={16} />
+            <Text size="sm" fw={700} c="white">
+              Ground
+            </Text>
           </Table.Th>
         </Table.Tr>
       </Table.Thead>

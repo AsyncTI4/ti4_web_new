@@ -1,5 +1,9 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
+import {
+  getAttachmentData,
+  getAttachmentImagePath,
+} from "../../data/attachments";
 
 type AttachmentProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   unitType: string;
@@ -14,11 +18,16 @@ export const Attachment = ({
   alt,
   ...imageProps
 }: AttachmentProps) => {
-  const defaultAlt = alt || `${faction || "attachment"} ${unitType}`;
+  // Look up attachment data by ID
+  const attachmentData = getAttachmentData(unitType);
+  const imagePath = getAttachmentImagePath(unitType);
+
+  const defaultAlt =
+    alt || `${faction || "attachment"} ${attachmentData?.name || unitType}`;
 
   return (
     <img
-      src={cdnImage(`/attachment_token/${unitType}`)}
+      src={cdnImage(`/attachment_token/${imagePath}`)}
       alt={defaultAlt}
       {...imageProps}
     />

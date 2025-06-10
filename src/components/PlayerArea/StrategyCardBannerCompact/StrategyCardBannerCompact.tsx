@@ -7,6 +7,7 @@ interface Props {
   text: string;
   color: string;
   isSpeaker: boolean;
+  isExhausted?: boolean;
 }
 
 // Strategy card color mapping to Mantine colors for number display
@@ -38,6 +39,7 @@ export function StrategyCardBannerCompact({
   text,
   color,
   isSpeaker,
+  isExhausted = false,
 }: Props) {
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
@@ -49,7 +51,10 @@ export function StrategyCardBannerCompact({
       {/* Speaker Token */}
       <SpeakerToken isVisible={isSpeaker} />
 
-      <Box className={`${classes.cardContainer} ${colorClass}`}>
+      <Box
+        className={`${classes.cardContainer} ${colorClass}`}
+        style={{ opacity: isExhausted ? 0.5 : 1 }}
+      >
         {/* Strategy card number circle */}
         <Box className={classes.numberCircle}>
           <Text ff="heading" c={numberColor} className={classes.numberText}>

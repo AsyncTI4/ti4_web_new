@@ -14,7 +14,7 @@
 }
 
 .mainBackground {
-  background: var(--mantine-color-dark-8);
+  background: #0e1828;
   min-height: calc(100vh - 60px);
 }
 

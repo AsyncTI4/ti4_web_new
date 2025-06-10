@@ -8,6 +8,7 @@ type FactionTabBarProps = {
   playerData: Array<{
     color: string;
     faction: string;
+    active?: boolean;
   }>;
   selectedArea: AreaType;
   activeArea: AreaType;
@@ -34,6 +35,7 @@ export function FactionTabBar({
           const isPinned =
             selectedArea?.type === "faction" &&
             selectedArea.faction === player.faction;
+          const isActivePlayer = player.active;
 
           return (
             <Box
@@ -70,6 +72,9 @@ export function FactionTabBar({
                       : ""
                 }`}
               />
+              {isActivePlayer && (
+                <Box className={classes.activePlayerIndicator} />
+              )}
             </Box>
           );
         })}

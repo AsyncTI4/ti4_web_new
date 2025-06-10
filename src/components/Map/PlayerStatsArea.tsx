@@ -69,6 +69,8 @@ export function PlayerStatsArea({
   const secondHex = hexagons[1];
   const thirdHex = hexagons[2];
 
+  const numScoredSecrets = Object.values(playerData.secretsScored).length;
+
   if (tilePositions.length === 0) return null;
 
   return (
@@ -104,15 +106,48 @@ export function PlayerStatsArea({
             )}
 
             <Group gap={1} justify="center">
-              {playerData.scs.map((sc: number) => (
-                <Text
-                  className={styles.strategyCard}
-                  c={SC_NUMBER_COLORS[SC_COLORS[sc as keyof typeof SC_COLORS]]}
-                >
-                  {sc}
-                </Text>
-              ))}
+              {playerData.scs.map((sc: number) => {
+                const isExhausted = playerData.exhaustedSCs?.includes(sc);
+                return (
+                  <Text
+                    key={sc}
+                    className={styles.strategyCard}
+                    c={
+                      isExhausted
+                        ? "gray.5"
+                        : SC_NUMBER_COLORS[
+                            SC_COLORS[sc as keyof typeof SC_COLORS]
+                          ]
+                    }
+                  >
+                    {sc}
+                  </Text>
+                );
+              })}
             </Group>
+
+            {/* Secret Objectives */}
+            {playerData.numScoreableSecrets > 0 && (
+              <Group gap={0} justify="center">
+                {Array.from(
+                  { length: playerData.numScoreableSecrets },
+                  (_, index) => {
+                    const isScored = index < (numScoredSecrets || 0);
+                    return (
+                      <img
+                        key={index}
+                        src={cdnImage(
+                          isScored
+                            ? "/player_area/pa_so-icon_scored.png"
+                            : "/player_area/pa_so-icon_hand.png"
+                        )}
+                        alt={isScored ? "Scored Secret" : "Secret in Hand"}
+                      />
+                    );
+                  }
+                )}
+              </Group>
+            )}
 
             {playerData.totalVps !== undefined && (
               <div className={styles.victoryPoints}>

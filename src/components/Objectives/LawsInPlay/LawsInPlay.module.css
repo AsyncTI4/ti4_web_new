@@ -1,0 +1,8 @@
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mantine-color-gray-5);
+  margin-bottom: var(--mantine-spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

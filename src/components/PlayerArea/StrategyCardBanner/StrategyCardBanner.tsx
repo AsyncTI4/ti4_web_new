@@ -9,9 +9,16 @@ interface Props {
   text: string;
   color: string;
   isSpeaker: boolean;
+  isExhausted?: boolean;
 }
 
-export function StrategyCardBanner({ number, text, color, isSpeaker }: Props) {
+export function StrategyCardBanner({
+  number,
+  text,
+  color,
+  isSpeaker,
+  isExhausted = false,
+}: Props) {
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
 
@@ -23,6 +30,7 @@ export function StrategyCardBanner({ number, text, color, isSpeaker }: Props) {
       <Shimmer
         color={color as any}
         className={`${styles.strategyCardBanner} ${styles[color as keyof typeof styles]}`}
+        style={{ opacity: isExhausted ? 0.5 : 1 }}
       >
         {/* Additional subtle inner glow overlay */}
         <Box
