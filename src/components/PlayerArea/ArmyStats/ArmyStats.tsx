@@ -19,12 +19,12 @@ export function ArmyStats({ stats }: Props) {
         <Table.Tr>
           <Table.Th></Table.Th>
           <Table.Th>
-            <Text size="sm" fw={700} c="white">
+            <Text size="sm" fw={700} c="white" ta="center">
               Space
             </Text>
           </Table.Th>
           <Table.Th>
-            <Text size="sm" fw={700} c="white">
+            <Text size="sm" fw={700} c="white" ta="center">
               Ground
             </Text>
           </Table.Th>
@@ -39,12 +39,12 @@ export function ArmyStats({ stats }: Props) {
             />
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.spaceArmyRes}
             </Text>
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.groundArmyRes}
             </Text>
           </Table.Td>
@@ -57,12 +57,12 @@ export function ArmyStats({ stats }: Props) {
             />
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.spaceArmyHealth}
             </Text>
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.groundArmyHealth}
             </Text>
           </Table.Td>
@@ -75,12 +75,12 @@ export function ArmyStats({ stats }: Props) {
             />
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.spaceArmyCombat}
             </Text>
           </Table.Td>
           <Table.Td>
-            <Text size="md" fw={700} c="white">
+            <Text size="md" fw={700} c="white" ta="center">
               {stats.groundArmyCombat}
             </Text>
           </Table.Td>

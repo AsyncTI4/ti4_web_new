@@ -245,7 +245,7 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </SimpleGrid>
 
-        <Surface pattern="grid" cornerAccents={true} label="TECH" p="md">
+        <Surface pattern="grid" cornerAccents={true} p="md">
           <Stack gap="xs">
             <DynamicTechGrid renderTechColumn={renderTechColumn} />
           </Stack>
@@ -253,7 +253,7 @@ export default function PlayerCardSidebar(props: Props) {
 
         {/* Units Section - Only show upgraded units */}
         {upgradedUnits.length > 0 && (
-          <Surface p="md" label="UPGRADED UNITS">
+          <Surface p="md">
             <SimpleGrid cols={4} spacing="8px">
               {upgradedUnits.map((unitId, index) => {
                 const asyncId = getUnitAsyncId(unitId);
@@ -287,7 +287,6 @@ export default function PlayerCardSidebar(props: Props) {
             p="md"
             pattern="circle"
             cornerAccents={true}
-            label="Planets"
             style={{
               alignItems: "flex-start",
             }}

@@ -527,12 +527,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
                   }}
                 />
 
-                {/* Ghost Wormholes and Sleeper Tokens Reinforcements */}
-                {((ghostWormholesReinf && ghostWormholesReinf.length > 0) ||
-                  (sleeperTokensReinf && sleeperTokensReinf > 0)) && (
+                {/* Ghost Wormhole Reinforcements */}
+                {!!ghostWormholesReinf?.length && (
                   <Group gap="xs" justify="center">
-                    {/* Ghost Wormholes */}
-                    {ghostWormholesReinf?.map((wormholeId, index) => (
+                    {ghostWormholesReinf.map((wormholeId, index) => (
                       <Image
                         key={index}
                         src={cdnImage(
@@ -546,33 +544,31 @@ export default memo(function PlayerCard2Mid(props: Props) {
                         }}
                       />
                     ))}
+                  </Group>
+                )}
 
-                    {/* Sleeper Tokens */}
-                    {sleeperTokensReinf && sleeperTokensReinf > 0 && (
-                      <Group gap="xs" align="center">
-                        <Image
-                          src={cdnImage(
-                            `/tokens/${getTokenImagePath("sleeper")}`
-                          )}
-                          alt="sleeper"
-                          w={40}
-                          h={40}
-                          style={{
-                            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
-                          }}
-                        />
-                        <Text
-                          size="lg"
-                          fw={700}
-                          c="white"
-                          style={{
-                            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                          }}
-                        >
-                          {sleeperTokensReinf}
-                        </Text>
-                      </Group>
-                    )}
+                {/* Sleeper Token Reinforcements */}
+                {sleeperTokensReinf !== undefined && sleeperTokensReinf > 0 && (
+                  <Group gap="xs" align="center" justify="center">
+                    <Image
+                      src={cdnImage(`/tokens/${getTokenImagePath("sleeper")}`)}
+                      alt="sleeper"
+                      w={40}
+                      h={40}
+                      style={{
+                        filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
+                      }}
+                    />
+                    <Text
+                      size="lg"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                      }}
+                    >
+                      {sleeperTokensReinf}
+                    </Text>
                   </Group>
                 )}
               </Stack>
