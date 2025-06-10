@@ -66,6 +66,10 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    positionInTile: {
+      x: 214,
+      y: 89,
+    },
     planetLayout: {
       unitHolderName: "abaddon",
       resourcesLocation: "TopRight",
@@ -174,6 +178,7 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+
     planetLayout: {
       unitHolderName: "acheron",
       resourcesLocation: "BottomLeft",
@@ -788,6 +793,10 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    positionInTile: {
+      x: 221.0,
+      y: 229.0,
+    },
     planetLayout: {
       unitHolderName: "ashtroth",
       resourcesLocation: "TopLeft",
@@ -4025,6 +4034,10 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    positionInTile: {
+      x: 83,
+      y: 139,
+    },
     planetLayout: {
       unitHolderName: "loki",
       resourcesLocation: "BottomLeft",
@@ -5791,6 +5804,7 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+
     planetLayout: {
       unitHolderName: "rigeli",
       resourcesLocation: "TopLeft",
