@@ -23,6 +23,7 @@ function SmoothPopoverBase({
       withArrow={withArrow}
       shadow={shadow}
       opened={opened}
+      zIndex={10000}
       onChange={onChange}
       transitionProps={{
         transition: {
