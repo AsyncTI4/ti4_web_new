@@ -16,7 +16,7 @@ import { IconPencil } from "@tabler/icons-react";
 import { DiscordLogin } from "./DiscordLogin";
 import { Link } from "react-router-dom";
 import classes from "./HeaderMenuNew.module.css";
-import { isTouchDevice } from "@/utils/isTouchDevice";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type HeaderMenuNewProps = {
   mapId: string;
@@ -81,7 +81,7 @@ export function HeaderMenuNew({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const showDropdown = showDesktopDropdown || isTouchDevice();
+  const showDropdown = showDesktopDropdown || isMobileDevice();
 
   return (
     <>

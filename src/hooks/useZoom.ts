@@ -1,4 +1,4 @@
-import { isTouchDevice } from "@/utils/isTouchDevice";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { useCallback, useState } from "react";
 
 // Zoom configuration from ScrollMap
@@ -15,7 +15,7 @@ export function useZoom(
     if (savedZoomIndex !== null) {
       return parseInt(savedZoomIndex, 10);
     }
-    return isTouchDevice() ? 0 : defaultZoomIndex;
+    return isMobileDevice() ? 0 : defaultZoomIndex;
   });
 
   const [zoomFitToScreen, setZoomFitToScreen] = useState(() => {
@@ -42,7 +42,7 @@ export function useZoom(
   }, []);
 
   const handleZoomReset = useCallback(() => {
-    const resetIndex = isTouchDevice() ? 0 : defaultZoomIndex;
+    const resetIndex = isMobileDevice() ? 0 : defaultZoomIndex;
     changeZoomIndex(resetIndex);
     changeZoomFitToScreen(false);
   }, []);
