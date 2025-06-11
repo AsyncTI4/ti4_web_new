@@ -130,6 +130,7 @@ export type PlayerDataResponse = {
   vpsToWin: number;
   objectives: Objectives;
   cardPool: CardPoolData;
+  versionSchema?: number;
 };
 
 export type PlayerData = {
@@ -188,6 +189,7 @@ export type PlayerData = {
   leaders: Leader[];
   leaderIDs: string[];
   secretsScored: Record<string, number>;
+  secretsUnscored: Record<string, number>;
   numScoreableSecrets: number;
   flexibleDisplayName: string;
   scs: number[];
@@ -214,6 +216,9 @@ export type PlayerData = {
   // ghost-specific properties
   sleeperTokensReinf?: number;
   ghostWormholesReinf?: string[];
+
+  // mahact-specific properties
+  mahactEdict?: string[];
 };
 
 export type Planet = {

@@ -14,10 +14,12 @@ interface UnitStackProps {
   colorAlias: string;
   faction: string;
   count: number;
+  sustained?: number | null;
   x: number;
   y: number;
   stackKey: string;
   entityType: "unit" | "token" | "attachment";
+  planetCenter?: { x: number; y: number };
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitSelect?: (stackKey: string, event: React.MouseEvent) => void;
@@ -28,10 +30,12 @@ export function UnitStack({
   colorAlias,
   faction,
   count,
+  sustained,
   stackKey,
   entityType,
   x,
   y,
+  planetCenter,
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
@@ -86,6 +90,7 @@ export function UnitStack({
         const stackOffsetY = i * SPLAY_OFFSET_Y; // Slight movement south for depth
 
         const unitKey = `${stackKey}-${i}`;
+
         const commonProps = {
           unitType,
           colorAlias,
@@ -95,9 +100,14 @@ export function UnitStack({
             left: `${x + stackOffsetX}px`,
             top: `${y + stackOffsetY}px`,
             pointerEvents: "auto" as const,
-            cursor: "pointer" as const,
+            cursor:
+              entityType === "unit"
+                ? ("pointer" as const)
+                : ("default" as const),
             transform: "translate(-50%, -50%)",
-            zIndex: baseZIndex + (count - 1 - i), // Higher z-index for northeast units (top of stack) + unit type priority
+            zIndex:
+              baseZIndex +
+              (entityType === "attachment" ? i * -1 : count - 1 - i),
           },
           onMouseEnter:
             entityType === "unit" && onUnitMouseOver
@@ -117,11 +127,24 @@ export function UnitStack({
         };
 
         if (entityType === "token") {
-          return <Token key={unitKey} tokenId={unitType} {...commonProps} />;
+          return (
+            <Token
+              key={unitKey}
+              tokenId={unitType}
+              planetCenter={planetCenter}
+              {...commonProps}
+            />
+          );
         } else if (entityType === "attachment") {
           return <Attachment key={unitKey} {...commonProps} />;
         } else {
-          return <Unit key={unitKey} {...commonProps} />;
+          return (
+            <Unit
+              key={unitKey}
+              {...commonProps}
+              sustained={sustained ? i < sustained : false}
+            />
+          );
         }
       })}
     </>

@@ -3,13 +3,18 @@ import { Grid, Stack, SimpleGrid } from "@mantine/core";
 type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
 type Props = {
-  renderTechColumn: (techType: string) => React.ReactNode[];
+  renderTechColumn: (
+    techType: string,
+    exhaustedTechs?: string[]
+  ) => React.ReactNode[];
   layout?: "grid" | "simple";
+  exhaustedTechs?: string[];
 };
 
 export function DynamicTechGrid({
   renderTechColumn,
   layout = "simple",
+  exhaustedTechs = [],
 }: Props) {
   const techCategories: TechCategory[] = [
     "PROPULSION",
@@ -21,7 +26,7 @@ export function DynamicTechGrid({
   const categoriesWithTechs = techCategories
     .map((techType) => ({
       type: techType,
-      techs: renderTechColumn(techType),
+      techs: renderTechColumn(techType, exhaustedTechs),
     }))
     .filter((category) => category.techs.length > 0);
 

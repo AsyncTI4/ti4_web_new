@@ -17,6 +17,7 @@ type PlayerStatsAreaProps = {
   statTilePositions: string[];
   color: string;
   vpsToWin: number;
+  factionToColor: Record<string, string>;
 };
 
 export function PlayerStatsArea({
@@ -25,6 +26,7 @@ export function PlayerStatsArea({
   statTilePositions,
   color,
   vpsToWin,
+  factionToColor,
 }: PlayerStatsAreaProps) {
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
@@ -69,7 +71,9 @@ export function PlayerStatsArea({
   const secondHex = hexagons[1];
   const thirdHex = hexagons[2];
 
-  const numScoredSecrets = Object.values(playerData.secretsScored).length;
+  const numScoredSecrets = playerData.secretsScored
+    ? Object.values(playerData.secretsScored).length
+    : 0;
 
   if (tilePositions.length === 0) return null;
 
@@ -129,22 +133,51 @@ export function PlayerStatsArea({
             {/* Secret Objectives */}
             {playerData.numScoreableSecrets > 0 && (
               <Group gap={0} justify="center">
+                {/* Render scored secrets */}
+                {Array.from({ length: numScoredSecrets }, (_, index) => (
+                  <img
+                    key={`scored-${index}`}
+                    src={cdnImage("/player_area/pa_so-icon_scored.png")}
+                    alt="Scored Secret"
+                  />
+                ))}
+
+                {/* Render unscored secrets in hand */}
                 {Array.from(
-                  { length: playerData.numScoreableSecrets },
-                  (_, index) => {
-                    const isScored = index < (numScoredSecrets || 0);
-                    return (
-                      <img
-                        key={index}
-                        src={cdnImage(
-                          isScored
-                            ? "/player_area/pa_so-icon_scored.png"
-                            : "/player_area/pa_so-icon_hand.png"
-                        )}
-                        alt={isScored ? "Scored Secret" : "Secret in Hand"}
-                      />
-                    );
-                  }
+                  {
+                    length: playerData.secretsUnscored
+                      ? Object.values(playerData.secretsUnscored).length
+                      : 0,
+                  },
+                  (_, index) => (
+                    <img
+                      key={`unscored-${index}`}
+                      src={cdnImage("/player_area/pa_so-icon_hand.png")}
+                      alt="Secret in Hand"
+                    />
+                  )
+                )}
+
+                {/* Render empty slots with reduced opacity */}
+                {Array.from(
+                  {
+                    length: Math.max(
+                      0,
+                      playerData.numScoreableSecrets -
+                        numScoredSecrets -
+                        (playerData.secretsUnscored
+                          ? Object.values(playerData.secretsUnscored).length
+                          : 0)
+                    ),
+                  },
+                  (_, index) => (
+                    <img
+                      key={`empty-${index}`}
+                      src={cdnImage("/player_area/pa_so-icon_hand.png")}
+                      alt="Empty Secret Slot"
+                      style={{ opacity: 0.2 }}
+                    />
+                  )
                 )}
               </Group>
             )}
@@ -185,6 +218,8 @@ export function PlayerStatsArea({
                 colorAlias={getColorAlias(color)}
                 faction={faction}
                 type="fleet"
+                mahactEdict={playerData.mahactEdict}
+                factionToColor={factionToColor}
               />
               <CommandTokenStack
                 count={playerData.strategicCC}

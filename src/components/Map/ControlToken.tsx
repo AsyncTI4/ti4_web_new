@@ -37,3 +37,37 @@ export const ControlToken = ({
     </div>
   );
 };
+
+export const SmallControlToken = ({
+  colorAlias,
+  faction,
+  style,
+}: ControlTokenProps) => {
+  return (
+    <div style={style}>
+      <div style={{ position: "relative" }}>
+        <img
+          src={cdnImage(`/command_token/control_${colorAlias}.png`)}
+          alt={`${faction || "control"} control token`}
+          style={{
+            height: "24px",
+          }}
+        />
+        {faction && (
+          <img
+            src={cdnImage(`/factions/${faction}.png`)}
+            alt={`${faction} faction`}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -70%)",
+              height: "20px",
+              zIndex: 1,
+            }}
+          />
+        )}
+      </div>
+    </div>
+  );
+};

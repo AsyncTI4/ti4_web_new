@@ -26,6 +26,7 @@ export type EnhancedPlayerData = {
   strategyCards: StrategyCard[];
   vpsToWin: number;
   cardPool: CardPoolData;
+  versionSchema?: number;
 };
 
 export function enhancePlayerData(
@@ -101,6 +102,7 @@ export function enhancePlayerData(
     strategyCards: data.strategyCards,
     vpsToWin: data.vpsToWin,
     cardPool: data.cardPool,
+    versionSchema: data.versionSchema,
     // extra computed properties
     calculatedTilePositions,
     systemIdToPosition,

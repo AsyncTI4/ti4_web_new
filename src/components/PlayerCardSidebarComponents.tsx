@@ -116,6 +116,7 @@ export default function PlayerCardSidebarComponents(props: Props) {
               tacticalCC={tacticalCC}
               fleetCC={fleetCC}
               strategicCC={strategicCC}
+              mahactEdict={props.playerData.mahactEdict}
             />
 
             <FragmentsPool fragments={fragments} />

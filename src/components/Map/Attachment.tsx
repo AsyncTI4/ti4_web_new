@@ -25,11 +25,6 @@ export const Attachment = ({
   const defaultAlt =
     alt || `${faction || "attachment"} ${attachmentData?.name || unitType}`;
 
-  return (
-    <img
-      src={cdnImage(`/attachment_token/${imagePath}`)}
-      alt={defaultAlt}
-      {...imageProps}
-    />
-  );
+  if (!imagePath) return null;
+  return <img src={cdnImage(imagePath)} alt={defaultAlt} {...imageProps} />;
 };

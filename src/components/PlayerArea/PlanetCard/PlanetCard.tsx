@@ -32,100 +32,13 @@ export function PlanetCard({
   const planetType = planetData.planetType;
   const traitIconKey = getTraitIconKey(planetData.planetType!);
 
-  // Calculate attachment modifiers
-  const attachmentModifiers = attachments.reduce(
-    (totals, attachmentId) => {
-      const attachmentData = getAttachmentData(attachmentId);
-      if (attachmentData) {
-        return {
-          resources: totals.resources + (attachmentData.resourcesModifier || 0),
-          influence: totals.influence + (attachmentData.influenceModifier || 0),
-          techSpecialties: [
-            ...totals.techSpecialties,
-            ...(attachmentData.techSpeciality || []),
-          ],
-        };
-      }
-      return totals;
-    },
-    { resources: 0, influence: 0, techSpecialties: [] as string[] }
+  const attachmentModifiers = calculateAttachmentModifiers(attachments);
+  const allIcons = createAllIcons(planetData, attachmentModifiers, attachments);
+  const { finalResources, finalInfluence } = calculateFinalValues(
+    planetData,
+    attachmentModifiers
   );
-
-  // Get all tech skip icons for this planet (native + attachment tech specialties)
-  const allTechSpecialties = [
-    ...(planetData.techSpecialties || []),
-    ...attachmentModifiers.techSpecialties,
-  ];
-
-  const techSkipIconElements = allTechSpecialties
-    .map((specialty) => getTechSkipIconKey(specialty))
-    .filter((key) => key !== null)
-    .map((key, index) => (
-      <TechSkipIcon key={`${key}-${index}`} techType={key as TechType} />
-    ));
-
-  // Add legendary ability icon if planet has legendary ability text
-  const legendaryAbilityIcon = planetData.legendaryAbilityText ? (
-    <Image
-      key="legendary"
-      src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-      className={styles.legendaryIcon}
-    />
-  ) : null;
-
-  // Add attachment upgrade icon if there are any attachments
-  const attachmentUpgradeIcon =
-    attachments.length > 0 ? (
-      <Image
-        key="upgrade"
-        src={cdnImage("/planet_cards/pc_upgrade.png")}
-        className={styles.attachmentIcon}
-      />
-    ) : null;
-
-  // Combine all icons
-  const allIcons = [...techSkipIconElements];
-  if (legendaryAbilityIcon) {
-    allIcons.push(legendaryAbilityIcon);
-  }
-  if (attachmentUpgradeIcon) {
-    allIcons.push(attachmentUpgradeIcon);
-  }
-
-  // Calculate final resource and influence values
-  const finalResources = planetData.resources + attachmentModifiers.resources;
-  const finalInfluence = planetData.influence + attachmentModifiers.influence;
-
-  // For faction planets, render faction icon instead of trait icon
-  const renderIcon = () => {
-    if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
-      return (
-        <Image
-          src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
-          className={styles.factionIcon}
-        />
-      );
-    }
-    return traitIconKey ? <PlanetTraitIcon trait={traitIconKey} /> : null;
-  };
-
-  // Legendary planet animation styles
-  const isLegendary = !!planetData.legendaryAbilityText;
-
-  // Get CSS variable names for planet type
-  const getCSSVariables = (planetType: string) => {
-    const typeKey = planetType?.toLowerCase() || "default";
-    // Map known planet types, fallback to 'default' for unknown types
-    const validTypes = ["cultural", "hazardous", "industrial", "faction", "mr"];
-    const finalType = validTypes.includes(typeKey) ? typeKey : "default";
-
-    return {
-      "--planet-background": `var(--${finalType}-background)`,
-      "--planet-border": `var(--${finalType}-border)`,
-      "--planet-shadow": `var(--${finalType}-shadow)`,
-      "--planet-highlight": `var(--${finalType}-highlight)`,
-    };
-  };
+  const isLegendary = checkIsLegendary(planetData, attachments);
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -176,7 +89,9 @@ export function PlanetCard({
             }`}
           />
 
-          <Box className={styles.iconContainer}>{renderIcon()}</Box>
+          <Box className={styles.iconContainer}>
+            <PlanetIcon planetData={planetData} traitIconKey={traitIconKey} />
+          </Box>
           <Stack className={styles.bottomStack}>
             <Group className={styles.nameGroup}>
               <Text className={styles.planetName} ff="monospace">
@@ -218,6 +133,86 @@ export function PlanetCard({
   );
 }
 
+function calculateAttachmentModifiers(attachments: string[]) {
+  return attachments.reduce(
+    (totals, attachmentId) => {
+      const attachmentData = getAttachmentData(attachmentId);
+      if (attachmentData) {
+        return {
+          resources: totals.resources + (attachmentData.resourcesModifier || 0),
+          influence: totals.influence + (attachmentData.influenceModifier || 0),
+          techSpecialties: [
+            ...totals.techSpecialties,
+            ...(attachmentData.techSpeciality || []),
+          ],
+        };
+      }
+      return totals;
+    },
+    { resources: 0, influence: 0, techSpecialties: [] as string[] }
+  );
+}
+
+function createAllIcons(
+  planetData: any,
+  attachmentModifiers: any,
+  attachments: string[]
+) {
+  const allIcons = [];
+
+  // Add tech skip icons
+  const allTechSpecialties = [
+    ...(planetData.techSpecialties || []),
+    ...attachmentModifiers.techSpecialties,
+  ];
+
+  const techSkipIconElements = allTechSpecialties
+    .map((specialty) => getTechSkipIconKey(specialty))
+    .filter((key) => key !== null)
+    .map((key, index) => (
+      <TechSkipIcon key={`${key}-${index}`} techType={key as TechType} />
+    ));
+
+  allIcons.push(...techSkipIconElements);
+
+  // Add legendary icon if applicable
+  if (checkIsLegendary(planetData, attachments)) {
+    allIcons.push(<LegendaryIcon key="legendary" />);
+  }
+
+  // Add attachment upgrade icon if applicable
+  if (attachments.length > 0) {
+    allIcons.push(<AttachmentUpgradeIcon key="upgrade" />);
+  }
+
+  return allIcons;
+}
+
+function calculateFinalValues(planetData: any, attachmentModifiers: any) {
+  return {
+    finalResources: planetData.resources + attachmentModifiers.resources,
+    finalInfluence: planetData.influence + attachmentModifiers.influence,
+  };
+}
+
+function checkIsLegendary(planetData: any, attachments: string[]) {
+  return !!planetData.legendaryAbilityText || attachments.includes("nanoforge");
+}
+
+function getCSSVariables(planetType: string) {
+  const typeKey = planetType?.toLowerCase() || "default";
+  // Map known planet types, fallback to 'default' for unknown types
+  const validTypes = ["cultural", "hazardous", "industrial", "faction", "mr"];
+  const finalType = validTypes.includes(typeKey) ? typeKey : "default";
+
+  return {
+    "--planet-background": `var(--${finalType}-background)`,
+    "--planet-border": `var(--${finalType}-border)`,
+    "--planet-shadow": `var(--${finalType}-shadow)`,
+    "--planet-highlight": `var(--${finalType}-highlight)`,
+  };
+}
+
 const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
 
 const VALID_TECH_SPECIALTIES = new Set([
@@ -240,3 +235,42 @@ const getTechSkipIconKey = (techSpecialty: string): string | null => {
   const lowercase = techSpecialty.toLowerCase();
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
+
+type LegendaryIconProps = {};
+
+function LegendaryIcon({}: LegendaryIconProps) {
+  return (
+    <Image
+      src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
+      className={styles.legendaryIcon}
+    />
+  );
+}
+
+type AttachmentUpgradeIconProps = {};
+
+function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
+  return (
+    <Image
+      src={cdnImage("/planet_cards/pc_upgrade.png")}
+      className={styles.attachmentIcon}
+    />
+  );
+}
+
+type PlanetIconProps = {
+  planetData: any;
+  traitIconKey: any;
+};
+
+function PlanetIcon({ planetData, traitIconKey }: PlanetIconProps) {
+  if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
+    return (
+      <Image
+        src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
+        className={styles.factionIcon}
+      />
+    );
+  }
+  return traitIconKey ? <PlanetTraitIcon trait={traitIconKey} /> : null;
+}

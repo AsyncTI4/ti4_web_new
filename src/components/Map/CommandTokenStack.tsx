@@ -1,11 +1,15 @@
 import { Box, Text } from "@mantine/core";
 import { CommandCounter } from "./CommandCounter";
+import { LetnevFleetTokenStack } from "./LetnevFleetTokenStack";
+import { MahactFleetTokenStack } from "./MahactFleetTokenStack";
 
 type CommandTokenStackProps = {
   count: number;
   colorAlias: string;
   faction: string;
   type: "command" | "fleet";
+  mahactEdict?: string[];
+  factionToColor?: Record<string, string>;
 };
 
 export function CommandTokenStack({
@@ -13,7 +17,35 @@ export function CommandTokenStack({
   colorAlias,
   faction,
   type,
+  mahactEdict = [],
+  factionToColor = {},
 }: CommandTokenStackProps) {
+  // Use specialized components for fleet tokens
+  if (type === "fleet") {
+    if (faction === "letnev") {
+      return (
+        <LetnevFleetTokenStack
+          count={count}
+          colorAlias={colorAlias}
+          faction={faction}
+        />
+      );
+    }
+
+    if (mahactEdict.length > 0) {
+      return (
+        <MahactFleetTokenStack
+          count={count}
+          colorAlias={colorAlias}
+          faction={faction}
+          mahactEdict={mahactEdict}
+          factionToColor={factionToColor}
+        />
+      );
+    }
+  }
+
+  // Default behavior for command tokens and regular fleet tokens
   return (
     <Box pos="relative">
       <Text ff="heading" pos="absolute" left={0} top={0} fz={24} c="white">

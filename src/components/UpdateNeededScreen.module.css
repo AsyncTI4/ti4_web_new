@@ -1,0 +1,75 @@
+.container {
+  height: calc(100vh - 60px);
+  padding: var(--mantine-spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.updateCard {
+  width: 100%;
+}
+
+/* Content stack */
+.contentStack {
+  align-items: center;
+  gap: var(--mantine-spacing-lg);
+}
+
+/* Warning icon */
+.warningIcon {
+  color: var(--mantine-color-yellow-5);
+  filter: drop-shadow(0 2px 4px rgba(234, 179, 8, 0.4));
+}
+
+/* Title */
+.title {
+  color: white;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Description text */
+.description {
+  color: var(--mantine-color-gray-3);
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Reload button */
+.reloadButton {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow:
+    0 4px 12px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.reloadButton:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.2) 100%);
+  box-shadow:
+    0 6px 16px rgba(59, 130, 246, 0.3),
+    0 0 8px rgba(147, 197, 253, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Header styling */
+.headerGroup {
+  align-items: center;
+  height: 100%;
+  gap: var(--mantine-spacing-sm);
+  flex-wrap: nowrap;
+  max-width: 100vw;
+  padding: 0 var(--mantine-spacing-sm);
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logoDivider {
+  width: 1px;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, rgba(148, 163, 184, 0.3), transparent);
+}

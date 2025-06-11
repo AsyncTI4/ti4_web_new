@@ -167,6 +167,11 @@
   height: 20px;
   border-radius: 4px;
   transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
 }
 
 .closeButton:hover {

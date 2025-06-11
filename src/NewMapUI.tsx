@@ -48,6 +48,10 @@ import PlayerCardSidebarTech from "./components/PlayerCardSidebarTech";
 import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponents";
 import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
 import ScoreBoard from "./components/ScoreBoard";
+import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
+
+// Magic constant for required version schema
+const REQUIRED_VERSION_SCHEMA = 1;
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {
@@ -201,6 +205,8 @@ export function NewMapUI() {
     vpsToWin = 10,
     cardPool,
     isError = false,
+    versionSchema,
+    isLoading,
   } = enhancedData || {};
   const data = enhancedData;
 
@@ -226,6 +232,22 @@ export function NewMapUI() {
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
 
   const navigate = useNavigate();
+
+  // Early return for version check - render update needed page
+  if (
+    enhancedData &&
+    !isLoading &&
+    (!versionSchema || versionSchema < REQUIRED_VERSION_SCHEMA)
+  ) {
+    return (
+      <UpdateNeededScreen
+        gameId={gameId}
+        activeTabs={activeTabs}
+        changeTab={changeTab}
+        removeTab={removeTab}
+      />
+    );
+  }
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -348,6 +370,7 @@ export function NewMapUI() {
                               statTilePositions={statTiles as string[]}
                               color={factionToColor[faction]}
                               vpsToWin={vpsToWin}
+                              factionToColor={factionToColor}
                             />
                           );
                         }

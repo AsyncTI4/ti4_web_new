@@ -99,7 +99,16 @@ export const MapTile = React.memo<Props>(
         tileUnitData
       );
 
+      const planetCoords = getPlanetCoordsBySystemId(systemId);
+
       return Object.entries(allEntityPlacements).flatMap(([key, stack]) => {
+        // Determine planet center for tokens that belong to a planet
+        let planetCenter: { x: number; y: number } | undefined;
+        if (stack.planetName && planetCoords[stack.planetName]) {
+          const [x, y] = planetCoords[stack.planetName].split(",").map(Number);
+          planetCenter = { x, y };
+        }
+
         return [
           <UnitStack
             key={`${systemId}-${key}-stack`}
@@ -110,7 +119,9 @@ export const MapTile = React.memo<Props>(
             x={stack.x}
             y={stack.y}
             stackKey={key}
+            sustained={stack.sustained}
             entityType={stack.entityType}
+            planetCenter={planetCenter}
             onUnitMouseOver={
               onUnitMouseOver
                 ? () => {

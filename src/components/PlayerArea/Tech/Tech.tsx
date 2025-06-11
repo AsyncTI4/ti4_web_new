@@ -37,9 +37,10 @@ const getTechTier = (requirements?: string): number => {
 
 type Props = {
   techId: string;
+  isExhausted?: boolean;
 };
 
-export function Tech({ techId }: Props) {
+export function Tech({ techId, isExhausted = false }: Props) {
   const [opened, setOpened] = useState(false);
 
   // Look up tech data
@@ -60,6 +61,7 @@ export function Tech({ techId }: Props) {
         <Box
           className={`${styles.techCard} ${styles[color]} ${isFactionTech ? styles.factionTech : ""}`}
           onClick={() => setOpened((o) => !o)}
+          style={{ opacity: isExhausted ? 0.5 : 1 }}
         >
           {/* Tier indicator dots in top-right */}
           {tier > 0 && (

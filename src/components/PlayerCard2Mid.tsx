@@ -37,6 +37,7 @@ import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 // Removed calculatePlanetEconomics import - now using pre-calculated values
 import { PlayerCardBox } from "./PlayerCardBox";
 import { getTokenImagePath } from "../data/tokens";
+import { DebtTokens } from "./PlayerArea/DebtTokens";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -223,7 +224,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
   );
 
   // Helper function to render techs with phantom slots
-  const renderTechColumn = (techType: string) => {
+  const renderTechColumn = (
+    techType: string,
+    exhaustedTechs: string[] = []
+  ) => {
     const filteredTechs = techs.filter((techId) => {
       const techData = getTechData(techId);
       return techData?.types[0] === techType;
@@ -239,7 +243,11 @@ export default memo(function PlayerCard2Mid(props: Props) {
     });
 
     const techElements = sortedTechs.map((techId, index) => (
-      <Tech key={index} techId={techId} />
+      <Tech
+        key={index}
+        techId={techId}
+        isExhausted={exhaustedTechs.includes(techId)}
+      />
     ));
 
     return [...techElements];
@@ -252,6 +260,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
         tacticalCC={tacticalCC}
         fleetCC={fleetCC}
         strategicCC={strategicCC}
+        mahactEdict={props.playerData.mahactEdict}
       />
       {/* Fragments Section - harmonized with Surface component styling */}
       <FragmentsPool fragments={fragments} />
@@ -448,6 +457,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
                       <DynamicTechGrid
                         renderTechColumn={renderTechColumn}
                         layout="grid"
+                        exhaustedTechs={props.playerData.exhaustedTechs}
                       />
                     </Grid>
                   </Stack>
@@ -473,13 +483,15 @@ export default memo(function PlayerCard2Mid(props: Props) {
               <Surface p="xs" pattern="none" h="100%">
                 <Stack>
                   {/* Total/Optimal Section */}
-                  <ResourceInfluenceCompact
-                    planetEconomics={planetEconomics}
-                    debts={debtTokens}
-                  />
+                  <ResourceInfluenceCompact planetEconomics={planetEconomics} />
 
-                  {/* Debt Section */}
-                  {/* <DebtTokens debts={debts} /> */}
+                  {/* Debt Tokens Section - Full width at bottom */}
+                  {debtTokens && Object.keys(debtTokens).length > 0 && (
+                    <DebtTokens
+                      debts={debtTokens}
+                      colorToFaction={props.colorToFaction}
+                    />
+                  )}
                 </Stack>
               </Surface>
             </Grid.Col>
@@ -489,7 +501,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
                 sm: 9,
               }}
             >
-              <Group h="100%">
+              <Group>
                 <Surface
                   p="md"
                   pattern="circle"
@@ -513,6 +525,14 @@ export default memo(function PlayerCard2Mid(props: Props) {
                   </Group>
                 </Surface>
               </Group>
+              {nombox !== undefined && Object.keys(nombox).length > 0 && (
+                <Box mt="md">
+                  <Nombox
+                    capturedUnits={nombox || {}}
+                    factionToColor={props.factionToColor}
+                  />
+                </Box>
+              )}
             </Grid.Col>
             <Grid.Col span={3} p="sm">
               <Stack gap="xs">
@@ -574,14 +594,6 @@ export default memo(function PlayerCard2Mid(props: Props) {
               </Stack>
             </Grid.Col>
           </Grid>
-        </Grid.Col>
-
-        {/* Full-width Nombox at the bottom */}
-        <Grid.Col span={12}>
-          <Nombox
-            capturedUnits={nombox || {}}
-            factionToColor={props.factionToColor}
-          />
         </Grid.Col>
       </Grid>
     </PlayerCardBox>

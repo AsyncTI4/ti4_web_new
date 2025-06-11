@@ -5,6 +5,7 @@ import { units } from "../data/units";
 import { CapturedUnitsData } from "../data/types";
 import styles from "./Nombox.module.css";
 import { getColorAlias } from "@/lookup/colors";
+import { Unit } from "./shared/Unit";
 
 type Props = {
   capturedUnits: CapturedUnitsData;
@@ -127,13 +128,7 @@ export function Nombox({ capturedUnits, factionToColor }: Props) {
           const colorAlias = getColorAlias(playerColor);
 
           return (
-            <Box
-              key={factionName}
-              style={{
-                minWidth: "200px",
-                flex: "1 1 auto",
-              }}
-            >
+            <Box key={factionName}>
               {/* Faction header */}
               <Group gap="xs" className={styles.factionHeader}>
                 <Image
@@ -169,10 +164,10 @@ export function Nombox({ capturedUnits, factionToColor }: Props) {
                           }}
                         >
                           <Box className={styles.unitContainer}>
-                            <Image
-                              src={cdnImage(
-                                `/units/${colorAlias}_${asyncId}.png`
-                              )}
+                            <Unit
+                              unitType={asyncId}
+                              colorAlias={colorAlias}
+                              faction={factionName}
                               className={styles.unitImage}
                             />
                           </Box>

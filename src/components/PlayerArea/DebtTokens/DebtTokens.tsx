@@ -1,63 +1,58 @@
-import { Box, Stack, Group } from "@mantine/core";
-import { Caption } from "../Caption";
-import { DebtToken } from "../DebtToken";
-import { cdnImage } from "../../../data/cdnImage";
+import { Box, Group, Text } from "@mantine/core";
+import { SmallControlToken } from "../../Map/ControlToken";
+import { getColorAlias } from "../../../lookup/colors";
+import styles from "./DebtTokens.module.css";
 
 type Props = {
   debts: Record<string, number>;
+  colorToFaction?: Record<string, string>;
+  factionToColor?: Record<string, string>;
 };
 
-export function DebtTokens({ debts }: Props) {
-  const debtEntries = Object.entries(debts);
-
-  if (debtEntries.length === 0) {
-    return null;
-  }
+export function DebtTokens({ debts, colorToFaction }: Props) {
+  const debtEntries = Object.entries(debts).filter(([, amount]) => amount > 0);
+  if (debtEntries.length === 0) return null;
 
   return (
-    <Box
-      p="sm"
-      mx="-md"
-      mb="-md"
-      style={{
-        borderRadius: "0 0 12px 12px",
-        background:
-          "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 50%, rgba(239, 68, 68, 0.08) 100%)",
-        borderTop: "1px solid rgba(239, 68, 68, 0.15)",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Subtle inner glow */}
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+    <Box className={styles.container}>
+      <Text size="xs" fw={600} c="orange.4" className={styles.debtLabel}>
+        Debt
+      </Text>
 
-      <Stack gap="xs" style={{ position: "relative", zIndex: 1 }}>
-        <Caption color="red.3">Debt</Caption>
-        <Group gap={0}>
-          {/* Render debt tokens */}
-          {debtEntries.flatMap(([factionName, amount]) =>
-            Array(amount)
-              .fill(null)
-              .map((_, index) => (
-                <DebtToken
-                  key={`${factionName}-${index}`}
-                  factionIcon={cdnImage(`/factions/${factionName}.png`)}
-                />
-              ))
-          )}
-        </Group>
-      </Stack>
+      <div className={styles.tokensContainer}>
+        {debtEntries.map(([colorName, amount]) => {
+          // Convert color to faction name and get color alias
+          const factionName = colorToFaction?.[colorName];
+          const colorAlias = getColorAlias(colorName);
+
+          return (
+            <Group
+              key={colorName}
+              pos="relative"
+              style={{ height: 24, width: amount * 10 }}
+            >
+              {/* Stack tokens for this faction */}
+              {Array(amount)
+                .fill(null)
+                .map((_, index) => (
+                  <Box
+                    key={`${colorName}-${index}`}
+                    className={styles.tokenWrapper}
+                    style={{
+                      left: index * 10,
+                      position: "absolute",
+                    }}
+                  >
+                    <SmallControlToken
+                      colorAlias={colorAlias}
+                      faction={factionName}
+                    />
+                  </Box>
+                ))}
+            </Group>
+          );
+        })}
+      </div>
     </Box>
   );
 }

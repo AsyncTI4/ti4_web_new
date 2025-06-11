@@ -19,7 +19,10 @@ type Props = {
 export default function PlayerCardSidebarTech(props: Props) {
   const { userName, faction, color, techs, unitsOwned } = props.playerData;
   const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
-  const renderTechColumn = (techType: string) => {
+  const renderTechColumn = (
+    techType: string,
+    exhaustedTechs: string[] = []
+  ) => {
     const filteredTechs = techs.filter((techId) => {
       const techData = getTechData(techId);
       return techData?.types[0] === techType;
@@ -35,7 +38,11 @@ export default function PlayerCardSidebarTech(props: Props) {
     });
 
     const techElements = sortedTechs.map((techId, index) => (
-      <Tech key={index} techId={techId} />
+      <Tech
+        key={index}
+        techId={techId}
+        isExhausted={exhaustedTechs.includes(techId)}
+      />
     ));
 
     return techElements;
@@ -96,7 +103,10 @@ export default function PlayerCardSidebarTech(props: Props) {
       <Stack gap="md">
         <Surface pattern="grid" cornerAccents={true} label="TECH" p="md">
           <Stack gap="xs">
-            <DynamicTechGrid renderTechColumn={renderTechColumn} />
+            <DynamicTechGrid
+              renderTechColumn={renderTechColumn}
+              exhaustedTechs={props.playerData.exhaustedTechs}
+            />
           </Stack>
         </Surface>
 

@@ -191,7 +191,9 @@ export const getAttachmentData = (
 /**
  * Get the image path for an attachment by ID
  */
-export const getAttachmentImagePath = (attachmentId: string): string => {
+export const getAttachmentImagePath = (attachmentId: string): string | null => {
   const attachmentData = getAttachmentData(attachmentId);
-  return attachmentData?.imagePath || `attachment_${attachmentId}.png`;
+  if (!attachmentData) return null;
+
+  return `/attachment_token/${attachmentData?.imagePath}`;
 };

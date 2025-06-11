@@ -1,11 +1,13 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
 import { getTokenImagePath } from "@/data/tokens";
+import { getAttachmentImagePath } from "@/data/attachments";
 
 interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   tokenId: string;
   colorAlias?: string;
   faction?: string;
+  planetCenter?: { x: number; y: number };
 }
 
 export const Token = ({
@@ -13,6 +15,7 @@ export const Token = ({
   colorAlias,
   faction,
   alt,
+  planetCenter,
   ...imageProps
 }: TokenProps) => {
   // Short-circuit render DMZToken for token_dmz_large.png
@@ -24,22 +27,19 @@ export const Token = ({
         colorAlias={colorAlias}
         faction={faction}
         alt={alt}
+        planetCenter={planetCenter}
         {...imageProps}
       />
     );
   }
 
-  const imagePath = getTokenImagePath(tokenId);
+  const imagePath =
+    getTokenImagePath(tokenId) || getAttachmentImagePath(tokenId);
 
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
 
-  return (
-    <img
-      src={cdnImage(`/tokens/${imagePath}`)}
-      alt={defaultAlt}
-      {...imageProps}
-    />
-  );
+  if (!imagePath) return null;
+  return <img src={cdnImage(imagePath)} alt={defaultAlt} {...imageProps} />;
 };
 
 const DMZToken = ({
@@ -47,36 +47,41 @@ const DMZToken = ({
   colorAlias,
   faction,
   alt,
+  planetCenter,
   ...imageProps
 }: TokenProps) => {
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
 
   const existingStyle = imageProps.style || {};
-  const existingLeft = existingStyle.left;
 
-  // Parse existing left value and add 20px
-  let newLeft = "20px";
-  if (existingLeft) {
-    const leftValue =
-      typeof existingLeft === "string"
-        ? parseInt(existingLeft.replace("px", "")) || 0
-        : typeof existingLeft === "number"
-          ? existingLeft
-          : 0;
-    newLeft = `${leftValue + 20}px`;
+  let dmzStyles;
+
+  if (planetCenter) {
+    // If planetCenter is provided, render dead center
+    dmzStyles = {
+      ...existingStyle,
+      width: "120px",
+      position: "absolute" as const,
+      left: `${planetCenter.x}px`,
+      top: `${planetCenter.y}px`,
+      transform: "translate(-50%, -50%)",
+      zIndex: 1000,
+    };
+  } else {
+    // Otherwise, use attachment x,y location with no nudging
+    dmzStyles = {
+      ...existingStyle,
+      width: "120px",
+    };
   }
 
-  const imagePath = getTokenImagePath(tokenId);
+  const imagePath =
+    getTokenImagePath(tokenId) || getAttachmentImagePath(tokenId);
 
-  const dmzStyles = {
-    ...existingStyle,
-    width: "120px",
-    left: newLeft,
-  };
-
+  if (!imagePath) return null;
   return (
     <img
-      src={cdnImage(`/tokens/${imagePath}`)}
+      src={cdnImage(imagePath)}
       alt={defaultAlt}
       {...imageProps}
       style={dmzStyles}

@@ -1,5 +1,4 @@
 import {
-  Button,
   Group,
   Tabs,
   Box,
@@ -177,16 +176,23 @@ function TabView({
                     handleEditClick(tab, event)
                   }
                 />
-                <Button
-                  size="compact-xs"
+                <div
                   className={classes.closeButton}
                   onClick={(event: React.MouseEvent) => {
                     event.stopPropagation();
                     removeTab(tab);
                   }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.stopPropagation();
+                      removeTab(tab);
+                    }
+                  }}
                 >
                   ×
-                </Button>
+                </div>
               </Group>
             }
           >
@@ -281,16 +287,23 @@ function DropdownView({
                   handleEditClick(item, event)
                 }
               />
-              <Button
-                size="compact-xs"
+              <div
                 className={classes.closeButton}
                 onClick={(event: React.MouseEvent) => {
                   event.stopPropagation();
                   removeTab(item);
                 }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.stopPropagation();
+                    removeTab(item);
+                  }
+                }}
               >
                 ×
-              </Button>
+              </div>
             </Group>
           </>
         )}

@@ -22,6 +22,8 @@ import { getUnitAsyncId, isUnitUpgraded } from "@/lookup/units";
 // Removed calculatePlanetEconomics import - now using pre-calculated values
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
+import { Nombox } from "./Nombox";
+import { DebtTokens } from "./PlayerArea/DebtTokens";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -58,7 +60,7 @@ export default function PlayerCardSidebar(props: Props) {
     strategicCC,
     fragments,
     isSpeaker,
-
+    nombox,
     techs,
     relics,
     planets,
@@ -91,7 +93,10 @@ export default function PlayerCardSidebar(props: Props) {
     },
   };
 
-  const renderTechColumn = (techType: string) => {
+  const renderTechColumn = (
+    techType: string,
+    exhaustedTechs: string[] = []
+  ) => {
     const filteredTechs = techs.filter((techId) => {
       const techData = getTechData(techId);
       return techData?.types[0] === techType;
@@ -107,7 +112,11 @@ export default function PlayerCardSidebar(props: Props) {
     });
 
     const techElements = sortedTechs.map((techId, index) => (
-      <Tech key={index} techId={techId} />
+      <Tech
+        key={index}
+        techId={techId}
+        isExhausted={exhaustedTechs.includes(techId)}
+      />
     ));
 
     return techElements;
@@ -120,6 +129,7 @@ export default function PlayerCardSidebar(props: Props) {
         tacticalCC={tacticalCC}
         fleetCC={fleetCC}
         strategicCC={strategicCC}
+        mahactEdict={props.playerData.mahactEdict}
       />
       {/* Fragments Section - harmonized with Surface component styling */}
       <FragmentsPool fragments={fragments} />
@@ -247,7 +257,10 @@ export default function PlayerCardSidebar(props: Props) {
 
         <Surface pattern="grid" cornerAccents={true} p="md">
           <Stack gap="xs">
-            <DynamicTechGrid renderTechColumn={renderTechColumn} />
+            <DynamicTechGrid
+              renderTechColumn={renderTechColumn}
+              exhaustedTechs={props.playerData.exhaustedTechs}
+            />
           </Stack>
         </Surface>
 
@@ -277,10 +290,18 @@ export default function PlayerCardSidebar(props: Props) {
         {/* Resources and Planets Section */}
         <Stack gap="xs">
           <Surface p="md" pattern="circle">
-            <ResourceInfluenceCompact
-              planetEconomics={planetEconomics}
-              debts={props.playerData.debtTokens}
-            />
+            <Stack gap="sm">
+              <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+
+              {/* Debt Tokens Section - Full width at bottom */}
+              {props.playerData.debtTokens &&
+                Object.keys(props.playerData.debtTokens).length > 0 && (
+                  <DebtTokens
+                    debts={props.playerData.debtTokens}
+                    colorToFaction={props.colorToFaction}
+                  />
+                )}
+            </Stack>
           </Surface>
 
           <Surface
@@ -302,6 +323,14 @@ export default function PlayerCardSidebar(props: Props) {
               ))}
             </Group>
           </Surface>
+          {nombox !== undefined && Object.keys(nombox).length > 0 && (
+            <Box mt="md">
+              <Nombox
+                capturedUnits={nombox || {}}
+                factionToColor={props.factionToColor}
+              />
+            </Box>
+          )}
         </Stack>
       </Stack>
     </PlayerCardBox>

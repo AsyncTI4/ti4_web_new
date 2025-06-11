@@ -144,7 +144,8 @@ export const getTokenData = (tokenId: string) =>
 /**
  * Get the image path for an attachment by ID
  */
-export const getTokenImagePath = (tokenId: string): string => {
+export const getTokenImagePath = (tokenId: string): string | null => {
   const tokenData = getTokenData(tokenId);
-  return tokenData?.imagePath || `token_${tokenId}.png`;
+  if (!tokenData) return null;
+  return `/tokens/${tokenData?.imagePath}`;
 };

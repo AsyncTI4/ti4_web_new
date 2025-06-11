@@ -5,9 +5,15 @@ type Props = {
   tacticalCC: number;
   fleetCC: number;
   strategicCC: number;
+  mahactEdict?: string[];
 };
 
-export function CCPool({ tacticalCC, fleetCC, strategicCC }: Props) {
+export function CCPool({
+  tacticalCC,
+  fleetCC,
+  strategicCC,
+  mahactEdict = [],
+}: Props) {
   return (
     <Stack gap={4} align="center">
       <Text
@@ -78,7 +84,8 @@ export function CCPool({ tacticalCC, fleetCC, strategicCC }: Props) {
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
             }}
           >
-            {tacticalCC}/{fleetCC}/{strategicCC}
+            {tacticalCC}/{fleetCC}
+            {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
           </Text>
         </Stack>
       </Surface>

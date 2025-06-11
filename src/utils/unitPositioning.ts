@@ -82,6 +82,8 @@ export const entityZStackPriority = [
   "fs",
   "ws",
   "sleeper",
+  "custodiavigilia1",
+  "custodiavigilia2",
 ];
 
 const calculatePlanetHeat = (
@@ -601,14 +603,14 @@ const placeAttachmentsOnRim = (
       y: planetY, // Same Y as planet center (centered vertically)
     });
   } else {
-    // Multiple attachments: distribute around the rim starting from east
+    // Multiple attachments: distribute around the rim starting from east going counter-clockwise
     const totalAttachments = attachmentEntities.length;
-    const angleSpread = Math.PI / 3; // 60 degrees total spread (30 degrees each direction from east)
+    const angleSpread = Math.PI / 1.25; // 120 degrees total spread
     const angleStep = angleSpread / (totalAttachments - 1);
-    const startAngle = -angleSpread / 2; // Start 30 degrees counter-clockwise from east
+    const startAngle = 0; // Start at east (0 degrees)
 
     attachmentEntities.forEach((attachment, index) => {
-      const angle = startAngle + index * angleStep;
+      const angle = startAngle + index * angleStep * -1;
 
       // Calculate position on the rim (angle 0 = east, positive = counter-clockwise)
       const x = planetX + planetRadius * Math.cos(angle);
@@ -620,6 +622,7 @@ const placeAttachmentsOnRim = (
         y,
       });
     });
+    attachmentPlacements.reverse();
   }
 
   return attachmentPlacements;
@@ -643,6 +646,7 @@ const createSortedEntityStacks = (
       count: number;
       priority: number;
       entityType: "unit" | "token" | "attachment";
+      sustained?: number | null;
     }[];
   } = {};
 
@@ -656,6 +660,7 @@ const createSortedEntityStacks = (
           count: entity.count,
           priority,
           entityType: entity.entityType,
+          sustained: entity.sustained,
         });
       }
     });
@@ -677,6 +682,7 @@ const createSortedEntityStacks = (
           entityId: stack.entityId,
           entityType: stack.entityType,
           count: stack.count,
+          sustained: stack.sustained,
         });
       }
     }
@@ -797,7 +803,16 @@ const processPlanetEntities = (
     attachmentHeatSources
   );
 
-  return [...attachmentPlacements, ...groundEntityPlacements];
+  // Add planet name to all planet-based entities
+  const planetEntitiesWithPlanetName = [
+    ...attachmentPlacements,
+    ...groundEntityPlacements,
+  ].map((entity) => ({
+    ...entity,
+    planetName: planet.name,
+  }));
+
+  return planetEntitiesWithPlanetName;
 };
 
 export const getAllEntityPlacementsForTile = (
@@ -944,6 +959,7 @@ export type EntityStackBase = EntityData & {
 export type EntityStack = EntityStackBase & {
   x: number;
   y: number;
+  planetName?: string;
 };
 
 export interface GameState {
