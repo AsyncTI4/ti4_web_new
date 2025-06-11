@@ -47,7 +47,8 @@ export function FragmentsPool({ fragments }: Props) {
           <Group gap="xs" justify="center" w="100%">
             {fragmentCounts.cultural > 0 ||
             fragmentCounts.hazardous > 0 ||
-            fragmentCounts.industrial > 0 ? (
+            fragmentCounts.industrial > 0 ||
+            fragmentCounts.unknown > 0 ? (
               <>
                 <FragmentStack count={fragmentCounts.cultural} type="crf" />
                 <FragmentStack count={fragmentCounts.hazardous} type="hrf" />
