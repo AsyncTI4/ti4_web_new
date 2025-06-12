@@ -9,6 +9,12 @@ type Props = {
 };
 
 function PublicObjectives({ objectives, playerData }: Props) {
+
+  objectives.customObjectives.map((objective) => (
+    console.log(objective.key),
+    console.log(objective.multiScoring)
+  ));
+  
   return (
     <Box>
       <Text className={styles.sectionTitle}>Public Objectives</Text>
@@ -69,6 +75,7 @@ function PublicObjectives({ objectives, playerData }: Props) {
                 color="gray"
                 revealed={objective.revealed}
                 scoredFactions={objective.scoredFactions}
+                multiScoring={objective.multiScoring}
                 playerData={playerData}
                 objectiveKey={objective.key}
               />

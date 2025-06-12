@@ -15,6 +15,7 @@ type Props = {
   color: "orange" | "blue" | "gray";
   revealed?: boolean;
   scoredFactions: string[];
+  multiScoring?: boolean
   playerData: PlayerData[];
   objectiveKey: string;
 };
@@ -25,6 +26,7 @@ function ObjectiveCard({
   color,
   revealed = true,
   scoredFactions,
+  multiScoring,
   playerData,
   objectiveKey,
 }: Props) {
@@ -43,6 +45,32 @@ function ObjectiveCard({
 
   // Only show popover/clickable behavior if objective is revealed AND has data
   const shouldShowPopover = revealed && hasObjectiveData;
+
+  /* Show each faction in its designated position - faction icon if scored, empty slot if not */
+  const singleScoringObjectiveBox = (
+    allFactionsSorted.slice(0, 6).map((faction) => (
+            <Box
+              key={faction}
+              className={`${styles.controlTokenSlot} ${scoredFactionsSet.has(faction) ? "" : styles.emptySlot}`}
+            >
+              {scoredFactionsSet.has(faction) && (
+                <CircularFactionIcon faction={faction} size={28} />
+              )}
+            </Box>
+          ))
+  )
+
+    /* Show faction per score of objective */
+  const multiScoringObjectiveBox = (
+    scoredFactions.slice(0, 6).map((faction, index) => (
+            <Box
+              key={faction}
+              className={`${styles.controlTokenSlot} ${index}`}
+            >
+              <CircularFactionIcon faction={faction} size={28} />
+            </Box>
+    ))
+  )
 
   const cardContent = (
     <Shimmer
@@ -72,17 +100,7 @@ function ObjectiveCard({
 
         {/* Control token area */}
         <Box className={styles.controlTokenArea}>
-          {/* Show each faction in its designated position - faction icon if scored, empty slot if not */}
-          {allFactionsSorted.slice(0, 6).map((faction) => (
-            <Box
-              key={faction}
-              className={`${styles.controlTokenSlot} ${scoredFactionsSet.has(faction) ? "" : styles.emptySlot}`}
-            >
-              {scoredFactionsSet.has(faction) && (
-                <CircularFactionIcon faction={faction} size={28} />
-              )}
-            </Box>
-          ))}
+          {!multiScoring ? singleScoringObjectiveBox : multiScoringObjectiveBox}
         </Box>
       </Box>
     </Shimmer>
