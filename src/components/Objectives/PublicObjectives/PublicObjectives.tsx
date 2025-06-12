@@ -69,6 +69,7 @@ function PublicObjectives({ objectives, playerData }: Props) {
                 color="gray"
                 revealed={objective.revealed}
                 scoredFactions={objective.scoredFactions}
+                multiScoring={objective.multiScoring}
                 playerData={playerData}
                 objectiveKey={objective.key}
               />
