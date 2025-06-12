@@ -15,7 +15,7 @@ type Props = {
   color: "orange" | "blue" | "gray";
   revealed?: boolean;
   scoredFactions: string[];
-  multiScoring?: boolean
+  multiScoring?: boolean;
   playerData: PlayerData[];
   objectiveKey: string;
 };
@@ -46,32 +46,6 @@ function ObjectiveCard({
   // Only show popover/clickable behavior if objective is revealed AND has data
   const shouldShowPopover = revealed && hasObjectiveData;
 
-  /* Show each faction in its designated position - faction icon if scored, empty slot if not */
-  const singleScoringObjectiveBox = (
-    allFactionsSorted.slice(0, 6).map((faction) => (
-            <Box
-              key={faction}
-              className={`${styles.controlTokenSlot} ${scoredFactionsSet.has(faction) ? "" : styles.emptySlot}`}
-            >
-              {scoredFactionsSet.has(faction) && (
-                <CircularFactionIcon faction={faction} size={28} />
-              )}
-            </Box>
-          ))
-  )
-
-    /* Show faction per score of objective */
-  const multiScoringObjectiveBox = (
-    scoredFactions.map((faction, index) => (
-            <Box
-              key={faction}
-              className={`${styles.controlTokenSlot} ${index}`}
-            >
-              <CircularFactionIcon faction={faction} size={28} />
-            </Box>
-    ))
-  )
-
   const cardContent = (
     <Shimmer
       color={color}
@@ -100,7 +74,25 @@ function ObjectiveCard({
 
         {/* Control token area */}
         <Box className={styles.controlTokenArea}>
-          {!multiScoring ? singleScoringObjectiveBox : multiScoringObjectiveBox}
+          {!multiScoring
+            ? allFactionsSorted.map((faction) => (
+                <Box
+                  key={faction}
+                  className={`${styles.controlTokenSlot} ${scoredFactionsSet.has(faction) ? "" : styles.emptySlot}`}
+                >
+                  {scoredFactionsSet.has(faction) && (
+                    <CircularFactionIcon faction={faction} size={28} />
+                  )}
+                </Box>
+              ))
+            : scoredFactions.map((faction, index) => (
+                <Box
+                  key={faction}
+                  className={`${styles.controlTokenSlot} ${index}`}
+                >
+                  <CircularFactionIcon faction={faction} size={28} />
+                </Box>
+              ))}
         </Box>
       </Box>
     </Shimmer>
