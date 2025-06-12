@@ -62,7 +62,7 @@ function ObjectiveCard({
 
     /* Show faction per score of objective */
   const multiScoringObjectiveBox = (
-    scoredFactions.slice(0, 6).map((faction, index) => (
+    scoredFactions.map((faction, index) => (
             <Box
               key={faction}
               className={`${styles.controlTokenSlot} ${index}`}
