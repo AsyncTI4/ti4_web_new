@@ -1,0 +1,60 @@
+.card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: var(--mantine-radius-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.iconContainer {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(107, 114, 128, 0.15) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 6px rgba(148, 163, 184, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.icon {
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.title {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
+}
+
+.effectText {
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.mapText {
+  line-height: 1.4;
+  font-weight: 500;
+  padding: 8px 12px;
+  background: rgba(148, 163, 184, 0.1);
+  border-left: 3px solid rgba(148, 163, 184, 0.4);
+  border-radius: 0 4px 4px 0;
+}

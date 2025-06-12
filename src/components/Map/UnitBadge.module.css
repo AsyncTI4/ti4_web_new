@@ -27,13 +27,6 @@
 }
 
 .whiteText {
-  text-shadow:
-    -1px -1px 1px #000,
-    1px -1px 1px #000,
-    -1px 1px 1px #000,
-    1px 1px 1px #000,
-    -3px 0 1px #000,
-    3px 0 1px #000,
-    0 -3px 1px #000,
-    0 3px 1px #000;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
 }

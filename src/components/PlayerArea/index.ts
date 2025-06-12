@@ -12,6 +12,8 @@ export { StatusBadge } from "./StatusBadge";
 export { Tech, PhantomTech } from "./Tech";
 export { Relic } from "./Relic";
 export { ScoredSecret } from "./ScoredSecret";
+export { CompactObjective } from "./CompactObjective";
+export { CompactObjectives } from "./CompactObjectives";
 export { PromissoryNote } from "./PromissoryNote";
 export { Caption } from "./Caption";
 export { ArmyStats } from "./ArmyStats";

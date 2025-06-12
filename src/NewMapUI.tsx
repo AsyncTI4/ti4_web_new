@@ -17,6 +17,8 @@ import {
   IconTarget,
   IconUsers,
   IconRefresh,
+  IconChevronLeft,
+  IconChevronRight,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -49,6 +51,11 @@ import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponent
 import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
 import ScoreBoard from "./components/ScoreBoard";
 import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
+import { CompactObjectives } from "./components/PlayerArea/CompactObjectives";
+import { CompactLaw } from "./components/PlayerArea/CompactLaw";
+import { LawDetailsCard } from "./components/PlayerArea/LawDetailsCard";
+import { PointTotals } from "./components/PlayerArea/PointTotals";
+import { SmoothPopover } from "./components/shared/SmoothPopover";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 2;
@@ -144,6 +151,15 @@ export function NewMapUI() {
     coords: { x: number; y: number };
   } | null>(null);
 
+  // State for law popover
+  const [selectedLaw, setSelectedLaw] = useState<string | null>(null);
+
+  // State for left panel collapse
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(() => {
+    const saved = localStorage.getItem("leftPanelCollapsed");
+    return saved ? JSON.parse(saved) : false;
+  });
+
   // Planet hover handlers
   const handlePlanetMouseEnter = useCallback(
     (systemId: string, planetId: string, x: number, y: number) => {
@@ -168,6 +184,13 @@ export function NewMapUI() {
   const handleUnitMouseLeave = useCallback(() => {
     handleMouseLeave();
   }, [handleMouseLeave]);
+
+  // Handle panel collapse toggle
+  const toggleLeftPanel = useCallback(() => {
+    const newState = !isLeftPanelCollapsed;
+    setIsLeftPanelCollapsed(newState);
+    localStorage.setItem("leftPanelCollapsed", JSON.stringify(newState));
+  }, [isLeftPanelCollapsed]);
 
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
     useSidebarDragHandle(30);
@@ -258,14 +281,7 @@ export function NewMapUI() {
           h="100%"
           px="sm"
           gap="sm"
-          style={{
-            flexWrap: "nowrap",
-            maxWidth: "100vw",
-            background:
-              "linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-            borderBottom: "1px solid rgba(59, 130, 246, 0.15)",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          }}
+          className={classes.newHeaderGroup}
         >
           <Logo />
           <div className="logo-divider" />
@@ -273,7 +289,7 @@ export function NewMapUI() {
             mapId={gameId}
             activeTabs={activeTabs}
             changeTab={changeTab}
-            removeTab={removeTab}
+            removeTab={removeTab} // eslint-disable-line @typescript-eslint/no-unused-vars
           />
 
           <Button
@@ -321,17 +337,111 @@ export function NewMapUI() {
             {/* Map Tab */}
             <Tabs.Panel value="map" h="calc(100% - 37px)">
               <Box className={classes.mapContainer}>
-                {/* Map Container - Left Side (dynamic width) */}
+                {/* Map Container - Full Width */}
                 <Box
                   className={`dragscroll ${classes.mapArea}`}
                   style={{ width: `${100 - sidebarWidth}%` }}
                 >
+                  {/* Left Panel - Only render when there's data */}
+                  {(objectives && playerData) ||
+                  (lawsInPlay && lawsInPlay.length > 0) ? (
+                    <>
+                      {/* Left Sidebar Overlay */}
+                      <Box
+                        className={`${classes.leftSidebarOverlay} ${isLeftPanelCollapsed ? classes.collapsed : ""}`}
+                      >
+                        <Stack p="md" gap="md">
+                          {objectives && playerData && (
+                            <Box>
+                              <h3 className={classes.sectionHeading}>
+                                Public Objectives
+                              </h3>
+                              <CompactObjectives
+                                objectives={objectives}
+                                playerData={playerData}
+                              />
+                            </Box>
+                          )}
+
+                          {/* Point Totals */}
+                          {playerData && (
+                            <Box>
+                              <h3 className={classes.sectionHeading}>
+                                Point Totals
+                              </h3>
+                              <PointTotals
+                                playerData={playerData}
+                                vpsToWin={vpsToWin}
+                              />
+                            </Box>
+                          )}
+
+                          {/* Laws in Play */}
+                          {lawsInPlay && lawsInPlay.length > 0 && (
+                            <Box>
+                              <h3 className={classes.sectionHeading}>
+                                Laws in Play
+                              </h3>
+                              <Stack gap={2}>
+                                {lawsInPlay.map((law, index) => (
+                                  <SmoothPopover
+                                    key={`${law.id}-${index}`}
+                                    position="right"
+                                    opened={
+                                      selectedLaw === `${law.id}-${index}`
+                                    }
+                                    onChange={(opened) =>
+                                      setSelectedLaw(
+                                        opened ? `${law.id}-${index}` : null
+                                      )
+                                    }
+                                  >
+                                    <SmoothPopover.Target>
+                                      <div>
+                                        <CompactLaw
+                                          law={law}
+                                          onClick={() =>
+                                            setSelectedLaw(`${law.id}-${index}`)
+                                          }
+                                        />
+                                      </div>
+                                    </SmoothPopover.Target>
+                                    <SmoothPopover.Dropdown p={0}>
+                                      <LawDetailsCard law={law} />
+                                    </SmoothPopover.Dropdown>
+                                  </SmoothPopover>
+                                ))}
+                              </Stack>
+                            </Box>
+                          )}
+                        </Stack>
+                      </Box>
+
+                      {/* Left Panel Toggle Button */}
+                      <Box
+                        className={`${classes.leftPanelToggle} ${isLeftPanelCollapsed ? classes.collapsed : ""}`}
+                        onClick={toggleLeftPanel}
+                      >
+                        {isLeftPanelCollapsed ? (
+                          <IconChevronRight
+                            size={16}
+                            className={classes.leftPanelToggleIcon}
+                          />
+                        ) : (
+                          <IconChevronLeft
+                            size={16}
+                            className={classes.leftPanelToggleIcon}
+                          />
+                        )}
+                      </Box>
+                    </>
+                  ) : null}
+
                   <div
-                    className={classes.zoomControlsFixed}
+                    className={classes.zoomControlsDynamic}
                     style={{
                       right: `calc(${sidebarWidth}vw + 35px)`,
                       transition: isDragging ? "none" : "right 0.1s ease",
-                      zIndex: 10000,
                     }}
                   >
                     <ZoomControls
@@ -346,8 +456,8 @@ export function NewMapUI() {
 
                   {/* Tile-based rendering */}
                   <Box
+                    className={classes.tileRenderingContainer}
                     style={{
-                      position: "relative",
                       ...(isFirefox ? {} : { zoom: zoom }),
                       MozTransform: `scale(${zoom})`,
                       MozTransformOrigin: "top left",

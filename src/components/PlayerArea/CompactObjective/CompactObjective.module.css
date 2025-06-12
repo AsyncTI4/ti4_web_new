@@ -1,0 +1,75 @@
+/* Compact objective card styles - mirrors ScoredSecret styling */
+.objectiveCard {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: var(--mantine-radius-sm);
+}
+
+/* Default blue hover effect */
+.objectiveCard:hover {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), 0 0 12px rgba(96, 165, 250, 0.2);
+}
+
+/* Orange hover effect for stage 1 objectives */
+.objectiveCard.orange:hover {
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3), 0 0 12px rgba(251, 146, 60, 0.2);
+}
+
+/* Gray hover effect (should be disabled anyway but just in case) */
+.objectiveCard.gray:hover {
+  box-shadow: 0 4px 16px rgba(148, 163, 184, 0.3), 0 0 12px rgba(156, 163, 175, 0.2);
+}
+
+.contentContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  min-width: 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.textContainer {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.scoreText {
+  opacity: 0.7;
+}
+
+.factionIcons {
+  flex-shrink: 0;
+  align-items: center;
+  height: 20px;
+}
+
+.factionIcons img {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+/* Disable hover effects and pointer cursor for unrevealed objectives */
+.unrevealed {
+  cursor: default !important;
+}
+
+.unrevealed:hover {
+  box-shadow: none !important;
+}
+
+/* Disable hover effects and pointer cursor for non-clickable (gray) objectives */
+.nonClickable {
+  cursor: default !important;
+}
+
+.nonClickable:hover {
+  box-shadow: none !important;
+}

@@ -1,0 +1,54 @@
+.container {
+  width: 100%;
+}
+
+.playerRow {
+  transition: transform 0.3s ease;
+  padding: 4px 2px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.playerRow:hover {
+  transform: scale(1.1) !important;
+}
+
+.winningPlayer {
+  filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.8));
+}
+
+.factionIcon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.pointsText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: var(--mantine-font-family-monospace);
+  min-width: 12px;
+  text-align: center;
+  line-height: 1;
+}
+
+.winnerIcon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+  animation: pulse 2s infinite;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 10px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
