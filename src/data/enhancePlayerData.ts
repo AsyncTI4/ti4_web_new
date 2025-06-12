@@ -27,14 +27,14 @@ export type EnhancedPlayerData = {
   vpsToWin: number;
   cardPool: CardPoolData;
   versionSchema?: number;
+  ringCount: number;
 };
 
 export function enhancePlayerData(
-  data: PlayerDataResponse,
-  ringCount: number = 6
+  data: PlayerDataResponse
 ): EnhancedPlayerData {
   const calculatedTilePositions = data.tilePositions
-    ? calculateTilePositions(data.tilePositions, ringCount)
+    ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
 
   const systemIdToPosition: Record<string, string> = {};
@@ -103,6 +103,7 @@ export function enhancePlayerData(
     vpsToWin: data.vpsToWin,
     cardPool: data.cardPool,
     versionSchema: data.versionSchema,
+    ringCount: data.ringCount,
     // extra computed properties
     calculatedTilePositions,
     systemIdToPosition,

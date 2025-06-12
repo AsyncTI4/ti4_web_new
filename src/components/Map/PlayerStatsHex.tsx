@@ -28,6 +28,7 @@ type PlayerStatsHexProps = {
   faction: string;
   openSides: Record<string, number[]>;
   borderColor: string;
+  backgroundTint?: string;
   onHexagonsCalculated?: (
     hexagons: HexagonData[],
     svgBounds: SVGBounds
@@ -39,6 +40,7 @@ export function PlayerStatsHex({
   faction,
   openSides,
   borderColor,
+  backgroundTint,
   onHexagonsCalculated,
 }: PlayerStatsHexProps) {
   // Calculate hexagon properties and SVG bounds
@@ -114,6 +116,7 @@ export function PlayerStatsHex({
         top: svgBounds.y,
         width: svgBounds.width,
         height: svgBounds.height,
+        overflow: "inherit",
       }}
       viewBox={`0 0 ${svgBounds.width} ${svgBounds.height}`}
     >
@@ -129,6 +132,20 @@ export function PlayerStatsHex({
           <stop offset="0%" stopColor="rgba(15, 23, 42, 0.95)" />
           <stop offset="100%" stopColor="rgba(30, 41, 59, 0.9)" />
         </linearGradient>
+
+        {/* Tinted gradient for active/passed states */}
+        {backgroundTint && (
+          <linearGradient
+            id={`tintedGradient-${faction}`}
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor={backgroundTint} />
+            <stop offset="100%" stopColor={backgroundTint} />
+          </linearGradient>
+        )}
 
         {/* Elegant drop shadow */}
         <filter
@@ -158,13 +175,23 @@ export function PlayerStatsHex({
       {/* Render hexagons */}
       {hexagons.map((hex) => (
         <g key={hex.id}>
-          {/* Filled polygon without stroke */}
+          {/* Base filled polygon */}
           <polygon
             points={hex.points}
             fill={`url(#surfaceGradient-${faction})`}
             filter={`url(#dropShadow-${faction})`}
             transform={`translate(${-svgBounds.x}, ${-svgBounds.y})`}
           />
+
+          {/* Tinted overlay if backgroundTint is provided */}
+          {backgroundTint && (
+            <polygon
+              points={hex.points}
+              fill={backgroundTint}
+              opacity="0.3"
+              transform={`translate(${-svgBounds.x}, ${-svgBounds.y})`}
+            />
+          )}
 
           {/* Individual border lines for each side */}
           {hex.sides.map((side, sideIndex) => {

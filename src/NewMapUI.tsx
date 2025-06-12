@@ -51,7 +51,7 @@ import ScoreBoard from "./components/ScoreBoard";
 import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
 
 // Magic constant for required version schema
-const REQUIRED_VERSION_SCHEMA = 1;
+const REQUIRED_VERSION_SCHEMA = 2;
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {
@@ -207,6 +207,7 @@ export function NewMapUI() {
     isError = false,
     versionSchema,
     isLoading,
+    ringCount = 3,
   } = enhancedData || {};
   const data = enhancedData;
 
@@ -371,6 +372,7 @@ export function NewMapUI() {
                               color={factionToColor[faction]}
                               vpsToWin={vpsToWin}
                               factionToColor={factionToColor}
+                              ringCount={ringCount}
                             />
                           );
                         }
@@ -644,7 +646,7 @@ function PlayerCardDisplay({
   // For tech mode (when not hovering over a unit), show all players
   if (activeArea?.type === "tech") {
     return (
-      <Stack className={classes.playerCardsContainer}>
+      <Stack className={classes.playerCardsContainer} gap={0}>
         {playerData.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
             <PlayerCardSidebarTech

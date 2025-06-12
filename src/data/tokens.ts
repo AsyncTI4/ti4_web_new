@@ -113,6 +113,8 @@ export const tokens = [
     tokenPlanetName: "mirage",
     aliasList: ["mirage", "token_mirage"],
     source: "pok",
+    // NOTE: Is not in old data.
+    isPlanet: true,
   },
   {
     id: "sleeper",

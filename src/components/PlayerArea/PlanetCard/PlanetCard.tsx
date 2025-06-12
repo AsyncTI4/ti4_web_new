@@ -95,7 +95,7 @@ export function PlanetCard({
           <Stack className={styles.bottomStack}>
             <Group className={styles.nameGroup}>
               <Text className={styles.planetName} ff="monospace">
-                {planetData.name}
+                {planetData.shortName ?? planetData.name}
               </Text>
               <Stack className={styles.valuesStack} align="top">
                 {allIcons.length > 0 && (

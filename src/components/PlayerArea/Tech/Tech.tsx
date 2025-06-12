@@ -54,12 +54,13 @@ export function Tech({ techId, isExhausted = false }: Props) {
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
   const isFactionTech = !!techData.faction;
+  const isEnhanced = tier === 3 || isFactionTech;
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          className={`${styles.techCard} ${styles[color]} ${isFactionTech ? styles.factionTech : ""}`}
+          className={`${styles.techCard} ${styles[color]} ${isFactionTech ? styles.factionTech : ""} ${isEnhanced ? styles.enhanced : ""}`}
           onClick={() => setOpened((o) => !o)}
           style={{ opacity: isExhausted ? 0.5 : 1 }}
         >

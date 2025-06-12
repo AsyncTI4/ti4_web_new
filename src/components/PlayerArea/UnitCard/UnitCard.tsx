@@ -12,6 +12,7 @@ type Props = {
   unitId: string;
   color?: string;
   deployedCount: number;
+  compact?: boolean;
 };
 
 const DEFAULT_UNIT_CAPS = {
@@ -28,7 +29,7 @@ const DEFAULT_UNIT_CAPS = {
   fighter: 10,
 };
 
-export function UnitCard({ unitId, color, deployedCount }: Props) {
+export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
   const [opened, setOpened] = useState(false);
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
@@ -82,45 +83,47 @@ export function UnitCard({ unitId, color, deployedCount }: Props) {
               unitType={unitData.asyncId}
               colorAlias={colorAlias}
               faction={unitData.faction}
-              className={styles.unitImage}
+              className={compact ? styles.unitImageCompact : styles.unitImage}
             />
           </Flex>
 
-          <Stack className={styles.infoStack}>
-            <Group className={styles.mainGroup}>
-              {/* Reinforcements - show infinity for fighters and infantry, normal count for others */}
-              <Group className={styles.reinforcementGroup}>
-                <Group className={styles.countGroup}>
-                  <Text
-                    className={
-                      reinforcements === 0
-                        ? styles.countTextZero
-                        : styles.countText
-                    }
-                  >
-                    {reinforcements}
-                  </Text>
-                  <Text className={styles.maxCountText}>/{unitCap}</Text>
+          {!compact && (
+            <Stack className={styles.infoStack}>
+              <Group className={styles.mainGroup}>
+                {/* Reinforcements - show infinity for fighters and infantry, normal count for others */}
+                <Group className={styles.reinforcementGroup}>
+                  <Group className={styles.countGroup}>
+                    <Text
+                      className={
+                        reinforcements === 0
+                          ? styles.countTextZero
+                          : styles.countText
+                      }
+                    >
+                      {reinforcements}
+                    </Text>
+                    <Text className={styles.maxCountText}>/{unitCap}</Text>
+                  </Group>
                 </Group>
-              </Group>
 
-              {/* Captured - commented out for now as requested */}
-              {/* {captured > 0 && (
-                <Group gap={3} align="baseline">
-                  <Text
-                    className={styles.capturedLabel}
-                  >
-                    C
-                  </Text>
-                  <Text
-                    className={styles.capturedCount}
-                  >
-                    {captured}
-                  </Text>
-                </Group>
-              )} */}
-            </Group>
-          </Stack>
+                {/* Captured - commented out for now as requested */}
+                {/* {captured > 0 && (
+                  <Group gap={3} align="baseline">
+                    <Text
+                      className={styles.capturedLabel}
+                    >
+                      C
+                    </Text>
+                    <Text
+                      className={styles.capturedCount}
+                    >
+                      {captured}
+                    </Text>
+                  </Group>
+                )} */}
+              </Group>
+            </Stack>
+          )}
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>

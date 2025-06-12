@@ -98,6 +98,10 @@
   width: 30px;
 }
 
+.unitImageCompact {
+  width: 28px;
+}
+
 .infoStack {
   gap: var(--mantine-spacing-xs);
   align-items: center;

@@ -15,9 +15,9 @@ const SPACE_FOR_TILE_HEIGHT = 300;
 // const TILE_HEIGHT = 299;
 // const TILE_WIDTH = 345;
 const EXTRA_X = 300;
-const EXTRA_Y = 200;
-const TILE_PADDING = 0;
-const RING_MAX_COUNT = 11;
+const EXTRA_Y = 300;
+const TILE_PADDING = 100;
+const RING_MAX_COUNT = 8;
 const RING_MIN_COUNT = 3;
 
 /**
@@ -120,7 +120,7 @@ function calculateSingleTilePosition(
  */
 const calculateTilePositions = (
   inputData: string[],
-  ringCount: number = 6
+  ringCount: number = 3
 ): TilePosition[] =>
   inputData.map((entry) => {
     const [position, systemId] = entry.split(":");

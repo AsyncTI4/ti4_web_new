@@ -15,6 +15,7 @@ import {
   touchesHexRim,
 } from "./hitbox";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getTokenData } from "@/data/tokens";
 
 // Define the new types here since they're not exported from types.ts
 
@@ -84,6 +85,7 @@ export const entityZStackPriority = [
   "sleeper",
   "custodiavigilia1",
   "custodiavigilia2",
+  "mirage",
 ];
 
 const calculatePlanetHeat = (
@@ -773,7 +775,7 @@ const placeGroundEntitiesForPlanet = (
     planetRadius: planet.radius,
     factionEntities: filteredPlanetEntities,
     planetDecayRate: PLANET_DECAY_RATE,
-    rimDecayRate: 0.1,
+    rimDecayRate: 0.3,
     entityDecayRate: 0.035,
     factionDecayRate: FACTION_DECAY_RATE,
     heatSources: attachmentHeatSources,
@@ -866,6 +868,21 @@ export const getAllEntityPlacementsForTile = (
     planets,
     factionEntities: tileUnitData.space || {},
     initialHeatSources,
+  });
+
+  // Check space entities for tokens with isPlanet: true and add to planets array
+  spaceEntityPlacements.forEach((entity) => {
+    if (entity.entityType === "token") {
+      const tokenData = getTokenData(entity.entityId);
+      if (tokenData?.isPlanet) {
+        planets.push({
+          name: entity.entityId, // Use token ID as planet name
+          x: entity.x,
+          y: entity.y,
+          radius: 60, // Default planet radius for collision detection
+        });
+      }
+    }
   });
 
   // Process each planet and collect all ground/attachment entity placements

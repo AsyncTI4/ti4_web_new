@@ -18,6 +18,7 @@ type PlayerStatsAreaProps = {
   color: string;
   vpsToWin: number;
   factionToColor: Record<string, string>;
+  ringCount: number;
 };
 
 export function PlayerStatsArea({
@@ -27,6 +28,7 @@ export function PlayerStatsArea({
   color,
   vpsToWin,
   factionToColor,
+  ringCount,
 }: PlayerStatsAreaProps) {
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
@@ -39,8 +41,8 @@ export function PlayerStatsArea({
       (position) => `${position}:stat_${position}`
     );
 
-    return calculateTilePositions(statTilePositionsArray, 6);
-  }, [statTilePositions]);
+    return calculateTilePositions(statTilePositionsArray, ringCount);
+  }, [statTilePositions, ringCount]);
 
   // Determine which sides should be open/closed for borders
   const openSides = useMemo(() => {
@@ -60,6 +62,13 @@ export function PlayerStatsArea({
     const { red, green, blue } = primaryColorValues;
     return `rgba(${red}, ${green}, ${blue}, 0.8)`;
   }, [color]);
+
+  // Generate background tint based on player status
+  const backgroundTint = playerData.active
+    ? "rgba(34, 197, 94, 0.4)" // green tint for active players
+    : playerData.passed
+      ? "rgba(239, 68, 68, 0.4)" // red tint for passed players
+      : undefined; // no tint for normal state
 
   // Handle hexagons calculation callback
   const handleHexagonsCalculated = (newHexagons: HexagonData[]) => {
@@ -84,6 +93,7 @@ export function PlayerStatsArea({
         faction={faction}
         openSides={openSides}
         borderColor={borderColor}
+        backgroundTint={backgroundTint}
         onHexagonsCalculated={handleHexagonsCalculated}
       />
 
@@ -145,9 +155,7 @@ export function PlayerStatsArea({
                 {/* Render unscored secrets in hand */}
                 {Array.from(
                   {
-                    length: playerData.secretsUnscored
-                      ? Object.values(playerData.secretsUnscored).length
-                      : 0,
+                    length: playerData.numUnscoredSecrets || 0,
                   },
                   (_, index) => (
                     <img
@@ -165,9 +173,7 @@ export function PlayerStatsArea({
                       0,
                       playerData.numScoreableSecrets -
                         numScoredSecrets -
-                        (playerData.secretsUnscored
-                          ? Object.values(playerData.secretsUnscored).length
-                          : 0)
+                        (playerData.numUnscoredSecrets || 0)
                     ),
                   },
                   (_, index) => (
@@ -198,12 +204,10 @@ export function PlayerStatsArea({
           playerData.fleetCC > 0 ||
           playerData.strategicCC > 0) && (
           <div
+            className={styles.commandCountersOverlay}
             style={{
-              position: "absolute",
               left: secondHex.cx - 50,
               top: secondHex.cy,
-              zIndex: 10,
-              transform: "translate(-50%, -50%)",
             }}
           >
             <Stack gap={0}>
@@ -234,31 +238,31 @@ export function PlayerStatsArea({
       {/* HTML overlay for third hexagon trade goods and commodities */}
       {thirdHex && playerData && (
         <div
+          className={styles.tradeGoodsOverlay}
           style={{
-            position: "absolute",
             left: thirdHex.cx,
             top: thirdHex.cy,
-            zIndex: 10,
-            transform: "translate(-50%, -50%)",
           }}
         >
-          <Group
-            gap="md"
-            align="center"
-            style={{ minWidth: 170, justifyContent: "center" }}
-          >
-            {/* Trade Goods */}
+          {/* Player Status Text */}
+          {(playerData.active || playerData.passed) && (
             <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
-                justifyContent: "center",
-              }}
+              className={`${styles.playerStatusText} ${
+                playerData.active
+                  ? styles.playerStatusActive
+                  : styles.playerStatusPassed
+              }`}
             >
+              {playerData.active ? "ACTIVE" : "PASSED"}
+            </div>
+          )}
+
+          <Group gap="md" align="center" className={styles.tradeGoodsGroup}>
+            {/* Trade Goods */}
+            <div className={styles.tradeGoodsContainer}>
               <img
                 src={cdnImage("/player_area/pa_cardbacks_tradegoods.png")}
-                style={{ height: 48, marginTop: 16 }}
+                className={styles.tradeGoodsImage}
               />
               <Text size="24px" fw={600} c="white" ff="heading">
                 {playerData.tg || 0}
@@ -266,22 +270,16 @@ export function PlayerStatsArea({
             </div>
 
             {/* Commodities */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
+            <div className={styles.commoditiesContainer}>
               <img
                 src={cdnImage("/player_area/pa_cardbacks_commodities.png")}
-                style={{ height: 48, marginTop: 16 }}
+                className={styles.commoditiesImage}
               />
               <Text
                 size="24px"
                 fw={600}
                 c="white"
-                style={{ marginTop: 4 }}
+                className={styles.commoditiesText}
                 ff="heading"
               >
                 {playerData.commodities || 0}/{playerData.commoditiesTotal || 0}
