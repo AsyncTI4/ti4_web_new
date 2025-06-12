@@ -1,7 +1,6 @@
 import { Group, Text, Stack, Box, Image, SimpleGrid } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { Tech } from "./PlayerArea/Tech";
-import { Surface } from "./PlayerArea/Surface";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { PlayerCardBox } from "./PlayerCardBox";
@@ -50,7 +49,7 @@ export default function PlayerCardSidebarTech(props: Props) {
 
   return (
     <PlayerCardBox color={color} faction={faction}>
-      <Group gap={4} style={{ minWidth: 0, flex: 1 }} mb="sm">
+      <Group gap={4} style={{ minWidth: 0, flex: 1 }} mb={6}>
         <Image
           src={cdnImage(`/factions/${faction}.png`)}
           alt={faction}
@@ -100,37 +99,34 @@ export default function PlayerCardSidebarTech(props: Props) {
         </Box>
       </Group>
 
-      <Stack gap="md">
-        <Surface pattern="grid" cornerAccents={true} label="TECH" p="md">
-          <Stack gap="xs">
-            <DynamicTechGrid
-              renderTechColumn={renderTechColumn}
-              exhaustedTechs={props.playerData.exhaustedTechs}
-            />
-          </Stack>
-        </Surface>
+      <Stack gap="xs">
+        <Stack gap="xs">
+          <DynamicTechGrid
+            renderTechColumn={renderTechColumn}
+            exhaustedTechs={props.playerData.exhaustedTechs}
+          />
+        </Stack>
 
         {/* Units Section - Only show upgraded units */}
         {upgradedUnits.length > 0 && (
-          <Surface p="md" label="UPGRADED UNITS">
-            <SimpleGrid cols={4} spacing="8px">
-              {upgradedUnits.map((unitId, index) => {
-                const asyncId = getUnitAsyncId(unitId);
-                const deployedCount = asyncId
-                  ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
-                  : 0;
+          <SimpleGrid cols={4} spacing="8px">
+            {upgradedUnits.map((unitId, index) => {
+              const asyncId = getUnitAsyncId(unitId);
+              const deployedCount = asyncId
+                ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
+                : 0;
 
-                return (
-                  <UnitCard
-                    key={index}
-                    unitId={unitId}
-                    color={color}
-                    deployedCount={deployedCount}
-                  />
-                );
-              })}
-            </SimpleGrid>
-          </Surface>
+              return (
+                <UnitCard
+                  key={index}
+                  unitId={unitId}
+                  color={color}
+                  deployedCount={deployedCount}
+                  compact
+                />
+              );
+            })}
+          </SimpleGrid>
         )}
       </Stack>
     </PlayerCardBox>

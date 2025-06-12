@@ -69,13 +69,8 @@ export type LawInPlay = {
   text1: string;
   text2: string;
   mapText: string;
-  forEmoji: string;
-  againstEmoji: string;
-  source: string;
   electedInfo: string | null;
   electedFaction: string | null;
-  electedColor: string | null;
-  electedDisplayName: string | null;
   electedType: string;
   controlTokens: string[];
   displaysElectedFaction: boolean;
@@ -121,6 +116,7 @@ type CardPoolData = {
 export type { CardPoolData };
 
 export type PlayerDataResponse = {
+  ringCount: number;
   playerData: PlayerData[];
   tileUnitData: Record<string, TileUnitData>;
   tilePositions: string[];
@@ -189,7 +185,7 @@ export type PlayerData = {
   leaders: Leader[];
   leaderIDs: string[];
   secretsScored: Record<string, number>;
-  secretsUnscored: Record<string, number>;
+  numUnscoredSecrets: number;
   numScoreableSecrets: number;
   flexibleDisplayName: string;
   scs: number[];

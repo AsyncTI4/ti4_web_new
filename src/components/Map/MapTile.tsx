@@ -93,12 +93,11 @@ export const MapTile = React.memo<Props>(
       };
     }, []);
 
-    const unitImages: React.ReactElement[] = React.useMemo(() => {
-      const allEntityPlacements = getAllEntityPlacementsForTile(
-        systemId,
-        tileUnitData
-      );
+    const allEntityPlacements = React.useMemo(() => {
+      return getAllEntityPlacementsForTile(systemId, tileUnitData);
+    }, [systemId, tileUnitData]);
 
+    const unitImages: React.ReactElement[] = React.useMemo(() => {
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
       return Object.entries(allEntityPlacements).flatMap(([key, stack]) => {
@@ -153,6 +152,7 @@ export const MapTile = React.memo<Props>(
       onUnitMouseOver,
       onUnitMouseLeave,
       onUnitSelect,
+      allEntityPlacements,
     ]);
 
     const controlTokens: React.ReactElement[] = React.useMemo(() => {
@@ -164,8 +164,23 @@ export const MapTile = React.memo<Props>(
 
       return Object.entries(tileUnitData.planets).flatMap(
         ([planetId, planetData]) => {
-          if (!planetData.controlledBy || !planetCoords[planetId]) return [];
-          const [x, y] = planetCoords[planetId].split(",").map(Number);
+          if (!planetData.controlledBy) return [];
+
+          // Try to get coordinates from planet lookup first
+          let x: number, y: number;
+          if (planetCoords[planetId]) {
+            [x, y] = planetCoords[planetId].split(",").map(Number);
+          } else {
+            // Fall back to checking entity placements for tokens matching the planet name
+            // (handles mirage and other case where a token added *is* a planet)
+            const tokenPlacement = Object.values(allEntityPlacements).find(
+              (placement) => placement.entityId === planetId
+            );
+            if (!tokenPlacement) return [];
+            x = tokenPlacement.x;
+            y = tokenPlacement.y;
+          }
+
           const colorAlias = getColorAlias(
             factionToColor[planetData.controlledBy]
           );
@@ -180,12 +195,13 @@ export const MapTile = React.memo<Props>(
                 left: `${x - 10}px`,
                 top: `${y + 15}px`, // 20px offset downward
                 transform: "translate(-50%, -50%)",
+                zIndex: 990,
               }}
             />,
           ];
         }
       );
-    }, [systemId, tileUnitData, factionToColor]);
+    }, [systemId, tileUnitData, factionToColor, allEntityPlacements]);
 
     const planetCircles: React.ReactElement[] = React.useMemo(() => {
       if (!tileUnitData?.planets) {

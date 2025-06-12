@@ -74,3 +74,69 @@
   stroke-width: 4;
   stroke-dasharray: 20, 8;
 }
+
+/* New styles moved from inline */
+.commandCountersOverlay {
+  position: absolute;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+}
+
+.tradeGoodsOverlay {
+  position: absolute;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+}
+
+.playerStatusText {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Slider';
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.playerStatusActive {
+  color: var(--mantine-color-green-5);
+}
+
+.playerStatusPassed {
+  color: var(--mantine-color-red-5);
+}
+
+.tradeGoodsGroup {
+  min-width: 170px;
+  justify-content: center;
+}
+
+.tradeGoodsContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.commoditiesContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tradeGoodsImage {
+  height: 48px;
+  margin-top: 16px;
+}
+
+.commoditiesImage {
+  height: 48px;
+  margin-top: 16px;
+}
+
+.commoditiesText {
+  margin-top: 4px;
+}

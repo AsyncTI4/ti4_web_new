@@ -1,3 +1,13 @@
+/* Shimmer animation keyframes */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Tech card styles */
 .techCard {
   padding: 4px var(--mantine-spacing-xs);
@@ -11,6 +21,33 @@
   cursor: pointer;
 }
 
+/* Enhanced styling for tier 3 and faction techs */
+.techCard.enhanced {
+  background: rgba(var(--gradient-color), 0.25);
+  border: 1px solid rgba(var(--gradient-color), 0.9);
+  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.techCard.enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
 
 .techCard:hover {
   background: rgba(var(--gradient-color), 0.18);
@@ -19,9 +56,12 @@
   /* transform: translateY(-2px); */
 }
 
-.techCard.factionTech:hover {
-  filter: hue-rotate(20deg);
+.techCard.enhanced:hover {
+  background: rgba(var(--gradient-color), 0.5);
+  border: 1px solid rgba(var(--gradient-color), 0.5);
+  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
+
 
 .techCard::before {
   content: '';
