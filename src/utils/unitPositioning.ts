@@ -826,6 +826,8 @@ export const getAllEntityPlacementsForTile = (
     return [];
   }
 
+  if (systemId === "49") debugger;
+
   // Convert planet coordinates to Planet[] format expected by placeSpaceEntities
   const planetCoords = getPlanetCoordsBySystemId(systemId);
   const planets: Planet[] = Object.entries(planetCoords).map(
@@ -843,7 +845,7 @@ export const getAllEntityPlacementsForTile = (
   // Hardcoded heat sources to avoid wormholes being blocked on wormhole tiles.
   // TODO: Move to data instead.
   const initialHeatSources: HeatSource[] = [];
-  if (systemId === "49" || systemId === "40" || systemId === "39") {
+  if (systemId === "40" || systemId === "39" || systemId === "79") {
     initialHeatSources.push({
       x: HEX_GRID_WIDTH / 2, // Center X: 172.5
       y: HEX_GRID_HEIGHT / 2, // Center Y: 149.5
