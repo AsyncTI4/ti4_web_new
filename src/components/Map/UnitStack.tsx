@@ -9,6 +9,8 @@ import {
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/lookup/colors";
 import { useRef, useCallback } from "react";
+import { units } from "../../data/units";
+import { lookupUnit } from "@/lookup/units";
 
 interface UnitStackProps {
   unitType: string;
@@ -43,6 +45,10 @@ export function UnitStack({
 }: UnitStackProps) {
   const baseZIndex = entityBaseZIndex(unitType);
   const hoverTimeoutRef = useRef<number | null>(null);
+
+  // Look up unit data to get bgDecalPath
+  const unitData = lookupUnit(unitType, faction);
+  const bgDecalPath = unitData?.bgDecalPath;
 
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent) => {
@@ -175,6 +181,7 @@ export function UnitStack({
               key={unitKey}
               {...commonProps}
               sustained={sustained ? i < sustained : false}
+              bgDecalPath={bgDecalPath}
             />
           );
         }

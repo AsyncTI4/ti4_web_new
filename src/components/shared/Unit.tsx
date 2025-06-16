@@ -6,6 +6,7 @@ interface UnitProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   colorAlias: string;
   faction?: string;
   sustained?: boolean;
+  bgDecalPath?: string;
 }
 
 export const Unit: React.FC<UnitProps> = ({
@@ -14,12 +15,24 @@ export const Unit: React.FC<UnitProps> = ({
   faction,
   alt,
   sustained,
+  bgDecalPath,
   ...imageProps
 }) => {
   const defaultAlt = alt || `${faction || colorAlias} ${unitType}`;
 
   return (
     <>
+      {bgDecalPath && (
+        <img
+          src={cdnImage(`/decals/${bgDecalPath}`)}
+          alt={`${defaultAlt} background decal`}
+          {...imageProps}
+          style={{
+            ...imageProps.style,
+            zIndex: (imageProps.style?.zIndex as number) - 1 || -1,
+          }}
+        />
+      )}
       <img
         src={cdnImage(`/units/${colorAlias}_${unitType}.png`)}
         alt={defaultAlt}

@@ -22,11 +22,11 @@ export const isUnitUpgradedOrWarSun = (unitId: string) => {
   );
 };
 
-export function lookupUnitId(
+export function lookupUnit(
   asyncId: string,
   faction: string,
   playerData?: PlayerData
-): string | null {
+) {
   const ownedUnits = playerData?.unitsOwned;
 
   // Try faction-specific units first
@@ -44,9 +44,9 @@ export function lookupUnitId(
   return null;
 }
 
-function preferUpgradedUnit(unitsList: Array<any>): string {
+function preferUpgradedUnit(unitsList: Array<any>) {
   const upgradedUnit = unitsList.find((unit) => unit.upgradesFromUnitId);
-  return upgradedUnit?.id || unitsList[0].id;
+  return upgradedUnit || unitsList[0];
 }
 
 // Helper function to filter units by criteria

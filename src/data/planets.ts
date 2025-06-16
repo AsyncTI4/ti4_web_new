@@ -407,6 +407,7 @@ export const planets: Planet[] = [
     tileId: "61",
     name: "Ang",
     aliases: ["ang", "ag", "61_1"],
+    statsPos: "bl",
     positionInTile: {
       x: 172.0,
       y: 148.0,

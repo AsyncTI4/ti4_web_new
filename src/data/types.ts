@@ -229,6 +229,7 @@ export type Planet = {
   resources: number;
   influence: number;
   factionHomeworld?: string | null;
+  statsPos?: "tl" | "tr" | "bl" | "br";
   planetType?:
     | "FACTION"
     | "CULTURAL"

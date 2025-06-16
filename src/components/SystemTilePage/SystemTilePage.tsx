@@ -6,8 +6,9 @@ import {
   processPlanetEntities,
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
+  DEFAULT_PLANET_RADIUS,
 } from "../../utils/unitPositioning";
-import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { TileUnitData } from "@/data/types";
 import classes from "./SystemTilePage.module.css";
 
@@ -32,10 +33,14 @@ export const SystemTilePage = ({
     space: {}, // Explicitly empty space units since we're skipping space
     planets: {
       bereg: {
-        controlledBy: "The Barony of Letnev",
+        controlledBy: "letnev",
         entities: {
-          neutral: [
-            { entityId: "worlddestroyed", count: 1, entityType: "token" },
+          // neutral: [
+          //   { entityId: "worlddestroyed", count: 1, entityType: "token" },
+          // ],
+          barony: [
+            // { entityId: "gf", count: 2, entityType: "unit" },
+            // { entityId: "mf", count: 1, entityType: "unit" },
           ],
         },
       },
@@ -74,16 +79,21 @@ export const SystemTilePage = ({
             name: planetId,
             x,
             y,
-            radius: 60, // Default planet radius for collision detection
+            radius: DEFAULT_PLANET_RADIUS, // Default planet radius for collision detection
+            statsPos: getPlanetById(planetId)?.statsPos,
           };
         }
       );
 
-      return processPlanetEntities(planets.find((p) => p.name === "bereg")!, {
-        controlledBy: "The Barony of Letnev",
+      return processPlanetEntities(planets.find((p) => p.name === "ang")!, {
+        controlledBy: "letnev",
         entities: {
-          neutral: [
-            { entityId: "worlddestroyed", count: 1, entityType: "token" },
+          // neutral: [
+          //   { entityId: "worlddestroyed", count: 1, entityType: "token" },
+          // ],
+          letnev: [
+            { entityId: "gf", count: 2, entityType: "unit" },
+            // { entityId: "mf", count: 1, entityType: "unit" },
           ],
         },
       });
@@ -187,7 +197,7 @@ export const SystemTilePage = ({
         <div className={classes.systemTileDisplay}>
           <Tile systemId={systemId} className={classes.tile} />
           {/* {controlTokens} */}
-          {unitImages}
+          {/* {unitImages} */}
           {costMapGrid}
         </div>
       </div>

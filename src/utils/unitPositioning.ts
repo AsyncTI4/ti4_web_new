@@ -14,8 +14,9 @@ import {
   touchesCircleRim,
   touchesHexRim,
 } from "./hitbox";
-import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { getTokenData } from "@/data/tokens";
+import { planets as allPlanets } from "@/data/planets";
 
 // Define the new types here since they're not exported from types.ts
 
@@ -40,6 +41,8 @@ export const HEX_GRID_HEIGHT = 299;
 export const HEX_GRID_SIZE = 30;
 export const HEX_SQUARE_WIDTH = HEX_GRID_WIDTH / HEX_GRID_SIZE;
 export const HEX_SQUARE_HEIGHT = HEX_GRID_HEIGHT / HEX_GRID_SIZE;
+
+export const DEFAULT_PLANET_RADIUS = 55;
 
 // Flat-top hexagon vertices for a 345x299 tile
 // (not correct with mallice and might need to be updated)
@@ -740,7 +743,7 @@ const placeAttachmentsAndCreateHeatSources = (
   const placements = placeAttachmentsOnRim(
     planet.x,
     planet.y,
-    60, // Planet radius for attachment placement
+    DEFAULT_PLANET_RADIUS, // Planet radius for attachment placement
     attachmentEntities
   );
 
@@ -766,6 +769,60 @@ const placeGroundEntitiesForPlanet = (
     return { entityPlacements: [], finalCostMap: [] };
   }
 
+  // Calculate total stack count across all factions for center penalty
+  const totalStackCount = Object.values(filteredPlanetEntities).flat().length;
+
+  // Create center penalty heat source that scales with stack count
+  // (if multiple units they should be spread out)
+  const centerPenaltyHeatSources: HeatSource[] = [];
+  if (totalStackCount > 1) {
+    const centerPenaltyHeat = Math.min(totalStackCount * 50, 200); // Cap at 200 heat
+    centerPenaltyHeatSources.push({
+      x: planet.x,
+      y: planet.y,
+      stackSize: centerPenaltyHeat / UNIT_HEAT, // Convert to equivalent stack size
+    });
+  }
+
+  // Create stats position heat source to discourage covering planet stats
+  const statsHeatSources: HeatSource[] = [];
+  if (planet.statsPos) {
+    const statsHeatDistance = planet.radius + 15;
+    let statsAngle: number;
+
+    switch (planet.statsPos) {
+      case "tl": // top-left
+        statsAngle = (5 * Math.PI) / 4;
+        break;
+      case "tr": // top-right
+        statsAngle = (7 * Math.PI) / 4;
+        break;
+      case "bl": // bottom-left
+        statsAngle = (3 * Math.PI) / 4;
+        break;
+      case "br": // bottom-right
+        statsAngle = Math.PI / 4;
+        break;
+      default:
+        statsAngle = 0;
+    }
+
+    const statsX = planet.x + statsHeatDistance * Math.cos(statsAngle);
+    const statsY = planet.y + statsHeatDistance * Math.sin(statsAngle);
+
+    statsHeatSources.push({
+      x: statsX,
+      y: statsY,
+      stackSize: 2, // Moderate repulsion strength
+    });
+  }
+
+  const allHeatSources = [
+    ...attachmentHeatSources,
+    ...centerPenaltyHeatSources,
+    ...statsHeatSources,
+  ];
+
   const { entityPlacements, finalCostMap } = placeGroundEntities({
     gridSize: HEX_GRID_SIZE,
     squareWidth: HEX_SQUARE_WIDTH,
@@ -776,9 +833,9 @@ const placeGroundEntitiesForPlanet = (
     factionEntities: filteredPlanetEntities,
     planetDecayRate: PLANET_DECAY_RATE,
     rimDecayRate: 0.07,
-    entityDecayRate: 0.035,
+    entityDecayRate: 0.04,
     factionDecayRate: FACTION_DECAY_RATE,
-    heatSources: attachmentHeatSources,
+    heatSources: allHeatSources,
   });
 
   return { entityPlacements, finalCostMap };
@@ -831,12 +888,14 @@ export const getAllEntityPlacementsForTile = (
   const planetCoords = getPlanetCoordsBySystemId(systemId);
   const planets: Planet[] = Object.entries(planetCoords).map(
     ([planetId, coordStr]) => {
+      const planetData = getPlanetById(planetId);
       const [x, y] = coordStr.split(",").map(Number);
       return {
         name: planetId,
         x,
         y,
-        radius: 60, // Default planet radius for collision detection
+        radius: DEFAULT_PLANET_RADIUS, // Default planet radius for collision detection
+        statsPos: planetData?.statsPos,
       };
     }
   );
@@ -846,8 +905,8 @@ export const getAllEntityPlacementsForTile = (
   const initialHeatSources: HeatSource[] = [];
   if (systemId === "40" || systemId === "39" || systemId === "79") {
     initialHeatSources.push({
-      x: HEX_GRID_WIDTH / 2, // Center X: 172.5
-      y: HEX_GRID_HEIGHT / 2, // Center Y: 149.5
+      x: HEX_GRID_WIDTH / 2,
+      y: HEX_GRID_HEIGHT / 2,
       stackSize: 1,
     });
   }
@@ -880,7 +939,7 @@ export const getAllEntityPlacementsForTile = (
           name: entity.entityId, // Use token ID as planet name
           x: entity.x,
           y: entity.y,
-          radius: 60, // Default planet radius for collision detection
+          radius: DEFAULT_PLANET_RADIUS, // Default planet radius for collision detection
         });
       }
     }
@@ -961,6 +1020,7 @@ export interface Planet {
   x: number;
   y: number;
   radius: number;
+  statsPos?: "tl" | "tr" | "bl" | "br";
 }
 
 export interface HeatSource {

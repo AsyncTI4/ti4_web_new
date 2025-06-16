@@ -1,6 +1,10 @@
 import { planets } from "@/data/planets";
 import { Planet } from "@/data/types";
 
+export const getPlanetById = (planetId: string): Planet | undefined => {
+  return planets.find((planet) => planet.id === planetId);
+};
+
 export const getPlanetCoordsBySystemId = (
   systemId: string
 ): { [key: string]: string } => {

@@ -45,7 +45,7 @@ import { useSidebarDragHandle } from "./hooks/useSidebarDragHandle";
 import PlayerCardSidebar from "./components/PlayerCardSidebar";
 import { DragHandle } from "./components/DragHandle";
 import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
-import { lookupUnitId } from "./lookup/units";
+import { lookupUnit } from "./lookup/units";
 import PlayerCardSidebarTech from "./components/PlayerCardSidebarTech";
 import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponents";
 import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
@@ -578,11 +578,11 @@ export function NewMapUI() {
                     const scaledY = tooltipUnit.coords.y * zoom;
 
                     const unitIdToUse =
-                      lookupUnitId(
+                      lookupUnit(
                         tooltipUnit.unitId,
                         activePlayer.faction,
                         activePlayer
-                      ) || tooltipUnit.unitId;
+                      )?.id || tooltipUnit.unitId;
 
                     return (
                       <Box

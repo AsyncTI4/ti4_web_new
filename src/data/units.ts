@@ -578,6 +578,7 @@ export const units = [
     faction: "Cabal",
     productionValue: 5,
     isStructure: true,
+    bgDecalPath: "DimensionalTear.png",
     ability:
       "This system is a gravity rift; your ships do not roll for this gravity rift. Place a dimensional tear token beneath this unit as a reminder.\nUp to 6 fighters in this system do not count against your ships' capacity.",
     imageURL:
@@ -589,6 +590,7 @@ export const units = [
     asyncId: "sd",
     name: "Dimensional Tear II",
     upgradesFromUnitId: "cabal_spacedock",
+    bgDecalPath: "DimensionalTear.png",
     requiredTechId: "dt2",
     source: "pok",
     faction: "Cabal",
