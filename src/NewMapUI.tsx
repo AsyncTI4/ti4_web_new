@@ -122,9 +122,18 @@ type PlayerCardDisplayProps = {
   planetAttachments: Record<string, string[]>;
 };
 
+const MAP_PADDING = 200;
+
 export function NewMapUI() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
+
+  // Add ref for the scrollable map container
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  // Track if we've set the initial scroll position and for which game
+  const hasSetInitialScroll = useRef(false);
+  const lastGameId = useRef<string | null>(null);
 
   // Use tab management hook for NewMapUI
   const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
@@ -251,6 +260,39 @@ export function NewMapUI() {
     handleZoomScreenSize,
   } = useZoom(undefined, undefined);
 
+  // Reset scroll flag when switching games
+  useEffect(() => {
+    if (lastGameId.current !== gameId) {
+      hasSetInitialScroll.current = false;
+      lastGameId.current = gameId;
+    }
+  }, [gameId]);
+
+  // Set initial scroll position only once when loading a new game
+  useEffect(() => {
+    if (
+      mapContainerRef.current &&
+      playerData &&
+      tilePositions.length > 0 &&
+      !hasSetInitialScroll.current
+    ) {
+      // Use requestAnimationFrame to ensure DOM is updated after rendering
+      requestAnimationFrame(() => {
+        if (mapContainerRef.current) {
+          const container = mapContainerRef.current;
+
+          // Calculate center position based on actual content dimensions
+          const centerX = (container.scrollWidth - container.clientWidth) / 2;
+          const centerY = (container.scrollHeight - container.clientHeight) / 2;
+
+          container.scrollLeft = centerX + MAP_PADDING * zoom;
+          container.scrollTop = centerY + MAP_PADDING * zoom;
+          hasSetInitialScroll.current = true;
+        }
+      });
+    }
+  }, [playerData, tilePositions, zoom]);
+
   const isFirefox =
     typeof navigator !== "undefined" &&
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
@@ -339,6 +381,7 @@ export function NewMapUI() {
               <Box className={classes.mapContainer}>
                 {/* Map Container - Full Width */}
                 <Box
+                  ref={mapContainerRef}
                   className={`dragscroll ${classes.mapArea}`}
                   style={{ width: `${100 - sidebarWidth}%` }}
                 >
@@ -461,6 +504,8 @@ export function NewMapUI() {
                       ...(isFirefox ? {} : { zoom: zoom }),
                       MozTransform: `scale(${zoom})`,
                       MozTransformOrigin: "top left",
+                      top: MAP_PADDING / zoom,
+                      left: MAP_PADDING / zoom,
                     }}
                   >
                     {/* Render stat tiles for each faction */}
@@ -544,8 +589,8 @@ export function NewMapUI() {
                         key="tooltip"
                         style={{
                           position: "absolute",
-                          left: `${scaledX}px`,
-                          top: `${scaledY - 25}px`,
+                          left: `${scaledX + MAP_PADDING}px`,
+                          top: `${scaledY + MAP_PADDING - 25}px`,
                           zIndex: 10000000,
                           pointerEvents: "none",
                           transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
@@ -576,8 +621,8 @@ export function NewMapUI() {
                         key="planet-tooltip"
                         style={{
                           position: "absolute",
-                          left: `${scaledX}px`,
-                          top: `${scaledY - 25}px`,
+                          left: `${scaledX + MAP_PADDING}px`,
+                          top: `${scaledY + MAP_PADDING - 25}px`,
                           zIndex: 10000000,
                           pointerEvents: "none",
                           transform: "translate(-50%, -100%)", // Center horizontally, position above the planet

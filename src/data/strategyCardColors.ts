@@ -12,7 +12,7 @@ export const SC_COLORS: Record<number, string> = {
 export const SC_NUMBER_COLORS: Record<string, string> = {
   red: "red.9",
   orange: "orange.9",
-  yellow: "yellow.9",
+  yellow: "yellow.3",
   green: "green.9",
   teal: "teal.9",
   cyan: "cyan.9",

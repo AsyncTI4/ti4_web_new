@@ -761,12 +761,12 @@ const placeGroundEntitiesForPlanet = (
   planet: Planet,
   filteredPlanetEntities: FactionUnits,
   attachmentHeatSources: HeatSource[]
-): EntityStack[] => {
+): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
   if (Object.keys(filteredPlanetEntities).length === 0) {
-    return [];
+    return { entityPlacements: [], finalCostMap: [] };
   }
 
-  const { entityPlacements } = placeGroundEntities({
+  const { entityPlacements, finalCostMap } = placeGroundEntities({
     gridSize: HEX_GRID_SIZE,
     squareWidth: HEX_SQUARE_WIDTH,
     squareHeight: HEX_SQUARE_HEIGHT,
@@ -775,22 +775,22 @@ const placeGroundEntitiesForPlanet = (
     planetRadius: planet.radius,
     factionEntities: filteredPlanetEntities,
     planetDecayRate: PLANET_DECAY_RATE,
-    rimDecayRate: 0.3,
+    rimDecayRate: 0.07,
     entityDecayRate: 0.035,
     factionDecayRate: FACTION_DECAY_RATE,
     heatSources: attachmentHeatSources,
   });
 
-  return entityPlacements;
+  return { entityPlacements, finalCostMap };
 };
 
 /**
  * Processes all entities for a single planet
  */
-const processPlanetEntities = (
+export const processPlanetEntities = (
   planet: Planet,
   planetEntityData: PlanetEntityData
-): EntityStack[] => {
+): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
   const { filteredPlanetEntities, attachmentEntities } =
     separateEntityTypes(planetEntityData);
 
@@ -799,11 +799,12 @@ const processPlanetEntities = (
     heatSources: attachmentHeatSources,
   } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
 
-  const groundEntityPlacements = placeGroundEntitiesForPlanet(
-    planet,
-    filteredPlanetEntities,
-    attachmentHeatSources
-  );
+  const { entityPlacements: groundEntityPlacements, finalCostMap } =
+    placeGroundEntitiesForPlanet(
+      planet,
+      filteredPlanetEntities,
+      attachmentHeatSources
+    );
 
   // Add planet name to all planet-based entities
   const planetEntitiesWithPlanetName = [
@@ -814,7 +815,7 @@ const processPlanetEntities = (
     planetName: planet.name,
   }));
 
-  return planetEntitiesWithPlanetName;
+  return { entityPlacements: planetEntitiesWithPlanetName, finalCostMap };
 };
 
 export const getAllEntityPlacementsForTile = (
@@ -825,8 +826,6 @@ export const getAllEntityPlacementsForTile = (
   if (!tileUnitData) {
     return [];
   }
-
-  if (systemId === "49") debugger;
 
   // Convert planet coordinates to Planet[] format expected by placeSpaceEntities
   const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -897,7 +896,7 @@ export const getAllEntityPlacementsForTile = (
       ) {
         return [];
       }
-      return processPlanetEntities(planet, planetEntityData);
+      return processPlanetEntities(planet, planetEntityData).entityPlacements;
     })
     .flat();
 

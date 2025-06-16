@@ -1,6 +1,6 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
-import { getTokenImagePath } from "@/data/tokens";
+import { getTokenImagePath, getTokenData } from "@/data/tokens";
 import { getAttachmentImagePath } from "@/data/attachments";
 
 interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -38,8 +38,31 @@ export const Token = ({
 
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
 
+  // Get token data to check for scale
+  const tokenData = getTokenData(tokenId);
+  const scale = tokenData?.scale || 1;
+
+  // Apply scale to the existing style
+  const existingStyle = imageProps.style || {};
+  const scaledStyle =
+    scale !== 1
+      ? {
+          ...existingStyle,
+          transform: existingStyle.transform
+            ? `${existingStyle.transform} scale(${scale})`
+            : `scale(${scale})`,
+        }
+      : existingStyle;
+
   if (!imagePath) return null;
-  return <img src={cdnImage(imagePath)} alt={defaultAlt} {...imageProps} />;
+  return (
+    <img
+      src={cdnImage(imagePath)}
+      alt={defaultAlt}
+      {...imageProps}
+      style={scaledStyle}
+    />
+  );
 };
 
 const DMZToken = ({

@@ -199,7 +199,6 @@ export function ScrollMap({ gameId, imageUrl }) {
 const useOverlay = (gameId) => {
   const { data: overlays } = useOverlayData(gameId);
   const { data: overlayContent } = useOverlayContent();
-  console.log("overlayContent", overlayContent);
   const filteredOverlays = filterOverlays(overlays ?? []);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipTimer, setTooltipTimer] = useState(null);

@@ -8,6 +8,7 @@ import {
 } from "../../utils/unitPositioning";
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/lookup/colors";
+import { useRef, useCallback } from "react";
 
 interface UnitStackProps {
   unitType: string;
@@ -41,6 +42,41 @@ export function UnitStack({
   onUnitSelect,
 }: UnitStackProps) {
   const baseZIndex = entityBaseZIndex(unitType);
+  const hoverTimeoutRef = useRef<number | null>(null);
+
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent) => {
+      if (!onUnitMouseOver) return;
+
+      // Clear any existing timeout
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+
+      // Set new timeout
+      hoverTimeoutRef.current = setTimeout(() => {
+        onUnitMouseOver(stackKey, e);
+        hoverTimeoutRef.current = null;
+      }, 100);
+    },
+    [onUnitMouseOver, stackKey]
+  );
+
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent) => {
+      // Clear the timeout to prevent onMouseEnter from being called
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
+
+      // Call the original onMouseLeave if it exists
+      if (onUnitMouseLeave) {
+        onUnitMouseLeave(stackKey, e);
+      }
+    },
+    [onUnitMouseLeave, stackKey]
+  );
 
   // For fighters and infantry, render as a badge with count instead of individual units
   if (unitType === "ff" || unitType === "gf") {
@@ -63,14 +99,12 @@ export function UnitStack({
         }}
         onMouseEnter={
           entityType === "unit" && onUnitMouseOver
-            ? (e: React.MouseEvent<HTMLDivElement>) =>
-                onUnitMouseOver(stackKey, e)
+            ? handleMouseEnter
             : undefined
         }
         onMouseLeave={
           entityType === "unit" && onUnitMouseLeave
-            ? (e: React.MouseEvent<HTMLDivElement>) =>
-                onUnitMouseLeave(stackKey, e)
+            ? handleMouseLeave
             : undefined
         }
         onMouseDown={
@@ -111,13 +145,11 @@ export function UnitStack({
           },
           onMouseEnter:
             entityType === "unit" && onUnitMouseOver
-              ? (e: React.MouseEvent<HTMLImageElement>) =>
-                  onUnitMouseOver(stackKey, e)
+              ? handleMouseEnter
               : undefined,
           onMouseLeave:
             entityType === "unit" && onUnitMouseLeave
-              ? (e: React.MouseEvent<HTMLImageElement>) =>
-                  onUnitMouseLeave(stackKey, e)
+              ? handleMouseLeave
               : undefined,
           onMouseDown:
             entityType === "unit" && onUnitSelect

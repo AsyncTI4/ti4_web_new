@@ -14,6 +14,14 @@ export const isUnitUpgraded = (unitId: string) => {
   return unitData?.upgradesFromUnitId !== undefined;
 };
 
+export const isUnitUpgradedOrWarSun = (unitId: string) => {
+  const unitData = getUnitData(unitId);
+  return (
+    unitData?.upgradesFromUnitId !== undefined ||
+    unitData?.baseType === "warsun"
+  );
+};
+
 export function lookupUnitId(
   asyncId: string,
   faction: string,

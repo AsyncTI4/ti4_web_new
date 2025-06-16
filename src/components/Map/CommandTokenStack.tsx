@@ -18,7 +18,6 @@ export function CommandTokenStack({
   faction,
   type,
   mahactEdict = [],
-  factionToColor = {},
 }: CommandTokenStackProps) {
   // Use specialized components for fleet tokens
   if (type === "fleet") {
@@ -39,7 +38,6 @@ export function CommandTokenStack({
           colorAlias={colorAlias}
           faction={faction}
           mahactEdict={mahactEdict}
-          factionToColor={factionToColor}
         />
       );
     }

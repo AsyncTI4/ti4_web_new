@@ -122,6 +122,7 @@ export const tokens = [
     spaceOrPlanet: "planet",
     aliasList: ["sleeper", "token_sleeper"],
     source: "pok",
+    scale: 0.65,
   },
   {
     id: "worlddestroyed",

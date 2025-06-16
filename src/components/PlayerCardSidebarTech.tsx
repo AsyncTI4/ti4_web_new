@@ -7,7 +7,7 @@ import { PlayerCardBox } from "./PlayerCardBox";
 import { techs as techsData } from "../data/tech";
 import { PlayerData } from "../data/types";
 import { cdnImage } from "../data/cdnImage";
-import { getUnitAsyncId, isUnitUpgraded } from "@/lookup/units";
+import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
 
 type Props = {
   playerData: PlayerData;
@@ -17,7 +17,7 @@ type Props = {
 
 export default function PlayerCardSidebarTech(props: Props) {
   const { userName, faction, color, techs, unitsOwned } = props.playerData;
-  const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
+  const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
   const renderTechColumn = (
     techType: string,
     exhaustedTechs: string[] = []

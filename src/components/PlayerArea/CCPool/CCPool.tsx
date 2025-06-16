@@ -84,7 +84,7 @@ export function CCPool({
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
             }}
           >
-            {tacticalCC}/{fleetCC}
+            {tacticalCC}/{fleetCC + mahactEdict.length}
             {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
           </Text>
         </Stack>

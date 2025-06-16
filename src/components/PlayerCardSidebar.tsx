@@ -18,7 +18,7 @@ import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { getUnitAsyncId, isUnitUpgraded } from "@/lookup/units";
+import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
 // Removed calculatePlanetEconomics import - now using pre-calculated values
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
@@ -71,7 +71,7 @@ export default function PlayerCardSidebar(props: Props) {
   const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
-  const upgradedUnits = unitsOwned.filter(isUnitUpgraded);
+  const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
 
   // Create planet economics object from pre-calculated values
   const planetEconomics = {

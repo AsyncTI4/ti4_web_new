@@ -23,6 +23,7 @@ import FrogGamePage from "./FrogGamePage";
 // @ts-ignore
 import LandingPage from "./LandingPage";
 import MapTogglePage from "./MapTogglePage";
+import { SystemTilePage } from "./components/SystemTilePage/SystemTilePage";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
     loader: loginLoader,
+  },
+  {
+    path: "/system/:systemId",
+    element: <SystemTilePage />,
   },
 ]);
 

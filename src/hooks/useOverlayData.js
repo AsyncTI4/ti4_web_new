@@ -183,7 +183,6 @@ export const getOverlayContent = () => {
     ...exploreSources.map((source) => `${baseUrl}/explores/${source}.json`),
   ];
 
-  console.log("fetchUrls", fetchUrls[0]);
 
   // this is such a dumb way of doing this lol
   const dataSourcePrefixes = [

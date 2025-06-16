@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 
 // Zoom configuration from ScrollMap
 const defaultZoomIndex = 2;
-const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
+const zoomLevels = [0.4, 0.5, 0.6, 0.75, 0.85, 0.9, 1, 1.2, 1.4, 1.6, 1.8, 2];
 
 // Custom zoom hook adapted from ScrollMap
 export function useZoom(

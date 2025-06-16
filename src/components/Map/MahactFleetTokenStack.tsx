@@ -7,7 +7,6 @@ type MahactFleetTokenStackProps = {
   colorAlias: string;
   faction: string;
   mahactEdict?: string[];
-  factionToColor?: Record<string, string>;
 };
 
 export function MahactFleetTokenStack({
@@ -15,7 +14,6 @@ export function MahactFleetTokenStack({
   colorAlias,
   faction,
   mahactEdict = [],
-  factionToColor = {},
 }: MahactFleetTokenStackProps) {
   const totalCount = count + mahactEdict.length;
   const hasEdict = mahactEdict.length > 0;
@@ -53,15 +51,13 @@ export function MahactFleetTokenStack({
           />
         ))}
         {/* Render mahact edict tokens */}
-        {mahactEdict.map((edictFaction, index) => {
-          const edictColor = factionToColor[edictFaction];
+        {mahactEdict.map((edictColor, index) => {
           const edictColorAlias = getColorAlias(edictColor);
 
           return (
             <CommandCounter
-              key={`mahact-edict-${edictFaction}-${index}`}
+              key={`mahact-edict-${edictColor}-${index}`}
               colorAlias={edictColorAlias}
-              faction={edictFaction}
               style={{
                 position: "absolute",
                 left: count * 20 + 20 + index * 20,
