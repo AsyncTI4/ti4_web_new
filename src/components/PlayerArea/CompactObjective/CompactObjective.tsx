@@ -23,7 +23,6 @@ export function CompactObjective({
   revealed = true,
   onClick,
   scoredFactions = [],
-  playerData = [],
 }: Props) {
   const gradientClasses = getGradientClasses(color);
 

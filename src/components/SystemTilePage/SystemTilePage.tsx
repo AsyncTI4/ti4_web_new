@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { Tile } from "../Map/Tile";
 import { UnitStack } from "../Map/UnitStack";
 import {
@@ -7,66 +6,28 @@ import {
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
   DEFAULT_PLANET_RADIUS,
+  MAX_HEAT,
 } from "../../utils/unitPositioning";
 import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { TileUnitData } from "@/data/types";
 import classes from "./SystemTilePage.module.css";
 
-type SystemTilePageProps = {
-  systemId?: string;
-  tileUnitData?: TileUnitData;
+type SystemTileDisplayProps = {
+  systemId: string;
+  tileUnitData: TileUnitData;
 };
 
 const COLOR_ALIAS = "pnk";
 
-export const SystemTilePage = ({
-  systemId: propSystemId,
-  tileUnitData: propTileUnitData,
-}: SystemTilePageProps) => {
-  const { systemId: paramSystemId } = useParams<{ systemId: string }>();
-
-  // Use props first, fallback to URL params
-  const systemId = propSystemId || paramSystemId || "";
-
-  // Default tile unit data for demo/testing
-  const defaultTileUnitData: TileUnitData = {
-    space: {}, // Explicitly empty space units since we're skipping space
-    planets: {
-      bereg: {
-        controlledBy: "letnev",
-        entities: {
-          // neutral: [
-          //   { entityId: "worlddestroyed", count: 1, entityType: "token" },
-          // ],
-          barony: [
-            // { entityId: "gf", count: 2, entityType: "unit" },
-            // { entityId: "mf", count: 1, entityType: "unit" },
-          ],
-        },
-      },
-    },
-    ccs: [],
-  };
-
-  const tileUnitData = propTileUnitData || defaultTileUnitData;
-
+const SystemTileDisplay = ({
+  systemId,
+  tileUnitData,
+}: SystemTileDisplayProps) => {
   // Filter out space units by creating a modified tileUnitData
   const planetOnlyTileUnitData: TileUnitData = {
     ...tileUnitData,
     space: {}, // Remove all space units
   };
-
-  if (!systemId) {
-    return (
-      <div className={classes.errorContainer}>
-        <h1>System Tile Viewer</h1>
-        <p>
-          No system ID provided. Please provide a system ID via URL parameter or
-          props.
-        </p>
-      </div>
-    );
-  }
 
   // Get all entity placements for the tile
   const { entityPlacements: entityPlacements, finalCostMap } =
@@ -85,18 +46,27 @@ export const SystemTilePage = ({
         }
       );
 
-      return processPlanetEntities(planets.find((p) => p.name === "ang")!, {
-        controlledBy: "letnev",
-        entities: {
-          // neutral: [
-          //   { entityId: "worlddestroyed", count: 1, entityType: "token" },
-          // ],
-          letnev: [
-            { entityId: "gf", count: 2, entityType: "unit" },
-            // { entityId: "mf", count: 1, entityType: "unit" },
-          ],
-        },
-      });
+      // Process all planets that have data
+      const allEntityPlacements: Record<string, any> = {};
+      let combinedCostMap: number[][] = [];
+
+      Object.entries(planetOnlyTileUnitData.planets).forEach(
+        ([planetId, planetData]) => {
+          const planet = planets.find((p) => p.name === planetId);
+          if (planet && planetData) {
+            const result = processPlanetEntities(planet, planetData);
+            Object.assign(allEntityPlacements, result.entityPlacements);
+            if (result.finalCostMap.length > 0) {
+              combinedCostMap = result.finalCostMap;
+            }
+          }
+        }
+      );
+
+      return {
+        entityPlacements: allEntityPlacements,
+        finalCostMap: combinedCostMap,
+      };
     }, [systemId, planetOnlyTileUnitData]);
 
   // Generate unit images (UnitStack components)
@@ -110,6 +80,8 @@ export const SystemTilePage = ({
         const [x, y] = planetCoords[stack.planetName].split(",").map(Number);
         planetCenter = { x, y };
       }
+
+      console.log("the planet center is", JSON.stringify(planetCenter));
 
       return [
         <UnitStack
@@ -135,12 +107,11 @@ export const SystemTilePage = ({
       return [];
     }
 
-    // Find the maximum cost value for normalization
-    const maxCost = Math.max(
-      ...finalCostMap.flat().filter((cost) => cost !== -1)
-    );
+    console.log("finalCostMap", finalCostMap);
 
-    if (maxCost === 0) return [];
+    // Check if there are any non-zero, non-negative cost values to display
+    const hasValidCosts = finalCostMap.flat().some((cost) => cost > 0);
+    if (!hasValidCosts) return [];
 
     const gridElements: React.ReactElement[] = [];
 
@@ -155,17 +126,19 @@ export const SystemTilePage = ({
         const x = col * HEX_SQUARE_WIDTH;
         const y = row * HEX_SQUARE_HEIGHT;
 
-        let opacity: number;
+        let opacity: number = 1;
         let backgroundColor: string;
 
         if (cost === -1) {
-          // Inaccessible squares: full opacity with different color
-          opacity = 1;
+          // Inaccessible squares: black color
           backgroundColor = "black";
         } else {
-          // Accessible squares with cost: normalize cost to opacity (0-1 range)
-          opacity = Math.min(cost / maxCost, 1);
-          backgroundColor = "red";
+          // Normalize heat values using MAX_HEAT as the scale maximum
+          // Higher heat = more red, lower heat = more blue
+          const normalizedValue = (cost / MAX_HEAT) * 255 * 2;
+          const red = Math.min(255, Math.max(0, normalizedValue));
+          const blue = Math.max(0, 255 - normalizedValue);
+          backgroundColor = `rgb(${red}, 0, ${blue})`;
         }
 
         gridElements.push(
@@ -192,15 +165,92 @@ export const SystemTilePage = ({
   }, [finalCostMap]);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.tileContainer}>
-        <div className={classes.systemTileDisplay}>
-          <Tile systemId={systemId} className={classes.tile} />
-          {/* {controlTokens} */}
-          {/* {unitImages} */}
-          {costMapGrid}
-        </div>
+    <div className={classes.tileContainer}>
+      <h3>System {systemId}</h3>
+      <div className={classes.systemTileDisplay}>
+        <Tile systemId={systemId} className={classes.tile} />
+        {unitImages}
+        {costMapGrid}
       </div>
+    </div>
+  );
+};
+
+export const SystemTilePage = () => {
+  // Default tile unit data for system 53
+  const system53TileData: TileUnitData = {
+    space: {},
+    planets: {
+      arcturus: {
+        controlledBy: "letnev",
+        entities: {
+          letnev: [
+            { entityId: "gf", count: 1, entityType: "unit" },
+            { entityId: "sd", count: 1, entityType: "unit" },
+            { entityId: "mf", count: 1, entityType: "unit" },
+          ],
+        },
+      },
+    },
+    ccs: [],
+  };
+
+  // Default tile unit data for system 22
+  const system22TileData: TileUnitData = {
+    space: {},
+    planets: {
+      tarmann: {
+        controlledBy: "sol",
+        entities: {
+          letnev: [
+            { entityId: "gf", count: 2, entityType: "unit" },
+            // { entityId: "sd", count: 1, entityType: "unit" },
+            { entityId: "mf", count: 1, entityType: "unit" },
+          ],
+        },
+      },
+    },
+    ccs: [],
+  };
+
+  return (
+    <div className={classes.container}>
+      <SystemTileDisplay systemId="53" tileUnitData={system53TileData} />
+      <SystemTileDisplay systemId="22" tileUnitData={system22TileData} />
+      <SystemTileDisplay
+        systemId="69"
+        tileUnitData={{
+          space: {},
+          planets: {
+            accoen: {
+              controlledBy: "sol",
+              entities: {
+                letnev: [
+                  { entityId: "gf", count: 2, entityType: "unit" },
+                  // { entityId: "sd", count: 1, entityType: "unit" },
+                  { entityId: "mf", count: 1, entityType: "unit" },
+                ],
+              },
+            },
+            jeolir: {
+              controlledBy: "sol",
+              entities: {
+                letnev: [
+                  { entityId: "gf", count: 2, entityType: "unit" },
+                  // { entityId: "sd", count: 1, entityType: "unit" },
+                  { entityId: "mf", count: 1, entityType: "unit" },
+                  {
+                    entityId: "dysonsphere",
+                    count: 1,
+                    entityType: "attachment",
+                  },
+                ],
+              },
+            },
+          },
+          ccs: [],
+        }}
+      />
     </div>
   );
 };
