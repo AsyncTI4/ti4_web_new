@@ -27,11 +27,6 @@ export function CompactObjective({
 }: Props) {
   const gradientClasses = getGradientClasses(color);
 
-  // Get players who have scored this objective
-  const scoredPlayers = playerData.filter((player) =>
-    scoredFactions.includes(player.faction)
-  );
-
   // Gray objectives should not be clickable
   const isClickable = revealed && color !== "gray";
 
@@ -56,12 +51,12 @@ export function CompactObjective({
           </Text>
 
           {/* Faction icons for scored players */}
-          {revealed && scoredPlayers.length > 0 && (
+          {revealed && scoredFactions.length > 0 && (
             <Group gap={2} className={styles.factionIcons}>
-              {scoredPlayers.map((player) => (
+              {scoredFactions.map((faction, index) => (
                 <CircularFactionIcon
-                  key={player.faction}
-                  faction={player.faction}
+                  key={`${faction}-${index}`}
+                  faction={faction}
                   size={20}
                 />
               ))}
