@@ -33,9 +33,7 @@ const systemHasTechSkips = (
 
   // Check planet attachments for tech skips
   if (tileUnitData?.planets) {
-    for (const [planetName, planetData] of Object.entries(
-      tileUnitData.planets
-    )) {
+    for (const [_, planetData] of Object.entries(tileUnitData.planets)) {
       if (planetData?.entities) {
         for (const entities of Object.values(planetData.entities)) {
           if (Array.isArray(entities)) {

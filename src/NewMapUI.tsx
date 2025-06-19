@@ -59,54 +59,9 @@ import { LawDetailsCard } from "./components/PlayerArea/LawDetailsCard";
 import { PointTotals } from "./components/PlayerArea/PointTotals";
 import { SmoothPopover } from "./components/shared/SmoothPopover";
 import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
-import { planets } from "./data/planets";
-import { getAttachmentData } from "./data/attachments";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 3;
-
-// Helper function to check if a system has tech skips
-const systemHasTechSkips = (systemId: string, tileUnitData?: any): boolean => {
-  // Check base planet tech specialties
-  const systemPlanets = planets.filter((planet) => planet.tileId === systemId);
-  const hasBaseTechSkips = systemPlanets.some(
-    (planet) =>
-      planet.techSpecialties &&
-      planet.techSpecialties.length > 0 &&
-      !planet.techSpecialties.includes("NONUNITSKIP")
-  );
-
-  if (hasBaseTechSkips) {
-    return true;
-  }
-
-  // Check planet attachments for tech skips
-  if (tileUnitData?.planets) {
-    for (const [planetName, planetData] of Object.entries(
-      tileUnitData.planets
-    )) {
-      if ((planetData as any)?.entities) {
-        for (const entities of Object.values((planetData as any).entities)) {
-          if (Array.isArray(entities)) {
-            for (const entity of entities) {
-              if (entity.entityType === "attachment") {
-                const attachmentData = getAttachmentData(entity.entityId);
-                if (
-                  attachmentData?.techSpeciality &&
-                  attachmentData.techSpeciality.length > 0
-                ) {
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return false;
-};
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {
