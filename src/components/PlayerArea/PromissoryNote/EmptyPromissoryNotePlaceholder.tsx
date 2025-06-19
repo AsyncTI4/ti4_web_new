@@ -24,7 +24,6 @@ export function EmptyPromissoryNotePlaceholder() {
         />
         <Text
           size="xs"
-          fw={500}
           c="gray.6"
           flex={1}
           style={{

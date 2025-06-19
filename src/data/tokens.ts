@@ -1,4 +1,6 @@
-export const tokens = [
+import { Token } from "./types";
+
+export const tokens: Token[] = [
   {
     id: "creussalpha",
     imagePath: "token_creussalpha.png",

@@ -1,4 +1,6 @@
-export const units = [
+import { Unit } from "./types";
+
+export const units: Unit[] = [
   {
     id: "cruiser",
     baseType: "cruiser",

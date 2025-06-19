@@ -224,3 +224,92 @@
 .generalAbilityText {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
+
+.diceContainer {
+  position: relative;
+}
+
+.diceCircle {
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Single die layout */
+.singleDie {
+  width: 4px;
+  height: 4px;
+}
+
+/* Two dice layout */
+.twoDice {
+  display: flex;
+  gap: 2px;
+}
+
+.twoDice .diceCircle {
+  width: 4px;
+  height: 4px;
+}
+
+/* Three dice triangle layout */
+.threeDice {
+  width: 16px;
+  height: 12px;
+  position: relative;
+}
+
+.threeDice .diceCircle {
+  width: 4px;
+  height: 4px;
+  position: absolute;
+}
+
+.threeDiceTop {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.threeDiceBottomLeft {
+  bottom: 0;
+  left: 0;
+}
+
+.threeDiceBottomRight {
+  bottom: 0;
+  right: 0;
+}
+
+/* Four dice grid layout */
+.fourDice {
+  width: 10px;
+  height: 10px;
+  position: relative;
+}
+
+.fourDice .diceCircle {
+  width: 4px;
+  height: 4px;
+  position: absolute;
+}
+
+.fourDiceTopLeft {
+  top: 0;
+  left: 0;
+}
+
+.fourDiceTopRight {
+  top: 0;
+  right: 0;
+}
+
+.fourDiceBottomLeft {
+  bottom: 0;
+  left: 0;
+}
+
+.fourDiceBottomRight {
+  bottom: 0;
+  right: 0;
+}

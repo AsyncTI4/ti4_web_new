@@ -24,6 +24,8 @@ import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
+import { getAbility } from "@/lookup/abilities";
+import { Ability } from "./PlayerArea/Ability";
 
 // Helper function to get tech data by ID
 const getTechData = (techId: string) => {
@@ -67,6 +69,9 @@ export default function PlayerCardSidebar(props: Props) {
     secretsScored,
     unitsOwned,
     leaders,
+
+    abilities,
+    notResearchedFactionTechs,
   } = props.playerData;
   const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
@@ -146,7 +151,6 @@ export default function PlayerCardSidebar(props: Props) {
         wrap="nowrap"
         justify="space-between"
         style={{ minWidth: 0 }}
-        mb="md"
       >
         <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
           {/* Small circular faction icon */}
@@ -226,6 +230,53 @@ export default function PlayerCardSidebar(props: Props) {
         </Group>
       </Group>
 
+      <Group wrap="initial" gap={2} my="xs">
+        <Group
+          gap={4}
+          wrap="nowrap"
+          style={{
+            overflow: "hidden",
+            minWidth: "50%",
+            flex: 1,
+            flexShrink: 0,
+          }}
+        >
+          {abilities?.map((abilityId, index) => {
+            const abilityData = getAbility(abilityId);
+            if (!abilityData) return null;
+
+            return (
+              <Box
+                key={index}
+                style={{
+                  flexShrink: 1,
+                  minWidth: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <Ability id={abilityId} />
+              </Box>
+            );
+          })}
+        </Group>
+
+        {/* Unresearched Faction Techs */}
+        {notResearchedFactionTechs?.length > 0 && (
+          <Group gap={2} style={{ flexShrink: 1 }}>
+            {notResearchedFactionTechs.map((techId, index) => (
+              <Box
+                key={index}
+                style={{
+                  filter: "grayscale(0.5)",
+                }}
+              >
+                <Tech techId={techId} />
+              </Box>
+            ))}
+          </Group>
+        )}
+      </Group>
+
       {/* Main Content - Simplified Grid for narrow layout */}
       <Stack gap="md">
         {/* Top Row - Cards/Stats */}
@@ -245,6 +296,7 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
           <Stack gap={8}>
             <Leaders leaders={leaders} />
+
             {relics.map((relicId, index) => (
               <Relic key={index} relicId={relicId} />
             ))}

@@ -18,11 +18,7 @@ const parseUnitString = (unitString: string) => {
   const count = parseInt(countStr, 10);
 
   // Find unit by baseType or name match
-  const unit = units.find(
-    (u) =>
-      u.baseType === unitType ||
-      u.name.toLowerCase().includes(unitType.toLowerCase())
-  );
+  const unit = units.find((u) => u.baseType === unitType);
 
   return {
     unitType,

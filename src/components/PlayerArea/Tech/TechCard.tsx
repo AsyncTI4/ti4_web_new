@@ -86,7 +86,7 @@ export function TechCard({ techId }: Props) {
                 alt={techData.name}
                 w={24}
                 h={24}
-                className={`${styles.techIcon} ${styles[color]}`}
+                className={`${styles[color]}`}
               />
             </Box>
           </Box>

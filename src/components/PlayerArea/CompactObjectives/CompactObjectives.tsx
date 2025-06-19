@@ -53,6 +53,8 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                     playerData={playerData}
                     scoredFactions={objective.scoredFactions}
                     color="orange"
+                    factionProgress={objective.factionProgress}
+                    progressThreshold={objective.progressThreshold}
                   />
                 </SmoothPopover.Dropdown>
               </SmoothPopover>
@@ -97,6 +99,8 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                     playerData={playerData}
                     scoredFactions={objective.scoredFactions}
                     color="blue"
+                    factionProgress={objective.factionProgress}
+                    progressThreshold={objective.progressThreshold}
                   />
                 </SmoothPopover.Dropdown>
               </SmoothPopover>

@@ -29,6 +29,8 @@ function PublicObjectives({ objectives, playerData }: Props) {
                 scoredFactions={objective.scoredFactions}
                 playerData={playerData}
                 objectiveKey={objective.key}
+                factionProgress={objective.factionProgress}
+                progressThreshold={objective.progressThreshold}
               />
             ))}
           </Box>
@@ -50,6 +52,8 @@ function PublicObjectives({ objectives, playerData }: Props) {
                 scoredFactions={objective.scoredFactions}
                 playerData={playerData}
                 objectiveKey={objective.key}
+                factionProgress={objective.factionProgress}
+                progressThreshold={objective.progressThreshold}
               />
             ))}
           </Box>
@@ -72,6 +76,8 @@ function PublicObjectives({ objectives, playerData }: Props) {
                 multiScoring={objective.multiScoring}
                 playerData={playerData}
                 objectiveKey={objective.key}
+                factionProgress={objective.factionProgress}
+                progressThreshold={objective.progressThreshold}
               />
             ))}
           </Box>

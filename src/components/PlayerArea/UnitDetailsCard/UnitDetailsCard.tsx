@@ -2,6 +2,7 @@ import { Box, Text, Stack, Group, Image, Divider } from "@mantine/core";
 import { units } from "@/data/units";
 import { cdnImage } from "@/data/cdnImage";
 import { findColorData } from "@/lookup/colors";
+import { Dice } from "./Dice";
 
 type Props = {
   unitId: string;
@@ -312,16 +313,19 @@ export function UnitDetailsCard({ unitId, color }: Props) {
               >
                 Combat
               </Text>
-              <Text
-                size="lg"
-                fw={700}
-                c="white"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {unitData.combatHitsOn ?? "—"}
-              </Text>
+              <Group gap="xs" justify="center" align="center">
+                <Text
+                  size="lg"
+                  fw={700}
+                  c="white"
+                  style={{
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                  }}
+                >
+                  {unitData.combatHitsOn ?? "—"}
+                </Text>
+                <Dice count={unitData.combatDieCount || 1} />
+              </Group>
             </Box>
             <Box ta="center" style={{ flex: 1 }}>
               <Text

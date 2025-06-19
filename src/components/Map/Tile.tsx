@@ -9,9 +9,7 @@ interface TileProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 export const Tile: React.FC<TileProps> = ({ systemId, alt, ...imgProps }) => {
   const tile = getTileById(systemId);
 
-  if (!tile) {
-    return null;
-  }
+  if (!tile) return null;
 
   return (
     <img

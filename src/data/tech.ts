@@ -1,4 +1,6 @@
-export const techs = [
+import { Tech } from "./types";
+
+export const techs: Tech[] = [
   {
     alias: "amd",
     name: "Antimass Deflectors",

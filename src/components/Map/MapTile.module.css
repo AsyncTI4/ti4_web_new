@@ -12,6 +12,16 @@
   pointer-events: auto;
 }
 
+.anomalyOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* Interactive states */
 .mapTile.hovered .tile {
   filter: brightness(1.1);

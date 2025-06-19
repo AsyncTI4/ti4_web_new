@@ -8,6 +8,21 @@
     inset 0 1px 0 rgba(148, 163, 184, 0.1);
   position: relative;
   overflow: hidden;
+  width: 320px;
+}
+
+.cardStack {
+  gap: var(--mantine-spacing-md);
+}
+
+.headerGroup {
+  gap: var(--mantine-spacing-md);
+  align-items: flex-start;
+}
+
+.titleStack {
+  gap: 4px;
+  flex: 1;
 }
 
 .pointsContainer {
@@ -49,17 +64,99 @@
 }
 
 .pointsText {
+  font-size: var(--mantine-font-size-xl);
+  font-weight: 700;
+  color: var(--mantine-color-white);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   font-family: var(--mantine-font-family-heading);
 }
 
 .title {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  color: var(--mantine-color-white);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   font-family: var(--mantine-font-family-heading);
   letter-spacing: 0.3px;
 }
 
+.phaseBadge {
+  color: var(--mantine-color-gray-5);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.divider {
+  color: var(--mantine-color-gray-7);
+  opacity: 0.8;
+}
+
+.sectionLabel {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-4);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.progressSectionLabel {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-4);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
 .requirementText {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   line-height: 1.6;
+}
+
+.progressStack {
+  gap: 6px;
+}
+
+.progressRow {
+  gap: var(--mantine-spacing-sm);
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.factionIconContainer {
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.factionNameText {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-4);
+  font-weight: 600;
+  text-transform: uppercase;
+  width: 70px;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playerNameText {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-3);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progressContainer {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.progressText {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-4);
+  font-weight: 500;
 }

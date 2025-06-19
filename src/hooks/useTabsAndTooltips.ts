@@ -9,6 +9,7 @@ export type AreaType =
     }
   | { type: "tech" }
   | { type: "components" }
+  | { type: "strength" }
   | null;
 
 export function useTabsAndTooltips() {

@@ -1,5 +1,6 @@
 import { Box, Group, Image, Text } from "@mantine/core";
-import { IconFlask, IconHandStop } from "@tabler/icons-react";
+import { IconFlask, IconHandStop, IconTank } from "@tabler/icons-react";
+import { ReactNode } from "react";
 import { cdnImage } from "../data/cdnImage";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
@@ -16,6 +17,63 @@ type FactionTabBarProps = {
   onAreaMouseEnter: (area: AreaType) => void;
   onAreaMouseLeave: () => void;
 };
+
+type TabButtonProps = {
+  icon: ReactNode;
+  text: string;
+  areaType: "tech" | "components" | "strength";
+  iconClass: string;
+  textClass: string;
+  buttonPositionClass?: string;
+  selectedArea: AreaType;
+  activeArea: AreaType;
+  onAreaSelect: (area: AreaType) => void;
+  onAreaMouseEnter: (area: AreaType) => void;
+  onAreaMouseLeave: () => void;
+};
+
+function TabButton({
+  icon,
+  text,
+  areaType,
+  iconClass,
+  textClass,
+  buttonPositionClass = "",
+  selectedArea,
+  activeArea,
+  onAreaSelect,
+  onAreaMouseEnter,
+  onAreaMouseLeave,
+}: TabButtonProps) {
+  const isPinned = selectedArea?.type === areaType;
+  const isActive = activeArea?.type === areaType;
+
+  return (
+    <Box
+      onClick={() => onAreaSelect(isPinned ? null : { type: areaType })}
+      onMouseEnter={() => onAreaMouseEnter({ type: areaType })}
+      onMouseLeave={() => onAreaMouseLeave()}
+      className={`${classes.tab} ${classes.btnTab} ${buttonPositionClass} ${
+        isPinned ? classes.pinned : isActive ? classes.active : ""
+      }`}
+    >
+      <Box
+        className={`${classes.icon} ${iconClass} ${
+          isPinned ? classes.iconPinned : isActive ? classes.iconActive : ""
+        }`}
+      >
+        {icon}
+      </Box>
+      <Text
+        className={`${classes.text} ${textClass} ${
+          isPinned ? classes.textPinned : isActive ? classes.textActive : ""
+        }`}
+      >
+        {text}
+      </Text>
+    </Box>
+  );
+}
 
 export function FactionTabBar({
   playerData,
@@ -79,87 +137,47 @@ export function FactionTabBar({
           );
         })}
 
-        {/* TECH Button */}
-        <Box
-          onClick={() =>
-            onAreaSelect(
-              selectedArea?.type === "tech" ? null : { type: "tech" }
-            )
-          }
-          onMouseEnter={() => onAreaMouseEnter({ type: "tech" })}
-          onMouseLeave={() => onAreaMouseLeave()}
-          className={`${classes.tab} ${classes.btnTab} ${classes.btnLeft} ${
-            selectedArea?.type === "tech"
-              ? classes.pinned
-              : activeArea?.type === "tech"
-                ? classes.active
-                : ""
-          }`}
-        >
-          <IconFlask
-            size={16}
-            className={`${classes.icon} ${classes.iconTech} ${
-              selectedArea?.type === "tech"
-                ? classes.iconPinned
-                : activeArea?.type === "tech"
-                  ? classes.iconActive
-                  : ""
-            }`}
-          />
-          <Text
-            className={`${classes.text} ${classes.textTech} ${
-              selectedArea?.type === "tech"
-                ? classes.textPinned
-                : activeArea?.type === "tech"
-                  ? classes.textActive
-                  : ""
-            }`}
-          >
-            TECH
-          </Text>
-        </Box>
+        <TabButton
+          icon={<IconFlask size={16} />}
+          text="TECH"
+          areaType="tech"
+          iconClass={classes.iconTech}
+          textClass={classes.textTech}
+          buttonPositionClass={classes.btnLeft}
+          selectedArea={selectedArea}
+          activeArea={activeArea}
+          onAreaSelect={onAreaSelect}
+          onAreaMouseEnter={onAreaMouseEnter}
+          onAreaMouseLeave={onAreaMouseLeave}
+        />
 
-        {/* COMPONENTS Button */}
-        <Box
-          onClick={() =>
-            onAreaSelect(
-              selectedArea?.type === "components"
-                ? null
-                : { type: "components" }
-            )
-          }
-          onMouseEnter={() => onAreaMouseEnter({ type: "components" })}
-          onMouseLeave={() => onAreaMouseLeave()}
-          className={`${classes.tab} ${classes.btnTab} ${classes.btnRight} ${
-            selectedArea?.type === "components"
-              ? classes.pinned
-              : activeArea?.type === "components"
-                ? classes.active
-                : ""
-          }`}
-        >
-          <IconHandStop
-            size={16}
-            className={`${classes.icon} ${classes.iconComp} ${
-              selectedArea?.type === "components"
-                ? classes.iconPinned
-                : activeArea?.type === "components"
-                  ? classes.iconActive
-                  : ""
-            }`}
-          />
-          <Text
-            className={`${classes.text} ${classes.textComp} ${
-              selectedArea?.type === "components"
-                ? classes.textPinned
-                : activeArea?.type === "components"
-                  ? classes.textActive
-                  : ""
-            }`}
-          >
-            HAND
-          </Text>
-        </Box>
+        <TabButton
+          icon={<IconHandStop size={16} />}
+          text="HAND"
+          areaType="components"
+          iconClass={classes.iconComp}
+          textClass={classes.textComp}
+          buttonPositionClass={classes.btnRight}
+          selectedArea={selectedArea}
+          activeArea={activeArea}
+          onAreaSelect={onAreaSelect}
+          onAreaMouseEnter={onAreaMouseEnter}
+          onAreaMouseLeave={onAreaMouseLeave}
+        />
+
+        <TabButton
+          icon={<IconTank size={16} />}
+          text="Strength"
+          areaType="strength"
+          iconClass={classes.iconTech}
+          textClass={classes.textTech}
+          buttonPositionClass={classes.btnLeft}
+          selectedArea={selectedArea}
+          activeArea={activeArea}
+          onAreaSelect={onAreaSelect}
+          onAreaMouseEnter={onAreaMouseEnter}
+          onAreaMouseLeave={onAreaMouseLeave}
+        />
       </Group>
     </Box>
   );

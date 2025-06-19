@@ -179,6 +179,7 @@ const SystemTileDisplay = ({
 export const SystemTilePage = () => {
   // Default tile unit data for system 53
   const system53TileData: TileUnitData = {
+    anomaly: false,
     space: {},
     planets: {
       arcturus: {
@@ -197,6 +198,7 @@ export const SystemTilePage = () => {
 
   // Default tile unit data for system 22
   const system22TileData: TileUnitData = {
+    anomaly: false,
     space: {},
     planets: {
       tarmann: {
@@ -220,6 +222,7 @@ export const SystemTilePage = () => {
       <SystemTileDisplay
         systemId="69"
         tileUnitData={{
+          anomaly: false,
           space: {},
           planets: {
             accoen: {

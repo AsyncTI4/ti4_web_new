@@ -18,6 +18,8 @@ type Props = {
   multiScoring?: boolean;
   playerData: PlayerData[];
   objectiveKey: string;
+  factionProgress?: Record<string, number>;
+  progressThreshold?: number;
 };
 
 function ObjectiveCard({
@@ -29,6 +31,8 @@ function ObjectiveCard({
   multiScoring,
   playerData,
   objectiveKey,
+  factionProgress,
+  progressThreshold,
 }: Props) {
   const [opened, setOpened] = useState(false);
 
@@ -115,6 +119,8 @@ function ObjectiveCard({
           playerData={playerData}
           scoredFactions={scoredFactions}
           color={color}
+          factionProgress={factionProgress}
+          progressThreshold={progressThreshold}
         />
       </SmoothPopover.Dropdown>
     </SmoothPopover>

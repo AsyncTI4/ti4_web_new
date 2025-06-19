@@ -24,9 +24,13 @@
   font-family: "Slider", sans-serif;
   text-align: center;
   color: white;
+
+  -webkit-text-stroke: 3px white;
+  paint-order: stroke fill;
+
 }
 
 .whiteText {
   -webkit-text-stroke: 3px #000;
-  paint-order: stroke fill;
+
 }

@@ -1,0 +1,1 @@
+export { AbilityDetailsCard } from "./AbilityDetailsCard";

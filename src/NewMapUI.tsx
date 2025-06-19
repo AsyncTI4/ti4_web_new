@@ -10,6 +10,7 @@ import {
   Stack,
   Button,
   Group,
+  Text,
 } from "@mantine/core";
 import {
   IconAlertCircle,
@@ -56,9 +57,10 @@ import { CompactLaw } from "./components/PlayerArea/CompactLaw";
 import { LawDetailsCard } from "./components/PlayerArea/LawDetailsCard";
 import { PointTotals } from "./components/PlayerArea/PointTotals";
 import { SmoothPopover } from "./components/shared/SmoothPopover";
+import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
 
 // Magic constant for required version schema
-const REQUIRED_VERSION_SCHEMA = 2;
+const REQUIRED_VERSION_SCHEMA = 3;
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {
@@ -112,6 +114,7 @@ type ActiveArea =
     }
   | { type: "tech" }
   | { type: "components" }
+  | { type: "strength" }
   | null;
 
 type PlayerCardDisplayProps = {
@@ -396,9 +399,23 @@ export function NewMapUI() {
                         <Stack p="md" gap="md">
                           {objectives && playerData && (
                             <Box>
+                              {/* Game Info */}
+                              {playerData[0] && (
+                                <Stack gap={1} mb="xs">
+                                  <Text size="md" c="gray.1" ff="heading">
+                                    {data.gameName}
+                                    {data.gameCustomName &&
+                                      ` - ${data.gameCustomName}`}
+                                  </Text>
+                                  <Text size="md" c="gray.3">
+                                    Round {data.gameRound}
+                                  </Text>
+                                </Stack>
+                              )}
                               <h3 className={classes.sectionHeading}>
                                 Public Objectives
                               </h3>
+
                               <CompactObjectives
                                 objectives={objectives}
                                 playerData={playerData}
@@ -410,7 +427,7 @@ export function NewMapUI() {
                           {playerData && (
                             <Box>
                               <h3 className={classes.sectionHeading}>
-                                Point Totals
+                                Point Totals ({vpsToWin} VP)
                               </h3>
                               <PointTotals
                                 playerData={playerData}
@@ -826,6 +843,18 @@ function PlayerCardDisplay({
               factionToColor={factionToColor}
               colorToFaction={colorToFaction}
             />
+          </Box>
+        ))}
+      </Stack>
+    );
+  }
+
+  if (activeArea?.type === "strength") {
+    return (
+      <Stack className={classes.playerCardsContainer}>
+        {playerData.map((player) => (
+          <Box key={player.faction} className={classes.playerCard}>
+            <PlayerCardSidebarStrength playerData={player} />
           </Box>
         ))}
       </Stack>

@@ -24,6 +24,89 @@ export type EntityData = {
   sustained?: number | null;
 };
 
+export type Unit = {
+  id: string;
+  baseType: string;
+  asyncId: string;
+  name: string;
+  source: string;
+  upgradesToUnitId?: string;
+  upgradesFromUnitId?: string;
+  requiredTechId?: string;
+  faction?: string;
+  subtitle?: string;
+  moveValue?: number;
+  capacityValue?: number;
+  capacityUsed?: number;
+  cost?: number;
+  combatHitsOn?: number;
+  combatDieCount?: number;
+  afbHitsOn?: number;
+  afbDieCount?: number;
+  bombardHitsOn?: number;
+  bombardDieCount?: number;
+  spaceCannonHitsOn?: number;
+  spaceCannonDieCount?: number;
+  sustainDamage?: boolean;
+  canBeDirectHit?: boolean;
+  planetaryShield?: boolean;
+  deepSpaceCannon?: boolean;
+  disablesPlanetaryShield?: boolean;
+  isShip?: boolean;
+  isGroundForce?: boolean;
+  isStructure?: boolean;
+  isMonument?: boolean;
+  isPlanetOnly?: boolean;
+  isSpaceOnly?: boolean;
+  productionValue?: string | number;
+  basicProduction?: string;
+  ability?: string;
+  imageURL?: string;
+  bgDecalPath?: string;
+};
+
+export type Token = {
+  id: string;
+  imagePath: string;
+  spaceOrPlanet: "space" | "planet";
+  aliasList: string[];
+  source: string;
+  attachmentID?: string;
+  wormholes?: string[];
+  isAnomaly?: boolean;
+  isRift?: boolean;
+  isNebula?: boolean;
+  tokenPlanetName?: string;
+  isPlanet?: boolean;
+  scale?: number;
+};
+
+export type Tech = {
+  alias: string;
+  name: string;
+  types: string[];
+  source: string;
+  text: string;
+  imageURL: string;
+  requirements?: string;
+  faction?: string;
+  baseUpgrade?: string;
+  initials?: string;
+  shortName?: string;
+  shrinkName?: boolean;
+};
+
+export type Relic = {
+  alias: string;
+  name: string;
+  text: string;
+  imageURL: string;
+  source: string;
+  flavourText: string;
+  shrinkName?: boolean;
+  shortName?: string;
+};
+
 export type FactionUnits = {
   [factionName: string]: EntityData[];
 };
@@ -58,6 +141,7 @@ export type TileUnitData = {
   };
   planets: PlanetData;
   ccs: string[];
+  anomaly: boolean;
 };
 
 export type LawInPlay = {
@@ -127,6 +211,9 @@ export type PlayerDataResponse = {
   objectives: Objectives;
   cardPool: CardPoolData;
   versionSchema?: number;
+  gameRound: number;
+  gameName: string;
+  gameCustomName?: string;
 };
 
 export type PlayerData = {
@@ -194,6 +281,7 @@ export type PlayerData = {
   neighbors: string[];
   debtTokens?: Record<string, number>;
   nombox?: CapturedUnitsData;
+  abilities?: string[];
 
   // card counts
   soCount: number;
@@ -267,6 +355,8 @@ export type Objective = {
   scoredFactions: string[];
   peekingFactions: string[];
   multiScoring: boolean;
+  progressThreshold: number;
+  factionProgress: Record<string, number>;
 };
 
 export type Objectives = {
@@ -274,4 +364,31 @@ export type Objectives = {
   stage2Objectives: Objective[];
   customObjectives: Objective[];
   allObjectives: Objective[];
+};
+
+export type Agenda = {
+  alias: string;
+  name: string;
+  type: "Directive" | "Law";
+  target: string;
+  text1: string;
+  text2: string;
+  source: "pok" | "base";
+  forEmoji?: string;
+  againstEmoji?: string;
+  mapText?: string;
+};
+
+export type Agendas = Agenda[];
+
+export type Ability = {
+  id: string;
+  name: string;
+  faction: string;
+  window?: string;
+  windowEffect?: string;
+  permanentEffect?: string;
+  source: string;
+  shortName?: string;
+  homebrewReplacesID?: string;
 };

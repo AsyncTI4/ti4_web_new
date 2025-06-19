@@ -1,4 +1,6 @@
-export const agendas = [
+import { Agendas } from "./types";
+
+export const agendas: Agendas = [
   {
     alias: "standardization",
     name: "Armed Forces Standardization",

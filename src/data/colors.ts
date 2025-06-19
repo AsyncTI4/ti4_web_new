@@ -553,4 +553,22 @@ export const colors = [
     primaryColorRef: "rainbow",
     secondaryColorRef: "lightgray",
   },
+  {
+    alias: "nm",
+    name: "nightmare",
+    aliases: ["nm", "nightmare", "night"],
+    textColor: "white",
+    primaryColor: { red: 109, green: 0, blue: 10 },
+    secondaryColor: { red: 79, green: 50, blue: 81 },
+    hue: "MULTI2",
+  },
+  {
+    alias: "dw",
+    name: "dawn",
+    aliases: ["dw", "dawn"],
+    textColor: "black",
+    primaryColor: { red: 242, green: 242, blue: 242 },
+    secondaryColor: { red: 255, green: 210, blue: 112 },
+    hue: "MULTI2",
+  },
 ];

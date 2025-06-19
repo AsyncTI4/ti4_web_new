@@ -28,6 +28,9 @@ export type EnhancedPlayerData = {
   cardPool: CardPoolData;
   versionSchema?: number;
   ringCount: number;
+  gameRound: number;
+  gameName: string;
+  gameCustomName?: string;
 };
 
 export function enhancePlayerData(
@@ -93,17 +96,7 @@ export function enhancePlayerData(
   }
 
   return {
-    playerData: data.playerData,
-    tileUnitData: data.tileUnitData,
-    tilePositions: data.tilePositions,
-    statTilePositions: data.statTilePositions,
-    objectives: data.objectives,
-    lawsInPlay: data.lawsInPlay,
-    strategyCards: data.strategyCards,
-    vpsToWin: data.vpsToWin,
-    cardPool: data.cardPool,
-    versionSchema: data.versionSchema,
-    ringCount: data.ringCount,
+    ...data,
     // extra computed properties
     calculatedTilePositions,
     systemIdToPosition,

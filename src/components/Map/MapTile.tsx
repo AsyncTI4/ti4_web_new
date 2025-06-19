@@ -8,6 +8,8 @@ import { getColorAlias } from "@/lookup/colors";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
 import { TileUnitData } from "@/data/types";
+import { cdnImage } from "../../data/cdnImage";
+import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 
 type Props = {
   systemId: string;
@@ -273,6 +275,22 @@ export const MapTile = React.memo<Props>(
       >
         <div className={classes.tileContainer}>
           <Tile systemId={systemId} className={classes.tile} />
+          {tileUnitData?.anomaly && (
+            <img
+              src={cdnImage("/emojis/tiles/Anomaly.png")}
+              alt="Anomaly"
+              className={classes.anomalyOverlay}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: TILE_WIDTH,
+                height: TILE_HEIGHT,
+                zIndex: 1,
+                pointerEvents: "none",
+              }}
+            />
+          )}
           {planetCircles}
           {controlTokens}
           {unitImages}
