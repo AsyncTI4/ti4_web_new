@@ -151,7 +151,8 @@ export function UnitDetailsCard({ unitId, color }: Props) {
           unitData.bombardHitsOn ||
           unitData.spaceCannonHitsOn ||
           unitData.planetaryShield ||
-          unitData.sustainDamage) && (
+          unitData.sustainDamage ||
+          unitData.productionValue) && (
           <>
             <Divider c={isUpgraded ? "blue.7" : "gray.7"} opacity={0.4} />
             <Box>
@@ -265,6 +266,31 @@ export function UnitDetailsCard({ unitId, color }: Props) {
                   >
                     Sustain Damage
                   </Text>
+                )}
+                {unitData.productionValue && (
+                  <Group gap="xs" justify="flex-start">
+                    <Text
+                      size="xs"
+                      fw={600}
+                      c="gray.3"
+                      tt="uppercase"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+                      }}
+                    >
+                      Production 
+                    </Text>
+                    <Text
+                      size="sm"
+                      fw={700}
+                      c="white"
+                      style={{
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
+                      }}
+                    >
+                      {unitData.productionValue}
+                    </Text>
+                  </Group>
                 )}
               </Stack>
             </Box>
