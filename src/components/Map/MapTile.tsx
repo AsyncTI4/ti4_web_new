@@ -10,6 +10,54 @@ import classes from "./MapTile.module.css";
 import { TileUnitData } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import { planets } from "../../data/planets";
+import { getAttachmentData } from "../../data/attachments";
+
+// Helper function to check if a system has tech skips
+const systemHasTechSkips = (
+  systemId: string,
+  tileUnitData?: TileUnitData
+): boolean => {
+  // Check base planet tech specialties
+  const systemPlanets = planets.filter((planet) => planet.tileId === systemId);
+  const hasBaseTechSkips = systemPlanets.some(
+    (planet) =>
+      planet.techSpecialties &&
+      planet.techSpecialties.length > 0 &&
+      !planet.techSpecialties.includes("NONUNITSKIP")
+  );
+
+  if (hasBaseTechSkips) {
+    return true;
+  }
+
+  // Check planet attachments for tech skips
+  if (tileUnitData?.planets) {
+    for (const [planetName, planetData] of Object.entries(
+      tileUnitData.planets
+    )) {
+      if (planetData?.entities) {
+        for (const entities of Object.values(planetData.entities)) {
+          if (Array.isArray(entities)) {
+            for (const entity of entities) {
+              if (entity.entityType === "attachment") {
+                const attachmentData = getAttachmentData(entity.entityId);
+                if (
+                  attachmentData?.techSpeciality &&
+                  attachmentData.techSpeciality.length > 0
+                ) {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return false;
+};
 
 type Props = {
   systemId: string;
@@ -38,6 +86,7 @@ type Props = {
   onPlanetMouseLeave?: () => void;
   isSelected?: boolean;
   isHovered?: boolean;
+  techSkipsMode?: boolean;
 };
 
 export const MapTile = React.memo<Props>(
@@ -58,6 +107,7 @@ export const MapTile = React.memo<Props>(
     isSelected,
     isHovered,
     ringPosition,
+    techSkipsMode,
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
@@ -263,6 +313,11 @@ export const MapTile = React.memo<Props>(
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
+          opacity: techSkipsMode
+            ? systemHasTechSkips(systemId, tileUnitData)
+              ? 1.0
+              : 0.2
+            : 1,
           ...style,
         }}
         onClick={onTileSelect ? () => onTileSelect(systemId) : undefined}
