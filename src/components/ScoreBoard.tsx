@@ -4,7 +4,7 @@ import { UnpickedSCs } from "./Objectives/UnpickedSCs";
 import { CardPool } from "./Objectives/CardPool";
 import { FactionsInGame } from "./Objectives/FactionsInGame";
 import { LawsInPlay } from "./Objectives/LawsInPlay";
-import { PublicObjectives } from "./Objectives/PublicObjectives";
+import ExpandedPublicObjectives from "./Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { ScoreTracker } from "./Objectives/ScoreTracker";
 import {
   Objectives,
@@ -76,7 +76,10 @@ function ScoreBoard({
 
       {/* Scorable Objectives Section */}
       <Box mb="md">
-        <PublicObjectives objectives={objectives} playerData={playerData} />
+        <ExpandedPublicObjectives
+          objectives={objectives}
+          playerData={playerData}
+        />
       </Box>
 
       {/* Score Tracker */}

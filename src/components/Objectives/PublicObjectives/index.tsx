@@ -1,2 +1,1 @@
-export { default as PublicObjectives } from "./PublicObjectives";
-export { ObjectiveCard } from "./ObjectiveCard";
+export { default as ExpandedPublicObjectives } from "./ExpandedPublicObjectives";

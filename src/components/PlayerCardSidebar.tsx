@@ -73,6 +73,7 @@ export default function PlayerCardSidebar(props: Props) {
     abilities,
     notResearchedFactionTechs,
   } = props.playerData;
+
   const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];

@@ -20,6 +20,7 @@ import {
   IconRefresh,
   IconChevronLeft,
   IconChevronRight,
+  IconFlask,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -250,10 +251,9 @@ export function NewMapUI() {
     document.title = `${gameId} - Async TI`;
   }, [gameId]);
 
-  // Initialize dragscroll
   useEffect(() => {
     dragscroll.reset();
-  }, []);
+  }, [gameId]);
 
   const {
     zoom,
@@ -271,7 +271,7 @@ export function NewMapUI() {
     }
   }, [gameId]);
 
-  // Set initial scroll position only once when loading a new game
+  // Set initial scroll positicurson only once when loading a new game
   useEffect(() => {
     if (
       mapContainerRef.current &&
@@ -354,8 +354,8 @@ export function NewMapUI() {
       <AppShell.Main>
         <Box className={classes.mainBackground}>
           {/* Global Tabs */}
-          <Tabs defaultValue="map" h="calc(100vh - 60px)">
-            <Tabs.List grow justify="center" className={classes.tabsList}>
+          <Tabs defaultValue="map" h="calc(100vh - 68px)">
+            <Tabs.List className={classes.tabsList}>
               <Tabs.Tab
                 value="map"
                 className={classes.tabsTab}
@@ -377,6 +377,15 @@ export function NewMapUI() {
               >
                 Player Areas
               </Tabs.Tab>
+              {/* <Button
+                variant="subtle"
+                size="sm"
+                color="gray"
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+              >
+                <IconFlask size={16} />
+              </Button> */}
             </Tabs.List>
 
             {/* Map Tab */}

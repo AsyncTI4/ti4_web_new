@@ -1,57 +1,47 @@
-.objectiveCard {
+.expandedCard {
   position: relative;
-  border: 1px solid transparent; /* Default transparent border to maintain sizing */
-}
-
-/* Color-specific borders */
-.objectiveCard.orange {
-  border: 1px solid rgba(249, 115, 22, 0.15);
-}
-
-.objectiveCard.blue {
-  border: 1px solid rgba(59, 130, 246, 0.15);
-}
-
-.objectiveCard.gray {
-  border: 1px solid rgba(107, 114, 128, 0.15);
-}
-
-.clickable {
-  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 8px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.clickable:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.4),
-    0 0 16px rgba(255, 255, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* Color-specific borders */
+.expandedCard.orange {
+  border: 1px solid rgba(249, 115, 22, 0.15);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.03) 0%, rgba(194, 65, 12, 0.01) 100%);
+}
+
+.expandedCard.blue {
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(30, 58, 138, 0.01) 100%);
+}
+
+.expandedCard.gray {
+  border: 1px solid rgba(107, 114, 128, 0.15);
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.03) 0%, rgba(75, 85, 99, 0.01) 100%);
 }
 
 .unrevealed {
   opacity: 0.6;
 }
 
-.objectiveContent {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  min-height: 32px; /* Ensure enough height for control tokens */
+.mainRow {
+  gap: var(--mantine-spacing-sm);
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
 .vpIndicator {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
 }
 
 .vpIndicator.revealed {
@@ -110,54 +100,78 @@
   color: var(--mantine-color-gray-4);
 }
 
-.objectiveText {
-  font-size: var(--mantine-font-size-sm);
-  font-family: var(--mantine-font-family-heading);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
+.contentArea {
   flex: 1;
+  min-width: 0;
 }
 
-.objectiveText.revealed {
-  color: white;
+.objectiveTitle {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 700;
+  font-family: var(--mantine-font-family-heading);
+  line-height: 1.3;
+  margin-bottom: 2px;
 }
 
-.objectiveText.hidden {
+.objectiveTitle.revealed {
+  color: var(--mantine-color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.objectiveTitle.hidden {
   color: var(--mantine-color-gray-4);
 }
 
-.controlTokenArea {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  flex-shrink: 0;
-  min-width: 180px; /* Space for 6 larger tokens */
-  height: 32px;
-  justify-content: flex-end;
+.requirementText {
+  font-size: var(--mantine-font-size-md);
+  color: var(--mantine-color-gray-3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  line-height: 1.4;
+  opacity: 0.9;
 }
 
-.controlTokenSlot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  position: relative;
-  display: flex;
+.progressBadges {
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.factionProgressBadge {
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  min-width: 70px;
   justify-content: center;
 }
 
-.emptySlot {
-  border: 2px dashed rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
-  opacity: 0.6;
+/* Completed objective badge - green glow */
+.factionProgressBadge.completed {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 8px rgba(34, 197, 94, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.factionIcon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
-  opacity: 1;
+/* At threshold badge - blue glow */
+.factionProgressBadge.atThreshold {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 8px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.progressBadgeText {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-2);
+  font-weight: 600;
+  line-height: 1;
 }

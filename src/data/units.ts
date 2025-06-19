@@ -1942,4 +1942,44 @@ export const units: Unit[] = [
     imageURL:
       "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/blackshade_infiltrator.jpg?raw=true",
   },
+
+  {
+    id: "keleres_flagship",
+    baseType: "flagship",
+    asyncId: "fs",
+    name: "Artemiris",
+    source: "codex3",
+    faction: "keleresm",
+    moveValue: 1,
+    capacityValue: 6,
+    capacityUsed: 1,
+    cost: 8,
+    combatHitsOn: 7,
+    combatDieCount: 2,
+    sustainDamage: true,
+    canBeDirectHit: true,
+    isShip: true,
+    ability:
+      "Other players must spend 2 influence to activate the system that contains this ship.",
+    imageURL:
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/artemiris.png?raw=true",
+  },
+  {
+    id: "keleres_mech",
+    baseType: "mech",
+    asyncId: "mf",
+    name: "Omniopiares",
+    source: "codex3",
+    faction: "keleresm",
+    capacityUsed: 1,
+    cost: 2,
+    combatHitsOn: 6,
+    combatDieCount: 1,
+    sustainDamage: true,
+    isGroundForce: true,
+    ability:
+      "Other players must spend 1 influence to commit ground forces to the planet that contains this unit.",
+    imageURL:
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/omniopiares.jpg?raw=true",
+  },
 ];
