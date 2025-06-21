@@ -3,6 +3,7 @@ import { Cardback } from "../../PlayerArea/Cardback";
 import { cdnImage } from "../../../data/cdnImage";
 import { CardPoolData } from "../../../data/types";
 import styles from "./CardPool.module.css";
+import { ExplorationCardBack } from "../ExplorationCardBack";
 
 type Props = {
   cardPool?: CardPoolData;
@@ -60,43 +61,7 @@ function CardPool({ cardPool }: Props) {
             count: (
               <Text className={styles.cardCount}>{cardPool.relicDeckSize}</Text>
             ),
-          },
-          {
-            src: cdnImage("/player_area/cardback_cultural.jpg"),
-            alt: "cultural explore",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.culturalExploreDeckSize}
-              </Text>
-            ),
-          },
-          {
-            src: cdnImage("/player_area/cardback_industrial.jpg"),
-            alt: "industrial explore",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.industrialExploreDeckSize}
-              </Text>
-            ),
-          },
-          {
-            src: cdnImage("/player_area/cardback_hazardous.jpg"),
-            alt: "hazardous explore",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.hazardousExploreDeckSize}
-              </Text>
-            ),
-          },
-          {
-            src: cdnImage("/player_area/cardback_frontier.jpg"),
-            alt: "frontier explore",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.frontierExploreDeckSize}
-              </Text>
-            ),
-          },
+          }
         ].map((cardback, index) => (
           <Cardback
             key={index}
@@ -106,6 +71,12 @@ function CardPool({ cardPool }: Props) {
             size="lg"
           />
         ))}
+        {[
+          <ExplorationCardBack type="Cultural" deck={cardPool.culturalExploreDeck} discard={cardPool.culturalExploreDiscard}></ExplorationCardBack>,
+          <ExplorationCardBack type="Industrial" deck={cardPool.industrialExploreDeck} discard={cardPool.industrialExploreDiscard}></ExplorationCardBack>,
+          <ExplorationCardBack type="Hazardous" deck={cardPool.hazardousExploreDeck} discard={cardPool.hazardousExploreDiscard}></ExplorationCardBack>,
+          <ExplorationCardBack type="Frontier" deck={cardPool.frontierExploreDeck} discard={cardPool.frontierExploreDiscard}></ExplorationCardBack>,
+        ]}
       </Group>
     </Box>
   );

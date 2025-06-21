@@ -178,18 +178,14 @@ type CardPoolData = {
   actionCardFullDeckSize: number;
   actionCardDiscardSize: number;
   actionCardPurgedSize: number;
-  culturalExploreDeckSize: number;
-  culturalExploreDiscardSize: number;
-  culturalExploreFullDeckSize: number;
-  industrialExploreDeckSize: number;
-  industrialExploreDiscardSize: number;
-  industrialExploreFullDeckSize: number;
-  hazardousExploreDeckSize: number;
-  hazardousExploreDiscardSize: number;
-  hazardousExploreFullDeckSize: number;
-  frontierExploreDeckSize: number;
-  frontierExploreDiscardSize: number;
-  frontierExploreFullDeckSize: number;
+  culturalExploreDeck: string[];
+  culturalExploreDiscard: string[];
+  industrialExploreDeck: string[];
+  industrialExploreDiscard: string[];
+  hazardousExploreDeck: string[];
+  hazardousExploreDiscard: string[];
+  frontierExploreDeck: string[];
+  frontierExploreDiscard: string[];
   relicDeckSize: number;
   relicFullDeckSize: number;
   agendaDeckSize: number;
@@ -392,3 +388,9 @@ export type Ability = {
   shortName?: string;
   homebrewReplacesID?: string;
 };
+
+export type Exploration = {
+    alias: string;
+    name: string;
+    text: string;
+    source: string;}
