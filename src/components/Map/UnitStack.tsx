@@ -9,6 +9,7 @@ import {
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/lookup/colors";
 import { useRef, useCallback } from "react";
+import { LawInPlay } from "../../data/types";
 
 import { lookupUnit } from "@/lookup/units";
 
@@ -26,6 +27,7 @@ interface UnitStackProps {
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitSelect?: (stackKey: string, event: React.MouseEvent) => void;
+  lawsInPlay?: LawInPlay[];
 }
 
 export function UnitStack({
@@ -42,6 +44,7 @@ export function UnitStack({
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
+  lawsInPlay,
 }: UnitStackProps) {
   const baseZIndex = entityBaseZIndex(unitType);
   const hoverTimeoutRef = useRef<number | null>(null);
@@ -179,6 +182,7 @@ export function UnitStack({
               {...commonProps}
               sustained={sustained ? i < sustained : false}
               bgDecalPath={bgDecalPath}
+              lawsInPlay={lawsInPlay}
             />
           );
         }

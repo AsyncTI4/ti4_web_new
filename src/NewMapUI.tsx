@@ -61,7 +61,7 @@ import { SmoothPopover } from "./components/shared/SmoothPopover";
 import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
 
 // Magic constant for required version schema
-const REQUIRED_VERSION_SCHEMA = 3;
+const REQUIRED_VERSION_SCHEMA = 4;
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {
@@ -590,6 +590,7 @@ export function NewMapUI() {
                           onPlanetHover={handlePlanetMouseEnter}
                           onPlanetMouseLeave={handlePlanetMouseLeave}
                           techSkipsMode={techSkipsMode}
+                          lawsInPlay={lawsInPlay}
                         />
                       );
                     })}

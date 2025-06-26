@@ -116,6 +116,7 @@ export type PlanetEntityData = {
   entities: {
     [factionName: string]: EntityData[];
   };
+  commodities: number | null;
 };
 
 type PlanetData = {
@@ -142,6 +143,10 @@ export type TileUnitData = {
   planets: PlanetData;
   ccs: string[];
   anomaly: boolean;
+  production: { [factionColor: string]: number };
+  capacity: {
+    [factionColor: string]: { total: number; used: number; ignored: number };
+  };
 };
 
 export type LawInPlay = {

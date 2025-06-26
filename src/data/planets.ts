@@ -3995,6 +3995,7 @@ export const planets: Planet[] = [
       x: 137.0,
       y: 88.0,
     },
+    statsPos: "tl",
     resources: 3,
     influence: 1,
     factionHomeworld: null,

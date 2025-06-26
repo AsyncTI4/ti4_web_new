@@ -9,12 +9,13 @@ import {
   MAX_HEAT,
 } from "../../utils/unitPositioning";
 import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
-import { TileUnitData } from "@/data/types";
+import { TileUnitData, LawInPlay } from "@/data/types";
 import classes from "./SystemTilePage.module.css";
 
 type SystemTileDisplayProps = {
   systemId: string;
   tileUnitData: TileUnitData;
+  lawsInPlay?: LawInPlay[];
 };
 
 const COLOR_ALIAS = "pnk";
@@ -22,6 +23,7 @@ const COLOR_ALIAS = "pnk";
 const SystemTileDisplay = ({
   systemId,
   tileUnitData,
+  lawsInPlay,
 }: SystemTileDisplayProps) => {
   // Filter out space units by creating a modified tileUnitData
   const planetOnlyTileUnitData: TileUnitData = {
@@ -96,10 +98,11 @@ const SystemTileDisplay = ({
           sustained={stack.sustained}
           entityType={stack.entityType}
           planetCenter={planetCenter}
+          lawsInPlay={lawsInPlay}
         />,
       ];
     });
-  }, [systemId, planetOnlyTileUnitData, entityPlacements]);
+  }, [systemId, planetOnlyTileUnitData, entityPlacements, lawsInPlay]);
 
   // Generate cost map grid overlay
   const costMapGrid: React.ReactElement[] = React.useMemo(() => {
@@ -191,9 +194,12 @@ export const SystemTilePage = () => {
             { entityId: "mf", count: 1, entityType: "unit" },
           ],
         },
+        commodities: null,
       },
     },
     ccs: [],
+    production: {},
+    capacity: {},
   };
 
   // Default tile unit data for system 22
@@ -210,9 +216,12 @@ export const SystemTilePage = () => {
             { entityId: "mf", count: 1, entityType: "unit" },
           ],
         },
+        commodities: null,
       },
     },
     ccs: [],
+    production: {},
+    capacity: {},
   };
 
   return (
@@ -234,6 +243,7 @@ export const SystemTilePage = () => {
                   { entityId: "mf", count: 1, entityType: "unit" },
                 ],
               },
+              commodities: null,
             },
             jeolir: {
               controlledBy: "sol",
@@ -249,9 +259,12 @@ export const SystemTilePage = () => {
                   },
                 ],
               },
+              commodities: null,
             },
           },
           ccs: [],
+          production: {},
+          capacity: {},
         }}
       />
     </div>

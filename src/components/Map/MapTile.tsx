@@ -3,14 +3,21 @@ import { Tile } from "./Tile";
 import { UnitStack } from "./UnitStack";
 import { ControlToken } from "./ControlToken";
 import { CommandCounterStack } from "./CommandCounterStack";
-import { getAllEntityPlacementsForTile } from "../../utils/unitPositioning";
+import { CommodityIndicator } from "./CommodityIndicator";
+import { ProductionIndicator } from "./ProductionIndicator";
+import {
+  getAllEntityPlacementsForTile,
+  findOptimalProductionIconCorner,
+} from "../../utils/unitPositioning";
 import { getColorAlias } from "@/lookup/colors";
-import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import {
+  getPlanetsByTileId,
+  getPlanetCoordsBySystemId,
+} from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import { TileUnitData } from "@/data/types";
+import { TileUnitData, LawInPlay } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { planets } from "../../data/planets";
 import { getAttachmentData } from "../../data/attachments";
 
 // Helper function to check if a system has tech skips
@@ -19,7 +26,7 @@ const systemHasTechSkips = (
   tileUnitData?: TileUnitData
 ): boolean => {
   // Check base planet tech specialties
-  const systemPlanets = planets.filter((planet) => planet.tileId === systemId);
+  const systemPlanets = getPlanetsByTileId(systemId);
   const hasBaseTechSkips = systemPlanets.some(
     (planet) =>
       planet.techSpecialties &&
@@ -85,6 +92,7 @@ type Props = {
   isSelected?: boolean;
   isHovered?: boolean;
   techSkipsMode?: boolean;
+  lawsInPlay?: LawInPlay[];
 };
 
 export const MapTile = React.memo<Props>(
@@ -106,6 +114,7 @@ export const MapTile = React.memo<Props>(
     isHovered,
     ringPosition,
     techSkipsMode,
+    lawsInPlay,
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
@@ -171,6 +180,7 @@ export const MapTile = React.memo<Props>(
             sustained={stack.sustained}
             entityType={stack.entityType}
             planetCenter={planetCenter}
+            lawsInPlay={lawsInPlay}
             onUnitMouseOver={
               onUnitMouseOver
                 ? () => {
@@ -203,6 +213,7 @@ export const MapTile = React.memo<Props>(
       onUnitMouseLeave,
       onUnitSelect,
       allEntityPlacements,
+      lawsInPlay,
     ]);
 
     const controlTokens: React.ReactElement[] = React.useMemo(() => {
@@ -284,6 +295,54 @@ export const MapTile = React.memo<Props>(
       handlePlanetMouseLeave,
     ]);
 
+    const commodityIndicators: React.ReactElement[] = React.useMemo(() => {
+      if (!tileUnitData?.planets) {
+        return [];
+      }
+
+      const planetCoords = getPlanetCoordsBySystemId(systemId);
+
+      return Object.entries(tileUnitData.planets).flatMap(
+        ([planetId, planetData]) => {
+          if (!planetData.commodities || planetData.commodities === 0)
+            return [];
+
+          // Get coordinates from planet lookup
+          if (!planetCoords[planetId]) return [];
+          const [x, y] = planetCoords[planetId].split(",").map(Number);
+
+          return [
+            <CommodityIndicator
+              key={`${systemId}-${planetId}-commodity`}
+              commodityCount={planetData.commodities}
+              x={x}
+              y={y}
+            />,
+          ];
+        }
+      );
+    }, [systemId, tileUnitData]);
+
+    const productionIcon: React.ReactElement | null = React.useMemo(() => {
+      // Find the optimal corner position for the production icon
+      const optimalCorner = findOptimalProductionIconCorner(systemId);
+      if (!optimalCorner) return null;
+
+      const highestProduction = tileUnitData?.production
+        ? Math.max(...Object.values(tileUnitData.production))
+        : 0;
+      if (highestProduction <= 0) return null;
+
+      return (
+        <ProductionIndicator
+          key={`${systemId}-production-icon`}
+          x={optimalCorner.x}
+          y={optimalCorner.y}
+          productionValue={highestProduction}
+        />
+      );
+    }, [systemId, tileUnitData]);
+
     const commandCounterStack: React.ReactElement | null = React.useMemo(() => {
       if (!tileUnitData?.ccs || tileUnitData.ccs.length === 0) {
         return null;
@@ -346,6 +405,8 @@ export const MapTile = React.memo<Props>(
           )}
           {planetCircles}
           {controlTokens}
+          {commodityIndicators}
+          {productionIcon}
           {unitImages}
           {commandCounterStack}
           <div className={classes.ringPosition}>{ringPosition}</div>

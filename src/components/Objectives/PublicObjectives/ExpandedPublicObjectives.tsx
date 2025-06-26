@@ -9,7 +9,6 @@ type Props = {
 };
 
 function ExpandedPublicObjectives({ objectives, playerData }: Props) {
-  console.log("objectives.customObjectives", objectives.customObjectives);
   return (
     <Box>
       <Text className={styles.sectionTitle}>Public Objectives</Text>

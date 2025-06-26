@@ -5,6 +5,10 @@ export const getPlanetById = (planetId: string): Planet | undefined => {
   return planets.find((planet) => planet.id === planetId);
 };
 
+export const getPlanetsByTileId = (tileId: string): Planet[] => {
+  return planets.filter((planet) => planet.tileId === tileId);
+};
+
 export const getPlanetCoordsBySystemId = (
   systemId: string
 ): { [key: string]: string } => {

@@ -1,0 +1,35 @@
+.productionContainer {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productionIcon {
+  width: 48px;
+  height: 48px;
+}
+
+.productionValue {
+  position: absolute;
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black,
+    -2px 0 0 black,
+    2px 0 0 black,
+    0 -2px 0 black,
+    0 2px 0 black;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

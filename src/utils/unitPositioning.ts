@@ -875,6 +875,88 @@ export const processPlanetEntities = (
   return { entityPlacements: planetEntitiesWithPlanetName, finalCostMap };
 };
 
+/**
+ * Finds the optimal corner of the hexagon for placing a production icon.
+ * Calculates planet heat at the 4 diagonal corners and returns the one with lowest heat.
+ * Ignores rim square heat and unit heat sources - only considers planet repulsion.
+ * Returns coordinates adjusted for a 64x64px image positioned at the selected corner.
+ */
+export const findOptimalProductionIconCorner = (
+  systemId: string
+): { x: number; y: number } | null => {
+  // Get planet coordinates
+  const planetCoords = getPlanetCoordsBySystemId(systemId);
+  const planets: Planet[] = Object.entries(planetCoords).map(
+    ([planetId, coordStr]) => {
+      const [x, y] = coordStr.split(",").map(Number);
+      return {
+        name: planetId,
+        x,
+        y,
+        radius: DEFAULT_PLANET_RADIUS,
+      };
+    }
+  );
+
+  // Define the 4 diagonal corners of the hexagon using existing HEX_VERTICES
+  const hexagonCorners = [
+    { vertex: HEX_VERTICES[0], position: "top-left" }, // top-left
+    { vertex: HEX_VERTICES[1], position: "top-right" }, // top-right
+    // { vertex: HEX_VERTICES[3], position: "bottom-right" }, // bottom-right
+    // { vertex: HEX_VERTICES[4], position: "bottom-left" }, // bottom-left
+  ];
+
+  let lowestHeat = Infinity;
+  let bestCorner: {
+    vertex: { x: number; y: number };
+    position: string;
+  } | null = null;
+
+  // Check heat at each corner (only from planets, no rim or unit heat)
+  for (const corner of hexagonCorners) {
+    const heat = calculatePlanetHeat(
+      corner.vertex.x,
+      corner.vertex.y,
+      planets,
+      SPACE_HEAT_CONFIG.planetDecayRate,
+      SPACE_HEAT_CONFIG.maxHeat
+    );
+
+    if (heat < lowestHeat) {
+      lowestHeat = heat;
+      bestCorner = corner;
+    }
+  }
+
+  // If no best corner found, default to top-left
+  if (!bestCorner) {
+    bestCorner = { vertex: { x: 86.25, y: 0 }, position: "top-left" };
+  }
+
+  // Apply offset for 64x64px image based on corner position
+  const IMAGE_SIZE = 48;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  switch (bestCorner.position) {
+    case "top-left":
+      // Image top-left should align with hex corner
+      offsetX = -10;
+      offsetY = 0;
+      break;
+    case "top-right":
+      // Image top-right should align with hex corner
+      offsetX = -IMAGE_SIZE + 10;
+      offsetY = 0;
+      break;
+  }
+
+  return {
+    x: bestCorner.vertex.x + offsetX,
+    y: bestCorner.vertex.y + offsetY,
+  };
+};
+
 export const getAllEntityPlacementsForTile = (
   systemId: string,
   tileUnitData: TileUnitData | undefined
