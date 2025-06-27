@@ -20,7 +20,7 @@ import { TileUnitData, LawInPlay } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
-import { getUnitData, getUnitDataByAsyncId } from "../../lookup/units";
+import { getUnitDataByAsyncId } from "../../lookup/units";
 import { RGBColor } from "../../utils/colorOptimization";
 
 // Helper function to check if a system has tech skips
