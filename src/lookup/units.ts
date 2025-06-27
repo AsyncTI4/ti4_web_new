@@ -9,6 +9,10 @@ export const getUnitData = (unitId: string) => {
   return units.find((unit) => unit.id === unitId);
 };
 
+export const getUnitDataByAsyncId = (asyncId: string) => {
+  return units.find((unit) => unit.asyncId === asyncId);
+};
+
 export const isUnitUpgraded = (unitId: string) => {
   const unitData = getUnitData(unitId);
   return unitData?.upgradesFromUnitId !== undefined;

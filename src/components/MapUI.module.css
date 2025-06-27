@@ -118,6 +118,7 @@
   padding-top: 8px !important;
   justify-content: flex-start !important;
   padding-left: 16px !important;
+  align-items: center !important;
 }
 
 .tabsList::before {

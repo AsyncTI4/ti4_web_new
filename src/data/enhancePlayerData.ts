@@ -10,6 +10,9 @@ import {
   calculateTilePositions,
   TilePosition,
 } from "../mapgen/tilePositioning";
+import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
+import { getColorValues } from "../lookup/colors";
+import { colors } from "./colors";
 
 export type EnhancedPlayerData = {
   playerData: PlayerData[];
@@ -20,6 +23,7 @@ export type EnhancedPlayerData = {
   systemIdToPosition: Record<string, string>;
   factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
+  optimizedColors: Record<string, RGBColor>;
   planetAttachments: Record<string, string[]>;
   objectives: Objectives;
   lawsInPlay: LawInPlay[];
@@ -95,6 +99,36 @@ export function enhancePlayerData(
     });
   }
 
+  // Calculate optimized colors for faction overlays
+  const optimizedColors: Record<string, RGBColor> = (() => {
+    // Get unique colors that are actually in use by factions
+    const colorsInUse = new Set(Object.values(factionToColor));
+
+    // Transform only the colors that are actually being used
+    const transformedColors = colors
+      .filter((color) => colorsInUse.has(color.name))
+      .map((color) => {
+        // Use getColorValues to handle both primaryColor and primaryColorRef
+        const primaryColorValues = getColorValues(
+          (color as any).primaryColorRef,
+          color.primaryColor
+        );
+
+        if (!primaryColorValues) return null;
+
+        return {
+          alias: color.name,
+          primaryColor: primaryColorValues as RGBColor,
+        };
+      })
+      .filter(
+        (color): color is { alias: string; primaryColor: RGBColor } =>
+          color !== null
+      );
+
+    return optimizeFactionColors(transformedColors);
+  })();
+
   return {
     ...data,
     // extra computed properties
@@ -102,6 +136,7 @@ export function enhancePlayerData(
     systemIdToPosition,
     factionToColor,
     colorToFaction,
+    optimizedColors,
     planetAttachments,
   };
 }

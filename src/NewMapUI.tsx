@@ -11,6 +11,7 @@ import {
   Button,
   Group,
   Text,
+  Switch,
 } from "@mantine/core";
 import {
   IconAlertCircle,
@@ -21,6 +22,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconFlask,
+  IconEye,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -150,6 +152,21 @@ export function NewMapUI() {
     setTechSkipsMode((prev) => !prev);
   }, []);
 
+  // State for overlay mode with localStorage persistence
+  const [overlaysEnabled, setOverlaysEnabled] = useState(() => {
+    const saved = localStorage.getItem("overlaysEnabled");
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  // Toggle overlays handler
+  const toggleOverlays = useCallback(() => {
+    setOverlaysEnabled((prev: boolean) => {
+      const newValue = !prev;
+      localStorage.setItem("overlaysEnabled", JSON.stringify(newValue));
+      return newValue;
+    });
+  }, []);
+
   // Use tabs and tooltips hook
   const {
     selectedArea,
@@ -237,6 +254,7 @@ export function NewMapUI() {
     systemIdToPosition = {},
     factionToColor = {},
     colorToFaction = {},
+    optimizedColors = {},
     planetAttachments = {},
     objectives = {
       stage1Objectives: [],
@@ -395,6 +413,20 @@ export function NewMapUI() {
               >
                 <IconFlask size={16} />
               </Button>
+              <Switch
+                checked={overlaysEnabled}
+                onChange={toggleOverlays}
+                size="sm"
+                thumbIcon={
+                  overlaysEnabled ? (
+                    <IconEye size={12} />
+                  ) : (
+                    <IconEye size={12} style={{ opacity: 0.5 }} />
+                  )
+                }
+                label="Overlays"
+                labelPosition="right"
+              />
             </Tabs.List>
 
             {/* Map Tab */}
@@ -584,12 +616,14 @@ export function NewMapUI() {
                           position={{ x: tile.x, y: tile.y }}
                           tileUnitData={tileData}
                           factionToColor={factionToColor}
+                          optimizedColors={optimizedColors}
                           onUnitMouseOver={handleUnitMouseEnter}
                           onUnitMouseLeave={handleUnitMouseLeave}
                           onUnitSelect={handleMouseDown}
                           onPlanetHover={handlePlanetMouseEnter}
                           onPlanetMouseLeave={handlePlanetMouseLeave}
                           techSkipsMode={techSkipsMode}
+                          overlaysEnabled={overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                         />
                       );

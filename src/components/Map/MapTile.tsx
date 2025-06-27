@@ -5,6 +5,7 @@ import { ControlToken } from "./ControlToken";
 import { CommandCounterStack } from "./CommandCounterStack";
 import { CommodityIndicator } from "./CommodityIndicator";
 import { ProductionIndicator } from "./ProductionIndicator";
+import { FactionColorOverlay } from "./FactionColorOverlay";
 import {
   getAllEntityPlacementsForTile,
   findOptimalProductionIconCorner,
@@ -19,6 +20,8 @@ import { TileUnitData, LawInPlay } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
+import { getUnitData, getUnitDataByAsyncId } from "../../lookup/units";
+import { RGBColor } from "../../utils/colorOptimization";
 
 // Helper function to check if a system has tech skips
 const systemHasTechSkips = (
@@ -64,12 +67,31 @@ const systemHasTechSkips = (
   return false;
 };
 
+// Helper function to calculate overlay opacity based on unit cost
+const calculateOverlayOpacity = (totalCost: number): number => {
+  // Define cost bands and map them to opacity values between 0.25 and 0.5
+  const minOpacity = 0.1;
+  const maxOpacity = 0.3;
+
+  // Define cost thresholds (adjust these based on typical unit compositions)
+  const minCost = 0; // Minimum cost to show any overlay
+  const maxCost = 20; // Cost at which we reach maximum opacity
+
+  if (totalCost <= minCost) return minOpacity;
+  if (totalCost >= maxCost) return maxOpacity;
+
+  // Linear interpolation between min and max opacity
+  const ratio = totalCost / maxCost;
+  return minOpacity + ratio * (maxOpacity - minOpacity);
+};
+
 type Props = {
   systemId: string;
   position: { x: number; y: number };
   ringPosition: string;
   tileUnitData?: TileUnitData;
   factionToColor: Record<string, string>;
+  optimizedColors: Record<string, RGBColor>;
   style?: React.CSSProperties;
   className?: string;
   onTileSelect?: (systemId: string) => void;
@@ -92,6 +114,7 @@ type Props = {
   isSelected?: boolean;
   isHovered?: boolean;
   techSkipsMode?: boolean;
+  overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
 };
 
@@ -101,6 +124,7 @@ export const MapTile = React.memo<Props>(
     position,
     tileUnitData,
     factionToColor,
+    optimizedColors,
     style,
     className,
     onTileSelect,
@@ -114,6 +138,7 @@ export const MapTile = React.memo<Props>(
     isHovered,
     ringPosition,
     techSkipsMode,
+    overlaysEnabled,
     lawsInPlay,
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
@@ -362,6 +387,67 @@ export const MapTile = React.memo<Props>(
       );
     }, [systemId, tileUnitData, factionToColor]);
 
+    // Determine controlling faction for the system overlay
+    const controllingFaction: string | null = React.useMemo(() => {
+      if (!tileUnitData) return null;
+
+      // Check if all planets are controlled by the same faction
+      if (tileUnitData.planets) {
+        const controllingFactions = Object.values(tileUnitData.planets)
+          .map((planet) => planet.controlledBy)
+          .filter(Boolean);
+
+        if (controllingFactions.length > 0) {
+          const uniqueFactions = [...new Set(controllingFactions)];
+          if (uniqueFactions.length === 1) {
+            return uniqueFactions[0];
+          }
+        }
+      }
+
+      // Check if there are units from a single faction (excluding command counters)
+      const factionUnits = Object.values(allEntityPlacements)
+        .filter((placement) => placement.entityType === "unit")
+        .map((placement) => placement.faction);
+
+      if (factionUnits.length > 0) {
+        const uniqueFactionUnits = [...new Set(factionUnits)];
+        if (uniqueFactionUnits.length === 1) {
+          return uniqueFactionUnits[0];
+        }
+      }
+
+      return null;
+    }, [tileUnitData, allEntityPlacements]);
+
+    // Calculate total unit cost for the controlling faction
+    const controllingFactionUnitCost: number = React.useMemo(() => {
+      if (!controllingFaction) return 0;
+
+      let totalCost = 0;
+
+      // Calculate cost of units for the controlling faction
+      Object.values(allEntityPlacements).forEach((placement) => {
+        if (
+          placement.faction === controllingFaction &&
+          placement.entityType === "unit"
+        ) {
+          const unitData = getUnitDataByAsyncId(placement.entityId);
+
+          if (unitData?.cost) {
+            totalCost += unitData.cost * placement.count;
+          }
+        }
+      });
+
+      return totalCost;
+    }, [controllingFaction, allEntityPlacements]);
+
+    // Calculate overlay opacity based on unit cost
+    const overlayOpacity = React.useMemo(() => {
+      return calculateOverlayOpacity(controllingFactionUnitCost);
+    }, [controllingFactionUnitCost]);
+
     return (
       <div
         className={`${classes.mapTile} ${className || ""} ${
@@ -387,6 +473,7 @@ export const MapTile = React.memo<Props>(
       >
         <div className={classes.tileContainer}>
           <Tile systemId={systemId} className={classes.tile} />
+
           {tileUnitData?.anomaly && (
             <img
               src={cdnImage("/emojis/tiles/Anomaly.png")}
@@ -410,6 +497,13 @@ export const MapTile = React.memo<Props>(
           {unitImages}
           {commandCounterStack}
           <div className={classes.ringPosition}>{ringPosition}</div>
+          {controllingFaction && overlaysEnabled && (
+            <FactionColorOverlay
+              faction={factionToColor[controllingFaction]}
+              opacity={overlayOpacity}
+              optimizedColors={optimizedColors}
+            />
+          )}
         </div>
       </div>
     );
