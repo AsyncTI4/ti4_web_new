@@ -118,6 +118,7 @@ export const relics = [
     imageURL:
       "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/jrxs4550.jpg?raw=true",
     source: "codex2",
+    flavourText: "",
     shortName: "JR-\nXS455-O",
   },
   {
@@ -137,6 +138,7 @@ export const relics = [
     text: "When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective, even if it is a secret objective.",
     flavourText: "Knowledge. Creation. Control. Have a wonderful day.",
     source: "codex4",
+    imageURL: "",
   },
   {
     alias: "circletofthevoid",
@@ -145,6 +147,7 @@ export const relics = [
     flavourText:
       "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
     source: "codex4",
+    imageURL: "",
   },
   {
     alias: "bookoflatvinia",
@@ -153,5 +156,6 @@ export const relics = [
     flavourText:
       "A collector's item of incalculable value, none have been able to unlock its secrets - assuming its contents aren't just the ravings of a madwoman.",
     source: "codex4",
+    imageURL: "",
   },
 ];
