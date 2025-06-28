@@ -101,4 +101,57 @@ export const relics = [
       "*\"So you're going to drink a vial of murky liquid we found in a stasis vault on a dead world because you think it's the concentrated genetic essence of an entire species' most brilliant minds...and you think* I'm *being irrational?\"*",
     shortName: "Prophet's\nTears",
   },
+  {
+    alias: "dynamiscore",
+    name: "Dynamis Core",
+    text: "While this card is in your play area, your commodity value is increased by 2.\nACTION: Purge this card to gain trade goods equal to your printed commodity value+2.",
+    imageURL:
+      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/dynamis_core.jpg?raw=true",
+    source: "codex2",
+    flavourText:
+      "*Dart and Tai stood, mesmerized by the swirling mass. Neither had any idea what it was, but both were fairly sure they were about to retire.*",
+  },
+  {
+    alias: "titanprototype",
+    name: "JR-XS455-O",
+    text: "ACTION: Exhaust this agent and choose a player, that player may spend 3 resources to place a structure on a planet they control. If they do not, they gain 1 trade good.",
+    imageURL:
+      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/jrxs4550.jpg?raw=true",
+    source: "codex2",
+    shortName: "JR-\nXS455-O",
+  },
+  {
+    alias: "nanoforge",
+    name: "Nano-Forge",
+    text: "ACTION: Attach this card to a non-legendary, non-home planet you control, its resource and influence values are increased by 2 and it is a legendary planet. This action cannot be performed once attached.",
+    imageURL:
+      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/nanoforge.jpg?raw=true",
+    source: "codex2",
+    flavourText:
+      "*Intended to bring prosperity, the forge was twisted into an instrument of war.*",
+    shortName: "Nano-\nForge",
+  },
+  {
+    alias: "neuraloop",
+    name: "Neuraloop",
+    text: "When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective, even if it is a secret objective.",
+    flavourText: "Knowledge. Creation. Control. Have a wonderful day.",
+    source: "codex4",
+  },
+  {
+    alias: "circletofthevoid",
+    name: "Circlet of the Void",
+    text: "Your units do not roll for gravity rifts, and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships.",
+    flavourText:
+      "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
+    source: "codex4",
+  },
+  {
+    alias: "bookoflatvinia",
+    name: "Book of Latvinia",
+    text: "When you gain this card, research up to 2 technologies that have no prerequisites.\n> ACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.",
+    flavourText:
+      "A collector's item of incalculable value, none have been able to unlock its secrets - assuming its contents aren't just the ravings of a madwoman.",
+    source: "codex4",
+  },
 ];
