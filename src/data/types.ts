@@ -315,6 +315,7 @@ export type Planet = {
   tileId: string | null;
   name: string;
   shortName?: string;
+  shrinkName?: boolean;
   shortNamePNAttach?: any;
   shrinkNamePNAttach?: any;
   aliases: string[];
@@ -322,7 +323,7 @@ export type Planet = {
   resources: number;
   influence: number;
   factionHomeworld?: string | null;
-  statsPos?: "tl" | "tr" | "bl" | "br";
+
   planetType?:
     | "FACTION"
     | "CULTURAL"
@@ -345,7 +346,7 @@ export type Planet = {
     };
   };
   contrastColor?: string;
-  flavourText?: string;
+  flavourText?: string | null;
   source: string;
   spaceCannonDieCount?: number;
   spaceCannonHitsOn?: number;

@@ -43,7 +43,8 @@ const SystemTileDisplay = ({
             x,
             y,
             radius: DEFAULT_PLANET_RADIUS, // Default planet radius for collision detection
-            statsPos: getPlanetById(planetId)?.statsPos,
+            resourcesLocation:
+              getPlanetById(planetId)?.planetLayout?.resourcesLocation,
           };
         }
       );
