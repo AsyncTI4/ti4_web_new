@@ -16,7 +16,11 @@ export const getPlanetCoordsBySystemId = (
 
   const systemPlanets = planets.filter((planet) => planet.tileId === systemId);
   systemPlanets.forEach((planet) => {
-    if (planet.positionInTile) {
+    // Prioritize planetLayout.centerPosition if available, otherwise use positionInTile
+    if (planet.planetLayout?.centerPosition) {
+      planetCoords[planet.id] =
+        `${planet.planetLayout.centerPosition.x},${planet.planetLayout.centerPosition.y}`;
+    } else if (planet.positionInTile) {
       planetCoords[planet.id] =
         `${planet.positionInTile.x},${planet.positionInTile.y}`;
     }

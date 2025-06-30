@@ -783,6 +783,26 @@ const placeAttachmentsAndCreateHeatSources = (
 /**
  * Places ground entities for a single planet
  */
+/**
+ * Helper function to convert resourcesLocation to angle values
+ */
+const getResourcesLocationAngle = (
+  resourcesLocation: "TopLeft" | "TopRight" | "BottomLeft" | "BottomRight"
+): number => {
+  switch (resourcesLocation) {
+    case "TopLeft":
+      return (5 * Math.PI) / 4;
+    case "TopRight":
+      return (7 * Math.PI) / 4;
+    case "BottomLeft":
+      return (3 * Math.PI) / 4;
+    case "BottomRight":
+      return Math.PI / 4;
+    default:
+      return 0;
+  }
+};
+
 const placeGroundEntitiesForPlanet = (
   planet: Planet,
   filteredPlanetEntities: FactionUnits,
@@ -794,26 +814,9 @@ const placeGroundEntitiesForPlanet = (
 
   // Create stats position heat source to discourage covering planet stats
   const statsHeatSources: HeatSource[] = [];
-  if (planet.statsPos) {
+  if (planet.resourcesLocation) {
     const statsHeatDistance = planet.radius + 15;
-    let statsAngle: number;
-
-    switch (planet.statsPos) {
-      case "tl": // top-left
-        statsAngle = (5 * Math.PI) / 4;
-        break;
-      case "tr": // top-right
-        statsAngle = (7 * Math.PI) / 4;
-        break;
-      case "bl": // bottom-left
-        statsAngle = (3 * Math.PI) / 4;
-        break;
-      case "br": // bottom-right
-        statsAngle = Math.PI / 4;
-        break;
-      default:
-        statsAngle = 0;
-    }
+    const statsAngle = getResourcesLocationAngle(planet.resourcesLocation);
 
     const statsX = planet.x + statsHeatDistance * Math.cos(statsAngle);
     const statsY = planet.y + statsHeatDistance * Math.sin(statsAngle);
@@ -977,7 +980,7 @@ export const getAllEntityPlacementsForTile = (
         x,
         y,
         radius: DEFAULT_PLANET_RADIUS, // Default planet radius for collision detection
-        statsPos: planetData?.statsPos,
+        resourcesLocation: planetData?.planetLayout?.resourcesLocation,
       };
     }
   );
@@ -1102,7 +1105,7 @@ export interface Planet {
   x: number;
   y: number;
   radius: number;
-  statsPos?: "tl" | "tr" | "bl" | "br";
+  resourcesLocation?: "TopLeft" | "TopRight" | "BottomLeft" | "BottomRight";
 }
 
 export interface HeatSource {

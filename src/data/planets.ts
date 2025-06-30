@@ -1,3 +1,6 @@
+// Auto-generated file - Do not edit manually
+// Generated from src/main/resources/planets/*.json files
+
 import { Planet } from "./types";
 
 export const planets: Planet[] = [
@@ -66,10 +69,6 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
-    positionInTile: {
-      x: 214,
-      y: 89,
-    },
     planetLayout: {
       unitHolderName: "abaddon",
       resourcesLocation: "TopRight",
@@ -166,7 +165,6 @@ export const planets: Planet[] = [
       "vuilwrath",
       "54_1",
     ],
-    statsPos: "bl",
     positionInTile: {
       x: 170.0,
       y: 130.0,
@@ -179,7 +177,6 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
-
     planetLayout: {
       unitHolderName: "acheron",
       resourcesLocation: "BottomLeft",
@@ -408,7 +405,6 @@ export const planets: Planet[] = [
     tileId: "61",
     name: "Ang",
     aliases: ["ang", "ag", "61_1"],
-    statsPos: "bl",
     positionInTile: {
       x: 172.0,
       y: 148.0,
@@ -795,10 +791,6 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
-    positionInTile: {
-      x: 221.0,
-      y: 229.0,
-    },
     planetLayout: {
       unitHolderName: "ashtroth",
       resourcesLocation: "TopLeft",
@@ -858,7 +850,6 @@ export const planets: Planet[] = [
       x: 231.0,
       y: 207.0,
     },
-    statsPos: "tl",
     resources: 1,
     influence: 3,
     factionHomeworld: "celdauri",
@@ -1494,6 +1485,33 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     source: "base",
+  },
+  {
+    id: "cradle",
+    tileId: null,
+    name: "Cradle",
+    aliases: ["cradle"],
+    positionInTile: null,
+    resources: 1,
+    influence: 1,
+    factionHomeworld: null,
+    planetType: "INDUSTRIAL",
+    cardImagePath: null,
+    techSpecialties: null,
+    legendaryAbilityName: "",
+    legendaryAbilityText: "",
+    legendaryAbilityFlavourText: "**",
+    planetLayout: {
+      unitHolderName: "cradle",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 87,
+        y: 55,
+      },
+    },
+    contrastColor: "orange",
+    flavourText: "**",
+    source: "ascendant_sun",
   },
   {
     id: "creuss",
@@ -3192,6 +3210,36 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "illusion",
+    tileId: null,
+    name: "Illusion",
+    aliases: ["illusion"],
+    positionInTile: null,
+    resources: 1,
+    influence: 2,
+    factionHomeworld: null,
+    planetType: "CULTURAL",
+    cardImagePath: null,
+    techSpecialties: null,
+    legendaryAbilityName: "Illusion Flight Academy",
+    legendaryAbilityText:
+      "You may exhaust this card at the end of your turn to place up to 2 fighters from your reinforcements in any system that contains 1 or more of your ships",
+    legendaryAbilityFlavourText:
+      "*Unsurprisingly, the triple-ace instructors emphasize strike-and-fade tactics and misdirection.*",
+    planetLayout: {
+      unitHolderName: "mirage",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 70,
+        y: 55,
+      },
+    },
+    contrastColor: "blue",
+    flavourText:
+      "*Exists on no known charts and appears deserted to those who stumble across it. However, secretive locals live in cloaked cities heavily defended by swarms of starfighters.*",
+    source: "pok",
+  },
+  {
     id: "ilvoshu",
     tileId: "er22",
     name: "Il Voshu",
@@ -3262,7 +3310,6 @@ export const planets: Planet[] = [
       x: 171.0,
       y: 130.0,
     },
-    statsPos: "bl",
     resources: 3,
     influence: 5,
     factionHomeworld: "mahact",
@@ -3552,7 +3599,6 @@ export const planets: Planet[] = [
       x: 137.0,
       y: 88.0,
     },
-    statsPos: "tl",
     resources: 2,
     influence: 1,
     factionHomeworld: null,
@@ -3995,7 +4041,6 @@ export const planets: Planet[] = [
       x: 137.0,
       y: 88.0,
     },
-    statsPos: "tl",
     resources: 3,
     influence: 1,
     factionHomeworld: null,
@@ -4040,10 +4085,6 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
-    positionInTile: {
-      x: 83,
-      y: 139,
-    },
     planetLayout: {
       unitHolderName: "loki",
       resourcesLocation: "BottomLeft",
@@ -4300,7 +4341,7 @@ export const planets: Planet[] = [
     tileId: "s04",
     name: "Marshen Gurn",
     shortNamePNAttach: "Marshen G.",
-
+    shrinkName: true,
     aliases: [
       "marshengurn",
       "marshen_gurn",
@@ -4554,6 +4595,14 @@ export const planets: Planet[] = [
       "You may exhaust this card at the end of your turn to place up to 2 fighters from your reinforcements in any system that contains 1 or more of your ships",
     legendaryAbilityFlavourText:
       "*Unsurprisingly, the triple-ace instructors emphasize strike-and-fade tactics and misdirection.*",
+    planetLayout: {
+      unitHolderName: "mirage",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 70,
+        y: 55,
+      },
+    },
     contrastColor: "orange",
     flavourText:
       "*Exists on no known charts and appears deserted to those who stumble across it. However, secretive locals live in cloaked cities heavily defended by swarms of starfighters.*",
@@ -4784,6 +4833,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     legendaryAbilityFlavourText: null,
+    flavourText: null,
     spaceCannonDieCount: 0,
     spaceCannonHitsOn: 0,
     searchTags: [],
@@ -4798,7 +4848,6 @@ export const planets: Planet[] = [
       x: 134.0,
       y: 85.0,
     },
-    statsPos: "tl",
     resources: 2,
     influence: 1,
     factionHomeworld: "naaz",
@@ -5057,6 +5106,36 @@ export const planets: Planet[] = [
     source: "ds",
   },
   {
+    id: "oasis",
+    tileId: null,
+    name: "Oasis",
+    aliases: ["oasis"],
+    positionInTile: null,
+    resources: 2,
+    influence: 1,
+    factionHomeworld: null,
+    planetType: "HAZARDOUS",
+    cardImagePath: null,
+    techSpecialties: null,
+    legendaryAbilityName: "Unlikely Return",
+    legendaryAbilityText:
+      "At the end of your turn, you may place a destroyer from your reinforcements in a system that contains no planets and no other player's ships.",
+    legendaryAbilityFlavourText:
+      "*It is legend that deep within space, an oasis serves as a beacon of hope to lost ships.*",
+    planetLayout: {
+      unitHolderName: "oasis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 87,
+        y: 55,
+      },
+    },
+    contrastColor: "blue",
+    flavourText:
+      "*This rogue planet has eluded documentation for millennia. Its few reports have come from the lost crews that have claimed to have stumbled upon it. No expedition has ever been able to confirm its existence.*",
+    source: "ascendant_sun",
+  },
+  {
     id: "ogdun",
     tileId: "d24",
     name: "Ogdun",
@@ -5147,6 +5226,30 @@ export const planets: Planet[] = [
     flavourText:
       "Warm equatorial seas and vast agricultural fields have fostered strong trade with neighbouring systems.",
     source: "eronous",
+  },
+  {
+    id: "ordinianc4",
+    tileId: "c41",
+    name: "Ordinian",
+    shortNamePNAttach: "Ordinian",
+    shrinkNamePNAttach: true,
+    aliases: ["ordinianc4"],
+    positionInTile: {
+      x: 171.0,
+      y: 149.0,
+    },
+    resources: 0,
+    influence: 0,
+    factionHomeworld: null,
+    planetType: "MR",
+    cardImagePath: null,
+    techSpecialties: null,
+    legendaryAbilityName: "Barren Husk",
+    legendaryAbilityText:
+      "You may exhaust this card when you pass to draw 1 action card and gain 1 command token",
+    flavourText:
+      "The Nekro Virus did something here once. Idk nobody cares about flavor text.",
+    source: "base",
   },
   {
     id: "origin",
@@ -5254,6 +5357,36 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "somno",
+  },
+  {
+    id: "phantasm",
+    tileId: null,
+    name: "Phantasm",
+    aliases: ["phantasm"],
+    positionInTile: null,
+    resources: 1,
+    influence: 2,
+    factionHomeworld: null,
+    planetType: "CULTURAL",
+    cardImagePath: null,
+    techSpecialties: null,
+    legendaryAbilityName: "Phantasm Flight Academy",
+    legendaryAbilityText:
+      "You may exhaust this card at the end of your turn to place up to 2 fighters from your reinforcements in any system that contains 1 or more of your ships",
+    legendaryAbilityFlavourText:
+      "*Unsurprisingly, the triple-ace instructors emphasize strike-and-fade tactics and misdirection.*",
+    planetLayout: {
+      unitHolderName: "mirage",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 70,
+        y: 55,
+      },
+    },
+    contrastColor: "blue",
+    flavourText:
+      "*Exists on no known charts and appears deserted to those who stumble across it. However, secretive locals live in cloaked cities heavily defended by swarms of starfighters.*",
+    source: "pok",
   },
   {
     id: "phar",
@@ -5811,7 +5944,6 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
-
     planetLayout: {
       unitHolderName: "rigeli",
       resourcesLocation: "TopLeft",
@@ -6047,6 +6179,7 @@ export const planets: Planet[] = [
     id: "sayensbeach",
     tileId: "s05",
     name: "Sayen's Beach",
+    shrinkName: true,
     shortNamePNAttach: "Sayen's B.",
     aliases: [
       "sayensbeach",
@@ -6294,7 +6427,6 @@ export const planets: Planet[] = [
     id: "siig",
     tileId: "70",
     name: "Siig",
-    statsPos: "br",
     aliases: ["siig", "sig", "70_2"],
     positionInTile: {
       x: 201.0,
