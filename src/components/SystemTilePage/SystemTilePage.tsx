@@ -84,8 +84,6 @@ const SystemTileDisplay = ({
         planetCenter = { x, y };
       }
 
-      console.log("the planet center is", JSON.stringify(planetCenter));
-
       return [
         <UnitStack
           key={`${systemId}-${key}-stack`}
@@ -110,8 +108,6 @@ const SystemTileDisplay = ({
     if (!finalCostMap || finalCostMap.length === 0) {
       return [];
     }
-
-    console.log("finalCostMap", finalCostMap);
 
     // Check if there are any non-zero, non-negative cost values to display
     const hasValidCosts = finalCostMap.flat().some((cost) => cost > 0);
