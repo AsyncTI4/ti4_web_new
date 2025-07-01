@@ -14,6 +14,7 @@ import { getColorAlias } from "@/lookup/colors";
 import {
   getPlanetsByTileId,
   getPlanetCoordsBySystemId,
+  getPlanetById,
 } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
 import { TileUnitData, LawInPlay } from "@/data/types";
@@ -97,6 +98,7 @@ type Props = {
   techSkipsMode?: boolean;
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
+  exhaustedPlanets?: string[];
 };
 
 export const MapTile = React.memo<Props>(
@@ -121,6 +123,7 @@ export const MapTile = React.memo<Props>(
     techSkipsMode,
     overlaysEnabled,
     lawsInPlay,
+    exhaustedPlanets = [],
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
@@ -281,6 +284,34 @@ export const MapTile = React.memo<Props>(
         if (!planetCoords[planetId]) return [];
         const [x, y] = planetCoords[planetId].split(",").map(Number);
 
+        // Get planet information to determine if it's legendary or Mecatol Rex
+        const planet = getPlanetById(planetId);
+        const isLegendary =
+          planet?.legendaryAbilityName || planet?.legendaryAbilityText;
+        const isMecatolRex = planetId === "mr";
+
+        // Determine radius based on planet type
+        let radius = 60; // Default radius
+        if (isMecatolRex) {
+          radius = 120;
+        } else if (
+          planetId === "mallice" ||
+          planetId === "lockedmallice" ||
+          planetId === "hexmallice" ||
+          planetId === "hexlockedmallice"
+        ) {
+          radius = 60;
+        } else if (isLegendary) {
+          radius = 100;
+        }
+
+        const diameter = radius * 2;
+
+        const isExhausted = exhaustedPlanets.includes(planetId);
+        const exhaustedBackdropFilter = isExhausted
+          ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
+          : {};
+
         return [
           <div
             key={`${systemId}-${planetId}-circle`}
@@ -288,6 +319,9 @@ export const MapTile = React.memo<Props>(
             style={{
               left: `${x}px`,
               top: `${y}px`,
+              width: `${diameter}px`,
+              height: `${diameter}px`,
+              ...exhaustedBackdropFilter,
             }}
             onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
             onMouseLeave={() => handlePlanetMouseLeave(planetId)}
@@ -299,6 +333,7 @@ export const MapTile = React.memo<Props>(
       tileUnitData,
       handlePlanetMouseEnter,
       handlePlanetMouseLeave,
+      exhaustedPlanets,
     ]);
 
     const commodityIndicators: React.ReactElement[] = React.useMemo(() => {

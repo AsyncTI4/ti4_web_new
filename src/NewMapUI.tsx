@@ -256,6 +256,7 @@ export function NewMapUI() {
     colorToFaction = {},
     optimizedColors = {},
     planetAttachments = {},
+    allExhaustedPlanets = [],
     objectives = {
       stage1Objectives: [],
       stage2Objectives: [],
@@ -625,6 +626,7 @@ export function NewMapUI() {
                           techSkipsMode={techSkipsMode}
                           overlaysEnabled={overlaysEnabled}
                           lawsInPlay={lawsInPlay}
+                          exhaustedPlanets={allExhaustedPlanets}
                         />
                       );
                     })}

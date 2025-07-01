@@ -25,6 +25,7 @@ export type EnhancedPlayerData = {
   colorToFaction: Record<string, string>;
   optimizedColors: Record<string, RGBColor>;
   planetAttachments: Record<string, string[]>;
+  allExhaustedPlanets: string[];
   objectives: Objectives;
   lawsInPlay: LawInPlay[];
   strategyCards: StrategyCard[];
@@ -129,6 +130,22 @@ export function enhancePlayerData(
     return optimizeFactionColors(transformedColors);
   })();
 
+  // Collect all exhausted planets from all players
+  const allExhaustedPlanets: string[] = (() => {
+    if (!data.playerData) return [];
+
+    const exhaustedPlanetsSet = new Set<string>();
+    data.playerData.forEach((player) => {
+      if (player.exhaustedPlanets) {
+        player.exhaustedPlanets.forEach((planetId) => {
+          exhaustedPlanetsSet.add(planetId);
+        });
+      }
+    });
+
+    return Array.from(exhaustedPlanetsSet);
+  })();
+
   return {
     ...data,
     // extra computed properties
@@ -138,5 +155,6 @@ export function enhancePlayerData(
     colorToFaction,
     optimizedColors,
     planetAttachments,
+    allExhaustedPlanets,
   };
 }

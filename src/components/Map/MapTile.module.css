@@ -69,8 +69,6 @@
 
 .planetCircle {
   position: absolute;
-  width: 120px; /* 60 radius = 120px diameter */
-  height: 120px;
   border-radius: 50%;
   background-color: transparent;
   transform: translate(-50%, -50%);
