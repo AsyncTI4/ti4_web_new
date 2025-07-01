@@ -1,7 +1,7 @@
 import { Group, Text } from "@mantine/core";
 import { useState } from "react";
 import { Shimmer } from "../Shimmer";
-import { abilities } from "../../../data/abilities";
+import { getAbility } from "../../../lookup/abilities";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
@@ -49,9 +49,12 @@ export function Ability({ id }: Props) {
 }
 
 const getAbilityData = (abilityId: string) => {
-  return abilities.find(
-    (ability) =>
-      ability.id === abilityId &&
-      (ability.source === "pok" || ability.source === "base")
-  );
+  const ability = getAbility(abilityId);
+  if (!ability) return null;
+
+  // Filter by source if needed
+  if (ability.source === "pok" || ability.source === "base") {
+    return ability;
+  }
+  return null;
 };

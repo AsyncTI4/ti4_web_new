@@ -1,22 +1,11 @@
 import { Box, Text, Image } from "@mantine/core";
-import { relics } from "../../../data/relics";
+import { getRelicData } from "../../../lookup/relics";
 import { RelicCard } from "./RelicCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { useState } from "react";
 import { Shimmer } from "../Shimmer";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./Relic.module.css";
-
-type RelicData = {
-  alias: string;
-  name: string;
-  text: string;
-  imageURL: string;
-  source: string;
-  flavourText: string;
-  shortName?: string;
-  shrinkName?: boolean;
-};
 
 type Props = {
   relicId: string;
@@ -25,8 +14,7 @@ type Props = {
 export function Relic({ relicId }: Props) {
   const [opened, setOpened] = useState(false);
 
-  // Look up relic data
-  const relicData = relics.find((relic: RelicData) => relic.alias === relicId);
+  const relicData = getRelicData(relicId);
 
   if (!relicData) {
     console.warn(`Relic with ID "${relicId}" not found`);

@@ -1,6 +1,6 @@
 import { Box, Text, Image } from "@mantine/core";
 import { Shimmer } from "../Shimmer";
-import { secretObjectives } from "../../../data/secretObjectives";
+import { getSecretObjectiveData } from "../../../lookup/secretObjectives";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./ScoredSecret.module.css";
 
@@ -11,9 +11,7 @@ type Props = {
 };
 
 export function ScoredSecret({ secretId, score, onClick }: Props) {
-  const secretData = secretObjectives.find(
-    (secret) => secret.alias === secretId
-  );
+  const secretData = getSecretObjectiveData(secretId);
   const secretName = secretData?.name || secretId;
   const redClasses = getGradientClasses("red");
 

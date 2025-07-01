@@ -9,7 +9,6 @@ export type RGBColor = {
 export type ColorWithId = {
   id: string;
   color: RGBColor;
-  isAnchor?: boolean;
 };
 
 // Convert RGB to LAB color space for perceptual color distance
@@ -46,6 +45,81 @@ const rgbToLab = (rgb: RGBColor): { l: number; a: number; b: number } => {
   return { l, a, b: bLab };
 };
 
+// Convert LAB color space back to RGB
+const labToRgb = (lab: { l: number; a: number; b: number }): RGBColor => {
+  // Convert LAB to XYZ
+  const fy = (lab.l + 16) / 116;
+  const fx = lab.a / 500 + fy;
+  const fz = fy - lab.b / 200;
+
+  const xn = fx > 0.206893 ? Math.pow(fx, 3) : (fx - 16 / 116) / 7.787;
+  const yn = fy > 0.206893 ? Math.pow(fy, 3) : (fy - 16 / 116) / 7.787;
+  const zn = fz > 0.206893 ? Math.pow(fz, 3) : (fz - 16 / 116) / 7.787;
+
+  // Convert to XYZ with D65 illuminant
+  const x = xn * 0.95047;
+  const y = yn * 1.0;
+  const z = zn * 1.08883;
+
+  // Convert XYZ to RGB using sRGB matrix
+  let r = x * 3.2404542 + y * -1.5371385 + z * -0.4985314;
+  let g = x * -0.969266 + y * 1.8760108 + z * 0.041556;
+  let b = x * 0.0556434 + y * -0.2040259 + z * 1.0572252;
+
+  // Apply inverse gamma correction
+  r = r > 0.0031308 ? 1.055 * Math.pow(r, 1 / 2.4) - 0.055 : 12.92 * r;
+  g = g > 0.0031308 ? 1.055 * Math.pow(g, 1 / 2.4) - 0.055 : 12.92 * g;
+  b = b > 0.0031308 ? 1.055 * Math.pow(b, 1 / 2.4) - 0.055 : 12.92 * b;
+
+  // Clamp values to 0-255 range
+  return {
+    red: Math.max(0, Math.min(255, Math.round(r * 255))),
+    green: Math.max(0, Math.min(255, Math.round(g * 255))),
+    blue: Math.max(0, Math.min(255, Math.round(b * 255))),
+  };
+};
+
+// Adjust a color to target luminance while preserving hue and chroma
+const adjustColorLuminance = (
+  rgb: RGBColor,
+  targetLuminance: number
+): RGBColor => {
+  const lab = rgbToLab(rgb);
+
+  // Preserve hue and chroma (a, b) but adjust luminance (l)
+  const adjustedLab = {
+    l: targetLuminance,
+    a: lab.a,
+    b: lab.b,
+  };
+
+  return labToRgb(adjustedLab);
+};
+
+// Adjust both luminance and chroma together
+const adjustColorLuminanceAndChroma = (
+  rgb: RGBColor,
+  targetLuminance: number,
+  targetChroma: number
+): RGBColor => {
+  const lab = rgbToLab(rgb);
+  const currentChroma = Math.sqrt(lab.a * lab.a + lab.b * lab.b);
+
+  if (currentChroma === 0) {
+    // For gray colors, just adjust luminance
+    return adjustColorLuminance(rgb, targetLuminance);
+  }
+
+  const chromaRatio = targetChroma / currentChroma;
+  const adjustedLab = {
+    l: targetLuminance,
+    a: lab.a * chromaRatio,
+    b: lab.b * chromaRatio,
+  };
+
+  return labToRgb(adjustedLab);
+};
+
 // Calculate perceptual color distance using Delta E (CIE76)
 const calculateColorDistance = (color1: RGBColor, color2: RGBColor): number => {
   const lab1 = rgbToLab(color1);
@@ -73,68 +147,91 @@ export const rgbToHex = (rgb: RGBColor): string => {
   return `#${toHex(rgb.red)}${toHex(rgb.green)}${toHex(rgb.blue)}`;
 };
 
-// Optimize colors to maximize minimum pairwise distance while minimizing changes
-export const optimizeColorDistances = (
-  colors: ColorWithId[]
+// Optimize colors with luminance and chroma normalization for better overlays
+export const optimizeColorsWithLuminanceNormalization = (
+  colors: ColorWithId[],
+  targetLuminance: number = 0,
+  targetChroma: number = 35
 ): Record<string, RGBColor> => {
-  // If we have 2 or fewer colors, no optimization needed
   if (colors.length <= 2) {
+    // For small color sets, just normalize luminance and chroma
     return colors.reduce(
       (acc, color) => {
-        acc[color.id] = color.color;
+        acc[color.id] = adjustColorLuminanceAndChroma(
+          color.color,
+          targetLuminance,
+          targetChroma
+        );
         return acc;
       },
       {} as Record<string, RGBColor>
     );
   }
 
-  const result: Record<string, RGBColor> = {};
-  const workingColors = colors.map((c) => ({ ...c, color: { ...c.color } }));
+  // First pass: normalize all colors to target luminance and chroma
+  const normalizedColors = colors.map((c) => ({
+    ...c,
+    color: adjustColorLuminanceAndChroma(
+      c.color,
+      targetLuminance,
+      targetChroma
+    ),
+  }));
 
-  // Simple optimization: for each non-anchor color, try small adjustments to maximize minimum distance
-  const maxIterations = 10;
-  const stepSize = 10; // How much to potentially adjust each color channel
+  // Second pass: fix colors that are really close
+  const minDesiredDistance = 50; // Only adjust colors closer than this
+  const adjustments = [
+    { a: 20, b: 0 }, // strong red
+    { a: -20, b: 0 }, // strong green
+    { a: 0, b: 20 }, // strong yellow
+    { a: 0, b: -20 }, // strong blue
+    { a: 15, b: 15 }, // strong warm
+    { a: -15, b: -15 }, // strong cool
+    { a: 25, b: 8 }, // red-yellow
+    { a: -12, b: 18 }, // green-yellow
+    { a: 12, b: -25 }, // red-blue
+  ];
 
-  for (let iteration = 0; iteration < maxIterations; iteration++) {
-    let improved = false;
+  for (let i = 0; i < normalizedColors.length; i++) {
+    const originalColor = normalizedColors[i].color;
+    const currentMinDistance = calculateMinDistanceForColor(
+      normalizedColors,
+      i
+    );
 
-    for (let i = 0; i < workingColors.length; i++) {
-      if (workingColors[i].isAnchor) continue; // Skip anchor colors
+    // Only optimize colors that are really close to others
+    if (currentMinDistance >= minDesiredDistance) continue;
 
-      const originalColor = { ...workingColors[i].color };
-      let bestColor = originalColor;
-      let bestMinDistance = calculateMinDistanceForColor(workingColors, i);
+    const originalLab = rgbToLab(originalColor);
+    let bestColor = originalColor;
+    let bestMinDistance = currentMinDistance;
 
-      // Try adjustments in each color channel
-      for (const channel of ["red", "green", "blue"] as const) {
-        for (const delta of [-stepSize, stepSize]) {
-          const testColor = { ...originalColor };
-          testColor[channel] = Math.max(
-            0,
-            Math.min(255, testColor[channel] + delta)
-          );
+    // Try each adjustment
+    for (const adjustment of adjustments) {
+      const testLab = {
+        l: targetLuminance,
+        a: originalLab.a + adjustment.a,
+        b: originalLab.b + adjustment.b,
+      };
 
-          // Temporarily apply this color
-          workingColors[i].color = testColor;
-          const minDistance = calculateMinDistanceForColor(workingColors, i);
+      const testColor = labToRgb(testLab);
 
-          if (minDistance > bestMinDistance) {
-            bestMinDistance = minDistance;
-            bestColor = { ...testColor };
-            improved = true;
-          }
-        }
+      // Test this adjustment
+      normalizedColors[i].color = testColor;
+      const minDistance = calculateMinDistanceForColor(normalizedColors, i);
+
+      if (minDistance > bestMinDistance) {
+        bestMinDistance = minDistance;
+        bestColor = testColor;
       }
-
-      workingColors[i].color = bestColor;
     }
 
-    // If no improvements were made, stop early
-    if (!improved) break;
+    normalizedColors[i].color = bestColor;
   }
 
   // Build result object
-  workingColors.forEach((color) => {
+  const result: Record<string, RGBColor> = {};
+  normalizedColors.forEach((color) => {
     result[color.id] = color.color;
   });
 
@@ -158,20 +255,12 @@ const calculateMinDistanceForColor = (
   return minDistance;
 };
 
-// Main function to optimize colors for faction overlays
+// Main function to optimize colors for faction overlays with luminance normalization
 export const optimizeFactionColors = (
   colors: Array<{ alias: string; primaryColor: RGBColor }>
 ): Record<string, RGBColor> => {
   const colorsToOptimize: ColorWithId[] = [];
 
-  // Add the anchor color
-  colorsToOptimize.push({
-    id: "anchor",
-    color: hexToRgb("#1f1e4b"),
-    isAnchor: true,
-  });
-
-  // Add all the provided colors (already filtered to only those in use)
   colors.forEach((colorData) => {
     colorsToOptimize.push({
       id: colorData.alias,
@@ -179,9 +268,11 @@ export const optimizeFactionColors = (
     });
   });
 
-  const optimizedColors = optimizeColorDistances(colorsToOptimize);
+  const optimizedColors = optimizeColorsWithLuminanceNormalization(
+    colorsToOptimize,
+    75,
+    75
+  );
 
-  // Filter out the anchor color from the result - it should only be used for optimization
-  const { anchor, ...factionColors } = optimizedColors;
-  return factionColors;
+  return optimizedColors;
 };

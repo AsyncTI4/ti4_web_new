@@ -1,7 +1,7 @@
 import { Box, Text, Image, Stack } from "@mantine/core";
-import { techs } from "../../../data/tech";
 import { cdnImage } from "../../../data/cdnImage";
 import styles from "./TechCard.module.css";
+import { getTechData } from "../../../lookup/tech";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -25,7 +25,7 @@ type Props = {
 
 export function TechCard({ techId }: Props) {
   // Look up tech data
-  const techData = techs.find((tech) => tech.alias === techId);
+  const techData = getTechData(techId);
 
   if (!techData) {
     console.warn(`Tech with ID "${techId}" not found`);

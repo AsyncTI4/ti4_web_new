@@ -1,15 +1,13 @@
 import { Group } from "@mantine/core";
 import { Ability } from "../Ability/Ability";
-import { abilities } from "../../../data/abilities";
+import { getAbilitiesByFaction } from "../../../lookup/abilities";
 
 type Props = {
   faction: string;
 };
 
 export function Abilities({ faction }: Props) {
-  const factionAbilities = abilities.filter(
-    (ability) => ability.faction === faction
-  );
+  const factionAbilities = getAbilitiesByFaction(faction);
 
   if (factionAbilities.length === 0) {
     return null;

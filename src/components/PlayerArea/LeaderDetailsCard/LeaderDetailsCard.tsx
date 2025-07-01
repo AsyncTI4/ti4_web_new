@@ -16,13 +16,15 @@ export function LeaderDetailsCard({ leaderId }: Props) {
       <Stack gap="md">
         {/* Header with image and basic info */}
         <Group gap="md" align="flex-start">
-          <Image
-            src={`/leaders/${leaderId}.webp`}
-            w={80}
-            h={80}
-            radius="50%"
-            className={styles.leaderImage}
-          />
+          {leaderData.source === "base" || leaderData.source === "pok" ? (
+            <Image
+              src={`/leaders/${leaderId}.webp`}
+              w={80}
+              h={80}
+              radius="50%"
+              className={styles.leaderImage}
+            />
+          ) : undefined}
           <Stack gap={4} flex={1}>
             <Text size="lg" fw={700} c="white">
               {leaderData.name}

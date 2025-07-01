@@ -1,8 +1,9 @@
 @font-face {
-  font-family: "Slider";
-  src: url("/font/slider.ttf") format("truetype"),
-  url("/font/slider.woff2") format("woff2"),
-  url("/font/slider.otf") format("opentype");
+  font-family: 'Slider';
+  src: url('/font/Slider.woff2') format('woff2'),
+       url('/font/Slider.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-  }
+  font-display: swap;
+}
+

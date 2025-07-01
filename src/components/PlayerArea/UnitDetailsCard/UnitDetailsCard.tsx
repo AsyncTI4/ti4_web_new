@@ -11,6 +11,7 @@ type Props = {
 
 export function UnitDetailsCard({ unitId, color }: Props) {
   // Look up unit data
+  console.log(unitId);
   const unitData = units.find((unit) => unit.id === unitId);
 
   if (!unitData) {

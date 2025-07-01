@@ -20,7 +20,6 @@ import { TileUnitData, LawInPlay } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
-import { getUnitDataByAsyncId } from "../../lookup/units";
 import { RGBColor } from "../../utils/colorOptimization";
 
 // Helper function to check if a system has tech skips
@@ -65,24 +64,6 @@ const systemHasTechSkips = (
   }
 
   return false;
-};
-
-// Helper function to calculate overlay opacity based on unit cost
-const calculateOverlayOpacity = (totalCost: number): number => {
-  // Define cost bands and map them to opacity values between 0.25 and 0.5
-  const minOpacity = 0.1;
-  const maxOpacity = 0.3;
-
-  // Define cost thresholds (adjust these based on typical unit compositions)
-  const minCost = 0; // Minimum cost to show any overlay
-  const maxCost = 20; // Cost at which we reach maximum opacity
-
-  if (totalCost <= minCost) return minOpacity;
-  if (totalCost >= maxCost) return maxOpacity;
-
-  // Linear interpolation between min and max opacity
-  const ratio = totalCost / maxCost;
-  return minOpacity + ratio * (maxOpacity - minOpacity);
 };
 
 type Props = {
@@ -420,34 +401,6 @@ export const MapTile = React.memo<Props>(
       return null;
     }, [tileUnitData, allEntityPlacements]);
 
-    // Calculate total unit cost for the controlling faction
-    const controllingFactionUnitCost: number = React.useMemo(() => {
-      if (!controllingFaction) return 0;
-
-      let totalCost = 0;
-
-      // Calculate cost of units for the controlling faction
-      Object.values(allEntityPlacements).forEach((placement) => {
-        if (
-          placement.faction === controllingFaction &&
-          placement.entityType === "unit"
-        ) {
-          const unitData = getUnitDataByAsyncId(placement.entityId);
-
-          if (unitData?.cost) {
-            totalCost += unitData.cost * placement.count;
-          }
-        }
-      });
-
-      return totalCost;
-    }, [controllingFaction, allEntityPlacements]);
-
-    // Calculate overlay opacity based on unit cost
-    const overlayOpacity = React.useMemo(() => {
-      return calculateOverlayOpacity(controllingFactionUnitCost);
-    }, [controllingFactionUnitCost]);
-
     return (
       <div
         className={`${classes.mapTile} ${className || ""} ${
@@ -500,7 +453,7 @@ export const MapTile = React.memo<Props>(
           {controllingFaction && overlaysEnabled && (
             <FactionColorOverlay
               faction={factionToColor[controllingFaction]}
-              opacity={overlayOpacity}
+              opacity={0.3}
               optimizedColors={optimizedColors}
             />
           )}

@@ -1,5 +1,5 @@
 import { Stack, Text, Box, Divider } from "@mantine/core";
-import { abilities } from "../../../data/abilities";
+import { getAbility } from "../../../lookup/abilities";
 import { Surface } from "../Surface";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export function AbilityDetailsCard({ abilityId }: Props) {
-  const ability = abilities.find((a) => a.id === abilityId);
+  const ability = getAbility(abilityId);
 
   if (!ability) return null;
 

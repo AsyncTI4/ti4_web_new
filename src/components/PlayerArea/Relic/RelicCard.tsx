@@ -1,25 +1,13 @@
 import { Box, Text, Stack, Image, Group, Divider } from "@mantine/core";
-import { relics } from "../../../data/relics";
+import { getRelicData } from "../../../lookup/relics";
 import styles from "./RelicCard.module.css";
-
-type RelicData = {
-  alias: string;
-  name: string;
-  text: string;
-  imageURL: string;
-  source: string;
-  flavourText: string;
-  shortName?: string;
-  shrinkName?: boolean;
-};
 
 type Props = {
   relicId: string;
 };
 
 export function RelicCard({ relicId }: Props) {
-  // Look up relic data
-  const relicData = relics.find((relic: RelicData) => relic.alias === relicId);
+  const relicData = getRelicData(relicId);
 
   if (!relicData) {
     console.warn(`Relic with ID "${relicId}" not found`);

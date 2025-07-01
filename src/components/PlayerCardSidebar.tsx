@@ -13,37 +13,18 @@ import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
-import { techs as techsData } from "../data/tech";
+import { getTechData } from "../lookup/tech";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
-// Removed calculatePlanetEconomics import - now using pre-calculated values
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
-
-// Helper function to get tech data by ID
-const getTechData = (techId: string) => {
-  return techsData.find((tech) => tech.alias === techId);
-};
-
-// Helper function to get tier from requirements
-const getTechTier = (requirements?: string): number => {
-  if (!requirements) return 0;
-
-  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
-  const matches = requirements.match(/(.)\1*/g);
-  if (matches && matches.length > 0) {
-    return matches[0].length;
-  }
-
-  return 0;
-};
 
 type Props = {
   playerData: PlayerData;
@@ -108,7 +89,6 @@ export default function PlayerCardSidebar(props: Props) {
       return techData?.types[0] === techType;
     });
 
-    // Sort techs by tier (lower tier first)
     const sortedTechs = filteredTechs.sort((a, b) => {
       const techDataA = getTechData(a);
       const techDataB = getTechData(b);
@@ -130,14 +110,12 @@ export default function PlayerCardSidebar(props: Props) {
 
   const FragmentsAndCCSection = (
     <Group gap={0} align="stretch">
-      {/* T/F/S Section - harmonized with Surface component styling */}
       <CCPool
         tacticalCC={tacticalCC}
         fleetCC={fleetCC}
         strategicCC={strategicCC}
         mahactEdict={props.playerData.mahactEdict}
       />
-      {/* Fragments Section - harmonized with Surface component styling */}
       <FragmentsPool fragments={fragments} />
     </Group>
   );
@@ -201,12 +179,9 @@ export default function PlayerCardSidebar(props: Props) {
             [{faction}]
           </Text>
           <Box style={{ flexShrink: 2 }}>
-            {" "}
-            {/* Color has highest priority for truncation/hiding */}
             <PlayerColor color={color} size="sm" />
           </Box>
 
-          {/* Status Indicator - harmonized with Shimmer component styling */}
           <StatusIndicator
             passed={props.playerData.passed}
             active={props.playerData.active}
@@ -244,6 +219,9 @@ export default function PlayerCardSidebar(props: Props) {
         >
           {abilities?.map((abilityId, index) => {
             const abilityData = getAbility(abilityId);
+            if (!abilityData) {
+              console.log("Could not find ability", abilityId);
+            }
             if (!abilityData) return null;
 
             return (
@@ -261,7 +239,6 @@ export default function PlayerCardSidebar(props: Props) {
           })}
         </Group>
 
-        {/* Unresearched Faction Techs */}
         {notResearchedFactionTechs?.length > 0 && (
           <Group gap={2} style={{ flexShrink: 1 }}>
             {notResearchedFactionTechs.map((techId, index) => (
@@ -278,9 +255,7 @@ export default function PlayerCardSidebar(props: Props) {
         )}
       </Group>
 
-      {/* Main Content - Simplified Grid for narrow layout */}
       <Stack gap="md">
-        {/* Top Row - Cards/Stats */}
         <SimpleGrid cols={2} spacing="xs">
           <Stack gap={8}>
             <PlayerCardCounts
@@ -291,7 +266,6 @@ export default function PlayerCardSidebar(props: Props) {
               pnCount={props.playerData.pnCount || 0}
               acCount={props.playerData.acCount || 0}
             />
-            {/* Fragments and CC Section */}
             {FragmentsAndCCSection}
             <ScoredSecrets secretsScored={secretsScored} />
           </Stack>
@@ -345,8 +319,6 @@ export default function PlayerCardSidebar(props: Props) {
           <Surface p="md" pattern="circle">
             <Stack gap="sm">
               <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-
-              {/* Debt Tokens Section - Full width at bottom */}
               {props.playerData.debtTokens &&
                 Object.keys(props.playerData.debtTokens).length > 0 && (
                   <DebtTokens
@@ -389,3 +361,14 @@ export default function PlayerCardSidebar(props: Props) {
     </PlayerCardBox>
   );
 }
+
+const getTechTier = (requirements?: string): number => {
+  if (!requirements) return 0;
+
+  const matches = requirements.match(/(.)\1*/g);
+  if (matches && matches.length > 0) {
+    return matches[0].length;
+  }
+
+  return 0;
+};

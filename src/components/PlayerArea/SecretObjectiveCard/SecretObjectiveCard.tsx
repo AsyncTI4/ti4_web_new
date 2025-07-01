@@ -1,5 +1,5 @@
 import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
-import { secretObjectives } from "../../../data/secretObjectives";
+import { getSecretObjectiveData as getSecretData } from "../../../lookup/secretObjectives";
 import styles from "./SecretObjectiveCard.module.css";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export function SecretObjectiveCard({ secretId }: Props) {
-  const secretData = getSecretObjectiveData(secretId);
+  const secretData = getSecretData(secretId);
 
   if (!secretData) return null;
 
@@ -52,8 +52,3 @@ export function SecretObjectiveCard({ secretId }: Props) {
     </Box>
   );
 }
-
-// Helper function to get secret objective data by ID
-const getSecretObjectiveData = (secretId: string) => {
-  return secretObjectives.find((secret) => secret.alias === secretId);
-};

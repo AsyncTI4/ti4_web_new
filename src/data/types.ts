@@ -63,6 +63,10 @@ export type Unit = {
   ability?: string;
   imageURL?: string;
   bgDecalPath?: string;
+  homebrewReplacesID?: string;
+  fleetSupplyBonus?: number;
+  eligiblePlanetTypes?: string[];
+  unlock?: string;
 };
 
 export type Token = {
@@ -87,24 +91,28 @@ export type Tech = {
   types: string[];
   source: string;
   text: string;
-  imageURL: string;
+  imageURL?: string;
   requirements?: string;
   faction?: string;
   baseUpgrade?: string;
   initials?: string;
   shortName?: string;
   shrinkName?: boolean;
+  homebrewReplacesID?: string;
 };
 
 export type Relic = {
   alias: string;
   name: string;
   text: string;
-  imageURL: string;
+  imageURL?: string;
   source: string;
-  flavourText: string;
+  flavourText?: string;
   shrinkName?: boolean;
   shortName?: string;
+  homebrewReplacesID?: string;
+  isFakeRelic?: boolean;
+  actual_source?: string;
 };
 
 export type FactionUnits = {
@@ -130,6 +138,23 @@ export type Leader = {
   exhausted: boolean;
   locked: boolean;
   active: boolean;
+};
+
+export type LeaderData = {
+  id: string;
+  faction: string;
+  type: string;
+  name: string;
+  title: string;
+  abilityWindow: string;
+  abilityText: string;
+  unlockCondition: string;
+  source: string;
+  shortName?: string;
+  abilityName?: string;
+  shrinkName?: boolean;
+  searchTags?: string[];
+  homebrewReplacesID?: string;
 };
 
 export type CapturedUnitsData = {
@@ -397,4 +422,60 @@ export type Ability = {
   source: string;
   shortName?: string;
   homebrewReplacesID?: string;
+};
+
+export type PromissoryNote = {
+  alias: string;
+  name: string;
+  color?: string;
+  faction?: string;
+  playArea: boolean;
+  playImmediately?: boolean;
+  source: string;
+  text: string;
+  shortName?: string;
+  shrinkName?: boolean;
+  attachment?: string | boolean;
+  homebrewReplacesID?: string;
+};
+
+export type SecretObjective = {
+  alias: string;
+  name: string;
+  phase: string;
+  text: string;
+  points: number;
+  source: string;
+  homebrewReplacesID?: string;
+};
+
+export type PublicObjective = {
+  alias: string;
+  name: string;
+  phase: string;
+  text: string;
+  points: number;
+  source: string;
+  homebrewReplacesID?: string;
+};
+
+export type Color = {
+  alias: string;
+  name: string;
+  displayName?: string;
+  aliases: string[];
+  textColor: string;
+  primaryColor?: {
+    red: number;
+    green: number;
+    blue: number;
+  };
+  secondaryColor?: {
+    red: number;
+    green: number;
+    blue: number;
+  };
+  primaryColorRef?: string;
+  secondaryColorRef?: string;
+  hue?: string;
 };

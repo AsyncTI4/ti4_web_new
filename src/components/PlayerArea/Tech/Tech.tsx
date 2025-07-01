@@ -1,10 +1,10 @@
 import { Box, Group, Text, Image } from "@mantine/core";
-import { techs } from "../../../data/tech";
 import styles from "./Tech.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { TechCard } from "./TechCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { useState } from "react";
+import { getTechData } from "../../../lookup/tech";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -44,7 +44,7 @@ export function Tech({ techId, isExhausted = false }: Props) {
   const [opened, setOpened] = useState(false);
 
   // Look up tech data
-  const techData = techs.find((tech) => tech.alias === techId);
+  const techData = getTechData(techId);
 
   if (!techData) {
     console.warn(`Tech with ID "${techId}" not found`);

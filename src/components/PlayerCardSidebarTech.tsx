@@ -4,10 +4,10 @@ import { Tech } from "./PlayerArea/Tech";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { PlayerCardBox } from "./PlayerCardBox";
-import { techs as techsData } from "../data/tech";
 import { PlayerData } from "../data/types";
 import { cdnImage } from "../data/cdnImage";
 import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
+import { getTechData, getTechTier } from "@/lookup/tech";
 
 type Props = {
   playerData: PlayerData;
@@ -132,20 +132,3 @@ export default function PlayerCardSidebarTech(props: Props) {
     </PlayerCardBox>
   );
 }
-
-const getTechData = (techId: string) => {
-  return techsData.find((tech) => tech.alias === techId);
-};
-
-// Helper function to get tier from requirements
-const getTechTier = (requirements?: string): number => {
-  if (!requirements) return 0;
-
-  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
-  const matches = requirements.match(/(.)\1*/g);
-  if (matches && matches.length > 0) {
-    return matches[0].length;
-  }
-
-  return 0;
-};

@@ -90,7 +90,6 @@ const theme = createTheme({
     tomato: tomatoBg,
     blueGray: myColor,
   },
-  // fontFamily: "Slider, sans-serif",
   headings: {
     fontFamily: "Slider, sans-serif",
   },

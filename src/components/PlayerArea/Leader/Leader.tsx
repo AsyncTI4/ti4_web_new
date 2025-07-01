@@ -23,9 +23,14 @@ export function Leader({ id, type, exhausted, locked }: Props) {
 
   const shouldShowGreen = !exhausted && !locked;
 
+  const showLeaderImage =
+    leaderData.source === "base" || leaderData.source === "pok";
+
   const LeaderContent = () => (
     <Group className={styles.leaderGroup}>
-      <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
+      {showLeaderImage ? (
+        <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
+      ) : undefined}
       <Stack className={styles.leaderStack}>
         <Text
           className={`${styles.leaderName} ${shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive}`}

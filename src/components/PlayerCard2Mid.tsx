@@ -25,37 +25,18 @@ import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { CCPool } from "./PlayerArea/CCPool";
-import { techs as techsData } from "../data/tech";
+import { getTechData, getTechTier } from "../lookup/tech";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
-import { units } from "../data/units";
 import { ArmyStats } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-// Removed calculatePlanetEconomics import - now using pre-calculated values
 import { PlayerCardBox } from "./PlayerCardBox";
 import { getTokenImagePath } from "../data/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
-
-// Helper function to get tech data by ID
-const getTechData = (techId: string) => {
-  return techsData.find((tech) => tech.alias === techId);
-};
-
-// Helper function to get tier from requirements
-const getTechTier = (requirements?: string): number => {
-  if (!requirements) return 0;
-
-  // Count the number of same letters (e.g., "BB" = 2, "BBB" = 3)
-  const matches = requirements.match(/(.)\1*/g);
-  if (matches && matches.length > 0) {
-    return matches[0].length;
-  }
-
-  return 0;
-};
+import { getUnitAsyncId } from "@/lookup/units";
 
 // Strategy card names and colors mapping
 const SC_NAMES = {
@@ -599,7 +580,3 @@ export default memo(function PlayerCard2Mid(props: Props) {
     </PlayerCardBox>
   );
 });
-
-const getUnitAsyncId = (unitId: string) => {
-  return units.find((u) => u.id === unitId)?.asyncId;
-};

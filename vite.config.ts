@@ -20,6 +20,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  assetsInclude: ["**/*.woff", "**/*.woff2", "**/*.ttf", "**/*.otf"],
   server: {
     proxy: {
       "/proxy": {

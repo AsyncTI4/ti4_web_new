@@ -1,11 +1,20 @@
-export const colors = [
+// Auto-generated file - Do not edit manually
+// Generated from src/main/resources/data/colors/*.json files
+
+import { Color } from "./types";
+
+export const colors: Color[] = [
   {
     alias: "lgy",
     name: "lightgray",
     displayName: "LightGray",
     aliases: ["lgy", "lightgrey", "white", "W"],
     textColor: "black",
-    primaryColor: { red: 206, green: 206, blue: 206 },
+    primaryColor: {
+      red: 206,
+      green: 206,
+      blue: 206,
+    },
     hue: "GRAY",
   },
   {
@@ -13,7 +22,11 @@ export const colors = [
     name: "red",
     aliases: ["red"],
     textColor: "white",
-    primaryColor: { red: 240, green: 6, blue: 6 },
+    primaryColor: {
+      red: 240,
+      green: 6,
+      blue: 6,
+    },
     hue: "RED",
   },
   {
@@ -21,7 +34,11 @@ export const colors = [
     name: "orange",
     aliases: ["orange", "E", "org"],
     textColor: "black",
-    primaryColor: { red: 240, green: 180, blue: 6 },
+    primaryColor: {
+      red: 240,
+      green: 180,
+      blue: 6,
+    },
     hue: "ORANGE",
   },
   {
@@ -29,7 +46,11 @@ export const colors = [
     name: "yellow",
     aliases: ["yellow", "Y", "ylw"],
     textColor: "black",
-    primaryColor: { red: 245, green: 245, blue: 6 },
+    primaryColor: {
+      red: 245,
+      green: 245,
+      blue: 6,
+    },
     hue: "YELLOW",
   },
   {
@@ -37,7 +58,11 @@ export const colors = [
     name: "green",
     aliases: ["green", "grn"],
     textColor: "white",
-    primaryColor: { red: 6, green: 175, blue: 50 },
+    primaryColor: {
+      red: 6,
+      green: 175,
+      blue: 50,
+    },
     hue: "GREEN",
   },
   {
@@ -45,7 +70,11 @@ export const colors = [
     name: "blue",
     aliases: ["blue", "blu"],
     textColor: "white",
-    primaryColor: { red: 6, green: 75, blue: 203 },
+    primaryColor: {
+      red: 6,
+      green: 75,
+      blue: 203,
+    },
     hue: "BLUE",
   },
   {
@@ -53,7 +82,11 @@ export const colors = [
     name: "purple",
     aliases: ["purple", "P", "ppl"],
     textColor: "white",
-    primaryColor: { red: 146, green: 6, blue: 186 },
+    primaryColor: {
+      red: 146,
+      green: 6,
+      blue: 186,
+    },
     hue: "PURPLE",
   },
   {
@@ -61,7 +94,11 @@ export const colors = [
     name: "pink",
     aliases: ["pink", "K", "pnk"],
     textColor: "black",
-    primaryColor: { red: 240, green: 138, blue: 240 },
+    primaryColor: {
+      red: 240,
+      green: 138,
+      blue: 240,
+    },
     hue: "PINK",
   },
   {
@@ -69,7 +106,11 @@ export const colors = [
     name: "black",
     aliases: ["black", "blk"],
     textColor: "white",
-    primaryColor: { red: 50, green: 50, blue: 50 },
+    primaryColor: {
+      red: 50,
+      green: 50,
+      blue: 50,
+    },
     hue: "GRAY",
   },
   {
@@ -77,7 +118,11 @@ export const colors = [
     name: "petrol",
     aliases: ["ptr"],
     textColor: "white",
-    primaryColor: { red: 66, green: 140, blue: 140 },
+    primaryColor: {
+      red: 66,
+      green: 140,
+      blue: 140,
+    },
     hue: "BLUE",
   },
   {
@@ -85,7 +130,11 @@ export const colors = [
     name: "rust",
     aliases: ["rst"],
     textColor: "white",
-    primaryColor: { red: 140, green: 66, blue: 72 },
+    primaryColor: {
+      red: 140,
+      green: 66,
+      blue: 72,
+    },
     hue: "RED",
   },
   {
@@ -93,7 +142,11 @@ export const colors = [
     name: "brown",
     aliases: ["bwn"],
     textColor: "white",
-    primaryColor: { red: 150, green: 80, blue: 42 },
+    primaryColor: {
+      red: 150,
+      green: 80,
+      blue: 42,
+    },
     hue: "ORANGE",
   },
   {
@@ -101,7 +154,11 @@ export const colors = [
     name: "gray",
     aliases: ["gray", "grey", "gry"],
     textColor: "white",
-    primaryColor: { red: 110, green: 122, blue: 150 },
+    primaryColor: {
+      red: 110,
+      green: 122,
+      blue: 150,
+    },
     hue: "GRAY",
   },
   {
@@ -109,7 +166,11 @@ export const colors = [
     name: "tan",
     aliases: ["tan"],
     textColor: "black",
-    primaryColor: { red: 172, green: 160, blue: 116 },
+    primaryColor: {
+      red: 172,
+      green: 160,
+      blue: 116,
+    },
     hue: "ORANGE",
   },
   {
@@ -117,7 +178,11 @@ export const colors = [
     name: "forest",
     aliases: ["frs"],
     textColor: "white",
-    primaryColor: { red: 90, green: 150, blue: 100 },
+    primaryColor: {
+      red: 90,
+      green: 150,
+      blue: 100,
+    },
     hue: "GREEN",
   },
   {
@@ -125,7 +190,11 @@ export const colors = [
     name: "plum",
     aliases: ["plm"],
     textColor: "white",
-    primaryColor: { red: 150, green: 90, blue: 140 },
+    primaryColor: {
+      red: 150,
+      green: 90,
+      blue: 140,
+    },
     hue: "PURPLE",
   },
   {
@@ -133,7 +202,11 @@ export const colors = [
     name: "teal",
     aliases: ["tea"],
     textColor: "black",
-    primaryColor: { red: 0, green: 235, blue: 255 },
+    primaryColor: {
+      red: 0,
+      green: 235,
+      blue: 255,
+    },
     hue: "BLUE",
   },
   {
@@ -141,7 +214,11 @@ export const colors = [
     name: "rose",
     aliases: ["rse"],
     textColor: "black",
-    primaryColor: { red: 217, green: 165, blue: 229 },
+    primaryColor: {
+      red: 217,
+      green: 165,
+      blue: 229,
+    },
     hue: "PINK",
   },
   {
@@ -149,7 +226,11 @@ export const colors = [
     name: "lime",
     aliases: ["lme"],
     textColor: "black",
-    primaryColor: { red: 177, green: 229, blue: 165 },
+    primaryColor: {
+      red: 177,
+      green: 229,
+      blue: 165,
+    },
     hue: "GREEN",
   },
   {
@@ -157,7 +238,11 @@ export const colors = [
     name: "lavender",
     aliases: ["lvn"],
     textColor: "black",
-    primaryColor: { red: 169, green: 167, blue: 231 },
+    primaryColor: {
+      red: 169,
+      green: 167,
+      blue: 231,
+    },
     hue: "PURPLE",
   },
   {
@@ -165,7 +250,11 @@ export const colors = [
     name: "spring",
     aliases: ["spr"],
     textColor: "black",
-    primaryColor: { red: 219, green: 231, blue: 167 },
+    primaryColor: {
+      red: 219,
+      green: 231,
+      blue: 167,
+    },
     hue: "YELLOW",
   },
   {
@@ -173,7 +262,11 @@ export const colors = [
     name: "peach",
     aliases: ["pch"],
     textColor: "black",
-    primaryColor: { red: 232, green: 184, blue: 167 },
+    primaryColor: {
+      red: 232,
+      green: 184,
+      blue: 167,
+    },
     hue: "ORANGE",
   },
   {
@@ -181,17 +274,40 @@ export const colors = [
     name: "ethereal",
     aliases: ["eth"],
     textColor: "black",
-    primaryColor: { red: 35, green: 104, blue: 200 },
+    primaryColor: {
+      red: 35,
+      green: 104,
+      blue: 200,
+    },
     hue: "BLUE",
   },
-
+  {
+    alias: "rby",
+    name: "ruby",
+    aliases: ["rby"],
+    textColor: "black",
+    primaryColor: {
+      red: 212,
+      green: 43,
+      blue: 75,
+    },
+    hue: "RED",
+  },
   {
     alias: "crm",
     name: "chrome",
     aliases: ["crm"],
     textColor: "black",
-    primaryColor: { red: 104, green: 180, blue: 238 },
-    secondaryColor: { red: 228, green: 175, blue: 30 },
+    primaryColor: {
+      red: 104,
+      green: 180,
+      blue: 238,
+    },
+    secondaryColor: {
+      red: 228,
+      green: 175,
+      blue: 30,
+    },
     hue: "MULTI2",
   },
   {
@@ -199,8 +315,16 @@ export const colors = [
     name: "sunset",
     aliases: ["sns"],
     textColor: "black",
-    primaryColor: { red: 120, green: 129, blue: 255 },
-    secondaryColor: { red: 255, green: 90, blue: 132 },
+    primaryColor: {
+      red: 120,
+      green: 129,
+      blue: 255,
+    },
+    secondaryColor: {
+      red: 255,
+      green: 90,
+      blue: 132,
+    },
     hue: "PURPLE",
   },
   {
@@ -208,8 +332,16 @@ export const colors = [
     name: "magma",
     aliases: ["mgm"],
     textColor: "white",
-    primaryColor: { red: 240, green: 6, blue: 6 },
-    secondaryColor: { red: 245, green: 245, blue: 6 },
+    primaryColor: {
+      red: 240,
+      green: 6,
+      blue: 6,
+    },
+    secondaryColor: {
+      red: 245,
+      green: 245,
+      blue: 6,
+    },
     hue: "RED",
   },
   {
@@ -217,8 +349,16 @@ export const colors = [
     name: "glacier",
     aliases: ["gcr"],
     textColor: "white",
-    primaryColor: { red: 5, green: 240, blue: 240 },
-    secondaryColor: { red: 5, green: 5, blue: 245 },
+    primaryColor: {
+      red: 5,
+      green: 240,
+      blue: 240,
+    },
+    secondaryColor: {
+      red: 5,
+      green: 5,
+      blue: 245,
+    },
     hue: "BLUE",
   },
   {
@@ -226,8 +366,16 @@ export const colors = [
     name: "tropical",
     aliases: ["tpl"],
     textColor: "black",
-    primaryColor: { red: 255, green: 178, blue: 120 },
-    secondaryColor: { red: 89, green: 255, blue: 131 },
+    primaryColor: {
+      red: 255,
+      green: 178,
+      blue: 120,
+    },
+    secondaryColor: {
+      red: 89,
+      green: 255,
+      blue: 131,
+    },
     hue: "GREEN",
   },
   {
@@ -235,8 +383,16 @@ export const colors = [
     name: "turquoise",
     aliases: ["tqs", "torq", "turquoise", "torquoise", "turq", "turquis"],
     textColor: "black",
-    primaryColor: { red: 63, green: 255, blue: 145 },
-    secondaryColor: { red: 40, green: 255, blue: 255 },
+    primaryColor: {
+      red: 63,
+      green: 255,
+      blue: 145,
+    },
+    secondaryColor: {
+      red: 40,
+      green: 255,
+      blue: 255,
+    },
     hue: "GREEN",
   },
   {
@@ -244,8 +400,16 @@ export const colors = [
     name: "gold",
     aliases: ["gld"],
     textColor: "black",
-    primaryColor: { red: 255, green: 100, blue: 1 },
-    secondaryColor: { red: 190, green: 190, blue: 1 },
+    primaryColor: {
+      red: 255,
+      green: 100,
+      blue: 1,
+    },
+    secondaryColor: {
+      red: 190,
+      green: 190,
+      blue: 1,
+    },
     hue: "YELLOW",
   },
   {
@@ -253,8 +417,16 @@ export const colors = [
     name: "bloodred",
     aliases: ["bld"],
     textColor: "white",
-    primaryColor: { red: 230, green: 0, blue: 40 },
-    secondaryColor: { red: 80, green: 0, blue: 20 },
+    primaryColor: {
+      red: 230,
+      green: 0,
+      blue: 40,
+    },
+    secondaryColor: {
+      red: 80,
+      green: 0,
+      blue: 20,
+    },
     hue: "RED",
   },
   {
@@ -262,8 +434,16 @@ export const colors = [
     name: "copper",
     aliases: ["cpr"],
     textColor: "white",
-    primaryColor: { red: 229, green: 134, blue: 0 },
-    secondaryColor: { red: 79, green: 40, blue: 0 },
+    primaryColor: {
+      red: 229,
+      green: 134,
+      blue: 0,
+    },
+    secondaryColor: {
+      red: 79,
+      green: 40,
+      blue: 0,
+    },
     hue: "ORANGE",
   },
   {
@@ -271,8 +451,16 @@ export const colors = [
     name: "navy",
     aliases: ["nvy"],
     textColor: "white",
-    primaryColor: { red: 50, green: 60, blue: 255 },
-    secondaryColor: { red: 5, green: 5, blue: 120 },
+    primaryColor: {
+      red: 50,
+      green: 60,
+      blue: 255,
+    },
+    secondaryColor: {
+      red: 5,
+      green: 5,
+      blue: 120,
+    },
     hue: "BLUE",
   },
   {
@@ -280,8 +468,16 @@ export const colors = [
     name: "chocolate",
     aliases: ["chk"],
     textColor: "white",
-    primaryColor: { red: 140, green: 60, blue: 55 },
-    secondaryColor: { red: 60, green: 30, blue: 25 },
+    primaryColor: {
+      red: 140,
+      green: 60,
+      blue: 55,
+    },
+    secondaryColor: {
+      red: 60,
+      green: 30,
+      blue: 25,
+    },
     hue: "ORANGE",
   },
   {
@@ -289,8 +485,16 @@ export const colors = [
     name: "emerald",
     aliases: ["eme"],
     textColor: "white",
-    primaryColor: { red: 37, green: 255, blue: 47 },
-    secondaryColor: { red: 0, green: 90, blue: 30 },
+    primaryColor: {
+      red: 37,
+      green: 255,
+      blue: 47,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 90,
+      blue: 30,
+    },
     hue: "GREEN",
   },
   {
@@ -298,8 +502,16 @@ export const colors = [
     name: "watermelon",
     aliases: ["wtm"],
     textColor: "white",
-    primaryColor: { red: 240, green: 6, blue: 6 },
-    secondaryColor: { red: 6, green: 175, blue: 50 },
+    primaryColor: {
+      red: 240,
+      green: 6,
+      blue: 6,
+    },
+    secondaryColor: {
+      red: 6,
+      green: 175,
+      blue: 50,
+    },
     hue: "MULTI2",
   },
   {
@@ -307,8 +519,16 @@ export const colors = [
     name: "vapourwave",
     aliases: ["vpw", "vaporwave"],
     textColor: "white",
-    primaryColor: { red: 6, green: 239, blue: 240 },
-    secondaryColor: { red: 175, green: 6, blue: 131 },
+    primaryColor: {
+      red: 6,
+      green: 239,
+      blue: 240,
+    },
+    secondaryColor: {
+      red: 175,
+      green: 6,
+      blue: 131,
+    },
     hue: "MULTI2",
   },
   {
@@ -316,8 +536,16 @@ export const colors = [
     name: "jupiter",
     aliases: ["jpt"],
     textColor: "black",
-    primaryColor: { red: 6, green: 75, blue: 203 },
-    secondaryColor: { red: 240, green: 180, blue: 6 },
+    primaryColor: {
+      red: 6,
+      green: 75,
+      blue: 203,
+    },
+    secondaryColor: {
+      red: 240,
+      green: 180,
+      blue: 6,
+    },
     hue: "MILTI2",
   },
   {
@@ -325,8 +553,16 @@ export const colors = [
     name: "poison",
     aliases: ["psn"],
     textColor: "white",
-    primaryColor: { red: 6, green: 175, blue: 50 },
-    secondaryColor: { red: 146, green: 6, blue: 186 },
+    primaryColor: {
+      red: 6,
+      green: 175,
+      blue: 50,
+    },
+    secondaryColor: {
+      red: 146,
+      green: 6,
+      blue: 186,
+    },
     hue: "MULTI2",
   },
   {
@@ -334,8 +570,16 @@ export const colors = [
     name: "rainbow",
     aliases: ["rbw"],
     textColor: "black",
-    primaryColor: { red: 255, green: 0, blue: 0 },
-    secondaryColor: { red: 0, green: 255, blue: 0 },
+    primaryColor: {
+      red: 255,
+      green: 0,
+      blue: 0,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 255,
+      blue: 0,
+    },
     hue: "MULTI1",
   },
   {
@@ -343,8 +587,16 @@ export const colors = [
     name: "sherbet",
     aliases: ["sbt"],
     textColor: "black",
-    primaryColor: { red: 255, green: 0, blue: 0 },
-    secondaryColor: { red: 0, green: 255, blue: 0 },
+    primaryColor: {
+      red: 255,
+      green: 0,
+      blue: 0,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 255,
+      blue: 0,
+    },
     hue: "MULTI1",
   },
   {
@@ -352,8 +604,16 @@ export const colors = [
     name: "paintball",
     aliases: ["ptb"],
     textColor: "black",
-    primaryColor: { red: 255, green: 0, blue: 0 },
-    secondaryColor: { red: 0, green: 255, blue: 0 },
+    primaryColor: {
+      red: 255,
+      green: 0,
+      blue: 0,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 255,
+      blue: 0,
+    },
     hue: "MULTI1",
   },
   {
@@ -361,8 +621,16 @@ export const colors = [
     name: "wasp",
     aliases: ["wsp"],
     textColor: "black",
-    primaryColor: { red: 245, green: 245, blue: 6 },
-    secondaryColor: { red: 0, green: 0, blue: 0 },
+    primaryColor: {
+      red: 245,
+      green: 245,
+      blue: 6,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 0,
+      blue: 0,
+    },
     hue: "YELLOW",
   },
   {
@@ -370,8 +638,16 @@ export const colors = [
     name: "checker",
     aliases: ["cqr", "chequer"],
     textColor: "white",
-    primaryColor: { red: 255, green: 255, blue: 255 },
-    secondaryColor: { red: 0, green: 0, blue: 0 },
+    primaryColor: {
+      red: 255,
+      green: 255,
+      blue: 255,
+    },
+    secondaryColor: {
+      red: 0,
+      green: 0,
+      blue: 0,
+    },
     hue: "GRAY",
   },
   {
@@ -379,8 +655,16 @@ export const colors = [
     name: "plaid",
     aliases: ["pld", "plaid"],
     textColor: "white",
-    primaryColor: { red: 240, green: 6, blue: 6 },
-    secondaryColor: { red: 50, green: 50, blue: 50 },
+    primaryColor: {
+      red: 240,
+      green: 6,
+      blue: 6,
+    },
+    secondaryColor: {
+      red: 50,
+      green: 50,
+      blue: 50,
+    },
     hue: "RED",
   },
   {
@@ -388,8 +672,16 @@ export const colors = [
     name: "harlequin",
     aliases: ["hqn", "harlequin"],
     textColor: "white",
-    primaryColor: { red: 6, green: 175, blue: 50 },
-    secondaryColor: { red: 5, green: 45, blue: 176 },
+    primaryColor: {
+      red: 6,
+      green: 175,
+      blue: 50,
+    },
+    secondaryColor: {
+      red: 5,
+      green: 45,
+      blue: 176,
+    },
     hue: "MULTI2",
   },
   {
@@ -397,9 +689,51 @@ export const colors = [
     name: "riftset",
     aliases: ["ero", "riftset"],
     textColor: "white",
-    primaryColor: { red: 74, green: 27, blue: 36 },
-    secondaryColor: { red: 135, green: 0, blue: 4 },
+    primaryColor: {
+      red: 74,
+      green: 27,
+      blue: 36,
+    },
+    secondaryColor: {
+      red: 135,
+      green: 0,
+      blue: 4,
+    },
     hue: "GRAY",
+  },
+  {
+    alias: "nm",
+    name: "nightmare",
+    aliases: ["nm", "nightmare", "night"],
+    textColor: "white",
+    primaryColor: {
+      red: 109,
+      green: 0,
+      blue: 10,
+    },
+    secondaryColor: {
+      red: 79,
+      green: 50,
+      blue: 81,
+    },
+    hue: "MULTI2",
+  },
+  {
+    alias: "dw",
+    name: "dawn",
+    aliases: ["dw", "dawn"],
+    textColor: "black",
+    primaryColor: {
+      red: 242,
+      green: 242,
+      blue: 242,
+    },
+    secondaryColor: {
+      red: 255,
+      green: 210,
+      blue: 112,
+    },
+    hue: "MULTI2",
   },
   {
     alias: "orca",
@@ -552,23 +886,5 @@ export const colors = [
     textColor: "white",
     primaryColorRef: "rainbow",
     secondaryColorRef: "lightgray",
-  },
-  {
-    alias: "nm",
-    name: "nightmare",
-    aliases: ["nm", "nightmare", "night"],
-    textColor: "white",
-    primaryColor: { red: 109, green: 0, blue: 10 },
-    secondaryColor: { red: 79, green: 50, blue: 81 },
-    hue: "MULTI2",
-  },
-  {
-    alias: "dw",
-    name: "dawn",
-    aliases: ["dw", "dawn"],
-    textColor: "black",
-    primaryColor: { red: 242, green: 242, blue: 242 },
-    secondaryColor: { red: 255, green: 210, blue: 112 },
-    hue: "MULTI2",
   },
 ];
