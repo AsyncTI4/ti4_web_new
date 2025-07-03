@@ -29,6 +29,7 @@ type FactionProgressData = {
 
 type CustomObjectiveDisplayProps = {
   scoredFactions: string[];
+  multiScoring: boolean;
 };
 
 type ProgressObjectiveDisplayProps = {
@@ -38,14 +39,28 @@ type ProgressObjectiveDisplayProps = {
 
 function CustomObjectiveDisplay({
   scoredFactions,
+  multiScoring,
 }: CustomObjectiveDisplayProps) {
-  return (
-    <>
-      {scoredFactions.map((faction) => (
-        <CircularFactionIcon key={faction} faction={faction} size={28} />
-      ))}
-    </>
-  );
+  if(multiScoring) {
+    let factionScoreCount = new Map<string, number>();
+    return (
+      <>
+        {scoredFactions.map((faction) => {
+          factionScoreCount.set(faction, (factionScoreCount.get(faction) ?? 0) + 1);
+        (
+          <CircularFactionIcon key={`${faction}_${factionScoreCount.get(faction)}`} faction={faction} size={28} />
+        )})}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {scoredFactions.map((faction) => (
+          <CircularFactionIcon key={faction} faction={faction} size={28} />
+        ))}
+      </>
+    );
+  }
 }
 
 function ProgressObjectiveDisplay({
@@ -86,6 +101,7 @@ function ExpandedObjectiveCard({
   color,
   revealed = true,
   scoredFactions,
+  multiScoring,
   custom,
   playerData,
   objectiveKey,
@@ -113,7 +129,7 @@ function ExpandedObjectiveCard({
     if (!revealed) return null;
 
     if (custom) {
-      return <CustomObjectiveDisplay scoredFactions={scoredFactions} />;
+      return <CustomObjectiveDisplay scoredFactions={scoredFactions} multiScoring={multiScoring} />;
     }
 
     if (progressThreshold > 0) {
