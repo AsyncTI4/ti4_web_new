@@ -23,6 +23,7 @@ import {
   IconChevronRight,
   IconFlask,
   IconEye,
+  IconSettings,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -61,6 +62,8 @@ import { LawDetailsCard } from "./components/PlayerArea/LawDetailsCard";
 import { PointTotals } from "./components/PlayerArea/PointTotals";
 import { SmoothPopover } from "./components/shared/SmoothPopover";
 import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
+import { SettingsProvider, useSettings } from "./context/SettingsContext";
+import { SettingsModal } from "./components/SettingsModal";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 4;
@@ -130,7 +133,7 @@ type PlayerCardDisplayProps = {
 
 const MAP_PADDING = 200;
 
-export function NewMapUI() {
+function NewMapUIContent() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
@@ -144,28 +147,17 @@ export function NewMapUI() {
   // Use tab management hook for NewMapUI
   const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
 
-  // State for tech skips mode
-  const [techSkipsMode, setTechSkipsMode] = useState(false);
+  // Use settings from context
+  const {
+    settings,
+    toggleOverlays,
+    toggleTechSkipsMode,
+    toggleLeftPanelCollapsed,
+    toggleRightPanelCollapsed,
+  } = useSettings();
 
-  // Toggle tech skips mode handler
-  const toggleTechSkipsMode = useCallback(() => {
-    setTechSkipsMode((prev) => !prev);
-  }, []);
-
-  // State for overlay mode with localStorage persistence
-  const [overlaysEnabled, setOverlaysEnabled] = useState(() => {
-    const saved = localStorage.getItem("overlaysEnabled");
-    return saved ? JSON.parse(saved) : false;
-  });
-
-  // Toggle overlays handler
-  const toggleOverlays = useCallback(() => {
-    setOverlaysEnabled((prev: boolean) => {
-      const newValue = !prev;
-      localStorage.setItem("overlaysEnabled", JSON.stringify(newValue));
-      return newValue;
-    });
-  }, []);
+  // State for settings modal
+  const [settingsModalOpened, setSettingsModalOpened] = useState(false);
 
   // Use tabs and tooltips hook
   const {
@@ -192,11 +184,7 @@ export function NewMapUI() {
   // State for law popover
   const [selectedLaw, setSelectedLaw] = useState<string | null>(null);
 
-  // State for left panel collapse
-  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(() => {
-    const saved = localStorage.getItem("leftPanelCollapsed");
-    return saved ? JSON.parse(saved) : false;
-  });
+  // Left panel collapse state now managed by settings context
 
   // Planet hover handlers
   const handlePlanetMouseEnter = useCallback(
@@ -223,12 +211,7 @@ export function NewMapUI() {
     handleMouseLeave();
   }, [handleMouseLeave]);
 
-  // Handle panel collapse toggle
-  const toggleLeftPanel = useCallback(() => {
-    const newState = !isLeftPanelCollapsed;
-    setIsLeftPanelCollapsed(newState);
-    localStorage.setItem("leftPanelCollapsed", JSON.stringify(newState));
-  }, [isLeftPanelCollapsed]);
+  // Panel collapse toggle now managed by settings context
 
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
     useSidebarDragHandle(30);
@@ -405,21 +388,29 @@ export function NewMapUI() {
                 Player Areas
               </Tabs.Tab>
               <Button
-                variant={techSkipsMode ? "filled" : "subtle"}
+                variant={settings.techSkipsMode ? "filled" : "subtle"}
                 size="sm"
-                color={techSkipsMode ? "cyan" : "gray"}
+                color={settings.techSkipsMode ? "cyan" : "gray"}
                 style={{ height: "36px", minWidth: "36px" }}
                 px={8}
                 onClick={toggleTechSkipsMode}
               >
                 <IconFlask size={16} />
               </Button>
+              <Box
+                style={{
+                  borderLeft: "1px solid var(--mantine-color-dark-4)",
+                  height: "24px",
+                  marginLeft: "12px",
+                  marginRight: "12px",
+                }}
+              />
               <Switch
-                checked={overlaysEnabled}
+                checked={settings.overlaysEnabled}
                 onChange={toggleOverlays}
                 size="sm"
                 thumbIcon={
-                  overlaysEnabled ? (
+                  settings.overlaysEnabled ? (
                     <IconEye size={12} />
                   ) : (
                     <IconEye size={12} style={{ opacity: 0.5 }} />
@@ -428,6 +419,24 @@ export function NewMapUI() {
                 label="Overlays"
                 labelPosition="right"
               />
+              <Box
+                style={{
+                  borderLeft: "1px solid var(--mantine-color-dark-4)",
+                  height: "24px",
+                  marginLeft: "12px",
+                  marginRight: "12px",
+                }}
+              />
+              <Button
+                variant="light"
+                size="sm"
+                color="gray"
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+                onClick={() => setSettingsModalOpened(true)}
+              >
+                <IconSettings size={16} />
+              </Button>
             </Tabs.List>
 
             {/* Map Tab */}
@@ -437,7 +446,11 @@ export function NewMapUI() {
                 <Box
                   ref={mapContainerRef}
                   className={`dragscroll ${classes.mapArea}`}
-                  style={{ width: `${100 - sidebarWidth}%` }}
+                  style={{
+                    width: settings.isRightPanelCollapsed
+                      ? "100%"
+                      : `${100 - sidebarWidth}%`,
+                  }}
                 >
                   {/* Left Panel - Only render when there's data */}
                   {(objectives && playerData) ||
@@ -445,7 +458,7 @@ export function NewMapUI() {
                     <>
                       {/* Left Sidebar Overlay */}
                       <Box
-                        className={`${classes.leftSidebarOverlay} ${isLeftPanelCollapsed ? classes.collapsed : ""}`}
+                        className={`${classes.leftSidebarOverlay} ${settings.isLeftPanelCollapsed ? classes.collapsed : ""}`}
                       >
                         <Stack p="md" gap="md">
                           {objectives && playerData && (
@@ -530,10 +543,10 @@ export function NewMapUI() {
 
                       {/* Left Panel Toggle Button */}
                       <Box
-                        className={`${classes.leftPanelToggle} ${isLeftPanelCollapsed ? classes.collapsed : ""}`}
-                        onClick={toggleLeftPanel}
+                        className={`${classes.leftPanelToggle} ${settings.isLeftPanelCollapsed ? classes.collapsed : ""}`}
+                        onClick={toggleLeftPanelCollapsed}
                       >
-                        {isLeftPanelCollapsed ? (
+                        {settings.isLeftPanelCollapsed ? (
                           <IconChevronRight
                             size={16}
                             className={classes.leftPanelToggleIcon}
@@ -551,7 +564,9 @@ export function NewMapUI() {
                   <div
                     className={classes.zoomControlsDynamic}
                     style={{
-                      right: `calc(${sidebarWidth}vw + 35px)`,
+                      right: settings.isRightPanelCollapsed
+                        ? "35px"
+                        : `calc(${sidebarWidth}vw + 35px)`,
                       transition: isDragging ? "none" : "right 0.1s ease",
                     }}
                   >
@@ -623,10 +638,14 @@ export function NewMapUI() {
                           onUnitSelect={handleMouseDown}
                           onPlanetHover={handlePlanetMouseEnter}
                           onPlanetMouseLeave={handlePlanetMouseLeave}
-                          techSkipsMode={techSkipsMode}
-                          overlaysEnabled={overlaysEnabled}
+                          techSkipsMode={settings.techSkipsMode}
+                          overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                           exhaustedPlanets={allExhaustedPlanets}
+                          alwaysShowControlTokens={
+                            settings.alwaysShowControlTokens
+                          }
+                          showExhaustedPlanets={settings.showExhaustedPlanets}
                         />
                       );
                     })}
@@ -734,10 +753,38 @@ export function NewMapUI() {
                 {/* Drag Handle */}
                 <DragHandle onMouseDown={handleSidebarMouseDown} />
 
+                {/* Right Panel Toggle Button */}
+                <Box
+                  className={`${classes.rightPanelToggle} ${settings.isRightPanelCollapsed ? classes.collapsed : ""}`}
+                  onClick={toggleRightPanelCollapsed}
+                  style={{
+                    right: settings.isRightPanelCollapsed
+                      ? "10px"
+                      : `calc(${sidebarWidth}vw + 14px)`,
+                    transition: isDragging ? "none" : "right 0.1s ease",
+                  }}
+                >
+                  {settings.isRightPanelCollapsed ? (
+                    <IconChevronLeft
+                      size={16}
+                      className={classes.rightPanelToggleIcon}
+                    />
+                  ) : (
+                    <IconChevronRight
+                      size={16}
+                      className={classes.rightPanelToggleIcon}
+                    />
+                  )}
+                </Box>
+
                 {/* Sidebar - Right Side (dynamic width) */}
                 <Box
-                  className={classes.sidebar}
-                  style={{ width: `${sidebarWidth}%` }}
+                  className={`${classes.sidebar} ${settings.isRightPanelCollapsed ? classes.collapsedRight : ""}`}
+                  style={{
+                    width: settings.isRightPanelCollapsed
+                      ? "0%"
+                      : `${sidebarWidth}%`,
+                  }}
                 >
                   {/* Faction Tab Bar */}
                   {playerData && (
@@ -840,6 +887,12 @@ export function NewMapUI() {
           </Tabs>
         </Box>
       </AppShell.Main>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        opened={settingsModalOpened}
+        onClose={() => setSettingsModalOpened(false)}
+      />
     </AppShell>
   );
 }
@@ -918,6 +971,14 @@ function PlayerCardDisplay({
   }
 
   return null;
+}
+
+export function NewMapUI() {
+  return (
+    <SettingsProvider>
+      <NewMapUIContent />
+    </SettingsProvider>
+  );
 }
 
 export default NewMapUI;

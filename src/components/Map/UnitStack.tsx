@@ -10,7 +10,6 @@ import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/lookup/colors";
 import { useRef, useCallback } from "react";
 import { LawInPlay } from "../../data/types";
-
 import { lookupUnit } from "@/lookup/units";
 
 interface UnitStackProps {

@@ -99,6 +99,8 @@ type Props = {
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
   exhaustedPlanets?: string[];
+  alwaysShowControlTokens?: boolean;
+  showExhaustedPlanets?: boolean;
 };
 
 export const MapTile = React.memo<Props>(
@@ -124,6 +126,8 @@ export const MapTile = React.memo<Props>(
     overlaysEnabled,
     lawsInPlay,
     exhaustedPlanets = [],
+    alwaysShowControlTokens = true,
+    showExhaustedPlanets = true,
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
@@ -236,6 +240,17 @@ export const MapTile = React.memo<Props>(
         ([planetId, planetData]) => {
           if (!planetData.controlledBy) return [];
 
+          // Check if we should show control tokens based on the setting
+          if (!alwaysShowControlTokens) {
+            // Only show control tokens on planets with no units
+            const planetHasUnits = Object.values(allEntityPlacements).some(
+              (placement) =>
+                placement.planetName === planetId &&
+                placement.entityType === "unit"
+            );
+            if (planetHasUnits) return [];
+          }
+
           // Try to get coordinates from planet lookup first
           let x: number, y: number;
           if (planetCoords[planetId]) {
@@ -271,7 +286,13 @@ export const MapTile = React.memo<Props>(
           ];
         }
       );
-    }, [systemId, tileUnitData, factionToColor, allEntityPlacements]);
+    }, [
+      systemId,
+      tileUnitData,
+      factionToColor,
+      allEntityPlacements,
+      alwaysShowControlTokens,
+    ]);
 
     const planetCircles: React.ReactElement[] = React.useMemo(() => {
       if (!tileUnitData?.planets) {
@@ -308,9 +329,10 @@ export const MapTile = React.memo<Props>(
         const diameter = radius * 2;
 
         const isExhausted = exhaustedPlanets.includes(planetId);
-        const exhaustedBackdropFilter = isExhausted
-          ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
-          : {};
+        const exhaustedBackdropFilter =
+          isExhausted && showExhaustedPlanets
+            ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
+            : {};
 
         return [
           <div
@@ -334,6 +356,7 @@ export const MapTile = React.memo<Props>(
       handlePlanetMouseEnter,
       handlePlanetMouseLeave,
       exhaustedPlanets,
+      showExhaustedPlanets,
     ]);
 
     const commodityIndicators: React.ReactElement[] = React.useMemo(() => {
