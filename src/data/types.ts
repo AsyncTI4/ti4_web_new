@@ -169,7 +169,7 @@ export type TileUnitData = {
   ccs: string[];
   anomaly: boolean;
   production: { [factionColor: string]: number };
-  capacity: {
+  capacity?: {
     [factionColor: string]: { total: number; used: number; ignored: number };
   };
 };
@@ -185,7 +185,7 @@ export type LawInPlay = {
   mapText: string;
   electedInfo: string | null;
   electedFaction: string | null;
-  electedType: string;
+  electedType: string | null;
   controlTokens: string[];
   displaysElectedFaction: boolean;
 };
