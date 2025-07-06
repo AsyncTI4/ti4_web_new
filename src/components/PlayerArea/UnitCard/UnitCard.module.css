@@ -3,11 +3,14 @@
   border-radius: 8px;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.unitCard:hover {
+.animated {
+  transition: all 0.2s ease;
+}
+
+.animated:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.1);
 }
@@ -18,7 +21,7 @@
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.upgraded:hover {
+.animated.upgraded:hover {
   background: rgba(59, 130, 246, 0.25);
   box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4), 0 0 12px rgba(147, 197, 253, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
@@ -29,7 +32,7 @@
   box-shadow: 0 2px 8px rgba(107, 114, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.standard:hover {
+.animated.standard:hover {
   background: rgba(15, 23, 42, 0.7);
   box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2), 0 0 8px rgba(156, 163, 175, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }

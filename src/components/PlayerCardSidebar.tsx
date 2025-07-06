@@ -6,6 +6,7 @@ import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
+import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
@@ -291,10 +292,11 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </Surface>
 
-        {/* Units Section - Only show upgraded units */}
-        {upgradedUnits.length > 0 && (
+        {/* Units Section - Show command tokens and upgraded units */}
+        {(upgradedUnits.length > 0 || props.playerData.ccReinf >= 0) && (
           <Surface p="md">
             <SimpleGrid cols={4} spacing="8px">
+              {/* Upgraded Units */}
               {upgradedUnits.map((unitId, index) => {
                 const asyncId = getUnitAsyncId(unitId);
                 const deployedCount = asyncId
@@ -310,6 +312,16 @@ export default function PlayerCardSidebar(props: Props) {
                   />
                 );
               })}
+
+              {/* Command Token Card */}
+              {props.playerData.ccReinf !== undefined && (
+                <CommandTokenCard
+                  color={color}
+                  faction={faction}
+                  reinforcements={props.playerData.ccReinf}
+                  totalCapacity={16}
+                />
+              )}
             </SimpleGrid>
           </Surface>
         )}

@@ -258,6 +258,7 @@ export type PlayerData = {
   tacticalCC: number;
   fleetCC: number;
   strategicCC: number;
+  ccReinf: number;
   tg: number;
   commodities: number;
   commoditiesTotal: number;

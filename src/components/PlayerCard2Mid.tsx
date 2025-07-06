@@ -15,6 +15,7 @@ import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
+import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
 import { Nombox } from "./Nombox";
 import { StrategyCardBanner } from "./PlayerArea/StrategyCardBanner";
@@ -169,6 +170,16 @@ export default memo(function PlayerCard2Mid(props: Props) {
             />
           );
         })}
+
+        {/* Command Token Card */}
+        {props.playerData.ccReinf !== undefined && (
+          <CommandTokenCard
+            color={color}
+            faction={faction}
+            reinforcements={props.playerData.ccReinf}
+            totalCapacity={16}
+          />
+        )}
 
         {/* Add StasisInfantryCard if there are any stasisInfantry */}
         {stasisInfantry > 0 && (

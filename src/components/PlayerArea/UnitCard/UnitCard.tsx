@@ -1,12 +1,11 @@
-import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
 import { useState } from "react";
 import { units } from "../../../data/units";
 import { colors } from "../../../data/colors";
 import styles from "./UnitCard.module.css";
-import { cdnImage } from "../../../data/cdnImage";
 import { UnitDetailsCard } from "../UnitDetailsCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { Unit } from "@/components/shared/Unit";
+import { BaseCard } from "./BaseCard";
 
 type Props = {
   unitId: string;
@@ -39,10 +38,6 @@ export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
 
-  const cardClass = isUpgraded
-    ? `${styles.unitCard} ${styles.upgraded}`
-    : `${styles.unitCard} ${styles.standard}`;
-
   const unitCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
 
@@ -51,80 +46,24 @@ export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Stack
-          className={`${cardClass} ${styles.cardStack}`}
-          onClick={() => setOpened((o) => !o)}
-        >
-          {/* Upgraded unit special effects */}
-          {isUpgraded && (
-            <>
-              {/* Glassy sheen effect */}
-              <Box className={styles.glassySheen} />
-
-              {/* Subtle inner glow */}
-              <Box className={styles.innerGlow} />
-            </>
-          )}
-
-          {/* Faction icon badge for faction-specific units */}
-          {isFaction && (
-            <Box className={styles.factionBadge}>
-              <Image
-                src={cdnImage(
-                  `/factions/${unitData.faction?.toLowerCase()}.png`
-                )}
-                className={styles.factionIcon}
-              />
-            </Box>
-          )}
-
-          <Flex className={styles.imageContainer}>
+        <div>
+          <BaseCard
+            onClick={() => setOpened((o) => !o)}
+            isUpgraded={isUpgraded}
+            isFaction={isFaction}
+            faction={unitData.faction}
+            compact={compact}
+            reinforcements={reinforcements}
+            totalCapacity={unitCap}
+          >
             <Unit
               unitType={unitData.asyncId}
               colorAlias={colorAlias}
               faction={unitData.faction}
               className={compact ? styles.unitImageCompact : styles.unitImage}
             />
-          </Flex>
-
-          {!compact && (
-            <Stack className={styles.infoStack}>
-              <Group className={styles.mainGroup}>
-                {/* Reinforcements - show infinity for fighters and infantry, normal count for others */}
-                <Group className={styles.reinforcementGroup}>
-                  <Group className={styles.countGroup}>
-                    <Text
-                      className={
-                        reinforcements === 0
-                          ? styles.countTextZero
-                          : styles.countText
-                      }
-                    >
-                      {reinforcements}
-                    </Text>
-                    <Text className={styles.maxCountText}>/{unitCap}</Text>
-                  </Group>
-                </Group>
-
-                {/* Captured - commented out for now as requested */}
-                {/* {captured > 0 && (
-                  <Group gap={3} align="baseline">
-                    <Text
-                      className={styles.capturedLabel}
-                    >
-                      C
-                    </Text>
-                    <Text
-                      className={styles.capturedCount}
-                    >
-                      {captured}
-                    </Text>
-                  </Group>
-                )} */}
-              </Group>
-            </Stack>
-          )}
-        </Stack>
+          </BaseCard>
+        </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
         <UnitDetailsCard unitId={unitId} color={color} />
