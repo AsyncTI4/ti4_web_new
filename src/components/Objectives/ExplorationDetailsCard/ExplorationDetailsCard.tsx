@@ -9,8 +9,7 @@ type Props = {
   discard: string[];
 };
 
-export function ExplorationDeckDetailsCard({ type, deck, discard }: Props) {
-  // Memoized data processing using the generic utility
+export function ExplorationDeckDetailsCard({ deck, discard }: Props) {
   const sections = useMemo(() => {
     const deckData = processCardData(deck, getExploration);
     const discardData = processCardData(discard, getExploration);

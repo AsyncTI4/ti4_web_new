@@ -8,7 +8,6 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
-import { memo } from "react";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";

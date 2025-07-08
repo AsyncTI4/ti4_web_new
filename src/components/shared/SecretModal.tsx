@@ -15,14 +15,7 @@ type SecretItemProps = {
   phaseColor: "red" | "blue" | "orange";
 };
 
-function SecretItem({
-  name,
-  count,
-  text,
-  percentage,
-  phase,
-  phaseColor,
-}: SecretItemProps) {
+function SecretItem({ name, text, phase, phaseColor }: SecretItemProps) {
   return (
     <Box className={`${styles.secretItem} ${styles[phaseColor]}`}>
       <Stack gap="xs">

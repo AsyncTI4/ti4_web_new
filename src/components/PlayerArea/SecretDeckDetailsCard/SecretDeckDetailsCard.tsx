@@ -18,7 +18,7 @@ export function SecretDeckDetailsCard({ deck, discard, playerData }: Props) {
     const deckData = processSecretObjectives(deck, playerData);
     const discardData = processSecretObjectives(discard, playerData);
 
-    return createSecretSections(deckData, discardData, deck, discard);
+    return createSecretSections(deckData, discardData, deck);
   }, [deck, discard, playerData]);
 
   return <SecretModal sections={sections} />;

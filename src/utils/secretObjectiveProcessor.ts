@@ -112,8 +112,7 @@ export function processSecretObjectives(
 export function createSecretSections(
   deckData: ProcessedSecretData[],
   discardData: ProcessedSecretData[],
-  deckIds: string[],
-  discardIds: string[]
+  deckIds: string[]
 ): SecretSection[] {
   const phaseOrder = ["ACTION", "AGENDA", "STATUS"];
 
