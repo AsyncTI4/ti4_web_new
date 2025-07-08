@@ -204,24 +204,24 @@ export type StrategyCard = {
 type CardPoolData = {
   secretObjectiveDeckSize: number;
   secretObjectiveFullDeckSize: number;
+  secretObjectiveDeck: string[];
+  secretObjectiveDiscard: string[];
   actionCardDeckSize: number;
   actionCardFullDeckSize: number;
   actionCardDiscardSize: number;
   actionCardPurgedSize: number;
-  culturalExploreDeckSize: number;
-  culturalExploreDiscardSize: number;
-  culturalExploreFullDeckSize: number;
-  industrialExploreDeckSize: number;
-  industrialExploreDiscardSize: number;
-  industrialExploreFullDeckSize: number;
-  hazardousExploreDeckSize: number;
-  hazardousExploreDiscardSize: number;
-  hazardousExploreFullDeckSize: number;
-  frontierExploreDeckSize: number;
-  frontierExploreDiscardSize: number;
-  frontierExploreFullDeckSize: number;
+  culturalExploreDeck: string[];
+  culturalExploreDiscard: string[];
+  industrialExploreDeck: string[];
+  industrialExploreDiscard: string[];
+  hazardousExploreDeck: string[];
+  hazardousExploreDiscard: string[];
+  frontierExploreDeck: string[];
+  frontierExploreDiscard: string[];
   relicDeckSize: number;
   relicFullDeckSize: number;
+  relicDeck: string[];
+  relicDiscard: string[];
   agendaDeckSize: number;
   agendaFullDeckSize: number;
   agendaDiscardSize: number;
@@ -303,6 +303,7 @@ export type PlayerData = {
   leaders: Leader[];
   leaderIDs: string[];
   secretsScored: Record<string, number>;
+  knownUnscoredSecrets: Record<string, number>;
   numUnscoredSecrets: number;
   numScoreableSecrets: number;
   flexibleDisplayName: string;
@@ -479,4 +480,11 @@ export type Color = {
   primaryColorRef?: string;
   secondaryColorRef?: string;
   hue?: string;
+};
+
+export type Exploration = {
+  alias: string;
+  name: string;
+  text: string;
+  source: string;
 };

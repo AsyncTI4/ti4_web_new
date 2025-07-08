@@ -1,0 +1,9 @@
+.card {
+  cursor: pointer;
+}
+
+.popoverDropdown {
+  background: transparent;
+  border: none;
+  padding: 0;
+}

@@ -8,7 +8,6 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
-import { memo } from "react";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
@@ -69,7 +68,7 @@ type Props = {
   planetAttachments?: Record<string, string[]>;
 };
 
-export default memo(function PlayerCard2Mid(props: Props) {
+export default function PlayerCard2Mid(props: Props) {
   const {
     userName,
     faction,
@@ -89,6 +88,7 @@ export default memo(function PlayerCard2Mid(props: Props) {
     relics,
     planets,
     secretsScored,
+    knownUnscoredSecrets,
     unitsOwned,
     leaders,
     scs = [],
@@ -375,7 +375,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
           }}
           hiddenFrom="lg"
         >
-          <ScoredSecrets secretsScored={secretsScored} />
+          <ScoredSecrets
+            secretsScored={secretsScored}
+            knownUnscoredSecrets={knownUnscoredSecrets}
+          />
         </Grid.Col>
         <Grid.Col
           span={{
@@ -408,7 +411,10 @@ export default memo(function PlayerCard2Mid(props: Props) {
               acCount={acCount || 0}
             />
             {FragmentsAndCCSection}
-            <ScoredSecrets secretsScored={secretsScored} />
+            <ScoredSecrets
+              secretsScored={secretsScored}
+              knownUnscoredSecrets={knownUnscoredSecrets}
+            />
             <PromissoryNotesStack
               promissoryNotes={promissoryNotes}
               colorToFaction={props.colorToFaction}
@@ -590,4 +596,4 @@ export default memo(function PlayerCard2Mid(props: Props) {
       </Grid>
     </PlayerCardBox>
   );
-});
+}

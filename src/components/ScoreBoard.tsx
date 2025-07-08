@@ -55,7 +55,7 @@ function ScoreBoard({
             <FactionsInGame playerData={playerData} />
             <UnpickedSCs strategyCards={strategyCards} />
           </Stack>
-          <CardPool cardPool={cardPool} />
+          <CardPool cardPool={cardPool} playerData={playerData} />
         </SimpleGrid>
       </Box>
 
