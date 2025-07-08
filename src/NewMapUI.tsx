@@ -66,7 +66,7 @@ import { SettingsProvider, useSettings } from "./context/SettingsContext";
 import { SettingsModal } from "./components/SettingsModal";
 
 // Magic constant for required version schema
-const REQUIRED_VERSION_SCHEMA = 4;
+const REQUIRED_VERSION_SCHEMA = 5;
 
 // TypeScript version of useTabManagement hook for NewMapUI
 function useTabManagementNewUI() {

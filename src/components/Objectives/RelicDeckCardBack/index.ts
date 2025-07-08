@@ -1,0 +1,1 @@
+export { RelicDeckCardBack } from "./RelicDeckCardBack";

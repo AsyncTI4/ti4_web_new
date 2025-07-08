@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PlayerDataResponse } from "../data/types";
 import { enhancePlayerData } from "@/data/enhancePlayerData";
 import { useMemo } from "react";
+import { gameState } from "./gameState";
 
 export function usePlayerData(gameId: string) {
   const apiUrl = import.meta.env.DEV
@@ -19,7 +20,7 @@ export function usePlayerDataEnhanced(gameId: string) {
   const { data, isLoading, isError, refetch } = usePlayerData(gameId);
 
   const enhancedPlayerData = useMemo(
-    () => (data ? enhancePlayerData(data) : undefined),
+    () => (data ? enhancePlayerData(gameState) : undefined),
     [data]
   );
 

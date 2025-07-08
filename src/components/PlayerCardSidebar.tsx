@@ -49,6 +49,7 @@ export default function PlayerCardSidebar(props: Props) {
     relics,
     planets,
     secretsScored,
+    knownUnscoredSecrets,
     unitsOwned,
     leaders,
 
@@ -268,7 +269,10 @@ export default function PlayerCardSidebar(props: Props) {
               acCount={props.playerData.acCount || 0}
             />
             {FragmentsAndCCSection}
-            <ScoredSecrets secretsScored={secretsScored} />
+            <ScoredSecrets
+              secretsScored={secretsScored}
+              knownUnscoredSecrets={knownUnscoredSecrets}
+            />
           </Stack>
           <Stack gap={8}>
             <Leaders leaders={leaders} />

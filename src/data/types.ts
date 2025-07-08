@@ -204,6 +204,8 @@ export type StrategyCard = {
 type CardPoolData = {
   secretObjectiveDeckSize: number;
   secretObjectiveFullDeckSize: number;
+  secretObjectiveDeck: string[];
+  secretObjectiveDiscard: string[];
   actionCardDeckSize: number;
   actionCardFullDeckSize: number;
   actionCardDiscardSize: number;
@@ -218,6 +220,8 @@ type CardPoolData = {
   frontierExploreDiscard: string[];
   relicDeckSize: number;
   relicFullDeckSize: number;
+  relicDeck: string[];
+  relicDiscard: string[];
   agendaDeckSize: number;
   agendaFullDeckSize: number;
   agendaDiscardSize: number;
@@ -299,6 +303,7 @@ export type PlayerData = {
   leaders: Leader[];
   leaderIDs: string[];
   secretsScored: Record<string, number>;
+  knownUnscoredSecrets: Record<string, number>;
   numUnscoredSecrets: number;
   numScoreableSecrets: number;
   flexibleDisplayName: string;
@@ -478,8 +483,8 @@ export type Color = {
 };
 
 export type Exploration = {
-    alias: string;
-    name: string;
-    text: string;
-    source: string;
+  alias: string;
+  name: string;
+  text: string;
+  source: string;
 };

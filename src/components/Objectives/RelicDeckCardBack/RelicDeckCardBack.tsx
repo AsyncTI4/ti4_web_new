@@ -3,16 +3,15 @@ import { useState } from "react";
 import { Cardback } from "../../PlayerArea/Cardback";
 import { cdnImage } from "@/data/cdnImage";
 import { SmoothPopover } from "../../shared/SmoothPopover";
-import { ExplorationDeckDetailsCard } from "../ExplorationDeckDetailsCard";
-import styles from "./ExplorationCardBack.module.css";
+import { RelicDeckDetailsCard } from "../../PlayerArea/RelicDeckDetailsCard";
+import styles from "./RelicDeckCardBack.module.css";
 
 type Props = {
-  type: string;
   deck: string[];
   discard: string[];
 };
 
-export function ExplorationCardBack({ type, deck, discard }: Props) {
+export function RelicDeckCardBack({ deck, discard }: Props) {
   const [opened, setOpened] = useState(false);
 
   return (
@@ -23,16 +22,15 @@ export function ExplorationCardBack({ type, deck, discard }: Props) {
           onClick={() => setOpened((o) => !o)}
         >
           <Cardback
-            key={type}
-            src={cdnImage(`/player_area/cardback_${type.toLowerCase()}.jpg`)}
-            alt={`${type} explore`}
+            src={cdnImage("/player_area/cardback_relic.jpg")}
+            alt="relics"
             count={deck?.length ?? 0}
             size="lg"
           />
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        <ExplorationDeckDetailsCard type={type} deck={deck} discard={discard} />
+        <RelicDeckDetailsCard deck={deck} discard={discard} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

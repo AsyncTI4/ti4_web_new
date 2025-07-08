@@ -1,19 +1,18 @@
 import { useMemo } from "react";
-import { getExploration } from "@/lookup/explorations";
+import { getRelicData } from "@/lookup/relics";
 import { processCardData, createCardSections } from "@/utils/cardDataProcessor";
 import { CardDetailsModal } from "@/components/shared/CardDetailsModal";
 
 type Props = {
-  type: string;
   deck: string[];
   discard: string[];
 };
 
-export function ExplorationDeckDetailsCard({ type, deck, discard }: Props) {
+export function RelicDeckDetailsCard({ deck, discard }: Props) {
   // Memoized data processing using the generic utility
   const sections = useMemo(() => {
-    const deckData = processCardData(deck, getExploration);
-    const discardData = processCardData(discard, getExploration);
+    const deckData = processCardData(deck, getRelicData);
+    const discardData = processCardData(discard, getRelicData);
 
     return createCardSections(
       deckData,
