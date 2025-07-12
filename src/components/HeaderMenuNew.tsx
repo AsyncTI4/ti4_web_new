@@ -283,9 +283,11 @@ function DropdownView({
               <IconPencil
                 size={14}
                 className={classes.editIcon}
-                onClick={(event: React.MouseEvent) =>
-                  handleEditClick(item, event)
-                }
+                onClick={(event: React.MouseEvent) => {
+                  console.log("edit click");
+                  event.preventDefault();
+                  handleEditClick(item, event);
+                }}
               />
               <div
                 className={classes.closeButton}
@@ -318,6 +320,7 @@ function DropdownView({
         combobox.closeDropdown();
         changeTab(val);
       }}
+      zIndex={20000}
     >
       <Combobox.Target>
         <InputBase
@@ -325,7 +328,6 @@ function DropdownView({
           rightSectionPointerEvents="none"
           onClick={() => combobox.openDropdown()}
           onFocus={() => combobox.openDropdown()}
-          onBlur={() => combobox.closeDropdown()}
           value={localStorage.getItem(mapId) || mapId}
           className={classes.comboboxInput}
         />

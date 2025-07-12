@@ -255,7 +255,6 @@ function DropdownView({
           rightSectionPointerEvents="none"
           onClick={() => combobox.openDropdown()}
           onFocus={() => combobox.openDropdown()}
-          onBlur={() => combobox.closeDropdown()}
           value={localStorage.getItem(mapId) || mapId}
           styles={{ input: { cursor: "pointer" } }}
         />

@@ -224,7 +224,7 @@
 }
 
 .dropdown {
-  background: transparent;
+  background: rgba(15, 23, 42, 0.8);
   border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 8px;
   box-shadow:
