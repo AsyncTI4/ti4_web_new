@@ -17,6 +17,7 @@ import {
 import { IconBrandDiscord } from "@tabler/icons-react";
 import Logo from "./components/Logo";
 import { DiscordLogin } from "./components/DiscordLogin";
+import { Surface } from "./components/PlayerArea/Surface";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
@@ -60,7 +61,7 @@ export default function LandingPage() {
 
   return (
     <AppShell header={{ height: 60 }}>
-      <AppShell.Header>
+      <AppShell.Header className="appHeader">
         <Group align="center" h="100%" px="sm" gap="sm">
           <Logo />
           <div className="logo-divider" />
@@ -69,7 +70,7 @@ export default function LandingPage() {
             size="sm"
             fw={600}
             underline="hover"
-            c="orange"
+            c="gray.4"
             ml="sm"
             mr="sm"
             component={Link}
@@ -85,22 +86,21 @@ export default function LandingPage() {
       <AppShell.Main>
         <Stack gap={0} w="100%">
           <Box
-            pt={60}
-            pb={120}
+            className="heroSection"
             style={{
               backgroundImage: 'url("/tilebg.jpg")',
               backgroundRepeat: "repeat",
               backgroundSize: "auto",
             }}
           >
-            <Container size={1400}>
-              <Grid align="center" mt="xl">
-                <Grid.Col span={{ base: 12, lg: 6 }}>
-                  <Stack spacing="xl">
+            <Container size={1400} style={{ position: "relative", zIndex: 3 }}>
+              <Grid align="center" mt={0}>
+                <Grid.Col span={{ base: 12, lg: 4 }}>
+                  <Stack spacing="xl" className="fadeInUp">
                     <Title
                       order={1}
                       className="gradient-text space-title"
-                      size={80}
+                      size={70}
                       visibleFrom="md"
                     >
                       Async Twilight Imperium
@@ -113,7 +113,13 @@ export default function LandingPage() {
                     >
                       Async Twilight Imperium
                     </Title>
-                    <Text size={28} lh={1.2} fw={500} c="orange.1">
+                    <Text
+                      size={28}
+                      lh={1.2}
+                      fw={500}
+                      c="gray.2"
+                      className="enhancedText fadeInUp delay-1"
+                    >
                       Conquer the galaxy at your own pace. Experience the epic
                       space opera of Twilight Imperium, played entirely through
                       Discord.
@@ -125,51 +131,43 @@ export default function LandingPage() {
                       rel="noopener noreferrer"
                       size="xl"
                       variant="filled"
-                      color="orange.6"
+                      className="enhancedButton fadeInUp delay-2"
                       mt="xl"
-                      style={{
-                        borderRadius: "var(--mantine-radius-lg)",
-                      }}
                       leftSection={<IconBrandDiscord size={36} />}
                     >
                       Join our Discord
                     </Button>
                   </Stack>
                 </Grid.Col>
-                <Grid.Col span={{ base: 12, lg: 6 }}>
-                  <Box align="center">
-                    <Image
-                      src="/mapimage.webp"
-                      alt="Twilight Imperium Game"
-                      radius="md"
-                      fit="contain"
-                      style={{
-                        maxWidth: "600px",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
+                <Grid.Col span={{ base: 12, lg: 8 }}>
+                  <Box className="mapImageContainer fadeInUp delay-3">
+                    <div className="mapImageWrapper">
+                      <Image
+                        src="/mapimage.webp"
+                        alt="Twilight Imperium Game"
+                        radius="lg"
+                        fit="contain"
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          position: "relative",
+                          zIndex: 2,
+                        }}
+                      />
+                    </div>
                   </Box>
                 </Grid.Col>
               </Grid>
             </Container>
           </Box>
-          <Box
-            pt={120}
-            pb={120}
-            style={{
-              background: `linear-gradient(to bottom,
-                          black 0.25%,
-                          ${theme.colors.dark[9]} 5%)`,
-            }}
-          >
-            <Container size={1600}>
+          <Box pt={120} pb={120} className="enhancedSection sectionVariant1">
+            <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
               <Title
                 order={2}
                 align="center"
                 mb={64}
                 size={52}
-                c="orange.4"
+                c="blue.4"
                 className="gradient-text space-title"
               >
                 How it Works
@@ -179,11 +177,16 @@ export default function LandingPage() {
                 <Grid align="center">
                   <Grid.Col span={{ base: 12, lg: 6 }}>
                     <List spacing="xl" size="lg" center icon={<></>}>
-                      <List.Item>
-                        <Text size="xl" fw={700} c="orange.4">
+                      <List.Item className="enhancedListItem">
+                        <Text size="xl" fw={700} c="blue.4">
                           Play at your pace
                         </Text>
-                        <Text size="lg" c="orange.2" mt="xs">
+                        <Text
+                          size="lg"
+                          c="gray.3"
+                          mt="xs"
+                          className="enhancedText"
+                        >
                           Take your turns when it's convenient for you, no
                           real-time commitment needed. Our asynchronous play
                           system allows you to enjoy the epic scale of Twilight
@@ -192,11 +195,16 @@ export default function LandingPage() {
                         </Text>
                       </List.Item>
 
-                      <List.Item>
-                        <Text size="xl" fw={700} c="orange.4">
+                      <List.Item className="enhancedListItem">
+                        <Text size="xl" fw={700} c="blue.4">
                           Easy to use interface
                         </Text>
-                        <Text size="lg" c="orange.2" mt="xs">
+                        <Text
+                          size="lg"
+                          c="gray.3"
+                          mt="xs"
+                          className="enhancedText"
+                        >
                           The Discord bot provides buttons and commands for all
                           game actions. Players use these to move units, make
                           decisions, and interact with game systems directly in
@@ -204,11 +212,16 @@ export default function LandingPage() {
                         </Text>
                       </List.Item>
 
-                      <List.Item>
-                        <Text size="xl" fw={700} c="orange.4">
+                      <List.Item className="enhancedListItem">
+                        <Text size="xl" fw={700} c="blue.4">
                           Constantly updating map
                         </Text>
-                        <Text size="lg" c="orange.2" mt="xs">
+                        <Text
+                          size="lg"
+                          c="gray.3"
+                          mt="xs"
+                          className="enhancedText"
+                        >
                           As players input commands, our system automatically
                           updates a visual map of the game state. This map is
                           accessible through the AsyncTI4 website or directly
@@ -218,11 +231,16 @@ export default function LandingPage() {
                         </Text>
                       </List.Item>
 
-                      <List.Item>
-                        <Text size="xl" fw={700} c="orange.4">
+                      <List.Item className="enhancedListItem">
+                        <Text size="xl" fw={700} c="blue.4">
                           Fully reversible
                         </Text>
-                        <Text size="lg" c="orange.2" mt="xs">
+                        <Text
+                          size="lg"
+                          c="gray.3"
+                          mt="xs"
+                          className="enhancedText"
+                        >
                           Easily undo actions and correct mistakes. Game masters
                           can manually adjust the game state, allowing for house
                           rules and creative solutions. Our flexible system
@@ -232,32 +250,41 @@ export default function LandingPage() {
                     </List>
                   </Grid.Col>
                   <Grid.Col span={{ base: 12, lg: 6 }}>
-                    <Image
-                      src="/discord.png"
-                      alt="Join Discord"
-                      radius="xl"
-                      height={500}
-                    />
+                    <Surface pattern="circle" cornerAccents>
+                      <Image
+                        src="/discord.png"
+                        alt="Join Discord"
+                        radius="xl"
+                        height={500}
+                      />
+                    </Surface>
                   </Grid.Col>
                 </Grid>
               </Box>
             </Container>
           </Box>
 
-          <Box pt={60} pb={120} bg="dark.9">
-            <Container size={1600}>
+          <Box pt={60} pb={120} className="enhancedSection sectionVariant2">
+            <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
               <Title
                 order={2}
                 align="center"
                 mb={32}
                 size={52}
-                c="orange.4"
-                className="gradient-text space-title"
+                c="violet.4"
+                className="gradient-text-purple space-title"
               >
                 Active Games
               </Title>
 
-              <Text size="lg" c="orange.2" mt="xs" align="center" mb={32}>
+              <Text
+                size="lg"
+                c="violet.2"
+                mt="xs"
+                align="center"
+                mb={32}
+                className="enhancedText"
+              >
                 Peek into the current state of active games to see what it looks
                 like!
               </Text>
@@ -278,17 +305,15 @@ export default function LandingPage() {
                       padding="lg"
                       radius="md"
                       withBorder
-                      style={{
-                        backgroundColor: "rgba(31, 41, 55, 0.8)",
-                        borderColor: "rgba(255, 128, 0, 0.5)",
-                      }}
+                      className="cleanCard"
                     >
-                      <Card.Section withBorder>
+                      <Card.Section>
                         <Text
                           size="xl"
                           fw={700}
-                          c="orange.4"
+                          c="violet.4"
                           p="md"
+                          className="enhancedText"
                           style={{
                             whiteSpace: "nowrap",
                             overflow: "hidden",
@@ -301,16 +326,20 @@ export default function LandingPage() {
 
                       <Stack spacing={2} mt="md">
                         {mapDetail.mapTemplateID != "null" ? (
-                          <Text c="orange.2">
+                          <Text c="violet.2" className="enhancedText">
                             Type: {mapDetail.mapTemplateID}
                           </Text>
                         ) : (
-                          <Text c="orange.2">Type: Other</Text>
+                          <Text c="violet.2" className="enhancedText">
+                            Type: Other
+                          </Text>
                         )}
-                        <Text c="orange.2">
+                        <Text c="violet.2" className="enhancedText">
                           Current Round: {mapDetail.round}
                         </Text>
-                        <Text c="orange.2">VPs: {mapDetail.vp}</Text>
+                        <Text c="violet.2" className="enhancedText">
+                          VPs: {mapDetail.vp}
+                        </Text>
                       </Stack>
 
                       <Button
@@ -318,9 +347,10 @@ export default function LandingPage() {
                         mt="lg"
                         size="md"
                         variant="gradient"
-                        gradient={{ from: "orange", to: "red" }}
+                        gradient={{ from: "violet", to: "purple" }}
                         component={Link}
                         to={`/game/${mapDetail.name}`}
+                        className="purpleButton"
                       >
                         Observe Game
                       </Button>
@@ -330,20 +360,27 @@ export default function LandingPage() {
               </Grid>
             </Container>
           </Box>
-          <Box pt={120} pb={120} bg="dark.9">
-            <Container size={1600}>
+          <Box pt={120} pb={120} className="enhancedSection sectionVariant3">
+            <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
               <Title
                 order={2}
                 align="center"
                 mb={32}
                 size={52}
-                c="orange.4"
-                className="gradient-text space-title"
+                c="gray.4"
+                className="gradient-text-grey space-title"
               >
                 Join our community
               </Title>
 
-              <Text size="lg" c="orange.2" mt="xs" align="center" mb={32}>
+              <Text
+                size="lg"
+                c="gray.3"
+                mt="xs"
+                align="center"
+                mb={32}
+                className="enhancedText"
+              >
                 We're a vibrant community that loves to push the boundaries of
                 Twilight Imperium! From hosting epic 32-player games to creating
                 wild mods like 'Rotato Potato' (where map rings rotate each
@@ -352,12 +389,14 @@ export default function LandingPage() {
                 galaxy of possibilities!
               </Text>
 
-              <WidgetBot
-                server="943410040369479690"
-                channel="1025083568839471165"
-                width="100%"
-                height="600px"
-              />
+              <Surface pattern="grid" cornerAccents>
+                <WidgetBot
+                  server="943410040369479690"
+                  channel="1025083568839471165"
+                  width="100%"
+                  height="600px"
+                />
+              </Surface>
             </Container>
           </Box>
         </Stack>
