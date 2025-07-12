@@ -44,6 +44,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                       onClick={() => setSelectedObjective(objective.key)}
                       scoredFactions={objective.scoredFactions}
                       playerData={playerData}
+                      multiScoring={objective.multiScoring}
                     />
                   </div>
                 </SmoothPopover.Target>
@@ -90,6 +91,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                       onClick={() => setSelectedObjective(objective.key)}
                       scoredFactions={objective.scoredFactions}
                       playerData={playerData}
+                      multiScoring={objective.multiScoring}
                     />
                   </div>
                 </SmoothPopover.Target>
@@ -126,6 +128,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                 revealed={objective.revealed}
                 scoredFactions={objective.scoredFactions}
                 playerData={playerData}
+                multiScoring
               />
             ))}
           </Stack>

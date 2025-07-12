@@ -14,6 +14,7 @@ type Props = {
   onClick?: () => void;
   scoredFactions?: string[];
   playerData?: PlayerData[];
+  multiScoring?: boolean;
 };
 
 export function CompactObjective({
@@ -23,11 +24,73 @@ export function CompactObjective({
   revealed = true,
   onClick,
   scoredFactions = [],
+  playerData = [],
+  multiScoring = false,
 }: Props) {
   const gradientClasses = getGradientClasses(color);
-
-  // Gray objectives should not be clickable
   const isClickable = revealed && color !== "gray";
+
+  const renderFactionIcons = () => {
+    if (!revealed || !playerData || playerData.length === 0) return null;
+
+    console.log("name", name, "multiScoring", multiScoring);
+
+    if (multiScoring) {
+      // For multiscoring objectives, show only the scored factions
+      return (
+        <Group gap={2} className={styles.factionIcons}>
+          {scoredFactions.map((faction, index) => (
+            <CircularFactionIcon
+              key={`${faction}-${index}`}
+              faction={faction}
+              size={20}
+            />
+          ))}
+        </Group>
+      );
+    } else {
+      // For non-multiscoring objectives, show consistent slots for all factions
+      // Sort faction names alphabetically for consistent ordering
+      const sortedFactions = [...playerData]
+        .sort((a, b) => a.faction.localeCompare(b.faction))
+        .map((p) => p.faction);
+
+      return (
+        <Group gap={2} className={styles.factionIcons}>
+          {sortedFactions.map((faction) => {
+            const hasScored = scoredFactions.includes(faction);
+            return (
+              <Box
+                key={faction}
+                style={{
+                  width: 20,
+                  height: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {hasScored ? (
+                  <CircularFactionIcon faction={faction} size={20} />
+                ) : (
+                  // Empty slot placeholder
+                  <Box
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                    }}
+                  />
+                )}
+              </Box>
+            );
+          })}
+        </Group>
+      );
+    }
+  };
 
   return (
     <Box
@@ -49,18 +112,7 @@ export function CompactObjective({
             {revealed ? name : "UNREVEALED"}
           </Text>
 
-          {/* Faction icons for scored players */}
-          {revealed && scoredFactions.length > 0 && (
-            <Group gap={2} className={styles.factionIcons}>
-              {scoredFactions.map((faction, index) => (
-                <CircularFactionIcon
-                  key={`${faction}-${index}`}
-                  faction={faction}
-                  size={20}
-                />
-              ))}
-            </Group>
-          )}
+          {renderFactionIcons()}
         </Box>
       </Shimmer>
     </Box>
