@@ -23,6 +23,8 @@ import {
   IconChevronRight,
   IconFlask,
   IconEye,
+  IconLinkPlus,
+  IconCrosshair,
   IconSettings,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
@@ -113,11 +115,11 @@ function useTabManagementNewUI() {
 
 type ActiveArea =
   | {
-      type: "faction";
-      faction: string;
-      unitId?: string;
-      coords: { x: number; y: number };
-    }
+    type: "faction";
+    faction: string;
+    unitId?: string;
+    coords: { x: number; y: number };
+  }
   | { type: "tech" }
   | { type: "components" }
   | { type: "strength" }
@@ -152,6 +154,8 @@ function NewMapUIContent() {
     settings,
     toggleOverlays,
     toggleTechSkipsMode,
+    toggleAttachmentsMode,
+    togglePDSMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
   } = useSettings();
@@ -397,6 +401,26 @@ function NewMapUIContent() {
               >
                 <IconFlask size={16} />
               </Button>
+              <Button
+                variant={settings.attachmentsMode ? "filled" : "subtle"}
+                size="sm"
+                color={settings.attachmentsMode ? "cyan" : "gray"}
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+                onClick={toggleAttachmentsMode}
+              >
+                <IconLinkPlus size={16} />
+              </Button>
+              <Button
+                variant={settings.pdsMode ? "filled" : "subtle"}
+                size="sm"
+                color={settings.pdsMode ? "cyan" : "gray"}
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+                onClick={togglePDSMode}
+              >
+                <IconCrosshair size={16} />
+              </Button>
               <Box
                 style={{
                   borderLeft: "1px solid var(--mantine-color-dark-4)",
@@ -454,7 +478,7 @@ function NewMapUIContent() {
                 >
                   {/* Left Panel - Only render when there's data */}
                   {(objectives && playerData) ||
-                  (lawsInPlay && lawsInPlay.length > 0) ? (
+                    (lawsInPlay && lawsInPlay.length > 0) ? (
                     <>
                       {/* Left Sidebar Overlay */}
                       <Box

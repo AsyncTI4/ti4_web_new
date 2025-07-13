@@ -67,6 +67,52 @@ const systemHasTechSkips = (
   return false;
 };
 
+// Helper function to check if a system has tech skips
+const systemHasAttachment = (
+  tileUnitData?: TileUnitData
+): boolean => {
+  // Check planet attachments
+  if (tileUnitData?.planets) {
+    for (const [_, planetData] of Object.entries(tileUnitData.planets)) {
+      if (planetData?.entities) {
+        for (const entities of Object.values(planetData.entities)) {
+          if (Array.isArray(entities)) {
+            for (const entity of entities) {
+              if (entity.entityType === "attachment") {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+  }
+  return false;
+};
+
+// Helper function to check if a system has tech skips
+const systemHasPDS = (
+  tileUnitData?: TileUnitData
+): boolean => {
+  // Check planet attachments
+  if (tileUnitData?.planets) {
+    for (const [_, planetData] of Object.entries(tileUnitData.planets)) {
+      if (planetData?.entities) {
+        for (const entities of Object.values(planetData.entities)) {
+          if (Array.isArray(entities)) {
+            for (const entity of entities) {
+              if (entity.entityType === "unit" && entity.entityId === "pds") {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+  }
+  return false;
+};
+
 type Props = {
   systemId: string;
   position: { x: number; y: number };
@@ -96,6 +142,8 @@ type Props = {
   isSelected?: boolean;
   isHovered?: boolean;
   techSkipsMode?: boolean;
+  attachmentsMode?: boolean;
+  pdsMode?: boolean;
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
   exhaustedPlanets?: string[];
@@ -123,6 +171,8 @@ export const MapTile = React.memo<Props>(
     isHovered,
     ringPosition,
     techSkipsMode,
+    pdsMode,
+    attachmentsMode,
     overlaysEnabled,
     lawsInPlay,
     exhaustedPlanets = [],
@@ -459,6 +509,24 @@ export const MapTile = React.memo<Props>(
       return null;
     }, [tileUnitData, allEntityPlacements]);
 
+    const filterModeOpacity: number = React.useMemo(() => {
+      if (techSkipsMode && attachmentsMode) {
+        if(systemHasTechSkips(systemId, tileUnitData) && systemHasAttachment(tileUnitData)) {
+          return 1.0
+        } else {
+          return 0.2
+        }
+      } else if (techSkipsMode) {
+        return systemHasTechSkips(systemId, tileUnitData) ? 1.0 : 0.2;
+      } else if (attachmentsMode) {
+        return systemHasAttachment(tileUnitData) ? 1.0 : 0.2;
+      } 
+
+      return 1.0;
+
+    }, [systemId, tileUnitData]);
+
+
     return (
       <div
         className={`${classes.mapTile} ${className || ""} ${
@@ -467,11 +535,7 @@ export const MapTile = React.memo<Props>(
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          opacity: techSkipsMode
-            ? systemHasTechSkips(systemId, tileUnitData)
-              ? 1.0
-              : 0.2
-            : 1,
+          opacity: filterModeOpacity,
           ...style,
         }}
         onClick={onTileSelect ? () => onTileSelect(systemId) : undefined}

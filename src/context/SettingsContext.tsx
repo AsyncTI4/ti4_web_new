@@ -10,6 +10,8 @@ export type Settings = {
   overlaysEnabled: boolean;
   alwaysShowControlTokens: boolean;
   techSkipsMode: boolean;
+  attachmentsMode: boolean;
+  pdsMode: boolean;
   isLeftPanelCollapsed: boolean;
   isRightPanelCollapsed: boolean;
   showExhaustedPlanets: boolean;
@@ -19,6 +21,8 @@ const DEFAULT_SETTINGS: Settings = {
   overlaysEnabled: false,
   alwaysShowControlTokens: true,
   techSkipsMode: false,
+  attachmentsMode: false,
+  pdsMode: false,
   isLeftPanelCollapsed: false,
   isRightPanelCollapsed: false,
   showExhaustedPlanets: true,
@@ -56,6 +60,8 @@ type SettingsContextValue = {
   toggleOverlays: () => void;
   toggleAlwaysShowControlTokens: () => void;
   toggleTechSkipsMode: () => void;
+  toggleAttachmentsMode: () => void;
+  togglePDSMode: () => void;
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   toggleShowExhaustedPlanets: () => void;
@@ -94,6 +100,14 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     updateSettings({ techSkipsMode: !settings.techSkipsMode });
   }, [settings.techSkipsMode, updateSettings]);
 
+  const toggleAttachmentsMode = useCallback(() => {
+    updateSettings({ attachmentsMode: !settings.attachmentsMode });
+  }, [settings.attachmentsMode, updateSettings]);
+
+  const togglePDSMode = useCallback(() => {
+    updateSettings({ pdsMode: !settings.pdsMode });
+  }, [settings.pdsMode, updateSettings]);
+
   const toggleLeftPanelCollapsed = useCallback(() => {
     updateSettings({ isLeftPanelCollapsed: !settings.isLeftPanelCollapsed });
   }, [settings.isLeftPanelCollapsed, updateSettings]);
@@ -112,6 +126,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleOverlays,
     toggleAlwaysShowControlTokens,
     toggleTechSkipsMode,
+    toggleAttachmentsMode,
+    togglePDSMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     toggleShowExhaustedPlanets,
