@@ -284,7 +284,6 @@ function DropdownView({
                 size={14}
                 className={classes.editIcon}
                 onClick={(event: React.MouseEvent) => {
-                  console.log("edit click");
                   event.preventDefault();
                   handleEditClick(item, event);
                 }}

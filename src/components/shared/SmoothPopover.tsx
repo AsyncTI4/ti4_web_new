@@ -35,6 +35,13 @@ function SmoothPopoverBase({
         duration: 280,
         timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
       }}
+      styles={{
+        dropdown: {
+          background: "transparent",
+          padding: 0,
+          border: "none",
+        },
+      }}
       {...props}
     >
       {children}

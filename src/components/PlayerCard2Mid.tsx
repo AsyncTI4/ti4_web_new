@@ -12,6 +12,7 @@ import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
+import { PlanetAbilityCard } from "./PlayerArea/PlanetAbilityCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
@@ -37,6 +38,7 @@ import { PlayerCardBox } from "./PlayerCardBox";
 import { getTokenImagePath } from "../data/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getUnitAsyncId } from "@/lookup/units";
+import { getPlanetData } from "@/lookup/planets";
 
 // Strategy card names and colors mapping
 const SC_NAMES = {
@@ -123,6 +125,8 @@ export default function PlayerCard2Mid(props: Props) {
     nombox,
   } = props.playerData;
   const promissoryNotes = promissoryNotesInPlayArea;
+  const exhaustedPlanetAbilities =
+    props.playerData.exhaustedPlanetAbilities || [];
 
   // Create planet economics object from pre-calculated values
   const planetEconomics = {
@@ -512,14 +516,37 @@ export default function PlayerCard2Mid(props: Props) {
                   }}
                 >
                   <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
-                    {planets.map((planetId, index) => (
-                      <PlanetCard
-                        key={index}
-                        planetId={planetId}
-                        exhausted={exhaustedPlanets.includes(planetId)}
-                        attachments={props.planetAttachments?.[planetId] || []}
-                      />
-                    ))}
+                    {planets.map((planetId, index) => {
+                      const planetData = getPlanetData(planetId);
+                      const hasLegendaryAbility =
+                        planetData?.legendaryAbilityName &&
+                        planetData?.legendaryAbilityText;
+
+                      return (
+                        <div
+                          key={index}
+                          style={{ display: "flex", gap: "4px" }}
+                        >
+                          <PlanetCard
+                            planetId={planetId}
+                            exhausted={exhaustedPlanets.includes(planetId)}
+                            attachments={
+                              props.planetAttachments?.[planetId] || []
+                            }
+                          />
+                          {hasLegendaryAbility && (
+                            <PlanetAbilityCard
+                              planetId={planetId}
+                              abilityName={planetData.legendaryAbilityName!}
+                              abilityText={planetData.legendaryAbilityText!}
+                              exhausted={exhaustedPlanetAbilities.includes(
+                                planetId
+                              )}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
                   </Group>
                 </Surface>
               </Group>

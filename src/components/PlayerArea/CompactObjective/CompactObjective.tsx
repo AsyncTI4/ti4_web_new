@@ -33,8 +33,6 @@ export function CompactObjective({
   const renderFactionIcons = () => {
     if (!revealed || !playerData || playerData.length === 0) return null;
 
-    console.log("name", name, "multiScoring", multiScoring);
-
     if (multiScoring) {
       // For multiscoring objectives, show only the scored factions
       return (

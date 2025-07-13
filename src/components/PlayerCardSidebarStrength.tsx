@@ -1,11 +1,13 @@
 import { Group, Text, Stack, Box, Image, Grid } from "@mantine/core";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
+import { PlanetAbilityCard } from "./PlayerArea/PlanetAbilityCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { PlayerData } from "../data/types";
 import { cdnImage } from "../data/cdnImage";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { ArmyStats } from "./PlayerArea";
+import { getPlanetData } from "@/lookup/planets";
 
 type Props = {
   playerData: PlayerData;
@@ -28,6 +30,8 @@ export default function PlayerCardSidebarStrength(props: Props) {
   } = props.playerData;
 
   const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
+  const exhaustedPlanetAbilities =
+    props.playerData.exhaustedPlanetAbilities || [];
 
   // Create planet economics object from pre-calculated values
   const planetEconomics = {
@@ -121,14 +125,30 @@ export default function PlayerCardSidebarStrength(props: Props) {
           <Stack gap="xs" my="xs">
             <ResourceInfluenceCompact planetEconomics={planetEconomics} />
             <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
-              {planets.map((planetId, index) => (
-                <PlanetCard
-                  key={index}
-                  planetId={planetId}
-                  exhausted={exhaustedPlanets.includes(planetId)}
-                  attachments={props.planetAttachments?.[planetId] || []}
-                />
-              ))}
+              {planets.map((planetId, index) => {
+                const planetData = getPlanetData(planetId);
+                const hasLegendaryAbility =
+                  planetData?.legendaryAbilityName &&
+                  planetData?.legendaryAbilityText;
+
+                return (
+                  <div key={index} style={{ display: "flex", gap: "4px" }}>
+                    <PlanetCard
+                      planetId={planetId}
+                      exhausted={exhaustedPlanets.includes(planetId)}
+                      attachments={props.planetAttachments?.[planetId] || []}
+                    />
+                    {hasLegendaryAbility && (
+                      <PlanetAbilityCard
+                        planetId={planetId}
+                        abilityName={planetData.legendaryAbilityName!}
+                        abilityText={planetData.legendaryAbilityText!}
+                        exhausted={exhaustedPlanetAbilities.includes(planetId)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </Group>
           </Stack>
         </Grid.Col>

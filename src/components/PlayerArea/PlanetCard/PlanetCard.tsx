@@ -59,8 +59,6 @@ export function PlanetCard({
           {isLegendary && !exhausted && (
             <>
               <Box className={styles.legendaryConstellation} />
-
-              {/* Floating energy particles */}
               <Box
                 className={`${styles.floatingParticle} ${styles.particle1}`}
               />
