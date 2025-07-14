@@ -663,6 +663,8 @@ function NewMapUIContent() {
                           onPlanetHover={handlePlanetMouseEnter}
                           onPlanetMouseLeave={handlePlanetMouseLeave}
                           techSkipsMode={settings.techSkipsMode}
+                          attachmentsMode={settings.attachmentsMode}
+                          pdsMode={settings.pdsMode}
                           overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                           exhaustedPlanets={allExhaustedPlanets}

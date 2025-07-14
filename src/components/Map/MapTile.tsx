@@ -524,7 +524,7 @@ export const MapTile = React.memo<Props>(
 
       return 1.0;
 
-    }, [systemId, tileUnitData]);
+    }, [techSkipsMode, attachmentsMode]);
 
 
     return (
