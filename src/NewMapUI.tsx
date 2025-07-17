@@ -228,7 +228,7 @@ function NewMapUIContent() {
 
   // Track if this is the first socket connection to avoid refetching on initial connect
   const hasConnectedBefore = useRef(false);
-  
+
   // Memoize socket callback to prevent unnecessary effect re-runs
   const socketCallback = useCallback(() => {
     if (!hasConnectedBefore.current) {
@@ -253,7 +253,7 @@ function NewMapUIContent() {
       isError: true,
       ringCount: 3,
     };
-    
+
     const {
       playerData = [],
       calculatedTilePositions: tilePositions = [],
@@ -327,7 +327,7 @@ function NewMapUIContent() {
     if (!memoTooltipUnit?.faction || !playerData) return null;
     return playerData.find(player => player.faction === memoTooltipUnit.faction);
   }, [memoTooltipUnit?.faction, playerData]);
-  
+
   const getUnitIdToUse = useUnitLookup(memoTooltipUnit, activePlayer);
 
   // Memoize document title effect dependencies
@@ -381,10 +381,10 @@ function NewMapUIContent() {
   }, [playerData, tilePositions, zoom]);
 
   // Memoize browser detection
-  const isFirefox = useMemo(() => 
+  const isFirefox = useMemo(() =>
     typeof navigator !== "undefined" &&
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1
-  , []);
+    , []);
 
   const navigate = useNavigate();
 
@@ -403,36 +403,6 @@ function NewMapUIContent() {
   const handleLawDeselect = useCallback(() => {
     setSelectedLaw(null);
   }, []);
-
-  // Memoize zoom controls style to prevent object recreation
-  const zoomControlsStyle = useMemo(() => ({
-    right: settings.isRightPanelCollapsed
-      ? "35px"
-      : `calc(${sidebarWidth}vw + 35px)`,
-    transition: isDragging ? "none" : "right 0.1s ease",
-  }), [settings.isRightPanelCollapsed, sidebarWidth, isDragging]);
-
-  // Memoize right panel toggle style
-  const rightPanelToggleStyle = useMemo(() => ({
-    right: settings.isRightPanelCollapsed
-      ? "10px"
-      : `calc(${sidebarWidth}vw + 14px)`,
-    transition: isDragging ? "none" : "right 0.1s ease",
-  }), [settings.isRightPanelCollapsed, sidebarWidth, isDragging]);
-
-  // Memoize sidebar style
-  const sidebarStyle = useMemo(() => ({
-    width: settings.isRightPanelCollapsed
-      ? "0%"
-      : `${sidebarWidth}%`,
-  }), [settings.isRightPanelCollapsed, sidebarWidth]);
-
-  // Memoize map area style
-  const mapAreaStyle = useMemo(() => ({
-    width: settings.isRightPanelCollapsed
-      ? "100%"
-      : `${100 - sidebarWidth}%`,
-  }), [settings.isRightPanelCollapsed, sidebarWidth]);
 
   // Early return for version check - render update needed page
   if (
@@ -565,7 +535,11 @@ function NewMapUIContent() {
                 <Box
                   ref={mapContainerRef}
                   className={`dragscroll ${classes.mapArea}`}
-                  style={mapAreaStyle}
+                  style={{
+                    width: settings.isRightPanelCollapsed
+                      ? "100%"
+                      : `${100 - sidebarWidth}%`,
+                  }}
                 >
                   {/* Left Panel */}
                   <MemoizedLeftSidebar
@@ -584,7 +558,12 @@ function NewMapUIContent() {
 
                   <div
                     className={classes.zoomControlsDynamic}
-                    style={zoomControlsStyle}
+                    style={{
+                      right: settings.isRightPanelCollapsed
+                        ? "35px"
+                        : `calc(${sidebarWidth}vw + 35px)`,
+                      transition: isDragging ? "none" : "right 0.1s ease",
+                    }}
                   >
                     <ZoomControls
                       zoom={zoom}
@@ -709,7 +688,12 @@ function NewMapUIContent() {
                 <Box
                   className={`${classes.rightPanelToggle} ${settings.isRightPanelCollapsed ? classes.collapsed : ""}`}
                   onClick={toggleRightPanelCollapsed}
-                  style={rightPanelToggleStyle}
+                  style={{
+                    right: settings.isRightPanelCollapsed
+                      ? "10px"
+                      : `calc(${sidebarWidth}vw + 14px)`,
+                    transition: isDragging ? "none" : "right 0.1s ease",
+                  }}
                 >
                   {settings.isRightPanelCollapsed ? (
                     <IconChevronLeft
@@ -727,7 +711,11 @@ function NewMapUIContent() {
                 {/* Sidebar - Right Side (dynamic width) */}
                 <Box
                   className={`${classes.sidebar} ${settings.isRightPanelCollapsed ? classes.collapsedRight : ""}`}
-                  style={sidebarStyle}
+                  style={{
+                    width: settings.isRightPanelCollapsed
+                      ? "0%"
+                      : `${sidebarWidth}%`,
+                  }}
                 >
                   {/* Faction Tab Bar */}
                   {playerData && (
@@ -844,11 +832,11 @@ const PlayerCardDisplay = React.memo(function PlayerCardDisplay({
   planetAttachments,
 }: PlayerCardDisplayProps) {
   if (activeArea?.type === "faction") {
-    const playerToShow = useMemo(() => 
+    const playerToShow = useMemo(() =>
       playerData.find((player) => player.faction === activeArea.faction),
       [playerData, activeArea.faction]
     );
-    
+
     if (!playerToShow) return null;
 
     return (
