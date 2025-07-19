@@ -6,6 +6,7 @@ import { CommandCounterStack } from "./CommandCounterStack";
 import { CommodityIndicator } from "./CommodityIndicator";
 import { ProductionIndicator } from "./ProductionIndicator";
 import { FactionColorOverlay } from "./FactionColorOverlay";
+import { Text, Group } from "@mantine/core";
 import {
   getAllEntityPlacementsForTile,
   findOptimalProductionIconCorner,
@@ -17,11 +18,13 @@ import {
   getPlanetById,
 } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import { TileUnitData, LawInPlay } from "@/data/types";
+import { TileUnitData, LawInPlay, EntityData } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
+import { CircularFactionIcon } from "../shared/CircularFactionIcon";
+import { processSpaceCannon } from "@/utils/spaceCannonProcessor";
 
 // Helper function to check if a system has tech skips
 const systemHasTechSkips = (
@@ -79,36 +82,13 @@ const systemHasAttachment = (
           if (Array.isArray(entities)) {
             for (const entity of entities) {
               if (entity.entityType === "attachment") {
-                  return true;
-                }
+                return true;
               }
             }
           }
         }
       }
-  }
-  return false;
-};
-
-// Helper function to check if a system has tech skips
-const systemHasPDS = (
-  tileUnitData?: TileUnitData
-): boolean => {
-  // Check planet attachments
-  if (tileUnitData?.planets) {
-    for (const [_, planetData] of Object.entries(tileUnitData.planets)) {
-      if (planetData?.entities) {
-        for (const entities of Object.values(planetData.entities)) {
-          if (Array.isArray(entities)) {
-            for (const entity of entities) {
-              if (entity.entityType === "unit" && entity.entityId === "pds") {
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
+    }
   }
   return false;
 };
@@ -247,16 +227,16 @@ export const MapTile = React.memo<Props>(
             onUnitMouseOver={
               onUnitMouseOver
                 ? () => {
-                    // Convert relative unit position to world coordinates
-                    const worldX = position.x + stack.x;
-                    const worldY = position.y + stack.y;
-                    onUnitMouseOver(
-                      stack.faction,
-                      stack.entityId,
-                      worldX,
-                      worldY
-                    );
-                  }
+                  // Convert relative unit position to world coordinates
+                  const worldX = position.x + stack.x;
+                  const worldY = position.y + stack.y;
+                  onUnitMouseOver(
+                    stack.faction,
+                    stack.entityId,
+                    worldX,
+                    worldY
+                  );
+                }
                 : undefined
             }
             onUnitMouseLeave={
@@ -511,7 +491,7 @@ export const MapTile = React.memo<Props>(
 
     const filterModeOpacity: number = React.useMemo(() => {
       if (techSkipsMode && attachmentsMode) {
-        if(systemHasTechSkips(systemId, tileUnitData) && systemHasAttachment(tileUnitData)) {
+        if (systemHasTechSkips(systemId, tileUnitData) && systemHasAttachment(tileUnitData)) {
           return 1.0
         } else {
           return 0.2
@@ -520,18 +500,41 @@ export const MapTile = React.memo<Props>(
         return systemHasTechSkips(systemId, tileUnitData) ? 1.0 : 0.2;
       } else if (attachmentsMode) {
         return systemHasAttachment(tileUnitData) ? 1.0 : 0.2;
-      } 
+      }
 
       return 1.0;
 
     }, [techSkipsMode, attachmentsMode]);
 
+    const spaceCannonShotTokens: React.ReactElement[] | null = React.useMemo(() => {
+      if(!pdsMode || !tileUnitData) {
+        return null
+      }
+
+      const spaceCannonEntities = processSpaceCannon(tileId, tileUnitData);
+
+
+      return (
+        <>
+        {spaceCannonEntities?.forEach(
+          (spaceCannonEntity, faction) => {
+            <Group key={`faction`} className={classes.factionProgressBadge} gap={4}>
+              <CircularFactionIcon faction={`faction`} size={28} />
+                <Text className={classes.progressBadgeText}>
+                  {spaceCannonEntity[0].hitOn}
+                </Text>
+            </Group>
+          }
+        )}
+        </>
+      );    
+    }, [pdsMode]);
+
 
     return (
       <div
-        className={`${classes.mapTile} ${className || ""} ${
-          isSelected ? classes.selected : ""
-        } ${isHovered ? classes.hovered : ""}`}
+        className={`${classes.mapTile} ${className || ""} ${isSelected ? classes.selected : ""
+          } ${isHovered ? classes.hovered : ""}`}
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,

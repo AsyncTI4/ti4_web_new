@@ -352,12 +352,12 @@ export type Planet = {
   factionHomeworld?: string | null;
 
   planetType?:
-    | "FACTION"
-    | "CULTURAL"
-    | "INDUSTRIAL"
-    | "HAZARDOUS"
-    | "NONE"
-    | "MR";
+  | "FACTION"
+  | "CULTURAL"
+  | "INDUSTRIAL"
+  | "HAZARDOUS"
+  | "NONE"
+  | "MR";
   planetTypes?: ("CULTURAL" | "INDUSTRIAL" | "HAZARDOUS")[];
   cardImagePath?: string | null;
   techSpecialties?: string[] | null;
@@ -488,3 +488,9 @@ export type Exploration = {
   text: string;
   source: string;
 };
+
+export type SpaceCannon = {
+    diceCount: number;
+    hitOn: number;
+    deepSpace?: boolean;
+}
