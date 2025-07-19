@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useMemo } from "react";
 
 export type AreaType =
   | {
@@ -24,21 +24,30 @@ export function useTabsAndTooltips() {
   // Use ref for hover timeout instead of state
   const hoverTimeoutRef = useRef<number | null>(null);
 
-  const selectedFaction =
-    selectedArea?.type === "faction" ? selectedArea.faction : null;
-  const activeUnit =
-    activeArea?.type === "faction"
-      ? {
-          faction: activeArea.faction,
-          unitId: activeArea.unitId,
-          coords: activeArea.coords,
-        }
-      : null;
+  // Memoize derived values to prevent unnecessary recalculations
+  const selectedFaction = useMemo(
+    () => (selectedArea?.type === "faction" ? selectedArea.faction : null),
+    [selectedArea]
+  );
 
-  // Optimized hover handlers - now include unit ID with delay
+  const activeUnit = useMemo(
+    () =>
+      activeArea?.type === "faction"
+        ? {
+            faction: activeArea.faction,
+            unitId: activeArea.unitId,
+            coords: activeArea.coords,
+          }
+        : null,
+    [activeArea]
+  );
+
+  // Optimized hover handlers - memoized with stable dependencies
   const handleMouseEnter = useCallback(
     (faction: string, unitId: string, x: number, y: number) => {
-      setActiveArea({ type: "faction", faction, unitId, coords: { x, y } });
+      // Create the new area object once
+      const newArea = { type: "faction" as const, faction, unitId, coords: { x, y } };
+      setActiveArea(newArea);
 
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
@@ -52,7 +61,7 @@ export function useTabsAndTooltips() {
 
       hoverTimeoutRef.current = newTimeout;
     },
-    [selectedArea]
+    [] // No dependencies needed since we're not referencing any external state
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -66,7 +75,7 @@ export function useTabsAndTooltips() {
     setTooltipUnit(null);
   }, []);
 
-  // Add click handler for pinning areas
+  // Add click handler for pinning areas - memoized with stable implementation
   const handleMouseDown = useCallback(
     (faction: string, x: number = 0, y: number = 0) => {
       setSelectedArea({ type: "faction", faction, coords: { x, y } });
@@ -74,12 +83,13 @@ export function useTabsAndTooltips() {
     []
   );
 
-  // Unified area selection handler
+  // Unified area selection handler - memoized
   const handleAreaSelect = useCallback((area: AreaType) => {
     setSelectedArea(area);
     setActiveArea(null); // Clear any hover state
   }, []);
 
+  // Memoized area hover handlers
   const handleAreaMouseEnter = useCallback((area: AreaType) => {
     setActiveArea(area);
   }, []);
@@ -88,19 +98,35 @@ export function useTabsAndTooltips() {
     setActiveArea(null);
   }, []);
 
-  return {
-    selectedArea,
-    activeArea,
-    selectedFaction,
-    activeUnit,
-    tooltipUnit,
+  // Return memoized object to prevent unnecessary re-renders in consuming components
+  return useMemo(
+    () => ({
+      selectedArea,
+      activeArea,
+      selectedFaction,
+      activeUnit,
+      tooltipUnit,
 
-    handleAreaSelect,
-    handleAreaMouseEnter,
-    handleAreaMouseLeave,
+      handleAreaSelect,
+      handleAreaMouseEnter,
+      handleAreaMouseLeave,
 
-    handleMouseEnter,
-    handleMouseLeave,
-    handleMouseDown,
-  };
+      handleMouseEnter,
+      handleMouseLeave,
+      handleMouseDown,
+    }),
+    [
+      selectedArea,
+      activeArea,
+      selectedFaction,
+      activeUnit,
+      tooltipUnit,
+      handleAreaSelect,
+      handleAreaMouseEnter,
+      handleAreaMouseLeave,
+      handleMouseEnter,
+      handleMouseLeave,
+      handleMouseDown,
+    ]
+  );
 }
