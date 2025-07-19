@@ -1,6 +1,6 @@
-import { Box, Text, Stack, Image, Group, Divider } from "@mantine/core";
+import { Stack, Text, Image, Divider } from "@mantine/core";
 import { getRelicData } from "../../../lookup/relics";
-import styles from "./RelicCard.module.css";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   relicId: string;
@@ -14,56 +14,34 @@ export function RelicCard({ relicId }: Props) {
     return null;
   }
 
+  const renderRelicIcon = () => <Image src="/relicicon.webp" w={50} h={50} />;
+
   return (
-    <Box w={320} p="md" className={styles.container}>
+    <DetailsCard width={320} color="orange">
       <Stack gap="md">
-        {/* Header with relic icon and name */}
-        <Group gap="md" align="flex-start">
-          <Box w={80} h={80} className={styles.iconContainer}>
-            <Image
-              src="/relicicon.webp"
-              w={40}
-              h={40}
-              className={styles.relicIcon}
-            />
-          </Box>
-          <Stack gap={4} flex={1}>
-            <Text size="lg" fw={700} c="white">
-              {relicData.name}
-            </Text>
-            <Text size="xs" c="yellow.3" fw={600} tt="uppercase">
-              Relic
-            </Text>
-          </Stack>
-        </Group>
+        <DetailsCard.Title
+          title={relicData.name}
+          subtitle="Relic"
+          icon={<DetailsCard.Icon icon={renderRelicIcon()} />}
+        />
 
-        <Divider c="yellow.7" opacity={0.4} />
+        <Divider c="gray.7" opacity={0.8} />
 
-        {/* Description */}
-        <Box>
-          <Text size="sm" fw={600} c="yellow.3" mb={4}>
-            Effect
-          </Text>
-          <Text
-            size="sm"
-            c="gray.2"
-            lh={1.4}
-            className={styles.descriptionText}
-          >
-            {relicData.text?.replace(/\n/g, "\n\n") ||
-              "No description available."}
-          </Text>
-        </Box>
+        <DetailsCard.Section
+          title="Effect"
+          content={
+            relicData.text?.replace(/\n/g, "\n\n") ||
+            "No description available."
+          }
+        />
 
-        <Divider c="yellow.7" opacity={0.4} />
+        <Divider c="gray.7" opacity={0.8} />
 
-        {/* Flavor text */}
-        <Box>
-          <Text size="sm" c="orange.3" fs="italic" lh={1.5}>
-            {relicData.flavourText}
-          </Text>
-        </Box>
+        {/* Bespoke flavor text */}
+        <Text size="sm" c="orange.3" fs="italic" lh={1.5}>
+          {relicData.flavourText}
+        </Text>
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }

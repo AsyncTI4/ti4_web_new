@@ -1,6 +1,6 @@
-import { Stack, Text, Box, Divider } from "@mantine/core";
+import { Stack, Divider } from "@mantine/core";
 import { getAbility } from "../../../lookup/abilities";
-import { Surface } from "../Surface";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   abilityId: string;
@@ -12,52 +12,45 @@ export function AbilityDetailsCard({ abilityId }: Props) {
   if (!ability) return null;
 
   return (
-    <Surface p="md" style={{ minWidth: 280, maxWidth: 400 }}>
-      <Stack gap="sm">
-        <Box>
-          <Text size="lg" fw={700} c="white" mb={4}>
-            {ability.name}
-          </Text>
-          <Text size="sm" c="dimmed" tt="capitalize">
-            {ability.permanentEffect ? "Passive Ability" : "Active Ability"}
-          </Text>
-        </Box>
-
-        <Divider color="gray.7" />
+    <DetailsCard width={320} color="purple">
+      <Stack gap="md">
+        <DetailsCard.Title
+          title={ability.name}
+          subtitle={
+            ability.permanentEffect ? "Passive Ability" : "Active Ability"
+          }
+        />
 
         {ability.permanentEffect && (
-          <Box>
-            <Text size="xs" c="violet.3" fw={600} mb={4}>
-              PERMANENT EFFECT
-            </Text>
-            <Text size="sm" c="white" style={{ lineHeight: 1.4 }}>
-              {ability.permanentEffect}
-            </Text>
-          </Box>
+          <>
+            <Divider c="gray.7" opacity={0.8} />
+            <DetailsCard.Section
+              title="PERMANENT EFFECT"
+              content={ability.permanentEffect}
+            />
+          </>
         )}
 
         {ability.window && (
-          <Box>
-            <Text size="xs" c="violet.3" fw={600} mb={4}>
-              TIMING WINDOW
-            </Text>
-            <Text size="sm" c="white" style={{ lineHeight: 1.4 }}>
-              {ability.window}
-            </Text>
-          </Box>
+          <>
+            <Divider c="gray.7" opacity={0.8} />
+            <DetailsCard.Section
+              title="TIMING WINDOW"
+              content={ability.window}
+            />
+          </>
         )}
 
         {ability.windowEffect && (
-          <Box>
-            <Text size="xs" c="violet.3" fw={600} mb={4}>
-              EFFECT
-            </Text>
-            <Text size="sm" c="white" style={{ lineHeight: 1.4 }}>
-              {ability.windowEffect}
-            </Text>
-          </Box>
+          <>
+            <Divider c="gray.7" opacity={0.8} />
+            <DetailsCard.Section
+              title="EFFECT"
+              content={ability.windowEffect}
+            />
+          </>
         )}
       </Stack>
-    </Surface>
+    </DetailsCard>
   );
 }

@@ -6,6 +6,9 @@ import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import classes from "./PlanetDetailsCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
 import { getAttachmentData } from "@/data/attachments";
+import { DetailsCard } from "@/components/shared/DetailsCard";
+import DetailsCardTitle from "@/components/shared/DetailsCard/DetailsCardTitle";
+import DetailsCardIcon from "@/components/shared/DetailsCard/DetailsCardIcon";
 
 type Props = {
   planetId: string;
@@ -84,7 +87,6 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
           src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
           w={80}
           h={80}
-          className={classes.planetImage}
         />
       );
     }
@@ -92,11 +94,7 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
     const traitKey = planetData.planetType!.toLowerCase();
     if (["cultural", "hazardous", "industrial"].includes(traitKey)) {
       return (
-        <Box
-          w={80}
-          h={80}
-          className={`${classes.planetImage} ${classes.planetIconContainer}`}
-        >
+        <Box w={80} h={80} className={` ${classes.planetIconContainer}`}>
           <PlanetTraitIcon
             trait={traitKey as "cultural" | "hazardous" | "industrial"}
             size={40}
@@ -110,25 +108,14 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
   };
 
   return (
-    <Box w={320} p="md" className={cardClass}>
+    <DetailsCard width={320}>
       <Stack gap="md">
         {/* Header with image and basic info */}
-        <Group gap="md" align="flex-start">
-          {renderTraitIcon()}
-          <Stack gap={4} flex={1}>
-            <Text
-              size="lg"
-              fw={700}
-              c={isLegendary ? undefined : "white"}
-              className={isLegendary ? classes.legendaryTitle : undefined}
-            >
-              {planetData.name}
-            </Text>
-            <Text size="sm" c="gray.3" fw={500} fs="italic">
-              {getPlanetTypeDisplay(planetData.planetType!)}
-            </Text>
-          </Stack>
-        </Group>
+        <DetailsCardTitle
+          title={planetData.name}
+          subtitle={getPlanetTypeDisplay(planetData.planetType!)}
+          icon={<DetailsCardIcon icon={renderTraitIcon()} />}
+        />
 
         <Divider c="gray.7" opacity={0.8} />
 
@@ -296,6 +283,6 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
           </>
         )}
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }

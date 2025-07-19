@@ -1,6 +1,6 @@
-import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
+import { Stack, Image, Text, Group, Divider } from "@mantine/core";
 import { leaders } from "../../../data/leaders";
-import styles from "./LeaderDetailsCard.module.css";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   leaderId: string;
@@ -11,61 +11,41 @@ export function LeaderDetailsCard({ leaderId }: Props) {
 
   if (!leaderData) return null;
 
+  const renderLeaderIcon = () => {
+    if (leaderData.source === "base" || leaderData.source === "pok") {
+      return (
+        <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
+      );
+    }
+    return <></>;
+  };
+
   return (
-    <Box w={320} p="md" className={styles.container}>
+    <DetailsCard width={320}>
       <Stack gap="md">
         {/* Header with image and basic info */}
-        <Group gap="md" align="flex-start">
-          {leaderData.source === "base" || leaderData.source === "pok" ? (
-            <Image
-              src={`/leaders/${leaderId}.webp`}
-              w={80}
-              h={80}
-              radius="50%"
-              className={styles.leaderImage}
-            />
-          ) : undefined}
-          <Stack gap={4} flex={1}>
-            <Text size="lg" fw={700} c="white">
-              {leaderData.name}
-            </Text>
-            <Text size="sm" c="gray.3" fw={500} fs="italic">
-              {leaderData.title}
-            </Text>
-            <Text size="xs" c="blue.3" fw={600} tt="uppercase">
-              {leaderData.type}
-            </Text>
-          </Stack>
-        </Group>
+        <DetailsCard.Title
+          title={leaderData.name}
+          subtitle={leaderData.title}
+          icon={<DetailsCard.Icon icon={renderLeaderIcon()} />}
+          caption={leaderData.type}
+        />
 
         <Divider c="gray.7" opacity={0.8} />
 
-        {/* Unlock Condition */}
-        <Box>
-          <Text size="sm" c="blue.3" mb={4}>
-            Unlock Condition
-          </Text>
-          <Text size="sm" c="gray.2" lh={1.4}>
-            {leaderData.unlockCondition}
-          </Text>
-        </Box>
+        <DetailsCard.Section
+          title="Unlock Condition"
+          content={leaderData.unlockCondition}
+        />
 
         <Divider c="gray.7" opacity={0.8} />
 
-        {/* Ability */}
-        <Box>
-          {leaderData.abilityWindow && (
-            <Text size="sm" fw={500} c="blue.3" mb={6}>
-              {leaderData.abilityWindow}
-            </Text>
-          )}
-
-          <Text size="sm" c="gray.1" lh={1.5}>
-            {leaderData.abilityText}
-          </Text>
-        </Box>
+        <DetailsCard.Section
+          title={leaderData.abilityWindow}
+          content={leaderData.abilityText}
+        />
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }
 
