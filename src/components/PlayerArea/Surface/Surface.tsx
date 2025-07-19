@@ -36,19 +36,16 @@ export function Surface({
       className={`${classes.surface} ${boxProps.className || ""}`}
       style={boxProps.style}
     >
-      {/* Label */}
       {label && (
         <Text className={classes.label} c={labelColor}>
           {label}
         </Text>
       )}
 
-      {/* Pattern overlay */}
       {pattern !== "none" && (
         <Box className={`${classes.patternOverlay} ${getPatternClass()}`} />
       )}
 
-      {/* Corner accents */}
       {cornerAccents && (
         <>
           <Box
