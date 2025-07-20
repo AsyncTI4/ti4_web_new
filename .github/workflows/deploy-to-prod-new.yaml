@@ -26,9 +26,9 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-            role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_NEW }}:role/GithubActionsRole
-            role-duration-seconds: 900
-            aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NEW }}:role/GithubActionsRole
+          role-duration-seconds: 900
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
