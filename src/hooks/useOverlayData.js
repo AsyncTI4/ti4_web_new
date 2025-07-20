@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { config } from "../config";
+
 
 export function useOverlayData(gameId) {
   const apiUrl = import.meta.env.DEV
     ? `/proxy/overlays/${gameId}/${gameId}.json`
-    : `https://ti4.westaddisonheavyindustries.com/overlays/${gameId}/${gameId}.json`;
+    : `${config.api.websiteBase}overlays/${gameId}/${gameId}.json`;
 
   return useQuery({
     queryKey: ["overlays", gameId],
@@ -14,8 +16,7 @@ export function useOverlayData(gameId) {
 
 export const getOverlayContent = () => {
 
-  const baseUrl =
-    "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/data";
+  const baseUrl = config.api.statsWebsite;
 
   const factionSources = [
     "base",

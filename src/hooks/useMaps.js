@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { config } from "../config";
 
 
 export function useMaps() {
   const apiUrl = import.meta.env.DEV
-  ? "/proxy/maps.json"
-  : "https://ti4.westaddisonheavyindustries.com/maps.json";
+  ? config.api.proxyMapsUrl
+  : config.api.mapsUrl;
 
 
   return useQuery({

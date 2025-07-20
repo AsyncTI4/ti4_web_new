@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { config } from "../config";
 
 export function useMapSocket(mapId, onMapUpdate) {
   const [isReconnecting, setIsReconnecting] = useState(false);
 
-  const socket_url =
-    "wss://4z4c1wj2e2.execute-api.us-east-1.amazonaws.com/dev?map=" + mapId;
+  const socket_url = config.api.socketUrl + "?map=" + mapId;
 
   const { sendJsonMessage, lastMessage, readyState, getWebSocket } =
     useWebSocket(socket_url, {

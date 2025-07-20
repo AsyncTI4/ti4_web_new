@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { PlayerDataResponse } from "../data/types";
 import { enhancePlayerData } from "@/data/enhancePlayerData";
 import { useMemo } from "react";
+import { config } from "@/config";
 
 export function usePlayerData(gameId: string) {
   const apiUrl = import.meta.env.DEV
     ? `/proxy/webdata/${gameId}/${gameId}.json`
-    : `https://ti4.westaddisonheavyindustries.com/webdata/${gameId}/${gameId}.json`;
+    : `${config.api.websiteBase}webdata/${gameId}/${gameId}.json`;
 
   return useQuery<PlayerDataResponse>({
     queryKey: ["playerData", gameId],
