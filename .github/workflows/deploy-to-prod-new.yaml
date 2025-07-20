@@ -1,0 +1,44 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build app
+        run: yarn build
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_NEW }}:role/GithubActionsRole
+            role-duration-seconds: 900
+            aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
+        env:
+          SOURCE_DIR: dist/
+          AWS_S3_BUCKET: ${{ secrets.PROD_AWS_S3_BUCKET_NEW }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      # - name: Cloudfront Invalidate
+      #   run: |
+      #     aws cloudfront create-invalidation --distribution-id <<TBD SECRET>> --paths "/*"
+      #   env:
+      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
