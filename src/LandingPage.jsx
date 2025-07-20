@@ -25,10 +25,10 @@ import { useMaps } from "./hooks/useMaps";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { config } from "./config";
 
 function useMapDetails(mapIds) {
-  const baseApiUrl =
-    "https://bbg9uiqewd.execute-api.us-east-1.amazonaws.com/Prod/map/";
+  const baseApiUrl = config.api.prodmapuri;
 
   return useQuery({
     queryKey: ["mapDetails", mapIds],
