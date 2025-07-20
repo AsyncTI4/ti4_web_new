@@ -34,11 +34,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@master
-        env:
-          SOURCE_DIR: dist/
-          AWS_S3_BUCKET: ${{ secrets.PROD_AWS_S3_BUCKET_NEW }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.PROD_AWS_S3_BUCKET_NEW }} --delete
 
       # - name: Cloudfront Invalidate
       #   run: |
