@@ -1,4 +1,4 @@
-import { Box, Text, Group } from "@mantine/core";
+import { Box, Text, Group, Stack } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { Shimmer } from "../../PlayerArea/Shimmer";
 import { PlayerData } from "../../../data/types";
@@ -132,11 +132,9 @@ function ExpandedObjectiveCard({
     <Shimmer
       color={color}
       p="sm"
-      className={`${styles.expandedCard} ${styles[color]} ${!revealed ? styles.unrevealed : ""}`}
+      className={`${styles[color]} ${!revealed ? styles.unrevealed : ""}`}
     >
-      {/* Main Row */}
       <Group className={styles.mainRow}>
-        {/* VP indicator */}
         <Box
           className={`${styles.vpIndicator} ${revealed ? styles.revealed : styles.hidden} ${revealed ? styles[color] : ""}`}
         >
@@ -147,22 +145,23 @@ function ExpandedObjectiveCard({
           </Text>
         </Box>
 
-        {/* Title and Requirement */}
         <Box className={styles.contentArea}>
           <Text
             className={`${styles.objectiveTitle} ${revealed ? styles.revealed : styles.hidden}`}
           >
             {revealed ? text : "UNREVEALED"}
           </Text>
-          {revealed && objectiveData && (
-            <Text className={styles.requirementText}>{objectiveData.text}</Text>
-          )}
         </Box>
-
-        {/* Progress/Scoring Display */}
-        <Group className={styles.progressBadges} gap="xs">
-          {renderProgressDisplay()}
-        </Group>
+        <Stack>
+          <Group className={styles.progressBadges} gap="xs">
+            {renderProgressDisplay()}
+          </Group>
+          {revealed && objectiveData && (
+            <Text className={styles.requirementText} ta="right">
+              {objectiveData.text}
+            </Text>
+          )}
+        </Stack>
       </Group>
     </Shimmer>
   );

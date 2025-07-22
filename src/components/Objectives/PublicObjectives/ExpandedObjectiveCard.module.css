@@ -1,24 +1,14 @@
-.expandedCard {
-  position: relative;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Color-specific borders */
 .expandedCard.orange {
   border: 1px solid rgba(249, 115, 22, 0.15);
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.03) 0%, rgba(194, 65, 12, 0.01) 100%);
 }
 
 .expandedCard.blue {
   border: 1px solid rgba(59, 130, 246, 0.15);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(30, 58, 138, 0.01) 100%);
 }
 
 .expandedCard.gray {
   border: 1px solid rgba(107, 114, 128, 0.15);
-  background: linear-gradient(135deg, rgba(107, 114, 128, 0.03) 0%, rgba(75, 85, 99, 0.01) 100%);
+
 }
 
 .unrevealed {
@@ -102,7 +92,6 @@
 
 .contentArea {
   flex: 1;
-  min-width: 0;
 }
 
 .objectiveTitle {
@@ -123,11 +112,8 @@
 }
 
 .requirementText {
-  font-size: var(--mantine-font-size-md);
   color: var(--mantine-color-gray-3);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  line-height: 1.4;
-  opacity: 0.9;
 }
 
 .progressBadges {

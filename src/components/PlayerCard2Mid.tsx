@@ -35,7 +35,7 @@ import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/Re
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { PlayerCardBox } from "./PlayerCardBox";
-import { getTokenImagePath } from "../data/tokens";
+import { getTokenImagePath } from "@/lookup/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getUnitAsyncId } from "@/lookup/units";
 import { getPlanetData } from "@/lookup/planets";

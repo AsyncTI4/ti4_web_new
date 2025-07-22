@@ -15,9 +15,7 @@ import {
   touchesHexRim,
 } from "./hitbox";
 import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
-import { getTokenData } from "@/data/tokens";
-
-// Define the new types here since they're not exported from types.ts
+import { getTokenData } from "@/lookup/tokens";
 
 // Unit stacking constants
 export const SPLAY_OFFSET_X = 10; // Horizontal offset between stacked units (pixels)
@@ -31,7 +29,7 @@ export const SPACE_HEAT_CONFIG = {
   rimDecayRate: 0.08,
   unitHeat: 400,
   unitDecayRate: 0.055,
-  factionRepulsionHeat: 400,
+  factionRepulsionHeat: 100,
   factionDecayRate: 0.02,
   stackSizeMultiplier: 0.15,
 } as const;
@@ -43,24 +41,12 @@ export const GROUND_HEAT_CONFIG = {
   rimDecayRate: 0.06, // From placeGroundEntitiesForPlanet
   unitHeat: 400,
   unitDecayRate: 0.06, // From placeGroundEntitiesForPlanet
-  factionRepulsionHeat: 400,
+  factionRepulsionHeat: 100,
   factionDecayRate: 0.02,
   stackSizeMultiplier: 0.15,
 } as const;
 
-// Deprecated constants - use SPACE_HEAT_CONFIG or GROUND_HEAT_CONFIG instead
 export const MAX_HEAT = SPACE_HEAT_CONFIG.maxHeat;
-export const PLANET_DECAY_RATE = SPACE_HEAT_CONFIG.planetDecayRate;
-export const SPACE_RIM_MAX_HEAT = SPACE_HEAT_CONFIG.rimMaxHeat;
-export const GROUND_RIM_MAX_HEAT = GROUND_HEAT_CONFIG.rimMaxHeat;
-export const RIM_MAX_HEAT = SPACE_HEAT_CONFIG.rimMaxHeat;
-export const RIM_DECAY_RATE = SPACE_HEAT_CONFIG.rimDecayRate;
-export const UNIT_HEAT = SPACE_HEAT_CONFIG.unitHeat;
-export const UNIT_DECAY_RATE = SPACE_HEAT_CONFIG.unitDecayRate;
-export const FACTION_REPULSION_HEAT = SPACE_HEAT_CONFIG.factionRepulsionHeat;
-export const FACTION_DECAY_RATE = SPACE_HEAT_CONFIG.factionDecayRate;
-export const STACK_SIZE_MULTIPLIER = SPACE_HEAT_CONFIG.stackSizeMultiplier;
-
 export const HEX_GRID_WIDTH = 345;
 export const HEX_GRID_HEIGHT = 299;
 export const HEX_GRID_SIZE = 30;
@@ -79,6 +65,7 @@ export const HEX_VERTICES = [
   { x: 86.25, y: 299 },
   { x: 0, y: 149.5 },
 ];
+
 // Entity type priority order (lower index = higher priority)
 export const entityIdPriority = [
   "ws",
@@ -110,6 +97,7 @@ export const entityZStackPriority = [
   "dn",
   "fs",
   "ws",
+  "gledge_core",
   "sleeper",
   "custodiavigilia1",
   "custodiavigilia2",
@@ -199,16 +187,6 @@ const calculateUnitHeat = (
   return totalHeat;
 };
 
-/**
- * Multi-source heat map algorithm using exponential decay functions.
- * Updates an existing cost map with heat calculations based on distance from multiple heat sources:
- * - Planets (attraction)
- * - Hexagon rim (attraction for defensive positions)
- * - Existing units (attraction for same faction, repulsion for opposing factions)
- *
- * Uses exponential decay: heat = maxHeat * e^(-decayRate * distance)
- */
-
 export type HeatConfig = typeof SPACE_HEAT_CONFIG | typeof GROUND_HEAT_CONFIG;
 
 export interface UpdateCostMapOptions {
@@ -224,6 +202,15 @@ export interface UpdateCostMapOptions {
   currentFaction?: string;
 }
 
+/**
+ * Multi-source heat map algorithm using exponential decay functions.
+ * Updates an existing cost map with heat calculations based on distance from multiple heat sources:
+ * - Planets (attraction)
+ * - Hexagon rim (attraction for defensive positions)
+ * - Existing units (attraction for same faction, repulsion for opposing factions)
+ *
+ * Uses exponential decay: heat = maxHeat * e^(-decayRate * distance)
+ */
 export const updateCostMap = ({
   gridSize,
   squareWidth,
@@ -424,12 +411,7 @@ const createHeatSource = (
   };
 };
 
-/**
- * Core iterative placement algorithm that handles the priority queues, alternating placement,
- * and greedy positioning logic. This shared method is used by both space and ground unit placement.
- */
-
-export interface PlaceEntitiesOptions {
+export type PlaceEntitiesOptions = {
   gridSize: number;
   squareWidth: number;
   squareHeight: number;
@@ -439,7 +421,12 @@ export interface PlaceEntitiesOptions {
   heatConfig: HeatConfig;
   factionEntities: FactionUnits;
   initialHeatSources?: HeatSource[];
-}
+};
+
+/**
+ * Core iterative placement algorithm that handles the priority queues, alternating placement,
+ * and greedy positioning logic. This shared method is used by both space and ground unit placement.
+ */
 
 const placeEntitiesWithCostMap = ({
   gridSize,
@@ -508,7 +495,7 @@ const placeEntitiesWithCostMap = ({
   return { entityPlacements, finalCostMap };
 };
 
-export interface PlaceSpaceEntitiesOptions {
+export type PlaceSpaceEntitiesOptions = {
   gridSize: number;
   squareWidth: number;
   squareHeight: number;
@@ -520,7 +507,7 @@ export interface PlaceSpaceEntitiesOptions {
   entityDecayRate?: number;
   factionDecayRate?: number;
   initialHeatSources?: HeatSource[];
-}
+};
 
 /**
  * Iterative greedy placement algorithm for optimal space entity positioning.
@@ -556,7 +543,7 @@ export const placeSpaceEntities = ({
   });
 };
 
-export interface PlaceGroundEntitiesOptions {
+export type PlaceGroundEntitiesOptions = {
   gridSize: number;
   squareWidth: number;
   squareHeight: number;
@@ -569,7 +556,7 @@ export interface PlaceGroundEntitiesOptions {
   entityDecayRate?: number;
   factionDecayRate?: number;
   heatSources?: HeatSource[];
-}
+};
 
 /**
  * Iterative greedy placement algorithm for optimal ground entity positioning.
@@ -720,36 +707,48 @@ const createSortedEntityStacks = (
 };
 
 /**
- * Separates entities into attachments and regular entities for a planet
+ * Separates entities into attachments, center tokens, and regular entities for a planet
  */
 const separateEntityTypes = (planetEntityData: PlanetEntityData) => {
   const filteredPlanetEntities: FactionUnits = {};
   const attachmentEntities: EntityStackBase[] = [];
+  const centerTokens: EntityStackBase[] = [];
 
   Object.entries(planetEntityData.entities).forEach(([faction, entities]) => {
-    const nonAttachmentEntities = entities.filter(
-      (entity) => entity.entityType !== "attachment"
-    );
-    const attachments = entities.filter(
-      (entity) => entity.entityType === "attachment"
-    );
+    const regularEntities: EntityData[] = [];
 
-    if (nonAttachmentEntities.length > 0) {
-      filteredPlanetEntities[faction] = nonAttachmentEntities;
-    }
-
-    attachments.forEach((attachment) => {
-      attachmentEntities.push({
+    entities.forEach((entity) => {
+      const entityStack: EntityStackBase = {
         faction,
-        entityId: attachment.entityId,
-        entityType: attachment.entityType,
-        count: attachment.count,
-        sustained: attachment.sustained,
-      });
+        entityId: entity.entityId,
+        entityType: entity.entityType,
+        count: entity.count,
+        sustained: entity.sustained,
+      };
+
+      if (entity.entityType === "attachment") {
+        attachmentEntities.push(entityStack);
+        return;
+      }
+
+      if (entity.entityType === "token") {
+        const tokenData = getTokenData(entity.entityId);
+        if (tokenData?.placement === "center") {
+          centerTokens.push(entityStack);
+          return;
+        }
+      }
+
+      // Default: regular entity for heat map positioning
+      regularEntities.push(entity);
     });
+
+    if (regularEntities.length > 0) {
+      filteredPlanetEntities[faction] = regularEntities;
+    }
   });
 
-  return { filteredPlanetEntities, attachmentEntities };
+  return { filteredPlanetEntities, attachmentEntities, centerTokens };
 };
 
 /**
@@ -851,13 +850,20 @@ export const processPlanetEntities = (
   planet: Planet,
   planetEntityData: PlanetEntityData
 ): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
-  const { filteredPlanetEntities, attachmentEntities } =
+  const { filteredPlanetEntities, attachmentEntities, centerTokens } =
     separateEntityTypes(planetEntityData);
 
   const {
     placements: attachmentPlacements,
     heatSources: attachmentHeatSources,
   } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
+
+  // Place center tokens at planet center (underneath units and control tokens)
+  const centerTokenPlacements: EntityStack[] = centerTokens.map((token) => ({
+    ...token,
+    x: planet.x,
+    y: planet.y,
+  }));
 
   const { entityPlacements: groundEntityPlacements, finalCostMap } =
     placeGroundEntitiesForPlanet(
@@ -868,6 +874,7 @@ export const processPlanetEntities = (
 
   // Add planet name to all planet-based entities
   const planetEntitiesWithPlanetName = [
+    ...centerTokenPlacements,
     ...attachmentPlacements,
     ...groundEntityPlacements,
   ].map((entity) => ({
@@ -901,12 +908,10 @@ export const findOptimalProductionIconCorner = (
     }
   );
 
-  // Define the 4 diagonal corners of the hexagon using existing HEX_VERTICES
+  // Define the diagonal corners of the hexagon
   const hexagonCorners = [
     { vertex: HEX_VERTICES[0], position: "top-left" }, // top-left
     { vertex: HEX_VERTICES[1], position: "top-right" }, // top-right
-    // { vertex: HEX_VERTICES[3], position: "bottom-right" }, // bottom-right
-    // { vertex: HEX_VERTICES[4], position: "bottom-left" }, // bottom-left
   ];
 
   let lowestHeat = Infinity;
@@ -964,10 +969,7 @@ export const getAllEntityPlacementsForTile = (
   systemId: string,
   tileUnitData: TileUnitData | undefined
 ): EntityStack[] => {
-  // Early return if no entity data
-  if (!tileUnitData) {
-    return [];
-  }
+  if (!tileUnitData) return [];
 
   // Convert planet coordinates to Planet[] format expected by placeSpaceEntities
   const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -1100,20 +1102,20 @@ export const initializeSpaceCostMap = (
   return { costMap, rimSquares };
 };
 
-export interface Planet {
+export type Planet = {
   name: string;
   x: number;
   y: number;
   radius: number;
   resourcesLocation?: "TopLeft" | "TopRight" | "BottomLeft" | "BottomRight";
-}
+};
 
-export interface HeatSource {
+export type HeatSource = {
   x: number;
   y: number;
   faction?: string;
   stackSize: number;
-}
+};
 
 export type EntityStackBase = EntityData & {
   faction: string;
@@ -1125,7 +1127,7 @@ export type EntityStack = EntityStackBase & {
   planetName?: string;
 };
 
-export interface GameState {
+export type GameState = {
   space: {
     [faction: string]: {
       [unitType: string]: number;
@@ -1134,4 +1136,4 @@ export interface GameState {
   planets: {
     [planetName: string]: any;
   };
-}
+};

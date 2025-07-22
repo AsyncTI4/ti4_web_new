@@ -678,9 +678,14 @@ export const planets: Planet[] = [
       "nmd",
       "53_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+
+    planetLayout: {
+      unitHolderName: "arcturus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170,
+        y: 130,
+      },
     },
     resources: 4,
     influence: 4,
@@ -4702,9 +4707,13 @@ export const planets: Planet[] = [
       "mordai ii",
       "08_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "mordaiii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170,
+        y: 130,
+      },
     },
     resources: 4,
     influence: 0,
@@ -4844,9 +4853,13 @@ export const planets: Planet[] = [
     tileId: "57",
     name: "Naazir",
     aliases: ["naazir", "nazir", "naaz", "naz", "57_1"],
-    positionInTile: {
-      x: 134.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "naazir",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134,
+        y: 85,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6022,9 +6035,13 @@ export const planets: Planet[] = [
     tileId: "57",
     name: "Rokha",
     aliases: ["rokha", "roka", "rokh", "rok", "rohka", "roh", "57_2"],
-    positionInTile: {
-      x: 226.0,
-      y: 201.0,
+    planetLayout: {
+      unitHolderName: "rokha",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226,
+        y: 201,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6885,9 +6902,13 @@ export const planets: Planet[] = [
       "empy_hs",
       "56_1",
     ],
-    positionInTile: {
-      x: 173.0,
-      y: 135.0,
+    planetLayout: {
+      unitHolderName: "thedark",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170,
+        y: 130,
+      },
     },
     resources: 3,
     influence: 4,

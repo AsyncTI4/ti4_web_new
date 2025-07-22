@@ -73,7 +73,7 @@ export type Token = {
   id: string;
   imagePath: string;
   spaceOrPlanet: "space" | "planet";
-  aliasList: string[];
+  aliasList?: string[];
   source: string;
   attachmentID?: string;
   wormholes?: string[];
@@ -83,6 +83,7 @@ export type Token = {
   tokenPlanetName?: string;
   isPlanet?: boolean;
   scale?: number;
+  placement?: "rim" | "center";
 };
 
 export type Tech = {
