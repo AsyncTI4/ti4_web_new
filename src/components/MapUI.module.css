@@ -1,14 +1,3 @@
-.headerContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--mantine-spacing-md);
-  height: 100%;
-  padding: 0 var(--mantine-spacing-sm);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
-}
-
 /* New header styles for NewMapUI */
 .newHeaderGroup {
   flex-wrap: nowrap;
@@ -39,82 +28,6 @@
   opacity: 0;
 }
 
-/* Toggle button for left panel */
-.leftPanelToggle {
-  position: fixed;
-  left: 310px;
-  top: 125px;
-  z-index: 2001;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, rgba(14, 24, 40, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border: 1px solid var(--mantine-color-dark-4);
-  border-radius: 0 50% 50% 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.leftPanelToggle:hover {
-  background: linear-gradient(135deg, rgba(14, 24, 40, 1) 0%, rgba(30, 41, 59, 0.95) 100%);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.leftPanelToggle.collapsed {
-  left: 10px;
-}
-
-.leftPanelToggleIcon {
-  color: var(--mantine-color-gray-3);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
-}
-
-.leftPanelToggle:hover .leftPanelToggleIcon {
-  color: var(--mantine-color-gray-1);
-}
-
-/* Toggle button for right panel */
-.rightPanelToggle {
-  position: fixed;
-  top: 165px;
-  z-index: 2001;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, rgba(14, 24, 40, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border: 1px solid var(--mantine-color-dark-4);
-  border-radius: 50% 0 0 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.rightPanelToggle:hover {
-  background: linear-gradient(135deg, rgba(14, 24, 40, 1) 0%, rgba(30, 41, 59, 0.95) 100%);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.rightPanelToggle.collapsed {
-  right: 10px;
-}
-
-.rightPanelToggleIcon {
-  color: var(--mantine-color-gray-3);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
-}
-
-.rightPanelToggle:hover .rightPanelToggleIcon {
-  color: var(--mantine-color-gray-1);
-}
-
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;
@@ -133,15 +46,6 @@
 /* Tile rendering container */
 .tileRenderingContainer {
   position: relative;
-}
-
-/* Firefox-specific zoom handling */
-.firefoxZoomContainer {
-  position: relative;
-}
-
-.flexGrow {
-  flex-grow: 1;
 }
 
 .mainBackground {
@@ -213,30 +117,6 @@
   height: 100%;
   position: relative;
   overflow: auto;
-}
-
-.dragHandle {
-  width: 16px;
-  height: 100%;
-  background: var(--mantine-color-dark-4);
-  border-left: 1px solid var(--mantine-color-dark-3);
-  border-right: 1px solid var(--mantine-color-dark-3);
-  cursor: col-resize;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 100;
-  transition: background-color 0.2s ease;
-}
-
-.dragHandle:hover {
-  background-color: var(--mantine-color-dark-3);
-}
-
-.dragHandleIcon {
-  color: var(--mantine-color-gray-6);
-  pointer-events: none;
 }
 
 .sidebar {

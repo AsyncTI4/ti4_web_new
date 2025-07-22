@@ -3,14 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
   Box,
-  Center,
   Alert,
   SimpleGrid,
   Tabs,
-  Stack,
   Button,
   Group,
-  Text,
   Switch,
 } from "@mantine/core";
 import {
@@ -19,8 +16,6 @@ import {
   IconTarget,
   IconUsers,
   IconRefresh,
-  IconChevronLeft,
-  IconChevronRight,
   IconFlask,
   IconEye,
   IconSettings,
@@ -44,26 +39,23 @@ import { MapTile } from "./components/Map/MapTile";
 import { PlayerStatsArea } from "./components/Map/PlayerStatsArea";
 import classes from "./components/MapUI.module.css";
 import { useZoom } from "./hooks/useZoom";
-import { FactionTabBar } from "./components/FactionTabBar";
+
 import { useTabsAndTooltips } from "./hooks/useTabsAndTooltips";
 import { useSidebarDragHandle } from "./hooks/useSidebarDragHandle";
-import PlayerCardSidebar from "./components/PlayerCardSidebar";
+import { useMapScrollPosition } from "./hooks/useMapScrollPosition";
 import { DragHandle } from "./components/DragHandle";
 import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
 import { lookupUnit } from "./lookup/units";
-import PlayerCardSidebarTech from "./components/PlayerCardSidebarTech";
-import PlayerCardSidebarComponents from "./components/PlayerCardSidebarComponents";
 import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
 import ScoreBoard from "./components/ScoreBoard";
 import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
-import { CompactObjectives } from "./components/PlayerArea/CompactObjectives";
-import { CompactLaw } from "./components/PlayerArea/CompactLaw";
-import { LawDetailsCard } from "./components/PlayerArea/LawDetailsCard";
-import { PointTotals } from "./components/PlayerArea/PointTotals";
-import { SmoothPopover } from "./components/shared/SmoothPopover";
-import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
+import { LeftSidebar } from "./components/main/LeftSidebar";
 import { SettingsProvider, useSettings } from "./context/SettingsContext";
 import { SettingsModal } from "./components/SettingsModal";
+import { PanelToggleButton } from "./components/PanelToggleButton";
+import { RightSidebar } from "./components/main/RightSidebar";
+import { MapPlanetDetailsCard } from "./components/main/MapPlanetDetailsCard";
+import { MapUnitDetailsCard } from "./components/main/MapUnitDetailsCard";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -111,38 +103,11 @@ function useTabManagementNewUI() {
   return { activeTabs, changeTab, removeTab };
 }
 
-type ActiveArea =
-  | {
-      type: "faction";
-      faction: string;
-      unitId?: string;
-      coords: { x: number; y: number };
-    }
-  | { type: "tech" }
-  | { type: "components" }
-  | { type: "strength" }
-  | null;
-
-type PlayerCardDisplayProps = {
-  playerData: any[];
-  activeArea: ActiveArea;
-  factionToColor: Record<string, string>;
-  colorToFaction: Record<string, string>;
-  planetAttachments: Record<string, string[]>;
-};
-
 const MAP_PADDING = 200;
 
 function NewMapUIContent() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
-
-  // Add ref for the scrollable map container
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-
-  // Track if we've set the initial scroll position and for which game
-  const hasSetInitialScroll = useRef(false);
-  const lastGameId = useRef<string | null>(null);
 
   // Use tab management hook for NewMapUI
   const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
@@ -181,9 +146,6 @@ function NewMapUIContent() {
     coords: { x: number; y: number };
   } | null>(null);
 
-  // State for law popover
-  const [selectedLaw, setSelectedLaw] = useState<string | null>(null);
-
   // Left panel collapse state now managed by settings context
 
   // Planet hover handlers
@@ -211,17 +173,13 @@ function NewMapUIContent() {
     handleMouseLeave();
   }, [handleMouseLeave]);
 
-  // Panel collapse toggle now managed by settings context
-
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
     useSidebarDragHandle(30);
 
-  // Use enhanced player data hook that computes all derived values
   const enhancedData = usePlayerDataEnhanced(gameId);
 
-  // Track if this is the first socket connection to avoid refetching on initial connect
   const hasConnectedBefore = useRef(false);
-  // socket connection for real-time updates
+
   const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
     if (!hasConnectedBefore.current) {
       hasConnectedBefore.current = true;
@@ -273,38 +231,13 @@ function NewMapUIContent() {
     handleZoomScreenSize,
   } = useZoom(undefined, undefined);
 
-  // Reset scroll flag when switching games
-  useEffect(() => {
-    if (lastGameId.current !== gameId) {
-      hasSetInitialScroll.current = false;
-      lastGameId.current = gameId;
-    }
-  }, [gameId]);
-
-  // Set initial scroll positicurson only once when loading a new game
-  useEffect(() => {
-    if (
-      mapContainerRef.current &&
-      playerData &&
-      tilePositions.length > 0 &&
-      !hasSetInitialScroll.current
-    ) {
-      // Use requestAnimationFrame to ensure DOM is updated after rendering
-      requestAnimationFrame(() => {
-        if (mapContainerRef.current) {
-          const container = mapContainerRef.current;
-
-          // Calculate center position based on actual content dimensions
-          const centerX = (container.scrollWidth - container.clientWidth) / 2;
-          const centerY = (container.scrollHeight - container.clientHeight) / 2;
-
-          container.scrollLeft = centerX + MAP_PADDING * zoom;
-          container.scrollTop = centerY + MAP_PADDING * zoom;
-          hasSetInitialScroll.current = true;
-        }
-      });
-    }
-  }, [playerData, tilePositions, zoom]);
+  const { mapContainerRef } = useMapScrollPosition({
+    playerData,
+    tilePositions,
+    zoom,
+    gameId,
+    mapPadding: MAP_PADDING,
+  });
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -452,114 +385,17 @@ function NewMapUIContent() {
                       : `${100 - sidebarWidth}%`,
                   }}
                 >
-                  {/* Left Panel - Only render when there's data */}
-                  {(objectives && playerData) ||
-                  (lawsInPlay && lawsInPlay.length > 0) ? (
-                    <>
-                      {/* Left Sidebar Overlay */}
-                      <Box
-                        className={`${classes.leftSidebarOverlay} ${settings.isLeftPanelCollapsed ? classes.collapsed : ""}`}
-                      >
-                        <Stack p="md" gap="md">
-                          {objectives && playerData && (
-                            <Box>
-                              {/* Game Info */}
-                              {playerData[0] && (
-                                <Stack gap={1} mb="xs">
-                                  <Text size="md" c="gray.1" ff="heading">
-                                    {data.gameName}
-                                    {data.gameCustomName &&
-                                      ` - ${data.gameCustomName}`}
-                                  </Text>
-                                  <Text size="md" c="gray.3">
-                                    Round {data.gameRound}
-                                  </Text>
-                                </Stack>
-                              )}
-                              <h3 className={classes.sectionHeading}>
-                                Public Objectives
-                              </h3>
+                  <LeftSidebar enhancedData={enhancedData} />
 
-                              <CompactObjectives
-                                objectives={objectives}
-                                playerData={playerData}
-                              />
-                            </Box>
-                          )}
-
-                          {/* Point Totals */}
-                          {playerData && (
-                            <Box>
-                              <h3 className={classes.sectionHeading}>
-                                Point Totals ({vpsToWin} VP)
-                              </h3>
-                              <PointTotals
-                                playerData={playerData}
-                                vpsToWin={vpsToWin}
-                              />
-                            </Box>
-                          )}
-
-                          {/* Laws in Play */}
-                          {lawsInPlay && lawsInPlay.length > 0 && (
-                            <Box>
-                              <h3 className={classes.sectionHeading}>
-                                Laws in Play
-                              </h3>
-                              <Stack gap={2}>
-                                {lawsInPlay.map((law, index) => (
-                                  <SmoothPopover
-                                    key={`${law.id}-${index}`}
-                                    position="right"
-                                    opened={
-                                      selectedLaw === `${law.id}-${index}`
-                                    }
-                                    onChange={(opened) =>
-                                      setSelectedLaw(
-                                        opened ? `${law.id}-${index}` : null
-                                      )
-                                    }
-                                  >
-                                    <SmoothPopover.Target>
-                                      <div>
-                                        <CompactLaw
-                                          law={law}
-                                          onClick={() =>
-                                            setSelectedLaw(`${law.id}-${index}`)
-                                          }
-                                        />
-                                      </div>
-                                    </SmoothPopover.Target>
-                                    <SmoothPopover.Dropdown p={0}>
-                                      <LawDetailsCard law={law} />
-                                    </SmoothPopover.Dropdown>
-                                  </SmoothPopover>
-                                ))}
-                              </Stack>
-                            </Box>
-                          )}
-                        </Stack>
-                      </Box>
-
-                      {/* Left Panel Toggle Button */}
-                      <Box
-                        className={`${classes.leftPanelToggle} ${settings.isLeftPanelCollapsed ? classes.collapsed : ""}`}
-                        onClick={toggleLeftPanelCollapsed}
-                      >
-                        {settings.isLeftPanelCollapsed ? (
-                          <IconChevronRight
-                            size={16}
-                            className={classes.leftPanelToggleIcon}
-                          />
-                        ) : (
-                          <IconChevronLeft
-                            size={16}
-                            className={classes.leftPanelToggleIcon}
-                          />
-                        )}
-                      </Box>
-                    </>
-                  ) : null}
+                  {/* Left Panel Toggle Button */}
+                  {((objectives && playerData) ||
+                    (lawsInPlay && lawsInPlay.length > 0)) && (
+                    <PanelToggleButton
+                      isCollapsed={settings.isLeftPanelCollapsed}
+                      onClick={toggleLeftPanelCollapsed}
+                      position="left"
+                    />
+                  )}
 
                   <div
                     className={classes.zoomControlsDynamic}
@@ -651,82 +487,19 @@ function NewMapUIContent() {
                     })}
                   </Box>
 
-                  {/* Absolutely positioned UnitDetailsCard over hovered unit - outside zoom container */}
-                  {(() => {
-                    if (
-                      !tooltipUnit ||
-                      !tooltipUnit.unitId ||
-                      !tooltipUnit.faction
-                    )
-                      return null;
+                  <MapUnitDetailsCard
+                    tooltipUnit={tooltipUnit}
+                    playerData={playerData}
+                    zoom={zoom}
+                    mapPadding={MAP_PADDING}
+                  />
 
-                    const activePlayer = playerData?.find(
-                      (player) => player.faction === tooltipUnit.faction
-                    );
-                    if (!activePlayer) return null;
-
-                    // Scale the coordinates by zoom to match the zoomed content position
-                    const scaledX = tooltipUnit.coords.x * zoom;
-                    const scaledY = tooltipUnit.coords.y * zoom;
-
-                    const unitIdToUse =
-                      lookupUnit(
-                        tooltipUnit.unitId,
-                        activePlayer.faction,
-                        activePlayer
-                      )?.id || tooltipUnit.unitId;
-
-                    return (
-                      <Box
-                        key="tooltip"
-                        style={{
-                          position: "absolute",
-                          left: `${scaledX + MAP_PADDING}px`,
-                          top: `${scaledY + MAP_PADDING - 25}px`,
-                          zIndex: 10000000,
-                          pointerEvents: "none",
-                          transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
-                        }}
-                      >
-                        <UnitDetailsCard
-                          unitId={unitIdToUse}
-                          color={activePlayer.color}
-                        />
-                      </Box>
-                    );
-                  })()}
-
-                  {/* Absolutely positioned PlanetDetailsCard over hovered planet - outside zoom container */}
-                  {(() => {
-                    if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
-
-                    // Scale the coordinates by zoom to match the zoomed content position
-                    const scaledX = tooltipPlanet.coords.x * zoom;
-                    const scaledY = tooltipPlanet.coords.y * zoom;
-
-                    // Get planet attachments for this planet
-                    const planetAttachmentIds =
-                      planetAttachments[tooltipPlanet.planetId] || [];
-
-                    return (
-                      <Box
-                        key="planet-tooltip"
-                        style={{
-                          position: "absolute",
-                          left: `${scaledX + MAP_PADDING}px`,
-                          top: `${scaledY + MAP_PADDING - 25}px`,
-                          zIndex: 10000000,
-                          pointerEvents: "none",
-                          transform: "translate(-50%, -100%)", // Center horizontally, position above the planet
-                        }}
-                      >
-                        <PlanetDetailsCard
-                          planetId={tooltipPlanet.planetId}
-                          attachments={planetAttachmentIds}
-                        />
-                      </Box>
-                    );
-                  })()}
+                  <MapPlanetDetailsCard
+                    tooltipPlanet={tooltipPlanet}
+                    zoom={zoom}
+                    mapPadding={MAP_PADDING}
+                    planetAttachments={planetAttachments}
+                  />
 
                   {/* Reconnect button when disconnected */}
                   {readyState === ReadyState.CLOSED && (
@@ -750,91 +523,33 @@ function NewMapUIContent() {
                   )}
                 </Box>
 
-                {/* Drag Handle */}
                 <DragHandle onMouseDown={handleSidebarMouseDown} />
 
-                {/* Right Panel Toggle Button */}
-                <Box
-                  className={`${classes.rightPanelToggle} ${settings.isRightPanelCollapsed ? classes.collapsed : ""}`}
+                <PanelToggleButton
+                  isCollapsed={settings.isRightPanelCollapsed}
                   onClick={toggleRightPanelCollapsed}
+                  position="right"
                   style={{
                     right: settings.isRightPanelCollapsed
                       ? "10px"
                       : `calc(${sidebarWidth}vw + 14px)`,
                     transition: isDragging ? "none" : "right 0.1s ease",
                   }}
-                >
-                  {settings.isRightPanelCollapsed ? (
-                    <IconChevronLeft
-                      size={16}
-                      className={classes.rightPanelToggleIcon}
-                    />
-                  ) : (
-                    <IconChevronRight
-                      size={16}
-                      className={classes.rightPanelToggleIcon}
-                    />
-                  )}
-                </Box>
+                />
 
-                {/* Sidebar - Right Side (dynamic width) */}
-                <Box
-                  className={`${classes.sidebar} ${settings.isRightPanelCollapsed ? classes.collapsedRight : ""}`}
-                  style={{
-                    width: settings.isRightPanelCollapsed
-                      ? "0%"
-                      : `${sidebarWidth}%`,
-                  }}
-                >
-                  {/* Faction Tab Bar */}
-                  {playerData && (
-                    <FactionTabBar
-                      playerData={playerData}
-                      selectedArea={selectedArea}
-                      activeArea={activeArea}
-                      onAreaSelect={handleAreaSelect}
-                      onAreaMouseEnter={handleAreaMouseEnter}
-                      onAreaMouseLeave={handleAreaMouseLeave}
-                    />
-                  )}
-
-                  {/* Show player card based on active or selected faction */}
-                  {playerData && (
-                    <PlayerCardDisplay
-                      playerData={playerData}
-                      activeArea={activeArea || selectedArea}
-                      factionToColor={factionToColor}
-                      colorToFaction={colorToFaction}
-                      planetAttachments={planetAttachments}
-                    />
-                  )}
-
-                  {isError && (
-                    <Alert
-                      variant="light"
-                      color="red"
-                      title="Error loading player data"
-                      icon={<IconAlertCircle />}
-                      mb="md"
-                    >
-                      Could not load player data for game {gameId}. Please try
-                      again later.
-                    </Alert>
-                  )}
-
-                  {playerData && !selectedFaction && !activeUnit && (
-                    <Center h="200px" className={classes.hoverInstructions}>
-                      <Box>
-                        <div>Hover over a unit</div>
-                        <div>on the map to view</div>
-                        <div>player details</div>
-                        <div className={classes.hoverInstructionsLine}>
-                          Click to pin a player
-                        </div>
-                      </Box>
-                    </Center>
-                  )}
-                </Box>
+                <RightSidebar
+                  isRightPanelCollapsed={settings.isRightPanelCollapsed}
+                  sidebarWidth={sidebarWidth}
+                  enhancedData={enhancedData}
+                  selectedArea={selectedArea}
+                  activeArea={activeArea}
+                  selectedFaction={selectedFaction}
+                  activeUnit={activeUnit}
+                  onAreaSelect={handleAreaSelect}
+                  onAreaMouseEnter={handleAreaMouseEnter}
+                  onAreaMouseLeave={handleAreaMouseLeave}
+                  gameId={gameId}
+                />
               </Box>
             </Tabs.Panel>
 
@@ -895,82 +610,6 @@ function NewMapUIContent() {
       />
     </AppShell>
   );
-}
-
-function PlayerCardDisplay({
-  playerData,
-  activeArea,
-  factionToColor,
-  colorToFaction,
-  planetAttachments,
-}: PlayerCardDisplayProps) {
-  if (activeArea?.type === "faction") {
-    const playerToShow = playerData.find(
-      (player) => player.faction === activeArea.faction
-    );
-    if (!playerToShow) return null;
-
-    return (
-      <Box className={classes.playerCardsContainer}>
-        <Box className={classes.playerCard}>
-          <PlayerCardSidebar
-            playerData={playerToShow}
-            factionToColor={factionToColor}
-            colorToFaction={colorToFaction}
-            planetAttachments={planetAttachments}
-          />
-        </Box>
-      </Box>
-    );
-  }
-
-  // For tech mode (when not hovering over a unit), show all players
-  if (activeArea?.type === "tech") {
-    return (
-      <Stack className={classes.playerCardsContainer} gap={0}>
-        {playerData.map((player) => (
-          <Box key={player.faction} className={classes.playerCard}>
-            <PlayerCardSidebarTech
-              playerData={player}
-              factionToColor={factionToColor}
-              colorToFaction={colorToFaction}
-            />
-          </Box>
-        ))}
-      </Stack>
-    );
-  }
-
-  // For components mode (when not hovering over a unit), show all players
-  if (activeArea?.type === "components") {
-    return (
-      <Stack className={classes.playerCardsContainer}>
-        {playerData.map((player) => (
-          <Box key={player.faction} className={classes.playerCard}>
-            <PlayerCardSidebarComponents
-              playerData={player}
-              factionToColor={factionToColor}
-              colorToFaction={colorToFaction}
-            />
-          </Box>
-        ))}
-      </Stack>
-    );
-  }
-
-  if (activeArea?.type === "strength") {
-    return (
-      <Stack className={classes.playerCardsContainer}>
-        {playerData.map((player) => (
-          <Box key={player.faction} className={classes.playerCard}>
-            <PlayerCardSidebarStrength playerData={player} />
-          </Box>
-        ))}
-      </Stack>
-    );
-  }
-
-  return null;
 }
 
 export function NewMapUI() {

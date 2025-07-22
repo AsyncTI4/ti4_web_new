@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlayerDataResponse } from "../data/types";
-import { enhancePlayerData } from "@/data/enhancePlayerData";
+import {
+  EnhancedPlayerData,
+  enhancePlayerData,
+} from "@/data/enhancePlayerData";
 import { useMemo } from "react";
 import { config } from "@/config";
 
@@ -24,5 +27,16 @@ export function usePlayerDataEnhanced(gameId: string) {
     [data]
   );
 
-  return { ...enhancedPlayerData, isLoading, isError, refetch };
+  return {
+    ...enhancedPlayerData,
+    isLoading,
+    isError,
+    refetch,
+  } as HookReturnType;
 }
+
+type HookReturnType = EnhancedPlayerData & {
+  isLoading: boolean;
+  isError: boolean;
+  refetch: () => void;
+};
