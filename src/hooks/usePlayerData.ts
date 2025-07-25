@@ -8,9 +8,7 @@ import { useMemo } from "react";
 import { config } from "@/config";
 
 export function usePlayerData(gameId: string) {
-  const apiUrl = import.meta.env.DEV
-    ? `/proxy/webdata/${gameId}/${gameId}.json`
-    : `${config.api.websiteBase}webdata/${gameId}/${gameId}.json`;
+  const apiUrl = `${config.api.websiteBase}webdata/${gameId}/${gameId}.json`;
 
   return useQuery<PlayerDataResponse>({
     queryKey: ["playerData", gameId],

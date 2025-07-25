@@ -24,7 +24,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/proxy": {
-        target: "https://ti4.westaddisonheavyindustries.com",
+        target: "https://asyncti4.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/proxy/, ""),
       },

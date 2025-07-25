@@ -3,9 +3,7 @@ import { config } from "../config";
 
 
 export function useOverlayData(gameId) {
-  const apiUrl = import.meta.env.DEV
-    ? `/proxy/overlays/${gameId}/${gameId}.json`
-    : `${config.api.websiteBase}overlays/${gameId}/${gameId}.json`;
+  const apiUrl = `${config.api.websiteBase}overlays/${gameId}/${gameId}.json`;
 
   return useQuery({
     queryKey: ["overlays", gameId],
