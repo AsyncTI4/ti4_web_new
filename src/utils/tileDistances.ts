@@ -1,6 +1,7 @@
 import { hyperlaneIds, hyperlanes } from "@/data/hyperlanes";
 import { tileAdjacencies } from "../data/tileAdjacencies";
 import { getTileById } from "../mapgen/systems";
+import { getTokenData } from "../lookup/tokens";
 
 /**
  * Helper function to get all wormholes present on a tile
@@ -28,14 +29,12 @@ export function getTileWormholes(
       if (Array.isArray(factionEntities)) {
         factionEntities.forEach((entity: any) => {
           if (entity.entityType === "token") {
-            // Check if this token has wormholes
-            // Note: We'd need to lookup token data to get wormholes, but for now
-            // we can check common Creuss token patterns
+            // Look up token data and check if it has wormholes
             const tokenId = entity.entityId;
-            if (tokenId === "creussalpha") wormholes.add("ALPHA");
-            else if (tokenId === "creussbeta") wormholes.add("BETA");
-            else if (tokenId === "creussgamma") wormholes.add("GAMMA");
-            else if (tokenId === "creussepsilon") wormholes.add("EPSILON");
+            const tokenData = getTokenData(tokenId);
+            if (tokenData?.wormholes) {
+              tokenData.wormholes.forEach((wh) => wormholes.add(wh));
+            }
           }
         });
       }
