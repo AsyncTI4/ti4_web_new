@@ -22,6 +22,7 @@ import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
+import { TileSelectedOverlay } from "./TileSelectedOverlay";
 
 // Helper function to check if a system has tech skips
 const systemHasTechSkips = (
@@ -96,11 +97,16 @@ type Props = {
   isSelected?: boolean;
   isHovered?: boolean;
   techSkipsMode?: boolean;
+  distanceMode?: boolean;
+  selectedTiles?: string[];
+  tileDistance?: number | null;
+  systemIdToPosition?: Record<string, string>;
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
   exhaustedPlanets?: string[];
   alwaysShowControlTokens?: boolean;
   showExhaustedPlanets?: boolean;
+  isOnPath?: boolean; // Whether this tile is on any of the calculated paths
 };
 
 export const MapTile = React.memo<Props>(
@@ -123,11 +129,15 @@ export const MapTile = React.memo<Props>(
     isHovered,
     ringPosition,
     techSkipsMode,
+    distanceMode,
+    selectedTiles,
+
     overlaysEnabled,
     lawsInPlay,
     exhaustedPlanets = [],
     alwaysShowControlTokens = true,
     showExhaustedPlanets = true,
+    isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
@@ -459,19 +469,38 @@ export const MapTile = React.memo<Props>(
       return null;
     }, [tileUnitData, allEntityPlacements]);
 
+    const isDistanceSelected =
+      distanceMode && selectedTiles?.includes(systemId);
+    const isDistanceHoverable = distanceMode && !isDistanceSelected;
+
     return (
       <div
         className={`${classes.mapTile} ${className || ""} ${
           isSelected ? classes.selected : ""
-        } ${isHovered ? classes.hovered : ""}`}
+        } ${isHovered ? classes.hovered : ""} ${
+          isDistanceSelected ? classes.distanceSelected : ""
+        } ${isDistanceHoverable ? classes.distanceHoverable : ""}`}
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
-          opacity: techSkipsMode
-            ? systemHasTechSkips(systemId, tileUnitData)
-              ? 1.0
-              : 0.2
-            : 1,
+          opacity: (() => {
+            // Tech skips mode takes priority
+            if (techSkipsMode) {
+              return systemHasTechSkips(systemId, tileUnitData) ? 1.0 : 0.2;
+            }
+
+            // Distance mode with two selected tiles - dim tiles not on any path
+            if (
+              distanceMode &&
+              selectedTiles &&
+              selectedTiles.length === 2 &&
+              !isOnPath
+            ) {
+              return 0.2;
+            }
+
+            return 1;
+          })(),
           ...style,
         }}
         onClick={onTileSelect ? () => onTileSelect(systemId) : undefined}
@@ -508,6 +537,7 @@ export const MapTile = React.memo<Props>(
           {unitImages}
           {commandCounterStack}
           <div className={classes.ringPosition}>{ringPosition}</div>
+
           {controllingFaction && overlaysEnabled && (
             <FactionColorOverlay
               faction={factionToColor[controllingFaction]}
@@ -515,6 +545,12 @@ export const MapTile = React.memo<Props>(
               optimizedColors={optimizedColors}
             />
           )}
+
+          <TileSelectedOverlay
+            isSelected={!!isDistanceSelected}
+            isHovered={!!isHovered}
+            isDistanceMode={!!distanceMode}
+          />
         </div>
       </div>
     );

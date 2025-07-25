@@ -10,6 +10,7 @@ export type Settings = {
   overlaysEnabled: boolean;
   alwaysShowControlTokens: boolean;
   techSkipsMode: boolean;
+  distanceMode: boolean;
   isLeftPanelCollapsed: boolean;
   isRightPanelCollapsed: boolean;
   showExhaustedPlanets: boolean;
@@ -19,6 +20,7 @@ const DEFAULT_SETTINGS: Settings = {
   overlaysEnabled: false,
   alwaysShowControlTokens: true,
   techSkipsMode: false,
+  distanceMode: false,
   isLeftPanelCollapsed: false,
   isRightPanelCollapsed: false,
   showExhaustedPlanets: true,
@@ -56,6 +58,7 @@ type SettingsContextValue = {
   toggleOverlays: () => void;
   toggleAlwaysShowControlTokens: () => void;
   toggleTechSkipsMode: () => void;
+  toggleDistanceMode: () => void;
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   toggleShowExhaustedPlanets: () => void;
@@ -94,6 +97,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     updateSettings({ techSkipsMode: !settings.techSkipsMode });
   }, [settings.techSkipsMode, updateSettings]);
 
+  const toggleDistanceMode = useCallback(() => {
+    updateSettings({ distanceMode: !settings.distanceMode });
+  }, [settings.distanceMode, updateSettings]);
+
   const toggleLeftPanelCollapsed = useCallback(() => {
     updateSettings({ isLeftPanelCollapsed: !settings.isLeftPanelCollapsed });
   }, [settings.isLeftPanelCollapsed, updateSettings]);
@@ -112,6 +119,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleOverlays,
     toggleAlwaysShowControlTokens,
     toggleTechSkipsMode,
+    toggleDistanceMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     toggleShowExhaustedPlanets,

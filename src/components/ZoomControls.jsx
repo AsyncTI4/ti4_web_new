@@ -31,7 +31,7 @@ export function ZoomControls({
         onClick={onZoomOut}
         size="compact-md"
         color="red"
-        disabled={zoom <= 0.5 || zoomFitToScreen}
+        disabled={zoom <= 0.25 || zoomFitToScreen}
       >
         <IconZoomOut size={18} />
       </Button>

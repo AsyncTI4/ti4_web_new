@@ -1,4 +1,4 @@
-type TileAdjacencies = {
+export type TileAdjacencies = {
   [tilePosition: string]: (string | null)[];
 };
 

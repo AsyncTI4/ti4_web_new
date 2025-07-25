@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
@@ -19,6 +19,7 @@ import {
   IconFlask,
   IconEye,
   IconSettings,
+  IconRuler2,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -44,9 +45,6 @@ import { useTabsAndTooltips } from "./hooks/useTabsAndTooltips";
 import { useSidebarDragHandle } from "./hooks/useSidebarDragHandle";
 import { useMapScrollPosition } from "./hooks/useMapScrollPosition";
 import { DragHandle } from "./components/DragHandle";
-import { UnitDetailsCard } from "./components/PlayerArea/UnitDetailsCard";
-import { lookupUnit } from "./lookup/units";
-import { PlanetDetailsCard } from "./components/PlayerArea/PlanetDetailsCard";
 import ScoreBoard from "./components/ScoreBoard";
 import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
 import { LeftSidebar } from "./components/main/LeftSidebar";
@@ -56,6 +54,9 @@ import { PanelToggleButton } from "./components/PanelToggleButton";
 import { RightSidebar } from "./components/main/RightSidebar";
 import { MapPlanetDetailsCard } from "./components/main/MapPlanetDetailsCard";
 import { MapUnitDetailsCard } from "./components/main/MapUnitDetailsCard";
+import { PathVisualization } from "./components/PathVisualization";
+import { TilePosition } from "./utils/pathVisualization";
+import { useDistanceRendering } from "./hooks/useDistanceRendering";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -109,22 +110,19 @@ function NewMapUIContent() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
-  // Use tab management hook for NewMapUI
   const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
 
-  // Use settings from context
   const {
     settings,
     toggleOverlays,
     toggleTechSkipsMode,
+    toggleDistanceMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
   } = useSettings();
 
-  // State for settings modal
   const [settingsModalOpened, setSettingsModalOpened] = useState(false);
 
-  // Use tabs and tooltips hook
   const {
     selectedArea,
     activeArea,
@@ -139,16 +137,12 @@ function NewMapUIContent() {
     handleMouseDown,
   } = useTabsAndTooltips();
 
-  // State for tracking hovered planet
   const [tooltipPlanet, setTooltipPlanet] = useState<{
     systemId: string;
     planetId: string;
     coords: { x: number; y: number };
   } | null>(null);
 
-  // Left panel collapse state now managed by settings context
-
-  // Planet hover handlers
   const handlePlanetMouseEnter = useCallback(
     (systemId: string, planetId: string, x: number, y: number) => {
       setTooltipPlanet({ systemId, planetId, coords: { x, y } });
@@ -160,10 +154,9 @@ function NewMapUIContent() {
     setTooltipPlanet(null);
   }, []);
 
-  // Enhanced unit mouse handlers to clear planet tooltip
   const handleUnitMouseEnter = useCallback(
     (faction: string, unitId: string, x: number, y: number) => {
-      setTooltipPlanet(null); // Clear planet tooltip when hovering unit
+      setTooltipPlanet(null);
       handleMouseEnter(faction, unitId, x, y);
     },
     [handleMouseEnter]
@@ -183,7 +176,7 @@ function NewMapUIContent() {
   const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
     if (!hasConnectedBefore.current) {
       hasConnectedBefore.current = true;
-      return; // Ignore the first update since we already loaded the data
+      return;
     }
     console.log("Map update received, refetching player data...");
     enhancedData?.refetch();
@@ -215,6 +208,21 @@ function NewMapUIContent() {
   } = enhancedData || {};
   const data = enhancedData;
 
+  const {
+    selectedTiles,
+    pathResult,
+    hoveredTile,
+    systemsOnPath,
+    activePathIndex,
+    handleTileSelect,
+    handleTileHover,
+    handlePathIndexChange,
+  } = useDistanceRendering({
+    distanceMode: settings.distanceMode,
+    systemIdToPosition,
+    tileUnitData: data?.tileUnitData,
+  });
+
   useEffect(() => {
     document.title = `${gameId} - Async TI`;
   }, [gameId]);
@@ -245,7 +253,6 @@ function NewMapUIContent() {
 
   const navigate = useNavigate();
 
-  // Early return for version check - render update needed page
   if (
     enhancedData &&
     !isLoading &&
@@ -329,6 +336,16 @@ function NewMapUIContent() {
                 onClick={toggleTechSkipsMode}
               >
                 <IconFlask size={16} />
+              </Button>
+              <Button
+                variant={settings.distanceMode ? "filled" : "subtle"}
+                size="sm"
+                color={settings.distanceMode ? "orange" : "gray"}
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+                onClick={toggleDistanceMode}
+              >
+                <IconRuler2 size={16} />
               </Button>
               <Box
                 style={{
@@ -469,12 +486,11 @@ function NewMapUIContent() {
                           tileUnitData={tileData}
                           factionToColor={factionToColor}
                           optimizedColors={optimizedColors}
-                          onUnitMouseOver={handleUnitMouseEnter}
-                          onUnitMouseLeave={handleUnitMouseLeave}
-                          onUnitSelect={handleMouseDown}
-                          onPlanetHover={handlePlanetMouseEnter}
-                          onPlanetMouseLeave={handlePlanetMouseLeave}
+                          isHovered={hoveredTile === tile.systemId}
                           techSkipsMode={settings.techSkipsMode}
+                          distanceMode={settings.distanceMode}
+                          selectedTiles={selectedTiles}
+                          systemIdToPosition={systemIdToPosition}
                           overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                           exhaustedPlanets={allExhaustedPlanets}
@@ -482,10 +498,28 @@ function NewMapUIContent() {
                             settings.alwaysShowControlTokens
                           }
                           showExhaustedPlanets={settings.showExhaustedPlanets}
+                          isOnPath={systemsOnPath.has(tile.systemId)}
+                          onUnitMouseOver={handleUnitMouseEnter}
+                          onUnitMouseLeave={handleUnitMouseLeave}
+                          onUnitSelect={handleMouseDown}
+                          onPlanetHover={handlePlanetMouseEnter}
+                          onPlanetMouseLeave={handlePlanetMouseLeave}
+                          onTileSelect={handleTileSelect}
+                          onTileHover={handleTileHover}
                         />
                       );
                     })}
                   </Box>
+
+                  <PathVisualization
+                    pathResult={pathResult}
+                    systemIdToPosition={systemIdToPosition}
+                    tilePositions={tilePositions}
+                    zoom={zoom}
+                    mapPadding={MAP_PADDING}
+                    activePathIndex={activePathIndex}
+                    onPathIndexChange={handlePathIndexChange}
+                  />
 
                   <MapUnitDetailsCard
                     tooltipUnit={tooltipUnit}
