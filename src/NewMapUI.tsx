@@ -20,6 +20,7 @@ import {
   IconEye,
   IconSettings,
   IconRuler2,
+  IconKeyboard,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -57,6 +58,8 @@ import { MapUnitDetailsCard } from "./components/main/MapUnitDetailsCard";
 import { PathVisualization } from "./components/PathVisualization";
 import { TilePosition } from "./utils/pathVisualization";
 import { useDistanceRendering } from "./hooks/useDistanceRendering";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
+import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -119,9 +122,12 @@ function NewMapUIContent() {
     toggleDistanceMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
+    updateSettings,
   } = useSettings();
 
   const [settingsModalOpened, setSettingsModalOpened] = useState(false);
+  const [keyboardShortcutsModalOpened, setKeyboardShortcutsModalOpened] =
+    useState(false);
 
   const {
     selectedArea,
@@ -247,6 +253,23 @@ function NewMapUIContent() {
     mapPadding: MAP_PADDING,
   });
 
+  // Add keyboard shortcuts
+  useKeyboardShortcuts({
+    playerData,
+    toggleOverlays,
+    toggleTechSkipsMode,
+    toggleDistanceMode,
+    toggleLeftPanelCollapsed,
+    toggleRightPanelCollapsed,
+    isLeftPanelCollapsed: settings.isLeftPanelCollapsed,
+    isRightPanelCollapsed: settings.isRightPanelCollapsed,
+    updateSettings,
+    handleZoomIn,
+    handleZoomOut,
+    onAreaSelect: handleAreaSelect,
+    selectedArea,
+  });
+
   const isFirefox =
     typeof navigator !== "undefined" &&
     navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
@@ -346,6 +369,16 @@ function NewMapUIContent() {
                 onClick={toggleDistanceMode}
               >
                 <IconRuler2 size={16} />
+              </Button>
+              <Button
+                variant="subtle"
+                size="sm"
+                color="gray"
+                style={{ height: "36px", minWidth: "36px" }}
+                px={8}
+                onClick={() => setKeyboardShortcutsModalOpened(true)}
+              >
+                <IconKeyboard size={16} />
               </Button>
               <Box
                 style={{
@@ -641,6 +674,12 @@ function NewMapUIContent() {
       <SettingsModal
         opened={settingsModalOpened}
         onClose={() => setSettingsModalOpened(false)}
+      />
+
+      {/* Keyboard Shortcuts Modal */}
+      <KeyboardShortcutsModal
+        opened={keyboardShortcutsModalOpened}
+        onClose={() => setKeyboardShortcutsModalOpened(false)}
       />
     </AppShell>
   );

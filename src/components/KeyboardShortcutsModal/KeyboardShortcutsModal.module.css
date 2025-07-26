@@ -1,0 +1,45 @@
+.content {
+  font-family: var(--mantine-font-family);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shortcutItem {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+}
+
+.shortcutItem:last-child {
+  border-bottom: none;
+}
+
+.description {
+  flex: 1;
+  color: var(--mantine-color-gray-1);
+}
+
+.keyContainer {
+  display: flex;
+  align-items: center;
+}
+
+.key {
+  background: var(--mantine-color-dark-5);
+  border: 1px solid var(--mantine-color-dark-3);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  min-width: 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--mantine-color-gray-0);
+}
+
+.note {
+  background: var(--mantine-color-dark-6);
+  border-radius: 8px;
+  border: 1px solid var(--mantine-color-dark-4);
+}
