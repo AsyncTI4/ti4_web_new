@@ -125,8 +125,8 @@ type Props = {
   attachmentsMode?: boolean;
   pdsMode?: {
     enabled: boolean,
-    spaceCannonShotDetails?: {
-      [factionName: string]: SpaceCannonShotDetails[],
+    systemSpaceCannons?: {
+      [factionName: string]: SpaceCannonShotDetails,
     }
   };
   overlaysEnabled?: boolean;
@@ -512,21 +512,21 @@ export const MapTile = React.memo<Props>(
     }, [techSkipsMode, attachmentsMode]);
 
     const spaceCannonShotTokens: React.ReactElement[] | null = React.useMemo(() => {
-      if(!pdsMode?.enabled || !pdsMode?.spaceCannonShotDetails) {
+      if(!pdsMode?.enabled || !pdsMode?.systemSpaceCannons) {
         return null;
       }
 
-      return Object.entries(pdsMode?.spaceCannonShotDetails).flatMap(
-        ([faction, spaceCannonEntity]) => {
-          if(spaceCannonEntity) {
+      return Object.entries(pdsMode?.systemSpaceCannons).flatMap(
+        ([faction, spaceCannonDetails]) => {
+          if(!spaceCannonDetails) {
             return [];
           }
           
-          const expectedHits = processExpectedHits(spaceCannonEntity);
+          const expectedHits = processExpectedHits(spaceCannonDetails);
 
           return [
           <Group key={faction} className={classes.factionProgressBadge} gap={4}>
-            <CircularFactionIcon faction={faction} size={28} />
+            <CircularFactionIcon faction={faction} size={55} />
               <Text className={classes.progressBadgeText}>
                 {expectedHits}
               </Text>

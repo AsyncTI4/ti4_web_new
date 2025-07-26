@@ -47,7 +47,7 @@ export function determineTileAdjacencies(systemId: string, position: string, til
   }
 
   //Grab tile positional adjacencies
-  const resultAdjacentTiles = tileAdjacencies[position];
+  let resultAdjacentTiles = tileAdjacencies[position];
 
   //Grab wormhole adjacencies. 
   //Step 1: Start by finding wormholes in target system tile. This gets wormholes tied to the system.
@@ -58,7 +58,7 @@ export function determineTileAdjacencies(systemId: string, position: string, til
   }
 
   //Step 2: find wormhole tokens on tile.
-  const tileWormholes = targetTileUnitData.space["neutral"].filter((e) => e.entityType === "token" && wormHoleEntities.includes(e.entityId)).map((e) => e.entityId)
+  const tileWormholes = targetTileUnitData.space["neutral"]?.filter((e) => e.entityType === "token" && wormHoleEntities.includes(e.entityId)).map((e) => e.entityId)
   if(tileWormholes) {
     targetTileWormholes.push(...tileWormholes);
   }
@@ -81,6 +81,9 @@ export function determineTileAdjacencies(systemId: string, position: string, til
     //Step 5: Push any wormhole adjacents into the result
     if(wormholeAdjacents) {
       wormholeAdjacents.forEach(([k, _]) => {
+        if(!resultAdjacentTiles) {
+          resultAdjacentTiles = [];
+        }
         resultAdjacentTiles.push(k)
       })
     }

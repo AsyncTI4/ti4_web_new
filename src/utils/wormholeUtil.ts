@@ -3,7 +3,7 @@
 export const wormHoleEntities = ["alpha,", "beta", "creussalpha", "creussbeta", "creussgamma", "gamma", "ionalpha", "ionbeta"]
 
 export function translateWormholeChannel(entityId: string) {
-    switch (entityId) {
+    switch (entityId.toLowerCase()) {
         case "alpha":
         case "cruessalpha":
         case "ionalpha":

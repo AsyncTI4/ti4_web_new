@@ -18,8 +18,8 @@ export function processSystemSpaceCannon(
 ): {[factionName: string]: SpaceCannonShotDetails} | undefined {
     const systemSpaceCannons: {[factionName: string]: SpaceCannonShotDetails} = {};
     
-    const targetTileData = (data.tileUnitData as any)[position] as TileUnitData
-    const tileAdjacencies = determineTileAdjacencies(systemId, position, tileUnitData)
+    const targetTileData = (tileUnitData as any)[position] as TileUnitData
+    const tileAdjacencies = determineTileAdjacencies(systemId, position, tileUnitData).filter((t) => !!t)
 
     let spaceCannons: {[factionName: string]: SpaceCannon[]} = {};
     
@@ -33,11 +33,16 @@ export function processSystemSpaceCannon(
                             if (entity.entityType === "unit") {
                                 const unitData = lookupUnit(entity.entityId, faction)
                                 if (unitData?.spaceCannonDieCount && unitData?.spaceCannonHitsOn)
+                                {
+                                    if(spaceCannons[faction] === undefined) {
+                                        spaceCannons[faction] = []
+                                    }
                                     spaceCannons[faction].push({
                                         diceCount: unitData.spaceCannonDieCount,
                                         hitOn: unitData.spaceCannonHitsOn,
                                         deepSpace: unitData.deepSpaceCannon
-                                    })
+                                    } as SpaceCannon)
+                                }
                             }
                         }
                     }
@@ -57,11 +62,16 @@ export function processSystemSpaceCannon(
                             if (entity.entityType === "unit") {
                                 const unitData = lookupUnit(entity.entityId, faction)
                                 if (unitData?.spaceCannonDieCount && unitData?.spaceCannonHitsOn && unitData.deepSpaceCannon)
+                                {
+                                    if(spaceCannons[faction] === undefined) {
+                                        spaceCannons[faction] = []
+                                    }
                                     spaceCannons[faction].push({
                                         diceCount: unitData.spaceCannonDieCount,
                                         hitOn: unitData.spaceCannonHitsOn,
                                         deepSpace: unitData.deepSpaceCannon
-                                    })
+                                    } as SpaceCannon)
+                                }
                             }
                         }
                     }
@@ -72,6 +82,12 @@ export function processSystemSpaceCannon(
 
     if(Object.entries(spaceCannons).length > 0) {
         for ( const [faction, sc] of Object.entries(spaceCannons)) {
+            if(systemSpaceCannons[faction] === undefined) {
+                systemSpaceCannons[faction] = {
+                        spaceCannons: [],
+                        plasmaScoring: false
+                }
+            }
             systemSpaceCannons[faction].spaceCannons.push(...sc);
             systemSpaceCannons[faction].plasmaScoring = playerData.find((p) => p.faction === faction)?.techs.some((t) => t === "ps")
         }
@@ -82,11 +98,23 @@ export function processSystemSpaceCannon(
     return systemSpaceCannons;
 }
 
+// export function processExpectedHits(
+//     spaceCannons: SpaceCannon[]
+// ): number {
+//     let expectedHits: number = 0;
+//     spaceCannons.forEach((spaceCannon) => {
+//         expectedHits = expectedHits + (spaceCannon.diceCount * spaceCannon.hitOn / 10)
+//     })
+    
+//     return expectedHits;
+// }
+
+
 export function processExpectedHits(
-    spaceCannons: SpaceCannon[]
+    spaceCannons: SpaceCannonShotDetails
 ): number {
     let expectedHits: number = 0;
-    spaceCannons.forEach((spaceCannon) => {
+    spaceCannons.spaceCannons.forEach((spaceCannon) => {
         expectedHits = expectedHits + (spaceCannon.diceCount * spaceCannon.hitOn / 10)
     })
     
