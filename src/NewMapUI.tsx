@@ -66,6 +66,7 @@ import { SmoothPopover } from "./components/shared/SmoothPopover";
 import PlayerCardSidebarStrength from "./components/PlayerCardSidebarStrength";
 import { SettingsProvider, useSettings } from "./context/SettingsContext";
 import { SettingsModal } from "./components/SettingsModal";
+import { processSystemSpaceCannon } from "./utils/spaceCannonProcessor";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -643,10 +644,15 @@ function NewMapUIContent() {
                     {tilePositions.map((tile, index) => {
                       const tileKey = `${tile.systemId}-${index}`;
                       const position = systemIdToPosition[tile.systemId];
-                      const tileData =
+                      const tileUnitData =
                         position && data?.tileUnitData
                           ? (data.tileUnitData as any)[position]
                           : undefined;
+                      const spaceCannonData = data?.tileUnitData && data?.playerData ? {
+                        enabled: settings.pdsMode,
+                        systemSpaceCannons: processSystemSpaceCannon(tile.systemId, position, data?.tileUnitData, data?.playerData)
+                      }
+                        : undefined
 
                       return (
                         <MapTile
@@ -654,7 +660,7 @@ function NewMapUIContent() {
                           ringPosition={tile.ringPosition}
                           systemId={tile.systemId}
                           position={{ x: tile.x, y: tile.y }}
-                          tileUnitData={tileData}
+                          tileUnitData={tileUnitData}
                           factionToColor={factionToColor}
                           optimizedColors={optimizedColors}
                           onUnitMouseOver={handleUnitMouseEnter}
@@ -664,7 +670,7 @@ function NewMapUIContent() {
                           onPlanetMouseLeave={handlePlanetMouseLeave}
                           techSkipsMode={settings.techSkipsMode}
                           attachmentsMode={settings.attachmentsMode}
-                          pdsMode={settings.pdsMode}
+                          pdsMode={spaceCannonData}
                           overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                           exhaustedPlanets={allExhaustedPlanets}

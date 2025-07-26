@@ -494,3 +494,8 @@ export type SpaceCannon = {
     hitOn: number;
     deepSpace?: boolean;
 }
+
+export type SpaceCannonShotDetails = {
+  spaceCannons: SpaceCannon[]
+  plasmaScoring?: boolean;
+}

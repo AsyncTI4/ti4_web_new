@@ -18,13 +18,13 @@ import {
   getPlanetById,
 } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import { TileUnitData, LawInPlay, EntityData } from "@/data/types";
+import { TileUnitData, LawInPlay, SpaceCannonShotDetails } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
 import { CircularFactionIcon } from "../shared/CircularFactionIcon";
-import { processSpaceCannon } from "@/utils/spaceCannonProcessor";
+import { processExpectedHits } from "@/utils/spaceCannonProcessor";
 
 // Helper function to check if a system has tech skips
 const systemHasTechSkips = (
@@ -123,7 +123,12 @@ type Props = {
   isHovered?: boolean;
   techSkipsMode?: boolean;
   attachmentsMode?: boolean;
-  pdsMode?: boolean;
+  pdsMode?: {
+    enabled: boolean,
+    spaceCannonShotDetails?: {
+      [factionName: string]: SpaceCannonShotDetails[],
+    }
+  };
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
   exhaustedPlanets?: string[];
@@ -507,26 +512,27 @@ export const MapTile = React.memo<Props>(
     }, [techSkipsMode, attachmentsMode]);
 
     const spaceCannonShotTokens: React.ReactElement[] | null = React.useMemo(() => {
-      if(!pdsMode || !tileUnitData) {
-        return null
+      if(!pdsMode?.enabled || !pdsMode?.spaceCannonShotDetails) {
+        return null;
       }
 
-      const spaceCannonEntities = processSpaceCannon(tileId, tileUnitData);
-
-
-      return (
-        <>
-        {spaceCannonEntities?.forEach(
-          (spaceCannonEntity, faction) => {
-            <Group key={`faction`} className={classes.factionProgressBadge} gap={4}>
-              <CircularFactionIcon faction={`faction`} size={28} />
-                <Text className={classes.progressBadgeText}>
-                  {spaceCannonEntity[0].hitOn}
-                </Text>
-            </Group>
+      return Object.entries(pdsMode?.spaceCannonShotDetails).flatMap(
+        ([faction, spaceCannonEntity]) => {
+          if(spaceCannonEntity) {
+            return [];
           }
-        )}
-        </>
+          
+          const expectedHits = processExpectedHits(spaceCannonEntity);
+
+          return [
+          <Group key={faction} className={classes.factionProgressBadge} gap={4}>
+            <CircularFactionIcon faction={faction} size={28} />
+              <Text className={classes.progressBadgeText}>
+                {expectedHits}
+              </Text>
+          </Group>
+          ];
+        }
       );    
     }, [pdsMode]);
 
@@ -572,6 +578,7 @@ export const MapTile = React.memo<Props>(
           {controlTokens}
           {commodityIndicators}
           {productionIcon}
+          {spaceCannonShotTokens}
           {unitImages}
           {commandCounterStack}
           <div className={classes.ringPosition}>{ringPosition}</div>

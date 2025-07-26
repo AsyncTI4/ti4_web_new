@@ -1,4 +1,7 @@
+import { TileUnitData } from "@/data/types";
 import { tileAdjacencies } from "../data/tileAdjacencies";
+import { systems } from "@/data/systems";
+import { translateWormholeChannel, wormHoleEntities } from "./wormholeUtil";
 
 /**
  * Core logic: Determine which hex sides should be "open" (sparse borders) vs "closed" (solid borders)
@@ -33,6 +36,57 @@ export function determineOpenSides(statTiles: string[]): OpenSidesResult {
   }
 
   return result;
+}
+
+export function determineTileAdjacencies(systemId: string, position: string, tileData: Record<string, TileUnitData>): (string | null)[] {
+  const targetSystem = systems.find((s) => s.id === systemId);
+  const targetTileUnitData = tileData[position];
+
+  if (!targetTileUnitData || !targetSystem) {
+    return [];
+  }
+
+  //Grab tile positional adjacencies
+  const resultAdjacentTiles = tileAdjacencies[position];
+
+  //Grab wormhole adjacencies. 
+  //Step 1: Start by finding wormholes in target system tile. This gets wormholes tied to the system.
+  let targetTileWormholes: string[] = [];
+  const systemWormholes = targetSystem.wormholes;
+  if(systemWormholes) {
+    targetTileWormholes.push(...systemWormholes);
+  }
+
+  //Step 2: find wormhole tokens on tile.
+  const tileWormholes = targetTileUnitData.space["neutral"].filter((e) => e.entityType === "token" && wormHoleEntities.includes(e.entityId)).map((e) => e.entityId)
+  if(tileWormholes) {
+    targetTileWormholes.push(...tileWormholes);
+  }
+  
+  //Step 3: Merge different wormhole entities to similar wormhole channel (ALPHA, BETA, GAMMA)
+  const tileWormholeChannels = new Set(targetTileWormholes.map((wormholeId) => translateWormholeChannel(wormholeId)).filter(channel => !!channel))
+
+  //Step 4: Get tile IDs that have similar wormhole channels
+  if(tileWormholeChannels.size > 0) {
+    const wormholeAdjacents = Object.entries(tileData)
+    .filter(([_, t]) => t.space["neutral"]?.filter((e) => {
+      e.entityType === "token" 
+        && wormHoleEntities.includes(e.entityId)
+        const wormholeChannel = translateWormholeChannel(e.entityId)
+        if(wormholeChannel && tileWormholeChannels.has(wormholeChannel)) {
+          return true;
+        }
+    }))
+
+    //Step 5: Push any wormhole adjacents into the result
+    if(wormholeAdjacents) {
+      wormholeAdjacents.forEach(([k, _]) => {
+        resultAdjacentTiles.push(k)
+      })
+    }
+  }
+
+  return resultAdjacentTiles;
 }
 
 type OpenSidesResult = {
