@@ -72,7 +72,7 @@ export type Unit = {
 export type Token = {
   id: string;
   imagePath: string;
-  spaceOrPlanet: "space" | "planet";
+  spaceOrPlanet?: string;
   aliasList?: string[];
   source: string;
   attachmentID?: string;
@@ -406,11 +406,26 @@ export type Objectives = {
 export type Agenda = {
   alias: string;
   name: string;
-  type: "Directive" | "Law";
+  type: string;
   target: string;
   text1: string;
-  text2: string;
-  source: "pok" | "base";
+  text2?: string;
+  category?: string;
+  categoryDescription?: string;
+  source:
+    | "pok"
+    | "base"
+    | "absol"
+    | "mahact"
+    | "ignis_aurora"
+    | "byz_agendas"
+    | "voices_of_the_council"
+    | "little_omega"
+    | "miltymod"
+    | "project_pi"
+    | "sigma"
+    | "omega_phase"
+    | "riftset";
   forEmoji?: string;
   againstEmoji?: string;
   mapText?: string;
