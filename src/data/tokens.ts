@@ -17,12 +17,11 @@ export const tokens: Token[] = [
     id: "big_obelisk",
     imagePath: "token_big_obelisk.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "blight",
     imagePath: "token_ds_blight.png",
-    spaceOrPlanet: "space",
+    spaceOrPlanet: "idk",
     source: "ds",
   },
   {
@@ -137,37 +136,31 @@ export const tokens: Token[] = [
     id: "customempyrean",
     imagePath: "token_empyrean.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "customkollecc",
     imagePath: "token_ds_customkollecc.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "customnivyn",
     imagePath: "token_ds_customnivyn.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "customnokar",
     imagePath: "token_ds_customnokar.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "customtnelis",
     imagePath: "token_ds_customtnelis.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "customwinnu",
     imagePath: "token_winnu.png",
     source: "other",
-    spaceOrPlanet: "space",
   },
   {
     id: "custvpc1",
@@ -175,6 +168,7 @@ export const tokens: Token[] = [
     spaceOrPlanet: "space",
     aliasList: ["custvpc1"],
     source: "base",
+    placement: "center",
   },
   {
     id: "dmz_large",
@@ -243,7 +237,6 @@ export const tokens: Token[] = [
     id: "installation",
     imagePath: "token_installation.png",
     source: "asteroid",
-    spaceOrPlanet: "space",
   },
   {
     id: "ionalpha",
@@ -304,7 +297,6 @@ export const tokens: Token[] = [
   {
     id: "speaker",
     imagePath: "token_speaker.png",
-    spaceOrPlanet: "space",
     aliasList: ["speaker", "token_speaker"],
     source: "other",
   },
