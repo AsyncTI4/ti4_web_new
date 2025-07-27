@@ -2,6 +2,7 @@ import React from "react";
 import { Tile } from "./Tile";
 import { UnitStack } from "./UnitStack";
 import { ControlToken } from "./ControlToken";
+import { PdsControlToken } from "./PdsControlToken";
 import { CommandCounterStack } from "./CommandCounterStack";
 import { CommodityIndicator } from "./CommodityIndicator";
 import { ProductionIndicator } from "./ProductionIndicator";
@@ -98,6 +99,17 @@ type Props = {
   isHovered?: boolean;
   techSkipsMode?: boolean;
   distanceMode?: boolean;
+  pdsMode?: boolean;
+  tilesWithPds?: Set<string>;
+  dominantPdsFaction?: Record<
+    string,
+    {
+      faction: string;
+      color: string;
+      count: number;
+      expected: number;
+    }
+  >;
   selectedTiles?: string[];
   tileDistance?: number | null;
   systemIdToPosition?: Record<string, string>;
@@ -130,7 +142,11 @@ export const MapTile = React.memo<Props>(
     ringPosition,
     techSkipsMode,
     distanceMode,
+    pdsMode,
+    tilesWithPds,
+    dominantPdsFaction,
     selectedTiles,
+    systemIdToPosition,
 
     overlaysEnabled,
     lawsInPlay,
@@ -489,6 +505,12 @@ export const MapTile = React.memo<Props>(
               return systemHasTechSkips(systemId, tileUnitData) ? 1.0 : 0.2;
             }
 
+            // PDS mode - dim tiles that don't have PDS
+            if (pdsMode && tilesWithPds) {
+              const tilePosition = systemIdToPosition?.[systemId];
+              return tilePosition && tilesWithPds.has(tilePosition) ? 1.0 : 0.2;
+            }
+
             // Distance mode with two selected tiles - dim tiles not on any path
             if (
               distanceMode &&
@@ -545,6 +567,37 @@ export const MapTile = React.memo<Props>(
               optimizedColors={optimizedColors}
             />
           )}
+
+          {/* PDS Control Token Overlay */}
+          {pdsMode &&
+            dominantPdsFaction &&
+            systemIdToPosition &&
+            (() => {
+              const tilePosition = systemIdToPosition[systemId];
+              const pdsData = tilePosition
+                ? dominantPdsFaction[tilePosition]
+                : null;
+
+              if (pdsData) {
+                return (
+                  <PdsControlToken
+                    colorAlias={getColorAlias(pdsData.color)}
+                    faction={pdsData.faction}
+                    count={pdsData.count}
+                    expected={pdsData.expected}
+                    style={{
+                      position: "absolute",
+                      left: `${TILE_WIDTH / 2}px`,
+                      top: `${TILE_HEIGHT / 2}px`,
+                      transform: "translate(-50%, -50%)",
+                      zIndex: 19000, // High z-index to appear on top of everything
+                    }}
+                  />
+                );
+              }
+
+              return null;
+            })()}
 
           <TileSelectedOverlay
             isSelected={!!isDistanceSelected}

@@ -26,6 +26,16 @@ export type EnhancedPlayerData = {
   optimizedColors: Record<string, RGBColor>;
   planetAttachments: Record<string, string[]>;
   allExhaustedPlanets: string[];
+  tilesWithPds: Set<string>;
+  dominantPdsFaction: Record<
+    string,
+    {
+      faction: string;
+      color: string;
+      count: number;
+      expected: number;
+    }
+  >;
   objectives: Objectives;
   lawsInPlay: LawInPlay[];
   strategyCards: StrategyCard[];
@@ -146,6 +156,58 @@ export function enhancePlayerData(
     return Array.from(exhaustedPlanetsSet);
   })();
 
+  // Calculate PDS data for rendering
+  const { tilesWithPds, dominantPdsFaction } = (() => {
+    const tilesWithPds = new Set<string>();
+    const dominantPdsFaction: Record<
+      string,
+      {
+        faction: string;
+        color: string;
+        count: number;
+        expected: number;
+      }
+    > = {};
+
+    if (data.tileUnitData) {
+      Object.entries(data.tileUnitData).forEach(
+        ([position, tileData]: [string, any]) => {
+          if (tileData.pds && Object.keys(tileData.pds).length > 0) {
+            tilesWithPds.add(position);
+
+            // Find the faction with the highest expected value
+            let highestExpected = -1;
+            let dominantFaction = "";
+            let dominantCount = 0;
+            let dominantExpectedValue = 0;
+
+            Object.entries(tileData.pds).forEach(
+              ([faction, pdsData]: [string, any]) => {
+                if (pdsData.expected > highestExpected) {
+                  highestExpected = pdsData.expected;
+                  dominantFaction = faction;
+                  dominantCount = pdsData.count;
+                  dominantExpectedValue = pdsData.expected;
+                }
+              }
+            );
+
+            if (dominantFaction && factionToColor[dominantFaction]) {
+              dominantPdsFaction[position] = {
+                faction: dominantFaction,
+                color: factionToColor[dominantFaction],
+                count: dominantCount,
+                expected: dominantExpectedValue,
+              };
+            }
+          }
+        }
+      );
+    }
+
+    return { tilesWithPds, dominantPdsFaction };
+  })();
+
   return {
     ...data,
     // extra computed properties
@@ -156,5 +218,7 @@ export function enhancePlayerData(
     optimizedColors,
     planetAttachments,
     allExhaustedPlanets,
+    tilesWithPds,
+    dominantPdsFaction,
   };
 }

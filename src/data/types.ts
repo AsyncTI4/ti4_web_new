@@ -173,6 +173,9 @@ export type TileUnitData = {
   capacity?: {
     [factionColor: string]: { total: number; used: number; ignored: number };
   };
+  pds: {
+    [factionName: string]: { count: number; expected: number };
+  } | null;
 };
 
 export type LawInPlay = {

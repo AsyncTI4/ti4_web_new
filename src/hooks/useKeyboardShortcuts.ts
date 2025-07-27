@@ -5,6 +5,7 @@ interface KeyboardShortcutsProps {
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
   toggleDistanceMode: () => void;
+  togglePdsMode: () => void;
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   isLeftPanelCollapsed: boolean;
@@ -21,6 +22,7 @@ export function useKeyboardShortcuts({
   toggleOverlays,
   toggleTechSkipsMode,
   toggleDistanceMode,
+  togglePdsMode,
   toggleLeftPanelCollapsed,
   toggleRightPanelCollapsed,
   isLeftPanelCollapsed,
@@ -105,6 +107,11 @@ export function useKeyboardShortcuts({
         case "t":
           event.preventDefault();
           toggleTechSkipsMode();
+          break;
+
+        case "p":
+          event.preventDefault();
+          togglePdsMode();
           break;
 
         case "o":

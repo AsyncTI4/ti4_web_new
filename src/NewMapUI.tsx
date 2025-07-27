@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
@@ -21,6 +21,7 @@ import {
   IconSettings,
   IconRuler2,
   IconKeyboard,
+  IconRadar,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -56,7 +57,6 @@ import { RightSidebar } from "./components/main/RightSidebar";
 import { MapPlanetDetailsCard } from "./components/main/MapPlanetDetailsCard";
 import { MapUnitDetailsCard } from "./components/main/MapUnitDetailsCard";
 import { PathVisualization } from "./components/PathVisualization";
-import { TilePosition } from "./utils/pathVisualization";
 import { useDistanceRendering } from "./hooks/useDistanceRendering";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
@@ -120,6 +120,7 @@ function NewMapUIContent() {
     toggleOverlays,
     toggleTechSkipsMode,
     toggleDistanceMode,
+    togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     updateSettings,
@@ -211,6 +212,8 @@ function NewMapUIContent() {
     versionSchema,
     isLoading,
     ringCount = 3,
+    tilesWithPds,
+    dominantPdsFaction,
   } = enhancedData || {};
   const data = enhancedData;
 
@@ -259,6 +262,7 @@ function NewMapUIContent() {
     toggleOverlays,
     toggleTechSkipsMode,
     toggleDistanceMode,
+    togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     isLeftPanelCollapsed: settings.isLeftPanelCollapsed,
@@ -370,6 +374,18 @@ function NewMapUIContent() {
               >
                 <IconRuler2 size={16} />
               </Button>
+              {tilesWithPds && tilesWithPds.size > 0 && (
+                <Button
+                  variant={settings.pdsMode ? "filled" : "subtle"}
+                  size="sm"
+                  color={settings.pdsMode ? "blue" : "gray"}
+                  style={{ height: "36px", minWidth: "36px" }}
+                  px={8}
+                  onClick={togglePdsMode}
+                >
+                  PDS
+                </Button>
+              )}
               <Button
                 variant="subtle"
                 size="sm"
@@ -522,6 +538,9 @@ function NewMapUIContent() {
                           isHovered={hoveredTile === tile.systemId}
                           techSkipsMode={settings.techSkipsMode}
                           distanceMode={settings.distanceMode}
+                          pdsMode={settings.pdsMode}
+                          tilesWithPds={enhancedData?.tilesWithPds}
+                          dominantPdsFaction={enhancedData?.dominantPdsFaction}
                           selectedTiles={selectedTiles}
                           systemIdToPosition={systemIdToPosition}
                           overlaysEnabled={settings.overlaysEnabled}

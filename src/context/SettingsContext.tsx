@@ -11,6 +11,7 @@ export type Settings = {
   alwaysShowControlTokens: boolean;
   techSkipsMode: boolean;
   distanceMode: boolean;
+  pdsMode: boolean;
   isLeftPanelCollapsed: boolean;
   isRightPanelCollapsed: boolean;
   showExhaustedPlanets: boolean;
@@ -21,6 +22,7 @@ const DEFAULT_SETTINGS: Settings = {
   alwaysShowControlTokens: true,
   techSkipsMode: false,
   distanceMode: false,
+  pdsMode: false,
   isLeftPanelCollapsed: false,
   isRightPanelCollapsed: false,
   showExhaustedPlanets: true,
@@ -59,6 +61,7 @@ type SettingsContextValue = {
   toggleAlwaysShowControlTokens: () => void;
   toggleTechSkipsMode: () => void;
   toggleDistanceMode: () => void;
+  togglePdsMode: () => void;
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   toggleShowExhaustedPlanets: () => void;
@@ -84,34 +87,80 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   }, []);
 
   const toggleOverlays = useCallback(() => {
-    updateSettings({ overlaysEnabled: !settings.overlaysEnabled });
-  }, [settings.overlaysEnabled, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = { ...prev, overlaysEnabled: !prev.overlaysEnabled };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const toggleAlwaysShowControlTokens = useCallback(() => {
-    updateSettings({
-      alwaysShowControlTokens: !settings.alwaysShowControlTokens,
+    setSettings((prev) => {
+      const newSettings = {
+        ...prev,
+        alwaysShowControlTokens: !prev.alwaysShowControlTokens,
+      };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
     });
-  }, [settings.alwaysShowControlTokens, updateSettings]);
+  }, []);
 
   const toggleTechSkipsMode = useCallback(() => {
-    updateSettings({ techSkipsMode: !settings.techSkipsMode });
-  }, [settings.techSkipsMode, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = { ...prev, techSkipsMode: !prev.techSkipsMode };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const toggleDistanceMode = useCallback(() => {
-    updateSettings({ distanceMode: !settings.distanceMode });
-  }, [settings.distanceMode, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = { ...prev, distanceMode: !prev.distanceMode };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
+
+  const togglePdsMode = useCallback(() => {
+    setSettings((prev) => {
+      const newSettings = { ...prev, pdsMode: !prev.pdsMode };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const toggleLeftPanelCollapsed = useCallback(() => {
-    updateSettings({ isLeftPanelCollapsed: !settings.isLeftPanelCollapsed });
-  }, [settings.isLeftPanelCollapsed, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = {
+        ...prev,
+        isLeftPanelCollapsed: !prev.isLeftPanelCollapsed,
+      };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const toggleRightPanelCollapsed = useCallback(() => {
-    updateSettings({ isRightPanelCollapsed: !settings.isRightPanelCollapsed });
-  }, [settings.isRightPanelCollapsed, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = {
+        ...prev,
+        isRightPanelCollapsed: !prev.isRightPanelCollapsed,
+      };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const toggleShowExhaustedPlanets = useCallback(() => {
-    updateSettings({ showExhaustedPlanets: !settings.showExhaustedPlanets });
-  }, [settings.showExhaustedPlanets, updateSettings]);
+    setSettings((prev) => {
+      const newSettings = {
+        ...prev,
+        showExhaustedPlanets: !prev.showExhaustedPlanets,
+      };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
 
   const value: SettingsContextValue = {
     settings,
@@ -120,6 +169,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleAlwaysShowControlTokens,
     toggleTechSkipsMode,
     toggleDistanceMode,
+    togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     toggleShowExhaustedPlanets,

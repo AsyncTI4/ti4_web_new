@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+}
+
+.controlTokenImage {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.factionIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  height: 50px;
+  width: 50px;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.pdsOverlay {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 2;
+  margin-top: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  min-width: 80px;
+}
+
+.pdsCount {
+  margin-bottom: 2px;
+  font-size: 16px;
+}
+
+.pdsHits {
+  font-size: 13px;
+  opacity: 0.9;
+}
