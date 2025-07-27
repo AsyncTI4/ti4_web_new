@@ -355,6 +355,8 @@ export const relics: Relic[] = [
     text: "When you gain this card, research up to 2 technologies that have no prerequisites.\n> ACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.",
     flavourText:
       "A collector's item of incalculable value, none have been able to unlock its secrets - assuming its contents aren't just the ravings of a madwoman.",
+    imageURL:
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/book_of_latvinia.jpg?raw=true",
     source: "codex4",
   },
   {
@@ -372,6 +374,8 @@ export const relics: Relic[] = [
     text: "Your units do not roll for gravity rifts, and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships.",
     flavourText:
       "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
+    imageURL:
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/circlet_of_the_void.jpg?raw=true",
     source: "codex4",
   },
   {
@@ -408,7 +412,7 @@ export const relics: Relic[] = [
     name: "Dynamis Core",
     text: "While this card is in your play area, your commodity value is increased by 2.\nACTION: Purge this card to gain trade goods equal to your printed commodity value+2.",
     imageURL:
-      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/dynamis_core.jpg?raw=true",
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/dynamis_core.jpg?raw=true",
     source: "codex2",
     flavourText:
       "*Dart and Tai stood, mesmerized by the swirling mass. Neither had any idea what it was, but both were fairly sure they were about to retire.*",
@@ -480,7 +484,7 @@ export const relics: Relic[] = [
     name: "Nano-Forge",
     text: "ACTION: Attach this card to a non-legendary, non-home planet you control, its resource and influence values are increased by 2 and it is a legendary planet. This action cannot be performed once attached.",
     imageURL:
-      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/nanoforge.jpg?raw=true",
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/nanoforge.jpg?raw=true",
     source: "codex2",
     flavourText:
       "*Intended to bring prosperity, the forge was twisted into an instrument of war.*",
@@ -491,6 +495,8 @@ export const relics: Relic[] = [
     name: "Neuraloop",
     text: "When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective, even if it is a secret objective.",
     flavourText: "Knowledge. Creation. Control. Have a wonderful day.",
+    imageURL:
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/neuraloop.jpg?raw=true",
     source: "codex4",
   },
   {
@@ -676,7 +682,7 @@ export const relics: Relic[] = [
   {
     alias: "superweaponcaled",
     name: "Superweapon Caled",
-    text: "During combat, if a straight line between this system and the active system would cross only parallel non-anomaly borders, you may exhaust this card to destroy 1 ship in that system. [Note: You must be participating in the combat] ",
+    text: "During combat, if a straight line between the center of this system and the center of the active system would cross only parallel non-anomaly borders, you may exhaust this card to destroy 1 ship in that system. [Note: You must be participating in the combat. Cannot hit its own system. Treats hyperlanes as empties for purposes of line drawing.] ",
     isFakeRelic: true,
     source: "ds",
   },
@@ -725,7 +731,7 @@ export const relics: Relic[] = [
     name: "JR-XS455-O",
     text: "ACTION: Exhaust this agent and choose a player, that player may spend 3 resources to place a structure on a planet they control. If they do not, they gain 1 trade good.",
     imageURL:
-      "https://github.com/AsyncTI4/TI4_map_generator_bot/blob/master/src/main/resources/hover_images/relics/pok/jrxs4550.jpg?raw=true",
+      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/jrxs4550.jpg?raw=true",
     source: "codex2",
     shortName: "JR-\nXS455-O",
   },
