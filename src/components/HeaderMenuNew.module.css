@@ -195,6 +195,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .comboboxInput::before {
