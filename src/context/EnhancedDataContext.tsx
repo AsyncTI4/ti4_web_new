@@ -41,7 +41,7 @@ const EnhancedDataContext = createContext<EnhancedDataContextValue | undefined>(
     undefined
 );
 
-export function SettingsProvider({ children }: EnhancedDataProviderProps) {
+export function EnhancedDataContextProvider({ children }: EnhancedDataProviderProps) {
     const params = useParams<{ mapid: string }>();
     const gameId = params.mapid!;
     const systemIdToPosition: Record<string, string> = {};
