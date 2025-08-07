@@ -35,9 +35,19 @@ type EnhancedDataContextValue = {
     allExhaustedPlanets: string[];
     systemIdToPosition: Record<string, string>;
     factionColorMap: FactionColorMap;
+    tilesWithPds: Set<string>;
+    dominantPdsFaction: Record<
+        string,
+        {
+            faction: string;
+            color: string;
+            count: number;
+            expected: number;
+        }
+    >;
 }
 
-const EnhancedDataContext = createContext<EnhancedDataContextValue | undefined>(
+export const EnhancedDataContext = createContext<EnhancedDataContextValue | undefined>(
     undefined
 );
 
@@ -269,6 +279,59 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
         return Array.from(exhaustedPlanetsSet);
     })();
 
+
+    // Calculate PDS data for rendering
+    const { tilesWithPds, dominantPdsFaction } = (() => {
+        const tilesWithPds = new Set<string>();
+        const dominantPdsFaction: Record<
+            string,
+            {
+                faction: string;
+                color: string;
+                count: number;
+                expected: number;
+            }
+        > = {};
+
+        if (data.tileUnitData) {
+            Object.entries(data.tileUnitData).forEach(
+                ([position, tileData]: [string, any]) => {
+                    if (tileData.pds && Object.keys(tileData.pds).length > 0) {
+                        tilesWithPds.add(position);
+
+                        // Find the faction with the highest expected value
+                        let highestExpected = -1;
+                        let dominantFaction = "";
+                        let dominantCount = 0;
+                        let dominantExpectedValue = 0;
+
+                        Object.entries(tileData.pds).forEach(
+                            ([faction, pdsData]: [string, any]) => {
+                                if (pdsData.expected > highestExpected) {
+                                    highestExpected = pdsData.expected;
+                                    dominantFaction = faction;
+                                    dominantCount = pdsData.count;
+                                    dominantExpectedValue = pdsData.expected;
+                                }
+                            }
+                        );
+
+                        if (dominantFaction && factionToColor[dominantFaction]) {
+                            dominantPdsFaction[position] = {
+                                faction: dominantFaction,
+                                color: factionToColor[dominantFaction],
+                                count: dominantCount,
+                                expected: dominantExpectedValue,
+                            };
+                        }
+                    }
+                }
+            );
+        }
+
+        return { tilesWithPds, dominantPdsFaction };
+    })();
+
     // you can use either Faction or Color to access all of faction/color/optimized color.
     // this way, we don't have to pass two objects around (though maybe this is too fancy)
     data.playerData.forEach((player) => {
@@ -292,6 +355,8 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
         systemIdToPosition,
         factionColorMap,
         allExhaustedPlanets,
+        tilesWithPds,
+        dominantPdsFaction
     }
 
     return (
