@@ -5,10 +5,10 @@ import {
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
 import { createContext, ReactNode } from "react";
-import { usePlayerData } from "@/hooks/usePlayerData";
+import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { useParams } from "react-router-dom";
 import { colors } from "@/data/colors";
-import { MapTile, Planet } from "@/types/global";
+import { MapTileType, Planet } from "@/types/global";
 import { PlayerDataResponse } from "@/data/types";
 
 
@@ -30,7 +30,7 @@ type EnhancedDataProviderProps = {
 
 type EnhancedDataContextValue = {
     planetAttachments: Record<string, string[]>;
-    mapTiles: MapTile[];
+    mapTiles: MapTileType[];
     tilePositions: any;
     allExhaustedPlanets: string[];
     systemIdToPosition: Record<string, string>;
@@ -45,10 +45,31 @@ type EnhancedDataContextValue = {
             expected: number;
         }
     >;
+    isLoading: boolean;
+    isError: boolean;
+    readyState: any;
+    reconnect: any;
+    isReconnecting: any;
 }
 
-export const EnhancedDataContext = createContext<EnhancedDataContextValue | undefined>(
-    undefined
+const DEFAULT_VALUES: EnhancedDataContextValue = {
+        planetAttachments: {},
+        mapTiles: [],
+        tilePositions: [],
+        systemIdToPosition: {},
+        factionColorMap: {},
+        allExhaustedPlanets: [],
+        tilesWithPds: new Set(),
+        dominantPdsFaction: {},
+        isLoading: false,
+        isError: false,
+        isReconnecting: false,
+        readyState: false,
+        reconnect: false
+    }
+
+export const EnhancedDataContext = createContext<EnhancedDataContextValue>(
+    DEFAULT_VALUES
 );
 
 export function EnhancedDataContextProvider({ children }: EnhancedDataProviderProps) {
@@ -59,11 +80,18 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
     const factionColorMap: FactionColorMap = {};
     let validData: PlayerDataResponse;
 
-    const { data, isLoading, isError, refetch } = usePlayerData(gameId);
+    const { data, isLoading, isError, isReconnecting, readyState, reconnect } = usePlayerDataSocket(gameId);
 
     if (data) {
         validData = data!;
-    } else return (<EnhancedDataContext.Provider value={undefined}>
+    } else return (<EnhancedDataContext.Provider value={{
+                ...DEFAULT_VALUES,
+                isLoading,
+                isError,
+                isReconnecting,
+                readyState,
+                reconnect
+            }}>
         {children}
     </EnhancedDataContext.Provider>);
 
@@ -110,15 +138,15 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
         return sides;
     }
 
-    function parseMapTiles(): MapTile[] {
-        let mapTiles: MapTile[] = [];
+    function parseMapTiles(): MapTileType[] {
+        let mapTiles: MapTileType[] = [];
 
         if (!validData.tileUnitData) return [];
         Object.entries(validData.tileUnitData).forEach(([position, tileData]) => {
             const coordinates = calculateSingleTilePosition(position, validData.ringCount);
 
             // the id printed on the cardboard
-            const [_, systemId] = validData.tilePositions.filter(pos => pos.split(":")[0] === position).slice(-2);
+            const [_, systemId] = validData.tilePositions.filter(pos => pos.split(":")[0] === position)[0].split(":");
 
             const radius = 172.5; // Width = 345px
             // const height = Math.sqrt(3) * radius; // ~298.7px
@@ -126,7 +154,7 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
             const cy = coordinates.y + 149.5;
             const points = generateHexagonPoints(cx, cy, radius);
 
-            let newMapTile: MapTile = {
+            let newMapTile: MapTileType = {
                 position: position,
                 systemId: systemId,
                 planets: [],
@@ -356,7 +384,13 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
         factionColorMap,
         allExhaustedPlanets,
         tilesWithPds,
-        dominantPdsFaction
+        dominantPdsFaction,
+        isLoading,
+        isError,
+        isReconnecting,
+        readyState,
+        reconnect
+        
     }
 
     return (

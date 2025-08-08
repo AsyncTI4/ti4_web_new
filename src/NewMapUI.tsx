@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
@@ -61,32 +61,20 @@ import { useDistanceRendering } from "./hooks/useDistanceRendering";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 import { useTabManagementNewUI } from "./hooks/useTabManagementNewUI";
-
+import { EnhancedDataContext, EnhancedDataContextProvider } from "./context/EnhancedDataContext";
+import { useSettingsStore } from "./utils/appStore";
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
 const MAP_PADDING = 200;
 
 function NewMapUIContent() {
+  const enhancedData2 = useContext(EnhancedDataContext);
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
   const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
 
-  const {
-    settings,
-    toggleOverlays,
-    toggleTechSkipsMode,
-    toggleDistanceMode,
-    togglePdsMode,
-    toggleLeftPanelCollapsed,
-    toggleRightPanelCollapsed,
-    updateSettings,
-  } = useSettings();
-
-  const [settingsModalOpened, setSettingsModalOpened] = useState(false);
-  const [keyboardShortcutsModalOpened, setKeyboardShortcutsModalOpened] =
-    useState(false);
 
   const {
     selectedArea,
@@ -115,37 +103,39 @@ function NewMapUIContent() {
     []
   );
 
-  const handlePlanetMouseLeave = useCallback(() => {
-    setTooltipPlanet(null);
-  }, []);
+  const handlePlanetMouseLeave = () => setTooltipPlanet(null);
 
-  const handleUnitMouseEnter = useCallback(
-    (faction: string, unitId: string, x: number, y: number) => {
+  const handleUnitMouseEnter = (faction: string, unitId: string, x: number, y: number) => {
       setTooltipPlanet(null);
       handleMouseEnter(faction, unitId, x, y);
-    },
-    [handleMouseEnter]
-  );
+    };
 
-  const handleUnitMouseLeave = useCallback(() => {
-    handleMouseLeave();
-  }, [handleMouseLeave]);
+  const handleUnitMouseLeave = () => handleMouseLeave();
 
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
     useSidebarDragHandle(30);
 
   const enhancedData = usePlayerDataEnhanced(gameId);
 
-  const hasConnectedBefore = useRef(false);
-
-  const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
-    if (!hasConnectedBefore.current) {
-      hasConnectedBefore.current = true;
-      return;
-    }
-    console.log("Map update received, refetching player data...");
-    enhancedData?.refetch();
-  });
+  const isFirefox = useSettingsStore((state) => state.settings.isFirefox);
+  const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
+  const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
+  const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
+  const isLeftPanelCollapsed = useSettingsStore((state) => state.settings.leftPanelCollapsed);
+  const isRightPanelCollapsed = useSettingsStore((state) => state.settings.rightPanelCollapsed);
+  const overlaysEnabled = useSettingsStore((state) => state.settings.overlaysEnabled);
+  // const hoveredTile = useSettingsStore((state) => state.settings.hoveredTile);
+  const settingsModalOpened = useSettingsStore((state) => state.settings.settingsModalOpened);
+  const keyboardShortcutsModalOpened = useSettingsStore((state) => state.settings.keyboardShortcutsModalOpened);
+  const updateSettings = useSettingsStore((state) => state.updateSettings);
+  const setSettingsModalOpened = useSettingsStore((state) => state.setSettingsModalOpened);
+  const setKeyboardShortcutsModalOpened = useSettingsStore((state) => state.setKeyboardShortcutsModalOpened);
+  const toggleTechSkipsMode = useSettingsStore((state) => state.toggleTechSkipsMode);
+  const togglePdsMode = useSettingsStore((state) => state.toggleShowPDSLayer);
+  const toggleOverlays = useSettingsStore((state) => state.toggleOverlays);
+  const toggleDistanceMode = useSettingsStore((state) => state.toggleDistanceMode);
+  const toggleLeftPanelCollapsed = useSettingsStore((state) => state.toggleLeftPanelCollapsed);
+  const toggleRightPanelCollapsed = useSettingsStore((state) => state.toggleRightPanelCollapsed);
 
   const {
     playerData = [],
@@ -155,7 +145,6 @@ function NewMapUIContent() {
     colorToFaction = {},
     optimizedColors = {},
     planetAttachments = {},
-    allExhaustedPlanets = [],
     objectives = {
       stage1Objectives: [],
       stage2Objectives: [],
@@ -166,26 +155,22 @@ function NewMapUIContent() {
     strategyCards = [],
     vpsToWin = 10,
     cardPool,
-    isError = false,
     versionSchema,
-    isLoading,
     ringCount = 3,
     tilesWithPds,
-    dominantPdsFaction,
   } = enhancedData || {};
   const data = enhancedData;
 
   const {
     selectedTiles,
     pathResult,
-    hoveredTile,
     systemsOnPath,
     activePathIndex,
     handleTileSelect,
     handleTileHover,
     handlePathIndexChange,
   } = useDistanceRendering({
-    distanceMode: settings.distanceMode,
+    distanceMode: distanceMode,
     systemIdToPosition,
     tileUnitData: data?.tileUnitData,
   });
@@ -220,8 +205,8 @@ function NewMapUIContent() {
     togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
-    isLeftPanelCollapsed: settings.isLeftPanelCollapsed,
-    isRightPanelCollapsed: settings.isRightPanelCollapsed,
+    isLeftPanelCollapsed: isLeftPanelCollapsed,
+    isRightPanelCollapsed: isRightPanelCollapsed,
     updateSettings,
     handleZoomIn,
     handleZoomOut,
@@ -229,15 +214,12 @@ function NewMapUIContent() {
     selectedArea,
   });
 
-  const isFirefox =
-    typeof navigator !== "undefined" &&
-    navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
 
   const navigate = useNavigate();
 
   if (
-    enhancedData &&
-    !isLoading &&
+    enhancedData2 &&
+    !enhancedData2.isLoading &&
     (!versionSchema || versionSchema < REQUIRED_VERSION_SCHEMA)
   ) {
     return (
@@ -249,6 +231,8 @@ function NewMapUIContent() {
       />
     );
   }
+
+
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -310,9 +294,9 @@ function NewMapUIContent() {
                 Player Areas
               </Tabs.Tab>
               <Button
-                variant={settings.techSkipsMode ? "filled" : "subtle"}
+                variant={techSkipsMode ? "filled" : "subtle"}
                 size="sm"
-                color={settings.techSkipsMode ? "cyan" : "gray"}
+                color={techSkipsMode ? "cyan" : "gray"}
                 style={{ height: "36px", minWidth: "36px" }}
                 px={8}
                 onClick={toggleTechSkipsMode}
@@ -320,9 +304,9 @@ function NewMapUIContent() {
                 <IconFlask size={16} />
               </Button>
               <Button
-                variant={settings.distanceMode ? "filled" : "subtle"}
+                variant={distanceMode ? "filled" : "subtle"}
                 size="sm"
-                color={settings.distanceMode ? "orange" : "gray"}
+                color={distanceMode ? "orange" : "gray"}
                 style={{ height: "36px", minWidth: "36px" }}
                 px={8}
                 onClick={toggleDistanceMode}
@@ -331,9 +315,9 @@ function NewMapUIContent() {
               </Button>
               {tilesWithPds && tilesWithPds.size > 0 && (
                 <Button
-                  variant={settings.pdsMode ? "filled" : "subtle"}
+                  variant={pdsMode ? "filled" : "subtle"}
                   size="sm"
-                  color={settings.pdsMode ? "blue" : "gray"}
+                  color={pdsMode ? "blue" : "gray"}
                   style={{ height: "36px", minWidth: "36px" }}
                   px={8}
                   onClick={togglePdsMode}
@@ -360,11 +344,11 @@ function NewMapUIContent() {
                 }}
               />
               <Switch
-                checked={settings.overlaysEnabled}
+                checked={overlaysEnabled}
                 onChange={toggleOverlays}
                 size="sm"
                 thumbIcon={
-                  settings.overlaysEnabled ? (
+                  overlaysEnabled ? (
                     <IconEye size={12} />
                   ) : (
                     <IconEye size={12} style={{ opacity: 0.5 }} />
@@ -401,7 +385,7 @@ function NewMapUIContent() {
                   ref={mapContainerRef}
                   className={`dragscroll ${classes.mapArea}`}
                   style={{
-                    width: settings.isRightPanelCollapsed
+                    width: isRightPanelCollapsed
                       ? "100%"
                       : `${100 - sidebarWidth}%`,
                   }}
@@ -412,7 +396,7 @@ function NewMapUIContent() {
                   {((objectives && playerData) ||
                     (lawsInPlay && lawsInPlay.length > 0)) && (
                     <PanelToggleButton
-                      isCollapsed={settings.isLeftPanelCollapsed}
+                      isCollapsed={isLeftPanelCollapsed}
                       onClick={toggleLeftPanelCollapsed}
                       position="left"
                     />
@@ -421,7 +405,7 @@ function NewMapUIContent() {
                   <div
                     className={classes.zoomControlsDynamic}
                     style={{
-                      right: settings.isRightPanelCollapsed
+                      right: isRightPanelCollapsed
                         ? "35px"
                         : `calc(${sidebarWidth}vw + 35px)`,
                       transition: isDragging ? "none" : "right 0.1s ease",
@@ -473,9 +457,8 @@ function NewMapUIContent() {
                         }
                       )}
                     {/* Render tiles */}
-                    {tilePositions.map((tile, index) => {
-                      const tileKey = `${tile.systemId}-${index}`;
-                      const position = systemIdToPosition[tile.systemId];
+                    {enhancedData2!.mapTiles.map((tile, index) => {
+                      const position = enhancedData!.systemIdToPosition[tile.systemId];
                       const tileData =
                         position && data?.tileUnitData
                           ? (data.tileUnitData as any)[position]
@@ -483,33 +466,18 @@ function NewMapUIContent() {
 
                       return (
                         <MapTile
-                          key={tileKey}
-                          ringPosition={tile.ringPosition}
-                          systemId={tile.systemId}
-                          position={{ x: tile.x, y: tile.y }}
+                          key={`${tile.systemId}-${index}`}
+                          mapTile={tile}
                           tileUnitData={tileData}
                           factionToColor={factionToColor}
                           optimizedColors={optimizedColors}
-                          isHovered={hoveredTile === tile.systemId}
-                          techSkipsMode={settings.techSkipsMode}
-                          distanceMode={settings.distanceMode}
-                          pdsMode={settings.pdsMode}
-                          tilesWithPds={enhancedData?.tilesWithPds}
-                          dominantPdsFaction={enhancedData?.dominantPdsFaction}
                           selectedTiles={selectedTiles}
-                          systemIdToPosition={systemIdToPosition}
-                          overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
-                          exhaustedPlanets={allExhaustedPlanets}
-                          alwaysShowControlTokens={
-                            settings.alwaysShowControlTokens
-                          }
-                          showExhaustedPlanets={settings.showExhaustedPlanets}
                           isOnPath={systemsOnPath.has(tile.systemId)}
                           onUnitMouseOver={handleUnitMouseEnter}
                           onUnitMouseLeave={handleUnitMouseLeave}
                           onUnitSelect={handleMouseDown}
-                          onPlanetHover={handlePlanetMouseEnter}
+                          onPlanetMouseEnter={handlePlanetMouseEnter}
                           onPlanetMouseLeave={handlePlanetMouseLeave}
                           onTileSelect={handleTileSelect}
                           onTileHover={handleTileHover}
@@ -543,7 +511,7 @@ function NewMapUIContent() {
                   />
 
                   {/* Reconnect button when disconnected */}
-                  {readyState === ReadyState.CLOSED && (
+                  {enhancedData2!.readyState === ReadyState.CLOSED && (
                     <Button
                       variant="filled"
                       size="md"
@@ -556,8 +524,8 @@ function NewMapUIContent() {
                         transform: "translateX(-50%)",
                         zIndex: 1000,
                       }}
-                      onClick={reconnect}
-                      loading={isReconnecting}
+                      onClick={enhancedData2!.reconnect}
+                      loading={enhancedData2!.isReconnecting}
                     >
                       Refresh
                     </Button>
@@ -567,11 +535,11 @@ function NewMapUIContent() {
                 <DragHandle onMouseDown={handleSidebarMouseDown} />
 
                 <PanelToggleButton
-                  isCollapsed={settings.isRightPanelCollapsed}
+                  isCollapsed={isRightPanelCollapsed}
                   onClick={toggleRightPanelCollapsed}
                   position="right"
                   style={{
-                    right: settings.isRightPanelCollapsed
+                    right: isRightPanelCollapsed
                       ? "10px"
                       : `calc(${sidebarWidth}vw + 14px)`,
                     transition: isDragging ? "none" : "right 0.1s ease",
@@ -579,7 +547,7 @@ function NewMapUIContent() {
                 />
 
                 <RightSidebar
-                  isRightPanelCollapsed={settings.isRightPanelCollapsed}
+                  isRightPanelCollapsed={isRightPanelCollapsed}
                   sidebarWidth={sidebarWidth}
                   enhancedData={enhancedData}
                   selectedArea={selectedArea}
@@ -597,7 +565,7 @@ function NewMapUIContent() {
             {/* Player Areas Tab */}
             <Tabs.Panel value="players" h="calc(100% - 60px)">
               <Box className={classes.playersTabContent}>
-                {isError && (
+                {enhancedData2!.isError && (
                   <Alert
                     variant="light"
                     color="red"
@@ -662,7 +630,9 @@ function NewMapUIContent() {
 export function NewMapUI() {
   return (
     <SettingsProvider>
-      <NewMapUIContent />
+      <EnhancedDataContextProvider>
+        <NewMapUIContent />
+      </EnhancedDataContextProvider>
     </SettingsProvider>
   );
 }

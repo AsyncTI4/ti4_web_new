@@ -10,7 +10,7 @@
 // }
 
 
-export type MapTile = {
+export type MapTileType = {
   position: string;
   systemId: string;
   planets: Planet[];

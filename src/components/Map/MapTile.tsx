@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Tile } from "./Tile";
 import { UnitStack } from "./UnitStack";
 import { ControlToken } from "./ControlToken";
@@ -24,6 +24,9 @@ import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { getAttachmentData } from "../../data/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
+import { useSettingsStore, useAppStore } from "@/utils/appStore";
+import { MapTileType } from "@/types/global";
+import { EnhancedDataContext } from "@/context/EnhancedDataContext";
 
 // Helper function to check if a system has tech skips
 const systemHasTechSkips = (
@@ -70,9 +73,7 @@ const systemHasTechSkips = (
 };
 
 type Props = {
-  systemId: string;
-  position: { x: number; y: number };
-  ringPosition: string;
+  mapTile: MapTileType;
   tileUnitData?: TileUnitData;
   factionToColor: Record<string, string>;
   optimizedColors: Record<string, RGBColor>;
@@ -88,43 +89,23 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
-  onPlanetHover?: (
+  onPlanetMouseEnter?: (
     systemId: string,
     planetId: string,
     x: number,
     y: number
   ) => void;
   onPlanetMouseLeave?: () => void;
-  isSelected?: boolean;
-  isHovered?: boolean;
-  techSkipsMode?: boolean;
-  distanceMode?: boolean;
-  pdsMode?: boolean;
-  tilesWithPds?: Set<string>;
-  dominantPdsFaction?: Record<
-    string,
-    {
-      faction: string;
-      color: string;
-      count: number;
-      expected: number;
-    }
-  >;
+        
   selectedTiles?: string[];
   tileDistance?: number | null;
-  systemIdToPosition?: Record<string, string>;
-  overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
-  exhaustedPlanets?: string[];
-  alwaysShowControlTokens?: boolean;
-  showExhaustedPlanets?: boolean;
   isOnPath?: boolean; // Whether this tile is on any of the calculated paths
 };
 
 export const MapTile = React.memo<Props>(
   ({
-    systemId,
-    position,
+    mapTile,
     tileUnitData,
     factionToColor,
     optimizedColors,
@@ -135,40 +116,45 @@ export const MapTile = React.memo<Props>(
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
-    onPlanetHover,
+    onPlanetMouseEnter,
     onPlanetMouseLeave,
-    isSelected,
-    isHovered,
-    ringPosition,
-    techSkipsMode,
-    distanceMode,
-    pdsMode,
-    tilesWithPds,
-    dominantPdsFaction,
     selectedTiles,
-    systemIdToPosition,
-
-    overlaysEnabled,
     lawsInPlay,
-    exhaustedPlanets = [],
-    alwaysShowControlTokens = true,
-    showExhaustedPlanets = true,
+
+    
+
     isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
+    const enhancedData = useContext(EnhancedDataContext);
+
+    const ringPosition = mapTile.position;
+    const systemId = mapTile.systemId;
+    const position = {
+      x: mapTile.properties.x,
+      y: mapTile.properties.y
+    };
+    const isSelected = useAppStore((state) => state.selectedArea);
+    const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
+    const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
+    const alwaysShowControlTokens = useSettingsStore((state) => state.settings.showControlTokens);
+    const showExhaustedPlanets = useSettingsStore((state) => state.settings.showExhaustedPlanets);
+    const overlaysEnabled = useSettingsStore((state) => state.settings.overlaysEnabled);
+    const isHovered = useAppStore((state) => state.hoveredTile);
+    const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
 
     const handlePlanetMouseEnter = React.useCallback(
       (planetId: string, x: number, y: number) => {
-        if (!onPlanetHover) return;
+        if (!onPlanetMouseEnter) return;
 
         hoverTimeoutRef.current[planetId] = setTimeout(() => {
           // Convert relative planet position to world coordinates
           const worldX = position.x + x;
           const worldY = position.y + y;
-          onPlanetHover(systemId, planetId, worldX, worldY);
+          onPlanetMouseEnter(systemId, planetId, worldX, worldY);
         }, 1000);
       },
-      [systemId, onPlanetHover, position.x, position.y]
+      [systemId, onPlanetMouseEnter, position.x, position.y]
     );
 
     const handlePlanetMouseLeave = React.useCallback(
@@ -191,9 +177,7 @@ export const MapTile = React.memo<Props>(
       };
     }, []);
 
-    const allEntityPlacements = React.useMemo(() => {
-      return getAllEntityPlacementsForTile(systemId, tileUnitData);
-    }, [systemId, tileUnitData]);
+    const allEntityPlacements = getAllEntityPlacementsForTile(systemId, tileUnitData);
 
     const unitImages: React.ReactElement[] = React.useMemo(() => {
       const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -209,15 +193,9 @@ export const MapTile = React.memo<Props>(
         return [
           <UnitStack
             key={`${systemId}-${key}-stack`}
-            unitType={stack.entityId}
+            stack={stack}
             colorAlias={getColorAlias(factionToColor[stack.faction])}
-            faction={stack.faction}
-            count={stack.count}
-            x={stack.x}
-            y={stack.y}
             stackKey={key}
-            sustained={stack.sustained}
-            entityType={stack.entityType}
             planetCenter={planetCenter}
             lawsInPlay={lawsInPlay}
             onUnitMouseOver={
@@ -354,7 +332,7 @@ export const MapTile = React.memo<Props>(
 
         const diameter = radius * 2;
 
-        const isExhausted = exhaustedPlanets.includes(planetId);
+        const isExhausted = enhancedData.allExhaustedPlanets.includes(planetId);
         const exhaustedBackdropFilter =
           isExhausted && showExhaustedPlanets
             ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
@@ -381,7 +359,7 @@ export const MapTile = React.memo<Props>(
       tileUnitData,
       handlePlanetMouseEnter,
       handlePlanetMouseLeave,
-      exhaustedPlanets,
+      enhancedData.allExhaustedPlanets,
       showExhaustedPlanets,
     ]);
 
@@ -506,9 +484,9 @@ export const MapTile = React.memo<Props>(
             }
 
             // PDS mode - dim tiles that don't have PDS
-            if (pdsMode && tilesWithPds) {
-              const tilePosition = systemIdToPosition?.[systemId];
-              return tilePosition && tilesWithPds.has(tilePosition) ? 1.0 : 0.2;
+            if (pdsMode && enhancedData.tilesWithPds) {
+              const tilePosition = enhancedData.systemIdToPosition?.[systemId];
+              return tilePosition && enhancedData.tilesWithPds.has(tilePosition) ? 1.0 : 0.2;
             }
 
             // Distance mode with two selected tiles - dim tiles not on any path
@@ -570,12 +548,12 @@ export const MapTile = React.memo<Props>(
 
           {/* PDS Control Token Overlay */}
           {pdsMode &&
-            dominantPdsFaction &&
-            systemIdToPosition &&
+            enhancedData.dominantPdsFaction &&
+            enhancedData.systemIdToPosition &&
             (() => {
-              const tilePosition = systemIdToPosition[systemId];
+              const tilePosition = enhancedData.systemIdToPosition[systemId];
               const pdsData = tilePosition
-                ? dominantPdsFaction[tilePosition]
+                ? enhancedData.dominantPdsFaction[tilePosition]
                 : null;
 
               if (pdsData) {

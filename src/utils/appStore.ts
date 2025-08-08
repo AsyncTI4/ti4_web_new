@@ -148,7 +148,7 @@ export type Settings = {
   keyboardShortcutsModalOpened: boolean;
   leftPanelCollapsed: boolean;
   rightPanelCollapsed: boolean;
-  enableOverlays: boolean;
+  overlaysEnabled: boolean;
   techSkipsMode: boolean;
   showPDSLayer: boolean;
   distanceMode: boolean;
@@ -182,7 +182,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
     keyboardShortcutsModalOpened: false,
     leftPanelCollapsed: false,
     rightPanelCollapsed: false,
-    enableOverlays: false,
+    overlaysEnabled: false,
     techSkipsMode: false,
     showPDSLayer: false,
     distanceMode: false,
@@ -237,7 +237,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
       ...state,
       settings: {
         ...state.settings,
-        enableOverlays: !state.settings.enableOverlays,
+        overlaysEnabled: !state.settings.overlaysEnabled,
       },
     })),
   toggleTechSkipsMode: () =>
