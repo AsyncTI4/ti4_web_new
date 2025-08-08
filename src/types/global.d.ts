@@ -43,13 +43,6 @@ export type MapTile = {
 
 export type Planet = {
   name: string;
-  baseResources: number;
-  baseInfluence: number;
-  totalResources: number;
-  totalInfluence: number;
-  type: string;
-  hasTechSpecialty: boolean;
-  techSpecialty?: string;
   attachments: string[];
   tokens: string[];
   units: Unit[];
@@ -61,11 +54,10 @@ export type Planet = {
 };
 
 export type Unit = {
-  type: string;
+  type: "unit" | "token" | "attachment";
   amount: number;
   amountSustained: number;
   owner: string;
-  color: string;
 };
 
 // Common types that might be used across components

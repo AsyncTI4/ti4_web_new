@@ -8,11 +8,8 @@ import { createContext, ReactNode } from "react";
 import { usePlayerData } from "@/hooks/usePlayerData";
 import { useParams } from "react-router-dom";
 import { colors } from "@/data/colors";
-import { MapTile, Planet } from "@/types/global";
-import { PlayerDataResponse } from "@/data/types";
-
-
-
+import { MapTile, Planet, Unit } from "@/types/global";
+import { PlanetEntityData, PlayerDataResponse, TileUnitData } from "@/data/types";
 
 export type FactionColorMap = {
     [key: string]: FactionColorData
@@ -51,32 +48,27 @@ export const EnhancedDataContext = createContext<EnhancedDataContextValue | unde
     undefined
 );
 
+
+const RADIUS = 172.5; // Width = 345px
+const CENTER_X_OFFSET = 172.5;
+const CENTER_Y_OFFSET = 149.5;
+// const HEIGHT = Math.sqrt(3) * radius; // ~298.7px
+
 export function EnhancedDataContextProvider({ children }: EnhancedDataProviderProps) {
     const params = useParams<{ mapid: string }>();
-    const gameId = params.mapid!;
-    const systemIdToPosition: Record<string, string> = {};
-    const planetAttachments: Record<string, string[]> = {};
+    const { data, isLoading, isError, refetch } = usePlayerData(params.mapid!);
+    const systemIdToPosition = generateSystemIdToPosition(data);
     const factionColorMap: FactionColorMap = {};
-    let validData: PlayerDataResponse;
 
-    const { data, isLoading, isError, refetch } = usePlayerData(gameId);
-
-    if (data) {
-        validData = data!;
-    } else return (<EnhancedDataContext.Provider value={undefined}>
-        {children}
-    </EnhancedDataContext.Provider>);
-
-
-    if (validData.tilePositions) {
-        data.tilePositions.forEach((entry: string) => {
-            const [position, systemId] = entry.split(":");
-            systemIdToPosition[systemId] = position;
-        });
+    if (!data) {
+        return (<EnhancedDataContext.Provider value={undefined}>
+            {children}
+        </EnhancedDataContext.Provider>);
     }
 
+
     const factionToColor =
-        validData.playerData?.reduce(
+        data.playerData?.reduce(
             (acc, player) => {
                 acc[player.faction] = player.color;
                 return acc;
@@ -84,59 +76,38 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
             {} as Record<string, string>
         ) || {};
 
+    function parseMapTiles(data: PlayerDataResponse): { mapTiles: MapTile[], planetAttachments: Record<string, string[]> } {
+        if (!data.tileUnitData) return {
+            mapTiles: [],
+            planetAttachments: {}
+        };
 
-    function generateHexagonPoints(cx: number, cy: number, radius: number) {
-        const points = [];
-        for (let i = 0; i < 6; i++) {
-            const angle = i * 60 * (Math.PI / 180); // Start at 0° for flat-top orientation
-            const x = cx + radius * Math.cos(angle);
-            const y = cy + radius * Math.sin(angle);
-            points.push({ x, y });
-        }
-        return points;
-    }
+        const planetAttachments: Record<string, string[]> = {};
+        const mapTiles = Object.entries(data.tileUnitData).map(([position, tileData]) => {
+            const coordinates = calculateSingleTilePosition(position, data.ringCount);
+            const planets: Planet[] = getPlanets(tileData);
+            const { space, tokens } = getSpace(tileData);
 
-    function generateHexagonSides(points: { x: number; y: number }[]) {
-        const sides = [];
-        for (let i = 0; i < 6; i++) {
-            const nextI = (i + 1) % 6;
-            sides.push({
-                x1: points[i].x,
-                y1: points[i].y,
-                x2: points[nextI].x,
-                y2: points[nextI].y,
-            });
-        }
-        return sides;
-    }
+            const points = generateHexagonPoints(
+                coordinates.x + CENTER_X_OFFSET,
+                coordinates.y + CENTER_Y_OFFSET,
+                RADIUS
+            );
 
-    function parseMapTiles(): MapTile[] {
-        let mapTiles: MapTile[] = [];
+            // adds to planetAttachments
+            planets.filter(planet => planet.attachments.length > 0).forEach(planet => planetAttachments[planet.name] = planet.attachments);
 
-        if (!validData.tileUnitData) return [];
-        Object.entries(validData.tileUnitData).forEach(([position, tileData]) => {
-            const coordinates = calculateSingleTilePosition(position, validData.ringCount);
-
-            // the id printed on the cardboard
-            const [_, systemId] = validData.tilePositions.filter(pos => pos.split(":")[0] === position).slice(-2);
-
-            const radius = 172.5; // Width = 345px
-            // const height = Math.sqrt(3) * radius; // ~298.7px
-            const cx = coordinates.x + 172.5;
-            const cy = coordinates.y + 149.5;
-            const points = generateHexagonPoints(cx, cy, radius);
-
-            let newMapTile: MapTile = {
+            return {
                 position: position,
-                systemId: systemId,
-                planets: [],
-                space: [],
+                systemId: data.tilePositions.filter(pos => pos.split(":")[0] === position).slice(-2)[1],
+                planets: planets,
+                space: space,
                 anomaly: tileData.anomaly,
                 wormholes: [], //
                 commandCounters: tileData.ccs,
                 productionCapacity: 0, //
-                tokens: [],
-                controller: "",
+                tokens: tokens,
+                controller: mapTileController(planets, space),
                 properties: {
                     x: coordinates.x,
                     y: coordinates.y,
@@ -148,91 +119,12 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
                     height: 0,
                 },
             };
-
-            Object.entries(tileData.planets).forEach(
-                ([planetName, planetData]: [string, any]) => {
-                    let newPlanet: Planet = {
-                        name: planetName,
-                        baseResources: 0,
-                        baseInfluence: 0,
-                        totalResources: 0,
-                        totalInfluence: 0,
-                        type: "",
-                        hasTechSpecialty: false,
-                        techSpecialty: "",
-                        attachments: [],
-                        tokens: [],
-                        units: [],
-                        controller: planetData.controlledBy,
-                        properties: {
-                            x: 0,
-                            y: 0,
-                        },
-                    };
-
-                    Object.entries(planetData.entities).forEach(([faction, entities]: [string, any]) => {
-                        entities.forEach((entity: any) => {
-                            if (entity.entityType === "unit") {
-                                newPlanet.units.push({
-                                    type: entity.entityType,
-                                    amount: entity.count,
-                                    amountSustained: entity.sustained ?? 0,
-                                    owner: faction,
-                                    color: "",
-                                });
-                            }
-
-                            if (entity.entityType === "attachment")
-                                newPlanet.attachments.push(entity.entityId);
-                        });
-                    });
-
-                    if (newPlanet.attachments.length > 0) {
-                        planetAttachments[planetName] = newPlanet.attachments;
-                    }
-                    newMapTile.planets.push(newPlanet);
-                }
-            );
-
-            Object.entries(tileData.space).forEach(
-                ([faction, entities]: [string, any]) => {
-                    entities.forEach((entity: any) => {
-                        if (entity.entityType === "unit") {
-                            newMapTile.space.push({
-                                type: entity.entityType,
-                                amount: entity.count,
-                                amountSustained: entity.sustained ?? 0,
-                                owner: faction,
-                                color: "",
-                            });
-                        }
-
-                        if (entity.entityType === "token")
-                            newMapTile.tokens.push(entity.entityId);
-                    });
-                }
-            );
-
-            const uniquePlanetFactions = [
-                ...new Set(newMapTile.planets.map((planet) => planet.controller)),
-            ];
-            const uniqueFactions = [
-                ...new Set(newMapTile.space.map((unit) => unit.owner)),
-            ];
-
-            // Check planets, then check space area, otherwise no one faction has control
-            if (uniquePlanetFactions.length === 1) {
-                newMapTile.controller = uniquePlanetFactions[0];
-            } else if (uniqueFactions.length === 1) {
-                newMapTile.controller = uniqueFactions[0];
-            } else {
-                newMapTile.controller = "";
-            }
-
-            mapTiles.push(newMapTile);
         });
 
-        return mapTiles;
+        return {
+            mapTiles,
+            planetAttachments
+        }
     }
 
     const optimizedColors: Record<string, RGBColor> = (() => {
@@ -267,16 +159,9 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
     const allExhaustedPlanets: string[] = (() => {
         if (!data.playerData) return [];
 
-        const exhaustedPlanetsSet = new Set<string>();
-        data.playerData.forEach((player) => {
-            if (player.exhaustedPlanets) {
-                player.exhaustedPlanets.forEach((planetId) => {
-                    exhaustedPlanetsSet.add(planetId);
-                });
-            }
+        return data.playerData.flatMap((player) => {
+            return player.exhaustedPlanets.filter(planet => planet)
         });
-
-        return Array.from(exhaustedPlanetsSet);
     })();
 
 
@@ -293,41 +178,41 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
             }
         > = {};
 
-        if (data.tileUnitData) {
-            Object.entries(data.tileUnitData).forEach(
-                ([position, tileData]: [string, any]) => {
-                    if (tileData.pds && Object.keys(tileData.pds).length > 0) {
-                        tilesWithPds.add(position);
+        if (!data.tileUnitData) return { tilesWithPds, dominantPdsFaction }
 
-                        // Find the faction with the highest expected value
-                        let highestExpected = -1;
-                        let dominantFaction = "";
-                        let dominantCount = 0;
-                        let dominantExpectedValue = 0;
+        Object.entries(data.tileUnitData).forEach(
+            ([position, tileData]: [string, any]) => {
+                if (!(tileData.pds && Object.keys(tileData.pds).length > 0)) return;
 
-                        Object.entries(tileData.pds).forEach(
-                            ([faction, pdsData]: [string, any]) => {
-                                if (pdsData.expected > highestExpected) {
-                                    highestExpected = pdsData.expected;
-                                    dominantFaction = faction;
-                                    dominantCount = pdsData.count;
-                                    dominantExpectedValue = pdsData.expected;
-                                }
-                            }
-                        );
+                tilesWithPds.add(position);
 
-                        if (dominantFaction && factionToColor[dominantFaction]) {
-                            dominantPdsFaction[position] = {
-                                faction: dominantFaction,
-                                color: factionToColor[dominantFaction],
-                                count: dominantCount,
-                                expected: dominantExpectedValue,
-                            };
+                // Find the faction with the highest expected value
+                let highestExpected = -1;
+                let dominantFaction = "";
+                let dominantCount = 0;
+                let dominantExpectedValue = 0;
+
+                Object.entries(tileData.pds).forEach(
+                    ([faction, pdsData]: [string, any]) => {
+                        if (pdsData.expected > highestExpected) {
+                            highestExpected = pdsData.expected;
+                            dominantFaction = faction;
+                            dominantCount = pdsData.count;
+                            dominantExpectedValue = pdsData.expected;
                         }
                     }
+                );
+
+                if (dominantFaction && factionToColor[dominantFaction]) {
+                    dominantPdsFaction[position] = {
+                        faction: dominantFaction,
+                        color: factionToColor[dominantFaction],
+                        count: dominantCount,
+                        expected: dominantExpectedValue,
+                    };
                 }
-            );
-        }
+            }
+        );
 
         return { tilesWithPds, dominantPdsFaction };
     })();
@@ -347,10 +232,8 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
         };
     })
 
-
     const enhancedData: EnhancedDataContextValue = {
-        planetAttachments,
-        mapTiles: parseMapTiles(),
+        ...parseMapTiles(data), // for mapTiles and planetAttachments
         tilePositions: data.tilePositions,
         systemIdToPosition,
         factionColorMap,
@@ -369,3 +252,125 @@ export function EnhancedDataContextProvider({ children }: EnhancedDataProviderPr
 
 
 
+
+
+// Check planets, then check space area, otherwise no one faction has control
+function mapTileController(planets: Planet[], space: Unit[]) {
+    const uniquePlanetFactions = [
+        ...new Set(planets.map((planet) => planet.controller)),
+    ];
+    const uniqueFactions = [
+        ...new Set(space.map((unit) => unit.owner)),
+    ];
+
+    if (uniquePlanetFactions.length === 1) {
+        return uniquePlanetFactions[0];
+    } else if (uniqueFactions.length === 1) {
+        return uniqueFactions[0];
+    } else {
+        return "";
+    }
+}
+
+function getSpace(tileData: TileUnitData) {
+    const space: Unit[] = [];
+    const tokens: string[] = [];
+
+    Object.entries(tileData.space).forEach(
+        ([faction, entities]: [string, any]) => {
+            entities.forEach((entity: any) => {
+                if (entity.entityType === "unit") {
+                    space.push({
+                        type: entity.entityType,
+                        amount: entity.count,
+                        amountSustained: entity.sustained ?? 0,
+                        owner: faction
+                    });
+                }
+
+                if (entity.entityType === "token")
+                    tokens.push(entity.entityId);
+            });
+        }
+    );
+
+    return {
+        space,
+        tokens
+    }
+}
+
+function getPlanets(tileData: TileUnitData) {
+    return Object.entries(tileData.planets).map(
+        ([planetName, planetData]: [string, PlanetEntityData]) => {
+
+            const attachments: string[] = [];
+            const units: Unit[] = [];
+            Object.entries(planetData.entities).forEach(([faction, entities]: [string, any]) => {
+                entities.forEach((entity: any) => {
+                    if (entity.entityType === "unit") {
+                        units.push({
+                            type: entity.entityType,
+                            amount: entity.count,
+                            amountSustained: entity.sustained ?? 0,
+                            owner: faction
+                        });
+                    }
+
+                    if (entity.entityType === "attachment")
+                        attachments.push(entity.entityId);
+                });
+            });
+
+            return {
+                name: planetName,
+                attachments: attachments,
+                tokens: [],
+                units: units,
+                controller: planetData.controlledBy,
+                properties: {
+                    x: 0,
+                    y: 0,
+                },
+            };
+        }
+    );
+}
+
+function generateSystemIdToPosition(data: PlayerDataResponse | undefined) {
+    const systemIdToPosition: Record<string, string> = {};
+
+    if (!data || !data.tilePositions) return systemIdToPosition;
+
+    data.tilePositions.forEach((entry: string) => {
+        const [position, systemId] = entry.split(":");
+        systemIdToPosition[systemId] = position;
+    });
+
+    return systemIdToPosition;
+}
+
+function generateHexagonPoints(cx: number, cy: number, radius: number) {
+    const points = [];
+    for (let i = 0; i < 6; i++) {
+        const angle = i * 60 * (Math.PI / 180); // Start at 0° for flat-top orientation
+        const x = cx + radius * Math.cos(angle);
+        const y = cy + radius * Math.sin(angle);
+        points.push({ x, y });
+    }
+    return points;
+}
+
+function generateHexagonSides(points: { x: number; y: number }[]) {
+    const sides = [];
+    for (let i = 0; i < 6; i++) {
+        const nextI = (i + 1) % 6;
+        sides.push({
+            x1: points[i].x,
+            y1: points[i].y,
+            x2: points[nextI].x,
+            y2: points[nextI].y,
+        });
+    }
+    return sides;
+}
