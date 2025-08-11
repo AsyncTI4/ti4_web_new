@@ -29,7 +29,7 @@ function CardItem({ name, count, text, percentage }: CardItemData) {
             <Box className={styles.copyBadge}>{count}</Box>
           </Group>
           {percentage !== undefined && (
-            <Box className={styles.percentage}>{percentage.toFixed(2)}%</Box>
+            <Box className={styles.percentage}>{percentage?.toFixed(2)}%</Box>
           )}
         </Group>
         <Text className={styles.cardText}>{text}</Text>
