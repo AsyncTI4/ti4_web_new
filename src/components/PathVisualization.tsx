@@ -6,13 +6,13 @@ import {
   calculatePathPoints,
 } from "../utils/pathVisualization";
 import classes from "./PathVisualization.module.css";
+import { useAppStore } from "@/utils/appStore";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
   systemIdToPosition: Record<string, string>;
   tilePositions: TilePosition[];
   zoom: number;
-  mapPadding: number;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
 };
@@ -46,7 +46,6 @@ export const PathVisualization = ({
   systemIdToPosition,
   tilePositions,
   zoom,
-  mapPadding,
   activePathIndex,
   onPathIndexChange,
 }: PathVisualizationProps) => {
@@ -56,6 +55,7 @@ export const PathVisualization = ({
     () => createPositionMap(tilePositions),
     [tilePositions]
   );
+  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const validatedPathIndex =
     activePathIndex >= pathResult.paths.length ? 0 : activePathIndex;
@@ -76,7 +76,7 @@ export const PathVisualization = ({
       systemIdToPosition,
       positionMap,
       1, // Pass zoom as 1 since we'll apply it via CSS transform
-      0 // Pass mapPadding as 0 since we'll handle it via CSS positioning
+      0 // Pass MAP_PADDING as 0 since we'll handle it via CSS positioning
     );
   }, [currentPath, systemIdToPosition, positionMap]);
 
@@ -195,8 +195,8 @@ export const PathVisualization = ({
           ...(isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: mapPadding / zoom,
-          left: mapPadding / zoom,
+          top: MAP_PADDING / zoom,
+          left: MAP_PADDING / zoom,
         }}
       >
         {renderPathLines()}

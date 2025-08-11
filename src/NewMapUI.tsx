@@ -62,11 +62,10 @@ import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 import { useTabManagementNewUI } from "./hooks/useTabManagementNewUI";
 import { EnhancedDataContext, EnhancedDataContextProvider } from "./context/EnhancedDataContext";
-import { useSettingsStore } from "./utils/appStore";
+import { useAppStore, useSettingsStore } from "./utils/appStore";
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
-const MAP_PADDING = 200;
 
 function NewMapUIContent() {
   const enhancedData2 = useContext(EnhancedDataContext);
@@ -117,6 +116,8 @@ function NewMapUIContent() {
 
   const enhancedData = usePlayerDataEnhanced(gameId);
 
+  const zoomLevel = useAppStore((state) => state.zoomLevel);
+  const MAP_PADDING = useAppStore((state) => state.mapPadding);
   const isFirefox = useSettingsStore((state) => state.settings.isFirefox);
   const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
   const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
@@ -193,7 +194,6 @@ function NewMapUIContent() {
     tilePositions,
     zoom,
     gameId,
-    mapPadding: MAP_PADDING,
   });
 
   // Add keyboard shortcuts
@@ -491,7 +491,6 @@ function NewMapUIContent() {
                     systemIdToPosition={systemIdToPosition}
                     tilePositions={tilePositions}
                     zoom={zoom}
-                    mapPadding={MAP_PADDING}
                     activePathIndex={activePathIndex}
                     onPathIndexChange={handlePathIndexChange}
                   />
@@ -500,13 +499,11 @@ function NewMapUIContent() {
                     tooltipUnit={tooltipUnit}
                     playerData={playerData}
                     zoom={zoom}
-                    mapPadding={MAP_PADDING}
                   />
 
                   <MapPlanetDetailsCard
                     tooltipPlanet={tooltipPlanet}
                     zoom={zoom}
-                    mapPadding={MAP_PADDING}
                     planetAttachments={planetAttachments}
                   />
 
