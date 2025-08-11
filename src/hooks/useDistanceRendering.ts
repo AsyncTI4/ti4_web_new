@@ -3,18 +3,18 @@ import { calculateOptimalPaths, PathResult } from "../utils/tileDistances";
 
 type UseDistanceRenderingProps = {
   distanceMode: boolean;
-  systemIdToPosition: Record<string, string>;
+  positionToSystemId: Record<string, string>;
   tileUnitData?: any;
 };
 
 export function useDistanceRendering({
   distanceMode,
-  systemIdToPosition,
+  positionToSystemId,
   tileUnitData,
 }: UseDistanceRenderingProps) {
-  const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
+  const [selectedTiles, setSelectedTiles] = useState<string[]>([]); // positions
   const [pathResult, setPathResult] = useState<PathResult | null>(null);
-  const [hoveredTile, setHoveredTile] = useState<string | null>(null);
+  const [hoveredTile, setHoveredTile] = useState<string | null>(null); // position
   const [activePathIndex, setActivePathIndex] = useState(0);
 
   const systemsOnPath = useMemo(() => {
@@ -36,23 +36,23 @@ export function useDistanceRendering({
   }, [pathResult, activePathIndex]);
 
   const handleTileSelect = useCallback(
-    (systemId: string) => {
+    (position: string) => {
       if (!distanceMode) return;
 
       setSelectedTiles((prev) => {
-        if (prev.includes(systemId)) {
-          const newSelection = prev.filter((tile) => tile !== systemId);
+        if (prev.includes(position)) {
+          const newSelection = prev.filter((tile) => tile !== position);
           setPathResult(null);
           setActivePathIndex(0);
           return newSelection;
         }
 
         if (prev.length >= 2) {
-          const newSelection = [prev[1], systemId];
+          const newSelection = [prev[1], position];
           const paths = calculateOptimalPaths(
             newSelection[0],
             newSelection[1],
-            systemIdToPosition,
+            positionToSystemId,
             tileUnitData
           );
           setPathResult(paths);
@@ -60,13 +60,13 @@ export function useDistanceRendering({
           return newSelection;
         }
 
-        const newSelection = [...prev, systemId];
+        const newSelection = [...prev, position];
 
         if (newSelection.length === 2) {
           const paths = calculateOptimalPaths(
             newSelection[0],
             newSelection[1],
-            systemIdToPosition,
+            positionToSystemId,
             tileUnitData
           );
           setPathResult(paths);
@@ -76,13 +76,13 @@ export function useDistanceRendering({
         return newSelection;
       });
     },
-    [distanceMode, systemIdToPosition, tileUnitData]
+    [distanceMode, positionToSystemId, tileUnitData]
   );
 
   const handleTileHover = useCallback(
-    (systemId: string, isHovered: boolean) => {
+    (position: string, isHovered: boolean) => {
       if (!distanceMode) return;
-      setHoveredTile(isHovered ? systemId : null);
+      setHoveredTile(isHovered ? position : null);
     },
     [distanceMode]
   );

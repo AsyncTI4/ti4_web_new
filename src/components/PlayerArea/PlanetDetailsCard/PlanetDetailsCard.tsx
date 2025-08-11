@@ -5,7 +5,7 @@ import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import classes from "./PlanetDetailsCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
-import { getAttachmentData } from "@/data/attachments";
+import { getAttachmentData } from "@/lookup/attachments";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import DetailsCardTitle from "@/components/shared/DetailsCard/DetailsCardTitle";
 import DetailsCardIcon from "@/components/shared/DetailsCard/DetailsCardIcon";
@@ -22,9 +22,6 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
 
   const isLegendary = !!planetData.legendaryAbilityText;
   const isFactionPlanet = planetData.planetType === "FACTION";
-  const cardClass = isLegendary
-    ? `${classes.card} ${classes.legendaryCard}`
-    : classes.card;
 
   // Calculate attachment modifiers
   const attachmentModifiers = attachments.reduce(

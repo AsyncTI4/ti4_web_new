@@ -20,7 +20,7 @@ export type EnhancedPlayerData = {
   tilePositions: string[];
   statTilePositions: Record<string, string[]>;
   calculatedTilePositions: TilePosition[];
-  systemIdToPosition: Record<string, string>;
+  positionToSystemId: Record<string, string>;
   factionToColor: Record<string, string>;
   colorToFaction: Record<string, string>;
   optimizedColors: Record<string, RGBColor>;
@@ -55,11 +55,11 @@ export function enhancePlayerData(
     ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
 
-  const systemIdToPosition: Record<string, string> = {};
+  const positionToSystemId: Record<string, string> = {};
   if (data.tilePositions) {
     data.tilePositions.forEach((entry: string) => {
       const [position, systemId] = entry.split(":");
-      systemIdToPosition[systemId] = position;
+      positionToSystemId[position] = systemId;
     });
   }
 
@@ -212,7 +212,7 @@ export function enhancePlayerData(
     ...data,
     // extra computed properties
     calculatedTilePositions,
-    systemIdToPosition,
+    positionToSystemId,
     factionToColor,
     colorToFaction,
     optimizedColors,

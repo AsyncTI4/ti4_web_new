@@ -1,7 +1,7 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
 import { getTokenImagePath, getTokenData } from "@/lookup/tokens";
-import { getAttachmentImagePath } from "@/data/attachments";
+import { getAttachmentImagePath } from "@/lookup/attachments";
 
 interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   tokenId: string;

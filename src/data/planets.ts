@@ -1987,9 +1987,14 @@ export const planets: Planet[] = [
     tileId: "d111",
     name: "Dorvak",
     aliases: ["dorvak", "dorv", "dor", "dorvok"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+
+    planetLayout: {
+      unitHolderName: "dorvok",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 135,
+        y: 85,
+      },
     },
     resources: 1,
     influence: 2,
@@ -3294,9 +3299,13 @@ export const planets: Planet[] = [
     tileId: "d13",
     name: "Idyn",
     aliases: ["idyn"],
-    positionInTile: {
-      x: 93.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "idyn",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 93,
+        y: 140,
+      },
     },
     resources: 1,
     influence: 0,
@@ -4152,9 +4161,13 @@ export const planets: Planet[] = [
     tileId: "26",
     name: "Lodor",
     aliases: ["lodor", "lodo", "ldr", "26_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "lodor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137,
+        y: 88,
+      },
     },
     resources: 3,
     influence: 1,
@@ -5616,9 +5629,13 @@ export const planets: Planet[] = [
     tileId: "65",
     name: "Primor",
     aliases: ["primor", "prmr", "primr", "prmor", "prim", "65_1"],
-    positionInTile: {
-      x: 172.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "primor",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172,
+        y: 148,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6195,9 +6212,13 @@ export const planets: Planet[] = [
     tileId: "d112",
     name: "Rysaa",
     aliases: ["rysaa", "rysa", "ryssa"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "rysaa",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 135,
+        y: 85,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6393,9 +6414,13 @@ export const planets: Planet[] = [
       "sem",
       "sem-lor",
     ],
-    positionInTile: {
-      x: 169.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "semlore",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 169,
+        y: 148,
+      },
     },
     resources: 3,
     influence: 2,

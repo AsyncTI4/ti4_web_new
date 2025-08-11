@@ -598,7 +598,7 @@ export const placeGroundEntities = ({
 
 /**
  * Places attachment entities on the rim of a planet.
- * Starts from the EAST side (directly to the right) and distributes around the rim.
+ * Uses a constant angular step between attachments, centered around EAST.
  */
 const placeAttachmentsOnRim = (
   planetX: number,
@@ -607,38 +607,35 @@ const placeAttachmentsOnRim = (
   attachmentEntities: EntityStackBase[]
 ): EntityStack[] => {
   const attachmentPlacements: EntityStack[] = [];
-  // If no attachments, return empty array
   if (attachmentEntities.length === 0) return attachmentPlacements;
 
+  // Approximately 28.6° between attachments (arc length ~= 30px for radius 60)
+  const ATTACHMENT_ANGLE_STEP = 0.5; // radians
+
   if (attachmentEntities.length === 1) {
-    // Single attachment: place directly on the EAST side (right side, centered vertically)
     attachmentPlacements.push({
       ...attachmentEntities[0],
-      x: planetX + planetRadius, // Direct east = planetX + radius
-      y: planetY, // Same Y as planet center (centered vertically)
+      x: planetX + planetRadius,
+      y: planetY,
     });
-  } else {
-    // Multiple attachments: distribute around the rim starting from east going counter-clockwise
-    const totalAttachments = attachmentEntities.length;
-    const angleSpread = Math.PI / 1.25; // 120 degrees total spread
-    const angleStep = angleSpread / (totalAttachments - 1);
-    const startAngle = 0; // Start at east (0 degrees)
-
-    attachmentEntities.forEach((attachment, index) => {
-      const angle = startAngle + index * angleStep * -1;
-
-      // Calculate position on the rim (angle 0 = east, positive = counter-clockwise)
-      const x = planetX + planetRadius * Math.cos(angle);
-      const y = planetY + planetRadius * Math.sin(angle);
-
-      attachmentPlacements.push({
-        ...attachment,
-        x,
-        y,
-      });
-    });
-    attachmentPlacements.reverse();
+    return attachmentPlacements;
   }
+
+  const totalAttachments = attachmentEntities.length;
+  // Center the sequence around EAST so it fans out symmetrically
+  const startAngle = (-ATTACHMENT_ANGLE_STEP * (totalAttachments - 1)) / 2;
+
+  attachmentEntities.forEach((attachment, index) => {
+    const angle = startAngle + index * ATTACHMENT_ANGLE_STEP; // 0 = east, + = CCW
+    const x = planetX + planetRadius * Math.cos(angle);
+    const y = planetY + planetRadius * Math.sin(angle);
+
+    attachmentPlacements.push({
+      ...attachment,
+      x,
+      y,
+    });
+  });
 
   return attachmentPlacements;
 };

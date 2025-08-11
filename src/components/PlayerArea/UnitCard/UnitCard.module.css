@@ -51,6 +51,8 @@
   padding: 6px 4px;
   gap: 4px;
   justify-content: space-between;
+  min-height: 64px;
+  box-sizing: border-box;
 }
 
 .topHighlight {
@@ -95,14 +97,18 @@
 
 .imageContainer {
   justify-content: center;
+  align-items: center;
+  min-height: 40px;
 }
 
 .unitImage {
-  width: 30px;
+  height: 30px;
+  width: auto;
 }
 
 .unitImageCompact {
-  width: 28px;
+  height: 28px;
+  width: auto;
 }
 
 .infoStack {

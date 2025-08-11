@@ -3,7 +3,7 @@ import { cdnImage } from "../../data/cdnImage";
 import {
   getAttachmentData,
   getAttachmentImagePath,
-} from "../../data/attachments";
+} from "../../lookup/attachments";
 
 type AttachmentProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   unitType: string;
@@ -20,6 +20,7 @@ export const Attachment = ({
 }: AttachmentProps) => {
   // Look up attachment data by ID
   const attachmentData = getAttachmentData(unitType);
+  console.log("attachmentData", attachmentData, unitType);
   const imagePath = getAttachmentImagePath(unitType);
 
   const defaultAlt =

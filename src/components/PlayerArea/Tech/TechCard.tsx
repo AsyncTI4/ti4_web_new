@@ -1,7 +1,7 @@
 import { Box, Text, Image, Stack } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
 import styles from "./TechCard.module.css";
-import { getTechData } from "../../../lookup/tech";
+import { getTechData, getTechTier } from "../../../lookup/tech";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -34,6 +34,7 @@ export function TechCard({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const isFactionTech = !!techData.faction;
+  const tier = getTechTier(techData.requirements);
 
   return (
     <Box className={`${styles.techCard} ${styles[color]}`}>
@@ -78,17 +79,24 @@ export function TechCard({ techId }: Props) {
             </Text>
           </Box>
 
-          {/* Bottom section with tech icon */}
+          {/* Bottom section with tech icon splayed diagonally by prereq tier (icon only, single background container) */}
           <Box className={styles.bottomSection}>
-            <Box className={`${styles.techIconContainer} ${styles[color]}`}>
-              <Image
-                src={`/${color}.png`}
-                alt={techData.name}
-                w={24}
-                h={24}
-                className={`${styles[color]}`}
-              />
-            </Box>
+            {tier > 0 && (
+              <Box className={`${styles.techIconContainer} ${styles[color]}`}>
+                <Box className={styles.iconStack}>
+                  {[...Array(tier)].map((_, i) => (
+                    <Image
+                      key={i}
+                      src={`/${color}.png`}
+                      alt={techData.name}
+                      w={14}
+                      h={14}
+                      className={`${styles.stackIcon} ${styles[color]}`}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
           </Box>
         </Stack>
       </Box>

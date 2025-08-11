@@ -1,4 +1,5 @@
 import { PathResult } from "./tileDistances";
+import type { TilePosition as CalcTilePosition } from "../mapgen/tilePositioning";
 
 export type PathPoint = {
   x: number;
@@ -8,32 +9,29 @@ export type PathPoint = {
   stepNumber: number;
 };
 
-export type TilePosition = {
-  systemId: string;
-  x: number;
-  y: number;
-};
-
 const TILE_WIDTH = 390;
 const TILE_HEIGHT = 239;
 
 export function createPositionMap(
-  tilePositions: TilePosition[]
+  tilePositions: CalcTilePosition[]
 ): Map<string, { x: number; y: number }> {
   const map = new Map<string, { x: number; y: number }>();
   tilePositions.forEach((tile) => {
-    map.set(tile.systemId, { x: tile.x, y: tile.y });
+    // Key by unique ring position
+    // @ts-ignore ringPosition exists on CalcTilePosition
+    const key = (tile as any).ringPosition as string;
+    map.set(key, { x: tile.x, y: tile.y });
   });
   return map;
 }
 
 export function getTileCenter(
-  systemId: string,
+  positionKey: string,
   positionMap: Map<string, { x: number; y: number }>,
   zoom: number,
   mapPadding: number
 ): { x: number; y: number } | null {
-  const pos = positionMap.get(systemId);
+  const pos = positionMap.get(positionKey);
   if (!pos) return null;
 
   // Calculate center position without zoom/mapPadding since these are handled by CSS transforms
@@ -45,7 +43,6 @@ export function getTileCenter(
 
 export function calculatePathPoints(
   path: PathResult["paths"][0],
-  systemIdToPosition: Record<string, string>,
   positionMap: Map<string, { x: number; y: number }>,
   zoom: number,
   mapPadding: number
@@ -53,11 +50,12 @@ export function calculatePathPoints(
   const pathPoints: PathPoint[] = [];
   let stepNumber = 1;
 
-  for (const systemId of path.systemIds) {
-    const center = getTileCenter(systemId, positionMap, zoom, mapPadding);
+  for (let i = 0; i < path.systemIds.length; i++) {
+    const systemId = path.systemIds[i];
+    const position = path.positions[i];
+    const center = getTileCenter(position, positionMap, zoom, mapPadding);
     if (!center) continue;
 
-    const position = systemIdToPosition[systemId];
     const isHyperlane = position
       ? path.hyperlanePositions.has(position)
       : false;

@@ -10,20 +10,25 @@
 
 .unitCountContainer {
   position: absolute;
-  right: 12px;
-  top: 4px;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .unitCount {
-  min-width: 19px;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 800;
   font-family: "Slider", sans-serif;
   text-align: center;
   color: white;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 
   -webkit-text-stroke: 3px white;
   paint-order: stroke fill;
@@ -32,5 +37,4 @@
 
 .whiteText {
   -webkit-text-stroke: 3px #000;
-
 }

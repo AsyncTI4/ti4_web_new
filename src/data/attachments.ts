@@ -1,20 +1,116 @@
-export type AttachmentData = {
-  id: string;
-  name?: string;
-  imagePath: string;
-  techSpeciality?: string[];
-  resourcesModifier?: number;
-  influenceModifier?: number;
-  token?: string;
-  isLegendary?: boolean;
-  isFakeAttachment?: boolean;
-  planetTypes?: string[];
-  spaceCannonHitsOn?: number;
-  spaceCannonDieCount?: number;
-  source: string;
-};
+// Auto-generated file - Do not edit manually
+// Generated from src/main/resources/data/attachments/*.json files
+
+import { AttachmentData } from "./types";
 
 export const attachments: AttachmentData[] = [
+  {
+    id: "facilityrefinery",
+    name: "Refinery (Facility)",
+    imagePath: "attachment_facilityrefinery.png",
+    resourcesModifier: 1,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilitycolony",
+    name: "Colony (Facility)",
+    imagePath: "attachment_facilitycolony.png",
+    influenceModifier: 1,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilitycorefactory",
+    name: "Core Factory (Facility)",
+    imagePath: "attachment_facilitycorefactory.png",
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilitytransitnode",
+    name: "Transit Node (Facility)",
+    imagePath: "attachment_facilitytransitnode.png",
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityresearchlab",
+    name: "Research Lab (Facility)",
+    imagePath: "attachment_facilityresearchlab.png",
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilitynavalbase",
+    name: "Naval Base (Facility)",
+    imagePath: "attachment_facilitynavalbase.png",
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilitylogisticshub",
+    name: "Logistics Hub (Facility)",
+    imagePath: "attachment_facilitylogisticshub.png",
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy1",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy1.png",
+    influenceModifier: 1,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy2",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy2.png",
+    influenceModifier: 2,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy3",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy3.png",
+    influenceModifier: 3,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy4",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy4.png",
+    influenceModifier: 4,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy5",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy5.png",
+    influenceModifier: 5,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy6",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy6.png",
+    influenceModifier: 6,
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "facilityembassy7",
+    name: "Embassy (Facility)",
+    imagePath: "attachment_facilityembassy7.png",
+    influenceModifier: 7,
+    isFakeAttachment: true,
+    source: "other",
+  },
   {
     id: "biotic",
     name: "Biotic Research Facility",
@@ -177,23 +273,489 @@ export const attachments: AttachmentData[] = [
     isFakeAttachment: true,
     source: "codex3",
   },
+  {
+    id: "galacticheritagesite",
+    imagePath: "attachment_galacticheritagesite.png",
+    source: "asteroid",
+  },
+  {
+    id: "imperialinstitute",
+    imagePath: "attachment_imperialinstitute.png",
+    source: "asteroid",
+  },
+  {
+    id: "manufactorum",
+    imagePath: "attachment_manufactorum.png",
+    source: "asteroid",
+  },
+  {
+    id: "weapon",
+    imagePath: "attachment_weapon.png",
+    source: "asteroid",
+  },
+  {
+    id: "weaponstat",
+    imagePath: "attachment_weaponstat.png",
+    source: "asteroid",
+  },
+  {
+    id: "obelisk",
+    imagePath: "attachment_obelisk.png",
+    source: "asteroid",
+  },
+  {
+    id: "lloyd_populationgrowth",
+    imagePath: "attachment_populationgrowth.png",
+    resourcesModifier: 1,
+    influenceModifier: 1,
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_planetaryarcologies",
+    imagePath: "attachment_planetaryarcologies.png",
+    influenceModifier: 1,
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_industrialboom",
+    imagePath: "attachment_industrialboom.png",
+    resourcesModifier: 2,
+    planetTypes: ["industrial"],
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_orbitalslingshot",
+    imagePath: "attachment_orbitalslingshot.png",
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_traderoute",
+    imagePath: "attachment_traderoute.png",
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_terraformingmilestone",
+    imagePath: "attachment_terraformingmilestone.png",
+    resourcesModifier: 2,
+    influenceModifier: 2,
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_galacticfinancialcenter",
+    imagePath: "attachment_galacticfinancialcenter.png",
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_culturalboom",
+    imagePath: "attachment_culturalboom.png",
+    influenceModifier: 2,
+    planetTypes: ["cultural"],
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_interplanetaryhub",
+    imagePath: "attachment_interplanetaryhub.png",
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_geothermal",
+    imagePath: "attachment_geothermal.png",
+    resourcesModifier: 1,
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "lloyd_selfdefense",
+    imagePath: "attachment_selfdefense.png",
+    source: "lost_star_charts_of_ixth",
+  },
+  {
+    id: "orbital_foundries",
+    name: "Orbital Foundries",
+    imagePath: "attachment_orbital_foundries.png",
+    source: "uncharted_space",
+  },
+  {
+    id: "arcane_shield",
+    name: "Arcane Shield Emitter",
+    imagePath: "attachment_arc_shield.png",
+    source: "uncharted_space",
+  },
+  {
+    id: "arcane_citadel",
+    name: "Arcane Citadel",
+    imagePath: "attachment_arcane_citadel.png",
+    source: "uncharted_space",
+  },
+  {
+    id: "council_preserve",
+    name: "Council Preserve",
+    imagePath: "attachment_council_preserve.png",
+    source: "uncharted_space",
+  },
+  {
+    id: "threetraits",
+    imagePath: "attachment_threetraits.png",
+    planetTypes: ["cultural", "industrial", "hazardous"],
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "negativeinf",
+    imagePath: "attachment_negativeinf.png",
+    influenceModifier: -1,
+    source: "other",
+  },
+  {
+    id: "negativeinf2",
+    imagePath: "attachment_negativeinf2.png",
+    influenceModifier: -2,
+    source: "other",
+  },
+  {
+    id: "negativeinf3",
+    imagePath: "attachment_negativeinf3.png",
+    influenceModifier: -3,
+    source: "other",
+  },
+  {
+    id: "positiveinf",
+    imagePath: "attachment_positiveinf.png",
+    influenceModifier: 1,
+    source: "other",
+  },
+  {
+    id: "positiveinf2",
+    imagePath: "attachment_positiveinf2.png",
+    influenceModifier: 2,
+    source: "other",
+  },
+  {
+    id: "positiveinf3",
+    imagePath: "attachment_positiveinf3.png",
+    influenceModifier: 3,
+    source: "other",
+  },
+  {
+    id: "positiveinf2",
+    imagePath: "attachment_positiveinf2.png",
+    influenceModifier: 2,
+    source: "other",
+  },
+  {
+    id: "negativeres",
+    imagePath: "attachment_negativeres.png",
+    resourcesModifier: -1,
+    source: "other",
+  },
+  {
+    id: "negativeres2",
+    imagePath: "attachment_negativeres2.png",
+    resourcesModifier: -2,
+    source: "other",
+  },
+  {
+    id: "negativeres3",
+    imagePath: "attachment_negativeres3.png",
+    resourcesModifier: -3,
+    source: "other",
+  },
+  {
+    id: "positiveres",
+    imagePath: "attachment_positiveres.png",
+    resourcesModifier: 1,
+    source: "other",
+  },
+  {
+    id: "positiveres2",
+    imagePath: "attachment_positiveres2.png",
+    resourcesModifier: 2,
+    source: "other",
+  },
+  {
+    id: "positiveres3",
+    imagePath: "attachment_positiveres3.png",
+    resourcesModifier: 3,
+    source: "other",
+  },
+  {
+    id: "legendary",
+    imagePath: "attachment_legendary.png",
+    isLegendary: true,
+    source: "other",
+  },
+  {
+    id: "cultural",
+    imagePath: "attachment_cultural.png",
+    planetTypes: ["cultural"],
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "industrial",
+    imagePath: "attachment_industrial.png",
+    planetTypes: ["industrial"],
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "hazardous",
+    imagePath: "attachment_hazardous.png",
+    planetTypes: ["hazardous"],
+    isFakeAttachment: true,
+    source: "other",
+  },
+  {
+    id: "encryptionkey",
+    name: "Encryption Key",
+    imagePath: "attachment_encryptionkey.png",
+    techSpeciality: ["biotic", "cybernetic", "propulsion", "warfare"],
+    source: "ds",
+  },
+  {
+    id: "gledgebase",
+    name: "Gledge Base",
+    imagePath: "attachment_gledgebase.png",
+    resourcesModifier: 2,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap2",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap2.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap3",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap3.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap4",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap4.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap5",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap5.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap6",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap6.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "lizhotrap1",
+    name: "Lizho Trap",
+    imagePath: "attachment_lizhotrap1.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "veldyrtaxhaven",
+    name: "Tax Haven",
+    imagePath: "attachment_veldyrtaxhaven.png",
+    influenceModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "veldyrbroadcasthub",
+    name: "Broadcast Hub",
+    imagePath: "attachment_veldyrbroadcasthub.png",
+    influenceModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "veldyrreservebank",
+    name: "Reserve Bank",
+    imagePath: "attachment_veldyrreservebank.png",
+    resourcesModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "veldyrorbitalshipyard",
+    name: "Orbital Shipyard",
+    imagePath: "attachment_veldyrorbitalshipyard.png",
+    resourcesModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "automatons",
+    name: "Automatons",
+    imagePath: "attachment_automatons.png",
+    source: "ds",
+  },
+  {
+    id: "garden_worlds",
+    name: "Garden World",
+    imagePath: "attachment_garden_worlds.png",
+    resourcesModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "olradin_mech_res",
+    name: "Exemplar Resource",
+    imagePath: "attachment_olradin_mech_res.png",
+    resourcesModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "olradin_mech_inf",
+    name: "Exemplar Influence",
+    imagePath: "attachment_olradin_mech_inf.png",
+    influenceModifier: 1,
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "superweapon_availyn",
+    name: "Superweapon Availyn",
+    imagePath: "attachment_superweapon_availyn.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "superweapon_caled",
+    name: "Superweapon Caled",
+    imagePath: "attachment_superweapon_caled.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "superweapon_glatison",
+    name: "Superweapon Glatison",
+    imagePath: "attachment_superweapon_glatison.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "superweapon_mors",
+    name: "Superweapon Mors",
+    imagePath: "attachment_superweapon_mors.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "superweapon_grom",
+    name: "Superweapon Grom",
+    imagePath: "attachment_superweapon_grom.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "pharadn_tomb_token",
+    name: "Pharadn Tomb Token",
+    imagePath: "token_tomb.png",
+    isFakeAttachment: true,
+    source: "ds",
+  },
+  {
+    id: "sigma_senate_sanctuary",
+    name: "Senate Sanctuary",
+    imagePath: "attachment_sigma_senate_sanctuary.png",
+    token: "sigma_senate_sanctuary",
+    source: "promises_promises",
+  },
+  {
+    id: "sigma_weirdway",
+    name: "Weirdway",
+    imagePath: "attachment_sigma_weirdway.png",
+    token: "sigma_weirdway",
+    source: "promises_promises",
+  },
+  {
+    id: "sigma_ancient_hall",
+    name: "Ancient Hall",
+    imagePath: "attachment_sigma_ancient_hall.png",
+    token: "sigma_ancient_hall",
+    source: "sigma",
+  },
+  {
+    id: "sigma_deserted_factories",
+    name: "Deserted Factories",
+    imagePath: "attachment_sigma_deserted_factories.png",
+    token: "sigma_deserted_factories",
+    source: "sigma",
+  },
+  {
+    id: "sigma_unwelcoming",
+    name: "Unwelcoming Fauna",
+    imagePath: "attachment_sigma_unwelcoming.png",
+    token: "sigma_unwelcoming",
+    source: "sigma",
+  },
+  {
+    id: "sigma_palace_diplomats",
+    name: "Palace of the Diplomats",
+    imagePath: "attachment_sigma_palace_diplomats.png",
+    token: "sigma_palace_diplomats",
+    source: "sigma",
+  },
+  {
+    id: "sigma_palace_politicians",
+    name: "Palace of the Politicians",
+    imagePath: "attachment_sigma_palace_politicians.png",
+    token: "sigma_palace_politicians",
+    source: "sigma",
+  },
+  {
+    id: "sigma_palace_architects",
+    name: "Palace of the Architects",
+    imagePath: "attachment_sigma_palace_architects.png",
+    token: "sigma_palace_architects",
+    source: "sigma",
+  },
+  {
+    id: "sigma_palace_merchants",
+    name: "Palace of the Merchants",
+    imagePath: "attachment_sigma_palace_merchants.png",
+    token: "sigma_palace_merchants",
+    source: "sigma",
+  },
+  {
+    id: "sigma_palace_admirals",
+    name: "Palace of the Admirals",
+    imagePath: "attachment_sigma_palace_admirals.png",
+    token: "sigma_palace_admirals",
+    source: "sigma",
+  },
+  {
+    name: "Palace of the Scientists",
+    id: "sigma_palace_scientists",
+    imagePath: "attachment_sigma_palace_scientists.png",
+    token: "sigma_palace_scientists",
+    source: "sigma",
+  },
+  {
+    id: "sigma_cyber",
+    name: "Cybernetic Enhancements",
+    imagePath: "attachment_sigma_cyber.png",
+    token: "sigma_cyber",
+    resourcesModifier: 2,
+    influenceModifier: 2,
+    isFakeAttachment: true,
+    source: "sigma",
+  },
 ];
-
-/**
- * Look up attachment data by ID
- */
-export const getAttachmentData = (
-  attachmentId: string
-): AttachmentData | undefined => {
-  return attachments.find((attachment) => attachment.id === attachmentId);
-};
-
-/**
- * Get the image path for an attachment by ID
- */
-export const getAttachmentImagePath = (attachmentId: string): string | null => {
-  const attachmentData = getAttachmentData(attachmentId);
-  if (!attachmentData) return null;
-
-  return `/attachment_token/${attachmentData?.imagePath}`;
-};

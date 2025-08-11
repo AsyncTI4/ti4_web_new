@@ -507,3 +507,19 @@ export type Exploration = {
   text: string;
   source: string;
 };
+
+export type AttachmentData = {
+  id: string;
+  name?: string;
+  imagePath: string;
+  techSpeciality?: string[];
+  resourcesModifier?: number;
+  influenceModifier?: number;
+  token?: string;
+  isLegendary?: boolean;
+  isFakeAttachment?: boolean;
+  planetTypes?: string[];
+  spaceCannonHitsOn?: number;
+  spaceCannonDieCount?: number;
+  source: string;
+};

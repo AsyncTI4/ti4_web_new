@@ -6,7 +6,7 @@ import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import { cdnImage } from "../../../data/cdnImage";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { PlanetDetailsCard } from "../PlanetDetailsCard";
-import { getAttachmentData } from "../../../data/attachments";
+import { getAttachmentData } from "@/lookup/attachments";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
 

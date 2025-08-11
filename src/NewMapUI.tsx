@@ -21,7 +21,6 @@ import {
   IconSettings,
   IconRuler2,
   IconKeyboard,
-  IconRadar,
 } from "@tabler/icons-react";
 import { usePlayerDataEnhanced } from "./hooks/usePlayerData";
 // @ts-ignore
@@ -192,7 +191,7 @@ function NewMapUIContent() {
   const {
     playerData = [],
     calculatedTilePositions: tilePositions = [],
-    systemIdToPosition = {},
+    positionToSystemId = {},
     factionToColor = {},
     colorToFaction = {},
     optimizedColors = {},
@@ -213,7 +212,6 @@ function NewMapUIContent() {
     isLoading,
     ringCount = 3,
     tilesWithPds,
-    dominantPdsFaction,
   } = enhancedData || {};
   const data = enhancedData;
 
@@ -228,7 +226,7 @@ function NewMapUIContent() {
     handlePathIndexChange,
   } = useDistanceRendering({
     distanceMode: settings.distanceMode,
-    systemIdToPosition,
+    positionToSystemId,
     tileUnitData: data?.tileUnitData,
   });
 
@@ -519,8 +517,8 @@ function NewMapUIContent() {
                       )}
                     {/* Render tiles */}
                     {tilePositions.map((tile, index) => {
-                      const tileKey = `${tile.systemId}-${index}`;
-                      const position = systemIdToPosition[tile.systemId];
+                      const tileKey = `${tile.ringPosition}-${index}`;
+                      const position = tile.ringPosition;
                       const tileData =
                         position && data?.tileUnitData
                           ? (data.tileUnitData as any)[position]
@@ -535,14 +533,13 @@ function NewMapUIContent() {
                           tileUnitData={tileData}
                           factionToColor={factionToColor}
                           optimizedColors={optimizedColors}
-                          isHovered={hoveredTile === tile.systemId}
+                          isHovered={hoveredTile === tile.ringPosition}
                           techSkipsMode={settings.techSkipsMode}
                           distanceMode={settings.distanceMode}
                           pdsMode={settings.pdsMode}
                           tilesWithPds={enhancedData?.tilesWithPds}
                           dominantPdsFaction={enhancedData?.dominantPdsFaction}
                           selectedTiles={selectedTiles}
-                          systemIdToPosition={systemIdToPosition}
                           overlaysEnabled={settings.overlaysEnabled}
                           lawsInPlay={lawsInPlay}
                           exhaustedPlanets={allExhaustedPlanets}
@@ -565,7 +562,7 @@ function NewMapUIContent() {
 
                   <PathVisualization
                     pathResult={pathResult}
-                    systemIdToPosition={systemIdToPosition}
+                    positionToSystemId={positionToSystemId}
                     tilePositions={tilePositions}
                     zoom={zoom}
                     mapPadding={MAP_PADDING}

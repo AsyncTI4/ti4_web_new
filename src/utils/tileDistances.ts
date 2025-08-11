@@ -7,22 +7,21 @@ import { getTokenData } from "../lookup/tokens";
  * Helper function to get all wormholes present on a tile
  */
 export function getTileWormholes(
-  systemId: string,
-  systemIdToPosition: Record<string, string>,
+  position: string,
+  positionToSystemId: Record<string, string>,
   tileUnitData?: Record<string, any>
 ): string[] {
   const wormholes = new Set<string>();
 
   // Get wormholes from the base tile
-  const tileData = getTileById(systemId);
+  const systemId = positionToSystemId[position];
+  const tileData = systemId ? getTileById(systemId) : undefined;
   if (tileData?.wormholes) {
     tileData.wormholes.forEach((wh) => wormholes.add(wh));
   }
 
   // Get wormholes from tokens in space (like Creuss wormhole tokens)
-  const position = systemIdToPosition[systemId];
-  const tileSpatialData =
-    position && tileUnitData ? tileUnitData[position] : undefined;
+  const tileSpatialData = tileUnitData ? tileUnitData[position] : undefined;
 
   if (tileSpatialData?.space) {
     Object.values(tileSpatialData.space).forEach((factionEntities: any) => {
@@ -137,25 +136,21 @@ export type PathResult = {
  * with support for normal adjacencies, wormhole connections, and hyperlanes
  */
 export function calculateTileDistances(
-  startSystemId: string,
-  systemIdToPosition: Record<string, string>,
+  startPosition: string,
+  positionToSystemId: Record<string, string>,
   tileUnitData?: Record<string, any>
 ): Record<string, number> {
-  // Convert systemId to position for tileAdjacencies lookup
-  const startPosition = systemIdToPosition[startSystemId];
   if (!startPosition) return {};
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(Object.values(systemIdToPosition));
+  const validPositions = new Set(Object.keys(positionToSystemId));
 
   // Pre-calculate wormhole connections by creating a map of wormhole types to positions
   const wormholeMap: Record<string, string[]> = {};
-  const positionToSystemId: Record<string, string> = {};
 
-  // Build reverse mapping and collect wormholes
-  Object.entries(systemIdToPosition).forEach(([sysId, pos]) => {
-    positionToSystemId[pos] = sysId;
-    const wormholes = getTileWormholes(sysId, systemIdToPosition, tileUnitData);
+  // Collect wormholes per position
+  Object.keys(positionToSystemId).forEach((pos) => {
+    const wormholes = getTileWormholes(pos, positionToSystemId, tileUnitData);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -246,8 +241,8 @@ export function calculateTileDistances(
       // Add wormhole connections
       if (currentSystemId) {
         const currentWormholes = getTileWormholes(
-          currentSystemId,
-          systemIdToPosition,
+          currentPosition,
+          positionToSystemId,
           tileUnitData
         );
         currentWormholes.forEach((whType) => {
@@ -290,26 +285,21 @@ export function calculateTileDistances(
  * Calculate optimal paths between two specific tiles
  */
 export function calculateOptimalPaths(
-  startSystemId: string,
-  endSystemId: string,
-  systemIdToPosition: Record<string, string>,
+  startPosition: string,
+  endPosition: string,
+  positionToSystemId: Record<string, string>,
   tileUnitData?: Record<string, any>
 ): PathResult | null {
-  const startPosition = systemIdToPosition[startSystemId];
-  const endPosition = systemIdToPosition[endSystemId];
-
   if (!startPosition || !endPosition) return null;
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(Object.values(systemIdToPosition));
+  const validPositions = new Set(Object.keys(positionToSystemId));
 
   // Pre-calculate wormhole connections and position mappings
   const wormholeMap: Record<string, string[]> = {};
-  const positionToSystemId: Record<string, string> = {};
 
-  Object.entries(systemIdToPosition).forEach(([sysId, pos]) => {
-    positionToSystemId[pos] = sysId;
-    const wormholes = getTileWormholes(sysId, systemIdToPosition, tileUnitData);
+  Object.keys(positionToSystemId).forEach((pos) => {
+    const wormholes = getTileWormholes(pos, positionToSystemId, tileUnitData);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -335,7 +325,7 @@ export function calculateOptimalPaths(
     position: startPosition,
     distance: 0,
     path: [startPosition],
-    systemPath: [startSystemId],
+    systemPath: [positionToSystemId[startPosition]],
     hyperlanePositions: new Set(),
   });
 
@@ -437,8 +427,8 @@ export function calculateOptimalPaths(
 
       // Wormhole connections
       const currentWormholes = getTileWormholes(
-        currentSystemId,
-        systemIdToPosition,
+        currentPosition,
+        positionToSystemId,
         tileUnitData
       );
       currentWormholes.forEach((whType) => {

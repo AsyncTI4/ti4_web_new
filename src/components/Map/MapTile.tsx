@@ -21,7 +21,7 @@ import classes from "./MapTile.module.css";
 import { TileUnitData, LawInPlay } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { getAttachmentData } from "../../data/attachments";
+import { getAttachmentData } from "@/lookup/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 
@@ -78,8 +78,8 @@ type Props = {
   optimizedColors: Record<string, RGBColor>;
   style?: React.CSSProperties;
   className?: string;
-  onTileSelect?: (systemId: string) => void;
-  onTileHover?: (systemId: string, isHovered: boolean) => void;
+  onTileSelect?: (position: string) => void;
+  onTileHover?: (position: string, isHovered: boolean) => void;
   onUnitMouseOver?: (
     faction: string,
     unitId: string,
@@ -112,7 +112,6 @@ type Props = {
   >;
   selectedTiles?: string[];
   tileDistance?: number | null;
-  systemIdToPosition?: Record<string, string>;
   overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
   exhaustedPlanets?: string[];
@@ -146,7 +145,6 @@ export const MapTile = React.memo<Props>(
     tilesWithPds,
     dominantPdsFaction,
     selectedTiles,
-    systemIdToPosition,
 
     overlaysEnabled,
     lawsInPlay,
@@ -486,7 +484,7 @@ export const MapTile = React.memo<Props>(
     }, [tileUnitData, allEntityPlacements]);
 
     const isDistanceSelected =
-      distanceMode && selectedTiles?.includes(systemId);
+      distanceMode && selectedTiles?.includes(ringPosition);
     const isDistanceHoverable = distanceMode && !isDistanceSelected;
 
     return (
@@ -507,8 +505,7 @@ export const MapTile = React.memo<Props>(
 
             // PDS mode - dim tiles that don't have PDS
             if (pdsMode && tilesWithPds) {
-              const tilePosition = systemIdToPosition?.[systemId];
-              return tilePosition && tilesWithPds.has(tilePosition) ? 1.0 : 0.2;
+              return ringPosition && tilesWithPds.has(ringPosition) ? 1.0 : 0.2;
             }
 
             // Distance mode with two selected tiles - dim tiles not on any path
@@ -525,12 +522,12 @@ export const MapTile = React.memo<Props>(
           })(),
           ...style,
         }}
-        onClick={onTileSelect ? () => onTileSelect(systemId) : undefined}
+        onClick={onTileSelect ? () => onTileSelect(ringPosition) : undefined}
         onMouseEnter={
-          onTileHover ? () => onTileHover(systemId, true) : undefined
+          onTileHover ? () => onTileHover(ringPosition, true) : undefined
         }
         onMouseLeave={
-          onTileHover ? () => onTileHover(systemId, false) : undefined
+          onTileHover ? () => onTileHover(ringPosition, false) : undefined
         }
       >
         <div className={classes.tileContainer}>
@@ -571,9 +568,8 @@ export const MapTile = React.memo<Props>(
           {/* PDS Control Token Overlay */}
           {pdsMode &&
             dominantPdsFaction &&
-            systemIdToPosition &&
             (() => {
-              const tilePosition = systemIdToPosition[systemId];
+              const tilePosition = ringPosition;
               const pdsData = tilePosition
                 ? dominantPdsFaction[tilePosition]
                 : null;

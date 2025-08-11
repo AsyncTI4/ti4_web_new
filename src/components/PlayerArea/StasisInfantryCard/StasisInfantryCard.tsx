@@ -20,7 +20,11 @@ export function StasisInfantryCard({ reviveCount, color }: Props) {
       <Box className={styles.innerGlow} />
 
       <Flex className={styles.imageContainer}>
-        <Unit unitType="gf" colorAlias={colorAlias} />
+        <Unit
+          unitType="gf"
+          colorAlias={colorAlias}
+          className={styles.unitImage}
+        />
       </Flex>
 
       <Stack className={styles.infoStack}>

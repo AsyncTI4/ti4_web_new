@@ -4,21 +4,25 @@ import { PathResult } from "../utils/tileDistances";
 type DistanceDisplayProps = {
   selectedTiles: string[];
   pathResult: PathResult | null;
-  systemIdToPosition: Record<string, string>;
+  positionToSystemId: Record<string, string>;
 };
 
 export const DistanceDisplay = ({
   selectedTiles,
   pathResult,
-  systemIdToPosition,
+  positionToSystemId,
 }: DistanceDisplayProps) => {
   if (selectedTiles.length !== 2 || !pathResult) {
     return null;
   }
 
   // Get positions for calculation of display location
-  const tileAPosition = systemIdToPosition[selectedTiles[0]];
-  const tileBPosition = systemIdToPosition[selectedTiles[1]];
+  const tileAPosition = Object.keys(positionToSystemId).find(
+    (pos) => positionToSystemId[pos] === selectedTiles[0]
+  );
+  const tileBPosition = Object.keys(positionToSystemId).find(
+    (pos) => positionToSystemId[pos] === selectedTiles[1]
+  );
 
   if (!tileAPosition || !tileBPosition) {
     return null;

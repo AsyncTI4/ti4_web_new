@@ -1,15 +1,15 @@
 import { useMemo, useCallback } from "react";
 import { PathResult } from "../utils/tileDistances";
 import {
-  TilePosition,
   createPositionMap,
   calculatePathPoints,
 } from "../utils/pathVisualization";
+import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
-  systemIdToPosition: Record<string, string>;
+  positionToSystemId: Record<string, string>;
   tilePositions: TilePosition[];
   zoom: number;
   mapPadding: number;
@@ -43,7 +43,7 @@ const PATH_COLORS = [
 
 export const PathVisualization = ({
   pathResult,
-  systemIdToPosition,
+  positionToSystemId,
   tilePositions,
   zoom,
   mapPadding,
@@ -73,12 +73,11 @@ export const PathVisualization = ({
     if (!currentPath) return [];
     return calculatePathPoints(
       currentPath,
-      systemIdToPosition,
       positionMap,
       1, // Pass zoom as 1 since we'll apply it via CSS transform
       0 // Pass mapPadding as 0 since we'll handle it via CSS positioning
     );
-  }, [currentPath, systemIdToPosition, positionMap]);
+  }, [currentPath, positionMap]);
 
   const currentColors = useMemo(
     () => PATH_COLORS[validatedPathIndex % PATH_COLORS.length],

@@ -28,6 +28,7 @@ import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 import { getPlanetData } from "@/lookup/planets";
+import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
 
 type Props = {
   playerData: PlayerData;
@@ -54,7 +55,8 @@ export default function PlayerCardSidebar(props: Props) {
     knownUnscoredSecrets,
     unitsOwned,
     leaders,
-
+    stasisInfantry,
+    unitCounts,
     abilities,
     notResearchedFactionTechs,
   } = props.playerData;
@@ -300,39 +302,47 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </Surface>
 
-        {/* Units Section - Show command tokens and upgraded units */}
-        {(upgradedUnits.length > 0 || props.playerData.ccReinf >= 0) && (
-          <Surface p="md">
-            <SimpleGrid cols={4} spacing="8px">
-              {/* Upgraded Units */}
-              {upgradedUnits.map((unitId, index) => {
-                const asyncId = getUnitAsyncId(unitId);
-                const deployedCount = asyncId
-                  ? (props.playerData.unitCounts[asyncId].deployedCount ?? 0)
-                  : 0;
+        <Surface
+          h="100%"
+          p="md"
+          style={{
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+          }}
+        >
+          <SimpleGrid h="100%" cols={6} spacing="8px">
+            {unitsOwned.map((unitId, index) => {
+              const asyncId = getUnitAsyncId(unitId);
+              const deployedCount = asyncId
+                ? (unitCounts[asyncId].deployedCount ?? 0)
+                : 0;
 
-                return (
-                  <UnitCard
-                    key={index}
-                    unitId={unitId}
-                    color={color}
-                    deployedCount={deployedCount}
-                  />
-                );
-              })}
-
-              {/* Command Token Card */}
-              {props.playerData.ccReinf !== undefined && (
-                <CommandTokenCard
+              return (
+                <UnitCard
+                  key={index}
+                  unitId={unitId}
                   color={color}
-                  faction={faction}
-                  reinforcements={props.playerData.ccReinf}
-                  totalCapacity={16}
+                  deployedCount={deployedCount}
                 />
-              )}
-            </SimpleGrid>
-          </Surface>
-        )}
+              );
+            })}
+
+            {/* Command Token Card */}
+            {props.playerData.ccReinf !== undefined && (
+              <CommandTokenCard
+                color={color}
+                faction={faction}
+                reinforcements={props.playerData.ccReinf}
+                totalCapacity={16}
+              />
+            )}
+
+            {/* Add StasisInfantryCard if there are any stasisInfantry */}
+            {stasisInfantry > 0 && (
+              <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
+            )}
+          </SimpleGrid>
+        </Surface>
 
         {/* Resources and Planets Section */}
         <Stack gap="xs">

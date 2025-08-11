@@ -40,6 +40,12 @@
   filter: brightness(1.3) saturate(1.2);
 }
 
+/* Export standalone classes so TS can reference classes.selected, classes.hovered, etc. */
+.selected {}
+.hovered {}
+.distanceSelected {}
+.distanceHoverable {}
+
 /* Focus styles for accessibility */
 .tile:focus {
   outline: 2px solid var(--mantine-color-blue-6);

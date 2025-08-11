@@ -81,11 +81,34 @@
   bottom: -24px;
   right: -24px;
   width: 48px;
-  height: 48px;
+  height: auto;
+  min-height: 48px;
+  padding: 6px 0;
   border-radius: 12px 0 16px 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+}
+
+/* Stack and diagonal splay for prerequisite icons */
+/* Splayed duplicate icons inside a single background container */
+.iconStack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding-bottom: 6px;
+}
+
+.stackIcon {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* Base class for icon to satisfy CSS modules and share filters */
+.techIcon {
+  position: relative;
 }
 
 /* Color variants */
@@ -156,6 +179,11 @@
 .techIcon.green,
 .techIcon.red,
 .techIcon.yellow,
-.techIcon.grey {
+.techIcon.grey,
+.stackIcon.blue,
+.stackIcon.green,
+.stackIcon.red,
+.stackIcon.yellow,
+.stackIcon.grey {
   filter: drop-shadow(0 2px 4px rgba(var(--tech-color-rgb), 0.4));
 }
