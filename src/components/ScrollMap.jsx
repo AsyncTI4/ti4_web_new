@@ -1,9 +1,18 @@
 import { useCallback, useState, useEffect } from "react";
 import { ZoomControls } from "./ZoomControls";
-import { useOverlayContent, useOverlayData } from "../hooks/useOverlayData";
+import { useOverlayData } from "../hooks/useOverlayData";
+import { abilities } from "../data/abilities";
+import { publicObjectives } from "../data/publicObjectives";
+import { secretObjectives } from "../data/secretObjectives";
+import { promissoryNotes } from "../data/promissoryNotes";
+import { relics } from "../data/relics";
+import { explorations } from "../data/explorations";
+import { leaders } from "../data/leaders";
+import { units } from "../data/units";
+import { techs as technologies } from "../data/tech";
+import { cdnImage } from "../data/cdnImage";
 
 import "./ScrollMap.css";
-import { keepPreviousData } from "@tanstack/react-query";
 
 const defaultZoomIndex = 2;
 const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
@@ -12,7 +21,7 @@ export function ScrollMap({ gameId, imageUrl }) {
   const [imageNaturalWidth, setImageNaturalWidth] = useState(undefined);
   const {
     filteredOverlays,
-    overlayContent,
+
     activeTooltip,
     handleMouseEnter,
     handleMouseLeave,
@@ -59,8 +68,7 @@ export function ScrollMap({ gameId, imageUrl }) {
       ) : undefined}
 
       {Object.entries(filteredOverlays).map(([key, overlay]) => {
-        const dataModel =
-          overlayContent?.[`${overlay.dataModel}:${overlay.dataModelID}`];
+        const dataModel = lookupDataModel(overlay);
 
         const getCardContent = (dataModel, overlay) => {
           let title, text;
@@ -140,7 +148,10 @@ export function ScrollMap({ gameId, imageUrl }) {
         const { title, text } = getCardContent(dataModel, overlay);
         if (!title && !text) return null;
 
-        const imageURL = dataModel?.imageURL ?? undefined;
+        const imageURL = dataModel?.imageURL
+          ? cdnImage(dataModel.imageURL)
+          : undefined;
+
         let style = {
           left: `${(overlay.boxXYWH[0] - 1) * overlayZoom}px`,
           top: `${(overlay.boxXYWH[1] - 1) * overlayZoom}px`,
@@ -198,7 +209,6 @@ export function ScrollMap({ gameId, imageUrl }) {
 
 const useOverlay = (gameId) => {
   const { data: overlays } = useOverlayData(gameId);
-  const { data: overlayContent } = useOverlayContent();
   const filteredOverlays = filterOverlays(overlays ?? []);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipTimer, setTooltipTimer] = useState(null);
@@ -217,7 +227,6 @@ const useOverlay = (gameId) => {
 
   return {
     filteredOverlays,
-    overlayContent,
     activeTooltip,
     handleMouseEnter,
     handleMouseLeave,
@@ -313,3 +322,30 @@ const overlayMaxWidths = {
   UnitModel: 350,
   StrategyCardModel: 350,
 };
+
+function lookupDataModel(overlay) {
+  const { dataModel, dataModelID } = overlay || {};
+  if (!dataModel || !dataModelID) return undefined;
+  switch (dataModel) {
+    case "AbilityModel":
+      return abilities.find((a) => a.id === dataModelID);
+    case "PublicObjectiveModel":
+      return publicObjectives.find((o) => o.alias === dataModelID);
+    case "SecretObjectiveModel":
+      return secretObjectives.find((o) => o.alias === dataModelID);
+    case "PromissoryNoteModel":
+      return promissoryNotes.find((p) => p.alias === dataModelID);
+    case "RelicModel":
+      return relics.find((r) => r.alias === dataModelID);
+    case "ExploreModel":
+      return explorations.find((e) => e.alias === dataModelID);
+    case "LeaderModel":
+      return leaders.find((l) => l.id === dataModelID);
+    case "UnitModel":
+      return units.find((u) => u.id === dataModelID);
+    case "TechnologyModel":
+      return technologies.find((t) => t.alias === dataModelID);
+    default:
+      return undefined;
+  }
+}
