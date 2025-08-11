@@ -22,7 +22,7 @@ export type FactionColorData = {
   optimizedColor: RGBColor;
 };
 
-type EnhancedGame = {
+type GameContext = {
   planetAttachments: Record<string, string[]>;
   mapTiles: MapTile[];
   tilePositions: any;
@@ -52,7 +52,7 @@ const CENTER_Y_OFFSET = 149.5;
 export function GameContextProvider({ children }: Props) {
   const params = useParams<{ mapid: string }>();
   const { data } = usePlayerData(params.mapid!);
-  const enhancedData = data ? enhanceData(data) : undefined;
+  const enhancedData = data ? buildGameContext(data) : undefined;
 
   return (
     <EnhancedDataContext.Provider value={enhancedData}>
@@ -61,11 +61,11 @@ export function GameContextProvider({ children }: Props) {
   );
 }
 
-export const EnhancedDataContext = createContext<EnhancedGame | undefined>(
+export const EnhancedDataContext = createContext<GameContext | undefined>(
   undefined
 );
 
-export function enhanceData(data: PlayerDataResponse): EnhancedGame {
+export function buildGameContext(data: PlayerDataResponse): GameContext {
   const systemIdToPosition = generateSystemIdToPosition(data);
   const factionToColor = buildFactionToColor(data);
   const optimizedColors = computeOptimizedColors(factionToColor);
