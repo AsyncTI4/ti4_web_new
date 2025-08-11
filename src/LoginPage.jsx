@@ -1,6 +1,7 @@
 import { redirect, useLoaderData } from "react-router-dom";
 import { getLocalUser, setLocalUser } from "./hooks/useUser";
 import { config } from "./config";
+import { v4 as uuidv4 } from "uuid";
 
 async function login(code, userId) {
   const apiUrl = import.meta.env.DEV
@@ -26,10 +27,12 @@ async function login(code, userId) {
 export async function loginLoader({ request }) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const user = getLocalUser();
-
-  // handle failure case maybe with an error parameter
-  if (!user) return { error: "Login failed. Please try again." };
+  let user = getLocalUser();
+  if (!user) {
+    const newUser = { id: uuidv4(), authenticated: false };
+    setLocalUser(newUser);
+    user = newUser;
+  }
 
   if (code) {
     try {
