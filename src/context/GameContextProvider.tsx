@@ -2,15 +2,17 @@ import { calculateSingleTilePosition } from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
 import { createContext, ReactNode } from "react";
-import { usePlayerData } from "@/hooks/usePlayerData";
+import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { useParams } from "react-router-dom";
 import { colors } from "@/data/colors";
-import { MapTile, Planet, Unit } from "@/types/global";
+import { MapTileType, Planet, Unit } from "@/types/global";
 import {
   PlanetEntityData,
   PlayerDataResponse,
   TileUnitData,
 } from "@/data/types";
+import { getPlanetsByTileId } from "@/lookup/planets";
+import { getAttachmentData } from "@/lookup/attachments";
 
 export type FactionColorMap = {
   [key: string]: FactionColorData;
@@ -23,8 +25,13 @@ export type FactionColorData = {
 };
 
 type GameContext = {
+  data: GameData | undefined,
+  dataState: GameDataState
+};
+
+type GameData = {
   planetAttachments: Record<string, string[]>;
-  mapTiles: MapTile[];
+  mapTiles: MapTileType[];
   tilePositions: any;
   allExhaustedPlanets: string[];
   systemIdToPosition: Record<string, string>;
@@ -39,7 +46,15 @@ type GameContext = {
       expected: number;
     }
   >;
-};
+}
+
+type GameDataState = {
+  isLoading: boolean;
+  isError: boolean;
+  readyState: any;
+  reconnect: () => void;
+  isReconnecting: any;
+}
 
 type Props = {
   children: ReactNode;
@@ -51,11 +66,21 @@ const CENTER_Y_OFFSET = 149.5;
 
 export function GameContextProvider({ children }: Props) {
   const params = useParams<{ mapid: string }>();
-  const { data } = usePlayerData(params.mapid!);
+  
+  //hook calls need to be at component level, cannot bring this out to a helper function
+  const { data, isLoading, isError, isReconnecting, readyState, reconnect } = usePlayerDataSocket(params.mapid!);
   const enhancedData = data ? buildGameContext(data) : undefined;
 
+  const gameContext = enhancedData ? {
+    data: enhancedData,
+    dataState: {
+      isLoading, isError, isReconnecting, readyState, reconnect
+    }
+  } : undefined;
+
+
   return (
-    <EnhancedDataContext.Provider value={enhancedData}>
+    <EnhancedDataContext.Provider value={gameContext}>
       {children}
     </EnhancedDataContext.Provider>
   );
@@ -65,7 +90,7 @@ export const EnhancedDataContext = createContext<GameContext | undefined>(
   undefined
 );
 
-export function buildGameContext(data: PlayerDataResponse): GameContext {
+export function buildGameContext(data: PlayerDataResponse): GameData {
   const systemIdToPosition = generateSystemIdToPosition(data);
   const factionToColor = buildFactionToColor(data);
   const optimizedColors = computeOptimizedColors(factionToColor);
@@ -90,7 +115,7 @@ export function buildGameContext(data: PlayerDataResponse): GameContext {
 }
 
 function buildMapTiles(data: PlayerDataResponse): {
-  mapTiles: MapTile[];
+  mapTiles: MapTileType[];
   planetAttachments: Record<string, string[]>;
 } {
   if (!data.tileUnitData)
@@ -99,12 +124,18 @@ function buildMapTiles(data: PlayerDataResponse): {
       planetAttachments: {},
     };
 
+
   const planetAttachments: Record<string, string[]> = {};
   const mapTiles = Object.entries(data.tileUnitData).map(
     ([position, tileData]) => {
       const coordinates = calculateSingleTilePosition(position, data.ringCount);
       const planets: Planet[] = buildTilePlanetData(tileData);
       const { space, tokens } = buildTileSpaceData(tileData);
+      
+
+      const systemId = data.tilePositions
+          .filter((pos) => pos.split(":")[0] === position)[0]
+          .split(":")[1];
 
       const points = generateHexagonPoints(
         coordinates.x + CENTER_X_OFFSET,
@@ -120,17 +151,18 @@ function buildMapTiles(data: PlayerDataResponse): {
 
       return {
         position: position,
-        systemId: data.tilePositions
-          .filter((pos) => pos.split(":")[0] === position)
-          .slice(-2)[1],
+        systemId: systemId,
         planets: planets,
         space: space,
         anomaly: (tileData as any).anomaly,
         wormholes: [],
-        commandCounters: (tileData as any).ccs,
-        productionCapacity: 0,
-        tokens: tokens,
+        hasTechSkips: systemHasTechSkips(systemId, planets),
         controller: getTileController(planets, space),
+        commandCounters: (tileData as any).ccs,
+        production: tileData.production,
+        highestProduction: Math.max(...Object.values(tileData.production)),
+        capacity: {},
+        tokens: tokens,
         properties: {
           x: coordinates.x,
           y: coordinates.y,
@@ -141,7 +173,7 @@ function buildMapTiles(data: PlayerDataResponse): {
           width: 0,
           height: 0,
         },
-      } as MapTile;
+      } as MapTileType;
     }
   );
 
@@ -150,6 +182,35 @@ function buildMapTiles(data: PlayerDataResponse): {
     planetAttachments,
   };
 }
+
+
+function systemHasTechSkips(systemId: string, planets: Planet[]): boolean {
+  const hasBaseTechSkips = getPlanetsByTileId(systemId).some(
+    (planet) =>
+      planet.techSpecialties &&
+      planet.techSpecialties.length > 0 &&
+      !planet.techSpecialties.includes("NONUNITSKIP")
+  );
+
+  if (hasBaseTechSkips) {
+    return true;
+  }
+
+  // Check planet attachments for tech skips
+  planets.forEach(planet => {
+    planet.attachments.forEach(attachment => {
+      const attachmentData = getAttachmentData(attachment);
+      if (
+        attachmentData?.techSpeciality &&
+        attachmentData.techSpeciality.length > 0
+      ) {
+        return true;
+      }
+    })
+  })
+
+  return false;
+};
 
 // Check planets, then check space area, otherwise no one faction has control
 function getTileController(planets: Planet[], space: Unit[]) {
@@ -223,6 +284,7 @@ function buildTilePlanetData(tileData: TileUnitData) {
         tokens: [],
         units: units,
         controller: planetData.controlledBy,
+        commodities: planetData.commodities,
         properties: {
           x: 0,
           y: 0,

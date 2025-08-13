@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Tile } from "./Tile";
 import { UnitStack } from "./UnitStack";
 import { ControlToken } from "./ControlToken";
@@ -13,67 +13,23 @@ import {
 } from "../../utils/unitPositioning";
 import { getColorAlias } from "@/lookup/colors";
 import {
-  getPlanetsByTileId,
   getPlanetCoordsBySystemId,
   getPlanetById,
 } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import { TileUnitData, LawInPlay } from "@/data/types";
+import {  LawInPlay, TileUnitData } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { getAttachmentData } from "@/lookup/attachments";
 import { RGBColor } from "../../utils/colorOptimization";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
+import { useSettingsStore, useAppStore } from "@/utils/appStore";
+import { MapTileType } from "@/types/global";
+import { EnhancedDataContext } from "@/context/GameContextProvider";
 
-// Helper function to check if a system has tech skips
-const systemHasTechSkips = (
-  systemId: string,
-  tileUnitData?: TileUnitData
-): boolean => {
-  // Check base planet tech specialties
-  const systemPlanets = getPlanetsByTileId(systemId);
-  const hasBaseTechSkips = systemPlanets.some(
-    (planet) =>
-      planet.techSpecialties &&
-      planet.techSpecialties.length > 0 &&
-      !planet.techSpecialties.includes("NONUNITSKIP")
-  );
-
-  if (hasBaseTechSkips) {
-    return true;
-  }
-
-  // Check planet attachments for tech skips
-  if (tileUnitData?.planets) {
-    for (const [_, planetData] of Object.entries(tileUnitData.planets)) {
-      if (planetData?.entities) {
-        for (const entities of Object.values(planetData.entities)) {
-          if (Array.isArray(entities)) {
-            for (const entity of entities) {
-              if (entity.entityType === "attachment") {
-                const attachmentData = getAttachmentData(entity.entityId);
-                if (
-                  attachmentData?.techSpeciality &&
-                  attachmentData.techSpeciality.length > 0
-                ) {
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return false;
-};
 
 type Props = {
-  systemId: string;
-  position: { x: number; y: number };
-  ringPosition: string;
-  tileUnitData?: TileUnitData;
+  mapTile: MapTileType;
+  tileUnitData: TileUnitData;
   factionToColor: Record<string, string>;
   optimizedColors: Record<string, RGBColor>;
   style?: React.CSSProperties;
@@ -88,43 +44,22 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
-  onPlanetHover?: (
+  onPlanetMouseEnter?: (
     systemId: string,
     planetId: string,
     x: number,
     y: number
   ) => void;
   onPlanetMouseLeave?: () => void;
-  isSelected?: boolean;
-  isHovered?: boolean;
-  techSkipsMode?: boolean;
-  distanceMode?: boolean;
-  pdsMode?: boolean;
-  tilesWithPds?: Set<string>;
-  dominantPdsFaction?: Record<
-    string,
-    {
-      faction: string;
-      color: string;
-      count: number;
-      expected: number;
-    }
-  >;
   selectedTiles?: string[];
   tileDistance?: number | null;
-  overlaysEnabled?: boolean;
   lawsInPlay?: LawInPlay[];
-  exhaustedPlanets?: string[];
-  alwaysShowControlTokens?: boolean;
-  showExhaustedPlanets?: boolean;
   isOnPath?: boolean; // Whether this tile is on any of the calculated paths
 };
 
 export const MapTile = React.memo<Props>(
   ({
-    systemId,
-    position,
-    tileUnitData,
+    mapTile,
     factionToColor,
     optimizedColors,
     style,
@@ -134,39 +69,47 @@ export const MapTile = React.memo<Props>(
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
-    onPlanetHover,
+    onPlanetMouseEnter,
     onPlanetMouseLeave,
-    isSelected,
-    isHovered,
-    ringPosition,
-    techSkipsMode,
-    distanceMode,
-    pdsMode,
-    tilesWithPds,
-    dominantPdsFaction,
     selectedTiles,
 
-    overlaysEnabled,
+    tileUnitData,
     lawsInPlay,
-    exhaustedPlanets = [],
-    alwaysShowControlTokens = true,
-    showExhaustedPlanets = true,
     isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
+    const enhancedData = useContext(EnhancedDataContext);
+
+    
+
+    const ringPosition = mapTile.position;
+    const systemId = mapTile.systemId;
+    const position = {
+      x: mapTile.properties.x,
+      y: mapTile.properties.y
+    };
+    const isSelected = useAppStore((state) => state.selectedArea);
+    const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
+    const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
+    const alwaysShowControlTokens = useSettingsStore((state) => state.settings.showControlTokens);
+    const showExhaustedPlanets = useSettingsStore((state) => state.settings.showExhaustedPlanets);
+    const overlaysEnabled = useSettingsStore((state) => state.settings.enableOverlays);
+    const isHovered = useAppStore((state) => state.hoveredTile);
+    const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
+
 
     const handlePlanetMouseEnter = React.useCallback(
       (planetId: string, x: number, y: number) => {
-        if (!onPlanetHover) return;
+        if (!onPlanetMouseEnter) return;
 
         hoverTimeoutRef.current[planetId] = setTimeout(() => {
           // Convert relative planet position to world coordinates
           const worldX = position.x + x;
           const worldY = position.y + y;
-          onPlanetHover(systemId, planetId, worldX, worldY);
+          onPlanetMouseEnter(systemId, planetId, worldX, worldY);
         }, 1000);
       },
-      [systemId, onPlanetHover, position.x, position.y]
+      [systemId, onPlanetMouseEnter, position.x, position.y]
     );
 
     const handlePlanetMouseLeave = React.useCallback(
@@ -189,9 +132,8 @@ export const MapTile = React.memo<Props>(
       };
     }, []);
 
-    const allEntityPlacements = React.useMemo(() => {
-      return getAllEntityPlacementsForTile(systemId, tileUnitData);
-    }, [systemId, tileUnitData]);
+
+    const allEntityPlacements = getAllEntityPlacementsForTile(systemId, tileUnitData);
 
     const unitImages: React.ReactElement[] = React.useMemo(() => {
       const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -207,15 +149,9 @@ export const MapTile = React.memo<Props>(
         return [
           <UnitStack
             key={`${systemId}-${key}-stack`}
-            unitType={stack.entityId}
+            stack={stack}
             colorAlias={getColorAlias(factionToColor[stack.faction])}
-            faction={stack.faction}
-            count={stack.count}
-            x={stack.x}
-            y={stack.y}
             stackKey={key}
-            sustained={stack.sustained}
-            entityType={stack.entityType}
             planetCenter={planetCenter}
             lawsInPlay={lawsInPlay}
             onUnitMouseOver={
@@ -244,7 +180,7 @@ export const MapTile = React.memo<Props>(
       });
     }, [
       systemId,
-      tileUnitData,
+      mapTile,
       factionToColor,
       onUnitMouseOver,
       onUnitMouseLeave,
@@ -254,15 +190,15 @@ export const MapTile = React.memo<Props>(
     ]);
 
     const controlTokens: React.ReactElement[] = React.useMemo(() => {
-      if (!tileUnitData?.planets) {
+      if (!mapTile?.planets) {
         return [];
       }
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(tileUnitData.planets).flatMap(
+      return Object.entries(mapTile.planets).flatMap(
         ([planetId, planetData]) => {
-          if (!planetData.controlledBy) return [];
+          if (!planetData.controller) return [];
 
           // Check if we should show control tokens based on the setting
           if (!alwaysShowControlTokens) {
@@ -291,14 +227,14 @@ export const MapTile = React.memo<Props>(
           }
 
           const colorAlias = getColorAlias(
-            factionToColor[planetData.controlledBy]
+            factionToColor[planetData.controller]
           );
 
           return [
             <ControlToken
               key={`${systemId}-${planetId}-control`}
               colorAlias={colorAlias}
-              faction={planetData.controlledBy}
+              faction={planetData.controller}
               style={{
                 position: "absolute",
                 left: `${x - 10}px`,
@@ -312,20 +248,20 @@ export const MapTile = React.memo<Props>(
       );
     }, [
       systemId,
-      tileUnitData,
+      mapTile,
       factionToColor,
       allEntityPlacements,
       alwaysShowControlTokens,
     ]);
 
     const planetCircles: React.ReactElement[] = React.useMemo(() => {
-      if (!tileUnitData?.planets) {
+      if (!mapTile?.planets) {
         return [];
       }
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(tileUnitData.planets).flatMap(([planetId, _]) => {
+      return Object.entries(mapTile.planets).flatMap(([planetId, _]) => {
         if (!planetCoords[planetId]) return [];
         const [x, y] = planetCoords[planetId].split(",").map(Number);
 
@@ -352,7 +288,7 @@ export const MapTile = React.memo<Props>(
 
         const diameter = radius * 2;
 
-        const isExhausted = exhaustedPlanets.includes(planetId);
+        const isExhausted = enhancedData!.data!.allExhaustedPlanets.includes(planetId);
         const exhaustedBackdropFilter =
           isExhausted && showExhaustedPlanets
             ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
@@ -376,21 +312,21 @@ export const MapTile = React.memo<Props>(
       });
     }, [
       systemId,
-      tileUnitData,
+      mapTile,
       handlePlanetMouseEnter,
       handlePlanetMouseLeave,
-      exhaustedPlanets,
+      enhancedData!.data!.allExhaustedPlanets,
       showExhaustedPlanets,
     ]);
 
     const commodityIndicators: React.ReactElement[] = React.useMemo(() => {
-      if (!tileUnitData?.planets) {
+      if (!mapTile?.planets) {
         return [];
       }
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(tileUnitData.planets).flatMap(
+      return Object.entries(mapTile.planets).flatMap(
         ([planetId, planetData]) => {
           if (!planetData.commodities || planetData.commodities === 0)
             return [];
@@ -409,37 +345,31 @@ export const MapTile = React.memo<Props>(
           ];
         }
       );
-    }, [systemId, tileUnitData]);
+    }, [systemId, mapTile]);
 
     const productionIcon: React.ReactElement | null = React.useMemo(() => {
-      // Find the optimal corner position for the production icon
       const optimalCorner = findOptimalProductionIconCorner(systemId);
-      if (!optimalCorner) return null;
-
-      const highestProduction = tileUnitData?.production
-        ? Math.max(...Object.values(tileUnitData.production))
-        : 0;
-      if (highestProduction <= 0) return null;
+      if (!optimalCorner || mapTile.highestProduction <= 0) return null;
 
       return (
         <ProductionIndicator
           key={`${systemId}-production-icon`}
           x={optimalCorner.x}
           y={optimalCorner.y}
-          productionValue={highestProduction}
+          productionValue={mapTile.highestProduction}
         />
       );
-    }, [systemId, tileUnitData]);
+    }, [systemId]);
 
     const commandCounterStack: React.ReactElement | null = React.useMemo(() => {
-      if (!tileUnitData?.ccs || tileUnitData.ccs.length === 0) {
+      if (!mapTile?.commandCounters || mapTile.commandCounters.length === 0) {
         return null;
       }
 
       return (
         <CommandCounterStack
           key={`${systemId}-command-stack`}
-          factions={tileUnitData.ccs}
+          factions={mapTile.commandCounters}
           factionToColor={factionToColor}
           style={{
             position: "absolute",
@@ -448,40 +378,10 @@ export const MapTile = React.memo<Props>(
           }}
         />
       );
-    }, [systemId, tileUnitData, factionToColor]);
+    }, [systemId, mapTile, factionToColor]);
 
     // Determine controlling faction for the system overlay
-    const controllingFaction: string | null = React.useMemo(() => {
-      if (!tileUnitData) return null;
-
-      // Check if all planets are controlled by the same faction
-      if (tileUnitData.planets) {
-        const controllingFactions = Object.values(tileUnitData.planets)
-          .map((planet) => planet.controlledBy)
-          .filter(Boolean);
-
-        if (controllingFactions.length > 0) {
-          const uniqueFactions = [...new Set(controllingFactions)];
-          if (uniqueFactions.length === 1) {
-            return uniqueFactions[0];
-          }
-        }
-      }
-
-      // Check if there are units from a single faction (excluding command counters)
-      const factionUnits = Object.values(allEntityPlacements)
-        .filter((placement) => placement.entityType === "unit")
-        .map((placement) => placement.faction);
-
-      if (factionUnits.length > 0) {
-        const uniqueFactionUnits = [...new Set(factionUnits)];
-        if (uniqueFactionUnits.length === 1) {
-          return uniqueFactionUnits[0];
-        }
-      }
-
-      return null;
-    }, [tileUnitData, allEntityPlacements]);
+    const controllingFaction = mapTile.controller;
 
     const isDistanceSelected =
       distanceMode && selectedTiles?.includes(ringPosition);
@@ -500,12 +400,12 @@ export const MapTile = React.memo<Props>(
           opacity: (() => {
             // Tech skips mode takes priority
             if (techSkipsMode) {
-              return systemHasTechSkips(systemId, tileUnitData) ? 1.0 : 0.2;
+              return mapTile.hasTechSkips ? 1.0 : 0.2;
             }
 
             // PDS mode - dim tiles that don't have PDS
-            if (pdsMode && tilesWithPds) {
-              return ringPosition && tilesWithPds.has(ringPosition) ? 1.0 : 0.2;
+            if (pdsMode && enhancedData!.data!.tilesWithPds) {
+              return ringPosition && enhancedData!.data!.tilesWithPds.has(ringPosition) ? 1.0 : 0.2;
             }
 
             // Distance mode with two selected tiles - dim tiles not on any path
@@ -533,7 +433,7 @@ export const MapTile = React.memo<Props>(
         <div className={classes.tileContainer}>
           <Tile systemId={systemId} className={classes.tile} />
 
-          {tileUnitData?.anomaly && (
+          {mapTile?.anomaly && (
             <img
               src={cdnImage("/emojis/tiles/Anomaly.png")}
               alt="Anomaly"
@@ -567,11 +467,11 @@ export const MapTile = React.memo<Props>(
 
           {/* PDS Control Token Overlay */}
           {pdsMode &&
-            dominantPdsFaction &&
+            enhancedData!.data!.dominantPdsFaction &&
             (() => {
               const tilePosition = ringPosition;
               const pdsData = tilePosition
-                ? dominantPdsFaction[tilePosition]
+                ? enhancedData!.data!.dominantPdsFaction[tilePosition]
                 : null;
 
               if (pdsData) {

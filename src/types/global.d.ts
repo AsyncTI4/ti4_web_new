@@ -10,17 +10,22 @@
 // }
 
 
-export type MapTile = {
+export type MapTileType = {
   position: string;
   systemId: string;
   planets: Planet[];
   space: Unit[];
   anomaly: boolean;
   wormholes: string[];
-  commandCounters: string[];
-  productionCapacity: number;
+  hasTechSkips: boolean;
   tokens: string[];
   controller: string;
+  commandCounters: string[];
+  production: { [factionColor: string]: number };
+  highestProduction: number;
+  capacity?: {
+    [factionColor: string]: { total: number; used: number; ignored: number };
+  };
   properties: {
     x: number;
     y: number;
@@ -47,6 +52,7 @@ export type Planet = {
   tokens: string[];
   units: Unit[];
   controller: string;
+  commodities: number | null;
   properties: {
     x: number;
     y: number;

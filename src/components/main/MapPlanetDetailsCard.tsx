@@ -1,5 +1,6 @@
 import { Box } from "@mantine/core";
 import { PlanetDetailsCard } from "../PlayerArea/PlanetDetailsCard";
+import { useAppStore } from "@/utils/appStore";
 
 type TooltipPlanet = {
   systemId: string;
@@ -10,17 +11,16 @@ type TooltipPlanet = {
 type Props = {
   tooltipPlanet: TooltipPlanet | null;
   zoom: number;
-  mapPadding: number;
   planetAttachments: Record<string, string[]>;
 };
 
 export function MapPlanetDetailsCard({
   tooltipPlanet,
   zoom,
-  mapPadding,
   planetAttachments,
 }: Props) {
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
+  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const scaledX = tooltipPlanet.coords.x * zoom;
   const scaledY = tooltipPlanet.coords.y * zoom;
@@ -32,8 +32,8 @@ export function MapPlanetDetailsCard({
       key="planet-tooltip"
       style={{
         position: "absolute",
-        left: `${scaledX + mapPadding}px`,
-        top: `${scaledY + mapPadding - 25}px`,
+        left: `${scaledX + MAP_PADDING}px`,
+        top: `${scaledY + MAP_PADDING - 25}px`,
         zIndex: 10000000,
         pointerEvents: "none",
         transform: "translate(-50%, -100%)",

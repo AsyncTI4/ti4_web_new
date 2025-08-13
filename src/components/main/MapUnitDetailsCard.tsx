@@ -2,6 +2,7 @@ import { Box } from "@mantine/core";
 import { UnitDetailsCard } from "../PlayerArea/UnitDetailsCard";
 import { lookupUnit } from "../../lookup/units";
 import { PlayerData } from "../../data/types";
+import { useAppStore } from "@/utils/appStore";
 
 type TooltipUnit = {
   unitId?: string;
@@ -13,16 +14,15 @@ type Props = {
   tooltipUnit: TooltipUnit | null;
   playerData: PlayerData[] | undefined;
   zoom: number;
-  mapPadding: number;
 };
 
 export function MapUnitDetailsCard({
   tooltipUnit,
   playerData,
   zoom,
-  mapPadding,
 }: Props) {
   if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
+  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction
@@ -39,8 +39,8 @@ export function MapUnitDetailsCard({
     <Box
       style={{
         position: "absolute",
-        left: `${scaledX + mapPadding}px`,
-        top: `${scaledY + mapPadding - 25}px`,
+        left: `${scaledX + MAP_PADDING}px`,
+        top: `${scaledY + MAP_PADDING - 25}px`,
         zIndex: 10000000,
         pointerEvents: "none",
         transform: "translate(-50%, -100%)", // Center horizontally, position above the unit

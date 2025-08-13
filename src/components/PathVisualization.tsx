@@ -6,13 +6,13 @@ import {
 } from "../utils/pathVisualization";
 import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
+import { useAppStore } from "@/utils/appStore";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
   positionToSystemId: Record<string, string>;
   tilePositions: TilePosition[];
   zoom: number;
-  mapPadding: number;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
 };
@@ -46,11 +46,11 @@ export const PathVisualization = ({
   positionToSystemId,
   tilePositions,
   zoom,
-  mapPadding,
   activePathIndex,
   onPathIndexChange,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
+  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const positionMap = useMemo(
     () => createPositionMap(tilePositions),
@@ -194,8 +194,8 @@ export const PathVisualization = ({
           ...(isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: mapPadding / zoom,
-          left: mapPadding / zoom,
+          top: MAP_PADDING / zoom,
+          left: MAP_PADDING / zoom,
         }}
       >
         {renderPathLines()}
