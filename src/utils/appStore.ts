@@ -21,7 +21,7 @@ const DEFAULT_SETTINGS = {
   keyboardShortcutsModalOpened: false,
   leftPanelCollapsed: false,
   rightPanelCollapsed: false,
-  enableOverlays: false,
+  overlaysEnabled: false,
   techSkipsMode: false,
   showPDSLayer: false,
   distanceMode: false,
@@ -64,7 +64,6 @@ type AppStore = {
   activeArea: string | null;
   selectedFacion: string | null;
   activeUnit: string | null;
-  mapPadding: number;
   setSelectedArea: (area: string) => void;
   setActiveArea: (area: string) => void;
   setSelectedFaction: (faction: string) => void;
@@ -72,6 +71,7 @@ type AppStore = {
   setTooltipUnit: (unit: TooltipUnit | null) => void;
   setTooltipPlanet: (planet: TooltipPlanet | null) => void;
 };
+
 
 export const useAppStore = create<AppStore>((set) => ({
   hoveredTile: "",
@@ -92,7 +92,6 @@ export const useAppStore = create<AppStore>((set) => ({
     planetId: "",
     coords: { x: 0, y: 0 },
   },
-  mapPadding: 200,
 
   setHoveredTile: (id: string) =>
     set((state) => ({
@@ -148,7 +147,7 @@ export type Settings = {
   keyboardShortcutsModalOpened: boolean;
   leftPanelCollapsed: boolean;
   rightPanelCollapsed: boolean;
-  enableOverlays: boolean;
+  overlaysEnabled: boolean;
   techSkipsMode: boolean;
   showPDSLayer: boolean;
   distanceMode: boolean;
@@ -182,7 +181,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
     keyboardShortcutsModalOpened: false,
     leftPanelCollapsed: false,
     rightPanelCollapsed: false,
-    enableOverlays: false,
+    overlaysEnabled: false,
     techSkipsMode: false,
     showPDSLayer: false,
     distanceMode: false,
@@ -237,7 +236,7 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
       ...state,
       settings: {
         ...state.settings,
-        enableOverlays: !state.settings.enableOverlays,
+        overlaysEnabled: !state.settings.overlaysEnabled,
       },
     })),
   toggleTechSkipsMode: () =>

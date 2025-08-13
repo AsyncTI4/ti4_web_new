@@ -2,7 +2,7 @@ import { Box } from "@mantine/core";
 import { UnitDetailsCard } from "../PlayerArea/UnitDetailsCard";
 import { lookupUnit } from "../../lookup/units";
 import { PlayerData } from "../../data/types";
-import { useAppStore } from "@/utils/appStore";
+import { MAP_PADDING } from "@/NewMapUI";
 
 type TooltipUnit = {
   unitId?: string;
@@ -22,7 +22,6 @@ export function MapUnitDetailsCard({
   zoom,
 }: Props) {
   if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
-  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction

@@ -17,13 +17,12 @@ import {
   getPlanetById,
 } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import {  LawInPlay, TileUnitData } from "@/data/types";
+import {  LawInPlay, MapTileType, TileUnitData } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { RGBColor } from "../../utils/colorOptimization";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
-import { MapTileType } from "@/types/global";
 import { EnhancedDataContext } from "@/context/GameContextProvider";
 
 
@@ -93,7 +92,7 @@ export const MapTile = React.memo<Props>(
     const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
     const alwaysShowControlTokens = useSettingsStore((state) => state.settings.showControlTokens);
     const showExhaustedPlanets = useSettingsStore((state) => state.settings.showExhaustedPlanets);
-    const overlaysEnabled = useSettingsStore((state) => state.settings.enableOverlays);
+    const overlaysEnabled = useSettingsStore((state) => state.settings.overlaysEnabled);
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
 
@@ -261,7 +260,7 @@ export const MapTile = React.memo<Props>(
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(mapTile.planets).flatMap(([planetId, _]) => {
+      return Object.entries(mapTile.planets).flatMap(([planetId, planetTile]) => {
         if (!planetCoords[planetId]) return [];
         const [x, y] = planetCoords[planetId].split(",").map(Number);
 
@@ -288,9 +287,8 @@ export const MapTile = React.memo<Props>(
 
         const diameter = radius * 2;
 
-        const isExhausted = enhancedData!.data!.allExhaustedPlanets.includes(planetId);
         const exhaustedBackdropFilter =
-          isExhausted && showExhaustedPlanets
+          planetTile.isExhausted && showExhaustedPlanets
             ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
             : {};
 
@@ -315,7 +313,6 @@ export const MapTile = React.memo<Props>(
       mapTile,
       handlePlanetMouseEnter,
       handlePlanetMouseLeave,
-      enhancedData!.data!.allExhaustedPlanets,
       showExhaustedPlanets,
     ]);
 

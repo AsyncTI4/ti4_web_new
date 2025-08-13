@@ -1,3 +1,4 @@
+import { MAP_PADDING } from "@/NewMapUI";
 import { useAppStore } from "@/utils/appStore";
 import { useEffect, useRef } from "react";
 
@@ -16,8 +17,6 @@ export function useMapScrollPosition({
 }: UseMapScrollPositionProps) {
   // Ref for the scrollable map container
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const MAP_PADDING = useAppStore((state) => state.mapPadding);
-
   // Track if we've set the initial scroll position and for which game
   const hasSetInitialScroll = useRef(false);
   const lastGameId = useRef<string | null>(null);

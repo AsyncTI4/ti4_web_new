@@ -7,6 +7,7 @@ import {
 import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
 import { useAppStore } from "@/utils/appStore";
+import { MAP_PADDING } from "@/NewMapUI";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
@@ -50,7 +51,6 @@ export const PathVisualization = ({
   onPathIndexChange,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
-  const MAP_PADDING = useAppStore((state) => state.mapPadding);
 
   const positionMap = useMemo(
     () => createPositionMap(tilePositions),

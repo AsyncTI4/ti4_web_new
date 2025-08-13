@@ -10,61 +10,6 @@
 // }
 
 
-export type MapTileType = {
-  position: string;
-  systemId: string;
-  planets: Planet[];
-  space: Unit[];
-  anomaly: boolean;
-  wormholes: string[];
-  hasTechSkips: boolean;
-  tokens: string[];
-  controller: string;
-  commandCounters: string[];
-  production: { [factionColor: string]: number };
-  highestProduction: number;
-  capacity?: {
-    [factionColor: string]: { total: number; used: number; ignored: number };
-  };
-  properties: {
-    x: number;
-    y: number;
-    hexOutline: {
-      points: {
-        x: number;
-        y: number;
-      }[];
-      sides: {
-        x1: number;
-        x2: number;
-        y1: number;
-        y2: number;
-      }[];
-    };
-    width: number;
-    height: number;
-  };
-};
-
-export type Planet = {
-  name: string;
-  attachments: string[];
-  tokens: string[];
-  units: Unit[];
-  controller: string;
-  commodities: number | null;
-  properties: {
-    x: number;
-    y: number;
-  };
-};
-
-export type Unit = {
-  type: "unit" | "token" | "attachment";
-  amount: number;
-  amountSustained: number;
-  owner: string;
-};
 
 // Common types that might be used across components
 export interface Player {

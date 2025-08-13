@@ -5,11 +5,13 @@ import { createContext, ReactNode } from "react";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { useParams } from "react-router-dom";
 import { colors } from "@/data/colors";
-import { MapTileType, Planet, Unit } from "@/types/global";
 import {
+  MapTileType,
   PlanetEntityData,
+  PlanetMapTile,
   PlayerDataResponse,
   TileUnitData,
+  UnitMapTile,
 } from "@/data/types";
 import { getPlanetsByTileId } from "@/lookup/planets";
 import { getAttachmentData } from "@/lookup/attachments";
@@ -33,7 +35,6 @@ type GameData = {
   planetAttachments: Record<string, string[]>;
   mapTiles: MapTileType[];
   tilePositions: any;
-  allExhaustedPlanets: string[];
   systemIdToPosition: Record<string, string>;
   factionColorMap: FactionColorMap;
   tilesWithPds: Set<string>;
@@ -95,7 +96,6 @@ export function buildGameContext(data: PlayerDataResponse): GameData {
   const factionToColor = buildFactionToColor(data);
   const optimizedColors = computeOptimizedColors(factionToColor);
   const factionColorMap = buildFactionColorMap(data, optimizedColors);
-  const allExhaustedPlanets = computeAllExhaustedPlanets(data);
   const { tilesWithPds, dominantPdsFaction } = computePdsData(
     data,
     factionToColor
@@ -108,7 +108,6 @@ export function buildGameContext(data: PlayerDataResponse): GameData {
     tilePositions: data.tilePositions,
     systemIdToPosition,
     factionColorMap,
-    allExhaustedPlanets,
     tilesWithPds,
     dominantPdsFaction,
   };
@@ -124,12 +123,12 @@ function buildMapTiles(data: PlayerDataResponse): {
       planetAttachments: {},
     };
 
-
   const planetAttachments: Record<string, string[]> = {};
+  const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
   const mapTiles = Object.entries(data.tileUnitData).map(
     ([position, tileData]) => {
       const coordinates = calculateSingleTilePosition(position, data.ringCount);
-      const planets: Planet[] = buildTilePlanetData(tileData);
+      const planets: PlanetMapTile[] = buildTilePlanetData(tileData, allExhaustedPlanets);
       const { space, tokens } = buildTileSpaceData(tileData);
       
 
@@ -184,7 +183,7 @@ function buildMapTiles(data: PlayerDataResponse): {
 }
 
 
-function systemHasTechSkips(systemId: string, planets: Planet[]): boolean {
+function systemHasTechSkips(systemId: string, planets: PlanetMapTile[]): boolean {
   const hasBaseTechSkips = getPlanetsByTileId(systemId).some(
     (planet) =>
       planet.techSpecialties &&
@@ -213,7 +212,7 @@ function systemHasTechSkips(systemId: string, planets: Planet[]): boolean {
 };
 
 // Check planets, then check space area, otherwise no one faction has control
-function getTileController(planets: Planet[], space: Unit[]) {
+function getTileController(planets: PlanetMapTile[], space: UnitMapTile[]) {
   const uniquePlanetFactions = [
     ...new Set(planets.map((planet) => planet.controller)),
   ];
@@ -229,7 +228,7 @@ function getTileController(planets: Planet[], space: Unit[]) {
 }
 
 function buildTileSpaceData(tileData: TileUnitData) {
-  const space: Unit[] = [];
+  const space: UnitMapTile[] = [];
   const tokens: string[] = [];
 
   Object.entries(tileData.space).forEach(
@@ -255,11 +254,11 @@ function buildTileSpaceData(tileData: TileUnitData) {
   };
 }
 
-function buildTilePlanetData(tileData: TileUnitData) {
+function buildTilePlanetData(tileData: TileUnitData, allExhaustedPlanets: Set<string>) {
   return Object.entries(tileData.planets).map(
     ([planetName, planetData]: [string, PlanetEntityData]) => {
       const attachments: string[] = [];
-      const units: Unit[] = [];
+      const units: UnitMapTile[] = [];
       Object.entries(planetData.entities).forEach(
         ([faction, entities]: [string, any]) => {
           entities.forEach((entity: any) => {
@@ -284,6 +283,7 @@ function buildTilePlanetData(tileData: TileUnitData) {
         tokens: [],
         units: units,
         controller: planetData.controlledBy,
+        isExhausted: allExhaustedPlanets.has(planetName),
         commodities: planetData.commodities,
         properties: {
           x: 0,

@@ -61,11 +61,12 @@ import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 import { useTabManagementNewUI } from "./hooks/useTabManagementNewUI";
 import { EnhancedDataContext, GameContextProvider } from "./context/GameContextProvider";
-import { useAppStore, useSettingsStore } from "./utils/appStore";
+import { useSettingsStore } from "./utils/appStore";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
+export const MAP_PADDING = 200;
 
 function NewMapUIContent() {
   const enhancedData2 = useContext(EnhancedDataContext);
@@ -117,17 +118,7 @@ function NewMapUIContent() {
 
 
   // const zoomLevel = useAppStore((state) => state.zoomLevel);
-  const MAP_PADDING = useAppStore((state) => state.mapPadding);
-  const isFirefox = useSettingsStore((state) => state.settings.isFirefox);
-  const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
-  const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
-  const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
-  const isLeftPanelCollapsed = useSettingsStore((state) => state.settings.leftPanelCollapsed);
-  const isRightPanelCollapsed = useSettingsStore((state) => state.settings.rightPanelCollapsed);
-  const overlaysEnabled = useSettingsStore((state) => state.settings.enableOverlays);
-  // const hoveredTile = useSettingsStore((state) => state.settings.hoveredTile);
-  const settingsModalOpened = useSettingsStore((state) => state.settings.settingsModalOpened);
-  const keyboardShortcutsModalOpened = useSettingsStore((state) => state.settings.keyboardShortcutsModalOpened);
+  const settings = useSettingsStore((state) => state.settings);
   const updateSettings = useSettingsStore((state) => state.updateSettings);
   const setSettingsModalOpened = useSettingsStore((state) => state.setSettingsModalOpened);
   const setKeyboardShortcutsModalOpened = useSettingsStore((state) => state.setKeyboardShortcutsModalOpened);
@@ -172,7 +163,7 @@ function NewMapUIContent() {
     handleTileHover,
     handlePathIndexChange,
   } = useDistanceRendering({
-    distanceMode: distanceMode,
+    distanceMode: settings.distanceMode,
     positionToSystemId,
     tileUnitData: data?.tileUnitData,
   });
@@ -206,8 +197,8 @@ function NewMapUIContent() {
     togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
-    isLeftPanelCollapsed: isLeftPanelCollapsed,
-    isRightPanelCollapsed: isRightPanelCollapsed,
+    isLeftPanelCollapsed: settings.leftPanelCollapsed,
+    isRightPanelCollapsed: settings.rightPanelCollapsed,
     updateSettings,
     handleZoomIn,
     handleZoomOut,
@@ -298,9 +289,9 @@ if (!enhancedData2) {
                 Player Areas
               </Tabs.Tab>
               <Button
-                variant={techSkipsMode ? "filled" : "subtle"}
+                variant={settings.techSkipsMode ? "filled" : "subtle"}
                 size="sm"
-                color={techSkipsMode ? "cyan" : "gray"}
+                color={settings.techSkipsMode ? "cyan" : "gray"}
                 style={{ height: "36px", minWidth: "36px" }}
                 px={8}
                 onClick={toggleTechSkipsMode}
@@ -308,9 +299,9 @@ if (!enhancedData2) {
                 <IconFlask size={16} />
               </Button>
               <Button
-                variant={distanceMode ? "filled" : "subtle"}
+                variant={settings.distanceMode ? "filled" : "subtle"}
                 size="sm"
-                color={distanceMode ? "orange" : "gray"}
+                color={settings.distanceMode ? "orange" : "gray"}
                 style={{ height: "36px", minWidth: "36px" }}
                 px={8}
                 onClick={toggleDistanceMode}
@@ -319,9 +310,9 @@ if (!enhancedData2) {
               </Button>
               {tilesWithPds && tilesWithPds.size > 0 && (
                 <Button
-                  variant={pdsMode ? "filled" : "subtle"}
+                  variant={settings.showPDSLayer ? "filled" : "subtle"}
                   size="sm"
-                  color={pdsMode ? "blue" : "gray"}
+                  color={settings.showPDSLayer ? "blue" : "gray"}
                   style={{ height: "36px", minWidth: "36px" }}
                   px={8}
                   onClick={togglePdsMode}
@@ -348,11 +339,11 @@ if (!enhancedData2) {
                 }}
               />
               <Switch
-                checked={overlaysEnabled}
+                checked={settings.overlaysEnabled}
                 onChange={toggleOverlays}
                 size="sm"
                 thumbIcon={
-                  overlaysEnabled ? (
+                  settings.overlaysEnabled ? (
                     <IconEye size={12} />
                   ) : (
                     <IconEye size={12} style={{ opacity: 0.5 }} />
@@ -389,7 +380,7 @@ if (!enhancedData2) {
                   ref={mapContainerRef}
                   className={`dragscroll ${classes.mapArea}`}
                   style={{
-                    width: isRightPanelCollapsed
+                    width: settings.rightPanelCollapsed
                       ? "100%"
                       : `${100 - sidebarWidth}%`,
                   }}
@@ -400,7 +391,7 @@ if (!enhancedData2) {
                   {((objectives && playerData) ||
                     (lawsInPlay && lawsInPlay.length > 0)) && (
                     <PanelToggleButton
-                      isCollapsed={isLeftPanelCollapsed}
+                      isCollapsed={settings.leftPanelCollapsed}
                       onClick={toggleLeftPanelCollapsed}
                       position="left"
                     />
@@ -409,7 +400,7 @@ if (!enhancedData2) {
                   <div
                     className={classes.zoomControlsDynamic}
                     style={{
-                      right: isRightPanelCollapsed
+                      right: settings.rightPanelCollapsed
                         ? "35px"
                         : `calc(${sidebarWidth}vw + 35px)`,
                       transition: isDragging ? "none" : "right 0.1s ease",
@@ -429,7 +420,7 @@ if (!enhancedData2) {
                   <Box
                     className={classes.tileRenderingContainer}
                     style={{
-                      ...(isFirefox ? {} : { zoom: zoom }),
+                      ...(settings.isFirefox ? {} : { zoom: zoom }),
                       MozTransform: `scale(${zoom})`,
                       MozTransformOrigin: "top left",
                       top: MAP_PADDING / zoom,
@@ -539,11 +530,11 @@ if (!enhancedData2) {
                 <DragHandle onMouseDown={handleSidebarMouseDown} />
 
                 <PanelToggleButton
-                  isCollapsed={isRightPanelCollapsed}
+                  isCollapsed={settings.rightPanelCollapsed}
                   onClick={toggleRightPanelCollapsed}
                   position="right"
                   style={{
-                    right: isRightPanelCollapsed
+                    right: settings.rightPanelCollapsed
                       ? "10px"
                       : `calc(${sidebarWidth}vw + 14px)`,
                     transition: isDragging ? "none" : "right 0.1s ease",
@@ -551,7 +542,7 @@ if (!enhancedData2) {
                 />
 
                 <RightSidebar
-                  isRightPanelCollapsed={isRightPanelCollapsed}
+                  isRightPanelCollapsed={settings.rightPanelCollapsed}
                   sidebarWidth={sidebarWidth}
                   enhancedData={enhancedData}
                   selectedArea={selectedArea}
@@ -618,13 +609,13 @@ if (!enhancedData2) {
 
       {/* Settings Modal */}
       <SettingsModal
-        opened={settingsModalOpened}
+        opened={settings.settingsModalOpened}
         onClose={() => setSettingsModalOpened(false)}
       />
 
       {/* Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal
-        opened={keyboardShortcutsModalOpened}
+        opened={settings.keyboardShortcutsModalOpened}
         onClose={() => setKeyboardShortcutsModalOpened(false)}
       />
     </AppShell>
