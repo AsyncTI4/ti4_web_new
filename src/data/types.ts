@@ -1,3 +1,5 @@
+import { EntityStack } from "@/utils/unitPositioning";
+
 export type TileData = {
   id: string;
   name?: string;
@@ -524,9 +526,6 @@ export type AttachmentData = {
   source: string;
 };
 
-
-
-
 export type MapTileType = {
   position: string;
   systemId: string;
@@ -561,6 +560,7 @@ export type MapTileType = {
     width: number;
     height: number;
   };
+  entityPlacements: EntityStack[];
 };
 
 export type PlanetMapTile = {
@@ -569,7 +569,7 @@ export type PlanetMapTile = {
   tokens: string[];
   units: UnitMapTile[];
   controller: string;
-  isExhausted: boolean;
+  exhausted: boolean;
   commodities: number | null;
   properties: {
     x: number;
@@ -579,6 +579,7 @@ export type PlanetMapTile = {
 
 export type UnitMapTile = {
   type: "unit" | "token" | "attachment";
+  entityId: string;
   amount: number;
   amountSustained: number;
   owner: string;

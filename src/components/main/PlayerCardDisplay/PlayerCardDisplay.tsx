@@ -20,17 +20,11 @@ type ActiveArea =
 type PlayerCardDisplayProps = {
   playerData: any[];
   activeArea: ActiveArea;
-  factionToColor: Record<string, string>;
-  colorToFaction: Record<string, string>;
-  planetAttachments: Record<string, string[]>;
 };
 
 export function PlayerCardDisplay({
   playerData,
   activeArea,
-  factionToColor,
-  colorToFaction,
-  planetAttachments,
 }: PlayerCardDisplayProps) {
   if (activeArea?.type === "faction") {
     const playerToShow = playerData.find(
@@ -41,12 +35,7 @@ export function PlayerCardDisplay({
     return (
       <Box className={classes.playerCardsContainer}>
         <Box className={classes.playerCard}>
-          <PlayerCardSidebar
-            playerData={playerToShow}
-            factionToColor={factionToColor}
-            colorToFaction={colorToFaction}
-            planetAttachments={planetAttachments}
-          />
+          <PlayerCardSidebar playerData={playerToShow} />
         </Box>
       </Box>
     );
@@ -58,11 +47,7 @@ export function PlayerCardDisplay({
       <Stack className={classes.playerCardsContainer} gap={0}>
         {playerData.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
-            <PlayerCardSidebarTech
-              playerData={player}
-              factionToColor={factionToColor}
-              colorToFaction={colorToFaction}
-            />
+            <PlayerCardSidebarTech playerData={player} />
           </Box>
         ))}
       </Stack>
@@ -75,11 +60,7 @@ export function PlayerCardDisplay({
       <Stack className={classes.playerCardsContainer}>
         {playerData.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
-            <PlayerCardSidebarComponents
-              playerData={player}
-              factionToColor={factionToColor}
-              colorToFaction={colorToFaction}
-            />
+            <PlayerCardSidebarComponents playerData={player} />
           </Box>
         ))}
       </Stack>

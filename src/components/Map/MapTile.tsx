@@ -7,30 +7,19 @@ import { CommandCounterStack } from "./CommandCounterStack";
 import { CommodityIndicator } from "./CommodityIndicator";
 import { ProductionIndicator } from "./ProductionIndicator";
 import { FactionColorOverlay } from "./FactionColorOverlay";
-import {
-  getAllEntityPlacementsForTile,
-  findOptimalProductionIconCorner,
-} from "../../utils/unitPositioning";
+import { findOptimalProductionIconCorner } from "../../utils/unitPositioning";
 import { getColorAlias } from "@/lookup/colors";
-import {
-  getPlanetCoordsBySystemId,
-  getPlanetById,
-} from "@/lookup/planets";
+import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
 import classes from "./MapTile.module.css";
-import {  LawInPlay, MapTileType, TileUnitData } from "@/data/types";
+import { MapTileType } from "@/data/types";
 import { cdnImage } from "../../data/cdnImage";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { RGBColor } from "../../utils/colorOptimization";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
-import { EnhancedDataContext } from "@/context/GameContextProvider";
-
+import { useGameData } from "@/hooks/useGameContext";
 
 type Props = {
   mapTile: MapTileType;
-  tileUnitData: TileUnitData;
-  factionToColor: Record<string, string>;
-  optimizedColors: Record<string, RGBColor>;
   style?: React.CSSProperties;
   className?: string;
   onTileSelect?: (position: string) => void;
@@ -43,24 +32,16 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
-  onPlanetMouseEnter?: (
-    systemId: string,
-    planetId: string,
-    x: number,
-    y: number
-  ) => void;
+  onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
   selectedTiles?: string[];
   tileDistance?: number | null;
-  lawsInPlay?: LawInPlay[];
   isOnPath?: boolean; // Whether this tile is on any of the calculated paths
 };
 
 export const MapTile = React.memo<Props>(
   ({
     mapTile,
-    factionToColor,
-    optimizedColors,
     style,
     className,
     onTileSelect,
@@ -71,31 +52,35 @@ export const MapTile = React.memo<Props>(
     onPlanetMouseEnter,
     onPlanetMouseLeave,
     selectedTiles,
-
-    tileUnitData,
-    lawsInPlay,
     isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
   }) => {
     const hoverTimeoutRef = React.useRef<Record<string, number>>({});
-    const enhancedData = useContext(EnhancedDataContext);
-
-    
+    const gameData = useGameData();
 
     const ringPosition = mapTile.position;
     const systemId = mapTile.systemId;
     const position = {
       x: mapTile.properties.x,
-      y: mapTile.properties.y
+      y: mapTile.properties.y,
     };
     const isSelected = useAppStore((state) => state.selectedArea);
-    const techSkipsMode = useSettingsStore((state) => state.settings.techSkipsMode);
-    const distanceMode = useSettingsStore((state) => state.settings.distanceMode);
-    const alwaysShowControlTokens = useSettingsStore((state) => state.settings.showControlTokens);
-    const showExhaustedPlanets = useSettingsStore((state) => state.settings.showExhaustedPlanets);
-    const overlaysEnabled = useSettingsStore((state) => state.settings.overlaysEnabled);
+    const techSkipsMode = useSettingsStore(
+      (state) => state.settings.techSkipsMode
+    );
+    const distanceMode = useSettingsStore(
+      (state) => state.settings.distanceMode
+    );
+    const alwaysShowControlTokens = useSettingsStore(
+      (state) => state.settings.showControlTokens
+    );
+    const showExhaustedPlanets = useSettingsStore(
+      (state) => state.settings.showExhaustedPlanets
+    );
+    const overlaysEnabled = useSettingsStore(
+      (state) => state.settings.overlaysEnabled
+    );
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
-
 
     const handlePlanetMouseEnter = React.useCallback(
       (planetId: string, x: number, y: number) => {
@@ -105,10 +90,10 @@ export const MapTile = React.memo<Props>(
           // Convert relative planet position to world coordinates
           const worldX = position.x + x;
           const worldY = position.y + y;
-          onPlanetMouseEnter(systemId, planetId, worldX, worldY);
+          onPlanetMouseEnter(planetId, worldX, worldY);
         }, 1000);
       },
-      [systemId, onPlanetMouseEnter, position.x, position.y]
+      [onPlanetMouseEnter, position.x, position.y]
     );
 
     const handlePlanetMouseLeave = React.useCallback(
@@ -131,62 +116,56 @@ export const MapTile = React.memo<Props>(
       };
     }, []);
 
-
-    const allEntityPlacements = getAllEntityPlacementsForTile(systemId, tileUnitData);
-
     const unitImages: React.ReactElement[] = React.useMemo(() => {
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(allEntityPlacements).flatMap(([key, stack]) => {
-        // Determine planet center for tokens that belong to a planet
-        let planetCenter: { x: number; y: number } | undefined;
-        if (stack.planetName && planetCoords[stack.planetName]) {
-          const [x, y] = planetCoords[stack.planetName].split(",").map(Number);
-          planetCenter = { x, y };
-        }
+      return Object.entries(mapTile.entityPlacements).flatMap(
+        ([key, stack]) => {
+          // Determine planet center for tokens that belong to a planet
+          let planetCenter: { x: number; y: number } | undefined;
+          if (stack.planetName && planetCoords[stack.planetName]) {
+            const [x, y] = planetCoords[stack.planetName]
+              .split(",")
+              .map(Number);
+            planetCenter = { x, y };
+          }
 
-        return [
-          <UnitStack
-            key={`${systemId}-${key}-stack`}
-            stack={stack}
-            colorAlias={getColorAlias(factionToColor[stack.faction])}
-            stackKey={key}
-            planetCenter={planetCenter}
-            lawsInPlay={lawsInPlay}
-            onUnitMouseOver={
-              onUnitMouseOver
-                ? () => {
-                    // Convert relative unit position to world coordinates
-                    const worldX = position.x + stack.x;
-                    const worldY = position.y + stack.y;
-                    onUnitMouseOver(
-                      stack.faction,
-                      stack.entityId,
-                      worldX,
-                      worldY
-                    );
-                  }
-                : undefined
-            }
-            onUnitMouseLeave={
-              onUnitMouseLeave ? () => onUnitMouseLeave() : undefined
-            }
-            onUnitSelect={
-              onUnitSelect ? () => onUnitSelect(stack.faction) : undefined
-            }
-          />,
-        ];
-      });
-    }, [
-      systemId,
-      mapTile,
-      factionToColor,
-      onUnitMouseOver,
-      onUnitMouseLeave,
-      onUnitSelect,
-      allEntityPlacements,
-      lawsInPlay,
-    ]);
+          return [
+            <UnitStack
+              key={`${systemId}-${key}-stack`}
+              stack={stack}
+              colorAlias={getColorAlias(
+                gameData?.factionColorMap?.[stack.faction]?.color
+              )}
+              stackKey={key}
+              planetCenter={planetCenter}
+              lawsInPlay={gameData?.lawsInPlay}
+              onUnitMouseOver={
+                onUnitMouseOver
+                  ? () => {
+                      // Convert relative unit position to world coordinates
+                      const worldX = position.x + stack.x;
+                      const worldY = position.y + stack.y;
+                      onUnitMouseOver(
+                        stack.faction,
+                        stack.entityId,
+                        worldX,
+                        worldY
+                      );
+                    }
+                  : undefined
+              }
+              onUnitMouseLeave={
+                onUnitMouseLeave ? () => onUnitMouseLeave() : undefined
+              }
+              onUnitSelect={
+                onUnitSelect ? () => onUnitSelect(stack.faction) : undefined
+              }
+            />,
+          ];
+        }
+      );
+    }, [systemId, mapTile, onUnitMouseOver, onUnitMouseLeave, onUnitSelect]);
 
     const controlTokens: React.ReactElement[] = React.useMemo(() => {
       if (!mapTile?.planets) {
@@ -195,72 +174,63 @@ export const MapTile = React.memo<Props>(
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(mapTile.planets).flatMap(
-        ([planetId, planetData]) => {
-          if (!planetData.controller) return [];
+      return mapTile.planets.flatMap((planetData) => {
+        const planetId = planetData.name;
+        if (!planetData.controller) return [];
 
-          // Check if we should show control tokens based on the setting
-          if (!alwaysShowControlTokens) {
-            // Only show control tokens on planets with no units
-            const planetHasUnits = Object.values(allEntityPlacements).some(
-              (placement) =>
-                placement.planetName === planetId &&
-                placement.entityType === "unit"
-            );
-            if (planetHasUnits) return [];
-          }
-
-          // Try to get coordinates from planet lookup first
-          let x: number, y: number;
-          if (planetCoords[planetId]) {
-            [x, y] = planetCoords[planetId].split(",").map(Number);
-          } else {
-            // Fall back to checking entity placements for tokens matching the planet name
-            // (handles mirage and other case where a token added *is* a planet)
-            const tokenPlacement = Object.values(allEntityPlacements).find(
-              (placement) => placement.entityId === planetId
-            );
-            if (!tokenPlacement) return [];
-            x = tokenPlacement.x;
-            y = tokenPlacement.y;
-          }
-
-          const colorAlias = getColorAlias(
-            factionToColor[planetData.controller]
+        // Check if we should show control tokens based on the setting
+        if (!alwaysShowControlTokens) {
+          // Only show control tokens on planets with no units
+          const planetHasUnits = Object.values(mapTile.entityPlacements).some(
+            (placement) =>
+              placement.planetName === planetId &&
+              placement.entityType === "unit"
           );
-
-          return [
-            <ControlToken
-              key={`${systemId}-${planetId}-control`}
-              colorAlias={colorAlias}
-              faction={planetData.controller}
-              style={{
-                position: "absolute",
-                left: `${x - 10}px`,
-                top: `${y + 15}px`, // 20px offset downward
-                transform: "translate(-50%, -50%)",
-                zIndex: 990,
-              }}
-            />,
-          ];
+          if (planetHasUnits) return [];
         }
-      );
-    }, [
-      systemId,
-      mapTile,
-      factionToColor,
-      allEntityPlacements,
-      alwaysShowControlTokens,
-    ]);
+
+        // Try to get coordinates from planet lookup first
+        let x: number, y: number;
+        if (planetCoords[planetId]) {
+          [x, y] = planetCoords[planetId].split(",").map(Number);
+        } else {
+          // Fall back to checking entity placements for tokens matching the planet name
+          // (handles mirage and other case where a token added *is* a planet)
+          const tokenPlacement = Object.values(mapTile.entityPlacements).find(
+            (placement) => placement.entityId === planetId
+          );
+          if (!tokenPlacement) return [];
+          x = tokenPlacement.x;
+          y = tokenPlacement.y;
+        }
+
+        const colorAlias = getColorAlias(
+          gameData?.factionColorMap?.[planetData.controller]?.color
+        );
+
+        return [
+          <ControlToken
+            key={`${systemId}-${planetId}-control`}
+            colorAlias={colorAlias}
+            faction={planetData.controller}
+            style={{
+              position: "absolute",
+              left: `${x - 10}px`,
+              top: `${y + 15}px`, // 20px offset downward
+              transform: "translate(-50%, -50%)",
+              zIndex: 990,
+            }}
+          />,
+        ];
+      });
+    }, [systemId, mapTile, mapTile.entityPlacements, alwaysShowControlTokens]);
 
     const planetCircles: React.ReactElement[] = React.useMemo(() => {
-      if (!mapTile?.planets) {
-        return [];
-      }
-
+      if (!mapTile?.planets) return [];
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(mapTile.planets).flatMap(([planetId, planetTile]) => {
+      return mapTile.planets.flatMap((planetTile) => {
+        const planetId = planetTile.name;
         if (!planetCoords[planetId]) return [];
         const [x, y] = planetCoords[planetId].split(",").map(Number);
 
@@ -288,7 +258,7 @@ export const MapTile = React.memo<Props>(
         const diameter = radius * 2;
 
         const exhaustedBackdropFilter =
-          planetTile.isExhausted && showExhaustedPlanets
+          planetTile.exhausted && showExhaustedPlanets
             ? { backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" }
             : {};
 
@@ -323,25 +293,23 @@ export const MapTile = React.memo<Props>(
 
       const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      return Object.entries(mapTile.planets).flatMap(
-        ([planetId, planetData]) => {
-          if (!planetData.commodities || planetData.commodities === 0)
-            return [];
+      return mapTile.planets.flatMap((planetData) => {
+        const planetId = planetData.name;
+        if (!planetData.commodities || planetData.commodities === 0) return [];
 
-          // Get coordinates from planet lookup
-          if (!planetCoords[planetId]) return [];
-          const [x, y] = planetCoords[planetId].split(",").map(Number);
+        // Get coordinates from planet lookup
+        if (!planetCoords[planetId]) return [];
+        const [x, y] = planetCoords[planetId].split(",").map(Number);
 
-          return [
-            <CommodityIndicator
-              key={`${systemId}-${planetId}-commodity`}
-              commodityCount={planetData.commodities}
-              x={x}
-              y={y}
-            />,
-          ];
-        }
-      );
+        return [
+          <CommodityIndicator
+            key={`${systemId}-${planetId}-commodity`}
+            commodityCount={planetData.commodities}
+            x={x}
+            y={y}
+          />,
+        ];
+      });
     }, [systemId, mapTile]);
 
     const productionIcon: React.ReactElement | null = React.useMemo(() => {
@@ -367,7 +335,6 @@ export const MapTile = React.memo<Props>(
         <CommandCounterStack
           key={`${systemId}-command-stack`}
           factions={mapTile.commandCounters}
-          factionToColor={factionToColor}
           style={{
             position: "absolute",
             left: "0px",
@@ -375,7 +342,7 @@ export const MapTile = React.memo<Props>(
           }}
         />
       );
-    }, [systemId, mapTile, factionToColor]);
+    }, [systemId, mapTile]);
 
     // Determine controlling faction for the system overlay
     const controllingFaction = mapTile.controller;
@@ -401,8 +368,10 @@ export const MapTile = React.memo<Props>(
             }
 
             // PDS mode - dim tiles that don't have PDS
-            if (pdsMode && enhancedData!.data!.tilesWithPds) {
-              return ringPosition && enhancedData!.data!.tilesWithPds.has(ringPosition) ? 1.0 : 0.2;
+            if (pdsMode && gameData!.tilesWithPds) {
+              return ringPosition && gameData!.tilesWithPds.has(ringPosition)
+                ? 1.0
+                : 0.2;
             }
 
             // Distance mode with two selected tiles - dim tiles not on any path
@@ -455,20 +424,16 @@ export const MapTile = React.memo<Props>(
           <div className={classes.ringPosition}>{ringPosition}</div>
 
           {controllingFaction && overlaysEnabled && (
-            <FactionColorOverlay
-              faction={factionToColor[controllingFaction]}
-              opacity={0.3}
-              optimizedColors={optimizedColors}
-            />
+            <FactionColorOverlay faction={controllingFaction} opacity={0.3} />
           )}
 
           {/* PDS Control Token Overlay */}
           {pdsMode &&
-            enhancedData!.data!.dominantPdsFaction &&
+            gameData!.dominantPdsFaction &&
             (() => {
               const tilePosition = ringPosition;
               const pdsData = tilePosition
-                ? enhancedData!.data!.dominantPdsFaction[tilePosition]
+                ? gameData!.dominantPdsFaction[tilePosition]
                 : null;
 
               if (pdsData) {

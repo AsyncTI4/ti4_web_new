@@ -5,11 +5,11 @@ import { units } from "../data/units";
 import { CapturedUnitsData } from "../data/types";
 import styles from "./Nombox.module.css";
 import { getColorAlias } from "@/lookup/colors";
+import { useFactionColors } from "@/hooks/useFactionColors";
 import { Unit } from "./shared/Unit";
 
 type Props = {
   capturedUnits: CapturedUnitsData;
-  factionToColor: Record<string, string>;
 };
 
 // Parse unit string like "dread,3" or "carrier,4"
@@ -27,7 +27,8 @@ const parseUnitString = (unitString: string) => {
   };
 };
 
-export function Nombox({ capturedUnits, factionToColor }: Props) {
+export function Nombox({ capturedUnits }: Props) {
+  const factionColorMap = useFactionColors();
   // Early return if no captured units
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
     return null;
@@ -120,7 +121,7 @@ export function Nombox({ capturedUnits, factionToColor }: Props) {
         }}
       >
         {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-          const playerColor = factionToColor[factionName];
+          const playerColor = factionColorMap?.[factionName]?.color;
           const colorAlias = getColorAlias(playerColor);
 
           return (

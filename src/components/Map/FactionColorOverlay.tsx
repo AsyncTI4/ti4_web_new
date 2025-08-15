@@ -1,18 +1,22 @@
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { RGBColor } from "@/utils/colorOptimization";
+import { useContext, useMemo } from "react";
+import { EnhancedDataContext } from "@/context/GameContextProvider";
 
 type FactionColorOverlayProps = {
-  faction: string;
+  faction: string; // faction id
   opacity?: number;
-  optimizedColors?: Record<string, RGBColor>;
 };
 
 export const FactionColorOverlay = ({
   faction,
   opacity = 0.15,
-  optimizedColors,
 }: FactionColorOverlayProps) => {
-  const optimizedColor = optimizedColors?.[faction];
+  const enhancedData = useContext(EnhancedDataContext);
+  const optimizedColor = useMemo(() => {
+    const colorAlias = enhancedData?.data?.factionColorMap?.[faction]?.color;
+    const rgb = enhancedData?.data?.factionColorMap?.[faction]?.optimizedColor;
+    return rgb || undefined;
+  }, [enhancedData, faction]);
 
   if (!optimizedColor) {
     return null;

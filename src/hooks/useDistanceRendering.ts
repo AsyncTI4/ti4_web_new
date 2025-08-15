@@ -1,16 +1,15 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { calculateOptimalPaths, PathResult } from "../utils/tileDistances";
+import { MapTileType } from "@/data/types";
 
 type UseDistanceRenderingProps = {
   distanceMode: boolean;
-  positionToSystemId: Record<string, string>;
-  tileUnitData?: any;
+  mapTiles: MapTileType[];
 };
 
 export function useDistanceRendering({
   distanceMode,
-  positionToSystemId,
-  tileUnitData,
+  mapTiles,
 }: UseDistanceRenderingProps) {
   const [selectedTiles, setSelectedTiles] = useState<string[]>([]); // positions
   const [pathResult, setPathResult] = useState<PathResult | null>(null);
@@ -52,8 +51,7 @@ export function useDistanceRendering({
           const paths = calculateOptimalPaths(
             newSelection[0],
             newSelection[1],
-            positionToSystemId,
-            tileUnitData
+            mapTiles
           );
           setPathResult(paths);
           setActivePathIndex(0); // Reset to first path when new calculation
@@ -66,8 +64,7 @@ export function useDistanceRendering({
           const paths = calculateOptimalPaths(
             newSelection[0],
             newSelection[1],
-            positionToSystemId,
-            tileUnitData
+            mapTiles
           );
           setPathResult(paths);
           setActivePathIndex(0); // Reset to first path when new calculation
@@ -76,7 +73,7 @@ export function useDistanceRendering({
         return newSelection;
       });
     },
-    [distanceMode, positionToSystemId, tileUnitData]
+    [distanceMode, mapTiles]
   );
 
   const handleTileHover = useCallback(

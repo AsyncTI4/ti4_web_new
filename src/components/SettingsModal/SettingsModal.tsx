@@ -1,5 +1,5 @@
 import { Modal, Stack, Switch, Text, Divider } from "@mantine/core";
-import { useSettings } from "../../context/SettingsContext";
+import { useSettingsStore } from "../../utils/appStore";
 
 type SettingsModalProps = {
   opened: boolean;
@@ -7,14 +7,20 @@ type SettingsModalProps = {
 };
 
 export function SettingsModal({ opened, onClose }: SettingsModalProps) {
-  const {
-    settings,
-    toggleOverlays,
-    toggleAlwaysShowControlTokens,
-    toggleLeftPanelCollapsed,
-    toggleRightPanelCollapsed,
-    toggleShowExhaustedPlanets,
-  } = useSettings();
+  const settings = useSettingsStore((state) => state.settings);
+  const toggleOverlays = useSettingsStore((state) => state.toggleOverlays);
+  const toggleAlwaysShowControlTokens = useSettingsStore(
+    (state) => state.toggleAlwaysShowControlTokens
+  );
+  const toggleLeftPanelCollapsed = useSettingsStore(
+    (state) => state.toggleLeftPanelCollapsed
+  );
+  const toggleRightPanelCollapsed = useSettingsStore(
+    (state) => state.toggleRightPanelCollapsed
+  );
+  const toggleShowExhaustedPlanets = useSettingsStore(
+    (state) => state.toggleShowExhaustedPlanets
+  );
 
   return (
     <Modal
@@ -39,7 +45,7 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
               description="Show ownership color overlays on the map"
             />
             <Switch
-              checked={settings.alwaysShowControlTokens}
+              checked={settings.showControlTokens}
               onChange={toggleAlwaysShowControlTokens}
               size="sm"
               label="Always Show Control Tokens"
@@ -63,14 +69,14 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
           </Text>
           <Stack gap="sm">
             <Switch
-              checked={settings.isLeftPanelCollapsed}
+              checked={settings.leftPanelCollapsed}
               onChange={toggleLeftPanelCollapsed}
               size="sm"
               label="Collapse Left Panel"
               description="Hide the objectives and laws panel on the left side of the map"
             />
             <Switch
-              checked={settings.isRightPanelCollapsed}
+              checked={settings.rightPanelCollapsed}
               onChange={toggleRightPanelCollapsed}
               size="sm"
               label="Collapse Right Panel"

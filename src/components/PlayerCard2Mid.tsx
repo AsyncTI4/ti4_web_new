@@ -65,9 +65,6 @@ const SC_COLORS = {
 
 type Props = {
   playerData: PlayerData;
-  factionToColor: Record<string, string>;
-  colorToFaction: Record<string, string>;
-  planetAttachments?: Record<string, string[]>;
 };
 
 export default function PlayerCard2Mid(props: Props) {
@@ -95,7 +92,6 @@ export default function PlayerCard2Mid(props: Props) {
     leaders,
     scs = [],
     promissoryNotesInPlayArea = [],
-    exhaustedPlanets = [],
     resources,
     totResources,
     influence,
@@ -312,10 +308,7 @@ export default function PlayerCard2Mid(props: Props) {
 
           <StatusIndicator passed={passed} active={active} />
           <Box visibleFrom="sm">
-            <Neighbors
-              neighbors={neighbors || []}
-              colorToFaction={props.colorToFaction}
-            />
+            <Neighbors neighbors={neighbors || []} />
           </Box>
         </Group>
         <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
@@ -356,10 +349,7 @@ export default function PlayerCard2Mid(props: Props) {
               acCount={acCount || 0}
             />
             <Box hiddenFrom="sm">
-              <Neighbors
-                neighbors={neighbors || []}
-                colorToFaction={props.colorToFaction}
-              />
+              <Neighbors neighbors={neighbors || []} />
             </Box>
           </Stack>
         </Grid.Col>
@@ -392,10 +382,7 @@ export default function PlayerCard2Mid(props: Props) {
           hiddenFrom="lg"
         >
           <Stack gap={4}>
-            <PromissoryNotesStack
-              promissoryNotes={promissoryNotes}
-              colorToFaction={props.colorToFaction}
-            />
+            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
             {RelicStack}
           </Stack>
         </Grid.Col>
@@ -419,10 +406,7 @@ export default function PlayerCard2Mid(props: Props) {
               secretsScored={secretsScored}
               knownUnscoredSecrets={knownUnscoredSecrets}
             />
-            <PromissoryNotesStack
-              promissoryNotes={promissoryNotes}
-              colorToFaction={props.colorToFaction}
-            />
+            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
             {RelicStack}
             {/* Needs to Follow Section */}
             <NeedsToFollow values={unfollowedSCs || []} />
@@ -489,10 +473,7 @@ export default function PlayerCard2Mid(props: Props) {
 
                   {/* Debt Tokens Section - Full width at bottom */}
                   {debtTokens && Object.keys(debtTokens).length > 0 && (
-                    <DebtTokens
-                      debts={debtTokens}
-                      colorToFaction={props.colorToFaction}
-                    />
+                    <DebtTokens debts={debtTokens} />
                   )}
                 </Stack>
               </Surface>
@@ -527,13 +508,7 @@ export default function PlayerCard2Mid(props: Props) {
                           key={index}
                           style={{ display: "flex", gap: "4px" }}
                         >
-                          <PlanetCard
-                            planetId={planetId}
-                            exhausted={exhaustedPlanets.includes(planetId)}
-                            attachments={
-                              props.planetAttachments?.[planetId] || []
-                            }
-                          />
+                          <PlanetCard planetId={planetId} />
                           {hasLegendaryAbility && (
                             <PlanetAbilityCard
                               planetId={planetId}
@@ -552,10 +527,7 @@ export default function PlayerCard2Mid(props: Props) {
               </Group>
               {nombox !== undefined && Object.keys(nombox).length > 0 && (
                 <Box mt="md">
-                  <Nombox
-                    capturedUnits={nombox || {}}
-                    factionToColor={props.factionToColor}
-                  />
+                  <Nombox capturedUnits={nombox || {}} />
                 </Box>
               )}
             </Grid.Col>

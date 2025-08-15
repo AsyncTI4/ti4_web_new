@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CommandCounter } from "./CommandCounter";
 import { getColorAlias } from "@/lookup/colors";
+import { EnhancedDataContext } from "@/context/GameContextProvider";
 
 type CommandCounterStackProps = {
   factions: string[];
-  factionToColor: Record<string, string>;
   style?: React.CSSProperties;
 };
 
@@ -12,9 +12,9 @@ const TILE_OFFSET_X = 10;
 const TILE_OFFSET_Y = 90;
 export const CommandCounterStack = ({
   factions,
-  factionToColor,
   style,
 }: CommandCounterStackProps) => {
+  const enhancedData = useContext(EnhancedDataContext);
   if (factions.length === 0) {
     return null;
   }
@@ -22,7 +22,9 @@ export const CommandCounterStack = ({
   return (
     <div style={{ position: "relative", ...style }}>
       {factions.map((faction, index) => {
-        const colorAlias = getColorAlias(factionToColor[faction]);
+        const colorAlias = getColorAlias(
+          enhancedData?.data?.factionColorMap?.[faction]?.color
+        );
         const offsetX = index * 16;
         const offsetY = index * 16;
         const zIndex = index + 1;

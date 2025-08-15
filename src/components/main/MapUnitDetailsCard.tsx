@@ -1,8 +1,8 @@
 import { Box } from "@mantine/core";
 import { UnitDetailsCard } from "../PlayerArea/UnitDetailsCard";
 import { lookupUnit } from "../../lookup/units";
-import { PlayerData } from "../../data/types";
-import { MAP_PADDING } from "@/NewMapUI";
+import { useGameData } from "@/hooks/useGameContext";
+const MAP_PADDING = 200;
 
 type TooltipUnit = {
   unitId?: string;
@@ -12,16 +12,13 @@ type TooltipUnit = {
 
 type Props = {
   tooltipUnit: TooltipUnit | null;
-  playerData: PlayerData[] | undefined;
   zoom: number;
 };
 
-export function MapUnitDetailsCard({
-  tooltipUnit,
-  playerData,
-  zoom,
-}: Props) {
+export function MapUnitDetailsCard({ tooltipUnit, zoom }: Props) {
   if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
+  const gameData = useGameData();
+  const playerData = gameData?.playerData;
 
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction

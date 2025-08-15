@@ -7,13 +7,9 @@ import { PromissoryNoteCard } from "../PromissoryNoteCard";
 
 type Props = {
   promissoryNotes: string[];
-  colorToFaction: Record<string, string>;
 };
 
-export function PromissoryNotesStack({
-  promissoryNotes,
-  colorToFaction,
-}: Props) {
+export function PromissoryNotesStack({ promissoryNotes }: Props) {
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
 
   return (
@@ -29,16 +25,12 @@ export function PromissoryNotesStack({
               <div>
                 <PromissoryNote
                   promissoryNoteId={noteId}
-                  colorToFaction={colorToFaction}
                   onClick={() => setSelectedNote(noteId)}
                 />
               </div>
             </SmoothPopover.Target>
             <SmoothPopover.Dropdown p={0}>
-              <PromissoryNoteCard
-                promissoryNoteId={noteId}
-                colorToFaction={colorToFaction}
-              />
+              <PromissoryNoteCard promissoryNoteId={noteId} />
             </SmoothPopover.Dropdown>
           </SmoothPopover>
         ))

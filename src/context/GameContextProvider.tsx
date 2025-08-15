@@ -1,20 +1,27 @@
-import { calculateSingleTilePosition } from "../mapgen/tilePositioning";
+import {
+  calculateSingleTilePosition,
+  calculateTilePositions,
+} from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
 import { createContext, ReactNode } from "react";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
-import { useParams } from "react-router-dom";
 import { colors } from "@/data/colors";
 import {
   MapTileType,
+  EntityData,
   PlanetEntityData,
   PlanetMapTile,
   PlayerDataResponse,
   TileUnitData,
   UnitMapTile,
 } from "@/data/types";
-import { getPlanetsByTileId } from "@/lookup/planets";
+import {
+  getPlanetsByTileId,
+  getPlanetCoordsBySystemId,
+} from "@/lookup/planets";
 import { getAttachmentData } from "@/lookup/attachments";
+import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 
 export type FactionColorMap = {
   [key: string]: FactionColorData;
@@ -27,12 +34,11 @@ export type FactionColorData = {
 };
 
 type GameContext = {
-  data: GameData | undefined,
-  dataState: GameDataState
+  data: GameData | undefined;
+  dataState: GameDataState;
 };
 
 type GameData = {
-  planetAttachments: Record<string, string[]>;
   mapTiles: MapTileType[];
   tilePositions: any;
   systemIdToPosition: Record<string, string>;
@@ -47,38 +53,58 @@ type GameData = {
       expected: number;
     }
   >;
-}
+  planetIdToPlanetTile: Record<string, PlanetMapTile>;
 
-type GameDataState = {
+  // Added properties migrated from old enhancedData
+  // have not been massaged yet
+  playerData: PlayerDataResponse["playerData"];
+  objectives: PlayerDataResponse["objectives"];
+  lawsInPlay: PlayerDataResponse["lawsInPlay"];
+  strategyCards: PlayerDataResponse["strategyCards"];
+  vpsToWin: PlayerDataResponse["vpsToWin"];
+  cardPool: PlayerDataResponse["cardPool"];
+  versionSchema?: PlayerDataResponse["versionSchema"];
+  ringCount: PlayerDataResponse["ringCount"];
+  gameRound: PlayerDataResponse["gameRound"];
+  gameName: PlayerDataResponse["gameName"];
+  gameCustomName?: PlayerDataResponse["gameCustomName"];
+  statTilePositions: PlayerDataResponse["statTilePositions"];
+  calculatedTilePositions: ReturnType<typeof calculateTilePositions>;
+};
+
+export type GameDataState = {
   isLoading: boolean;
   isError: boolean;
   readyState: any;
   reconnect: () => void;
   isReconnecting: any;
-}
+};
 
 type Props = {
   children: ReactNode;
+  gameId: string;
 };
 
 const RADIUS = 172.5; // Width = 345px
 const CENTER_X_OFFSET = 172.5;
 const CENTER_Y_OFFSET = 149.5;
 
-export function GameContextProvider({ children }: Props) {
-  const params = useParams<{ mapid: string }>();
-  
+export function GameContextProvider({ children, gameId }: Props) {
   //hook calls need to be at component level, cannot bring this out to a helper function
-  const { data, isLoading, isError, isReconnecting, readyState, reconnect } = usePlayerDataSocket(params.mapid!);
+  const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
+    usePlayerDataSocket(gameId);
   const enhancedData = data ? buildGameContext(data) : undefined;
 
-  const gameContext = enhancedData ? {
+  const gameContext: GameContext = {
     data: enhancedData,
     dataState: {
-      isLoading, isError, isReconnecting, readyState, reconnect
-    }
-  } : undefined;
-
+      isLoading,
+      isError,
+      isReconnecting,
+      readyState,
+      reconnect,
+    },
+  } as GameContext;
 
   return (
     <EnhancedDataContext.Provider value={gameContext}>
@@ -100,41 +126,59 @@ export function buildGameContext(data: PlayerDataResponse): GameData {
     data,
     factionToColor
   );
-  const { mapTiles, planetAttachments } = buildMapTiles(data);
+  const mapTiles = buildMapTiles(data);
+  const planetIdToPlanetTile = buildPlanetIdToPlanetTileMap(mapTiles);
+  const calculatedTilePositions = data.tilePositions
+    ? calculateTilePositions(data.tilePositions, data.ringCount)
+    : [];
 
   return {
-    planetAttachments,
     mapTiles,
     tilePositions: data.tilePositions,
     systemIdToPosition,
     factionColorMap,
     tilesWithPds,
     dominantPdsFaction,
+    planetIdToPlanetTile,
+    playerData: data.playerData,
+    objectives: data.objectives,
+    lawsInPlay: data.lawsInPlay,
+    strategyCards: data.strategyCards,
+    vpsToWin: data.vpsToWin,
+    cardPool: data.cardPool,
+    versionSchema: data.versionSchema,
+    ringCount: data.ringCount,
+    gameRound: data.gameRound,
+    gameName: data.gameName,
+    gameCustomName: data.gameCustomName,
+    statTilePositions: data.statTilePositions,
+    calculatedTilePositions,
   };
 }
 
-function buildMapTiles(data: PlayerDataResponse): {
-  mapTiles: MapTileType[];
-  planetAttachments: Record<string, string[]>;
-} {
-  if (!data.tileUnitData)
-    return {
-      mapTiles: [],
-      planetAttachments: {},
-    };
+function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
+  if (!data.tileUnitData) return [];
 
-  const planetAttachments: Record<string, string[]> = {};
   const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
   const mapTiles = Object.entries(data.tileUnitData).map(
     ([position, tileData]) => {
       const coordinates = calculateSingleTilePosition(position, data.ringCount);
-      const planets: PlanetMapTile[] = buildTilePlanetData(tileData, allExhaustedPlanets);
       const { space, tokens } = buildTileSpaceData(tileData);
-      
 
       const systemId = data.tilePositions
-          .filter((pos) => pos.split(":")[0] === position)[0]
-          .split(":")[1];
+        .filter((pos) => pos.split(":")[0] === position)[0]
+        .split(":")[1];
+      const planetCoords = getPlanetCoordsBySystemId(systemId);
+
+      const planets: PlanetMapTile[] = Object.entries(tileData.planets).map(
+        ([planetName, planetData]: [string, PlanetEntityData]) =>
+          buildPlanetMapTile(
+            planetName,
+            planetData,
+            allExhaustedPlanets,
+            planetCoords
+          )
+      );
 
       const points = generateHexagonPoints(
         coordinates.x + CENTER_X_OFFSET,
@@ -142,26 +186,26 @@ function buildMapTiles(data: PlayerDataResponse): {
         RADIUS
       );
 
-      planets
-        .filter((planet) => planet.attachments.length > 0)
-        .forEach(
-          (planet) => (planetAttachments[planet.name] = planet.attachments)
-        );
+      const allEntityPlacements = getAllEntityPlacementsForTile(
+        systemId,
+        tileData
+      );
 
       return {
         position: position,
         systemId: systemId,
         planets: planets,
         space: space,
-        anomaly: (tileData as any).anomaly,
+        anomaly: tileData.anomaly,
         wormholes: [],
         hasTechSkips: systemHasTechSkips(systemId, planets),
         controller: getTileController(planets, space),
-        commandCounters: (tileData as any).ccs,
+        commandCounters: tileData.ccs,
         production: tileData.production,
         highestProduction: Math.max(...Object.values(tileData.production)),
         capacity: {},
         tokens: tokens,
+        entityPlacements: allEntityPlacements,
         properties: {
           x: coordinates.x,
           y: coordinates.y,
@@ -176,14 +220,27 @@ function buildMapTiles(data: PlayerDataResponse): {
     }
   );
 
-  return {
-    mapTiles,
-    planetAttachments,
-  };
+  return mapTiles;
 }
 
+function buildPlanetIdToPlanetTileMap(
+  mapTiles: MapTileType[]
+): Record<string, PlanetMapTile> {
+  const map: Record<string, PlanetMapTile> = {};
+  for (const tile of mapTiles) {
+    if (!tile.planets) continue;
+    for (const planet of tile.planets) {
+      // Use the same object reference from mapTiles
+      map[planet.name] = planet;
+    }
+  }
+  return map;
+}
 
-function systemHasTechSkips(systemId: string, planets: PlanetMapTile[]): boolean {
+function systemHasTechSkips(
+  systemId: string,
+  planets: PlanetMapTile[]
+): boolean {
   const hasBaseTechSkips = getPlanetsByTileId(systemId).some(
     (planet) =>
       planet.techSpecialties &&
@@ -196,8 +253,8 @@ function systemHasTechSkips(systemId: string, planets: PlanetMapTile[]): boolean
   }
 
   // Check planet attachments for tech skips
-  planets.forEach(planet => {
-    planet.attachments.forEach(attachment => {
+  planets.forEach((planet) => {
+    planet.attachments.forEach((attachment) => {
       const attachmentData = getAttachmentData(attachment);
       if (
         attachmentData?.techSpeciality &&
@@ -205,11 +262,11 @@ function systemHasTechSkips(systemId: string, planets: PlanetMapTile[]): boolean
       ) {
         return true;
       }
-    })
-  })
+    });
+  });
 
   return false;
-};
+}
 
 // Check planets, then check space area, otherwise no one faction has control
 function getTileController(planets: PlanetMapTile[], space: UnitMapTile[]) {
@@ -228,70 +285,82 @@ function getTileController(planets: PlanetMapTile[], space: UnitMapTile[]) {
 }
 
 function buildTileSpaceData(tileData: TileUnitData) {
-  const space: UnitMapTile[] = [];
-  const tokens: string[] = [];
+  const entries = Object.entries(tileData.space) as [string, EntityData[]][];
 
-  Object.entries(tileData.space).forEach(
-    ([faction, entities]: [string, any]) => {
-      entities.forEach((entity: any) => {
-        if (entity.entityType === "unit") {
-          space.push({
-            type: entity.entityType,
+  const space: UnitMapTile[] = entries.flatMap(([faction, entities]) =>
+    entries
+      .filter(([, entities]) => entities)
+      .flatMap(() =>
+        entities
+          .filter((entity) => entity.entityType === "unit")
+          .map((entity) => ({
+            type: "unit",
+            entityId: entity.entityId,
             amount: entity.count,
             amountSustained: entity.sustained ?? 0,
             owner: faction,
-          });
-        }
-
-        if (entity.entityType === "token") tokens.push(entity.entityId);
-      });
-    }
+          }))
+      )
   );
 
-  return {
-    space,
-    tokens,
-  };
+  const tokens: string[] = entries.flatMap(([, entities]) =>
+    entities
+      .filter((entity) => entity.entityType === "token")
+      .map((entity) => entity.entityId)
+  );
+
+  return { space, tokens };
 }
 
-function buildTilePlanetData(tileData: TileUnitData, allExhaustedPlanets: Set<string>) {
-  return Object.entries(tileData.planets).map(
-    ([planetName, planetData]: [string, PlanetEntityData]) => {
-      const attachments: string[] = [];
-      const units: UnitMapTile[] = [];
-      Object.entries(planetData.entities).forEach(
-        ([faction, entities]: [string, any]) => {
-          entities.forEach((entity: any) => {
-            if (entity.entityType === "unit") {
-              units.push({
-                type: entity.entityType,
-                amount: entity.count,
-                amountSustained: entity.sustained ?? 0,
-                owner: faction,
-              });
-            }
+function buildPlanetMapTile(
+  planetName: string,
+  planetData: PlanetEntityData,
+  allExhaustedPlanets: Set<string>,
+  planetCoords: Record<string, string>
+): PlanetMapTile {
+  const entityEntries = Object.entries(planetData.entities) as [
+    string,
+    EntityData[],
+  ][];
 
-            if (entity.entityType === "attachment")
-              attachments.push(entity.entityId);
-          });
-        }
-      );
-
-      return {
-        name: planetName,
-        attachments: attachments,
-        tokens: [],
-        units: units,
-        controller: planetData.controlledBy,
-        isExhausted: allExhaustedPlanets.has(planetName),
-        commodities: planetData.commodities,
-        properties: {
-          x: 0,
-          y: 0,
-        },
-      };
-    }
+  const attachments: string[] = entityEntries.flatMap(([, entities]) =>
+    entities
+      .filter((entity) => entity.entityType === "attachment")
+      .map((entity) => entity.entityId)
   );
+
+  const units: UnitMapTile[] = entityEntries.flatMap(([faction, entities]) =>
+    entities
+      .filter((entity) => entity.entityType === "unit")
+      .map((entity) => ({
+        type: "unit",
+        entityId: entity.entityId,
+        amount: entity.count,
+        amountSustained: entity.sustained ?? 0,
+        owner: faction,
+      }))
+  );
+
+  let x = 0;
+  let y = 0;
+  const coord = planetCoords[planetName];
+  if (coord) {
+    [x, y] = coord.split(",").map(Number);
+  }
+
+  return {
+    name: planetName,
+    attachments,
+    tokens: [],
+    units,
+    controller: planetData.controlledBy,
+    exhausted: allExhaustedPlanets.has(planetName),
+    commodities: planetData.commodities,
+    properties: {
+      x,
+      y,
+    },
+  };
 }
 
 function generateSystemIdToPosition(data: PlayerDataResponse | undefined) {

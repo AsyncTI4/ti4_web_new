@@ -6,16 +6,16 @@ import {
 } from "../utils/pathVisualization";
 import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
-import { useAppStore } from "@/utils/appStore";
-import { MAP_PADDING } from "@/NewMapUI";
+//
+// mapPadding is passed from parent to avoid circular imports
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
-  positionToSystemId: Record<string, string>;
-  tilePositions: TilePosition[];
+  tilePositions?: TilePosition[];
   zoom: number;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
+  mapPadding?: number;
 };
 
 const PATH_COLORS = [
@@ -44,16 +44,16 @@ const PATH_COLORS = [
 
 export const PathVisualization = ({
   pathResult,
-  positionToSystemId,
   tilePositions,
   zoom,
   activePathIndex,
   onPathIndexChange,
+  mapPadding = 200,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
 
   const positionMap = useMemo(
-    () => createPositionMap(tilePositions),
+    () => createPositionMap(tilePositions || []),
     [tilePositions]
   );
 
@@ -194,8 +194,8 @@ export const PathVisualization = ({
           ...(isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: MAP_PADDING / zoom,
-          left: MAP_PADDING / zoom,
+          top: mapPadding / zoom,
+          left: mapPadding / zoom,
         }}
       >
         {renderPathLines()}

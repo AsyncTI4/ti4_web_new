@@ -4,21 +4,18 @@ import { getPromissoryNoteData } from "../../../lookup/promissoryNotes";
 import { getGradientClasses } from "../gradientClasses";
 import { cdnImage } from "../../../data/cdnImage";
 import styles from "./PromissoryNote.module.css";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   promissoryNoteId: string;
-  colorToFaction: Record<string, string>;
   onClick?: () => void;
 };
 
-export function PromissoryNote({
-  promissoryNoteId,
-  colorToFaction,
-  onClick,
-}: Props) {
+export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
+  const factionColorMap = useFactionColors();
   const promissoryNoteData = getPromissoryNoteData(
     promissoryNoteId,
-    colorToFaction
+    factionColorMap
   );
   if (!promissoryNoteData) return null;
 

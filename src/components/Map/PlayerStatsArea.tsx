@@ -10,27 +10,30 @@ import { getColorAlias } from "../../lookup/colors";
 import { PlayerStatsHex, HexagonData } from "./PlayerStatsHex";
 import styles from "./PlayerStatsArea.module.css";
 import { PlayerData } from "@/data/types";
+import { useFactionColors } from "@/hooks/useFactionColors";
+import { useGameContext } from "@/hooks/useGameContext";
 
 type PlayerStatsAreaProps = {
   faction: string;
   playerData: PlayerData;
   statTilePositions: string[];
-  color: string;
-  vpsToWin: number;
-  factionToColor: Record<string, string>;
-  ringCount: number;
 };
 
 export function PlayerStatsArea({
   faction,
   playerData,
   statTilePositions,
-  color,
-  vpsToWin,
-  factionToColor,
-  ringCount,
 }: PlayerStatsAreaProps) {
+  const enhancedData = useGameContext();
+  const factionColorMap = useFactionColors();
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
+
+  if (!enhancedData) return null;
+
+  const { vpsToWin = 10, ringCount = 3 } = enhancedData;
+
+  // Get the color for this faction from the color map, fallback to player's default color
+  const color = factionColorMap[faction]?.color || playerData.color;
 
   // Calculate tile positions for this faction's stat tiles
   const tilePositions = useMemo(() => {
@@ -223,7 +226,6 @@ export function PlayerStatsArea({
                 faction={faction}
                 type="fleet"
                 mahactEdict={playerData.mahactEdict}
-                factionToColor={factionToColor}
               />
               <CommandTokenStack
                 count={playerData.strategicCC}

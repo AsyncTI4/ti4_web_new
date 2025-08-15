@@ -1,9 +1,10 @@
 import { Box, Group, Text, Image } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
+import { useMemo } from "react";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   neighbors: string[];
-  colorToFaction: Record<string, string>;
 };
 
 // Helper function to get neighbor faction icons from neighbor colors
@@ -18,7 +19,18 @@ const getNeighborFactionIcons = (
     .filter(Boolean); // Remove null values
 };
 
-export function Neighbors({ neighbors, colorToFaction }: Props) {
+export function Neighbors({ neighbors }: Props) {
+  const factionColorMap = useFactionColors();
+  const colorToFaction = useMemo(() => {
+    const map: Record<string, string> = {};
+    Object.values(factionColorMap).forEach((entry) => {
+      if (entry && entry.color && entry.faction) {
+        map[entry.color] = entry.faction;
+      }
+    });
+    return map;
+  }, [factionColorMap]);
+
   const neighborFactions = getNeighborFactionIcons(neighbors, colorToFaction);
 
   return (

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-
 export type TooltipUnit = {
   unitId?: string;
   faction: string;
@@ -12,7 +11,6 @@ export type TooltipPlanet = {
   planetId: string;
   coords: { x: number; y: number };
 };
-
 
 const STORAGE_KEY = "ti4_settings";
 const DEFAULT_SETTINGS = {
@@ -54,7 +52,6 @@ export function saveSettingsToStorage(settings: Settings) {
   }
 }
 
-
 type AppStore = {
   hoveredTile: string;
   zoomLevel: number;
@@ -71,7 +68,6 @@ type AppStore = {
   setTooltipUnit: (unit: TooltipUnit | null) => void;
   setTooltipPlanet: (planet: TooltipPlanet | null) => void;
 };
-
 
 export const useAppStore = create<AppStore>((set) => ({
   hoveredTile: "",
@@ -96,17 +92,17 @@ export const useAppStore = create<AppStore>((set) => ({
   setHoveredTile: (id: string) =>
     set((state) => ({
       ...state,
-        hoveredTile: id,
+      hoveredTile: id,
     })),
   clearHoveredTile: () =>
     set((state) => ({
       ...state,
-        hoveredTile: "",
+      hoveredTile: "",
     })),
   setZoomLevel: (level: number) =>
     set((state) => ({
       ...state,
-        zoomLevel: level,
+      zoomLevel: level,
     })),
   setSelectedArea: (area: string) =>
     set((state) => ({
@@ -140,7 +136,6 @@ export const useAppStore = create<AppStore>((set) => ({
     })),
 }));
 
-
 export type Settings = {
   isFirefox: boolean;
   settingsModalOpened: boolean;
@@ -156,8 +151,24 @@ export type Settings = {
   showExhaustedPlanets: boolean;
 };
 
+type SettingsHandlers = {
+  updateSettings: (updates: Partial<Settings>) => void;
+  setSettingsModalOpened: (opened: boolean) => void;
+  setKeyboardShortcutsModalOpened: (opened: boolean) => void;
+  toggleLeftPanelCollapsed: () => void;
+  toggleRightPanelCollapsed: () => void;
+  toggleOverlays: () => void;
+  toggleTechSkipsMode: () => void;
+  togglePdsMode: () => void;
+  toggleDistanceMode: () => void;
+  toggleShowControlLayer: () => void;
+  toggleAlwaysShowControlTokens: () => void;
+  toggleShowExhaustedPlanets: () => void;
+};
+
 type SettingsStore = {
   settings: Settings;
+  handlers: SettingsHandlers;
 
   updateSettings: (updates: Partial<Settings>) => void;
   setSettingsModalOpened: (opened: boolean) => void;
@@ -173,118 +184,160 @@ type SettingsStore = {
   toggleShowExhaustedPlanets: () => void;
 };
 
-export const useSettingsStore = create<SettingsStore>((set) => ({
-  settings: {
-    isFirefox: typeof navigator !== "undefined" &&
-      navigator.userAgent.toLowerCase().indexOf("firefox") > -1,
-    settingsModalOpened: false,
-    keyboardShortcutsModalOpened: false,
-    leftPanelCollapsed: false,
-    rightPanelCollapsed: false,
-    overlaysEnabled: false,
-    techSkipsMode: false,
-    showPDSLayer: false,
-    distanceMode: false,
-    showControlLayer: false,
-    showControlTokens: true,
-    showExhaustedPlanets: true,
-  },
-
-
-  updateSettings: (updates: Partial<Settings>) =>
+export const useSettingsStore = create<SettingsStore>((set) => {
+  const updateSettings = (updates: Partial<Settings>) =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         ...updates,
       },
-    })),
-  setSettingsModalOpened: (opened: boolean) =>
+    }));
+
+  const setSettingsModalOpened = (opened: boolean) =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         settingsModalOpened: opened,
       },
-    })),
-  setKeyboardShortcutsModalOpened: (opened: boolean) =>
+    }));
+
+  const setKeyboardShortcutsModalOpened = (opened: boolean) =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         keyboardShortcutsModalOpened: opened,
       },
-    })),
-  toggleLeftPanelCollapsed: () =>
+    }));
+
+  const toggleLeftPanelCollapsed = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         leftPanelCollapsed: !state.settings.leftPanelCollapsed,
       },
-    })),
-  toggleRightPanelCollapsed: () =>
+    }));
+
+  const toggleRightPanelCollapsed = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         rightPanelCollapsed: !state.settings.rightPanelCollapsed,
       },
-    })),
-  toggleOverlays: () =>
+    }));
+
+  const toggleOverlays = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         overlaysEnabled: !state.settings.overlaysEnabled,
       },
-    })),
-  toggleTechSkipsMode: () =>
+    }));
+
+  const toggleTechSkipsMode = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         techSkipsMode: !state.settings.techSkipsMode,
       },
-    })),
-  toggleShowPDSLayer: () =>
+    }));
+
+  const toggleShowPDSLayer = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         showPDSLayer: !state.settings.showPDSLayer,
       },
-    })),
-  toggleDistanceMode: () =>
+    }));
+
+  const toggleDistanceMode = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         distanceMode: !state.settings.distanceMode,
       },
-    })),
-  toggleShowControlLayer: () =>
+    }));
+
+  const toggleShowControlLayer = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         showControlLayer: !state.settings.showControlLayer,
       },
-    })),
-  toggleAlwaysShowControlTokens: () =>
+    }));
+
+  const toggleAlwaysShowControlTokens = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         showControlTokens: !state.settings.showControlTokens,
       },
-    })),
-  toggleShowExhaustedPlanets: () =>
+    }));
+
+  const toggleShowExhaustedPlanets = () =>
     set((state) => ({
       ...state,
       settings: {
         ...state.settings,
         showExhaustedPlanets: !state.settings.showExhaustedPlanets,
       },
-    })),
-}));
+    }));
+
+  return {
+    settings: {
+      isFirefox:
+        typeof navigator !== "undefined" &&
+        navigator.userAgent.toLowerCase().indexOf("firefox") > -1,
+      settingsModalOpened: false,
+      keyboardShortcutsModalOpened: false,
+      leftPanelCollapsed: false,
+      rightPanelCollapsed: false,
+      overlaysEnabled: false,
+      techSkipsMode: false,
+      showPDSLayer: false,
+      distanceMode: false,
+      showControlLayer: false,
+      showControlTokens: true,
+      showExhaustedPlanets: true,
+    },
+
+    handlers: {
+      updateSettings,
+      setSettingsModalOpened,
+      setKeyboardShortcutsModalOpened,
+      toggleLeftPanelCollapsed,
+      toggleRightPanelCollapsed,
+      toggleOverlays,
+      toggleTechSkipsMode,
+      togglePdsMode: toggleShowPDSLayer,
+      toggleDistanceMode,
+      toggleShowControlLayer,
+      toggleAlwaysShowControlTokens,
+      toggleShowExhaustedPlanets,
+    },
+
+    // Keep the individual handlers for backwards compatibility
+    updateSettings,
+    setSettingsModalOpened,
+    setKeyboardShortcutsModalOpened,
+    toggleLeftPanelCollapsed,
+    toggleRightPanelCollapsed,
+    toggleOverlays,
+    toggleTechSkipsMode,
+    toggleShowPDSLayer,
+    toggleDistanceMode,
+    toggleShowControlLayer,
+    toggleAlwaysShowControlTokens,
+    toggleShowExhaustedPlanets,
+  };
+});

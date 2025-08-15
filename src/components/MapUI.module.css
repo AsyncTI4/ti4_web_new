@@ -28,6 +28,15 @@
   opacity: 0;
 }
 
+/* Export collapsed as a standalone class for CSS Modules tooling */
+.collapsed {}
+
+/* Dedicated class to avoid relying on nested selector in modules checks */
+.leftSidebarOverlayCollapsed {
+  transform: translateX(-310px);
+  opacity: 0;
+}
+
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;
@@ -130,6 +139,9 @@
   opacity: 0;
   pointer-events: none;
 }
+
+/* Export collapsedRight as a standalone class for CSS Modules tooling */
+.collapsedRight {}
 
 .playerCardsContainer {
   position: relative;

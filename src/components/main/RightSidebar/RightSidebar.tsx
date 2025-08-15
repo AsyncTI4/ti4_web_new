@@ -4,11 +4,13 @@ import { FactionTabBar } from "../../FactionTabBar";
 import { PlayerCardDisplay } from "../PlayerCardDisplay";
 import { AreaType } from "../../../hooks/useTabsAndTooltips";
 import classes from "../../MapUI.module.css";
+import { useGameData } from "@/hooks/useGameContext";
+import { useContext } from "react";
+import { EnhancedDataContext } from "@/context/GameContextProvider";
 
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;
   sidebarWidth: number;
-  enhancedData: any;
   selectedArea: AreaType;
   activeArea: AreaType;
   selectedFaction: string | null;
@@ -22,7 +24,6 @@ type RightSidebarProps = {
 export function RightSidebar({
   isRightPanelCollapsed,
   sidebarWidth,
-  enhancedData,
   selectedArea,
   activeArea,
   selectedFaction,
@@ -32,13 +33,10 @@ export function RightSidebar({
   onAreaMouseLeave,
   gameId,
 }: RightSidebarProps) {
-  const {
-    playerData,
-    factionToColor,
-    colorToFaction,
-    planetAttachments,
-    isError,
-  } = enhancedData || {};
+  const gameData = useGameData();
+  const playerData = gameData?.playerData;
+  const ctx = useContext(EnhancedDataContext);
+  const isError = !!ctx?.dataState.isError;
 
   return (
     <Box
@@ -48,24 +46,34 @@ export function RightSidebar({
       }}
     >
       {playerData && (
-        <FactionTabBar
-          playerData={playerData}
-          selectedArea={selectedArea}
-          activeArea={activeArea}
-          onAreaSelect={onAreaSelect}
-          onAreaMouseEnter={onAreaMouseEnter}
-          onAreaMouseLeave={onAreaMouseLeave}
-        />
-      )}
+        <>
+          <FactionTabBar
+            playerData={playerData}
+            selectedArea={selectedArea}
+            activeArea={activeArea}
+            onAreaSelect={onAreaSelect}
+            onAreaMouseEnter={onAreaMouseEnter}
+            onAreaMouseLeave={onAreaMouseLeave}
+          />
 
-      {playerData && (
-        <PlayerCardDisplay
-          playerData={playerData}
-          activeArea={activeArea || selectedArea}
-          factionToColor={factionToColor}
-          colorToFaction={colorToFaction}
-          planetAttachments={planetAttachments}
-        />
+          <PlayerCardDisplay
+            playerData={playerData}
+            activeArea={activeArea || selectedArea}
+          />
+
+          {!selectedFaction && !activeUnit && (
+            <Center h="200px" className={classes.hoverInstructions}>
+              <Box>
+                <div>Hover over a unit</div>
+                <div>on the map to view</div>
+                <div>player details</div>
+                <div className={classes.hoverInstructionsLine}>
+                  Click to pin a player
+                </div>
+              </Box>
+            </Center>
+          )}
+        </>
       )}
 
       {isError && (
@@ -78,19 +86,6 @@ export function RightSidebar({
         >
           Could not load player data for game {gameId}. Please try again later.
         </Alert>
-      )}
-
-      {playerData && !selectedFaction && !activeUnit && (
-        <Center h="200px" className={classes.hoverInstructions}>
-          <Box>
-            <div>Hover over a unit</div>
-            <div>on the map to view</div>
-            <div>player details</div>
-            <div className={classes.hoverInstructionsLine}>
-              Click to pin a player
-            </div>
-          </Box>
-        </Center>
       )}
     </Box>
   );

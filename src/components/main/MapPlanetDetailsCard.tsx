@@ -1,10 +1,10 @@
 import { Box } from "@mantine/core";
 import { PlanetDetailsCard } from "../PlayerArea/PlanetDetailsCard";
-import { useAppStore } from "@/utils/appStore";
-import { MAP_PADDING } from "@/NewMapUI";
+const MAP_PADDING = 200;
+import { useMemo } from "react";
+import { usePlanet } from "@/hooks/usePlanet";
 
 type TooltipPlanet = {
-  systemId: string;
   planetId: string;
   coords: { x: number; y: number };
 };
@@ -12,20 +12,21 @@ type TooltipPlanet = {
 type Props = {
   tooltipPlanet: TooltipPlanet | null;
   zoom: number;
-  planetAttachments: Record<string, string[]>;
 };
 
-export function MapPlanetDetailsCard({
-  tooltipPlanet,
-  zoom,
-  planetAttachments,
-}: Props) {
+export function MapPlanetDetailsCard({ tooltipPlanet, zoom }: Props) {
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
+
+  const planetTile = usePlanet(tooltipPlanet.planetId);
+  const attachments = useMemo(
+    () => planetTile?.attachments || [],
+    [planetTile]
+  );
 
   const scaledX = tooltipPlanet.coords.x * zoom;
   const scaledY = tooltipPlanet.coords.y * zoom;
 
-  const planetAttachmentIds = planetAttachments[tooltipPlanet.planetId] || [];
+  // Attachments will be looked up by PlanetDetailsCard internally
 
   return (
     <Box
@@ -41,7 +42,7 @@ export function MapPlanetDetailsCard({
     >
       <PlanetDetailsCard
         planetId={tooltipPlanet.planetId}
-        attachments={planetAttachmentIds}
+        attachments={attachments}
       />
     </Box>
   );
