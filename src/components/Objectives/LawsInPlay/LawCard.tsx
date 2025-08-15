@@ -4,20 +4,16 @@ import { LawInPlay } from "../../../data/types";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import { getPrimaryColorWithOpacity } from "../../../lookup/colors";
 import styles from "./LawCard.module.css";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   law: LawInPlay;
-  factionToColor?: Record<string, string>;
 };
 
-function LawCard({ law, factionToColor }: Props) {
+function LawCard({ law }: Props) {
   const hasFactionIcon = law.displaysElectedFaction && law.electedFaction;
-
-  // Get faction color for the elected badge border - use lookup from faction instead of stored color
-  const factionColor =
-    law.electedFaction && factionToColor
-      ? factionToColor[law.electedFaction] || "gray"
-      : "gray";
+  const factionColorMap = useFactionColors();
+  const factionColor = factionColorMap?.[law.electedFaction!]?.color || "gray";
   const badgeBorderColor = getPrimaryColorWithOpacity(factionColor, 0.8);
 
   return (

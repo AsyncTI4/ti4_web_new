@@ -20,7 +20,7 @@ import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
+import { getUnitAsyncId } from "@/lookup/units";
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
@@ -32,9 +32,6 @@ import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
 
 type Props = {
   playerData: PlayerData;
-  colorToFaction: Record<string, string>;
-  factionToColor: Record<string, string>;
-  planetAttachments?: Record<string, string[]>;
 };
 
 export default function PlayerCardSidebar(props: Props) {
@@ -63,10 +60,9 @@ export default function PlayerCardSidebar(props: Props) {
 
   const scs = props.playerData.scs;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-  const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
-  const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
+  // const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
 
   // Create planet economics object from pre-calculated values
   const planetEconomics = {
@@ -286,10 +282,7 @@ export default function PlayerCardSidebar(props: Props) {
             {relics.map((relicId, index) => (
               <Relic key={index} relicId={relicId} />
             ))}
-            <PromissoryNotesStack
-              promissoryNotes={promissoryNotes}
-              colorToFaction={props.colorToFaction}
-            />
+            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
           </Stack>
         </SimpleGrid>
 
@@ -351,10 +344,7 @@ export default function PlayerCardSidebar(props: Props) {
               <ResourceInfluenceCompact planetEconomics={planetEconomics} />
               {props.playerData.debtTokens &&
                 Object.keys(props.playerData.debtTokens).length > 0 && (
-                  <DebtTokens
-                    debts={props.playerData.debtTokens}
-                    colorToFaction={props.colorToFaction}
-                  />
+                  <DebtTokens debts={props.playerData.debtTokens} />
                 )}
             </Stack>
           </Surface>
@@ -376,11 +366,7 @@ export default function PlayerCardSidebar(props: Props) {
 
                 return (
                   <div key={index} style={{ display: "flex", gap: "4px" }}>
-                    <PlanetCard
-                      planetId={planetId}
-                      exhausted={exhaustedPlanets.includes(planetId)}
-                      attachments={props.planetAttachments?.[planetId] || []}
-                    />
+                    <PlanetCard planetId={planetId} />
                     {hasLegendaryAbility && (
                       <PlanetAbilityCard
                         planetId={planetId}
@@ -396,10 +382,7 @@ export default function PlayerCardSidebar(props: Props) {
           </Surface>
           {nombox !== undefined && Object.keys(nombox).length > 0 && (
             <Box mt="md">
-              <Nombox
-                capturedUnits={nombox || {}}
-                factionToColor={props.factionToColor}
-              />
+              <Nombox capturedUnits={nombox || {}} />
             </Box>
           )}
         </Stack>

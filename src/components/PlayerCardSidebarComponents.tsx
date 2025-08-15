@@ -13,8 +13,6 @@ import { cdnImage } from "../data/cdnImage";
 
 type Props = {
   playerData: PlayerData;
-  colorToFaction: Record<string, string>;
-  factionToColor: Record<string, string>;
 };
 
 export default function PlayerCardSidebarComponents(props: Props) {
@@ -128,10 +126,7 @@ export default function PlayerCardSidebarComponents(props: Props) {
           {relics.map((relicId, index) => (
             <Relic key={index} relicId={relicId} />
           ))}
-          <PromissoryNotesStack
-            promissoryNotes={promissoryNotes}
-            colorToFaction={props.colorToFaction}
-          />
+          <PromissoryNotesStack promissoryNotes={promissoryNotes} />
         </Stack>
       </SimpleGrid>
     </PlayerCardBox>

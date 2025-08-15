@@ -2,16 +2,16 @@ import { Box, Group, Text } from "@mantine/core";
 import { SmallControlToken } from "../../Map/ControlToken";
 import { getColorAlias } from "../../../lookup/colors";
 import styles from "./DebtTokens.module.css";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   debts: Record<string, number>;
-  colorToFaction?: Record<string, string>;
-  factionToColor?: Record<string, string>;
 };
 
-export function DebtTokens({ debts, colorToFaction }: Props) {
+export function DebtTokens({ debts }: Props) {
   const debtEntries = Object.entries(debts).filter(([, amount]) => amount > 0);
   if (debtEntries.length === 0) return null;
+  const factionColorMap = useFactionColors();
 
   return (
     <Box className={styles.container}>
@@ -21,17 +21,14 @@ export function DebtTokens({ debts, colorToFaction }: Props) {
 
       <div className={styles.tokensContainer}>
         {debtEntries.map(([colorName, amount]) => {
-          // Convert color to faction name and get color alias
-          const factionName = colorToFaction?.[colorName];
+          const factionName = factionColorMap?.[colorName]?.faction;
           const colorAlias = getColorAlias(colorName);
-
           return (
             <Group
               key={colorName}
               pos="relative"
               style={{ height: 24, width: amount * 10 }}
             >
-              {/* Stack tokens for this faction */}
               {Array(amount)
                 .fill(null)
                 .map((_, index) => (

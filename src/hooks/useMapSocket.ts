@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { config } from "../config";
 
-export function useMapSocket(mapId, onMapUpdate) {
+export function useMapSocket(mapId: string, onMapUpdate: (func: any) => void) {
   const [isReconnecting, setIsReconnecting] = useState(false);
 
   const socket_url = config.api.socketUrl + "?map=" + mapId;
@@ -10,7 +10,7 @@ export function useMapSocket(mapId, onMapUpdate) {
   const { sendJsonMessage, lastMessage, readyState, getWebSocket } =
     useWebSocket(socket_url, {
       reconnectInterval: 3000,
-      shouldReconnect: (closeEvent) => true,
+      shouldReconnect: (_) => true,
       onReconnectStop: () => setIsReconnecting(false),
     });
 

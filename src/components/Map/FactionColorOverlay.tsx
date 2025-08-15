@@ -1,27 +1,24 @@
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import { RGBColor } from "@/utils/colorOptimization";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type FactionColorOverlayProps = {
-  faction: string;
+  faction: string; // faction id
   opacity?: number;
-  optimizedColors?: Record<string, RGBColor>;
 };
+
+// Calculate hex dimensions to fit tile
+const radius = TILE_WIDTH / 2; // 172.5px for 345px width
+const centerX = TILE_WIDTH / 2;
+const centerY = TILE_HEIGHT / 2;
 
 export const FactionColorOverlay = ({
   faction,
   opacity = 0.15,
-  optimizedColors,
 }: FactionColorOverlayProps) => {
-  const optimizedColor = optimizedColors?.[faction];
+  const factionColorMap = useFactionColors();
+  const optimizedColor = factionColorMap?.[faction]?.optimizedColor;
 
-  if (!optimizedColor) {
-    return null;
-  }
-
-  // Calculate hex dimensions to fit tile
-  const radius = TILE_WIDTH / 2; // 172.5px for 345px width
-  const centerX = TILE_WIDTH / 2;
-  const centerY = TILE_HEIGHT / 2;
+  if (!optimizedColor) return null;
 
   // Generate hexagon points for flat-top hexagon
   const generateHexagonPoints = (cx: number, cy: number, r: number) => {
@@ -37,7 +34,6 @@ export const FactionColorOverlay = ({
 
   const hexPoints = generateHexagonPoints(centerX, centerY, radius);
   const pointsString = hexPoints.map((p) => `${p.x},${p.y}`).join(" ");
-
   const primaryColor = `rgba(${optimizedColor.red}, ${optimizedColor.green}, ${optimizedColor.blue}, ${opacity})`;
 
   return (

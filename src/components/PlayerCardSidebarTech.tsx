@@ -11,8 +11,6 @@ import { getTechData, getTechTier } from "@/lookup/tech";
 
 type Props = {
   playerData: PlayerData;
-  colorToFaction: Record<string, string>;
-  factionToColor: Record<string, string>;
 };
 
 export default function PlayerCardSidebarTech(props: Props) {

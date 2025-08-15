@@ -2,42 +2,39 @@ import { hyperlaneIds, hyperlanes } from "@/data/hyperlanes";
 import { tileAdjacencies } from "../data/tileAdjacencies";
 import { getTileById } from "../mapgen/systems";
 import { getTokenData } from "../lookup/tokens";
+import { MapTileType } from "@/data/types";
 
 /**
  * Helper function to get all wormholes present on a tile
  */
 export function getTileWormholes(
   position: string,
-  positionToSystemId: Record<string, string>,
-  tileUnitData?: Record<string, any>
+  mapTiles: MapTileType[]
 ): string[] {
   const wormholes = new Set<string>();
 
   // Get wormholes from the base tile
-  const systemId = positionToSystemId[position];
-  const tileData = systemId ? getTileById(systemId) : undefined;
+  const tile = mapTiles.find((t) => t.position === position);
+  const tileData = tile?.systemId ? getTileById(tile.systemId) : undefined;
   if (tileData?.wormholes) {
     tileData.wormholes.forEach((wh) => wormholes.add(wh));
   }
 
   // Get wormholes from tokens in space (like Creuss wormhole tokens)
-  const tileSpatialData = tileUnitData ? tileUnitData[position] : undefined;
+  const tileSpatialData = tile; // MapTileType has tokens in space via entityPlacements
 
-  if (tileSpatialData?.space) {
-    Object.values(tileSpatialData.space).forEach((factionEntities: any) => {
-      if (Array.isArray(factionEntities)) {
-        factionEntities.forEach((entity: any) => {
-          if (entity.entityType === "token") {
-            // Look up token data and check if it has wormholes
-            const tokenId = entity.entityId;
-            const tokenData = getTokenData(tokenId);
-            if (tokenData?.wormholes) {
-              tokenData.wormholes.forEach((wh) => wormholes.add(wh));
-            }
+  // Look through mapTile tokens and attachments in space for wormhole tokens
+  if (tileSpatialData?.entityPlacements) {
+    Object.values(tileSpatialData.entityPlacements).forEach(
+      (placement: any) => {
+        if (placement.entityType === "token") {
+          const tokenData = getTokenData(placement.entityId);
+          if (tokenData?.wormholes) {
+            tokenData.wormholes.forEach((wh: string) => wormholes.add(wh));
           }
-        });
+        }
       }
-    });
+    );
   }
 
   return Array.from(wormholes);
@@ -137,20 +134,20 @@ export type PathResult = {
  */
 export function calculateTileDistances(
   startPosition: string,
-  positionToSystemId: Record<string, string>,
-  tileUnitData?: Record<string, any>
+  mapTiles: MapTileType[]
 ): Record<string, number> {
   if (!startPosition) return {};
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(Object.keys(positionToSystemId));
+  const validPositions = new Set(mapTiles.map((t) => t.position));
 
   // Pre-calculate wormhole connections by creating a map of wormhole types to positions
   const wormholeMap: Record<string, string[]> = {};
 
   // Collect wormholes per position
-  Object.keys(positionToSystemId).forEach((pos) => {
-    const wormholes = getTileWormholes(pos, positionToSystemId, tileUnitData);
+  mapTiles.forEach((t) => {
+    const pos = t.position;
+    const wormholes = getTileWormholes(pos, mapTiles);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -177,7 +174,8 @@ export function calculateTileDistances(
       previousPosition,
     } = queue.shift()!;
 
-    const currentSystemId = positionToSystemId[currentPosition];
+    const currentSystemId = mapTiles.find((t) => t.position === currentPosition)
+      ?.systemId as string;
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
     // Get all adjacent positions based on tile type
@@ -240,11 +238,7 @@ export function calculateTileDistances(
 
       // Add wormhole connections
       if (currentSystemId) {
-        const currentWormholes = getTileWormholes(
-          currentPosition,
-          positionToSystemId,
-          tileUnitData
-        );
+        const currentWormholes = getTileWormholes(currentPosition, mapTiles);
         currentWormholes.forEach((whType) => {
           const connectedPositions = wormholeMap[whType] || [];
           connectedPositions.forEach((pos) => {
@@ -287,19 +281,19 @@ export function calculateTileDistances(
 export function calculateOptimalPaths(
   startPosition: string,
   endPosition: string,
-  positionToSystemId: Record<string, string>,
-  tileUnitData?: Record<string, any>
+  mapTiles: MapTileType[]
 ): PathResult | null {
   if (!startPosition || !endPosition) return null;
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(Object.keys(positionToSystemId));
+  const validPositions = new Set(mapTiles.map((t) => t.position));
 
   // Pre-calculate wormhole connections and position mappings
   const wormholeMap: Record<string, string[]> = {};
 
-  Object.keys(positionToSystemId).forEach((pos) => {
-    const wormholes = getTileWormholes(pos, positionToSystemId, tileUnitData);
+  mapTiles.forEach((t) => {
+    const pos = t.position;
+    const wormholes = getTileWormholes(pos, mapTiles);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -325,7 +319,9 @@ export function calculateOptimalPaths(
     position: startPosition,
     distance: 0,
     path: [startPosition],
-    systemPath: [positionToSystemId[startPosition]],
+    systemPath: [
+      mapTiles.find((t) => t.position === startPosition)?.systemId as string,
+    ],
     hyperlanePositions: new Set(),
   });
 
@@ -364,7 +360,8 @@ export function calculateOptimalPaths(
       continue;
     }
 
-    const currentSystemId = positionToSystemId[currentPosition];
+    const currentSystemId = mapTiles.find((t) => t.position === currentPosition)
+      ?.systemId as string;
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
     // Get all adjacent positions
@@ -426,11 +423,7 @@ export function calculateOptimalPaths(
       }
 
       // Wormhole connections
-      const currentWormholes = getTileWormholes(
-        currentPosition,
-        positionToSystemId,
-        tileUnitData
-      );
+      const currentWormholes = getTileWormholes(currentPosition, mapTiles);
       currentWormholes.forEach((whType) => {
         const connectedPositions = wormholeMap[whType] || [];
         connectedPositions.forEach((pos) => {
@@ -446,7 +439,9 @@ export function calculateOptimalPaths(
     for (const adjacentPosition of allAdjacentPositions) {
       if (!adjacentPosition) continue;
 
-      const adjacentSystemId = positionToSystemId[adjacentPosition];
+      const adjacentSystemId = mapTiles.find(
+        (t) => t.position === adjacentPosition
+      )?.systemId as string;
       const distanceCost = currentIsHyperlane ? 0 : 1;
       const newDistance = currentDistance + distanceCost;
 

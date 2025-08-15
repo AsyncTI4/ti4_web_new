@@ -9,13 +9,14 @@ import { getAttachmentData } from "@/lookup/attachments";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import DetailsCardTitle from "@/components/shared/DetailsCard/DetailsCardTitle";
 import DetailsCardIcon from "@/components/shared/DetailsCard/DetailsCardIcon";
+import { PlanetMapTile } from "@/data/types";
 
 type Props = {
   planetId: string;
-  attachments?: string[];
+  planetTile: PlanetMapTile;
 };
 
-export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
+export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   const planetData = getPlanetData(planetId);
 
   if (!planetData) return null;
@@ -24,7 +25,7 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
   const isFactionPlanet = planetData.planetType === "FACTION";
 
   // Calculate attachment modifiers
-  const attachmentModifiers = attachments.reduce(
+  const attachmentModifiers = planetTile.attachments.reduce(
     (totals, attachmentId) => {
       const attachmentData = getAttachmentData(attachmentId);
       if (attachmentData) {
@@ -169,7 +170,7 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
         )}
 
         {/* Attachments */}
-        {attachments.length > 0 && (
+        {planetTile.attachments.length > 0 && (
           <>
             <Divider c="purple.6" opacity={0.8} />
             <Box>
@@ -184,7 +185,7 @@ export function PlanetDetailsCard({ planetId, attachments = [] }: Props) {
                 </Text>
               </Group>
               <Stack gap="xs">
-                {attachments.map((attachmentId) => {
+                {planetTile.attachments.map((attachmentId) => {
                   const attachmentData = getAttachmentData(attachmentId);
                   if (!attachmentData) return null;
 

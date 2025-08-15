@@ -11,7 +11,9 @@ type Props = {
 
 export function UnitDetailsCard({ unitId, color }: Props) {
   // Look up unit data
-  const unitData = units.find((unit) => unit.id === unitId);
+  const unitData = units.find(
+    (unit) => unit.id === unitId || unit.asyncId === unitId
+  );
 
   if (!unitData) {
     console.warn(`Unit with ID "${unitId}" not found`);
@@ -278,7 +280,7 @@ export function UnitDetailsCard({ unitId, color }: Props) {
                         textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
                       }}
                     >
-                      Production 
+                      Production
                     </Text>
                     <Text
                       size="sm"

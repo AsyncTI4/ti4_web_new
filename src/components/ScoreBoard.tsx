@@ -6,40 +6,20 @@ import { FactionsInGame } from "./Objectives/FactionsInGame";
 import { LawsInPlay } from "./Objectives/LawsInPlay";
 import ExpandedPublicObjectives from "./Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { ScoreTracker } from "./Objectives/ScoreTracker";
-import {
-  Objectives,
-  PlayerData,
-  LawInPlay,
-  StrategyCard,
-  CardPoolData,
-} from "../data/types";
+import { useGameData } from "@/hooks/useGameContext";
 import styles from "./ScoreBoard.module.css";
 
-type Props = {
-  objectives: Objectives;
-  playerData: PlayerData[];
-  lawsInPlay: LawInPlay[];
-  strategyCards: StrategyCard[];
-  vpsToWin: number;
-  cardPool?: CardPoolData;
-};
-
-function ScoreBoard({
-  objectives,
-  playerData,
-  lawsInPlay,
-  strategyCards,
-  vpsToWin,
-  cardPool,
-}: Props) {
-  // Create faction to color mapping
-  const factionToColor = playerData.reduce(
-    (acc, player) => {
-      acc[player.faction] = player.color;
-      return acc;
-    },
-    {} as Record<string, string>
-  );
+function ScoreBoard() {
+  const gameData = useGameData();
+  if (!gameData) return null;
+  const {
+    objectives,
+    playerData,
+    lawsInPlay = [],
+    strategyCards = [],
+    vpsToWin = 10,
+    cardPool,
+  } = gameData;
 
   return (
     <Surface
@@ -66,7 +46,7 @@ function ScoreBoard({
       {lawsInPlay.length > 0 && (
         <>
           <Box mb="md">
-            <LawsInPlay laws={lawsInPlay} factionToColor={factionToColor} />
+            <LawsInPlay laws={lawsInPlay} />
           </Box>
 
           {/* Divider */}

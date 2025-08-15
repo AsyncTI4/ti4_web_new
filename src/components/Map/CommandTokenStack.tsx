@@ -9,7 +9,6 @@ type CommandTokenStackProps = {
   faction: string;
   type: "command" | "fleet";
   mahactEdict?: string[];
-  factionToColor?: Record<string, string>;
 };
 
 export function CommandTokenStack({

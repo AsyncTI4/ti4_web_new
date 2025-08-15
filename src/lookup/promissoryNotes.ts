@@ -1,5 +1,6 @@
 import { promissoryNotes } from "../data/promissoryNotes";
 import { PromissoryNote } from "../data/types";
+import type { FactionColorMap } from "@/context/GameContextProvider";
 
 // Create efficient lookup maps
 const promissoryNotesMap = new Map(
@@ -81,7 +82,7 @@ export function getFactionSpecificPromissoryNotes(): PromissoryNote[] {
  */
 export function getPromissoryNoteData(
   promissoryNoteId: string,
-  colorToFaction: Record<string, string>
+  factionColorMap: FactionColorMap
 ): {
   noteData: PromissoryNote;
   faction: string;
@@ -130,7 +131,7 @@ export function getPromissoryNoteData(
   }
 
   // Find the faction associated with this color
-  const faction = colorToFaction[color];
+  const faction = factionColorMap?.[color]?.faction;
   if (!faction) {
     console.warn(`No faction found for color "${color}"`);
     return null;

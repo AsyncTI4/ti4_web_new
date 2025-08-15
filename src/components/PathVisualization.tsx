@@ -9,12 +9,11 @@ import classes from "./PathVisualization.module.css";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
-  positionToSystemId: Record<string, string>;
-  tilePositions: TilePosition[];
+  tilePositions?: TilePosition[];
   zoom: number;
-  mapPadding: number;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
+  mapPadding?: number;
 };
 
 const PATH_COLORS = [
@@ -43,17 +42,16 @@ const PATH_COLORS = [
 
 export const PathVisualization = ({
   pathResult,
-  positionToSystemId,
   tilePositions,
   zoom,
-  mapPadding,
   activePathIndex,
   onPathIndexChange,
+  mapPadding = 200,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
 
   const positionMap = useMemo(
-    () => createPositionMap(tilePositions),
+    () => createPositionMap(tilePositions || []),
     [tilePositions]
   );
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import { useGameData } from "@/hooks/useGameContext";
 
 interface KeyboardShortcutsProps {
-  playerData: any[];
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
   toggleDistanceMode: () => void;
@@ -18,7 +18,6 @@ interface KeyboardShortcutsProps {
 }
 
 export function useKeyboardShortcuts({
-  playerData,
   toggleOverlays,
   toggleTechSkipsMode,
   toggleDistanceMode,
@@ -33,6 +32,7 @@ export function useKeyboardShortcuts({
   onAreaSelect,
   selectedArea,
 }: KeyboardShortcutsProps) {
+  const enhancedData = useGameData();
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       // Don't trigger shortcuts if user is typing in an input/textarea
@@ -60,20 +60,20 @@ export function useKeyboardShortcuts({
           if (bothOpen) {
             // Both are open, close both
             updateSettings({
-              isLeftPanelCollapsed: true,
-              isRightPanelCollapsed: true,
+              leftPanelCollapsed: true,
+              rightPanelCollapsed: true,
             });
           } else if (bothClosed) {
             // Both are closed, open both
             updateSettings({
-              isLeftPanelCollapsed: false,
-              isRightPanelCollapsed: false,
+              leftPanelCollapsed: false,
+              rightPanelCollapsed: false,
             });
           } else {
             // Mixed state, force both closed
             updateSettings({
-              isLeftPanelCollapsed: true,
-              isRightPanelCollapsed: true,
+              leftPanelCollapsed: true,
+              rightPanelCollapsed: true,
             });
           }
           break;
@@ -150,6 +150,7 @@ export function useKeyboardShortcuts({
         case "8":
           event.preventDefault();
           const factionIndex = parseInt(event.key) - 1;
+          const playerData = enhancedData?.playerData;
           if (playerData && factionIndex < playerData.length) {
             const faction = playerData[factionIndex].faction;
             const isFactionSelected =
@@ -175,10 +176,11 @@ export function useKeyboardShortcuts({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [
-    playerData,
+    enhancedData?.playerData,
     toggleOverlays,
     toggleTechSkipsMode,
     toggleDistanceMode,
+    togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     isLeftPanelCollapsed,

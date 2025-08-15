@@ -2,17 +2,15 @@ import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
 import { getPromissoryNoteData } from "../../../lookup/promissoryNotes";
 import { cdnImage } from "../../../data/cdnImage";
 import classes from "./PromissoryNoteCard.module.css";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   promissoryNoteId: string;
-  colorToFaction: Record<string, string>;
 };
 
-export function PromissoryNoteCard({
-  promissoryNoteId,
-  colorToFaction,
-}: Props) {
-  const noteData = getPromissoryNoteData(promissoryNoteId, colorToFaction);
+export function PromissoryNoteCard({ promissoryNoteId }: Props) {
+  const factionColorMap = useFactionColors();
+  const noteData = getPromissoryNoteData(promissoryNoteId, factionColorMap);
 
   if (!noteData) return null;
 

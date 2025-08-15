@@ -1,5 +1,5 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
@@ -9,20 +9,20 @@ import { PlanetDetailsCard } from "../PlanetDetailsCard";
 import { getAttachmentData } from "@/lookup/attachments";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
+import { usePlanet } from "@/hooks/usePlanet";
 
 type Props = {
   planetId: string;
-  exhausted?: boolean;
-  attachments?: string[];
 };
 
-export function PlanetCard({
-  planetId,
-  exhausted = false,
-  attachments = [],
-}: Props) {
+export function PlanetCard({ planetId }: Props) {
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
+  const planetTile = usePlanet(planetId);
+  const isExhausted = planetTile?.exhausted ?? false;
+  const resolvedAttachments = useMemo(() => {
+    return planetTile?.attachments || [];
+  }, [planetTile]);
 
   if (!planetData) {
     console.warn(`Planet data not found for ID: ${planetId}`);
@@ -32,13 +32,17 @@ export function PlanetCard({
   const planetType = planetData.planetType;
   const traitIconKey = getTraitIconKey(planetData.planetType!);
 
-  const attachmentModifiers = calculateAttachmentModifiers(attachments);
-  const allIcons = createAllIcons(planetData, attachmentModifiers, attachments);
+  const attachmentModifiers = calculateAttachmentModifiers(resolvedAttachments);
+  const allIcons = createAllIcons(
+    planetData,
+    attachmentModifiers,
+    resolvedAttachments
+  );
   const { finalResources, finalInfluence } = calculateFinalValues(
     planetData,
     attachmentModifiers
   );
-  const isLegendary = checkIsLegendary(planetData, attachments);
+  const isLegendary = checkIsLegendary(planetData, resolvedAttachments);
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -49,14 +53,14 @@ export function PlanetCard({
             isLegendary
               ? `${styles.legendaryBackground} ${styles.legendary}`
               : ""
-          } ${exhausted ? styles.exhausted : ""} ${styles.planetCard}`}
+          } ${isExhausted ? styles.exhausted : ""} ${styles.planetCard}`}
           style={getCSSVariables(planetType!) as React.CSSProperties}
         >
           {/* Hover highlight overlay */}
           <Box className={styles.planetCardHighlight} />
 
           {/* Legendary constellation background */}
-          {isLegendary && !exhausted && (
+          {isLegendary && !isExhausted && (
             <>
               <Box className={styles.legendaryConstellation} />
               <Box
@@ -78,7 +82,7 @@ export function PlanetCard({
           )}
 
           {/* Dark overlay for exhausted planets */}
-          {exhausted && <Box className={styles.exhaustedOverlay} />}
+          {isExhausted && <Box className={styles.exhaustedOverlay} />}
 
           {/* Subtle top highlight */}
           <Box
@@ -125,7 +129,10 @@ export function PlanetCard({
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        <PlanetDetailsCard planetId={planetId} attachments={attachments} />
+        <PlanetDetailsCard
+          planetId={planetId}
+          attachments={resolvedAttachments}
+        />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

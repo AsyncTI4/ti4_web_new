@@ -1,23 +1,20 @@
+import { useAppStore } from "@/utils/appStore";
+import { useGameContext } from "@/hooks/useGameContext";
 import { useEffect, useRef } from "react";
 
 type UseMapScrollPositionProps = {
-  playerData: any[] | undefined;
-  tilePositions: any[];
   zoom: number;
   gameId: string;
-  mapPadding?: number;
 };
 
 export function useMapScrollPosition({
-  playerData,
-  tilePositions,
   zoom,
   gameId,
-  mapPadding = 200,
 }: UseMapScrollPositionProps) {
+  const enhancedData = useGameContext();
+  const MAP_PADDING = 200;
   // Ref for the scrollable map container
   const mapContainerRef = useRef<HTMLDivElement>(null);
-
   // Track if we've set the initial scroll position and for which game
   const hasSetInitialScroll = useRef(false);
   const lastGameId = useRef<string | null>(null);
@@ -32,6 +29,9 @@ export function useMapScrollPosition({
 
   // Set initial scroll position only once when loading a new game
   useEffect(() => {
+    const playerData = enhancedData?.playerData;
+    const tilePositions = enhancedData?.calculatedTilePositions || [];
+
     if (
       mapContainerRef.current &&
       playerData &&
@@ -47,13 +47,13 @@ export function useMapScrollPosition({
           const centerX = (container.scrollWidth - container.clientWidth) / 2;
           const centerY = (container.scrollHeight - container.clientHeight) / 2;
 
-          container.scrollLeft = centerX + mapPadding * zoom;
-          container.scrollTop = centerY + mapPadding * zoom;
+          container.scrollLeft = centerX + MAP_PADDING * zoom;
+          container.scrollTop = centerY + MAP_PADDING * zoom;
           hasSetInitialScroll.current = true;
         }
       });
     }
-  }, [playerData, tilePositions, zoom, mapPadding]);
+  }, [enhancedData?.playerData, enhancedData?.calculatedTilePositions, zoom]);
 
   return {
     mapContainerRef,

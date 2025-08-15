@@ -5,16 +5,15 @@ import styles from "./LawsInPlay.module.css";
 
 type Props = {
   laws: LawInPlay[];
-  factionToColor?: Record<string, string>;
 };
 
-function LawsInPlay({ laws, factionToColor }: Props) {
+function LawsInPlay({ laws }: Props) {
   return (
     <Box>
       <Text className={styles.sectionTitle}>Laws in Play</Text>
       <SimpleGrid cols={2} spacing="xs">
         {laws.map((law, index) => (
-          <LawCard key={index} law={law} factionToColor={factionToColor} />
+          <LawCard key={index} law={law} />
         ))}
       </SimpleGrid>
     </Box>

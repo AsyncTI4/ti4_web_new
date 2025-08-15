@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlayerDataResponse } from "../data/types";
-import {
-  EnhancedPlayerData,
-  enhancePlayerData,
-} from "@/data/enhancePlayerData";
-import { useMemo } from "react";
+import { useMapSocket } from "./useMapSocket";
+import { useRef } from "react";
 import { config } from "@/config";
 
 export function usePlayerData(gameId: string) {
@@ -17,24 +14,25 @@ export function usePlayerData(gameId: string) {
   });
 }
 
-export function usePlayerDataEnhanced(gameId: string) {
+export function usePlayerDataSocket(gameId: string) {
   const { data, isLoading, isError, refetch } = usePlayerData(gameId);
+  const hasConnectedBefore = useRef(false);
 
-  const enhancedPlayerData = useMemo(
-    () => (data ? enhancePlayerData(data) : undefined),
-    [data]
-  );
+  const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
+    if (!hasConnectedBefore.current) {
+      hasConnectedBefore.current = true;
+      return;
+    }
+    console.log("Map update received, refetching player data...");
+    refetch();
+  });
 
   return {
-    ...enhancedPlayerData,
+    data,
     isLoading,
     isError,
-    refetch,
-  } as HookReturnType;
+    readyState,
+    reconnect,
+    isReconnecting,
+  };
 }
-
-type HookReturnType = EnhancedPlayerData & {
-  isLoading: boolean;
-  isError: boolean;
-  refetch: () => void;
-};

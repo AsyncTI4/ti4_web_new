@@ -2,6 +2,7 @@ import { Unit } from "../shared/Unit";
 import { Token } from "./Token";
 import { Attachment } from "./Attachment";
 import {
+  EntityStack,
   SPLAY_OFFSET_X,
   SPLAY_OFFSET_Y,
   entityBaseZIndex,
@@ -13,15 +14,9 @@ import { LawInPlay } from "../../data/types";
 import { lookupUnit } from "@/lookup/units";
 
 interface UnitStackProps {
-  unitType: string;
-  colorAlias: string;
-  faction: string;
-  count: number;
-  sustained?: number | null;
-  x: number;
-  y: number;
+  stack: EntityStack;
   stackKey: string;
-  entityType: "unit" | "token" | "attachment";
+  colorAlias: string;
   planetCenter?: { x: number; y: number };
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
@@ -30,23 +25,24 @@ interface UnitStackProps {
 }
 
 export function UnitStack({
-  unitType,
-  colorAlias,
-  faction,
-  count,
-  sustained,
   stackKey,
-  entityType,
-  x,
-  y,
+  stack,
+  colorAlias,
   planetCenter,
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
   lawsInPlay,
 }: UnitStackProps) {
-  const baseZIndex = entityBaseZIndex(unitType);
-  const hoverTimeoutRef = useRef<number | null>(null);
+  const unitType = stack.entityId;
+  const faction = stack.faction;
+  const count = stack.count;
+  const x = stack.x;
+  const y = stack.y;
+  const sustained = stack.sustained;
+  const entityType = stack.entityType;
+  const baseZIndex = entityBaseZIndex(unitType);;
+  const hoverTimeoutRef = useRef<number | null>(null);;
 
   // Look up unit data to get bgDecalPath
   const unitData = lookupUnit(unitType, faction);

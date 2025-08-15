@@ -11,8 +11,6 @@ import { getPlanetData } from "@/lookup/planets";
 
 type Props = {
   playerData: PlayerData;
-
-  planetAttachments?: Record<string, string[]>;
 };
 
 export default function PlayerCardSidebarStrength(props: Props) {
@@ -29,7 +27,6 @@ export default function PlayerCardSidebarStrength(props: Props) {
     groundArmyRes,
   } = props.playerData;
 
-  const exhaustedPlanets = props.playerData.exhaustedPlanets || [];
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
 
@@ -133,11 +130,7 @@ export default function PlayerCardSidebarStrength(props: Props) {
 
                 return (
                   <div key={index} style={{ display: "flex", gap: "4px" }}>
-                    <PlanetCard
-                      planetId={planetId}
-                      exhausted={exhaustedPlanets.includes(planetId)}
-                      attachments={props.planetAttachments?.[planetId] || []}
-                    />
+                    <PlanetCard planetId={planetId} />
                     {hasLegendaryAbility && (
                       <PlanetAbilityCard
                         planetId={planetId}
