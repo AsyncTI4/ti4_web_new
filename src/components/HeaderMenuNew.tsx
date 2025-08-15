@@ -5,7 +5,6 @@ import {
   TextInput,
   useCombobox,
   Combobox,
-  InputBase,
   CheckIcon,
   Anchor,
 } from "@mantine/core";
@@ -16,10 +15,19 @@ import { DiscordLogin } from "./DiscordLogin";
 import { Link } from "react-router-dom";
 import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { CircularFactionIcon } from "./shared/CircularFactionIcon";
+import { generateColorGradient } from "@/lookup/colors";
+
+type EnrichedTab = {
+  id: string;
+  faction: string | null;
+  factionColor: string | null;
+  isManaged: boolean;
+};
 
 type HeaderMenuNewProps = {
   mapId: string;
-  activeTabs: string[];
+  activeTabs: EnrichedTab[];
   changeTab: (tab: string) => void;
   removeTab: (tab: string) => void;
 };
@@ -133,7 +141,7 @@ export function HeaderMenuNew({
 
 type TabViewProps = {
   mapId: string;
-  activeTabs: string[];
+  activeTabs: EnrichedTab[];
   changeTab: (tab: string) => void;
   tabsListRef: React.RefObject<HTMLDivElement | null>;
   editingTab: string | null;
@@ -164,58 +172,74 @@ function TabView({
       <Tabs.List className={classes.tabsList} ref={tabsListRef}>
         {activeTabs.map((tab) => (
           <Tabs.Tab
-            key={tab}
-            value={tab}
+            key={tab.id}
+            value={tab.id}
             className={classes.tab}
+            style={
+              tab.factionColor
+                ? {
+                    border: `2px solid`,
+                    borderImage: `${generateColorGradient(tab.factionColor, 0.3)} 1`,
+                    boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
+                  }
+                : undefined
+            }
+            leftSection={
+              tab.faction ? (
+                <CircularFactionIcon faction={tab.faction} size={16} />
+              ) : null
+            }
             rightSection={
               <Group gap="xs">
                 <IconPencil
                   size={14}
                   className={classes.editIcon}
                   onClick={(event: React.MouseEvent) =>
-                    handleEditClick(tab, event)
+                    handleEditClick(tab.id, event)
                   }
                 />
-                <div
-                  className={classes.closeButton}
-                  onClick={(event: React.MouseEvent) => {
-                    event.stopPropagation();
-                    removeTab(tab);
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(event: React.KeyboardEvent) => {
-                    if (event.key === "Enter" || event.key === " ") {
+                {!tab.isManaged && (
+                  <div
+                    className={classes.closeButton}
+                    onClick={(event: React.MouseEvent) => {
                       event.stopPropagation();
-                      removeTab(tab);
-                    }
-                  }}
-                >
-                  ×
-                </div>
+                      removeTab(tab.id);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.stopPropagation();
+                        removeTab(tab.id);
+                      }
+                    }}
+                  >
+                    ×
+                  </div>
+                )}
               </Group>
             }
           >
-            {editingTab === tab ? (
+            {editingTab === tab.id ? (
               <TextInput
                 ref={inputRef}
                 size="xs"
-                defaultValue={localStorage.getItem(tab) || tab}
+                defaultValue={localStorage.getItem(tab.id) || tab.id}
                 className={classes.tabInput}
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    handleTabRename(tab, e.currentTarget.value);
+                    handleTabRename(tab.id, e.currentTarget.value);
                   } else if (e.key === "Escape") {
-                    handleTabRename(tab, tab); // Reset to original value
+                    handleTabRename(tab.id, tab.id); // Reset to original value
                   }
                 }}
-                onBlur={(e) => handleTabRename(tab, e.currentTarget.value)}
+                onBlur={(e) => handleTabRename(tab.id, e.currentTarget.value)}
                 autoFocus
               />
             ) : (
               <span className={classes.tabText}>
-                {localStorage.getItem(tab) || tab}
+                {localStorage.getItem(tab.id) || tab.id}
               </span>
             )}
           </Tabs.Tab>
@@ -229,7 +253,7 @@ type DropdownViewProps = {
   mapId: string;
   combobox: ReturnType<typeof useCombobox>;
   changeTab: (tab: string) => void;
-  activeTabs: string[];
+  activeTabs: EnrichedTab[];
   editingTab: string | null;
   inputRef: React.RefObject<HTMLInputElement | null>;
   handleEditClick: (tab: string, event: React.MouseEvent) => void;
@@ -250,34 +274,46 @@ function DropdownView({
 }: DropdownViewProps) {
   const options = activeTabs.map((item) => (
     <Combobox.Option
-      value={item}
-      key={item}
-      active={item === mapId}
+      value={item.id}
+      key={item.id}
+      active={item.id === mapId}
       className={classes.dropdownOption}
+      style={
+        item.factionColor
+          ? {
+              border: `2px solid`,
+              borderImage: `${generateColorGradient(item.factionColor, 0.3)} 1`,
+              boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
+            }
+          : undefined
+      }
     >
       <Group gap="xs" style={{ width: "100%" }}>
-        {item === mapId && <CheckIcon size={12} />}
-        {editingTab === item ? (
+        {item.faction && (
+          <CircularFactionIcon faction={item.faction} size={12} />
+        )}
+        {item.id === mapId && <CheckIcon size={12} />}
+        {editingTab === item.id ? (
           <TextInput
             ref={inputRef}
             size="xs"
-            defaultValue={localStorage.getItem(item) || item}
+            defaultValue={localStorage.getItem(item.id) || item.id}
             className={classes.tabInput}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleTabRename(item, e.currentTarget.value);
+                handleTabRename(item.id, e.currentTarget.value);
               } else if (e.key === "Escape") {
-                handleTabRename(item, item);
+                handleTabRename(item.id, item.id);
               }
             }}
-            onBlur={(e) => handleTabRename(item, e.currentTarget.value)}
+            onBlur={(e) => handleTabRename(item.id, e.currentTarget.value)}
             autoFocus
           />
         ) : (
           <>
             <span style={{ flex: 1 }} className={classes.dropdownText}>
-              {localStorage.getItem(item) || item}
+              {localStorage.getItem(item.id) || item.id}
             </span>
             <Group gap="xs">
               <IconPencil
@@ -285,26 +321,28 @@ function DropdownView({
                 className={classes.editIcon}
                 onClick={(event: React.MouseEvent) => {
                   event.preventDefault();
-                  handleEditClick(item, event);
+                  handleEditClick(item.id, event);
                 }}
               />
-              <div
-                className={classes.closeButton}
-                onClick={(event: React.MouseEvent) => {
-                  event.stopPropagation();
-                  removeTab(item);
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(event: React.KeyboardEvent) => {
-                  if (event.key === "Enter" || event.key === " ") {
+              {!item.isManaged && (
+                <div
+                  className={classes.closeButton}
+                  onClick={(event: React.MouseEvent) => {
                     event.stopPropagation();
-                    removeTab(item);
-                  }
-                }}
-              >
-                ×
-              </div>
+                    removeTab(item.id);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.stopPropagation();
+                      removeTab(item.id);
+                    }
+                  }}
+                >
+                  ×
+                </div>
+              )}
             </Group>
           </>
         )}
@@ -322,14 +360,44 @@ function DropdownView({
       zIndex={20000}
     >
       <Combobox.Target>
-        <InputBase
-          rightSection={<Combobox.Chevron />}
-          rightSectionPointerEvents="none"
-          onClick={() => combobox.openDropdown()}
-          onFocus={() => combobox.openDropdown()}
-          value={localStorage.getItem(mapId) || mapId}
-          className={classes.comboboxInput}
-        />
+        {(() => {
+          const currentTab = activeTabs.find((tab) => tab.id === mapId);
+          return (
+            <div
+              className={classes.comboboxInput}
+              onClick={() => combobox.openDropdown()}
+              style={
+                currentTab?.factionColor
+                  ? {
+                      border: `2px solid`,
+                      borderImage: `${generateColorGradient(currentTab.factionColor, 0.3)} 1`,
+                      boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
+                    }
+                  : {
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                    }
+              }
+            >
+              <Group
+                gap="xs"
+                style={{ width: "100%", justifyContent: "space-between" }}
+              >
+                <Group gap="xs">
+                  {currentTab?.faction && (
+                    <CircularFactionIcon
+                      faction={currentTab.faction}
+                      size={16}
+                    />
+                  )}
+                  <span style={{ userSelect: "none" }}>
+                    {localStorage.getItem(mapId) || mapId}
+                  </span>
+                </Group>
+                <Combobox.Chevron />
+              </Group>
+            </div>
+          );
+        })()}
       </Combobox.Target>
 
       <Combobox.Dropdown className={classes.dropdown}>

@@ -253,6 +253,7 @@ export type PlayerDataResponse = {
 };
 
 export type PlayerData = {
+  discordId: string;
   userName: string;
   faction: string;
   color: string;
@@ -583,4 +584,16 @@ export type UnitMapTile = {
   amount: number;
   amountSustained: number;
   owner: string;
+};
+
+export type ActionCard = {
+  alias: string;
+  name: string;
+  phase: string;
+  window: string;
+  text: string;
+  automationID?: string;
+  actual_source?: string;
+  flavorText?: string;
+  source: string;
 };

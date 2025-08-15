@@ -23,6 +23,11 @@ export default defineConfig({
   assetsInclude: ["**/*.woff", "**/*.woff2", "**/*.ttf", "**/*.otf"],
   server: {
     proxy: {
+      "/bot": {
+        target: "https://bot.asyncti4.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bot/, ""),
+      },
       "/proxy": {
         target: "https://asyncti4.com",
         changeOrigin: true,

@@ -1,10 +1,10 @@
 import { Paper, Box, Image } from "@mantine/core";
-import { generateColorGradient } from "../PlayerArea/HeaderAccent";
+import { generateColorGradient } from "@/lookup/colors";
 import { getPrimaryColorWithOpacity } from "@/lookup/colors";
 import { cdnImage } from "../../data/cdnImage";
 import styles from "./PlayerCardBox.module.css";
 
-type PlayerCardBoxProps = {
+type Props = {
   color: string;
   faction: string;
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export function PlayerCardBox({
   children,
   showFactionBackground = true,
   paperProps = {},
-}: PlayerCardBoxProps) {
+}: Props) {
   return (
     <Box
       className={styles.wrapper}

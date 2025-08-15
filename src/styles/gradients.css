@@ -22,44 +22,44 @@
 
 /* Base gradient utility classes */
 .gradient-bg {
-  background: rgba(var(--gradient-color), 0.1);
+  background: rgba(var(--gradient-color), 0.06);
 }
 
 .gradient-bg-strong {
-  background: rgba(var(--gradient-color), 0.15);
+  background: rgba(var(--gradient-color), 0.09);
 }
 
 .gradient-border {
-  border: 1px solid rgba(var(--gradient-color), 0.28);
+  border: 1px solid rgba(var(--gradient-color), 0.16);
 }
 
 .gradient-shimmer {
-  background: rgba(var(--gradient-color), 0.12);
+  background: rgba(var(--gradient-color), 0.07);
 }
 
 .gradient-left-border {
-  background: rgba(var(--gradient-color), 0.18);
-  border-left: 3px solid rgba(var(--gradient-color), 0.4);
+  background: rgba(var(--gradient-color), 0.1);
+  border-left: 3px solid rgba(var(--gradient-color), 0.24);
 }
 
 .gradient-shadow {
-  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.17), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 8px rgba(var(--gradient-color), 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .gradient-icon-filter {
-  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.33));
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.2));
 }
 
 .gradient-accent {
-  background: rgba(var(--gradient-color), 0.9);
+  background: rgba(var(--gradient-color), 0.7);
 }
 
 .gradient-inner-glow {
-  background: rgba(var(--gradient-color), 0.08);
+  background: rgba(var(--gradient-color), 0.05);
 }
 
 .gradient-pattern {
-  background: rgba(var(--gradient-color), 0.06);
+  background: rgba(var(--gradient-color), 0.04);
 }
 
 /* Color-specific classes */
@@ -163,7 +163,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(var(--gradient-color), 0.05);
+  background: rgba(var(--gradient-color), 0.03);
   pointer-events: none;
 }
 
@@ -209,5 +209,5 @@
 
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {
-  background: rgba(var(--color-blue), 0.04);
+  background: rgba(var(--color-blue), 0.025);
 }

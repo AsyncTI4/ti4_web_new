@@ -30,7 +30,6 @@ import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
 import { SettingsProvider } from "./context/SettingsContext";
 import { SettingsModal } from "./components/SettingsModal";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
-import { useTabManagementNewUI } from "./hooks/useTabManagementNewUI";
 import { GameContextProvider } from "./context/GameContextProvider";
 import { useSettingsStore } from "./utils/appStore";
 
@@ -41,6 +40,7 @@ import {
 import PlayerCard2Mid from "./components/PlayerCard2Mid";
 import { MapView } from "./components/main/MapView";
 import { TabsControls } from "./components/main/TabsControls";
+import { useTabManagementV2 } from "./hooks/useTabManagementV2";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -53,7 +53,7 @@ function NewMapUIContent() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
-  const { activeTabs, changeTab, removeTab } = useTabManagementNewUI();
+  const { activeTabs, changeTab, removeTab } = useTabManagementV2();
 
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
@@ -76,7 +76,7 @@ function NewMapUIContent() {
     return (
       <UpdateNeededScreen
         gameId={gameId}
-        activeTabs={activeTabs}
+        activeTabs={activeTabs.map((tab) => tab.id)}
         changeTab={changeTab}
         removeTab={removeTab}
       />

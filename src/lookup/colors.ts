@@ -78,3 +78,50 @@ export const getPrimaryColorWithOpacity = (
   const { red, green, blue } = primaryColorValues;
   return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
 };
+
+export const generateColorGradient = (color: string, opacity: number = 0.6) => {
+  const colorData = findColorData(color);
+  if (!colorData) {
+    return `linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, ${opacity}) 50%, transparent 100%)`;
+  }
+
+  // Get primary color values (prioritize ref over direct)
+  const primaryColorValues = getColorValues(
+    (colorData as any).primaryColorRef,
+    colorData.primaryColor
+  );
+
+  // Get secondary color values (prioritize ref over direct)
+  const secondaryColorValues = getColorValues(
+    (colorData as any).secondaryColorRef,
+    colorData.secondaryColor
+  );
+
+  if (!primaryColorValues) {
+    // Fallback if no primary color found
+    return `linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, ${opacity}) 50%, transparent 100%)`;
+  }
+
+  const {
+    red: primaryRed,
+    green: primaryGreen,
+    blue: primaryBlue,
+  } = primaryColorValues;
+  const primaryColor = `rgba(${primaryRed}, ${primaryGreen}, ${primaryBlue}, ${opacity})`;
+
+  // Check if this is a split color (has secondaryColor or secondaryColorRef)
+  if (secondaryColorValues) {
+    const {
+      red: secondaryRed,
+      green: secondaryGreen,
+      blue: secondaryBlue,
+    } = secondaryColorValues;
+    const secondaryColor = `rgba(${secondaryRed}, ${secondaryGreen}, ${secondaryBlue}, ${opacity})`;
+
+    // Create a split gradient with softer transition
+    return `linear-gradient(90deg, transparent 0%, ${primaryColor} 25%, ${primaryColor} 45%, ${secondaryColor} 55%, ${secondaryColor} 75%, transparent 100%)`;
+  }
+
+  // Single color gradient
+  return `linear-gradient(90deg, transparent 0%, ${primaryColor} 50%, transparent 100%)`;
+};

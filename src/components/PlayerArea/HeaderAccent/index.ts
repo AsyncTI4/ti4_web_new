@@ -1,1 +1,1 @@
-export { HeaderAccent, generateColorGradient } from "./HeaderAccent";
+export { HeaderAccent } from "./HeaderAccent";

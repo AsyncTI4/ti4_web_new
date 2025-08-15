@@ -1,0 +1,47 @@
+/* Action card styles */
+.actionCard {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.actionCard:hover {
+  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.3), 0 0 12px rgba(250, 204, 21, 0.2);
+}
+
+.contentContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  min-width: 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.iconPlaceholder {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background: rgba(234, 179, 8, 0.2);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  border-radius: var(--mantine-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgb(234, 179, 8);
+}
+
+.textContainer {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
