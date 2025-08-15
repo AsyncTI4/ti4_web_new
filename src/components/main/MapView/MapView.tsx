@@ -80,6 +80,7 @@ export function MapView({ gameId }: Props) {
   const {
     selectedTiles,
     pathResult,
+    hoveredTile,
     systemsOnPath,
     activePathIndex,
     handleTileSelect,
@@ -209,6 +210,7 @@ export function MapView({ gameId }: Props) {
                     mapTile={tile}
                     selectedTiles={selectedTiles}
                     isOnPath={systemsOnPath.has(tile.systemId)}
+                    hoveredTilePosition={hoveredTile}
                     onUnitMouseOver={handleUnitMouseEnter}
                     onUnitMouseLeave={handleUnitMouseLeave}
                     onUnitSelect={handleMouseDown}

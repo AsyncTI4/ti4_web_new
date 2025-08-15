@@ -6,8 +6,6 @@ import {
 } from "../utils/pathVisualization";
 import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
-//
-// mapPadding is passed from parent to avoid circular imports
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;

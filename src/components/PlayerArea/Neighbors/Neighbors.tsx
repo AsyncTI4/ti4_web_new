@@ -1,7 +1,7 @@
 import { Box, Group, Text, Image } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
-import { useMemo } from "react";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { FactionColorMap } from "@/context/GameContextProvider";
 
 type Props = {
   neighbors: string[];
@@ -10,28 +10,18 @@ type Props = {
 // Helper function to get neighbor faction icons from neighbor colors
 const getNeighborFactionIcons = (
   neighbors: string[],
-  colorToFaction: Record<string, string>
+  factionColorMap: FactionColorMap
 ) => {
   return neighbors
     .map((neighborColor) => {
-      return colorToFaction[neighborColor] || null;
+      return factionColorMap[neighborColor]?.faction || null;
     })
     .filter(Boolean); // Remove null values
 };
 
 export function Neighbors({ neighbors }: Props) {
   const factionColorMap = useFactionColors();
-  const colorToFaction = useMemo(() => {
-    const map: Record<string, string> = {};
-    Object.values(factionColorMap).forEach((entry) => {
-      if (entry && entry.color && entry.faction) {
-        map[entry.color] = entry.faction;
-      }
-    });
-    return map;
-  }, [factionColorMap]);
-
-  const neighborFactions = getNeighborFactionIcons(neighbors, colorToFaction);
+  const neighborFactions = getNeighborFactionIcons(neighbors, factionColorMap);
 
   return (
     <Box

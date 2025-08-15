@@ -8,19 +8,7 @@ type SettingsModalProps = {
 
 export function SettingsModal({ opened, onClose }: SettingsModalProps) {
   const settings = useSettingsStore((state) => state.settings);
-  const toggleOverlays = useSettingsStore((state) => state.toggleOverlays);
-  const toggleAlwaysShowControlTokens = useSettingsStore(
-    (state) => state.toggleAlwaysShowControlTokens
-  );
-  const toggleLeftPanelCollapsed = useSettingsStore(
-    (state) => state.toggleLeftPanelCollapsed
-  );
-  const toggleRightPanelCollapsed = useSettingsStore(
-    (state) => state.toggleRightPanelCollapsed
-  );
-  const toggleShowExhaustedPlanets = useSettingsStore(
-    (state) => state.toggleShowExhaustedPlanets
-  );
+  const handlers = useSettingsStore((state) => state.handlers);
 
   return (
     <Modal
@@ -39,21 +27,21 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
           <Stack gap="sm">
             <Switch
               checked={settings.overlaysEnabled}
-              onChange={toggleOverlays}
+              onChange={handlers.toggleOverlays}
               size="sm"
               label="Show Overlays"
               description="Show ownership color overlays on the map"
             />
             <Switch
               checked={settings.showControlTokens}
-              onChange={toggleAlwaysShowControlTokens}
+              onChange={handlers.toggleAlwaysShowControlTokens}
               size="sm"
               label="Always Show Control Tokens"
               description="When off, control tokens are only shown on planets with no units"
             />
             <Switch
               checked={settings.showExhaustedPlanets}
-              onChange={toggleShowExhaustedPlanets}
+              onChange={handlers.toggleShowExhaustedPlanets}
               size="sm"
               label="Show Planets as Exhausted"
               description="When off, exhausted planets won't be greyed out on the map"
@@ -70,14 +58,14 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
           <Stack gap="sm">
             <Switch
               checked={settings.leftPanelCollapsed}
-              onChange={toggleLeftPanelCollapsed}
+              onChange={handlers.toggleLeftPanelCollapsed}
               size="sm"
               label="Collapse Left Panel"
               description="Hide the objectives and laws panel on the left side of the map"
             />
             <Switch
               checked={settings.rightPanelCollapsed}
-              onChange={toggleRightPanelCollapsed}
+              onChange={handlers.toggleRightPanelCollapsed}
               size="sm"
               label="Collapse Right Panel"
               description="Hide the player cards panel on the right side of the map"

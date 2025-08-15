@@ -1,7 +1,7 @@
 import { Box } from "@mantine/core";
 import { PlanetDetailsCard } from "../PlayerArea/PlanetDetailsCard";
 const MAP_PADDING = 200;
-import { useMemo } from "react";
+
 import { usePlanet } from "@/hooks/usePlanet";
 
 type TooltipPlanet = {
@@ -18,15 +18,9 @@ export function MapPlanetDetailsCard({ tooltipPlanet, zoom }: Props) {
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
 
   const planetTile = usePlanet(tooltipPlanet.planetId);
-  const attachments = useMemo(
-    () => planetTile?.attachments || [],
-    [planetTile]
-  );
 
   const scaledX = tooltipPlanet.coords.x * zoom;
   const scaledY = tooltipPlanet.coords.y * zoom;
-
-  // Attachments will be looked up by PlanetDetailsCard internally
 
   return (
     <Box
@@ -42,7 +36,7 @@ export function MapPlanetDetailsCard({ tooltipPlanet, zoom }: Props) {
     >
       <PlanetDetailsCard
         planetId={tooltipPlanet.planetId}
-        attachments={attachments}
+        planetTile={planetTile!}
       />
     </Box>
   );

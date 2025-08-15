@@ -13,12 +13,7 @@ type Props = {
 function LawCard({ law }: Props) {
   const hasFactionIcon = law.displaysElectedFaction && law.electedFaction;
   const factionColorMap = useFactionColors();
-
-  // Get faction color for the elected badge border - use lookup from faction instead of stored color
-  const factionColor = (() => {
-    if (!law.electedFaction) return "gray";
-    return factionColorMap?.[law.electedFaction]?.color || "gray";
-  })();
+  const factionColor = factionColorMap?.[law.electedFaction!]?.color || "gray";
   const badgeBorderColor = getPrimaryColorWithOpacity(factionColor, 0.8);
 
   return (

@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CommandCounter } from "./CommandCounter";
 import { getColorAlias } from "@/lookup/colors";
-import { EnhancedDataContext } from "@/context/GameContextProvider";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type CommandCounterStackProps = {
   factions: string[];
@@ -14,17 +14,13 @@ export const CommandCounterStack = ({
   factions,
   style,
 }: CommandCounterStackProps) => {
-  const enhancedData = useContext(EnhancedDataContext);
-  if (factions.length === 0) {
-    return null;
-  }
+  const factionColorMap = useFactionColors();
+  if (factions.length === 0) return null;
 
   return (
     <div style={{ position: "relative", ...style }}>
       {factions.map((faction, index) => {
-        const colorAlias = getColorAlias(
-          enhancedData?.data?.factionColorMap?.[faction]?.color
-        );
+        const colorAlias = getColorAlias(factionColorMap?.[faction]?.color);
         const offsetX = index * 16;
         const offsetY = index * 16;
         const zIndex = index + 1;

@@ -10,8 +10,8 @@ import { useGameData } from "@/hooks/useGameContext";
 import styles from "./ScoreBoard.module.css";
 
 function ScoreBoard() {
-  const enhancedData = useGameData();
-  if (!enhancedData) return null;
+  const gameData = useGameData();
+  if (!gameData) return null;
   const {
     objectives,
     playerData,
@@ -19,7 +19,7 @@ function ScoreBoard() {
     strategyCards = [],
     vpsToWin = 10,
     cardPool,
-  } = enhancedData;
+  } = gameData;
 
   return (
     <Surface

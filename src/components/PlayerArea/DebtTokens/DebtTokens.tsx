@@ -2,7 +2,6 @@ import { Box, Group, Text } from "@mantine/core";
 import { SmallControlToken } from "../../Map/ControlToken";
 import { getColorAlias } from "../../../lookup/colors";
 import styles from "./DebtTokens.module.css";
-import { useMemo } from "react";
 import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
@@ -12,17 +11,7 @@ type Props = {
 export function DebtTokens({ debts }: Props) {
   const debtEntries = Object.entries(debts).filter(([, amount]) => amount > 0);
   if (debtEntries.length === 0) return null;
-
   const factionColorMap = useFactionColors();
-  const colorToFaction = useMemo(() => {
-    const map: Record<string, string> = {};
-    Object.values(factionColorMap).forEach((entry) => {
-      if (entry && entry.color && entry.faction) {
-        map[entry.color] = entry.faction;
-      }
-    });
-    return map;
-  }, [factionColorMap]);
 
   return (
     <Box className={styles.container}>
@@ -32,17 +21,14 @@ export function DebtTokens({ debts }: Props) {
 
       <div className={styles.tokensContainer}>
         {debtEntries.map(([colorName, amount]) => {
-          // Convert color to faction name and get color alias
-          const factionName = colorToFaction[colorName];
+          const factionName = factionColorMap?.[colorName]?.faction;
           const colorAlias = getColorAlias(colorName);
-
           return (
             <Group
               key={colorName}
               pos="relative"
               style={{ height: 24, width: amount * 10 }}
             >
-              {/* Stack tokens for this faction */}
               {Array(amount)
                 .fill(null)
                 .map((_, index) => (
