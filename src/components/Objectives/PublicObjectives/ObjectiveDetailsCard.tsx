@@ -1,8 +1,9 @@
-import { Stack, Box, Text, Group, Divider, Badge } from "@mantine/core";
+import { Stack, Box, Text, Group, Divider } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { publicObjectives } from "../../../data/publicObjectives";
 import { PlayerData } from "../../../data/types";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 import classes from "./ObjectiveDetailsCard.module.css";
 
 type Props = {
@@ -19,6 +20,7 @@ export function ObjectiveDetailsCard({
   playerData,
   scoredFactions = [],
   color = "blue",
+
   factionProgress = {},
   progressThreshold = 0,
 }: Props) {
@@ -46,74 +48,84 @@ export function ObjectiveDetailsCard({
     return b.progress - a.progress; // Higher progress first for unscored
   });
 
+  const mapCardColor = (
+    c: Props["color"]
+  ): "none" | "yellow" | "purple" | "red" | "orange" | "blue" | "green" => {
+    if (c === "orange") return "orange";
+    if (c === "blue") return "blue";
+    return "none";
+  };
+
+  const mapCaptionColor = (
+    c: Props["color"]
+  ): "blue" | "yellow" | "red" | "orange" => {
+    if (c === "orange") return "orange";
+    if (c === "blue") return "blue";
+    return "yellow";
+  };
+
   return (
-    <Box p="md" className={classes.card}>
-      <Stack className={classes.cardStack}>
-        {/* Header with point value and phase */}
-        <Group className={classes.headerGroup}>
-          <Box className={`${classes.pointsContainer} ${classes[color]}`}>
-            <Text className={classes.pointsText}>{objectiveData.points}</Text>
-          </Box>
-          <Stack className={classes.titleStack}>
-            <Text className={classes.title}>{objectiveData.name}</Text>
-            <Badge
-              color="gray"
-              size="sm"
-              variant="light"
-              className={classes.phaseBadge}
-            >
-              {objectiveData.phase} Phase
-            </Badge>
-          </Stack>
-        </Group>
+    <DetailsCard width={320} color={mapCardColor(color)}>
+      <Stack gap="md">
+        <DetailsCard.Title
+          title={objectiveData.name}
+          subtitle={`${objectiveData.phase} Phase`}
+          caption={`${objectiveData.points} VP`}
+          captionColor={mapCaptionColor(color)}
+        />
 
-        <Divider className={classes.divider} />
+        <Divider c="gray.7" opacity={0.8} />
 
-        {/* Objective Text */}
-        <Box>
-          <Text className={classes.sectionLabel}>Requirement</Text>
-          <Text className={classes.requirementText}>{objectiveData.text}</Text>
-        </Box>
+        <DetailsCard.Section title="Requirement" content={objectiveData.text} />
 
-        {/* Faction Progress */}
-        <Divider className={classes.divider} />
-        <Box>
-          <Text className={classes.progressSectionLabel}>Faction Progress</Text>
-          <Stack className={classes.progressStack}>
-            {factionProgressData.map(({ player, progress, isScored }) => (
-              <Group key={player.faction} className={classes.progressRow}>
-                {/* Column 1: Faction Icon */}
-                <Box className={classes.factionIconContainer}>
-                  <CircularFactionIcon faction={player.faction} size={24} />
-                </Box>
+        <Divider c="gray.7" opacity={0.8} />
 
-                {/* Column 2: Faction Name */}
-                <Text className={classes.factionNameText}>
-                  {player.faction}
-                </Text>
-
-                {/* Column 3: Player Name */}
-                <Text className={classes.playerNameText}>
-                  {player.userName.length > 12
-                    ? `${player.userName.slice(0, 12)}...`
-                    : player.userName}
-                </Text>
-
-                {/* Column 4: Progress or Checkmark */}
-                <Box className={classes.progressContainer}>
-                  {isScored ? (
-                    <IconCheck size={18} color="var(--mantine-color-green-5)" />
-                  ) : (
-                    <Text className={classes.progressText}>
-                      {progress}/{progressThreshold}
-                    </Text>
-                  )}
-                </Box>
-              </Group>
-            ))}
-          </Stack>
-        </Box>
+        <DetailsCard.Section
+          title="Faction Progress"
+          content={
+            <Stack gap={6}>
+              {factionProgressData.map(({ player, progress, isScored }) => (
+                <Group
+                  key={player.faction}
+                  gap="sm"
+                  align="center"
+                  wrap="nowrap"
+                >
+                  <Box w={24} className={classes.factionIconBox}>
+                    <CircularFactionIcon faction={player.faction} size={24} />
+                  </Box>
+                  <Text
+                    size="xs"
+                    c="gray.4"
+                    fw={600}
+                    tt="uppercase"
+                    className={classes.factionName}
+                  >
+                    {player.faction}
+                  </Text>
+                  <Text size="sm" c="gray.3" className={classes.playerName}>
+                    {player.userName.length > 12
+                      ? `${player.userName.slice(0, 12)}...`
+                      : player.userName}
+                  </Text>
+                  <Box w={40} className={classes.progressValueBox}>
+                    {isScored ? (
+                      <IconCheck
+                        size={18}
+                        color="var(--mantine-color-green-5)"
+                      />
+                    ) : (
+                      <Text size="sm" c="gray.4" fw={500}>
+                        {progress}/{progressThreshold}
+                      </Text>
+                    )}
+                  </Box>
+                </Group>
+              ))}
+            </Stack>
+          }
+        />
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }

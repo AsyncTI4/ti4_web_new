@@ -5,7 +5,15 @@ import classes from "./DetailsCard.module.css";
 type Props = {
   children: ReactNode;
   width?: number;
-  color?: "none" | "yellow" | "purple" | "red" | "orange" | "cyan" | "green";
+  color?:
+    | "none"
+    | "yellow"
+    | "purple"
+    | "red"
+    | "orange"
+    | "cyan"
+    | "blue"
+    | "green";
 } & Omit<BoxProps, "children" | "w">;
 
 export function DetailsCard({
@@ -14,6 +22,7 @@ export function DetailsCard({
   color = "none",
   ...boxProps
 }: Props) {
+  const { className, ...restBoxProps } = boxProps;
   const getCardClass = () => {
     if (color === "yellow") return `${classes.card} ${classes.yellow}`;
     if (color === "purple") return `${classes.card} ${classes.purple}`;
@@ -21,11 +30,17 @@ export function DetailsCard({
     if (color === "orange") return `${classes.card} ${classes.orange}`;
     if (color === "cyan") return `${classes.card} ${classes.cyan}`;
     if (color === "green") return `${classes.card} ${classes.green}`;
+    if (color === "blue") return `${classes.card}`;
     return classes.card;
   };
 
   return (
-    <Box w={width} p="md" className={getCardClass()} {...boxProps}>
+    <Box
+      w={width}
+      p="md"
+      className={`${getCardClass()}${className ? ` ${className}` : ""}`}
+      {...restBoxProps}
+    >
       <Stack gap="sm">{children}</Stack>
     </Box>
   );

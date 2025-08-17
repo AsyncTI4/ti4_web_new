@@ -46,6 +46,13 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
               label="Show Planets as Exhausted"
               description="When off, exhausted planets won't be greyed out on the map"
             />
+            <Switch
+              checked={settings.accessibleColors}
+              onChange={handlers.toggleAccessibleColors}
+              size="sm"
+              label="Accessible Colors"
+              description="Use a simplified color palette (blue, green, purple, yellow, red, pink, black, lightgray) in order. Extra players keep their original colors."
+            />
           </Stack>
         </div>
 

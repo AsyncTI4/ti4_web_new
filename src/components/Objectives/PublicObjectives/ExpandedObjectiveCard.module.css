@@ -3,11 +3,11 @@
 }
 
 .expandedCard.blue {
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: var(--objective-expanded-border-emphasis);
 }
 
 .expandedCard.gray {
-  border: 1px solid rgba(107, 114, 128, 0.15);
+  border: var(--objective-expanded-border-default);
 
 }
 
@@ -52,27 +52,27 @@
 
 /* Blue variant for Stage II */
 .vpIndicator.revealed.blue {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: var(--objective-vp-indicator-revealed-emphasis-bg);
+  border-color: var(--objective-vp-indicator-revealed-emphasis-border);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 4px rgba(59, 130, 246, 0.15),
+    0 0 4px var(--objective-vp-indicator-revealed-emphasis-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Gray variant for Other */
 .vpIndicator.revealed.gray {
-  background: linear-gradient(135deg, rgba(156, 163, 175, 0.2) 0%, rgba(107, 114, 128, 0.15) 100%);
-  border-color: rgba(156, 163, 175, 0.4);
+  background: var(--objective-vp-indicator-revealed-default-bg);
+  border-color: var(--objective-vp-indicator-revealed-default-border);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 6px rgba(156, 163, 175, 0.2),
+    0 0 6px var(--objective-vp-indicator-revealed-default-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .vpIndicator.hidden {
-  background: linear-gradient(135deg, rgba(100, 100, 100, 0.15) 0%, rgba(75, 75, 75, 0.1) 100%);
-  border-color: rgba(100, 100, 100, 0.3);
+  background: var(--objective-vp-indicator-hidden-bg);
+  border-color: var(--objective-vp-indicator-hidden-border);
 }
 
 .vpText {
@@ -147,11 +147,11 @@
 
 /* At threshold badge - blue glow */
 .factionProgressBadge.atThreshold {
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: var(--objective-progress-badge-at-threshold-bg);
+  border: var(--objective-progress-badge-at-threshold-border);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 8px rgba(59, 130, 246, 0.3),
+    0 0 8px var(--objective-progress-badge-at-threshold-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 

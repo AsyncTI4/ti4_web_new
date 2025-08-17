@@ -2,6 +2,7 @@ import { Paper, Box, Image } from "@mantine/core";
 import { generateColorGradient } from "@/lookup/colors";
 import { getPrimaryColorWithOpacity } from "@/lookup/colors";
 import { cdnImage } from "../../data/cdnImage";
+import "../../styles/theme.css";
 import styles from "./PlayerCardBox.module.css";
 
 type Props = {

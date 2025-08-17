@@ -1,6 +1,6 @@
 .card {
-  background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: var(--details-card-bg);
+  border: var(--details-card-border);
   border-radius: 12px;
 }
 
@@ -38,6 +38,14 @@
 
 .cyan .sectionTitle {
   color: rgb(165, 243, 252) !important;
+}
+
+.blue {
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.blue .sectionTitle {
+  color: rgb(59, 130, 246) !important;
 }
 
 .green {

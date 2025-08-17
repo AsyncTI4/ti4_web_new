@@ -1,0 +1,106 @@
+.theme-midnightbluetheme {
+
+    /* Surface.tsx */
+    --surface-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --surface-border: 1px solid rgba(148, 163, 184, 0.24);
+    --surface-corner-accent: 2px solid rgba(59, 130, 246, 0.14);
+
+    /* FactionTabBar.tsx */
+    --faction-tab-bar-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
+    --faction-tab-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --faction-tab-border: 1px solid rgba(148, 163, 184, 0.225);
+
+    --faction-tab-active-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.425) 0%, rgba(30, 64, 175, 0.325) 50%, rgba(8, 14, 33, 0.92) 100%);
+
+    /* PlayerCard.tsx */
+    --player-card-box-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+
+    /** Sidebar **/
+    --sidebar-bg: #0a111e;
+    --left-sidebar-bg: rgb(10 17 30 / 91%);
+    --sidebar-border: 1px solid rgba(148, 163, 184, 0.225);
+
+    /** Secret Hand Popup Tab (Right Sidebar) **/
+    --secret-tab-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --secret-tab-header-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.84) 0%, rgba(20, 29, 45, 0.76) 100%);
+    --secret-tab-header-border: 1px solid rgba(148, 163, 184, 0.24);
+
+    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.225) 0%, rgba(20, 29, 45, 0.84) 100%);
+    --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
+
+    /** Map **/
+    --main-bg: #0a111e;
+    --map-tabs-bg: linear-gradient(180deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+
+    --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);
+    --map-tab-hover-bg: rgba(21, 30, 46, 0.84);
+    --map-tab-hover-border: rgba(59, 130, 246, 0.575);
+
+    --map-tab-active-bg: rgba(59, 130, 246, 0.19);
+    --map-tab-active-border: rgba(59, 130, 246, 0.675);
+
+    /** Header **/
+    --header-bg: linear-gradient(90deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --header-border: 1px solid rgba(59, 130, 246, 0.19);
+
+    /** Header Tabs  **/
+    --header-tab-bg: rgba(8, 14, 33, 0.525);
+    --header-tab-border: 1px solid rgba(59, 130, 246, 0.35);
+    --header-tab-hover-bg: rgba(37, 99, 235, 0.34);
+    --header-tab-hover-border: rgba(59, 130, 246, 0.55);
+
+    --header-tab-active-bg: rgba(37, 99, 235, 0.4);
+    --header-tab-active-border: rgba(59, 130, 246, 0.7);
+
+    /** Header Tabs Input **/
+    --header-tab-input-bg: rgba(8, 14, 33, 0.83);
+    --header-tab-input-border: 1px solid rgba(59, 130, 246, 0.425);
+
+    /** Dropdown **/
+    --header-tab-dropdown-bg: rgba(8, 14, 33, 0.92);
+    --header-tab-dropdown-border: 1px solid rgba(59, 130, 246, 0.425);
+    --header-tab-dropdown-hover-bg: rgba(37, 99, 235, 0.34);
+
+    /** Objectives Tab **/
+    --score-board-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.983) 0%, rgba(20, 29, 45, 0.955) 50%, rgba(8, 14, 33, 0.983) 100%);
+    --score-board-divider: linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.325) 50%, transparent 100%);
+
+    /** Objectives - Expanded Objective Card **/
+    --objective-expanded-border-emphasis: 1px solid rgba(59, 130, 246, 0.17);
+    --objective-expanded-border-default: 1px solid rgba(107, 114, 128, 0.17);
+
+    /** Objectives - VP Indicator **/
+    --objective-vp-indicator-revealed-emphasis-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.165) 0%, rgba(37, 99, 235, 0.11) 100%);
+    --objective-vp-indicator-revealed-emphasis-border: rgba(59, 130, 246, 0.34);
+    --objective-vp-indicator-revealed-emphasis-glow: rgba(59, 130, 246, 0.175);
+
+    --objective-vp-indicator-revealed-default-bg: linear-gradient(135deg, rgba(156, 163, 175, 0.21) 0%, rgba(107, 114, 128, 0.155) 100%);
+    --objective-vp-indicator-revealed-default-border: rgba(156, 163, 175, 0.425);
+    --objective-vp-indicator-revealed-default-glow: rgba(156, 163, 175, 0.225);
+
+    --objective-vp-indicator-hidden-bg: linear-gradient(135deg, rgba(100, 100, 100, 0.165) 0%, rgba(75, 75, 75, 0.11) 100%);
+    --objective-vp-indicator-hidden-border: rgba(100, 100, 100, 0.325);
+
+    /** Objectives - Progress Badge **/
+    --objective-progress-badge-at-threshold-bg: rgba(59, 130, 246, 0.175);
+    --objective-progress-badge-at-threshold-border: 1px solid rgba(59, 130, 246, 0.45);
+    --objective-progress-badge-at-threshold-glow: rgba(59, 130, 246, 0.325);
+
+    /** Card Stack Details Modal **/
+    --card-details-section-title-border: 1px solid rgba(148, 163, 184, 0.24);
+
+    --card-details-item-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.055) 0%, rgba(107, 114, 128, 0.035) 100%);
+    --card-details-item-border: 1px solid rgba(148, 163, 184, 0.13);
+
+    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.325) 0%, rgba(107, 114, 128, 0.265) 100%);
+    --card-details-copy-badge-border: 1px solid rgba(148, 163, 184, 0.425);
+
+    --card-details-percentage-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.11) 0%, rgba(107, 114, 128, 0.085) 100%);
+    --card-details-percentage-border: 1px solid rgba(148, 163, 184, 0.21);
+
+
+    /** Details Card (for all the popovers) **/
+    --details-card-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
+    --details-card-border: 1px solid rgba(59, 130, 246, 0.22);
+  }

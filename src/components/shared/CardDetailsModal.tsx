@@ -1,5 +1,6 @@
-import { Box, Text, Stack, Group, Divider } from "@mantine/core";
+import { Text, Stack, Divider } from "@mantine/core";
 import styles from "./CardDetailsModal.module.css";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type CardItemData = {
   name: string;
@@ -21,20 +22,26 @@ type Props = {
 
 function CardItem({ name, count, text, percentage }: CardItemData) {
   return (
-    <Box className={styles.cardItem}>
+    <div className={styles.cardItem}>
       <Stack gap="xs">
-        <Group justify="space-between" align="center">
-          <Group gap="xs" align="center">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
             <Text className={styles.cardName}>{name}</Text>
-            <Box className={styles.copyBadge}>{count}</Box>
-          </Group>
+            <div className={styles.copyBadge}>{count}</div>
+          </div>
           {percentage !== undefined && (
-            <Box className={styles.percentage}>{percentage?.toFixed(2)}%</Box>
+            <div className={styles.percentage}>{percentage?.toFixed(2)}%</div>
           )}
-        </Group>
+        </div>
         <Text className={styles.cardText}>{text}</Text>
       </Stack>
-    </Box>
+    </div>
   );
 }
 
@@ -42,16 +49,16 @@ function CardSection({ title, count, items }: CardSectionData) {
   if (items.length === 0) return null;
 
   return (
-    <Stack gap="xs">
-      <Text className={styles.sectionTitle}>
-        {title} ({count})
-      </Text>
-      <Stack gap="2px">
-        {items.map((item) => (
-          <CardItem key={item.name} {...item} />
-        ))}
-      </Stack>
-    </Stack>
+    <DetailsCard.Section
+      title={`${title} (${count})`}
+      content={
+        <Stack gap="2px">
+          {items.map((item) => (
+            <CardItem key={item.name} {...item} />
+          ))}
+        </Stack>
+      }
+    />
   );
 }
 
@@ -61,23 +68,19 @@ export function CardDetailsModal({ sections, width = 450 }: Props) {
   );
 
   return (
-    <Box
-      pos="relative"
-      w={width}
-      miw={width}
-      p="sm"
+    <DetailsCard
+      width={width}
       className={styles.container}
+      style={{ maxHeight: "70vh", overflowY: "auto" }}
     >
-      <Stack gap="sm">
-        {visibleSections.map((section, index) => (
-          <div key={section.title}>
-            <CardSection {...section} />
-            {index < visibleSections.length - 1 && (
-              <Divider c="gray.7" opacity={0.3} />
-            )}
-          </div>
-        ))}
-      </Stack>
-    </Box>
+      {visibleSections.map((section, index) => (
+        <div key={section.title}>
+          <CardSection {...section} />
+          {index < visibleSections.length - 1 && (
+            <Divider c="gray.7" opacity={0.3} />
+          )}
+        </div>
+      ))}
+    </DetailsCard>
   );
 }

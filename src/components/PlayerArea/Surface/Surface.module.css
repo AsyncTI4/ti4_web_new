@@ -1,7 +1,9 @@
+
+
 .surface {
   border-radius: var(--mantine-radius-md);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: var(--surface-bg);
+  border: var(--surface-border);
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
@@ -44,7 +46,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(59, 130, 246, 0.1);
+  border: var(--surface-corner-accent);
 }
 
 .cornerAccentTopLeft {

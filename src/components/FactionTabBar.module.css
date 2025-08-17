@@ -1,5 +1,5 @@
 .factionTabBar {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 1) 0%, rgba(30, 41, 59, 1) 100%);
+  background: var(--faction-tab-bar-bg);
   padding: 8px 12px;
   position: sticky;
   top: 0;
@@ -14,8 +14,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.04) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, rgba(99, 102, 241, 0.03) 0%, transparent 50%);
+
   pointer-events: none;
   opacity: 0.7;
 }
@@ -29,9 +28,8 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  border: 1px solid rgba(100, 116, 139, 0.3);
-  border-right: 1px solid rgba(100, 116, 139, 0.2);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.3) 100%);
+  border: var(--faction-tab-border);
+  background: var(--faction-tab-bg);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
@@ -45,7 +43,6 @@
 .tab:last-child {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  border-right: 1px solid rgba(100, 116, 139, 0.3);
 }
 
 .tab + .tab {
@@ -53,12 +50,12 @@
 }
 
 .active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(30, 58, 138, 0.2) 50%, rgba(15, 23, 42, 0.8) 100%);
+  background: var(--faction-tab-active-bg);
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.2);
 }
 
 .pinned {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(30, 58, 138, 0.3) 50%, rgba(15, 23, 42, 0.9) 100%);
+  background: var(--faction-tab-pinned-bg);
   box-shadow: 0 3px 12px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.3);
 }
 
@@ -102,9 +99,7 @@
 }
 
 .btnTab {
-  border: 1px solid rgba(100, 116, 139, 0.3);
   border-left: none;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.3) 100%);
   transition: all 0.2s ease;
   width: auto;
   min-width: 50px;

@@ -1,8 +1,8 @@
-import { Stack, Box, Text, Group, Divider, Badge } from "@mantine/core";
+import { Stack, Text, Group, Divider } from "@mantine/core";
 import { IconScale } from "@tabler/icons-react";
 import { LawInPlay } from "../../../data/types";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
-import classes from "./LawDetailsCard.module.css";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   law: LawInPlay;
@@ -10,79 +10,62 @@ type Props = {
 
 export function LawDetailsCard({ law }: Props) {
   return (
-    <Box w={320} p="md" className={classes.card}>
+    <DetailsCard width={320}>
       <Stack gap="md">
-        {/* Header with law icon and name */}
-        <Group gap="md" align="flex-start">
-          <Box className={classes.iconContainer}>
-            <IconScale size={24} className={classes.icon} />
-          </Box>
-          <Stack gap={4} flex={1}>
-            <Text size="lg" fw={700} c="white" className={classes.title}>
-              {law.name}
-            </Text>
-            <Badge color="gray" size="sm" variant="light">
-              {law.type}
-            </Badge>
-          </Stack>
-        </Group>
+        <DetailsCard.Title
+          title={law.name}
+          subtitle={law.type}
+          icon={<DetailsCard.Icon icon={<IconScale size={24} />} />}
+        />
 
         <Divider c="gray.7" opacity={0.8} />
 
-        {/* Law Text */}
-        <Box>
-          <Text size="sm" c="gray.4" mb={4} fw={600}>
-            Effect
-          </Text>
-          <Text size="sm" c="gray.2" className={classes.effectText}>
-            {law.text1}
-          </Text>
-          {law.text2 && law.text2.trim() && (
-            <Text size="sm" c="gray.2" className={classes.effectText} mt={8}>
-              {law.text2}
-            </Text>
-          )}
-        </Box>
+        <DetailsCard.Section
+          title="Effect"
+          content={
+            <Stack gap={8}>
+              <Text size="sm" c="gray.2" lh={1.4}>
+                {law.text1}
+              </Text>
+              {law.text2 && law.text2.trim() && (
+                <Text size="sm" c="gray.2" lh={1.4}>
+                  {law.text2}
+                </Text>
+              )}
+            </Stack>
+          }
+        />
 
-        {/* Map Text */}
         {law.mapText && law.mapText.trim() && (
           <>
             <Divider c="gray.7" opacity={0.8} />
-            <Box>
-              <Text size="sm" c="gray.4" mb={4} fw={600}>
-                Ongoing Effect
-              </Text>
-              <Text size="sm" c="gray.2" className={classes.mapText}>
-                {law.mapText}
-              </Text>
-            </Box>
+            <DetailsCard.Section title="Ongoing Effect" content={law.mapText} />
           </>
         )}
 
-        {/* Elected Player */}
         {law.electedFaction && (
           <>
             <Divider c="gray.7" opacity={0.8} />
-            <Box>
-              <Text size="sm" c="gray.4" mb={8} fw={600}>
-                Elected Player
-              </Text>
-              <Group gap="sm" align="center">
-                <CircularFactionIcon faction={law.electedFaction} size={24} />
-                <Text
-                  size="xs"
-                  c="gray.4"
-                  fw={600}
-                  tt="uppercase"
-                  style={{ minWidth: 60, letterSpacing: "0.5px" }}
-                >
-                  {law.electedFaction}
-                </Text>
-              </Group>
-            </Box>
+            <DetailsCard.Section
+              title="Elected Player"
+              content={
+                <Group gap="sm" align="center">
+                  <CircularFactionIcon faction={law.electedFaction} size={24} />
+                  <Text
+                    size="xs"
+                    c="gray.4"
+                    fw={600}
+                    tt="uppercase"
+                    style={{ minWidth: 60, letterSpacing: "0.5px" }}
+                  >
+                    {law.electedFaction}
+                  </Text>
+                </Group>
+              }
+            />
           </>
         )}
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }

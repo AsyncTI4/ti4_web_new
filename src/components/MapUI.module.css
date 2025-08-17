@@ -2,8 +2,8 @@
 .newHeaderGroup {
   flex-wrap: nowrap;
   max-width: 100vw;
-  background: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+  background: var(--header-bg);
+  border-bottom: var(--header-border);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -16,10 +16,10 @@
   max-height: calc(100vh - 110px);
   height: auto;
   z-index: 2000;
-  border: 1px solid var(--mantine-color-dark-4);
+  border: var(--sidebar-border);
   border-radius: 10px;
   backdrop-filter: blur(4px);
-  background-color: rgb(14 24 40 / 90%);
+  background-color: var(--left-sidebar-bg);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -28,8 +28,6 @@
   opacity: 0;
 }
 
-/* Export collapsed as a standalone class for CSS Modules tooling */
-.collapsed {}
 
 /* Dedicated class to avoid relying on nested selector in modules checks */
 .leftSidebarOverlayCollapsed {
@@ -58,12 +56,12 @@
 }
 
 .mainBackground {
-  background: #0e1828;
+  background: var(--main-bg);
   min-height: calc(100vh - 60px);
 }
 
 .tabsList {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  background: var(--map-tabs-bg);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   padding-top: 8px !important;
   justify-content: flex-start !important;
@@ -82,7 +80,7 @@
   color: rgba(255, 255, 255, 0.7);
   transition: all 0.2s ease;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: var(--map-tab-border);
   border-bottom: none;
   border-radius: 6px 6px 0 0;
   background: rgba(15, 23, 42, 0.6);
@@ -97,8 +95,8 @@
 
 .tabsTab:hover {
   color: rgba(255, 255, 255, 0.9);
-  background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(59, 130, 246, 0.5);
+  background: var(--map-tab-hover-bg);
+  border-color: var(--map-tab-hover-border);
   border-width: 1px;
   border-bottom: none;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -107,19 +105,16 @@
 
 .tabsTab[data-active="true"] {
   color: rgba(255, 255, 255, 1);
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.6);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.8);
+  background: var(--map-tab-active-bg);
+  border-color: var(--map-tab-active-border);
+  border-bottom: none;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  box-shadow:
-    0 4px 12px rgba(59, 130, 246, 0.3),
-    inset 0 1px 0 rgba(147, 197, 253, 0.2);
 }
 
 .mapContainer {
   display: flex;
   height: 100%;
-  background: #0e1728;
+  background: var(--main-bg);
 }
 
 .mapArea {
@@ -131,7 +126,7 @@
 .sidebar {
   overflow: scroll;
   height: 100%;
-  background: #0e1728;
+  background: var(--sidebar-bg);
 }
 
 .sidebar.collapsedRight {
@@ -139,9 +134,6 @@
   opacity: 0;
   pointer-events: none;
 }
-
-/* Export collapsedRight as a standalone class for CSS Modules tooling */
-.collapsedRight {}
 
 .playerCardsContainer {
   position: relative;
