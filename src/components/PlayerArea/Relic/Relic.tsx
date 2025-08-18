@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Shimmer } from "../Shimmer";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./Relic.module.css";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
+import { Chip } from "@/components/shared/primitives/Chip";
 
 type Props = {
   relicId: string;
@@ -27,8 +27,9 @@ export function Relic({ relicId }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Box
-          className={`${styles.relicCard} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${hierarchy.hoverOutline} ${hierarchy.hoverOutlineYellow}`}
+        <Chip
+          className={styles.relicCard}
+          accent="yellow"
           onClick={() => setOpened((o) => !o)}
         >
           <Shimmer color="yellow" px={6} className={gradientClasses.border}>
@@ -47,7 +48,7 @@ export function Relic({ relicId }: Props) {
               </Text>
             </Box>
           </Shimmer>
-        </Box>
+        </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <RelicCard relicId={relicId} />

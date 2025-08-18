@@ -1,5 +1,5 @@
 import { Group, Text, Image, Tabs, Stack } from "@mantine/core";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
+import { StatMono } from "@/components/shared/primitives/StatMono";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
 import { cdnImage } from "../../../data/cdnImage";
@@ -84,24 +84,22 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   height={24}
                 />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <Text
+                  <StatMono
                     size="xl"
                     fw={700}
                     c="yellow.3"
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.total.currentResources)}
-                  </Text>
-                  <Text
+                  </StatMono>
+                  <StatMono
                     size="sm"
                     c="yellow.5"
                     fw={500}
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.total.totalResources)}
-                  </Text>
+                  </StatMono>
                 </Group>
               </Group>
 
@@ -112,24 +110,22 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
               <Group gap={6} align="center" wrap="nowrap">
                 <InfluenceIcon size={24} />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <Text
+                  <StatMono
                     size="xl"
                     fw={700}
                     c="blue.3"
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.total.currentInfluence)}
-                  </Text>
-                  <Text
+                  </StatMono>
+                  <StatMono
                     size="sm"
                     c="blue.5"
                     fw={500}
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.total.totalInfluence)}
-                  </Text>
+                  </StatMono>
                 </Group>
               </Group>
             </Group>
@@ -144,24 +140,22 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   height={24}
                 />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <Text
+                  <StatMono
                     size="xl"
                     fw={700}
                     c="yellow.3"
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.optimal.currentResources)}
-                  </Text>
-                  <Text
+                  </StatMono>
+                  <StatMono
                     size="sm"
                     c="yellow.5"
                     fw={500}
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.optimal.totalResources)}
-                  </Text>
+                  </StatMono>
                 </Group>
               </Group>
 
@@ -172,24 +166,22 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
               <Group gap={6} align="center" wrap="nowrap">
                 <InfluenceIcon size={24} />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <Text
+                  <StatMono
                     size="xl"
                     fw={700}
                     c="blue.3"
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.optimal.currentInfluence)}
-                  </Text>
-                  <Text
+                  </StatMono>
+                  <StatMono
                     size="sm"
                     c="blue.5"
                     fw={500}
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.optimal.totalInfluence)}
-                  </Text>
+                  </StatMono>
                 </Group>
               </Group>
 
@@ -200,24 +192,22 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
               <Group gap={6} align="center" wrap="nowrap">
                 <CombinedResourceInfluenceIcon size={24} />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <Text
+                  <StatMono
                     size="xl"
                     fw={700}
                     c="gray.3"
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.flex.currentFlex)}
-                  </Text>
-                  <Text
+                  </StatMono>
+                  <StatMono
                     size="sm"
                     c="gray.5"
                     fw={500}
-                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.flex.totalFlex)}
-                  </Text>
+                  </StatMono>
                 </Group>
               </Group>
             </Group>

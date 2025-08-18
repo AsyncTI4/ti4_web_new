@@ -1,5 +1,5 @@
 import { Box, Text, Image, BoxProps } from "@mantine/core";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
+import { Chip } from "@/components/shared/primitives/Chip";
 import { ReactNode } from "react";
 
 type Props = BoxProps & {
@@ -26,8 +26,8 @@ export function Cardback({
 
   return (
     <Box pos="relative" {...boxProps}>
-      <Box
-        className={`${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${hierarchy.hoverOutline} ${hierarchy.hoverOutlineBlue}`}
+      <Chip
+        accent="blue"
         style={{
           width: widthMap[size],
           borderRadius: "8px",
@@ -43,7 +43,7 @@ export function Cardback({
             filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
           }}
         />
-      </Box>
+      </Chip>
       <Box
         style={{
           position: "absolute",

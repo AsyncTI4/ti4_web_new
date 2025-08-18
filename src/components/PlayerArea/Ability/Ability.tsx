@@ -6,7 +6,7 @@ import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import styles from "./Ability.module.css";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
+import { Chip } from "@/components/shared/primitives/Chip";
 
 type Props = {
   id: string;
@@ -34,12 +34,11 @@ export function Ability({ id }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <div onClick={() => setOpened((o) => !o)}>
-          <Shimmer
-            color="purple"
-            className={`${styles.abilityCard} ${styles.shimmerCard} ${styles.shimmerContainer} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${hierarchy.hoverOutline} ${hierarchy.hoverOutlinePurple}`}
-          >
-            <AbilityContent />
-          </Shimmer>
+          <Chip accent="purple">
+            <Shimmer color="purple" className={styles.shimmerContainer}>
+              <AbilityContent />
+            </Shimmer>
+          </Chip>
         </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

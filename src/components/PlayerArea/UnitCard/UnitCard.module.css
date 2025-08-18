@@ -16,9 +16,9 @@
 }
 
 .upgraded {
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.6);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(59, 130, 246, 0.28);
+  border: 1px solid rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.45), 0 10px 26px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .animated.upgraded:hover {
@@ -28,8 +28,8 @@
 
 .standard {
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(107, 114, 128, 0.25);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .animated.standard:hover {
@@ -79,7 +79,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(59, 130, 246, 0.05);
+  background: radial-gradient(80% 60% at 50% 40%, rgba(147, 197, 253, 0.18) 0%, transparent 70%);
   pointer-events: none;
 }
 

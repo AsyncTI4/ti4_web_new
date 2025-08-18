@@ -6,16 +6,12 @@
 .cardContainer {
   position: relative;
   display: flex;
-  border-radius: 8px;
+  border-radius: 999px;
   min-width: 60px;
   align-items: center;
   justify-content: center;
-  padding-left: 12px;
-  padding-right: 4px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  background: linear-gradient(135deg, rgba(var(--bg-rgb), 0.15) 0%, rgba(var(--bg-rgb), 0.08) 100%);
-  border: 1px solid rgba(var(--bg-rgb), 0.3);
+  padding: 6px 8px;
+  background: linear-gradient(135deg, rgba(var(--bg-rgb), 0.16) 0%, rgba(var(--bg-rgb), 0.1) 100%);
 }
 
 .cardContainer::before {
@@ -23,7 +19,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(var(--bg-rgb), 0.15);
+  box-shadow: inset 0 0 0 1px rgba(var(--bg-rgb), 0.22);
   pointer-events: none;
 }
 
@@ -61,22 +57,30 @@
 }
 
 .numberCircle {
-  background: var(--mantine-color-white);
-  position: absolute;
-  left: -14px;
-  width: 24px;
-  height: 24px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.92) 100%);
+  width: 26px;
+  height: 26px;
   display: flex;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  flex-shrink: 0;
   border: 2px solid rgba(var(--bg-rgb), 0.9);
-  box-shadow: 0 1px 3px rgba(var(--bg-rgb), 0.25);
+  box-shadow: 0 1px 3px rgba(var(--bg-rgb), 0.35), 0 0 8px rgba(var(--bg-rgb), 0.22);
+  position: relative;
+}
+
+.numberCircle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(var(--bg-rgb), 0.25), inset 0 0 8px rgba(var(--bg-rgb), 0.12);
+  pointer-events: none;
 }
 
 .numberText {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -87,4 +91,45 @@
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inner wrapper to keep Chip padding and glow from colliding with content */
+.inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Speaker badge slot inside the pill */
+/* speakerBadge removed; speaker shown outside chip */
+
+/* Ornamentation: subtle top sweep and left accent tied to color */
+.cardContainer::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: rgba(var(--bg-rgb), 0.5);
+  filter: blur(0.5px);
+}
+
+.cardContainer::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(var(--bg-rgb), 0.6) 0%, rgba(var(--bg-rgb), 0.25) 100%);
+  box-shadow: 0 0 6px rgba(var(--bg-rgb), 0.2);
 }

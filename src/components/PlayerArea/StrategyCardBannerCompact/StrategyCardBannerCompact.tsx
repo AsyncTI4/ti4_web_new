@@ -1,4 +1,5 @@
 import { Box, Group, Text } from "@mantine/core";
+import { Chip } from "@/components/shared/primitives/Chip";
 import { SpeakerToken } from "../SpeakerToken";
 import classes from "./StrategyCardBannerCompact.module.css";
 
@@ -48,25 +49,27 @@ export function StrategyCardBannerCompact({
 
   return (
     <Group className={classes.container} gap="lg">
-      {/* Speaker Token */}
       <SpeakerToken isVisible={isSpeaker} />
 
-      <Box
+      <Chip
+        accent={color as any}
         className={`${classes.cardContainer} ${colorClass}`}
         style={{ opacity: isExhausted ? 0.5 : 1 }}
       >
-        {/* Strategy card number circle */}
-        <Box className={classes.numberCircle}>
-          <Text ff="heading" c={numberColor} className={classes.numberText}>
-            {number}
+        <Box className={classes.inner}>
+          {/* Strategy card number circle */}
+          <Box className={classes.numberCircle}>
+            <Text ff="heading" c={numberColor} className={classes.numberText}>
+              {number}
+            </Text>
+          </Box>
+
+          {/* Strategy card text - abbreviated */}
+          <Text ff="heading" className={classes.cardText}>
+            {text}
           </Text>
         </Box>
-
-        {/* Strategy card text - abbreviated */}
-        <Text ff="heading" className={classes.cardText}>
-          {text}
-        </Text>
-      </Box>
+      </Chip>
     </Group>
   );
 }
