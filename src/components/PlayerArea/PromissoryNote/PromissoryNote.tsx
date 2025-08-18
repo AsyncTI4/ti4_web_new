@@ -4,6 +4,7 @@ import { getPromissoryNoteData } from "../../../lookup/promissoryNotes";
 import { getGradientClasses } from "../gradientClasses";
 import { cdnImage } from "../../../data/cdnImage";
 import styles from "./PromissoryNote.module.css";
+import hierarchy from "../../shared/primitives/Hierarchy.module.css";
 import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
@@ -30,7 +31,10 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
   const factionIcon = cdnImage(`/factions/${faction}.png`);
 
   return (
-    <Box className={styles.promissoryCard} onClick={onClick}>
+    <Box
+      className={`${styles.promissoryCard} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${hierarchy.hoverOutline} ${hierarchy.hoverOutlineCyan}`}
+      onClick={onClick}
+    >
       <Shimmer
         color={shimmerColor}
         py={2}

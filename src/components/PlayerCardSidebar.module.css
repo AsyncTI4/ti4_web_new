@@ -34,11 +34,5 @@
   border-radius: var(--mantine-radius-sm);
 }
 
-.gridBackground {
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
-  background-size: 18px 18px;
-  border-radius: var(--mantine-radius-sm);
-}
+/* gridBackground intentionally removed for reduced visual noise */
 

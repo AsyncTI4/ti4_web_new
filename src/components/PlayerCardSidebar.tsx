@@ -297,9 +297,7 @@ export default function PlayerCardSidebar(props: Props) {
           )}
         </Group>
 
-        <Box className={softStyles.softDivider} />
-
-        <Box p="md" className={softStyles.gridBackground}>
+        <Box p="md" className={softStyles.sectionBlock}>
           <Stack gap="xs">
             <DynamicTechGrid
               renderTechColumn={renderTechColumn}
@@ -308,9 +306,7 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </Box>
 
-        <Box className={softStyles.softDivider} />
-
-        <Box p="md" className={softStyles.sectionBlock}>
+        <Box p="md" mt={4} className={softStyles.sectionBlock}>
           <SimpleGrid h="100%" cols={6} spacing="8px">
             {unitsOwned.map((unitId, index) => {
               const asyncId = getUnitAsyncId(unitId);

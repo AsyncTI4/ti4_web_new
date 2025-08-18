@@ -18,6 +18,18 @@
   flex-wrap: nowrap;
 }
 
+/* Online status indicator */
+.onlineDot {
+  position: absolute;
+  top: 2px;
+  left: 28px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 1) 0%, rgba(34, 197, 94, 0.2) 80%);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+}
+
 .leaderStack {
   gap: 0;
 }

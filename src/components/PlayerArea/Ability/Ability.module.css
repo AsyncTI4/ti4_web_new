@@ -23,10 +23,9 @@
   flex-shrink: 0;
 }
 
-
 .shimmerContainer {
   padding: 4px 6px 4px 8px;
-  border: 1px solid #7c3aed;
+  border: 1px solid #8b5cf6;
   border-radius: 10px 10px 4px 4px;
   min-width: 0;
   width: auto;
@@ -36,7 +35,7 @@
 }
 
 .shimmerContainer:hover {
-  background: rgba(147, 51, 234, 0.08);
+  background: rgba(147, 51, 234, 0.1);
 }
 
 /* Left accent line for abilities to align with other chips */

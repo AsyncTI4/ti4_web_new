@@ -3,6 +3,7 @@ import { Shimmer } from "../Shimmer";
 import { getSecretObjectiveData } from "../../../lookup/secretObjectives";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./ScoredSecret.module.css";
+import hierarchy from "../../shared/primitives/Hierarchy.module.css";
 
 type Props = {
   secretId: string;
@@ -28,7 +29,7 @@ export function ScoredSecret({
 
   return (
     <Box
-      className={`${styles.secretCard} ${!isScored ? styles.gray : ""}`}
+      className={`${styles.secretCard} ${!isScored ? styles.gray : ""} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${hierarchy.hoverOutline} ${isScored ? hierarchy.hoverOutlineRed : hierarchy.hoverOutlineGray}`}
       onClick={onClick}
     >
       <Shimmer

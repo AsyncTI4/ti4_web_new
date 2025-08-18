@@ -6,6 +6,7 @@ import { leaders } from "../../../data/leaders";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./Leader.module.css";
+import hierarchy from "../../shared/primitives/Hierarchy.module.css";
 
 type Props = {
   id: string;
@@ -16,7 +17,7 @@ type Props = {
   active: boolean;
 };
 
-export function Leader({ id, type, exhausted, locked }: Props) {
+export function Leader({ id, type, exhausted, locked, active }: Props) {
   const [opened, setOpened] = useState(false);
   const leaderData = getLeaderData(id);
   if (!leaderData) return null;
@@ -43,6 +44,7 @@ export function Leader({ id, type, exhausted, locked }: Props) {
           {type}
         </Text>
       </Stack>
+      {active && <Box className={styles.onlineDot} />}
       {locked && (
         <Box className={styles.lockIcon}>
           <IconLock size={16} color="white" stroke={2.5} />
@@ -58,13 +60,13 @@ export function Leader({ id, type, exhausted, locked }: Props) {
           {shouldShowGreen ? (
             <Shimmer
               color="green"
-              className={`${styles.leaderCard} ${styles.shimmerCard} ${styles.shimmerContainer}`}
+              className={`${styles.leaderCard} ${styles.shimmerCard} ${styles.shimmerContainer} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover}`}
             >
               <LeaderContent />
             </Shimmer>
           ) : (
             <Box
-              className={`${styles.leaderCard} ${styles.standardCard} ${styles.standardContainer} ${exhausted ? styles.exhaustedContainer : ""}`}
+              className={`${styles.leaderCard} ${styles.standardCard} ${styles.standardContainer} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${exhausted ? styles.exhaustedContainer : ""}`}
             >
               <LeaderContent />
             </Box>

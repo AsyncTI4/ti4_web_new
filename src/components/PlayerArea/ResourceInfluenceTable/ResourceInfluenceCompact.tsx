@@ -1,4 +1,5 @@
 import { Group, Text, Image, Tabs, Stack } from "@mantine/core";
+import hierarchy from "../../shared/primitives/Hierarchy.module.css";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
 import { cdnImage } from "../../../data/cdnImage";
@@ -87,11 +88,8 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="xl"
                     fw={700}
                     c="yellow.3"
-                    ff="mono"
-                    style={{
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                      lineHeight: 1,
-                    }}
+                    className={hierarchy.monoValue}
+                    style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.total.currentResources)}
                   </Text>
@@ -99,7 +97,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="sm"
                     c="yellow.5"
                     fw={500}
-                    ff="mono"
+                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.total.totalResources)}
@@ -118,11 +116,8 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="xl"
                     fw={700}
                     c="blue.3"
-                    ff="mono"
-                    style={{
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                      lineHeight: 1,
-                    }}
+                    className={hierarchy.monoValue}
+                    style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.total.currentInfluence)}
                   </Text>
@@ -130,7 +125,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="sm"
                     c="blue.5"
                     fw={500}
-                    ff="mono"
+                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.total.totalInfluence)}
@@ -153,11 +148,8 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="xl"
                     fw={700}
                     c="yellow.3"
-                    ff="mono"
-                    style={{
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                      lineHeight: 1,
-                    }}
+                    className={hierarchy.monoValue}
+                    style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.optimal.currentResources)}
                   </Text>
@@ -165,7 +157,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="sm"
                     c="yellow.5"
                     fw={500}
-                    ff="mono"
+                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.optimal.totalResources)}
@@ -184,11 +176,8 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="xl"
                     fw={700}
                     c="blue.3"
-                    ff="mono"
-                    style={{
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                      lineHeight: 1,
-                    }}
+                    className={hierarchy.monoValue}
+                    style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.optimal.currentInfluence)}
                   </Text>
@@ -196,7 +185,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="sm"
                     c="blue.5"
                     fw={500}
-                    ff="mono"
+                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.optimal.totalInfluence)}
@@ -215,11 +204,8 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="xl"
                     fw={700}
                     c="gray.3"
-                    ff="mono"
-                    style={{
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                      lineHeight: 1,
-                    }}
+                    className={hierarchy.monoValue}
+                    style={{ lineHeight: 1 }}
                   >
                     {padNumber(planetEconomics.flex.currentFlex)}
                   </Text>
@@ -227,7 +213,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                     size="sm"
                     c="gray.5"
                     fw={500}
-                    ff="mono"
+                    className={hierarchy.monoValue}
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.flex.totalFlex)}
