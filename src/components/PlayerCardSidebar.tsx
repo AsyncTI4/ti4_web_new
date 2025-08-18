@@ -129,6 +129,7 @@ export default function PlayerCardSidebar(props: Props) {
       <Group
         gap={4}
         px={4}
+        mb="md"
         w="100%"
         align="center"
         wrap="nowrap"
@@ -228,13 +229,19 @@ export default function PlayerCardSidebar(props: Props) {
               knownUnscoredSecrets={knownUnscoredSecrets}
             />
           </Stack>
-          <Stack gap={8}>
-            <Leaders leaders={leaders} />
-
+          <Stack gap={2}>
+            <Box mb={2}>
+              <Leaders leaders={leaders} />
+            </Box>
             {relics.map((relicId, index) => (
               <Relic key={index} relicId={relicId} />
             ))}
-            <PromissoryNotesStack promissoryNotes={promissoryNotes} />
+            <Box mt={2}>
+              <PromissoryNotesStack
+                promissoryNotes={promissoryNotes}
+                showEmpty={false}
+              />
+            </Box>
           </Stack>
         </SimpleGrid>
 
@@ -292,7 +299,7 @@ export default function PlayerCardSidebar(props: Props) {
 
         <Box className={softStyles.softDivider} />
 
-        <Box p="md">
+        <Box p="md" className={softStyles.gridBackground}>
           <Stack gap="xs">
             <DynamicTechGrid
               renderTechColumn={renderTechColumn}
@@ -303,7 +310,7 @@ export default function PlayerCardSidebar(props: Props) {
 
         <Box className={softStyles.softDivider} />
 
-        <Box p="md">
+        <Box p="md" className={softStyles.sectionBlock}>
           <SimpleGrid h="100%" cols={6} spacing="8px">
             {unitsOwned.map((unitId, index) => {
               const asyncId = getUnitAsyncId(unitId);

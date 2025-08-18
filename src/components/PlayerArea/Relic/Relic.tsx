@@ -27,12 +27,7 @@ export function Relic({ relicId }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box className={styles.relicCard} onClick={() => setOpened((o) => !o)}>
-          <Shimmer
-            color="yellow"
-            py={2}
-            px={6}
-            className={gradientClasses.border}
-          >
+          <Shimmer color="yellow" px={6} className={gradientClasses.border}>
             <Box className={styles.contentContainer}>
               <Image
                 src="/relicicon.webp"

@@ -1,5 +1,4 @@
 import { Stack, Text, Box } from "@mantine/core";
-import { Surface } from "../Surface";
 
 type Props = {
   tacticalCC: number;
@@ -31,13 +30,23 @@ export function CCPool({
       >
         CCs
       </Text>
-      <Surface
+      <Box
         p="sm"
         h="100%"
         style={{
           borderRightWidth: 0,
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
+          borderTopLeftRadius: 10,
+          borderBottomLeftRadius: 10,
+          background:
+            "linear-gradient(135deg, rgba(148, 163, 184, 0.06) 0%, rgba(148, 163, 184, 0.04) 100%)",
+          border: "1px solid rgba(148, 163, 184, 0.18)",
+          borderRightStyle: "none",
+          boxShadow:
+            "0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+          minHeight: 54,
+          position: "relative",
         }}
       >
         {/* Subtle inner glow */}
@@ -88,7 +97,7 @@ export function CCPool({
             {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
           </Text>
         </Stack>
-      </Surface>
+      </Box>
     </Stack>
   );
 }

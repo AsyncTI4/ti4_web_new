@@ -1,6 +1,5 @@
 import { Box, Stack, Text, Group } from "@mantine/core";
 import { FragmentStack } from "../FragmentStack";
-import { Surface } from "../Surface";
 
 type Props = {
   fragments: string[];
@@ -33,15 +32,24 @@ export function FragmentsPool({ fragments }: Props) {
         >
           Frags
         </Text>
-        <Surface
+        <Box
           p="sm"
-          pattern="grid"
           style={{
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
+            borderTopRightRadius: 10,
+            borderBottomRightRadius: 10,
             display: "flex",
             height: "100%",
             width: "100%",
+            background:
+              "linear-gradient(135deg, rgba(148, 163, 184, 0.06) 0%, rgba(148, 163, 184, 0.04) 100%)",
+            border: "1px solid rgba(148, 163, 184, 0.18)",
+            borderLeftStyle: "none",
+            boxShadow:
+              "0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+            minHeight: 54,
+            position: "relative",
           }}
         >
           <Group gap="xs" justify="center" w="100%">
@@ -68,7 +76,7 @@ export function FragmentsPool({ fragments }: Props) {
               </Text>
             )}
           </Group>
-        </Surface>
+        </Box>
       </Stack>
     </Box>
   );

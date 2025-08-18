@@ -2,11 +2,11 @@
 .relicCard {
   transition: all 0.2s ease;
   cursor: pointer;
-  border-radius: var(--mantine-radius-sm);
+  position: relative;
 }
 
 .relicCard:hover {
-  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.3), 0 0 12px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.22), 0 0 8px rgba(255, 193, 7, 0.12);
 }
 
 .contentContainer {
@@ -14,7 +14,8 @@
   display: flex;
   align-items: center;
   gap: var(--mantine-spacing-xs);
-  min-width: 0;
+
+  padding: 4px 6px;
 }
 
 .icon {
@@ -30,4 +31,43 @@
   min-width: 0;
   flex: 1;
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Subtle bottom gilded underline */
+.contentContainer::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0) 0%, rgba(251, 191, 36, 0.45) 50%, rgba(251, 191, 36, 0) 100%);
+  pointer-events: none;
+}
+
+
+
+/* Subtle artifact filigree top line */
+.relicCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0) 0%, rgba(251, 191, 36, 0.35) 50%, rgba(251, 191, 36, 0) 100%);
+}
+
+/* Tiny inset corner cuts to imply carved edges */
+.relicCard::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid rgba(251, 191, 36, 0.4);
+  border-right: 1px solid rgba(251, 191, 36, 0.4);
+  border-top-right-radius: 4px;
+  opacity: 0.5;
 }

@@ -7,9 +7,13 @@ import { PromissoryNoteCard } from "../PromissoryNoteCard";
 
 type Props = {
   promissoryNotes: string[];
+  showEmpty?: boolean;
 };
 
-export function PromissoryNotesStack({ promissoryNotes }: Props) {
+export function PromissoryNotesStack({
+  promissoryNotes,
+  showEmpty = true,
+}: Props) {
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
 
   return (
@@ -34,9 +38,9 @@ export function PromissoryNotesStack({ promissoryNotes }: Props) {
             </SmoothPopover.Dropdown>
           </SmoothPopover>
         ))
-      ) : (
+      ) : showEmpty ? (
         <EmptyPromissoryNotePlaceholder />
-      )}
+      ) : null}
     </Stack>
   );
 }

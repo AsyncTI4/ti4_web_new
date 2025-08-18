@@ -33,7 +33,9 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
     <Box className={styles.promissoryCard} onClick={onClick}>
       <Shimmer
         color={shimmerColor}
-        className={`${gradientClasses.border} ${styles.shimmerContainer}`}
+        py={2}
+        px={6}
+        className={`${gradientClasses.border} ${gradientClasses.backgroundStrong} ${styles.shimmerContainer}`}
       >
         <Group className={styles.contentGroup}>
           <Image src="/pnicon.png" className={styles.noteIcon} />

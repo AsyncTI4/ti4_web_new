@@ -220,6 +220,12 @@
   background: rgba(var(--color-red), 0.06);
 }
 
+/* Stronger cyan for Promissory Notes */
+.gradient-cyan.gradient-border {
+  border-color: rgba(var(--color-cyan), 0.3);
+  background: rgba(var(--color-cyan), 0.08);
+}
+
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {
   background: rgba(var(--color-blue), 0.025);

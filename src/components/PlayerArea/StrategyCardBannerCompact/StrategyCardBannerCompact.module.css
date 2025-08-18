@@ -1,11 +1,12 @@
 .container {
   align-items: center;
+  gap: 8px;
 }
 
 .cardContainer {
   position: relative;
   display: flex;
-  border-radius: 4px;
+  border-radius: 8px;
   min-width: 60px;
   align-items: center;
   justify-content: center;
@@ -15,6 +16,15 @@
   padding-bottom: 6px;
   background: linear-gradient(135deg, rgba(var(--bg-rgb), 0.15) 0%, rgba(var(--bg-rgb), 0.08) 100%);
   border: 1px solid rgba(var(--bg-rgb), 0.3);
+}
+
+.cardContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(var(--bg-rgb), 0.15);
+  pointer-events: none;
 }
 
 /* Color variants */
@@ -53,7 +63,7 @@
 .numberCircle {
   background: var(--mantine-color-white);
   position: absolute;
-  left: -16px;
+  left: -14px;
   width: 24px;
   height: 24px;
   display: flex;
@@ -61,7 +71,8 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  border: 2px solid rgba(var(--bg-rgb), 1);
+  border: 2px solid rgba(var(--bg-rgb), 0.9);
+  box-shadow: 0 1px 3px rgba(var(--bg-rgb), 0.25);
 }
 
 .numberText {

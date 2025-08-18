@@ -2,11 +2,11 @@
 .abilityCard {
   transition: all 0.2s ease;
   cursor: pointer;
-  border-radius: var(--mantine-radius-sm);
+  border-radius: 10px 10px 4px 4px; /* book-tab silhouette */
 }
 
 .shimmerCard:hover {
-  border-color: rgba(147, 51, 234, 0.6);
+  border-color: rgba(147, 51, 234, 0.45);
 }
 
 /* Layout components */
@@ -24,19 +24,42 @@
 }
 
 
-
 .shimmerContainer {
-  padding: 4px;
+  padding: 4px 6px 4px 8px;
   border: 1px solid #7c3aed;
-  border-radius: 8px;
+  border-radius: 10px 10px 4px 4px;
   min-width: 0;
   width: auto;
   flex-shrink: 1;
   overflow: hidden;
+  position: relative;
 }
 
 .shimmerContainer:hover {
-  background: rgba(147, 51, 234, 0.1);
+  background: rgba(147, 51, 234, 0.08);
+}
+
+/* Left accent line for abilities to align with other chips */
+.shimmerContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.2) 100%);
+}
+
+/* Subtle top tab ornament */
+.shimmerContainer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0) 0%, rgba(147, 51, 234, 0.35) 50%, rgba(147, 51, 234, 0) 100%);
 }
 
 /* Ability icon */
@@ -54,7 +77,7 @@
 
 /* Text styles */
 .abilityName {
-  font-size: var(--mantine-font-size-sm);
+  font-size: var(--mantine-font-size-xs);
   font-weight: 700;
   overflow: hidden;
   white-space: nowrap;
