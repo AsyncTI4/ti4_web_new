@@ -119,12 +119,6 @@ export function TabsControls() {
             highlight: "rgba(59,130,246,1)",
           },
           {
-            name: "midnighttheme" as const,
-            gradient:
-              "linear-gradient(135deg, rgba(2,6,23,1) 0%, rgba(10,17,31,1) 100%)",
-            highlight: "rgba(59,130,246,1)",
-          },
-          {
             name: "midnightredtheme" as const,
             gradient:
               "linear-gradient(135deg, rgba(18,8,12,1) 0%, rgba(45,14,20,1) 100%)",
@@ -153,6 +147,12 @@ export function TabsControls() {
             gradient:
               "linear-gradient(135deg, rgba(8,8,8,1) 0%, rgba(24,24,24,1) 100%)",
             highlight: "rgba(200,200,200,1)",
+          },
+          {
+            name: "vaporwavetheme" as const,
+            gradient:
+              "linear-gradient(135deg, rgba(255,0,170,1) 0%, rgba(0,240,255,1) 100%)",
+            highlight: "rgba(255,0,170,1)",
           },
         ].map((t) => (
           <button

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { units } from "../../../data/units";
-import { colors } from "../../../data/colors";
 import styles from "./UnitCard.module.css";
 import { UnitDetailsCard } from "../UnitDetailsCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { Unit } from "@/components/shared/Unit";
 import { BaseCard } from "./BaseCard";
+import { getColorAlias } from "@/lookup/colors";
+import { getUnitData } from "@/lookup/units";
 
 type Props = {
   unitId: string;
@@ -71,22 +71,3 @@ export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
     </SmoothPopover>
   );
 }
-
-// Helper function to get unit data by ID
-const getUnitData = (unitId: string) => {
-  return units.find((unit) => unit.id === unitId);
-};
-
-// Helper function to get color alias from color name
-const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
-
-  const colorData = colors.find(
-    (solidColor) =>
-      solidColor.name === color.toLowerCase() ||
-      solidColor.aliases.includes(color.toLowerCase()) ||
-      solidColor.alias === color.toLowerCase()
-  );
-
-  return colorData?.alias || "pnk"; // fallback to pink if not found
-};

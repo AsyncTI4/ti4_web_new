@@ -1,0 +1,23 @@
+.softDivider {
+  height: 1px;
+  margin: 4px 0;
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0) 0%,
+    rgba(148, 163, 184, 0.22) 50%,
+    rgba(148, 163, 184, 0) 100%
+  );
+}
+
+
+.softDividerTight {
+  height: 1px;
+  margin: 2px 0;
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0) 0%,
+    rgba(148, 163, 184, 0.22) 50%,
+    rgba(148, 163, 184, 0) 100%
+  );
+}
+

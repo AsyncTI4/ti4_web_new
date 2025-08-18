@@ -18,14 +18,14 @@ type Props = {
 
 export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   const planetData = getPlanetData(planetId);
-
   if (!planetData) return null;
 
   const isLegendary = !!planetData.legendaryAbilityText;
   const isFactionPlanet = planetData.planetType === "FACTION";
 
   // Calculate attachment modifiers
-  const attachmentModifiers = planetTile.attachments.reduce(
+  const attachments = planetTile?.attachments ?? [];
+  const attachmentModifiers = attachments.reduce(
     (totals, attachmentId) => {
       const attachmentData = getAttachmentData(attachmentId);
       if (attachmentData) {
@@ -170,7 +170,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
         )}
 
         {/* Attachments */}
-        {planetTile.attachments.length > 0 && (
+        {attachments.length > 0 && (
           <>
             <Divider c="purple.6" opacity={0.8} />
             <Box>
@@ -185,7 +185,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
                 </Text>
               </Group>
               <Stack gap="xs">
-                {planetTile.attachments.map((attachmentId) => {
+                {attachments.map((attachmentId) => {
                   const attachmentData = getAttachmentData(attachmentId);
                   if (!attachmentData) return null;
 

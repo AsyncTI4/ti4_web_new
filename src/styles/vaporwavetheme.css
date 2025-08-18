@@ -1,0 +1,142 @@
+.theme-vaporwavetheme {
+
+    /* Surface.tsx */
+    --surface-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --surface-border: 1px solid rgba(255, 255, 255, 0.14);
+    --surface-corner-accent: 2px solid rgba(255, 0, 170, 0.35);
+    --surface-shadow: 0 10px 40px rgba(255, 0, 170, 0.15), 0 6px 24px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    /* FactionTabBar.tsx */
+    --faction-tab-bar-bg: linear-gradient(135deg, rgba(22, 10, 36, 1) 0%, rgba(10, 16, 38, 1) 100%);
+    --faction-tab-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.72) 0%, rgba(10, 16, 38, 0.68) 100%);
+    --faction-tab-border: 1px solid rgba(255, 0, 170, 0.22);
+    --faction-tab-shadow: 0 1px 3px rgba(255, 0, 170, 0.2);
+
+    --faction-tab-active-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.82) 0%, rgba(10, 16, 38, 0.78) 100%);
+    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.35) 0%, rgba(0, 240, 255, 0.28) 50%, rgba(22, 10, 36, 0.78) 100%);
+    --faction-tab-active-shadow: 0 2px 10px rgba(255, 0, 170, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --faction-tab-pinned-shadow: 0 4px 14px rgba(0, 240, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+    /* PlayerCard.tsx */
+    --player-card-box-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.98) 0%, rgba(10, 16, 38, 0.98) 100%);
+    --player-card-box-shadow: 0 12px 48px rgba(255, 0, 170, 0.15), 0 6px 28px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    /** Sidebar **/
+    --sidebar-bg: rgba(10, 8, 24, 0.6);
+    --left-sidebar-bg: rgba(10, 8, 24, 0.6);
+    --sidebar-border: 1px solid rgba(0, 240, 255, 0.22);
+    --sidebar-blur: 8px;
+
+    /** Secret Hand Popup Tab (Right Sidebar) **/
+    --secret-tab-bg:  linear-gradient(135deg, rgba(22, 10, 36, 0.7) 0%, rgba(10, 16, 38, 0.66) 100%);
+    --secret-tab-header-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.58) 0%, rgba(10, 16, 38, 0.54) 100%);
+    --secret-tab-header-border: 1px solid rgba(255, 255, 255, 0.16);
+
+    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(255, 0, 170, 0.14) 0%, rgba(0, 240, 255, 0.12) 100%);
+    --secret-tab-hover-border: 1px solid rgba(255, 0, 170, 0.3);
+
+    /** Map **/
+    --main-bg:
+      /* Neon grid lines (on top) */
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 80px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 80px),
+      /* Glow halo and horizon */
+      radial-gradient(60% 40% at 50% 20%, rgba(255, 0, 170, 0.22) 0%, rgba(255, 0, 170, 0.0) 60%),
+      radial-gradient(80% 60% at 50% 120%, rgba(0, 240, 255, 0.12) 0%, rgba(0, 240, 255, 0.0) 50%),
+      /* Base sky */
+      linear-gradient(180deg, rgba(12, 8, 28, 0.98) 0%, rgba(10, 8, 26, 0.98) 60%, rgba(6, 6, 18, 0.98) 100%);
+    --map-tabs-bg: linear-gradient(180deg, rgba(22, 10, 36, 0.85) 0%, rgba(10, 16, 38, 0.8) 100%);
+    --map-tabs-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+
+    --map-tab-border: 1px solid rgba(255, 255, 255, 0.22);
+    --map-tab-hover-bg: rgba(255, 0, 170, 0.18);
+    --map-tab-hover-border: rgba(255, 0, 170, 0.5);
+    --map-tab-default-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    --map-tab-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --map-tab-hover-text-shadow: 0 1px 4px rgba(255, 0, 170, 0.4);
+    --map-tab-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+
+    --map-tab-active-bg: rgba(0, 240, 255, 0.16);
+    --map-tab-active-border: rgba(0, 240, 255, 0.55);
+    --map-tab-active-text-shadow: 0 1px 6px rgba(0, 240, 255, 0.5);
+
+    /** Header **/
+    --header-bg: linear-gradient(90deg, rgba(22, 10, 36, 0.85) 0%, rgba(10, 16, 38, 0.8) 100%);
+    --header-border: 1px solid rgba(0, 240, 255, 0.22);
+    --header-shadow: 0 3px 10px rgba(255, 0, 170, 0.15);
+
+    /** Header Tabs  **/
+    --header-tab-bg: rgba(18, 14, 32, 0.5);
+    --header-tab-border: 1px solid rgba(255, 0, 170, 0.35);
+    --header-tab-hover-bg: rgba(255, 0, 170, 0.28);
+    --header-tab-hover-border: rgba(255, 0, 170, 0.55);
+
+    --header-tab-active-bg: rgba(0, 240, 255, 0.28);
+    --header-tab-active-border: rgba(0, 240, 255, 0.6);
+
+    /** Header Tabs Input **/
+    --header-tab-input-bg: rgba(18, 14, 32, 0.66);
+    --header-tab-input-border: 1px solid rgba(0, 240, 255, 0.36);
+
+    /** Dropdown **/
+    --header-tab-dropdown-bg: rgba(18, 14, 32, 0.8);
+    --header-tab-dropdown-border: 1px solid rgba(255, 0, 170, 0.36);
+    --header-tab-dropdown-hover-bg: rgba(255, 0, 170, 0.28);
+    --header-dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+
+    /** Objectives Tab **/
+    --score-board-bg: linear-gradient(135deg, rgba(18, 14, 32, 0.96) 0%, rgba(10, 16, 38, 0.9) 50%, rgba(18, 14, 32, 0.96) 100%);
+    --score-board-divider: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.32) 50%, transparent 100%);
+
+    /** Objectives - Expanded Objective Card **/
+    --objective-expanded-border-emphasis: 1px solid rgba(255, 0, 170, 0.24);
+    --objective-expanded-border-default: 1px solid rgba(255, 255, 255, 0.18);
+
+    /** Objectives - VP Indicator **/
+    --objective-vp-indicator-revealed-emphasis-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.22) 0%, rgba(0, 240, 255, 0.16) 100%);
+    --objective-vp-indicator-revealed-emphasis-border: rgba(255, 0, 170, 0.42);
+    --objective-vp-indicator-revealed-emphasis-glow: rgba(255, 0, 170, 0.22);
+
+    --objective-vp-indicator-revealed-default-bg: linear-gradient(135deg, rgba(200, 200, 220, 0.22) 0%, rgba(140, 140, 170, 0.16) 100%);
+    --objective-vp-indicator-revealed-default-border: rgba(200, 200, 220, 0.44);
+    --objective-vp-indicator-revealed-default-glow: rgba(200, 200, 220, 0.22);
+
+    --objective-vp-indicator-hidden-bg: linear-gradient(135deg, rgba(120, 120, 140, 0.18) 0%, rgba(90, 90, 120, 0.12) 100%);
+    --objective-vp-indicator-hidden-border: rgba(120, 120, 140, 0.35);
+
+    /** Objectives - Progress Badge **/
+    --objective-progress-badge-at-threshold-bg: rgba(0, 240, 255, 0.2);
+    --objective-progress-badge-at-threshold-border: 1px solid rgba(0, 240, 255, 0.5);
+    --objective-progress-badge-at-threshold-glow: rgba(0, 240, 255, 0.34);
+
+    /** Card Stack Details Modal **/
+    --card-details-section-title-border: 1px solid rgba(255, 255, 255, 0.18);
+
+    --card-details-item-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.04) 100%);
+    --card-details-item-border: 1px solid rgba(255, 255, 255, 0.16);
+
+    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.35) 0%, rgba(0, 240, 255, 0.28) 100%);
+    --card-details-copy-badge-border: 1px solid rgba(255, 255, 255, 0.36);
+
+    --card-details-percentage-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.085) 100%);
+    --card-details-percentage-border: 1px solid rgba(255, 255, 255, 0.21);
+
+
+    /** Details Card (for all the popovers) **/
+    --details-card-bg: linear-gradient(135deg, rgba(18, 14, 32, 1) 0%, rgba(10, 16, 38, 1) 100%);
+    --details-card-border: 1px solid rgba(255, 0, 170, 0.26);
+
+    /* Map Scrollbars */
+    --scrollbar-track-bg: rgba(16, 12, 36, 0.85);
+    --scrollbar-track-border: 1px solid rgba(255, 0, 170, 0.3);
+    --scrollbar-thumb-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.45) 0%, rgba(0, 240, 255, 0.55) 100%);
+    --scrollbar-thumb-border: 1px solid rgba(255, 255, 255, 0.2);
+    --scrollbar-thumb-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.5);
+    --scrollbar-thumb-hover-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.65) 0%, rgba(0, 240, 255, 0.7) 100%);
+    --scrollbar-thumb-hover-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.6);
+    --scrollbar-corner-bg: rgba(16, 12, 36, 0.85);
+    --scrollbar-color-thumb: rgba(255, 0, 170, 0.6);
+    --scrollbar-color-track: rgba(16, 12, 36, 0.85);
+}
+
+

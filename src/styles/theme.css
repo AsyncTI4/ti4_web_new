@@ -6,29 +6,35 @@
 @import "./midnightviolettheme.css";
 @import "./midnightgreentheme.css";
 @import "./slatetheme.css";
+@import "./vaporwavetheme.css";
 
 :root {
-
     /* Surface.tsx */
     --surface-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
     --surface-border: 1px solid rgba(148, 163, 184, 0.24);
     --surface-corner-accent: 2px solid rgba(59, 130, 246, 0.14);
+    --surface-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
 
     /* FactionTabBar.tsx */
     --faction-tab-bar-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
     --faction-tab-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
     --faction-tab-border: 1px solid rgba(148, 163, 184, 0.225);
+    --faction-tab-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 
     --faction-tab-active-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
     --faction-tab-pinned-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.425) 0%, rgba(30, 64, 175, 0.325) 50%, rgba(8, 14, 33, 0.92) 100%);
+    --faction-tab-active-shadow: 0 2px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.2);
+    --faction-tab-pinned-shadow: 0 3px 12px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.3);
 
     /* PlayerCard.tsx */
     --player-card-box-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --player-card-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
 
     /** Sidebar **/
     --sidebar-bg: #0a111e;
     --left-sidebar-bg: rgb(10 17 30 / 91%);
     --sidebar-border: 1px solid rgba(148, 163, 184, 0.225);
+    --sidebar-blur: 4px;
 
     /** Secret Hand Popup Tab (Right Sidebar) **/
     --secret-tab-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
@@ -41,17 +47,36 @@
     /** Map **/
     --main-bg: #0a111e;
     --map-tabs-bg: linear-gradient(180deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
+    --map-tabs-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);
+    --map-tab-default-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --map-tab-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     --map-tab-hover-bg: rgba(21, 30, 46, 0.84);
     --map-tab-hover-border: rgba(59, 130, 246, 0.575);
+    --map-tab-hover-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --map-tab-hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
     --map-tab-active-bg: rgba(59, 130, 246, 0.19);
     --map-tab-active-border: rgba(59, 130, 246, 0.675);
+    --map-tab-active-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+
+    /* Map Scrollbars */
+    --scrollbar-track-bg: rgba(15, 23, 42, 0.8);
+    --scrollbar-track-border: 1px solid rgba(30, 41, 59, 0.6);
+    --scrollbar-thumb-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(37, 99, 235, 0.5) 100%);
+    --scrollbar-thumb-border: 1px solid rgba(59, 130, 246, 0.2);
+    --scrollbar-thumb-shadow: inset 0 1px 0 rgba(147, 197, 253, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --scrollbar-thumb-hover-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.6) 0%, rgba(37, 99, 235, 0.7) 100%);
+    --scrollbar-thumb-hover-shadow: inset 0 1px 0 rgba(147, 197, 253, 0.3), 0 2px 4px rgba(0, 0, 0, 0.4);
+    --scrollbar-corner-bg: rgba(15, 23, 42, 0.8);
+    --scrollbar-color-thumb: rgba(59, 130, 246, 0.5);
+    --scrollbar-color-track: rgba(15, 23, 42, 0.8);
 
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
     --header-border: 1px solid rgba(59, 130, 246, 0.19);
+    --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     /** Header Tabs  **/
     --header-tab-bg: rgba(8, 14, 33, 0.525);
@@ -70,6 +95,7 @@
     --header-tab-dropdown-bg: rgba(8, 14, 33, 0.92);
     --header-tab-dropdown-border: 1px solid rgba(59, 130, 246, 0.425);
     --header-tab-dropdown-hover-bg: rgba(37, 99, 235, 0.34);
+    --header-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 
     /** Objectives Tab **/
     --score-board-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.983) 0%, rgba(20, 29, 45, 0.955) 50%, rgba(8, 14, 33, 0.983) 100%);

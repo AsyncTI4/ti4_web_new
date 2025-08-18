@@ -1,8 +1,8 @@
 import { Box, Text, Stack, Group, Image, Divider } from "@mantine/core";
-import { units } from "@/data/units";
 import { cdnImage } from "@/data/cdnImage";
-import { findColorData } from "@/lookup/colors";
+import { getColorAlias } from "@/lookup/colors";
 import { Dice } from "./Dice";
+import { getUnitData } from "@/lookup/units";
 
 type Props = {
   unitId: string;
@@ -10,11 +10,7 @@ type Props = {
 };
 
 export function UnitDetailsCard({ unitId, color }: Props) {
-  // Look up unit data
-  const unitData = units.find(
-    (unit) => unit.id === unitId || unit.asyncId === unitId
-  );
-
+  const unitData = getUnitData(unitId);
   if (!unitData) {
     console.warn(`Unit with ID "${unitId}" not found`);
     return null;
@@ -22,15 +18,6 @@ export function UnitDetailsCard({ unitId, color }: Props) {
 
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
-
-  // Get color alias for unit image
-  const getColorAlias = (color?: string) => {
-    if (!color) return "pnk"; // default fallback
-
-    const colorData = findColorData(color);
-    return colorData?.alias || "pnk"; // fallback to pink if color not found
-  };
-
   const colorAlias = getColorAlias(color);
 
   return (

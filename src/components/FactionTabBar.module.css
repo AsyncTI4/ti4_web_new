@@ -30,7 +30,7 @@
   transition: all 0.2s ease;
   border: var(--faction-tab-border);
   background: var(--faction-tab-bg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--faction-tab-shadow);
   position: relative;
   overflow: hidden;
 }
@@ -51,12 +51,12 @@
 
 .active {
   background: var(--faction-tab-active-bg);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.2);
+  box-shadow: var(--faction-tab-active-shadow);
 }
 
 .pinned {
   background: var(--faction-tab-pinned-bg);
-  box-shadow: 0 3px 12px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.3);
+  box-shadow: var(--faction-tab-pinned-shadow);
 }
 
 .activePlayerIndicator {

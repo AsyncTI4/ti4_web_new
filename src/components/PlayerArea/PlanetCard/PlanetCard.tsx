@@ -29,6 +29,11 @@ export function PlanetCard({ planetId }: Props) {
     return null;
   }
 
+  if (!planetTile) {
+    console.warn(`Planet tile not found for ID: ${planetId}`);
+    return null;
+  }
+
   const planetType = planetData.planetType;
   const traitIconKey = getTraitIconKey(planetData.planetType!);
 
@@ -129,10 +134,7 @@ export function PlanetCard({ planetId }: Props) {
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        <PlanetDetailsCard
-          planetId={planetId}
-          attachments={resolvedAttachments}
-        />
+        <PlanetDetailsCard planetId={planetId} planetTile={planetTile} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

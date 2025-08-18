@@ -1,5 +1,7 @@
 import { colors } from "../data/colors";
 
+const FALLBACK_COLOR_ALIAS = "lgy";
+
 // Helper function to get color values, prioritizing refs over direct colors
 export const getColorValues = (
   colorRef: string | undefined,
@@ -26,10 +28,10 @@ export const findColorData = (color: string) => {
 
 // Get color alias for unit image
 export const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
+  if (!color) return FALLBACK_COLOR_ALIAS; // default fallback
 
   const colorData = findColorData(color);
-  return colorData?.alias || "pnk"; // fallback to pink if color not found
+  return colorData?.alias || FALLBACK_COLOR_ALIAS; // fallback to pink if color not found
 };
 
 export const getTextColor = (color: string) => {

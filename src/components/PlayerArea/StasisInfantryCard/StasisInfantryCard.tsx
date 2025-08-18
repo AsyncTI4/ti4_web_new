@@ -1,7 +1,7 @@
 import { Stack, Box, Group, Text, Flex } from "@mantine/core";
-import { colors } from "../../../data/colors";
 import styles from "./StasisInfantryCard.module.css";
 import { Unit } from "../../shared/Unit";
+import { getColorAlias } from "@/lookup/colors";
 
 type Props = {
   reviveCount: number;
@@ -38,17 +38,3 @@ export function StasisInfantryCard({ reviveCount, color }: Props) {
     </Stack>
   );
 }
-
-// Helper function to get color alias from color name
-const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
-
-  const colorData = colors.find(
-    (solidColor) =>
-      solidColor.name === color.toLowerCase() ||
-      solidColor.aliases.includes(color.toLowerCase()) ||
-      solidColor.alias === color.toLowerCase()
-  );
-
-  return colorData?.alias || "pnk"; // fallback to pink if not found
-};

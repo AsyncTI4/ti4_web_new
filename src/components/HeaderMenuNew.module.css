@@ -43,6 +43,7 @@
   border-radius: 6px;
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .tab:hover {
@@ -143,7 +144,7 @@
   background: var(--header-tab-dropdown-bg);
   border: var(--header-tab-dropdown-border);
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--header-dropdown-shadow);
 }
 
 .dropdownOption {
@@ -178,4 +179,63 @@
   .tabsList {
     padding: 3px;
   }
+}
+
+/* Vaporwave (TRON) decorations, scoped to active theme */
+:global(.theme-vaporwavetheme) .newHeaderGroup {
+  position: relative;
+}
+
+:global(.theme-vaporwavetheme) .newHeaderGroup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-bottom: 1px solid rgba(255, 0, 170, 0.35);
+  box-shadow: 0 10px 32px rgba(255, 0, 170, 0.08), 0 8px 26px rgba(0, 240, 255, 0.06);
+}
+
+:global(.theme-vaporwavetheme) .newHeaderGroup::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 0, 170, 0.9), rgba(0, 240, 255, 0.9));
+  box-shadow: 0 0 10px rgba(255, 0, 170, 0.4), 0 0 12px rgba(0, 240, 255, 0.3);
+  opacity: 0.6;
+}
+
+:global(.theme-vaporwavetheme) .tab {
+  text-shadow: 0 0 6px rgba(255, 0, 170, 0.4), 0 0 10px rgba(0, 240, 255, 0.25);
+}
+
+:global(.theme-vaporwavetheme) .tab::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 0, 170, 0.95), rgba(0, 240, 255, 0.95));
+  transform: scaleX(0.5);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+:global(.theme-vaporwavetheme) .tab:hover::after,
+:global(.theme-vaporwavetheme) .tab[data-active="true"]::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+:global(.theme-vaporwavetheme) .tab:hover,
+:global(.theme-vaporwavetheme) .tab[data-active="true"] {
+  animation: vw-soft-pulse 7s ease-in-out infinite alternate;
+}
+
+@keyframes vw-soft-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 0, 170, 0)) drop-shadow(0 0 0 rgba(0, 240, 255, 0)); }
+  50% { filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.35)) drop-shadow(0 0 6px rgba(0, 240, 255, 0.25)); }
 }

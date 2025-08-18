@@ -1,8 +1,8 @@
 import { Group, Text, Stack, Box, Image, SimpleGrid } from "@mantine/core";
+import softStyles from "./PlayerCardSidebar.module.css";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
-import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { PlanetAbilityCard } from "./PlayerArea/PlanetAbilityCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
@@ -210,56 +210,8 @@ export default function PlayerCardSidebar(props: Props) {
         </Group>
       </Group>
 
-      <Group wrap="initial" gap={2} my="xs">
-        <Group
-          gap={4}
-          wrap="nowrap"
-          style={{
-            overflow: "hidden",
-            minWidth: "50%",
-            flex: 1,
-            flexShrink: 0,
-          }}
-        >
-          {abilities?.map((abilityId, index) => {
-            const abilityData = getAbility(abilityId);
-            if (!abilityData) {
-              console.log("Could not find ability", abilityId);
-            }
-            if (!abilityData) return null;
-
-            return (
-              <Box
-                key={index}
-                style={{
-                  flexShrink: 1,
-                  minWidth: 0,
-                  overflow: "hidden",
-                }}
-              >
-                <Ability id={abilityId} />
-              </Box>
-            );
-          })}
-        </Group>
-
-        {notResearchedFactionTechs?.length > 0 && (
-          <Group gap={2} style={{ flexShrink: 1 }}>
-            {notResearchedFactionTechs.map((techId, index) => (
-              <Box
-                key={index}
-                style={{
-                  filter: "grayscale(0.5)",
-                }}
-              >
-                <Tech techId={techId} />
-              </Box>
-            ))}
-          </Group>
-        )}
-      </Group>
-
-      <Stack gap="md">
+      {/* Abilities + Unresearched Faction Tech moved to appear right above Tech section */}
+      <Stack gap={0}>
         <SimpleGrid cols={2} spacing="xs">
           <Stack gap={8}>
             <PlayerCardCounts
@@ -286,23 +238,72 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </SimpleGrid>
 
-        <Surface pattern="grid" cornerAccents={true} p="md">
+        <Box className={softStyles.softDivider} mt="xs" />
+
+        {/* Abilities + Unresearched Faction Tech (moved above Tech) */}
+        <Group wrap="initial" gap={2} my="xs" mt="xs">
+          <Group
+            gap={4}
+            wrap="nowrap"
+            style={{
+              overflow: "hidden",
+              minWidth: "50%",
+              flex: 1,
+              flexShrink: 0,
+            }}
+          >
+            {abilities?.map((abilityId, index) => {
+              const abilityData = getAbility(abilityId);
+              if (!abilityData) {
+                console.log("Could not find ability", abilityId);
+              }
+              if (!abilityData) return null;
+
+              return (
+                <Box
+                  key={index}
+                  style={{
+                    flexShrink: 1,
+                    minWidth: 0,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Ability id={abilityId} />
+                </Box>
+              );
+            })}
+          </Group>
+
+          {notResearchedFactionTechs?.length > 0 && (
+            <Group gap={2} style={{ flexShrink: 1 }}>
+              {notResearchedFactionTechs.map((techId, index) => (
+                <Box
+                  key={index}
+                  style={{
+                    filter: "grayscale(0.5)",
+                  }}
+                >
+                  <Tech techId={techId} />
+                </Box>
+              ))}
+            </Group>
+          )}
+        </Group>
+
+        <Box className={softStyles.softDivider} />
+
+        <Box p="md">
           <Stack gap="xs">
             <DynamicTechGrid
               renderTechColumn={renderTechColumn}
               exhaustedTechs={props.playerData.exhaustedTechs}
             />
           </Stack>
-        </Surface>
+        </Box>
 
-        <Surface
-          h="100%"
-          p="md"
-          style={{
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
-          }}
-        >
+        <Box className={softStyles.softDivider} />
+
+        <Box p="md">
           <SimpleGrid h="100%" cols={6} spacing="8px">
             {unitsOwned.map((unitId, index) => {
               const asyncId = getUnitAsyncId(unitId);
@@ -320,7 +321,6 @@ export default function PlayerCardSidebar(props: Props) {
               );
             })}
 
-            {/* Command Token Card */}
             {props.playerData.ccReinf !== undefined && (
               <CommandTokenCard
                 color={color}
@@ -330,34 +330,28 @@ export default function PlayerCardSidebar(props: Props) {
               />
             )}
 
-            {/* Add StasisInfantryCard if there are any stasisInfantry */}
             {stasisInfantry > 0 && (
               <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
             )}
           </SimpleGrid>
-        </Surface>
+        </Box>
 
         {/* Resources and Planets Section */}
         <Stack gap="xs">
-          <Surface p="md" pattern="circle">
-            <Stack gap="sm">
+          <Box className={softStyles.softDividerTight} />
+          <Box px="sm">
+            <Stack gap={6}>
               <ResourceInfluenceCompact planetEconomics={planetEconomics} />
               {props.playerData.debtTokens &&
                 Object.keys(props.playerData.debtTokens).length > 0 && (
                   <DebtTokens debts={props.playerData.debtTokens} />
                 )}
             </Stack>
-          </Surface>
+          </Box>
 
-          <Surface
-            p="md"
-            pattern="circle"
-            cornerAccents={true}
-            style={{
-              alignItems: "flex-start",
-            }}
-          >
-            <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
+          <Box className={softStyles.softDividerTight} />
+          <Box p="sm" style={{ alignItems: "flex-start" }}>
+            <Group gap={6} pos="relative" style={{ zIndex: 1 }}>
               {planets.map((planetId, index) => {
                 const planetData = getPlanetData(planetId);
                 const hasLegendaryAbility =
@@ -379,7 +373,7 @@ export default function PlayerCardSidebar(props: Props) {
                 );
               })}
             </Group>
-          </Surface>
+          </Box>
           {nombox !== undefined && Object.keys(nombox).length > 0 && (
             <Box mt="md">
               <Nombox capturedUnits={nombox || {}} />

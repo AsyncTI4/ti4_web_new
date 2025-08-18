@@ -11,7 +11,7 @@
   max-width: 100%;
   background: var(--player-card-box-bg);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
+  box-shadow: var(--player-card-box-shadow);
 }
 
 .innerGlow {
@@ -39,4 +39,39 @@
   pointer-events: none;
   overflow: hidden;
   filter: grayscale(0.2);
+}
+
+/* Vaporwave (TRON) decorations, scoped to active theme */
+:global(.theme-vaporwavetheme) .paper {
+  position: relative;
+}
+
+:global(.theme-vaporwavetheme) .paper::before,
+:global(.theme-vaporwavetheme) .paper::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 0, 170, 0.85), rgba(0, 240, 255, 0.85));
+  filter: drop-shadow(0 0 8px rgba(255, 0, 170, 0.5)) drop-shadow(0 0 10px rgba(0, 240, 255, 0.4));
+  opacity: 0.55;
+}
+
+:global(.theme-vaporwavetheme) .paper::before { top: 6px; }
+:global(.theme-vaporwavetheme) .paper::after { bottom: 6px; }
+
+:global(.theme-vaporwavetheme) .innerGlow {
+  background: radial-gradient(ellipse at center, rgba(255, 0, 170, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(0, 240, 255, 0.06) 0%, transparent 50%);
+}
+
+:global(.theme-vaporwavetheme) .wrapper {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 16px 40px rgba(255, 0, 170, 0.12), 0 10px 28px rgba(0, 240, 255, 0.1);
+  animation: vw-glow-sweep 14s ease-in-out infinite alternate;
+}
+
+@keyframes vw-glow-sweep {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 28px rgba(255, 0, 170, 0.09), 0 8px 20px rgba(0, 240, 255, 0.07); }
+  50% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 40px rgba(255, 0, 170, 0.14), 0 12px 30px rgba(0, 240, 255, 0.1); }
 }

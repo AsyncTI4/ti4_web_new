@@ -1,8 +1,8 @@
 import { Image } from "@mantine/core";
-import { colors } from "../../../data/colors";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { BaseCard } from "./BaseCard";
+import { getColorAlias } from "@/lookup/colors";
 
 type Props = {
   color?: string;
@@ -55,17 +55,3 @@ export function CommandTokenCard({
     </BaseCard>
   );
 }
-
-// Helper function to get color alias from color name
-const getColorAlias = (color?: string) => {
-  if (!color) return "pnk"; // default fallback
-
-  const colorData = colors.find(
-    (solidColor) =>
-      solidColor.name === color.toLowerCase() ||
-      solidColor.aliases.includes(color.toLowerCase()) ||
-      solidColor.alias === color.toLowerCase()
-  );
-
-  return colorData?.alias || "pnk"; // fallback to pink if not found
-};

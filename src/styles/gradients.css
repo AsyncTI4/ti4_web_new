@@ -207,6 +207,19 @@
   --gradient-color: var(--color-grey);
 }
 
+/* Slightly stronger red for better contrast on secret objectives */
+.gradient-red.gradient-border {
+  border-color: rgba(var(--color-red), 0.26);
+}
+
+.gradient-red.gradient-shimmer {
+  background: rgba(var(--color-red), 0.1);
+}
+
+.shimmer-container.gradient-red::before {
+  background: rgba(var(--color-red), 0.06);
+}
+
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {
   background: rgba(var(--color-blue), 0.025);

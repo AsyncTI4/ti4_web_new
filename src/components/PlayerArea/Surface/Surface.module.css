@@ -6,7 +6,7 @@
   border: var(--surface-border);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1);
+  box-shadow: var(--surface-shadow);
 }
 
 .label {
@@ -80,3 +80,35 @@
   border-top: none;
   border-radius: 0 0 4px 0;
 }
+
+/* Vaporwave (TRON) decorations, scoped to active theme */
+:global(.theme-vaporwavetheme) .surface {
+  isolation: isolate;
+}
+
+:global(.theme-vaporwavetheme) .surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 0, 170, 0.35), inset 0 0 24px rgba(0, 240, 255, 0.12);
+  border-radius: inherit;
+  opacity: 0.6;
+  animation: vw-border-soft 7s ease-in-out infinite;
+}
+
+:global(.theme-vaporwavetheme) .surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: 0 0 18px rgba(255, 0, 170, 0.18), 0 0 22px rgba(0, 240, 255, 0.16);
+  opacity: 0.35;
+}
+
+:global(.theme-vaporwavetheme) .label {
+  text-shadow: 0 0 6px rgba(255, 0, 170, 0.35), 0 0 10px rgba(0, 240, 255, 0.25);
+  letter-spacing: 0.06em;
+}
+
