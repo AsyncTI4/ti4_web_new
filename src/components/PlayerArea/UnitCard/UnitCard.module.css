@@ -1,6 +1,6 @@
 /* Unit card styles */
 .unitCard {
-  border-radius: 8px;
+  border-radius: 2px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -12,18 +12,17 @@
 
 .animated:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.1);
 }
 
 .upgraded {
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.6);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(245, 255, 199, 0.12);
+  border: 1px solid rgba(245, 255, 199, 0.12);
 }
 
 .animated.upgraded:hover {
-  background: rgba(59, 130, 246, 0.25);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4), 0 0 12px rgba(147, 197, 253, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(245, 255, 199, 0.12);
+  box-shadow: 0 8px 24px rgba(245, 255, 199, 0.2), 0 0 12px rgba(245, 255, 199, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .standard {
@@ -47,11 +46,11 @@
 
 
 /* New utility classes */
-.cardStack {
-  padding: 6px 4px;
+.cardStack {  
+  padding: 6px 14px;
   gap: 4px;
   justify-content: space-between;
-  min-height: 64px;
+  min-height: 2px;
   box-sizing: border-box;
 }
 
@@ -91,14 +90,14 @@
 }
 
 .factionIcon {
-  width: 24px;
-  height: 24px;
+  width: 12px;
+  height: 12px;
 }
 
 .imageContainer {
   justify-content: center;
   align-items: center;
-  min-height: 40px;
+  min-height: 30px;
 }
 
 .unitImage {
@@ -107,7 +106,7 @@
 }
 
 .unitImageCompact {
-  height: 28px;
+  height: 12px;
   width: auto;
 }
 

@@ -1,13 +1,9 @@
 .container {
-  padding: var(--mantine-spacing-xs);
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.12) 0%, rgba(249, 115, 22, 0.08) 50%, rgba(251, 146, 60, 0.12) 100%);
-  border: 1px solid rgba(251, 146, 60, 0.2);
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--mantine-spacing-xs);
 }
 
 .contentGroup {
@@ -24,12 +20,7 @@
 
 .tokensContainer {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--mantine-spacing-md);
   align-items: flex-start;
 }
 
-
-.tokenWrapper {
-  transform: rotate(90deg);
-}

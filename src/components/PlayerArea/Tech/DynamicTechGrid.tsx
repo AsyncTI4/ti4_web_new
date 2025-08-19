@@ -39,7 +39,7 @@ export function DynamicTechGrid({
           <Grid.Col
             key={category.type}
             span={{
-              base: 12,
+              base: 6,
               md: 6,
             }}
           >

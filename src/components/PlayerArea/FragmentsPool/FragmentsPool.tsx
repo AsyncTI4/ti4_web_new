@@ -18,30 +18,14 @@ export function FragmentsPool({ fragments }: Props) {
   return (
     <Box flex={1}>
       <Stack gap={4} align="center" h="100%" flex={1}>
-        <Text
-          ff="heading"
-          size="xs"
-          fw={600}
-          c="gray.4"
-          style={{
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-            fontSize: "9px",
-            opacity: 0.8,
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-          }}
-        >
-          Frags
-        </Text>
-        <Surface
+        <Box
           p="sm"
           pattern="grid"
           style={{
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
             display: "flex",
             height: "100%",
             width: "100%",
+            borderBottom: "1px dashed rgba(255, 255, 255, 0.2)"
           }}
         >
           <Group gap="xs" justify="center" w="100%">
@@ -62,13 +46,14 @@ export function FragmentsPool({ fragments }: Props) {
                 style={{
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                   opacity: 0.5,
+                  fontStyle: "italic"
                 }}
               >
-                No fragments
+                No Fragments
               </Text>
             )}
           </Group>
-        </Surface>
+        </Box>
       </Stack>
     </Box>
   );

@@ -24,7 +24,7 @@ export function Cardback({
   };
 
   return (
-    <Box pos="relative" {...boxProps}>
+    <Box pos="relative" maw={widthMap[size]} {...boxProps}>
       <Box
         style={{
           width: widthMap[size],

@@ -43,17 +43,6 @@ export function ScoredSecret({
             className={`${colorClasses.iconFilter} ${styles.icon}`}
           />
           <Text size="xs" fw={700} c="white" className={styles.textContainer}>
-            {cardId && (
-              <Text
-                span
-                size="xs"
-                fw={600}
-                c="gray.4"
-                className={styles.scoreText}
-              >
-                ({cardId}){" "}
-              </Text>
-            )}
             {secretName}
           </Text>
         </Box>

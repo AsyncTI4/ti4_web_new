@@ -1,4 +1,4 @@
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Group, SimpleGrid, Text } from "@mantine/core";
 import { StrategyCard } from "../../PlayerArea/StrategyCard";
 import { StrategyCard as StrategyCardType } from "../../../data/types";
 import { SC_COLORS, SC_NAMES } from "../../../data/strategyCardColors";
@@ -34,15 +34,17 @@ function UnpickedSCs({ strategyCards }: Props) {
     <Box>
       <Text className={styles.sectionTitle}>Unpicked SCs</Text>
       <Group gap="md" wrap="wrap">
-        {unpickedCards.map((card, index) => (
-          <StrategyCard
-            key={index}
-            number={card.number}
-            name={card.name}
-            color={card.color}
-            tradeGoods={card.tradeGoods}
-          />
-        ))}
+        <SimpleGrid cols={1} spacing="xs">
+          {unpickedCards.map((card, index) => (
+            <StrategyCard
+              key={index}
+              number={card.number}
+              name={card.name}
+              color={card.color}
+              tradeGoods={card.tradeGoods}
+            />
+          ))}
+        </SimpleGrid>
       </Group>
     </Box>
   );

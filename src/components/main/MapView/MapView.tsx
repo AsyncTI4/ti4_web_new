@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Box, Button } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
 import { LeftSidebar } from "@/components/main/LeftSidebar";
-import { ZoomControls } from "@/components/ZoomControls";
 import { DragHandle } from "@/components/DragHandle";
 import { PanelToggleButton } from "@/components/PanelToggleButton";
 import { RightSidebar } from "@/components/main/RightSidebar";
@@ -13,12 +12,11 @@ import { MapPlanetDetailsCard } from "@/components/main/MapPlanetDetailsCard";
 import { MapUnitDetailsCard } from "@/components/main/MapUnitDetailsCard";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
-import { useZoom } from "@/hooks/useZoom";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
-import { useSettingsStore } from "@/utils/appStore";
+import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import { ReadyState } from "react-use-websocket";
 // Local constant to avoid circular imports
 const MAP_PADDING = 200;
@@ -74,6 +72,9 @@ export function MapView({ gameId }: Props) {
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
     useSidebarDragHandle(30);
 
+  const zoom = useAppStore((state) => state.zoomLevel);
+  const handleZoomIn = useAppStore((state) => state.handleZoomIn);
+  const handleZoomOut = useAppStore((state) => state.handleZoomOut);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
@@ -90,14 +91,6 @@ export function MapView({ gameId }: Props) {
     distanceMode: settings.distanceMode,
     mapTiles: gameData?.mapTiles || [],
   });
-
-  const {
-    zoom,
-    handleZoomIn,
-    handleZoomOut,
-    handleZoomReset,
-    handleZoomScreenSize,
-  } = useZoom(undefined, undefined);
 
   const { mapContainerRef } = useMapScrollPosition({
     zoom,
@@ -158,14 +151,7 @@ export function MapView({ gameId }: Props) {
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >
-          <ZoomControls
-            zoom={zoom}
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onZoomReset={handleZoomReset}
-            onZoomScreenSize={handleZoomScreenSize}
-            zoomClass=""
-          />
+          <ZoomControls />
         </div>
 
         {/* Tile-based rendering */}
@@ -201,8 +187,8 @@ export function MapView({ gameId }: Props) {
                     );
                   }
                 )}
-              {/* Render tiles */}
 
+              {/* Render tiles */}
               {gameData.mapTiles?.map((tile, index) => {
                 return (
                   <MapTile
@@ -225,16 +211,13 @@ export function MapView({ gameId }: Props) {
 
             <PathVisualization
               pathResult={pathResult}
-              tilePositions={gameData.calculatedTilePositions}
-              zoom={zoom}
               activePathIndex={activePathIndex}
               onPathIndexChange={handlePathIndexChange}
-              mapPadding={MAP_PADDING}
             />
 
-            <MapUnitDetailsCard tooltipUnit={tooltipUnit} zoom={zoom} />
+            <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
 
-            <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} zoom={zoom} />
+            <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
           </>
         )}
 
@@ -291,4 +274,5 @@ export function MapView({ gameId }: Props) {
 }
 
 // Local import to avoid circular dependency issues
-import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
+import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";import ZoomControls from "@/components/ZoomControls";
+

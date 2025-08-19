@@ -1,11 +1,11 @@
-import { Box, Text, Group } from "@mantine/core";
+import { Box, Text, Group, SimpleGrid } from "@mantine/core";
 import { Cardback } from "../../PlayerArea/Cardback";
 import { cdnImage } from "../../../data/cdnImage";
 import { CardPoolData, PlayerData } from "../../../data/types";
 import styles from "./CardPool.module.css";
-import { ExplorationCardBack } from "../ExplorationCardBack";
-import { SecretDeckCardBack } from "../SecretDeckCardBack";
-import { RelicDeckCardBack } from "../RelicDeckCardBack";
+import { ExplorationCardBack } from "../../Objectives/ExplorationCardBack";
+import { SecretDeckCardBack } from "../../Objectives/SecretDeckCardBack";
+import { RelicDeckCardBack } from "../../Objectives/RelicDeckCardBack";
 
 type Props = {
   cardPool?: CardPoolData;
@@ -28,8 +28,7 @@ function CardPool({ cardPool, playerData }: Props) {
     <Box>
       <Text className={styles.sectionTitle}>Card Pool</Text>
 
-      {/* All Card Types in One Wrapping Row */}
-      <Group gap={6}>
+        <SimpleGrid cols={4} spacing="xs">
         {[
           {
             src: cdnImage("/player_area/cardback_action.jpg"),
@@ -89,6 +88,9 @@ function CardPool({ cardPool, playerData }: Props) {
             discard={cardPool.frontierExploreDiscard}
           ></ExplorationCardBack>,
         ]}
+        </SimpleGrid>
+      {/* All Card Types in One Wrapping Row */}
+      <Group gap={6}>
       </Group>
     </Box>
   );

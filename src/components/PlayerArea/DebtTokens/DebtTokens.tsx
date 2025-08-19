@@ -1,4 +1,4 @@
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Flex, Group, Stack, Text } from "@mantine/core";
 import { SmallControlToken } from "../../Map/ControlToken";
 import { getColorAlias } from "../../../lookup/colors";
 import styles from "./DebtTokens.module.css";
@@ -14,42 +14,24 @@ export function DebtTokens({ debts }: Props) {
   const factionColorMap = useFactionColors();
 
   return (
-    <Box className={styles.container}>
-      <Text size="xs" fw={600} c="orange.4" className={styles.debtLabel}>
-        Debt
-      </Text>
-
-      <div className={styles.tokensContainer}>
+    <Flex direction={"column"} className={styles.container}>
         {debtEntries.map(([colorName, amount]) => {
           const factionName = factionColorMap?.[colorName]?.faction;
           const colorAlias = getColorAlias(colorName);
           return (
-            <Group
+            <Flex
               key={colorName}
-              pos="relative"
-              style={{ height: 24, width: amount * 10 }}
             >
-              {Array(amount)
-                .fill(null)
-                .map((_, index) => (
-                  <Box
-                    key={`${colorName}-${index}`}
-                    className={styles.tokenWrapper}
-                    style={{
-                      left: index * 10,
-                      position: "absolute",
-                    }}
-                  >
-                    <SmallControlToken
-                      colorAlias={colorAlias}
-                      faction={factionName}
-                    />
-                  </Box>
-                ))}
-            </Group>
+              <SmallControlToken
+                colorAlias={colorAlias}
+                faction={factionName}
+              />
+              <Text>
+                x{amount}
+              </Text>
+            </Flex>
           );
         })}
-      </div>
-    </Box>
+    </Flex>
   );
 }

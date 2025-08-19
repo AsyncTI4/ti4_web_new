@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 export type TooltipUnit = {
   unitId?: string;
@@ -52,9 +53,25 @@ export function saveSettingsToStorage(settings: Settings) {
   }
 }
 
+// Zoom configuration from ScrollMap
+const defaultZoomIndex = 2;
+const zoomLevels = [
+  0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 0.85, 0.9, 1, 1.2, 1.4, 1.6, 1.8, 2,
+];
+
+function getInitialZoomIndex() {
+  const savedZoomIndex = localStorage.getItem("zoomIndex");
+  if (savedZoomIndex !== null) {
+    return parseInt(savedZoomIndex, 10);
+  }
+  return isMobileDevice() ? 0 : defaultZoomIndex;
+}
+
 type AppStore = {
   hoveredTile: string;
   zoomLevel: number;
+  overlayZoom: number;
+  zoomFitToScreen: boolean;
   tooltipUnit: TooltipUnit | null;
   tooltipPlanet: TooltipPlanet | null;
   selectedArea: string | null;
@@ -67,74 +84,143 @@ type AppStore = {
   setActiveUnit: (unit: string) => void;
   setTooltipUnit: (unit: TooltipUnit | null) => void;
   setTooltipPlanet: (planet: TooltipPlanet | null) => void;
+
+  handleZoomIn: () => void;
+  handleZoomOut: () => void;
+  handleZoomReset: () => void;
+  handleZoomScreenSize: () => void;
 };
 
-export const useAppStore = create<AppStore>((set) => ({
-  hoveredTile: "",
-  zoomLevel: 100,
-  selectedArea: "",
-  activeArea: "",
-  selectedFacion: "",
-  activeUnit: "",
-  tooltipUnit: {
-    faction: "",
-    coords: {
-      x: 0,
-      y: 0,
-    },
-  },
-  tooltipPlanet: {
-    systemId: "",
-    planetId: "",
-    coords: { x: 0, y: 0 },
-  },
+export const useAppStore = create<AppStore>((set) => {
+  let zoomIndex = getInitialZoomIndex();
+  let zoomFitToScreen = localStorage.getItem("zoomFitToScreen") === "true";
 
-  setHoveredTile: (id: string) =>
-    set((state) => ({
-      ...state,
-      hoveredTile: id,
-    })),
-  clearHoveredTile: () =>
-    set((state) => ({
-      ...state,
-      hoveredTile: "",
-    })),
-  setZoomLevel: (level: number) =>
-    set((state) => ({
-      ...state,
-      zoomLevel: level,
-    })),
-  setSelectedArea: (area: string) =>
-    set((state) => ({
-      ...state,
-      selectedArea: area,
-    })),
-  setActiveArea: (area: string) =>
-    set((state) => ({
-      ...state,
-      activeArea: area,
-    })),
-  setSelectedFaction: (faction: string) =>
-    set((state) => ({
-      ...state,
-      selectedFacion: faction,
-    })),
-  setActiveUnit: (unit: string) =>
-    set((state) => ({
-      ...state,
-      activeUnit: unit,
-    })),
-  setTooltipUnit: (unit: TooltipUnit | null) =>
-    set((state) => ({
-      ...state,
-      tooltipUnit: unit,
-    })),
-  setTooltipPlanet: (planet: TooltipPlanet | null) =>
-    set((state) => ({
-      ...state,
-      tooltipPlanet: planet,
-    })),
-}));
+  const overlayZoom = (imageNaturalWidth: number | undefined, containerWidth: number | undefined) => {
+    return imageNaturalWidth && containerWidth
+      ? containerWidth / imageNaturalWidth
+      : 1;
+    }
+  const zoom = zoomLevels[zoomIndex];
+
+  const changeZoomIndex = (val: number) => {
+    zoomIndex = val;
+    localStorage.setItem("zoomIndex", val.toString());
+  };
+
+  const changeZoomFitToScreen = (val: boolean) => {
+    zoomFitToScreen = val;
+    localStorage.setItem("zoomFitToScreen", val.toString());
+  };
+
+  return {
+    hoveredTile: "",
+    zoomLevel: 100,
+    overlayZoom: zoomFitToScreen ? 1 : zoom,
+    zoomFitToScreen,
+    selectedArea: "",
+    activeArea: "",
+    selectedFacion: "",
+    activeUnit: "",
+    tooltipUnit: {
+      faction: "",
+      coords: {
+        x: 0,
+        y: 0,
+      },
+    },
+    tooltipPlanet: {
+      systemId: "",
+      planetId: "",
+      coords: { x: 0, y: 0 },
+    },
+
+    setHoveredTile: (id: string) =>
+      set((state) => ({
+        ...state,
+        hoveredTile: id,
+      })),
+    clearHoveredTile: () =>
+      set((state) => ({
+        ...state,
+        hoveredTile: "",
+      })),
+    setZoomLevel: (level: number) =>
+      set((state) => ({
+        ...state,
+        zoomLevel: level,
+      })),
+    setSelectedArea: (area: string) =>
+      set((state) => ({
+        ...state,
+        selectedArea: area,
+      })),
+    setActiveArea: (area: string) =>
+      set((state) => ({
+        ...state,
+        activeArea: area,
+      })),
+    setSelectedFaction: (faction: string) =>
+      set((state) => ({
+        ...state,
+        selectedFacion: faction,
+      })),
+    setActiveUnit: (unit: string) =>
+      set((state) => ({
+        ...state,
+        activeUnit: unit,
+      })),
+    setTooltipUnit: (unit: TooltipUnit | null) =>
+      set((state) => ({
+        ...state,
+        tooltipUnit: unit,
+      })),
+    setTooltipPlanet: (planet: TooltipPlanet | null) =>
+      set((state) => ({
+        ...state,
+        tooltipPlanet: planet,
+      })),
+
+    handleZoomIn: () => {
+        const newIndex = Math.min(zoomIndex + 1, zoomLevels.length - 1);
+        changeZoomIndex(newIndex);
+        changeZoomFitToScreen(false);
+        set((state) => ({
+          ...state,
+          zoomLevel: zoomLevels[newIndex],
+          zoomFitToScreen: false,
+        }));
+        return newIndex;
+      },
+    handleZoomOut: () => {
+        const newIndex = Math.max(zoomIndex - 1, 0);
+        changeZoomIndex(newIndex);
+        changeZoomFitToScreen(false);
+        set((state) => ({
+          ...state,
+          zoomLevel: zoomLevels[newIndex],
+          zoomFitToScreen: false,
+        }));
+        return newIndex;
+      },
+    handleZoomReset: () => {
+        const resetIndex = isMobileDevice() ? 0 : defaultZoomIndex;
+        changeZoomIndex(resetIndex);
+        changeZoomFitToScreen(false);
+        set((state) => ({
+          ...state,
+          zoomLevel: zoomLevels[resetIndex],
+          zoomFitToScreen: false,
+        }));
+      },
+    handleZoomScreenSize: () => {
+        changeZoomFitToScreen(!zoomFitToScreen);
+        set((state) => ({
+          ...state,
+          zoomFitToScreen: !zoomFitToScreen,
+        }));
+      },
+    };
+});
 
 export type Settings = {
   isFirefox: boolean;
