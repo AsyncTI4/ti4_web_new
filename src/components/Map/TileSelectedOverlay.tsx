@@ -4,6 +4,8 @@ type TileSelectedOverlayProps = {
   isSelected: boolean;
   isHovered?: boolean;
   isDistanceMode?: boolean;
+  variant?: "blue" | "origin";
+  alwaysVisible?: boolean;
 };
 
 const TILE_WIDTH = 345;
@@ -13,9 +15,12 @@ export const TileSelectedOverlay = ({
   isSelected,
   isHovered = false,
   isDistanceMode = false,
+  variant = "blue",
+  alwaysVisible = false,
 }: TileSelectedOverlayProps) => {
   // Show overlay if tile is selected, OR if it's hovered during distance mode
-  const shouldShowOverlay = isSelected || (isHovered && isDistanceMode);
+  const shouldShowOverlay =
+    alwaysVisible || isSelected || (isHovered && isDistanceMode);
 
   if (!shouldShowOverlay) return null;
 
@@ -30,9 +35,18 @@ export const TileSelectedOverlay = ({
     Z
   `;
 
-  // Use different colors/opacity for selected vs hovered
-  const fillColor = "var(--mantine-color-blue-6)";
-  const opacity = isSelected ? 0.3 : 0.5;
+  // Use different colors/opacity for selected vs hovered and variant
+  const isOriginVariant = variant === "origin";
+  const fillColor = isOriginVariant
+    ? // orange variants using mantine palette for better contrast
+      isSelected
+      ? "var(--mantine-color-orange-6)"
+      : "var(--mantine-color-orange-5)"
+    : // blue default
+      isSelected
+      ? "rgba(59, 130, 246, 0.85)"
+      : "rgba(59, 130, 246, 0.6)";
+  const opacity = isSelected ? 0.35 : 0.25;
 
   return (
     <svg

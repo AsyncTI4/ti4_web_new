@@ -26,6 +26,21 @@ export const getUnitDataByAsyncId = (asyncId: string) => {
   return unitsWithAsyncId?.[0]; // Return first match for backwards compatibility
 };
 
+// Prefer generic (non-faction) unit data for labels when multiple units share the same asyncId
+export const getGenericUnitDataByAsyncId = (asyncId: string) => {
+  const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId) || [];
+  if (unitsWithAsyncId.length === 0) return undefined;
+  // Prefer base (non-upgraded) entries
+  const baseUnits = unitsWithAsyncId.filter((u) => !u.upgradesFromUnitId);
+  // Among base, prefer generic (non-faction) first
+  const genericBase = baseUnits.find((u) => !u.faction);
+  if (genericBase) return genericBase;
+  if (baseUnits.length > 0) return baseUnits[0];
+  // Fallbacks if no base found
+  const genericAny = unitsWithAsyncId.find((u) => !u.faction);
+  return genericAny || unitsWithAsyncId[0];
+};
+
 export const isUnitUpgraded = (unitId: string) => {
   const unitData = unitsMap.get(unitId);
   return unitData?.upgradesFromUnitId !== undefined;

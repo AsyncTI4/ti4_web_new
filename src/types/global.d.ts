@@ -9,8 +9,6 @@
 //   }
 // }
 
-
-
 // Common types that might be used across components
 export interface Player {
   id: string;
@@ -28,3 +26,35 @@ export interface Game {
 
 // Add more shared types as needed
 export {};
+
+// Allow importing JSX modules without types
+declare module "@/components/DiscordLogin" {
+  export function getDiscordOauthUrl(): string;
+  export const DiscordLogin: any;
+}
+declare module "@/components/DiscordLogin.jsx" {
+  export function getDiscordOauthUrl(): string;
+  export const DiscordLogin: any;
+}
+declare module "@/components/ZoomControls" {
+  import * as React from "react";
+  export function ZoomControls(props: {
+    zoom: number;
+    onZoomIn: () => void;
+    onZoomOut: () => void;
+    onZoomReset: () => void;
+    onZoomScreenSize: () => void;
+    zoomClass?: string;
+  }): React.ReactElement;
+}
+declare module "@/components/ZoomControls.jsx" {
+  import * as React from "react";
+  export function ZoomControls(props: {
+    zoom: number;
+    onZoomIn: () => void;
+    onZoomOut: () => void;
+    onZoomReset: () => void;
+    onZoomScreenSize: () => void;
+    zoomClass?: string;
+  }): React.ReactElement;
+}

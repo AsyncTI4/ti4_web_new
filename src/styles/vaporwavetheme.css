@@ -48,7 +48,7 @@
     --map-tabs-bg: linear-gradient(180deg, rgba(22, 10, 36, 0.85) 0%, rgba(10, 16, 38, 0.8) 100%);
     --map-tabs-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 
-    --map-tab-border: 1px solid rgba(255, 255, 255, 0.22);
+    --map-tab-border: 1px solid rgba(255, 0, 170, 0.22);
     --map-tab-hover-bg: rgba(255, 0, 170, 0.18);
     --map-tab-hover-border: rgba(255, 0, 170, 0.5);
     --map-tab-default-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
@@ -137,6 +137,13 @@
     --scrollbar-corner-bg: rgba(16, 12, 36, 0.85);
     --scrollbar-color-thumb: rgba(255, 0, 170, 0.6);
     --scrollbar-color-track: rgba(16, 12, 36, 0.85);
+
+    /* Movement Banner */
+    --movement-banner-bg: linear-gradient(135deg, rgba(22, 10, 36, 1) 0%, rgba(10, 16, 38, 1) 100%);
+    --movement-banner-border: 2px solid rgba(0, 240, 255, 0.6);
+    --movement-banner-glow: rgba(255, 0, 170, 0.6);
+    --movement-banner-title-color: rgba(255, 255, 255, 0.98);
+    --movement-banner-accent-color: rgba(255, 0, 170, 0.95);
 }
 
 

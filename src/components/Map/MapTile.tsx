@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tile } from "./Tile";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import classes from "./MapTile.module.css";
@@ -20,7 +20,7 @@ type Props = {
   mapTile: MapTileType;
   style?: React.CSSProperties;
   className?: string;
-  onTileSelect?: (position: string) => void;
+  onTileSelect?: (position: string, systemId: string) => void;
   onTileHover?: (position: string, isHovered: boolean) => void;
   hoveredTilePosition?: string | null;
   onUnitMouseOver?: (
@@ -36,6 +36,10 @@ type Props = {
   selectedTiles?: string[];
   tileDistance?: number | null;
   isOnPath?: boolean; // Whether this tile is on any of the calculated paths
+  isTargetSelected?: boolean;
+  isMovingMode?: boolean; // Movement mode active globally
+  isOrigin?: boolean; // This tile is an origin in displacement draft
+  embedded?: boolean; // Render as self-contained preview without map offsets
 };
 
 export const MapTile = React.memo<Props>(
@@ -53,8 +57,13 @@ export const MapTile = React.memo<Props>(
     onPlanetMouseLeave,
     selectedTiles,
     isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
+    isTargetSelected = false,
+    isMovingMode = false,
+    isOrigin = false,
+    embedded = false,
   }) => {
     const gameData = useGameData();
+    const [hoveredLocal, setHoveredLocal] = useState(false);
 
     const ringPosition = mapTile.position;
     const systemId = mapTile.systemId;
@@ -89,10 +98,13 @@ export const MapTile = React.memo<Props>(
           isSelected ? classes.selected : ""
         } ${isHovered ? classes.hovered : ""} ${
           isDistanceSelected ? classes.distanceSelected : ""
-        } ${isDistanceHoverable ? classes.distanceHoverable : ""}`}
+        } ${isDistanceHoverable ? classes.distanceHoverable : ""} ${
+          isMovingMode ? classes.movingMode : ""
+        }`}
         style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
+          left: embedded ? 0 : `${position.x}px`,
+          top: embedded ? 0 : `${position.y}px`,
+          position: embedded ? "relative" : undefined,
           opacity: (() => {
             // Tech skips mode takes priority
             if (techSkipsMode) {
@@ -120,18 +132,22 @@ export const MapTile = React.memo<Props>(
           })(),
           ...style,
         }}
-        onClick={onTileSelect ? () => onTileSelect(ringPosition) : undefined}
+        onClick={
+          onTileSelect ? () => onTileSelect(ringPosition, systemId) : undefined
+        }
       >
         <div className={classes.tileContainer}>
           <Tile
             systemId={systemId}
             className={classes.tile}
-            onMouseEnter={
-              onTileHover ? () => onTileHover(ringPosition, true) : undefined
-            }
-            onMouseLeave={
-              onTileHover ? () => onTileHover(ringPosition, false) : undefined
-            }
+            onMouseEnter={() => {
+              setHoveredLocal(true);
+              if (onTileHover) onTileHover(ringPosition, true);
+            }}
+            onMouseLeave={() => {
+              setHoveredLocal(false);
+              if (onTileHover) onTileHover(ringPosition, false);
+            }}
           />
 
           <AnomalyOverlay
@@ -164,7 +180,17 @@ export const MapTile = React.memo<Props>(
             systemId={systemId}
             factions={mapTile.commandCounters}
           />
-          <div className={classes.ringPosition}>{ringPosition}</div>
+          <div
+            className={`${classes.ringPosition} ${
+              isOrigin
+                ? classes.ringPositionOrange
+                : isTargetSelected
+                  ? classes.ringPositionBlue
+                  : ""
+            }`}
+          >
+            {ringPosition}
+          </div>
 
           {controllingFaction && overlaysEnabled && (
             <FactionColorOverlay faction={controllingFaction} opacity={0.3} />
@@ -177,11 +203,34 @@ export const MapTile = React.memo<Props>(
             />
           )}
 
-          <TileSelectedOverlay
-            isSelected={!!isDistanceSelected}
-            isHovered={isHoveredForDistance}
-            isDistanceMode={!!distanceMode}
-          />
+          {isMovingMode || !!distanceMode ? (
+            <div
+              className={classes.interactiveOverlay}
+              style={{ width: TILE_WIDTH, height: TILE_HEIGHT }}
+              onMouseEnter={() => {
+                setHoveredLocal(true);
+                if (onTileHover) onTileHover(ringPosition, true);
+              }}
+              onMouseLeave={() => {
+                setHoveredLocal(false);
+                if (onTileHover) onTileHover(ringPosition, false);
+              }}
+            >
+              <TileSelectedOverlay
+                isSelected={!!isDistanceSelected || !!isTargetSelected}
+                isHovered={isHoveredForDistance || hoveredLocal}
+                isDistanceMode
+                variant={isOrigin ? "origin" : "blue"}
+                alwaysVisible={!!isOrigin}
+              />
+            </div>
+          ) : (
+            <TileSelectedOverlay
+              isSelected={!!isDistanceSelected || !!isTargetSelected}
+              isHovered={isHoveredForDistance || hoveredLocal}
+              isDistanceMode={!!distanceMode || !!isTargetSelected}
+            />
+          )}
         </div>
       </div>
     );

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button } from "@mantine/core";
+import { Box, Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
 import { LeftSidebar } from "@/components/main/LeftSidebar";
-import { ZoomControls } from "@/components/ZoomControls";
+import { ZoomControls } from "@/components/ZoomControls.ts";
 import { DragHandle } from "@/components/DragHandle";
 import { PanelToggleButton } from "@/components/PanelToggleButton";
 import { RightSidebar } from "@/components/main/RightSidebar";
@@ -20,6 +20,14 @@ import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { useSettingsStore } from "@/utils/appStore";
 import { ReadyState } from "react-use-websocket";
+import { useSearchParams } from "react-router-dom";
+import { useMovementStore } from "@/utils/movementStore";
+import { useUser } from "@/hooks/useUser";
+import { getDiscordOauthUrl } from "@/components/DiscordLogin.ts";
+// import { getTileById } from "@/mapgen/systems";
+// import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { MovementOriginModal } from "./MovementOriginModal";
+import { MovementModeBox } from "./MovementModeBox";
 // Local constant to avoid circular imports
 const MAP_PADDING = 200;
 
@@ -30,6 +38,8 @@ type Props = {
 export function MapView({ gameId }: Props) {
   const gameData = useGameData();
   const gameDataState = useGameDataState();
+  const [searchParams] = useSearchParams();
+  const { user } = useUser();
 
   const {
     selectedArea,
@@ -76,6 +86,24 @@ export function MapView({ gameId }: Props) {
 
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
+
+  // Movement mode handling
+  const targetPositionParam =
+    searchParams.get("targetPositionId") ||
+    searchParams.get("targetSystem") ||
+    null;
+  const setTargetPositionId = useMovementStore((s) => s.setTargetPositionId);
+  const draft = useMovementStore((s) => s.draft);
+  const clearAll = useMovementStore((s) => s.clearAll);
+
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  // Summary modal removed; confirm happens inside MovementModeBox
+  const [originModalOpen, setOriginModalOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [activeOrigin, setActiveOrigin] = useState<{
+    position: string;
+    systemId: string;
+  } | null>(null);
 
   const {
     selectedTiles,
@@ -125,6 +153,48 @@ export function MapView({ gameId }: Props) {
     if (gameData.objectives) return true;
     return !!(gameData.lawsInPlay && gameData.lawsInPlay.length > 0);
   }, [gameData]);
+
+  // Initialize movement mode from URL param
+  useEffect(() => {
+    if (!targetPositionParam) {
+      setTargetPositionId(null);
+      return;
+    }
+    if (!user?.authenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+    setShowAuthModal(false);
+    setTargetPositionId(targetPositionParam);
+  }, [targetPositionParam, setTargetPositionId, user?.authenticated]);
+
+  const targetSystemId = useMemo(() => {
+    if (!gameData || !draft.targetPositionId) return null;
+    const entry = (gameData.tilePositions || []).find((p: string) =>
+      p.startsWith(`${draft.targetPositionId}:`)
+    );
+    return entry ? entry.split(":")[1] : null;
+  }, [gameData, draft.targetPositionId]);
+
+  // Name is resolved inside MovementModeBox when rendering
+
+  // Movement mode banner actions
+  const handleResetMovement = useCallback(() => {
+    // Clear only displacement; preserve targetPositionId
+    useMovementStore.setState((prev) => ({
+      draft: { ...prev.draft, origins: {} },
+    }));
+    // no-op now that summary modal is removed
+  }, []);
+
+  const handleCancelMovement = useCallback(() => {
+    // Nuke everything including target
+    clearAll();
+    // no-op now that summary modal is removed
+    setOriginModalOpen(false);
+  }, [clearAll]);
+
+  // Confirm handled directly inside MovementModeBox
 
   return (
     <Box className={classes.mapContainer}>
@@ -208,29 +278,46 @@ export function MapView({ gameId }: Props) {
                   <MapTile
                     key={`${tile.systemId}-${index}`}
                     mapTile={tile}
+                    isMovingMode={!!draft.targetPositionId}
+                    isOrigin={!!draft.origins?.[tile.position]}
                     selectedTiles={selectedTiles}
-                    isOnPath={systemsOnPath.has(tile.systemId)}
+                    isOnPath={
+                      targetSystemId ? true : systemsOnPath.has(tile.systemId)
+                    }
+                    isTargetSelected={
+                      targetSystemId ? tile.systemId === targetSystemId : false
+                    }
                     hoveredTilePosition={hoveredTile}
                     onUnitMouseOver={handleUnitMouseEnter}
                     onUnitMouseLeave={handleUnitMouseLeave}
                     onUnitSelect={handleMouseDown}
                     onPlanetMouseEnter={handlePlanetMouseEnter}
                     onPlanetMouseLeave={handlePlanetMouseLeave}
-                    onTileSelect={handleTileSelect}
+                    onTileSelect={(position, systemId) => {
+                      if (draft.targetPositionId) {
+                        // Movement mode: open origin modal
+                        setActiveOrigin({ position, systemId });
+                        setOriginModalOpen(true);
+                        return;
+                      }
+                      handleTileSelect(position);
+                    }}
                     onTileHover={handleTileHover}
                   />
                 );
               })}
             </Box>
 
-            <PathVisualization
-              pathResult={pathResult}
-              tilePositions={gameData.calculatedTilePositions}
-              zoom={zoom}
-              activePathIndex={activePathIndex}
-              onPathIndexChange={handlePathIndexChange}
-              mapPadding={MAP_PADDING}
-            />
+            {!draft.targetPositionId && (
+              <PathVisualization
+                pathResult={pathResult}
+                tilePositions={gameData.calculatedTilePositions}
+                zoom={zoom}
+                activePathIndex={activePathIndex}
+                onPathIndexChange={handlePathIndexChange}
+                mapPadding={MAP_PADDING}
+              />
+            )}
 
             <MapUnitDetailsCard tooltipUnit={tooltipUnit} zoom={zoom} />
 
@@ -273,6 +360,77 @@ export function MapView({ gameId }: Props) {
           transition: isDragging ? "none" : "right 0.1s ease",
         }}
       />
+
+      {/* Movement Mode Box (bottom-left) */}
+      {draft.targetPositionId && (
+        <MovementModeBox
+          gameId={gameId}
+          onCancel={handleCancelMovement}
+          onReset={handleResetMovement}
+          onSuccess={() => setShowSuccessModal(true)}
+        />
+      )}
+
+      {/* Auth Required Modal */}
+      <Modal
+        opened={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        title="Login Required"
+        zIndex={22000}
+      >
+        <Stack>
+          <Text size="sm">
+            You must be logged into Discord to use movement mode.
+          </Text>
+          <Button
+            component="a"
+            href={getDiscordOauthUrl()}
+            leftSection={<IconRefresh size={16} />}
+          >
+            Login with Discord
+          </Button>
+        </Stack>
+      </Modal>
+
+      {/* Movement success modal */}
+      <Modal
+        opened={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Movement Posted"
+        size="lg"
+        zIndex={22000}
+        classNames={{
+          content: (classes as any).detailsModalContent,
+          header: (classes as any).detailsModalHeader,
+          title: (classes as any).detailsModalTitle,
+          body: (classes as any).detailsModalBody,
+        }}
+      >
+        <Stack className={classes.detailsModalBody}>
+          <Text size="xl" c="gray.3" mt="lg">
+            Head back to Discord to continue.
+          </Text>
+          <Group justify="flex-end" mt="sm">
+            <Button onClick={() => setShowSuccessModal(false)} size="sm">
+              Close
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
+      {/* Origin selection modal */}
+      {activeOrigin && (
+        <MovementOriginModal
+          opened={originModalOpen}
+          onClose={() => setOriginModalOpen(false)}
+          originTile={
+            gameData!.mapTiles.find(
+              (t) => t.position === activeOrigin.position
+            )!
+          }
+          originPosition={activeOrigin.position}
+        />
+      )}
 
       <RightSidebar
         isRightPanelCollapsed={settings.rightPanelCollapsed}

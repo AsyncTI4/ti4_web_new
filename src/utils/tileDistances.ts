@@ -618,28 +618,3 @@ function getHyperlaneConnections(
     connectedTiles: Array.from(connectedTileSet),
   };
 }
-
-// Example usage:
-/*
-const hyperlaneData: HyperlaneData = {
-  "84b": "0,0,0,1,1,0;0,0,0,1,0,0;0,0,0,0,0,0;1,1,0,0,0,0;1,0,0,0,0,0;0,0,0,0,0,0",
-  "83a": "0,0,0,0,0,0;0,0,0,0,1,0;0,0,0,0,0,0;0,0,0,0,0,0;0,1,0,0,0,0;0,0,0,0,0,0"
-  // ... more hyperlanes
-};
-
-const adjacencyData: TileAdjacencies = {
-  "201": ["101", "202", "203", "x", "212", "x"],
-  "304": ["203", "305", "306", "307", "303", "302"]
-  // ... more adjacencies
-};
-
-// Get connections for hyperlane 84b at position 201
-const result = getHyperlaneConnections("84b", "201", hyperlaneData, adjacencyData);
-
-console.log("Connected tiles:", result.connectedTiles);
-console.log("All connections:", result.connections);
-
-// Check if specific tiles are connected
-const isConnected = aretilesConnectedThroughHyperlane("101", "203", "84b", "201", hyperlaneData, adjacencyData);
-console.log("101 and 203 connected through 84b at 201:", isConnected);
-*/

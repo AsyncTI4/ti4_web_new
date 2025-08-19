@@ -6,9 +6,9 @@ export type TileData = {
   aliases?: string[];
   imagePath: string;
   planets?: string[];
-  shipPositionsType?: string;
+  shipPositionsType?: string | null;
   spaceTokenLocations?: Array<{ x: number; y: number }>;
-  wormholes?: string[];
+  wormholes?: string[] | null;
   isHyperlane?: boolean;
   isAsteroidField?: boolean;
   isSupernova?: boolean;
@@ -17,6 +17,7 @@ export type TileData = {
   imageURL?: string;
   source: string;
   tileBack?: string;
+  valid?: boolean;
 };
 
 export type EntityData = {

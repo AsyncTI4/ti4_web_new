@@ -1,0 +1,56 @@
+.summaryWrap {
+  overflow: auto;
+  padding: 8px 6px 4px;
+  border-radius: 6px;
+  background: var(--card-details-item-bg);
+  border: var(--card-details-item-border);
+}
+
+.factionRow {
+  padding: 4px 6px 6px;
+  border-radius: 6px;
+  background: transparent;
+}
+
+.originRow {
+  padding: 6px 6px 8px;
+  border-radius: 6px;
+  background: transparent;
+}
+
+.originPill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: var(--mantine-color-gray-0);
+  font-size: 11px;
+}
+
+.factionGroup {
+  padding-left: 2px;
+}
+
+.unitChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--mantine-radius-md);
+}
+
+.unitIconWrap {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+.actionsRow {
+  padding-top: 6px;
+}
+
+

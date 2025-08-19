@@ -50,6 +50,27 @@
   z-index: 10000;
 }
 
+/* Details-style modal content hook for summary modal */
+.detailsModalContent {
+  background: var(--details-card-bg);
+  border: var(--details-card-border);
+  border-radius: 12px;
+}
+
+.detailsModalHeader {
+  background: var(--header-tab-bg);
+  border-bottom: var(--card-details-section-title-border);
+}
+
+.detailsModalTitle {
+  color: white;
+  text-shadow: var(--map-tab-text-shadow);
+}
+
+.detailsModalBody {
+  padding-top: 2px;
+}
+
 /* Tile rendering container */
 .tileRenderingContainer {
   position: relative;
@@ -121,6 +142,11 @@
   height: 100%;
   position: relative;
   overflow: auto;
+}
+
+/* Adds space when movement banner is present so content isn't overlapped */
+.mapAreaWithBanner {
+  padding-top: 64px;
 }
 
 .sidebar {
@@ -283,23 +309,60 @@
   mix-blend-mode: screen;
 }
 
-@keyframes vw-scanlines {
-  0% { background-position-y: 0px; }
-  100% { background-position-y: -120px; }
+
+/* Movement banner - MUCH more prominent and theme-colored */
+.movementBanner {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 12000;
+  height: 64px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  background: var(--movement-banner-bg);
+  border-bottom: var(--movement-banner-border);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.25) inset,
+    0 0 22px 2px color-mix(in srgb, var(--movement-banner-glow) 60%, transparent);
+  animation: movement-banner-pulse 3.6s ease-in-out infinite;
 }
 
-@keyframes vw-pulse-soft {
-  0%, 100% {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 3px 8px rgba(0, 0, 0, 0.25);
-    filter: drop-shadow(0 0 0 rgba(255, 0, 170, 0)) drop-shadow(0 0 0 rgba(0, 240, 255, 0));
-  }
-  50% {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 5px 12px rgba(0, 0, 0, 0.3);
-    filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.25)) drop-shadow(0 0 6px rgba(0, 240, 255, 0.2));
-  }
+.movementBannerTitle {
+  color: var(--movement-banner-title-color);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
-@keyframes vw-border-breathe {
-  0%, 100% { opacity: 0.28; }
-  50% { opacity: 0.55; }
+.movementBannerTargetName {
+  color: var(--movement-banner-accent-color);
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--movement-banner-glow) 65%, transparent),
+    0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+/* Compact movement box pinned to bottom-left */
+.movementBox {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 12000;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  background: var(--movement-banner-bg);
+  border: var(--movement-banner-border);
+  border-radius: var(--mantine-radius-md);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.25) inset,
+    0 0 22px 2px color-mix(in srgb, var(--movement-banner-glow) 60%, transparent);
+  animation: movement-banner-pulse 3.6s ease-in-out infinite;
 }

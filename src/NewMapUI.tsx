@@ -40,6 +40,7 @@ import PlayerCard2Mid from "./components/PlayerCard2Mid";
 import { MapView } from "./components/main/MapView";
 import { TabsControls } from "./components/main/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
+import { useMovementStore } from "./utils/movementStore";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -54,6 +55,7 @@ function NewMapUIContent() {
 
   const { activeTabs, changeTab, removeTab } = useTabManagementV2();
 
+  const draft = useMovementStore((s) => s.draft);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 

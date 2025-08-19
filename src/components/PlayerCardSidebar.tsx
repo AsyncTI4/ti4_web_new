@@ -249,16 +249,7 @@ export default function PlayerCardSidebar(props: Props) {
 
         {/* Abilities + Unresearched Faction Tech (moved above Tech) */}
         <Group wrap="initial" gap={2} my="xs" mt="xs">
-          <Group
-            gap={4}
-            wrap="nowrap"
-            style={{
-              overflow: "hidden",
-              minWidth: "50%",
-              flex: 1,
-              flexShrink: 0,
-            }}
-          >
+          <Group gap={4}>
             {abilities?.map((abilityId, index) => {
               const abilityData = getAbility(abilityId);
               if (!abilityData) {
@@ -280,6 +271,7 @@ export default function PlayerCardSidebar(props: Props) {
               );
             })}
           </Group>
+          <div style={{ flex: 1 }} />
 
           {notResearchedFactionTechs?.length > 0 && (
             <Group gap={2} style={{ flexShrink: 1 }}>

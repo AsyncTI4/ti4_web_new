@@ -4,7 +4,7 @@ import {
 } from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useMemo } from "react";
 import { useSettingsStore } from "@/utils/appStore";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { colors } from "@/data/colors";
@@ -23,6 +23,8 @@ import {
 } from "@/lookup/planets";
 import { getAttachmentData } from "@/lookup/attachments";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
+import { useMovementStore } from "@/utils/movementStore";
+import { applyDisplacementToPlayerData } from "@/utils/displacement";
 
 export type FactionColorMap = {
   [key: string]: FactionColorData;
@@ -42,7 +44,6 @@ type GameContext = {
 type GameData = {
   mapTiles: MapTileType[];
   tilePositions: any;
-  systemIdToPosition: Record<string, string>;
   factionColorMap: FactionColorMap;
   tilesWithPds: Set<string>;
   dominantPdsFaction: Record<
@@ -95,8 +96,16 @@ export function GameContextProvider({ children, gameId }: Props) {
   const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
     usePlayerDataSocket(gameId);
   const accessibleColors = useSettingsStore((s) => s.settings.accessibleColors);
-  const enhancedData = data
-    ? buildGameContext(data, accessibleColors)
+  // Apply displacement at the tileUnitData layer so positioning runs via placement algorithm
+  const draft = useMovementStore((s) => s.draft);
+
+  const adjustedData = useMemo(() => {
+    if (!data) return undefined;
+    return applyDisplacementToPlayerData(data as PlayerDataResponse, draft);
+  }, [data, draft]);
+
+  const enhancedData = adjustedData
+    ? buildGameContext(adjustedData, accessibleColors)
     : undefined;
 
   const gameContext: GameContext = {
@@ -125,7 +134,6 @@ export function buildGameContext(
   data: PlayerDataResponse,
   accessibleColors: boolean
 ): GameData {
-  const systemIdToPosition = generateSystemIdToPosition(data);
   const baseFactionToColor = buildFactionToColor(data);
   const accessibleOrder = [
     "blue",
@@ -181,7 +189,7 @@ export function buildGameContext(
   return {
     mapTiles,
     tilePositions: data.tilePositions,
-    systemIdToPosition,
+
     factionColorMap,
     tilesWithPds,
     dominantPdsFaction,
@@ -334,19 +342,15 @@ function buildTileSpaceData(tileData: TileUnitData) {
   const entries = Object.entries(tileData.space) as [string, EntityData[]][];
 
   const space: UnitMapTile[] = entries.flatMap(([faction, entities]) =>
-    entries
-      .filter(([, entities]) => entities)
-      .flatMap(() =>
-        entities
-          .filter((entity) => entity.entityType === "unit")
-          .map((entity) => ({
-            type: "unit",
-            entityId: entity.entityId,
-            amount: entity.count,
-            amountSustained: entity.sustained ?? 0,
-            owner: faction,
-          }))
-      )
+    (entities || [])
+      .filter((entity) => entity.entityType === "unit")
+      .map((entity) => ({
+        type: "unit",
+        entityId: entity.entityId,
+        amount: entity.count,
+        amountSustained: entity.sustained ?? 0,
+        owner: faction,
+      }))
   );
 
   const tokens: string[] = entries.flatMap(([, entities]) =>
@@ -407,19 +411,6 @@ function buildPlanetMapTile(
       y,
     },
   };
-}
-
-function generateSystemIdToPosition(data: PlayerDataResponse | undefined) {
-  const systemIdToPosition: Record<string, string> = {};
-
-  if (!data || !data.tilePositions) return systemIdToPosition;
-
-  data.tilePositions.forEach((entry: string) => {
-    const [position, systemId] = entry.split(":");
-    systemIdToPosition[systemId] = position;
-  });
-
-  return systemIdToPosition;
 }
 
 function generateHexagonPoints(cx: number, cy: number, radius: number) {

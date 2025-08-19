@@ -45,11 +45,17 @@
 .hovered {}
 .distanceSelected {}
 .distanceHoverable {}
+.movingMode {}
 
 /* Focus styles for accessibility */
 .tile:focus {
   outline: 2px solid var(--mantine-color-blue-6);
   outline-offset: 2px;
+}
+
+/* Movement mode makes tiles clearly interactive */
+.movingMode .tile {
+  cursor: pointer;
 }
 
 .ringPosition {
@@ -73,6 +79,14 @@
   z-index: 10;
 }
 
+.ringPositionBlue {
+  color: var(--mantine-color-blue-5);
+}
+
+.ringPositionOrange {
+  color: var(--mantine-color-orange-5);
+}
+
 .planetCircle {
   position: absolute;
   border-radius: 50%;
@@ -80,4 +94,14 @@
   transform: translate(-50%, -50%);
   pointer-events: auto;
   z-index: 1;
+}
+
+/* Overlay that sits above all tile content when in movement mode */
+.interactiveOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20000; /* higher than tokens/units and PDS overlay */
+  pointer-events: auto;
+  cursor: pointer;
 }

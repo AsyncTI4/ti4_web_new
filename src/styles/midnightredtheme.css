@@ -132,6 +132,13 @@
     --scrollbar-corner-bg: rgba(0, 0, 0, 1);
     --scrollbar-color-thumb: rgba(239, 68, 68, 0.6);
     --scrollbar-color-track: rgba(0, 0, 0, 1);
-  }
+
+    /* Movement Banner */
+    --movement-banner-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    --movement-banner-border: 2px solid rgba(239, 68, 68, 0.82);
+    --movement-banner-glow: rgba(239, 68, 68, 0.6);
+    --movement-banner-title-color: rgba(255, 255, 255, 0.98);
+    --movement-banner-accent-color: rgba(239, 68, 68, 0.92);
+}
 
 

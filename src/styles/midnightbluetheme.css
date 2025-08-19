@@ -103,4 +103,11 @@
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
     --details-card-border: 1px solid rgba(59, 130, 246, 0.22);
-  }
+
+    /* Movement Banner */
+    --movement-banner-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
+    --movement-banner-border: 2px solid rgba(59, 130, 246, 0.7);
+    --movement-banner-glow: rgba(59, 130, 246, 0.6);
+    --movement-banner-title-color: rgba(255, 255, 255, 0.96);
+    --movement-banner-accent-color: rgba(147, 197, 253, 0.98);
+}

@@ -95,8 +95,6 @@ export function useTabManagementV2() {
       navigate("/");
     }
   };
-  console.log("playerGamesData", playerGamesData);
-  console.log(enrichedTabs);
 
   return { activeTabs: enrichedTabs, changeTab, removeTab };
 }
