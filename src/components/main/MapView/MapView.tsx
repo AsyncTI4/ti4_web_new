@@ -1,4 +1,4 @@
-import { useCallback,  useEffect,  useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
@@ -21,11 +21,12 @@ import { useSearchParams } from "react-router-dom";
 import { useMovementStore } from "@/utils/movementStore";
 import { useUser } from "@/hooks/useUser";
 import { getDiscordOauthUrl } from "@/components/DiscordLogin.ts";
-// import { getTileById } from "@/mapgen/systems";
-// import { getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { MovementOriginModal } from "./MovementOriginModal";
 import { MovementModeBox } from "./MovementModeBox";
-// Local constant to avoid circular imports
+import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
+import { useAppStore, useSettingsStore } from "@/utils/appStore";
+import ZoomControls from "@/components/ZoomControls";
+
 const MAP_PADDING = 200;
 
 type Props = {
@@ -219,7 +220,7 @@ export function MapView({ gameId }: Props) {
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >
-          <ZoomControls />
+          <ZoomControls zoomClass="" />
         </div>
 
         {/* Tile-based rendering */}
@@ -426,7 +427,3 @@ export function MapView({ gameId }: Props) {
     </Box>
   );
 }
-
-// Local import to avoid circular dependency issues
-import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";import { useAppStore, useSettingsStore } from "@/utils/appStore";import ZoomControls from "@/components/ZoomControls";
-
