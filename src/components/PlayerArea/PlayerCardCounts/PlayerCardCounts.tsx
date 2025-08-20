@@ -1,6 +1,10 @@
-import { Group } from "@mantine/core";
+import { Group, Stack, Image, Text, Box } from "@mantine/core";
 import { Cardback } from "../Cardback";
 import { cdnImage } from "../../../data/cdnImage";
+import { Chip } from "@/components/shared/primitives/Chip";
+import { Shimmer } from "../Shimmer";
+import { getGradientClasses } from "../gradientClasses";
+import styles from "./PlayerCardCounts.module.css";
 
 type Props = {
   tg: number;
@@ -20,7 +24,7 @@ export function PlayerCardCounts({
   acCount,
 }: Props) {
   return (
-    <Group gap={6} justify="center">
+    <Group gap={6} justify="center" align="center">
       {[
         {
           src: cdnImage("/player_area/pa_cardbacks_so.png"),
@@ -37,16 +41,6 @@ export function PlayerCardCounts({
           alt: "promissory notes",
           count: pnCount,
         },
-        {
-          src: cdnImage("/player_area/pa_cardbacks_tradegoods.png"),
-          alt: "trade goods",
-          count: tg,
-        },
-        {
-          src: cdnImage("/player_area/pa_cardbacks_commodities.png"),
-          alt: "commodities",
-          count: `${commodities}/${commoditiesTotal}`,
-        },
       ].map((cardback, index) => (
         <Cardback
           key={index}
@@ -55,6 +49,46 @@ export function PlayerCardCounts({
           count={cardback.count}
         />
       ))}
+
+      <Stack gap={4} align="stretch" className={styles.chipStack}>
+        {/* Trade Goods Chip */}
+        <Chip accent="yellow" className={styles.tgChip} enableHover={false}>
+          <Shimmer
+            color="yellow"
+            px={8}
+            py={4}
+            className={getGradientClasses("yellow").border}
+          >
+            <Box className={styles.chipContent}>
+              <Image
+                src="/tg.png"
+                className={`${getGradientClasses("yellow").iconFilter} ${styles.icon}`}
+              />
+              <Text className={styles.countText}>{tg}</Text>
+            </Box>
+          </Shimmer>
+        </Chip>
+
+        {/* Commodities Chip */}
+        <Chip accent="gray" className={styles.commsChip} enableHover={false}>
+          <Shimmer
+            color="gray"
+            px={8}
+            py={4}
+            className={getGradientClasses("gray").border}
+          >
+            <Box className={styles.chipContent}>
+              <Image
+                src="/comms.png"
+                className={`${getGradientClasses("gray").iconFilter} ${styles.icon}`}
+              />
+              <Text className={styles.countText}>
+                {commodities}/{commoditiesTotal}
+              </Text>
+            </Box>
+          </Shimmer>
+        </Chip>
+      </Stack>
     </Group>
   );
 }

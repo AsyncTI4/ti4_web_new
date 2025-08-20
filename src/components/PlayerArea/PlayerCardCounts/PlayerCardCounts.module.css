@@ -1,0 +1,33 @@
+.chipStack {
+  min-width: 100px;
+}
+
+.chipContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.countText {
+  color: var(--mantine-color-white);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+}
+
+.tgChip {
+  border-radius: 10px;
+}
+
+.commsChip {
+  border-radius: 10px;
+}
+
+
