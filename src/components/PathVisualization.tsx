@@ -4,16 +4,15 @@ import {
   createPositionMap,
   calculatePathPoints,
 } from "../utils/pathVisualization";
-import type { TilePosition } from "../mapgen/tilePositioning";
 import classes from "./PathVisualization.module.css";
+import { MAP_PADDING } from "@/NewMapUI";
+import { useGameData } from "@/hooks/useGameContext";
+import { useAppStore, useSettingsStore } from "@/utils/appStore";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
-  tilePositions?: TilePosition[];
-  zoom: number;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
-  mapPadding?: number;
 };
 
 const PATH_COLORS = [
@@ -42,30 +41,20 @@ const PATH_COLORS = [
 
 export const PathVisualization = ({
   pathResult,
-  tilePositions,
-  zoom,
   activePathIndex,
   onPathIndexChange,
-  mapPadding = 200,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
-
-  const positionMap = useMemo(
-    () => createPositionMap(tilePositions || []),
-    [tilePositions]
-  );
 
   const validatedPathIndex =
     activePathIndex >= pathResult.paths.length ? 0 : activePathIndex;
   const currentPath = pathResult.paths[validatedPathIndex];
 
-  // Detect Firefox browser
-  const isFirefox = useMemo(() => {
-    return (
-      typeof navigator !== "undefined" &&
-      navigator.userAgent.toLowerCase().indexOf("firefox") > -1
-    );
-  }, []);
+  const zoom = useAppStore((state) => state.zoomLevel);
+  const settings = useSettingsStore().settings;
+  const gameData = useGameData();
+
+  const positionMap = createPositionMap(gameData?.calculatedTilePositions || []);
 
   const pathPoints = useMemo(() => {
     if (!currentPath) return [];
@@ -189,11 +178,11 @@ export const PathVisualization = ({
         id="pathviz"
         className={classes.svg}
         style={{
-          ...(isFirefox ? {} : { zoom: zoom }),
+          ...(settings.isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: mapPadding / zoom,
-          left: mapPadding / zoom,
+          top: MAP_PADDING / zoom,
+          left: MAP_PADDING / zoom,
         }}
       >
         {renderPathLines()}

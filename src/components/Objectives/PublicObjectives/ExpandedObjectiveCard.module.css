@@ -126,10 +126,8 @@
 .factionProgressBadge {
   align-items: center;
   padding: 4px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: all 0.2s ease;
   min-width: 70px;
   justify-content: center;
@@ -137,21 +135,17 @@
 
 /* Completed objective badge - green glow */
 .factionProgressBadge.completed {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 8px rgba(34, 197, 94, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(34, 197, 94, 0.15);
 }
 
 /* At threshold badge - blue glow */
 .factionProgressBadge.atThreshold {
-  background: var(--objective-progress-badge-at-threshold-bg);
-  border: var(--objective-progress-badge-at-threshold-border);
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.7);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 8px var(--objective-progress-badge-at-threshold-glow),
+    0 0 8px rgba(34, 197, 94, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 

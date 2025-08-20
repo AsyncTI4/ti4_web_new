@@ -40,7 +40,7 @@ function ScoreTracker({ playerData, vpsToWin }: Props) {
   });
 
   return (
-    <Box className={styles.scoreTracker}>
+    <Box mb={8} className={styles.scoreTracker}>
       {scorePositions.map((score, index) => {
         const playersAtScore = factionsByScore[score] || [];
         const isWinningScore = score === vpsToWin;

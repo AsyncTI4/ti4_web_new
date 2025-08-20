@@ -3,6 +3,7 @@ import { PlanetDetailsCard } from "../PlayerArea/PlanetDetailsCard";
 const MAP_PADDING = 200;
 
 import { usePlanet } from "@/hooks/usePlanet";
+import { useAppStore } from "@/utils/appStore";
 
 type TooltipPlanet = {
   planetId: string;
@@ -11,12 +12,12 @@ type TooltipPlanet = {
 
 type Props = {
   tooltipPlanet: TooltipPlanet | null;
-  zoom: number;
 };
 
-export function MapPlanetDetailsCard({ tooltipPlanet, zoom }: Props) {
+export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
 
+  const zoom = useAppStore((state) => state.zoomLevel);
   const planetTile = usePlanet(tooltipPlanet.planetId);
 
   const scaledX = tooltipPlanet.coords.x * zoom;
