@@ -114,7 +114,7 @@ export const useAppStore = create<AppStore>((set) => {
 
   return {
     hoveredTile: "",
-    zoomLevel: 100,
+    zoomLevel: 1,
     overlayZoom: zoomFitToScreen ? 1 : zoom,
     zoomFitToScreen,
     selectedArea: "",

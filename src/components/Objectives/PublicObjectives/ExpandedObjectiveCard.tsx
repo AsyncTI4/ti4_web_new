@@ -18,7 +18,7 @@ function ExpandedObjectiveCard({
   objective,
   playerData,
   color,
-  custom = false,
+  custom = true,
 }: Props) {
   const objectiveData = publicObjectives.find(
     (obj) => obj.alias === objective.key
@@ -37,10 +37,6 @@ function ExpandedObjectiveCard({
   const renderProgressDisplay = () => {
     if (!objective.revealed) return null;
 
-    {custom && objective.scoredFactions.map((faction) => (
-      <CircularFactionIcon key={faction} faction={faction} size={28} />
-    ))}
-    
     if (objective.progressThreshold > 0) {
       return (
         <ProgressObjectiveDisplay
@@ -48,6 +44,12 @@ function ExpandedObjectiveCard({
           progressThreshold={objective.progressThreshold}
         />
       );
+    }
+
+    if (custom) {
+      return objective.scoredFactions.map((faction) => (
+        <CircularFactionIcon key={faction} faction={faction} size={28} />
+      ))
     }
 
     return null;

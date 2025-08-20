@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Stack } from "@mantine/core";
+import { Box, Flex, SimpleGrid, Stack } from "@mantine/core";
 import { Surface } from "../PlayerArea/Surface";
 import { useGameData } from "@/hooks/useGameContext";
 import styles from "../ScoreBoard.module.css";
@@ -24,18 +24,16 @@ function GeneralArea() {
       cornerAccents={true}
       className={styles.scoreBoardSurface}
     >
-      <Box mb="md">
-        <SimpleGrid cols={3} spacing="md">
+      <Flex wrap={"wrap"} justify={"center"} mb="md" gap={64}>
             <UnpickedSCs strategyCards={strategyCards} />
-          <Stack>
+          <Stack gap={32}>
             <FactionsInGame playerData={playerData} />
-          <CardPool cardPool={cardPool} playerData={playerData} />
+            <CardPool cardPool={cardPool} playerData={playerData} />
           </Stack>
           <Box mb="lg">
             <LawsInPlay laws={lawsInPlay} />
           </Box>
-        </SimpleGrid>
-      </Box>
+      </Flex>
     </Surface>
   );
 }

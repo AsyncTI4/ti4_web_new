@@ -57,6 +57,9 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
         {/* Other Objectives (Gray) */}
         {objectives.customObjectives.length > 0 && (
           <Box>
+            <Text className={`${styles.stageTitle} ${styles.otherTitle}`}>
+              Other
+            </Text>
             <Flex
               maw={"auto"}
               justify="center"
