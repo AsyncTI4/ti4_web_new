@@ -19,12 +19,12 @@ export function ArmyStats({ stats }: Props) {
         <Table.Tr>
           <Table.Th></Table.Th>
           <Table.Th>
-            <Text size="sm" fw={700} c="white" ta="center">
+            <Text size="xs" ff={"mono"} fw={500} fs={"italic"} c="gray" ta="center">
               Space
             </Text>
           </Table.Th>
           <Table.Th>
-            <Text size="sm" fw={700} c="white" ta="center">
+            <Text size="xs" ff={"mono"} fw={500} fs={"italic"} c="gray" ta="center">
               Ground
             </Text>
           </Table.Th>

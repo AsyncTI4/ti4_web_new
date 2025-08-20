@@ -7,6 +7,7 @@ import {
   Image,
   SimpleGrid,
   Flex,
+  Divider,
 } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { Relic } from "./PlayerArea/Relic";
@@ -40,6 +41,9 @@ import { getTokenImagePath } from "@/lookup/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getUnitAsyncId } from "@/lookup/units";
 import { getPlanetData } from "@/lookup/planets";
+import { Relics } from "./PlayerArea/Relic/Relic";
+import { Cardback } from "./PlayerArea/Cardback";
+import { TradeGoodsCommodities } from "./PlayerArea/TradeGoodsCommodities/TradeGoodsCommodities";
 
 // Strategy card names and colors mapping
 const SC_NAMES = {
@@ -125,7 +129,53 @@ export default function PlayerCard2Mid(props: Props) {
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
   const mahactEdict = props.playerData.mahactEdict || [];
-  const newdebtTokens = { "mentak": 2, "cabal": 1 };
+  const newdebtTokens = { "mentak": 2, "cabal": 1, };
+  const newGhostWormholesReinf = ["000"];
+  const newSleeperTokensReinf = 2;
+
+  const unitPriority: { [key: string]: number } = {
+    'ws': 1,
+    'fs': 2,
+    'dn': 3,
+    'cv': 4,
+    'ca': 5,
+    'dd': 6,
+    'ff': 7,
+    'mf': 8,
+    'gf': 9,
+    'sd': 10,
+    'pd': 11,
+  };
+
+  const array = unitsOwned.sort((a, b) => {
+    const asyncA = getUnitAsyncId(a);
+    const asyncB = getUnitAsyncId(b);
+    const priorityA = asyncA ? unitPriority[asyncA] : 999;
+    const priorityB = asyncB ? unitPriority[asyncB] : 999;
+
+    return priorityA - priorityB;
+  }).map((unitId, index) => {
+    const asyncId = getUnitAsyncId(unitId);
+    const deployedCount = asyncId
+      ? (unitCounts[asyncId].deployedCount ?? 0)
+      : 0;
+
+    return (
+      <UnitCard
+        key={index}
+        unitId={unitId}
+        color={color}
+        deployedCount={deployedCount}
+      />
+    );
+  });
+
+  // These numbers are based off of unitPriority above. the list is ordered Space, Ground, Structure. 
+  // If a player doesn't have warsuns, the list will be one item shorter. these negative numbers account for the
+  // one item difference
+  const spaceArray = array.slice(0, -4);  // read this as "get all but the last four"
+  const groundArray = array.slice(-4, -2);
+  const structureArray = array.slice(-2);
 
   // Create planet economics object from pre-calculated values
   const planetEconomics = {
@@ -148,26 +198,29 @@ export default function PlayerCard2Mid(props: Props) {
   };
 
   const UnitsArea = (
-    <Flex h="100%" justify="center" gap="2px">
-      {unitsOwned.map((unitId, index) => {
-        const asyncId = getUnitAsyncId(unitId);
-        const deployedCount = asyncId
-          ? (unitCounts[asyncId].deployedCount ?? 0)
-          : 0;
-
-        return (
-          <UnitCard
-            key={index}
-            unitId={unitId}
+    <Flex wrap={"wrap"} justify={"center"} columnGap={16} rowGap={4}>
+      <Group gap={4}>
+        {props.playerData.ccReinf !== undefined && (
+          <CommandTokenCard
             color={color}
-            deployedCount={deployedCount}
+            faction={faction}
+            reinforcements={props.playerData.ccReinf}
+            totalCapacity={16}
           />
-        );
-      })}
-
-      {stasisInfantry > 0 && (
+        )}
+      </Group>
+      <Group gap={0}>
+        {groundArray}
         <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
-      )}
+      </Group>
+
+      <Group gap={0}>
+        {structureArray}
+      </Group>
+      <Flex wrap={"wrap"} justify={"center"} align={"center"} gap={0}>
+        {spaceArray}
+      </Flex>
+
     </Flex>
   );
 
@@ -242,37 +295,38 @@ export default function PlayerCard2Mid(props: Props) {
             }}
           />
           <Stack gap={0}>
-          <Text
-            span
-            c="white"
-            size="lg"
-            ff="heading"
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            {userName}
-          </Text>
+            <Group>
+              <Text
+                span
+                c="white"
+                size="lg"
+                ff="heading"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                }}
+              >
+                {userName}
+              </Text>
+              <StatusIndicator passed={passed} active={active} />
+            </Group>
             <Group gap={8}>
-            <Text
-              size="xs"
-              span
-              ml={4}
-              opacity={0.9}
-              c="white"
-              ff="text"
-              fs="italic"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-              }}
-            >
-              {faction}
-            </Text>
-            <PlayerColor color={color} size="xs" />
+              <Text
+                size="sm"
+                span
+                ml={4}
+                opacity={0.9}
+                c="white"
+                ff="text"
+                style={{
+                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+                }}
+              >
+                {faction}
+              </Text>
+              <PlayerColor color={color} size="xs" />
             </Group>
           </Stack>
 
-          <StatusIndicator passed={passed} active={active} />
           <Box visibleFrom="sm">
             <Neighbors neighbors={neighbors || []} />
           </Box>
@@ -282,105 +336,26 @@ export default function PlayerCard2Mid(props: Props) {
       <Grid gutter="md" columns={12}>
         <Grid.Col
           span={{
-            base: 4,
-            sm: 2
+            base: 6,
+            sm: 4
           }}
         >
           <Stack gap={6}>
-            {/* <Box hiddenFrom="sm" w="100%">
-              <Stack gap="xs" align="center">
-                {scs.map((scNumber, index) => {
-                  const isExhausted = exhaustedSCs?.includes(scNumber);
-                  return (
-                    <StrategyCardBannerCompact
-                      key={scNumber}
-                      number={scNumber}
-                      text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                      color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                      isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
-                      isExhausted={isExhausted}
-                    />
-                  );
-                })}
-              </Stack>
-            </Box> */}
-
-            {/* <Box hiddenFrom="sm">
-              <Neighbors neighbors={neighbors || []} />
-            </Box> */}
-            <PlayerCardCounts
-              tg={tg || 0}
-              commodities={commodities || 0}
-              commoditiesTotal={commoditiesTotal || 0}
-              pnCount={pnCount || 0}
-              acCount={acCount || 0}
-            />
-          </Stack>
-        </Grid.Col>
-        <Grid.Col span={{
-            base: 4,
-            sm: 1
-          }}>
-          <Group gap={0} align="stretch">
-
-            <Stack
-              gap={2}
-              align="center"
-              justify="center"
-              pos="relative"
-              h="100%"
-              style={{ zIndex: 1 }}
-            >
-              {props.playerData.ccReinf !== undefined && (
-                <CommandTokenCard
-                  color={color}
-                  faction={faction}
-                  reinforcements={props.playerData.ccReinf}
-                  totalCapacity={16}
-                />
-              )}
-              <Text
-                ff="mono"
-                size="lg"
-                fw={600}
-                c="white"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {tacticalCC}/{fleetCC + mahactEdict.length}
-                {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
-              </Text>
-              <Surface p="xs"
-                label="DEBT"
-                labelColor="orange.6" pattern="none" cornerAccents={true} h="100%">
-                <Stack>
-                  {newdebtTokens && Object.keys(newdebtTokens).length > 0 && (
-                    <DebtTokens debts={newdebtTokens} />
-                  )}
-                </Stack>
-              </Surface>
-            </Stack>
-
-          </Group>
-        </Grid.Col>
-        <Grid.Col
-          span={{
-            base: 4,
-            sm: 2
-          }}
-        >
-          <Stack gap={4} w={{ base: "100%" }}>
+            <Group>
+              <PlayerCardCounts
+                pnCount={pnCount || 0}
+                acCount={acCount || 0}
+              />
+              <CCPool tacticalCC={tacticalCC} fleetCC={fleetCC} strategicCC={strategicCC} mahactEdict={mahactEdict} />
+            </Group>
             <FragmentsPool fragments={fragments} />
-            {relics.map((relicId, index) => (
-              <Relic key={index} relicId={relicId} />
-            ))}
+            <Relics relics={relics} />
           </Stack>
         </Grid.Col>
         <Grid.Col
           span={{
             base: 6,
-            sm: 3
+            sm: 4
           }}
         >
           <Stack gap={4}>
@@ -396,7 +371,7 @@ export default function PlayerCard2Mid(props: Props) {
         <Grid.Col
           span={{
             base: 6,
-            sm: 3
+            sm: 4
           }}
         >
           <Leaders leaders={leaders} />
@@ -407,52 +382,79 @@ export default function PlayerCard2Mid(props: Props) {
             base: 12
           }}
         >
+          <Divider my={0} />
           <Grid.Col
             span={{
               base: 12
             }}
           >
-            <Group gap={0} h="100%">
-              <Surface
-                flex={1}
-                pattern="grid"
-                p="md"
-                h="100%"
-              >
-                <Stack>
-                  <Grid gutter={4}>
-                    <DynamicTechGrid
-                      renderTechColumn={renderTechColumn}
-                      layout="grid"
-                      exhaustedTechs={props.playerData.exhaustedTechs}
-                    />
-                  </Grid>
-                  <Box h="100%">
+            <Flex justify={"center"}>
+              <Flex direction={"column"} gap={20}>
+                <Flex flex={1} justify={"space-between"}>
+                  <Flex flex={1} align={"center"} justify={"space-around"} direction={"column"} wrap={"wrap"}>
+
+                    <Box miw={100}>
+                      <ArmyStats
+                        stats={{
+                          spaceArmyRes,
+                          groundArmyRes,
+                          spaceArmyHealth,
+                          groundArmyHealth,
+                          spaceArmyCombat,
+                          groundArmyCombat,
+                        }}
+                      />
+                    </Box>
+                  </Flex>
+                  <Flex wrap={"wrap"}>
                     {UnitsArea}
-                  </Box>
-                </Stack>
-              </Surface>
-            </Group>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Flex>
           </Grid.Col>
+
+          <Divider my={0} />
 
           <Grid.Col
             span={{
               base: 12
             }}
           >
+            <Grid gutter={4}>
+              <DynamicTechGrid
+                renderTechColumn={renderTechColumn}
+                layout="grid"
+                exhaustedTechs={props.playerData.exhaustedTechs}
+              />
+            </Grid>
+          </Grid.Col>
+
+          <Divider my={0} />
+          <Grid.Col
+            span={{
+              base: 12
+            }}
+          >
             <Group>
-              <Surface
-                p="md"
-                pattern="circle"
-                label="Planets"
-                flex={1}
-                h="100%"
-                style={{
-                  alignItems: "flex-start",
-                }}
-              >
-                <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
+              <Flex align={"center"}>
+                <Flex gap={8} align={"flex-start"} miw={100}>
+
+
+
+                  <TradeGoodsCommodities
+                    tg={tg || 0}
+                    commodities={commodities || 0}
+                    commoditiesTotal={commoditiesTotal || 0} />
+
+
+                  
                   <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+
+                  <DebtTokens debts={newdebtTokens} />
+
+                </Flex>
+                <Flex justify={"flex-start"} gap={8} wrap={"wrap"}>
                   {planets.map((planetId, index) => {
                     const planetData = getPlanetData(planetId);
                     const hasLegendaryAbility =
@@ -478,20 +480,8 @@ export default function PlayerCard2Mid(props: Props) {
                       </div>
                     );
                   })}
-                  <Box pos={"absolute"} miw={140} right={"0px"}>
-                    <ArmyStats
-                      stats={{
-                        spaceArmyRes,
-                        groundArmyRes,
-                        spaceArmyHealth,
-                        groundArmyHealth,
-                        spaceArmyCombat,
-                        groundArmyCombat,
-                      }}
-                    />
-                  </Box>
-                </Group>
-              </Surface>
+                </Flex>
+              </Flex>
             </Group>
             {nombox !== undefined && Object.keys(nombox).length > 0 && (
               <Box mt="md">

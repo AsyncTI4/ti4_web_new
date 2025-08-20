@@ -14,24 +14,24 @@ export function DebtTokens({ debts }: Props) {
   const factionColorMap = useFactionColors();
 
   return (
-    <Flex direction={"column"} className={styles.container}>
-        {debtEntries.map(([colorName, amount]) => {
-          const factionName = factionColorMap?.[colorName]?.faction;
-          const colorAlias = getColorAlias(colorName);
-          return (
-            <Flex
-              key={colorName}
-            >
-              <SmallControlToken
-                colorAlias={colorAlias}
-                faction={factionName}
-              />
-              <Text>
-                x{amount}
-              </Text>
-            </Flex>
-          );
-        })}
+    <Flex gap={4} wrap={"wrap"} justify={"center"} align={"center"} className={styles.container}>
+      {debtEntries.map(([colorName, amount]) => {
+        const factionName = factionColorMap?.[colorName]?.faction;
+        const colorAlias = getColorAlias(colorName);
+        return (
+          <Flex
+            key={colorName}
+          >
+            <SmallControlToken
+              colorAlias={colorAlias}
+              faction={factionName}
+            />
+            <Text fs={"italic"} fz={"sm"} fc={"gray"}>
+              x{amount}
+            </Text>
+          </Flex>
+        );
+      })}
     </Flex>
   );
 }

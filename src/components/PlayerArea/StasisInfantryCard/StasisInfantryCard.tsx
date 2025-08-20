@@ -11,6 +11,8 @@ type Props = {
 export function StasisInfantryCard({ reviveCount, color }: Props) {
   const colorAlias = getColorAlias(color);
 
+  if (reviveCount == 0) return <></>;
+
   return (
     <Stack className={`${styles.stasisCard} ${styles.cardStack}`}>
       {/* Enhanced top highlight with green hue */}

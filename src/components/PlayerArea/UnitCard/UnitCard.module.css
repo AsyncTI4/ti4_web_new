@@ -1,6 +1,6 @@
 /* Unit card styles */
 .unitCard {
-  border-radius: 2px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -12,28 +12,29 @@
 
 .animated:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), 0 0 6px rgba(255, 255, 255, 0.08);
 }
 
 .upgraded {
-  background: rgba(245, 255, 199, 0.12);
-  border: 1px solid rgba(245, 255, 199, 0.12);
+  background: rgba(59, 130, 246, 0.28);
+  border: 1px solid rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.45), 0 10px 26px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .animated.upgraded:hover {
-  background: rgba(245, 255, 199, 0.12);
-  box-shadow: 0 8px 24px rgba(245, 255, 199, 0.2), 0 0 12px rgba(245, 255, 199, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(59, 130, 246, 0.22);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35), 0 0 10px rgba(147, 197, 253, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .standard {
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(107, 114, 128, 0.25);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .animated.standard:hover {
-  background: rgba(15, 23, 42, 0.7);
-  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2), 0 0 8px rgba(156, 163, 175, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.68);
+  box-shadow: 0 3px 12px rgba(107, 114, 128, 0.18), 0 0 6px rgba(156, 163, 175, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .highlight {
@@ -46,11 +47,11 @@
 
 
 /* New utility classes */
-.cardStack {  
-  padding: 6px 14px;
+.cardStack {
+  padding: 6px 4px;
   gap: 4px;
   justify-content: space-between;
-  min-height: 2px;
+  min-height: 64px;
   box-sizing: border-box;
 }
 
@@ -78,7 +79,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(59, 130, 246, 0.05);
+  background: radial-gradient(80% 60% at 50% 40%, rgba(147, 197, 253, 0.18) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -90,14 +91,14 @@
 }
 
 .factionIcon {
-  width: 12px;
-  height: 12px;
+  width: 24px;
+  height: 24px;
 }
 
 .imageContainer {
   justify-content: center;
   align-items: center;
-  min-height: 30px;
+  min-height: 40px;
 }
 
 .unitImage {
@@ -106,7 +107,7 @@
 }
 
 .unitImageCompact {
-  height: 12px;
+  height: 28px;
   width: auto;
 }
 

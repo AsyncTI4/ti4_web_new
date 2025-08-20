@@ -1,5 +1,4 @@
-import { Stack, Text, Box } from "@mantine/core";
-import { Surface } from "../Surface";
+import {  Text } from "@mantine/core";
 
 type Props = {
   tacticalCC: number;
@@ -15,35 +14,18 @@ export function CCPool({
   mahactEdict = [],
 }: Props) {
   return (
-    
-                <Stack
-                  gap={2}
-                  align="center"
-                  justify="center"
-                  pos="relative"
-                  h="100%"
-                  style={{ zIndex: 1 }}
-                >
-                {props.playerData.ccReinf !== undefined && (
-                  <CommandTokenCard
-                    color={color}
-                    faction={faction}
-                    reinforcements={props.playerData.ccReinf}
-                    totalCapacity={16}
-                  />
-                )}
-                  <Text
-                    ff="mono"
-                    size="sm"
-                    fw={600}
-                    c="white"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    {tacticalCC}/{fleetCC + mahactEdict.length}
-                    {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
-                  </Text>
-                </Stack>
-  );
+        <Text
+          ff="mono"
+          fs={"italic"}
+          visibleFrom="sm"
+          size="xl"
+          fw={400}
+          c="gray"
+          style={{
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
+          }}
+        >
+          {tacticalCC}/{fleetCC + mahactEdict.length}
+          {mahactEdict.length > 0 ? "*" : ""}/{strategicCC}
+        </Text>);
 }

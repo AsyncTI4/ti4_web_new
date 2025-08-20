@@ -5,7 +5,8 @@ type Props = BoxProps & {
   src: string;
   alt: string;
   count: string | number | ReactNode;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
+  addBorder?: boolean;
   style?: React.CSSProperties;
 };
 
@@ -14,28 +15,26 @@ export function Cardback({
   alt,
   count,
   size = "sm",
+  addBorder = false,
   style,
   ...boxProps
 }: Props) {
   const widthMap = {
+    xs: "35px",
     sm: "45px",
     md: "55px",
     lg: "65px",
   };
 
   return (
-    <Box pos="relative" maw={widthMap[size]} {...boxProps}>
+    <Box pos="relative" maw={widthMap[size]}>
       <Box
         style={{
           width: widthMap[size],
-          borderRadius: "8px",
+          borderRadius: "4px",
           overflow: "hidden",
           position: "relative",
-          background:
-            "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)",
-          border: "1px solid rgba(148, 163, 184, 0.2)",
-          boxShadow:
-            "0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
+          border: addBorder ? "1px solid rgba(148, 163, 184, 0.2)": "",
           ...style,
         }}
       >
@@ -53,11 +52,6 @@ export function Cardback({
           bottom: "4px",
           left: "50%",
           transform: "translateX(-50%)",
-          background:
-            "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-          borderRadius: "4px",
-          boxShadow:
-            "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
           minWidth: "24px",
           display: "flex",
           alignItems: "center",

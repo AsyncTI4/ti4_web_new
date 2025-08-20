@@ -22,6 +22,14 @@ export function CommandTokenCard({
   const colorAlias = getColorAlias(color);
 
   return (
+    <BaseCard
+      isUpgraded={false}
+      isFaction={false}
+      compact={compact}
+      reinforcements={reinforcements}
+      totalCapacity={totalCapacity}
+      enableAnimations={false}
+    >
       <div style={{ position: "relative" }}>
         <Image
           src={cdnImage(`/command_token/command_${colorAlias}.png`)}
@@ -44,6 +52,7 @@ export function CommandTokenCard({
           />
         )}
       </div>
+    </BaseCard>
   );
 }
 

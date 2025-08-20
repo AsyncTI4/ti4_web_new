@@ -40,7 +40,7 @@ export function DynamicTechGrid({
             key={category.type}
             span={{
               base: 6,
-              md: 6,
+              md: 3,
             }}
           >
             <Stack gap={4}>{category.techs}</Stack>

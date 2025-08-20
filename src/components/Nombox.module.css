@@ -5,11 +5,6 @@
 .capturedContainer {
   background: linear-gradient(135deg, rgba(185, 28, 28, 0.15) 0%, rgba(153, 27, 27, 0.10) 50%, rgba(127, 29, 29, 0.12) 100%);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(239, 68, 68, 0.1);
-}
-
-.redCornerAccent {
-  border: 2px solid rgba(239, 68, 68, 0.2);
 }
 
 .factionSection {
@@ -38,8 +33,7 @@
   color: var(--mantine-color-red-3);
   font-weight: 600;
   font-size: var(--mantine-font-size-xs);
-  text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase; 
   letter-spacing: 0.5px;
 }
 
@@ -57,16 +51,12 @@
   gap: 0;
   margin-bottom: var(--mantine-spacing-xs);
   padding: 8px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.4);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
   transition: all 0.2s ease;
 }
 
 .unitGroup:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 .stackedUnit {
@@ -78,12 +68,12 @@
 }
 
 .unitContainer {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   padding: 4px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,17 +85,15 @@
 }
 
 .unitImage {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
 
 .countBadge {
   color: var(--mantine-color-red-2);
   font-weight: 700;
-  font-size: var(--mantine-font-size-xs);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: var(--mantine-font-size-sm);
   min-width: 20px;
   margin-left: var(--mantine-spacing-xs);
 }

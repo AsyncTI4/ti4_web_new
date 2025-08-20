@@ -39,12 +39,6 @@ export function BaseCard({
       className={`${cardClass} ${animatedClass} ${styles.cardStack} ${className || ""}`}
       onClick={onClick}
     >
-      {isUpgraded && (
-        <>
-          <Box className={styles.glassySheen} />
-          <Box className={styles.innerGlow} />
-        </>
-      )}
 
       {/* Faction icon badge for faction-specific units */}
       {isFaction && faction && (
