@@ -1,8 +1,11 @@
-import { Box, Image, Stack } from "@mantine/core";
+import { Box, Group, Image, Stack } from "@mantine/core";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 import styles from "./TechCard.module.css";
-import { getTechData, getTechTier } from "../../../lookup/tech";
+import { getTechData } from "../../../lookup/tech";
+import { getGenericUnitDataByRequiredTechId } from "@/lookup/units";
+import { getColorAlias } from "@/lookup/colors";
+import { cdnImage } from "@/data/cdnImage";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -34,7 +37,7 @@ export function TechCard({ techId }: Props) {
 
   const color = getTechColor(techData.types[0]);
   const isFactionTech = !!techData.faction;
-  const tier = getTechTier(techData.requirements);
+  const isUnitUpgrade = techData.types.includes("UNITUPGRADE");
 
   const detailsCardColor =
     color === "grey" ? "none" : (color as "blue" | "green" | "red" | "yellow");
@@ -44,10 +47,38 @@ export function TechCard({ techId }: Props) {
     if (type === "BIOTIC") return "Biotic";
     if (type === "WARFARE") return "Warfare";
     if (type === "CYBERNETIC") return "Cybernetic";
+    if (type === "UNITUPGRADE") return "Unit Upgrade";
     return type;
   };
 
   const techIconSrc = color === "grey" ? undefined : (`/${color}.png` as const);
+
+  // Build unit icon for unit upgrade techs (fallback to neutral color alias)
+  const unitIcon = (() => {
+    if (!isUnitUpgrade) return undefined;
+    const requiredTechId = techData.baseUpgrade || techId;
+    const unitData = getGenericUnitDataByRequiredTechId(requiredTechId);
+    if (!unitData?.asyncId) return undefined;
+    const colorAlias = getColorAlias(undefined);
+    const src = cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`);
+    return <DetailsCard.Icon icon={<Image src={src} w={28} h={28} />} />;
+  })();
+
+  // Map requirements string (e.g., "BBY") to prerequisite icons
+  const requirementIcons = (() => {
+    const req = techData.requirements || "";
+    if (!req) return [] as string[];
+    const ICON_MAP: Record<string, string> = {
+      B: "/blue.png",
+      G: "/green.png",
+      R: "/red.png",
+      Y: "/yellow.png",
+    };
+    return req
+      .split("")
+      .map((c) => ICON_MAP[c])
+      .filter((src): src is string => Boolean(src));
+  })();
 
   return (
     <DetailsCard
@@ -60,11 +91,12 @@ export function TechCard({ techId }: Props) {
           title={techData.name}
           subtitle={`${formatType(techData.types[0])} Technology`}
           icon={
-            techIconSrc ? (
+            unitIcon ??
+            (techIconSrc ? (
               <DetailsCard.Icon
                 icon={<Image src={techIconSrc} w={28} h={28} />}
               />
-            ) : undefined
+            ) : undefined)
           }
           caption={isFactionTech ? "Faction Tech" : undefined}
           captionColor="blue"
@@ -83,20 +115,20 @@ export function TechCard({ techId }: Props) {
         />
 
         <Box className={styles.bottomSection}>
-          {tier > 0 && (
+          {requirementIcons.length > 0 && (
             <Box className={styles.techIconContainer}>
-              <Box className={styles.iconStack}>
-                {[...Array(tier)].map((_, i) => (
+              <Group gap={4} justify="flex-end" align="center">
+                {requirementIcons.map((src, i) => (
                   <Image
-                    key={i}
-                    src={`/${color}.png`}
-                    alt={techData.name}
+                    key={`${src}-${i}`}
+                    src={src}
+                    alt="tech prerequisite"
                     w={14}
                     h={14}
                     className={styles.stackIcon}
                   />
                 ))}
-              </Box>
+              </Group>
             </Box>
           )}
         </Box>

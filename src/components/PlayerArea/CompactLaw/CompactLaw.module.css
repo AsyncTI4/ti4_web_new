@@ -10,10 +10,7 @@
   box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3), 0 0 12px rgba(168, 85, 247, 0.2);
 }
 
-.shimmerBorder {
-  border: 1px solid rgba(147, 51, 234, 0.4);
-  border-radius: var(--mantine-radius-sm);
-}
+/* border handled by global gradient border */
 
 .contentContainer {
   position: relative;

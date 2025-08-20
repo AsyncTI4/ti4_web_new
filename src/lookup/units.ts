@@ -26,6 +26,24 @@ export const getUnitDataByAsyncId = (asyncId: string) => {
   return unitsWithAsyncId?.[0]; // Return first match for backwards compatibility
 };
 
+// Build a map from requiredTechId -> units for quick lookup
+const unitsByRequiredTechIdMap = new Map<string, Unit[]>();
+units.forEach((unit) => {
+  if (!unit.requiredTechId) return;
+  const existing = unitsByRequiredTechIdMap.get(unit.requiredTechId) || [];
+  unitsByRequiredTechIdMap.set(unit.requiredTechId, [...existing, unit]);
+});
+
+// Prefer generic (non-faction) unit for a given requiredTechId
+export const getGenericUnitDataByRequiredTechId = (requiredTechId: string) => {
+  const candidates = unitsByRequiredTechIdMap.get(requiredTechId) || [];
+  if (candidates.length === 0) return undefined;
+
+  const nonFaction = candidates.find((u) => !u.faction);
+  if (nonFaction) return nonFaction;
+  return candidates[0];
+};
+
 // Prefer generic (non-faction) unit data for labels when multiple units share the same asyncId
 export const getGenericUnitDataByAsyncId = (asyncId: string) => {
   const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId) || [];

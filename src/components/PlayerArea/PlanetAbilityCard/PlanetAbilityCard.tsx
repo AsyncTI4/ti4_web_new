@@ -1,9 +1,10 @@
-import { Stack, Text } from "@mantine/core";
+import { Stack, Text, Box } from "@mantine/core";
 import { useState } from "react";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { getPlanetData } from "@/lookup/planets";
 import { PlanetAbilityDetailsCard } from "./PlanetAbilityDetailsCard";
 import styles from "./PlanetAbilityCard.module.css";
+import { IconZzz } from "@tabler/icons-react";
 
 type Props = {
   planetId: string;
@@ -31,11 +32,13 @@ export function PlanetAbilityCard({
       <SmoothPopover.Target>
         <Stack
           onClick={() => setOpened((o) => !o)}
-          className={`${styles.mainStack} ${styles.abilityCard}`}
-          style={{
-            opacity: exhausted ? 0.7 : 1,
-          }}
+          className={`${styles.mainStack} ${styles.abilityCard} ${exhausted ? styles.exhausted : ""}`}
         >
+          {exhausted && (
+            <Box className={styles.exhaustBadge} aria-label="Exhausted">
+              <IconZzz size={18} />
+            </Box>
+          )}
           <Stack className={styles.bottomStack}>
             <Text className={styles.planetName} ff="monospace">
               {planetData.shortName ?? planetData.name} Ability

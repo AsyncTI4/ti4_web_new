@@ -4,11 +4,14 @@
   --ability-border: rgba(147, 51, 234, 0.3);
   --ability-shadow: rgba(147, 51, 234, 0.08);
   --ability-highlight: rgba(147, 51, 234, 0.4);
+  --ability-background-exhausted: rgba(128, 128, 128, 0.15);
+  --ability-border-exhausted: rgba(128, 128, 128, 0.35);
 }
 
 .abilityCard {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  position: relative;
 }
 
 .abilityCard:hover {
@@ -21,6 +24,30 @@
   padding: 6px var(--mantine-spacing-xs);
   border: 1px solid var(--ability-border);
   background: linear-gradient(135deg, var(--ability-background) 0%, rgba(30, 9, 60, 0.6) 100%);
+}
+
+.exhausted {
+  border-color: var(--ability-border-exhausted);
+  background: linear-gradient(135deg, var(--ability-background-exhausted) 0%, rgba(70, 70, 70, 0.35) 100%);
+  filter: none !important;
+}
+
+.exhaustBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.75);
+  color: var(--mantine-color-gray-1);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .bottomStack {

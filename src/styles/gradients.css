@@ -245,6 +245,16 @@
   background: rgba(var(--color-orange), 0.055);
 }
 
+/* Slightly stronger purple for Law chips */
+.gradient-purple.gradient-border {
+  border-color: rgba(var(--color-purple), 0.26);
+  background: rgba(var(--color-purple), 0.09);
+}
+
+.shimmer-container.gradient-purple::before {
+  background: rgba(var(--color-purple), 0.055);
+}
+
 
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {

@@ -39,6 +39,9 @@ import { getTokenImagePath } from "@/lookup/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getUnitAsyncId } from "@/lookup/units";
 import { getPlanetData } from "@/lookup/planets";
+import { getAbility } from "@/lookup/abilities";
+import { Ability } from "./PlayerArea/Ability";
+import styles from "./PlayerCard2Mid.module.css";
 
 // Strategy card names and colors mapping
 const SC_NAMES = {
@@ -119,6 +122,8 @@ export default function PlayerCard2Mid(props: Props) {
     ghostWormholesReinf,
     sleeperTokensReinf,
     nombox,
+    abilities,
+    notResearchedFactionTechs,
   } = props.playerData;
   const promissoryNotes = promissoryNotesInPlayArea;
   const exhaustedPlanetAbilities =
@@ -268,7 +273,7 @@ export default function PlayerCard2Mid(props: Props) {
       }}
     >
       {/* Header Section */}
-      <Group justify="space-between" align="center" mb="md">
+      <Group justify="space-between" align="center" mb="xs">
         <Group gap={4} px={4} align="center">
           <Image
             src={cdnImage(`/factions/${faction}.png`)}
@@ -312,6 +317,47 @@ export default function PlayerCard2Mid(props: Props) {
           </Box>
         </Group>
         <Box visibleFrom="sm">{StrategyAndSpeaker}</Box>
+      </Group>
+      {/* Abilities + Unresearched Faction Tech (below header) */}
+      <Group wrap="initial" gap={2} className={styles.overlayRow}>
+        <Group gap={4}>
+          {abilities?.map((abilityId, index) => {
+            const abilityData = getAbility(abilityId);
+            if (!abilityData) {
+              console.log("Could not find ability", abilityId);
+            }
+            if (!abilityData) return null;
+
+            return (
+              <Box
+                key={index}
+                style={{
+                  flexShrink: 1,
+                  minWidth: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <Ability id={abilityId} />
+              </Box>
+            );
+          })}
+        </Group>
+        <div style={{ flex: 1 }} />
+
+        {notResearchedFactionTechs?.length > 0 && (
+          <Group gap={2} style={{ flexShrink: 1 }}>
+            {notResearchedFactionTechs.map((techId, index) => (
+              <Box
+                key={index}
+                style={{
+                  filter: "grayscale(0.5)",
+                }}
+              >
+                <Tech techId={techId} />
+              </Box>
+            ))}
+          </Group>
+        )}
       </Group>
       <Grid gutter="md" columns={12}>
         <Grid.Col
