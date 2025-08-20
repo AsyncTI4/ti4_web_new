@@ -1,23 +1,33 @@
-/* Compact objective card styles - mirrors ScoredSecret styling */
+/* Compact objective chip distinctives */
 .objectiveCard {
+  position: relative;
   transition: all 0.2s ease;
-  cursor: pointer;
   border-radius: var(--mantine-radius-sm);
 }
 
-/* Default blue hover effect */
-.objectiveCard:hover {
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), 0 0 12px rgba(96, 165, 250, 0.2);
+/* Subtle left accent ribbon, color varies per stage */
+.objectiveCard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, rgba(var(--color-blue), 0.62) 0%, rgba(var(--color-blue), 0.26) 100%);
+  opacity: 0.95;
 }
 
-/* Orange hover effect for stage 1 objectives */
-.objectiveCard.orange:hover {
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3), 0 0 12px rgba(251, 146, 60, 0.2);
+.orange::before {
+  background: linear-gradient(180deg, rgba(var(--color-orange), 0.8) 0%, rgba(var(--color-orange), 0.35) 100%);
 }
 
-/* Gray hover effect (should be disabled anyway but just in case) */
-.objectiveCard.gray:hover {
-  box-shadow: 0 4px 16px rgba(148, 163, 184, 0.3), 0 0 12px rgba(156, 163, 175, 0.2);
+.blue::before {
+  background: linear-gradient(180deg, rgba(var(--color-blue), 0.78) 0%, rgba(var(--color-blue), 0.33) 100%);
+}
+
+.gray::before {
+  background: linear-gradient(180deg, rgba(var(--color-gray), 0.55) 0%, rgba(var(--color-gray), 0.22) 100%);
 }
 
 .contentContainer {
@@ -63,6 +73,7 @@
 
 .unrevealed:hover {
   box-shadow: none !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
 }
 
 /* Disable hover effects and pointer cursor for non-clickable (gray) objectives */
@@ -72,4 +83,5 @@
 
 .nonClickable:hover {
   box-shadow: none !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
 }

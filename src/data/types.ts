@@ -598,3 +598,15 @@ export type ActionCard = {
   flavorText?: string;
   source: string;
 };
+
+export type StrategyCardDefinition = {
+  id: string;
+  initiative: number;
+  name: string;
+  primaryTexts: string[];
+  secondaryTexts: string[];
+  imageFileName: string;
+  colourHexCode: string;
+  source: string;
+  imageURL: string;
+};

@@ -5,6 +5,8 @@ import classes from "./Hierarchy.module.css";
 type Props = Omit<BoxProps, "color" | "onClick"> & {
   children: React.ReactNode;
   accent?: ColorKey | "grey" | "gray";
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
@@ -18,6 +20,8 @@ function getHoverOutlineClass(accent?: Props["accent"]) {
       return classes.hoverOutlineRed;
     case "blue":
       return classes.hoverOutlineBlue;
+    case "orange":
+      return classes.hoverOutlineOrange;
     case "green":
       return classes.hoverOutlineGreen;
     case "purple":

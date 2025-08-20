@@ -1,7 +1,12 @@
 import { Box, Group, Text } from "@mantine/core";
+import { useState } from "react";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { SpeakerToken } from "../SpeakerToken";
 import classes from "./StrategyCardBannerCompact.module.css";
+import { SmoothPopover } from "@/components/shared/SmoothPopover";
+import { StrategyCardDetailsCard } from "../StrategyCardDetailsCard";
+import { Shimmer } from "../Shimmer/Shimmer";
+import type { ColorKey } from "../gradientClasses";
 
 interface Props {
   number: number;
@@ -42,34 +47,52 @@ export function StrategyCardBannerCompact({
   isSpeaker,
   isExhausted = false,
 }: Props) {
+  const [opened, setOpened] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const colorClass =
     SC_COLOR_CLASSES[color as keyof typeof SC_COLOR_CLASSES] || classes.red;
 
   return (
-    <Group className={classes.container} gap="lg">
-      <SpeakerToken isVisible={isSpeaker} />
+    <SmoothPopover opened={opened} onChange={setOpened} position="bottom">
+      <SmoothPopover.Target>
+        <Group className={classes.container} gap="lg">
+          <SpeakerToken isVisible={isSpeaker} />
 
-      <Chip
-        accent={color as any}
-        className={`${classes.cardContainer} ${colorClass}`}
-        style={{ opacity: isExhausted ? 0.5 : 1 }}
-      >
-        <Box className={classes.inner}>
-          {/* Strategy card number circle */}
-          <Box className={classes.numberCircle}>
-            <Text ff="heading" c={numberColor} className={classes.numberText}>
-              {number}
-            </Text>
-          </Box>
+          <Chip
+            accent={color as any}
+            className={`${classes.cardContainer} ${colorClass}`}
+            style={{ opacity: isExhausted && !hovered ? 0.5 : 1 }}
+            onClick={() => setOpened((o) => !o)}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+          >
+            <Shimmer color={color as ColorKey} px={6}>
+              <Box className={classes.inner}>
+                {/* Strategy card number circle */}
+                <Box className={classes.numberCircle}>
+                  <Text
+                    ff="heading"
+                    c={numberColor}
+                    className={classes.numberText}
+                  >
+                    {number}
+                  </Text>
+                </Box>
 
-          {/* Strategy card text - abbreviated */}
-          <Text ff="heading" className={classes.cardText}>
-            {text}
-          </Text>
-        </Box>
-      </Chip>
-    </Group>
+                {/* Strategy card text - abbreviated */}
+                <Text ff="heading" className={classes.cardText}>
+                  {text}
+                </Text>
+              </Box>
+            </Shimmer>
+          </Chip>
+        </Group>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
+        <StrategyCardDetailsCard initiative={number} color={color as any} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
   );
 }

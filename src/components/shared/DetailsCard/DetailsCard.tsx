@@ -30,7 +30,7 @@ export function DetailsCard({
     if (color === "orange") return `${classes.card} ${classes.orange}`;
     if (color === "cyan") return `${classes.card} ${classes.cyan}`;
     if (color === "green") return `${classes.card} ${classes.green}`;
-    if (color === "blue") return `${classes.card}`;
+    if (color === "blue") return `${classes.card} ${classes.blue}`;
     return classes.card;
   };
 

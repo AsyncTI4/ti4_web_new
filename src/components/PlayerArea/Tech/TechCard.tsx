@@ -1,5 +1,6 @@
-import { Box, Text, Image, Stack } from "@mantine/core";
-import { cdnImage } from "../../../data/cdnImage";
+import { Box, Image, Stack } from "@mantine/core";
+import { DetailsCard } from "@/components/shared/DetailsCard";
+import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 import styles from "./TechCard.module.css";
 import { getTechData, getTechTier } from "../../../lookup/tech";
 
@@ -24,7 +25,6 @@ type Props = {
 };
 
 export function TechCard({ techId }: Props) {
-  // Look up tech data
   const techData = getTechData(techId);
 
   if (!techData) {
@@ -36,70 +36,71 @@ export function TechCard({ techId }: Props) {
   const isFactionTech = !!techData.faction;
   const tier = getTechTier(techData.requirements);
 
+  const detailsCardColor =
+    color === "grey" ? "none" : (color as "blue" | "green" | "red" | "yellow");
+
+  const formatType = (type: string) => {
+    if (type === "PROPULSION") return "Propulsion";
+    if (type === "BIOTIC") return "Biotic";
+    if (type === "WARFARE") return "Warfare";
+    if (type === "CYBERNETIC") return "Cybernetic";
+    return type;
+  };
+
+  const techIconSrc = color === "grey" ? undefined : (`/${color}.png` as const);
+
   return (
-    <Box className={`${styles.techCard} ${styles[color]}`}>
-      {/* Content */}
-      <Box className={`${styles.content} ${styles[color]}`}>
-        <Stack gap="md" h="100%">
-          {/* Header with faction icon if applicable */}
-          <Box className={`${styles.header} ${styles[color]}`}>
-            <Text
-              size="md"
-              fw={700}
-              c="white"
-              ff="heading"
-              className={`${styles.title} ${isFactionTech ? styles.titleWithFaction : ""}`}
-            >
-              {techData.name}
-            </Text>
+    <DetailsCard
+      width={320}
+      color={detailsCardColor}
+      className={styles.content}
+    >
+      <Stack gap="md" h="100%">
+        <DetailsCard.Title
+          title={techData.name}
+          subtitle={`${formatType(techData.types[0])} Technology`}
+          icon={
+            techIconSrc ? (
+              <DetailsCard.Icon
+                icon={<Image src={techIconSrc} w={28} h={28} />}
+              />
+            ) : undefined
+          }
+          caption={isFactionTech ? "Faction Tech" : undefined}
+          captionColor="blue"
+        />
 
-            {/* Faction icon for faction techs */}
-            {isFactionTech && (
-              <Box className={styles.factionIcon}>
-                <Image
-                  src={cdnImage(`/factions/${techData.faction}.png`)}
-                  alt={`${techData.faction} faction`}
-                  w={24}
-                  h={24}
-                />
+        {isFactionTech && techData.faction && (
+          <Box className={styles.factionIcon}>
+            <CircularFactionIcon faction={techData.faction} size={24} />
+          </Box>
+        )}
+
+        <DetailsCard.Section
+          content={
+            techData.text?.replace(/\n/g, "\n\n") || "No description available."
+          }
+        />
+
+        <Box className={styles.bottomSection}>
+          {tier > 0 && (
+            <Box className={styles.techIconContainer}>
+              <Box className={styles.iconStack}>
+                {[...Array(tier)].map((_, i) => (
+                  <Image
+                    key={i}
+                    src={`/${color}.png`}
+                    alt={techData.name}
+                    w={14}
+                    h={14}
+                    className={styles.stackIcon}
+                  />
+                ))}
               </Box>
-            )}
-          </Box>
-
-          {/* Description */}
-          <Box className={styles.description}>
-            <Text
-              size="sm"
-              fw={400}
-              c="gray.2"
-              className={styles.descriptionText}
-            >
-              {techData.text?.replace(/\n/g, "\n\n") ||
-                "No description available."}
-            </Text>
-          </Box>
-
-          {/* Bottom section with tech icon splayed diagonally by prereq tier (icon only, single background container) */}
-          <Box className={styles.bottomSection}>
-            {tier > 0 && (
-              <Box className={`${styles.techIconContainer} ${styles[color]}`}>
-                <Box className={styles.iconStack}>
-                  {[...Array(tier)].map((_, i) => (
-                    <Image
-                      key={i}
-                      src={`/${color}.png`}
-                      alt={techData.name}
-                      w={14}
-                      h={14}
-                      className={`${styles.stackIcon} ${styles[color]}`}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-        </Stack>
-      </Box>
-    </Box>
+            </Box>
+          )}
+        </Box>
+      </Stack>
+    </DetailsCard>
   );
 }

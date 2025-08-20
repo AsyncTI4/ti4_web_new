@@ -129,7 +129,6 @@ export default function PlayerCardSidebar(props: Props) {
       <Group
         gap={4}
         px={4}
-        mb="md"
         w="100%"
         align="center"
         wrap="nowrap"
@@ -211,7 +210,48 @@ export default function PlayerCardSidebar(props: Props) {
         </Group>
       </Group>
 
-      {/* Abilities + Unresearched Faction Tech moved to appear right above Tech section */}
+      {/* Abilities + Unresearched Faction Tech (moved above Tech) */}
+      <Group wrap="initial" gap={2} mb="md" mt="xs">
+        <Group gap={4}>
+          {abilities?.map((abilityId, index) => {
+            const abilityData = getAbility(abilityId);
+            if (!abilityData) {
+              console.log("Could not find ability", abilityId);
+            }
+            if (!abilityData) return null;
+
+            return (
+              <Box
+                key={index}
+                style={{
+                  flexShrink: 1,
+                  minWidth: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <Ability id={abilityId} />
+              </Box>
+            );
+          })}
+        </Group>
+        <div style={{ flex: 1 }} />
+
+        {notResearchedFactionTechs?.length > 0 && (
+          <Group gap={2} style={{ flexShrink: 1 }}>
+            {notResearchedFactionTechs.map((techId, index) => (
+              <Box
+                key={index}
+                style={{
+                  filter: "grayscale(0.5)",
+                }}
+              >
+                <Tech techId={techId} />
+              </Box>
+            ))}
+          </Group>
+        )}
+      </Group>
+
       <Stack gap={0}>
         <SimpleGrid cols={2} spacing="xs">
           <Stack gap={8}>
@@ -246,48 +286,6 @@ export default function PlayerCardSidebar(props: Props) {
         </SimpleGrid>
 
         <Box className={softStyles.softDivider} mt="xs" />
-
-        {/* Abilities + Unresearched Faction Tech (moved above Tech) */}
-        <Group wrap="initial" gap={2} my="xs" mt="xs">
-          <Group gap={4}>
-            {abilities?.map((abilityId, index) => {
-              const abilityData = getAbility(abilityId);
-              if (!abilityData) {
-                console.log("Could not find ability", abilityId);
-              }
-              if (!abilityData) return null;
-
-              return (
-                <Box
-                  key={index}
-                  style={{
-                    flexShrink: 1,
-                    minWidth: 0,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Ability id={abilityId} />
-                </Box>
-              );
-            })}
-          </Group>
-          <div style={{ flex: 1 }} />
-
-          {notResearchedFactionTechs?.length > 0 && (
-            <Group gap={2} style={{ flexShrink: 1 }}>
-              {notResearchedFactionTechs.map((techId, index) => (
-                <Box
-                  key={index}
-                  style={{
-                    filter: "grayscale(0.5)",
-                  }}
-                >
-                  <Tech techId={techId} />
-                </Box>
-              ))}
-            </Group>
-          )}
-        </Group>
 
         <Box p="md" className={softStyles.sectionBlock}>
           <Stack gap="xs">

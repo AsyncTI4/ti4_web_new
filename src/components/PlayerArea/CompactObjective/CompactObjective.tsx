@@ -4,6 +4,7 @@ import { getGradientClasses } from "../gradientClasses";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import { PlayerData } from "../../../data/types";
 import styles from "./CompactObjective.module.css";
+import { Chip } from "@/components/shared/primitives/Chip";
 
 type Props = {
   objectiveKey: string;
@@ -91,28 +92,20 @@ export function CompactObjective({
   };
 
   return (
-    <Box
-      className={`${styles.objectiveCard} ${styles[color]} ${!revealed ? styles.unrevealed : ""} ${color === "gray" ? styles.nonClickable : ""}`}
+    <Chip
+      accent={color}
+      className={`${styles.objectiveCard} ${styles[color]} ${!revealed ? styles.unrevealed : ""} ${!isClickable ? styles.nonClickable : ""}`}
       onClick={isClickable ? onClick : undefined}
     >
       <Shimmer color={color} py={2} px={6} className={gradientClasses.border}>
         <Box className={styles.contentContainer}>
           <Text size="xs" fw={700} c="white" className={styles.textContainer}>
-            <Text
-              span
-              size="xs"
-              fw={600}
-              c={`${color}.4`}
-              className={styles.scoreText}
-            >
-              ({pointValue}){" "}
-            </Text>
             {revealed ? name : "UNREVEALED"}
           </Text>
 
           {renderFactionIcons()}
         </Box>
       </Shimmer>
-    </Box>
+    </Chip>
   );
 }
