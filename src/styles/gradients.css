@@ -255,6 +255,16 @@
   background: rgba(var(--color-purple), 0.055);
 }
 
+/* Slightly stronger green for Leader chips */
+.gradient-green.gradient-border {
+  border-color: rgba(var(--color-green), 0.26);
+  background: rgba(var(--color-green), 0.05);
+}
+
+.shimmer-container.gradient-green::before {
+  background: rgba(var(--color-green), 0.025);
+}
+
 
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {

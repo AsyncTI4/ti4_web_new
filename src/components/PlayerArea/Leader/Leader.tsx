@@ -6,7 +6,8 @@ import { leaders } from "../../../data/leaders";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./Leader.module.css";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
+import { Chip } from "@/components/shared/primitives/Chip";
+import { getGradientClasses } from "../gradientClasses";
 
 type Props = {
   id: string;
@@ -23,6 +24,8 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
   if (!leaderData) return null;
 
   const shouldShowGreen = !exhausted && !locked;
+  const accentColor = shouldShowGreen ? "green" : "gray";
+  const gradientClasses = getGradientClasses(accentColor);
 
   const showLeaderImage =
     leaderData.source === "base" || leaderData.source === "pok";
@@ -56,22 +59,18 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <div onClick={() => setOpened((o) => !o)}>
-          {shouldShowGreen ? (
-            <Shimmer
-              color="green"
-              className={`${styles.leaderCard} ${styles.shimmerCard} ${styles.shimmerContainer} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover}`}
-            >
-              <LeaderContent />
-            </Shimmer>
-          ) : (
-            <Box
-              className={`${styles.leaderCard} ${styles.standardCard} ${styles.standardContainer} ${hierarchy.chip} ${hierarchy.chipOutline} ${hierarchy.chipGlowHover} ${exhausted ? styles.exhaustedContainer : ""}`}
-            >
-              <LeaderContent />
-            </Box>
-          )}
-        </div>
+        <Chip
+          className={styles.leaderCard}
+          accent={accentColor}
+          onClick={() => setOpened((o) => !o)}
+        >
+          <Shimmer
+            color={accentColor}
+            className={`${styles.shimmerContainer} ${gradientClasses.border} ${exhausted ? styles.exhaustedContainer : ""}`}
+          >
+            <LeaderContent />
+          </Shimmer>
+        </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <LeaderDetailsCard leaderId={id} />
