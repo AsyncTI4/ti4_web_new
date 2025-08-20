@@ -1,4 +1,5 @@
 import { Button, Group, Text } from "@mantine/core";
+import { useAppStore } from "@/utils/appStore";
 import {
   IconZoomCancel,
   IconZoomIn,
@@ -7,18 +8,17 @@ import {
   IconScreenShareOff,
 } from "@tabler/icons-react";
 
-export function ZoomControls({
-  zoom,
-  onZoomIn,
-  onZoomOut,
-  onZoomReset,
-  onZoomScreenSize,
-  zoomFitToScreen,
-  zoomClass,
-}) {
+function ZoomControls() {
+  const zoom = useAppStore((state) => state.zoomLevel);
+  const zoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
+  const onZoomIn = useAppStore((state) => state.handleZoomIn);
+  const onZoomOut = useAppStore((state) => state.handleZoomOut);
+  const onZoomReset = useAppStore((state) => state.handleZoomReset);
+  const onZoomScreenSize = useAppStore((state) => state.handleZoomScreenSize);
+
   return (
-    <Group className={zoomClass ?? "zoomContainer"} gap="xs">
-      {!zoomFitToScreen && <Text>{zoom?.toFixed(2) * 100}%</Text>}
+    <Group className={"zoomContainer"} gap="xs">
+      {!zoomFitToScreen && <Text>{Number(zoom.toFixed(2))  * 100}%</Text>}
       <Button
         onClick={onZoomIn}
         size="compact-md"
@@ -52,3 +52,5 @@ export function ZoomControls({
     </Group>
   );
 }
+
+export default ZoomControls;

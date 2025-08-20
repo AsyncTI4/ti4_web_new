@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { ZoomControls } from "./ZoomControls";
+import ZoomControls from "./ZoomControls";
 import { useOverlayData } from "../hooks/useOverlayData";
 import { abilities } from "../data/abilities";
 import { publicObjectives } from "../data/publicObjectives";

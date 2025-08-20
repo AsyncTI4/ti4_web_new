@@ -41,6 +41,7 @@ import { MapView } from "./components/main/MapView";
 import { TabsControls } from "./components/main/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
 import { useMovementStore } from "./utils/movementStore";
+import GeneralArea from "./components/General/GeneralArea";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -137,6 +138,13 @@ function NewMapUIContent() {
                 Objectives
               </Tabs.Tab>
               <Tabs.Tab
+                value="general"
+                className={classes.tabsTab}
+                leftSection={<IconTarget size={16} />}
+              >
+                General Area
+              </Tabs.Tab>
+              <Tabs.Tab
                 value="players"
                 className={classes.tabsTab}
                 leftSection={<IconUsers size={16} />}
@@ -182,17 +190,21 @@ function NewMapUIContent() {
                 {enhancedData && <ScoreBoard />}
               </Box>
             </Tabs.Panel>
+
+            <Tabs.Panel value="general" h="calc(100% - 60px)">
+              <Box className={classes.playersTabContent}>
+                {enhancedData && <GeneralArea />}
+              </Box>
+            </Tabs.Panel>
           </Tabs>
         </Box>
       </AppShell.Main>
 
-      {/* Settings Modal */}
       <SettingsModal
         opened={settings.settingsModalOpened}
         onClose={() => handlers.setSettingsModalOpened(false)}
       />
 
-      {/* Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal
         opened={settings.keyboardShortcutsModalOpened}
         onClose={() => handlers.setKeyboardShortcutsModalOpened(false)}

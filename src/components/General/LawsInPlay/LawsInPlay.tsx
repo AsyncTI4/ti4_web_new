@@ -10,11 +10,13 @@ type Props = {
 function LawsInPlay({ laws }: Props) {
   return (
     <Box>
-      <Text className={styles.sectionTitle}>Laws in Play</Text>
-      <SimpleGrid cols={2} spacing="xs">
-        {laws.map((law, index) => (
-          <LawCard key={index} law={law} />
-        ))}
+      <SimpleGrid cols={1} spacing="xs">
+        <SimpleGrid cols={1} spacing="xs">
+        <Text className={styles.sectionTitle}>Laws in Play</Text>
+          {laws.map((law, index) => (
+            <LawCard key={index} law={law} />
+          ))}
+        </SimpleGrid>
       </SimpleGrid>
     </Box>
   );
