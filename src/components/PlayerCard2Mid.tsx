@@ -12,7 +12,6 @@ import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { Surface } from "./PlayerArea/Surface";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { PlanetAbilityCard } from "./PlayerArea/PlanetAbilityCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
@@ -38,7 +37,7 @@ import { PlayerCardBox } from "./PlayerCardBox";
 import { getTokenImagePath } from "@/lookup/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getUnitAsyncId } from "@/lookup/units";
-import { getPlanetData } from "@/lookup/planets";
+// import { getPlanetData } from "@/lookup/planets";
 import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 import styles from "./PlayerCard2Mid.module.css";
@@ -544,28 +543,14 @@ export default function PlayerCard2Mid(props: Props) {
                 >
                   <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
                     {planets.map((planetId, index) => {
-                      const planetData = getPlanetData(planetId);
-                      const hasLegendaryAbility =
-                        planetData?.legendaryAbilityName &&
-                        planetData?.legendaryAbilityText;
-
                       return (
-                        <div
+                        <PlanetCard
                           key={index}
-                          style={{ display: "flex", gap: "4px" }}
-                        >
-                          <PlanetCard planetId={planetId} />
-                          {hasLegendaryAbility && (
-                            <PlanetAbilityCard
-                              planetId={planetId}
-                              abilityName={planetData.legendaryAbilityName!}
-                              abilityText={planetData.legendaryAbilityText!}
-                              exhausted={exhaustedPlanetAbilities.includes(
-                                planetId
-                              )}
-                            />
+                          planetId={planetId}
+                          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                            planetId
                           )}
-                        </div>
+                        />
                       );
                     })}
                   </Group>

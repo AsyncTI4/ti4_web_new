@@ -1,6 +1,5 @@
 import { Group, Text, Stack, Box, Image, Grid } from "@mantine/core";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { PlanetAbilityCard } from "./PlayerArea/PlanetAbilityCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { PlayerData } from "../data/types";
@@ -129,17 +128,13 @@ export default function PlayerCardSidebarStrength(props: Props) {
                   planetData?.legendaryAbilityText;
 
                 return (
-                  <div key={index} style={{ display: "flex", gap: "4px" }}>
-                    <PlanetCard planetId={planetId} />
-                    {hasLegendaryAbility && (
-                      <PlanetAbilityCard
-                        planetId={planetId}
-                        abilityName={planetData.legendaryAbilityName!}
-                        abilityText={planetData.legendaryAbilityText!}
-                        exhausted={exhaustedPlanetAbilities.includes(planetId)}
-                      />
+                  <PlanetCard
+                    key={index}
+                    planetId={planetId}
+                    legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                      planetId
                     )}
-                  </div>
+                  />
                 );
               })}
             </Group>
