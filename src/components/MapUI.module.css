@@ -73,14 +73,13 @@
   padding-top: 2px;
 }
 
-/* Tile rendering container */
+
 .tileRenderingContainer {
   position: relative;
 }
 
 .mainBackground {
   background: var(--main-bg);
-  min-height: calc(100vh - 60px);
 }
 
 .tabsList {
@@ -132,18 +131,6 @@
   border-color: var(--map-tab-active-border);
   border-bottom: none;
   text-shadow: var(--map-tab-active-text-shadow);
-}
-
-.mapContainer {
-  display: flex;
-  height: 100%;
-  background: var(--main-bg);
-}
-
-.mapArea {
-  height: 100%;
-  position: relative;
-  overflow: auto;
 }
 
 /* Adds space when movement banner is present so content isn't overlapped */

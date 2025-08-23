@@ -4,9 +4,5 @@ import NewMapUI from "./NewMapUI";
 import GamePage from "./GamePage";
 
 export default function MapTogglePage() {
-  const hasOldUIOverride = localStorage.getItem("showOldUI") === "true";
-  if (isMobileDevice() || hasOldUIOverride) {
-    return <GamePage />;
-  }
   return <NewMapUI />;
 }

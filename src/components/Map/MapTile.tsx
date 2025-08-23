@@ -63,7 +63,6 @@ export const MapTile = React.memo<Props>(
     embedded = false,
   }) => {
     const gameData = useGameData();
-    const [hoveredLocal, setHoveredLocal] = useState(false);
 
     const ringPosition = mapTile.position;
     const systemId = mapTile.systemId;
@@ -78,19 +77,13 @@ export const MapTile = React.memo<Props>(
     const distanceMode = useSettingsStore(
       (state) => state.settings.distanceMode
     );
-    const overlaysEnabled = useSettingsStore(
-      (state) => state.settings.overlaysEnabled
-    );
+
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
 
     const isDistanceSelected =
       distanceMode && selectedTiles?.includes(ringPosition);
     const isDistanceHoverable = distanceMode && !isDistanceSelected;
-    const isHoveredForDistance =
-      !!distanceMode && hoveredTilePosition === ringPosition;
-
-    const controllingFaction = mapTile.controller;
 
     return (
       <div
@@ -141,11 +134,9 @@ export const MapTile = React.memo<Props>(
             systemId={systemId}
             className={classes.tile}
             onMouseEnter={() => {
-              setHoveredLocal(true);
               if (onTileHover) onTileHover(ringPosition, true);
             }}
             onMouseLeave={() => {
-              setHoveredLocal(false);
               if (onTileHover) onTileHover(ringPosition, false);
             }}
           />
@@ -191,46 +182,6 @@ export const MapTile = React.memo<Props>(
           >
             {ringPosition}
           </div>
-
-          {controllingFaction && overlaysEnabled && (
-            <FactionColorOverlay faction={controllingFaction} opacity={0.3} />
-          )}
-
-          {pdsMode && (
-            <PdsOverlayLayer
-              ringPosition={ringPosition}
-              dominantPdsFaction={gameData?.dominantPdsFaction}
-            />
-          )}
-
-          {isMovingMode || !!distanceMode ? (
-            <div
-              className={classes.interactiveOverlay}
-              style={{ width: TILE_WIDTH, height: TILE_HEIGHT }}
-              onMouseEnter={() => {
-                setHoveredLocal(true);
-                if (onTileHover) onTileHover(ringPosition, true);
-              }}
-              onMouseLeave={() => {
-                setHoveredLocal(false);
-                if (onTileHover) onTileHover(ringPosition, false);
-              }}
-            >
-              <TileSelectedOverlay
-                isSelected={!!isDistanceSelected || !!isTargetSelected}
-                isHovered={isHoveredForDistance || hoveredLocal}
-                isDistanceMode
-                variant={isOrigin ? "origin" : "blue"}
-                alwaysVisible={!!isOrigin}
-              />
-            </div>
-          ) : (
-            <TileSelectedOverlay
-              isSelected={!!isDistanceSelected || !!isTargetSelected}
-              isHovered={isHoveredForDistance || hoveredLocal}
-              isDistanceMode={!!distanceMode || !!isTargetSelected}
-            />
-          )}
         </div>
       </div>
     );
