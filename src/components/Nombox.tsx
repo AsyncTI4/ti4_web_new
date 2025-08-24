@@ -1,4 +1,4 @@
-import { Box, Image, Group, Text } from "@mantine/core";
+import { Box, Image, Group, Text, Divider } from "@mantine/core";
 import { Surface } from "./PlayerArea/Surface";
 import { cdnImage } from "../data/cdnImage";
 import { units } from "../data/units";
@@ -7,6 +7,9 @@ import styles from "./Nombox.module.css";
 import { getColorAlias } from "@/lookup/colors";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { Unit } from "./shared/Unit";
+import { SmoothPopover } from "./shared/SmoothPopover";
+import { useState } from "react";
+import { BaseCard } from "./PlayerArea/UnitCard/BaseCard";
 
 type Props = {
   capturedUnits: CapturedUnitsData;
@@ -28,6 +31,7 @@ const parseUnitString = (unitString: string) => {
 };
 
 export function Nombox({ capturedUnits }: Props) {
+  const [opened, setOpened] = useState(false);
   const factionColorMap = useFactionColors();
   // Early return if no captured units
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
@@ -35,80 +39,98 @@ export function Nombox({ capturedUnits }: Props) {
   }
 
   return (
-    <Surface
-      className={styles.nombox}
-      p="md"
-      pattern="grid"
-      label="CAPTURED"
-      labelColor="red.4"
-      style={{
-        // Red tint styling
-        background:
-          "linear-gradient(135deg, rgba(185, 28, 28, 0.15) 0%, rgba(153, 27, 27, 0.10) 50%, rgba(127, 29, 29, 0.12) 100%)",
-        border: "1px solid rgba(239, 68, 68, 0.3)",
-      }}
-    >
+    <Box>
 
-      {/* Red pattern overlay */}
-      <Box className={styles.patternOverlay} />
+      <SmoothPopover opened={opened} onChange={setOpened}>
+        <SmoothPopover.Target>
+          <Box>
+            
+          <BaseCard
+            onClick={() => setOpened((o) => !o)}
+            isFaction={true}
+            faction={"cabal"}
+          >
+            <Text ff={"mono"}>
+              VORTEX
+            </Text>
+          </BaseCard>
+          </Box>
+        </SmoothPopover.Target>
+        <SmoothPopover.Dropdown className={styles.popoverDropdown}>
+          <Surface
+            className={styles.nombox}
+            p="md"
+            pattern="grid"
+            label="CAPTURED"
+            labelColor="red.4"
+            style={{
+              // Red tint styling
+              background:
+                "linear-gradient(135deg, rgba(185, 28, 28, 0.15) 0%, rgba(153, 27, 27, 0.10) 50%, rgba(127, 29, 29, 0.12) 100%)",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
+            }}
+          >
 
-      {/* Red glow effect */}
-      <Box className={styles.redGlow} />
+            <Box className={styles.patternOverlay} />
 
-      <Group
-        gap="lg"
-        pos="relative"
-        style={{
-          zIndex: 1,
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-        }}
-      >
-        {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-          const playerColor = factionColorMap?.[factionName]?.color;
-          const colorAlias = getColorAlias(playerColor);
+            <Box className={styles.redGlow} />
 
-          return (
-            <Box key={factionName}>
-              {/* Faction header */}
-              <Group gap={2} className={styles.factionHeader}>
-                <Image
-                  src={cdnImage(`/factions/${factionName.toLowerCase()}.png`)}
-                  w={20}
-                  h={20}
-                />
-                <Text className={styles.factionName}>{factionName}</Text>
-              </Group>
+            <Group
+              gap="lg"
+              pos="relative"
+              style={{
+                zIndex: 1,
+                flexWrap: "wrap",
+                alignItems: "flex-start",
+              }}
+            >
+              {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
+                const playerColor = factionColorMap?.[factionName]?.color;
+                const colorAlias = getColorAlias(playerColor);
 
-              {/* Units row */}
-              <Group gap="xs" className={styles.unitsRow}>
-                {unitStrings.map((unitString, index) => {
-                  const { count, asyncId } = parseUnitString(unitString);
+                return (
+                  <Box key={factionName}>
 
-                  return (
-                    <Group
-                      key={index}
-                      gap={0}
-                      pos="relative"
-                      className={styles.unitGroup}
-                    >
-                      <Box className={styles.unitContainer}>
-                        <Unit
-                          unitType={asyncId}
-                          colorAlias={colorAlias}
-                          faction={factionName}
-                          className={styles.unitImage}
-                        />
-                      </Box>
-                      <Text className={styles.countBadge}>×{count}</Text>
+                    <Group gap={2} className={styles.factionHeader}>
+                      <Image
+                        src={cdnImage(`/factions/${factionName.toLowerCase()}.png`)}
+                        w={20}
+                        h={20}
+                      />
+                      <Text className={styles.factionName}>{factionName}</Text>
                     </Group>
-                  );
-                })}
-              </Group>
-            </Box>
-          );
-        })}
-      </Group>
-    </Surface>
+
+                    <Group gap="xs" className={styles.unitsRow}>
+                      {unitStrings.map((unitString, index) => {
+                        const { count, asyncId } = parseUnitString(unitString);
+
+                        return (
+                          <Group
+                            key={index}
+                            gap={0}
+                            pos="relative"
+                            className={styles.unitGroup}
+                          >
+                            <Box className={styles.unitContainer}>
+                              <Unit
+                                unitType={asyncId}
+                                colorAlias={colorAlias}
+                                faction={factionName}
+                                className={styles.unitImage}
+                              />
+                            </Box>
+                            <Text className={styles.countBadge}>×{count}</Text>
+                          </Group>
+                        );
+                      })}
+                    </Group>
+                  </Box>
+                );
+              })}
+            </Group>
+          </Surface>
+        </SmoothPopover.Dropdown>
+      </SmoothPopover>
+    </Box>
   );
 }

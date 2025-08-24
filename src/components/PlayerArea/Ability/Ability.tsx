@@ -18,11 +18,6 @@ export function Ability({ id }: Props) {
 
   const AbilityContent = () => (
     <Group className={styles.abilityGroup}>
-      <CircularFactionIcon
-        faction={abilityData.faction}
-        size={16}
-        className={styles.factionIcon}
-      />
       <Text className={`${styles.abilityName} ${styles.abilityNameActive}`}>
         {abilityData.name}
       </Text>

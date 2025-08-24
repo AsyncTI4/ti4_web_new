@@ -14,7 +14,7 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
       <Stack gap="md">
         <Box>
           {/* Stage I Objectives (Orange) */}
-          <SimpleGrid cols={{ base: 2, sm: 2 }} spacing="xs">
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xs">
             {objectives.stage1Objectives.length > 0 && (
               <Box>
                 <Text className={`${styles.stageTitle} ${styles.stage1Title}`}>

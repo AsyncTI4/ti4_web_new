@@ -32,7 +32,7 @@ export function PlayerCardCounts({
             alt={cardback.alt}
             count={cardback.count}
             addBorder={true}
-            size="xs"
+            size="sm"
           />
         ))}
       </Group>

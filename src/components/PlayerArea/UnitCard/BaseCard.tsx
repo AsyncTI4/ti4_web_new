@@ -1,7 +1,8 @@
-import { Stack, Box, Image, Group, Text, Flex } from "@mantine/core";
+import { Box, Image, Group, Text, Flex } from "@mantine/core";
 import { ReactNode } from "react";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../../data/cdnImage";
+import { Chip } from "@/components/shared/primitives/Chip";
 
 type BaseCardProps = {
   children: ReactNode;
@@ -35,10 +36,17 @@ export function BaseCard({
   const animatedClass = enableAnimations ? styles.animated : "";
 
   return (
-    <Stack
+    <Chip
+      accent="blue"
       className={`${cardClass} ${animatedClass} ${styles.cardStack} ${className || ""}`}
       onClick={onClick}
     >
+      {isUpgraded && (
+        <>
+          <Box className={styles.glassySheen} />
+          <Box className={styles.innerGlow} />
+        </>
+      )}
 
       {/* Faction icon badge for faction-specific units */}
       {isFaction && faction && (
@@ -55,7 +63,7 @@ export function BaseCard({
       {!compact &&
         reinforcements !== undefined &&
         totalCapacity !== undefined && (
-          <Stack className={styles.infoStack}>
+          <div className={styles.infoStack}>
             <Group className={styles.mainGroup}>
               {/* Reinforcements */}
               <Group className={styles.reinforcementGroup}>
@@ -73,8 +81,8 @@ export function BaseCard({
                 </Group>
               </Group>
             </Group>
-          </Stack>
+          </div>
         )}
-    </Stack>
+    </Chip>
   );
 }

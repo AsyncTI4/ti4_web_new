@@ -3,8 +3,8 @@
 }
 
 .capturedContainer {
-  background: linear-gradient(135deg, rgba(185, 28, 28, 0.15) 0%, rgba(153, 27, 27, 0.10) 50%, rgba(127, 29, 29, 0.12) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: linear-gradient(135deg, rgba(185, 28, 28, 1) 0%, rgba(153, 27, 27, 1) 50%, rgba(127, 29, 29, 1) 100%);
+  border: 1px solid rgba(239, 68, 68, 1);
 }
 
 .factionSection {
@@ -12,7 +12,7 @@
   flex: 1 1 auto;
   padding: var(--mantine-spacing-sm);
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%);
+  background: linear-gradient(135deg, rgb(239, 68, 68) 0%, rgb(220, 38, 38) 100%);
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
@@ -49,8 +49,6 @@
   display: flex;
   align-items: center;
   gap: 0;
-  margin-bottom: var(--mantine-spacing-xs);
-  padding: 8px;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
@@ -70,7 +68,6 @@
 .unitContainer {
   width: 24px;
   height: 24px;
-  padding: 4px;
   background: transparent;
   border: none;
   border-radius: 2px;
@@ -109,7 +106,6 @@
     linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
-  opacity: 0.5;
   pointer-events: none;
 }
 
@@ -122,6 +118,11 @@
   bottom: 0;
   background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
   pointer-events: none;
+}
+
+
+.popoverDropdown {
+  padding: 0;
 }
 
 /* Responsive behavior */

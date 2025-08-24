@@ -75,7 +75,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
 
         <div style={{ flex: 1 }}>
           <Tabs.Panel value="total">
-            <Stack gap="sm"  justify="center">
+            <Stack gap="sm" justify="center">
               <Group gap={6} align="center" wrap="nowrap">
                 <Image
                   src={cdnImage("/player_area/pa_resources.png")}
@@ -137,7 +137,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
           </Tabs.Panel>
 
           <Tabs.Panel value="optimal">
-            <Stack>
+            <Stack gap="sm" justify="center">
                 <Group gap={6} align="center" wrap="nowrap">
                   <Image
                     src={cdnImage("/player_area/pa_resources.png")}

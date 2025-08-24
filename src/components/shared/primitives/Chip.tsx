@@ -4,6 +4,7 @@ import classes from "./Hierarchy.module.css";
 
 type Props = Omit<BoxProps, "color" | "onClick"> & {
   children: React.ReactNode;
+  enableHover?: boolean;  
   accent?: ColorKey | "grey" | "gray";
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
@@ -33,6 +34,7 @@ export function Chip({
   children,
   className,
   accent = "gray",
+  enableHover = true,
   onClick,
   ...boxProps
 }: Props) {
@@ -56,7 +58,11 @@ export function Chip({
       onKeyDown={handleKeyDown}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
-      className={`${classes.chip} ${classes.chipOutline} ${classes.chipGlowHover} ${clickable ? classes.chipClickable : ""} ${classes.hoverOutline} ${hoverClass} ${className || ""}`}
+      className={`${classes.chip} ${classes.chipOutline} ${enableHover ? classes.chipGlowHover : ""} ${clickable ? classes.chipClickable : ""} ${enableHover ? classes.hoverOutline : ""} ${enableHover ? hoverClass : ""} ${className || ""}`}
+      style={{
+        cursor: clickable ? "pointer" : undefined,
+        ...boxProps.style,
+      }}
     >
       {children}
     </Box>
