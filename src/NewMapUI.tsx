@@ -176,7 +176,7 @@ function NewMapUIContent() {
                 )}
 
                 {enhancedData?.playerData && (
-                  <SimpleGrid cols={{ base: 1, xl3: 2 }} spacing="md">
+                  <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
                     {enhancedData.playerData.map((player) => (
                       <PlayerCard2Mid key={player.color} playerData={player} />
                     ))}

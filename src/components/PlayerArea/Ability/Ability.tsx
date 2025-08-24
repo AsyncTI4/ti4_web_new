@@ -4,7 +4,6 @@ import { Shimmer } from "../Shimmer";
 import { getAbility } from "../../../lookup/abilities";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
-import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import styles from "./Ability.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
 
@@ -19,11 +18,6 @@ export function Ability({ id }: Props) {
 
   const AbilityContent = () => (
     <Group className={styles.abilityGroup}>
-      <CircularFactionIcon
-        faction={abilityData.faction}
-        size={16}
-        className={styles.factionIcon}
-      />
       <Text className={`${styles.abilityName} ${styles.abilityNameActive}`}>
         {abilityData.name}
       </Text>

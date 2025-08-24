@@ -3,13 +3,8 @@
 }
 
 .capturedContainer {
-  background: linear-gradient(135deg, rgba(185, 28, 28, 0.15) 0%, rgba(153, 27, 27, 0.10) 50%, rgba(127, 29, 29, 0.12) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(239, 68, 68, 0.1);
-}
-
-.redCornerAccent {
-  border: 2px solid rgba(239, 68, 68, 0.2);
+  background: linear-gradient(135deg, rgba(185, 28, 28, 1) 0%, rgba(153, 27, 27, 1) 50%, rgba(127, 29, 29, 1) 100%);
+  border: 1px solid rgba(239, 68, 68, 1);
 }
 
 .factionSection {
@@ -17,7 +12,7 @@
   flex: 1 1 auto;
   padding: var(--mantine-spacing-sm);
   border-radius: 8px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%);
+  background: linear-gradient(135deg, rgb(239, 68, 68) 0%, rgb(220, 38, 38) 100%);
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
@@ -39,7 +34,6 @@
   font-weight: 600;
   font-size: var(--mantine-font-size-xs);
   text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   letter-spacing: 0.5px;
 }
 
@@ -55,18 +49,12 @@
   display: flex;
   align-items: center;
   gap: 0;
-  margin-bottom: var(--mantine-spacing-xs);
-  padding: 8px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.4);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
   transition: all 0.2s ease;
 }
 
 .unitGroup:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 .stackedUnit {
@@ -78,12 +66,11 @@
 }
 
 .unitContainer {
-  width: 32px;
-  height: 32px;
-  padding: 4px;
+  width: 24px;
+  height: 24px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,8 +82,8 @@
 }
 
 .unitImage {
-  width: 40px;
-  height: 40px;
+  width: 32;
+  height: 32;
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
@@ -104,13 +91,11 @@
 .countBadge {
   color: var(--mantine-color-red-2);
   font-weight: 700;
-  font-size: var(--mantine-font-size-xs);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: var(--mantine-font-size-sm);
   min-width: 20px;
   margin-left: var(--mantine-spacing-xs);
 }
 
-/* Pattern overlay matching the parent Surface */
 .patternOverlay {
   position: absolute;
   top: 0;
@@ -121,11 +106,9 @@
     linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
-  opacity: 0.5;
   pointer-events: none;
 }
 
-/* Subtle red glow effect */
 .redGlow {
   position: absolute;
   top: 0;
@@ -134,6 +117,10 @@
   bottom: 0;
   background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
   pointer-events: none;
+}
+
+.popoverDropdown {
+  padding: 0;
 }
 
 /* Responsive behavior */

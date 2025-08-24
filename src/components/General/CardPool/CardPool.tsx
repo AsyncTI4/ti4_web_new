@@ -28,7 +28,7 @@ function CardPool({ cardPool, playerData }: Props) {
     <Box>
       <Text className={styles.sectionTitle}>Card Pool</Text>
 
-      <SimpleGrid  cols={4} spacing="lg">
+      <SimpleGrid cols={4} spacing="lg">
         {[
           {
             src: cdnImage("/player_area/cardback_action.jpg"),

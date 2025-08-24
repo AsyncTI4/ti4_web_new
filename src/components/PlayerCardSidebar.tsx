@@ -83,34 +83,6 @@ export default function PlayerCardSidebar(props: Props) {
     },
   };
 
-  const renderTechColumn = (
-    techType: string,
-    exhaustedTechs: string[] = []
-  ) => {
-    const filteredTechs = techs.filter((techId) => {
-      const techData = getTechData(techId);
-      return techData?.types[0] === techType;
-    });
-
-    const sortedTechs = filteredTechs.sort((a, b) => {
-      const techDataA = getTechData(a);
-      const techDataB = getTechData(b);
-      const tierA = techDataA ? getTechTier(techDataA.requirements) : 999;
-      const tierB = techDataB ? getTechTier(techDataB.requirements) : 999;
-      return tierA - tierB;
-    });
-
-    const techElements = sortedTechs.map((techId, index) => (
-      <Tech
-        key={index}
-        techId={techId}
-        isExhausted={exhaustedTechs.includes(techId)}
-      />
-    ));
-
-    return techElements;
-  };
-
   const FragmentsAndCCSection = (
     <Group gap={0} align="stretch">
       <CCPool
@@ -255,16 +227,13 @@ export default function PlayerCardSidebar(props: Props) {
         <SimpleGrid cols={2} spacing="xs">
           <Stack gap={8}>
             <PlayerCardCounts
-              tg={props.playerData.tg || 0}
-              commodities={props.playerData.commodities || 0}
-              commoditiesTotal={props.playerData.commoditiesTotal || 0}
-              soCount={props.playerData.soCount || 0}
-              pnCount={props.playerData.pnCount || 0}
-              acCount={props.playerData.acCount || 0}
+                pnCount={props.playerData.pnCount || 0}
+                acCount={props.playerData.acCount || 0}
             />
             {FragmentsAndCCSection}
             <ScoredSecrets
               secretsScored={secretsScored}
+              unscoredSecrets={props.playerData.soCount || 0}
               knownUnscoredSecrets={knownUnscoredSecrets}
             />
           </Stack>
@@ -289,7 +258,7 @@ export default function PlayerCardSidebar(props: Props) {
         <Box p="md" className={softStyles.sectionBlock}>
           <Stack gap="xs">
             <DynamicTechGrid
-              renderTechColumn={renderTechColumn}
+              techs={techs}
               exhaustedTechs={props.playerData.exhaustedTechs}
             />
           </Stack>
@@ -365,14 +334,3 @@ export default function PlayerCardSidebar(props: Props) {
     </PlayerCardBox>
   );
 }
-
-const getTechTier = (requirements?: string): number => {
-  if (!requirements) return 0;
-
-  const matches = requirements.match(/(.)\1*/g);
-  if (matches && matches.length > 0) {
-    return matches[0].length;
-  }
-
-  return 0;
-};

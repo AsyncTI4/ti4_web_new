@@ -17,7 +17,6 @@ export const StatusIndicator = memo(function StatusIndicator({
     <Box
       px={8}
       py={2}
-      ml={4}
       className={passed ? styles.passedContainer : styles.activeContainer}
     >
       <Text

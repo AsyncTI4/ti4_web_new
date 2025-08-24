@@ -13,7 +13,6 @@ type Props = {
   deployedCount: number;
   compact?: boolean;
 };
-
 const DEFAULT_UNIT_CAPS = {
   carrier: 4,
   mech: 4,
@@ -27,22 +26,16 @@ const DEFAULT_UNIT_CAPS = {
   infantry: 12,
   fighter: 10,
 };
-
 export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
   const [opened, setOpened] = useState(false);
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
-
   if (!unitData) return null; // or some fallback UI
-
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
-
   const unitCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
-
   const reinforcements = unitCap - deployedCount;
-
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
