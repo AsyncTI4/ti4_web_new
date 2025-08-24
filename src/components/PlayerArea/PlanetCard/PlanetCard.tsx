@@ -1,5 +1,6 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
 import { useMemo, useState } from "react";
+import { PlanetAbilityCard } from "../PlanetAbilityCard";
 import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
@@ -13,9 +14,13 @@ import { usePlanet } from "@/hooks/usePlanet";
 
 type Props = {
   planetId: string;
+  legendaryAbilityExhausted?: boolean;
 };
 
-export function PlanetCard({ planetId }: Props) {
+export function PlanetCard({
+  planetId,
+  legendaryAbilityExhausted = false,
+}: Props) {
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
@@ -48,6 +53,109 @@ export function PlanetCard({ planetId }: Props) {
     attachmentModifiers
   );
   const isLegendary = checkIsLegendary(planetData, resolvedAttachments);
+  const hasLegendaryAbility = !!(
+    planetData.legendaryAbilityName && planetData.legendaryAbilityText
+  );
+
+  if (isLegendary && hasLegendaryAbility) {
+    return (
+      <div
+        className={styles.legendaryWrapper}
+        style={getCSSVariables(planetType!) as React.CSSProperties}
+      >
+        <SmoothPopover opened={opened} onChange={setOpened}>
+          <SmoothPopover.Target>
+            <Stack
+              onClick={() => setOpened((o) => !o)}
+              className={`${styles.mainStack} ${
+                isLegendary
+                  ? `${styles.legendaryBackground} ${styles.legendary}`
+                  : ""
+              } ${styles.planetCard} ${styles.noRightRadius}`}
+            >
+              <Box className={styles.planetCardHighlight} />
+
+              {isLegendary && !isExhausted && (
+                <>
+                  <Box className={styles.legendaryConstellation} />
+                  <Box
+                    className={`${styles.floatingParticle} ${styles.particle1}`}
+                  />
+                  <Box
+                    className={`${styles.floatingParticle} ${styles.particle2}`}
+                  />
+                  <Box
+                    className={`${styles.floatingParticle} ${styles.particle3}`}
+                  />
+                  <Box
+                    className={`${styles.floatingParticle} ${styles.particle4}`}
+                  />
+                  <Box
+                    className={`${styles.floatingParticle} ${styles.particle5}`}
+                  />
+                </>
+              )}
+
+              {isExhausted && <Box className={styles.exhaustedOverlay} />}
+
+              <Box
+                className={`${styles.topHighlight} ${isLegendary ? styles.legendary : ""}`}
+              />
+
+              <Box className={styles.iconContainer}>
+                <PlanetIcon
+                  planetData={planetData}
+                  traitIconKey={traitIconKey}
+                />
+              </Box>
+              <Stack className={styles.bottomStack}>
+                <Group className={styles.nameGroup}>
+                  <Text className={styles.planetName} ff="monospace">
+                    {planetData.shortName ?? planetData.name}
+                  </Text>
+                  <Stack className={styles.valuesStack} align="top">
+                    {allIcons.length > 0 && (
+                      <Stack className={styles.iconsStack}>
+                        {allIcons.map((icon, index) => (
+                          <Box key={index}>{icon}</Box>
+                        ))}
+                      </Stack>
+                    )}
+                    <Box className={styles.valueContainer}>
+                      <Image
+                        src="/pa_resources.png"
+                        className={styles.resourceImage}
+                      />
+                      <Text className={styles.valueText}>{finalResources}</Text>
+                    </Box>
+
+                    <Box className={styles.valueContainer}>
+                      <Box className={styles.influenceIconContainer}>
+                        <InfluenceIcon size={18} />
+                      </Box>
+                      <Text className={styles.influenceValueText}>
+                        {finalInfluence}
+                      </Text>
+                    </Box>
+                  </Stack>
+                </Group>
+              </Stack>
+            </Stack>
+          </SmoothPopover.Target>
+          <SmoothPopover.Dropdown className={styles.popoverDropdown}>
+            <PlanetDetailsCard planetId={planetId} planetTile={planetTile} />
+          </SmoothPopover.Dropdown>
+        </SmoothPopover>
+        <PlanetAbilityCard
+          planetId={planetId}
+          abilityName={planetData.legendaryAbilityName!}
+          abilityText={planetData.legendaryAbilityText!}
+          exhausted={legendaryAbilityExhausted}
+          joinedRight
+        />
+      </div>
+    );
+  }
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -58,13 +166,11 @@ export function PlanetCard({ planetId }: Props) {
             isLegendary
               ? `${styles.legendaryBackground} ${styles.legendary}`
               : ""
-          } ${isExhausted ? styles.exhausted : ""} ${styles.planetCard}`}
+          } ${styles.planetCard}`}
           style={getCSSVariables(planetType!) as React.CSSProperties}
         >
-          {/* Hover highlight overlay */}
           <Box className={styles.planetCardHighlight} />
 
-          {/* Legendary constellation background */}
           {isLegendary && !isExhausted && (
             <>
               <Box className={styles.legendaryConstellation} />
@@ -86,14 +192,10 @@ export function PlanetCard({ planetId }: Props) {
             </>
           )}
 
-          {/* Dark overlay for exhausted planets */}
           {isExhausted && <Box className={styles.exhaustedOverlay} />}
 
-          {/* Subtle top highlight */}
           <Box
-            className={`${styles.topHighlight} ${
-              isLegendary ? styles.legendary : ""
-            }`}
+            className={`${styles.topHighlight} ${isLegendary ? styles.legendary : ""}`}
           />
 
           <Box className={styles.iconContainer}>
@@ -182,11 +284,6 @@ function createAllIcons(
 
   allIcons.push(...techSkipIconElements);
 
-  // Add legendary icon if applicable
-  if (checkIsLegendary(planetData, attachments)) {
-    allIcons.push(<LegendaryIcon key="legendary" />);
-  }
-
   // Add attachment upgrade icon if applicable
   if (attachments.length > 0) {
     allIcons.push(<AttachmentUpgradeIcon key="upgrade" />);
@@ -242,17 +339,6 @@ const getTechSkipIconKey = (techSpecialty: string): string | null => {
   const lowercase = techSpecialty.toLowerCase();
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
-
-type LegendaryIconProps = {};
-
-function LegendaryIcon({}: LegendaryIconProps) {
-  return (
-    <Image
-      src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-      className={styles.legendaryIcon}
-    />
-  );
-}
 
 type AttachmentUpgradeIconProps = {};
 

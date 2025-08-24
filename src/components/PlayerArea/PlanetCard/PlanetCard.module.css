@@ -172,12 +172,16 @@
   border: 1px solid var(--planet-border);
 }
 
+.noRightRadius {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none; /* avoid double border; ability's left border acts as divider */
+}
+
 .mainStack:not(.legendary) {
   background: linear-gradient(135deg, var(--planet-background) 0%, rgba(15, 23, 42, 0.6) 100%);
 }
-
-.exhausted {}
-
+.internalSeparator { display: none; }
 .mainStack.exhausted {
   filter: grayscale(0.4) opacity(0.5);
 }
@@ -273,13 +277,6 @@
   height: 24px;
 }
 
-/* Legendary icon */
-.legendaryIcon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
-}
 
 /* Exhausted overlay */
 .exhaustedOverlay {
@@ -304,13 +301,6 @@
   z-index: 3;
 }
 
-.topHighlight.legendary {
-  background: rgba(255, 215, 0, 0.6);
-}
-
-.topHighlight:not(.legendary) {
-  background: var(--planet-highlight);
-}
 
 /* Popover dropdown */
 .popoverDropdown {
@@ -322,4 +312,10 @@
   height: 18px;
   object-fit: contain;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+}
+
+.legendaryWrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
 }

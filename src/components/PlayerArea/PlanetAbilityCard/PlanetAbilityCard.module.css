@@ -24,12 +24,31 @@
   padding: 6px var(--mantine-spacing-xs);
   border: 1px solid var(--ability-border);
   background: linear-gradient(135deg, var(--ability-background) 0%, rgba(30, 9, 60, 0.6) 100%);
+  border-radius: 12px;
 }
 
 .exhausted {
   border-color: var(--ability-border-exhausted);
   background: linear-gradient(135deg, var(--ability-background-exhausted) 0%, rgba(70, 70, 70, 0.35) 100%);
-  filter: none !important;
+  filter: grayscale(0.4) opacity(0.5);
+}
+
+.joinedRight {
+  background: rgba(76, 29, 149, 0.16);
+  border: 1px solid var(--planet-border);
+  border-left-width: 1px; /* divider line */
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  height: 140px;
+}
+
+.joinedRight.exhausted {
+  background: rgba(76, 29, 149, 0.16);
 }
 
 .exhaustBadge {
@@ -67,3 +86,12 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
+
+
+/* Legendary icon */
+.legendaryIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+}

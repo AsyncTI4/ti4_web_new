@@ -1,16 +1,17 @@
-import { Stack, Text, Box } from "@mantine/core";
+import { Stack, Text, Image } from "@mantine/core";
 import { useState } from "react";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { getPlanetData } from "@/lookup/planets";
 import { PlanetAbilityDetailsCard } from "./PlanetAbilityDetailsCard";
 import styles from "./PlanetAbilityCard.module.css";
-import { IconZzz } from "@tabler/icons-react";
+import { cdnImage } from "@/data/cdnImage";
 
 type Props = {
   planetId: string;
   abilityName: string;
   abilityText: string;
   exhausted?: boolean;
+  joinedRight?: boolean;
 };
 
 export function PlanetAbilityCard({
@@ -18,6 +19,7 @@ export function PlanetAbilityCard({
   abilityName,
   abilityText,
   exhausted = false,
+  joinedRight = false,
 }: Props) {
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
@@ -32,16 +34,14 @@ export function PlanetAbilityCard({
       <SmoothPopover.Target>
         <Stack
           onClick={() => setOpened((o) => !o)}
-          className={`${styles.mainStack} ${styles.abilityCard} ${exhausted ? styles.exhausted : ""}`}
+          className={`${styles.mainStack} ${styles.abilityCard} ${joinedRight ? styles.joinedRight : ""} ${exhausted ? styles.exhausted : ""}`}
         >
-          {exhausted && (
-            <Box className={styles.exhaustBadge} aria-label="Exhausted">
-              <IconZzz size={18} />
-            </Box>
-          )}
+          {/* Exhausted badge removed; exhausted state now uses lower opacity filter */}
           <Stack className={styles.bottomStack}>
+            <LegendaryIcon key="legendary" />
+            <div style={{ flex: 1 }} />
             <Text className={styles.planetName} ff="monospace">
-              {planetData.shortName ?? planetData.name} Ability
+              Ability
             </Text>
           </Stack>
         </Stack>
@@ -54,5 +54,16 @@ export function PlanetAbilityCard({
         />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
+  );
+}
+
+type LegendaryIconProps = {};
+
+function LegendaryIcon({}: LegendaryIconProps) {
+  return (
+    <Image
+      src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
+      className={styles.legendaryIcon}
+    />
   );
 }

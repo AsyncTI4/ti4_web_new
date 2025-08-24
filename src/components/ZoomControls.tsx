@@ -8,7 +8,10 @@ import {
   IconScreenShareOff,
 } from "@tabler/icons-react";
 
-function ZoomControls() {
+type Props = {
+  zoomClass?: string;
+};
+function ZoomControls({ zoomClass }: Props) {
   const zoom = useAppStore((state) => state.zoomLevel);
   const zoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
   const onZoomIn = useAppStore((state) => state.handleZoomIn);
@@ -17,8 +20,8 @@ function ZoomControls() {
   const onZoomScreenSize = useAppStore((state) => state.handleZoomScreenSize);
 
   return (
-    <Group className={"zoomContainer"} gap="xs">
-      {!zoomFitToScreen && <Text>{Number(zoom.toFixed(2))  * 100}%</Text>}
+    <Group className={zoomClass ?? "zoomContainer"} gap="xs">
+      {!zoomFitToScreen && <Text>{Number(zoom.toFixed(2)) * 100}%</Text>}
       <Button
         onClick={onZoomIn}
         size="compact-md"
