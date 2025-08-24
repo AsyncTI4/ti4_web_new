@@ -1,5 +1,4 @@
 import { Box, Stack, Text, Group } from "@mantine/core";
-import hierarchy from "../../shared/primitives/Hierarchy.module.css";
 import { FragmentStack } from "../FragmentStack";
 
 type Props = {
@@ -18,32 +17,15 @@ export function FragmentsPool({ fragments }: Props) {
   return (
     <Box flex={1}>
       <Stack gap={4} align="center" h="100%" flex={1}>
-        <Text
-          ff="heading"
-          size="xs"
-          fw={600}
-          c="gray.4"
-          style={{
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-            fontSize: "9px",
-            opacity: 0.8,
-            textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-          }}
-        >
-          Frags
-        </Text>
         <Box
           p="sm"
-          className={`${hierarchy.chip} ${hierarchy.chipOutline}`}
           style={{
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
             borderTopRightRadius: 10,
             borderBottomRightRadius: 10,
             display: "flex",
             height: "100%",
             width: "100%",
+            borderBottom: "1px dashed rgba(255, 255, 255, 0.2)",
             borderLeftStyle: "none",
             minHeight: 54,
             position: "relative",
@@ -67,9 +49,10 @@ export function FragmentsPool({ fragments }: Props) {
                 style={{
                   textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
                   opacity: 0.5,
+                  fontStyle: "italic"
                 }}
               >
-                No fragments
+                No Fragments
               </Text>
             )}
           </Group>

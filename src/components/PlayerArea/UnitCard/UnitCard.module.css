@@ -40,12 +40,9 @@
 .highlight {
   background: rgba(147, 197, 253, 0.6);
 }
-
 .highlightStandard {
   background: rgba(107, 114, 128, 0.3);
 }
-
-
 /* New utility classes */
 .cardStack {
   padding: 6px 4px;
@@ -54,7 +51,6 @@
   min-height: 64px;
   box-sizing: border-box;
 }
-
 .topHighlight {
   position: absolute;
   top: 0;
@@ -62,7 +58,6 @@
   right: 20%;
   height: 1px;
 }
-
 .glassySheen {
   position: absolute;
   top: 0;
@@ -72,7 +67,6 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.08) 100%);
   pointer-events: none;
 }
-
 .innerGlow {
   position: absolute;
   top: 0;

@@ -14,7 +14,7 @@ export function PlayerColor({ color, size = "sm" }: PlayerColorProps) {
   const lightenedColor = lighten(primaryColor, 0.4); // Lighten by 40%
 
   return (
-    <Text span size={size} ff="heading" c={lightenedColor}>
+    <Text span fs="italic" size={size} ff="heading" c={lightenedColor}>
       ({color})
     </Text>
   );
