@@ -1,5 +1,4 @@
 import { Box, Text, Image, BoxProps } from "@mantine/core";
-import { Chip } from "@/components/shared/primitives/Chip";
 import { ReactNode } from "react";
 
 type Props = BoxProps & {
@@ -17,8 +16,7 @@ export function Cardback({
   count,
   size = "sm",
   addBorder = false,
-  style,
-  ...boxProps
+  style
 }: Props) {
   const widthMap = {
     xs: "35px",
