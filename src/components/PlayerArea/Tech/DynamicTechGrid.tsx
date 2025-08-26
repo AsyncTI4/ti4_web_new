@@ -1,27 +1,27 @@
 import { Grid, Stack, SimpleGrid } from "@mantine/core";
 import { Tech } from "./Tech";
 import { getTechData, getTechTier } from "@/lookup/tech";
+import { PhantomTech } from "./PhantomTech";
 
 type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
 type Props = {
-  techs: string[];
+  techs?: string[];
   layout?: "grid" | "simple";
   exhaustedTechs?: string[];
 };
+const techCategories: TechCategory[] = [
+  "PROPULSION",
+  "CYBERNETIC",
+  "BIOTIC",
+  "WARFARE",
+];
 
 export function DynamicTechGrid({
-  techs,
+  techs = [],
   layout = "simple",
   exhaustedTechs = [],
 }: Props) {
-  const techCategories: TechCategory[] = [
-    "PROPULSION",
-    "CYBERNETIC",
-    "BIOTIC",
-    "WARFARE",
-  ];
-
   const renderTechColumn = (
     techType: string,
     exhaustedTechs: string[] = []
@@ -51,28 +51,32 @@ export function DynamicTechGrid({
     return [...techElements];
   };
 
-  const categoriesWithTechs = techCategories
-    .map((techType) => ({
-      type: techType,
-      techs: renderTechColumn(techType, exhaustedTechs),
-    }));
+  const categoriesWithTechs = techCategories.map((techType) => ({
+    type: techType,
+    techs: renderTechColumn(techType, exhaustedTechs),
+  }));
 
   if (categoriesWithTechs.length === 0) return null;
 
   if (layout === "grid") {
     return (
       <>
-        {categoriesWithTechs.map((category) => (
-          <Grid.Col
-            key={category.type}
-            span={{
-              base: 6,
-              md: 3,
-            }}
-          >
-            <Stack gap={4}>{category.techs}</Stack>
-          </Grid.Col>
-        ))}
+        {techCategories.map((techType) => {
+          const techs = renderTechColumn(techType, exhaustedTechs);
+          return (
+            <Grid.Col
+              key={techType}
+              span={{
+                base: 6,
+                md: 3,
+              }}
+            >
+              <Stack key={techType} gap={4}>
+                {techs.length > 0 ? techs : <PhantomTech techType={techType} />}
+              </Stack>
+            </Grid.Col>
+          );
+        })}
       </>
     );
   }

@@ -31,7 +31,6 @@ import { SettingsModal } from "./components/SettingsModal";
 import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
 import { GameContextProvider } from "./context/GameContextProvider";
 import { useSettingsStore } from "./utils/appStore";
-
 import {
   useGameData as useGameContext,
   useGameDataState,
@@ -40,7 +39,6 @@ import PlayerCard2Mid from "./components/PlayerCard2Mid";
 import { MapView } from "./components/main/MapView";
 import { TabsControls } from "./components/main/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
-import { useMovementStore } from "./utils/movementStore";
 import GeneralArea from "./components/General/GeneralArea";
 
 // Magic constant for required version schema
@@ -56,7 +54,7 @@ function NewMapUIContent() {
 
   const { activeTabs, changeTab, removeTab } = useTabManagementV2();
 
-  const draft = useMovementStore((s) => s.draft);
+  // const draft = useMovementStore((s) => s.draft);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
@@ -177,9 +175,14 @@ function NewMapUIContent() {
 
                 {enhancedData?.playerData && (
                   <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                    {enhancedData.playerData.map((player) => (
-                      <PlayerCard2Mid key={player.color} playerData={player} />
-                    ))}
+                    {enhancedData.playerData
+                      .filter((player) => player.faction !== "null")
+                      .map((player) => (
+                        <PlayerCard2Mid
+                          key={player.color}
+                          playerData={player}
+                        />
+                      ))}
                   </SimpleGrid>
                 )}
               </Box>

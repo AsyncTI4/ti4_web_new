@@ -54,19 +54,6 @@
   width: 25px;
 }
 
-/* Subtle ticket-style perforation on the right edge */
-.shimmerContainer::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  right: 10px;
-  width: 0;
-  border-right: 1px dashed rgba(var(--color-cyan), 0.3);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
 /* Tiny corner trims for a distinct silhouette */
 .promissoryCard::before,
 .promissoryCard::after {

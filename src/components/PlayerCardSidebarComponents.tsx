@@ -100,16 +100,15 @@ export default function PlayerCardSidebarComponents(props: Props) {
 
       <SimpleGrid cols={2} spacing="xs">
         <Stack gap={8}>
-          <PlayerCardCounts
-            tg={props.playerData.tg || 0}
-            commodities={props.playerData.commodities || 0}
-            commoditiesTotal={props.playerData.commoditiesTotal || 0}
-            soCount={props.playerData.soCount || 0}
-            pnCount={props.playerData.pnCount || 0}
-            acCount={props.playerData.acCount || 0}
-          />
+          <Group gap={2}>
+            <PlayerCardCounts
+              tg={props.playerData.tg || 0}
+              commodities={props.playerData.commodities || 0}
+              commoditiesTotal={props.playerData.commoditiesTotal || 0}
+              pnCount={props.playerData.pnCount || 0}
+              acCount={props.playerData.acCount || 0}
+            />
 
-          <Group gap={0} align="stretch">
             <CCPool
               tacticalCC={tacticalCC}
               fleetCC={fleetCC}
@@ -119,7 +118,10 @@ export default function PlayerCardSidebarComponents(props: Props) {
 
             <FragmentsPool fragments={fragments} />
           </Group>
-          <ScoredSecrets secretsScored={secretsScored} />
+          <ScoredSecrets
+            secretsScored={secretsScored}
+            unscoredSecrets={props.playerData.soCount || 0}
+          />
         </Stack>
         <Stack gap={8}>
           <Leaders leaders={leaders} />

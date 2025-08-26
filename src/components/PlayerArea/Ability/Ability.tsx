@@ -6,6 +6,7 @@ import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
 import styles from "./Ability.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 
 type Props = {
   id: string;
@@ -18,6 +19,11 @@ export function Ability({ id }: Props) {
 
   const AbilityContent = () => (
     <Group className={styles.abilityGroup}>
+      <CircularFactionIcon
+        faction={abilityData.faction}
+        size={16}
+        className={styles.factionIcon}
+      />
       <Text className={`${styles.abilityName} ${styles.abilityNameActive}`}>
         {abilityData.name}
       </Text>

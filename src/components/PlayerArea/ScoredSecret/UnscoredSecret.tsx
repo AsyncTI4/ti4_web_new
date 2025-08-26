@@ -1,52 +1,31 @@
 import { Box, Text, Image } from "@mantine/core";
+import { Chip } from "@/components/shared/primitives/Chip";
+import { Shimmer } from "../Shimmer";
+import styles from "./ScoredSecret.module.css";
 
 export function UnscoredSecret() {
   return (
-    <Box
-      py={2}
-      px={6}
-      style={{
-        borderRadius: "var(--mantine-radius-sm)",
-        border: "1px rgba(184, 148, 148, 0.7)",
-        background: "rgba(42, 15, 15, 0.6)",
-        position: "relative",
-      }}
+    <Chip
+      className={`${styles.secretCard} ${styles.unscoredDark}`}
+      accent="red"
+      enableHover={false}
     >
-      <Box
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          minWidth: 0,
-        }}
+      <Shimmer
+        color="red"
+        py={2}
+        px={6}
+        className={`${styles.deepRedBorder} ${styles.deepRedBackground} ${styles.noShimmerOverlay}`}
       >
-        <Image
-          src="/so_icon.png"
-          style={{
-            width: "20px",
-            height: "20px",
-            flexShrink: 0,
-            opacity: 0.8,
-            filter: "grayscale(1)",
-          }}
-        />
-        <Text
-          size="xs"
-          fw={500}
-          c="gray.6"
-          style={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            minWidth: 0,
-            flex: 1,
-            opacity: 0.9,
-          }}
-        >
-          Unscored Secret
-        </Text>
-      </Box>
-    </Box>
+        <Box className={styles.contentContainer}>
+          <Image
+            src="/so_icon.png"
+            className={`${styles.icon} ${styles.deepRedIcon}`}
+          />
+          <Text size="xs" fw={700} c="white" className={styles.textContainer}>
+            Unscored Secret
+          </Text>
+        </Box>
+      </Shimmer>
+    </Chip>
   );
 }

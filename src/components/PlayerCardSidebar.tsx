@@ -5,7 +5,7 @@ import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
-import { UnitCard } from "./PlayerArea/UnitCard";
+import { UnitCard, UnitCardUnavailable } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
@@ -14,12 +14,12 @@ import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
-import { getTechData } from "../lookup/tech";
+// import { getTechData } from "../lookup/tech";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { getUnitAsyncId } from "@/lookup/units";
+import { lookupUnit } from "@/lookup/units";
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
@@ -28,6 +28,8 @@ import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 // import { getPlanetData } from "@/lookup/planets";
 import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
+import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
+import { Commodities } from "./PlayerArea/Commodities/Commodities";
 
 type Props = {
   playerData: PlayerData;
@@ -49,7 +51,7 @@ export default function PlayerCardSidebar(props: Props) {
     planets,
     secretsScored,
     knownUnscoredSecrets,
-    unitsOwned,
+    // unitsOwned,
     leaders,
     stasisInfantry,
     unitCounts,
@@ -83,17 +85,21 @@ export default function PlayerCardSidebar(props: Props) {
     },
   };
 
-  const FragmentsAndCCSection = (
-    <Group gap={0} align="stretch">
-      <CCPool
-        tacticalCC={tacticalCC}
-        fleetCC={fleetCC}
-        strategicCC={strategicCC}
-        mahactEdict={props.playerData.mahactEdict}
-      />
-      <FragmentsPool fragments={fragments} />
-    </Group>
-  );
+  // const FragmentsAndCCSection = <Group gap={0} align="stretch"></Group>;
+
+  const unitPriorityOrder = [
+    "ws",
+    "fs",
+    "dn",
+    "cv",
+    "ca",
+    "dd",
+    "ff",
+    "mf",
+    "gf",
+    "sd",
+    "pd",
+  ];
 
   return (
     <PlayerCardBox color={color} faction={faction}>
@@ -225,18 +231,31 @@ export default function PlayerCardSidebar(props: Props) {
 
       <Stack gap={0}>
         <SimpleGrid cols={2} spacing="xs">
-          <Stack gap={8}>
-            <PlayerCardCounts
+          <Stack gap="sm">
+            <Group gap={4}>
+              <PlayerCardCounts
                 pnCount={props.playerData.pnCount || 0}
                 acCount={props.playerData.acCount || 0}
-            />
-            {FragmentsAndCCSection}
+                tg={props.playerData.tg}
+                commodities={props.playerData.commodities}
+                commoditiesTotal={props.playerData.commoditiesTotal}
+                debtTokens={props.playerData.debtTokens}
+              />
+              <CCPool
+                tacticalCC={tacticalCC}
+                fleetCC={fleetCC}
+                strategicCC={strategicCC}
+                mahactEdict={props.playerData.mahactEdict}
+              />
+              <FragmentsPool fragments={fragments} />
+            </Group>
             <ScoredSecrets
               secretsScored={secretsScored}
               unscoredSecrets={props.playerData.soCount || 0}
               knownUnscoredSecrets={knownUnscoredSecrets}
             />
           </Stack>
+
           <Stack gap={2}>
             <Box mb={2}>
               <Leaders leaders={leaders} />
@@ -245,10 +264,7 @@ export default function PlayerCardSidebar(props: Props) {
               <Relic key={index} relicId={relicId} />
             ))}
             <Box mt={2}>
-              <PromissoryNotesStack
-                promissoryNotes={promissoryNotes}
-                showEmpty={false}
-              />
+              <PromissoryNotesStack promissoryNotes={promissoryNotes} />
             </Box>
           </Stack>
         </SimpleGrid>
@@ -263,19 +279,43 @@ export default function PlayerCardSidebar(props: Props) {
             />
           </Stack>
         </Box>
+        {/* Resources and Planets Section */}
+        <Stack gap="xs">
+          <Box className={softStyles.softDividerTight} />
 
-        <Box p="md" mt={4} className={softStyles.sectionBlock}>
+          <Group gap={8} align="flex-start">
+            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+            {planets.map((planetId, index) => (
+              <PlanetCard
+                key={index}
+                planetId={planetId}
+                legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                  planetId
+                )}
+              />
+            ))}
+          </Group>
+          <Box className={softStyles.softDividerTight} />
+        </Stack>
+        <Box p="md" className={softStyles.sectionBlock}>
           <SimpleGrid h="100%" cols={6} spacing="8px">
-            {unitsOwned.map((unitId, index) => {
-              const asyncId = getUnitAsyncId(unitId);
-              const deployedCount = asyncId
-                ? (unitCounts[asyncId].deployedCount ?? 0)
-                : 0;
-
+            {unitPriorityOrder.map((asyncId) => {
+              const bestUnit = lookupUnit(asyncId, faction, props.playerData);
+              const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
+              if (!bestUnit) {
+                return (
+                  <UnitCardUnavailable
+                    key={`unavailable-${asyncId}`}
+                    asyncId={asyncId}
+                    color={color}
+                    lockedLabel="Not available"
+                  />
+                );
+              }
               return (
                 <UnitCard
-                  key={index}
-                  unitId={unitId}
+                  key={bestUnit.id}
+                  unitId={bestUnit.id}
                   color={color}
                   deployedCount={deployedCount}
                 />
@@ -297,39 +337,11 @@ export default function PlayerCardSidebar(props: Props) {
           </SimpleGrid>
         </Box>
 
-        {/* Resources and Planets Section */}
-        <Stack gap="xs">
-          <Box className={softStyles.softDividerTight} />
-          <Box px="sm">
-            <Stack gap={6}>
-              <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-              {props.playerData.debtTokens &&
-                Object.keys(props.playerData.debtTokens).length > 0 && (
-                  <DebtTokens debts={props.playerData.debtTokens} />
-                )}
-            </Stack>
+        {nombox !== undefined && Object.keys(nombox).length > 0 && (
+          <Box mt="md">
+            <Nombox capturedUnits={nombox || {}} />
           </Box>
-
-          <Box className={softStyles.softDividerTight} />
-          <Box p="sm" style={{ alignItems: "flex-start" }}>
-            <Group gap={6} pos="relative" style={{ zIndex: 1 }}>
-              {planets.map((planetId, index) => (
-                <PlanetCard
-                  key={index}
-                  planetId={planetId}
-                  legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                    planetId
-                  )}
-                />
-              ))}
-            </Group>
-          </Box>
-          {nombox !== undefined && Object.keys(nombox).length > 0 && (
-            <Box mt="md">
-              <Nombox capturedUnits={nombox || {}} />
-            </Box>
-          )}
-        </Stack>
+        )}
       </Stack>
     </PlayerCardBox>
   );

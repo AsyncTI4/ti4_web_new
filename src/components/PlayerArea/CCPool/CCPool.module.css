@@ -1,0 +1,15 @@
+.num {
+  display: inline-block;
+  width: 2ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  color: var(--mantine-color-dimmed);
+  opacity: 0.85;
+  font-family: var(--mantine-font-family);
+  letter-spacing: 0.06em;
+}
+
+

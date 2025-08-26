@@ -39,13 +39,10 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
         className={`${gradientClasses.border} ${gradientClasses.backgroundStrong} ${styles.shimmerContainer}`}
       >
         <Group className={styles.contentGroup}>
-          <Image src="/pnicon.png" className={styles.noteIcon} />
+          <Image src={factionIcon} className={styles.noteIcon} />
           <Text className={styles.noteText}>
             {noteData.shortName || displayName}
           </Text>
-          <Box className={styles.factionIconContainer}>
-            <Image src={factionIcon} className={styles.factionIcon} />
-          </Box>
         </Group>
       </Shimmer>
     </Chip>

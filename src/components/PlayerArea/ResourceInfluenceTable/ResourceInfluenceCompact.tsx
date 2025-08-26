@@ -58,17 +58,17 @@ type Props = {
 export function ResourceInfluenceCompact({ planetEconomics }: Props) {
   return (
     <Tabs defaultValue="optimal" variant="pills" orientation="vertical">
-      <Stack gap="lg" align="center" justify="flex-start">
+      <Stack gap="xs" align="center">
         <Tabs.List>
-          <Group gap={2}>
-            <Tabs.Tab value="total" size="xs" h={18} p="2px 6px">
-              <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
-                Tot.
-              </Text>
-            </Tabs.Tab>
-            <Tabs.Tab value="optimal" size="xs" h={18} p="2px 6px">
+          <Group gap={0}>
+            <Tabs.Tab value="optimal" size="xs" h={18}>
               <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
                 Opt.
+              </Text>
+            </Tabs.Tab>
+            <Tabs.Tab value="total" size="xs" h={18}>
+              <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
+                Tot.
               </Text>
             </Tabs.Tab>
           </Group>
@@ -129,36 +129,36 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
 
           <Tabs.Panel value="optimal">
             <Stack gap="sm" justify="center">
-                <Group gap={6} align="center" wrap="nowrap">
-                  <Image
-                    src={cdnImage("/player_area/pa_resources.png")}
-                    width={24}
-                    height={24}
-                  />
-                  <Group gap={6} align="baseline" wrap="nowrap">
-                    <Text
-                      size="xl"
-                      fw={700}
-                      c="yellow.3"
-                      ff="mono"
-                      style={{
-                        textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {padNumber(planetEconomics.optimal.currentResources)}
-                    </Text>
-                    <Text
-                      size="sm"
-                      c="yellow.5"
-                      fw={500}
-                      ff="mono"
-                      style={{ lineHeight: 1 }}
-                    >
-                      / {padNumber(planetEconomics.optimal.totalResources)}
-                    </Text>
-                  </Group>
+              <Group gap={6} align="center" wrap="nowrap">
+                <Image
+                  src={cdnImage("/player_area/pa_resources.png")}
+                  width={24}
+                  height={24}
+                />
+                <Group gap={6} align="baseline" wrap="nowrap">
+                  <Text
+                    size="xl"
+                    fw={700}
+                    c="yellow.3"
+                    ff="mono"
+                    style={{
+                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
+                      lineHeight: 1,
+                    }}
+                  >
+                    {padNumber(planetEconomics.optimal.currentResources)}
+                  </Text>
+                  <Text
+                    size="sm"
+                    c="yellow.5"
+                    fw={500}
+                    ff="mono"
+                    style={{ lineHeight: 1 }}
+                  >
+                    / {padNumber(planetEconomics.optimal.totalResources)}
+                  </Text>
                 </Group>
+              </Group>
 
               <Group gap={6} align="center" wrap="nowrap">
                 <InfluenceIcon size={24} />
@@ -181,7 +181,6 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   </StatMono>
                 </Group>
               </Group>
-
 
               <Group gap={6} align="center" wrap="nowrap">
                 <CombinedResourceInfluenceIcon size={24} />

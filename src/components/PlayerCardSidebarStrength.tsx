@@ -1,4 +1,4 @@
-import { Group, Text, Stack, Box, Image, Grid } from "@mantine/core";
+import { Group, Text, Stack, Box, Image } from "@mantine/core";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
@@ -7,6 +7,7 @@ import { cdnImage } from "../data/cdnImage";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { ArmyStats } from "./PlayerArea";
 import { getPlanetData } from "@/lookup/planets";
+import layout from "./PlayerCardSidebarStrength.module.css";
 
 type Props = {
   playerData: PlayerData;
@@ -115,32 +116,26 @@ export default function PlayerCardSidebarStrength(props: Props) {
         </Group>
       </Group>
 
-      <Grid columns={6}>
-        <Grid.Col span={4}>
-          {/* Resources and Planets Section */}
-          <Stack gap="xs" my="xs">
-            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-            <Group gap="xs" pos="relative" style={{ zIndex: 1 }}>
-              {planets.map((planetId, index) => {
-                const planetData = getPlanetData(planetId);
-                const hasLegendaryAbility =
-                  planetData?.legendaryAbilityName &&
-                  planetData?.legendaryAbilityText;
+      <div className={layout.strengthRow}>
+        <div className={layout.box} style={{ flex: "0 0 auto" }}>
+          <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+        </div>
 
-                return (
-                  <PlanetCard
-                    key={index}
-                    planetId={planetId}
-                    legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                      planetId
-                    )}
-                  />
-                );
-              })}
-            </Group>
-          </Stack>
-        </Grid.Col>
-        <Grid.Col span={2}>
+        <div className={`${layout.box} ${layout.planetCardsBox}`}>
+          <div className={layout.planetCards}>
+            {planets.map((planetId, index) => (
+              <PlanetCard
+                key={index}
+                planetId={planetId}
+                legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                  planetId
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className={layout.box} style={{ flex: "0 0 auto" }}>
           <ArmyStats
             stats={{
               spaceArmyRes,
@@ -151,8 +146,8 @@ export default function PlayerCardSidebarStrength(props: Props) {
               groundArmyCombat,
             }}
           />
-        </Grid.Col>
-      </Grid>
+        </div>
+      </div>
     </PlayerCardBox>
   );
 }

@@ -4,6 +4,7 @@ import PlayerCardSidebarTech from "../../PlayerCardSidebarTech";
 import PlayerCardSidebarComponents from "../../PlayerCardSidebarComponents";
 import PlayerCardSidebarStrength from "../../PlayerCardSidebarStrength";
 import classes from "../../MapUI.module.css";
+import { PlayerData } from "@/data/types";
 
 type ActiveArea =
   | {
@@ -18,7 +19,7 @@ type ActiveArea =
   | null;
 
 type PlayerCardDisplayProps = {
-  playerData: any[];
+  playerData: PlayerData[];
   activeArea: ActiveArea;
 };
 
@@ -26,8 +27,9 @@ export function PlayerCardDisplay({
   playerData,
   activeArea,
 }: PlayerCardDisplayProps) {
+  const players = playerData.filter((player) => player.faction !== "null");
   if (activeArea?.type === "faction") {
-    const playerToShow = playerData.find(
+    const playerToShow = players.find(
       (player) => player.faction === activeArea.faction
     );
     if (!playerToShow) return null;
@@ -45,7 +47,7 @@ export function PlayerCardDisplay({
   if (activeArea?.type === "tech") {
     return (
       <Stack className={classes.playerCardsContainer} gap={0}>
-        {playerData.map((player) => (
+        {players.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
             <PlayerCardSidebarTech playerData={player} />
           </Box>
@@ -58,7 +60,7 @@ export function PlayerCardDisplay({
   if (activeArea?.type === "components") {
     return (
       <Stack className={classes.playerCardsContainer}>
-        {playerData.map((player) => (
+        {players.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
             <PlayerCardSidebarComponents playerData={player} />
           </Box>
@@ -70,7 +72,7 @@ export function PlayerCardDisplay({
   if (activeArea?.type === "strength") {
     return (
       <Stack className={classes.playerCardsContainer}>
-        {playerData.map((player) => (
+        {players.map((player) => (
           <Box key={player.faction} className={classes.playerCard}>
             <PlayerCardSidebarStrength playerData={player} />
           </Box>

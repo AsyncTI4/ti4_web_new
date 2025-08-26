@@ -15,6 +15,8 @@ type BaseCardProps = {
   totalCapacity?: number;
   className?: string;
   enableAnimations?: boolean;
+  locked?: boolean;
+  lockedLabel?: string;
 };
 
 export function BaseCard({
@@ -28,17 +30,21 @@ export function BaseCard({
   totalCapacity,
   className,
   enableAnimations = true,
+  locked = false,
+  lockedLabel = "Not available",
 }: BaseCardProps) {
   const cardClass = isUpgraded
     ? `${styles.unitCard} ${styles.upgraded}`
     : `${styles.unitCard} ${styles.standard}`;
 
   const animatedClass = enableAnimations ? styles.animated : "";
+  const lockedClass = locked ? styles.locked : "";
+  const compactClass = compact ? styles.compactCard : "";
 
   return (
     <Chip
       accent="blue"
-      className={`${cardClass} ${animatedClass} ${styles.cardStack} ${className || ""}`}
+      className={`${cardClass} ${animatedClass} ${lockedClass} ${styles.cardStack} ${compactClass} ${className || ""}`}
       onClick={onClick}
     >
       {isUpgraded && (
@@ -60,12 +66,20 @@ export function BaseCard({
 
       <Flex className={styles.imageContainer}>{children}</Flex>
 
+      {!compact && locked && (
+        <div className={styles.infoStack}>
+          <Group className={styles.mainGroup}>
+            <Text className={styles.lockedText}>{lockedLabel}</Text>
+          </Group>
+        </div>
+      )}
+
       {!compact &&
+        !locked &&
         reinforcements !== undefined &&
         totalCapacity !== undefined && (
           <div className={styles.infoStack}>
             <Group className={styles.mainGroup}>
-              {/* Reinforcements */}
               <Group className={styles.reinforcementGroup}>
                 <Group className={styles.countGroup}>
                   <Text
