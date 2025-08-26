@@ -29,7 +29,7 @@ export const SPACE_HEAT_CONFIG = {
   rimDecayRate: 0.08,
   unitHeat: 400,
   unitDecayRate: 0.055,
-  factionRepulsionHeat: 100,
+  factionRepulsionHeat: 600,
   factionDecayRate: 0.02,
   stackSizeMultiplier: 0.15,
 } as const;
@@ -41,7 +41,7 @@ export const GROUND_HEAT_CONFIG = {
   rimDecayRate: 0.06, // From placeGroundEntitiesForPlanet
   unitHeat: 400,
   unitDecayRate: 0.06, // From placeGroundEntitiesForPlanet
-  factionRepulsionHeat: 100,
+  factionRepulsionHeat: 600,
   factionDecayRate: 0.02,
   stackSizeMultiplier: 0.15,
 } as const;
