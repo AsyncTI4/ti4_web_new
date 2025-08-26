@@ -1,51 +1,82 @@
 import { Grid, Stack, SimpleGrid } from "@mantine/core";
+import { Tech } from "./Tech";
+import { getTechData, getTechTier } from "@/lookup/tech";
+import { PhantomTech } from "./PhantomTech";
 
 type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
 type Props = {
-  renderTechColumn: (
-    techType: string,
-    exhaustedTechs?: string[]
-  ) => React.ReactNode[];
+  techs?: string[];
   layout?: "grid" | "simple";
   exhaustedTechs?: string[];
 };
+const techCategories: TechCategory[] = [
+  "PROPULSION",
+  "CYBERNETIC",
+  "BIOTIC",
+  "WARFARE",
+];
 
 export function DynamicTechGrid({
-  renderTechColumn,
+  techs = [],
   layout = "simple",
   exhaustedTechs = [],
 }: Props) {
-  const techCategories: TechCategory[] = [
-    "PROPULSION",
-    "CYBERNETIC",
-    "BIOTIC",
-    "WARFARE",
-  ];
+  const renderTechColumn = (
+    techType: string,
+    exhaustedTechs: string[] = []
+  ) => {
+    const filteredTechs = techs.filter((techId) => {
+      const techData = getTechData(techId);
+      return techData?.types[0] === techType;
+    });
 
-  const categoriesWithTechs = techCategories
-    .map((techType) => ({
-      type: techType,
-      techs: renderTechColumn(techType, exhaustedTechs),
-    }))
-    .filter((category) => category.techs.length > 0);
+    // Sort techs by tier (lower tier first)
+    const sortedTechs = filteredTechs.sort((a, b) => {
+      const techDataA = getTechData(a);
+      const techDataB = getTechData(b);
+      const tierA = techDataA ? getTechTier(techDataA.requirements) : 999;
+      const tierB = techDataB ? getTechTier(techDataB.requirements) : 999;
+      return tierA - tierB;
+    });
+
+    const techElements = sortedTechs.map((techId, index) => (
+      <Tech
+        key={index}
+        techId={techId}
+        isExhausted={exhaustedTechs.includes(techId)}
+      />
+    ));
+
+    return [...techElements];
+  };
+
+  const categoriesWithTechs = techCategories.map((techType) => ({
+    type: techType,
+    techs: renderTechColumn(techType, exhaustedTechs),
+  }));
 
   if (categoriesWithTechs.length === 0) return null;
 
   if (layout === "grid") {
     return (
       <>
-        {categoriesWithTechs.map((category) => (
-          <Grid.Col
-            key={category.type}
-            span={{
-              base: 12,
-              md: 6,
-            }}
-          >
-            <Stack gap={4}>{category.techs}</Stack>
-          </Grid.Col>
-        ))}
+        {techCategories.map((techType) => {
+          const techs = renderTechColumn(techType, exhaustedTechs);
+          return (
+            <Grid.Col
+              key={techType}
+              span={{
+                base: 6,
+                md: 3,
+              }}
+            >
+              <Stack key={techType} gap={4}>
+                {techs.length > 0 ? techs : <PhantomTech techType={techType} />}
+              </Stack>
+            </Grid.Col>
+          );
+        })}
       </>
     );
   }

@@ -58,25 +58,25 @@ type Props = {
 export function ResourceInfluenceCompact({ planetEconomics }: Props) {
   return (
     <Tabs defaultValue="optimal" variant="pills" orientation="vertical">
-      <Group gap="lg" align="center" wrap="nowrap">
+      <Stack gap="xs" align="center">
         <Tabs.List>
-          <Stack gap={2}>
-            <Tabs.Tab value="total" size="xs" h={18} p="2px 6px">
-              <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
-                Tot.
-              </Text>
-            </Tabs.Tab>
-            <Tabs.Tab value="optimal" size="xs" h={18} p="2px 6px">
+          <Group gap={0}>
+            <Tabs.Tab value="optimal" size="xs" h={18}>
               <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
                 Opt.
               </Text>
             </Tabs.Tab>
-          </Stack>
+            <Tabs.Tab value="total" size="xs" h={18}>
+              <Text size="xs" fw={600} style={{ fontSize: "10px" }}>
+                Tot.
+              </Text>
+            </Tabs.Tab>
+          </Group>
         </Tabs.List>
 
         <div style={{ flex: 1 }}>
           <Tabs.Panel value="total">
-            <Group gap="sm" wrap="nowrap" justify="center">
+            <Stack gap="sm" justify="center">
               <Group gap={6} align="center" wrap="nowrap">
                 <Image
                   src={cdnImage("/player_area/pa_resources.png")}
@@ -103,10 +103,6 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                 </Group>
               </Group>
 
-              <Text c="gray.6" size="lg">
-                |
-              </Text>
-
               <Group gap={6} align="center" wrap="nowrap">
                 <InfluenceIcon size={24} />
                 <Group gap={6} align="baseline" wrap="nowrap">
@@ -128,11 +124,11 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   </StatMono>
                 </Group>
               </Group>
-            </Group>
+            </Stack>
           </Tabs.Panel>
 
           <Tabs.Panel value="optimal">
-            <Group gap="sm" wrap="nowrap" justify="center">
+            <Stack gap="sm" justify="center">
               <Group gap={6} align="center" wrap="nowrap">
                 <Image
                   src={cdnImage("/player_area/pa_resources.png")}
@@ -140,28 +136,29 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   height={24}
                 />
                 <Group gap={6} align="baseline" wrap="nowrap">
-                  <StatMono
+                  <Text
                     size="xl"
                     fw={700}
                     c="yellow.3"
-                    style={{ lineHeight: 1 }}
+                    ff="mono"
+                    style={{
+                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.6)",
+                      lineHeight: 1,
+                    }}
                   >
                     {padNumber(planetEconomics.optimal.currentResources)}
-                  </StatMono>
-                  <StatMono
+                  </Text>
+                  <Text
                     size="sm"
                     c="yellow.5"
                     fw={500}
+                    ff="mono"
                     style={{ lineHeight: 1 }}
                   >
                     / {padNumber(planetEconomics.optimal.totalResources)}
-                  </StatMono>
+                  </Text>
                 </Group>
               </Group>
-
-              <Text c="gray.6" size="lg">
-                |
-              </Text>
 
               <Group gap={6} align="center" wrap="nowrap">
                 <InfluenceIcon size={24} />
@@ -185,10 +182,6 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                 </Group>
               </Group>
 
-              <Text c="gray.6" size="lg">
-                |
-              </Text>
-
               <Group gap={6} align="center" wrap="nowrap">
                 <CombinedResourceInfluenceIcon size={24} />
                 <Group gap={6} align="baseline" wrap="nowrap">
@@ -210,10 +203,10 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
                   </StatMono>
                 </Group>
               </Group>
-            </Group>
+            </Stack>
           </Tabs.Panel>
         </div>
-      </Group>
+      </Stack>
     </Tabs>
   );
 }

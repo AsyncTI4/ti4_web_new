@@ -1,36 +1,32 @@
-import { Group, Stack, Image, Text, Box } from "@mantine/core";
+import { Box, Flex, Group, Stack } from "@mantine/core";
 import { Cardback } from "../Cardback";
 import { cdnImage } from "../../../data/cdnImage";
-import { Chip } from "@/components/shared/primitives/Chip";
-import { Shimmer } from "../Shimmer";
-import { getGradientClasses } from "../gradientClasses";
-import styles from "./PlayerCardCounts.module.css";
+import { TradeGoods } from "../TradeGoods/TradeGoods";
+import { Commodities } from "../Commodities/Commodities";
+import { DebtTokens } from "../DebtTokens";
 
 type Props = {
-  tg: number;
-  commodities: number;
-  commoditiesTotal: number;
-  soCount: number;
   pnCount: number;
   acCount: number;
+  tg?: number;
+  commodities?: number;
+  commoditiesTotal?: number;
+  debtTokens?: Record<string, number>;
 };
 
 export function PlayerCardCounts({
+  pnCount,
+  acCount,
   tg,
   commodities,
   commoditiesTotal,
-  soCount,
-  pnCount,
-  acCount,
+  debtTokens,
 }: Props) {
+  const hasResources =
+    tg !== undefined || commodities !== undefined || debtTokens !== undefined;
   return (
-    <Group gap={6} justify="center" align="center">
+    <Group gap={4} align="flex-start" wrap="wrap">
       {[
-        {
-          src: cdnImage("/player_area/pa_cardbacks_so.png"),
-          alt: "secret objectives",
-          count: soCount,
-        },
         {
           src: "/cardback/cardback_action.png",
           alt: "action cards",
@@ -47,48 +43,26 @@ export function PlayerCardCounts({
           src={cardback.src}
           alt={cardback.alt}
           count={cardback.count}
+          addBorder={true}
+          size="sm"
         />
       ))}
-
-      <Stack gap={4} align="stretch" className={styles.chipStack}>
-        {/* Trade Goods Chip */}
-        <Chip accent="yellow" className={styles.tgChip} enableHover={false}>
-          <Shimmer
-            color="yellow"
-            px={8}
-            py={4}
-            className={getGradientClasses("yellow").border}
-          >
-            <Box className={styles.chipContent}>
-              <Image
-                src="/tg.png"
-                className={`${getGradientClasses("yellow").iconFilter} ${styles.icon}`}
-              />
-              <Text className={styles.countText}>{tg}</Text>
-            </Box>
-          </Shimmer>
-        </Chip>
-
-        {/* Commodities Chip */}
-        <Chip accent="gray" className={styles.commsChip} enableHover={false}>
-          <Shimmer
-            color="gray"
-            px={8}
-            py={4}
-            className={getGradientClasses("gray").border}
-          >
-            <Box className={styles.chipContent}>
-              <Image
-                src="/comms.png"
-                className={`${getGradientClasses("gray").iconFilter} ${styles.icon}`}
-              />
-              <Text className={styles.countText}>
-                {commodities}/{commoditiesTotal}
-              </Text>
-            </Box>
-          </Shimmer>
-        </Chip>
-      </Stack>
+      {hasResources && (
+        <Stack gap={4}>
+          {tg !== undefined && <TradeGoods tg={tg} />}
+          {commodities !== undefined && (
+            <Commodities
+              commodities={commodities}
+              commoditiesTotal={commoditiesTotal || 0}
+            />
+          )}
+        </Stack>
+      )}
+      {debtTokens && Object.keys(debtTokens).length > 0 && (
+        <Box>
+          <DebtTokens debts={debtTokens} />
+        </Box>
+      )}
     </Group>
   );
 }

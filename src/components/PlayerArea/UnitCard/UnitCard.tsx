@@ -12,8 +12,9 @@ type Props = {
   color?: string;
   deployedCount: number;
   compact?: boolean;
+  locked?: boolean;
+  lockedLabel?: string;
 };
-
 const DEFAULT_UNIT_CAPS = {
   carrier: 4,
   mech: 4,
@@ -27,34 +28,37 @@ const DEFAULT_UNIT_CAPS = {
   infantry: 12,
   fighter: 10,
 };
-
-export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
+export function UnitCard({
+  unitId,
+  color,
+  deployedCount,
+  compact,
+  locked,
+  lockedLabel,
+}: Props) {
   const [opened, setOpened] = useState(false);
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
-
   if (!unitData) return null; // or some fallback UI
-
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
-
   const unitCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
-
   const reinforcements = unitCap - deployedCount;
-
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <div>
           <BaseCard
-            onClick={() => setOpened((o) => !o)}
+            onClick={locked ? undefined : () => setOpened((o) => !o)}
             isUpgraded={isUpgraded}
             isFaction={isFaction}
             faction={unitData.faction}
             compact={compact}
             reinforcements={reinforcements}
             totalCapacity={unitCap}
+            locked={locked}
+            lockedLabel={lockedLabel}
           >
             <Unit
               unitType={unitData.asyncId}
@@ -66,7 +70,7 @@ export function UnitCard({ unitId, color, deployedCount, compact }: Props) {
         </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        <UnitDetailsCard unitId={unitId} color={color} />
+        {!locked && <UnitDetailsCard unitId={unitId} color={color} />}
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

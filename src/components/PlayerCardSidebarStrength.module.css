@@ -1,0 +1,26 @@
+.strengthRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-sm);
+  width: 100%;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+}
+
+.planetCardsBox {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.planetCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mantine-spacing-xs);
+  align-items: flex-start;
+}
+
+

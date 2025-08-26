@@ -1,12 +1,12 @@
 import { Box, Text, Image, BoxProps } from "@mantine/core";
-import { Chip } from "@/components/shared/primitives/Chip";
 import { ReactNode } from "react";
 
 type Props = BoxProps & {
   src: string;
   alt: string;
   count: string | number | ReactNode;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
+  addBorder?: boolean;
   style?: React.CSSProperties;
 };
 
@@ -15,24 +15,25 @@ export function Cardback({
   alt,
   count,
   size = "sm",
-  style,
-  ...boxProps
+  addBorder = false,
+  style
 }: Props) {
   const widthMap = {
+    xs: "35px",
     sm: "45px",
     md: "55px",
     lg: "65px",
   };
 
   return (
-    <Box pos="relative" {...boxProps}>
-      <Chip
-        accent="blue"
+    <Box pos="relative" maw={widthMap[size]}>
+      <Box
         style={{
           width: widthMap[size],
-          borderRadius: "8px",
+          borderRadius: "4px",
           overflow: "hidden",
           position: "relative",
+          border: addBorder ? "1px solid rgba(148, 163, 184, 0.2)": "",
           ...style,
         }}
       >
@@ -43,18 +44,13 @@ export function Cardback({
             filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
           }}
         />
-      </Chip>
+      </Box>
       <Box
         style={{
           position: "absolute",
           bottom: "4px",
           left: "50%",
           transform: "translateX(-50%)",
-          background:
-            "linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)",
-          borderRadius: "4px",
-          boxShadow:
-            "0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(148, 163, 184, 0.1)",
           minWidth: "24px",
           display: "flex",
           alignItems: "center",

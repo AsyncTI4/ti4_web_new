@@ -45,13 +45,11 @@ export const SmallControlToken = ({
 }: ControlTokenProps) => {
   return (
     <div style={style}>
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", height: "24px" }}>
         <img
           src={cdnImage(`/command_token/control_${colorAlias}.png`)}
           alt={`${faction || "control"} control token`}
-          style={{
-            height: "24px",
-          }}
+          style={{ height: "24px" }}
         />
         {faction && (
           <img
@@ -59,6 +57,7 @@ export const SmallControlToken = ({
             alt={`${faction} faction`}
             style={{
               position: "absolute",
+              marginTop: "4px",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -70%)",

@@ -1,0 +1,23 @@
+.table {
+  width: auto;
+}
+
+.headerIcon {
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+}
+
+.caption {
+  color: var(--mantine-color-gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.number {
+  color: var(--mantine-color-white);
+  line-height: 1;
+}
+
+

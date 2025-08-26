@@ -4,21 +4,25 @@ import { ScoredSecret } from "../ScoredSecret";
 import { EmptyScoredSecretsPlaceholder } from "../ScoredSecret";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { SecretObjectiveCard } from "../SecretObjectiveCard";
+import { UnscoredSecret } from "../ScoredSecret/UnscoredSecret";
 
 type Props = {
   secretsScored: Record<string, number>;
   knownUnscoredSecrets?: Record<string, number>;
+  unscoredSecrets: number;
 };
 
 export function ScoredSecrets({
   secretsScored,
   knownUnscoredSecrets = {},
+  unscoredSecrets
 }: Props) {
   const [selectedSecret, setSelectedSecret] = useState<string | null>(null);
 
   const hasSecrets =
     Object.values(secretsScored).length > 0 ||
-    Object.values(knownUnscoredSecrets).length > 0;
+    Object.values(knownUnscoredSecrets).length > 0 ||
+    unscoredSecrets > 0;
 
   return (
     <Stack gap={2}>
@@ -68,6 +72,10 @@ export function ScoredSecrets({
                 <SecretObjectiveCard secretId={secretId} />
               </SmoothPopover.Dropdown>
             </SmoothPopover>
+          ))}
+          
+          {Array.from({length: unscoredSecrets}, (_, index) => (
+            <UnscoredSecret key={index} />
           ))}
         </>
       ) : (

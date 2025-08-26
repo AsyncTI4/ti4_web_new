@@ -86,56 +86,58 @@ export function FactionTabBar({
   return (
     <Box className={classes.factionTabBar}>
       <Group gap={0} justify="center" wrap="wrap">
-        {playerData.map((player) => {
-          const isActive =
-            activeArea?.type === "faction" &&
-            activeArea.faction === player.faction;
-          const isPinned =
-            selectedArea?.type === "faction" &&
-            selectedArea.faction === player.faction;
-          const isActivePlayer = player.active;
+        {playerData
+          .filter((p) => p.faction !== "null")
+          .map((player) => {
+            const isActive =
+              activeArea?.type === "faction" &&
+              activeArea.faction === player.faction;
+            const isPinned =
+              selectedArea?.type === "faction" &&
+              selectedArea.faction === player.faction;
+            const isActivePlayer = player.active;
 
-          return (
-            <Box
-              key={player.color}
-              onClick={() =>
-                onAreaSelect({
-                  type: "faction",
-                  faction: player.faction,
-                  coords: { x: 0, y: 0 },
-                })
-              }
-              onMouseEnter={() =>
-                onAreaMouseEnter({
-                  type: "faction",
-                  faction: player.faction,
-                  coords: { x: 0, y: 0 },
-                })
-              }
-              onMouseLeave={() => onAreaMouseLeave()}
-              className={`${classes.tab} ${
-                isPinned ? classes.pinned : isActive ? classes.active : ""
-              }`}
-            >
-              <Image
-                src={cdnImage(`/factions/${player.faction}.png`)}
-                alt={player.faction}
-                w={24}
-                h={24}
-                className={`${classes.img} ${
-                  isPinned
-                    ? classes.imgPinned
-                    : isActive
-                      ? classes.imgActive
-                      : ""
+            return (
+              <Box
+                key={player.color}
+                onClick={() =>
+                  onAreaSelect({
+                    type: "faction",
+                    faction: player.faction,
+                    coords: { x: 0, y: 0 },
+                  })
+                }
+                onMouseEnter={() =>
+                  onAreaMouseEnter({
+                    type: "faction",
+                    faction: player.faction,
+                    coords: { x: 0, y: 0 },
+                  })
+                }
+                onMouseLeave={() => onAreaMouseLeave()}
+                className={`${classes.tab} ${
+                  isPinned ? classes.pinned : isActive ? classes.active : ""
                 }`}
-              />
-              {isActivePlayer && (
-                <Box className={classes.activePlayerIndicator} />
-              )}
-            </Box>
-          );
-        })}
+              >
+                <Image
+                  src={cdnImage(`/factions/${player.faction}.png`)}
+                  alt={player.faction}
+                  w={24}
+                  h={24}
+                  className={`${classes.img} ${
+                    isPinned
+                      ? classes.imgPinned
+                      : isActive
+                        ? classes.imgActive
+                        : ""
+                  }`}
+                />
+                {isActivePlayer && (
+                  <Box className={classes.activePlayerIndicator} />
+                )}
+              </Box>
+            );
+          })}
 
         <TabButton
           icon={<IconFlask size={16} />}

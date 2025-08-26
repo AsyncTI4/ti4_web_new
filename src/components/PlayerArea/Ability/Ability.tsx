@@ -4,9 +4,9 @@ import { Shimmer } from "../Shimmer";
 import { getAbility } from "../../../lookup/abilities";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
-import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import styles from "./Ability.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 
 type Props = {
   id: string;
