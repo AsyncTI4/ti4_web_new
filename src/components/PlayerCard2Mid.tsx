@@ -382,14 +382,28 @@ export default function PlayerCard2Mid(props: Props) {
 
               <Flex gap={8} wrap={"wrap"}>
                 {planets.map((planetId, index) => {
+                  const planetData = getPlanetData(planetId);
+                  const hasLegendaryAbility =
+                    planetData?.legendaryAbilityName &&
+                    planetData?.legendaryAbilityText;
+
                   return (
-                        <PlanetCard
-                          key={index}
+                    <div
+                      key={index}
+                      style={{ display: "flex", gap: "4px" }}
+                    >
+                      <PlanetCard planetId={planetId} />
+                      {hasLegendaryAbility && (
+                        <PlanetAbilityCard
                           planetId={planetId}
-                          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                          abilityName={planetData.legendaryAbilityName!}
+                          abilityText={planetData.legendaryAbilityText!}
+                          exhausted={exhaustedPlanetAbilities.includes(
                             planetId
                           )}
                         />
+                      )}
+                    </div>
                   );
                 })}
               </Flex>
