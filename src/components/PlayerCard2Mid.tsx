@@ -129,6 +129,8 @@ export default function PlayerCard2Mid(props: Props) {
     nombox,
   } = props.playerData;
   const promissoryNotes = promissoryNotesInPlayArea;
+  const exhaustedPlanetAbilities =
+    props.playerData.exhaustedPlanetAbilities || [];
 
   const mahactEdict = props.playerData.mahactEdict || [];
   const armyStats = {
@@ -432,7 +434,13 @@ export default function PlayerCard2Mid(props: Props) {
 
             <Group gap={4} wrap="wrap" flex={1}>
               {planets.map((planetId, index) => {
-                return <PlanetCard key={index} planetId={planetId} />;
+                return <PlanetCard
+                  key={index}
+                  planetId={planetId}
+                  legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                    planetId
+                  )}
+                />;
               })}
             </Group>
           </Group>
