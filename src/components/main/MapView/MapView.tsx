@@ -128,6 +128,7 @@ export function MapView({ gameId }: Props) {
   useKeyboardShortcuts({
     toggleOverlays: handlers.toggleOverlays,
     toggleTechSkipsMode: handlers.toggleTechSkipsMode,
+    togglePlanetTypesMode: handlers.togglePlanetTypesMode,
     toggleDistanceMode: handlers.toggleDistanceMode,
     togglePdsMode: handlers.togglePdsMode,
     toggleLeftPanelCollapsed: handlers.toggleLeftPanelCollapsed,

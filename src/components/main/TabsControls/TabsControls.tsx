@@ -5,6 +5,8 @@ import {
   IconKeyboard,
   IconSettings,
   IconEye,
+  IconChecklist,
+  IconAdjustmentsAlt,
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import { useSettingsStore } from "@/utils/appStore";
@@ -26,6 +28,16 @@ export function TabsControls() {
         onClick={handlers.toggleTechSkipsMode}
       >
         <IconFlask size={16} />
+      </Button>
+      <Button
+        variant={settings.planetTypesMode ? "filled" : "subtle"}
+        size="sm"
+        color={settings.planetTypesMode ? "cyan" : "gray"}
+        style={{ height: "36px", minWidth: "36px" }}
+        px={8}
+        onClick={handlers.togglePlanetTypesMode}
+      >
+        <IconAdjustmentsAlt size={16} />
       </Button>
       <Button
         variant={settings.distanceMode ? "filled" : "subtle"}

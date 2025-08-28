@@ -81,6 +81,9 @@ export const MapTile = React.memo<Props>(
     const overlaysEnabled = useSettingsStore(
       (state) => state.settings.overlaysEnabled
     );
+    const planetTypesMode = useSettingsStore(
+      (state) => state.settings.planetTypesMode
+    );
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
 
@@ -109,6 +112,11 @@ export const MapTile = React.memo<Props>(
             // Tech skips mode takes priority
             if (techSkipsMode) {
               return mapTile.hasTechSkips ? 1.0 : 0.2;
+            }
+
+            
+            if (planetTypesMode) {
+              return mapTile.planets.length > 0 ? 1.0 : 0.2;
             }
 
             // PDS mode - dim tiles that don't have PDS
