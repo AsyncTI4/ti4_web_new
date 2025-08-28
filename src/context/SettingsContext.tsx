@@ -10,6 +10,7 @@ export type Settings = {
   overlaysEnabled: boolean;
   alwaysShowControlTokens: boolean;
   techSkipsMode: boolean;
+  planetTypesMode: boolean;
   distanceMode: boolean;
   pdsMode: boolean;
   isLeftPanelCollapsed: boolean;
@@ -21,6 +22,7 @@ const DEFAULT_SETTINGS: Settings = {
   overlaysEnabled: false,
   alwaysShowControlTokens: true,
   techSkipsMode: false,
+  planetTypesMode: false,
   distanceMode: false,
   pdsMode: false,
   isLeftPanelCollapsed: false,
@@ -60,6 +62,7 @@ type SettingsContextValue = {
   toggleOverlays: () => void;
   toggleAlwaysShowControlTokens: () => void;
   toggleTechSkipsMode: () => void;
+  togglePlanetTypesMode: () => void;
   toggleDistanceMode: () => void;
   togglePdsMode: () => void;
   toggleLeftPanelCollapsed: () => void;
@@ -108,6 +111,14 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   const toggleTechSkipsMode = useCallback(() => {
     setSettings((prev) => {
       const newSettings = { ...prev, techSkipsMode: !prev.techSkipsMode };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
+
+  const togglePlanetTypesMode = useCallback(() => {
+    setSettings((prev) => {
+      const newSettings = { ...prev, planetTypesMode: !prev.planetTypesMode };
       saveSettingsToStorage(newSettings);
       return newSettings;
     });
@@ -168,6 +179,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleOverlays,
     toggleAlwaysShowControlTokens,
     toggleTechSkipsMode,
+    togglePlanetTypesMode,
     toggleDistanceMode,
     togglePdsMode,
     toggleLeftPanelCollapsed,
