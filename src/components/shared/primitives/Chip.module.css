@@ -1,0 +1,164 @@
+
+.yellow {
+    --background-color: var(--gd-yellow);
+    --border-color: rgba(var(--gd-yellow), 0.18);
+    --hover-border-color: rgba(var(--gd-yellow), 0.6);
+    --hover-shadow-1: rgba(var(--gd-yellow), 0.35);
+    --hover-shadow-2: rgba(var(--gd-yellow), 0.22);
+    --ribbon-color: var(--gd-yellow);
+}
+
+.cyan {
+    --background-color: var(--gd-cyan);
+    --border-color: rgba(var(--gd-cyan), 0.18);
+    --hover-border-color: rgba(var(--gd-cyan), 0.6);
+    --hover-shadow-1: rgba(var(--gd-cyan), 0.35);
+    --hover-shadow-2: rgba(var(--gd-cyan), 0.22);
+    --ribbon-color: var(--gd-cyan);
+}
+
+.red {
+    --background-color: var(--gd-red);
+    --border-color: rgba(var(--gd-red), 0.18);
+    --hover-border-color: rgba(var(--gd-red), 0.6);
+    --hover-shadow-1: rgba(var(--gd-red), 0.35);
+    --hover-shadow-2: rgba(var(--gd-red), 0.22);
+    --ribbon-color: var(--gd-red);
+}
+
+.deepRed {
+    --background-color: rgba(48,6,6,0.42);
+    --border-color: rgba(48,6,6,1);
+    --hover-border-color: rgba(48,6,6,1);
+    --hover-shadow-1: rgba(48,6,6,0.3);
+    --hover-shadow-2: rgba(48,6,6,0.18);
+    --ribbon-color: rgb(48,6,6);
+}
+
+.blue {
+    --background-color: var(--gd-blue);
+    --border-color: rgba(var(--gd-blue), 0.18);
+    --hover-border-color: rgba(var(--gd-blue), 0.6);
+    --hover-shadow-1: rgba(var(--gd-blue), 0.35);
+    --hover-shadow-2: rgba(var(--gd-blue), 0.22);
+    --ribbon-color: var(--gd-blue);
+}
+
+.green {
+    --background-color: var(--gd-green);
+    --border-color: rgba(var(--gd-green), 0.18);
+    --hover-border-color: rgba(var(--gd-green), 0.6);
+    --hover-shadow-1: rgba(var(--gd-green), 0.35);
+    --hover-shadow-2: rgba(var(--gd-green), 0.22);
+    --ribbon-color: var(--gd-green);
+}
+
+.orange {
+    --background-color: var(--gd-orange);
+    --border-color: rgba(var(--gd-orange), 0.18);
+    --hover-border-color: rgba(var(--gd-orange), 0.64);
+    --hover-shadow-1: rgba(var(--gd-orange), 0.4);
+    --hover-shadow-2: rgba(var(--gd-orange), 0.25);
+    --ribbon-color: var(--gd-orange);
+}
+
+.purple {
+    --background-color: var(--gd-purple);
+    --border-color: rgba(var(--gd-purple), 0.18);
+    --hover-border-color: rgba(var(--gd-purple), 0.6);
+    --hover-shadow-1: rgba(var(--gd-purple), 0.35);
+    --hover-shadow-2: rgba(var(--gd-purple), 0.22);
+    --ribbon-color: var(--gd-purple);
+}
+
+.gray,
+.grey {
+    --background-color: var(--gd-gray);
+    --border-color: rgba(var(--gd-gray), 0.18);
+    --hover-border-color: rgba(var(--gd-gray), 0.55);
+    --hover-shadow-1: rgba(var(--gd-gray), 0.3);
+    --hover-shadow-2: rgba(var(--gd-gray), 0.18);
+    --ribbon-color: var(--gd-gray);
+}
+
+.ribbon::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.6) 0%, rgba(var(--ribbon-color), 0.2) 100%);
+    opacity: 0.9;
+}
+
+.accentLine::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
+    border-radius: 0 2px 2px 0;
+    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.85) 0%, rgba(var(--ribbon-color), 0.35) 100%);
+    box-shadow: 0 0 6px rgba(var(--ribbon-color), 0.12);
+    opacity: 1;
+}
+
+.accentLine {
+    padding-left: 2px;
+}
+
+
+.chip {
+    position: relative;
+    border-radius: var(--mantine-radius-md);
+    background: rgba(var(--background-color), 0.10);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+}
+
+.chip.strong {
+    background: rgba(var(--background-color), 0.18);
+}
+
+.hover {
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.hover:hover {
+    border-color: var(--hover-border-color);
+    border-width: 1px;
+    box-shadow: 0 0 0 1px var(--hover-shadow-1), 0 2px 10px var(--hover-shadow-2);
+}
+
+.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.inner {
+    position: relative;
+    display: flex;
+    gap: var(--mantine-spacing-xs);
+    padding: 4px 6px;
+    align-items: center;
+}
+
+.leftSection {
+    max-width: 20px;
+    max-height: 20px;
+    flex-shrink: 0;
+}
+
+.textContainer {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+}
+

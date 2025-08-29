@@ -1,5 +1,6 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
 import { useMemo, useState } from "react";
+import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
 import InfluenceIcon from "../../InfluenceIcon";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
@@ -67,11 +68,14 @@ export function PlanetCard({
           <SmoothPopover.Target>
             <Stack
               onClick={() => setOpened((o) => !o)}
-              className={`${styles.mainStack} ${
-                isLegendary
-                  ? `${styles.legendaryBackground} ${styles.legendary}`
-                  : ""
-              } ${styles.planetCard} ${styles.noRightRadius}`}
+              className={cx(
+                styles.mainStack,
+                isLegendary && styles.legendaryBackground,
+                isLegendary && styles.legendary,
+                styles.planetCard,
+                styles.noRightRadius,
+                isExhausted && styles.exhausted
+              )}
             >
               <Box className={styles.planetCardHighlight} />
 
@@ -79,27 +83,28 @@ export function PlanetCard({
                 <>
                   <Box className={styles.legendaryConstellation} />
                   <Box
-                    className={`${styles.floatingParticle} ${styles.particle1}`}
+                    className={cx(styles.floatingParticle, styles.particle1)}
                   />
                   <Box
-                    className={`${styles.floatingParticle} ${styles.particle2}`}
+                    className={cx(styles.floatingParticle, styles.particle2)}
                   />
                   <Box
-                    className={`${styles.floatingParticle} ${styles.particle3}`}
+                    className={cx(styles.floatingParticle, styles.particle3)}
                   />
                   <Box
-                    className={`${styles.floatingParticle} ${styles.particle4}`}
+                    className={cx(styles.floatingParticle, styles.particle4)}
                   />
                   <Box
-                    className={`${styles.floatingParticle} ${styles.particle5}`}
+                    className={cx(styles.floatingParticle, styles.particle5)}
                   />
                 </>
               )}
 
-              {isExhausted && <Box className={styles.exhaustedOverlay} />}
-
               <Box
-                className={`${styles.topHighlight} ${isLegendary ? styles.legendary : ""}`}
+                className={cx(
+                  styles.topHighlight,
+                  isLegendary && styles.legendary
+                )}
               />
 
               <Box className={styles.iconContainer}>
@@ -162,11 +167,13 @@ export function PlanetCard({
       <SmoothPopover.Target>
         <Stack
           onClick={() => setOpened((o) => !o)}
-          className={`${styles.mainStack} ${
-            isLegendary
-              ? `${styles.legendaryBackground} ${styles.legendary}`
-              : ""
-          } ${styles.planetCard}`}
+          className={cx(
+            styles.mainStack,
+            styles.planetCard,
+            isLegendary && styles.legendaryBackground,
+            isLegendary && styles.legendary,
+            isExhausted && styles.exhausted
+          )}
           style={getCSSVariables(planetType!) as React.CSSProperties}
         >
           <Box className={styles.planetCardHighlight} />
@@ -174,28 +181,16 @@ export function PlanetCard({
           {isLegendary && !isExhausted && (
             <>
               <Box className={styles.legendaryConstellation} />
-              <Box
-                className={`${styles.floatingParticle} ${styles.particle1}`}
-              />
-              <Box
-                className={`${styles.floatingParticle} ${styles.particle2}`}
-              />
-              <Box
-                className={`${styles.floatingParticle} ${styles.particle3}`}
-              />
-              <Box
-                className={`${styles.floatingParticle} ${styles.particle4}`}
-              />
-              <Box
-                className={`${styles.floatingParticle} ${styles.particle5}`}
-              />
+              <Box className={cx(styles.floatingParticle, styles.particle1)} />
+              <Box className={cx(styles.floatingParticle, styles.particle2)} />
+              <Box className={cx(styles.floatingParticle, styles.particle3)} />
+              <Box className={cx(styles.floatingParticle, styles.particle4)} />
+              <Box className={cx(styles.floatingParticle, styles.particle5)} />
             </>
           )}
 
-          {isExhausted && <Box className={styles.exhaustedOverlay} />}
-
           <Box
-            className={`${styles.topHighlight} ${isLegendary ? styles.legendary : ""}`}
+            className={cx(styles.topHighlight, isLegendary && styles.legendary)}
           />
 
           <Box className={styles.iconContainer}>

@@ -9,19 +9,19 @@
 
 /* Color-specific classes using global variables */
 .red {
-  --gradient-color: var(--color-red);
+  --gradient-color: var(--gd-red);
 }
 
 .green {
-  --gradient-color: var(--color-green);
+  --gradient-color: var(--gd-green);
 }
 
 .blue {
-  --gradient-color: var(--color-blue);
+  --gradient-color: var(--gd-blue);
 }
 
 .gray {
-  --gradient-color: var(--color-gray);
+  --gradient-color: var(--gd-gray);
 }
 
 .grey {

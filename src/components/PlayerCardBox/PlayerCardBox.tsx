@@ -37,7 +37,7 @@ export function PlayerCardBox({
         }}
         {...paperProps}
       >
-        <Box className={styles.innerGlow} />
+        {/* <Box className={styles.innerGlow} /> */}
 
         <Box className={styles.content}>{children}</Box>
 

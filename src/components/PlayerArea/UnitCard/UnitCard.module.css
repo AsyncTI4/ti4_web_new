@@ -1,10 +1,5 @@
-/* Unit card styles */
-.unitCard {
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
+
+
 
 .animated {
   transition: all 0.2s ease;
@@ -15,15 +10,15 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), 0 0 6px rgba(255, 255, 255, 0.08);
 }
 
-.unitCard.upgraded {
-  background: rgba(59, 130, 246, 0.28);
-  border: 1px solid rgba(59, 130, 246, 0.8);
+.upgraded {
+  background: rgba(59, 130, 246, 0.28) !important;
+  border: 1px solid rgba(59, 130, 246, 0.8) !important;
   box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.45), 0 10px 26px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.animated.unitCard.upgraded:hover {
-  background: rgba(59, 130, 246, 0.22);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35), 0 0 10px rgba(147, 197, 253, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+.animated.upgraded:hover {
+  background: rgba(59, 130, 246, 0.22) !important;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35), 0 0 10px rgba(147, 197, 253, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 .standard {
@@ -53,19 +48,12 @@
 .highlightStandard {
   background: rgba(107, 114, 128, 0.3);
 }
-/* New utility classes */
-.cardStack {
-  padding: 6px 4px;
-  gap: 4px;
-  justify-content: space-between;
-  min-height: 64px;
-  box-sizing: border-box;
-}
 
 .compactCard {
   min-height: unset;
   padding-bottom: 4px;
 }
+
 .topHighlight {
   position: absolute;
   top: 0;

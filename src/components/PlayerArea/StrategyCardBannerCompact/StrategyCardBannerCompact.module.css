@@ -10,7 +10,7 @@
   min-width: 60px;
   align-items: center;
   justify-content: center;
-  padding: 6px 8px;
+  padding: 2px 8px;
   background: linear-gradient(135deg, rgba(var(--bg-rgb), 0.26) 0%, rgba(var(--bg-rgb), 0.18) 100%);
   border: 1px solid rgba(var(--bg-rgb), 0.35);
   box-shadow: 0 4px 12px rgba(var(--bg-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);

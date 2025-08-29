@@ -18,7 +18,7 @@ const getTechColor = (techType: string): string => {
     case "CYBERNETIC":
       return "yellow";
     default:
-      return "grey";
+      return "gray";
   }
 };
 
