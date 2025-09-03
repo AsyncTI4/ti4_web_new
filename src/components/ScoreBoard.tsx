@@ -1,7 +1,8 @@
-import { Box } from "@mantine/core";
+import { Box, Stack } from "@mantine/core";
 import ExpandedPublicObjectives from "./Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { ScoreTracker } from "./Objectives/ScoreTracker";
 import { useGameData } from "@/hooks/useGameContext";
+import { PlayerScoreSummary } from "./Objectives/PlayerScoreSummary/PlayerScoreSummary";
 
 function ScoreBoard() {
   const gameData = useGameData();
@@ -12,12 +13,16 @@ function ScoreBoard() {
     <Box p="lg">
       <ScoreTracker playerData={playerData} vpsToWin={vpsToWin} />
 
-      <Box mb="md" mt="xl">
-        <ExpandedPublicObjectives
-          objectives={objectives}
-          playerData={playerData}
-        />
-      </Box>
+      <Stack gap="xl">
+        <Box>
+          <ExpandedPublicObjectives
+            objectives={objectives}
+            playerData={playerData}
+          />
+        </Box>
+
+        <PlayerScoreSummary playerData={playerData} objectives={objectives} />
+      </Stack>
     </Box>
   );
 }
