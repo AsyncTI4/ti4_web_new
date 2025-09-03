@@ -16,7 +16,9 @@ type Props = {
 export function PlayerScoreSummary({ playerData, objectives }: Props) {
   if (!playerData || !objectives) return null;
 
-  const sortedPlayers = [...playerData].sort((a, b) => (b.totalVps || 0) - (a.totalVps || 0));
+  const sortedPlayers = [...playerData].sort(
+    (a, b) => (b.totalVps || 0) - (a.totalVps || 0)
+  );
 
   return (
     <Box>
@@ -66,7 +68,9 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                   </Text>
                   <PlayerColor color={player.color} size="xs" />
                 </Group>
-                <Text size="sm" fw={700} c="white" ff="heading">{player.totalVps ?? 0} VP</Text>
+                <Text size="sm" fw={700} c="white" ff="heading">
+                  {player.totalVps ?? 0} VP
+                </Text>
               </Group>
 
               <Stack gap="xs">
