@@ -18,8 +18,9 @@ export default function FactionAbilitiesTechs({
         const abilityData = getAbility(abilityId);
         if (!abilityData) {
           console.log("Could not find ability", abilityId);
+          return null;
         }
-        if (!abilityData) return null;
+
         return <Ability id={abilityId} key={index} />;
       })}
 

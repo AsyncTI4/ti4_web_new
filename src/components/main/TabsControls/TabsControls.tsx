@@ -1,6 +1,5 @@
-import { Box, Button, Switch } from "@mantine/core";
+import { Box, Button, Group, Image, Switch } from "@mantine/core";
 import {
-  IconFlask,
   IconRuler2,
   IconKeyboard,
   IconSettings,
@@ -8,6 +7,7 @@ import {
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import { useSettingsStore } from "@/utils/appStore";
+import { cdnImage } from "@/data/cdnImage";
 
 export function TabsControls() {
   const game = useGameData();
@@ -17,89 +17,81 @@ export function TabsControls() {
 
   return (
     <>
-      <Button
-        variant={settings.techSkipsMode ? "filled" : "subtle"}
-        size="sm"
-        color={settings.techSkipsMode ? "cyan" : "gray"}
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
-        onClick={handlers.toggleTechSkipsMode}
-      >
-        <IconFlask size={16} />
-      </Button>
-      <Button
-        variant={settings.distanceMode ? "filled" : "subtle"}
-        size="sm"
-        color={settings.distanceMode ? "orange" : "gray"}
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
-        onClick={handlers.toggleDistanceMode}
-      >
-        <IconRuler2 size={16} />
-      </Button>
-      {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
+      <Group gap={4} pl={8} pb={4}>
         <Button
-          variant={settings.showPDSLayer ? "filled" : "subtle"}
+          variant={settings.distanceMode ? "filled" : "light"}
           size="sm"
-          color={settings.showPDSLayer ? "blue" : "gray"}
+          color={settings.distanceMode ? "orange" : "gray"}
+          px={8}
+          onClick={handlers.toggleDistanceMode}
+        >
+          <IconRuler2 size={16} />
+        </Button>
+        <Button
+          variant="light"
+          size="sm"
+          color="gray"
+          h={36}
+          w={36}
+          px={8}
+          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
+        >
+          <IconKeyboard size={16} />
+        </Button>
+
+        <Button
+          variant={settings.techSkipsMode ? "filled" : "light"}
+          size="sm"
+          color={settings.techSkipsMode ? "cyan" : "gray"}
+          h={36}
+          px={8}
+          onClick={handlers.toggleTechSkipsMode}
+        >
+          <Image src="/green.png" alt="Tech Skips" height={16} />
+          <Image src="/yellow.png" alt="Tech Skips" height={16} />
+          <Image src="/red.png" alt="Tech Skips" height={16} />
+          <Image src="/blue.png" alt="Tech Skips" height={16} />
+        </Button>
+
+        {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
+          <Button
+            variant={settings.showPDSLayer ? "filled" : "light"}
+            size="sm"
+            color={settings.showPDSLayer ? "blue" : "gray"}
+            px={8}
+            onClick={handlers.togglePdsMode}
+          >
+            <Image src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
+          </Button>
+        )}
+
+        <Button
+          variant="light"
+          size="sm"
+          color="gray"
           style={{ height: "36px", minWidth: "36px" }}
           px={8}
-          onClick={handlers.togglePdsMode}
+          onClick={() => handlers.setSettingsModalOpened(true)}
         >
-          PDS
+          <IconSettings size={16} />
         </Button>
-      )}
 
-      <Button
-        variant="subtle"
-        size="sm"
-        color="gray"
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
-        onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
-      >
-        <IconKeyboard size={16} />
-      </Button>
-      <Box
-        style={{
-          borderLeft: "1px solid var(--mantine-color-dark-4)",
-          height: "24px",
-          marginLeft: "12px",
-          marginRight: "12px",
-        }}
-      />
-      <Switch
-        checked={settings.overlaysEnabled}
-        onChange={handlers.toggleOverlays}
-        size="sm"
-        thumbIcon={
-          settings.overlaysEnabled ? (
-            <IconEye size={12} />
-          ) : (
-            <IconEye size={12} style={{ opacity: 0.5 }} />
-          )
-        }
-        label="Overlays"
-        labelPosition="right"
-      />
-      <Box
-        style={{
-          borderLeft: "1px solid var(--mantine-color-dark-4)",
-          height: "24px",
-          marginLeft: "12px",
-          marginRight: "12px",
-        }}
-      />
-      <Button
-        variant="light"
-        size="sm"
-        color="gray"
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
-        onClick={() => handlers.setSettingsModalOpened(true)}
-      >
-        <IconSettings size={16} />
-      </Button>
+        <Switch
+          checked={settings.overlaysEnabled}
+          onChange={handlers.toggleOverlays}
+          size="sm"
+          thumbIcon={
+            settings.overlaysEnabled ? (
+              <IconEye size={12} />
+            ) : (
+              <IconEye size={12} style={{ opacity: 0.5 }} />
+            )
+          }
+          label="Overlays"
+          labelPosition="right"
+        />
+      </Group>
+
       <div style={{ flex: 1 }} />
       {/* Theme swatches */}
       <Box

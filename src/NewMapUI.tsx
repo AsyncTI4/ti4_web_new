@@ -47,7 +47,7 @@ const REQUIRED_VERSION_SCHEMA = 5;
 export const MAP_PADDING = 200;
 
 function NewMapUIContent() {
-  const enhancedData = useGameContext();
+  const data = useGameContext();
   const gameDataState = useGameDataState();
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
@@ -59,7 +59,7 @@ function NewMapUIContent() {
   const handlers = useSettingsStore((state) => state.handlers);
 
   const isError = gameDataState?.isError || false;
-  const versionSchema = enhancedData?.versionSchema;
+  const versionSchema = data?.versionSchema;
 
   useEffect(() => {
     document.title = `${gameId} - Async TI`;
@@ -69,7 +69,7 @@ function NewMapUIContent() {
   const navigate = useNavigate();
 
   if (
-    enhancedData &&
+    data &&
     !gameDataState?.isLoading &&
     (!versionSchema || versionSchema < REQUIRED_VERSION_SCHEMA)
   ) {
@@ -153,7 +153,7 @@ function NewMapUIContent() {
             </Tabs.List>
 
             {/* Map Tab */}
-            <Tabs.Panel value="map" h="calc(100% - 37px)">
+            <Tabs.Panel value="map" h="calc(100% - 40px)">
               <MapView gameId={gameId} />
             </Tabs.Panel>
 
@@ -173,9 +173,9 @@ function NewMapUIContent() {
                   </Alert>
                 )}
 
-                {enhancedData?.playerData && (
+                {data?.playerData && (
                   <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                    {enhancedData.playerData
+                    {data.playerData
                       .filter((player) => player.faction !== "null")
                       .map((player) => (
                         <PlayerCard2Mid
@@ -190,13 +190,13 @@ function NewMapUIContent() {
 
             <Tabs.Panel value="objectives" h="calc(100% - 60px)">
               <Box className={classes.playersTabContent}>
-                {enhancedData && <ScoreBoard />}
+                {data && <ScoreBoard />}
               </Box>
             </Tabs.Panel>
 
             <Tabs.Panel value="general" h="calc(100% - 60px)">
               <Box className={classes.playersTabContent}>
-                {enhancedData && <GeneralArea />}
+                {data && <GeneralArea />}
               </Box>
             </Tabs.Panel>
           </Tabs>

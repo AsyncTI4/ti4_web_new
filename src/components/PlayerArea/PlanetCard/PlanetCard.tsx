@@ -25,6 +25,7 @@ export function PlanetCard({
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
+
   const isExhausted = planetTile?.exhausted ?? false;
   const resolvedAttachments = useMemo(() => {
     return planetTile?.attachments || [];
@@ -32,11 +33,6 @@ export function PlanetCard({
 
   if (!planetData) {
     console.warn(`Planet data not found for ID: ${planetId}`);
-    return null;
-  }
-
-  if (!planetTile) {
-    console.warn(`Planet tile not found for ID: ${planetId}`);
     return null;
   }
 

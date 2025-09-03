@@ -13,7 +13,7 @@ import { PlanetMapTile } from "@/data/types";
 
 type Props = {
   planetId: string;
-  planetTile: PlanetMapTile;
+  planetTile?: PlanetMapTile;
 };
 
 export function PlanetDetailsCard({ planetId, planetTile }: Props) {

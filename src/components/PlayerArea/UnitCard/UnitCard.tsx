@@ -40,7 +40,8 @@ export function UnitCard({
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
   if (!unitData) return null; // or some fallback UI
-  const isUpgraded = unitData.upgradesFromUnitId !== undefined;
+  const isUpgraded =
+    unitData.upgradesFromUnitId !== undefined || unitData.baseType === "warsun";
   const isFaction = unitData.faction !== undefined;
   const unitCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];

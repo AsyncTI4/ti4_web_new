@@ -7,6 +7,9 @@ import {
   HEX_SQUARE_HEIGHT,
   DEFAULT_PLANET_RADIUS,
   MAX_HEAT,
+  HEX_GRID_SIZE,
+  HEX_VERTICES,
+  placeSpaceEntities,
 } from "../../utils/unitPositioning";
 import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { TileUnitData, LawInPlay } from "@/data/types";
@@ -25,12 +28,6 @@ const SystemTileDisplay = ({
   tileUnitData,
   lawsInPlay,
 }: SystemTileDisplayProps) => {
-  // Filter out space units by creating a modified tileUnitData
-  const planetOnlyTileUnitData: TileUnitData = {
-    ...tileUnitData,
-    space: {}, // Remove all space units
-  };
-
   // Get all entity placements for the tile
   const { entityPlacements: entityPlacements, finalCostMap } =
     React.useMemo(() => {
@@ -49,28 +46,22 @@ const SystemTileDisplay = ({
         }
       );
 
-      // Process all planets that have data
-      const allEntityPlacements: Record<string, any> = {};
-      let combinedCostMap: number[][] = [];
-
-      Object.entries(planetOnlyTileUnitData.planets).forEach(
-        ([planetId, planetData]) => {
-          const planet = planets.find((p) => p.name === planetId);
-          if (planet && planetData) {
-            const result = processPlanetEntities(planet, planetData);
-            Object.assign(allEntityPlacements, result.entityPlacements);
-            if (result.finalCostMap.length > 0) {
-              combinedCostMap = result.finalCostMap;
-            }
-          }
-        }
-      );
+      const { entityPlacements: allEntityPlacements, finalCostMap } =
+        placeSpaceEntities({
+          gridSize: HEX_GRID_SIZE,
+          squareWidth: HEX_SQUARE_WIDTH,
+          squareHeight: HEX_SQUARE_HEIGHT,
+          hexagonVertices: HEX_VERTICES,
+          planets,
+          factionEntities: tileUnitData.space || {},
+          initialHeatSources: [],
+        });
 
       return {
         entityPlacements: allEntityPlacements,
-        finalCostMap: combinedCostMap,
+        finalCostMap: finalCostMap,
       };
-    }, [systemId, planetOnlyTileUnitData]);
+    }, [systemId, tileUnitData]);
 
   // Generate unit images (UnitStack components)
   const unitImages: React.ReactElement[] = React.useMemo(() => {
@@ -84,24 +75,20 @@ const SystemTileDisplay = ({
         planetCenter = { x, y };
       }
 
+      console.log("systemId key stack", systemId, key, stack);
+
       return [
-        <UnitStack
-          key={`${systemId}-${key}-stack`}
-          unitType={stack.entityId}
-          colorAlias={COLOR_ALIAS}
-          faction={stack.faction}
-          count={stack.count}
-          x={stack.x}
-          y={stack.y}
-          stackKey={key}
-          sustained={stack.sustained}
-          entityType={stack.entityType}
-          planetCenter={planetCenter}
-          lawsInPlay={lawsInPlay}
-        />,
+        // <UnitStack
+        //   key={`${systemId}-${key}-stack`}
+        //   stack={stack}
+        //   colorAlias={COLOR_ALIAS}
+        //   stackKey={key}
+        //   planetCenter={planetCenter}
+        //   lawsInPlay={lawsInPlay}
+        // />,
       ];
     });
-  }, [systemId, planetOnlyTileUnitData, entityPlacements, lawsInPlay]);
+  }, [systemId, tileUnitData, entityPlacements, lawsInPlay]);
 
   // Generate cost map grid overlay
   const costMapGrid: React.ReactElement[] = React.useMemo(() => {
@@ -177,91 +164,60 @@ const SystemTileDisplay = ({
 };
 
 export const SystemTilePage = () => {
-  // Default tile unit data for system 53
-  const system53TileData: TileUnitData = {
-    anomaly: false,
-    space: {},
-    planets: {
-      arcturus: {
-        controlledBy: "letnev",
-        entities: {
-          letnev: [
-            { entityId: "gf", count: 1, entityType: "unit" },
-            { entityId: "sd", count: 1, entityType: "unit" },
-            { entityId: "mf", count: 1, entityType: "unit" },
-          ],
-        },
-        commodities: null,
-      },
-    },
-    ccs: [],
-    production: {},
-    capacity: {},
-  };
-
-  // Default tile unit data for system 22
-  const system22TileData: TileUnitData = {
-    anomaly: false,
-    space: {},
-    planets: {
-      tarmann: {
-        controlledBy: "sol",
-        entities: {
-          letnev: [
-            { entityId: "gf", count: 2, entityType: "unit" },
-            // { entityId: "sd", count: 1, entityType: "unit" },
-            { entityId: "mf", count: 1, entityType: "unit" },
-          ],
-        },
-        commodities: null,
-      },
-    },
-    ccs: [],
-    production: {},
-    capacity: {},
-  };
-
   return (
     <div className={classes.container}>
-      <SystemTileDisplay systemId="53" tileUnitData={system53TileData} />
-      <SystemTileDisplay systemId="22" tileUnitData={system22TileData} />
       <SystemTileDisplay
-        systemId="69"
+        systemId="75"
         tileUnitData={{
-          anomaly: false,
-          space: {},
-          planets: {
-            accoen: {
-              controlledBy: "sol",
-              entities: {
-                letnev: [
-                  { entityId: "gf", count: 2, entityType: "unit" },
-                  // { entityId: "sd", count: 1, entityType: "unit" },
-                  { entityId: "mf", count: 1, entityType: "unit" },
-                ],
+          space: {
+            neutral: [
+              {
+                entityId: "gamma",
+                entityType: "token",
+                count: 1,
+                sustained: null,
               },
-              commodities: null,
-            },
-            jeolir: {
-              controlledBy: "sol",
-              entities: {
-                letnev: [
-                  { entityId: "gf", count: 2, entityType: "unit" },
-                  // { entityId: "sd", count: 1, entityType: "unit" },
-                  { entityId: "mf", count: 1, entityType: "unit" },
-                  {
-                    entityId: "dysonsphere",
-                    count: 1,
-                    entityType: "attachment",
-                  },
-                ],
+            ],
+            franken10: [
+              {
+                entityId: "cv",
+                entityType: "unit",
+                count: 4,
+                sustained: null,
               },
-              commodities: null,
+              {
+                entityId: "ca",
+                entityType: "unit",
+                count: 1,
+                sustained: null,
+              },
+              // {
+              //   entityId: "ff",
+              //   entityType: "unit",
+              //   count: 9,
+              //   sustained: null,
+              // },
+
+              // {
+              //   entityId: "dd",
+              //   entityType: "unit",
+              //   count: 1,
+              //   sustained: null,
+              // },
+            ],
+          },
+          planets: {},
+          ccs: [],
+          production: {
+            red: 4,
+          },
+          pds: {
+            franken10: {
+              count: 2,
+              expected: 1,
             },
           },
-          ccs: [],
-          production: {},
-          capacity: {},
+          anomaly: false,
         }}
       />
     </div>

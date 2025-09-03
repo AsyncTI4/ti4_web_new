@@ -129,6 +129,12 @@ export default function PlayerCard2Mid(props: Props) {
     nombox,
     exhaustedPlanetAbilities,
   } = props.playerData;
+
+  console.log(
+    "abilities",
+    props.playerData.faction,
+    props.playerData.abilities
+  );
   const promissoryNotes = promissoryNotesInPlayArea;
 
   const mahactEdict = props.playerData.mahactEdict || [];

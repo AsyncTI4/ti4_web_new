@@ -11,7 +11,7 @@ type Props = {
 
 export function Ability({ id }: Props) {
   const [opened, setOpened] = useState(false);
-  const abilityData = getAbilityData(id);
+  const abilityData = getAbility(id);
   if (!abilityData) return null;
 
   return (
@@ -34,14 +34,3 @@ export function Ability({ id }: Props) {
     </SmoothPopover>
   );
 }
-
-const getAbilityData = (abilityId: string) => {
-  const ability = getAbility(abilityId);
-  if (!ability) return null;
-
-  // Filter by source if needed
-  if (ability.source === "pok" || ability.source === "base") {
-    return ability;
-  }
-  return null;
-};
