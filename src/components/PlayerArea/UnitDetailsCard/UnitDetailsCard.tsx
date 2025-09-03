@@ -156,7 +156,6 @@ export function UnitDetailsCard({ unitId, color }: Props) {
 
         {/* Stats */}
         <DetailsCard.Section
-          title="Stats"
           content={
             <Box>
               <Group gap="xs" justify="space-between">

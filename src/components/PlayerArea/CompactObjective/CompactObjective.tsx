@@ -94,6 +94,7 @@ export function CompactObjective({
       accentLine
       strong
       title={revealed ? name : "UNREVEALED"}
+      revealFullTitleOnHover
     >
       {renderFactionIcons()}
     </Chip>

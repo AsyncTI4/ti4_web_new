@@ -18,41 +18,44 @@
 
 /* Stage Titles */
 .stageTitle {
+  position: relative;
   font-size: var(--mantine-font-size-md);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--mantine-color-white);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  text-align: center;
-  padding: var(--mantine-spacing-xs);
-  border-radius: 4px;
+  padding: 4px 10px 4px 12px;
   margin-bottom: var(--mantine-spacing-xs);
+  border-radius: 4px;
+}
+
+.stageTitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.85) 0%, rgba(var(--ribbon-color), 0.35) 100%);
+  box-shadow: 0 0 6px rgba(var(--ribbon-color), 0.12);
 }
 
 .stage1Title {
-  background: rgba(249, 115, 22, 0.15);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  --ribbon-color: var(--gd-orange);
+  background: rgba(var(--gd-orange), 0.10);
+  border: 1px solid rgba(var(--gd-orange), 0.28);
 }
 
 .stage2Title {
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.stage2Container .stageTitle {
-  color: var(--mantine-color-blue-3);
+  --ribbon-color: var(--gd-blue);
+  background: rgba(var(--gd-blue), 0.08);
+  border: 1px solid rgba(var(--gd-blue), 0.24);
 }
 
 .otherTitle {
-  font-size: var(--mantine-font-size-md);
-  font-weight: 600;
-  color: var(--mantine-color-white);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  text-align: center;
-  padding: var(--mantine-spacing-xs);
-  border-radius: 4px;
-  background: rgba(107, 114, 128, 0.15);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  margin-bottom: var(--mantine-spacing-xs);
+  --ribbon-color: var(--gd-gray);
+  background: rgba(var(--gd-gray), 0.10);
+  border: 1px solid rgba(var(--gd-gray), 0.22);
 }
 
 /* Objective Lists */

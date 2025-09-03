@@ -11,6 +11,8 @@ type Props = Omit<BoxProps, "color" | "onClick"> & {
   accentLine?: boolean;
   accent?: ColorKey | "grey" | "gray" | "deepRed";
   strong?: boolean;
+  /** When true, shows an absolute-positioned full title on hover */
+  revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.KeyboardEventHandler<HTMLDivElement>;
@@ -25,6 +27,7 @@ export function Chip({
   ribbon = false,
   accentLine = false,
   strong = false,
+  revealFullTitleOnHover = false,
   onClick,
   px,
   py,
@@ -57,12 +60,24 @@ export function Chip({
         className
       )}
     >
-      <Box className={classes.inner} px={px} py={py}>
+      <Box
+        className={cx(
+          classes.inner,
+          revealFullTitleOnHover && classes.revealFullTitle
+        )}
+        px={px}
+        py={py}
+      >
         {leftSection && (
           <Box className={classes.leftSection}>{leftSection}</Box>
         )}
         {title && (
           <Text size="xs" fw={700} c="white" className={classes.textContainer}>
+            {title}
+          </Text>
+        )}
+        {title && revealFullTitleOnHover && (
+          <Text size="xs" fw={700} c="white" className={classes.fullTitle}>
             {title}
           </Text>
         )}

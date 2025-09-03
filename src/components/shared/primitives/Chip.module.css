@@ -162,3 +162,34 @@
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
 }
 
+
+/* Reveal full title text on hover without wrapping (used opt-in) */
+.revealFullTitle { position: relative; }
+
+.fullTitle {
+    position: absolute;
+    left: 0px; /* match inner horizontal padding */
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    pointer-events: none;
+    display: none;
+    z-index: 2;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+    width: max-content;
+    background: rgba(0,0, 0, 1);
+    padding-left: 6px;
+    padding-right: 8px;
+}
+
+.revealFullTitle:hover .fullTitle {
+    display: block;
+}
+
+.revealFullTitle:hover .textContainer {
+    visibility: hidden;
+}
+
+/* Provide a standalone export for CSS Modules */
+.strong { outline: none; }
+
