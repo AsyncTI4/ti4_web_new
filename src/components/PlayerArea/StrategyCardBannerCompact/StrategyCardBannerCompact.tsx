@@ -5,8 +5,6 @@ import { SpeakerToken } from "../SpeakerToken";
 import classes from "./StrategyCardBannerCompact.module.css";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { StrategyCardDetailsCard } from "../StrategyCardDetailsCard";
-import { Shimmer } from "../Shimmer/Shimmer";
-import type { ColorKey } from "../gradientClasses";
 
 interface Props {
   number: number;
@@ -59,7 +57,6 @@ export function StrategyCardBannerCompact({
       <SmoothPopover.Target>
         <Group className={classes.container} gap="lg">
           <SpeakerToken isVisible={isSpeaker} />
-
           <Chip
             accent={color as any}
             className={`${classes.cardContainer} ${colorClass}`}
@@ -68,25 +65,14 @@ export function StrategyCardBannerCompact({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            <Shimmer color={color as ColorKey} px={6}>
-              <Box className={classes.inner}>
-                {/* Strategy card number circle */}
-                <Box className={classes.numberCircle}>
-                  <Text
-                    ff="heading"
-                    c={numberColor}
-                    className={classes.numberText}
-                  >
-                    {number}
-                  </Text>
-                </Box>
-
-                {/* Strategy card text - abbreviated */}
-                <Text ff="heading" className={classes.cardText}>
-                  {text}
-                </Text>
-              </Box>
-            </Shimmer>
+            <Box className={classes.numberCircle}>
+              <Text ff="heading" c={numberColor} className={classes.numberText}>
+                {number}
+              </Text>
+            </Box>
+            <Text ff="heading" className={classes.cardText}>
+              {text}
+            </Text>
           </Chip>
         </Group>
       </SmoothPopover.Target>

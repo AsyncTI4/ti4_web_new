@@ -1,6 +1,4 @@
-import { Box, Text, Group } from "@mantine/core";
-import { Shimmer } from "../Shimmer";
-import { getGradientClasses } from "../gradientClasses";
+import { Box, Group } from "@mantine/core";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import { PlayerData } from "../../../data/types";
 import styles from "./CompactObjective.module.css";
@@ -9,7 +7,6 @@ import { Chip } from "@/components/shared/primitives/Chip";
 type Props = {
   objectiveKey: string;
   name: string;
-  pointValue: number;
   color: "orange" | "blue" | "gray";
   revealed?: boolean;
   onClick?: () => void;
@@ -20,7 +17,6 @@ type Props = {
 
 export function CompactObjective({
   name,
-  pointValue,
   color,
   revealed = true,
   onClick,
@@ -28,7 +24,6 @@ export function CompactObjective({
   playerData = [],
   multiScoring = false,
 }: Props) {
-  const gradientClasses = getGradientClasses(color);
   const isClickable = revealed && color !== "gray";
 
   const renderFactionIcons = () => {
@@ -94,18 +89,14 @@ export function CompactObjective({
   return (
     <Chip
       accent={color}
-      className={`${styles.objectiveCard} ${styles[color]} ${!revealed ? styles.unrevealed : ""} ${!isClickable ? styles.nonClickable : ""}`}
+      className={`${!revealed ? styles.unrevealed : ""}`}
       onClick={isClickable ? onClick : undefined}
+      accentLine
+      strong
+      title={revealed ? name : "UNREVEALED"}
+      revealFullTitleOnHover
     >
-      <Shimmer color={color} py={2} px={6} className={gradientClasses.border}>
-        <Box className={styles.contentContainer}>
-          <Text size="xs" fw={700} c="white" className={styles.textContainer}>
-            {revealed ? name : "UNREVEALED"}
-          </Text>
-
-          {renderFactionIcons()}
-        </Box>
-      </Shimmer>
+      {renderFactionIcons()}
     </Chip>
   );
 }

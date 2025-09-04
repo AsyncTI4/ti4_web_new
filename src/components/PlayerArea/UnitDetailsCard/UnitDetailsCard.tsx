@@ -1,8 +1,8 @@
 import { Box, Text, Stack, Group, Image, Divider } from "@mantine/core";
 import { cdnImage } from "@/data/cdnImage";
 import { getColorAlias } from "@/lookup/colors";
-import { Dice } from "./Dice";
 import { getUnitData } from "@/lookup/units";
+import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   unitId: string;
@@ -20,122 +20,61 @@ export function UnitDetailsCard({ unitId, color }: Props) {
   const isFaction = unitData.faction !== undefined;
   const colorAlias = getColorAlias(color);
 
-  return (
+  const unitIcon = (
     <Box
       pos="relative"
-      w={380}
-      miw={380}
-      // mih={220}
-      p="md"
-      bg="linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)"
+      w={60}
+      h={60}
       style={{
-        border: isUpgraded
-          ? "1px solid rgba(59, 130, 246, 0.4)"
-          : "1px solid rgba(148, 163, 184, 0.3)",
-        borderRadius: "12px",
-        backdropFilter: "blur(8px)",
-        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <Stack gap="md" h="100%">
-        {/* Header */}
-        <Group gap="md" align="flex-start">
-          <Box
-            w={60}
-            h={60}
-            style={{
-              borderRadius: "50%",
-              background: isUpgraded
-                ? "linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.15) 100%)"
-                : "linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(107, 114, 128, 0.15) 100%)",
-              border: isUpgraded
-                ? "2px solid rgba(59, 130, 246, 0.4)"
-                : "2px solid rgba(148, 163, 184, 0.4)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              src={cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`)}
-              w={35}
-              h={35}
-              style={{
-                objectFit: "contain",
-                filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6))",
-              }}
-            />
-          </Box>
-          <Stack gap={4} flex={1}>
-            <Text
-              size="lg"
-              fw={700}
-              c="white"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-              }}
-            >
-              {unitData.name}
-            </Text>
+      <Image
+        src={cdnImage(`/units/${colorAlias}_${unitData.asyncId}.png`)}
+        w={50}
+        h={50}
+        style={{ objectFit: "contain" }}
+      />
+      {isFaction && (
+        <Box
+          pos="absolute"
+          bottom={-4}
+          right={-4}
+          style={{ background: "rgba(0,0,0,0.5)", borderRadius: 4, padding: 2 }}
+        >
+          <Image
+            src={cdnImage(`/factions/${unitData.faction?.toLowerCase()}.png`)}
+            alt={`${unitData.faction} faction`}
+            w={20}
+            h={20}
+          />
+        </Box>
+      )}
+    </Box>
+  );
 
-            <Text
-              size="xs"
-              c={isUpgraded ? "blue.3" : "gray.4"}
-              fw={600}
-              tt="uppercase"
-              style={{
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-              }}
-            >
-              {isUpgraded ? "Upgraded Unit" : "Standard Unit"}
-            </Text>
-          </Stack>
+  return (
+    <DetailsCard width={380}>
+      <Stack gap="md">
+        <DetailsCard.Title
+          title={unitData.name}
+          subtitle={isFaction ? `${unitData.faction} Unit` : "Unit"}
+          icon={<DetailsCard.Icon icon={unitIcon} />}
+          caption={isUpgraded ? "Upgraded" : "Standard"}
+          captionColor="blue"
+        />
 
-          {/* Faction icon for faction-specific units */}
-          {isFaction && (
-            <Box
-              pos="absolute"
-              top={12}
-              right={12}
-              style={{
-                background: "rgba(0, 0, 0, 0.5)",
-                borderRadius: "4px",
-                padding: "2px",
-              }}
-            >
-              <Image
-                src={cdnImage(
-                  `/factions/${unitData.faction?.toLowerCase()}.png`
-                )}
-                alt={`${unitData.faction} faction`}
-                w={24}
-                h={24}
-              />
-            </Box>
-          )}
-        </Group>
-
-        {/* General Ability Text Section */}
+        {/* Ability text */}
         {unitData.ability && (
           <>
-            <Divider c={isUpgraded ? "blue.7" : "gray.7"} opacity={0.4} />
-            <Box p="md">
-              <Text
-                size="sm"
-                fw={500}
-                c="gray.2"
-                lh={1.5}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                {unitData.ability}
-              </Text>
-            </Box>
+            <Divider c="gray.7" opacity={0.8} />
+            <DetailsCard.Section title="Ability" content={unitData.ability} />
           </>
         )}
 
-        {/* Abilities Section */}
+        {/* Abilities breakdown */}
         {(unitData.afbHitsOn ||
           unitData.bombardHitsOn ||
           unitData.spaceCannonHitsOn ||
@@ -143,256 +82,123 @@ export function UnitDetailsCard({ unitId, color }: Props) {
           unitData.sustainDamage ||
           unitData.productionValue) && (
           <>
-            <Divider c={isUpgraded ? "blue.7" : "gray.7"} opacity={0.4} />
-            <Box>
-              <Stack gap={2}>
-                {unitData.afbHitsOn && (
-                  <Group gap="xs" justify="flex-start">
-                    <Text
-                      size="xs"
-                      fw={600}
-                      c="gray.3"
-                      tt="uppercase"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      Anti-Fighter Barrage
+            <Divider c="gray.7" opacity={0.8} />
+            <DetailsCard.Section
+              title="Abilities"
+              content={
+                <Stack gap={2}>
+                  {unitData.afbHitsOn && (
+                    <Group gap="xs" justify="flex-start">
+                      <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                        Anti-Fighter Barrage
+                      </Text>
+                      <Text size="sm" fw={700} c="white">
+                        {unitData.afbHitsOn}
+                        {unitData.afbDieCount &&
+                          unitData.afbDieCount > 1 &&
+                          ` (x${unitData.afbDieCount})`}
+                      </Text>
+                    </Group>
+                  )}
+                  {unitData.bombardHitsOn && (
+                    <Group gap="xs" justify="flex-start">
+                      <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                        Bombardment
+                      </Text>
+                      <Text size="xs" fw={700} c="white">
+                        {unitData.bombardHitsOn}
+                        {unitData.bombardDieCount &&
+                          unitData.bombardDieCount > 1 &&
+                          ` (x${unitData.bombardDieCount})`}
+                      </Text>
+                    </Group>
+                  )}
+                  {unitData.spaceCannonHitsOn && (
+                    <Group gap="xs" justify="flex-start">
+                      <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                        Space Cannon
+                      </Text>
+                      <Text size="sm" fw={700} c="white">
+                        {unitData.spaceCannonHitsOn}
+                        {unitData.spaceCannonDieCount &&
+                          unitData.spaceCannonDieCount > 1 &&
+                          ` (x${unitData.spaceCannonDieCount})`}
+                      </Text>
+                    </Group>
+                  )}
+                  {unitData.planetaryShield && (
+                    <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                      Planetary Shield
                     </Text>
-                    <Text
-                      size="sm"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      {unitData.afbHitsOn}
-                      {unitData.afbDieCount &&
-                        unitData.afbDieCount > 1 &&
-                        ` (x${unitData.afbDieCount})`}
+                  )}
+                  {unitData.sustainDamage && (
+                    <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                      Sustain Damage
                     </Text>
-                  </Group>
-                )}
-                {unitData.bombardHitsOn && (
-                  <Group gap="xs" justify="flex-start">
-                    <Text
-                      size="xs"
-                      fw={600}
-                      c="gray.3"
-                      tt="uppercase"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      Bombardment
-                    </Text>
-                    <Text
-                      size="xs"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      {unitData.bombardHitsOn}
-                      {unitData.bombardDieCount &&
-                        unitData.bombardDieCount > 1 &&
-                        ` (x${unitData.bombardDieCount})`}
-                    </Text>
-                  </Group>
-                )}
-                {unitData.spaceCannonHitsOn && (
-                  <Group gap="xs" justify="flex-start">
-                    <Text
-                      size="xs"
-                      fw={600}
-                      c="gray.3"
-                      tt="uppercase"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      Space Cannon
-                    </Text>
-                    <Text
-                      size="sm"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      {unitData.spaceCannonHitsOn}
-                      {unitData.spaceCannonDieCount &&
-                        unitData.spaceCannonDieCount > 1 &&
-                        ` (x${unitData.spaceCannonDieCount})`}
-                    </Text>
-                  </Group>
-                )}
-                {unitData.planetaryShield && (
-                  <Text
-                    size="xs"
-                    fw={600}
-                    c="gray.3"
-                    tt="uppercase"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                    }}
-                  >
-                    Planetary Shield
-                  </Text>
-                )}
-                {unitData.sustainDamage && (
-                  <Text
-                    size="xs"
-                    fw={600}
-                    c="gray.3"
-                    tt="uppercase"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                    }}
-                  >
-                    Sustain Damage
-                  </Text>
-                )}
-                {unitData.productionValue && (
-                  <Group gap="xs" justify="flex-start">
-                    <Text
-                      size="xs"
-                      fw={600}
-                      c="gray.3"
-                      tt="uppercase"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      Production
-                    </Text>
-                    <Text
-                      size="sm"
-                      fw={700}
-                      c="white"
-                      style={{
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                      }}
-                    >
-                      {unitData.productionValue}
-                    </Text>
-                  </Group>
-                )}
-              </Stack>
-            </Box>
+                  )}
+                  {unitData.productionValue && (
+                    <Group gap="xs" justify="flex-start">
+                      <Text size="xs" fw={600} c="gray.3" tt="uppercase">
+                        Production
+                      </Text>
+                      <Text size="sm" fw={700} c="white">
+                        {unitData.productionValue}
+                      </Text>
+                    </Group>
+                  )}
+                </Stack>
+              }
+            />
           </>
         )}
 
-        <Divider c={isUpgraded ? "blue.7" : "gray.7"} opacity={0.4} />
+        <Divider c="gray.7" opacity={0.8} />
 
-        {/* Stats Section */}
-        <Box>
-          <Group gap="xs" justify="space-between">
-            <Box ta="center" style={{ flex: 1 }}>
-              <Text
-                size="xs"
-                fw={600}
-                c="gray.3"
-                tt="uppercase"
-                mb={2}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                Cost
-              </Text>
-              <Text
-                size="lg"
-                fw={700}
-                c="white"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {unitData.cost ?? "—"}
-              </Text>
-            </Box>
-            <Box ta="center" style={{ flex: 1 }}>
-              <Text
-                size="xs"
-                fw={600}
-                c="gray.3"
-                tt="uppercase"
-                mb={2}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                Combat
-              </Text>
-              <Group gap="xs" justify="center" align="center">
-                <Text
-                  size="lg"
-                  fw={700}
-                  c="white"
-                  style={{
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                  }}
-                >
-                  {unitData.combatHitsOn ?? "—"}
-                </Text>
-                <Dice count={unitData.combatDieCount || 1} />
+        {/* Stats */}
+        <DetailsCard.Section
+          content={
+            <Box>
+              <Group gap="xs" justify="space-between">
+                <Box ta="center" style={{ flex: 1 }}>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase" mb={2}>
+                    Cost
+                  </Text>
+                  <Text size="lg" fw={700} c="white">
+                    {unitData.cost ?? "—"}
+                  </Text>
+                </Box>
+                <Box ta="center" style={{ flex: 1 }}>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase" mb={2}>
+                    Combat
+                  </Text>
+                  <Text size="lg" fw={700} c="white">
+                    {unitData.combatHitsOn ?? "—"}
+                    {unitData.combatDieCount &&
+                      unitData.combatDieCount > 1 &&
+                      ` (x${unitData.combatDieCount})`}
+                  </Text>
+                </Box>
+                <Box ta="center" style={{ flex: 1 }}>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase" mb={2}>
+                    Move
+                  </Text>
+                  <Text size="lg" fw={700} c="white">
+                    {unitData.moveValue ?? "—"}
+                  </Text>
+                </Box>
+                <Box ta="center" style={{ flex: 1 }}>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase" mb={2}>
+                    Capacity
+                  </Text>
+                  <Text size="lg" fw={700} c="white">
+                    {unitData.capacityValue ?? "—"}
+                  </Text>
+                </Box>
               </Group>
             </Box>
-            <Box ta="center" style={{ flex: 1 }}>
-              <Text
-                size="xs"
-                fw={600}
-                c="gray.3"
-                tt="uppercase"
-                mb={2}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                Move
-              </Text>
-              <Text
-                size="lg"
-                fw={700}
-                c="white"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {unitData.moveValue ?? "—"}
-              </Text>
-            </Box>
-            <Box ta="center" style={{ flex: 1 }}>
-              <Text
-                size="xs"
-                fw={600}
-                c="gray.3"
-                tt="uppercase"
-                mb={2}
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                Capacity
-              </Text>
-              <Text
-                size="lg"
-                fw={700}
-                c="white"
-                style={{
-                  textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                }}
-              >
-                {unitData.capacityValue ?? "—"}
-              </Text>
-            </Box>
-          </Group>
-        </Box>
+          }
+        />
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }

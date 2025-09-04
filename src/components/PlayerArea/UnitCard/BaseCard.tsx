@@ -1,4 +1,4 @@
-import { Box, Image, Group, Text, Flex } from "@mantine/core";
+import { Box, Image, Group, Text, Flex, Stack } from "@mantine/core";
 import { ReactNode } from "react";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../../data/cdnImage";
@@ -33,10 +33,7 @@ export function BaseCard({
   locked = false,
   lockedLabel = "Not available",
 }: BaseCardProps) {
-  const cardClass = isUpgraded
-    ? `${styles.unitCard} ${styles.upgraded}`
-    : `${styles.unitCard} ${styles.standard}`;
-
+  const cardClass = isUpgraded ? `${styles.upgraded}` : `${styles.standard}`;
   const animatedClass = enableAnimations ? styles.animated : "";
   const lockedClass = locked ? styles.locked : "";
   const compactClass = compact ? styles.compactCard : "";
@@ -44,8 +41,10 @@ export function BaseCard({
   return (
     <Chip
       accent="blue"
-      className={`${cardClass} ${animatedClass} ${lockedClass} ${styles.cardStack} ${compactClass} ${className || ""}`}
+      className={`${cardClass} ${animatedClass} ${lockedClass} ${compactClass} ${className || ""}`}
       onClick={onClick}
+      px={0}
+      py={0}
     >
       {isUpgraded && (
         <>
@@ -53,50 +52,49 @@ export function BaseCard({
           <Box className={styles.innerGlow} />
         </>
       )}
+      <Stack gap={0} align="center" w="100%">
+        {/* Faction icon badge for faction-specific units */}
+        {isFaction && faction && (
+          <Box className={styles.factionBadge}>
+            <Image
+              src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+              className={styles.factionIcon}
+            />
+          </Box>
+        )}
 
-      {/* Faction icon badge for faction-specific units */}
-      {isFaction && faction && (
-        <Box className={styles.factionBadge}>
-          <Image
-            src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-            className={styles.factionIcon}
-          />
-        </Box>
-      )}
+        <Flex className={styles.imageContainer}>{children}</Flex>
 
-      <Flex className={styles.imageContainer}>{children}</Flex>
-
-      {!compact && locked && (
-        <div className={styles.infoStack}>
-          <Group className={styles.mainGroup}>
-            <Text className={styles.lockedText}>{lockedLabel}</Text>
-          </Group>
-        </div>
-      )}
-
-      {!compact &&
-        !locked &&
-        reinforcements !== undefined &&
-        totalCapacity !== undefined && (
+        {!compact && locked && (
           <div className={styles.infoStack}>
             <Group className={styles.mainGroup}>
-              <Group className={styles.reinforcementGroup}>
-                <Group className={styles.countGroup}>
-                  <Text
-                    className={
-                      reinforcements === 0
-                        ? styles.countTextZero
-                        : styles.countText
-                    }
-                  >
-                    {reinforcements}
-                  </Text>
-                  <Text className={styles.maxCountText}>/{totalCapacity}</Text>
-                </Group>
-              </Group>
+              <Text className={styles.lockedText}>{lockedLabel}</Text>
             </Group>
           </div>
         )}
+
+        {!compact &&
+          !locked &&
+          reinforcements !== undefined &&
+          totalCapacity !== undefined && (
+            <div className={styles.infoStack}>
+              <Group
+                className={`${styles.mainGroup} ${styles.reinforcementGroup} ${styles.countGroup}`}
+              >
+                <Text
+                  className={
+                    reinforcements === 0
+                      ? styles.countTextZero
+                      : styles.countText
+                  }
+                >
+                  {reinforcements}
+                </Text>
+                <Text className={styles.maxCountText}>/{totalCapacity}</Text>
+              </Group>
+            </div>
+          )}
+      </Stack>
     </Chip>
   );
 }

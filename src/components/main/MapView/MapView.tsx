@@ -1,4 +1,4 @@
-import { useCallback,  useEffect,  useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
@@ -381,10 +381,10 @@ export function MapView({ gameId }: Props) {
         size="lg"
         zIndex={22000}
         classNames={{
-          content: (classes as any).detailsModalContent,
-          header: (classes as any).detailsModalHeader,
-          title: (classes as any).detailsModalTitle,
-          body: (classes as any).detailsModalBody,
+          content: classes.detailsModalContent,
+          header: classes.detailsModalHeader,
+          title: classes.detailsModalTitle,
+          body: classes.detailsModalBody,
         }}
       >
         <Stack className={classes.detailsModalBody}>

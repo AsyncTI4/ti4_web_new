@@ -66,42 +66,42 @@
 
 /* Color-specific classes using global variables */
 .red {
-  --gradient-color: var(--color-red);
+  --gradient-color: var(--gd-red);
   --border-color: var(--mantine-color-red-7);
 }
 
 .orange {
-  --gradient-color: var(--color-orange);
+  --gradient-color: var(--gd-orange);
   --border-color: var(--mantine-color-orange-7);
 }
 
 .yellow {
-  --gradient-color: var(--color-yellow);
+  --gradient-color: var(--gd-yellow);
   --border-color: var(--mantine-color-yellow-7);
 }
 
 .green {
-  --gradient-color: var(--color-green);
+  --gradient-color: var(--gd-green);
   --border-color: var(--mantine-color-green-7);
 }
 
 .teal {
-  --gradient-color: var(--color-teal);
+  --gradient-color: var(--gd-teal);
   --border-color: var(--mantine-color-teal-7);
 }
 
 .cyan {
-  --gradient-color: var(--color-cyan);
+  --gradient-color: var(--gd-cyan);
   --border-color: var(--mantine-color-cyan-7);
 }
 
 .blue {
-  --gradient-color: var(--color-blue);
+  --gradient-color: var(--gd-blue);
   --border-color: var(--mantine-color-blue-7);
 }
 
 .purple {
-  --gradient-color: var(--color-purple);
+  --gradient-color: var(--gd-purple);
   --border-color: var(--mantine-color-violet-7);
 }
 

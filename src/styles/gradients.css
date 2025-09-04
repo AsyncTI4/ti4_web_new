@@ -1,23 +1,14 @@
-/* Unified gradient and color system for global use */
-/* This centralizes core color values and reusable gradient utilities */
-
 :root {
   /* Core color values (RGB values for consistency) */
-  --color-red: 239, 68, 68;
-  --color-green: 34, 197, 94;
-  --color-blue: 59, 130, 246;
-  --color-cyan: 6, 182, 212;
-  --color-orange: 249, 115, 22;
-  --color-yellow: 234, 179, 8;
-  --color-teal: 20, 184, 166;
-  --color-purple: 147, 51, 234;
-  --color-gray: 148, 163, 184;
-  --color-grey: 107, 114, 128;
-
-  /* Special colors for relic */
-  --color-relic-primary: 194, 65, 12;
-  --color-relic-secondary: 234, 88, 12;
-  --color-relic-accent: 251, 191, 36;
+  --gd-red: 239, 68, 68;
+  --gd-green: 34, 197, 94;
+  --gd-blue: 59, 130, 246;
+  --gd-cyan: 6, 182, 212;
+  --gd-orange: 249, 115, 22;
+  --gd-yellow: 234, 179, 8;
+  --gd-teal: 20, 184, 166;
+  --gd-purple: 147, 51, 234;
+  --gd-gray: 148, 163, 184;
 }
 
 /* Base gradient utility classes */
@@ -64,39 +55,39 @@
 
 /* Color-specific classes */
 .gradient-red {
-  --gradient-color: var(--color-red);
+  --gradient-color: var(--gd-red);
 }
 
 .gradient-green {
-  --gradient-color: var(--color-green);
+  --gradient-color: var(--gd-green);
 }
 
 .gradient-blue {
-  --gradient-color: var(--color-blue);
+  --gradient-color: var(--gd-blue);
 }
 
 .gradient-cyan {
-  --gradient-color: var(--color-cyan);
+  --gradient-color: var(--gd-cyan);
 }
 
 .gradient-orange {
-  --gradient-color: var(--color-orange);
+  --gradient-color: var(--gd-orange);
 }
 
 .gradient-yellow {
-  --gradient-color: var(--color-yellow);
+  --gradient-color: var(--gd-yellow);
 }
 
 .gradient-teal {
-  --gradient-color: var(--color-teal);
+  --gradient-color: var(--gd-teal);
 }
 
 .gradient-purple {
-  --gradient-color: var(--color-purple);
+  --gradient-color: var(--gd-purple);
 }
 
 .gradient-gray {
-  --gradient-color: var(--color-gray);
+  --gradient-color: var(--gd-gray);
 }
 
 .gradient-grey {
@@ -111,39 +102,39 @@
 }
 
 .player-area-card.gradient-red {
-  --gradient-color: var(--color-red);
+  --gradient-color: var(--gd-red);
 }
 
 .player-area-card.gradient-green {
-  --gradient-color: var(--color-green);
+  --gradient-color: var(--gd-green);
 }
 
 .player-area-card.gradient-blue {
-  --gradient-color: var(--color-blue);
+  --gradient-color: var(--gd-blue);
 }
 
 .player-area-card.gradient-cyan {
-  --gradient-color: var(--color-cyan);
+  --gradient-color: var(--gd-cyan);
 }
 
 .player-area-card.gradient-orange {
-  --gradient-color: var(--color-orange);
+  --gradient-color: var(--gd-orange);
 }
 
 .player-area-card.gradient-yellow {
-  --gradient-color: var(--color-yellow);
+  --gradient-color: var(--gd-yellow);
 }
 
 .player-area-card.gradient-teal {
-  --gradient-color: var(--color-teal);
+  --gradient-color: var(--gd-teal);
 }
 
 .player-area-card.gradient-purple {
-  --gradient-color: var(--color-purple);
+  --gradient-color: var(--gd-purple);
 }
 
 .player-area-card.gradient-gray {
-  --gradient-color: var(--color-gray);
+  --gradient-color: var(--gd-gray);
 }
 
 .player-area-card.gradient-grey {
@@ -168,39 +159,39 @@
 }
 
 .shimmer-container.gradient-red {
-  --gradient-color: var(--color-red);
+  --gradient-color: var(--gd-red);
 }
 
 .shimmer-container.gradient-green {
-  --gradient-color: var(--color-green);
+  --gradient-color: var(--gd-green);
 }
 
 .shimmer-container.gradient-blue {
-  --gradient-color: var(--color-blue);
+  --gradient-color: var(--gd-blue);
 }
 
 .shimmer-container.gradient-cyan {
-  --gradient-color: var(--color-cyan);
+  --gradient-color: var(--gd-cyan);
 }
 
 .shimmer-container.gradient-orange {
-  --gradient-color: var(--color-orange);
+  --gradient-color: var(--gd-orange);
 }
 
 .shimmer-container.gradient-yellow {
-  --gradient-color: var(--color-yellow);
+  --gradient-color: var(--gd-yellow);
 }
 
 .shimmer-container.gradient-teal {
-  --gradient-color: var(--color-teal);
+  --gradient-color: var(--gd-teal);
 }
 
 .shimmer-container.gradient-purple {
-  --gradient-color: var(--color-purple);
+  --gradient-color: var(--gd-purple);
 }
 
 .shimmer-container.gradient-gray {
-  --gradient-color: var(--color-gray);
+  --gradient-color: var(--gd-gray);
 }
 
 .shimmer-container.gradient-grey {
@@ -209,64 +200,64 @@
 
 /* Slightly stronger red for better contrast on secret objectives */
 .gradient-red.gradient-border {
-  border-color: rgba(var(--color-red), 0.26);
+  border-color: rgba(var(--gd-red), 0.26);
 }
 
 .gradient-red.gradient-shimmer {
-  background: rgba(var(--color-red), 0.1);
+  background: rgba(var(--gd-red), 0.1);
 }
 
 .shimmer-container.gradient-red::before {
-  background: rgba(var(--color-red), 0.06);
+  background: rgba(var(--gd-red), 0.06);
 }
 
 /* Stronger cyan for Promissory Notes */
 .gradient-cyan.gradient-border {
-  border-color: rgba(var(--color-cyan), 0.3);
-  background: rgba(var(--color-cyan), 0.08);
+  border-color: rgba(var(--gd-cyan), 0.3);
+  background: rgba(var(--gd-cyan), 0.08);
 }
 /* Slightly stronger blue for Stage II objectives */
 .gradient-blue.gradient-border {
-  border-color: rgba(var(--color-blue), 0.24);
-  background: rgba(var(--color-blue), 0.08);
+  border-color: rgba(var(--gd-blue), 0.24);
+  background: rgba(var(--gd-blue), 0.08);
 }
 
 .shimmer-container.gradient-blue::before {
-  background: rgba(var(--color-blue), 0.05);
+  background: rgba(var(--gd-blue), 0.05);
 }
 
 /* Slightly stronger orange for Stage I objectives */
 .gradient-orange.gradient-border {
-  border-color: rgba(var(--color-orange), 0.28);
-  background: rgba(var(--color-orange), 0.10);
+  border-color: rgba(var(--gd-orange), 0.28);
+  background: rgba(var(--gd-orange), 0.10);
 }
 
 .shimmer-container.gradient-orange::before {
-  background: rgba(var(--color-orange), 0.055);
+  background: rgba(var(--gd-orange), 0.055);
 }
 
 /* Slightly stronger purple for Law chips */
 .gradient-purple.gradient-border {
-  border-color: rgba(var(--color-purple), 0.26);
-  background: rgba(var(--color-purple), 0.09);
+  border-color: rgba(var(--gd-purple), 0.26);
+  background: rgba(var(--gd-purple), 0.09);
 }
 
 .shimmer-container.gradient-purple::before {
-  background: rgba(var(--color-purple), 0.055);
+  background: rgba(var(--gd-purple), 0.055);
 }
 
 /* Slightly stronger green for Leader chips */
 .gradient-green.gradient-border {
-  border-color: rgba(var(--color-green), 0.26);
-  background: rgba(var(--color-green), 0.05);
+  border-color: rgba(var(--gd-green), 0.26);
+  background: rgba(var(--gd-green), 0.05);
 }
 
 .shimmer-container.gradient-green::before {
-  background: rgba(var(--color-green), 0.025);
+  background: rgba(var(--gd-green), 0.025);
 }
 
 
 /* Special blue pattern for certain components */
 .gradient-blue .gradient-pattern {
-  background: rgba(var(--color-blue), 0.025);
+  background: rgba(var(--gd-blue), 0.025);
 }

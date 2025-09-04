@@ -60,11 +60,7 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
             <Text className={`${styles.stageTitle} ${styles.otherTitle}`}>
               Other
             </Text>
-            <Flex
-              maw={"auto"}
-              justify="center"
-              align="center"
-              gap="xs">
+            <Flex maw={"auto"} justify="center" align="center" gap="xs">
               {objectives.customObjectives.map((objective) => (
                 <ExpandedObjectiveCard
                   key={objective.key}

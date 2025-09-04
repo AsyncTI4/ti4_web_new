@@ -1,57 +1,44 @@
-import { Box, type BoxProps } from "@mantine/core";
+import { Box, Text, type BoxProps } from "@mantine/core";
 import type { ColorKey } from "@/components/PlayerArea/gradientClasses";
-import classes from "./Hierarchy.module.css";
+import classes from "./Chip.module.css";
+import cx from "clsx";
 
 type Props = Omit<BoxProps, "color" | "onClick"> & {
-  children: React.ReactNode;
-  accent?: ColorKey | "grey" | "gray";
-  enableHover?: boolean;
+  title?: string;
+  leftSection?: React.ReactNode;
+  children?: React.ReactNode;
+  ribbon?: boolean;
+  accentLine?: boolean;
+  accent?: ColorKey | "grey" | "gray" | "deepRed";
+  strong?: boolean;
+  /** When true, shows an absolute-positioned full title on hover */
+  revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.KeyboardEventHandler<HTMLDivElement>;
 };
 
-function getHoverOutlineClass(accent?: Props["accent"]) {
-  switch (accent) {
-    case "yellow":
-      return classes.hoverOutlineYellow;
-    case "cyan":
-      return classes.hoverOutlineCyan;
-    case "red":
-      return classes.hoverOutlineRed;
-    case "blue":
-      return classes.hoverOutlineBlue;
-    case "orange":
-      return classes.hoverOutlineOrange;
-    case "green":
-      return classes.hoverOutlineGreen;
-    case "purple":
-      return classes.hoverOutlinePurple;
-    case "grey":
-    case "gray":
-    default:
-      return classes.hoverOutlineGray;
-  }
-}
-
 export function Chip({
+  title,
+  leftSection,
   children,
   className,
   accent = "gray",
-  enableHover = true,
+  ribbon = false,
+  accentLine = false,
+  strong = false,
+  revealFullTitleOnHover = false,
   onClick,
+  px,
+  py,
   ...boxProps
 }: Props) {
-  const clickable = typeof onClick === "function";
-  const hoverClass = getHoverOutlineClass(accent);
-
+  const clickable = onClick !== undefined;
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!clickable) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onClick?.(
-        event as unknown as React.MouseEvent<HTMLDivElement, MouseEvent>
-      );
+      onClick?.(event);
     }
   };
 
@@ -62,13 +49,40 @@ export function Chip({
       onKeyDown={handleKeyDown}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
-      className={`${classes.chip} ${classes.chipOutline} ${enableHover ? classes.chipGlowHover : ""} ${clickable ? classes.chipClickable : ""} ${enableHover ? classes.hoverOutline : ""} ${enableHover ? hoverClass : ""} ${className || ""}`}
-      style={{
-        cursor: clickable ? "pointer" : undefined,
-        ...boxProps.style,
-      }}
+      className={cx(
+        classes.chip,
+        classes[accent ?? "gray"],
+        clickable && classes.hover,
+        clickable && classes.clickable,
+        ribbon && classes.ribbon,
+        accentLine && classes.accentLine,
+        strong && classes.strong,
+        className
+      )}
     >
-      {children}
+      <Box
+        className={cx(
+          classes.inner,
+          revealFullTitleOnHover && classes.revealFullTitle
+        )}
+        px={px}
+        py={py}
+      >
+        {leftSection && (
+          <Box className={classes.leftSection}>{leftSection}</Box>
+        )}
+        {title && (
+          <Text size="xs" fw={700} c="white" className={classes.textContainer}>
+            {title}
+          </Text>
+        )}
+        {title && revealFullTitleOnHover && (
+          <Text size="xs" fw={700} c="white" className={classes.fullTitle}>
+            {title}
+          </Text>
+        )}
+        {children}
+      </Box>
     </Box>
   );
 }

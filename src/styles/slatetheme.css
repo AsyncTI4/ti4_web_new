@@ -14,7 +14,7 @@
     --faction-tab-pinned-bg: linear-gradient(135deg, rgba(170, 180, 194, 0.28) 0%, rgba(120, 130, 146, 0.22) 50%, rgba(18, 22, 28, 0.9) 100%);
 
     /* PlayerCard.tsx */
-    --player-card-box-bg: linear-gradient(135deg, rgba(18, 22, 28, 0.95) 0%, rgba(28, 32, 38, 0.9) 100%);
+    --player-card-box-bg: linear-gradient(135deg, rgba(18, 22, 28, 1) 0%, rgba(28, 32, 38, 1) 100%);
 
     /** Sidebar **/
     --sidebar-bg: #141820;

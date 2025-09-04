@@ -1,8 +1,9 @@
-import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
+import { Stack, Box, Image, Divider, Text, Group } from "@mantine/core";
 import { getPromissoryNoteData } from "../../../lookup/promissoryNotes";
 import { cdnImage } from "../../../data/cdnImage";
-import classes from "./PromissoryNoteCard.module.css";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { DetailsCard } from "@/components/shared/DetailsCard";
+import { leaders } from "@/data/leaders";
 
 type Props = {
   promissoryNoteId: string;
@@ -14,83 +15,113 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
 
   if (!noteData) return null;
 
-  // Transform to match the expected format
-  const displayData = {
-    displayName: noteData.noteData.shortName || noteData.displayName,
-    displayText: noteData.noteData.text.replace(
-      /<color>/g,
-      noteData.color || ""
-    ),
-    faction: noteData.faction,
-    factionIcon: noteData.faction
-      ? cdnImage(`/factions/${noteData.faction}.png`)
-      : undefined,
-    playArea: noteData.noteData.playArea,
-    playImmediately: noteData.noteData.playImmediately,
-  };
+  // Use noteData directly; no intermediate displayData object
+  const displayName = noteData.noteData.shortName || noteData.displayName;
+  const displayText = noteData.noteData.text.replace(
+    /<color>/g,
+    noteData.color || ""
+  );
+  const factionIcon = noteData.faction
+    ? cdnImage(`/factions/${noteData.faction}.png`)
+    : undefined;
+
+  // Determine if this is an Alliance PN
+  const isAlliance =
+    noteData.noteData.alias.includes("_an") ||
+    noteData.noteData.name.toLowerCase() === "alliance";
+
+  // Find commander for the faction when Alliance
+  const commander = isAlliance
+    ? leaders.find(
+        (l) => l.faction === noteData.faction && l.type === "commander"
+      )
+    : undefined;
+
+  const renderIcon = () => (
+    <Box
+      pos="relative"
+      w={60}
+      h={60}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Image src="/pnicon.png" w={40} />
+      {factionIcon && (
+        <Box
+          pos="absolute"
+          bottom={-4}
+          right={-4}
+          style={{ background: "rgba(0,0,0,0.5)", borderRadius: 4, padding: 2 }}
+        >
+          <Image src={factionIcon} w={18} h={18} />
+        </Box>
+      )}
+    </Box>
+  );
 
   return (
-    <Box w={320} p="md" className={classes.card}>
+    <DetailsCard width={320} color="cyan">
       <Stack gap="md">
-        {/* Header with icon and basic info */}
-        <Group gap="md" align="flex-start">
-          <Box w={80} h={80} className={classes.iconContainer}>
-            <Image src="/pnicon.png" w={40} h={40} className={classes.icon} />
-          </Box>
-          <Stack gap={4} flex={1}>
-            <Text size="lg" fw={700} c="white">
-              {displayData.displayName}
-            </Text>
-            <Text size="xs" c="cyan.3" fw={600} tt="uppercase">
-              Promissory Note
-            </Text>
-            {displayData.faction && (
-              <Group gap={4} align="center">
-                <Image
-                  src={displayData.factionIcon}
-                  w={16}
-                  h={16}
-                  style={{ flexShrink: 0 }}
-                />
-                <Text size="xs" c="cyan.4" fw={500} tt="capitalize">
-                  {displayData.faction}
-                </Text>
-              </Group>
-            )}
-          </Stack>
-        </Group>
+        <DetailsCard.Title
+          title={displayName}
+          subtitle="Promissory Note"
+          icon={<DetailsCard.Icon icon={renderIcon()} />}
+        />
 
-        <Divider c="cyan.7" opacity={0.6} />
+        <Divider c="gray.7" opacity={0.8} />
 
-        {/* Note Text */}
-        <Box>
-          <Text size="sm" c="cyan.3" mb={4} fw={500}>
-            Effect
-          </Text>
-          <Text size="sm" c="gray.1" lh={1.5}>
-            {displayData.displayText}
-          </Text>
-        </Box>
-
-        {displayData.playArea && (
+        {isAlliance && commander && (
           <>
-            <Divider c="cyan.7" opacity={0.6} />
-
-            {/* Play Area Information */}
-            <Box>
-              <Text size="sm" c="cyan.3" mb={4} fw={500}>
-                Usage
-              </Text>
-              <Text size="sm" c="gray.2" fw={600}>
-                {displayData.playImmediately
-                  ? "Played immediately when received"
-                  : "Placed in play area"}
-              </Text>
-            </Box>
+            <DetailsCard.Section
+              content={
+                <Stack gap={8}>
+                  <Group gap={10} align="center">
+                    {(commander.source === "base" ||
+                      commander.source === "pok") && (
+                      <Box
+                        w={36}
+                        h={46}
+                        style={{ overflow: "hidden", borderRadius: 8 }}
+                      >
+                        <Image
+                          src={`/leaders/${commander.id}.webp`}
+                          w={36}
+                          h={46}
+                        />
+                      </Box>
+                    )}
+                    <Stack gap={0} style={{ flex: 1 }}>
+                      <Text size="sm" fw={700} c="white">
+                        {commander.name}
+                      </Text>
+                      <Text size="xs" c="gray.4" fs="italic">
+                        Commander Ability
+                      </Text>
+                    </Stack>
+                  </Group>
+                  <Stack gap={4} style={{ flex: 1 }}>
+                    {commander.abilityWindow && (
+                      <Text size="xs" c="blue.3" fw={600} tt="uppercase">
+                        {commander.abilityWindow}
+                      </Text>
+                    )}
+                    <Text size="sm" c="gray.2" lh={1.5}>
+                      {commander.abilityText}
+                    </Text>
+                  </Stack>
+                </Stack>
+              }
+            />
+            <Divider c="gray.7" opacity={0.8} />
           </>
         )}
+
+        <DetailsCard.Section title="Effect" content={displayText} />
       </Stack>
-    </Box>
+    </DetailsCard>
   );
 }
 

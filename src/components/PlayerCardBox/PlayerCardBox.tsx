@@ -21,12 +21,15 @@ export function PlayerCardBox({
   paperProps = {},
 }: Props) {
   return (
-    <Box
-      className={styles.wrapper}
-      style={{
-        background: generateColorGradient(color, 0.6),
-      }}
-    >
+    <Box className={styles.wrapper}>
+      <Box
+        className={`${styles.edgeBar} ${styles.edgeBarTop}`}
+        style={{ background: generateColorGradient(color, 0.6) }}
+      />
+      <Box
+        className={`${styles.edgeBar} ${styles.edgeBarBottom}`}
+        style={{ background: generateColorGradient(color, 0.6) }}
+      />
       <Paper
         p="sm"
         radius="md"

@@ -127,7 +127,14 @@ export default function PlayerCard2Mid(props: Props) {
     ghostWormholesReinf,
     sleeperTokensReinf,
     nombox,
+    exhaustedPlanetAbilities,
   } = props.playerData;
+
+  console.log(
+    "abilities",
+    props.playerData.faction,
+    props.playerData.abilities
+  );
   const promissoryNotes = promissoryNotesInPlayArea;
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
@@ -434,13 +441,15 @@ export default function PlayerCard2Mid(props: Props) {
 
             <Group gap={4} wrap="wrap" flex={1}>
               {planets.map((planetId, index) => {
-                return <PlanetCard
-                  key={index}
-                  planetId={planetId}
-                  legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                    planetId
-                  )}
-                />;
+                return (
+                  <PlanetCard
+                    key={index}
+                    planetId={planetId}
+                    legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                      planetId
+                    )}
+                  />
+                );
               })}
             </Group>
           </Group>

@@ -16,6 +16,7 @@ import {
   PlayerDataResponse,
   TileUnitData,
   UnitMapTile,
+  PlayerData,
 } from "@/data/types";
 import {
   getPlanetsByTileId,
@@ -92,11 +93,10 @@ const CENTER_X_OFFSET = 172.5;
 const CENTER_Y_OFFSET = 149.5;
 
 export function GameContextProvider({ children, gameId }: Props) {
-  //hook calls need to be at component level, cannot bring this out to a helper function
   const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
     usePlayerDataSocket(gameId);
   const accessibleColors = useSettingsStore((s) => s.settings.accessibleColors);
-  // Apply displacement at the tileUnitData layer so positioning runs via placement algorithm
+
   const draft = useMovementStore((s) => s.draft);
 
   const adjustedData = useMemo(() => {
@@ -134,7 +134,10 @@ export function buildGameContext(
   data: PlayerDataResponse,
   accessibleColors: boolean
 ): GameData {
-  const baseFactionToColor = buildFactionToColor(data);
+  const playerData = data.playerData.filter(
+    (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
+  );
+  const baseFactionToColor = buildFactionToColor(playerData);
   const accessibleOrder = [
     "blue",
     "green",
@@ -145,16 +148,17 @@ export function buildGameContext(
     "black",
     "lightgray",
   ];
+
   let factionToColor = baseFactionToColor;
-  if (accessibleColors && data.playerData) {
+  if (accessibleColors && playerData) {
     const mapping: Record<string, string> = {};
     let idx = 0;
-    for (const player of data.playerData) {
+    for (const player of playerData) {
       if (idx >= accessibleOrder.length) break;
       mapping[player.faction] = accessibleOrder[idx];
       idx += 1;
     }
-    factionToColor = data.playerData.reduce(
+    factionToColor = playerData.reduce(
       (acc, p) => {
         acc[p.faction] = mapping[p.faction] ?? p.color;
         return acc;
@@ -179,12 +183,12 @@ export function buildGameContext(
     : [];
 
   const overriddenPlayerData =
-    accessibleColors && data.playerData
-      ? data.playerData.map((p) => ({
+    accessibleColors && playerData
+      ? playerData.map((p) => ({
           ...p,
           color: factionToColor[p.faction] ?? p.color,
         }))
-      : data.playerData;
+      : playerData;
 
   return {
     mapTiles,
@@ -438,9 +442,9 @@ function generateHexagonSides(points: { x: number; y: number }[]) {
   return sides;
 }
 
-function buildFactionToColor(data: PlayerDataResponse): Record<string, string> {
-  if (!data.playerData) return {};
-  return data.playerData.reduce(
+function buildFactionToColor(playerData: PlayerData[]): Record<string, string> {
+  if (!playerData) return {};
+  return playerData.reduce(
     (acc, player) => {
       acc[player.faction] = player.color;
       return acc;

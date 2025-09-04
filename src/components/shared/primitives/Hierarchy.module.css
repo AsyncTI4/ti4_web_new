@@ -1,115 +1,88 @@
+
+/* Color variables used by hoverOutline */
+.yellow {
+  --background-color: rgba(var(--gd-yellow), 0.12);
+  --hover-border-color: rgba(var(--gd-yellow), 0.6);
+  --hover-shadow-1: rgba(var(--gd-yellow), 0.35);
+  --hover-shadow-2: rgba(var(--gd-yellow), 0.22);
+}
+
+.cyan {
+  --background-color: rgba(var(--gd-cyan), 0.03);
+  --hover-border-color: rgba(var(--gd-cyan), 0.6);
+  --hover-shadow-1: rgba(var(--gd-cyan), 0.35);
+  --hover-shadow-2: rgba(var(--gd-cyan), 0.22);
+}
+
+.red {
+  --background-color: rgba(var(--gd-red), 0.03);
+  --hover-border-color: rgba(var(--gd-red), 0.6);
+  --hover-shadow-1: rgba(var(--gd-red), 0.35);
+  --hover-shadow-2: rgba(var(--gd-red), 0.22);
+}
+
+.blue {
+  --background-color: rgba(var(--gd-blue), 0.03);
+  --hover-border-color: rgba(var(--gd-blue), 0.6);
+  --hover-shadow-1: rgba(var(--gd-blue), 0.35);
+  --hover-shadow-2: rgba(var(--gd-blue), 0.22);
+}
+
+.green {
+  --background-color: rgba(var(--gd-green), 0.03);
+  --hover-border-color: rgba(var(--gd-green), 0.6);
+  --hover-shadow-1: rgba(var(--gd-green), 0.35);
+  --hover-shadow-2: rgba(var(--gd-green), 0.22);
+}
+
+.orange {
+  --background-color: rgba(var(--gd-orange), 0.03);
+  --hover-border-color: rgba(var(--gd-orange), 0.64);
+  --hover-shadow-1: rgba(var(--gd-orange), 0.4);
+  --hover-shadow-2: rgba(var(--gd-orange), 0.25);
+}
+
+.purple {
+  --background-color: rgba(var(--gd-purple), 0.03);
+  --hover-border-color: rgba(var(--gd-purple), 0.6);
+  --hover-shadow-1: rgba(var(--gd-purple), 0.35);
+  --hover-shadow-2: rgba(var(--gd-purple), 0.22);
+}
+
+.gray,
+.grey {
+  --background-color: rgba(var(--gd-gray), 0.03);
+  --hover-border-color: rgba(var(--gd-gray), 0.55);
+  --hover-shadow-1: rgba(var(--gd-gray), 0.3);
+  --hover-shadow-2: rgba(var(--gd-gray), 0.18);
+}
+
+
 .chip {
   position: relative;
   border-radius: var(--mantine-radius-md);
-  background: linear-gradient(
-    135deg,
-    rgba(148, 163, 184, 0.06) 0%,
-    rgba(148, 163, 184, 0.04) 100%
-  );
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: var(--background-color);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   cursor: pointer;
 }
 
-.chipHover:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(148, 163, 184, 0.1) 0%,
-    rgba(148, 163, 184, 0.06) 100%
-  );
-}
-
-.chipOutline {
-  border: 1px solid rgba(148, 163, 184, 0.2);
+.chipGlowHover {
+  transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .chipGlowHover:hover {
+  border-color: var(--hover-border-color);
+  box-shadow: 0 0 0 1px var(--hover-shadow-1), 0 2px 10px var(--hover-shadow-2);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(59, 130, 246, 0.12);
 }
 
-.chipClickable {
+.clickable {
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.labelCaps {
-  font-size: var(--mantine-font-size-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--mantine-color-gray-4);
-}
-
-.softText {
-  color: var(--mantine-color-gray-4);
 }
 
 .monoValue {
   font-family: var(--mantine-font-family-monospace, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-.gridSurface {
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
-  background-size: 18px 18px;
-  border-radius: var(--mantine-radius-sm);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.dividerHairline {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    rgba(148, 163, 184, 0) 0%,
-    rgba(148, 163, 184, 0.22) 50%,
-    rgba(148, 163, 184, 0) 100%
-  );
-}
-
-/* Colorful hover outlines for better click affordance */
-.hoverOutline {
-  transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.hoverOutlineYellow:hover {
-  border-color: rgba(var(--color-yellow), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-yellow), 0.35), 0 2px 10px rgba(var(--color-yellow), 0.22);
-}
-
-.hoverOutlineCyan:hover {
-  border-color: rgba(var(--color-cyan), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-cyan), 0.35), 0 2px 10px rgba(var(--color-cyan), 0.22);
-}
-
-.hoverOutlineRed:hover {
-  border-color: rgba(var(--color-red), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-red), 0.35), 0 2px 10px rgba(var(--color-red), 0.22);
-}
-
-.hoverOutlineBlue:hover {
-  border-color: rgba(var(--color-blue), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-blue), 0.35), 0 2px 10px rgba(var(--color-blue), 0.22);
-}
-
-.hoverOutlineGreen:hover {
-  border-color: rgba(var(--color-green), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-green), 0.35), 0 2px 10px rgba(var(--color-green), 0.22);
-}
-
-.hoverOutlineOrange:hover {
-  border-color: rgba(var(--color-orange), 0.64);
-  box-shadow: 0 0 0 1px rgba(var(--color-orange), 0.4), 0 2px 12px rgba(var(--color-orange), 0.25);
-}
-
-.hoverOutlinePurple:hover {
-  border-color: rgba(var(--color-purple), 0.6);
-  box-shadow: 0 0 0 1px rgba(var(--color-purple), 0.35), 0 2px 10px rgba(var(--color-purple), 0.22);
-}
-
-.hoverOutlineGray:hover,
-.hoverOutlineGrey:hover {
-  border-color: rgba(var(--color-gray), 0.55);
-  box-shadow: 0 0 0 1px rgba(var(--color-gray), 0.3), 0 2px 10px rgba(var(--color-gray), 0.18);
 }

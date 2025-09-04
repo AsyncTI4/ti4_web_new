@@ -1,40 +1,13 @@
-
-.chipStack {
-  min-width: 50px;
-}
-
-.chipContent {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
 .countText {
   color: var(--mantine-color-white);
   font-weight: 800;
   font-size: 18px;
   line-height: 1;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
 }
 
 .countTextGray {
-  color: var(--mantine-color-gray);
+  color: var(--mantine-color-gray-6);
   font-weight: 400;
   font-size: 14px;
   line-height: 1;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
-}
-
-.tgChip {
-  border-radius: 10px;
-}
-
-.commsChip {
-  border-radius: 10px;
 }

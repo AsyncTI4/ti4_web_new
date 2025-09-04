@@ -183,7 +183,7 @@
 }
 .internalSeparator { display: none; }
 .mainStack.exhausted {
-  filter: grayscale(0.4) opacity(0.5);
+  filter: grayscale(0.4) opacity(0.4);
 }
 
 /* Icon container */
