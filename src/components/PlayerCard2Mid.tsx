@@ -136,8 +136,6 @@ export default function PlayerCard2Mid(props: Props) {
     props.playerData.abilities
   );
   const promissoryNotes = promissoryNotesInPlayArea;
-  const exhaustedPlanetAbilities =
-    props.playerData.exhaustedPlanetAbilities || [];
 
   const mahactEdict = props.playerData.mahactEdict || [];
   const armyStats = {

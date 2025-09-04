@@ -21,24 +21,17 @@ export function TabsControls() {
     <>
       <Group gap={4} pl={8} pb={4}>
         <Button
-          variant={settings.distanceMode ? "filled" : "light"}
+          variant="light"
           size="sm"
-          color={settings.distanceMode ? "orange" : "gray"}
+          color={settings.planetTypesMode ? "cyan" : "gray"}
+          style={{ height: "36px", minWidth: "36px" }}
           px={8}
-          onClick={handlers.toggleDistanceMode}
+          onClick={handlers.togglePlanetTypesMode}
         >
-          <IconRuler2 size={16} />
+          <Image src="/planet_attributes/pc_attribute_cultural.png" alt="Planet Types" height={16} />
+          <Image src="/planet_attributes/pc_attribute_industrial.png" alt="Planet Types" height={16} />
+          <Image src="/planet_attributes/pc_attribute_hazardous.png" alt="Planet Types" height={16} />
         </Button>
-      <Button
-        variant={settings.planetTypesMode ? "filled" : "subtle"}
-        size="sm"
-        color={settings.planetTypesMode ? "cyan" : "gray"}
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
-        onClick={handlers.togglePlanetTypesMode}
-      >
-        <IconAdjustmentsAlt size={16} />
-      </Button>
         <Button
           variant="light"
           size="sm"
@@ -64,6 +57,15 @@ export function TabsControls() {
           <Image src="/blue.png" alt="Tech Skips" height={16} />
         </Button>
 
+        <Button
+          variant={settings.distanceMode ? "filled" : "light"}
+          size="sm"
+          color={settings.distanceMode ? "orange" : "gray"}
+          px={8}
+          onClick={handlers.toggleDistanceMode}
+        >
+          <IconRuler2 size={16} />
+        </Button>
         {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
           <Button
             variant={settings.showPDSLayer ? "filled" : "light"}
