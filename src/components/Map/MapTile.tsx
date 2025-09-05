@@ -40,6 +40,7 @@ type Props = {
   isMovingMode?: boolean; // Movement mode active globally
   isOrigin?: boolean; // This tile is an origin in displacement draft
   embedded?: boolean; // Render as self-contained preview without map offsets
+  isA11ySelected?: boolean; // Accessibility selection highlight
 };
 
 export const MapTile = React.memo<Props>(
@@ -61,6 +62,7 @@ export const MapTile = React.memo<Props>(
     isMovingMode = false,
     isOrigin = false,
     embedded = false,
+    isA11ySelected = false,
   }) => {
     const gameData = useGameData();
     const [hoveredLocal, setHoveredLocal] = useState(false);
@@ -94,13 +96,14 @@ export const MapTile = React.memo<Props>(
 
     return (
       <div
+        id={`tile-${ringPosition}`}
         className={`${classes.mapTile} ${className || ""} ${
           isSelected ? classes.selected : ""
         } ${isHovered ? classes.hovered : ""} ${
           isDistanceSelected ? classes.distanceSelected : ""
         } ${isDistanceHoverable ? classes.distanceHoverable : ""} ${
           isMovingMode ? classes.movingMode : ""
-        }`}
+        } ${isA11ySelected ? classes.selected : ""}`}
         style={{
           left: embedded ? 0 : `${position.x}px`,
           top: embedded ? 0 : `${position.y}px`,
