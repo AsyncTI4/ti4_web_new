@@ -1,7 +1,8 @@
-import { Group, Text, Image, Stack } from "@mantine/core";
+import { Group, Image, Stack } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { FactionColorMap } from "@/context/GameContextProvider";
+import Caption from "@/components/shared/Caption/Caption";
 
 type Props = {
   neighbors: string[];
@@ -25,20 +26,7 @@ export function Neighbors({ neighbors }: Props) {
 
   return (
     <Stack gap={6} pos="relative" style={{ zIndex: 1 }}>
-      <Text
-        size="xs"
-        fw={600}
-        c="gray.4"
-        style={{
-          textTransform: "uppercase",
-          fontSize: "9px",
-          letterSpacing: "0.5px",
-          marginRight: "4px",
-          textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-        }}
-      >
-        Neighbors
-      </Text>
+      <Caption size="xs">Neighbors</Caption>
       <Group gap={2}>
         {neighborFactions.map((neighborFaction, index) => (
           <Image

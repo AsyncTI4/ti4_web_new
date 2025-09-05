@@ -7,6 +7,7 @@ import { PromissoryNote } from "@/components/PlayerArea";
 import { PlayerColor } from "@/components/PlayerArea/PlayerColor";
 import { cdnImage } from "@/data/cdnImage";
 import styles from "./PlayerScoreSummary.module.css";
+import Caption from "@/components/shared/Caption/Caption";
 
 type Props = {
   playerData: PlayerData[];
@@ -81,9 +82,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                   const stage1Keys = new Set(stage1.map((o) => o.key));
                   return (
                     <Box>
-                      <Text className={styles.sectionSubTitle}>
-                        Public objectives
-                      </Text>
+                      <Caption size="sm">Public objectives</Caption>
                       <Group gap="xs" wrap="wrap">
                         {publics.map((obj) => (
                           <Chip
@@ -103,7 +102,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                 {/* Other */}
                 {other.length > 0 && (
                   <Box>
-                    <Text className={styles.sectionSubTitle}>Other</Text>
+                    <Caption size="sm">Other</Caption>
                     <Group gap="xs" wrap="wrap">
                       {other.map((obj) => (
                         <Chip
@@ -122,7 +121,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                 {/* Secrets */}
                 {secretIds.length > 0 && (
                   <Box>
-                    <Text className={styles.sectionSubTitle}>Secrets</Text>
+                    <Caption size="sm">Secrets</Caption>
                     <Group gap="xs" wrap="wrap">
                       {secretIds.map((id) => (
                         <ScoredSecret key={id} secretId={id} />
@@ -134,9 +133,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                 {/* SFTT */}
                 {sfttIds.length > 0 && (
                   <Box>
-                    <Text className={styles.sectionSubTitle}>
-                      Support for the Throne
-                    </Text>
+                    <Caption size="sm">Support for the Throne</Caption>
                     <Group gap="xs" wrap="wrap">
                       {sfttIds.map((pn) => (
                         <PromissoryNote key={pn} promissoryNoteId={pn} />
