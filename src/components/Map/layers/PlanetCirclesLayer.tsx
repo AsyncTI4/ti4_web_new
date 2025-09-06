@@ -1,8 +1,9 @@
 import React from "react";
 import classes from "../MapTile.module.css";
-import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
-import { MapTileType } from "@/data/types";
+import { getPlanetCoordsBySystemId, getPlanetById, getPlanetsByTileId } from "@/lookup/planets";
+import { MapTileType, Planet } from "@/data/types";
 import { useSettingsStore } from "@/utils/appStore";
+import { rgba } from "@mantine/core";
 
 type Props = {
   systemId: string;
@@ -23,6 +24,12 @@ export function PlanetCirclesLayer({
     (state) => state.settings.showExhaustedPlanets
   );
   const hoverTimeoutRef = React.useRef<Record<string, number>>({});
+
+  const planetTypesMode = useSettingsStore(
+    (state) => state.settings.planetTypesMode
+  );
+  const d = getPlanetsByTileId(mapTile.systemId);
+  
 
   const handlePlanetMouseEnter = React.useCallback(
     (planetId: string, x: number, y: number) => {
@@ -53,11 +60,11 @@ export function PlanetCirclesLayer({
     };
   }, []);
 
-  const circles = React.useMemo(() => {
+  
     if (!mapTile?.planets) return [] as React.ReactElement[];
     const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-    return mapTile.planets.flatMap((planetTile) => {
+  const circles = mapTile.planets.flatMap((planetTile, index) => {
       const planetId = planetTile.name;
       if (!planetCoords[planetId]) return [];
       const [x, y] = planetCoords[planetId].split(",").map(Number);
@@ -84,8 +91,8 @@ export function PlanetCirclesLayer({
       const exhaustedBackdropFilter =
         planetTile.exhausted && showExhaustedPlanets
           ? {
-              backdropFilter: "grayscale(1) brightness(0.7) blur(0px)" as const,
-            }
+            backdropFilter: "brightness(0.7) blur(0px)" as const,
+          }
           : {};
 
       return [
@@ -93,24 +100,35 @@ export function PlanetCirclesLayer({
           key={`${systemId}-${planetId}-circle`}
           className={classes.planetCircle}
           style={{
+            position: 'absolute',
             left: `${x}px`,
             top: `${y}px`,
             width: `${diameter}px`,
             height: `${diameter}px`,
-            ...exhaustedBackdropFilter,
+            backgroundColor: `${planetTypesMode ? getPlanetBackdropStyles(d[index]): ""}`,
+            ...exhaustedBackdropFilter
           }}
           onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
           onMouseLeave={() => handlePlanetMouseLeave(planetId)}
         />,
       ];
-    });
-  }, [
-    systemId,
-    mapTile,
-    showExhaustedPlanets,
-    handlePlanetMouseEnter,
-    handlePlanetMouseLeave,
-  ]);
+
+  });
 
   return <>{circles}</>;
 }
+
+  function getPlanetBackdropStyles(planet: Planet | undefined) {
+    if (!planet) return "";
+
+    switch (planet.planetType) {
+      case "CULTURAL":
+        return "rgba(0, 123, 255, 0.8)";
+      case "HAZARDOUS":
+        return "rgba(220, 38, 38, 0.8)";
+      case "INDUSTRIAL":
+        return "rgba(34, 197, 94, 0.8)";
+      default:
+        return "";
+    }
+  }

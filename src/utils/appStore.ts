@@ -22,6 +22,7 @@ const DEFAULT_SETTINGS = {
   leftPanelCollapsed: false,
   rightPanelCollapsed: false,
   overlaysEnabled: false,
+  planetTypesMode: false,
   techSkipsMode: false,
   showPDSLayer: false,
   distanceMode: false,
@@ -273,6 +274,7 @@ export type Settings = {
   leftPanelCollapsed: boolean;
   rightPanelCollapsed: boolean;
   overlaysEnabled: boolean;
+  planetTypesMode: boolean;
   techSkipsMode: boolean;
   showPDSLayer: boolean;
   distanceMode: boolean;
@@ -301,6 +303,7 @@ type SettingsHandlers = {
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   toggleOverlays: () => void;
+  togglePlanetTypesMode: () => void;
   toggleTechSkipsMode: () => void;
   togglePdsMode: () => void;
   toggleDistanceMode: () => void;
@@ -321,6 +324,7 @@ type SettingsStore = {
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   toggleOverlays: () => void;
+  togglePlanetTypesMode: () => void;
   toggleTechSkipsMode: () => void;
   toggleShowPDSLayer: () => void;
   toggleDistanceMode: () => void;
@@ -392,6 +396,16 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       return { ...state, settings: newSettings };
     });
 
+  const togglePlanetTypesMode = () =>
+    set((state) => {
+      const newSettings = {
+        ...state.settings,
+        planetTypesMode: !state.settings.planetTypesMode,
+      };
+      saveSettingsToStorage(newSettings as Settings);
+      return { ...state, settings: newSettings };
+    });
+    
   const toggleTechSkipsMode = () =>
     set((state) => {
       const newSettings = {
@@ -491,6 +505,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       toggleLeftPanelCollapsed,
       toggleRightPanelCollapsed,
       toggleOverlays,
+      togglePlanetTypesMode,
       toggleTechSkipsMode,
       togglePdsMode: toggleShowPDSLayer,
       toggleDistanceMode,
@@ -508,6 +523,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,
     toggleOverlays,
+    togglePlanetTypesMode,
     toggleTechSkipsMode,
     toggleShowPDSLayer,
     toggleDistanceMode,
