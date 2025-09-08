@@ -50,7 +50,7 @@
 }
 
 .numberCircle {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.92) 100%);
+  background: rgb(255, 255, 255);
   width: 26px;
   height: 26px;
   display: flex;
@@ -98,6 +98,3 @@
   gap: 8px;
   min-width: 0;
 }
-
-/* Speaker badge slot inside the pill */
-/* speakerBadge removed; speaker shown outside chip */

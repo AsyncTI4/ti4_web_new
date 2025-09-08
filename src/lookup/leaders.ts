@@ -19,7 +19,7 @@ export function getLeaderEmojiUrl(leader: LeaderData): string | null {
     else if (leader.id === "nomadagentmercer")
       fileName = "NomadAgentMercer.webp";
     else if (leader.id === "nomadagentthundarian")
-      fileName = "NomadAgentCommander.webp";
+      fileName = "NomadAgentThundarian.webp";
   }
 
   return cdnImage(`/emojis/leaders/${leader.source}/${fileName}`);
