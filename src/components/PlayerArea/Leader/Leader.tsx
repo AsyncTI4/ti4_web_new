@@ -6,6 +6,7 @@ import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./Leader.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { getLeaderEmojiUrl } from "@/lookup/leaders";
 
 type Props = {
   id: string;
@@ -23,20 +24,16 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
 
   const shouldShowGreen = !exhausted && !locked;
   const accentColor = shouldShowGreen ? "green" : "gray";
-  const showLeaderImage =
-    leaderData.source === "base" || leaderData.source === "pok";
+  const emojiPath = getLeaderEmojiUrl(leaderData);
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Chip accent={accentColor} onClick={() => setOpened((o) => !o)}>
           <Group gap={8}>
-            {showLeaderImage ? (
+            {emojiPath ? (
               <div className={styles.leaderImageContainer}>
-                <Image
-                  src={`/leaders/${id}.webp`}
-                  className={styles.leaderImage}
-                />
+                <Image src={emojiPath} className={styles.leaderImage} />
               </div>
             ) : undefined}
             <Stack gap={0}>

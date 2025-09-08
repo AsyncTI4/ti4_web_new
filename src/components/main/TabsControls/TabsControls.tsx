@@ -28,21 +28,23 @@ export function TabsControls() {
           px={8}
           onClick={handlers.togglePlanetTypesMode}
         >
-          <Image src="/planet_attributes/pc_attribute_cultural.png" alt="Planet Types" height={16} />
-          <Image src="/planet_attributes/pc_attribute_industrial.png" alt="Planet Types" height={16} />
-          <Image src="/planet_attributes/pc_attribute_hazardous.png" alt="Planet Types" height={16} />
+          <Image
+            src="/planet_attributes/pc_attribute_cultural.png"
+            alt="Planet Types"
+            height={16}
+          />
+          <Image
+            src="/planet_attributes/pc_attribute_industrial.png"
+            alt="Planet Types"
+            height={16}
+          />
+          <Image
+            src="/planet_attributes/pc_attribute_hazardous.png"
+            alt="Planet Types"
+            height={16}
+          />
         </Button>
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          h={36}
-          w={36}
-          px={8}
-          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
-        >
-          <IconKeyboard size={16} />
-        </Button>
+
         <Button
           variant={settings.techSkipsMode ? "filled" : "light"}
           size="sm"
@@ -87,6 +89,17 @@ export function TabsControls() {
           onClick={() => handlers.setSettingsModalOpened(true)}
         >
           <IconSettings size={16} />
+        </Button>
+        <Button
+          variant="light"
+          size="sm"
+          color="gray"
+          h={36}
+          w={36}
+          px={8}
+          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
+        >
+          <IconKeyboard size={16} />
         </Button>
 
         <Switch

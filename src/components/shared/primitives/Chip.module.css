@@ -27,13 +27,17 @@
 }
 
 .deepRed {
-    --background-color: rgba(48,6,6,0.42);
+    /* Use RGB triplet for consistency with other accents */
+    --background-color: 48,6,6;
     --border-color: rgba(48,6,6,1);
     --hover-border-color: rgba(48,6,6,1);
     --hover-shadow-1: rgba(48,6,6,0.3);
     --hover-shadow-2: rgba(48,6,6,0.18);
     --ribbon-color: rgb(48,6,6);
 }
+
+/* Strengthen deep red background to be clearly visible */
+.deepRed.chip { background: rgba(var(--background-color), 0.28); }
 
 .blue {
     --background-color: var(--gd-blue);

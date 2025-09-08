@@ -1,7 +1,8 @@
 import { Box, Group, Text } from "@mantine/core";
 import { useState } from "react";
+import cx from "clsx";
+import { IconX } from "@tabler/icons-react";
 import { Chip } from "@/components/shared/primitives/Chip";
-import { SpeakerToken } from "../SpeakerToken";
 import classes from "./StrategyCardBannerCompact.module.css";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { StrategyCardDetailsCard } from "../StrategyCardDetailsCard";
@@ -10,7 +11,6 @@ interface Props {
   number: number;
   text: string;
   color: string;
-  isSpeaker: boolean;
   isExhausted?: boolean;
 }
 
@@ -42,11 +42,9 @@ export function StrategyCardBannerCompact({
   number,
   text,
   color,
-  isSpeaker,
   isExhausted = false,
 }: Props) {
   const [opened, setOpened] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const colorClass =
@@ -56,19 +54,29 @@ export function StrategyCardBannerCompact({
     <SmoothPopover opened={opened} onChange={setOpened} position="bottom">
       <SmoothPopover.Target>
         <Group className={classes.container} gap="lg">
-          <SpeakerToken isVisible={isSpeaker} />
           <Chip
             accent={color as any}
             className={`${classes.cardContainer} ${colorClass}`}
-            style={{ opacity: isExhausted && !hovered ? 0.5 : 1 }}
             onClick={() => setOpened((o) => !o)}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
           >
-            <Box className={classes.numberCircle}>
+            <Box
+              className={cx(
+                classes.numberCircle,
+                isExhausted && classes.exhaustedNumberCircle
+              )}
+            >
               <Text ff="heading" c={numberColor} className={classes.numberText}>
                 {number}
               </Text>
+              {isExhausted && (
+                <span className={classes.exhaustedX}>
+                  <IconX
+                    size={22}
+                    stroke={3}
+                    color="var(--mantine-color-red-6)"
+                  />
+                </span>
+              )}
             </Box>
             <Text ff="heading" className={classes.cardText}>
               {text}

@@ -8,13 +8,12 @@ import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { UnitCard, UnitCardUnavailable } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
+import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
-import { PromissoryNotesStack } from "./PlayerArea/PromissoryNotesStack";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { CCPool } from "./PlayerArea/CCPool";
-// import { getTechData } from "../lookup/tech";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { cdnImage } from "../data/cdnImage";
@@ -23,13 +22,10 @@ import { lookupUnit } from "@/lookup/units";
 import { SC_COLORS, SC_NAMES } from "@/data/strategyCardColors";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
-import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
-// import { getPlanetData } from "@/lookup/planets";
 import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
-import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
-import { Commodities } from "./PlayerArea/Commodities/Commodities";
+import { PromissoryNote } from "./PlayerArea";
 
 type Props = {
   playerData: PlayerData;
@@ -51,7 +47,6 @@ export default function PlayerCardSidebar(props: Props) {
     planets,
     secretsScored,
     knownUnscoredSecrets,
-    // unitsOwned,
     leaders,
     stasisInfantry,
     unitCounts,
@@ -170,7 +165,8 @@ export default function PlayerCardSidebar(props: Props) {
         </Group>
 
         <Group gap={8} style={{ flexShrink: 0 }}>
-          {scs.map((scNumber, index) => {
+          {isSpeaker && <SpeakerToken isVisible />}
+          {scs.map((scNumber) => {
             const isExhausted =
               props.playerData.exhaustedSCs?.includes(scNumber);
             return (
@@ -179,7 +175,6 @@ export default function PlayerCardSidebar(props: Props) {
                 number={scNumber}
                 text={SC_NAMES[scNumber]}
                 color={SC_COLORS[scNumber]}
-                isSpeaker={index === 0 && isSpeaker} // Only show speaker on first card
                 isExhausted={isExhausted}
               />
             );
@@ -260,14 +255,17 @@ export default function PlayerCardSidebar(props: Props) {
             <Box mb={2}>
               <Leaders leaders={leaders} />
             </Box>
-            {relics.map((relicId, index) => (
-              <Relic key={index} relicId={relicId} />
-            ))}
-            <Box mt={2}>
-              <PromissoryNotesStack promissoryNotes={promissoryNotes} />
-            </Box>
           </Stack>
         </SimpleGrid>
+
+        <Group gap={4} mt="xs">
+          {relics.map((relicId, index) => {
+            return <Relic key={index} relicId={relicId} />;
+          })}
+          {promissoryNotes.map((pn) => (
+            <PromissoryNote promissoryNoteId={pn} />
+          ))}
+        </Group>
 
         <Box className={softStyles.softDivider} mt="xs" />
 
@@ -302,20 +300,18 @@ export default function PlayerCardSidebar(props: Props) {
             {unitPriorityOrder.map((asyncId) => {
               const bestUnit = lookupUnit(asyncId, faction, props.playerData);
               const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
-              if (!bestUnit) {
-                return (
-                  <UnitCardUnavailable
-                    key={`unavailable-${asyncId}`}
-                    asyncId={asyncId}
-                    color={color}
-                    lockedLabel="Not available"
-                  />
-                );
+
+              if (asyncId === "dn" && !bestUnit) {
+                debugger;
               }
+
+              console.log("bestUnit", bestUnit);
+              console.log("deployedCount", deployedCount);
+
               return (
                 <UnitCard
-                  key={bestUnit.id}
-                  unitId={bestUnit.id}
+                  key={bestUnit?.id}
+                  unitId={bestUnit?.id ?? ""}
                   color={color}
                   deployedCount={deployedCount}
                 />

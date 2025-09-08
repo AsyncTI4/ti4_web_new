@@ -12,75 +12,79 @@ type Props = {
   unscoredSecrets: number;
 };
 
+type SecretVariant = "scored" | "unscored";
+
+type SecretWithPopoverProps = {
+  secretId: string;
+  variant: SecretVariant;
+  isOpen: boolean;
+  onToggle: (opened: boolean) => void;
+  onClick: () => void;
+};
+
+function SecretWithPopover({
+  secretId,
+  variant,
+  isOpen,
+  onToggle,
+  onClick,
+}: SecretWithPopoverProps) {
+  return (
+    <SmoothPopover opened={isOpen} onChange={onToggle}>
+      <SmoothPopover.Target>
+        <div>
+          <ScoredSecret
+            secretId={secretId}
+            variant={variant}
+            onClick={onClick}
+          />
+        </div>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
+        <SecretObjectiveCard secretId={secretId} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
+  );
+}
+
 export function ScoredSecrets({
   secretsScored,
   knownUnscoredSecrets = {},
-  unscoredSecrets
+  unscoredSecrets,
 }: Props) {
   const [selectedSecret, setSelectedSecret] = useState<string | null>(null);
 
-  const hasSecrets =
-    Object.values(secretsScored).length > 0 ||
-    Object.values(knownUnscoredSecrets).length > 0 ||
-    unscoredSecrets > 0;
+  const scoredIds = Object.keys(secretsScored);
+  const knownUnscoredIds = Object.keys(knownUnscoredSecrets);
+  const unscored = Math.max(unscoredSecrets - knownUnscoredIds.length, 0);
 
   return (
     <Stack gap={2}>
-      {hasSecrets ? (
-        <>
-          {/* Scored Secrets */}
-          {Object.entries(secretsScored).map(([secretId, cardId]) => (
-            <SmoothPopover
-              key={`scored-${secretId}`}
-              opened={selectedSecret === secretId}
-              onChange={(opened) => setSelectedSecret(opened ? secretId : null)}
-            >
-              <SmoothPopover.Target>
-                <div>
-                  <ScoredSecret
-                    secretId={secretId}
-                    cardId={cardId}
-                    variant="scored"
-                    onClick={() => setSelectedSecret(secretId)}
-                  />
-                </div>
-              </SmoothPopover.Target>
-              <SmoothPopover.Dropdown p={0}>
-                <SecretObjectiveCard secretId={secretId} />
-              </SmoothPopover.Dropdown>
-            </SmoothPopover>
-          ))}
+      {scoredIds.map((secretId) => (
+        <SecretWithPopover
+          key={`scored-${secretId}`}
+          secretId={secretId}
+          variant="scored"
+          isOpen={selectedSecret === secretId}
+          onToggle={(opened) => setSelectedSecret(opened ? secretId : null)}
+          onClick={() => setSelectedSecret(secretId)}
+        />
+      ))}
 
-          {/* Unscored Secrets */}
-          {Object.entries(knownUnscoredSecrets).map(([secretId, cardId]) => (
-            <SmoothPopover
-              key={`unscored-${secretId}`}
-              opened={selectedSecret === secretId}
-              onChange={(opened) => setSelectedSecret(opened ? secretId : null)}
-            >
-              <SmoothPopover.Target>
-                <div>
-                  <ScoredSecret
-                    secretId={secretId}
-                    cardId={cardId}
-                    variant="unscored"
-                    onClick={() => setSelectedSecret(secretId)}
-                  />
-                </div>
-              </SmoothPopover.Target>
-              <SmoothPopover.Dropdown p={0}>
-                <SecretObjectiveCard secretId={secretId} />
-              </SmoothPopover.Dropdown>
-            </SmoothPopover>
-          ))}
-          
-          {Array.from({length: unscoredSecrets}, (_, index) => (
-            <UnscoredSecret key={index} />
-          ))}
-        </>
-      ) : (
-        <EmptyScoredSecretsPlaceholder />
-      )}
+      {knownUnscoredIds.map((secretId) => (
+        <SecretWithPopover
+          key={`unscored-${secretId}`}
+          secretId={secretId}
+          variant="unscored"
+          isOpen={selectedSecret === secretId}
+          onToggle={(opened) => setSelectedSecret(opened ? secretId : null)}
+          onClick={() => setSelectedSecret(secretId)}
+        />
+      ))}
+
+      {Array.from({ length: unscored }, (_, index) => (
+        <UnscoredSecret key={index} />
+      ))}
     </Stack>
   );
 }

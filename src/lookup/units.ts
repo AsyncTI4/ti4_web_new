@@ -82,6 +82,16 @@ export function lookupUnit(
 
   if (!unitsWithAsyncId) return null;
 
+  // First, if the player owns any unit with this asyncId, prefer that regardless of faction
+  if (ownedUnits && ownedUnits.length > 0) {
+    const ownedMatches = unitsWithAsyncId.filter((unit) =>
+      ownedUnits.includes(unit.id)
+    );
+    if (ownedMatches.length > 0) {
+      return preferUpgradedUnit(ownedMatches);
+    }
+  }
+
   // Try faction-specific units first
   const factionUnits = filterUnitsFromList(
     unitsWithAsyncId,

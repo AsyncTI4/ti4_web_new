@@ -58,38 +58,22 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 2px solid rgba(var(--bg-rgb), 0.9);
-  box-shadow: 0 1px 2px rgba(var(--bg-rgb), 0.22), 0 0 6px rgba(var(--bg-rgb), 0.14);
   position: relative;
 }
 
-.numberCircle::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(var(--bg-rgb), 0.25), inset 0 0 6px rgba(var(--bg-rgb), 0.08);
-  pointer-events: none;
-}
-
-.numberCircle::before {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: repeating-conic-gradient(
-    from 0deg,
-    rgba(var(--bg-rgb), 0.5) 0 8deg,
-    transparent 8deg 18deg
-  );
-  opacity: 0.15;
-  pointer-events: none;
-  filter: blur(0.3px);
+.exhaustedNumberCircle {
+  opacity: 0.5;
 }
 
 .numberText {
   font-size: 15px;
   font-weight: 700;
+}
+
+.exhaustedX {
+  position: absolute;
+  right: -12px;
+  bottom: -14px;
 }
 
 .cardText {

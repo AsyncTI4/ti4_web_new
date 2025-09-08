@@ -15,6 +15,7 @@ import { UnitCard, UnitCardUnavailable } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
+import { SpeakerToken } from "./PlayerArea/SpeakerToken";
 import { Neighbors } from "./PlayerArea/Neighbors";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
 import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
@@ -210,7 +211,8 @@ export default function PlayerCard2Mid(props: Props) {
 
   const StrategyAndSpeaker = (
     <Group gap="xs" align="center">
-      {scs.map((scNumber, index) => {
+      {isSpeaker && <SpeakerToken isVisible />}
+      {scs.map((scNumber) => {
         const isExhausted = exhaustedSCs?.includes(scNumber);
         return (
           <StrategyCardBannerCompact
@@ -218,7 +220,6 @@ export default function PlayerCard2Mid(props: Props) {
             number={scNumber}
             text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
             color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-            isSpeaker={index === 0 && isSpeaker}
             isExhausted={isExhausted}
           />
         );
