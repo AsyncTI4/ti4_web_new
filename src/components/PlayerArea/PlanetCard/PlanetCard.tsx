@@ -36,10 +36,12 @@ export function PlanetCard({
     return null;
   }
 
-  const planetType = planetData.planetType;
-  const traitIconKey = getTraitIconKey(planetData.planetType!);
-
   const attachmentModifiers = calculateAttachmentModifiers(resolvedAttachments);
+  const finalTraits = resolveFinalTraits(
+    planetData.planetType ?? "NONE",
+    attachmentModifiers.planetTypes
+  );
+  const cssTypeKey = resolveCssTypeKey(finalTraits);
   const allIcons = createAllIcons(
     planetData,
     attachmentModifiers,
@@ -58,7 +60,7 @@ export function PlanetCard({
     return (
       <div
         className={styles.legendaryWrapper}
-        style={getCSSVariables(planetType!) as React.CSSProperties}
+        style={getCSSVariables(cssTypeKey) as React.CSSProperties}
       >
         <SmoothPopover opened={opened} onChange={setOpened}>
           <SmoothPopover.Target>
@@ -104,10 +106,7 @@ export function PlanetCard({
               />
 
               <Box className={styles.iconContainer}>
-                <PlanetIcon
-                  planetData={planetData}
-                  traitIconKey={traitIconKey}
-                />
+                <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
               </Box>
               <Stack className={styles.bottomStack}>
                 <Group className={styles.nameGroup}>
@@ -170,7 +169,7 @@ export function PlanetCard({
             isLegendary && styles.legendary,
             isExhausted && styles.exhausted
           )}
-          style={getCSSVariables(planetType!) as React.CSSProperties}
+          style={getCSSVariables(cssTypeKey) as React.CSSProperties}
         >
           <Box className={styles.planetCardHighlight} />
 
@@ -190,7 +189,7 @@ export function PlanetCard({
           />
 
           <Box className={styles.iconContainer}>
-            <PlanetIcon planetData={planetData} traitIconKey={traitIconKey} />
+            <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
           </Box>
           <Stack className={styles.bottomStack}>
             <Group className={styles.nameGroup}>
@@ -245,11 +244,20 @@ function calculateAttachmentModifiers(attachments: string[]) {
             ...totals.techSpecialties,
             ...(attachmentData.techSpeciality || []),
           ],
+          planetTypes: [
+            ...totals.planetTypes,
+            ...((attachmentData as any).planetTypes || []),
+          ],
         };
       }
       return totals;
     },
-    { resources: 0, influence: 0, techSpecialties: [] as string[] }
+    {
+      resources: 0,
+      influence: 0,
+      techSpecialties: [] as string[],
+      planetTypes: [] as string[],
+    }
   );
 }
 
@@ -317,13 +325,11 @@ const VALID_TECH_SPECIALTIES = new Set([
   "warfare",
 ]);
 
-const getTraitIconKey = (
-  planetType: string
-): "cultural" | "hazardous" | "industrial" | null => {
+type SingleTrait = "cultural" | "hazardous" | "industrial";
+
+const getTraitIconKey = (planetType: string): SingleTrait | null => {
   const lowercase = planetType.toLowerCase();
-  return VALID_PLANET_TYPES.has(lowercase)
-    ? (lowercase as "cultural" | "hazardous" | "industrial")
-    : null;
+  return VALID_PLANET_TYPES.has(lowercase) ? (lowercase as SingleTrait) : null;
 };
 
 const getTechSkipIconKey = (techSpecialty: string): string | null => {
@@ -344,10 +350,10 @@ function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
 
 type PlanetIconProps = {
   planetData: any;
-  traitIconKey: any;
+  finalTraits: SingleTrait[];
 };
 
-function PlanetIcon({ planetData, traitIconKey }: PlanetIconProps) {
+function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
   if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
     return (
       <Image
@@ -356,5 +362,28 @@ function PlanetIcon({ planetData, traitIconKey }: PlanetIconProps) {
       />
     );
   }
-  return traitIconKey ? <PlanetTraitIcon trait={traitIconKey} /> : null;
+  if (!finalTraits || finalTraits.length === 0) return null;
+  if (finalTraits.length === 1) {
+    return <PlanetTraitIcon trait={finalTraits[0]} />;
+  }
+  return <PlanetTraitIcon traits={finalTraits} />;
+}
+
+function resolveFinalTraits(
+  planetType: string,
+  attachmentPlanetTypes: string[]
+): SingleTrait[] {
+  const base = getTraitIconKey(planetType);
+  const traits = new Set<SingleTrait>();
+  if (base) traits.add(base);
+  for (const t of attachmentPlanetTypes) {
+    const key = t.toLowerCase();
+    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
+  }
+  return Array.from(traits);
+}
+
+function resolveCssTypeKey(finalTraits: SingleTrait[]) {
+  if (finalTraits.length !== 1) return "default";
+  return finalTraits[0];
 }
