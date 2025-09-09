@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
-import { ReadyState } from "react-use-websocket";
+
+export enum SocketReadyState {
+  UNINSTANTIATED = -1,
+  CONNECTING = 0,
+  OPEN = 1,
+  CLOSING = 2,
+  CLOSED = 3,
+}
 
 export function useGameSocket(gameId: string, onRefresh: () => void) {
   const clientRef = useRef<Client | null>(null);
-  const [readyState, setReadyState] = useState<ReadyState>(
-    ReadyState.UNINSTANTIATED
+  const [readyState, setReadyState] = useState<SocketReadyState>(
+    SocketReadyState.UNINSTANTIATED
   );
   const [isReconnecting, setIsReconnecting] = useState(false);
 
@@ -27,11 +34,11 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
     });
 
     client.beforeConnect = () => {
-      setReadyState(ReadyState.CONNECTING);
+      setReadyState(SocketReadyState.CONNECTING);
     };
 
     client.onConnect = () => {
-      setReadyState(ReadyState.OPEN);
+      setReadyState(SocketReadyState.OPEN);
       setIsReconnecting(false);
       client.subscribe(`/topic/game/${gameId}`, (msg: any) => {
         if (msg.body === "refresh") onRefreshRef.current?.();
@@ -39,12 +46,12 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
     };
 
     client.onWebSocketClose = () => {
-      setReadyState(ReadyState.CLOSED);
+      setReadyState(SocketReadyState.CLOSED);
       setIsReconnecting(false);
     };
 
     client.onWebSocketError = () => {
-      setReadyState(ReadyState.CLOSED);
+      setReadyState(SocketReadyState.CLOSED);
       setIsReconnecting(false);
     };
 
@@ -62,11 +69,11 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
     if (!client) return;
     setIsReconnecting(true);
     // Restart the client to force a reconnect cycle
-    setReadyState(ReadyState.CLOSING);
+    setReadyState(SocketReadyState.CLOSING);
     client
       .deactivate()
       .finally(() => {
-        setReadyState(ReadyState.CONNECTING);
+        setReadyState(SocketReadyState.CONNECTING);
         client.activate();
       })
       .catch(() => {});

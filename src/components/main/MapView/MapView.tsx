@@ -16,7 +16,7 @@ import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
-import { ReadyState } from "react-use-websocket";
+import { SocketReadyState } from "@/hooks/useGameSocket";
 import { useSearchParams } from "react-router-dom";
 import { useMovementStore } from "@/utils/movementStore";
 import { useUser } from "@/hooks/useUser";
@@ -299,7 +299,7 @@ export function MapView({ gameId }: Props) {
         )}
 
         {/* Reconnect button when disconnected */}
-        {gameDataState?.readyState === ReadyState.CLOSED && (
+        {gameDataState?.readyState === SocketReadyState.CLOSED && (
           <Button
             variant="filled"
             size="md"
