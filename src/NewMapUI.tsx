@@ -19,7 +19,8 @@ import {
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
-import { HeaderMenuNew } from "./components/HeaderMenuNew";
+// import { HeaderMenuNew } from "./components/HeaderMenuNew";
+import { GamesBar } from "./components/shared/GamesBar";
 import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
@@ -95,12 +96,7 @@ function NewMapUIContent() {
         >
           <Logo />
           <div className="logo-divider" />
-          <HeaderMenuNew
-            mapId={gameId}
-            activeTabs={activeTabs}
-            changeTab={changeTab}
-            removeTab={removeTab} // eslint-disable-line @typescript-eslint/no-unused-vars
-          />
+          <GamesBar currentMapId={gameId} />
 
           <Button
             variant="light"

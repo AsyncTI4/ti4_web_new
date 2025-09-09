@@ -17,6 +17,7 @@ import {
 import { IconBrandDiscord } from "@tabler/icons-react";
 import Logo from "./components/Logo";
 import { DiscordLogin } from "./components/DiscordLogin";
+import { GamesBar } from "@/components/shared/GamesBar";
 import { Surface } from "./components/PlayerArea/Surface";
 
 import "./LandingPage.css";
@@ -65,22 +66,7 @@ export default function LandingPage() {
         <Group align="center" h="100%" px="sm" gap="sm">
           <Logo />
           <div className="logo-divider" />
-          <Anchor
-            to="/games"
-            size="sm"
-            fw={600}
-            underline="hover"
-            c="gray.4"
-            ml="sm"
-            mr="sm"
-            component={Link}
-          >
-            All Games
-          </Anchor>
-          <div style={{ flexGrow: 1 }} />
-          <Box visibleFrom="sm">
-            <DiscordLogin />
-          </Box>
+          <GamesBar />
         </Group>
       </AppShell.Header>
       <AppShell.Main>
