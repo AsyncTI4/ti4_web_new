@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlayerDataResponse } from "../data/types";
-import { useMapSocket } from "./useMapSocket";
+import { useGameSocket } from "./useGameSocket";
 import { useRef } from "react";
 import { config } from "@/config";
 
@@ -19,20 +19,22 @@ export function usePlayerDataSocket(gameId: string) {
   const queryClient = useQueryClient();
   const hasConnectedBefore = useRef(false);
 
-  const { readyState, reconnect, isReconnecting } = useMapSocket(gameId, () => {
-    if (!hasConnectedBefore.current) {
-      hasConnectedBefore.current = true;
-      return;
+  const { readyState, reconnect, isReconnecting } = useGameSocket(
+    gameId,
+    () => {
+      if (!hasConnectedBefore.current) {
+        hasConnectedBefore.current = true;
+        return;
+      }
+      console.log(
+        "Game refresh received, refetching player data and player hands..."
+      );
+      refetch();
+      queryClient.invalidateQueries({
+        queryKey: ["playerHand", gameId],
+      });
     }
-    console.log(
-      "Map update received, refetching player data and player hands..."
-    );
-    refetch();
-    // Also invalidate all player hand queries for this game
-    queryClient.invalidateQueries({
-      queryKey: ["playerHand", gameId],
-    });
-  });
+  );
 
   return {
     data,

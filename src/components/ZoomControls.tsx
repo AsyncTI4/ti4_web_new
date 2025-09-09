@@ -10,14 +10,48 @@ import {
 
 type Props = {
   zoomClass?: string;
+  // Back-compat props for legacy MapUI/ScrollMap
+  zoom?: number;
+  zoomFitToScreen?: boolean;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onZoomReset?: () => void;
+  onZoomScreenSize?: () => void;
+  hideFitToScreen?: boolean;
 };
-function ZoomControls({ zoomClass }: Props) {
-  const zoom = useAppStore((state) => state.zoomLevel);
-  const zoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
-  const onZoomIn = useAppStore((state) => state.handleZoomIn);
-  const onZoomOut = useAppStore((state) => state.handleZoomOut);
-  const onZoomReset = useAppStore((state) => state.handleZoomReset);
-  const onZoomScreenSize = useAppStore((state) => state.handleZoomScreenSize);
+
+function ZoomControls({
+  zoomClass,
+  zoom: zoomProp,
+  zoomFitToScreen: zoomFitToScreenProp,
+  onZoomIn: onZoomInProp,
+  onZoomOut: onZoomOutProp,
+  onZoomReset: onZoomResetProp,
+  onZoomScreenSize: onZoomScreenSizeProp,
+  hideFitToScreen = false,
+}: Props) {
+  // Store values (used by new MapView)
+  const storeZoom = useAppStore((state) => state.zoomLevel);
+  const storeZoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
+  const storeOnZoomIn = useAppStore((state) => state.handleZoomIn);
+  const storeOnZoomOut = useAppStore((state) => state.handleZoomOut);
+  const storeOnZoomReset = useAppStore((state) => state.handleZoomReset);
+  const storeOnZoomScreenSize = useAppStore(
+    (state) => state.handleZoomScreenSize
+  );
+
+  // Prefer explicit props when provided (legacy), otherwise fall back to store
+  const zoom = typeof zoomProp === "number" ? zoomProp : storeZoom;
+  // When hidden, treat fit-to-screen as off for control rendering
+  const zoomFitToScreen = hideFitToScreen
+    ? false
+    : typeof zoomFitToScreenProp === "boolean"
+      ? zoomFitToScreenProp
+      : storeZoomFitToScreen;
+  const onZoomIn = onZoomInProp ?? storeOnZoomIn;
+  const onZoomOut = onZoomOutProp ?? storeOnZoomOut;
+  const onZoomReset = onZoomResetProp ?? storeOnZoomReset;
+  const onZoomScreenSize = onZoomScreenSizeProp ?? storeOnZoomScreenSize;
 
   return (
     <Group className={zoomClass ?? "zoomContainer"} gap="xs">
@@ -41,17 +75,19 @@ function ZoomControls({ zoomClass }: Props) {
       <Button onClick={onZoomReset} size="compact-md">
         <IconZoomCancel size={18} />
       </Button>
-      <Button
-        onClick={onZoomScreenSize}
-        size="compact-md"
-        color={zoomFitToScreen ? "red" : "purple"}
-      >
-        {zoomFitToScreen ? (
-          <IconScreenShareOff size={18} />
-        ) : (
-          <IconScreenShare size={18} />
-        )}
-      </Button>
+      {!hideFitToScreen && (
+        <Button
+          onClick={onZoomScreenSize}
+          size="compact-md"
+          color={zoomFitToScreen ? "red" : "purple"}
+        >
+          {zoomFitToScreen ? (
+            <IconScreenShareOff size={18} />
+          ) : (
+            <IconScreenShare size={18} />
+          )}
+        </Button>
+      )}
     </Group>
   );
 }

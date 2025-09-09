@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMaps } from "./hooks/useMaps";
-import { useMapSocket } from "./hooks/useMapSocket";
 import { useTabManagement } from "./hooks/useTabManagement";
 import MapUI from "./components/MapUI";
-import { ReadyState } from "react-use-websocket";
+import { useMapImage } from "./hooks/useMapImage";
+import { useGameSocket } from "./hooks/useGameSocket";
 
 function GamePage() {
   const navigate = useNavigate();
@@ -13,14 +14,16 @@ function GamePage() {
     document.title = `${params.mapid} - | Async TI`;
   }, [params.mapid]);
 
-  const [imageUrl, setImageUrl] = useState(null);
-  useEffect(() => setImageUrl(null), [params.mapid]);
-
+  const gameId = params.mapid;
+  const { data: imageUrl, refetch, isFetching, isError } = useMapImage(gameId);
   const { activeTabs, changeTab, removeTab } = useTabManagement();
-  const { readyState, reconnect, isReconnecting } = useMapSocket(
-    params.mapid,
-    setImageUrl
-  );
+
+  const queryClient = useQueryClient();
+
+  useGameSocket(String(gameId), () => {
+    refetch();
+    queryClient.invalidateQueries({ queryKey: ["mapImage", gameId] });
+  });
 
   return (
     <MapUI
@@ -30,9 +33,10 @@ function GamePage() {
       removeTab={removeTab}
       imageUrl={imageUrl}
       navigate={navigate}
-      showRefresh={readyState === ReadyState.CLOSED}
-      reconnect={reconnect}
-      isReconnecting={isReconnecting}
+      showRefresh={false}
+      reconnect={() => refetch()}
+      isReconnecting={isFetching}
+      isError={isError}
     />
   );
 }

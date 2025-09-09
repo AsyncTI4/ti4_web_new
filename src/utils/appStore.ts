@@ -115,6 +115,7 @@ type AppStore = {
   activeArea: string | null;
   selectedFacion: string | null;
   activeUnit: string | null;
+  setZoomLevel: (level: number) => void;
   setSelectedArea: (area: string) => void;
   setActiveArea: (area: string) => void;
   setSelectedFaction: (faction: string) => void;
@@ -128,7 +129,7 @@ type AppStore = {
   handleZoomScreenSize: () => void;
 };
 
-/* 
+/*
 keeping this here from original zoom hook, but with it's use in the Map,
 neither imageNaturalWidth nor containerWidth was populated.
 it would always evaluate as 1, so     overlayZoom: zoomFitToScreen ? 1 : zoom
@@ -159,7 +160,7 @@ export const useAppStore = create<AppStore>((set) => {
 
   return {
     hoveredTile: "",
-    zoomLevel: 1,
+    zoomLevel: zoom,
     overlayZoom: zoomFitToScreen ? 1 : zoom,
     zoomFitToScreen,
     selectedArea: "",
@@ -226,45 +227,45 @@ export const useAppStore = create<AppStore>((set) => {
       })),
 
     handleZoomIn: () => {
-        const newIndex = Math.min(zoomIndex + 1, zoomLevels.length - 1);
-        changeZoomIndex(newIndex);
-        changeZoomFitToScreen(false);
-        set((state) => ({
-          ...state,
-          zoomLevel: zoomLevels[newIndex],
-          zoomFitToScreen: false,
-        }));
-        return newIndex;
-      },
+      const newIndex = Math.min(zoomIndex + 1, zoomLevels.length - 1);
+      changeZoomIndex(newIndex);
+      changeZoomFitToScreen(false);
+      set((state) => ({
+        ...state,
+        zoomLevel: zoomLevels[newIndex],
+        zoomFitToScreen: false,
+      }));
+      return newIndex;
+    },
     handleZoomOut: () => {
-        const newIndex = Math.max(zoomIndex - 1, 0);
-        changeZoomIndex(newIndex);
-        changeZoomFitToScreen(false);
-        set((state) => ({
-          ...state,
-          zoomLevel: zoomLevels[newIndex],
-          zoomFitToScreen: false,
-        }));
-        return newIndex;
-      },
+      const newIndex = Math.max(zoomIndex - 1, 0);
+      changeZoomIndex(newIndex);
+      changeZoomFitToScreen(false);
+      set((state) => ({
+        ...state,
+        zoomLevel: zoomLevels[newIndex],
+        zoomFitToScreen: false,
+      }));
+      return newIndex;
+    },
     handleZoomReset: () => {
-        const resetIndex = isMobileDevice() ? 0 : defaultZoomIndex;
-        changeZoomIndex(resetIndex);
-        changeZoomFitToScreen(false);
-        set((state) => ({
-          ...state,
-          zoomLevel: zoomLevels[resetIndex],
-          zoomFitToScreen: false,
-        }));
-      },
+      const resetIndex = isMobileDevice() ? 0 : defaultZoomIndex;
+      changeZoomIndex(resetIndex);
+      changeZoomFitToScreen(false);
+      set((state) => ({
+        ...state,
+        zoomLevel: zoomLevels[resetIndex],
+        zoomFitToScreen: false,
+      }));
+    },
     handleZoomScreenSize: () => {
-        changeZoomFitToScreen(!zoomFitToScreen);
-        set((state) => ({
-          ...state,
-          zoomFitToScreen: !zoomFitToScreen,
-        }));
-      },
-    };
+      changeZoomFitToScreen(!zoomFitToScreen);
+      set((state) => ({
+        ...state,
+        zoomFitToScreen: !zoomFitToScreen,
+      }));
+    },
+  };
 });
 
 export type Settings = {
@@ -405,7 +406,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       saveSettingsToStorage(newSettings as Settings);
       return { ...state, settings: newSettings };
     });
-    
+
   const toggleTechSkipsMode = () =>
     set((state) => {
       const newSettings = {

@@ -26,7 +26,9 @@ export default function FactionAbilitiesTechs({
 
       <div style={{ flex: 1 }} />
       {notResearchedFactionTechs?.length > 0 &&
-        notResearchedFactionTechs.map((techId) => <Tech techId={techId} />)}
+        notResearchedFactionTechs.map((techId) => (
+          <Tech techId={techId} key={techId} />
+        ))}
     </Group>
   );
 }

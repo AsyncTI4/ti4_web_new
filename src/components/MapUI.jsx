@@ -1,14 +1,9 @@
-import {
-  AppShell,
-  Button,
-  Group,
-  useMantineTheme,
-  Box,
-  Anchor,
-} from "@mantine/core";
+import { AppShell, Button, Group, useMantineTheme, Box } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
 import { useNavigate } from "react-router-dom";
+import { useRefreshMap } from "@/hooks/useRefreshMap";
+import MapImageErrorDialog from "@/components/MapImageErrorDialog";
 
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
@@ -26,9 +21,11 @@ function MapUI({
   reconnect,
   isReconnecting,
   showRefresh,
+  isError,
 }) {
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  const refreshMutation = useRefreshMap(params.mapid);
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -71,7 +68,9 @@ function MapUI({
               <DiscordLogin />
             </Box>
 
-            {!imageUrl ? (
+            {isError ? (
+              <MapImageErrorDialog gameId={params.mapid} />
+            ) : !imageUrl ? (
               <div
                 style={{
                   display: "flex",

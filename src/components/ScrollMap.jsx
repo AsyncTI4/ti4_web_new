@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
-import ZoomControls from "./ZoomControls";
+import ZoomControls from "@/components/ZoomControls";
+import { useAppStore } from "@/utils/appStore";
 import { useOverlayData } from "../hooks/useOverlayData";
 import { abilities } from "../data/abilities";
 import { publicObjectives } from "../data/publicObjectives";
@@ -14,9 +15,6 @@ import { cdnImage } from "../data/cdnImage";
 
 import "./ScrollMap.css";
 
-const defaultZoomIndex = 2;
-const zoomLevels = [0.4, 0.5, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2];
-
 export function ScrollMap({ gameId, imageUrl }) {
   const [imageNaturalWidth, setImageNaturalWidth] = useState(undefined);
   const {
@@ -26,15 +24,20 @@ export function ScrollMap({ gameId, imageUrl }) {
     handleMouseEnter,
     handleMouseLeave,
   } = useOverlay(gameId);
-  const {
-    zoom,
-    overlayZoom,
-    handleZoomIn,
-    handleZoomOut,
-    handleZoomReset,
-    handleZoomScreenSize,
-    zoomFitToScreen,
-  } = useZoom(imageNaturalWidth);
+  const zoom = useAppStore((s) => s.zoomLevel);
+  const zoomFitToScreen = useAppStore((s) => s.zoomFitToScreen);
+
+  // Compute overlay scale for fit-to-screen mode
+  const [containerWidth, setContainerWidth] = useState(() => window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setContainerWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const overlayZoom =
+    imageNaturalWidth && containerWidth
+      ? containerWidth / imageNaturalWidth
+      : 1;
 
   const isFirefox =
     typeof navigator !== "undefined" &&
@@ -42,16 +45,7 @@ export function ScrollMap({ gameId, imageUrl }) {
 
   return (
     <div style={{ width: "100%", position: "relative" }}>
-      {!isTouchDevice() && (
-        <ZoomControls
-          zoom={zoom}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onZoomReset={handleZoomReset}
-          onZoomScreenSize={handleZoomScreenSize}
-          zoomFitToScreen={zoomFitToScreen}
-        />
-      )}
+      {!isTouchDevice() && <ZoomControls />}
 
       {imageUrl ? (
         <img
@@ -59,8 +53,8 @@ export function ScrollMap({ gameId, imageUrl }) {
           src={imageUrl}
           onLoad={(e) => setImageNaturalWidth(e.target.naturalWidth)}
           style={{
-            ...(isFirefox ? {} : { zoom: zoom }),
-            [`-moz-transform`]: `scale(${zoom})`,
+            ...(isFirefox ? {} : { zoom: zoomFitToScreen ? 1 : zoom }),
+            [`-moz-transform`]: `scale(${zoomFitToScreen ? 1 : zoom})`,
             [`-moz-transform-origin`]: "top left",
             ...(zoomFitToScreen ? { width: "100%", height: "100%" } : {}),
           }}
@@ -152,12 +146,13 @@ export function ScrollMap({ gameId, imageUrl }) {
           ? cdnImage(dataModel.imageURL)
           : undefined;
 
+        const effectiveOverlayZoom = zoomFitToScreen ? overlayZoom : zoom;
         let style = {
-          left: `${(overlay.boxXYWH[0] - 1) * overlayZoom}px`,
-          top: `${(overlay.boxXYWH[1] - 1) * overlayZoom}px`,
-          width: `${(overlay.boxXYWH[2] + 2) * overlayZoom}px`,
-          height: `${(overlay.boxXYWH[3] + 2) * overlayZoom}px`,
-          border: `${overlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`,
+          left: `${(overlay.boxXYWH[0] - 1) * effectiveOverlayZoom}px`,
+          top: `${(overlay.boxXYWH[1] - 1) * effectiveOverlayZoom}px`,
+          width: `${(overlay.boxXYWH[2] + 2) * effectiveOverlayZoom}px`,
+          height: `${(overlay.boxXYWH[3] + 2) * effectiveOverlayZoom}px`,
+          border: `${effectiveOverlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`,
         };
 
         const deleteBorder = [

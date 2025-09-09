@@ -143,16 +143,30 @@ function TabView({
                   style={{ cursor: "pointer" }}
                   onClick={(event) => handleEditClick(tab, event)}
                 />
-                <Button
-                  size="compact-xs"
-                  color="red"
+                <Box
+                  component="span"
                   onClick={(event) => {
                     event.stopPropagation();
                     removeTab(tab);
                   }}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 22,
+                    padding: "0 6px",
+                    borderRadius: 4,
+                    background: "var(--mantine-color-red-6)",
+                    color: "var(--mantine-color-white)",
+                    fontSize: 12,
+                    lineHeight: "22px",
+                    cursor: "pointer",
+                    userSelect: "none",
+                  }}
+                  title="Close tab"
                 >
-                  x
-                </Button>
+                  ×
+                </Box>
               </Group>
             }
           >

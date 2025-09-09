@@ -130,12 +130,6 @@ export default function PlayerCard2Mid(props: Props) {
     nombox,
     exhaustedPlanetAbilities,
   } = props.playerData;
-
-  console.log(
-    "abilities",
-    props.playerData.faction,
-    props.playerData.abilities
-  );
   const promissoryNotes = promissoryNotesInPlayArea;
 
   const mahactEdict = props.playerData.mahactEdict || [];
@@ -342,7 +336,7 @@ export default function PlayerCard2Mid(props: Props) {
               return <Relic key={index} relicId={relicId} />;
             })}
             {promissoryNotes.map((pn) => (
-              <PromissoryNote promissoryNoteId={pn} />
+              <PromissoryNote promissoryNoteId={pn} key={pn} />
             ))}
           </Group>
         </Grid.Col>

@@ -5,7 +5,7 @@ import { Relic } from "./PlayerArea/Relic";
 import { Tech } from "./PlayerArea/Tech";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
-import { UnitCard, UnitCardUnavailable } from "./PlayerArea/UnitCard";
+import { UnitCard } from "./PlayerArea/UnitCard";
 import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
 import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
 import { SpeakerToken } from "./PlayerArea/SpeakerToken";
@@ -31,7 +31,22 @@ type Props = {
   playerData: PlayerData;
 };
 
+const unitPriorityOrder = [
+  "ws",
+  "fs",
+  "dn",
+  "cv",
+  "ca",
+  "dd",
+  "ff",
+  "mf",
+  "gf",
+  "sd",
+  "pd",
+];
+
 export default function PlayerCardSidebar(props: Props) {
+  const playerData = props.playerData;
   const {
     userName,
     faction,
@@ -52,49 +67,30 @@ export default function PlayerCardSidebar(props: Props) {
     unitCounts,
     abilities,
     notResearchedFactionTechs,
-  } = props.playerData;
+  } = playerData;
 
-  const scs = props.playerData.scs;
-  const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-  const exhaustedPlanetAbilities =
-    props.playerData.exhaustedPlanetAbilities || [];
-  // const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
+  const scs = playerData.scs;
+  const promissoryNotes = playerData.promissoryNotesInPlayArea || [];
+  const exhaustedPlanetAbilities = playerData.exhaustedPlanetAbilities || [];
 
-  // Create planet economics object from pre-calculated values
   const planetEconomics = {
     total: {
-      currentResources: props.playerData.resources,
-      totalResources: props.playerData.totResources,
-      currentInfluence: props.playerData.influence,
-      totalInfluence: props.playerData.totInfluence,
+      currentResources: playerData.resources,
+      totalResources: playerData.totResources,
+      currentInfluence: playerData.influence,
+      totalInfluence: playerData.totInfluence,
     },
     optimal: {
-      currentResources: props.playerData.optimalResources,
-      totalResources: props.playerData.totOptimalResources,
-      currentInfluence: props.playerData.optimalInfluence,
-      totalInfluence: props.playerData.totOptimalInfluence,
+      currentResources: playerData.optimalResources,
+      totalResources: playerData.totOptimalResources,
+      currentInfluence: playerData.optimalInfluence,
+      totalInfluence: playerData.totOptimalInfluence,
     },
     flex: {
-      currentFlex: props.playerData.flexValue,
-      totalFlex: props.playerData.totFlexValue,
+      currentFlex: playerData.flexValue,
+      totalFlex: playerData.totFlexValue,
     },
   };
-
-  // const FragmentsAndCCSection = <Group gap={0} align="stretch"></Group>;
-
-  const unitPriorityOrder = [
-    "ws",
-    "fs",
-    "dn",
-    "cv",
-    "ca",
-    "dd",
-    "ff",
-    "mf",
-    "gf",
-    "sd",
-    "pd",
-  ];
 
   return (
     <PlayerCardBox color={color} faction={faction}>
@@ -114,11 +110,7 @@ export default function PlayerCardSidebar(props: Props) {
             alt={faction}
             w={24}
             h={24}
-            style={{
-              filter:
-                "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-              flexShrink: 0,
-            }}
+            style={{ flexShrink: 0 }}
           />
           <Text
             span
@@ -126,7 +118,6 @@ export default function PlayerCardSidebar(props: Props) {
             size="sm"
             ff="heading"
             style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
               textOverflow: "ellipsis",
               overflow: "hidden",
               whiteSpace: "nowrap",
@@ -144,7 +135,6 @@ export default function PlayerCardSidebar(props: Props) {
             c="white"
             ff="heading"
             style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
               flexShrink: 1, // Faction has medium priority for truncation
               textOverflow: "ellipsis",
               overflow: "hidden",
@@ -207,7 +197,6 @@ export default function PlayerCardSidebar(props: Props) {
           })}
         </Group>
         <div style={{ flex: 1 }} />
-
         {notResearchedFactionTechs?.length > 0 && (
           <Group gap={2} style={{ flexShrink: 1 }}>
             {notResearchedFactionTechs.map((techId, index) => (

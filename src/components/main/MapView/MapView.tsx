@@ -26,6 +26,7 @@ import { MovementModeBox } from "./MovementModeBox";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
+// Removed: TILE_WIDTH import used previously by fit-to-screen logic
 
 const MAP_PADDING = 200;
 
@@ -170,25 +171,16 @@ export function MapView({ gameId }: Props) {
     return entry ? entry.split(":")[1] : null;
   }, [gameData, draft.targetPositionId]);
 
-  // Name is resolved inside MovementModeBox when rendering
-
-  // Movement mode banner actions
   const handleResetMovement = useCallback(() => {
-    // Clear only displacement; preserve targetPositionId
     useMovementStore.setState((prev) => ({
       draft: { ...prev.draft, origins: {} },
     }));
-    // no-op now that summary modal is removed
   }, []);
 
   const handleCancelMovement = useCallback(() => {
-    // Nuke everything including target
     clearAll();
-    // no-op now that summary modal is removed
     setOriginModalOpen(false);
   }, [clearAll]);
-
-  // Confirm handled directly inside MovementModeBox
 
   return (
     <Box className={classes.mapContainer}>
@@ -221,7 +213,7 @@ export function MapView({ gameId }: Props) {
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >
-          <ZoomControls zoomClass="" />
+          <ZoomControls zoomClass="" hideFitToScreen />
         </div>
 
         {/* Tile-based rendering */}
