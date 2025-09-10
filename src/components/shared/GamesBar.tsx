@@ -20,3 +20,4 @@ export function GamesBar({ currentMapId }: GamesBarProps) {
 }
 
 export default GamesBar;
+

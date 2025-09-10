@@ -1,5 +1,5 @@
 export * from "../General/UnpickedSCs";
-export * from "./CardPool";
+export * from "../General/CardPool";
 export * from "../General/FactionsInGame";
 export * from "../General/LawsInPlay";
 export * from "./PublicObjectives";

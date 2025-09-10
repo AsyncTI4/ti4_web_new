@@ -64,13 +64,7 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
         {/* Other Objectives (Gray) */}
         {objectives.customObjectives.length > 0 && (
           <Box>
-            <Caption
-              size="sm"
-              className={`${styles.stageTitle} ${styles.otherTitle}`}
-            >
-              Other
-            </Caption>
-            <Flex maw={"auto"} justify="center" align="center" gap="xs">
+            <Flex gap="xs">
               {objectives.customObjectives.map((objective) => (
                 <ExpandedObjectiveCard
                   key={objective.key}

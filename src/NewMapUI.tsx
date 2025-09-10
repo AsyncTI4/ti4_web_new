@@ -19,7 +19,6 @@ import {
 import Logo from "./components/Logo";
 // @ts-ignore
 import { DiscordLogin } from "./components/DiscordLogin";
-// import { HeaderMenuNew } from "./components/HeaderMenuNew";
 import { GamesBar } from "./components/shared/GamesBar";
 import "./components/ScrollMap.css";
 // @ts-ignore
@@ -36,30 +35,28 @@ import {
   useGameData as useGameContext,
   useGameDataState,
 } from "./hooks/useGameContext";
-import PlayerCard2Mid from "./components/PlayerCard2Mid";
-import { MapView } from "./components/main/MapView";
+import PlayerCard from "./components/PlayerCard";
 import { TabsControls } from "./components/main/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
 import GeneralArea from "./components/General/GeneralArea";
+import { PannableMapView } from "./components/main/MapView/PannableMapView";
+import { MapView } from "./components/main/MapView";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
 export const MAP_PADDING = 200;
 
-function NewMapUIContent() {
+function NewMapUIContent({ pannable }: Props) {
   const data = useGameContext();
   const gameDataState = useGameDataState();
+  const isError = gameDataState?.isError || false;
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
   const { activeTabs, changeTab, removeTab } = useTabManagementV2();
-
-  // const draft = useMovementStore((s) => s.draft);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
-
-  const isError = gameDataState?.isError || false;
   const versionSchema = data?.versionSchema;
 
   useEffect(() => {
@@ -150,7 +147,11 @@ function NewMapUIContent() {
 
             {/* Map Tab */}
             <Tabs.Panel value="map" h="calc(100% - 40px)">
-              <MapView gameId={gameId} />
+              {pannable ? (
+                <PannableMapView gameId={gameId} />
+              ) : (
+                <MapView gameId={gameId} />
+              )}
             </Tabs.Panel>
 
             {/* Player Areas Tab */}
@@ -174,10 +175,7 @@ function NewMapUIContent() {
                     {data.playerData
                       .filter((player) => player.faction !== "null")
                       .map((player) => (
-                        <PlayerCard2Mid
-                          key={player.color}
-                          playerData={player}
-                        />
+                        <PlayerCard key={player.color} playerData={player} />
                       ))}
                   </SimpleGrid>
                 )}
@@ -212,12 +210,15 @@ function NewMapUIContent() {
   );
 }
 
-export function NewMapUI() {
+type Props = {
+  pannable?: boolean;
+};
+
+export function NewMapUI({ pannable }: Props) {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
   const themeName = useSettingsStore((state) => state.settings.themeName);
 
-  // Ensure portals (rendered under document.body) receive the theme variables
   useEffect(() => {
     const themeClasses = [
       "theme-bluetheme",
@@ -239,11 +240,12 @@ export function NewMapUI() {
       themeClasses.forEach((cls) => body.classList.remove(cls));
     };
   }, [themeName]);
+
   return (
     <SettingsProvider>
       <GameContextProvider gameId={gameId}>
         <div className={`theme-${themeName}`}>
-          <NewMapUIContent />
+          <NewMapUIContent pannable={pannable} />
         </div>
       </GameContextProvider>
     </SettingsProvider>

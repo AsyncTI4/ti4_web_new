@@ -25,7 +25,6 @@ import FrogGamePage from "./FrogGamePage";
 import LandingPage from "./LandingPage";
 import MapTogglePage from "./MapTogglePage";
 import { SystemTilePage } from "./components/SystemTilePage/SystemTilePage";
-import A11yMapPage from "./A11yMapPage";
 
 const queryClient = new QueryClient();
 
@@ -46,10 +45,12 @@ const router = createBrowserRouter([
     path: "/game/:mapid/newui",
     element: <MapTogglePage />,
   },
+
   {
-    path: "/game/:mapid/a11y",
-    element: <A11yMapPage />,
+    path: "/game/:mapid/pannable",
+    element: <MapTogglePage pannable />,
   },
+
   {
     path: "/froggame/:discordid/:mapid",
     element: <FrogGamePage />,

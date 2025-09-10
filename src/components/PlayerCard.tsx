@@ -37,28 +37,8 @@ import { Commodities } from "./PlayerArea/Commodities/Commodities";
 import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
 import FactionAbilitiesTechs from "./PlayerArea/FactionAbilitiesTechs";
 import { Nombox } from "./Nombox";
+import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 
-// Strategy card names and colors mapping
-const SC_NAMES = {
-  1: "LEADERSHIP",
-  2: "DIPLOMACY",
-  3: "POLITICS",
-  4: "CONSTRUCTION",
-  5: "TRADE",
-  6: "WARFARE",
-  7: "TECHNOLOGY",
-  8: "IMPERIAL",
-};
-const SC_COLORS = {
-  1: "red",
-  2: "orange",
-  3: "yellow",
-  4: "green",
-  5: "teal",
-  6: "cyan",
-  7: "blue",
-  8: "purple",
-};
 type Props = {
   playerData: PlayerData;
 };
@@ -77,7 +57,7 @@ const unitPriorityOrder = [
   "pd", // PDS
 ];
 
-export default function PlayerCard2Mid(props: Props) {
+export default function PlayerCard(props: Props) {
   const {
     userName,
     faction,
@@ -98,7 +78,6 @@ export default function PlayerCard2Mid(props: Props) {
     planets,
     secretsScored,
     knownUnscoredSecrets,
-    // unitsOwned,
     leaders,
     scs = [],
     promissoryNotesInPlayArea = [],
@@ -203,24 +182,6 @@ export default function PlayerCard2Mid(props: Props) {
     </SimpleGrid>
   );
 
-  const StrategyAndSpeaker = (
-    <Group gap="xs" align="center">
-      {isSpeaker && <SpeakerToken isVisible />}
-      {scs.map((scNumber) => {
-        const isExhausted = exhaustedSCs?.includes(scNumber);
-        return (
-          <StrategyCardBannerCompact
-            key={scNumber}
-            number={scNumber}
-            text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-            color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-            isExhausted={isExhausted}
-          />
-        );
-      })}
-    </Group>
-  );
-
   return (
     <PlayerCardBox
       color={color}
@@ -278,7 +239,23 @@ export default function PlayerCard2Mid(props: Props) {
             <Neighbors neighbors={neighbors || []} />
           </Box>
         </Group>
-        <Box>{StrategyAndSpeaker}</Box>
+        <Box>
+          <Group gap="xs" align="center">
+            {isSpeaker && <SpeakerToken isVisible />}
+            {scs.map((scNumber) => {
+              const isExhausted = exhaustedSCs?.includes(scNumber);
+              return (
+                <StrategyCardBannerCompact
+                  key={scNumber}
+                  number={scNumber}
+                  text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                  color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                  isExhausted={isExhausted}
+                />
+              );
+            })}
+          </Group>
+        </Box>
       </Group>
 
       <FactionAbilitiesTechs
@@ -296,7 +273,7 @@ export default function PlayerCard2Mid(props: Props) {
           <Stack gap={6}>
             <Group gap={4}>
               <PlayerCardCounts pnCount={pnCount || 0} acCount={acCount || 0} />
-              <FadedDivider orientation="vertical" />
+
               <CCPool
                 tacticalCC={tacticalCC}
                 fleetCC={fleetCC}
@@ -357,61 +334,13 @@ export default function PlayerCard2Mid(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={12}>
-          <Stack gap={12}>
-            <Group gap="xs">
-              {/* Ghost Wormhole Reinforcements */}
-              {!!ghostWormholesReinf?.length && (
-                <Group gap="xs" justify="center">
-                  {ghostWormholesReinf.map((wormholeId, index) => (
-                    <Image
-                      key={index}
-                      src={cdnImage(`/tokens/${getTokenImagePath(wormholeId)}`)}
-                      alt={wormholeId}
-                      w={40}
-                      h={40}
-                      style={{
-                        filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
-                      }}
-                    />
-                  ))}
-                </Group>
-              )}
-
-              {/* Sleeper Token Reinforcements */}
-              {sleeperTokensReinf !== undefined && sleeperTokensReinf > 0 && (
-                <Group gap="xs" align="center" justify="center">
-                  <Image
-                    src={cdnImage(`/tokens/${getTokenImagePath("sleeper")}`)}
-                    alt="sleeper"
-                    w={40}
-                    h={40}
-                    style={{
-                      filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))",
-                    }}
-                  />
-                  <Text
-                    size="lg"
-                    fw={700}
-                    c="white"
-                    style={{
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    {sleeperTokensReinf}
-                  </Text>
-                </Group>
-              )}
-            </Group>
-
-            {/* Units + Army Stats */}
-            <Flex align="flex-start" justify="flex-start" gap="md" wrap="wrap">
-              <Box style={{ flex: 1 }}>{UnitsArea}</Box>
-
-              <Box>
-                <ArmyStats stats={armyStats} />
-              </Box>
-            </Flex>
-          </Stack>
+          {/* Units + Army Stats */}
+          <Flex align="flex-start" justify="flex-start" gap="md" wrap="wrap">
+            <Box style={{ flex: 1 }}>{UnitsArea}</Box>
+            <Box>
+              <ArmyStats stats={armyStats} />
+            </Box>
+          </Flex>
         </Grid.Col>
         <FadedDivider orientation="horizontal" />
         <Grid.Col span={12}>

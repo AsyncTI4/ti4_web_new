@@ -30,13 +30,13 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Chip accent={accentColor} onClick={() => setOpened((o) => !o)}>
-          <Group gap={8}>
+          <Group gap={8} className={styles.leaderGroup}>
             {emojiPath ? (
               <div className={styles.leaderImageContainer}>
                 <Image src={emojiPath} className={styles.leaderImage} />
               </div>
             ) : undefined}
-            <Stack gap={0}>
+            <Stack gap={0} className={styles.textContainer}>
               <Text
                 className={`${styles.leaderName} ${shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive}`}
               >

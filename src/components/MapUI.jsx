@@ -2,9 +2,7 @@ import { AppShell, Button, Group, useMantineTheme, Box } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
 import { useNavigate } from "react-router-dom";
-import { useRefreshMap } from "@/hooks/useRefreshMap";
 import MapImageErrorDialog from "@/components/MapImageErrorDialog";
-
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
 import Logo from "./Logo";
@@ -25,7 +23,6 @@ function MapUI({
 }) {
   const theme = useMantineTheme();
   const navigate = useNavigate();
-  const refreshMutation = useRefreshMap(params.mapid);
 
   return (
     <AppShell header={{ height: 60 }}>

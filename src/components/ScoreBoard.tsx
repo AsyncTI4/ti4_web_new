@@ -14,12 +14,10 @@ function ScoreBoard() {
       <ScoreTracker playerData={playerData} vpsToWin={vpsToWin} />
 
       <Stack gap="xl">
-        <Box>
-          <ExpandedPublicObjectives
-            objectives={objectives}
-            playerData={playerData}
-          />
-        </Box>
+        <ExpandedPublicObjectives
+          objectives={objectives}
+          playerData={playerData}
+        />
 
         <PlayerScoreSummary playerData={playerData} objectives={objectives} />
       </Stack>

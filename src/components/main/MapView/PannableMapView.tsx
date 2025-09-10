@@ -1,18 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Group, Modal, Stack, Text } from "@mantine/core";
+import { Box, Button, Grid, Group, Modal, Stack, Text } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
-import { LeftSidebar } from "@/components/main/LeftSidebar";
-import { DragHandle } from "@/components/DragHandle";
-import { PanelToggleButton } from "@/components/PanelToggleButton";
-import { RightSidebar } from "@/components/main/RightSidebar";
 import { MapTile } from "@/components/Map/MapTile";
 import { PathVisualization } from "@/components/PathVisualization";
 import { MapPlanetDetailsCard } from "@/components/main/MapPlanetDetailsCard";
 import { MapUnitDetailsCard } from "@/components/main/MapUnitDetailsCard";
-import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
-import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
@@ -26,14 +20,19 @@ import { MovementModeBox } from "./MovementModeBox";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
+import PlayerCard from "@/components/PlayerCard";
+import { ScoreTracker } from "@/components/Objectives";
+import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
+import { PlayerScoreSummary } from "@/components/Objectives/PlayerScoreSummary/PlayerScoreSummary";
+import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 
-const MAP_PADDING = 200;
+const MAP_PADDING = 0;
 
 type Props = {
   gameId: string;
 };
 
-export function MapView({ gameId }: Props) {
+export function PannableMapView({ gameId }: Props) {
   const gameData = useGameData();
   const gameDataState = useGameDataState();
   const [searchParams] = useSearchParams();
@@ -41,13 +40,8 @@ export function MapView({ gameId }: Props) {
 
   const {
     selectedArea,
-    activeArea,
-    selectedFaction,
-    activeUnit,
     tooltipUnit,
     handleAreaSelect,
-    handleAreaMouseEnter,
-    handleAreaMouseLeave,
     handleMouseEnter,
     handleMouseLeave,
     handleMouseDown,
@@ -79,16 +73,12 @@ export function MapView({ gameId }: Props) {
 
   const handleUnitMouseLeave = () => handleMouseLeave();
 
-  const { sidebarWidth, isDragging, handleSidebarMouseDown } =
-    useSidebarDragHandle(30);
-
   const zoom = useAppStore((state) => state.zoomLevel);
   const handleZoomIn = useAppStore((state) => state.handleZoomIn);
   const handleZoomOut = useAppStore((state) => state.handleZoomOut);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
-  // Movement mode handling
   const targetPositionParam =
     searchParams.get("targetPositionId") ||
     searchParams.get("targetSystem") ||
@@ -98,7 +88,6 @@ export function MapView({ gameId }: Props) {
   const clearAll = useMovementStore((s) => s.clearAll);
 
   const [showAuthModal, setShowAuthModal] = useState(false);
-  // Summary modal removed; confirm happens inside MovementModeBox
   const [originModalOpen, setOriginModalOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [activeOrigin, setActiveOrigin] = useState<{
@@ -120,11 +109,6 @@ export function MapView({ gameId }: Props) {
     mapTiles: gameData?.mapTiles || [],
   });
 
-  const { mapContainerRef } = useMapScrollPosition({
-    zoom,
-    gameId,
-  });
-
   useKeyboardShortcuts({
     toggleOverlays: handlers.toggleOverlays,
     toggleTechSkipsMode: handlers.toggleTechSkipsMode,
@@ -141,12 +125,6 @@ export function MapView({ gameId }: Props) {
     onAreaSelect: handleAreaSelect,
     selectedArea,
   });
-
-  const showLeftPanelToggle = useMemo(() => {
-    if (!gameData) return false;
-    if (gameData.objectives) return true;
-    return !!(gameData.lawsInPlay && gameData.lawsInPlay.length > 0);
-  }, [gameData]);
 
   // Initialize movement mode from URL param
   useEffect(() => {
@@ -181,37 +159,37 @@ export function MapView({ gameId }: Props) {
     setOriginModalOpen(false);
   }, [clearAll]);
 
+  // Compute content bounds so the absolute-positioned tiles live inside a
+  // container with real width/height, allowing following elements to flow below
+  const contentSize = useMemo(() => {
+    const tiles = gameData?.mapTiles || [];
+    if (!tiles.length) return { width: 0, height: 0 };
+
+    let maxRight = 0;
+    let maxBottom = 0;
+
+    for (const t of tiles) {
+      const right = t.properties.x + TILE_WIDTH;
+      const bottom = t.properties.y + TILE_HEIGHT;
+      if (right > maxRight) maxRight = right;
+      if (bottom > maxBottom) maxBottom = bottom;
+    }
+
+    // Add right/bottom padding. Left/top padding are applied via style.top/left below.
+    return {
+      width: maxRight + MAP_PADDING,
+      height: maxBottom + MAP_PADDING + 180,
+    };
+  }, [gameData?.mapTiles]);
+
   return (
     <Box className={classes.mapContainer}>
       {/* Map Container - Full Width */}
       <Box
-        ref={mapContainerRef}
         className={`dragscroll ${classes.mapArea}`}
-        style={{
-          width: settings.rightPanelCollapsed
-            ? "100%"
-            : `${100 - sidebarWidth}%`,
-        }}
+        style={{ width: "100%" }}
       >
-        <LeftSidebar />
-
-        {showLeftPanelToggle && (
-          <PanelToggleButton
-            isCollapsed={settings.leftPanelCollapsed}
-            onClick={handlers.toggleLeftPanelCollapsed}
-            position="left"
-          />
-        )}
-
-        <div
-          className={classes.zoomControlsDynamic}
-          style={{
-            right: settings.rightPanelCollapsed
-              ? "35px"
-              : `calc(${sidebarWidth}vw + 35px)`,
-            transition: isDragging ? "none" : "right 0.1s ease",
-          }}
-        >
+        <div className={classes.zoomControlsDynamic} style={{ right: "35px" }}>
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
 
@@ -226,6 +204,8 @@ export function MapView({ gameId }: Props) {
                 MozTransformOrigin: "top left",
                 top: MAP_PADDING / zoom,
                 left: MAP_PADDING / zoom,
+                width: contentSize.width,
+                height: contentSize.height,
               }}
             >
               {/* Render stat tiles for each faction */}
@@ -290,12 +270,52 @@ export function MapView({ gameId }: Props) {
                 onPathIndexChange={handlePathIndexChange}
               />
             )}
-
             <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
-
             <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
           </>
         )}
+
+        {/* Scoreboard summary area */}
+        {gameData && (
+          <Box
+            style={{
+              width: contentSize.width * zoom,
+              minWidth: "max(100vw, 100%)",
+              padding: "12px 8px",
+            }}
+          >
+            <Stack gap="md">
+              <ScoreTracker
+                playerData={gameData.playerData}
+                vpsToWin={gameData.vpsToWin || 10}
+              />
+
+              <ExpandedPublicObjectives
+                objectives={gameData.objectives}
+                playerData={gameData.playerData}
+              />
+            </Stack>
+          </Box>
+        )}
+
+        {/* Player cards */}
+        <Grid
+          gutter="md"
+          columns={12}
+          style={{
+            width: contentSize.width * zoom,
+            minWidth: "max(100vw, 100%)",
+            padding: "12px 8px",
+          }}
+        >
+          {gameData?.playerData
+            .filter((p) => p.faction !== "null")
+            .map((player) => (
+              <Grid.Col key={player.color} span={4}>
+                <PlayerCard playerData={player} />
+              </Grid.Col>
+            ))}
+        </Grid>
 
         {/* Reconnect button when disconnected */}
         {gameDataState?.readyState === SocketReadyState.CLOSED && (
@@ -318,20 +338,6 @@ export function MapView({ gameId }: Props) {
           </Button>
         )}
       </Box>
-
-      <DragHandle onMouseDown={handleSidebarMouseDown} />
-
-      <PanelToggleButton
-        isCollapsed={settings.rightPanelCollapsed}
-        onClick={handlers.toggleRightPanelCollapsed}
-        position="right"
-        style={{
-          right: settings.rightPanelCollapsed
-            ? "10px"
-            : `calc(${sidebarWidth}vw + 14px)`,
-          transition: isDragging ? "none" : "right 0.1s ease",
-        }}
-      />
 
       {/* Movement Mode Box (bottom-left) */}
       {draft.targetPositionId && (
@@ -403,19 +409,6 @@ export function MapView({ gameId }: Props) {
           originPosition={activeOrigin.position}
         />
       )}
-
-      <RightSidebar
-        isRightPanelCollapsed={settings.rightPanelCollapsed}
-        sidebarWidth={sidebarWidth}
-        selectedArea={selectedArea}
-        activeArea={activeArea}
-        selectedFaction={selectedFaction}
-        activeUnit={activeUnit}
-        onAreaSelect={handleAreaSelect}
-        onAreaMouseEnter={handleAreaMouseEnter}
-        onAreaMouseLeave={handleAreaMouseLeave}
-        gameId={gameId}
-      />
     </Box>
   );
 }
