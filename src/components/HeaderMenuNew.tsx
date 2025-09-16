@@ -357,7 +357,7 @@ function DropdownView({
         combobox.closeDropdown();
         changeTab(val);
       }}
-      zIndex={20000}
+      styles={{ dropdown: { zIndex: 'var(--z-header-menu)' } }}
     >
       <Combobox.Target>
         {(() => {

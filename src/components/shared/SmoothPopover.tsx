@@ -1,12 +1,11 @@
 import { Popover, PopoverProps } from "@mantine/core";
 import { ReactNode } from "react";
 
-interface SmoothPopoverProps
-  extends Omit<PopoverProps, "transitionProps" | "styles"> {
+type SmoothPopoverProps = Omit<PopoverProps, "transitionProps" | "styles"> & {
   children: ReactNode;
   opened: boolean;
   onChange: (opened: boolean) => void;
-}
+};
 
 function SmoothPopoverBase({
   children,
@@ -23,7 +22,6 @@ function SmoothPopoverBase({
       withArrow={withArrow}
       shadow={shadow}
       opened={opened}
-      zIndex={10000}
       onChange={onChange}
       transitionProps={{
         transition: {
@@ -42,6 +40,8 @@ function SmoothPopoverBase({
           border: "none",
         },
       }}
+      // Hardcoded to match --z-smooth-popover; see src/utils/zIndexVariables.css
+      zIndex={3500}
       {...props}
     >
       {children}

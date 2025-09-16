@@ -7,6 +7,7 @@ import {
   SPLAY_OFFSET_Y,
   entityBaseZIndex,
 } from "../../utils/unitPositioning";
+import { getUnitZIndex } from "../../utils/zIndexLayers";
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/lookup/colors";
 import { useRef, useCallback } from "react";
@@ -41,7 +42,7 @@ export function UnitStack({
   const y = stack.y;
   const sustained = stack.sustained;
   const entityType = stack.entityType;
-  const baseZIndex = entityBaseZIndex(unitType);;
+  const baseZIndex = getUnitZIndex(unitType, 0);
   const hoverTimeoutRef = useRef<number | null>(null);;
 
   // Look up unit data to get bgDecalPath

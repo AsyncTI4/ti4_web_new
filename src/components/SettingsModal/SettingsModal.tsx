@@ -17,7 +17,8 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
       title="Settings"
       size="md"
       centered
-      zIndex={2000}
+      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+      zIndex={3500}
     >
       <Stack gap="md">
         <div>

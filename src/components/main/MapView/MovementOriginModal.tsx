@@ -403,7 +403,8 @@ export function MovementOriginModal({
       onClose={onClose}
       title={`Move from ${originPosition}`}
       size={920}
-      zIndex={22000}
+      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+      zIndex={3500}
       classNames={{
         content: classes.modalContent,
         header: classes.modalHeader,

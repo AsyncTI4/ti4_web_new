@@ -28,7 +28,7 @@ export function PdsOverlayLayer({ ringPosition, dominantPdsFaction }: Props) {
         left: `${TILE_WIDTH / 2}px`,
         top: `${TILE_HEIGHT / 2}px`,
         transform: "translate(-50%, -50%)",
-        zIndex: 19000,
+        zIndex: 'var(--z-pds-overlay)',
       }}
     />
   );

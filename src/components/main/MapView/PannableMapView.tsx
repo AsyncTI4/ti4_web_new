@@ -23,7 +23,6 @@ import ZoomControls from "@/components/ZoomControls";
 import PlayerCard from "@/components/PlayerCard";
 import { ScoreTracker } from "@/components/Objectives";
 import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
-import { PlayerScoreSummary } from "@/components/Objectives/PlayerScoreSummary/PlayerScoreSummary";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 
 const MAP_PADDING = 0;
@@ -354,7 +353,8 @@ export function PannableMapView({ gameId }: Props) {
         opened={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         title="Login Required"
-        zIndex={22000}
+        // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+        zIndex={3500}
       >
         <Stack>
           <Text size="sm">
@@ -376,6 +376,7 @@ export function PannableMapView({ gameId }: Props) {
         onClose={() => setShowSuccessModal(false)}
         title="Movement Posted"
         size="lg"
+        // Hardcoded above all map UI; related to src/utils/zIndexVariables.css
         zIndex={22000}
         classNames={{
           content: classes.detailsModalContent,

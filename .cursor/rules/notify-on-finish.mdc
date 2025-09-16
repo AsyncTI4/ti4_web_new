@@ -1,0 +1,10 @@
+---
+description: Play sound when agent completes its task
+globs:
+  - "**"
+alwaysApply: true
+---
+
+- After completing any agent-run workflow, execute the following command:
+
+afplay /System/Library/Sounds/Glass.aiff

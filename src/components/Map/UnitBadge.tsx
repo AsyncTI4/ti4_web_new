@@ -1,6 +1,6 @@
 import React from "react";
 import { cdnImage } from "@/data/cdnImage";
-import { entityBaseZIndex } from "../../utils/unitPositioning";
+import { getUnitZIndex } from "../../utils/zIndexLayers";
 import classes from "./UnitBadge.module.css";
 
 interface UnitBadgeProps {
@@ -26,7 +26,7 @@ export function UnitBadge({
   onMouseLeave,
   onMouseDown,
 }: UnitBadgeProps) {
-  const baseZIndex = entityBaseZIndex(unitType);
+  const baseZIndex = getUnitZIndex(unitType, 0);
   const mergedStyle = {
     ...style,
     zIndex: baseZIndex,

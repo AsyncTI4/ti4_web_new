@@ -29,7 +29,7 @@ export const DistanceDisplay = ({
         top: "100px",
         left: "50%",
         transform: "translateX(-50%)",
-        zIndex: 1001,
+        zIndex: 'var(--z-distance-display)',
         backgroundColor: "rgba(0, 0, 0, 0.8)",
         color: "white",
         padding: "12px 24px",

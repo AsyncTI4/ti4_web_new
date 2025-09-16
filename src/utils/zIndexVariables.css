@@ -1,0 +1,61 @@
+/**
+ * Z-Index CSS Custom Properties
+ * 
+ * This file defines all z-index values as CSS custom properties
+ * to ensure consistency across the application.
+ */
+
+:root {
+  /* MAP STUFF - Map tiles, units, tokens, positioning (0-999) */
+  --z-anomaly-overlay: 1;
+  --z-planet-circle: 1;
+  --z-ring-position: 10;
+  --z-control-token: 50;
+  
+  /* Game Units Layer (100-999) */
+  --z-unit-base: 100;
+  
+  /* Unit type priorities - actual TI4 unit types */
+  --z-gf: 100;    /* Ground Forces */
+  --z-ff: 110;    /* Fighters */
+  --z-mf: 120;    /* Mechs */
+  --z-sd: 130;    /* Space Docks */
+  --z-pd: 140;    /* PDS */
+  --z-dd: 150;    /* Destroyers */
+  --z-cv: 160;    /* Carriers */
+  --z-ca: 170;    /* Cruisers */
+  --z-dn: 180;    /* Dreadnoughts */
+  --z-fs: 190;    /* Flagships */
+  --z-ws: 200;    /* War Suns */
+  
+  /* MAP OVERLAYS - Map overlays, path visualization, PDS overlay (1000-1999) */
+  --z-pds-overlay: 1100;
+  --z-path-visualization: 1200;
+  --z-path-visualization-hover: 1201;
+  --z-interactive-overlay: 1300;
+  
+  /* MAP UI - Left sidebar, faction tab bar, scrollbar, controls (2000-2999) */
+  --z-left-sidebar: 2000;
+  --z-faction-tab-bar: 2010;
+  --z-player-card: 2001;
+  --z-drag-handle: 2100;
+  --z-drag-handle-active: 2101;
+  --z-panel-toggle-button: 2200;
+  --z-zoom-controls: 2300;
+  --z-movement-banner: 2400;
+  --z-movement-box: 2400;
+  
+  /* MODALS - Settings, shortcuts, movement modals, popovers (3000-3999) */
+  --z-settings-modal: 3000;
+  --z-keyboard-shortcuts-modal: 3100;
+  --z-movement-origin-modal: 3200;
+  --z-header-menu: 3300;
+  --z-smooth-popover: 3500;
+  
+  /* TOOLTIPS/POPOVERS - Hover tooltips, popovers (4000-4999) */
+  --z-map-unit-details: 4100;
+  --z-map-planet-details: 4100;
+  --z-distance-display: 4200;
+  
+  /* CRITICAL UI - Emergency UI (5000+) */
+}

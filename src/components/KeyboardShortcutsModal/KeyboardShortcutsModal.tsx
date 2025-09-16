@@ -54,7 +54,8 @@ export function KeyboardShortcutsModal({
       }
       size="lg"
       centered
-      zIndex={17000}
+      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+      zIndex={3500}
     >
       <Box className={classes.content}>
         <Grid>

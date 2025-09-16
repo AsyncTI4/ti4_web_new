@@ -18,7 +18,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: var(--z-anomaly-overlay);
   pointer-events: none;
 }
 
@@ -76,7 +76,7 @@
     0 -2px 0 black,
     0 2px 0 black;
   pointer-events: none;
-  z-index: 10;
+  z-index: var(--z-ring-position);
 }
 
 .ringPositionBlue {
@@ -93,7 +93,7 @@
   background-color: transparent;
   transform: translate(-50%, -50%);
   pointer-events: auto;
-  z-index: 1;
+  z-index: var(--z-planet-circle);
 }
 
 /* Overlay that sits above all tile content when in movement mode */
@@ -101,7 +101,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 20000; /* higher than tokens/units and PDS overlay */
+  z-index: var(--z-interactive-overlay);
   pointer-events: auto;
   cursor: pointer;
 }

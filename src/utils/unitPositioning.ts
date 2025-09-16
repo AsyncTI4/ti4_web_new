@@ -7,6 +7,7 @@ import {
   EntityData,
   PlanetEntityData,
 } from "@/data/types";
+import { getUnitZIndex } from './zIndexLayers';
 import {
   HexagonVertex,
   squareIntersectsCircle,
@@ -275,12 +276,7 @@ export const updateCostMap = ({
 };
 
 export const entityBaseZIndex = (entityType: string) => {
-  // Calculate base z-index based on entity type priority (higher priority = higher z-index)
-  const entityTypePriorityIndex = entityZStackPriority.indexOf(entityType);
-  const baseEntityZIndex =
-    1000 + (entityIdPriority.length - entityTypePriorityIndex) * 10;
-
-  return baseEntityZIndex;
+  return getUnitZIndex(entityType, 0);
 };
 
 /**

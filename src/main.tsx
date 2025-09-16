@@ -2,6 +2,7 @@ import "@mantine/core/styles.css";
 import "./styles/fonts.css";
 import "./styles/gradients.css";
 import "./styles/theme.css";
+import "./utils/zIndexVariables.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";

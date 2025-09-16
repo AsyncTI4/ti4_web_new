@@ -348,7 +348,8 @@ export function MapView({ gameId }: Props) {
         opened={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         title="Login Required"
-        zIndex={22000}
+        // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+        zIndex={3500}
       >
         <Stack>
           <Text size="sm">
@@ -370,7 +371,8 @@ export function MapView({ gameId }: Props) {
         onClose={() => setShowSuccessModal(false)}
         title="Movement Posted"
         size="lg"
-        zIndex={22000}
+        // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
+        zIndex={3500}
         classNames={{
           content: classes.detailsModalContent,
           header: classes.detailsModalHeader,

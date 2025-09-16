@@ -38,7 +38,7 @@ export function MapUnitDetailsCard({ tooltipUnit }: Props) {
         position: "absolute",
         left: `${scaledX + MAP_PADDING}px`,
         top: `${scaledY + MAP_PADDING - 25}px`,
-        zIndex: 10000000,
+        zIndex: 'var(--z-map-unit-details)',
         pointerEvents: "none",
         transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
       }}
