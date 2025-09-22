@@ -4,13 +4,10 @@ import { ReactNode } from "react";
 import { cdnImage } from "../data/cdnImage";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
+import { PlayerData } from "@/data/types";
 
 type FactionTabBarProps = {
-  playerData: Array<{
-    color: string;
-    faction: string;
-    active?: boolean;
-  }>;
+  playerData: PlayerData[];
   selectedArea: AreaType;
   activeArea: AreaType;
   onAreaSelect: (area: AreaType) => void;
@@ -96,6 +93,11 @@ export function FactionTabBar({
               selectedArea?.type === "faction" &&
               selectedArea.faction === player.faction;
             const isActivePlayer = player.active;
+            const factionUrl = (
+              player.factionImageType === "DISCORD"
+                ? player.factionImage!
+                : cdnImage(`/factions/${player.faction}.png`)
+            )!;
 
             return (
               <Box
@@ -120,7 +122,7 @@ export function FactionTabBar({
                 }`}
               >
                 <Image
-                  src={cdnImage(`/factions/${player.faction}.png`)}
+                  src={factionUrl}
                   alt={player.faction}
                   w={24}
                   h={24}

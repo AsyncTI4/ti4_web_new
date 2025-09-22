@@ -1,15 +1,50 @@
-import { Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { Leader } from "../Leader";
+import { CompactLeader } from "../Leader/CompactLeader";
 import { Leader as LeaderType } from "@/data/types";
+// no need for cdnImage here; faction icon is rendered inside CompactLeader
 
 type Props = {
   leaders: LeaderType[];
+  faction?: string;
 };
 
-export function Leaders({ leaders }: Props) {
+export function Leaders({ leaders, faction }: Props) {
+  const isNomad = faction === "nomad";
+  const nomadAgentIds = [
+    "nomadagentartuno",
+    "nomadagentmercer",
+    "nomadagentthundarian",
+  ];
+  const nomadAgents = isNomad
+    ? leaders.filter((l) => l.type === "agent" && nomadAgentIds.includes(l.id))
+    : [];
+  const otherLeaders = isNomad
+    ? leaders.filter(
+        (l) => !(l.type === "agent" && nomadAgentIds.includes(l.id))
+      )
+    : leaders;
+
   return (
     <Stack gap={4} style={{ overflow: "hidden" }}>
-      {leaders.map((leader, index) => (
+      {isNomad && nomadAgents.length > 0 && (
+        <Group p={2} gap={6} wrap="nowrap" align="center">
+          {nomadAgentIds
+            .map((id) => nomadAgents.find((l) => l.id === id))
+            .filter(Boolean)
+            .map((leader, index) => (
+              <CompactLeader
+                key={`nomad-compact-${leader!.id}-${index}`}
+                id={leader!.id}
+                exhausted={leader!.exhausted ?? false}
+                locked={leader!.locked ?? false}
+                active={leader!.active ?? false}
+              />
+            ))}
+        </Group>
+      )}
+
+      {otherLeaders.map((leader, index) => (
         <Leader
           key={index}
           id={leader.id}

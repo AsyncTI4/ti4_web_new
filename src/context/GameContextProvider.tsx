@@ -27,6 +27,8 @@ import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 import { useMovementStore } from "@/utils/movementStore";
 import { applyDisplacementToPlayerData } from "@/utils/displacement";
 
+export type FactionImageMap = Record<string, { image: string; type: string }>;
+
 export type FactionColorMap = {
   [key: string]: FactionColorData;
 };
@@ -46,6 +48,7 @@ type GameData = {
   mapTiles: MapTileType[];
   tilePositions: any;
   factionColorMap: FactionColorMap;
+  factionImageMap: FactionImageMap;
   tilesWithPds: Set<string>;
   dominantPdsFaction: Record<
     string,
@@ -55,6 +58,10 @@ type GameData = {
       count: number;
       expected: number;
     }
+  >;
+  pdsByTile: Record<
+    string,
+    { faction: string; color: string; count: number; expected: number }[]
   >;
   planetIdToPlanetTile: Record<string, PlanetMapTile>;
 
@@ -172,7 +179,10 @@ export function buildGameContext(
     optimizedColors,
     accessibleColors
   );
-  const { tilesWithPds, dominantPdsFaction } = computePdsData(
+
+  const factionImageMap = buildFactionImageMap(playerData);
+
+  const { tilesWithPds, dominantPdsFaction, pdsByTile } = computePdsData(
     data,
     factionToColor
   );
@@ -193,10 +203,11 @@ export function buildGameContext(
   return {
     mapTiles,
     tilePositions: data.tilePositions,
-
     factionColorMap,
+    factionImageMap,
     tilesWithPds,
     dominantPdsFaction,
+    pdsByTile,
     planetIdToPlanetTile,
     playerData: overriddenPlayerData,
     objectives: data.objectives,
@@ -212,6 +223,17 @@ export function buildGameContext(
     statTilePositions: data.statTilePositions,
     calculatedTilePositions,
   };
+}
+
+function buildFactionImageMap(playerData: PlayerData[]): FactionImageMap {
+  return playerData.reduce((acc, player) => {
+    acc[player.faction] = {
+      image: player.factionImage ?? "",
+      type: player.factionImageType ?? "",
+    };
+
+    return acc;
+  }, {} as FactionImageMap);
 }
 
 function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
@@ -410,6 +432,7 @@ function buildPlanetMapTile(
     controller: planetData.controlledBy,
     exhausted: allExhaustedPlanets.has(planetName),
     commodities: planetData.commodities,
+    planetaryShield: planetData.planetaryShield,
     properties: {
       x,
       y,
@@ -549,8 +572,13 @@ function computePdsData(
     string,
     { faction: string; color: string; count: number; expected: number }
   > = {};
+  const pdsByTile: Record<
+    string,
+    { faction: string; color: string; count: number; expected: number }[]
+  > = {};
 
-  if (!data.tileUnitData) return { tilesWithPds, dominantPdsFaction };
+  if (!data.tileUnitData)
+    return { tilesWithPds, dominantPdsFaction, pdsByTile };
 
   Object.entries(data.tileUnitData).forEach(
     ([position, tileData]: [string, any]) => {
@@ -563,8 +591,23 @@ function computePdsData(
       let dominantCount = 0;
       let dominantExpectedValue = 0;
 
+      const allForTile: {
+        faction: string;
+        color: string;
+        count: number;
+        expected: number;
+      }[] = [];
+
       Object.entries(tileData.pds).forEach(
         ([faction, pdsData]: [string, any]) => {
+          if (factionToColor[faction]) {
+            allForTile.push({
+              faction,
+              color: factionToColor[faction],
+              count: pdsData.count,
+              expected: pdsData.expected,
+            });
+          }
           if (pdsData.expected > highestExpected) {
             highestExpected = pdsData.expected;
             dominantFaction = faction;
@@ -573,6 +616,16 @@ function computePdsData(
           }
         }
       );
+
+      if (allForTile.length > 0) {
+        // sort by expected desc, then count desc
+        allForTile.sort((a, b) =>
+          b.expected !== a.expected
+            ? b.expected - a.expected
+            : b.count - a.count
+        );
+        pdsByTile[position] = allForTile;
+      }
 
       if (dominantFaction && factionToColor[dominantFaction]) {
         dominantPdsFaction[position] = {
@@ -585,5 +638,5 @@ function computePdsData(
     }
   );
 
-  return { tilesWithPds, dominantPdsFaction };
+  return { tilesWithPds, dominantPdsFaction, pdsByTile };
 }

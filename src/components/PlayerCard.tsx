@@ -28,7 +28,6 @@ import { ArmyStats, PromissoryNote } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { PlayerCardBox } from "./PlayerCardBox";
-import { getTokenImagePath } from "@/lookup/tokens";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { lookupUnit } from "@/lookup/units";
 import { Relic } from "./PlayerArea/Relic/Relic";
@@ -38,6 +37,7 @@ import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
 import FactionAbilitiesTechs from "./PlayerArea/FactionAbilitiesTechs";
 import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
+import { getFactionImage } from "@/lookup/factions";
 
 type Props = {
   playerData: PlayerData;
@@ -61,6 +61,8 @@ export default function PlayerCard(props: Props) {
   const {
     userName,
     faction,
+    factionImage,
+    factionImageType,
     color,
     tacticalCC,
     fleetCC,
@@ -104,11 +106,15 @@ export default function PlayerCard(props: Props) {
     pnCount,
     acCount,
     debtTokens,
-    ghostWormholesReinf,
-    sleeperTokensReinf,
+    exhaustedRelics,
     nombox,
     exhaustedPlanetAbilities,
+    notResearchedFactionTechs,
+    factionTechs,
+    abilities,
   } = props.playerData;
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
+
   const promissoryNotes = promissoryNotesInPlayArea;
 
   const mahactEdict = props.playerData.mahactEdict || [];
@@ -194,7 +200,7 @@ export default function PlayerCard(props: Props) {
       <Group justify="space-between" align="center" mb="md">
         <Group gap={8} px={4} align="center">
           <Image
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={faction}
             w={32}
             h={32}
@@ -259,8 +265,9 @@ export default function PlayerCard(props: Props) {
       </Group>
 
       <FactionAbilitiesTechs
-        abilities={props.playerData.abilities}
-        notResearchedFactionTechs={props.playerData.notResearchedFactionTechs}
+        abilities={abilities}
+        factionTechs={factionTechs}
+        notResearchedFactionTechs={notResearchedFactionTechs}
       />
 
       <Grid gutter="md" columns={12}>
@@ -292,8 +299,8 @@ export default function PlayerCard(props: Props) {
           }}
         >
           <Stack gap={2}>
-            <Box hiddenFrom="sm">
-              <Leaders leaders={leaders} />
+            <Box hiddenFrom="sm" style={{ minHeight: "175px" }}>
+              <Leaders leaders={leaders} faction={faction} />
             </Box>
             <ScoredSecrets
               secretsScored={secretsScored}
@@ -304,13 +311,22 @@ export default function PlayerCard(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={4} visibleFrom="sm">
-          <Leaders leaders={leaders} />
+          <Box style={{ minHeight: "175px" }}>
+            <Leaders leaders={leaders} faction={faction} />
+          </Box>
         </Grid.Col>
 
         <Grid.Col py={0}>
-          <Group gap={4}>
+          <Group gap={4} style={{ minHeight: "30px" }}>
             {relics.map((relicId, index) => {
-              return <Relic key={index} relicId={relicId} />;
+              const isExhausted = exhaustedRelics?.includes(relicId);
+              return (
+                <Relic
+                  key={index}
+                  relicId={relicId}
+                  isExhausted={!!isExhausted}
+                />
+              );
             })}
             {promissoryNotes.map((pn) => (
               <PromissoryNote promissoryNoteId={pn} key={pn} />
@@ -329,6 +345,7 @@ export default function PlayerCard(props: Props) {
               techs={techs}
               layout="grid"
               exhaustedTechs={props.playerData.exhaustedTechs}
+              minSlotsPerColor={4}
             />
           </Grid>
         </Grid.Col>

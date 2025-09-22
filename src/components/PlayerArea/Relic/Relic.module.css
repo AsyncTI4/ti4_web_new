@@ -5,6 +5,26 @@
   flex-shrink: 0;
 }
 
+.iconWrapper {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.exhaustedIcon {
+  filter: saturate(1.2) hue-rotate(-8deg) brightness(0.9) contrast(1.1);
+}
+
+.exhaustedX {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 .textContainer {
   overflow: hidden;
   text-overflow: ellipsis;

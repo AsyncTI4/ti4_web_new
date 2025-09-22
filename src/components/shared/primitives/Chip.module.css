@@ -66,6 +66,19 @@
     --ribbon-color: var(--gd-orange);
 }
 
+/* Darker, deeper orange accent for exhausted relics */
+.bloodOrange {
+    /* RGB triplet chosen to be darker and richer than standard orange */
+    --background-color: 191, 71, 0;
+    --border-color: rgba(191, 71, 0, 0.5);
+    --hover-border-color: rgba(191, 71, 0, 0.9);
+    --hover-shadow-1: rgba(191, 71, 0, 0.45);
+    --hover-shadow-2: rgba(191, 71, 0, 0.28);
+    --ribbon-color: rgb(191, 71, 0);
+}
+
+.bloodOrange.chip { background: rgba(var(--background-color), 0.20); }
+
 .purple {
     --background-color: var(--gd-purple);
     --border-color: rgba(var(--gd-purple), 0.18);

@@ -1,0 +1,39 @@
+.compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--mantine-radius-md);
+  padding: 2px; /* small padding so green border/background is more visible */
+  border: 1px solid transparent;
+  background: rgba(var(--gd-green), 0.08);
+  box-sizing: border-box;
+  flex: 1 1 33.333%;
+  min-width: 0;
+}
+
+.active {
+  /* green accent visible */
+  border-color: rgba(var(--gd-green), 0.5);
+  background: rgba(var(--gd-green), 0.14);
+}
+
+.inactive {
+  border-color: rgba(var(--gd-gray), 0.35);
+  background: rgba(var(--gd-gray), 0.10);
+}
+
+.imageFrame {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mantine-radius-md);
+  width: 100%;
+  height: 47px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}

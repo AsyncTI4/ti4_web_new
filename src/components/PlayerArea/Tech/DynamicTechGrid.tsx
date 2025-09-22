@@ -9,6 +9,8 @@ type Props = {
   techs?: string[];
   layout?: "grid" | "simple";
   exhaustedTechs?: string[];
+  /** Optional: ensure at least N slots per tech color by adding placeholders (PhantomTech). */
+  minSlotsPerColor?: number;
 };
 const techCategories: TechCategory[] = [
   "PROPULSION",
@@ -21,6 +23,7 @@ export function DynamicTechGrid({
   techs = [],
   layout = "simple",
   exhaustedTechs = [],
+  minSlotsPerColor,
 }: Props) {
   const renderTechColumn = (
     techType: string,
@@ -42,13 +45,24 @@ export function DynamicTechGrid({
 
     const techElements = sortedTechs.map((techId, index) => (
       <Tech
-        key={index}
+        key={`tech-${techId}-${index}`}
         techId={techId}
         isExhausted={exhaustedTechs.includes(techId)}
       />
     ));
 
-    return [...techElements];
+    if (!minSlotsPerColor || techElements.length >= minSlotsPerColor) {
+      return techElements;
+    }
+
+    const placeholders: JSX.Element[] = [];
+    for (let i = techElements.length; i < minSlotsPerColor; i++) {
+      placeholders.push(
+        <PhantomTech key={`phantom-${techType}-${i}`} techType={techType} />
+      );
+    }
+
+    return [...techElements, ...placeholders];
   };
 
   const categoriesWithTechs = techCategories.map((techType) => ({

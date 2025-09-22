@@ -8,6 +8,8 @@ type PdsControlTokenProps = {
   count: number;
   expected: number;
   style?: React.CSSProperties;
+  compact?: boolean;
+  dominant?: boolean;
 };
 
 export const PdsControlToken = ({
@@ -16,10 +18,16 @@ export const PdsControlToken = ({
   count,
   expected,
   style,
+  compact = false,
+  dominant = false,
 }: PdsControlTokenProps) => {
   return (
     <div style={style}>
-      <div className={styles.container}>
+      <div
+        className={`${styles.container} ${compact ? styles.compact : ""} ${
+          dominant ? styles.dominant : ""
+        }`}
+      >
         <img
           src={cdnImage(`/command_token/control_${colorAlias}.png`)}
           alt={`${faction} control token`}
@@ -32,11 +40,12 @@ export const PdsControlToken = ({
             className={styles.factionIcon}
           />
         )}
-        {/* PDS Information Overlay */}
-        <div className={styles.pdsOverlay}>
-          <div className={styles.pdsCount}>{count} PDS</div>
-          <div className={styles.pdsHits}>{expected} hits</div>
-        </div>
+        {dominant && (
+          <div className={styles.pdsOverlay}>
+            <div className={styles.pdsCount}>{count} PDS</div>
+            <div className={styles.pdsHits}>{expected} hits</div>
+          </div>
+        )}
       </div>
     </div>
   );

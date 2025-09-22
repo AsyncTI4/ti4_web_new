@@ -1,0 +1,37 @@
+.title {
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.versionTitle {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.versionBadge {
+  margin-left: var(--mantine-spacing-xs);
+}
+
+.body {
+  color: var(--mantine-color-text);
+}
+
+.section {
+  margin-top: var(--mantine-spacing-sm);
+}
+
+.sectionTitle {
+  color: var(--mantine-color-dimmed);
+  font-weight: 600;
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.list {
+  padding-left: var(--mantine-spacing-lg);
+}
+
+.listItem {
+  line-height: 1.5;
+}
+
+

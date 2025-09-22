@@ -1,7 +1,6 @@
 import { Stack, Image, Divider } from "@mantine/core";
 import { leaders } from "../../../data/leaders";
 import { DetailsCard } from "@/components/shared/DetailsCard";
-import { getLeaderEmojiUrl } from "@/lookup/leaders";
 
 type Props = {
   leaderId: string;
@@ -13,9 +12,11 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   if (!leaderData) return null;
 
   const renderLeaderIcon = () => {
-    const emojiPath = getLeaderEmojiUrl(leaderData);
-    if (!emojiPath) return <></>;
-    return <Image src={emojiPath} w={60} h={80} radius="50%" />;
+    const showLeaderImage =
+      leaderData.source === "base" || leaderData.source === "pok";
+
+    if (!showLeaderImage) return <></>;
+    return <Image src={`/leaders/${leaderId}.webp`} />;
   };
 
   return (

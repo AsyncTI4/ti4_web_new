@@ -1,0 +1,6 @@
+.icon {
+  z-index: var(--z-planet-circle);
+  pointer-events: none;
+}
+
+

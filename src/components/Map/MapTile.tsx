@@ -13,6 +13,7 @@ import { CommodityIndicatorsLayer } from "./layers/CommodityIndicatorsLayer";
 import { ProductionIconLayer } from "./layers/ProductionIconLayer";
 import { CommandCounterLayer } from "./layers/CommandCounterLayer";
 import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
+import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 
@@ -117,7 +118,6 @@ export const MapTile = React.memo<Props>(
               return mapTile.hasTechSkips ? 1.0 : 0.2;
             }
 
-            
             if (planetTypesMode) {
               return mapTile.planets.length > 0 ? 1.0 : 0.2;
             }
@@ -173,6 +173,7 @@ export const MapTile = React.memo<Props>(
             onPlanetMouseEnter={onPlanetMouseEnter}
             onPlanetMouseLeave={onPlanetMouseLeave}
           />
+          <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
           <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
           <CommodityIndicatorsLayer systemId={systemId} mapTile={mapTile} />
           <ProductionIconLayer
@@ -211,6 +212,7 @@ export const MapTile = React.memo<Props>(
             <PdsOverlayLayer
               ringPosition={ringPosition}
               dominantPdsFaction={gameData?.dominantPdsFaction}
+              pdsByTile={gameData?.pdsByTile}
             />
           )}
 

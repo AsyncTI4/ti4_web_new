@@ -1,7 +1,7 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
 import { LawInPlay } from "../../data/types";
-import { getTextColor } from "../../lookup/colors";
+import { getTextColor, findColorData } from "../../lookup/colors";
 
 interface UnitProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   unitType: string;
@@ -35,9 +35,12 @@ export const Unit: React.FC<UnitProps> = ({
   const shouldShowArticlesOverlay = isArticlesOfWarActive && isMech;
   const shouldShowSchematicsOverlay = isSchematicsActive && isWarSun;
 
-  // Determine token color based on text color
   const textColor = getTextColor(colorAlias);
   const tokenSuffix = textColor.toLowerCase() === "white" ? "_wht" : "_blk";
+  const urlColor =
+    unitType === "monument" || unitType === "lady"
+      ? findColorData(colorAlias)?.name || colorAlias
+      : colorAlias;
 
   return (
     <>
@@ -53,7 +56,7 @@ export const Unit: React.FC<UnitProps> = ({
         />
       )}
       <img
-        src={cdnImage(`/units/${colorAlias}_${unitType}.png`)}
+        src={cdnImage(`/units/${urlColor}_${unitType}.png`)}
         alt={defaultAlt}
         {...imageProps}
       />

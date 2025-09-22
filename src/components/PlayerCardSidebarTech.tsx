@@ -1,26 +1,33 @@
 import { Group, Text, Stack, Box, Image, SimpleGrid } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
-import { Tech } from "./PlayerArea/Tech";
 import { UnitCard } from "./PlayerArea/UnitCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { PlayerData } from "../data/types";
-import { cdnImage } from "../data/cdnImage";
 import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
+import { getFactionImage } from "@/lookup/factions";
 
 type Props = {
   playerData: PlayerData;
 };
 
 export default function PlayerCardSidebarTech(props: Props) {
-  const { userName, faction, color, techs, unitsOwned } = props.playerData;
+  const {
+    userName,
+    faction,
+    color,
+    techs,
+    unitsOwned,
+    factionImage,
+    factionImageType,
+  } = props.playerData;
   const upgradedUnits = unitsOwned.filter(isUnitUpgradedOrWarSun);
-
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
   return (
     <PlayerCardBox color={color} faction={faction}>
       <Group gap={4} style={{ minWidth: 0, flex: 1 }} mb={6}>
         <Image
-          src={cdnImage(`/factions/${faction}.png`)}
+          src={factionUrl}
           alt={faction}
           w={24}
           h={24}

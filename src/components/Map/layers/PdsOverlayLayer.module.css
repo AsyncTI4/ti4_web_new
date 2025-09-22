@@ -1,0 +1,23 @@
+.wrapper {
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  align-items: center;
+  justify-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 6px;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+@media (min-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+

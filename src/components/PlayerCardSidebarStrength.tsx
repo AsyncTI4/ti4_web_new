@@ -3,10 +3,9 @@ import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { PlayerData } from "../data/types";
-import { cdnImage } from "../data/cdnImage";
+import { getFactionImage } from "@/lookup/factions";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { ArmyStats } from "./PlayerArea";
-import { getPlanetData } from "@/lookup/planets";
 import layout from "./PlayerCardSidebarStrength.module.css";
 
 type Props = {
@@ -25,7 +24,10 @@ export default function PlayerCardSidebarStrength(props: Props) {
     groundArmyHealth,
     spaceArmyRes,
     groundArmyRes,
+    factionImage,
+    factionImageType,
   } = props.playerData;
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
@@ -64,7 +66,7 @@ export default function PlayerCardSidebarStrength(props: Props) {
         <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
           {/* Small circular faction icon */}
           <Image
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={faction}
             w={24}
             h={24}

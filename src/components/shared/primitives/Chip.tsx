@@ -9,7 +9,7 @@ type Props = Omit<BoxProps, "color" | "onClick"> & {
   children?: React.ReactNode;
   ribbon?: boolean;
   accentLine?: boolean;
-  accent?: ColorKey | "grey" | "gray" | "deepRed";
+  accent?: ColorKey | "grey" | "gray" | "deepRed" | "bloodOrange";
   strong?: boolean;
   /** When true, shows an absolute-positioned full title on hover */
   revealFullTitleOnHover?: boolean;

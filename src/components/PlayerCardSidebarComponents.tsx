@@ -9,7 +9,7 @@ import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import { cdnImage } from "../data/cdnImage";
+import { getFactionImage } from "@/lookup/factions";
 
 type Props = {
   playerData: PlayerData;
@@ -24,13 +24,14 @@ export default function PlayerCardSidebarComponents(props: Props) {
     fleetCC,
     strategicCC,
     fragments,
-
     relics,
     secretsScored,
     leaders,
+    factionImage,
+    factionImageType,
   } = props.playerData;
   const promissoryNotes = props.playerData.promissoryNotesInPlayArea || [];
-
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
   return (
     <PlayerCardBox color={color} faction={faction}>
       <Group
@@ -46,7 +47,7 @@ export default function PlayerCardSidebarComponents(props: Props) {
         <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
           {/* Small circular faction icon */}
           <Image
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={faction}
             w={24}
             h={24}
@@ -124,9 +125,15 @@ export default function PlayerCardSidebarComponents(props: Props) {
           />
         </Stack>
         <Stack gap={8}>
-          <Leaders leaders={leaders} />
+          <Leaders leaders={leaders} faction={faction} />
           {relics.map((relicId, index) => (
-            <Relic key={index} relicId={relicId} />
+            <Relic
+              key={index}
+              relicId={relicId}
+              isExhausted={
+                props.playerData.exhaustedRelics?.includes(relicId) ?? false
+              }
+            />
           ))}
           <PromissoryNotesStack promissoryNotes={promissoryNotes} />
         </Stack>

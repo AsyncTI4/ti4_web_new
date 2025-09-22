@@ -26,6 +26,7 @@ import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
 import { PromissoryNote } from "./PlayerArea";
+import { getFactionImage } from "@/lookup/factions";
 
 type Props = {
   playerData: PlayerData;
@@ -67,7 +68,10 @@ export default function PlayerCardSidebar(props: Props) {
     unitCounts,
     abilities,
     notResearchedFactionTechs,
+    factionImage,
+    factionImageType,
   } = playerData;
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
   const scs = playerData.scs;
   const promissoryNotes = playerData.promissoryNotesInPlayArea || [];
@@ -106,7 +110,7 @@ export default function PlayerCardSidebar(props: Props) {
         <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
           {/* Small circular faction icon */}
           <Image
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={faction}
             w={24}
             h={24}
@@ -242,14 +246,22 @@ export default function PlayerCardSidebar(props: Props) {
 
           <Stack gap={2}>
             <Box mb={2}>
-              <Leaders leaders={leaders} />
+              <Leaders leaders={leaders} faction={faction} />
             </Box>
           </Stack>
         </SimpleGrid>
 
         <Group gap={4} mt="xs">
           {relics.map((relicId, index) => {
-            return <Relic key={index} relicId={relicId} />;
+            const isExhausted =
+              props.playerData.exhaustedRelics?.includes(relicId);
+            return (
+              <Relic
+                key={index}
+                relicId={relicId}
+                isExhausted={!!isExhausted}
+              />
+            );
           })}
           {promissoryNotes.map((pn) => (
             <PromissoryNote promissoryNoteId={pn} />
@@ -289,13 +301,6 @@ export default function PlayerCardSidebar(props: Props) {
             {unitPriorityOrder.map((asyncId) => {
               const bestUnit = lookupUnit(asyncId, faction, props.playerData);
               const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
-
-              if (asyncId === "dn" && !bestUnit) {
-                debugger;
-              }
-
-              console.log("bestUnit", bestUnit);
-              console.log("deployedCount", deployedCount);
 
               return (
                 <UnitCard

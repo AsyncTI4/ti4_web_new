@@ -48,3 +48,15 @@
   font-size: 13px;
   opacity: 0.9;
 }
+
+.compact .controlTokenImage {
+  width: 56px;
+  height: 56px;
+}
+
+.compact .factionIcon {
+  height: 36px;
+  width: 36px;
+}
+
+/* Dominant styling intentionally minimal; prominence is handled by size/overlay */

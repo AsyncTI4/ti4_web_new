@@ -1,5 +1,7 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
+import { getFactionImage } from "@/lookup/factions";
+import { useFactionImages } from "@/hooks/useFactionImages";
 
 type ControlTokenProps = {
   colorAlias: string;
@@ -12,6 +14,10 @@ export const ControlToken = ({
   faction,
   style,
 }: ControlTokenProps) => {
+  const factionImages = useFactionImages();
+  const factionImage = factionImages[faction!]?.image;
+  const factionImageType = factionImages[faction!]?.type;
+  const factionUrl = getFactionImage(faction!, factionImage, factionImageType);
   return (
     <div style={style}>
       <div style={{ position: "relative" }}>
@@ -21,7 +27,7 @@ export const ControlToken = ({
         />
         {faction && (
           <img
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={`${faction} faction`}
             style={{
               position: "absolute",
@@ -43,6 +49,10 @@ export const SmallControlToken = ({
   faction,
   style,
 }: ControlTokenProps) => {
+  const factionImages = useFactionImages();
+  const factionImage = factionImages[faction!]?.image;
+  const factionImageType = factionImages[faction!]?.type;
+  const factionUrl = getFactionImage(faction!, factionImage, factionImageType);
   return (
     <div style={style}>
       <div style={{ position: "relative", height: "24px" }}>
@@ -53,7 +63,7 @@ export const SmallControlToken = ({
         />
         {faction && (
           <img
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={factionUrl}
             alt={`${faction} faction`}
             style={{
               position: "absolute",

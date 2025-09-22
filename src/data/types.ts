@@ -129,6 +129,7 @@ export type PlanetEntityData = {
     [factionName: string]: EntityData[];
   };
   commodities: number | null;
+  planetaryShield: boolean;
 };
 
 type PlanetData = {
@@ -257,6 +258,9 @@ export type PlayerData = {
   discordId: string;
   userName: string;
   faction: string;
+  factionImage?: string;
+  factionImageType?: string;
+
   color: string;
   displayName: string;
   isSpeaker: boolean;
@@ -573,6 +577,7 @@ export type PlanetMapTile = {
   controller: string;
   exhausted: boolean;
   commodities: number | null;
+  planetaryShield?: boolean;
   properties: {
     x: number;
     y: number;

@@ -1,4 +1,4 @@
-import { Box, Text, Image } from "@mantine/core";
+import { Box, Image } from "@mantine/core";
 import { getRelicData } from "../../../lookup/relics";
 import { RelicCard } from "./RelicCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
@@ -6,12 +6,14 @@ import { useState } from "react";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./Relic.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { IconX } from "@tabler/icons-react";
 
 type Props = {
   relicId: string;
+  isExhausted?: boolean;
 };
 
-export function Relic({ relicId }: Props) {
+export function Relic({ relicId, isExhausted = false }: Props) {
   const [opened, setOpened] = useState(false);
 
   const relicData = getRelicData(relicId);
@@ -28,14 +30,26 @@ export function Relic({ relicId }: Props) {
       <SmoothPopover.Target>
         <Chip
           className={styles.relicCard}
-          accent="yellow"
+          accent={isExhausted ? "bloodOrange" : "yellow"}
           onClick={() => setOpened((o) => !o)}
-          glow
           leftSection={
-            <Image
-              src="/relicicon.webp"
-              className={`${gradientClasses.iconFilter} ${styles.icon}`}
-            />
+            <Box className={styles.iconWrapper}>
+              <Image
+                src="/relicicon.webp"
+                className={`${gradientClasses.iconFilter} ${styles.icon} ${
+                  isExhausted ? styles.exhaustedIcon : ""
+                }`}
+              />
+              {isExhausted && (
+                <span className={styles.exhaustedX}>
+                  <IconX
+                    size={18}
+                    stroke={3}
+                    color="var(--mantine-color-red-1)"
+                  />
+                </span>
+              )}
+            </Box>
           }
           title={relicData.shortName || relicData.name}
           px="sm"

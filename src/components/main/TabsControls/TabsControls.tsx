@@ -28,17 +28,17 @@ export function TabsControls() {
           px={8}
           onClick={handlers.togglePlanetTypesMode}
         >
-          <Image
+          <img
             src="/planet_attributes/pc_attribute_cultural.png"
             alt="Planet Types"
             height={16}
           />
-          <Image
+          <img
             src="/planet_attributes/pc_attribute_industrial.png"
             alt="Planet Types"
             height={16}
           />
-          <Image
+          <img
             src="/planet_attributes/pc_attribute_hazardous.png"
             alt="Planet Types"
             height={16}
@@ -53,10 +53,10 @@ export function TabsControls() {
           px={8}
           onClick={handlers.toggleTechSkipsMode}
         >
-          <Image src="/green.png" alt="Tech Skips" height={16} />
-          <Image src="/yellow.png" alt="Tech Skips" height={16} />
-          <Image src="/red.png" alt="Tech Skips" height={16} />
-          <Image src="/blue.png" alt="Tech Skips" height={16} />
+          <img src="/green.png" alt="Tech Skips" height={16} />
+          <img src="/yellow.png" alt="Tech Skips" height={16} />
+          <img src="/red.png" alt="Tech Skips" height={16} />
+          <img src="/blue.png" alt="Tech Skips" height={16} />
         </Button>
 
         <Button
@@ -76,7 +76,7 @@ export function TabsControls() {
             px={8}
             onClick={handlers.togglePdsMode}
           >
-            <Image src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
+            <img src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
           </Button>
         )}
 

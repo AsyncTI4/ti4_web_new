@@ -38,7 +38,6 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                     <CompactObjective
                       objectiveKey={objective.key}
                       name={objective.name}
-                      pointValue={objective.pointValue}
                       color="orange"
                       revealed={objective.revealed}
                       onClick={() => setSelectedObjective(objective.key)}
@@ -85,7 +84,6 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                     <CompactObjective
                       objectiveKey={objective.key}
                       name={objective.name}
-                      pointValue={objective.pointValue}
                       color="blue"
                       revealed={objective.revealed}
                       onClick={() => setSelectedObjective(objective.key)}
@@ -123,7 +121,6 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                 key={objective.key}
                 objectiveKey={objective.key}
                 name={objective.name}
-                pointValue={objective.pointValue}
                 color="gray"
                 revealed={objective.revealed}
                 scoredFactions={objective.scoredFactions}

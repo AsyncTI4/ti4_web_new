@@ -26,6 +26,11 @@ import FrogGamePage from "./FrogGamePage";
 import LandingPage from "./LandingPage";
 import MapTogglePage from "./MapTogglePage";
 import { SystemTilePage } from "./components/SystemTilePage/SystemTilePage";
+import ChangeLogModal from "./components/ChangeLogModal/ChangeLogModal";
+import {
+  CHANGELOG_090,
+  CURRENT_CHANGELOG_VERSION,
+} from "./components/ChangeLogModal/changelogData";
 
 const queryClient = new QueryClient();
 
@@ -124,6 +129,10 @@ root.render(
     <MantineProvider forceColorScheme="dark" theme={theme}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ChangeLogModal
+          version={CURRENT_CHANGELOG_VERSION}
+          changelog={CHANGELOG_090}
+        />
       </QueryClientProvider>
     </MantineProvider>
   </React.StrictMode>

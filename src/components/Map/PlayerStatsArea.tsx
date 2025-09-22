@@ -12,6 +12,8 @@ import styles from "./PlayerStatsArea.module.css";
 import { PlayerData } from "@/data/types";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameContext } from "@/hooks/useGameContext";
+import { useFactionImages } from "@/hooks/useFactionImages";
+import { getFactionImage } from "@/lookup/factions";
 
 type PlayerStatsAreaProps = {
   faction: string;
@@ -25,6 +27,11 @@ export function PlayerStatsArea({
   statTilePositions,
 }: PlayerStatsAreaProps) {
   const enhancedData = useGameContext();
+  const factionImages = useFactionImages();
+  const factionImage = factionImages[faction]?.image;
+  const factionImageType = factionImages[faction]?.type;
+  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
+
   const factionColorMap = useFactionColors();
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
@@ -112,7 +119,7 @@ export function PlayerStatsArea({
           <div
             className={styles.backgroundImage}
             style={{
-              backgroundImage: `url(${cdnImage(`/factions/${faction}.png`)})`,
+              backgroundImage: `url(${factionUrl})`,
             }}
           />
           <div className={styles.textContainer}>
