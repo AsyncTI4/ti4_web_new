@@ -129,10 +129,6 @@ root.render(
     <MantineProvider forceColorScheme="dark" theme={theme}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        <ChangeLogModal
-          version={CURRENT_CHANGELOG_VERSION}
-          changelog={CHANGELOG_090}
-        />
       </QueryClientProvider>
     </MantineProvider>
   </React.StrictMode>

@@ -12,11 +12,12 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   if (!leaderData) return null;
 
   const renderLeaderIcon = () => {
-    const showLeaderImage =
-      leaderData.source === "base" || leaderData.source === "pok";
-
-    if (!showLeaderImage) return <></>;
-    return <Image src={`/leaders/${leaderId}.webp`} />;
+    if (leaderData.source === "base" || leaderData.source === "pok") {
+      return (
+        <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
+      );
+    }
+    return <></>;
   };
 
   return (

@@ -41,6 +41,11 @@ import { useTabManagementV2 } from "./hooks/useTabManagementV2";
 import GeneralArea from "./components/General/GeneralArea";
 import { PannableMapView } from "./components/main/MapView/PannableMapView";
 import { MapView } from "./components/main/MapView";
+import ChangeLogModal from "./components/ChangeLogModal/ChangeLogModal";
+import {
+  CHANGELOG_090,
+  CURRENT_CHANGELOG_VERSION,
+} from "./components/ChangeLogModal/changelogData";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -248,6 +253,10 @@ export function NewMapUI({ pannable }: Props) {
           <NewMapUIContent pannable={pannable} />
         </div>
       </GameContextProvider>
+      <ChangeLogModal
+        version={CURRENT_CHANGELOG_VERSION}
+        changelog={CHANGELOG_090}
+      />
     </SettingsProvider>
   );
 }
