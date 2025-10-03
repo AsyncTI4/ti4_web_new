@@ -12,8 +12,7 @@ export const relics: Relic[] = [
     flavourText:
       "*No single tome could contain the collected knowledge of millennia of rulers. Thus, the last Emperor built a massive cruiser, its holds bulging with crystal info-matrices. It roams the outer reaches of the Gul system, awaiting a summons that will never come.*",
     homebrewReplacesID: "codex",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheCodex.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheCodex.jpg?raw=true",
   },
   {
     alias: "absol_dominusorb",
@@ -23,8 +22,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Goldos hoisted the ivory orb at the head of their army. At once, the weariness that filled the bodies and minds of each soldier vanished. They strode forth as if fresh from a week's rest.*",
     homebrewReplacesID: "dominusorb",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/DominusOrb.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/DominusOrb.jpg?raw=true",
   },
   {
     alias: "absol_dynamiscore",
@@ -34,8 +32,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Dart and Tai stood, mesmerized by the swirling mass. Neither had any idea what it was, but both were fairly sure they were about to retire.*",
     homebrewReplacesID: "dynamiscore",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/DynamisCore.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/DynamisCore.jpg?raw=true",
   },
   {
     alias: "absol_emelpar",
@@ -45,8 +42,7 @@ export const relics: Relic[] = [
     flavourText:
       "*As the hilt began to fuse with the flesh of her hand, she worried that she should set the scepter aside. But the whispered suggestions in her mind were too valuable and insightful to seriously consider such a rash and illogical act.*",
     homebrewReplacesID: "emelpar",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/ScepterOfEmelpar.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/ScepterOfEmelpar.jpg?raw=true",
   },
   {
     alias: "absol_emphidia",
@@ -56,8 +52,7 @@ export const relics: Relic[] = [
     flavourText:
       "*The machines of the forgotten throne-world could only be controlled through the data-impulses of the black-barbed crown.*",
     homebrewReplacesID: "emphidia",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheCrownOfEmphidia.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheCrownOfEmphidia.jpg?raw=true",
   },
   {
     alias: "absol_jr",
@@ -67,8 +62,7 @@ export const relics: Relic[] = [
     flavourText:
       "*There was a long moment, stretching in silence until Dart blurted, “Can we help you somehow?”\nAll of the individuals seemed startled by the question, but the titan seemed the most perplexed.  “I do not know,” it said at last.  “I only remember that… I want to learn.  And… and to remember.”\n\n“I have no name. You,” it said, pointing to Dart. “Perhaps I shall be Dart II.”\n“H-how about Junior instead?” Dart offered. “I wouldn’t want anyone to get us confused, we already look so… uh… alike.”\nThe titan nodded solemnly.  “Yes. Yes, this is true.” It turned. “Junior. Yes. I like that name, and I would also like to come with you.”*",
     homebrewReplacesID: "titanprototype",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/JR.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/JR.jpg?raw=true",
   },
   {
     alias: "absol_luxarchtreatise",
@@ -77,8 +71,7 @@ export const relics: Relic[] = [
     source: "absol",
     flavourText:
       "*Written thousands of years before the fall of the Lazax, the Luxarch Treatsie contained detailed analyses of the Lazax's greatest victories.  With the return of the Mahact, it was imperative that the document be found.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/LuxarchTreatise.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/LuxarchTreatise.jpg?raw=true",
   },
   {
     alias: "absol_mawofworlds",
@@ -88,8 +81,7 @@ export const relics: Relic[] = [
     flavourText:
       "*No larger than a carrier, the spherical lattice held a captive singularity at its heart. As they dumped the planet's entire energy grid into its core, the black hole began to spin, the complex logic-circuitry along the lattice slowly coming to life.*",
     homebrewReplacesID: "mawofworlds",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/MawOfWorlds.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/MawOfWorlds.jpg?raw=true",
   },
   {
     alias: "absol_nanoforge",
@@ -99,8 +91,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Intended to bring prosperity, the forge was twisted into an instrument of war.\nThe planet heaved and shuddered as it merged with the Nano-forge, sputtering as its atmosphere became breathable for the first time.*",
     homebrewReplacesID: "nanoforge",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/NanoForge.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/NanoForge.jpg?raw=true",
   },
   {
     alias: "absol_obsidian",
@@ -110,8 +101,7 @@ export const relics: Relic[] = [
     flavourText:
       '*The inky blackness of the blade evoked feelings of discomfort and nausea in all who saw it. All but Sharsiss. It whispered to him promises of power. Promises of a reckoning that would see the Collective unmade. "Good," he thought. "Let them burn."*',
     homebrewReplacesID: "obsidian",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheObsidian.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheObsidian.jpg?raw=true",
   },
   {
     alias: "absol_plenaryorbital",
@@ -120,8 +110,7 @@ export const relics: Relic[] = [
     source: "absol",
     flavourText:
       "*To many, the ring represented hope - a testament to the preseverance of the Gashlai.  To Magmus, it represented waste.  Extravagance.  Foolishness.  He sneered.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/PlenaryOrbital.jpg?raw=true",
+    imageURL: "/hover_images/units/absol/PlenaryOrbital.jpg?raw=true",
   },
   {
     alias: "absol_prophetstears",
@@ -131,8 +120,7 @@ export const relics: Relic[] = [
     flavourText:
       "*\"So you're going to drink a vial of murky liquid we found in a stasis vault on a dead world because you think it's the concentrated genetic essence of an entire species' most brilliant minds...and you think* I'm *being irrational?\"*",
     homebrewReplacesID: "prophetstears",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheProphetsTears.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheProphetsTears.jpg?raw=true",
   },
   {
     alias: "absol_quantumcore",
@@ -142,8 +130,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Trilossa slipped the core into the hololattice's main terminal.  The lattice was ancient - as old as the Flight itself - and tampering with it was tantamount to sin.  Hopefully the rest of the Flight would would see the necessity of the upgrade.*",
     shortName: "Quantum\n-core",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/generic/QuantumCore.jpg?raw=true",
+    imageURL: "/hover_images/techs/absol/generic/QuantumCore.jpg?raw=true",
   },
   {
     alias: "absol_shardofthethrone1",
@@ -153,8 +140,7 @@ export const relics: Relic[] = [
     flavourText:
       '*"What power does a broken piece of the Throne of Emperors hold? To me, none. But to everyone else..."*',
     homebrewReplacesID: "shard",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/ShardOfTheThrone1.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/ShardOfTheThrone1.jpg?raw=true",
   },
   {
     alias: "absol_shardofthethrone2",
@@ -164,8 +150,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Qanoj watched the light reflect off of the shard and dance about his chambers.  It was such a pretty thing.  And yet, so many had died for it.*",
     homebrewReplacesID: "shard",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/ShardOfTheThrone2.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/ShardOfTheThrone2.jpg?raw=true",
   },
   {
     alias: "absol_shardofthethrone3",
@@ -175,8 +160,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Legends claim that only the one who can bring together all the scattered pieces of the Throne of Emperors will truly be wothy to claim the seat.*",
     homebrewReplacesID: "shard",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/ShardOfTheThrone3.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/ShardOfTheThrone3.jpg?raw=true",
   },
   {
     alias: "absol_stellarconverter",
@@ -186,8 +170,7 @@ export const relics: Relic[] = [
     flavourText:
       "*A power great enough to envelop a star, such that its energies might be concentrated… and scattered.*",
     homebrewReplacesID: "stellarconverter",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/StellarConverter.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/StellarConverter.jpg?raw=true",
   },
   {
     alias: "absol_syncretone",
@@ -197,8 +180,7 @@ export const relics: Relic[] = [
     flavourText:
       "*One of many Guild secrets involves a tiny object known as the Syncretone.  Connor had heard the damn thing referred to by the Yssaril as 'innocuous' so many times now that he was absolutely positive it must be his by day's end.*",
     shrinkName: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheSyncretone.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheSyncretone.jpg?raw=true",
   },
   {
     alias: "absol_thalnos",
@@ -208,8 +190,7 @@ export const relics: Relic[] = [
     flavourText:
       "*A cloud of satellites spewed from the dreadnought's hull, drifting into a halo around the vessel. The battle seemed to pause for one long moment, before the drones' weapons flared, unleashing beams of energy in all directions.*",
     homebrewReplacesID: "thalnos",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/absol/TheCrownOfThalnos.jpg?raw=true",
+    imageURL: "/hover_images/relics/absol/TheCrownOfThalnos.jpg?raw=true",
   },
   {
     alias: "absol_tyrantslament",
@@ -218,8 +199,7 @@ export const relics: Relic[] = [
     source: "absol",
     flavourText:
       "*Instrument of Judgement\nThe Tyrant's Lament has never responded to a hail, and fights under no banner.  Wherever it appears, death rains.  And then it is gone.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/TyrantsLament.jpg?raw=true",
+    imageURL: "/hover_images/units/absol/TyrantsLament.jpg?raw=true",
   },
   {
     alias: "axisordercr",
@@ -355,8 +335,7 @@ export const relics: Relic[] = [
     text: "When you gain this card, research up to 2 technologies that have no prerequisites.\n> ACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.",
     flavourText:
       "A collector's item of incalculable value, none have been able to unlock its secrets - assuming its contents aren't just the ravings of a madwoman.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/book_of_latvinia.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/book_of_latvinia.jpg?raw=true",
     source: "codex4",
   },
   {
@@ -365,8 +344,7 @@ export const relics: Relic[] = [
     text: "Apply +1 to the PRODUCTION value of each of your units with PRODUCTION. When you produce 1 or more units reduce the combined cost of the produced units by 1.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/accretion_engine.png?raw=true",
+    imageURL: "/hover_images/relics/ds/accretion_engine.png?raw=true",
   },
   {
     alias: "circletofthevoid",
@@ -374,16 +352,14 @@ export const relics: Relic[] = [
     text: "Your units do not roll for gravity rifts [you still get the bonus movement], and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships. [Note: you must have an available DET token in order to use this action. It cannot just be a stall]",
     flavourText:
       "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/circlet_of_the_void.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/circlet_of_the_void.jpg?raw=true",
     source: "codex4",
   },
   {
     alias: "codex",
     name: "The Codex",
     text: "ACTION: Purge this card to take up to 3 action cards of your choice from the action card discard pile.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/the_codex.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/the_codex.jpg?raw=true",
     source: "pok",
     flavourText:
       "*No single tome could contain the collected knowledge of millennia of rulers. Thus, the last Emperor built a massive cruiser, its holds bulging with crystal info-matrices. It roams the outer reaches of the Mecatol system, awaiting a summons that will never come.*",
@@ -394,15 +370,13 @@ export const relics: Relic[] = [
     text: "ACTION: Purge this card to draw 3 system tiles with a blue-colored back at random. Place 1 of those tiles at the edge of the game board, adjacent to at least 2 other systems. Purge the rest.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/azdels_key.png?raw=true",
+    imageURL: "/hover_images/relics/ds/azdels_key.png?raw=true",
   },
   {
     alias: "dominusorb",
     name: "Dominus Orb",
     text: "Before you move units during a tactical action, you may purge this card to move and transport units that are in systems that contain 1 of your command tokens.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/dominus_orb.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/dominus_orb.jpg?raw=true",
     source: "pok",
     flavourText:
       "*Goldos hoisted the ivory orb at the head of their army. At once, the weariness that filled the bodies and minds of each soldier vanished. They strode forth as if fresh from a week's rest.*",
@@ -411,8 +385,7 @@ export const relics: Relic[] = [
     alias: "dynamiscore",
     name: "Dynamis Core",
     text: "While this card is in your play area, your commodity value is increased by 2.\nACTION: Purge this card to gain trade goods equal to your printed commodity value+2.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/dynamis_core.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/dynamis_core.jpg?raw=true",
     source: "codex2",
     flavourText:
       "*Dart and Tai stood, mesmerized by the swirling mass. Neither had any idea what it was, but both were fairly sure they were about to retire.*",
@@ -423,15 +396,13 @@ export const relics: Relic[] = [
     text: "You may have 2 additional action cards in your hand, game effects cannot prevent you from using this ability. At any time, you may exhaust this card to draw 1 action card.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/e6go_network.png?raw=true",
+    imageURL: "/hover_images/relics/ds/e6go_network.png?raw=true",
   },
   {
     alias: "emelpar",
     name: "Scepter of Emelpar",
     text: "When you would spend a token from your strategy pool, you may exhaust this card to spend a token from your reinforcements instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/scepter_of_emelpar.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/scepter_of_emelpar.jpg?raw=true",
     source: "pok",
     flavourText:
       "*As the hilt began to fuse with the flesh of her hand, she worried that she should set the scepter aside. But the whispered suggestions in her mind were too valuable and insightful to seriously consider such a rash and illogical act.*",
@@ -440,8 +411,7 @@ export const relics: Relic[] = [
     alias: "emphidia",
     name: "The Crown of Emphidia",
     text: 'After you perform a tactical action, you may exhaust this card to explore 1 planet you control. At the end of the status phase, if you control the "Tomb of Emphidia," you may purge this card to gain 1 victory point.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/the_crown_of_emphidia.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/the_crown_of_emphidia.jpg?raw=true",
     source: "pok",
     flavourText:
       "*The machines of the forgotten throne-world could only be controlled through the data-impulses of the black-barbed crown.*",
@@ -460,8 +430,7 @@ export const relics: Relic[] = [
     text: "After you activate a system: Purge this card to treat 2 of your ships as adjacent to the active system until the end of this tactical action.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/eye_of_vogul.png?raw=true",
+    imageURL: "/hover_images/relics/ds/eye_of_vogul.png?raw=true",
   },
   {
     alias: "king_tis_golden_tooth",
@@ -473,8 +442,7 @@ export const relics: Relic[] = [
     alias: "mawofworlds",
     name: "Maw of Worlds",
     text: "At the start of the agenda phase, you may purge this card and exhaust all of your planets to gain any 1 technology.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/maw_of_worlds.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/maw_of_worlds.jpg?raw=true",
     source: "pok",
     flavourText:
       "*No larger than a carrier, the spherical lattice held a captive singularity at its heart. As they dumped the planet's entire energy grid into its core, the black hole began to spin, the complex logic-circuitry along the lattice slowly coming to life.*",
@@ -483,8 +451,7 @@ export const relics: Relic[] = [
     alias: "nanoforge",
     name: "Nano-Forge",
     text: "ACTION: Attach this card to a non-legendary, non-home planet you control, its resource and influence values are increased by 2 and it is a legendary planet. This action cannot be performed once attached.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/nanoforge.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/nanoforge.jpg?raw=true",
     source: "codex2",
     flavourText:
       "*Intended to bring prosperity, the forge was twisted into an instrument of war.*",
@@ -495,8 +462,7 @@ export const relics: Relic[] = [
     name: "Neuraloop",
     text: "When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective, even if it is a secret objective.",
     flavourText: "Knowledge. Creation. Control. Have a wonderful day.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/neuraloop.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/neuraloop.jpg?raw=true",
     source: "codex4",
   },
   {
@@ -511,8 +477,7 @@ export const relics: Relic[] = [
     alias: "obsidian",
     name: "The Obsidian",
     text: "When you gain this card, draw 1 secret objective. You can have 1 additional scored or unscored secret objective.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/the_obsidian.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/the_obsidian.jpg?raw=true",
     source: "pok",
     flavourText:
       '*The inky blackness of the blade evoked feelings of discomfort and nausea in all who saw it. All but Sharsiss. It whispered to him promises of power. Promises of a reckoning that would see the Collective unmade. "Good," he thought. "Let them burn."*',
@@ -553,8 +518,7 @@ export const relics: Relic[] = [
     alias: "prophetstears",
     name: "The Prophet's Tears",
     text: "When you research a technology, you may exhaust this card to ignore 1 prerequisite or draw 1 action card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/the_prophets_tears.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/the_prophets_tears.jpg?raw=true",
     source: "pok",
     flavourText:
       "*\"So you're going to drink a vial of murky liquid we found in a stasis vault on a dead world because you think it's the concentrated genetic essence of an entire species' most brilliant minds...and you think* I'm *being irrational?\"*",
@@ -578,8 +542,7 @@ export const relics: Relic[] = [
     alias: "shard",
     name: "Shard of the Throne",
     text: "When you gain this card, gain 1 victory point, when you lose this card, lose 1 victory point. When a player gains control of a legendary planet you control or a planet you control in your home system, that player gains this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/shard_of_the_throne.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/shard_of_the_throne.jpg?raw=true",
     source: "pok",
     flavourText:
       '*"What power does a broken piece of the Throne of Emperors hold? To me, none. But to everyone else..."*',
@@ -591,8 +554,7 @@ export const relics: Relic[] = [
     source: "sigma",
     flavourText:
       "*With the ability to access alternate realities, The Forgotten seemd to have a prefernce for thos in which it remained undiscovered, at least for a few extra years.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/misc_homebrew/the_forgotten.png?raw=true",
+    imageURL: "/hover_images/relics/misc_homebrew/the_forgotten.png?raw=true",
   },
   {
     alias: "sigma_mirror_engine",
@@ -601,8 +563,7 @@ export const relics: Relic[] = [
     source: "sigma",
     flavourText:
       "*Word of advice: if you meet yourself, don't make eye contact. That'll wipe out time. Entirely. Forward and backward.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/misc_homebrew/mirror_engine.jpg?raw=true",
+    imageURL: "/hover_images/relics/misc_homebrew/mirror_engine.jpg?raw=true",
   },
   {
     alias: "sigma_moontree_staff",
@@ -611,8 +572,7 @@ export const relics: Relic[] = [
     source: "sigma",
     flavourText:
       "*The moontree was the symbol of the Galactic Council, and graced the Imperial Gardens on Mecatol Rex. The greatest ambassadors were granted a staff of moontree wood, as a symbol of their rank.*",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/misc_homebrew/moontree_staff.jpg?raw=true",
+    imageURL: "/hover_images/relics/misc_homebrew/moontree_staff.jpg?raw=true",
   },
   {
     alias: "sigma_phoenix",
@@ -620,8 +580,7 @@ export const relics: Relic[] = [
     text: "After 1 of your units is destroyed: You may exhaust this card to produce a unit of the same type at any of your space docks; reduce the cost by 4 resources. If you have ships in the active system, you may place the unit in that system, even if another player has units there.",
     source: "sigma",
     flavourText: '*"But you were dead!"\n"I got better."*',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/misc_homebrew/phoenix.png?raw=true",
+    imageURL: "/hover_images/relics/misc_homebrew/phoenix.png?raw=true",
   },
   {
     alias: "silverflame",
@@ -667,15 +626,13 @@ export const relics: Relic[] = [
     text: "When 1 or more of your units roll dice for a unit ability, you may add +1 to the result of each of those dice, and 1 of those units may roll 1 additional die.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/starfall_array.png?raw=true",
+    imageURL: "/hover_images/relics/ds/starfall_array.png?raw=true",
   },
   {
     alias: "stellarconverter",
     name: "Stellar Converter",
     text: "ACTION: Choose 1 non-home, non-legendary planet other than Mecatol Rex in a system that is adjacent to 1 or more of your units that have BOMBARDMENT, destroy all units on that planet and purge its attachments and its planet card. Then, place the destroyed planet token on that planet and purge this card. [Note: You cannot choose a planet that you control]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/stellar_converter.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/stellar_converter.jpg?raw=true",
     source: "pok",
     flavourText:
       "*A power great enough to envelop a star, such that its energies might be concentrated… and scattered.*",
@@ -719,8 +676,7 @@ export const relics: Relic[] = [
     alias: "thalnos",
     name: "The Crown of Thalnos",
     text: "During each combat round, this card's owner may reroll any number of their dice, applying +1 to the results, any units that reroll dice but do not produce at least 1 hit are destroyed.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/the_crown_of_thalnos.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/the_crown_of_thalnos.jpg?raw=true",
     source: "pok",
     flavourText:
       "*A cloud of satellites spewed from the dreadnought's hull, drifting into a halo around the vessel. The battle seemed to pause for one long moment, before the drones' weapons flared, unleashing beams of energy in all directions.*",
@@ -731,15 +687,13 @@ export const relics: Relic[] = [
     text: "ACTION: Purge this card to either gain 1 relic or immediately score 1 scored secret objective, or 1 of your unscored secret objectives, if you fulfill its requirements. [Note, this does not enable you to score the same secret twice, or to have more than 3 scored secrets]",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/forgotten_throne.png?raw=true",
+    imageURL: "/hover_images/relics/ds/forgotten_throne.png?raw=true",
   },
   {
     alias: "titanprototype",
     name: "JR-XS455-O",
     text: "ACTION: Exhaust this agent and choose a player, that player may spend 3 resources to place a structure on a planet they control. If they do not, they gain 1 trade good.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/pok/jrxs4550.jpg?raw=true",
+    imageURL: "/hover_images/relics/pok/jrxs4550.jpg?raw=true",
     source: "codex2",
     shortName: "JR-\nXS455-O",
   },
@@ -749,8 +703,7 @@ export const relics: Relic[] = [
     text: "At the start of the agenda phase, you may purge this card to resolve 1 non-strategic action.",
     source: "ds",
     actualSource: "uncharted_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/relics/ds/twilight_mirror.png?raw=true",
+    imageURL: "/hover_images/relics/ds/twilight_mirror.png?raw=true",
   },
   {
     alias: "votetoken",

@@ -22,8 +22,7 @@ export const units: Unit[] = [
     ability:
       "After this unit is destroyed, place the unit on this card. At the start of your next turn, for every 2 units that are on this card, place 1 on a planet you control.",
     homebrewReplacesID: "arborec_infantry2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/LetaniWarriorII.png?raw=true",
+    imageURL: "/hover_images/techs/absol/faction/LetaniWarriorII.png?raw=true",
   },
   {
     id: "absol_arborec_mech",
@@ -43,8 +42,7 @@ export const units: Unit[] = [
     ability:
       "This unit may count as a structure when it is on a planet.\nDEPLOY: When you would place a structure on a planet, you may place 1 mech on that planet instead.",
     homebrewReplacesID: "arborec_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/LetaniBehemoth.png?raw=true",
+    imageURL: "/hover_images/units/absol/LetaniBehemoth.png?raw=true",
   },
   {
     id: "absol_argent_destroyer2",
@@ -68,7 +66,7 @@ export const units: Unit[] = [
       "When this unit generates a hit on a combat roll, your opponent must destroy 1 fighter in the active system, if able.\nWhen this unit uses ANTI-FIGHTER BARRAGE, each result of 9 or 10 also destroys 1 of your opponent's infantry in the space area of the active system.",
     homebrewReplacesID: "argent_destroyer2",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/StrikeWingAlphaII.png?raw=true",
+      "/hover_images/techs/absol/faction/StrikeWingAlphaII.png?raw=true",
   },
   {
     id: "absol_cabal_spacedock2",
@@ -86,7 +84,7 @@ export const units: Unit[] = [
       "PRODUCTION 7. This system is a gravity rift; your ships do not roll for this gravity rift. Place a dimensional tear token beneath this unit as a reminder.\nUp to 10 fighters in this system do not count against your ships' capacity. 1 non-fighter ship in this system does not count against your fleet pool.",
     homebrewReplacesID: "cabal_spacedock2",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/DimensionalTearII.png?raw=true",
+      "/hover_images/techs/absol/faction/DimensionalTearII.png?raw=true",
   },
   {
     id: "absol_cabal_spacedock2Alt",
@@ -119,8 +117,7 @@ export const units: Unit[] = [
     combatDieCount: 1,
     isShip: true,
     homebrewReplacesID: "carrier2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/carrier_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/carrier_2.jpg?raw=true",
   },
   {
     id: "absol_cruiser2",
@@ -138,8 +135,7 @@ export const units: Unit[] = [
     combatDieCount: 1,
     isShip: true,
     homebrewReplacesID: "cruiser2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/cruiser_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/cruiser_2.jpg?raw=true",
   },
   {
     id: "absol_destroyer2",
@@ -160,8 +156,7 @@ export const units: Unit[] = [
     ability:
       "When this unit generates a hit on a combat roll, your opponent must destroy 1 fighter in the active system, if able.",
     homebrewReplacesID: "destroyer2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/DestroyerII.png?raw=true",
+    imageURL: "/hover_images/units/absol/DestroyerII.png?raw=true",
   },
   {
     id: "absol_dreadnought2",
@@ -184,8 +179,7 @@ export const units: Unit[] = [
     isShip: true,
     homebrewReplacesID: "dreadnought2",
     ability: 'This unit cannot be destroyed by "Direct Hit" action cards.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/dreadnought_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/dreadnought_2.jpg?raw=true",
   },
   {
     id: "absol_fighter2",
@@ -204,8 +198,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported.\nFighters in excess of your ships' capacity count against your fleet pool.",
     homebrewReplacesID: "fighter2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/fighter_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/fighter_2.jpg?raw=true",
   },
   {
     id: "absol_infantry2",
@@ -223,8 +216,7 @@ export const units: Unit[] = [
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home.",
     homebrewReplacesID: "infantry2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/infantry_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/infantry_2.jpg?raw=true",
   },
   {
     id: "absol_keleres_mech",
@@ -242,8 +234,7 @@ export const units: Unit[] = [
     ability:
       "Once per invasion, other players must spend 1 influence per mech to commit ground forces to this planet.",
     homebrewReplacesID: "keleres_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/Omniopiares.png?raw=true",
+    imageURL: "/hover_images/units/absol/Omniopiares.png?raw=true",
   },
   {
     id: "absol_l1z1x_dreadnought2",
@@ -266,8 +257,7 @@ export const units: Unit[] = [
     isShip: true,
     homebrewReplacesID: "l1z1x_dreadnought2",
     ability: 'This unit cannot be destroyed by "Direct Hit" action cards.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/superdreadnought_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/superdreadnought_2.jpg?raw=true",
   },
   {
     id: "absol_mahact_infantry2",
@@ -287,7 +277,7 @@ export const units: Unit[] = [
       "After this unit is destroyed, gain 2 commodities or convert 1 of your commodities to a trade good. Then, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet that contains 1 of your structures.",
     homebrewReplacesID: "mahact_infantry2",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/CrimsonLegionnaireII.png?raw=true",
+      "/hover_images/techs/absol/faction/CrimsonLegionnaireII.png?raw=true",
   },
   {
     id: "absol_muaat_mech",
@@ -305,8 +295,7 @@ export const units: Unit[] = [
     ability:
       "When you use your STAR FORGE faction ability or your flagship component action in this system or an adjacent system, you may place 1 infantry from your reinforcements with this unit.",
     homebrewReplacesID: "muaat_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/BlackshadeInfiltrator.png?raw=true",
+    imageURL: "/hover_images/units/absol/BlackshadeInfiltrator.png?raw=true",
   },
   {
     id: "absol_muaat_warsun2",
@@ -333,7 +322,7 @@ export const units: Unit[] = [
       'Other players\' units in this system lose the PLANETARY SHIELD ability.\nThis unit cannot be destroyed by "Direct Hit" action cards.',
     homebrewReplacesID: "muaat_warsun2",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/PrototypeWarSunII.png?raw=true",
+      "/hover_images/techs/absol/faction/PrototypeWarSunII.png?raw=true",
   },
   {
     id: "absol_naalu_fighter2",
@@ -354,7 +343,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported.\nEach fighter in excess of your ships' capacity counts as 1/2 of a ship against your fleet pool.",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/hybrid_crystal_fighter_2.jpg?raw=true",
+      "/hover_images/techs/faction/hybrid_crystal_fighter_2.jpg?raw=true",
   },
   {
     id: "absol_naaz_mech_space",
@@ -371,8 +360,7 @@ export const units: Unit[] = [
     ability:
       "If this unit is in the space area of the active system, it is also a ship.\nAt the end of a space battle in the active system, flip this card.",
     homebrewReplacesID: "naaz_mech_space",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/ZGravEidolon.png?raw=true",
+    imageURL: "/hover_images/units/absol/ZGravEidolon.png?raw=true",
   },
   {
     id: "absol_nomad_flagship2",
@@ -397,8 +385,7 @@ export const units: Unit[] = [
     ability:
       "You may treat this unit as if it were adjacent to systems that contain 1 or more of your mechs.",
     homebrewReplacesID: "nomad_flagship2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/MemoriaII.png?raw=true",
+    imageURL: "/hover_images/techs/absol/faction/MemoriaII.png?raw=true",
   },
   {
     id: "absol_pds2",
@@ -416,8 +403,7 @@ export const units: Unit[] = [
     planetaryShield: true,
     isStructure: true,
     homebrewReplacesID: "pds2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/pds_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/pds_2.jpg?raw=true",
   },
   {
     id: "absol_saar_mech",
@@ -435,8 +421,7 @@ export const units: Unit[] = [
     ability:
       "DEPLOY:  After you gain control of a planet, you may spend 1 trade good to replace 1 infantry on that planet with 1 mech.",
     homebrewReplacesID: "saar_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/ScavengerZeta.png?raw=true",
+    imageURL: "/hover_images/units/absol/ScavengerZeta.png?raw=true",
   },
   {
     id: "absol_saar_spacedock2",
@@ -456,7 +441,7 @@ export const units: Unit[] = [
       "This unit is placed in the space area instead of on a planet.\nThis unit can move and retreat as if it were a ship.\nIf this unit is blockaded, it is destroyed.\n1 non-fighter ship in this system does not count against your fleet pool.",
     homebrewReplacesID: "saar_spacedock2",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/FloatingFactoryII.png?raw=true",
+      "/hover_images/techs/absol/faction/FloatingFactoryII.png?raw=true",
   },
   {
     id: "absol_sardakk_dreadnought2",
@@ -480,8 +465,7 @@ export const units: Unit[] = [
     ability:
       'This unit cannot be destroyed by "Direct Hit" action cards.\nAfter a round of space combat, you may destroy this unit to destroy up to 2 ships in the system.',
     homebrewReplacesID: "sardakk_dreadnought2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/exotrireme_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/exotrireme_2.jpg?raw=true",
   },
   {
     id: "absol_sol_carrier2",
@@ -502,8 +486,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     homebrewReplacesID: "sol_carrier2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/advanced_carrier_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/advanced_carrier_2.jpg?raw=true",
   },
   {
     id: "absol_sol_infantry2",
@@ -522,8 +505,7 @@ export const units: Unit[] = [
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 5 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
     homebrewReplacesID: "sol_infantry2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/absol/faction/SpecOpsII.png?raw=true",
+    imageURL: "/hover_images/techs/absol/faction/SpecOpsII.png?raw=true",
   },
   {
     id: "absol_spacedock2",
@@ -541,8 +523,7 @@ export const units: Unit[] = [
     ability:
       "This unit's PRODUCTION value is equal to 4 more than the resource value of this planet.\nUp to 5 fighters in this system do not count against your ships' capacity.1 non-fighter ship in this system does not count against your fleet pool",
     homebrewReplacesID: "spacedock2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/SpaceDockII.png?raw=true",
+    imageURL: "/hover_images/units/absol/SpaceDockII.png?raw=true",
   },
   {
     id: "absol_titans_cruiser2",
@@ -562,8 +543,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isShip: true,
     homebrewReplacesID: "titans_cruiser2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/saturn_engine_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/saturn_engine_2.jpg?raw=true",
   },
   {
     id: "absol_titans_pds2",
@@ -587,8 +567,7 @@ export const units: Unit[] = [
     ability:
       "This unit is treated as both a structure and a ground force. It cannot be transported.\nYou may use this unit's SPACE CANNON against ships that are adjacent to this unit's systems.",
     homebrewReplacesID: "titans_pds2",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/heltitan_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/heltitan_2.jpg?raw=true",
   },
   {
     id: "absol_warsun",
@@ -610,8 +589,7 @@ export const units: Unit[] = [
     isShip: true,
     ability: "Other players' units in this system lose PLANETARY SHIELD.",
     homebrewReplacesID: "warsun",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/WarSun.png?raw=true",
+    imageURL: "/hover_images/units/absol/WarSun.png?raw=true",
   },
   {
     id: "absol_xxcha_mech",
@@ -630,8 +608,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability: "When this unit uses SUSTAIN DAMAGE, cancel 2 hits instead of 1.",
     homebrewReplacesID: "xxcha_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/Indomitus.png?raw=true",
+    imageURL: "/hover_images/units/absol/Indomitus.png?raw=true",
   },
   {
     id: "absol_yin_mech",
@@ -649,8 +626,7 @@ export const units: Unit[] = [
     ability:
       "You may use the Indoctrination ability on this planet without spending influence.",
     homebrewReplacesID: "yin_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/MoyinsAshes.png?raw=true",
+    imageURL: "/hover_images/units/absol/MoyinsAshes.png?raw=true",
   },
   {
     id: "absol_yssaril_mech",
@@ -668,8 +644,7 @@ export const units: Unit[] = [
     ability:
       "This unit can be committed from planets in the active system and from planets and space areas in adjacent systems that do not contain 1 of your command tokens.",
     homebrewReplacesID: "yssaril_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/BlackshadeInfiltrator.png?raw=true",
+    imageURL: "/hover_images/units/absol/BlackshadeInfiltrator.png?raw=true",
   },
   {
     id: "admins_flagship",
@@ -791,8 +766,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After you activate this system, you may produce up to 5 units in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/duha_menaimon.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/duha_menaimon.png?raw=true",
   },
   {
     id: "arborec_infantry",
@@ -808,8 +782,7 @@ export const units: Unit[] = [
     combatHitsOn: 8,
     combatDieCount: 1,
     isGroundForce: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/letani_warrior.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/letani_warrior.jpg?raw=true",
   },
   {
     id: "arborec_infantry2",
@@ -828,8 +801,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/letani_warrior_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/letani_warrior_2.jpg?raw=true",
   },
   {
     id: "arborec_mech",
@@ -848,8 +820,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: When you would use your Mitosis faction ability you may replace 1 of your infantry with 1 mech from your reinforcements instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/letani_behemoth.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/letani_behemoth.jpg?raw=true",
   },
   {
     id: "arborec_monument",
@@ -884,8 +855,7 @@ export const units: Unit[] = [
     afbHitsOn: 9,
     afbDieCount: 2,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/strike_wing_alpha.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/strike_wing_alpha.jpg?raw=true",
   },
   {
     id: "argent_destroyer2",
@@ -907,8 +877,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit uses ANTI-FIGHTER BARRAGE, each result of 9 or 10 also destroys 1 of your opponent's infantry in the space area of the active system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/strike_wing_alpha_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/strike_wing_alpha_2.jpg?raw=true",
   },
   {
     id: "argent_flagship",
@@ -928,8 +897,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other players cannot use space cannon against your ships in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/quetzecoatl.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/quetzecoatl.png?raw=true",
   },
   {
     id: "argent_mech",
@@ -946,8 +914,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This unit does not count against capacity if it is being transported or if it is in a space area with 1 or more of your ships that have capacity values.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/aerie_sentinel.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/aerie_sentinel.jpg?raw=true",
   },
   {
     id: "argent_monument",
@@ -1089,8 +1056,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat roll, it rolls 1 additional die for each secret objective you have scored.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/nemsys.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/nemsys.jpg?raw=true",
   },
   {
     id: "augers_mech",
@@ -1107,8 +1073,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After researching a technology, you may place 1 mech on a legendary planet, or a planet that has a technology specialty, that you control.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/iledrith.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/iledrith.jpg?raw=true",
   },
   {
     id: "augurs_monument",
@@ -1141,8 +1106,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After this ship produces 1 or more hits during a round of space combat, you may repair 1 ship you control in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/bearer_of_heavens.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/bearer_of_heavens.jpg?raw=true",
   },
   {
     id: "axis_mech",
@@ -1159,8 +1123,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "You may treat a spacedock on this planet as if it has PRODUCTION 5.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/forgetender.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/forgetender.jpg?raw=true",
   },
   {
     id: "axis_monument",
@@ -1380,8 +1343,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Apply +1 to the results of this ship's combat and ability rolls for each Fragment token on your faction sheet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/wayfinder.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/wayfinder.png?raw=true",
   },
   {
     id: "bentor_mech",
@@ -1398,8 +1360,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: When you place a Fragment token on your faction sheet, you may place 1 mech on a planet you control.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/auctioneer.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/auctioneer.png?raw=true",
   },
   {
     id: "bentor_monument",
@@ -1435,7 +1396,7 @@ export const units: Unit[] = [
     ability:
       "Capture all other non-structure units that are destroyed in this system, including your own.",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/the_terror_between.png?raw=true",
+      "/hover_images/units/pok/flagships/the_terror_between.png?raw=true",
   },
   {
     id: "cabal_mech",
@@ -1452,8 +1413,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When your infantry on this planet are destroyed, place them on your faction sheet; those units are captured.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/reanimator.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/reanimator.jpg?raw=true",
   },
   {
     id: "cabal_monument",
@@ -1488,8 +1448,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "This system is a gravity rift; your ships do not roll for this gravity rift. Place a dimensional tear token beneath this unit as a reminder.\nUp to 6 fighters in this system do not count against your ships' capacity.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/dimensional_tear.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/dimensional_tear.jpg?raw=true",
   },
   {
     id: "cabal_spacedock2",
@@ -1504,8 +1463,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "This system is a gravity rift; your ships do not roll for this gravity rift. Place a dimensional tear token beneath this unit as a reminder.\nUp to 12 fighters in this system do not count against your ships' capacity.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/dimensional_tear_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/dimensional_tear_2.jpg?raw=true",
   },
   {
     id: "canto_flagship",
@@ -1558,8 +1516,7 @@ export const units: Unit[] = [
     combatHitsOn: 9,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/carrier.png?raw=true",
+    imageURL: "/hover_images/units/generic/carrier.png?raw=true",
   },
   {
     id: "carrier2",
@@ -1577,8 +1534,7 @@ export const units: Unit[] = [
     combatHitsOn: 9,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/carrier_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/carrier_2.jpg?raw=true",
   },
   {
     id: "cavalry1",
@@ -1636,8 +1592,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "You may use the PRODUCTION ability of other player's space docks in this system to produce ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/supremacy.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/supremacy.jpg?raw=true",
   },
   {
     id: "celdauri_mech",
@@ -1654,8 +1609,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After another player activates a system, you may spend 1 trade good or 1 commodity to place 1 mech on a planet in that system that contains 1 of your space docks.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/minuteman.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/minuteman.jpg?raw=true",
   },
   {
     id: "celdauri_monument",
@@ -1687,8 +1641,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "This unit's PRODUCTION value is equal to 2 more than the resource or influence value of this planet.\nUp to 3 fighters in this system do not count against your ships' capacity.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/trade_port.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/trade_port.jpg?raw=true",
   },
   {
     id: "celdauri_spacedock2",
@@ -1707,8 +1660,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "This unit's PRODUCTION value is equal to 4 more than the resource or influence value of this planet.\nUp to 3 fighters in this system do not count against your ships' capacity.\nThis unit may use its ANTI-FIGHTER BARRAGE during each round of space combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/trade_port_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/trade_port_2.jpg?raw=true",
   },
   {
     id: "cheiran_dreadnought",
@@ -1731,8 +1683,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit is destroyed, you may place 1 fighter from your reinforcements in this system's space area.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/chitin_hulk.png?raw=true",
+    imageURL: "/hover_images/units/ds/faction/chitin_hulk.png?raw=true",
   },
   {
     id: "cheiran_dreadnought2",
@@ -1755,8 +1706,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       'This unit cannot be destroyed by "Direct Hit" action cards.\nWhen this unit is destroyed, you may place 1 fighter or 1 destroyer from your reinforcements in this system\'s space area.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/chitin_hulk_2.png?raw=true",
+    imageURL: "/hover_images/techs/ds/chitin_hulk_2.png?raw=true",
   },
   {
     id: "cheiran_flagship",
@@ -1778,8 +1728,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat or ability roll, it rolls 1 additional die if this system is adjacent to or contains 1 of your structures.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/lithodax.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/lithodax.png?raw=true",
   },
   {
     id: "cheiran_mech",
@@ -1796,8 +1745,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When this unit is destroyed, you may place 1 infantry from your reinforcements on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/nauplius.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/nauplius.png?raw=true",
   },
   {
     id: "cheiran_monument",
@@ -1842,8 +1790,7 @@ export const units: Unit[] = [
     combatHitsOn: 7,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/cruiser.png?raw=true",
+    imageURL: "/hover_images/units/generic/cruiser.png?raw=true",
   },
   {
     id: "cruiser2",
@@ -1861,8 +1808,7 @@ export const units: Unit[] = [
     combatHitsOn: 6,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/cruiser_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/cruiser_2.jpg?raw=true",
   },
   {
     id: "cymiae_flagship",
@@ -1882,8 +1828,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After you win a combat in this system, you may take 1 of your opponent's action cards, at random.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/reprocessor_alpha.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/reprocessor_alpha.jpg?raw=true",
   },
   {
     id: "cymiae_infantry",
@@ -1898,8 +1843,7 @@ export const units: Unit[] = [
     combatHitsOn: 5,
     combatDieCount: 1,
     isGroundForce: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/unholy_abomination.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/unholy_abomination.jpg?raw=true",
   },
   {
     id: "cymiae_infantry2",
@@ -1917,8 +1861,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your turn, place each unit that is on this card on a planet you control, if able.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/unholy_abomination_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/unholy_abomination_2.jpg?raw=true",
   },
   {
     id: "cymiae_mech",
@@ -1935,8 +1878,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the start of each ground combat round, if this planet contains no more than 1 of your mechs, repair this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/revenant.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/revenant.jpg?raw=true",
   },
   {
     id: "cymiae_monument",
@@ -1967,8 +1909,7 @@ export const units: Unit[] = [
     afbHitsOn: 9,
     afbDieCount: 2,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/destroyer.png?raw=true",
+    imageURL: "/hover_images/units/generic/destroyer.png?raw=true",
   },
   {
     id: "destroyer2",
@@ -1987,8 +1928,7 @@ export const units: Unit[] = [
     afbHitsOn: 6,
     afbDieCount: 3,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/destroyer_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/destroyer_2.jpg?raw=true",
   },
   {
     id: "dihmohn_dreadnought",
@@ -2011,8 +1951,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When another ship in this system would be destroyed during combat, you may have this ship become damaged instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/aegis.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/aegis.jpg?raw=true",
   },
   {
     id: "dihmohn_dreadnought2",
@@ -2035,8 +1974,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When another ship in this system would be destroyed by a game effect, you may have this ship become damaged instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/aegis_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/aegis_2.jpg?raw=true",
   },
   {
     id: "dihmohn_flagship",
@@ -2056,8 +1994,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After this unit moves into the active system, you may produce up to 2 units that have a combined cost of 4 or less in that system. [Note: this cannot produce ships if enemy ships are present]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/maximus.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/maximus.jpg?raw=true",
   },
   {
     id: "dihmohn_mech",
@@ -2074,8 +2011,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the start of a combat in this system you may repair 1 unit you control that is participating in that combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/repairitor.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/repairitor.jpg?raw=true",
   },
   {
     id: "dihmohn_monument",
@@ -2160,8 +2096,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/dreadnought.png?raw=true",
+    imageURL: "/hover_images/units/generic/dreadnought.png?raw=true",
   },
   {
     id: "dreadnought2",
@@ -2184,8 +2119,7 @@ export const units: Unit[] = [
     canBeDirectHit: false,
     isShip: true,
     ability: 'This unit cannot be destroyed by "Direct Hit" action cards.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/dreadnought_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/dreadnought_2.jpg?raw=true",
   },
   {
     id: "edyn_flagship",
@@ -2205,8 +2139,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Apply +1 to the results of this unit's combat rolls for each law in play.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/kaliburn.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/kaliburn.png?raw=true",
   },
   {
     id: "edyn_mech",
@@ -2223,8 +2156,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This system is a Sigil anomaly. Place an Edyn Sigil token beneath this unit as a reminder. Game effects cannot prevent you from using this ability.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/rune_bearer.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/rune_bearer.png?raw=true",
   },
   {
     id: "edyn_monument",
@@ -2325,8 +2257,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After any player's unit in this system or an adjacent system uses SUSTAIN DAMAGE, you may spend 2 influence to repair that unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/dynamo.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/dynamo.png?raw=true",
   },
   {
     id: "empyrean_mech",
@@ -2343,8 +2274,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "You may remove this unit from a system that contains or is adjacent to another player's units to cancel an action card played by that player.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/watcher.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/watcher.jpg?raw=true",
   },
   {
     id: "empyrean_monument",
@@ -2373,8 +2303,7 @@ export const units: Unit[] = [
     combatHitsOn: 9,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/fighter.png?raw=true",
+    imageURL: "/hover_images/units/generic/fighter.png?raw=true",
   },
   {
     id: "fighter2",
@@ -2393,8 +2322,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This unit may move without being transported.\nFighters in excess of your ships' capacity count against your fleet pool.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/fighter_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/fighter_2.jpg?raw=true",
   },
   {
     id: "flagship",
@@ -2431,8 +2359,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported.\nFighters in excess of your ships' capacity count against your fleet pool.",
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/corsair.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/corsair.jpg?raw=true",
   },
   {
     id: "florzen_fighter2",
@@ -2453,8 +2380,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported. Fighters in excess of your ships' capacity count against your fleet pool.",
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/corsair_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/corsair_2.jpg?raw=true",
   },
   {
     id: "florzen_flagship",
@@ -2474,8 +2400,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other players cannot play action cards during a space combat in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/man_o_war.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/man_o_war.jpg?raw=true",
   },
   {
     id: "florzen_mech",
@@ -2491,8 +2416,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability: "You may spend influence as resources to produce this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/privateer.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/privateer.jpg?raw=true",
   },
   {
     id: "florzen_monument",
@@ -2540,8 +2464,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat roll, it rolls 1 additional die for each planet in this system of any single trait.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/vox.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/vox.jpg?raw=true",
   },
   {
     id: "freesystems_mech",
@@ -2558,8 +2481,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After you use your RALLY TO THE CAUSE faction ability in a system, you may spend 1 trade good to place 1 mech on a planet you control adjacent to that system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/liberator.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/liberator.jpg?raw=true",
   },
   {
     id: "ghemina_carrier",
@@ -2576,8 +2498,7 @@ export const units: Unit[] = [
     combatHitsOn: 9,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/combat_transport.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/combat_transport.jpg?raw=true",
   },
   {
     id: "ghemina_carrier2",
@@ -2597,8 +2518,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "You may reroll 1 of your unit's combat dice during each round of ground combat on a planet in this system that contains 2 or fewer of your infantry.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/combat_transport_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/combat_transport_2.jpg?raw=true",
   },
   {
     id: "ghemina_flagship_lady",
@@ -2620,8 +2540,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When another player's structure in this system is destroyed, gain 2 trade goods.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/the_lady.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/the_lady.png?raw=true",
   },
   {
     id: "ghemina_flagship_lord",
@@ -2641,8 +2560,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After a player explores a planet in this system, place 1 infantry from their reinforcements on that planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/the_lord.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/the_lord.png?raw=true",
   },
   {
     id: "ghemina_mech",
@@ -2659,8 +2577,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After you win a ground combat on this planet, if this planet contains exactly 1 other mech, explore this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/jotun.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/jotun.jpg?raw=true",
   },
   {
     id: "ghemina_monument",
@@ -2694,8 +2611,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This ship's system contains a delta wormhole.\nDuring movement, this ship may move before or after your other ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/hil_colish.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/hil_colish.png?raw=true",
   },
   {
     id: "ghost_mech",
@@ -2712,8 +2628,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After any player activates a system, you may remove this unit from the game board to place or move a Creuss wormhole token into this system. [Note: this system refers to the system the mech is in. It does not refer to the active system]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/icarus_drive.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/icarus_drive.jpg?raw=true",
   },
   {
     id: "ghoti_flagship",
@@ -2733,8 +2648,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "While in play, this unit is also treated as a space dock with a PRODUCTION value equal to the number of tokens in your fleet pool.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/all_mother.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/all_mother.png?raw=true",
   },
   {
     id: "ghoti_mech",
@@ -2751,8 +2665,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This unit can be blockaded.\nWhen producing ships in your home system, place up to 1 of those units in this system's space area if it is not blockaded.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/tioleombp.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/tioleombp.png?raw=true",
   },
   {
     id: "ghoti_monument",
@@ -2788,8 +2701,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat or ability roll, it rolls 1 additional die for each mech in or adjacent to this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/beg_bersha.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/beg_bersha.png?raw=true",
   },
   {
     id: "gledge_mech",
@@ -2806,8 +2718,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When you exhaust this planet to spend resources, you may also spend 1 of its influence as a resource.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/exodriller.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/exodriller.png?raw=true",
   },
   {
     id: "gledge_monument",
@@ -2837,8 +2748,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "When this unit makes a SPACE CANNON roll against another player's units, if it rolls at least 1 result of 9 or 10, explore this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/orion_platform.png?raw=true",
+    imageURL: "/hover_images/units/ds/faction/orion_platform.png?raw=true",
   },
   {
     id: "gledge_pds2",
@@ -2856,8 +2766,7 @@ export const units: Unit[] = [
     deepSpaceCannon: true,
     ability:
       "When this unit produces 1 or more hits against another player's units, explore this planet.\nYou may use this unit's SPACE CANNON against ships that are adjacent to this unit's system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/orion_platform_2.png?raw=true",
+    imageURL: "/hover_images/techs/ds/orion_platform_2.png?raw=true",
   },
   {
     id: "hacan_flagship",
@@ -2877,8 +2786,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After you roll a die during a space combat in this system, you may spend 1 trade good to apply +1 to the result.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/wrath_of_kenara.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/wrath_of_kenara.png?raw=true",
   },
   {
     id: "hacan_mech",
@@ -2895,8 +2803,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This planet's card may be traded as part of a transaction; if you do, move all of your units from this planet to another planet you control.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/pride_of_kenara.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/pride_of_kenara.jpg?raw=true",
   },
   {
     id: "hacan_monument",
@@ -2924,8 +2831,7 @@ export const units: Unit[] = [
     combatHitsOn: 8,
     combatDieCount: 1,
     isGroundForce: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/infantry.png?raw=true",
+    imageURL: "/hover_images/units/generic/infantry.png?raw=true",
   },
   {
     id: "infantry2",
@@ -2943,8 +2849,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/infantry_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/infantry_2.jpg?raw=true",
   },
   {
     id: "jolnar_flagship",
@@ -2964,8 +2869,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When making a combat roll for this ship, each result of 9 or 10, before applying modifiers, produces 2 additional hits.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/jns_hylarim.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/jns_hylarim.png?raw=true",
   },
   {
     id: "jolnar_mech",
@@ -2982,8 +2886,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Your infantry on this planet are not affected by your Fragile faction ability.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/shield_paling.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/shield_paling.jpg?raw=true",
   },
   {
     id: "jolnar_monument",
@@ -3098,8 +3001,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other players must spend 2 influence to activate the system that contains this ship.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/artemiris.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/artemiris.png?raw=true",
   },
   {
     id: "keleres_mech",
@@ -3116,8 +3018,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Other players must spend 1 influence to commit ground forces to the planet that contains this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/omniopiares.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/omniopiares.jpg?raw=true",
   },
   {
     id: "keleres_monument",
@@ -3151,8 +3052,7 @@ export const units: Unit[] = [
     bombardHitsOn: 8,
     bombardDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/shattered_sky.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/shattered_sky.jpg?raw=true",
   },
   {
     id: "khrask_cruiser2",
@@ -3172,8 +3072,7 @@ export const units: Unit[] = [
     bombardHitsOn: 6,
     bombardDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/shattered_sky_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/shattered_sky_2.jpg?raw=true",
   },
   {
     id: "khrask_flagship",
@@ -3193,8 +3092,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the start of a space combat in this system, choose up to 2 non-fighter ships to gain SUSTAIN DAMAGE until the end of combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/splintering_gale.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/splintering_gale.jpg?raw=true",
   },
   {
     id: "khrask_mech",
@@ -3211,8 +3109,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Units other than your mechs do not make combat rolls during the first round of ground combat on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/megalith.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/megalith.jpg?raw=true",
   },
   {
     id: "khrask_monument",
@@ -3248,8 +3145,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This unit may ignore the movement effects of non-supernova anomalies. [Note: This does not ignore Gravity Rifts Rolls/non-movement-effects!]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/star_dragon.png?raw=true",
+    imageURL: "/hover_images/units/ds/faction/star_dragon.png?raw=true",
   },
   {
     id: "kjalengard_carrier2",
@@ -3269,8 +3165,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This unit may ignore the movement effects of anomalies. [Note: This does not ignore Gravity Rifts Rolls/non-movement-effects]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/star_dragon_2.png?raw=true",
+    imageURL: "/hover_images/techs/ds/star_dragon_2.png?raw=true",
   },
   {
     id: "kjalengard_flagship",
@@ -3290,8 +3185,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After the first round of combat in this system, place up to 2 of your captured units in this system or on that planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/hulgades_hammer.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/hulgades_hammer.png?raw=true",
   },
   {
     id: "kjalengard_mech",
@@ -3308,8 +3202,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When you pass, place 1 infantry from your reinforcements on this planet if there is a Glory token in or adjacent to this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/skald.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/skald.png?raw=true",
   },
   {
     id: "kjalengard_monument",
@@ -3343,8 +3236,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit retreats, you may capture each of your units that retreat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/nightingale_v.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/nightingale_v.jpg?raw=true",
   },
   {
     id: "kollecc_mech",
@@ -3361,8 +3253,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the end of a tactical action in this system, you may place up to 2 ground forces from this planet onto your faction sheet, those units are captured.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/nightshade_vanguard.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/nightshade_vanguard.jpg?raw=true",
   },
   {
     id: "kollecc_monument",
@@ -3398,8 +3289,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Hits produced by the SPACE CANNON abilities of your units in this system cannot be canceled.[Note: this means you cannot use sustain damage on them]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/halberd.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/halberd.png?raw=true",
   },
   {
     id: "kolume_mech",
@@ -3418,8 +3308,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Hits produced by this unit cannot be assigned to non-fighter ships. After you spend a command token from your strategy pool, repair this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/rook.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/rook.png?raw=true",
   },
   {
     id: "kolume_monument",
@@ -3457,8 +3346,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After you win a space combat in this system, you may have this ship become damaged to gain 1 command token.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/magistrate.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/magistrate.png?raw=true",
   },
   {
     id: "kortali_mech",
@@ -3475,8 +3363,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability: "This unit cannot lose its PLANETARY SHIELD.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/justicar.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/justicar.jpg?raw=true",
   },
   {
     id: "kortali_monument",
@@ -3510,8 +3397,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When you commit units to a planet in this system, commit 1 infantry from your reinforcements to that planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/auriga.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/auriga.png?raw=true",
   },
   {
     id: "kyro_mech",
@@ -3528,8 +3414,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When this unit would be destroyed, if it is damaged, you may discard 1 action card to repair it instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/pustule.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/pustule.png?raw=true",
   },
   {
     id: "kyro_monument",
@@ -3564,8 +3449,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/superdreadnought.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/superdreadnought.jpg?raw=true",
   },
   {
     id: "l1z1x_dreadnought2",
@@ -3587,8 +3471,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isShip: true,
     ability: 'This unit cannot be destroyed by "Direct Hit" action cards.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/superdreadnought_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/superdreadnought_2.jpg?raw=true",
   },
   {
     id: "l1z1x_flagship",
@@ -3608,8 +3491,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "During a space combat, hits produced by this ship and by your dreadnoughts in this system must be assigned to non-fighter ships if able.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/001.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/001.png?raw=true",
   },
   {
     id: "l1z1x_mech",
@@ -3628,8 +3510,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "While not participating in ground combat, this unit can use it's BOMBARDMENT ability on planets in its system as if it were a ship.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/annihilator.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/annihilator.jpg?raw=true",
   },
   {
     id: "l1z1x_monument",
@@ -3670,8 +3551,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the end of a tactical action in this system, you may explore 1 planet you control in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/memory_of_dusk.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/memory_of_dusk.png?raw=true",
   },
   {
     id: "lanefir_mech",
@@ -3688,8 +3568,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: At the start of your turn, purge 1 of your relic fragments to place 1 mech on a planet you control, if you do, you may end your turn. [Note: Treated as a component action in the bot, despite not entirely being one]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/troubadour.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/troubadour.png?raw=true",
   },
   {
     id: "lanefir_monument",
@@ -3753,8 +3632,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other player's units in this system lose PLANETARY SHIELD.\nAt the start of each space combat round, repair this ship.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/arc_secundus.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/arc_secundus.png?raw=true",
   },
   {
     id: "letnev_mech",
@@ -3771,8 +3649,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: At the start of a round of ground combat, you may spend 2 resources to replace 1 of your infantry in that combat with 1 mech.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/dunlain_reaper.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/dunlain_reaper.jpg?raw=true",
   },
   {
     id: "letnev_monument",
@@ -3803,8 +3680,7 @@ export const units: Unit[] = [
     bombardHitsOn: 9,
     bombardDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/heavy_bomber.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/heavy_bomber.jpg?raw=true",
   },
   {
     id: "lizho_fighter2",
@@ -3825,8 +3701,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported.\nFighters in excess of your ships' capacity count against your fleet pool.",
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/heavy_bomber_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/heavy_bomber_2.jpg?raw=true",
   },
   {
     id: "lizho_flagship",
@@ -3846,8 +3721,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This unit can only be destroyed by an uncanceled hit being assigned to it.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/silence_of_stars.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/silence_of_stars.jpg?raw=true",
   },
   {
     id: "lizho_mech",
@@ -3864,8 +3738,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the start of your turn, you may remove 1 trap attachment from the game board and attach it to this planet, or swap any trap attachment with 1 on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/orozhin_elite.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/orozhin_elite.jpg?raw=true",
   },
   {
     id: "lizho_monument",
@@ -3971,8 +3844,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "During combat against an opponent whose command token is not in your fleet pool, apply +2 to the results of this unit's combat rolls.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/arvicon_rex.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/arvicon_rex.png?raw=true",
   },
   {
     id: "mahact_infantry",
@@ -3990,7 +3862,7 @@ export const units: Unit[] = [
     ability:
       "After this unit is destroyed, gain 1 commodity or convert 1 of your commodities to a trade good.",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/crimson_legionnaire.jpg?raw=true",
+      "/hover_images/units/pok/faction/crimson_legionnaire.jpg?raw=true",
   },
   {
     id: "mahact_infantry2",
@@ -4008,8 +3880,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, gain 1 commodity or convert 1 of your commodities to a trade good. Then, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/crimson_legionnaire_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/crimson_legionnaire_2.jpg?raw=true",
   },
   {
     id: "mahact_mech",
@@ -4026,8 +3897,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After a player whose command token is in your fleet pool activates this system, you may spend their token from your fleet pool to end their turn; they gain that token.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/starlancer.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/starlancer.jpg?raw=true",
   },
   {
     id: "mahact_monument",
@@ -4109,8 +3979,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability: "Other player's ships in this system cannot use SUSTAIN DAMAGE.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/fourth_moon.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/fourth_moon.png?raw=true",
   },
   {
     id: "mentak_mech",
@@ -4127,8 +3996,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Other player's ground forces on this planet cannot use SUSTAIN DAMAGE.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/moll_terminus.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/moll_terminus.jpg?raw=true",
   },
   {
     id: "mentak_monument",
@@ -4833,8 +4701,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After each round of space combat in this system, place 1 fighter from your reinforcements in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/nexus.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/nexus.jpg?raw=true",
   },
   {
     id: "mirveda_mech",
@@ -4851,8 +4718,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "For every 2 unit upgrade technologies you own, apply +1 to the result of this unit's combat rolls.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/javelin.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/javelin.jpg?raw=true",
   },
   {
     id: "mirveda_monument",
@@ -4888,8 +4754,7 @@ export const units: Unit[] = [
     isSpaceOnly: true,
     ability:
       "This unit is placed in a space area instead of on a planet.\nThis unit can move and retreat as if it were a ship.\nThis unit can be blockaded, if it is blockaded, it is destroyed. [Note that if this unit is alone and an enemy ship moves into its space, it will be blockaded and die before it can shoot PDS.]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/gauss_cannon.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/gauss_cannon.jpg?raw=true",
   },
   {
     id: "mirveda_pds2",
@@ -4912,8 +4777,7 @@ export const units: Unit[] = [
     isSpaceOnly: true,
     ability:
       "This unit is placed in a space area instead of on a planet.\nThis unit can move and retreat as if it were a ship.\nThis unit can be blockaded, if it is blockaded, it is destroyed. [Note: this unit cannot fire into adjacent systems by itself. Needs Mirveda commander. Also note that if it is alone and an enemy ship moves into its space, it will be blockaded and die before it can shoot PDS.]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/gauss_cannon_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/gauss_cannon_2.jpg?raw=true",
   },
   {
     id: "monument",
@@ -4942,8 +4806,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After you activate this system, if it does not contain any planets, you may place 1 frontier token in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/particle_sieve.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/particle_sieve.jpg?raw=true",
   },
   {
     id: "mortheus_mech",
@@ -4960,8 +4823,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When a player commits 1 or more units to a planet you control adjacent to this system, you may swap this unit with 1 of your infantry on that planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/duuban.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/duuban.jpg?raw=true",
   },
   {
     id: "mortheus_monument",
@@ -4995,8 +4857,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "ACTION: Spend 1 token from your strategy pool to place 1 cruiser in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/the_inferno.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/the_inferno.png?raw=true",
   },
   {
     id: "muaat_mech",
@@ -5013,8 +4874,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "When you use your Star Forge faction ability in this system or an adjacent system, you may place 1 infantry from your reinforcements with this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/ember_colossus.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/ember_colossus.jpg?raw=true",
   },
   {
     id: "muaat_monument",
@@ -5052,8 +4912,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other players' units in this system lose the PLANETARY SHIELD ability.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/prototype_war_sun.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/prototype_war_sun.jpg?raw=true",
   },
   {
     id: "muaat_warsun2",
@@ -5078,8 +4937,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other players' units in this system lose the PLANETARY SHIELD ability.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/prototype_war_sun_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/prototype_war_sun_2.jpg?raw=true",
   },
   {
     id: "mykomentori_flagship",
@@ -5099,8 +4957,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Once per round of space combat, when a non-fighter ship in this system is destroyed, you may gain 1 commodity.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/psyclobea_qarnyx.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/psyclobea_qarnyx.jpg?raw=true",
   },
   {
     id: "mykomentori_mech",
@@ -5117,8 +4974,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll a die. If the result is 6 or greater, place the unit on this card. At the start of your turn, you may replace 1 infantry you control with a unit that is on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/amandia_pholdis.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/amandia_pholdis.jpg?raw=true",
   },
   {
     id: "mykomentori_monument",
@@ -5150,8 +5006,7 @@ export const units: Unit[] = [
     planetaryShield: true,
     ability:
       "This unit’s PRODUCTION value is equal to 2 more than the resource value of this planet.\nDEPLOY: When you gain control of a planet, you may replace 4 infantry on that planet with 1 space dock.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/mycelium_ring.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/mycelium_ring.jpg?raw=true",
   },
   {
     id: "mykomentori_spacedock2",
@@ -5168,8 +5023,7 @@ export const units: Unit[] = [
     planetaryShield: true,
     ability:
       "This unit’s PRODUCTION value is equal to 5 more than the resource value of this planet.\nDEPLOY: When you gain control of a planet, you may replace 3 infantry on that planet with 1 space dock.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/mycelium_ring_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/mycelium_ring_2.jpg?raw=true",
   },
   {
     id: "naalu_fighter",
@@ -5186,7 +5040,7 @@ export const units: Unit[] = [
     combatHitsOn: 8,
     combatDieCount: 1,
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/hybrid_crystal_fighter.jpg?raw=true",
+      "/hover_images/units/pok/faction/hybrid_crystal_fighter.jpg?raw=true",
   },
   {
     id: "naalu_fighter2",
@@ -5207,7 +5061,7 @@ export const units: Unit[] = [
     ability:
       "This unit may move without being transported.\nEach fighter in excess of your ships' capacity counts as 1/2 of a ship against your fleet pool.",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/hybrid_crystal_fighter_2.jpg?raw=true",
+      "/hover_images/techs/faction/hybrid_crystal_fighter_2.jpg?raw=true",
   },
   {
     id: "naalu_flagship",
@@ -5227,8 +5081,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "During an invasion in this system, you may commit fighters to planets as if they were ground forces. After combat, return those units to the space area.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/matriarch.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/matriarch.png?raw=true",
   },
   {
     id: "naalu_mech",
@@ -5245,8 +5098,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "During combat against an opponent who has at least 1 relic fragment, apply +2 to the results of this unit's combat rolls.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/iconoclast.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/iconoclast.jpg?raw=true",
   },
   {
     id: "naalu_mech_omega",
@@ -5263,8 +5115,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Other players cannot use ANTI-FIGHTER BARRAGE against your units in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/iconoclast_omega.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/iconoclast_omega.jpg?raw=true",
   },
   {
     id: "naalu_monument",
@@ -5311,8 +5162,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability: "Your mechs in this system roll 1 additional die during combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/visz_el_vir.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/visz_el_vir.png?raw=true",
   },
   {
     id: "naaz_mech",
@@ -5329,8 +5179,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "If this unit is in the space area of the active system at the start of a space combat, flip this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/eidolon.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/eidolon.jpg?raw=true",
   },
   {
     id: "naaz_mech_space",
@@ -5346,8 +5195,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "If this unit is in the space area of the active system, it is also a ship.\nAt the end of a space battle in the active system, flip this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/eidolon_zgrav.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/eidolon_zgrav.jpg?raw=true",
   },
   {
     id: "nekro_flagship",
@@ -5367,8 +5215,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the start of a space combat, choose any number of your ground forces in this system to participate in that combat as if they were ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/the_alastor.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/the_alastor.png?raw=true",
   },
   {
     id: "nekro_mech",
@@ -5385,8 +5232,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       'During combat against an opponent who has an "X" or "Y" token on 1 or more of their technologies, apply +2 to the result of each of this unit\'s combat rolls.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/mordred.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/mordred.jpg?raw=true",
   },
   {
     id: "nekro_monument",
@@ -5486,8 +5332,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When a unit in this system would be destroyed, you may remove it from the game board instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/eradica.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/eradica.jpg?raw=true",
   },
   {
     id: "nivyn_mech",
@@ -5505,8 +5350,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this system is activated, you may have this unit become damaged to place or move the Wound token into this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/voidflare_warden_i.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/voidflare_warden_i.jpg?raw=true",
   },
   {
     id: "nivyn_mech2",
@@ -5525,8 +5369,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After a system is activated, you may have this unit become damaged to place or move the Wound token into this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/voidflare_warden_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/voidflare_warden_2.jpg?raw=true",
   },
   {
     id: "nivyn_monument",
@@ -5560,8 +5403,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After this unit is destroyed during combat, roll a die, on a result of 9 or 10, produce up to 1 hit against ships against your opponent's ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/sabre.png?raw=true",
+    imageURL: "/hover_images/units/ds/faction/sabre.png?raw=true",
   },
   {
     id: "nokar_destroyer2",
@@ -5582,8 +5424,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After this unit is destroyed during combat, roll a die, on a result equal to or greater than 7, produce up to 1 hit against your opponent's ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/sabre_2.png?raw=true",
+    imageURL: "/hover_images/techs/ds/sabre_2.png?raw=true",
   },
   {
     id: "nokar_flagship",
@@ -5603,8 +5444,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Apply +1 to the results of this unit's combat rolls for every 2 destroyers you control.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/annah_regia.png?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/annah_regia.png?raw=true",
   },
   {
     id: "nokar_mech",
@@ -5621,8 +5461,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "You may treat this system as adjacent to the active system for the purposes of declaring and resolving retreats.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/freelance_outfit.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/freelance_outfit.png?raw=true",
   },
   {
     id: "nokar_monument",
@@ -5659,8 +5498,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "You may treat this unit as if it were adjacent to systems that contain 1 or more of your mechs.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/memoria.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/memoria.png?raw=true",
   },
   {
     id: "nomad_flagship2",
@@ -5684,8 +5522,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "You may treat this unit as if it were adjacent to systems that contain 1 or more of your mechs.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/memoria_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/memoria_2.jpg?raw=true",
   },
   {
     id: "nomad_mech",
@@ -5702,8 +5539,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "While this unit is in a space area during combat, you may use its SUSTAIN DAMAGE ability to cancel a hit that is produced against your ships in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/quantum_manipulator.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/quantum_manipulator.jpg?raw=true",
   },
   {
     id: "nomad_monument",
@@ -5739,8 +5575,7 @@ export const units: Unit[] = [
     asyncId: "ws",
     name: "Not a War Sun Yet",
     source: "base",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/warsun_0.png?raw=true",
+    imageURL: "/hover_images/units/generic/warsun_0.png?raw=true",
   },
   {
     id: "olradin_flagship",
@@ -5760,8 +5595,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When you move this ship, apply +1 to the move value of each of your other ships during this tactical action.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/rallypoint.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/rallypoint.jpg?raw=true",
   },
   {
     id: "olradin_mech",
@@ -5778,8 +5612,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "You have not selected your policies yet. This mech's ability depends on your Policies.\nIf you have at least 2 ➕ Policies, and if this planet contains no more than 1 of your mechs, apply +1 to its influence value.\nIf you have at least 2 ➖ Policies, and if this planet contains no more than 1 of your mechs, apply +1 to its resource value.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/exemplar_glitch.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/exemplar_glitch.png?raw=true",
   },
   {
     id: "olradin_mech_negative",
@@ -5796,8 +5629,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "If this planet contains no more than 1 of your mechs, apply +1 to its resource value.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/exemplar_malus.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/exemplar_malus.png?raw=true",
   },
   {
     id: "olradin_mech_positive",
@@ -5814,8 +5646,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "If this planet contains no more than 1 of your mechs, apply +1 to its influence value.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/exemplar_bonum.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/exemplar_bonum.png?raw=true",
   },
   {
     id: "olradin_monument",
@@ -5971,8 +5802,7 @@ export const units: Unit[] = [
     spaceCannonDieCount: 1,
     planetaryShield: true,
     isStructure: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/pds.png?raw=true",
+    imageURL: "/hover_images/units/generic/pds.png?raw=true",
   },
   {
     id: "pds2",
@@ -5990,8 +5820,7 @@ export const units: Unit[] = [
       "You may use this unit's SPACE CANNON against ships that are in adjacent systems.",
     planetaryShield: true,
     isStructure: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/pds_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/pds_2.jpg?raw=true",
   },
   {
     id: "pharadn_flagship",
@@ -6870,8 +6699,7 @@ export const units: Unit[] = [
     isStructure: true,
     ability:
       "DEPLOY: After you activate a system, attach this card to a non-home planet other than Mecatol Rex you control in that system that does not contain a space dock. The planet this card is attached to contains this unit.\nUp to 8 fighters in this system do not count against your ships' capacity. Up to 2 non-fighter ships in the system do not count against your fleet pool.\nThis unit cannot be affected by opponent's action cards.\nWhen this unit is destroyed or removed, purge this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/PlenaryOrbital.jpg?raw=true",
+    imageURL: "/hover_images/units/absol/PlenaryOrbital.jpg?raw=true",
   },
   {
     id: "qhet_cruiser",
@@ -7133,8 +6961,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "DEPLOY: After you activate a system, you may spend 4 resources to replace 1 of your non-fighter ships in that system with your flagship.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/kyvir.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/kyvir.jpg?raw=true",
   },
   {
     id: "rohdhna_mech",
@@ -7151,8 +6978,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After you use your Recycled Materials faction ability in a system, you may place 1 mech in that system's space area or on a planet you control in that system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/autofabricator.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/autofabricator.jpg?raw=true",
   },
   {
     id: "rohdhna_warsun",
@@ -7170,8 +6996,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This unit produces only 1 fighter or infantry for their cost instead of 2.\nThis unit cannot move or be produced.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/terrafactory.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/terrafactory.jpg?raw=true",
   },
   {
     id: "rohdhna_warsun2",
@@ -7197,8 +7022,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Other player's units in this system lose PLANETARY SHIELD.\nThis unit produces only 1 fighter or infantry for their cost instead of 2.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/terrafactory_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/terrafactory_2.jpg?raw=true",
   },
   {
     id: "saar_flagship",
@@ -7218,8 +7042,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/son_of_ragh.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/son_of_ragh.png?raw=true",
   },
   {
     id: "saar_mech",
@@ -7236,8 +7059,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After you gain control of a planet, you may spend 1 trade good to place 1 mech on that planet",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/scavenger_zeta.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/scavenger_zeta.jpg?raw=true",
   },
   {
     id: "saar_monument",
@@ -7271,8 +7093,7 @@ export const units: Unit[] = [
     isSpaceOnly: true,
     ability:
       "This unit is placed in the space area instead of on a planet.\nThis unit can move and retreat as if it were a ship.\nIf this unit is blockaded, it is destroyed.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/floating_factory.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/floating_factory.jpg?raw=true",
   },
   {
     id: "saar_spacedock2",
@@ -7291,8 +7112,7 @@ export const units: Unit[] = [
     isSpaceOnly: true,
     ability:
       "This unit is placed in the space area instead of on a planet.\nThis unit can move and retreat as if it were a ship.\nIf this unit is blockaded, it is destroyed.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/floating_factory_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/floating_factory_2.jpg?raw=true",
   },
   {
     id: "saera_cruiser",
@@ -7388,8 +7208,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/exotrireme.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/exotrireme.jpg?raw=true",
   },
   {
     id: "sardakk_dreadnought2",
@@ -7412,8 +7231,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       'This unit cannot be destroyed by "Direct Hit" action cards.\nAfter a round of space combat, you may destroy this unit to destroy up to 2 ships in the system.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/exotrireme_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/exotrireme_2.jpg?raw=true",
   },
   {
     id: "sardakk_flagship",
@@ -7433,8 +7251,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "Apply +1 to the result of each of your other ship's combat rolls in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/cmorran_norr.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/cmorran_norr.png?raw=true",
   },
   {
     id: "sardakk_mech",
@@ -7451,8 +7268,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit uses it's SUSTAIN DAMAGE ability during ground combat, it produces 1 hit against your opponent's ground forces on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/valkyrie_exoskeleton.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/valkyrie_exoskeleton.jpg?raw=true",
   },
   {
     id: "shadows_flagship",
@@ -7538,8 +7354,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: During the production step of a tactical action, produce 8 units.",
     homebrewReplacesID: "arborec_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/arborec_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/arborec_1a.png?raw=true",
   },
   {
     id: "sigma_arborec_flagship_2",
@@ -7561,8 +7376,7 @@ export const units: Unit[] = [
     productionValue: 12,
     unlock:
       "UNLOCK: During the production step of a tactical action, produce 12 units.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/arborec_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/arborec_2a.png?raw=true",
   },
   {
     id: "sigma_argent_flagship_1",
@@ -7584,8 +7398,7 @@ export const units: Unit[] = [
     unlock:
       "When you destroy a unit using a unit ability, place a control token on this card.\nUNLOCK: Have 4 control tokens on this card.",
     homebrewReplacesID: "argent_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/argent_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/argent_1a.png?raw=true",
   },
   {
     id: "sigma_argent_flagship_2",
@@ -7606,8 +7419,7 @@ export const units: Unit[] = [
       "When using SPACE CANNON, other players apply -2 and you apply +2 to the result of each die roll against units in adjacent systems, and other players apply -3 and you apply +3 to the result of each die roll against units in this system.",
     unlock:
       "When you destroy a unit using a unit ability, place a control token on this card.\nUNLOCK: Have 12 control tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/argent_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/argent_2a.png?raw=true",
   },
   {
     id: "sigma_cavalry_1",
@@ -7681,8 +7493,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Have ships in systems that collectively contain a total of 4 or more wormholes.",
     homebrewReplacesID: "ghost_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/creuss_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/creuss_1a.png?raw=true",
   },
   {
     id: "sigma_creuss_flagship_2",
@@ -7703,8 +7514,7 @@ export const units: Unit[] = [
       "You treat this system as if it contained a delta wormhole.\nDuring movement, this ship may move before or after your other ships.\nThis ship does not roll for gravity rifts.\nYou may move this ship to an adjacent system at the start of a space combat there.",
     unlock:
       "UNLOCK: Have ships in systems that collectively contain a total of 6 or more wormholes.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/creuss_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/creuss_2a.png?raw=true",
   },
   {
     id: "sigma_empyrean_flagship_1",
@@ -7726,8 +7536,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Explore a frontier token adjacent to another player's home system.",
     homebrewReplacesID: "empyrean_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/empyrean_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/empyrean_1a.png?raw=true",
   },
   {
     id: "sigma_empyrean_flagship_2",
@@ -7748,8 +7557,7 @@ export const units: Unit[] = [
       'When any player\'s unit in this system or an adjacent system with the SUSTAIN DAMAGE ability becomes damaged, you may spend 1 influence to repair that unit; it cannot be destroyed by a "Direct Hit" action card triggered by that use of SUSTAIN DAMAGE.',
     unlock:
       "UNLOCK: Purge a frontier exploration card.\nACTION: Purge an unknown relic fragment.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/empyrean_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/empyrean_2a.png?raw=true",
   },
   {
     id: "sigma_hacan_flagship_1",
@@ -7771,8 +7579,7 @@ export const units: Unit[] = [
     unlock:
       "When you resolve a transaction with another player, place 1 of their control tokens on this card.\nUNLOCK: Have a control token from each other player on this card.",
     homebrewReplacesID: "hacan_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/hacan_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/hacan_1a.png?raw=true",
   },
   {
     id: "sigma_hacan_flagship_2",
@@ -7793,8 +7600,7 @@ export const units: Unit[] = [
       "You may spend any number of trade goods to cancel up to 3 hits each, all produced by the same player against your units in this system; that player gains the trade good.",
     unlock:
       "When you resolve a transaction with another player, place 1 of their control tokens on this card.\nUNLOCK: Have 6 control tokens for each other player in the game on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/hacan_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/hacan_2a.png?raw=true",
   },
   {
     id: "sigma_jolnar_flagship_1",
@@ -7815,8 +7621,7 @@ export const units: Unit[] = [
       "When this ship produces a hit with a combat roll, it gains 1 additional combat dice for this round of combat; roll that dice immediately.",
     unlock: "UNLOCK: Control a planet with a technology speciality.",
     homebrewReplacesID: "jolnar_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/jolnar_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/jolnar_1a.png?raw=true",
   },
   {
     id: "sigma_jolnar_flagship_2",
@@ -7837,8 +7642,7 @@ export const units: Unit[] = [
       "When this ship produces a hit with a combat roll, it gains 1 additional combat dice for this round of combat; roll that dice immediately.",
     unlock:
       "If you control a planet with a technology speciality, or own 4 technologies of 1 color, place the technology token of the corresponding color on this card.\nUNLOCK: Have 4 tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/jolnar_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/jolnar_2a.png?raw=true",
   },
   {
     id: "sigma_keleresa_flagship_1",
@@ -7859,8 +7663,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Give another player 3 commodities and/or trade goods when resolving a transaction.",
     homebrewReplacesID: "keleres_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_1a.png?raw=true",
   },
   {
     id: "sigma_keleresa_flagship_2",
@@ -7881,8 +7684,7 @@ export const units: Unit[] = [
       "Other players must spend 4 influence to activate this system. When they do, gain 1 command token from this system or your reinforcements.",
     unlock:
       "UNLOCK: With the Artemiris I unlocked, give another player 6 commodities and/or trade goods when resolving a transaction.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_2a.png?raw=true",
   },
   {
     id: "sigma_keleresm_flagship_1",
@@ -7904,8 +7706,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Give another player 4 commodities or trade goods when resolving a transaction.",
     homebrewReplacesID: "keleres_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_1a.png?raw=true",
   },
   {
     id: "sigma_keleresm_flagship_2",
@@ -7926,8 +7727,7 @@ export const units: Unit[] = [
       "Other players must spend 4 influence to activate the system that contains this ship. When they do, gain 1 command token from this system or your reinforcements.",
     unlock:
       "UNLOCK: With the Artemiris I unlocked, give another player 8 commodities or trade goods when resolving a transaction.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_2a.png?raw=true",
   },
   {
     id: "sigma_keleresx_flagship_1",
@@ -7949,8 +7749,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Give another player 4 commodities or trade goods when resolving a transaction.",
     homebrewReplacesID: "keleres_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_1a.png?raw=true",
   },
   {
     id: "sigma_keleresx_flagship_1_flagship_2",
@@ -7971,8 +7770,7 @@ export const units: Unit[] = [
       "Other players must spend 4 influence to activate the system that contains this ship. When they do, gain 1 command token from this system or your reinforcements.",
     unlock:
       "UNLOCK: With the Artemiris I unlocked, give another player 8 commodities or trade goods when resolving a transaction.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/keleres_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/keleres_2a.png?raw=true",
   },
   {
     id: "sigma_l1z1x_flagship_1",
@@ -7995,8 +7793,7 @@ export const units: Unit[] = [
     bombardDieCount: 2,
     unlock: "UNLOCK: produce 3 BOMBARDMENT hits during 1 invasion.",
     homebrewReplacesID: "l1z1x_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/lizix_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/lizix_1a.png?raw=true",
   },
   {
     id: "sigma_l1z1x_flagship_2",
@@ -8018,8 +7815,7 @@ export const units: Unit[] = [
     bombardHitsOn: 6,
     bombardDieCount: 4,
     unlock: "UNLOCK: produce 6 BOMBARDMENT hits during 1 invasion.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/lizix_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/lizix_2a.png?raw=true",
   },
   {
     id: "sigma_letnev_flagship_1",
@@ -8041,8 +7837,7 @@ export const units: Unit[] = [
     unlock:
       "When 1 of your opponent's non-fighter ships is destroyed during space combat, place a number of control tokens on this card equal to that ship's cost.\nUNLOCK: Have 8 control tokens on this card.",
     homebrewReplacesID: "letnev_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/letnev_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/letnev_1a.png?raw=true",
   },
   {
     id: "sigma_letnev_flagship_2",
@@ -8063,8 +7858,7 @@ export const units: Unit[] = [
       'At the start of each space combat round in this system, repair this ship, then place 1 fighter for every 8 resources in the combined cost of your non-fighter ships in this system.\nThis unit cannot be destroyed by "Direct Hit" action cards.',
     unlock:
       "When 1 of your opponent's non-fighter ships is destroyed during space combat, place a number of control tokens on this card equal to that ship's cost.\nUNLOCK: Have 20 control tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/letnev_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/letnev_2a.png?raw=true",
   },
   {
     id: "sigma_mahact_flagship_1",
@@ -8085,8 +7879,7 @@ export const units: Unit[] = [
       "During a combat against a player without a command token in your fleet pool, apply +1 to the result of this unit's combat rolls.",
     unlock: "UNLOCK: Have 1 Support For The Throne in your play area.",
     homebrewReplacesID: "mahact_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/mahact_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/mahact_1a.png?raw=true",
   },
   {
     id: "sigma_mahact_flagship_2",
@@ -8106,8 +7899,7 @@ export const units: Unit[] = [
     ability:
       "During a combat against a player without a command token in your fleet pool, apply +2 to the result of this unit's combat rolls.\nWhen you win a combat in this system, place 1 command token from your opponent's reinforcements in this system.",
     unlock: "UNLOCK: Have 2 Supports Fors Thes Thrones in your play area.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/mahact_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/mahact_2a.png?raw=true",
   },
   {
     id: "sigma_mentak_flagship_1",
@@ -8129,8 +7921,7 @@ export const units: Unit[] = [
     unlock:
       "When you resolve your Pillage faction ability, place 1 control token on this card.\nUNLOCK: have 6 control tokens on this card.",
     homebrewReplacesID: "mentak_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/mentak_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/mentak_1a.png?raw=true",
   },
   {
     id: "sigma_mentak_flagship_2",
@@ -8151,8 +7942,7 @@ export const units: Unit[] = [
       "Other players' ships in or adjacent to this system cannot use SUSTAIN DAMAGE.",
     unlock:
       "When you resolve your Pillage faction ability, place 1 control token on this card.\nUNLOCK: have 12 control tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/mentak_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/mentak_2a.png?raw=true",
   },
   {
     id: "sigma_muaat_flagship_1",
@@ -8174,8 +7964,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Have a war sun in or adjacent to a system that contains a supernova.",
     homebrewReplacesID: "muaat_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/muaat_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/muaat_1a.png?raw=true",
   },
   {
     id: "sigma_muaat_flagship_2",
@@ -8196,8 +7985,7 @@ export const units: Unit[] = [
       "When 1 of your war suns in this system would be destroyed, you may damage or destroy this ship instead.\nACTION: Spend 1 token from your strategy pool to place ships with a combined cost of 2 or less in this or adjacent systems.",
     unlock:
       "UNLOCK: Have 2 of your war suns in or adjacent to the system that contains The Inferno I",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/muaat_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/muaat_2a.png?raw=true",
   },
   {
     id: "sigma_muaat_mech",
@@ -8215,8 +8003,7 @@ export const units: Unit[] = [
     ability:
       "When you use your Star Forge faction ability in this or an adjacent system, or use the component action of your flagship when it is in this or an adjacent system, you may place 1 infantry from your reinforcements with this unit.",
     homebrewReplacesID: "muaat_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/muaat_mech.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/muaat_mech.png?raw=true",
   },
   {
     id: "sigma_naalu_flagship_1",
@@ -8237,8 +8024,7 @@ export const units: Unit[] = [
       "Other players cannot use ANTI-FIGHTER BARRAGE against your units in this system.",
     unlock: "UNLOCK: Have 8 fighters on the game board.",
     homebrewReplacesID: "naalu_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/naalu_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/naalu_1a.png?raw=true",
   },
   {
     id: "sigma_naalu_flagship_2",
@@ -8258,8 +8044,7 @@ export const units: Unit[] = [
     ability:
       "Other players cannot use ANTI-FIGHTER BARRAGE against your units in this system.\nDuring an invasion in this system, you may commit fighters to planets as though they were ground forces. When combat ends, return those units to the space area.",
     unlock: "UNLOCK: Have 20 fighters on the game board.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/naalu_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/naalu_2a.png?raw=true",
   },
   {
     id: "sigma_naalu_mech",
@@ -8277,8 +8062,7 @@ export const units: Unit[] = [
     ability:
       "Only this unit rolls combat dice during the first round of ground combat on this planet.\nWhen another player activates this system, place 1 infantry on this planet.",
     homebrewReplacesID: "naalu_mech",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/naalu_mech.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/naalu_mech.png?raw=true",
   },
   {
     id: "sigma_naazrokha_flagship_1",
@@ -8300,8 +8084,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: You purge a relic fragment or an exploration deck is depleted.",
     homebrewReplacesID: "naaz_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/naazrokha_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/naazrokha_1a.png?raw=true",
   },
   {
     id: "sigma_naazrokha_flagship_2",
@@ -8322,8 +8105,7 @@ export const units: Unit[] = [
       "Your mechs in this system roll 1 additional die during combat.\nWhen you win a combat in this system, you may repair 1 participating unit.",
     unlock:
       "When you purge a relic fragment, or when an exploration deck is depleted, place the corresponding trait token on this card.\nUNLOCK: have 3 tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/naazrokha_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/naazrokha_2a.png?raw=true",
   },
   {
     id: "sigma_nekro_flagship_1",
@@ -8345,8 +8127,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: When you would gain a technology from a player with their Flagship I unlocked using 1 of your faction abilities, you may instead unlock this unit.",
     homebrewReplacesID: "nekro_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/nekro_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/nekro_1a.png?raw=true",
   },
   {
     id: "sigma_nekro_flagship_2",
@@ -8367,8 +8148,7 @@ export const units: Unit[] = [
       "If you own each non-faction technology owned by your opponent, apply +2 to the result of this unit's combat rolls.\nAt the start of a space combat, choose any number of your ground forces in this system to participate in that combat as though they were ships.",
     unlock:
       "UNLOCK: When you would gain a technology from a player with their Flagship II unlocked using 1 of your faction abilities, you may instead unlock this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/nekro_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/nekro_2a.png?raw=true",
   },
   {
     id: "sigma_nomad_flagship_1",
@@ -8390,8 +8170,7 @@ export const units: Unit[] = [
     afbDieCount: 2,
     unlock: "This unit is unlocked at the start of the game.",
     homebrewReplacesID: "nomad_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/nomad_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/nomad_1a.png?raw=true",
   },
   {
     id: "sigma_nomad_flagship_2",
@@ -8414,8 +8193,7 @@ export const units: Unit[] = [
     afbDieCount: 3,
     unlock:
       "UNLOCK: When you would score a public objective or draw a secret objective, you may instead unlock the Memoria II.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/nomad_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/nomad_2a.png?raw=true",
   },
   {
     id: "sigma_nomad_flagship_3",
@@ -8439,8 +8217,7 @@ export const units: Unit[] = [
     productionValue: 1,
     unlock:
       "UNLOCK: With the Memoria II unlocked, when you would score a public objective or draw a secret objective, you may instead unlock the Memoria III.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/nomad_3a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/nomad_3a.png?raw=true",
   },
   {
     id: "sigma_norr_flagship_1",
@@ -8461,8 +8238,7 @@ export const units: Unit[] = [
       "Apply +1 to the result of each of your other ship's combat rolls in this system.",
     unlock: "UNLOCK: Produce 4 hits during 1 round of combat.",
     homebrewReplacesID: "sardakk_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/norr_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/norr_1a.png?raw=true",
   },
   {
     id: "sigma_norr_flagship_2",
@@ -8482,8 +8258,7 @@ export const units: Unit[] = [
     ability:
       "Apply +1 to the result of each of your unit's combat and ability rolls in this system.",
     unlock: "UNLOCK: Produce 8 hits during 1 round of combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/norr_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/norr_2a.png?raw=true",
   },
   {
     id: "sigma_saar_flagship_1",
@@ -8505,8 +8280,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: Participate in a space combat in a system containing 1 or more of your space docks.",
     homebrewReplacesID: "saar_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/saar_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/saar_1a.png?raw=true",
   },
   {
     id: "sigma_saar_flagship_2",
@@ -8526,8 +8300,7 @@ export const units: Unit[] = [
     ability:
       "During your actions, this ship may transport structures as though they were ground forces; they lose all abilities and attributes until the end of the action. If any of your PDS are in the space area of a system at the end of the action, they are destroyed.",
     unlock: "UNLOCK: 1 of your structures is destroyed.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/saar_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/saar_2a.png?raw=true",
   },
   {
     id: "sigma_sol_flagship_1",
@@ -8548,8 +8321,7 @@ export const units: Unit[] = [
       "At the start of a space combat in this system, you may place 1 fighter in this system.\nAt the start of a ground combat in this system, you may place 1 infantry on that planet if you have not placed a unit with this ship's ability this action.",
     unlock: "UNLOCK: Win a ground combat.",
     homebrewReplacesID: "sol_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/sol_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/sol_1a.png?raw=true",
   },
   {
     id: "sigma_sol_flagship_2",
@@ -8570,8 +8342,7 @@ export const units: Unit[] = [
       "At the start of a space combat in this system, place 1 fighter in this system.\nAt the start of a ground combat in this system, place 1 infantry on that planet.",
     unlock:
       "UNLOCK: Win a ground combat on a legendary planet, Mecatol Rex, or in a home system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/sol_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/sol_2a.png?raw=true",
   },
   {
     id: "sigma_ul_flagship_1",
@@ -8592,8 +8363,7 @@ export const units: Unit[] = [
       "DEPLOY: After you activate a system that contains 1 of your PDS, you may replace that PDS with this ship.",
     unlock: "UNLOCK: Control 2 attachments amongst planets you control.",
     homebrewReplacesID: "titans_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/ul_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/ul_1a.png?raw=true",
   },
   {
     id: "sigma_ul_flagship_2",
@@ -8613,8 +8383,7 @@ export const units: Unit[] = [
     ability:
       "When this ship is destroyed, place a ship with a cost of 4 or less from your reinforcements in this system.\nDEPLOY: After you activate a system that contains 1 of your PDS, you may replace that PDS with this ship.",
     unlock: "UNLOCK: Control 5 attachments amongst planets you control.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/ul_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/ul_2a.png?raw=true",
   },
   {
     id: "sigma_vuilraith_flagship_1",
@@ -8636,8 +8405,7 @@ export const units: Unit[] = [
     unlock:
       "When you capture another player's unit, place 1 of that player's control tokens on this card.\nUNLOCK: Have 4 of 1 player's control tokens on this card.",
     homebrewReplacesID: "cabal_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/vuilraith_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/vuilraith_1a.png?raw=true",
   },
   {
     id: "sigma_vuilraith_flagship_2",
@@ -8658,8 +8426,7 @@ export const units: Unit[] = [
       "When another unit is destroyed in this system, including your own, capture it, then capture a fighter or infantry token from the supply.\nWhen you produce this ship, you may return 16 fighters and/or infantry tokens instead of spending resources.",
     unlock:
       "When you capture another player's unit, place 1 of that player's control tokens on this card.\nUNLOCK: Have 12 of 1 player's control tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/vuilraith_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/vuilraith_2a.png?raw=true",
   },
   {
     id: "sigma_winnu_flagship_1",
@@ -8680,8 +8447,7 @@ export const units: Unit[] = [
       "When this ship makes a combat roll, it rolls a number of dice equal to the number of your opponent's non-fighter ships in this system.",
     unlock: "UNLOCK: Win a combat in the Mecatol Rex system.",
     homebrewReplacesID: "winnu_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/winnu_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/winnu_1a.png?raw=true",
   },
   {
     id: "sigma_winnu_flagship_2",
@@ -8701,8 +8467,7 @@ export const units: Unit[] = [
     ability:
       "When this ship makes a combat roll, it rolls a number of dice equal to the number of ships your opponent had in the active system at the start of the space combat.",
     unlock: "UNLOCK: Control Mecatol Rex and 2 legendary planets.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/winnu_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/winnu_2a.png?raw=true",
   },
   {
     id: "sigma_xxcha_flagship_1",
@@ -8725,8 +8490,7 @@ export const units: Unit[] = [
     unlock:
       "When you perform the primary or secondary ability of a strategy card, place the corresponding token on this card.\nUNLOCK: Have 4 tokens on this card.",
     homebrewReplacesID: "xxcha_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/xxcha_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/xxcha_1a.png?raw=true",
   },
   {
     id: "sigma_xxcha_flagship_2",
@@ -8750,8 +8514,7 @@ export const units: Unit[] = [
     deepSpaceCannon: true,
     unlock:
       "When you perform the primary or secondary ability of a strategy card, place the corresponding token on this card.\nUNLOCK: Have 8 tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/xxcha_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/xxcha_2a.png?raw=true",
   },
   {
     id: "sigma_yin_flagship_1",
@@ -8773,8 +8536,7 @@ export const units: Unit[] = [
     unlock:
       "After 1 of your units is destroyed, place 1 control token on this card.\nUNLOCK: Have 4 control tokens on this card.",
     homebrewReplacesID: "yin_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/yin_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/yin_1a.png?raw=true",
   },
   {
     id: "sigma_yin_flagship_2",
@@ -8795,8 +8557,7 @@ export const units: Unit[] = [
       "When a hit is produced against your units in this system, you may assign that hit to any of your units in this system, regardless of type.\nWhen this ship is destroyed, destroy all ships in this system.",
     unlock:
       "After 1 of your units is destroyed, place 1 control token on this card.\nUNLOCK: Have 12 control tokens on this card.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/yin_a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/yin_a.png?raw=true",
   },
   {
     id: "sigma_yssaril_flagship_1",
@@ -8818,8 +8579,7 @@ export const units: Unit[] = [
     unlock:
       "UNLOCK: See an unscored secret objective belonging to another player.",
     homebrewReplacesID: "yssaril_flagship",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/yssaril_1a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/yssaril_1a.png?raw=true",
   },
   {
     id: "sigma_yssaril_flagship_2",
@@ -8840,8 +8600,7 @@ export const units: Unit[] = [
       "This ship can move through systems that contain other player's units, and ignores the movement effects of anomalies.",
     unlock:
       "UNLOCK: Gain control of a planet in a system that is not adjacent to another planet you control or any of your units.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/flagshipping/yssaril_2a.png?raw=true",
+    imageURL: "/hover_images/units/flagshipping/yssaril_2a.png?raw=true",
   },
   {
     id: "sol_carrier",
@@ -8858,8 +8617,7 @@ export const units: Unit[] = [
     combatHitsOn: 9,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/advanced_carrier.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/advanced_carrier.jpg?raw=true",
   },
   {
     id: "sol_carrier2",
@@ -8879,8 +8637,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/advanced_carrier_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/advanced_carrier_2.jpg?raw=true",
   },
   {
     id: "sol_flagship",
@@ -8900,8 +8657,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the end of the status phase, place 1 infantry from your reinforcements in this system's space area.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/genesis.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/genesis.png?raw=true",
   },
   {
     id: "sol_infantry",
@@ -8916,8 +8672,7 @@ export const units: Unit[] = [
     combatHitsOn: 7,
     combatDieCount: 1,
     isGroundForce: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/spec_ops.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/spec_ops.jpg?raw=true",
   },
   {
     id: "sol_infantry2",
@@ -8935,8 +8690,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 5 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/spec_ops_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/spec_ops_2.jpg?raw=true",
   },
   {
     id: "sol_mech",
@@ -8953,8 +8707,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After you use your Orbital Drop faction ability, you may spend 3 resources to place 1 mech on that planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/zs_thunderbolt_m2.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/zs_thunderbolt_m2.jpg?raw=true",
   },
   {
     id: "sol_monument",
@@ -8981,8 +8734,7 @@ export const units: Unit[] = [
     basicProduction: "res",
     capacityValue: 3,
     isStructure: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/generic/spacedock.png?raw=true",
+    imageURL: "/hover_images/units/generic/spacedock.png?raw=true",
     ability:
       "This unit's PRODUCTION value is equal to 2 more than the resource value of this planet.\nUp to 3 fighters in this system do not count against your ships' capacity.",
   },
@@ -8999,8 +8751,7 @@ export const units: Unit[] = [
     basicProduction: "res",
     capacityValue: 3,
     isStructure: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/spacedock_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/spacedock_2.jpg?raw=true",
     ability:
       "This unit's PRODUCTION value is equal to 4 more than the resource value of this planet.\nUp to 3 fighters in this system do not count against your ships' capacity.",
   },
@@ -9037,8 +8788,7 @@ export const units: Unit[] = [
     combatHitsOn: 7,
     combatDieCount: 1,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/saturn_engine.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/saturn_engine.jpg?raw=true",
   },
   {
     id: "titans_cruiser2",
@@ -9057,8 +8807,7 @@ export const units: Unit[] = [
     combatDieCount: 1,
     sustainDamage: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/saturn_engine_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/saturn_engine_2.jpg?raw=true",
   },
   {
     id: "titans_flagship",
@@ -9078,8 +8827,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "DEPLOY: After you activate a system that contains 1 or more of your PDS, you may replace 1 of those PDS with this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/ouranos.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/ouranos.png?raw=true",
   },
   {
     id: "titans_mech",
@@ -9096,8 +8844,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: When you would place a PDS on a planet, you may place 1 mech and 1 infantry on that planet instead.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/hecatoncheires.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/hecatoncheires.jpg?raw=true",
   },
   {
     id: "titans_monument",
@@ -9132,8 +8879,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This unit is treated as both a structure and a ground force. It cannot be transported.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/faction/heltitan.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/faction/heltitan.jpg?raw=true",
   },
   {
     id: "titans_pds2",
@@ -9156,8 +8902,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "This unit is treated as both a structure and a ground force. It cannot be transported.\nYou may use this unit's SPACE CANNON against ships that are adjacent to this unit's systems.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/faction/heltitan_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/faction/heltitan_2.jpg?raw=true",
   },
   {
     id: "tnelis_destroyer",
@@ -9175,8 +8920,7 @@ export const units: Unit[] = [
     afbHitsOn: 9,
     afbDieCount: 3,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/blockade_runner.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/blockade_runner.jpg?raw=true",
   },
   {
     id: "tnelis_destroyer2",
@@ -9197,8 +8941,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This ship can move through systems that contain other players' ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/blockade_runner_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/blockade_runner_2.jpg?raw=true",
   },
   {
     id: "tnelis_flagship",
@@ -9218,8 +8961,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the start of a round of combat, choose 1 ship in this system, during this combat round, that ship rolls 1 less combat die.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/principia_aneris.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/principia_aneris.jpg?raw=true",
   },
   {
     id: "tnelis_mech",
@@ -9236,8 +8978,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: After you move a destroyer into a non-home system other than Mecatol Rex, you may spend 3 resources to place 1 mech on a planet in that system. [Note: can DEPLOY 1 mech for each destroyer that moves]",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/daedalon.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/daedalon.jpg?raw=true",
   },
   {
     id: "tnelis_monument",
@@ -9306,8 +9047,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "DEPLOY: At the end of your turn, you may place this unit in any system that contains your ships.\nWhen this unit is removed or captured, purge this card.\nThis unit is not affected by action cards, anomalies, or your faction abilities or technologies.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/absol/TyrantsLament.jpg?raw=true",
+    imageURL: "/hover_images/units/absol/TyrantsLament.jpg?raw=true",
   },
   {
     id: "tyris_flagship",
@@ -9430,8 +9170,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "After this unit produces 1 or more hits during a BOMBARDMENT roll, gain 1 trade good.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/aurum_vadra.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/aurum_vadra.jpg?raw=true",
   },
   {
     id: "vaden_mech",
@@ -9448,8 +9187,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the end of a round of ground combat, you may remove 1 of your opponent's control tokens from your faction sheet to place 1 infantry unit from your reinforcements on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/collector.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/collector.jpg?raw=true",
   },
   {
     id: "vaden_monument",
@@ -9482,8 +9220,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "During a round of space combat, if your opponent cannot declare a retreat, hits produced by this ship must be assigned to non-fighter ships, if able.\nThis unit may only transport ground forces.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/raider.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/raider.jpg?raw=true",
   },
   {
     id: "vaylerian_cruiser2",
@@ -9503,8 +9240,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "During a round of space combat, if your opponent cannot declare a retreat, hits produced by this ship cannot be canceled and must be assigned to non-fighter ships, if able.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/raider_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/raider_2.jpg?raw=true",
   },
   {
     id: "vaylerian_flagship",
@@ -9524,8 +9260,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "At the start of a space combat in this system, you may choose 1 adjacent system.\nYour opponent cannot retreat to that system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/lost_cause.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/lost_cause.jpg?raw=true",
   },
   {
     id: "vaylerian_mech",
@@ -9542,8 +9277,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "During your tactical actions, hits produced by SPACE CANNON cannot be assigned to 1 of your ships in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/eclipse.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/eclipse.jpg?raw=true",
   },
   {
     id: "vaylerian_monument",
@@ -9580,8 +9314,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/lancer_dreadnought.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/lancer_dreadnought.jpg?raw=true",
   },
   {
     id: "veldyr_dreadnought2",
@@ -9605,8 +9338,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isShip: true,
     ability: 'This unit cannot be destroyed by "Direct Hit" action cards.',
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/lancer_dreadnought_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/lancer_dreadnought_2.jpg?raw=true",
   },
   {
     id: "veldyr_flagship",
@@ -9626,8 +9358,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this ship makes a combat roll, it rolls 1 additional die for each round of combat that has been resolved this combat.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/richtyrian.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/richtyrian.jpg?raw=true",
   },
   {
     id: "veldyr_mech",
@@ -9644,8 +9375,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After a player activates this system, you may remove this unit from the game board to place 1 PDS from your reinforcements on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/aurora_stormcaller.png?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/aurora_stormcaller.png?raw=true",
   },
   {
     id: "veldyr_monument",
@@ -9750,8 +9480,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability: "Other player's units in this system lose PLANETARY SHIELD.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/generic/warsun.jpg?raw=true",
+    imageURL: "/hover_images/techs/generic/warsun.jpg?raw=true",
   },
   {
     id: "winnu_flagship",
@@ -9771,8 +9500,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat roll, it rolls a number of dice (hit on a 7) equal to the number of your opponent's non-fighter ships in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/salai_sai_corian.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/salai_sai_corian.png?raw=true",
   },
   {
     id: "winnu_mech",
@@ -9789,8 +9517,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After you resolve a tactical action where you gained control of this planet, you may place 1 PDS or 1 Space Dock from your reinforcements on this planet.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/reclaimer.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/reclaimer.jpg?raw=true",
   },
   {
     id: "winnu_monument",
@@ -9935,8 +9662,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "You may use this unit's SPACE CANNON against ships that are in adjacent systems.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/loncara_ssodu.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/loncara_ssodu.png?raw=true",
   },
   {
     id: "xxcha_mech",
@@ -9956,8 +9682,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "You may use this unit's SPACE CANNON against ships that are in adjacent systems.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/indomitus.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/indomitus.jpg?raw=true",
   },
   {
     id: "xxcha_monument",
@@ -9990,8 +9715,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability: "When this ship is destroyed, destroy all ships in this system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/van_hauge.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/van_hauge.png?raw=true",
   },
   {
     id: "yin_mech",
@@ -10008,8 +9732,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "DEPLOY: When you use your Indoctrination faction ability, you may spend 1 additional influence to replace your opponent's unit with 1 mech instead of 1 infantry.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/moyins_ashes.jpg?raw=true",
+    imageURL: "/hover_images/units/pok/mechs/moyins_ashes.jpg?raw=true",
   },
   {
     id: "yin_monument",
@@ -10044,8 +9767,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "This ship can move through systems that contain other player's ships.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/flagships/ysia_yssrila.png?raw=true",
+    imageURL: "/hover_images/units/pok/flagships/ysia_yssrila.png?raw=true",
   },
   {
     id: "yssaril_mech",
@@ -10063,7 +9785,7 @@ export const units: Unit[] = [
     ability:
       "DEPLOY: After you use your Stall Tactics faction ability, you may place 1 mech on a planet you control.",
     imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/pok/mechs/blackshade_infiltrator.jpg?raw=true",
+      "/hover_images/units/pok/mechs/blackshade_infiltrator.jpg?raw=true",
   },
   {
     id: "yssaril_monument",
@@ -10097,8 +9819,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "For each unit upgrade technology your opponent owns, apply +1 to the results of this unit's combat rolls.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/reckoning.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/reckoning.jpg?raw=true",
   },
   {
     id: "zealots_mech",
@@ -10115,8 +9836,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "Apply +1 to this unit's combat rolls for each faction technology your opponent owns.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/templar.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/templar.jpg?raw=true",
   },
   {
     id: "zelian_flagship",
@@ -10140,8 +9860,7 @@ export const units: Unit[] = [
     isShip: true,
     ability:
       "When this unit makes a combat or unit ability roll, it rolls 1 additional die for each asteroid field adjacent to this unit.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/flagships/worldcracker.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/flagships/worldcracker.jpg?raw=true",
   },
   {
     id: "zelian_infantry",
@@ -10159,8 +9878,7 @@ export const units: Unit[] = [
     bombardDieCount: 1,
     isGroundForce: true,
     ability: "During invasion, this unit must commit to a planet it bombards.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/faction/impactor.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/faction/impactor.jpg?raw=true",
   },
   {
     id: "zelian_infantry2",
@@ -10180,8 +9898,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/techs/ds/impactor_2.jpg?raw=true",
+    imageURL: "/hover_images/techs/ds/impactor_2.jpg?raw=true",
   },
   {
     id: "zelian_mech",
@@ -10198,8 +9915,7 @@ export const units: Unit[] = [
     isGroundForce: true,
     ability:
       "At the start of invasion, if this unit is in the space area of the active system, you may remove this unit from the game board to destroy 1 unit on a planet in that system.",
-    imageURL:
-      "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/master/src/main/resources/hover_images/units/ds/mechs/collider.jpg?raw=true",
+    imageURL: "/hover_images/units/ds/mechs/collider.jpg?raw=true",
   },
   {
     id: "zelian_monument",
