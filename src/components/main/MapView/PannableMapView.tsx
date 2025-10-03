@@ -232,7 +232,10 @@ export function PannableMapView({ gameId }: Props) {
 
   return (
     <Box className={classes.mapContainer}>
-      <Box className={`${classes.mapArea}`} style={{ width: "100%" }}>
+      <Box
+        className={`dragscroll ${classes.mapArea}`}
+        style={{ width: "100%" }}
+      >
         {!hideZoomControls && (
           <div
             className={classes.zoomControlsDynamic}
