@@ -1,3 +1,4 @@
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { Popover, PopoverProps } from "@mantine/core";
 import { ReactNode } from "react";
 
@@ -14,10 +15,10 @@ function SmoothPopoverBase({
   position = "top",
   withArrow = true,
   shadow = "xl",
-  withinPortal = false,
   positionDependencies,
   ...props
 }: SmoothPopoverProps) {
+  const withinPortal = !isMobileDevice();
   return (
     <Popover
       position={position}

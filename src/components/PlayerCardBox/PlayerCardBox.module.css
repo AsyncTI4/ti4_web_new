@@ -33,13 +33,31 @@
   position: relative;
   max-width: 100%;
   background: var(--player-card-box-bg);
-  overflow: hidden;
   box-shadow: var(--player-card-box-shadow);
+}
+
+.clipInner {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mantine-radius-md);
+  height: 100%;
 }
 
 .content {
   position: relative;
   z-index: 1;
+}
+
+.factionClip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: var(--mantine-radius-md);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .factionBackground {
@@ -51,7 +69,6 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  filter: grayscale(0.2);
 }
 
 :global(.theme-vaporwavetheme) .innerGlow {

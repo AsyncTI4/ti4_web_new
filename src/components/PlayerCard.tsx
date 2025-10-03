@@ -23,7 +23,6 @@ import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import { cdnImage } from "../data/cdnImage";
 import { ArmyStats, PromissoryNote } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";

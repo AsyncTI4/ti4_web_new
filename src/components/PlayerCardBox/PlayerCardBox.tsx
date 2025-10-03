@@ -40,21 +40,21 @@ export function PlayerCardBox({
         }}
         {...paperProps}
       >
-        <Box className={styles.innerGlow} />
-
         <Box className={styles.content}>{children}</Box>
-
-        {showFactionBackground && (
-          <Box className={styles.factionBackground}>
-            <Image
-              src={cdnImage(`/factions/${faction}.png`)}
-              alt="faction"
-              w="100%"
-              h="100%"
-              style={{ objectFit: "contain" }}
-            />
-          </Box>
-        )}
+        <Box className={styles.innerGlow} />
+        <Box className={styles.factionClip}>
+          {showFactionBackground && (
+            <Box className={styles.factionBackground}>
+              <Image
+                src={cdnImage(`/factions/${faction}.png`)}
+                alt="faction"
+                w="100%"
+                h="100%"
+                style={{ objectFit: "contain" }}
+              />
+            </Box>
+          )}
+        </Box>
       </Paper>
     </Box>
   );
