@@ -198,6 +198,30 @@
   padding: 16px;
 }
 
+/* Sci-fi segmented control styling, aligned with map tabs look */
+.segmentedSciFiRoot {
+  background: var(--map-tabs-bg);
+  border: var(--map-tab-border);
+  box-shadow: var(--map-tabs-shadow);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.segmentedSciFiControl {
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: var(--map-tab-text-shadow);
+}
+
+.segmentedSciFiLabel {
+  font-weight: 700;
+}
+
+.segmentedSciFiIndicator {
+  background: var(--map-tab-active-bg);
+  border: var(--map-tab-active-border);
+  box-shadow: var(--map-tab-hover-shadow);
+}
+
 /* Custom scrollbar styling for thematic blue-gray design */
 :global(*::-webkit-scrollbar) {
   width: 16px;

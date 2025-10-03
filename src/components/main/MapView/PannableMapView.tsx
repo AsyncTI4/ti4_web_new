@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Grid, Group, Modal, Stack, Text } from "@mantine/core";
-import { IconRefresh } from "@tabler/icons-react";
+import {
+  Box,
+  Button,
+  Grid,
+  Group,
+  Modal,
+  Stack,
+  Text,
+  SegmentedControl,
+} from "@mantine/core";
+import { IconRefresh, IconList, IconLayoutGrid } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
 import { MapTile } from "@/components/Map/MapTile";
 import { PathVisualization } from "@/components/PathVisualization";
@@ -30,6 +39,7 @@ import {
   getScaleStyle,
   computePanelsZoom,
 } from "@/utils/zoom";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 const MAP_PADDING = 0;
 
@@ -103,6 +113,26 @@ export function PannableMapView({ gameId }: Props) {
     position: string;
     systemId: string;
   } | null>(null);
+
+  type PlayerCardLayout = "list" | "grid";
+  const [playerCardLayout, setPlayerCardLayout] =
+    useState<PlayerCardLayout>("list");
+
+  // Persist player card layout selection across sessions
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ti4_player_card_layout");
+      if (saved === "list" || saved === "grid") {
+        setPlayerCardLayout(saved as PlayerCardLayout);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("ti4_player_card_layout", playerCardLayout);
+    } catch {}
+  }, [playerCardLayout]);
 
   const {
     selectedTiles,
@@ -317,19 +347,48 @@ export function PannableMapView({ gameId }: Props) {
         )}
 
         {/* Player cards */}
+        {!isMobileDevice() && (
+          <Box pl="md">
+            <SegmentedControl
+              value={playerCardLayout}
+              onChange={(value) =>
+                setPlayerCardLayout(value as PlayerCardLayout)
+              }
+              classNames={{
+                root: classes.segmentedSciFiRoot,
+                control: classes.segmentedSciFiControl,
+                label: classes.segmentedSciFiLabel,
+                indicator: classes.segmentedSciFiIndicator,
+              }}
+              data={[
+                {
+                  label: <IconList />,
+                  value: "list",
+                },
+                {
+                  label: <IconLayoutGrid />,
+                  value: "grid",
+                },
+              ]}
+            />
+          </Box>
+        )}
         <Grid
           gutter="md"
           columns={12}
           style={{
             ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
             minWidth: "2150px",
-            padding: "12px 8px",
+            padding: "0px 8px",
           }}
         >
           {gameData?.playerData
             .filter((p) => p.faction !== "null")
             .map((player) => (
-              <Grid.Col key={player.color} span={12}>
+              <Grid.Col
+                key={player.color}
+                span={playerCardLayout === "grid" ? 6 : 12}
+              >
                 <PlayerCardHorizontal playerData={player} />
               </Grid.Col>
             ))}

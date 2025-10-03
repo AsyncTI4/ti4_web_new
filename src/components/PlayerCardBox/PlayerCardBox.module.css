@@ -3,6 +3,7 @@
   margin: 5px;
   border-radius: 8px;
   padding: 2px;
+  height: 100%;
 }
 
 .edgeBar {
@@ -28,6 +29,7 @@
 
 
 .paper {
+  height: 100%;
   position: relative;
   max-width: 100%;
   background: var(--player-card-box-bg);
