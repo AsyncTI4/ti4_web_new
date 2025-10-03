@@ -2,7 +2,7 @@
   position: absolute;
   width: 48px;
   height: 48px;
-  z-index: 1000;
+  z-index: 99;
   pointer-events: none;
   display: flex;
   align-items: center;
