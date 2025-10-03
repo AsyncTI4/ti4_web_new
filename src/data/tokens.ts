@@ -14,6 +14,15 @@ export const tokens: Token[] = [
     source: "other",
   },
   {
+    id: "avernus",
+    imagePath: "token_avernus.png",
+    spaceOrPlanet: "space",
+    aliasList: ["avernus", "token_avernus", "stargate"],
+    tokenPlanetName: "avernus",
+    isPlanet: true,
+    source: "thunders_edge",
+  },
+  {
     id: "big_obelisk",
     imagePath: "token_big_obelisk.png",
     source: "other",
@@ -301,11 +310,26 @@ export const tokens: Token[] = [
     source: "other",
   },
   {
+    id: "thundersedge",
+    imagePath: "token_thundersedge.png",
+    spaceOrPlanet: "space",
+    aliasList: ["thundersedge", "token_thundersedge"],
+    tokenPlanetName: "thundersedge",
+    isPlanet: true,
+    source: "thunders_edge",
+  },
+  {
     id: "vortex",
     imagePath: "token_vortex.png",
     spaceOrPlanet: "space",
     wormholes: ["VORTEX"],
     source: "eronous",
+  },
+  {
+    id: "whall",
+    imagePath: "token_whunknown.png",
+    spaceOrPlanet: "space",
+    source: "other",
   },
   {
     id: "whalpha",

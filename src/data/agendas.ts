@@ -224,7 +224,7 @@ export const agendas: Agenda[] = [
   {
     alias: "absol_equality",
     name: "Economic Equality",
-    type: "Directive",
+    type: "Law",
     target: "For/Against",
     text1:
       'Each player returns all their trade goods to the supply. All players have a commodity value of 3.  The player that cast the most votes "For" replenishes their commodities.',
@@ -2004,6 +2004,16 @@ export const agendas: Agenda[] = [
     source: "base",
   },
   {
+    alias: "collective_ambition",
+    name: "Collective Ambition",
+    type: "Directive",
+    target: "For/Against",
+    text1: "For: Purge all Support for the Throne promissory notes.",
+    text2:
+      "Against: Players who voted For purge their Alliance promissory note, if able",
+    source: "blue_reverie",
+  },
+  {
     alias: "committee",
     name: "Committee Formation",
     type: "Law",
@@ -2061,6 +2071,19 @@ export const agendas: Agenda[] = [
       "Attach this card to the elected planet's card. Then, destroy 1 infantry on the planet. The resource value of this planet is increased by 2.",
     text2: "",
     source: "base",
+  },
+  {
+    alias: "council_abolishment",
+    name: "Council Abolishment",
+    type: "Law",
+    target: "For/Against",
+    text1:
+      "For:During the agenda phase, instead of players voting, the speaker randomly determines all agenda outcomes.",
+    text2:
+      "Against:Ready all planets and reveal 1 agenda from the top of the deck. Players vote on that agenda.",
+    mapText:
+      "During the agenda phase, instead of players voting, the speaker randomly determines all agenda outcomes.",
+    source: "blue_reverie",
   },
   {
     alias: "covert",
@@ -2752,6 +2775,29 @@ export const agendas: Agenda[] = [
     source: "base",
   },
   {
+    alias: "galactic_fair",
+    name: "Galactic Fair",
+    type: "Directive",
+    target: "For/Against",
+    text1:
+      "For: Each player may research 1 technology that has no prerequisites.",
+    text2:
+      'Against: Each player who voted "For" discards 1 of their technologies that has the fewest prerequisites.',
+    source: "blue_reverie",
+  },
+  {
+    alias: "galactic_sanctions",
+    name: "Galactic Sanctions",
+    type: "Law",
+    target: "For/Against",
+    text1:
+      "For:Initiative Order is reversed, and begins with the player who has the highest numbered strategy card.",
+    text2:
+      "Against:Each player who voted For may resolve the secondary ability of 1 strategy card of their choice.",
+    mapText: "Initiative Order is reversed.",
+    source: "blue_reverie",
+  },
+  {
     alias: "grant_reallocation",
     name: "Research Grant Reallocation",
     type: "Directive",
@@ -2772,6 +2818,30 @@ export const agendas: Agenda[] = [
     source: "base",
   },
   {
+    alias: "imperial_referendum",
+    name: "Imperial Referendum",
+    type: "Directive",
+    target: "For/Against",
+    text1:
+      "For:Each player who has the fewest victory points gains 1 command token.",
+    text2:
+      "Against:Each player who does not have the most victory points loses 1 command token from their command sheet.",
+    source: "blue_reverie",
+  },
+  {
+    alias: "imperialist_edict",
+    name: "Imperialist Edict",
+    type: "Law",
+    target: "For/Against",
+    text1:
+      "For: When a player is eliminated, all remaining players gain 1 victory point.",
+    text2:
+      "Against: Each player places 1 command token from their fleet pool in the Mecatol Rex system.",
+    mapText:
+      "When a player is eliminated, all remaining players gain 1 victory point.",
+    source: "blue_reverie",
+  },
+  {
     alias: "incentive",
     name: "Incentive Program",
     type: "Directive",
@@ -2783,6 +2853,27 @@ export const agendas: Agenda[] = [
     forEmoji: "Public1alt",
     againstEmoji: "Public2alt",
     source: "base",
+  },
+  {
+    alias: "invalidated_patent",
+    name: "Invalidated Patent",
+    type: "Directive",
+    target: "Elect a non-faction echnology",
+    text1: "Each player gains the elected technology, if able",
+    source: "blue_reverie",
+  },
+  {
+    alias: "isolationist_movement",
+    name: "Isolationist Movement",
+    type: "Law",
+    target: "For/Against",
+    text1:
+      "For: Players are not neighbors with another player unless they have units in the same system as that player.",
+    text2:
+      "Against: Each player who voted For may produce 1 unit in a system that contains 1 or more of their ships and a planet they control.",
+    mapText:
+      "Players are not neighbors with another player unless they have units in the same system as that player.",
+    source: "blue_reverie",
   },
   {
     alias: "little_omega_abolishment",
@@ -3456,6 +3547,15 @@ export const agendas: Agenda[] = [
     source: "base",
   },
   {
+    alias: "minister_of_justice",
+    name: "Minister of Justice",
+    type: "Directive",
+    target: "Elect a player",
+    text1:
+      "For each player in the game, the elected player may gain 1 command token and allow that player to gain 1 command token.",
+    source: "blue_reverie",
+  },
+  {
     alias: "minister_peace",
     name: "Minister of Peace",
     type: "Law",
@@ -3630,6 +3730,17 @@ export const agendas: Agenda[] = [
     text2:
       "Against: Each player places 1 infantry from their reinforcements on each planet they control.",
     source: "base",
+  },
+  {
+    alias: "political_entanglement",
+    name: "Political Entanglement",
+    type: "Directive",
+    target: "For/Against",
+    text1:
+      "For: Each player with the most victory points gives 1 promissory note to each other player, if able.",
+    text2:
+      "Against: Each player with the fewest victory points may take 1 promissory note at random from each other player.",
+    source: "blue_reverie",
   },
   {
     alias: "prophecy",
@@ -4107,6 +4218,17 @@ export const agendas: Agenda[] = [
     source: "pok",
   },
   {
+    alias: "strategic_coordination",
+    name: "Strategic Coordination",
+    type: "Law",
+    target: "Elect Strategy Card",
+    text1:
+      "Attach this card to that strategy card. Players may resolve the secondary of this strategy card without spending a command token",
+    mapText:
+      "May resolve the secondary of elected card without spending a command token.",
+    source: "blue_reverie",
+  },
+  {
     alias: "terraforming_initiative",
     name: "Terraforming Initiative",
     type: "Law",
@@ -4115,6 +4237,16 @@ export const agendas: Agenda[] = [
       "Attach this card to the elected planet's card. The resource and influence values of this planet are increased by 1.",
     text2: "",
     source: "base",
+  },
+  {
+    alias: "transparency_accord",
+    name: "Transparency Accord",
+    type: "Directive",
+    target: "For/Against",
+    text1:
+      "For: Each player reveals one of their unscored secret objectives, at random, if able.",
+    text2: "Against: Each player who voted For draws 1 secret objective.",
+    source: "blue_reverie",
   },
   {
     alias: "travel_ban",
@@ -4151,6 +4283,16 @@ export const agendas: Agenda[] = [
     mapText:
       "Gain this card and 1 victory point. If you lose this card, you lose 1 victory point and this card is placed in the common play area.",
     source: "omega_phase",
+  },
+  {
+    alias: "vote_of_confidence",
+    name: "Vote Of Confidence",
+    type: "Directive",
+    target: "For/Against",
+    text1: "For: The speaker gains 1 victory point.",
+    text2:
+      "Against: During the next strategy phase, strategy cards are chosen at random.",
+    source: "blue_reverie",
   },
   {
     alias: "warrant",

@@ -56,7 +56,7 @@ export const relics: Relic[] = [
   },
   {
     alias: "absol_jr",
-    name: "JR-SX455-O",
+    name: "JR-XS455-0",
     text: "ACTION: Exhaust this agent and choose a planet. The player that controls that planet may place a structure on that planet. If they do not, they gain 1 trade good for each structure on that planet.",
     source: "absol",
     flavourText:
@@ -130,7 +130,7 @@ export const relics: Relic[] = [
     flavourText:
       "*Trilossa slipped the core into the hololattice's main terminal.  The lattice was ancient - as old as the Flight itself - and tampering with it was tantamount to sin.  Hopefully the rest of the Flight would would see the necessity of the upgrade.*",
     shortName: "Quantum\n-core",
-    imageURL: "/hover_images/techs/absol/generic/QuantumCore.png",
+    imageURL: "/hover_images/techs/absol/generic/QuantumCore.jpg",
   },
   {
     alias: "absol_shardofthethrone1",
@@ -343,13 +343,13 @@ export const relics: Relic[] = [
     name: "Accretion Engine",
     text: "Apply +1 to the PRODUCTION value of each of your units with PRODUCTION. When you produce 1 or more units reduce the combined cost of the produced units by 1.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/accretion_engine.png",
   },
   {
     alias: "circletofthevoid",
     name: "Circlet of the Void",
-    text: "Your units do not roll for gravity rifts, and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships.",
+    text: "Your units do not roll for gravity rifts [you still get the bonus movement], and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships. [Note: you must have an available DET token in order to use this action. It cannot just be a stall]",
     flavourText:
       "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
     imageURL: "/hover_images/relics/pok/circlet_of_the_void.jpg",
@@ -369,7 +369,7 @@ export const relics: Relic[] = [
     name: "Azdel's Key",
     text: "ACTION: Purge this card to draw 3 system tiles with a blue-colored back at random. Place 1 of those tiles at the edge of the game board, adjacent to at least 2 other systems. Purge the rest.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/azdels_key.png",
   },
   {
@@ -395,7 +395,7 @@ export const relics: Relic[] = [
     name: "E6-G0 Network",
     text: "You may have 2 additional action cards in your hand, game effects cannot prevent you from using this ability. At any time, you may exhaust this card to draw 1 action card.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/e6go_network.png",
   },
   {
@@ -429,7 +429,7 @@ export const relics: Relic[] = [
     name: "Eye of Vogul",
     text: "After you activate a system: Purge this card to treat 2 of your ships as adjacent to the active system until the end of this tactical action.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/eye_of_vogul.png",
   },
   {
@@ -525,6 +525,14 @@ export const relics: Relic[] = [
     shortName: "Prophet's\nTears",
   },
   {
+    alias: "quantumcore",
+    name: "The Quantumcore",
+    text: "You have SYNERGY for all technology types.",
+    flavourText:
+      "The core burned with the heat of a thousand stars, connections forming and reforming a thousand times per second.",
+    source: "thunders_edge",
+  },
+  {
     alias: "ring_king_poon",
     name: "The Ring of King Poon",
     text: "ACTION: Exhaust this card to peek at a face down objective.\nACTION: You may flip a face down public objective. Score a revealed public objective. Purge this card.",
@@ -617,7 +625,7 @@ export const relics: Relic[] = [
     name: "Starfall Array",
     text: "When 1 or more of your units roll dice for a unit ability, you may add +1 to the result of each of those dice, and 1 of those units may roll 1 additional die.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/starfall_array.png",
   },
   {
@@ -632,7 +640,7 @@ export const relics: Relic[] = [
   {
     alias: "superweaponavailyn",
     name: "Superweapon Availyn",
-    text: "This system is a nebula. During combat, you may exhaust this card to move up to 3 of your fighters on the game board into the active system. [Note: You must be participating in the combat] PRODUCTION 3",
+    text: "This system is a nebula. During combat, you may exhaust this card to move up to 3 of your fighters from this system to the active system. [Note: You must be participating in the combat] PRODUCTION 3",
     isFakeRelic: true,
     source: "ds",
   },
@@ -678,7 +686,7 @@ export const relics: Relic[] = [
     name: "Forgotten Throne",
     text: "ACTION: Purge this card to either gain 1 relic or immediately score 1 scored secret objective, or 1 of your unscored secret objectives, if you fulfill its requirements. [Note, this does not enable you to score the same secret twice, or to have more than 3 scored secrets]",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/forgotten_throne.png",
   },
   {
@@ -694,7 +702,7 @@ export const relics: Relic[] = [
     name: "Twilight Mirror",
     text: "At the start of the agenda phase, you may purge this card to resolve 1 non-strategic action.",
     source: "ds",
-    actual_source: "uncharted_space",
+    actualSource: "uncharted_space",
     imageURL: "/hover_images/relics/ds/twilight_mirror.png",
   },
   {
