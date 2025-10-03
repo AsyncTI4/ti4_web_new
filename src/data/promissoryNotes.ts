@@ -893,6 +893,15 @@ export const promissoryNotes: PromissoryNote[] = [
     text: "At the start of the Sol player's turn: Remove 1 token from the Sol player's strategy pool, if able, and return it to their reinforcements. Then, you may place 2 infantry from your reinforcements on any planet you control. Then, return this card to the Sol player.",
   },
   {
+    alias: "nanolink",
+    name: "Nano-Link Permit",
+    faction: "ralnel",
+    playArea: false,
+    attachment: false,
+    source: "thunders_edge",
+    text: "After you activate a system: You may move your structures from adjacent systems that do not contain your command tokens onto planets you control in the active system. Then, return this card to the Ral Nel player.",
+  },
+  {
     alias: "nethariipn",
     name: "Netharii PN",
     faction: "netharii",
@@ -1026,6 +1035,15 @@ export const promissoryNotes: PromissoryNote[] = [
     text: "After you commit 1 or more units to land on a planet: Remove all of the Saar player's ground forces from that planet and place them on a planet controlled by the Saar player. Then, return this card to the Saar player.",
   },
   {
+    alias: "raisethestandard",
+    name: "Raise the Standard",
+    faction: "bastion",
+    playArea: false,
+    attachment: false,
+    source: "thunders_edge",
+    text: "At the end of a combat: Galvanize 1 of your units that participated. Then, return this card to the Last Bastion player.",
+  },
+  {
     alias: "rider",
     name: "Keleres Rider",
     faction: "keleres",
@@ -1082,6 +1100,15 @@ export const promissoryNotes: PromissoryNote[] = [
     playArea: false,
     source: "pok",
     text: "At the start of the strategy phase: Choose 1 non-home system that contains your units, each other player who has a token on the Mahact player's command sheet places a token from their reinforcements in that system. Then, return this card to the Mahact player.",
+  },
+  {
+    alias: "sever",
+    name: "Sever",
+    faction: "crimson",
+    playArea: true,
+    attachment: false,
+    source: "thunders_edge",
+    text: "ACTION: place this card face up in your play area, and place the sever token in a system that contains your units, wormholes in that system have no effect during movement. Remove the sever token and return this card to the Rebellion player at end of the status phase.",
   },
   {
     alias: "shadowspn",

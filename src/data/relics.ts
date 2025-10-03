@@ -433,10 +433,26 @@ export const relics: Relic[] = [
     imageURL: "/hover_images/relics/ds/eye_of_vogul.png",
   },
   {
+    alias: "heartofixth",
+    name: "Heart of Ixth",
+    text: "After any die is rolled, you may exhaust this card to add or subtract 1 from its result.",
+    flavourText:
+      '"It should be impossible." Feng glanced sidelong at his compatriot. The Thundarian merely stared ahead, as if he did not hear. Feng snorted. "One day I mean to know the source of this so-called power of yours."',
+    source: "thunders_edge",
+  },
+  {
     alias: "king_tis_golden_tooth",
     name: "King Tis's Golden Tooth",
     text: "Attach this card to a planet you control that is the farthest away from your home system. Gain 1 VP. If you lose control of the planet, lose 1 VP and give this card to the player who took the planet from you.",
     source: "pbd100",
+  },
+  {
+    alias: "lightrailordnance",
+    name: "Lightrail Ordnance",
+    text: "Your space docks gain SPACE CANNON 5 (x2). You may use your space dock's SPACE CANNON against ships that are adjacent to their systems.",
+    flavourText:
+      "A single sparkle was the only warning the Yin fleet had before a massive hole had been punched through the hull of the Van Hague.\nThen, searing light.",
+    source: "thunders_edge",
   },
   {
     alias: "mawofworlds",
@@ -446,6 +462,22 @@ export const relics: Relic[] = [
     source: "pok",
     flavourText:
       "*No larger than a carrier, the spherical lattice held a captive singularity at its heart. As they dumped the planet's entire energy grid into its core, the black hole began to spin, the complex logic-circuitry along the lattice slowly coming to life.*",
+  },
+  {
+    alias: "metalivoidarmaments",
+    name: "Metali Void Armaments",
+    text: 'During the "Anti-Fighter Barrage" step of space combat, you may resolve ANTI-FIGHTER BARRAGE 6 (x3) against your opponent\'s units.',
+    flavourText:
+      "The Metali, Empyrean artificers of legend, were said to have created weapons that harnessed the power of space itself.",
+    source: "thunders_edge",
+  },
+  {
+    alias: "metalivoidshielding",
+    name: "Metali Void Shielding",
+    text: "Each time hits are produced against 1 or more of your non-fighter ships, 1 of those ships may use SUSTAIN DAMAGE as if it had that ability.",
+    flavourText:
+      "Capable of more than destruction, the Metali also wrapped their ships in nigh-indestructable plating unable to be replicated using today's methods.",
+    source: "thunders_edge",
   },
   {
     alias: "nanoforge",
@@ -527,7 +559,7 @@ export const relics: Relic[] = [
   {
     alias: "quantumcore",
     name: "The Quantumcore",
-    text: "You have SYNERGY for all technology types.",
+    text: "When you gain this card, gain your breakthrough. You have SYNERGY for all technology types.",
     flavourText:
       "The core burned with the heat of a thousand stars, connections forming and reforming a thousand times per second.",
     source: "thunders_edge",
@@ -680,6 +712,21 @@ export const relics: Relic[] = [
     source: "pok",
     flavourText:
       "*A cloud of satellites spewed from the dreadnought's hull, drifting into a halo around the vessel. The battle seemed to pause for one long moment, before the drones' weapons flared, unleashing beams of energy in all directions.*",
+  },
+  {
+    alias: "thesilverflame",
+    name: "The Silver Flame",
+    text: "The Silver Flame may be exchanged as part of a transaction.\n> ACTION: Roll 1 die and purge this card; if the result is a 10, gain 1 victory point. Otherwise, purge your home system and all units in it; you cannot score public objectives. Put The Fracture into play if it is not already.",
+    flavourText: "Shen're Ix Ianovar. The flame beyond time and space.",
+    source: "thunders_edge",
+  },
+  {
+    alias: "thetriad",
+    name: "The Triad",
+    text: "This card can be readied and spent as if it were a planet card. Its resource and influence values are equal to 3 plus the number of different types of relic fragments you own.",
+    flavourText:
+      "The light that shines without reflects the dark it harbors within.",
+    source: "thunders_edge",
   },
   {
     alias: "throne_of_the_false_emperor",
