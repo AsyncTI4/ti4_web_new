@@ -239,6 +239,25 @@ export const planets: Planet[] = [
     source: "somno",
   },
   {
+    id: "ahkcreuxx",
+    tileId: "118",
+    name: "Ahk Creuxx",
+    aliases: ["ahk", "creuxx", "ahkcreuxx"],
+    resources: 4,
+    influence: 2,
+    factionHomeworld: "crimson",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "ahkcreuxx",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 205.0,
+        y: 160.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "akhassi",
     tileId: "er57",
     name: "Akhassi",
@@ -1017,9 +1036,11 @@ export const planets: Planet[] = [
     resources: 2,
     influence: 0,
     planetTypes: ["HAZARDOUS"],
-    legendaryAbilityName: "Unknown",
-    legendaryAbilityText: "Unknown",
-    legendaryAbilityFlavourText: "Unknown",
+    legendaryAbilityName: "The Nucleus",
+    legendaryAbilityText:
+      "ACTION: Exhaust this card to use the Embers of Muaat's **STAR FORGE** faction ability without spending a command token.",
+    legendaryAbilityFlavourText:
+      "Gashlai energy/matter conversion has many uses.",
     planetLayout: {
       unitHolderName: "avernus",
       resourcesLocation: "BottomRight",
@@ -1558,6 +1579,25 @@ export const planets: Planet[] = [
     source: "ds",
   },
   {
+    id: "cocytus",
+    tileId: "fracture1",
+    name: "Cocytus",
+    aliases: ["cocy", "cody", "cocytus", "codytct"],
+    resources: 3,
+    influence: 0,
+    planetTypes: ["NONE"],
+    planetLayout: {
+      unitHolderName: "cocytus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+      extraIcons: 1,
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "cormund",
     tileId: "67",
     name: "Cormund",
@@ -1676,6 +1716,46 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "somno",
+  },
+  {
+    id: "cronos",
+    tileId: "96a",
+    name: "Cronos",
+    aliases: ["cronos"],
+    resources: 2,
+    influence: 1,
+    factionHomeworld: "firmament",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "cronos",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
+    id: "cronoshollow",
+    tileId: "96b",
+    name: "Cronos Hollow",
+    shortName: "Cronos H.",
+    shrinkNamePNAttach: true,
+    aliases: ["cronosh", "chollow", "ch", "cronoshollow"],
+    resources: 3,
+    influence: 0,
+    factionHomeworld: "obsidian",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "cronoshollow",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "custodiavigilia",
@@ -3422,6 +3502,25 @@ export const planets: Planet[] = [
     source: "ds",
   },
   {
+    id: "ikatena",
+    tileId: "95",
+    name: "Ikatena",
+    aliases: ["ikatena"],
+    resources: 4,
+    influence: 4,
+    factionHomeworld: "deepwrought",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "ikatena",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "ikrusiii",
     tileId: "er52",
     name: "Ikrus III",
@@ -4104,6 +4203,24 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "eronous",
+  },
+  {
+    id: "lethe",
+    tileId: "fracture7",
+    name: "Lethe",
+    aliases: ["leth", "lathe", "lethe"],
+    resources: 0,
+    influence: 2,
+    planetTypes: ["NONE"],
+    planetLayout: {
+      unitHolderName: "lethe",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "limbo",
@@ -5490,6 +5607,61 @@ export const planets: Planet[] = [
     source: "ascendant_sun",
   },
   {
+    id: "ocean1",
+    name: "Coral Reef",
+    aliases: ["ocean1", "coralreef", "reef", "coral"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["FAKE", "FACTION"],
+    flavourText:
+      'Coral-analogues have evolved on many worlds, and their "reefs" are always areas of intense biodiversity.',
+    source: "thunders_edge",
+  },
+  {
+    id: "ocean2",
+    name: "Lost Fleet",
+    aliases: ["ocean2", "fleet", "lostfleet"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["FAKE", "FACTION"],
+    flavourText:
+      "Although usually badly degraded by water and time, shipwrecks remain fascinating areas of exploration and study whether those ships sailed sea or stars.",
+    source: "thunders_edge",
+  },
+  {
+    id: "ocean3",
+    name: "Deep Abyss",
+    aliases: ["ocean3", "abyss", "deepabyss"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["FAKE", "FACTION"],
+    flavourText:
+      "The Abyssal zone features such dramatic pressure that even most Hylar need assistance to survive in the lightless depths.",
+    source: "thunders_edge",
+  },
+  {
+    id: "ocean4",
+    name: "Brine Pool",
+    aliases: ["ocean4", "brine", "brinepool"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["FAKE", "FACTION"],
+    flavourText:
+      "Sites with unique oceanic chemistry are of obvious interest to Deepwrought researchers.",
+    source: "thunders_edge",
+  },
+  {
+    id: "ocean5",
+    name: "Ice Shelf",
+    aliases: ["ocean5", "ice", "iceshelf"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["FAKE", "FACTION"],
+    flavourText:
+      "Drylanders frequently discount the scientific opportunities to be found beneath their own polar ice sheets.",
+    source: "thunders_edge",
+  },
+  {
     id: "ogdun",
     tileId: "d24",
     name: "Ogdun",
@@ -5580,6 +5752,30 @@ export const planets: Planet[] = [
     flavourText:
       "Warm equatorial seas and vast agricultural fields have fostered strong trade with neighbouring systems.",
     source: "eronous",
+  },
+  {
+    id: "ordinian",
+    tileId: "92",
+    name: "Ordinian",
+    aliases: ["ordinian"],
+    resources: 0,
+    influence: 0,
+    factionHomeworld: "bastion",
+    planetTypes: ["FACTION"],
+    legendaryAbilityName: '4X41D "Hyperion" V1',
+    legendaryAbilityText:
+      "You may exhaust this card when you pass to draw 1 action card and gain 1 command token.",
+    legendaryAbilityFlavourText:
+      "A shard of a greater whole, a part of a grand effort.",
+    planetLayout: {
+      unitHolderName: "ordinian",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "ordinianc4",
@@ -5761,6 +5957,24 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     source: "ds",
+  },
+  {
+    id: "phlegethon",
+    tileId: "fracture7",
+    name: "Phlegethon",
+    aliases: ["phlegethon", "plem", "phlem", "phleg", "pleg", "plegethon"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["NONE"],
+    planetLayout: {
+      unitHolderName: "phlegethon",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "phylo",
@@ -6203,6 +6417,25 @@ export const planets: Planet[] = [
     flavourText:
       "*Darien is the heart of the brotherhood's realm. Here, within the great Monastery of Lucas, rests the Yin, the holy egg from which all the Brotherhood were made.*",
     source: "base",
+  },
+  {
+    id: "revelation",
+    tileId: "92",
+    name: "Revelation",
+    aliases: ["revelation"],
+    resources: 1,
+    influence: 2,
+    factionHomeworld: "bastion",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "revelation",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 225.0,
+        y: 205.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "rexatolmec",
@@ -6964,6 +7197,28 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "styx",
+    tileId: "fracture4",
+    name: "Styx",
+    aliases: ["stic", "stix", "styx", "sticks"],
+    resources: 4,
+    influence: 0,
+    planetTypes: ["NONE"],
+    legendaryAbilityName: "A Song Like Marrow",
+    legendaryAbilityText:
+      "When you gain this card, gain 1 victory point. When you lose this card, lose 1 victory point.",
+    legendaryAbilityFlavourText: "The last memory of the universe before.",
+    planetLayout: {
+      unitHolderName: "styx",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "suprima",
     tileId: "er04",
     name: "Su'Prima",
@@ -7086,6 +7341,46 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "balacasi",
+  },
+  {
+    id: "tallin",
+    tileId: "96a",
+    name: "Tallin",
+    aliases: ["tallin"],
+    resources: 1,
+    influence: 2,
+    factionHomeworld: "firmament",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "tallin",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 225.0,
+        y: 205.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
+    id: "tallinhollow",
+    tileId: "96b",
+    name: "Tallin Hollow",
+    shortName: "Tallin H.",
+    shrinkNamePNAttach: true,
+    aliases: ["tallinh", "thollow", "th", "tallinhollow"],
+    resources: 3,
+    influence: 0,
+    factionHomeworld: "obsidian",
+    planetTypes: ["FACTION"],
+    planetLayout: {
+      unitHolderName: "tallinhollow",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 225.0,
+        y: 205.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "tarmann",
@@ -7490,6 +7785,15 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "base",
+  },
+  {
+    id: "triad",
+    name: "The Triad",
+    aliases: ["triad"],
+    resources: 3,
+    influence: 3,
+    planetTypes: ["FAKE"],
+    source: "thunders_edge",
   },
   {
     id: "trisrodh",

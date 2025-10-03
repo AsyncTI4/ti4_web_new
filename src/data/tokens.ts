@@ -189,6 +189,13 @@ export const tokens: Token[] = [
     placement: "center",
   },
   {
+    id: "freepeople",
+    imagePath: "token_freepeople.png",
+    spaceOrPlanet: "planet",
+    aliasList: ["freepeople"],
+    source: "ds",
+  },
+  {
     id: "freesystems_raccoon",
     imagePath: "token_raccoon.png",
     spaceOrPlanet: "planet",
