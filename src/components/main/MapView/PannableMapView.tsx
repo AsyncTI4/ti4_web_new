@@ -24,6 +24,12 @@ import { ScoreTracker } from "@/components/Objectives";
 import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import PlayerCardHorizontal from "@/components/PlayerCardHorizontal";
+import {
+  shouldHideZoomControls,
+  computeMapZoom,
+  getScaleStyle,
+  computePanelsZoom,
+} from "@/utils/zoom";
 
 const MAP_PADDING = 0;
 
@@ -72,11 +78,15 @@ export function PannableMapView({ gameId }: Props) {
 
   const handleUnitMouseLeave = () => handleMouseLeave();
 
-  const zoom = useAppStore((state) => state.zoomLevel);
+  const storeZoom = useAppStore((state) => state.zoomLevel);
   const handleZoomIn = useAppStore((state) => state.handleZoomIn);
   const handleZoomOut = useAppStore((state) => state.handleZoomOut);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
+
+  const zoom = computeMapZoom(storeZoom);
+
+  const hideZoomControls = shouldHideZoomControls();
 
   const targetPositionParam =
     searchParams.get("targetPositionId") ||
@@ -192,26 +202,25 @@ export function PannableMapView({ gameId }: Props) {
 
   return (
     <Box className={classes.mapContainer}>
-      <Box
-        className={`dragscroll ${classes.mapArea}`}
-        style={{ width: "100%" }}
-      >
-        <div className={classes.zoomControlsDynamic} style={{ right: "35px" }}>
-          <ZoomControls zoomClass="" hideFitToScreen />
-        </div>
+      <Box className={`${classes.mapArea}`} style={{ width: "100%" }}>
+        {!hideZoomControls && (
+          <div
+            className={classes.zoomControlsDynamic}
+            style={{ right: "35px" }}
+          >
+            <ZoomControls zoomClass="" hideFitToScreen />
+          </div>
+        )}
 
         {gameData && (
           <>
             <Box
               className={classes.tileRenderingContainer}
               style={{
-                ...(settings.isFirefox ? {} : { zoom: zoom }),
-                MozTransform: `scale(${zoom})`,
-                MozTransformOrigin: "top left",
+                ...getScaleStyle(zoom, settings.isFirefox),
                 top: MAP_PADDING / zoom,
                 left: MAP_PADDING / zoom,
                 // offset to account for mallice meaning 'centering' looks weird
-
                 width: contentSize.width + 400,
                 height: contentSize.height,
                 marginLeft: "auto",
@@ -288,6 +297,7 @@ export function PannableMapView({ gameId }: Props) {
         {gameData && (
           <Box
             style={{
+              ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
               minWidth: "2150px",
               padding: "12px 8px",
             }}
@@ -311,6 +321,7 @@ export function PannableMapView({ gameId }: Props) {
           gutter="md"
           columns={12}
           style={{
+            ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
             minWidth: "2150px",
             padding: "12px 8px",
           }}

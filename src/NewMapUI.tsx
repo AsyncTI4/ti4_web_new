@@ -48,6 +48,7 @@ import {
 } from "./components/ChangeLogModal/changelogData";
 import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
+import { isMobileDevice } from "./utils/isTouchDevice";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -128,13 +129,15 @@ function NewMapUIContent({ pannable }: Props) {
               >
                 Map
               </Tabs.Tab>
-              <Tabs.Tab
-                value="objectives"
-                className={classes.tabsTab}
-                leftSection={<IconTarget size={16} />}
-              >
-                Objectives
-              </Tabs.Tab>
+              {!isMobileDevice() && (
+                <Tabs.Tab
+                  value="objectives"
+                  className={classes.tabsTab}
+                  leftSection={<IconTarget size={16} />}
+                >
+                  Objectives
+                </Tabs.Tab>
+              )}
               <Tabs.Tab
                 value="general"
                 className={classes.tabsTab}
@@ -258,10 +261,14 @@ export function NewMapUI({ pannable }: Props) {
       "theme-midnightviolettheme",
       "theme-midnightgreentheme",
       "theme-slatetheme",
+      "theme-mobile",
     ];
     const body = document.body;
     themeClasses.forEach((cls) => body.classList.remove(cls));
-    body.classList.add(`theme-${themeName}`);
+    const selectedClass = isMobileDevice()
+      ? "theme-mobile"
+      : `theme-${themeName}`;
+    body.classList.add(selectedClass);
     return () => {
       themeClasses.forEach((cls) => body.classList.remove(cls));
     };
@@ -270,7 +277,9 @@ export function NewMapUI({ pannable }: Props) {
   return (
     <SettingsProvider>
       <GameContextProvider gameId={gameId}>
-        <div className={`theme-${themeName}`}>
+        <div
+          className={isMobileDevice() ? "theme-mobile" : `theme-${themeName}`}
+        >
           <NewMapUIContent pannable={effectivePannable} />
         </div>
       </GameContextProvider>

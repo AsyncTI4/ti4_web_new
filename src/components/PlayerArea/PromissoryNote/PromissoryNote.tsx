@@ -1,6 +1,5 @@
 import { Image } from "@mantine/core";
 import { getPromissoryNoteData } from "../../../lookup/promissoryNotes";
-import { cdnImage } from "../../../data/cdnImage";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";

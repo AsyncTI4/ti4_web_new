@@ -2,6 +2,7 @@ import { Grid, Stack, SimpleGrid } from "@mantine/core";
 import { Tech } from "./Tech";
 import { getTechData, getTechTier } from "@/lookup/tech";
 import { PhantomTech } from "./PhantomTech";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
@@ -72,19 +73,15 @@ export function DynamicTechGrid({
 
   if (categoriesWithTechs.length === 0) return null;
 
+  const colSpan = isMobileDevice() ? 3 : { base: 6, md: 3 };
+
   if (layout === "grid") {
     return (
       <>
         {techCategories.map((techType) => {
           const techs = renderTechColumn(techType, exhaustedTechs);
           return (
-            <Grid.Col
-              key={techType}
-              span={{
-                base: 6,
-                md: 3,
-              }}
-            >
+            <Grid.Col key={techType} span={colSpan}>
               <Stack key={techType} gap={4}>
                 {techs.length > 0 ? techs : <PhantomTech techType={techType} />}
               </Stack>

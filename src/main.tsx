@@ -2,6 +2,7 @@ import "@mantine/core/styles.css";
 import "./styles/fonts.css";
 import "./styles/gradients.css";
 import "./styles/theme.css";
+import "./styles/mobile.css";
 import "./utils/zIndexVariables.css";
 
 import React from "react";
@@ -26,11 +27,7 @@ import FrogGamePage from "./FrogGamePage";
 import LandingPage from "./LandingPage";
 import MapTogglePage from "./MapTogglePage";
 import { SystemTilePage } from "./components/SystemTilePage/SystemTilePage";
-import ChangeLogModal from "./components/ChangeLogModal/ChangeLogModal";
-import {
-  CHANGELOG_090,
-  CURRENT_CHANGELOG_VERSION,
-} from "./components/ChangeLogModal/changelogData";
+import { isMobileDevice } from "./utils/isTouchDevice";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +63,16 @@ const router = createBrowserRouter([
     element: <SystemTilePage />,
   },
 ]);
+
+// Apply global mobile class for mobile devices
+if (typeof window !== "undefined") {
+  const body = document.body;
+  if (isMobileDevice()) {
+    body.classList.add("mobile");
+  } else {
+    body.classList.remove("mobile");
+  }
+}
 
 const tomatoBg: MantineColorsTuple = [
   darken("#e0dcd8", 0.75),

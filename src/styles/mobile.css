@@ -1,4 +1,4 @@
-.theme-midnightbluetheme {
+.theme-mobile {
     --surface-bg: #0A111E;
     --surface-border: 1px solid #313947;
     --surface-corner-accent: 2px solid #313947;
@@ -53,3 +53,16 @@
     --movement-banner-title-color: rgba(255, 255, 255, 0.96);
     --movement-banner-accent-color: rgba(147, 197, 253, 0.98);
 }
+
+
+.mobile *, .mobile *::before, .mobile *::after {
+    box-shadow: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    -webkit-transition: none !important;
+}
+
+

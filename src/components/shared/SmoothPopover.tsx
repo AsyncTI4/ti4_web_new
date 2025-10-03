@@ -14,6 +14,8 @@ function SmoothPopoverBase({
   position = "top",
   withArrow = true,
   shadow = "xl",
+  withinPortal = false,
+  positionDependencies,
   ...props
 }: SmoothPopoverProps) {
   return (
@@ -23,13 +25,8 @@ function SmoothPopoverBase({
       shadow={shadow}
       opened={opened}
       onChange={onChange}
+      withinPortal={withinPortal}
       transitionProps={{
-        transition: {
-          in: { opacity: 1, transform: "translateY(0) translateZ(0)" },
-          out: { opacity: 0, transform: "translateY(16px) translateZ(0)" },
-          common: { transformOrigin: "bottom" },
-          transitionProperty: "transform, opacity",
-        },
         duration: 280,
         timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
       }}

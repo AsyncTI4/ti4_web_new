@@ -92,19 +92,21 @@ export function HeaderMenuNew({
 
   return (
     <>
-      <Anchor
-        to="/games"
-        size="sm"
-        fw={600}
-        underline="hover"
-        c="orange"
-        ml="sm"
-        mr="sm"
-        component={Link}
-        className={classes.gamesLink}
-      >
-        All Games
-      </Anchor>
+      {!isMobileDevice() && (
+        <Anchor
+          to="/games"
+          size="sm"
+          fw={600}
+          underline="hover"
+          c="orange"
+          ml="sm"
+          mr="sm"
+          component={Link}
+          className={classes.gamesLink}
+        >
+          All Games
+        </Anchor>
+      )}
       <div className={classes.tabsContainer}>
         {!showDropdown ? (
           <TabView
@@ -357,7 +359,7 @@ function DropdownView({
         combobox.closeDropdown();
         changeTab(val);
       }}
-      styles={{ dropdown: { zIndex: 'var(--z-header-menu)' } }}
+      styles={{ dropdown: { zIndex: "var(--z-header-menu)" } }}
     >
       <Combobox.Target>
         {(() => {

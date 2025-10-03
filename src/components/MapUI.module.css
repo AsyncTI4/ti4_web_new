@@ -144,6 +144,12 @@
   height: 100%;
   position: relative;
   overflow: auto;
+
+}
+
+/* When user is performing a two-finger gesture, let the page receive it */
+:global(.mobile.pinch-zooming) .mapArea {
+  pointer-events: none;
 }
 
 /* Adds space when movement banner is present so content isn't overlapped */

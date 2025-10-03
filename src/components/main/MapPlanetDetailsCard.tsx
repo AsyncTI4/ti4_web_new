@@ -4,6 +4,7 @@ const MAP_PADDING = 200;
 
 import { usePlanet } from "@/hooks/usePlanet";
 import { useAppStore } from "@/utils/appStore";
+import { getBrowserZoomScale } from "@/utils/zoom";
 
 type TooltipPlanet = {
   planetId: string;
@@ -20,6 +21,8 @@ export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
   const zoom = useAppStore((state) => state.zoomLevel);
   const planetTile = usePlanet(tooltipPlanet.planetId);
 
+  const browserScale = getBrowserZoomScale();
+  const inverse = browserScale ? 1 / browserScale : 1;
   const scaledX = tooltipPlanet.coords.x * zoom;
   const scaledY = tooltipPlanet.coords.y * zoom;
 
@@ -32,7 +35,8 @@ export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
         top: `${scaledY + MAP_PADDING - 25}px`,
         zIndex: 'var(--z-map-planet-details)',
         pointerEvents: "none",
-        transform: "translate(-50%, -100%)",
+        transform: `translate(-50%, -100%) scale(${inverse})`,
+        transformOrigin: "top left",
       }}
     >
       <PlanetDetailsCard
