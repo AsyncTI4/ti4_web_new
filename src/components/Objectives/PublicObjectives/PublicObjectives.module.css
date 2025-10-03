@@ -18,27 +18,12 @@
 
 /* Stage Titles */
 .stageTitle {
-  position: relative;
   font-size: var(--mantine-font-size-md);
   font-weight: 700;
   color: var(--mantine-color-white) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  padding: 4px 10px 4px 12px;
   margin-bottom: var(--mantine-spacing-xs);
-  border-radius: 4px;
 }
 
-.stage1Title {
-  --ribbon-color: var(--gd-orange);
-  background: rgba(var(--gd-orange), 0.10);
-  border: 1px solid rgba(var(--gd-orange), 0.28);
-}
-
-.stage2Title {
-  --ribbon-color: var(--gd-blue);
-  background: rgba(var(--gd-blue), 0.08);
-  border: 1px solid rgba(var(--gd-blue), 0.24);
-}
 
 .otherTitle {
   --ribbon-color: var(--gd-gray);

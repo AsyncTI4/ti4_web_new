@@ -22,11 +22,7 @@ export default function FactionAbilitiesTechs({
       <Group gap={4} wrap="wrap" align="center">
         {abilities?.map((abilityId, index) => {
           const abilityData = getAbility(abilityId);
-          if (!abilityData) {
-            console.log("Could not find ability", abilityId);
-            return null;
-          }
-
+          if (!abilityData) return;
           return <Ability id={abilityId} key={index} />;
         })}
       </Group>

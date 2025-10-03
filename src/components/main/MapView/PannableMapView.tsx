@@ -20,10 +20,10 @@ import { MovementModeBox } from "./MovementModeBox";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
-import PlayerCard from "@/components/PlayerCard";
 import { ScoreTracker } from "@/components/Objectives";
 import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import PlayerCardHorizontal from "@/components/PlayerCardHorizontal";
 
 const MAP_PADDING = 0;
 
@@ -158,8 +158,6 @@ export function PannableMapView({ gameId }: Props) {
     setOriginModalOpen(false);
   }, [clearAll]);
 
-  // Compute content bounds so the absolute-positioned tiles live inside a
-  // container with real width/height, allowing following elements to flow below
   const contentSize = useMemo(() => {
     const tiles = gameData?.mapTiles || [];
     if (!tiles.length) return { width: 0, height: 0 };
@@ -174,16 +172,14 @@ export function PannableMapView({ gameId }: Props) {
       if (bottom > maxBottom) maxBottom = bottom;
     }
 
-    // Add right/bottom padding. Left/top padding are applied via style.top/left below.
     return {
       width: maxRight + MAP_PADDING,
-      height: maxBottom + MAP_PADDING + 180,
+      height: maxBottom + MAP_PADDING + 320,
     };
   }, [gameData?.mapTiles]);
 
   return (
     <Box className={classes.mapContainer}>
-      {/* Map Container - Full Width */}
       <Box
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
@@ -192,7 +188,6 @@ export function PannableMapView({ gameId }: Props) {
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
 
-        {/* Tile-based rendering */}
         {gameData && (
           <>
             <Box
@@ -203,11 +198,14 @@ export function PannableMapView({ gameId }: Props) {
                 MozTransformOrigin: "top left",
                 top: MAP_PADDING / zoom,
                 left: MAP_PADDING / zoom,
-                width: contentSize.width,
+                // offset to account for mallice meaning 'centering' looks weird
+
+                width: contentSize.width + 400,
                 height: contentSize.height,
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             >
-              {/* Render stat tiles for each faction */}
               {gameData.playerData &&
                 gameData.statTilePositions &&
                 Object.entries(gameData.statTilePositions).map(
@@ -278,8 +276,7 @@ export function PannableMapView({ gameId }: Props) {
         {gameData && (
           <Box
             style={{
-              width: contentSize.width * zoom,
-              minWidth: "max(100vw, 100%)",
+              minWidth: "2150px",
               padding: "12px 8px",
             }}
           >
@@ -302,16 +299,15 @@ export function PannableMapView({ gameId }: Props) {
           gutter="md"
           columns={12}
           style={{
-            width: contentSize.width * zoom,
-            minWidth: "max(100vw, 100%)",
+            minWidth: "2150px",
             padding: "12px 8px",
           }}
         >
           {gameData?.playerData
             .filter((p) => p.faction !== "null")
             .map((player) => (
-              <Grid.Col key={player.color} span={4}>
-                <PlayerCard playerData={player} />
+              <Grid.Col key={player.color} span={12}>
+                <PlayerCardHorizontal playerData={player} />
               </Grid.Col>
             ))}
         </Grid>

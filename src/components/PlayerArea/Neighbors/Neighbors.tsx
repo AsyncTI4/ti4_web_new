@@ -25,15 +25,15 @@ export function Neighbors({ neighbors }: Props) {
   const neighborFactions = getNeighborFactionIcons(neighbors, factionColorMap);
 
   return (
-    <Stack gap={6} pos="relative" style={{ zIndex: 1 }}>
+    <Stack gap={6} pos="relative">
       <Caption size="xs">Neighbors</Caption>
       <Group gap={2}>
         {neighborFactions.map((neighborFaction, index) => (
           <Image
             key={index}
             src={cdnImage(`/factions/${neighborFaction}.png`)}
-            w={18}
-            h={18}
+            w={24}
+            h={24}
             style={{
               filter:
                 "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
