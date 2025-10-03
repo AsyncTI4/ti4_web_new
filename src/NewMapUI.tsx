@@ -236,6 +236,10 @@ export function NewMapUI({ pannable }: Props) {
   const [showSelectionModal, setShowSelectionModal] = useState(false);
 
   useEffect(() => {
+    if (isMobileDevice()) {
+      setShowSelectionModal(false);
+      return;
+    }
     if (!pannable && !mapViewPreference) {
       setShowSelectionModal(true);
     }
@@ -245,8 +249,9 @@ export function NewMapUI({ pannable }: Props) {
     handlers.setMapViewPreference(preference);
   };
 
-  const effectivePannable =
-    pannable || mapViewPreference === "pannable" || false;
+  const effectivePannable = isMobileDevice()
+    ? true
+    : pannable || mapViewPreference === "pannable" || false;
 
   useEffect(() => {
     const themeClasses = [
@@ -283,15 +288,19 @@ export function NewMapUI({ pannable }: Props) {
           <NewMapUIContent pannable={effectivePannable} />
         </div>
       </GameContextProvider>
-      <ChangeLogModal
-        version={CURRENT_CHANGELOG_VERSION}
-        changelog={CHANGELOG_090}
-      />
-      <MapViewSelectionModal
-        opened={showSelectionModal}
-        onClose={() => setShowSelectionModal(false)}
-        onSelect={handleMapViewSelect}
-      />
+      {!isMobileDevice() && (
+        <ChangeLogModal
+          version={CURRENT_CHANGELOG_VERSION}
+          changelog={CHANGELOG_090}
+        />
+      )}
+      {!isMobileDevice() && (
+        <MapViewSelectionModal
+          opened={showSelectionModal}
+          onClose={() => setShowSelectionModal(false)}
+          onSelect={handleMapViewSelect}
+        />
+      )}
     </SettingsProvider>
   );
 }

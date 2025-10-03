@@ -7,6 +7,7 @@ import {
   SegmentedControl,
 } from "@mantine/core";
 import { useSettingsStore } from "../../utils/appStore";
+import { isMobileDevice } from "../../utils/isTouchDevice";
 
 type SettingsModalProps = {
   opened: boolean;
@@ -66,28 +67,30 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
 
         <Divider />
 
-        <div>
-          <Text size="sm" fw={500} mb="xs">
-            Map View Style
-          </Text>
-          <Stack gap="xs">
-            <SegmentedControl
-              value={settings.mapViewPreference || "panels"}
-              onChange={(value) =>
-                handlers.setMapViewPreference(value as "panels" | "pannable")
-              }
-              data={[
-                { label: "Panels", value: "panels" },
-                { label: "Pannable", value: "pannable" },
-              ]}
-              fullWidth
-            />
-            <Text size="xs" c="dimmed">
-              Panels: Left and right side panel to see content and map at same
-              time. Pannable: Full-screen draggable map.
+        {!isMobileDevice() && (
+          <div>
+            <Text size="sm" fw={500} mb="xs">
+              Map View Style
             </Text>
-          </Stack>
-        </div>
+            <Stack gap="xs">
+              <SegmentedControl
+                value={settings.mapViewPreference || "panels"}
+                onChange={(value) =>
+                  handlers.setMapViewPreference(value as "panels" | "pannable")
+                }
+                data={[
+                  { label: "Panels", value: "panels" },
+                  { label: "Pannable", value: "pannable" },
+                ]}
+                fullWidth
+              />
+              <Text size="xs" c="dimmed">
+                Panels: Left and right side panel to see content and map at same
+                time. Pannable: Full-screen draggable map.
+              </Text>
+            </Stack>
+          </div>
+        )}
 
         <Divider />
 
