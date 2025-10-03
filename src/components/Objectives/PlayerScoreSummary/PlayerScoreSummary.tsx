@@ -5,9 +5,9 @@ import { Chip } from "@/components/shared/primitives/Chip";
 import { ScoredSecret } from "@/components/PlayerArea/ScoredSecret";
 import { PromissoryNote } from "@/components/PlayerArea";
 import { PlayerColor } from "@/components/PlayerArea/PlayerColor";
-import { cdnImage } from "@/data/cdnImage";
 import styles from "./PlayerScoreSummary.module.css";
 import Caption from "@/components/shared/Caption/Caption";
+import { useFactionImages } from "@/hooks/useFactionImages";
 
 type Props = {
   playerData: PlayerData[];
@@ -15,6 +15,7 @@ type Props = {
 };
 
 export function PlayerScoreSummary({ playerData, objectives }: Props) {
+  const factionImages = useFactionImages();
   if (!playerData || !objectives) return null;
 
   const sortedPlayers = [...playerData].sort(
@@ -53,7 +54,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
               <Group justify="space-between" align="center" mb="xs">
                 <Group gap={8} px={4} align="center">
                   <Image
-                    src={cdnImage(`/factions/${player.faction}.png`)}
+                    src={factionImages[player.faction!]?.image}
                     alt={player.faction}
                     w={26}
                     h={26}

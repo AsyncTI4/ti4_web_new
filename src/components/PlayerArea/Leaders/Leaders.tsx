@@ -1,4 +1,4 @@
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, SimpleGrid } from "@mantine/core";
 import { Leader } from "../Leader";
 import { CompactLeader } from "../Leader/CompactLeader";
 import { Leader as LeaderType } from "@/data/types";
@@ -9,7 +9,23 @@ type Props = {
   faction?: string;
 };
 
-export function Leaders({ leaders, faction }: Props) {
+export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
+  return (
+    <SimpleGrid cols={3} spacing={6} verticalSpacing={6} px={2}>
+      {leaders.map((leader, index) => (
+        <CompactLeader
+          key={`compact-${leader.id}-${index}`}
+          id={leader.id}
+          exhausted={leader.exhausted ?? false}
+          locked={leader.locked ?? false}
+          active={leader.active ?? false}
+        />
+      ))}
+    </SimpleGrid>
+  );
+}
+
+export function RegularLeaders({ leaders, faction }: Props) {
   const isNomad = faction === "nomad";
   const nomadAgentIds = [
     "nomadagentartuno",
@@ -57,4 +73,12 @@ export function Leaders({ leaders, faction }: Props) {
       ))}
     </Stack>
   );
+}
+
+export function Leaders({ leaders, faction }: Props) {
+  const useCompactForAll = leaders.length > 5;
+  if (useCompactForAll) {
+    return <GridCompactLeaders leaders={leaders} />;
+  }
+  return <RegularLeaders leaders={leaders} faction={faction} />;
 }

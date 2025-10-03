@@ -53,11 +53,6 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/game/:mapid/pannable",
-    element: <MapTogglePage pannable />,
-  },
-
-  {
     path: "/froggame/:discordid/:mapid",
     element: <FrogGamePage />,
   },

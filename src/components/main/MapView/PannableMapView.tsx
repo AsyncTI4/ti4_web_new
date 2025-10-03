@@ -172,11 +172,23 @@ export function PannableMapView({ gameId }: Props) {
       if (bottom > maxBottom) maxBottom = bottom;
     }
 
+    const baseWidth = maxRight + MAP_PADDING;
+    const baseHeight = maxBottom + MAP_PADDING + 320;
+
+    // For Firefox, we need to account for the MozTransform scale
+    // since it doesn't affect layout dimensions like CSS zoom does
+    if (settings.isFirefox) {
+      return {
+        width: baseWidth * zoom,
+        height: baseHeight * zoom,
+      };
+    }
+
     return {
-      width: maxRight + MAP_PADDING,
-      height: maxBottom + MAP_PADDING + 320,
+      width: baseWidth,
+      height: baseHeight,
     };
-  }, [gameData?.mapTiles]);
+  }, [gameData?.mapTiles, settings.isFirefox, zoom]);
 
   return (
     <Box className={classes.mapContainer}>

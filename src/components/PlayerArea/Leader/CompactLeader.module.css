@@ -9,6 +9,8 @@
   box-sizing: border-box;
   flex: 1 1 33.333%;
   min-width: 0;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
 
 .active {
@@ -20,6 +22,17 @@
 .inactive {
   border-color: rgba(var(--gd-gray), 0.35);
   background: rgba(var(--gd-gray), 0.10);
+}
+
+/* Hover effects to mirror Chip hover behavior */
+.compact.active:hover {
+  border-color: rgba(var(--gd-green), 0.6);
+  box-shadow: 0 0 0 1px rgba(var(--gd-green), 0.35), 0 2px 10px rgba(var(--gd-green), 0.22);
+}
+
+.compact.inactive:hover {
+  border-color: rgba(var(--gd-gray), 0.55);
+  box-shadow: 0 0 0 1px rgba(var(--gd-gray), 0.3), 0 2px 10px rgba(var(--gd-gray), 0.18);
 }
 
 .imageFrame {

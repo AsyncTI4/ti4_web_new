@@ -3,6 +3,7 @@ import { cdnImage } from "../../../data/cdnImage";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { FactionColorMap } from "@/context/GameContextProvider";
 import Caption from "@/components/shared/Caption/Caption";
+import { useFactionImages } from "@/hooks/useFactionImages";
 
 type Props = {
   neighbors: string[];
@@ -24,6 +25,8 @@ export function Neighbors({ neighbors }: Props) {
   const factionColorMap = useFactionColors();
   const neighborFactions = getNeighborFactionIcons(neighbors, factionColorMap);
 
+  const factionImages = useFactionImages();
+
   return (
     <Stack gap={6} pos="relative">
       <Caption size="xs">Neighbors</Caption>
@@ -31,7 +34,7 @@ export function Neighbors({ neighbors }: Props) {
         {neighborFactions.map((neighborFaction, index) => (
           <Image
             key={index}
-            src={cdnImage(`/factions/${neighborFaction}.png`)}
+            src={factionImages[neighborFaction!]?.image}
             w={24}
             h={24}
             style={{

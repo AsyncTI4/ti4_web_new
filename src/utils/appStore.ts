@@ -1,5 +1,10 @@
 import { create } from "zustand";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import {
+  getMapViewPreference,
+  setMapViewPreference,
+  type MapViewPreference,
+} from "@/utils/mapViewPreference";
 
 export type TooltipUnit = {
   unitId?: string;
@@ -31,6 +36,7 @@ const DEFAULT_SETTINGS = {
   showExhaustedPlanets: true,
   themeName: "midnightbluetheme" as const,
   accessibleColors: false,
+  mapViewPreference: null as MapViewPreference | null,
 };
 
 export function loadSettingsFromStorage(): Settings {
@@ -295,6 +301,7 @@ export type Settings = {
     | "midnightgreentheme"
     | "slatetheme";
   accessibleColors: boolean;
+  mapViewPreference: MapViewPreference | null;
 };
 
 type SettingsHandlers = {
@@ -313,6 +320,7 @@ type SettingsHandlers = {
   toggleShowExhaustedPlanets: () => void;
   setThemeName: (name: Settings["themeName"]) => void;
   toggleAccessibleColors: () => void;
+  setMapViewPreference: (preference: MapViewPreference) => void;
 };
 
 type SettingsStore = {
@@ -334,6 +342,7 @@ type SettingsStore = {
   toggleShowExhaustedPlanets: () => void;
   setThemeName: (name: Settings["themeName"]) => void;
   toggleAccessibleColors: () => void;
+  setMapViewPreference: (preference: MapViewPreference) => void;
 };
 
 export const useSettingsStore = create<SettingsStore>((set) => {
@@ -490,6 +499,17 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       return { ...state, settings: newSettings };
     });
 
+  const handleSetMapViewPreference = (preference: MapViewPreference) =>
+    set((state) => {
+      const newSettings = {
+        ...state.settings,
+        mapViewPreference: preference,
+      };
+      setMapViewPreference(preference);
+      saveSettingsToStorage(newSettings as Settings);
+      return { ...state, settings: newSettings };
+    });
+
   return {
     settings: {
       ...loadSettingsFromStorage(),
@@ -497,6 +517,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
         typeof navigator !== "undefined" &&
         navigator.userAgent.toLowerCase().indexOf("firefox") > -1,
       themeName: loadThemeFromStorage(),
+      mapViewPreference: getMapViewPreference(),
     },
 
     handlers: {
@@ -515,6 +536,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       toggleShowExhaustedPlanets,
       setThemeName,
       toggleAccessibleColors,
+      setMapViewPreference: handleSetMapViewPreference,
     },
 
     // Keep the individual handlers for backwards compatibility
@@ -533,5 +555,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
     toggleShowExhaustedPlanets,
     setThemeName,
     toggleAccessibleColors,
+    setMapViewPreference: handleSetMapViewPreference,
   };
 });

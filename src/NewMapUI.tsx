@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   AppShell,
@@ -46,6 +46,8 @@ import {
   CHANGELOG_090,
   CURRENT_CHANGELOG_VERSION,
 } from "./components/ChangeLogModal/changelogData";
+import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
+import { type MapViewPreference } from "./utils/mapViewPreference";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -223,6 +225,25 @@ export function NewMapUI({ pannable }: Props) {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
   const themeName = useSettingsStore((state) => state.settings.themeName);
+  const mapViewPreference = useSettingsStore(
+    (state) => state.settings.mapViewPreference
+  );
+  const handlers = useSettingsStore((state) => state.handlers);
+
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
+
+  useEffect(() => {
+    if (!pannable && !mapViewPreference) {
+      setShowSelectionModal(true);
+    }
+  }, [pannable, mapViewPreference]);
+
+  const handleMapViewSelect = (preference: MapViewPreference) => {
+    handlers.setMapViewPreference(preference);
+  };
+
+  const effectivePannable =
+    pannable || mapViewPreference === "pannable" || false;
 
   useEffect(() => {
     const themeClasses = [
@@ -250,12 +271,17 @@ export function NewMapUI({ pannable }: Props) {
     <SettingsProvider>
       <GameContextProvider gameId={gameId}>
         <div className={`theme-${themeName}`}>
-          <NewMapUIContent pannable={pannable} />
+          <NewMapUIContent pannable={effectivePannable} />
         </div>
       </GameContextProvider>
       <ChangeLogModal
         version={CURRENT_CHANGELOG_VERSION}
         changelog={CHANGELOG_090}
+      />
+      <MapViewSelectionModal
+        opened={showSelectionModal}
+        onClose={() => setShowSelectionModal(false)}
+        onSelect={handleMapViewSelect}
       />
     </SettingsProvider>
   );
