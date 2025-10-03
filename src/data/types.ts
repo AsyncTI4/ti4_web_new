@@ -116,7 +116,7 @@ export type Relic = {
   shortName?: string;
   homebrewReplacesID?: string;
   isFakeRelic?: boolean;
-  actual_source?: string;
+  actualSource?: string;
 };
 
 export type FactionUnits = {
@@ -351,7 +351,7 @@ export type PlayerData = {
 
 export type Planet = {
   id: string;
-  tileId: string | null;
+  tileId?: string | null;
   name: string;
   shortName?: string;
   shrinkName?: boolean;
@@ -362,7 +362,6 @@ export type Planet = {
   resources: number;
   influence: number;
   factionHomeworld?: string | null;
-
   planetType?:
     | "FACTION"
     | "CULTURAL"
@@ -383,6 +382,8 @@ export type Planet = {
       x: number;
       y: number;
     };
+    extraIcons?: number | null;
+    planetRadius?: number | null;
   };
   contrastColor?: string;
   flavourText?: string | null;
