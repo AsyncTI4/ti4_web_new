@@ -6,6 +6,7 @@ import { FactionsInGame } from "./FactionsInGame";
 import { UnpickedSCs } from "./UnpickedSCs";
 import { CardPool } from "./CardPool";
 import { LawsInPlay } from "./LawsInPlay";
+import Expeditions from "./Expeditions/Expeditions";
 
 function GeneralArea() {
   const gameData = useGameData();
@@ -25,14 +26,15 @@ function GeneralArea() {
       className={styles.scoreBoardSurface}
     >
       <Flex wrap={"wrap"} justify={"center"} mb="md" gap={64}>
-            <UnpickedSCs strategyCards={strategyCards} />
-          <Stack gap={32}>
-            <FactionsInGame playerData={playerData} />
-            <CardPool cardPool={cardPool} playerData={playerData} />
-          </Stack>
-          <Box mb="lg">
-            <LawsInPlay laws={lawsInPlay} />
-          </Box>
+        <UnpickedSCs strategyCards={strategyCards} />
+        <Stack gap={32}>
+          <FactionsInGame playerData={playerData} />
+          <CardPool cardPool={cardPool} playerData={playerData} />
+        </Stack>
+        <Expeditions playerData={playerData} />
+        <Box mb="lg">
+          <LawsInPlay laws={lawsInPlay} />
+        </Box>
       </Flex>
     </Surface>
   );
