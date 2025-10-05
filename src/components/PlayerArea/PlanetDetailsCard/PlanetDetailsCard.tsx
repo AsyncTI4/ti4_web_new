@@ -89,8 +89,11 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
       );
     }
 
-    const traitKey = planetData.planetType!.toLowerCase();
-    if (["cultural", "hazardous", "industrial"].includes(traitKey)) {
+    const traitKey = planetData.planetType?.toLowerCase();
+    if (
+      traitKey &&
+      ["cultural", "hazardous", "industrial"].includes(traitKey)
+    ) {
       return (
         <Box w={80} h={80} className={` ${classes.planetIconContainer}`}>
           <PlanetTraitIcon
