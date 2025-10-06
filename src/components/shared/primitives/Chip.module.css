@@ -162,6 +162,7 @@
     gap: var(--mantine-spacing-xs);
     padding: 4px 6px;
     align-items: center;
+    min-height: 28px;
 }
 
 .leftSection {
@@ -172,7 +173,7 @@
 
 .textContainer {
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: clip;
     white-space: nowrap;
     min-width: 0;
     flex: 1;

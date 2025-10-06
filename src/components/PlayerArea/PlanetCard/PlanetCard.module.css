@@ -209,7 +209,7 @@
 
 /* Planet name text */
 .planetName {
-  font-size: var(--mantine-font-size-xs);
+  font-size: 12px;
   color: white;
   font-weight: 700;
   writing-mode: vertical-rl;

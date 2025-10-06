@@ -5,7 +5,6 @@ import {
   Stack,
   Box,
   Image,
-  Flex,
   SimpleGrid,
 } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
@@ -59,7 +58,7 @@ const unitPriorityOrder = [
   "pd", // PDS
 ];
 
-export default function PlayerCardHorizontal(props: Props) {
+export default function PlayerCardMobile(props: Props) {
   const {
     userName,
     faction,
@@ -342,7 +341,7 @@ export default function PlayerCardHorizontal(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={20}>
-          <Group gap="xs">
+          <Group gap="xs" align="flex-start">
             <DynamicTechGrid
               techs={techs}
               layout="grid"

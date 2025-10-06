@@ -4,6 +4,7 @@ import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   id: string;
@@ -24,7 +25,9 @@ export function Ability({ id }: Props) {
           title={abilityData.name}
           onClick={() => setOpened((o) => !o)}
           leftSection={
-            <CircularFactionIcon faction={abilityData.faction} size={18} />
+            !isMobileDevice() ? (
+              <CircularFactionIcon faction={abilityData.faction} size={18} />
+            ) : undefined
           }
         />
       </SmoothPopover.Target>

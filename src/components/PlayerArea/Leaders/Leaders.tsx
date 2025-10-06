@@ -2,7 +2,8 @@ import { Group, Stack, SimpleGrid } from "@mantine/core";
 import { Leader } from "../Leader";
 import { CompactLeader } from "../Leader/CompactLeader";
 import { Leader as LeaderType } from "@/data/types";
-// no need for cdnImage here; faction icon is rendered inside CompactLeader
+import { MobileLeader } from "../Leader/MobileLeader";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   leaders: LeaderType[];
@@ -41,6 +42,8 @@ export function RegularLeaders({ leaders, faction }: Props) {
       )
     : leaders;
 
+  const LeaderComponent = isMobileDevice() ? MobileLeader : Leader;
+
   return (
     <Stack gap={4} style={{ overflow: "hidden" }}>
       {isNomad && nomadAgents.length > 0 && (
@@ -61,7 +64,7 @@ export function RegularLeaders({ leaders, faction }: Props) {
       )}
 
       {otherLeaders.map((leader, index) => (
-        <Leader
+        <LeaderComponent
           key={index}
           id={leader.id}
           type={leader.type as "agent" | "commander" | "hero"}
