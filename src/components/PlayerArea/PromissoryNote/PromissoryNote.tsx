@@ -6,6 +6,7 @@ import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { useState } from "react";
 import { PromissoryNoteCard } from "../PromissoryNoteCard";
 import { useFactionImages } from "@/hooks/useFactionImages";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   promissoryNoteId: string;
@@ -35,7 +36,9 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
               if (onClick) onClick();
             }}
             ribbon
-            leftSection={<Image src={factionIcon} />}
+            leftSection={
+              !isMobileDevice() ? <Image src={factionIcon} /> : undefined
+            }
             title={noteData.shortName || displayName}
             strong
             px={8}

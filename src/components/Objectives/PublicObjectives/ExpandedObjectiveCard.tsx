@@ -6,6 +6,7 @@ import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import { publicObjectives } from "../../../data/publicObjectives";
 import styles from "./ExpandedObjectiveCard.module.css";
 import ProgressObjectiveDisplay from "./ProgressObjectiveDisplay";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   playerData: PlayerData[];
@@ -70,7 +71,7 @@ function ExpandedObjectiveCard({
           >
             {objective.revealed ? objective.name : "UNREVEALED"}
           </Text>
-          {objective.revealed && objectiveData && (
+          {objective.revealed && objectiveData && !isMobileDevice() && (
             <Text className={styles.requirementText} size="sm">
               {objectiveData.text}
             </Text>

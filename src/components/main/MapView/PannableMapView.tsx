@@ -40,6 +40,7 @@ import {
   computePanelsZoom,
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import PlayerCardMobile from "@/components/PlayerCardMobile";
 
 const MAP_PADDING = 0;
 
@@ -230,6 +231,17 @@ export function PannableMapView({ gameId }: Props) {
     };
   }, [gameData?.mapTiles, settings.isFirefox, zoom]);
 
+  const PlayerCardComponent = isMobileDevice()
+    ? PlayerCardMobile
+    : PlayerCardHorizontal;
+
+  const areaStyles = isMobileDevice()
+    ? {
+        width: "1300px",
+      }
+    : {
+        minWidth: "2150px",
+      };
   return (
     <Box className={classes.mapContainer}>
       <Box
@@ -331,7 +343,7 @@ export function PannableMapView({ gameId }: Props) {
           <Box
             style={{
               ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
-              minWidth: "2150px",
+              ...areaStyles,
               padding: "12px 8px",
             }}
           >
@@ -381,7 +393,7 @@ export function PannableMapView({ gameId }: Props) {
           columns={12}
           style={{
             ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
-            minWidth: "2150px",
+            ...areaStyles,
             padding: "0px 8px",
           }}
         >
@@ -392,7 +404,7 @@ export function PannableMapView({ gameId }: Props) {
                 key={player.color}
                 span={playerCardLayout === "grid" ? 6 : 12}
               >
-                <PlayerCardHorizontal playerData={player} />
+                <PlayerCardComponent playerData={player} />
               </Grid.Col>
             ))}
         </Grid>

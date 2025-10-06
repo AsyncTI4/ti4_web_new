@@ -1,7 +1,7 @@
 import { isMobileDevice } from "@/utils/isTouchDevice";
 
 export const MOBILE_MAP_ZOOM = 0.2;
-export const MOBILE_PANELS_ZOOM = 0.25;
+export const MOBILE_PANELS_ZOOM = 0.5;
 
 export function computeMapZoom(storeZoom: number): number {
   return isMobileDevice() ? MOBILE_MAP_ZOOM : storeZoom;
