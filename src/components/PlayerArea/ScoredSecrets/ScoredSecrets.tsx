@@ -1,7 +1,6 @@
-import { Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { useState } from "react";
 import { ScoredSecret } from "../ScoredSecret";
-import { EmptyScoredSecretsPlaceholder } from "../ScoredSecret";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { SecretObjectiveCard } from "../SecretObjectiveCard";
 import { UnscoredSecret } from "../ScoredSecret/UnscoredSecret";
@@ -10,6 +9,7 @@ type Props = {
   secretsScored: Record<string, number>;
   knownUnscoredSecrets?: Record<string, number>;
   unscoredSecrets: number;
+  horizontal?: boolean;
 };
 
 type SecretVariant = "scored" | "unscored";
@@ -51,15 +51,16 @@ export function ScoredSecrets({
   secretsScored,
   knownUnscoredSecrets = {},
   unscoredSecrets,
+  horizontal = false,
 }: Props) {
   const [selectedSecret, setSelectedSecret] = useState<string | null>(null);
-
   const scoredIds = Object.keys(secretsScored);
   const knownUnscoredIds = Object.keys(knownUnscoredSecrets);
   const unscored = Math.max(unscoredSecrets - knownUnscoredIds.length, 0);
+  const Wrapper = horizontal ? Group : Stack;
 
   return (
-    <Stack gap={2}>
+    <Wrapper gap={2}>
       {scoredIds.map((secretId) => (
         <SecretWithPopover
           key={`scored-${secretId}`}
@@ -85,6 +86,6 @@ export function ScoredSecrets({
       {Array.from({ length: unscored }, (_, index) => (
         <UnscoredSecret key={index} />
       ))}
-    </Stack>
+    </Wrapper>
   );
 }

@@ -14,7 +14,7 @@ type Props = {
 
 export function TechGridMobile({ techs = [], exhaustedTechs = [] }: Props) {
   const allTechElements: ReactNode[] = techCategories.flatMap((techType) =>
-    buildTechElementsForType(techType, techs, exhaustedTechs, undefined)
+    buildTechElementsForType(techType, techs, exhaustedTechs, undefined, true)
   );
 
   const chunks = chunkInto(allTechElements, 4);

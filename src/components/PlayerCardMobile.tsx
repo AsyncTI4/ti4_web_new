@@ -29,10 +29,8 @@ import { PlayerCardBox } from "./PlayerCardBox";
 import { DebtTokens } from "./PlayerArea/DebtTokens";
 import { lookupUnit } from "@/lookup/units";
 import { Relic } from "./PlayerArea/Relic/Relic";
-import FadedDivider from "./shared/primitives/FadedDivider/FadedDivider";
 import { Commodities } from "./PlayerArea/Commodities/Commodities";
 import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
-import FactionAbilitiesTechs from "./PlayerArea/FactionAbilitiesTechs";
 import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
@@ -317,7 +315,7 @@ export default function PlayerCardMobile(props: Props) {
 
         <Grid.Col span={2}>
           <Stack gap={2}>
-            <Leaders leaders={leaders} faction={faction} />
+            <Leaders leaders={leaders} faction={faction} mobile />
           </Stack>
         </Grid.Col>
 
@@ -347,6 +345,7 @@ export default function PlayerCardMobile(props: Props) {
               layout="grid"
               exhaustedTechs={props.playerData.exhaustedTechs}
               minSlotsPerColor={4}
+              mobile
             />
 
             {UnitsArea}

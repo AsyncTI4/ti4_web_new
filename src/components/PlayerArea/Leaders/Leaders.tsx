@@ -8,6 +8,7 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 type Props = {
   leaders: LeaderType[];
   faction?: string;
+  mobile?: boolean;
 };
 
 export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
@@ -26,7 +27,7 @@ export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
   );
 }
 
-export function RegularLeaders({ leaders, faction }: Props) {
+export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
   const isNomad = faction === "nomad";
   const nomadAgentIds = [
     "nomadagentartuno",
@@ -42,7 +43,7 @@ export function RegularLeaders({ leaders, faction }: Props) {
       )
     : leaders;
 
-  const LeaderComponent = isMobileDevice() ? MobileLeader : Leader;
+  const LeaderComponent = mobile ? MobileLeader : Leader;
 
   return (
     <Stack gap={4} style={{ overflow: "hidden" }}>
