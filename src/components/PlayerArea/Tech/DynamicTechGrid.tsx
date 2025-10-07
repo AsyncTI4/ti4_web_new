@@ -11,6 +11,7 @@ type Props = {
   exhaustedTechs?: string[];
   /** Optional: ensure at least N slots per tech color by adding placeholders (PhantomTech). */
   minSlotsPerColor?: number;
+  mobile?: boolean;
 };
 
 export function DynamicTechGrid({
@@ -18,9 +19,10 @@ export function DynamicTechGrid({
   layout = "simple",
   exhaustedTechs = [],
   minSlotsPerColor,
+  mobile,
 }: Props) {
   if (layout === "grid") {
-    if (isMobileDevice()) {
+    if (mobile) {
       return (
         <Grid gutter={4}>
           <TechGridMobile

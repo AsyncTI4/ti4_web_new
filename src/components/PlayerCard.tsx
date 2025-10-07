@@ -301,11 +301,13 @@ export default function PlayerCard(props: Props) {
             <Box hiddenFrom="sm" style={{ minHeight: "175px" }}>
               <Leaders leaders={leaders} faction={faction} />
             </Box>
-            <ScoredSecrets
-              secretsScored={secretsScored}
-              knownUnscoredSecrets={knownUnscoredSecrets}
-              unscoredSecrets={soCount || 0}
-            />
+            <Box visibleFrom="sm">
+              <ScoredSecrets
+                secretsScored={secretsScored}
+                knownUnscoredSecrets={knownUnscoredSecrets}
+                unscoredSecrets={soCount || 0}
+              />
+            </Box>
           </Stack>
         </Grid.Col>
 
@@ -330,6 +332,14 @@ export default function PlayerCard(props: Props) {
             {promissoryNotes.map((pn) => (
               <PromissoryNote promissoryNoteId={pn} key={pn} />
             ))}
+            <Box hiddenFrom="sm">
+              <ScoredSecrets
+                secretsScored={secretsScored}
+                knownUnscoredSecrets={knownUnscoredSecrets}
+                unscoredSecrets={soCount || 0}
+                horizontal
+              />
+            </Box>
           </Group>
         </Grid.Col>
         <FadedDivider orientation="horizontal" />

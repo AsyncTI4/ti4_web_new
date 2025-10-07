@@ -16,7 +16,8 @@ export function buildTechElementsForType(
   techType: string,
   techIds: string[] = [],
   exhaustedTechs: string[] = [],
-  minSlotsPerColor?: number
+  minSlotsPerColor?: number,
+  mobile?: boolean
 ): ReactNode[] {
   const filteredTechs = techIds.filter((techId) => {
     const techData = getTechData(techId);
@@ -36,6 +37,7 @@ export function buildTechElementsForType(
       key={`tech-${techId}-${index}`}
       techId={techId}
       isExhausted={exhaustedTechs.includes(techId)}
+      mobile={mobile}
     />
   ));
 
