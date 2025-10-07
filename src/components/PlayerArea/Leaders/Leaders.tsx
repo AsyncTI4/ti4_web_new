@@ -79,10 +79,10 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
   );
 }
 
-export function Leaders({ leaders, faction }: Props) {
+export function Leaders({ leaders, faction, mobile = false }: Props) {
   const useCompactForAll = leaders.length > 5;
   if (useCompactForAll) {
     return <GridCompactLeaders leaders={leaders} />;
   }
-  return <RegularLeaders leaders={leaders} faction={faction} />;
+  return <RegularLeaders leaders={leaders} faction={faction} mobile={mobile} />;
 }
