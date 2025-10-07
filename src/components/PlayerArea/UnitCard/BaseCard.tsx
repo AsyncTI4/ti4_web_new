@@ -31,7 +31,7 @@ export function BaseCard({
   className,
   enableAnimations = true,
   locked = false,
-  lockedLabel = "Not available",
+  lockedLabel = "",
 }: BaseCardProps) {
   const cardClass = isUpgraded ? `${styles.upgraded}` : `${styles.standard}`;
   const animatedClass = enableAnimations ? styles.animated : "";

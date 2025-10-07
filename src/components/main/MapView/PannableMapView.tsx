@@ -231,9 +231,10 @@ export function PannableMapView({ gameId }: Props) {
     };
   }, [gameData?.mapTiles, settings.isFirefox, zoom]);
 
-  const PlayerCardComponent = isMobileDevice()
-    ? PlayerCardMobile
-    : PlayerCardHorizontal;
+  const PlayerCardComponent =
+    isMobileDevice() || playerCardLayout === "grid"
+      ? PlayerCardMobile
+      : PlayerCardHorizontal;
 
   const areaStyles = isMobileDevice()
     ? {

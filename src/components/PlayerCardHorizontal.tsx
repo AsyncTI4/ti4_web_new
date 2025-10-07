@@ -341,18 +341,15 @@ export default function PlayerCardHorizontal(props: Props) {
           </Group>
         </Grid.Col>
 
-        <Grid.Col span={20}>
-          <Group gap="xs">
-            <DynamicTechGrid
-              techs={techs}
-              layout="grid"
-              exhaustedTechs={props.playerData.exhaustedTechs}
-              minSlotsPerColor={4}
-            />
-
-            {UnitsArea}
-          </Group>
+        <Grid.Col span={12}>
+          <DynamicTechGrid
+            techs={techs}
+            layout="grid"
+            exhaustedTechs={props.playerData.exhaustedTechs}
+            minSlotsPerColor={4}
+          />
         </Grid.Col>
+        <Grid.Col span={5}>{UnitsArea}</Grid.Col>
 
         {nombox !== undefined && Object.keys(nombox).length > 0 && (
           <Grid.Col span={4}>

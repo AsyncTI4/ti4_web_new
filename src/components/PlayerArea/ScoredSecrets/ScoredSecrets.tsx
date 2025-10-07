@@ -52,6 +52,7 @@ export function ScoredSecrets({
   knownUnscoredSecrets = {},
   unscoredSecrets,
   horizontal = false,
+  mobile = false,
 }: Props) {
   const [selectedSecret, setSelectedSecret] = useState<string | null>(null);
   const scoredIds = Object.keys(secretsScored);

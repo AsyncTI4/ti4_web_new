@@ -156,7 +156,6 @@ export default function PlayerCardMobile(props: Props) {
               key={`unavailable-${asyncId}`}
               asyncId={asyncId}
               color={color}
-              lockedLabel="Not available"
             />
           );
         }
@@ -222,6 +221,22 @@ export default function PlayerCardMobile(props: Props) {
           <Neighbors neighbors={neighbors || []} />
         </Box>
 
+        <Group gap="xs" align="center" mt={8}>
+          {scs.map((scNumber) => {
+            const isExhausted = exhaustedSCs?.includes(scNumber);
+            return (
+              <StrategyCardBannerCompact
+                key={scNumber}
+                number={scNumber}
+                text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
+                color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
+                isExhausted={isExhausted}
+              />
+            );
+          })}
+          {isSpeaker && <SpeakerToken isVisible />}
+        </Group>
+
         <Group gap="xs" wrap="wrap" align="center">
           <Stack gap={4}>
             <Caption size="xs">Abilities</Caption>
@@ -247,26 +262,10 @@ export default function PlayerCardMobile(props: Props) {
             </Group>
           </Stack>
         </Group>
-
-        <Group gap="xs" align="center" mt={8}>
-          {scs.map((scNumber) => {
-            const isExhausted = exhaustedSCs?.includes(scNumber);
-            return (
-              <StrategyCardBannerCompact
-                key={scNumber}
-                number={scNumber}
-                text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                isExhausted={isExhausted}
-              />
-            );
-          })}
-          {isSpeaker && <SpeakerToken isVisible />}
-        </Group>
       </Group>
 
       <Grid gutter="xs" columns={24}>
-        <Grid.Col span={5}>
+        <Grid.Col span={6}>
           <Group gap={2} align="flex-start">
             <Stack gap={4}>
               <TradeGoods tg={tg || 0} />
@@ -288,38 +287,12 @@ export default function PlayerCardMobile(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={2}>
-          <Stack gap={4}>
-            {relics.map((relicId, index) => {
-              const isExhausted = exhaustedRelics?.includes(relicId);
-              return (
-                <Relic
-                  key={index}
-                  relicId={relicId}
-                  isExhausted={!!isExhausted}
-                />
-              );
-            })}
-            {promissoryNotes.map((pn) => (
-              <PromissoryNote promissoryNoteId={pn} key={pn} />
-            ))}
-          </Stack>
-        </Grid.Col>
-
-        <Grid.Col span={2}>
-          <ScoredSecrets
-            secretsScored={secretsScored}
-            knownUnscoredSecrets={knownUnscoredSecrets}
-            unscoredSecrets={soCount || 0}
-          />
-        </Grid.Col>
-
-        <Grid.Col span={2}>
           <Stack gap={2}>
             <Leaders leaders={leaders} faction={faction} mobile />
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={10}>
+        <Grid.Col span={14}>
           <Group align="flex-start">
             <ResourceInfluenceCompact planetEconomics={planetEconomics} />
             <Group gap={4} wrap="wrap" flex={1}>
@@ -338,7 +311,31 @@ export default function PlayerCardMobile(props: Props) {
           </Group>
         </Grid.Col>
 
-        <Grid.Col span={20}>
+        <Grid.Col span={24}>
+          <Group gap={4}>
+            <ScoredSecrets
+              secretsScored={secretsScored}
+              knownUnscoredSecrets={knownUnscoredSecrets}
+              unscoredSecrets={soCount || 0}
+              horizontal
+            />
+            {relics.map((relicId, index) => {
+              const isExhausted = exhaustedRelics?.includes(relicId);
+              return (
+                <Relic
+                  key={index}
+                  relicId={relicId}
+                  isExhausted={!!isExhausted}
+                />
+              );
+            })}
+            {promissoryNotes.map((pn) => (
+              <PromissoryNote promissoryNoteId={pn} key={pn} />
+            ))}
+          </Group>
+        </Grid.Col>
+
+        <Grid.Col span={24}>
           <Group gap="xs" align="flex-start">
             <DynamicTechGrid
               techs={techs}
@@ -349,14 +346,13 @@ export default function PlayerCardMobile(props: Props) {
             />
 
             {UnitsArea}
+            {nombox !== undefined && Object.keys(nombox).length > 0 && (
+              <div style={{ minWidth: "200px" }}>
+                <Nombox capturedUnits={nombox || {}} />
+              </div>
+            )}
           </Group>
         </Grid.Col>
-
-        {nombox !== undefined && Object.keys(nombox).length > 0 && (
-          <Grid.Col span={4}>
-            <Nombox capturedUnits={nombox || {}} />
-          </Grid.Col>
-        )}
       </Grid>
 
       <Box

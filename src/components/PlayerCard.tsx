@@ -156,7 +156,6 @@ export default function PlayerCard(props: Props) {
               key={`unavailable-${asyncId}`}
               asyncId={asyncId}
               color={color}
-              lockedLabel="Not available"
             />
           );
         }

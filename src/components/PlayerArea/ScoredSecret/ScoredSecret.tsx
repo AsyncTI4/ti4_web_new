@@ -1,7 +1,6 @@
 import { Image } from "@mantine/core";
 import { getSecretObjectiveData } from "../../../lookup/secretObjectives";
 import { Chip } from "@/components/shared/primitives/Chip";
-import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   secretId: string;
@@ -18,7 +17,7 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
     <Chip
       accent={isScored ? "red" : "gray"}
       onClick={onClick}
-      leftSection={!isMobileDevice() ? <Image src="/so_icon.png" /> : undefined}
+      leftSection={<Image src="/so_icon.png" />}
       ribbon
       title={secretName}
     />

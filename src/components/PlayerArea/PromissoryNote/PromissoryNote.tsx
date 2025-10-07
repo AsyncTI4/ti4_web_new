@@ -36,9 +36,7 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
               if (onClick) onClick();
             }}
             ribbon
-            leftSection={
-              !isMobileDevice() ? <Image src={factionIcon} /> : undefined
-            }
+            leftSection={<Image src={factionIcon} />}
             title={noteData.shortName || displayName}
             strong
             px={8}

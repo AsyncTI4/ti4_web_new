@@ -18,12 +18,7 @@ export function UnitCardUnavailable({
 }: Props) {
   const colorAlias = getColorAlias(color);
   return (
-    <BaseCard
-      compact={compact}
-      locked
-      lockedLabel={lockedLabel || "Not available"}
-      enableAnimations={false}
-    >
+    <BaseCard compact={compact} locked enableAnimations={false}>
       <Unit
         unitType={asyncId}
         colorAlias={colorAlias}
