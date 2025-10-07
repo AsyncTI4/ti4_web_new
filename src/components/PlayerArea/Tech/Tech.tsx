@@ -5,6 +5,7 @@ import { TechCard } from "./TechCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { useState } from "react";
 import { getTechData } from "../../../lookup/tech";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 // Helper function to get tech color from type
 const getTechColor = (techType: string): string => {
@@ -100,7 +101,7 @@ export function Tech({ techId, isExhausted = false, mobile = false }: Props) {
             <Text
               className={styles.techName}
               ff={mobile ? "text" : "monospace"}
-              fz={mobile ? 14 : "xs"}
+              fz={isMobileDevice() ? 14 : "xs"}
             >
               {techData.name}
             </Text>

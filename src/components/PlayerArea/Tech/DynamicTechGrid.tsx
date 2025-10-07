@@ -46,7 +46,7 @@ export function DynamicTechGrid({
 
   // For sidebar components - uses SimpleGrid with rows of 2
   return (
-    <Grid gutter={4}>
+    <Grid gutter={4} style={{ flex: 1 }}>
       <TechGridSidebar
         techs={techs}
         exhaustedTechs={exhaustedTechs}

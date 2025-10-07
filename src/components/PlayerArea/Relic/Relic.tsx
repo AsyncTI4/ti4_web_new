@@ -7,7 +7,6 @@ import { getGradientClasses } from "../gradientClasses";
 import styles from "./Relic.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { IconX } from "@tabler/icons-react";
-import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   relicId: string;
@@ -34,25 +33,23 @@ export function Relic({ relicId, isExhausted = false }: Props) {
           accent={isExhausted ? "bloodOrange" : "yellow"}
           onClick={() => setOpened((o) => !o)}
           leftSection={
-            !isMobileDevice() ? (
-              <Box className={styles.iconWrapper}>
-                <Image
-                  src="/relicicon.webp"
-                  className={`${gradientClasses.iconFilter} ${styles.icon} ${
-                    isExhausted ? styles.exhaustedIcon : ""
-                  }`}
-                />
-                {isExhausted && (
-                  <span className={styles.exhaustedX}>
-                    <IconX
-                      size={18}
-                      stroke={3}
-                      color="var(--mantine-color-red-1)"
-                    />
-                  </span>
-                )}
-              </Box>
-            ) : undefined
+            <Box className={styles.iconWrapper}>
+              <Image
+                src="/relicicon.webp"
+                className={`${gradientClasses.iconFilter} ${styles.icon} ${
+                  isExhausted ? styles.exhaustedIcon : ""
+                }`}
+              />
+              {isExhausted && (
+                <span className={styles.exhaustedX}>
+                  <IconX
+                    size={18}
+                    stroke={3}
+                    color="var(--mantine-color-red-1)"
+                  />
+                </span>
+              )}
+            </Box>
           }
           title={relicData.shortName || relicData.name}
           px="sm"

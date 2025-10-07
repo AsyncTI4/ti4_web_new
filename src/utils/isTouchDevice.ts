@@ -1,8 +1,4 @@
 export function isMobileDevice() {
-  return isMobileDevice2();
-}
-
-export function isMobileDevice2() {
   // First check if device has touch capability
   const hasTouch =
     "ontouchstart" in window ||
