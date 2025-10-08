@@ -5,3 +5,8 @@ export function useFactionColors(): FactionColorMap {
   const game = useGameData();
   return game?.factionColorMap ?? {};
 }
+
+export function useOriginalFactionColors(): FactionColorMap {
+  const game = useGameData();
+  return game?.originalFactionColorMap ?? {};
+}

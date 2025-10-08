@@ -1,6 +1,9 @@
 import { Group, Image, Stack } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
-import { useFactionColors } from "@/hooks/useFactionColors";
+import {
+  useFactionColors,
+  useOriginalFactionColors,
+} from "@/hooks/useFactionColors";
 import { FactionColorMap } from "@/context/GameContextProvider";
 import Caption from "@/components/shared/Caption/Caption";
 import { useFactionImages } from "@/hooks/useFactionImages";
@@ -22,7 +25,7 @@ const getNeighborFactionIcons = (
 };
 
 export function Neighbors({ neighbors }: Props) {
-  const factionColorMap = useFactionColors();
+  const factionColorMap = useOriginalFactionColors();
   const neighborFactions = getNeighborFactionIcons(neighbors, factionColorMap);
 
   const factionImages = useFactionImages();
