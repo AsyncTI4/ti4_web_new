@@ -48,6 +48,7 @@ type GameData = {
   mapTiles: MapTileType[];
   tilePositions: any;
   factionColorMap: FactionColorMap;
+  originalFactionColorMap: FactionColorMap;
   factionImageMap: FactionImageMap;
   tilesWithPds: Set<string>;
   dominantPdsFaction: Record<
@@ -180,6 +181,12 @@ export function buildGameContext(
     accessibleColors
   );
 
+  const originalFactionColorMap = buildFactionColorMap(
+    data,
+    optimizedColors,
+    false
+  );
+
   const factionImageMap = buildFactionImageMap(playerData);
 
   const { tilesWithPds, dominantPdsFaction, pdsByTile } = computePdsData(
@@ -204,6 +211,7 @@ export function buildGameContext(
     mapTiles,
     tilePositions: data.tilePositions,
     factionColorMap,
+    originalFactionColorMap,
     factionImageMap,
     tilesWithPds,
     dominantPdsFaction,

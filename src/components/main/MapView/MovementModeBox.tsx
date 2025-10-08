@@ -4,7 +4,10 @@ import classesGlobal from "@/components/MapUI.module.css";
 import classes from "./MovementModeBox.module.css";
 import { useMovementStore } from "@/utils/movementStore";
 import { useGameData } from "@/hooks/useGameContext";
-import { useFactionColors } from "@/hooks/useFactionColors";
+import {
+  useFactionColors,
+  useOriginalFactionColors,
+} from "@/hooks/useFactionColors";
 import { useSubmitMovement } from "@/hooks/useSubmitMovement";
 import { getTileById } from "@/mapgen/systems";
 import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
@@ -28,7 +31,7 @@ export function MovementModeBox({
   const clearAll = useMovementStore((s) => s.clearAll);
   const draft = useMovementStore((s) => s.draft);
   const game = useGameData();
-  const factionColorMap = useFactionColors();
+  const factionColorMap = useOriginalFactionColors();
 
   const submitMovement = useSubmitMovement(gameId, {
     onSuccess: () => {
@@ -56,37 +59,15 @@ export function MovementModeBox({
     const tilesByPosition = new Map(
       (game?.mapTiles || []).map((t) => [t.position, t])
     );
-    const out: {
-      position: string;
-      systemName: string;
-      perFaction: Record<string, Record<string, number>>;
-    }[] = [];
-    entries.forEach(([position, originDraft]) => {
-      const perFaction: Record<string, Record<string, number>> = {};
-      Object.entries(originDraft.space || {}).forEach(([faction, units]) => {
-        Object.entries(units).forEach(([unitType, counts]) => {
-          const byFaction = (perFaction[faction] ||= {});
-          byFaction[unitType] =
-            (byFaction[unitType] || 0) + counts.healthy + counts.sustained;
-        });
-      });
-      Object.values(originDraft.planets || {}).forEach((area) => {
-        Object.entries(area || {}).forEach(([faction, units]) => {
-          Object.entries(units).forEach(([unitType, counts]) => {
-            const byFaction = (perFaction[faction] ||= {});
-            byFaction[unitType] =
-              (byFaction[unitType] || 0) + counts.healthy + counts.sustained;
-          });
-        });
-      });
-      const tile = tilesByPosition.get(position);
-      const systemName = tile
-        ? getTileById(tile.systemId)?.name || tile.systemId
-        : position;
-      out.push({ position, systemName, perFaction });
+
+    const summaries = entries.map(([position, originDraft]) => {
+      const perFaction = buildFactionUnitSummary(originDraft);
+      const systemName = getSystemName(position, tilesByPosition);
+      return { position, systemName, perFaction };
     });
-    out.sort((a, b) => a.systemName.localeCompare(b.systemName));
-    return out;
+
+    summaries.sort((a, b) => a.systemName.localeCompare(b.systemName));
+    return summaries;
   }, [entries, game?.mapTiles]);
 
   const handleSubmit = () => {
@@ -228,39 +209,149 @@ export function MovementModeBox({
 
 type FactionColorMap = ReturnType<typeof useFactionColors>;
 
+type DisplacementEntry = {
+  unitType: string;
+  colorID: string;
+  counts: [number, number];
+};
+
+type DisplacementMap = Record<string, DisplacementEntry[]>;
+
+type UnitCounts = {
+  healthy: number;
+  sustained: number;
+};
+
+type FactionUnitsMap = Record<string, Record<string, number>>;
+
+function addUnitsToFactionMap(
+  factionMap: FactionUnitsMap,
+  faction: string,
+  unitType: string,
+  counts: UnitCounts
+) {
+  const factionUnits = (factionMap[faction] ||= {});
+  const totalCount = counts.healthy + counts.sustained;
+  factionUnits[unitType] = (factionUnits[unitType] || 0) + totalCount;
+}
+
+function processUnitsArea(
+  factionMap: FactionUnitsMap,
+  unitsArea: Record<string, Record<string, UnitCounts>> | undefined
+) {
+  if (!unitsArea) return;
+
+  Object.entries(unitsArea).forEach(([faction, units]) => {
+    Object.entries(units).forEach(([unitType, counts]) => {
+      addUnitsToFactionMap(factionMap, faction, unitType, counts);
+    });
+  });
+}
+
+function buildFactionUnitSummary(originDraft: {
+  space?: Record<string, Record<string, UnitCounts>>;
+  planets?: Record<string, Record<string, Record<string, UnitCounts>>>;
+}): FactionUnitsMap {
+  const factionMap: FactionUnitsMap = {};
+
+  processUnitsArea(factionMap, originDraft.space);
+
+  if (originDraft.planets) {
+    Object.values(originDraft.planets).forEach((planetArea) => {
+      processUnitsArea(factionMap, planetArea);
+    });
+  }
+
+  return factionMap;
+}
+
+function getSystemName(
+  position: string,
+  tilesByPosition: Map<string, { systemId: string }>
+): string {
+  const tile = tilesByPosition.get(position);
+  if (!tile) return position;
+
+  return getTileById(tile.systemId)?.name || tile.systemId;
+}
+
+function addDisplacementEntry(
+  displacement: DisplacementMap,
+  locationKey: string,
+  faction: string,
+  unitType: string,
+  counts: UnitCounts,
+  factionColorMap: FactionColorMap
+) {
+  const colorID = factionColorMap[faction]?.color || faction;
+  (displacement[locationKey] ||= []).push({
+    unitType,
+    colorID,
+    counts: [counts.healthy, counts.sustained],
+  });
+}
+
+function processSpaceUnits(
+  displacement: DisplacementMap,
+  position: string,
+  spaceUnits: Record<string, Record<string, UnitCounts>> | undefined,
+  factionColorMap: FactionColorMap
+) {
+  if (!spaceUnits) return;
+
+  const locationKey = `${position}-space`;
+  Object.entries(spaceUnits).forEach(([faction, units]) => {
+    Object.entries(units).forEach(([unitType, counts]) => {
+      addDisplacementEntry(
+        displacement,
+        locationKey,
+        faction,
+        unitType,
+        counts,
+        factionColorMap
+      );
+    });
+  });
+}
+
+function processPlanetUnits(
+  displacement: DisplacementMap,
+  position: string,
+  planets:
+    | Record<string, Record<string, Record<string, UnitCounts>>>
+    | undefined,
+  factionColorMap: FactionColorMap
+) {
+  if (!planets) return;
+
+  Object.entries(planets).forEach(([planetName, area]) => {
+    if (!area) return;
+
+    const locationKey = `${position}-${planetName}`;
+    Object.entries(area).forEach(([faction, units]) => {
+      Object.entries(units).forEach(([unitType, counts]) => {
+        addDisplacementEntry(
+          displacement,
+          locationKey,
+          faction,
+          unitType,
+          counts,
+          factionColorMap
+        );
+      });
+    });
+  });
+}
+
 function buildApiPayloadFromDraft(
   draft: ReturnType<typeof useMovementStore.getState>["draft"],
   factionColorMap: FactionColorMap
 ) {
-  const displacement: Record<
-    string,
-    { unitType: string; colorID: string; counts: [number, number] }[]
-  > = {};
+  const displacement: DisplacementMap = {};
+
   Object.entries(draft.origins).forEach(([position, origin]) => {
-    Object.entries(origin.space || {}).forEach(([faction, units]) => {
-      Object.entries(units).forEach(([unitType, counts]) => {
-        const key = `${position}-space`;
-        const colorID = factionColorMap[faction]?.color || faction;
-        (displacement[key] ||= []).push({
-          unitType,
-          colorID,
-          counts: [counts.healthy, counts.sustained],
-        });
-      });
-    });
-    Object.entries(origin.planets || {}).forEach(([planet, area]) => {
-      Object.entries(area || {}).forEach(([faction, units]) => {
-        Object.entries(units).forEach(([unitType, counts]) => {
-          const key = `${position}-${planet}`;
-          const colorID = factionColorMap[faction]?.color || faction;
-          (displacement[key] ||= []).push({
-            unitType,
-            colorID,
-            counts: [counts.healthy, counts.sustained],
-          });
-        });
-      });
-    });
+    processSpaceUnits(displacement, position, origin.space, factionColorMap);
+    processPlanetUnits(displacement, position, origin.planets, factionColorMap);
   });
 
   return {
