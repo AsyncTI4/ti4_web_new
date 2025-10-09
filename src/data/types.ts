@@ -563,6 +563,10 @@ export type MapTileType = {
         y1: number;
         y2: number;
       }[];
+      midpoints: {
+        x: number;
+        y: number;
+      }[];
     };
     width: number;
     height: number;

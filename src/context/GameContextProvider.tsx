@@ -292,6 +292,7 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
           hexOutline: {
             points: points,
             sides: generateHexagonSides(points),
+            midpoints: generateHexagonMidpoints(points)
           },
           width: 0,
           height: 0,
@@ -463,6 +464,18 @@ function generateHexagonSides(points: { x: number; y: number }[]) {
     });
   }
   return sides;
+}
+
+function generateHexagonMidpoints(points: { x: number; y: number }[]) {
+  const midpoints = [];
+  for (let i = 0; i < 6; i++) {
+    const nextI = (i + 1) % 6;
+    midpoints.push({
+      x: points[i].x - points[nextI].x / 2,
+      y: points[i].y - points[nextI].y / 2,
+    });
+  }
+  return midpoints;
 }
 
 function buildFactionToColor(playerData: PlayerData[]): Record<string, string> {
