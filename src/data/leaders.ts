@@ -614,6 +614,18 @@ export const leaders: LeaderData[] = [
     source: "thunders_edge",
   },
   {
+    id: "naaluagent-te",
+    faction: "naalu",
+    type: "agent",
+    name: "Z'eu",
+    title: "Agent of the Nefishh",
+    abilityWindow: "After any player's command token is placed in a system:",
+    abilityText:
+      "You may exhaust this card to return that token to that player's reinforcements.",
+    unlockCondition: "Always Unlocked",
+    source: "thunders_edge",
+  },
+  {
     id: "firmamentagent",
     faction: "firmament",
     type: "agent",
@@ -4721,7 +4733,8 @@ export const leaders: LeaderData[] = [
     name: "The Lyogslate",
     title: "Corrupted Shell",
     abilityWindow: "After a player gains control of a planet:",
-    abilityText: "You may exhaust this card to ready that planet.",
+    abilityText:
+      "You may exhaust this card to allow that player to produce 1 unit in that planet's system.",
     unlockCondition: "Always Unlocked",
     source: "eronous",
   },
@@ -4733,7 +4746,7 @@ export const leaders: LeaderData[] = [
     title: "The Learning Algorithm",
     abilityWindow: "During combat:",
     abilityText:
-      "After you gain control of a planet: You may produce 1 unit in that planet's system.",
+      "After you gain control of a planet: You may place 1 infantry from your reinforcements on that planet.",
     unlockCondition:
       "Gain control of a planet that was owned by another player.",
     source: "eronous",
@@ -4747,7 +4760,7 @@ export const leaders: LeaderData[] = [
     abilityName: "Psionic Rejection - Deny Fate",
     abilityWindow: "When another player would purge their hero",
     abilityText:
-      "You may purge this card instead, their hero has no effect, is not purged, and is treated as blank until the end of this game round.",
+      "When another would player uses the ability of a hero, you may attach this card to that hero; the hero's ability is not used, and the hero is treated as blank while this card is attached. At the end of this game round, purge this card.",
     unlockCondition: "Have 3 scored objectives.",
     source: "eronous",
   },
@@ -4757,9 +4770,9 @@ export const leaders: LeaderData[] = [
     type: "agent",
     name: "Xeyhotph",
     title: "Hand of the Void",
-    abilityWindow: "After a player activates a system:",
+    abilityWindow: "ACTION:",
     abilityText:
-      "You may exhaust this card to allow that player to treat 1 of their units as adjacent to the active system.",
+      "Exhaust this card and choose a player; that player can place up to 2 fighters in a system that contains no other players units.",
     unlockCondition: "Always Unlocked",
     source: "eronous",
   },
@@ -4771,7 +4784,7 @@ export const leaders: LeaderData[] = [
     title: "Eyes of the Void",
     abilityWindow: "At the start of the status phase",
     abilityText:
-      "Gain a number of commodities equal to the number of systems that contain 1 or more of your units and no planets.",
+      "After you activate a system that contains no planets. You may gain 1 trade good.",
     unlockCondition: "Have units in 3 systems that do not contain planets.",
     source: "eronous",
   },
@@ -4807,10 +4820,11 @@ export const leaders: LeaderData[] = [
     type: "commander",
     name: "That Which Tolls",
     title: "Shadow of Tyria Prime",
-    abilityWindow: "At the start of space combat",
+    abilityWindow: "At any time:",
     abilityText:
-      "You may place 1 ship from your reinforcements with a cost of no more than 4 matching the type of 1 of your opponents’ ship in that system. (you may use influence to build if you want)",
-    unlockCondition: "Have 3 “Silenced” tokens on planets",
+      "When you would exhaust a planet for its resources you may instead use its influence value.",
+    unlockCondition:
+      "Have 2 other players’ control tokens on your faction sheet.",
     source: "eronous",
   },
   {
