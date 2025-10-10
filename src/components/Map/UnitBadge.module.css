@@ -29,12 +29,45 @@
   color: white;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-
-  -webkit-text-stroke: 3px white;
-  paint-order: stroke fill;
-
 }
 
-.whiteText {
-  -webkit-text-stroke: 3px #000;
+@supports (paint-order: stroke fill) {
+  .unitCount {
+    -webkit-text-stroke: 3px white;
+    paint-order: stroke fill;
+  }
+}
+
+@supports not (paint-order: stroke fill) {
+  .unitCount {
+    text-shadow:
+      -3px -3px 0 white,
+      3px -3px 0 white,
+      -3px 3px 0 white,
+      3px 3px 0 white,
+      0 -3px 0 white,
+      0 3px 0 white,
+      -3px 0 0 white,
+      3px 0 0 white;
+  }
+}
+
+@supports (paint-order: stroke fill) {
+  .unitCount.whiteText {
+    -webkit-text-stroke: 3px #000;
+  }
+}
+
+@supports not (paint-order: stroke fill) {
+  .unitCount.whiteText {
+    text-shadow:
+      -3px -3px 0 #000,
+      3px -3px 0 #000,
+      -3px 3px 0 #000,
+      3px 3px 0 #000,
+      0 -3px 0 #000,
+      0 3px 0 #000,
+      -3px 0 0 #000,
+      3px 0 0 #000;
+  }
 }

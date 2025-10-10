@@ -3,7 +3,7 @@
 export type CardDataItem = {
   name: string;
   text: string;
-  alias: string;
+  id: string;
 };
 
 export type ProcessedCardData = {
@@ -33,7 +33,7 @@ export function processCardData<T extends CardDataItem>(
     } else {
       const existing = cardMap.get(card.name);
       cardMap.set(card.name, {
-        aliases: existing ? existing.aliases.concat(card.alias) : [card.alias],
+        aliases: existing ? existing.aliases.concat(card.id) : [card.id],
         text: card.text,
       });
     }
