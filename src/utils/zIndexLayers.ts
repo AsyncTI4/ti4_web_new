@@ -33,9 +33,10 @@ export function getUnitZIndex(
   unitType: string,
   stackIndex: number = 0
 ): number {
+  const capitalizedUnitType = unitType.toUpperCase();
   const basePriority =
     Z_INDEX_LAYERS.UNIT_PRIORITIES[
-      unitType as keyof typeof Z_INDEX_LAYERS.UNIT_PRIORITIES
+      capitalizedUnitType as keyof typeof Z_INDEX_LAYERS.UNIT_PRIORITIES
     ] || Z_INDEX_LAYERS.UNIT_BASE;
   return basePriority + stackIndex;
 }
