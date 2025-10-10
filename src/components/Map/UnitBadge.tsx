@@ -2,6 +2,7 @@ import React from "react";
 import { cdnImage } from "@/data/cdnImage";
 import { getUnitZIndex } from "../../utils/zIndexLayers";
 import classes from "./UnitBadge.module.css";
+import cx from "clsx";
 
 interface UnitBadgeProps {
   unitType: "ff" | "gf";
@@ -49,7 +50,7 @@ export function UnitBadge({
         />
         <div className={classes.unitCountContainer}>
           <span
-            className={`${classes.unitCount} ${isWhiteText ? classes.whiteText : ""}`}
+            className={cx(classes.unitCount, isWhiteText && classes.whiteText)}
             style={{ color: textColor }}
           >
             {count}

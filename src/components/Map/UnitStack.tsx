@@ -5,7 +5,6 @@ import {
   EntityStack,
   SPLAY_OFFSET_X,
   SPLAY_OFFSET_Y,
-  entityBaseZIndex,
 } from "../../utils/unitPositioning";
 import { getUnitZIndex } from "../../utils/zIndexLayers";
 import { UnitBadge } from "./UnitBadge";
@@ -43,7 +42,7 @@ export function UnitStack({
   const sustained = stack.sustained;
   const entityType = stack.entityType;
   const baseZIndex = getUnitZIndex(unitType, 0);
-  const hoverTimeoutRef = useRef<number | null>(null);;
+  const hoverTimeoutRef = useRef<number | null>(null);
 
   // Look up unit data to get bgDecalPath
   const unitData = lookupUnit(unitType, faction);

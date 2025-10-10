@@ -528,7 +528,11 @@ export type Color = {
 };
 
 export type Exploration = {
-  alias: string;
+  id: string;
+  type?: string;
+  resolution?: string;
+  attachmentId?: string;
+  flavorText?: string;
   name: string;
   text: string;
   source: string;
