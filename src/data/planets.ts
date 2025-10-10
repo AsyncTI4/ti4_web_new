@@ -438,6 +438,26 @@ export const planets: Planet[] = [
     source: "asteroid",
   },
   {
+    id: "andeara",
+    tileId: "102",
+    name: "Andeara",
+    aliases: ["andeara"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["INDUSTRIAL"],
+    techSpecialties: ["PROPULSION"],
+    planetLayout: {
+      unitHolderName: "andeara",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+      extraIcons: 1,
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "andokxull",
     tileId: "m03",
     name: "Andok Xull",
@@ -1185,6 +1205,24 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "bellatrix",
+    tileId: "109",
+    name: "Bellatrix",
+    aliases: ["bellatrix"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["CULTURAL"],
+    planetLayout: {
+      unitHolderName: "bellatrix",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "belsungix",
     tileId: "s17",
     name: "Belsung IX",
@@ -1453,6 +1491,24 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "capha",
+    tileId: "108",
+    name: "Capha",
+    aliases: ["capha"],
+    resources: 3,
+    influence: 0,
+    planetTypes: ["HAZARDOUS"],
+    planetLayout: {
+      unitHolderName: "capha",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "casibann",
     tileId: "er84",
     name: "Casibann",
@@ -1664,6 +1720,26 @@ export const planets: Planet[] = [
     contrastColor: "orange",
     flavourText: "**",
     source: "ascendant_sun",
+  },
+  {
+    id: "cresius",
+    tileId: "106",
+    name: "Cresius",
+    aliases: ["cresius"],
+    resources: 0,
+    influence: 1,
+    planetTypes: ["HAZARDOUS"],
+    techSpecialties: ["PROPULSION"],
+    planetLayout: {
+      unitHolderName: "cresius",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+      extraIcons: 1,
+    },
+    source: "thunders_edge",
   },
   {
     id: "creuss",
@@ -2470,6 +2546,24 @@ export const planets: Planet[] = [
     source: "ds",
   },
   {
+    id: "elnath",
+    tileId: "110",
+    name: "El'Nath",
+    aliases: ["elnath", "el'nath"],
+    resources: 2,
+    influence: 0,
+    planetTypes: ["HAZARDOUS"],
+    planetLayout: {
+      unitHolderName: "elnath",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 90,
+        y: 135,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "eloknu",
     tileId: "er10",
     name: "Elok Nu",
@@ -2532,6 +2626,31 @@ export const planets: Planet[] = [
     flavourText:
       "*Larger than a thousand terrestrial planets, Elysium is an artificial shell-world built around the powerful singularity in its hollow heart. Its surface is covered in calm seas and cultivated plants.*",
     source: "pok",
+  },
+  {
+    id: "emelpar",
+    tileId: "99",
+    name: "Emelpar",
+    aliases: ["emelpar", "emplar", "sillyspelling"],
+    resources: 0,
+    influence: 2,
+    planetTypes: ["CULTURAL"],
+    legendaryAbilityName: "The Acropolis",
+    legendaryAbilityText:
+      "You may exhaust this card at the end of your turn to ready another component that isn't a strategy card.",
+    legendaryAbilityFlavourText:
+      "Grandeur unrivaled, yet nothing but grandeur remains.",
+    planetLayout: {
+      unitHolderName: "emelpar",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+      extraIcons: 1,
+      planetRadius: 95,
+    },
+    source: "thunders_edge",
   },
   {
     id: "empero",
@@ -2717,6 +2836,32 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "uncharted_space",
+  },
+  {
+    id: "faunus",
+    tileId: "97",
+    name: "Faunus",
+    aliases: ["faunus", "fanus"],
+    resources: 1,
+    influence: 3,
+    planetTypes: ["INDUSTRIAL"],
+    techSpecialties: ["BIOTIC"],
+    legendaryAbilityName: "Maxis Central Control",
+    legendaryAbilityText:
+      "You may exhaust this card when you pass to gain control of a non-home, non-legendary planet that contains no units and has no attachments.",
+    legendaryAbilityFlavourText:
+      "The Maxis order has agents and scientists embedded in research teams all across the galaxy.",
+    planetLayout: {
+      unitHolderName: "faunus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+      extraIcons: 2,
+      planetRadius: 95,
+    },
+    source: "thunders_edge",
   },
   {
     id: "ferrust",
@@ -3139,6 +3284,24 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "hercalor",
+    tileId: "107",
+    name: "Hercalor",
+    aliases: ["hercalor", "hercolor", "hercolour"],
+    resources: 1,
+    influence: 0,
+    planetTypes: ["INDUSTRIAL"],
+    planetLayout: {
+      unitHolderName: "hercalor",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "hercant",
     tileId: "16",
     name: "Hercant",
@@ -3410,6 +3573,24 @@ export const planets: Planet[] = [
     source: "lost_star_charts_of_ixth",
   },
   {
+    id: "horizon",
+    tileId: "110",
+    name: "Horizon",
+    aliases: ["horizon"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["CULTURAL"],
+    planetLayout: {
+      unitHolderName: "horizon",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 214,
+        y: 92,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "hospoona",
     tileId: "s14",
     name: "Hospoona",
@@ -3603,6 +3784,30 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "uncharted_space",
+  },
+  {
+    id: "industrex",
+    tileId: "115",
+    name: "Industrex",
+    aliases: ["industrex"],
+    resources: 2,
+    influence: 0,
+    planetTypes: ["INDUSTRIAL"],
+    techSpecialties: ["WARFARE"],
+    legendaryAbilityName: "Aurex Mechanica",
+    legendaryAbilityText:
+      "You may exhaust this card when you pass to place 1 unit that matches a unit upgrade technology you own from your reinforcements into a system that contains your ships.",
+    legendaryAbilityFlavourText:
+      "The Mechanica have refined their prototyping facilities for generations.",
+    planetLayout: {
+      unitHolderName: "industrex",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "iota8217",
@@ -3938,6 +4143,24 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "kostboth",
+    tileId: "108",
+    name: "Kostboth",
+    aliases: ["kostboth"],
+    resources: 0,
+    influence: 1,
+    planetTypes: ["CULTURAL"],
+    planetLayout: {
+      unitHolderName: "kostboth",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "kraag",
     tileId: "70",
     name: "Kraag",
@@ -4186,6 +4409,42 @@ export const planets: Planet[] = [
     source: "base",
   },
   {
+    id: "lazulrex",
+    tileId: "106",
+    name: "Lazul Rex",
+    aliases: ["lazul", "rex", "lazil", "lazilrex"],
+    resources: 2,
+    influence: 2,
+    planetTypes: ["INDUSTRIAL", "CULTURAL"],
+    planetLayout: {
+      unitHolderName: "lazulrex",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
+    id: "lemox",
+    tileId: "116",
+    name: "Lemox",
+    aliases: ["lemox"],
+    resources: 0,
+    influence: 3,
+    planetTypes: ["INDUSTRIAL"],
+    planetLayout: {
+      unitHolderName: "lemox",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "leonelli",
     tileId: "er92",
     name: "Leonelli",
@@ -4203,6 +4462,24 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "eronous",
+  },
+  {
+    id: "lesab",
+    tileId: "104",
+    name: "Lesab",
+    aliases: ["lesab"],
+    resources: 2,
+    influence: 1,
+    planetTypes: ["INDUSTRIAL", "HAZARDOUS"],
+    planetLayout: {
+      unitHolderName: "lesab",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "lethe",
@@ -4604,6 +4881,24 @@ export const planets: Planet[] = [
     spaceCannonHitsOn: 0,
     searchTags: [],
     source: "eronous",
+  },
+  {
+    id: "luthieniv",
+    tileId: "110",
+    name: "Luthien IV",
+    aliases: ["luthien4", "luthien", "luthieniv"],
+    resources: 3,
+    influence: 1,
+    planetTypes: ["HAZARDOUS"],
+    planetLayout: {
+      unitHolderName: "luthieniv",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 223,
+        y: 225,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "maaluuk",
@@ -5406,6 +5701,26 @@ export const planets: Planet[] = [
     source: "base",
   },
   {
+    id: "neutera",
+    tileId: "105",
+    name: "Neutera",
+    aliases: ["neuter", "neutera"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["INDUSTRIAL"],
+    techSpecialties: ["BIOTIC"],
+    planetLayout: {
+      unitHolderName: "neutera",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+      extraIcons: 1,
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "nevermore",
     tileId: null,
     name: "Nevermore",
@@ -5698,6 +6013,44 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "ds",
+  },
+  {
+    id: "olergodt",
+    tileId: "101",
+    name: "Olergodt",
+    aliases: ["olergodt", "oldergoat"],
+    resources: 2,
+    influence: 1,
+    planetTypes: ["HAZARDOUS", "CULTURAL"],
+    techSpecialties: ["WARFARE", "CYBERNETIC"],
+    planetLayout: {
+      unitHolderName: "olergodt",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+      extraIcons: 2,
+    },
+    source: "thunders_edge",
+  },
+  {
+    id: "oluzstation",
+    tileId: "111",
+    name: "Oluz Station",
+    aliases: ["oluz", "oluzstation", "station"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "oluzstation",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "ooglee",
@@ -6426,7 +6779,7 @@ export const planets: Planet[] = [
     resources: 1,
     influence: 2,
     factionHomeworld: "bastion",
-    planetTypes: ["FACTION"],
+    planetTypes: ["FACTION", "SPACESTATION"],
     planetLayout: {
       unitHolderName: "revelation",
       resourcesLocation: "TopLeft",
@@ -7383,6 +7736,24 @@ export const planets: Planet[] = [
     source: "thunders_edge",
   },
   {
+    id: "tarana",
+    tileId: "111",
+    name: "Tarana",
+    aliases: ["tarana"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["CULTURAL", "INDUSTRIAL"],
+    planetLayout: {
+      unitHolderName: "tarana",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "tarmann",
     tileId: "22",
     name: "Tar'mann",
@@ -7465,6 +7836,30 @@ export const planets: Planet[] = [
     flavourText:
       "Colloquially known as the Amber Eye for its striking orange hue, Telahas bears the scars of ancient core mining operations.",
     source: "eronous",
+  },
+  {
+    id: "tempesta",
+    tileId: "100",
+    name: "Tempesta",
+    aliases: ["tempest", "tempesta"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["HAZARDOUS"],
+    techSpecialties: ["PROPULSION"],
+    legendaryAbilityName: "Ionian Fuel Refinery",
+    legendaryAbilityText:
+      "You may exhaust this card after you activate a system to apply +1 to the move value of 1 of your ships during this tactical action.",
+    legendaryAbilityFlavourText:
+      "The exotic matter of the rings is found nowhere else in the galaxy.",
+    planetLayout: {
+      unitHolderName: "tempesta",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "tequran",
@@ -7627,6 +8022,24 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "thewatchtower",
+    tileId: "117",
+    name: "The Watchtower",
+    aliases: ["watch", "tower", "watchtower", "thewatch", "thewatchtower"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "thewatchtower",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
     id: "thibah",
     tileId: "21",
     name: "Thibah",
@@ -7710,6 +8123,44 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     source: "eronous",
+  },
+  {
+    id: "tiamat",
+    tileId: "107",
+    name: "Tiamat",
+    aliases: ["tiamat", "dragon"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["CULTURAL"],
+    techSpecialties: ["CYBERNETIC", "CYBERNETIC"],
+    planetLayout: {
+      unitHolderName: "tiamat",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "thunders_edge",
+  },
+  {
+    id: "tinnes",
+    tileId: "105",
+    name: "Tinnes",
+    aliases: ["tin", "tiny", "tinnes"],
+    resources: 1,
+    influence: 2,
+    planetTypes: ["INDUSTRIAL", "HAZARDOUS"],
+    techSpecialties: ["BIOTIC"],
+    planetLayout: {
+      unitHolderName: "tinnes",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "tir",
@@ -7875,6 +8326,24 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "ds",
+  },
+  {
+    id: "tsionstation",
+    tileId: "109",
+    name: "Tsion Station",
+    aliases: ["tsion", "tsionstation"],
+    resources: 1,
+    influence: 1,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "tsionstation",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "tyriaprime",
@@ -8443,6 +8912,24 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "uncharted_space",
+  },
+  {
+    id: "virapicsiii",
+    tileId: "103",
+    name: "Vira Pics III",
+    aliases: ["vira", "virapics", "virapics3", "virapicsiii"],
+    resources: 2,
+    influence: 3,
+    planetTypes: ["CULTURAL", "HAZARDOUS"],
+    planetLayout: {
+      unitHolderName: "virapicsiii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "thunders_edge",
   },
   {
     id: "volgan",
