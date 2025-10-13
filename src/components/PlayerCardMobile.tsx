@@ -286,7 +286,7 @@ export default function PlayerCardMobile(props: Props) {
           </Group>
         </Grid.Col>
 
-        <Grid.Col span={2}>
+        <Grid.Col span={3}>
           <Stack gap={2}>
             <Leaders leaders={leaders} faction={faction} mobile />
           </Stack>
