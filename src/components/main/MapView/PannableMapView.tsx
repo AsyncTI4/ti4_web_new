@@ -115,25 +115,7 @@ export function PannableMapView({ gameId }: Props) {
     systemId: string;
   } | null>(null);
 
-  type PlayerCardLayout = "list" | "grid";
-  const [playerCardLayout, setPlayerCardLayout] =
-    useState<PlayerCardLayout>("list");
-
-  // Persist player card layout selection across sessions
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("ti4_player_card_layout");
-      if (saved === "list" || saved === "grid") {
-        setPlayerCardLayout(saved as PlayerCardLayout);
-      }
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("ti4_player_card_layout", playerCardLayout);
-    } catch {}
-  }, [playerCardLayout]);
+  const playerCardLayout = isMobileDevice() ? "list" : "grid";
 
   const {
     selectedTiles,
@@ -363,32 +345,6 @@ export function PannableMapView({ gameId }: Props) {
         )}
 
         {/* Player cards */}
-        {!isMobileDevice() && (
-          <Box pl="md">
-            <SegmentedControl
-              value={playerCardLayout}
-              onChange={(value) =>
-                setPlayerCardLayout(value as PlayerCardLayout)
-              }
-              classNames={{
-                root: classes.segmentedSciFiRoot,
-                control: classes.segmentedSciFiControl,
-                label: classes.segmentedSciFiLabel,
-                indicator: classes.segmentedSciFiIndicator,
-              }}
-              data={[
-                {
-                  label: <IconList />,
-                  value: "list",
-                },
-                {
-                  label: <IconLayoutGrid />,
-                  value: "grid",
-                },
-              ]}
-            />
-          </Box>
-        )}
         <Grid
           gutter="md"
           columns={12}
