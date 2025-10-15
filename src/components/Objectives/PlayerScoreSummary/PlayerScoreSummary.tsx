@@ -1,13 +1,12 @@
-import { Box, Group, Stack, SimpleGrid, Text, Image } from "@mantine/core";
+import { Group, Text, Image, Grid, Stack, Flex } from "@mantine/core";
 import { PlayerData, Objectives } from "@/data/types";
-import { PlayerCardBox } from "@/components/PlayerCardBox";
-import { Chip } from "@/components/shared/primitives/Chip";
-import { ScoredSecret } from "@/components/PlayerArea/ScoredSecret";
-import { PromissoryNote } from "@/components/PlayerArea";
 import { PlayerColor } from "@/components/PlayerArea/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
-import Caption from "@/components/shared/Caption/Caption";
 import { useFactionImages } from "@/hooks/useFactionImages";
+import { ObjectiveChip } from "./ObjectiveChip";
+import { cdnImage } from "@/data/cdnImage";
+import { getPromissoryNoteData } from "@/lookup/promissoryNotes";
+import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   playerData: PlayerData[];
@@ -15,140 +14,156 @@ type Props = {
 };
 
 export function PlayerScoreSummary({ playerData, objectives }: Props) {
-  const factionImages = useFactionImages();
   if (!playerData || !objectives) return null;
 
+  const factionImages = useFactionImages();
+  const factionColorMap = useFactionColors();
+  const stage1s = objectives.stage1Objectives;
+  const stage2s = objectives.stage2Objectives;
+
   const sortedPlayers = [...playerData].sort(
-    (a, b) => (b.totalVps || 0) - (a.totalVps || 0)
+    (a, b) => {
+      const aInit = a.scs[0];
+      const bInit = b.scs[0];
+
+      if (aInit == 8 && !a.exhaustedSCs.includes(8)) return -1;
+      if (bInit == 8 && !b.exhaustedSCs.includes(8)) return 1;
+
+      return (aInit || 0) - (bInit || 0);
+    }
   );
 
-  return (
-    <Box>
-      <Text className={styles.sectionTitle} ff="heading">
-        Player scoring summary
-      </Text>
-      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
-        {sortedPlayers.map((player) => {
-          const { stage1, stage2, other } = getScoredPublicsByTier(
-            player,
-            objectives
-          );
-          const secretIds = Object.keys(player.secretsScored || {});
-          const sfttIds = getPlayerSftt(player.promissoryNotesInPlayArea || []);
+  return (<Stack gap={10}>
+    {
+      sortedPlayers.map((player) => {
+        const { stage1, stage2, other } = getScoredPublicsByTier(
+          player,
+          objectives
+        );
 
-          const hasAny =
-            stage1.length ||
-            stage2.length ||
-            other.length ||
-            secretIds.length ||
-            sfttIds.length;
-          if (!hasAny) return null;
+        const secretsArray = Object.keys(player.secretsScored || {}).concat(new Array(3).fill("")).slice(0, 3);
+        const sfttIds = getPlayerSftt(player.promissoryNotesInPlayArea || []);
 
-          return (
-            <PlayerCardBox
-              key={player.faction}
-              color={player.color}
-              faction={player.faction}
-              paperProps={{ style: { height: "100%" } }}
+        function getPlayerSftt(promissoryNotesInPlayArea: string[]): string[] {
+          const pnData = promissoryNotesInPlayArea.map((pnId) => {
+            const promissoryNoteData = getPromissoryNoteData(
+              pnId,
+              factionColorMap
+            );
+
+            // fake pnData to comply with type stuff (i was too dumb to figure it out)
+            if (!promissoryNoteData) return {
+              noteData: {
+                alias: ""
+              },
+              faction: "",
+              displayName: "",
+            };
+            return promissoryNoteData;
+          }).filter((pnId) => pnId!.noteData.alias.endsWith("_sftt"))
+            .map((pnId) => pnId?.faction);
+
+          return pnData;
+        }
+
+        return <Group mah={100}>
+          <Flex w={"20%"} justify={"space-between"} className={styles.nameBody} gap={8} px={4} align="center">
+            <Image
+              src={factionImages[player.faction!]?.image}
+              alt={player.faction}
+              w={26}
+              h={26}
+            />
+            <Text
+              size="sm"
+              fw={700}
+              c="white"
+              ff="heading"
+              className={styles.playerName}
             >
-              <Group justify="space-between" align="center" mb="xs">
-                <Group gap={8} px={4} align="center">
-                  <Image
-                    src={factionImages[player.faction!]?.image}
-                    alt={player.faction}
-                    w={26}
-                    h={26}
-                  />
-                  <Text
-                    size="sm"
-                    fw={700}
-                    c="white"
-                    ff="heading"
-                    className={styles.playerName}
-                  >
-                    {player.userName}
-                  </Text>
-                  <PlayerColor color={player.color} size="xs" />
-                </Group>
-                <Text size="sm" fw={700} c="white" ff="heading">
-                  {player.totalVps ?? 0} VP
+              {player.userName}
+            </Text>
+            <PlayerColor color={player.color} size="xs" />
+            <Grid columns={2}>
+              <Grid.Col span={1}>
+                <Text ff={"text"} className={styles.initiativeBody} fs={"md"} ta="center">
+                  {player.scs[0]}
                 </Text>
-              </Group>
+              </Grid.Col>
+              <Grid.Col span={1}>
+                <Text ff={"heading"} className={styles.vp} fs={"md"} ta="center">
+                  {player.totalVps} VP
+                </Text>
+              </Grid.Col>
+            </Grid>
+          </Flex>
 
-              <Stack gap="xs">
-                {/* Public objectives (Stage I + Stage II combined) */}
-                {(() => {
-                  const publics = [...stage1, ...stage2];
-                  if (publics.length === 0) return null;
-                  const stage1Keys = new Set(stage1.map((o) => o.key));
-                  return (
-                    <Box>
-                      <Caption size="sm">Public objectives</Caption>
-                      <Group gap="xs" wrap="wrap">
-                        {publics.map((obj) => (
-                          <Chip
-                            key={obj.key}
-                            accent={stage1Keys.has(obj.key) ? "orange" : "blue"}
-                            title={obj.name}
-                            strong
-                            px={8}
-                            py={4}
-                          />
-                        ))}
-                      </Group>
-                    </Box>
-                  );
-                })()}
+          <Grid gutter={10} columns={5} style={{ width: '18%' }}>
+            {stage1.map((_, idx) => (
+              <Grid.Col key={idx} span={{ base: 1 }}>
+                <ObjectiveChip
+                  image={cdnImage("/general/Public1.png")}
+                  color="orange"
+                />
+              </Grid.Col>
+            ))}
+          </Grid>
 
-                {/* Other */}
-                {other.length > 0 && (
-                  <Box>
-                    <Caption size="sm">Other</Caption>
-                    <Group gap="xs" wrap="wrap">
-                      {other.map((obj) => (
-                        <Chip
-                          key={obj.key}
-                          accent="gray"
-                          title={obj.name}
-                          px={8}
-                          py={4}
-                          strong
-                        />
-                      ))}
-                    </Group>
-                  </Box>
-                )}
+          <Grid gutter={10} columns={3} style={{ width: '11%' }}>
+            {secretsArray.map((_, idx) => (
+              <Grid.Col key={idx} span={{ base: 1 }}>
+                <ObjectiveChip
+                  image={cdnImage("/general/Secret_regular.png")}
+                  color="red"
+                />
+              </Grid.Col>
+            ))}
+          </Grid>
 
-                {/* Secrets */}
-                {secretIds.length > 0 && (
-                  <Box>
-                    <Caption size="sm">Secrets</Caption>
-                    <Group gap="xs" wrap="wrap">
-                      {secretIds.map((id) => (
-                        <ScoredSecret key={id} secretId={id} />
-                      ))}
-                    </Group>
-                  </Box>
-                )}
+          <Grid gutter={10} columns={7} style={{ width: '20%' }}>
+            {stage2.map((_, idx) => (
+              <Grid.Col key={idx} span={{ base: 2 }}>
+                <ObjectiveChip
+                  image={cdnImage("/general/Public2.png")}
+                  span={2}
+                  color="blue"
+                />
+              </Grid.Col>
+            ))}
 
-                {/* SFTT */}
-                {sfttIds.length > 0 && (
-                  <Box>
-                    <Caption size="sm">Support for the Throne</Caption>
-                    <Group gap="xs" wrap="wrap">
-                      {sfttIds.map((pn) => (
-                        <PromissoryNote key={pn} promissoryNoteId={pn} />
-                      ))}
-                    </Group>
-                  </Box>
-                )}
-              </Stack>
-            </PlayerCardBox>
-          );
-        })}
-      </SimpleGrid>
-    </Box>
-  );
+            {other.filter((objective) => objective.name === "Custodian/Imperial")
+              .map((_, idx) => (
+                <Grid.Col key={idx} span={{ base: 1 }} >
+                  <ObjectiveChip
+                    image={cdnImage("/general/Agenda.png")}
+                    color="teal"
+                  />
+                </Grid.Col>
+              ))}
+
+            {sfttIds.map((pnId, idx) => (
+              <Grid.Col key={idx} span={{ base: 1 }} >
+                <ObjectiveChip
+                  image={cdnImage(`/factions/${pnId.toLowerCase()}.png`)}
+                  color="yellow"
+                />
+              </Grid.Col>
+            ))}
+
+            {other.filter((objective) => objective.name !== "Custodian/Imperial")
+              .map((_, idx) => (
+                <Grid.Col key={idx} span={{ base: 1 }}>
+                  <ObjectiveChip
+                    image={cdnImage("/general/Promissory.png")}
+                    color="teal"
+                  />
+                </Grid.Col>
+              ))}
+          </Grid>
+        </Group>
+      })
+    }
+  </Stack>);
 }
 
 function getScoredPublicsByTier(player: PlayerData, objectives: Objectives) {
@@ -163,8 +178,4 @@ function getScoredPublicsByTier(player: PlayerData, objectives: Objectives) {
     o.scoredFactions?.includes(faction)
   );
   return { stage1, stage2, other };
-}
-
-function getPlayerSftt(promissoryNotesInPlayArea: string[]): string[] {
-  return (promissoryNotesInPlayArea || []).filter((id) => id.endsWith("_sftt"));
 }

@@ -13,6 +13,7 @@ import {
   IconMap2,
   IconTarget,
   IconUsers,
+  IconInfoHexagon,
   IconAlertCircle,
 } from "@tabler/icons-react";
 // @ts-ignore
@@ -141,7 +142,7 @@ function NewMapUIContent({ pannable }: Props) {
               <Tabs.Tab
                 value="general"
                 className={classes.tabsTab}
-                leftSection={<IconTarget size={16} />}
+                leftSection={<IconInfoHexagon size={16} />}
               >
                 General Area
               </Tabs.Tab>
