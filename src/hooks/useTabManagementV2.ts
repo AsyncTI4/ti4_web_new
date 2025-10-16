@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "./useUser";
+import { authenticatedFetch, getBotApiUrl } from "../api";
 
 type PlayerGame = {
   gameId: string;
@@ -19,19 +19,11 @@ type EnrichedTab = {
 };
 
 function usePlayerGames() {
-  const { user } = useUser();
-  const apiUrl = import.meta.env.DEV
-    ? `/bot/api/my-games`
-    : `https://bot.asyncti4.com/api/my-games`;
+  const apiUrl = getBotApiUrl("/my-games");
 
   return useQuery<PlayerGamesResponse>({
     queryKey: ["playerGames"],
-    queryFn: () =>
-      fetch(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      }).then((res) => res.json()),
+    queryFn: () => authenticatedFetch(apiUrl).then((res) => res.json()),
     retry: false,
   });
 }

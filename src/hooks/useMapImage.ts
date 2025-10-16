@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { authenticatedFetch, getBotApiUrl } from "../api";
 
 async function fetchMapImageUrl(gameId: string): Promise<string> {
-  const apiUrl = import.meta.env.DEV
-    ? `/bot/api/public/game/${gameId}/image`
-    : `https://bot.asyncti4.com/api/public/game/${gameId}/image`;
+  const apiUrl = getBotApiUrl(`/public/game/${gameId}/image`);
 
-  const response = await fetch(apiUrl, {
+  const response = await authenticatedFetch(apiUrl, {
     method: "GET",
   });
 

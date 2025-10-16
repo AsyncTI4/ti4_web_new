@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import { config } from "../config";
 
 export enum SocketReadyState {
   UNINSTANTIATED = -1,
@@ -22,16 +23,8 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
   }, [onRefresh]);
 
   useEffect(() => {
-    // const brokerURL = import.meta.env.DEV
-    //   ? "ws://localhost:8081/ws"
-    //   : "wss://bot.asyncti4.com/ws";
-
-    const brokerURL = "wss://bot.asyncti4.com/ws";
-    const client = new Client({
-      brokerURL,
-      // Disable auto-reconnect; we will reconnect only on manual request
-      reconnectDelay: 0,
-    });
+    const brokerURL = config.api.websocketUrl;
+    const client = new Client({ brokerURL });
 
     client.beforeConnect = () => {
       setReadyState(SocketReadyState.CONNECTING);

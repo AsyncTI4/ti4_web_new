@@ -27,15 +27,6 @@ export interface Game {
 // Add more shared types as needed
 export {};
 
-// Allow importing JSX modules without types
-declare module "@/components/DiscordLogin" {
-  export function getDiscordOauthUrl(): string;
-  export const DiscordLogin: any;
-}
-declare module "@/components/DiscordLogin.jsx" {
-  export function getDiscordOauthUrl(): string;
-  export const DiscordLogin: any;
-}
 declare module "@/components/ZoomControls" {
   import * as React from "react";
   export function ZoomControls(props: {
