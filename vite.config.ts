@@ -23,8 +23,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/bot": {
-        // target: "https://bot.asyncti4.com",
-        target: "http://localhost:8081",
+        target: "https://bot.asyncti4.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bot/, ""),
       },
