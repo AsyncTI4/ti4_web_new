@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   AppShell,
   Box,
@@ -56,7 +56,7 @@ const REQUIRED_VERSION_SCHEMA = 5;
 
 export const MAP_PADDING = 200;
 
-function NewMapUIContent({ pannable }: Props) {
+function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const data = useGameContext();
   const gameDataState = useGameDataState();
   const isError = gameDataState?.isError || false;
@@ -72,8 +72,6 @@ function NewMapUIContent({ pannable }: Props) {
     document.title = `${gameId} - Async TI`;
     dragscroll.reset();
   }, [gameId]);
-
-  const navigate = useNavigate();
 
   if (
     data &&
@@ -109,8 +107,7 @@ function NewMapUIContent({ pannable }: Props) {
             size="xs"
             color="cyan"
             onClick={() => {
-              localStorage.setItem("showOldUI", "true");
-              navigate(`/game/${gameId}`);
+              onShowOldUI?.();
             }}
           >
             GO TO OLD UI
@@ -223,9 +220,10 @@ function NewMapUIContent({ pannable }: Props) {
 
 type Props = {
   pannable?: boolean;
+  onShowOldUI?: () => void;
 };
 
-export function NewMapUI({ pannable }: Props) {
+export function NewMapUI({ pannable, onShowOldUI }: Props) {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
   const themeName = useSettingsStore((state) => state.settings.themeName);
@@ -286,7 +284,10 @@ export function NewMapUI({ pannable }: Props) {
         <div
           className={isMobileDevice() ? "theme-mobile" : `theme-${themeName}`}
         >
-          <NewMapUIContent pannable={effectivePannable} />
+          <NewMapUIContent
+            pannable={effectivePannable}
+            onShowOldUI={onShowOldUI}
+          />
         </div>
       </GameContextProvider>
       {!isMobileDevice() && (

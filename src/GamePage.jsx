@@ -7,7 +7,7 @@ import MapUI from "./components/MapUI";
 import { useMapImage } from "./hooks/useMapImage";
 import { useGameSocket } from "./hooks/useGameSocket";
 
-function GamePage() {
+export function GamePage({ onShowNewUI }) {
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
@@ -37,6 +37,7 @@ function GamePage() {
       reconnect={() => refetch()}
       isReconnecting={isFetching}
       isError={isError}
+      onShowNewUI={onShowNewUI}
     />
   );
 }

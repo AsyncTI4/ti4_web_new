@@ -297,6 +297,7 @@ export type PlayerData = {
   groundArmyHealth: number;
   spaceArmyCombat: number;
   groundArmyCombat: number;
+
   // Pre-calculated planet economics
   resources: number;
   influence: number;
@@ -308,6 +309,7 @@ export type PlayerData = {
   totOptimalResources: number;
   totOptimalInfluence: number;
   totFlexValue: number;
+
   unitsOwned: string[];
   followedSCs: number[];
   unfollowedSCs: number[];
@@ -359,6 +361,8 @@ export type PlayerData = {
 
   // mahact-specific properties
   mahactEdict?: string[];
+
+  hasZeroToken?: boolean;
 };
 
 export type Planet = {

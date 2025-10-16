@@ -6,7 +6,6 @@ const ReactCompilerConfig = {
   target: "19",
 };
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
@@ -24,7 +23,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/bot": {
-        target: "https://bot.asyncti4.com",
+        // target: "https://bot.asyncti4.com",
+        target: "http://localhost:8081",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bot/, ""),
       },

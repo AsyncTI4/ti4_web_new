@@ -23,7 +23,7 @@ import { SocketReadyState } from "@/hooks/useGameSocket";
 import { useSearchParams } from "react-router-dom";
 import { useMovementStore } from "@/utils/movementStore";
 import { useUser } from "@/hooks/useUser";
-import { getDiscordOauthUrl } from "@/components/DiscordLogin.ts";
+import { getDiscordOauthUrl } from "@/components/DiscordLogin";
 import { MovementOriginModal } from "./MovementOriginModal";
 import { MovementModeBox } from "./MovementModeBox";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";

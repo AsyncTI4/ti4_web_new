@@ -140,3 +140,14 @@
 .commoditiesText {
   margin-top: 4px;
 }
+
+.zeroTokenImage {
+  height: 100px;
+}
+
+.strategyCardWithZeroToken {
+  top: 0;
+  right: 24px;
+  position: absolute;
+  font-size: 48px;
+}

@@ -2,19 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "./useUser";
 import { useGameData } from "./useGameContext";
 import { PlayerHandData } from "../types/playerHand";
+import { authenticatedFetch, getBotApiUrl } from "../api";
 
-const fetchPlayerHand = async (
-  gameId: string,
-  token: string
-): Promise<PlayerHandData> => {
-  const apiUrl = import.meta.env.DEV
-    ? `/bot/api/game/${gameId}/hand`
-    : `https://bot.asyncti4.com/api/game/${gameId}/hand`;
+const fetchPlayerHand = async (gameId: string): Promise<PlayerHandData> => {
+  const apiUrl = getBotApiUrl(`/game/${gameId}/hand`);
 
-  const response = await fetch(apiUrl, {
+  const response = await authenticatedFetch(apiUrl, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
@@ -40,7 +35,7 @@ export const usePlayerHand = (gameId: string) => {
 
   return useQuery({
     queryKey: ["playerHand", gameId, user?.id],
-    queryFn: () => fetchPlayerHand(gameId, user!.token!),
+    queryFn: () => fetchPlayerHand(gameId),
     enabled: !!shouldFetch,
   });
 };

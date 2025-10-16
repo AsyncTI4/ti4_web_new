@@ -14,6 +14,7 @@ import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameContext } from "@/hooks/useGameContext";
 import { useFactionImages } from "@/hooks/useFactionImages";
 import { getFactionImage } from "@/lookup/factions";
+import cx from "clsx";
 
 type PlayerStatsAreaProps = {
   faction: string;
@@ -26,31 +27,27 @@ export function PlayerStatsArea({
   playerData,
   statTilePositions,
 }: PlayerStatsAreaProps) {
+  if (playerData.faction === "franken19") {
+    console.log("playerdata", playerData);
+  }
   const enhancedData = useGameContext();
   const factionImages = useFactionImages();
   const factionImage = factionImages[faction]?.image;
   const factionImageType = factionImages[faction]?.type;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
-
   const factionColorMap = useFactionColors();
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
   if (!enhancedData) return null;
 
   const { vpsToWin = 10, ringCount = 3 } = enhancedData;
-
-  // Get the color for this faction from the color map, fallback to player's default color
   const color = factionColorMap[faction]?.color || playerData.color;
 
-  // Calculate tile positions for this faction's stat tiles
   const tilePositions = useMemo(() => {
     if (!statTilePositions || statTilePositions.length === 0) return [];
-
-    // Create fake tile positions array for stat tiles (format: "position:systemId")
     const statTilePositionsArray = statTilePositions.map(
       (position) => `${position}:stat_${position}`
     );
-
     return calculateTilePositions(statTilePositionsArray, ringCount);
   }, [statTilePositions, ringCount]);
 
@@ -129,13 +126,24 @@ export function PlayerStatsArea({
               <div className={styles.playerName}>{playerData.userName}</div>
             )}
 
-            <Group gap={1} justify="center">
+            <Group gap={1} justify="center" style={{ position: "relative" }}>
+              {playerData.hasZeroToken && (
+                <img
+                  src={cdnImage("/player_area/pa_foresight.webp")}
+                  alt="Zero Token"
+                  className={styles.zeroTokenImage}
+                />
+              )}
               {playerData.scs.map((sc: number) => {
                 const isExhausted = playerData.exhaustedSCs?.includes(sc);
                 return (
                   <Text
                     key={sc}
-                    className={styles.strategyCard}
+                    className={cx(
+                      styles.strategyCard,
+                      playerData.hasZeroToken &&
+                        styles.strategyCardWithZeroToken
+                    )}
                     c={
                       isExhausted
                         ? "gray.5"

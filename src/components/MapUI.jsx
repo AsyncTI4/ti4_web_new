@@ -20,9 +20,9 @@ function MapUI({
   isReconnecting,
   showRefresh,
   isError,
+  onShowNewUI,
 }) {
   const theme = useMantineTheme();
-  const navigate = useNavigate();
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -42,19 +42,17 @@ function MapUI({
             changeTab={changeTab}
             removeTab={removeTab}
           />
-          {!isTouchDevice() && (
-            <Button
-              variant="light"
-              size="xs"
-              color="cyan"
-              onClick={() => {
-                localStorage.setItem("showOldUI", undefined);
-                navigate(`/game/${params.mapid}/newui`);
-              }}
-            >
-              GO TO NEW UI
-            </Button>
-          )}
+
+          <Button
+            variant="light"
+            size="xs"
+            color="cyan"
+            onClick={() => {
+              onShowNewUI?.();
+            }}
+          >
+            GO TO NEW UI
+          </Button>
         </Group>
       </AppShell.Header>
 
@@ -110,14 +108,6 @@ function MapUI({
         </div>
       </AppShell.Main>
     </AppShell>
-  );
-}
-
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0
   );
 }
 

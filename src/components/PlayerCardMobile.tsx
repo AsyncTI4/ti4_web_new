@@ -192,7 +192,7 @@ export default function PlayerCardMobile(props: Props) {
 
   return (
     <PlayerCardBox color={color} faction={faction}>
-      <Group gap="md" px={4} align="center" mb="lg">
+      <Group gap="md" px={4} align="center">
         <Image
           src={factionUrl}
           alt={faction}
@@ -236,32 +236,31 @@ export default function PlayerCardMobile(props: Props) {
           })}
           {isSpeaker && <SpeakerToken isVisible />}
         </Group>
+      </Group>
+      <Group gap="xs" wrap="wrap" align="center" mb="lg" mt="xs">
+        <Stack gap={4}>
+          <Caption size="xs">Abilities</Caption>
+          <Group gap={2}>
+            {abilities?.map((abilityId, index) => {
+              const abilityData = getAbility(abilityId);
+              if (!abilityData) return;
+              return <Ability id={abilityId} key={index} />;
+            })}
+          </Group>
+        </Stack>
 
-        <Group gap="xs" wrap="wrap" align="center">
-          <Stack gap={4}>
-            <Caption size="xs">Abilities</Caption>
-            <Group gap={2}>
-              {abilities?.map((abilityId, index) => {
-                const abilityData = getAbility(abilityId);
-                if (!abilityData) return;
-                return <Ability id={abilityId} key={index} />;
-              })}
-            </Group>
-          </Stack>
-
-          <Stack gap={4}>
-            <Caption size="xs">Faction Techs</Caption>
-            <Group gap={2}>
-              {researchedFactionTechs?.map((techId, index) => (
-                <Tech techId={techId} key={index} />
+        <Stack gap={4}>
+          <Caption size="xs">Faction Techs</Caption>
+          <Group gap={2}>
+            {researchedFactionTechs?.map((techId, index) => (
+              <Tech techId={techId} key={index} />
+            ))}
+            {notResearchedFactionTechs?.length > 0 &&
+              notResearchedFactionTechs.map((techId) => (
+                <Tech techId={techId} key={techId} />
               ))}
-              {notResearchedFactionTechs?.length > 0 &&
-                notResearchedFactionTechs.map((techId) => (
-                  <Tech techId={techId} key={techId} />
-                ))}
-            </Group>
-          </Stack>
-        </Group>
+          </Group>
+        </Stack>
       </Group>
 
       <Grid gutter="xs" columns={24}>

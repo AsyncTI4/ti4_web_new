@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { useUser } from "./useUser";
+import { authenticatedFetch, getBotApiUrl } from "../api";
 
 export type MovementPayload = {
   targetPosition: string;
@@ -9,19 +9,12 @@ export type MovementPayload = {
   >;
 };
 
-async function postMovement(
-  gameId: string,
-  payload: MovementPayload,
-  token: string
-) {
-  const apiUrl = import.meta.env.DEV
-    ? `/bot/api/game/${gameId}/movement`
-    : `https://bot.asyncti4.com/api/game/${gameId}/movement`;
+async function postMovement(gameId: string, payload: MovementPayload) {
+  const apiUrl = getBotApiUrl(`/game/${gameId}/movement`);
 
-  const response = await fetch(apiUrl, {
+  const response = await authenticatedFetch(apiUrl, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
@@ -52,10 +45,8 @@ export function useSubmitMovement(
     onError?: (error: unknown) => void;
   }
 ): UseMutationResult<void, unknown, MovementPayload> {
-  const { user } = useUser();
-
   return useMutation<void, unknown, MovementPayload>({
-    mutationFn: (payload) => postMovement(gameId, payload, user!.token!),
+    mutationFn: (payload) => postMovement(gameId, payload),
     onSuccess: () => options?.onSuccess?.(),
     onError: (err) => options?.onError?.(err),
   });

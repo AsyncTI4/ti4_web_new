@@ -7,7 +7,12 @@ import "./utils/zIndexVariables.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 // @ts-ignore
 import GamePage from "./GamePage";
 // @ts-ignore
@@ -31,6 +36,11 @@ import { isMobileDevice } from "./utils/isTouchDevice";
 
 const queryClient = new QueryClient();
 
+const RedirectToGame = () => {
+  const { mapid } = useParams<{ mapid: string }>();
+  return <Navigate to={`/game/${mapid}`} replace />;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,7 +48,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/game/:mapid",
-    element: <GamePage />,
+    element: <MapTogglePage />,
   },
   {
     path: "/games",
@@ -46,7 +56,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/game/:mapid/newui",
-    element: <MapTogglePage />,
+    element: <RedirectToGame />,
   },
 
   {

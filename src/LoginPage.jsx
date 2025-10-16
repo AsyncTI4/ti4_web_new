@@ -1,19 +1,17 @@
 import { redirect, useLoaderData } from "react-router-dom";
 import { getLocalUser, setLocalUser } from "./hooks/useUser";
-import { config } from "./config";
+import { getBotApiUrl } from "./api";
 import { v4 as uuidv4 } from "uuid";
 
 async function login(code, userId) {
-  const apiUrl = import.meta.env.DEV
-    ? "/auth/login"
-    : config.api.discordLoginUrl;
+  const apiUrl = getBotApiUrl("/public/auth/login");
 
   const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ code, user_id: userId }),
+    body: JSON.stringify({ code, userId }),
   });
 
   if (!response.ok) {
@@ -41,7 +39,9 @@ export async function loginLoader({ request }) {
         id: data.user_id,
         name: data.discord_name,
         token: data.bearer_token,
+        refreshToken: data.refresh_token,
         discord_id: data.discord_id,
+        expiresIn: data.expires_in,
         authenticated: true,
       });
 
