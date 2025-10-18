@@ -7,8 +7,10 @@ const devConfig = {
     websiteBase: "http://localhost:5173/",
     discordLoginUrl: "http://localhost:8000/login",
     discordRedirectUri: "http://localhost:5173/login",
+    gameDataUrl: "http://asyncti4.com/webdata",
     botApiUrl: "/bot/api",
-    websocketUrl: "ws://localhost:8081/ws",
+    websocketUrl: "wss://bot.asyncti4.com/ws",
+    // websocketUrl: "ws://localhost:8081/ws",
   },
 };
 
@@ -21,6 +23,7 @@ const prodConfig = {
     websiteBase: "https://asyncti4.com/",
     discordLoginUrl: "https://api.asyncti4.com/login",
     discordRedirectUri: "https://asyncti4.com/login",
+    gameDataUrl: "http://localhost:5173/webdata",
     botApiUrl: "https://bot.asyncti4.com/api",
     websocketUrl: "wss://bot.asyncti4.com/ws",
   },

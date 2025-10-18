@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { config } from "@/config";
 
 export function usePlayerData(gameId: string) {
-  const apiUrl = `${config.api.websiteBase}webdata/${gameId}/${gameId}.json`;
+  const apiUrl = `${config.api.gameDataUrl}/${gameId}/${gameId}.json`;
 
   return useQuery<PlayerDataResponse>({
     queryKey: ["playerData", gameId],
