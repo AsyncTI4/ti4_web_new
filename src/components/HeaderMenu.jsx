@@ -73,6 +73,7 @@ export function HeaderMenu({ mapId, activeTabs, changeTab, removeTab }) {
   return (
     <>
       <Anchor
+        visibleFrom="sm"
         to="/games"
         size="sm"
         fw={600}

@@ -30,9 +30,13 @@ export const Z_INDEX_LAYERS = {
  * Calculate z-index for a unit based on its type and stack position
  */
 export function getUnitZIndex(
-  unitType: string,
+  unitType: string | null | undefined,
   stackIndex: number = 0
 ): number {
+  if (!unitType) {
+    return Z_INDEX_LAYERS.UNIT_BASE + stackIndex;
+  }
+
   const capitalizedUnitType = unitType.toUpperCase();
   const basePriority =
     Z_INDEX_LAYERS.UNIT_PRIORITIES[
