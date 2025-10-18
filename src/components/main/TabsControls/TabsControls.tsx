@@ -1,14 +1,15 @@
-import { Box, Button, Group, Image, Switch } from "@mantine/core";
+import { Box, Button, Group, Image } from "@mantine/core";
 import {
   IconRuler2,
   IconKeyboard,
   IconSettings,
-  IconEye,
+  IconHash,
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import { useSettingsStore } from "@/utils/appStore";
 import { cdnImage } from "@/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import classes from "./TabsControls.module.css";
 
 export function TabsControls() {
   const game = useGameData();
@@ -28,17 +29,7 @@ export function TabsControls() {
           onClick={handlers.togglePlanetTypesMode}
         >
           <img
-            src="/planet_attributes/pc_attribute_cultural.png"
-            alt="Planet Types"
-            height={16}
-          />
-          <img
-            src="/planet_attributes/pc_attribute_industrial.png"
-            alt="Planet Types"
-            height={16}
-          />
-          <img
-            src="/planet_attributes/pc_attribute_hazardous.png"
+            src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
             alt="Planet Types"
             height={16}
           />
@@ -53,20 +44,40 @@ export function TabsControls() {
           onClick={handlers.toggleTechSkipsMode}
         >
           <img src="/green.png" alt="Tech Skips" height={16} />
-          <img src="/yellow.png" alt="Tech Skips" height={16} />
-          <img src="/red.png" alt="Tech Skips" height={16} />
-          <img src="/blue.png" alt="Tech Skips" height={16} />
+          <img
+            src="/yellow.png"
+            alt="Tech Skips"
+            height={16}
+            style={{ marginLeft: "-4px" }}
+          />
+          <img
+            src="/red.png"
+            alt="Tech Skips"
+            height={16}
+            style={{ marginLeft: "-4px" }}
+          />
+          <img
+            src="/blue.png"
+            alt="Tech Skips"
+            height={16}
+            style={{
+              marginLeft: "-4px",
+            }}
+          />
         </Button>
 
-        <Button
-          variant={settings.distanceMode ? "filled" : "light"}
-          size="sm"
-          color={settings.distanceMode ? "orange" : "gray"}
-          px={8}
-          onClick={handlers.toggleDistanceMode}
-        >
-          <IconRuler2 size={16} />
-        </Button>
+        {!isMobileDevice() ? (
+          <Button
+            variant={settings.distanceMode ? "filled" : "light"}
+            size="sm"
+            color={settings.distanceMode ? "orange" : "gray"}
+            px={8}
+            onClick={handlers.toggleDistanceMode}
+          >
+            <IconRuler2 size={16} />
+          </Button>
+        ) : undefined}
+
         {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
           <Button
             variant={settings.showPDSLayer ? "filled" : "light"}
@@ -79,16 +90,18 @@ export function TabsControls() {
           </Button>
         )}
 
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          style={{ height: "36px", minWidth: "36px" }}
-          px={8}
-          onClick={() => handlers.setSettingsModalOpened(true)}
-        >
-          <IconSettings size={16} />
-        </Button>
+        {!isMobileDevice() && (
+          <Button
+            variant="light"
+            size="sm"
+            color="gray"
+            style={{ height: "36px", minWidth: "36px" }}
+            px={8}
+            onClick={() => handlers.setSettingsModalOpened(true)}
+          >
+            <IconSettings size={16} />
+          </Button>
+        )}
         {!isMobileDevice() && (
           <Button
             variant="light"
@@ -103,23 +116,65 @@ export function TabsControls() {
           </Button>
         )}
 
-        <Switch
-          checked={settings.overlaysEnabled}
-          onChange={handlers.toggleOverlays}
+        <Button
+          variant={settings.overlaysEnabled ? "filled" : "light"}
           size="sm"
-          thumbIcon={
-            settings.overlaysEnabled ? (
-              <IconEye size={12} />
-            ) : (
-              <IconEye size={12} style={{ opacity: 0.5 }} />
-            )
-          }
-          label="Overlays"
-          labelPosition="right"
-        />
+          color={settings.overlaysEnabled ? "blue" : "gray"}
+          px={8}
+          onClick={handlers.toggleOverlays}
+        >
+          <svg
+            width="16"
+            height="18"
+            viewBox="0 0 16 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
+              fill="#3b82f6"
+              stroke="#3b82f6"
+              strokeWidth="1.5"
+              strokeLinejoin="miter"
+            />
+          </svg>
+        </Button>
       </Group>
 
       <div style={{ flex: 1 }} />
+      {/* Discord channel links */}
+
+      <Group gap={4} mr={12}>
+        {game?.actionsJumpLink && (
+          <Button
+            component="a"
+            href={game.actionsJumpLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            size="compact-xs"
+            leftSection={<IconHash size={14} />}
+            px={6}
+            className={classes.discordButton}
+          >
+            actions
+          </Button>
+        )}
+        {game?.tableTalkJumpLink && (
+          <Button
+            component="a"
+            href={game.tableTalkJumpLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            size="compact-xs"
+            leftSection={<IconHash size={14} />}
+            px={6}
+            className={classes.discordButton}
+          >
+            table-talk
+          </Button>
+        )}
+      </Group>
+
       {/* Theme swatches (hidden on mobile) */}
       {!isMobileDevice() && (
         <Box

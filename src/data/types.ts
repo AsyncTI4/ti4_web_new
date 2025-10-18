@@ -262,6 +262,8 @@ export type PlayerDataResponse = {
   gameRound: number;
   gameName: string;
   gameCustomName?: string;
+  tableTalkJumpLink?: string;
+  actionsJumpLink?: string;
 };
 
 export type PlayerData = {
