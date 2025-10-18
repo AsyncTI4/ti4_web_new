@@ -23,7 +23,7 @@ const prodConfig = {
     websiteBase: "https://asyncti4.com/",
     discordLoginUrl: "https://api.asyncti4.com/login",
     discordRedirectUri: "https://asyncti4.com/login",
-    gameDataUrl: "http://asyncti4.com/webdata"
+    gameDataUrl: "http://asyncti4.com/webdata",
     botApiUrl: "https://bot.asyncti4.com/api",
     websocketUrl: "wss://bot.asyncti4.com/ws",
   },
