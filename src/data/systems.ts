@@ -655,6 +655,7 @@ export const systems: TileData[] = [
     imagePath: "113_BetaRift.png",
     shipPositionsType: "TYPE08",
     wormholes: ["BETA"],
+    planets: [],
     tileBack: "red",
     isGravityRift: true,
     source: "thunders_edge",

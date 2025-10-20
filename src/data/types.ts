@@ -2,7 +2,7 @@ import { EntityStack } from "@/utils/unitPositioning";
 
 export type TileData = {
   id: string;
-  name?: string;
+  name?: string | null;
   aliases?: string[];
   imagePath: string;
   planets?: string[];

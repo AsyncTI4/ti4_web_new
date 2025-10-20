@@ -182,6 +182,30 @@ export const abilities: Ability[] = [
     source: "ignis_aurora",
   },
   {
+    id: "interstellar_string_walk",
+    name: "Interstellar String Walk",
+    faction: "arachian",
+    permanentEffect:
+      "When you activate a system, apply +1 to the move value of ships that move through a system that contains one of your Command Tokens. ",
+    source: "other",
+  },
+  {
+    id: "predatory_ambush",
+    name: "Predatory Ambush",
+    faction: "arachian",
+    permanentEffect:
+      "After a player moves ships into a system that contains one of your Command Tokens and your units: Choose up to 2 adjacent systems. Move 1 of your non-fighter ships from each of those systems into the activated system.",
+    source: "other",
+  },
+  {
+    id: "strong_webs",
+    name: "Strong Webs",
+    faction: "arachian",
+    permanentEffect:
+      "During the status phase, you may choose not to return up to 3 Command Tokens from the board to your reinforcements.",
+    source: "other",
+  },
+  {
     id: "voidmaker",
     name: "Voidmaker",
     faction: "raven",
@@ -217,9 +241,9 @@ export const abilities: Ability[] = [
     id: "laws_order",
     name: "Law's Order",
     faction: "keleres",
-    window: "At the start of your turn",
+    window: "At the start of any player's turn",
     windowEffect:
-      "You may spend 1 influence to treat all laws as blank until the end of your turn.",
+      "You may spend 1 trade good or 1 commodity to treat all laws as blank until the end of that turn.",
     source: "codex3",
   },
   {
@@ -479,6 +503,166 @@ export const abilities: Ability[] = [
     faction: "enclave",
     permanentEffect: "Secret Ability Text",
     source: "pbd2000",
+  },
+  {
+    id: "enslave",
+    name: "Enslave",
+    faction: "canto",
+    window: "When you gain control of a planet",
+    windowEffect:
+      "Place 1 infantry from your reinforcements on that planet. REMOVED",
+    source: "eronous",
+  },
+  {
+    id: "dominate",
+    name: "Dominate",
+    faction: "canto",
+    window:
+      "After you commit ground forces to a planet controlled by another player",
+    windowEffect:
+      "That player must destroy 1 of their ground forces on that planet.",
+    source: "eronous",
+  },
+  {
+    id: "seamless_integration",
+    name: "Seamless Integration",
+    faction: "canto",
+    window: "At the start of the Status phase",
+    windowEffect:
+      "you may place 1 infantry from your reinforcements on a non-home planet other than Mecatol Rex that contains no other player's units, resolve invasion on that planet.",
+    source: "eronous",
+  },
+  {
+    id: "void_tap",
+    name: "Void Tap",
+    faction: "eidolon",
+    window: "After you activate a system that contains no planets REMOVED",
+    windowEffect: "You may gain 1 trade good.",
+    source: "eronous",
+  },
+  {
+    id: "dark_weaver",
+    name: "Dark Weaver",
+    faction: "eidolon",
+    window: "When you explore a frontier token",
+    windowEffect:
+      "You may draw 1 additional card; choose 1 to resolve and discard the rest",
+    source: "eronous",
+  },
+  {
+    id: "abyssal_propagation",
+    name: "Abyssal Propagation",
+    faction: "eidolon",
+    window: "After you perform a tactical action,",
+    windowEffect:
+      "you may place 1 fighter from your reinforcements in a system that contains no other players units.",
+    source: "eronous",
+  },
+  {
+    id: "creeping_shades",
+    name: "Creeping Shades",
+    faction: "shadows",
+    window: "At the start of space combat",
+    windowEffect:
+      "if your opponent has a control token on one of your ships, you may return any number of control tokens from your faction sheet to replace one of their matching ship types with one from your reinforcements.",
+    source: "eronous",
+  },
+  {
+    id: "silent_growth",
+    name: "Silent Growth",
+    faction: "shadows",
+    window: "At the start of the agenda phase,",
+    windowEffect:
+      "For each other player you may spend influence equal to the cost of one non-fighter ship type with a cost of 4 or less to place one of their control tokens onto that ship type on your faction sheet.",
+    source: "eronous",
+  },
+  {
+    id: "tomb_worlds",
+    name: "Tomb Worlds",
+    faction: "shadows",
+    permanentEffect:
+      "For each planet that contains one of your space docks, increase its influence value by 2.",
+    source: "eronous",
+  },
+  {
+    id: "protocols",
+    name: "Protocols",
+    faction: "mechi",
+    window: "At the start of the Strategy phase, ",
+    windowEffect:
+      "Exhaust all Active Protocols, and remove them from your faction sheet. Then, choose two unexhausted Protocols, and set them Active by placing them face up on your faction sheet.",
+    source: "eronous",
+  },
+  {
+    id: "machine_cult",
+    name: "Machine Cult",
+    faction: "mechi",
+    permanentEffect:
+      "During setup place the 2 Mechikide mech tokens in your reinforcements. The Mechikide unit tokens are additional units of their type.",
+    source: "eronous",
+  },
+  {
+    id: "protocol_distribution",
+    name: "(Protocol) Distribution",
+    faction: "mechi",
+    permanentEffect:
+      "Tier 1 - After a player activates a system, you may exhaust this card to increase the movement value of one of their ships by 1. \n\nTier 2 - After you activate a system, you may choose to ignore the moment effects of either asteroid fields, gravity rifts or nebulas. \n\nTier 3 - At the start of a round of space combat: Apply a bonus to each of your non-fighter ships combat rolls equal to their movement value until the end of the combat.",
+    source: "eronous",
+  },
+  {
+    id: "protocol_command",
+    name: "(Protocol) Command",
+    faction: "mechi",
+    permanentEffect:
+      "Tier 1 - At the end of a player’s turn: You may exhaust this card to allow them to perform the secondary ability of the Leadership strategy card. \n\nTier 2 - Planets that contain your mechs have their influence value increased by +1 \n\nTier 3 - ACTION: Perform the primary ability of the leadership card. Then, refresh all planets you spent during that action.",
+    source: "eronous",
+  },
+  {
+    id: "protocol_excavation",
+    name: "(Protocol) Excavation",
+    faction: "mechi",
+    permanentEffect:
+      "Tier 1 - At the end of a player’s turn: You may exhaust this card to allow that player to explore a planet that contains one of their mechs. \n\nTier 2 - When you explore a planet: Gain 1tg. \n\nTier 3 - ACTION: Explore each planet that contains one of your mechs. Then, ready each of those planets.",
+    source: "eronous",
+  },
+  {
+    id: "protocol_espionage",
+    name: "(Protocol) Espionage",
+    faction: "mechi",
+    permanentEffect:
+      "Tier 1 - At the end of a player’s turn: You may exhaust this card to allow a player to discard one unscored secret objective. If they do so, they draw a new one. Then, shuffle the discarded secret objective into the deck. \n\nTier 2 - When you win a combat against another player: That player must show you one of their unscored secret objectives at random, if able. \n\nTier 3 - ACTION: Each of your neighbors must give you one of their unscored secret objectives. Then, give one unscored secret objective you are holding back to each of those players.",
+    source: "eronous",
+  },
+  {
+    id: "protocol_conflict",
+    name: "(Protocol) Conflict",
+    faction: "mechi",
+    permanentEffect:
+      "Tier 1 - At the end of a round of combat: You may exhaust this card to repair one unit in the active system. \n\nTier 2 - Your space docks and mechs increase their PRODUCTION values by 1. \n\nTier 3 - ACTION: You may use the PRODUCTION values of each of your mechs.",
+    source: "eronous",
+  },
+  {
+    id: "angelic_hosts",
+    name: "Angelic Hosts",
+    faction: "saera",
+    permanentEffect:
+      "During setup, take the 2 additional Saeraphyme faction agents and place them next to your faction sheet; you have 3 agents.",
+    source: "eronous",
+  },
+  {
+    id: "guidance",
+    name: "Guidance",
+    faction: "saera",
+    window: "After an agenda is revealed",
+    windowEffect: "Ready one planet you control",
+    source: "eronous",
+  },
+  {
+    id: "celestial_being",
+    name: "Celestial Being",
+    faction: "saera",
+    permanentEffect: "Your units ignore the effects of anomalies.",
+    source: "eronous",
   },
   {
     id: "limited_vision",
@@ -1080,10 +1264,9 @@ export const abilities: Ability[] = [
     id: "facsimile",
     name: "Facsimile",
     faction: "mortheus",
-    window:
-      "At the start of a space combat while you are not the active player",
+    window: "At the start of a space combat while you are the defender",
     windowEffect:
-      "Choose 1 of your opponent's ships in the active system, you may produce 1 unit of that type in that system, spending influence instead of resources.",
+      "You may spend influence equal to the cost value of 1 of your opponent's ships in the active system to place 1 unit of that type from your reinforcements in that system.",
     source: "ds",
   },
   {
@@ -1547,7 +1730,7 @@ export const abilities: Ability[] = [
     name: "Pride",
     faction: "toldar",
     permanentEffect:
-      "When you win a combat as the attacker against a player who has more victory points than you, gain 1 honor; if that player has fewer victory points than you, gain 1 dishonor.",
+      "When you win a combat as the attacker, gain 1 honor if your opponent has more victory points than you, or gain 1 dishonor if they have fewer victory points than you; otherwise, gain 1 honor or 1 dishonor and ignore this ability until the end of your turn.",
     source: "ds",
   },
   {
@@ -1910,6 +2093,14 @@ export const abilities: Ability[] = [
     shortName: "Indoctri\n-nation",
   },
   {
+    id: "yin_breakthrough",
+    name: "Yin Breakthrough",
+    faction: "yin",
+    permanentEffect:
+      "When you gain this card or score a public objective, gain the alliance ability of a random, unused faction.",
+    source: "thunders_edge",
+  },
+  {
     id: "crafty",
     name: "Crafty",
     faction: "yssaril",
@@ -1933,6 +2124,144 @@ export const abilities: Ability[] = [
     window: "ACTION",
     windowEffect: "Discard 1 action card from your hand",
     source: "base",
+  },
+  {
+    id: "liberate",
+    name: "Liberate",
+    faction: "bastion",
+    window: "When you gain control of a planet",
+    windowEffect:
+      "ready that planet if it contains a number of your infantry equal to or greater than that planet's resource value; otherwise, place 1 infantry on that planet.",
+    source: "thunders_edge",
+  },
+  {
+    id: "galvanize",
+    name: "Galvanize",
+    faction: "bastion",
+    permanentEffect:
+      "Galvanized units roll 1 additional die for combat rolls and unit abilities.",
+    window: "When a game effect instructs a player to galvanize a unit",
+    windowEffect:
+      "they place a galvanize token beneath it if it does not have one. ",
+    source: "thunders_edge",
+  },
+  {
+    id: "phoenixstandard",
+    name: "Phoenix Standard",
+    faction: "bastion",
+    window: "At the end of combat",
+    windowEffect: "you may galvanize 1 of your units that participated.",
+    source: "thunders_edge",
+  },
+  {
+    id: "survivalinstinct",
+    name: "Survival Instinct",
+    faction: "ralnel",
+    window: "After a player activates a system that contains your ships",
+    windowEffect:
+      "you may move up to 2 of your ships into the active system from adjacent systems that do not contain your command tokens.",
+    source: "thunders_edge",
+  },
+  {
+    id: "researchteam",
+    name: "Research Team",
+    faction: "deepwrought",
+    window: "When ground forces are committed",
+    windowEffect:
+      "if your units on that planet are not already coexisting, you may choose for your units to coexist.",
+    source: "thunders_edge",
+  },
+  {
+    id: "oceanbound",
+    name: "Oceanbound",
+    faction: "deepwrought",
+    permanentEffect:
+      "Any time you have more ocean cards than there are planets that contain your coexisting units, discard ocean cards until you do not.",
+    window: "When your units begin coexisting on a planet",
+    windowEffect: "gain an ocean card and ready it.",
+    source: "thunders_edge",
+  },
+  {
+    id: "sundered",
+    name: "Sundered",
+    faction: "crimson",
+    permanentEffect:
+      "You cannot use wormholes other than epsilon wormholes. Other players' units that move or are placed into your home system are destroyed.",
+    source: "thunders_edge",
+  },
+  {
+    id: "incursion",
+    name: "Incursion",
+    faction: "crimson",
+    permanentEffect:
+      "When you activate a system that contains a breach, you may flip that breach; systems that contain active breaches are adjacent. at the end of the status phase, any player with ships in a system that contain an active breach may remove that breach.",
+    source: "thunders_edge",
+  },
+  {
+    id: "miniaturization",
+    name: "Miniaturization",
+    faction: "ralnel",
+    permanentEffect:
+      "Your structures can be transported by any ship; this does not require or count against capacity. While your structures are in the space area, they cannot use their unit abilities.",
+    window: "At the end of your tactical actions",
+    windowEffect:
+      "you may place your structures that are in space areas onto planets you control in their respective systems.",
+    source: "thunders_edge",
+  },
+  {
+    id: "sorrow",
+    name: "Sorrow",
+    faction: "crimson",
+    permanentEffect:
+      "When you create the game board, place the Sorrow (tile 94) where your home system would normally be placed, then place a inactive breach there. The Sorrow is not a home system. Then, place your home system (tile 118) in your play area.",
+    source: "thunders_edge",
+  },
+  {
+    id: "plotsplots",
+    name: "Plots Within Plots",
+    faction: "firmament",
+    permanentEffect:
+      "You can score secret objectives already scored by other players if you fulfill their requirements; this does not count against your secret objective limit or the number you can score in a round.",
+    window: "When you score another player's secret objective",
+    windowEffect:
+      "do not gain a victory point; instead, place a facedown plot card into your play area with that player's control token on it.",
+    source: "thunders_edge",
+  },
+  {
+    id: "puppetsoftheblade",
+    name: "Puppets of the Blade",
+    shortName: "Puppet Soft\nHe Blade",
+    faction: "firmament",
+    window:
+      "If you have at least 1 plot card in your play area, gain the following ability:",
+    windowEffect:
+      "ACTION: Purge The Firmament's faction sheet, leaders, planet cards, and promissory note. Then, gain all of the faction components for The Obsidian.",
+    source: "thunders_edge",
+  },
+  {
+    id: "nocturne",
+    name: "Nocturne",
+    faction: "obsidian",
+    permanentEffect: "This faction cannot be chosen during setup.",
+    source: "thunders_edge",
+  },
+  {
+    id: "bladesorchestra",
+    name: "The Blade's Orchestra",
+    shortName: "Blade's\nOrchestra",
+    faction: "obsidian",
+    window: "When this faction comes into play",
+    windowEffect:
+      "flip your home system, double-sided faction components, and all of your in-play plot cards. Then, ready Cronos Hollow and Tallin Hollow if you control them.",
+    source: "thunders_edge",
+  },
+  {
+    id: "marionettes",
+    name: "Marionettes",
+    faction: "obsidian",
+    permanentEffect:
+      "The player or players whose control tokens are on each plot card are the puppeted players for that plot.",
+    source: "thunders_edge",
   },
   {
     id: "thepraefecti",
@@ -1974,5 +2303,174 @@ export const abilities: Ability[] = [
     permanentEffect:
       "During setup, gain the Nevermore planet card and it's planet ability card. You cannot lose these cards and Nevermore begins the game exhausted.",
     source: "keleresplus",
+  },
+  {
+    id: "underhanded_maneuver",
+    name: "Underhanded Maneuver",
+    faction: "arvaxi",
+    window: "At the start of the strategy phase",
+    windowEffect:
+      "You may choose 1 of your neighbours. That player must give you 1 action card from their hand.",
+    source: "balacasi",
+  },
+  {
+    id: "scrap_metal",
+    name: "Scrap Metal",
+    faction: "arvaxi",
+    window: "After you discard an action card without resolving its effects",
+    windowEffect:
+      "Gain 1 commodity or convert 1 commodity to a trade good. Game effects cannot prevent you from playing action cards.",
+    source: "balacasi",
+  },
+  {
+    id: "ultimate_authority",
+    name: "Ultimate Authority",
+    faction: "arvaxi",
+    permanentEffect:
+      "Apply +1 to the influence value of planets that contain 3 or more of your units. After you explore a planet that contains 3 or more of your units, draw 1 action card.",
+    source: "balacasi",
+  },
+  {
+    id: "quantum_fabrication",
+    name: "Quantum Fabrication",
+    faction: "xan",
+    permanentEffect:
+      "Once per action, when you place a space dock on a planet in a non-home system using the primary or secondary ability of the Construction strategy card, you may use its PRODUCTION ability immediately.",
+    source: "balacasi",
+  },
+  {
+    id: "transformation_protocol",
+    name: "Transformation Protocol",
+    faction: "xan",
+    permanentEffect:
+      "When casting votes on an agenda, you may choose up to 2 of your ships that have SUSTAIN DAMAGE to become damaged. For each ship chosen, cast 4 additional votes.",
+    source: "balacasi",
+  },
+  {
+    id: "eusociality",
+    name: "Eusociality",
+    faction: "kalora",
+    permanentEffect:
+      "When you retreat during a space combat in a system that doesn't contain your command tokens, you do not place a command token into the target system. You may treat “Skilled Retreat” action cards as a retreat for the purpose of this ability.",
+    source: "balacasi",
+  },
+  {
+    id: "carapace_regeneration",
+    name: "Carapace Regeneration",
+    faction: "kalora",
+    permanentEffect:
+      "After you retreat during a space combat, repair all of your damaged ships that retreated.",
+    source: "balacasi",
+  },
+  {
+    id: "primordial",
+    name: "Primordial",
+    faction: "kalora",
+    permanentEffect:
+      "When you score a public objective, if you are the first to score that objective, you may gain trade goods equal to the number of other players in the game.",
+    source: "balacasi",
+  },
+  {
+    id: "initiation",
+    name: "Initiation",
+    faction: "lunarium",
+    permanentEffect:
+      "During setup, place 1 command token from your reinforcements on your faction sheet. ",
+    source: "balacasi",
+  },
+  {
+    id: "expanding_minds",
+    name: "Expanding Minds",
+    faction: "lunarium",
+    permanentEffect:
+      "You may have up to 6 command tokens on your faction sheet. Your secret objective limit is equal to the number of command tokens on your faction sheet. ",
+    source: "balacasi",
+  },
+  {
+    id: "multitasking",
+    name: "Multitasking",
+    faction: "lunarium",
+    permanentEffect:
+      "When you redistribute command tokens or draw a secret objective, you may move any number of command tokens between your fleet pool and your faction sheet.",
+    source: "balacasi",
+  },
+  {
+    id: "patience",
+    name: "Patience",
+    faction: "onyxxa",
+    permanentEffect:
+      "At the end of the strategy phase, place the Onyxxa Infinity token on your strategy card. You are last in initiative order. When you perform a strategic action, resolve your strategy card’s secondary ability instead of its primary ability.",
+    source: "balacasi",
+  },
+  {
+    id: "strategic_fluidity",
+    name: "Strategic Fluidity",
+    faction: "onyxxa",
+    permanentEffect:
+      "When you would spend a token from your strategy pool to resolve the secondary ability of a strategy card other than Politics, you may spend an additional command token from your strategy pool to resolve the primary ability of that card instead.",
+    source: "balacasi",
+  },
+  {
+    id: "increased_surveillance",
+    name: "Increased Surveillance",
+    faction: "onyxxa",
+    permanentEffect:
+      "When you resolve the primary ability of a strategy card, place a control token on your commander. At the start of the status phase, remove your control tokens from your commander.",
+    source: "balacasi",
+  },
+  {
+    id: "rewrite_destiny",
+    name: "Rewrite Destiny",
+    faction: "tyris",
+    permanentEffect:
+      "Once per status phase, when the speaker reveals a public objective, you may spend 1 command token from your strategy pool to discard that objective. The speaker then reveals a new public objective from the same deck and reshuffles it.",
+    source: "balacasi",
+  },
+  {
+    id: "arrow_of_time",
+    name: "Arrow of Time",
+    faction: "tyris",
+    permanentEffect:
+      "During each of your turns in the action phase, you may take an additional non-strategic action.",
+    source: "balacasi",
+  },
+  {
+    id: "phantom_energy",
+    name: "Phantom Energy",
+    faction: "tyris",
+    permanentEffect:
+      "After you explore a frontier token during a tactical action, you may place a control token on a unit space on your faction sheet that matches a ship in the active system. You may move ships that have a control token on your faction sheet out of systems containing your command tokens. At the end of your turn, remove control tokens from your faction sheet for any ships matching those you have in systems that contain your command tokens.",
+    source: "balacasi",
+  },
+  {
+    id: "veiled_ember_forge",
+    name: "Veiled Ember Forge",
+    faction: "vyserix",
+    permanentEffect:
+      "After you gain control of a planet with a technology specialty, you may place 1 PDS on that planet.",
+    source: "balacasi",
+  },
+  {
+    id: "scattered_legions",
+    name: "Scattered Legions",
+    faction: "vyserix",
+    permanentEffect:
+      "At the end of your turns, you may not have more ground forces on a non-home planet than the greater of its resource or influence values. Place any excess on a planet you control in your home system, or return them to your reinforcements.",
+  },
+  {
+    id: "marked_prey",
+    name: "Marked Prey",
+    faction: "zephyrion",
+    permanentEffect:
+      "At the start of the strategy phase, place any number of your bounty tokens from your reinforcements on the unit space of non-fighter ships on other players’ factions sheets. You can have a maximum of 1 bounty token on each unit space.",
+    source: "balacasi",
+  },
+  {
+    id: "confirmed_kill",
+    name: "Confirmed Kill",
+    faction: "zephyrion",
+    permanentEffect:
+      "During your turn, if a ship with a bounty token on its unit space is destroyed, return the bounty token to your reinforcements and gain 3 trade goods.",
+    source: "balacasi",
   },
 ];
