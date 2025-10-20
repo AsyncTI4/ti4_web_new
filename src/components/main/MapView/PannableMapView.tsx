@@ -41,6 +41,9 @@ import {
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/components/PlayerCardMobile";
+import { SecretHand } from "@/components/main/SecretHand";
+import { usePlayerHand } from "@/hooks/usePlayerHand";
+import secretHandClasses from "@/components/main/SecretHand/SecretHand.module.css";
 
 const MAP_PADDING = 0;
 
@@ -114,8 +117,21 @@ export function PannableMapView({ gameId }: Props) {
     position: string;
     systemId: string;
   } | null>(null);
+  const [isSecretHandCollapsed, setIsSecretHandCollapsed] = useState(false);
 
   const playerCardLayout = isMobileDevice() ? "list" : "grid";
+
+  // Fetch player hand data
+  const {
+    data: handData,
+    isLoading: isHandLoading,
+    error: handError,
+  } = usePlayerHand(gameId);
+
+  const isUserAuthenticated = user?.authenticated;
+  const isInGame = gameData?.playerData?.some(
+    (p) => p.discordId === user?.discord_id
+  );
 
   const {
     selectedTiles,
@@ -318,10 +334,26 @@ export function PannableMapView({ gameId }: Props) {
             )}
             <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
             <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
+
+            {/* Secret Hand - Top left of pannable area */}
+            {isUserAuthenticated && isInGame && !isMobileDevice() && (
+              <Box className={secretHandClasses.pannableWrapper}>
+                <SecretHand
+                  isCollapsed={isSecretHandCollapsed}
+                  onToggle={() => setIsSecretHandCollapsed(!isSecretHandCollapsed)}
+                  handData={handData}
+                  isLoading={isHandLoading}
+                  error={handError}
+                  playerData={gameData?.playerData}
+                  activeArea={null}
+                  userDiscordId={user?.discord_id}
+                />
+              </Box>
+            )}
           </>
         )}
 
-        {/* Scoreboard summary area */}
+        {/* Game info and scoreboard summary area */}
         {gameData && (
           <Box
             style={{
@@ -331,6 +363,19 @@ export function PannableMapView({ gameId }: Props) {
             }}
           >
             <Stack gap="md">
+              {/* Game Name and Round */}
+              {gameData.gameName && (
+                <Box>
+                  <Text size="lg" c="gray.1" fw={600}>
+                    {gameData.gameName}
+                    {gameData.gameCustomName && ` - ${gameData.gameCustomName}`}
+                  </Text>
+                  <Text size="md" c="gray.3">
+                    Round {gameData.gameRound}
+                  </Text>
+                </Box>
+              )}
+
               <ScoreTracker
                 playerData={gameData.playerData}
                 vpsToWin={gameData.vpsToWin || 10}
