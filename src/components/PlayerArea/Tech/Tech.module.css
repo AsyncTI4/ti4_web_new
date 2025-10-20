@@ -48,6 +48,9 @@
   z-index: 1;
 }
 
+:global(.mobile) .techCard.enhanced::after {
+  animation: none;
+}
 
 .techCard:hover {
   background: rgba(var(--gradient-color), 0.18);

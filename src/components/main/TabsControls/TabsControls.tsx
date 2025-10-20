@@ -1,181 +1,222 @@
-import { Box, Button, Group, Image } from "@mantine/core";
+import { Box, Button, Group, ActionIcon } from "@mantine/core";
 import {
   IconRuler2,
   IconKeyboard,
   IconSettings,
   IconHash,
+  IconMenu2,
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
-import { useSettingsStore } from "@/utils/appStore";
+import { SettingsStore, useSettingsStore } from "@/utils/appStore";
 import { cdnImage } from "@/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import classes from "./TabsControls.module.css";
 
-export function TabsControls() {
-  const game = useGameData();
-  const settings = useSettingsStore((state) => state.settings);
-  const handlers = useSettingsStore((state) => state.handlers);
-  const setThemeName = useSettingsStore((state) => state.handlers.setThemeName);
+type TabsControlsProps = {
+  onMenuClick?: () => void;
+};
 
+type ControlButtonsProps = {
+  settings: SettingsStore["settings"];
+  handlers: SettingsStore["handlers"];
+  game: ReturnType<typeof useGameData>;
+  showDistanceButton?: boolean;
+};
+
+function ControlButtons({
+  settings,
+  handlers,
+  game,
+  showDistanceButton = true,
+}: ControlButtonsProps) {
   return (
     <>
-      <Group gap={4} pl={8} pb={4}>
+      <Button
+        variant="light"
+        size="sm"
+        color={settings.planetTypesMode ? "cyan" : "gray"}
+        style={{ height: "36px", minWidth: "36px" }}
+        px={8}
+        onClick={handlers.togglePlanetTypesMode}
+      >
+        <img
+          src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
+          alt="Planet Types"
+          height={16}
+        />
+      </Button>
+
+      <Button
+        variant={settings.techSkipsMode ? "filled" : "light"}
+        size="sm"
+        color={settings.techSkipsMode ? "cyan" : "gray"}
+        h={36}
+        px={8}
+        onClick={handlers.toggleTechSkipsMode}
+      >
+        <img src="/green.png" alt="Tech Skips" height={16} />
+        <img
+          src="/yellow.png"
+          alt="Tech Skips"
+          height={16}
+          style={{ marginLeft: "-4px" }}
+        />
+        <img
+          src="/red.png"
+          alt="Tech Skips"
+          height={16}
+          style={{ marginLeft: "-4px" }}
+        />
+        <img
+          src="/blue.png"
+          alt="Tech Skips"
+          height={16}
+          style={{
+            marginLeft: "-4px",
+          }}
+        />
+      </Button>
+
+      {showDistanceButton && (
+        <Button
+          variant={settings.distanceMode ? "filled" : "light"}
+          size="sm"
+          color={settings.distanceMode ? "orange" : "gray"}
+          px={8}
+          onClick={handlers.toggleDistanceMode}
+        >
+          <IconRuler2 size={16} />
+        </Button>
+      )}
+
+      {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
+        <Button
+          variant={settings.showPDSLayer ? "filled" : "light"}
+          size="sm"
+          color={settings.showPDSLayer ? "blue" : "gray"}
+          px={8}
+          onClick={handlers.togglePdsMode}
+        >
+          <img src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
+        </Button>
+      )}
+
+      {showDistanceButton && (
         <Button
           variant="light"
           size="sm"
-          color={settings.planetTypesMode ? "cyan" : "gray"}
+          color="gray"
           style={{ height: "36px", minWidth: "36px" }}
           px={8}
-          onClick={handlers.togglePlanetTypesMode}
+          onClick={() => handlers.setSettingsModalOpened(true)}
         >
-          <img
-            src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
-            alt="Planet Types"
-            height={16}
-          />
+          <IconSettings size={16} />
         </Button>
+      )}
 
+      {showDistanceButton && (
         <Button
-          variant={settings.techSkipsMode ? "filled" : "light"}
+          variant="light"
           size="sm"
-          color={settings.techSkipsMode ? "cyan" : "gray"}
+          color="gray"
           h={36}
+          w={36}
           px={8}
-          onClick={handlers.toggleTechSkipsMode}
+          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
         >
-          <img src="/green.png" alt="Tech Skips" height={16} />
-          <img
-            src="/yellow.png"
-            alt="Tech Skips"
-            height={16}
-            style={{ marginLeft: "-4px" }}
-          />
-          <img
-            src="/red.png"
-            alt="Tech Skips"
-            height={16}
-            style={{ marginLeft: "-4px" }}
-          />
-          <img
-            src="/blue.png"
-            alt="Tech Skips"
-            height={16}
-            style={{
-              marginLeft: "-4px",
-            }}
-          />
+          <IconKeyboard size={16} />
         </Button>
+      )}
 
-        {!isMobileDevice() ? (
-          <Button
-            variant={settings.distanceMode ? "filled" : "light"}
-            size="sm"
-            color={settings.distanceMode ? "orange" : "gray"}
-            px={8}
-            onClick={handlers.toggleDistanceMode}
-          >
-            <IconRuler2 size={16} />
-          </Button>
-        ) : undefined}
+      <Button
+        variant={settings.overlaysEnabled ? "filled" : "light"}
+        size="sm"
+        color={settings.overlaysEnabled ? "blue" : "gray"}
+        px={8}
+        onClick={handlers.toggleOverlays}
+      >
+        <svg
+          width="16"
+          height="18"
+          viewBox="0 0 16 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
+            fill="#3b82f6"
+            stroke="#3b82f6"
+            strokeWidth="1.5"
+            strokeLinejoin="miter"
+          />
+        </svg>
+      </Button>
+    </>
+  );
+}
 
-        {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
-          <Button
-            variant={settings.showPDSLayer ? "filled" : "light"}
-            size="sm"
-            color={settings.showPDSLayer ? "blue" : "gray"}
-            px={8}
-            onClick={handlers.togglePdsMode}
-          >
-            <img src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
-          </Button>
-        )}
+type DiscordLinksProps = {
+  game: ReturnType<typeof useGameData>;
+};
 
-        {!isMobileDevice() && (
-          <Button
-            variant="light"
-            size="sm"
-            color="gray"
-            style={{ height: "36px", minWidth: "36px" }}
-            px={8}
-            onClick={() => handlers.setSettingsModalOpened(true)}
-          >
-            <IconSettings size={16} />
-          </Button>
-        )}
-        {!isMobileDevice() && (
-          <Button
-            variant="light"
-            size="sm"
-            color="gray"
-            h={36}
-            w={36}
-            px={8}
-            onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
-          >
-            <IconKeyboard size={16} />
-          </Button>
-        )}
-
+function DiscordLinks({ game }: DiscordLinksProps) {
+  return (
+    <>
+      {game?.actionsJumpLink && (
         <Button
-          variant={settings.overlaysEnabled ? "filled" : "light"}
-          size="sm"
-          color={settings.overlaysEnabled ? "blue" : "gray"}
-          px={8}
-          onClick={handlers.toggleOverlays}
+          component="a"
+          href={game.actionsJumpLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          size="compact-xs"
+          leftSection={<IconHash size={14} />}
+          px={6}
+          className={classes.discordButton}
         >
-          <svg
-            width="16"
-            height="18"
-            viewBox="0 0 16 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
-              fill="#3b82f6"
-              stroke="#3b82f6"
-              strokeWidth="1.5"
-              strokeLinejoin="miter"
-            />
-          </svg>
+          actions
         </Button>
+      )}
+      {game?.tableTalkJumpLink && (
+        <Button
+          component="a"
+          href={game.tableTalkJumpLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          size="compact-xs"
+          leftSection={<IconHash size={14} />}
+          px={6}
+          className={classes.discordButton}
+        >
+          table-talk
+        </Button>
+      )}
+    </>
+  );
+}
+
+function DesktopTabsControls({
+  settings,
+  handlers,
+  game,
+  setThemeName,
+}: {
+  settings: SettingsStore["settings"];
+  handlers: SettingsStore["handlers"];
+  game: ReturnType<typeof useGameData>;
+  setThemeName: SettingsStore["handlers"]["setThemeName"];
+}) {
+  return (
+    <>
+      <Group gap={4} pl={8} pb={4}>
+        <ControlButtons settings={settings} handlers={handlers} game={game} />
       </Group>
 
       <div style={{ flex: 1 }} />
-      {/* Discord channel links */}
 
       <Group gap={4} mr={12}>
-        {game?.actionsJumpLink && (
-          <Button
-            component="a"
-            href={game.actionsJumpLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="compact-xs"
-            leftSection={<IconHash size={14} />}
-            px={6}
-            className={classes.discordButton}
-          >
-            actions
-          </Button>
-        )}
-        {game?.tableTalkJumpLink && (
-          <Button
-            component="a"
-            href={game.tableTalkJumpLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="compact-xs"
-            leftSection={<IconHash size={14} />}
-            px={6}
-            className={classes.discordButton}
-          >
-            table-talk
-          </Button>
-        )}
+        <DiscordLinks game={game} />
       </Group>
 
-      {/* Theme swatches (hidden on mobile) */}
       {!isMobileDevice() && (
         <Box
           style={{ display: "flex", gap: 10, marginLeft: 10, marginRight: 30 }}
@@ -236,6 +277,76 @@ export function TabsControls() {
               }}
             />
           ))}
+        </Box>
+      )}
+    </>
+  );
+}
+
+function MobileTabsControls({
+  settings,
+  handlers,
+  game,
+  onMenuClick,
+}: {
+  settings: SettingsStore["settings"];
+  handlers: SettingsStore["handlers"];
+  game: ReturnType<typeof useGameData>;
+  onMenuClick: () => void;
+}) {
+  return (
+    <>
+      {/* Row 1: Control buttons + hamburger */}
+      <Group gap={4} px={8} pb={4} style={{ width: "100%" }}>
+        <ControlButtons
+          settings={settings}
+          handlers={handlers}
+          game={game}
+          showDistanceButton={false}
+        />
+        <div style={{ flex: 1 }} />
+        <ActionIcon
+          size="lg"
+          variant="filled"
+          color="blue"
+          onClick={onMenuClick}
+          style={{ marginLeft: 4 }}
+        >
+          <IconMenu2 size={20} />
+        </ActionIcon>
+      </Group>
+      {/* Row 2: Discord links */}
+      <Group gap={4} px={8} pb={4} style={{ width: "100%" }}>
+        <DiscordLinks game={game} />
+      </Group>
+    </>
+  );
+}
+
+export function TabsControls({ onMenuClick }: TabsControlsProps) {
+  const game = useGameData();
+  const settings = useSettingsStore((state) => state.settings);
+  const handlers = useSettingsStore((state) => state.handlers);
+  const setThemeName = useSettingsStore((state) => state.handlers.setThemeName);
+
+  return (
+    <>
+      <Box visibleFrom="sm" style={{ display: "contents" }}>
+        <DesktopTabsControls
+          settings={settings}
+          handlers={handlers}
+          game={game}
+          setThemeName={setThemeName}
+        />
+      </Box>
+      {onMenuClick && (
+        <Box hiddenFrom="sm" style={{ display: "contents" }}>
+          <MobileTabsControls
+            settings={settings}
+            handlers={handlers}
+            game={game}
+            onMenuClick={onMenuClick}
+          />
         </Box>
       )}
     </>

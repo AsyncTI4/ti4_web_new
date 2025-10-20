@@ -142,7 +142,7 @@ export function PannableMapView({ gameId }: Props) {
     handleTileHover,
     handlePathIndexChange,
   } = useDistanceRendering({
-    distanceMode: settings.distanceMode,
+    distanceMode: isMobileDevice() ? false : settings.distanceMode,
     mapTiles: gameData?.mapTiles || [],
   });
 
@@ -393,6 +393,7 @@ export function PannableMapView({ gameId }: Props) {
             ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
             ...areaStyles,
             padding: "0px 8px",
+            marginBottom: "240px",
           }}
         >
           {gameData?.playerData

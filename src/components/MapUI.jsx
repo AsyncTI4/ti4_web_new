@@ -51,7 +51,7 @@ function MapUI({
               onShowNewUI?.();
             }}
           >
-            GO TO NEW UI
+            NEW UI
           </Button>
         </Group>
       </AppShell.Header>

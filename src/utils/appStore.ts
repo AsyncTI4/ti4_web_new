@@ -336,7 +336,7 @@ type SettingsHandlers = {
   setMapViewPreference: (preference: MapViewPreference) => void;
 };
 
-type SettingsStore = {
+export type SettingsStore = {
   settings: Settings;
   handlers: SettingsHandlers;
 
