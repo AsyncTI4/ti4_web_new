@@ -32,7 +32,6 @@ import ZoomControls from "@/components/ZoomControls";
 import { ScoreTracker } from "@/components/Objectives";
 import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
-import PlayerCardHorizontal from "@/components/PlayerCardHorizontal";
 import {
   shouldHideZoomControls,
   computeMapZoom,
@@ -229,11 +228,6 @@ export function PannableMapView({ gameId }: Props) {
     };
   }, [gameData?.mapTiles, settings.isFirefox, zoom]);
 
-  const PlayerCardComponent =
-    isMobileDevice() || playerCardLayout === "grid"
-      ? PlayerCardMobile
-      : PlayerCardHorizontal;
-
   const areaStyles = isMobileDevice()
     ? {
         width: "1300px",
@@ -340,7 +334,9 @@ export function PannableMapView({ gameId }: Props) {
               <Box className={secretHandClasses.pannableWrapper}>
                 <SecretHand
                   isCollapsed={isSecretHandCollapsed}
-                  onToggle={() => setIsSecretHandCollapsed(!isSecretHandCollapsed)}
+                  onToggle={() =>
+                    setIsSecretHandCollapsed(!isSecretHandCollapsed)
+                  }
                   handData={handData}
                   isLoading={isHandLoading}
                   error={handError}
@@ -406,7 +402,7 @@ export function PannableMapView({ gameId }: Props) {
                 key={player.color}
                 span={playerCardLayout === "grid" ? 6 : 12}
               >
-                <PlayerCardComponent playerData={player} />
+                <PlayerCardMobile playerData={player} />
               </Grid.Col>
             ))}
         </Grid>

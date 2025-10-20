@@ -5,7 +5,6 @@ import { getFactionImage } from "@/lookup/factions";
 
 type Props = {
   faction: string;
-
   size?: number;
   className?: string;
 };

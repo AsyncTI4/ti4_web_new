@@ -144,6 +144,9 @@
     --movement-banner-glow: rgba(255, 0, 170, 0.6);
     --movement-banner-title-color: rgba(255, 255, 255, 0.98);
     --movement-banner-accent-color: rgba(255, 0, 170, 0.95);
+
+    /* Resource/Influence Display */
+    --resource-divider-color: rgba(255, 0, 170, 0.35);
 }
 
 

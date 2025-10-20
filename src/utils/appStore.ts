@@ -66,8 +66,22 @@ export function saveSettingsToStorage(settings: Settings) {
 function loadThemeFromStorage(): Settings["themeName"] {
   try {
     const raw = localStorage.getItem(THEME_STORAGE_KEY);
+
+    // Migration: Replace deprecated themes with their replacements
+    // 'bluetheme' -> 'midnightbluetheme' (deprecated, removed)
+    // 'slatetheme' -> 'midnightgraytheme' (deprecated, removed)
+    if (raw === "bluetheme") {
+      const migrated = "midnightbluetheme";
+      localStorage.setItem(THEME_STORAGE_KEY, migrated);
+      return migrated;
+    }
+    if (raw === "slatetheme") {
+      const migrated = "midnightgraytheme";
+      localStorage.setItem(THEME_STORAGE_KEY, migrated);
+      return migrated;
+    }
+
     const validThemes = new Set<Settings["themeName"]>([
-      "bluetheme",
       "midnightbluetheme",
       "midnighttheme",
       "midnightgraytheme",
@@ -77,7 +91,6 @@ function loadThemeFromStorage(): Settings["themeName"] {
       "vaporwavetheme",
       "midnightviolettheme",
       "midnightgreentheme",
-      "slatetheme",
     ] as const);
     if (raw && validThemes.has(raw as Settings["themeName"])) {
       return raw as Settings["themeName"];

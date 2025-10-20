@@ -11,13 +11,15 @@
 .caption {
   color: var(--mantine-color-gray-3);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   line-height: 1;
+  font-weight: 600;
 }
 
 .number {
   color: var(--mantine-color-white);
   line-height: 1;
+  letter-spacing: 0.03em;
 }
 
 

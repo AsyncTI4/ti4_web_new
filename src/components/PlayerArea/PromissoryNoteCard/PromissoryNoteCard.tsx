@@ -4,6 +4,7 @@ import { cdnImage } from "../../../data/cdnImage";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import { leaders } from "@/data/leaders";
+import { FactionIcon } from "@/components/shared/FactionIcon";
 
 type Props = {
   promissoryNoteId: string;
@@ -21,9 +22,6 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
     /<color>/g,
     noteData.color || ""
   );
-  const factionIcon = noteData.faction
-    ? cdnImage(`/factions/${noteData.faction}.png`)
-    : undefined;
 
   // Determine if this is an Alliance PN
   const isAlliance =
@@ -49,14 +47,14 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
       }}
     >
       <Image src="/pnicon.png" w={40} />
-      {factionIcon && (
+      {noteData.faction && (
         <Box
           pos="absolute"
           bottom={-4}
           right={-4}
           style={{ background: "rgba(0,0,0,0.5)", borderRadius: 4, padding: 2 }}
         >
-          <Image src={factionIcon} w={18} h={18} />
+          <FactionIcon faction={noteData.faction} w={18} h={18} />
         </Box>
       )}
     </Box>

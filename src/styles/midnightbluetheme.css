@@ -52,4 +52,7 @@
     --movement-banner-glow: rgba(59, 130, 246, 0.6);
     --movement-banner-title-color: rgba(255, 255, 255, 0.96);
     --movement-banner-accent-color: rgba(147, 197, 253, 0.98);
+
+    /* Resource/Influence Display */
+    --resource-divider-color: rgba(49, 57, 71, 0.6);
 }
