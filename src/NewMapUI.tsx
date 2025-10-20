@@ -50,6 +50,7 @@ import {
 import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
+import { NavigationDrawer } from "./components/NavigationDrawer";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -67,6 +68,9 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
   const versionSchema = data?.versionSchema;
+
+  const [drawerOpened, setDrawerOpened] = useState(false);
+  const [activeTab, setActiveTab] = useState("map");
 
   useEffect(() => {
     document.title = `${gameId} - Async TI`;
@@ -89,8 +93,8 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   }
 
   return (
-    <AppShell header={{ height: 60 }}>
-      <AppShell.Header>
+    <AppShell header={{ height: { base: 0, sm: 60 } }}>
+      <AppShell.Header visibleFrom="sm">
         <Group
           align="center"
           h="100%"
@@ -110,7 +114,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               onShowOldUI?.();
             }}
           >
-            GO TO OLD UI
+            OLD UI
           </Button>
         </Group>
       </AppShell.Header>
@@ -118,12 +122,17 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
       <AppShell.Main>
         <Box className={classes.mainBackground}>
           {/* Global Tabs */}
-          <Tabs defaultValue="map" h="calc(100vh - 68px)">
+          <Tabs
+            value={activeTab}
+            onChange={(value) => setActiveTab(value || "map")}
+            h={{ base: "100vh", sm: "calc(100vh - 68px)" }}
+          >
             <Tabs.List className={classes.tabsList}>
               <Tabs.Tab
                 value="map"
                 className={classes.tabsTab}
                 leftSection={<IconMap2 size={16} />}
+                visibleFrom="sm"
               >
                 Map
               </Tabs.Tab>
@@ -140,17 +149,19 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                 value="general"
                 className={classes.tabsTab}
                 leftSection={<IconInfoHexagon size={16} />}
+                visibleFrom="sm"
               >
-                General Area
+                General
               </Tabs.Tab>
               <Tabs.Tab
                 value="players"
                 className={classes.tabsTab}
                 leftSection={<IconUsers size={16} />}
+                visibleFrom="sm"
               >
-                Player Areas
+                Player
               </Tabs.Tab>
-              <TabsControls />
+              <TabsControls onMenuClick={() => setDrawerOpened(true)} />
             </Tabs.List>
 
             {/* Map Tab */}
@@ -213,6 +224,19 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
       <KeyboardShortcutsModal
         opened={settings.keyboardShortcutsModalOpened}
         onClose={() => handlers.setKeyboardShortcutsModalOpened(false)}
+      />
+
+      {/* Navigation Drawer for base breakpoint */}
+      <NavigationDrawer
+        opened={drawerOpened}
+        onClose={() => setDrawerOpened(false)}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        gameId={gameId}
+        activeTabs={activeTabs}
+        onGameChange={changeTab}
+        onRemoveTab={removeTab}
+        onShowOldUI={onShowOldUI}
       />
     </AppShell>
   );
