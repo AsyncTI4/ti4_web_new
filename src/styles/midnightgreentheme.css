@@ -103,6 +103,9 @@
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgb(8, 20, 14) 0%, rgb(12, 38, 26) 100%);
     --details-card-border: 1px solid rgba(16, 185, 129, 0.28);
+
+    /* Resource/Influence Display */
+    --resource-divider-color: rgba(148, 163, 184, 0.3);
   }
 
 

@@ -2456,6 +2456,7 @@ export const abilities: Ability[] = [
     faction: "vyserix",
     permanentEffect:
       "At the end of your turns, you may not have more ground forces on a non-home planet than the greater of its resource or influence values. Place any excess on a planet you control in your home system, or return them to your reinforcements.",
+    source: "balacasi",
   },
   {
     id: "marked_prey",

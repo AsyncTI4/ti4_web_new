@@ -1,12 +1,12 @@
-import { Group, Text, Image, Grid, Stack, Flex } from "@mantine/core";
+import { Group, Text, Grid, Stack, Flex } from "@mantine/core";
 import { PlayerData, Objectives } from "@/data/types";
 import { PlayerColor } from "@/components/PlayerArea/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
-import { useFactionImages } from "@/hooks/useFactionImages";
 import { ObjectiveChip } from "./ObjectiveChip";
 import { cdnImage } from "@/data/cdnImage";
 import { getPromissoryNoteData } from "@/lookup/promissoryNotes";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { FactionIcon } from "@/components/shared/FactionIcon";
 
 type Props = {
   playerData: PlayerData[];
@@ -16,10 +16,7 @@ type Props = {
 export function PlayerScoreSummary({ playerData, objectives }: Props) {
   if (!playerData || !objectives) return null;
 
-  const factionImages = useFactionImages();
   const factionColorMap = useFactionColors();
-  const stage1s = objectives.stage1Objectives;
-  const stage2s = objectives.stage2Objectives;
 
   const sortedPlayers = [...playerData].sort(
     (a, b) => {
@@ -68,8 +65,8 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
 
         return <Group mah={100}>
           <Flex w={"20%"} justify={"space-between"} className={styles.nameBody} gap={8} px={4} align="center">
-            <Image
-              src={factionImages[player.faction!]?.image}
+            <FactionIcon
+              faction={player.faction!}
               alt={player.faction}
               w={26}
               h={26}

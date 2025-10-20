@@ -1,9 +1,9 @@
-import { Paper, Box, Image } from "@mantine/core";
+import { Paper, Box } from "@mantine/core";
 import { generateColorGradient } from "@/lookup/colors";
 import { getPrimaryColorWithOpacity } from "@/lookup/colors";
-import { cdnImage } from "../../data/cdnImage";
 import "../../styles/theme.css";
 import styles from "./PlayerCardBox.module.css";
+import { FactionIcon } from "../shared/FactionIcon";
 
 type Props = {
   color: string;
@@ -45,10 +45,9 @@ export function PlayerCardBox({
         <Box className={styles.factionClip}>
           {showFactionBackground && (
             <Box className={styles.factionBackground}>
-              <Image
-                src={cdnImage(`/factions/${faction}.png`)}
-                alt="faction"
-                w="100%"
+              <FactionIcon
+                faction={faction}
+                fw="100%"
                 h="100%"
                 style={{ objectFit: "contain" }}
               />

@@ -182,12 +182,6 @@ export function TabsControls() {
         >
           {[
             {
-              name: "bluetheme" as const,
-              gradient:
-                "linear-gradient(135deg, rgba(15,23,42,1) 0%, rgba(30,41,59,1) 100%)",
-              highlight: "rgba(59,130,246,1)",
-            },
-            {
               name: "midnightbluetheme" as const,
               gradient:
                 "linear-gradient(135deg, rgba(8,14,33,1) 0%, rgba(20,29,45,1) 100%)",
@@ -210,12 +204,6 @@ export function TabsControls() {
               gradient:
                 "linear-gradient(135deg, rgba(8,20,14,1) 0%, rgba(12,38,26,1) 100%)",
               highlight: "rgba(16,185,129,1)",
-            },
-            {
-              name: "slatetheme" as const,
-              gradient:
-                "linear-gradient(135deg, rgba(18,22,28,1) 0%, rgba(28,32,38,1) 100%)",
-              highlight: "rgba(170,180,194,1)",
             },
             {
               name: "midnightgraytheme" as const,

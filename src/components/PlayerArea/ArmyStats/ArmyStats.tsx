@@ -187,7 +187,7 @@ function MetricRowDual({ iconPath, ground, space }: MetricRowDualProps) {
 
 export function ArmyStats({ stats }: Props) {
   return (
-    <Table horizontalSpacing={8} verticalSpacing={10} className={classes.table}>
+    <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
       <Table.Thead>
         <TopHeaderRow />
       </Table.Thead>

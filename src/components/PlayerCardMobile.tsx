@@ -186,22 +186,10 @@ export default function PlayerCardMobile(props: Props) {
     </SimpleGrid>
   );
 
-  const researchedFactionTechs = factionTechs?.filter(
-    (techId) => !notResearchedFactionTechs.includes(techId)
-  );
-
   return (
     <PlayerCardBox color={color} faction={faction}>
       <Group gap="md" px={4} align="center">
-        <Image
-          src={factionUrl}
-          alt={faction}
-          w={32}
-          h={32}
-          style={{
-            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-          }}
-        />
+        <Image src={factionUrl} alt={faction} w={32} h={32} />
         <Stack gap={0}>
           <Group>
             <Text span c="white" size="lg" ff="heading">
@@ -252,9 +240,6 @@ export default function PlayerCardMobile(props: Props) {
         <Stack gap={4}>
           <Caption size="xs">Faction Techs</Caption>
           <Group gap={2}>
-            {researchedFactionTechs?.map((techId, index) => (
-              <Tech techId={techId} key={index} />
-            ))}
             {notResearchedFactionTechs?.length > 0 &&
               notResearchedFactionTechs.map((techId) => (
                 <Tech techId={techId} key={techId} />

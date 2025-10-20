@@ -1,4 +1,4 @@
-import { Group, Image, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { cdnImage } from "../../../data/cdnImage";
 import {
   useFactionColors,
@@ -6,7 +6,7 @@ import {
 } from "@/hooks/useFactionColors";
 import { FactionColorMap } from "@/context/GameContextProvider";
 import Caption from "@/components/shared/Caption/Caption";
-import { useFactionImages } from "@/hooks/useFactionImages";
+import { FactionIcon } from "@/components/shared/FactionIcon";
 
 type Props = {
   neighbors: string[];
@@ -28,16 +28,14 @@ export function Neighbors({ neighbors }: Props) {
   const factionColorMap = useOriginalFactionColors();
   const neighborFactions = getNeighborFactionIcons(neighbors, factionColorMap);
 
-  const factionImages = useFactionImages();
-
   return (
     <Stack gap={6} pos="relative">
       <Caption size="xs">Neighbors</Caption>
       <Group gap={2}>
         {neighborFactions.map((neighborFaction, index) => (
-          <Image
+          <FactionIcon
             key={index}
-            src={factionImages[neighborFaction!]?.image}
+            faction={neighborFaction!}
             w={24}
             h={24}
             style={{
