@@ -1729,7 +1729,7 @@ export const planets: Planet[] = [
     resources: 0,
     influence: 1,
     planetTypes: ["HAZARDOUS"],
-    techSpecialties: ["PROPULSION"],
+    techSpecialties: null,
     planetLayout: {
       unitHolderName: "cresius",
       resourcesLocation: "TopLeft",
@@ -3796,7 +3796,7 @@ export const planets: Planet[] = [
     techSpecialties: ["WARFARE"],
     legendaryAbilityName: "Aurex Mechanica",
     legendaryAbilityText:
-      "You may exhaust this card when you pass to place 1 unit that matches a unit upgrade technology you own from your reinforcements into a system that contains your ships.",
+      "You may exhaust this card when you pass to place 1 ship that matches a unit upgrade technology you own from your reinforcements into a system that contains your ships.",
     legendaryAbilityFlavourText:
       "The Mechanica have refined their prototyping facilities for generations.",
     planetLayout: {
@@ -8025,6 +8025,7 @@ export const planets: Planet[] = [
     id: "thewatchtower",
     tileId: "117",
     name: "The Watchtower",
+    shortName: "Watchtower",
     aliases: ["watch", "tower", "watchtower", "thewatch", "thewatchtower"],
     resources: 1,
     influence: 1,
@@ -8075,8 +8076,11 @@ export const planets: Planet[] = [
     planetType: "INDUSTRIAL",
     cardImagePath: null,
     techSpecialties: null,
-    legendaryAbilityName: null,
-    legendaryAbilityText: null,
+    legendaryAbilityName: "Orbital Deep Space Observatory",
+    legendaryAbilityText:
+      "After you pass, you may place frontier token in up to 2 systems that do not contain a frontier token or a planet.",
+    legendaryAbilityFlavourText:
+      "The old orbital antenna array was dismissed as derelict space junk by federal agents. Acamar knew better.",
     source: "somno",
   },
   {
@@ -8148,8 +8152,8 @@ export const planets: Planet[] = [
     tileId: "105",
     name: "Tinnes",
     aliases: ["tin", "tiny", "tinnes"],
-    resources: 1,
-    influence: 2,
+    resources: 2,
+    influence: 1,
     planetTypes: ["INDUSTRIAL", "HAZARDOUS"],
     techSpecialties: ["BIOTIC"],
     planetLayout: {

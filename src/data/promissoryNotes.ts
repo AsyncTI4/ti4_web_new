@@ -118,7 +118,7 @@ export const promissoryNotes: PromissoryNote[] = [
     color: "",
     playArea: true,
     source: "balacasi",
-    text: "When you would spend a command token from your strategy pool to resolve the secondary ability of a strategy card other than Politics: Place this card face up in your play area. You may spend an additional command token from your strategy pool to resolve the primary ability of that card instead. At the start of the status phase, return this card to the Obsidian player.",
+    text: "When you would spend a command token from your strategy pool to resolve the secondary ability of a strategy card other than Politics: Place this card face up in your play area. You may spend an additional command token from your strategy pool to resolve the primary ability of that card instead. At the start of the status phase, return this card to the Onyxxa player.",
   },
   {
     alias: "bapnkalo",
@@ -210,7 +210,7 @@ export const promissoryNotes: PromissoryNote[] = [
     playArea: true,
     playImmediately: true,
     source: "eronous",
-    text: "When you gain this card, place it face up in your play area: The Cantokylegance player cannot use their Seamless Integration faction ability against planets you control.  If you activate a system that contains 1 or more of the Cantokylegance player's units, return this card to the Cantokylegance player",
+    text: "During the first round of ground combat, apply +2 to the result of each of your unit's combat rolls. Then, return this card to the Cantokylegance player.",
   },
   {
     alias: "cavalry",

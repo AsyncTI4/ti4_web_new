@@ -22,6 +22,20 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: configure aws credentials (for data download)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::412381764112:role/GithubActionsWebsiteRole
+          role-duration-seconds: 900
+          aws-region: us-east-1
+
+      - name: Download data files from S3
+        run: |
+          echo "Downloading TypeScript data files from S3..."
+          aws s3 sync s3://bot-images-asyncti4.com/web_data/ src/data/ --exclude "*" --include "*.ts"
+          echo "Files downloaded and replaced:"
+          ls -lh src/data/*.ts | awk '{print $9}' | xargs -I {} sh -c 'echo "  [REPLACED] {}"'
+
       - name: Build app
         run: yarn build
 
