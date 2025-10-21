@@ -1,11 +1,18 @@
 /* Leader card styles */
 
 /* Layout components */
-.leaderGroup {
+.leaderWrapper {
   position: relative;
+  overflow: visible;
+  display: flex;
+  width: 100%;
+}
+
+.leaderGroup {
   align-items: center;
   flex-wrap: nowrap;
   min-width: 0;
+  width: 100%;
 }
 
 /* Online status indicator */
@@ -39,8 +46,8 @@
 }
 
 .mobile .leaderImageContainer {
-  width: 12px;
-  height: 18px;
+  width: 30px;
+  height: 29px;
 }
 
 .leaderImage {
@@ -56,10 +63,10 @@
 }
 
 .mobile .leaderImage {
-  width: 20px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
+  top: -3px;
 }
-
 
 .textContainer {
   min-width: 0;
@@ -111,8 +118,8 @@
 /* Lock icon */
 .lockIcon {
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: -8px;
+  right: -2px;
   background: var(--mantine-color-gray-7);
   padding: 4px;
   display: flex;

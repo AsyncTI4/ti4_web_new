@@ -75,8 +75,6 @@ const SystemTileDisplay = ({
         planetCenter = { x, y };
       }
 
-      console.log("systemId key stack", systemId, key, stack);
-
       return [
         // <UnitStack
         //   key={`${systemId}-${key}-stack`}

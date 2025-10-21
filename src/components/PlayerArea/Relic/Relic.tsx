@@ -7,6 +7,7 @@ import { getGradientClasses } from "../gradientClasses";
 import styles from "./Relic.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { IconX } from "@tabler/icons-react";
+import { cdnImage } from "@/data/cdnImage";
 
 type Props = {
   relicId: string;
@@ -23,20 +24,26 @@ export function Relic({ relicId, isExhausted = false }: Props) {
     return null;
   }
 
-  const gradientClasses = getGradientClasses("yellow");
+  const isFake = relicData.isFakeRelic ?? false;
+  const accentColor = isFake ? "grey" : isExhausted ? "bloodOrange" : "yellow";
+  const gradientClasses = getGradientClasses(isFake ? "gray" : "yellow");
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Chip
           className={styles.relicCard}
-          accent={isExhausted ? "bloodOrange" : "yellow"}
+          accent={accentColor}
           onClick={() => setOpened((o) => !o)}
           leftSection={
             <Box className={styles.iconWrapper}>
               <Image
-                src="/relicicon.webp"
-                className={`${gradientClasses.iconFilter} ${styles.icon} ${
+                src={
+                  isFake
+                    ? cdnImage("/tokens/token_frontier.webp")
+                    : "/relicicon.webp"
+                }
+                className={`${isFake ? "" : gradientClasses.iconFilter} ${styles.icon} ${
                   isExhausted ? styles.exhaustedIcon : ""
                 }`}
               />

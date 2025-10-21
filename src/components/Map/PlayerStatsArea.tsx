@@ -27,9 +27,6 @@ export function PlayerStatsArea({
   playerData,
   statTilePositions,
 }: PlayerStatsAreaProps) {
-  if (playerData.faction === "franken19") {
-    console.log("playerdata", playerData);
-  }
   const enhancedData = useGameContext();
   const factionImages = useFactionImages();
   const factionImage = factionImages[faction]?.image;

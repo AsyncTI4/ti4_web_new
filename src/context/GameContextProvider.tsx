@@ -345,19 +345,17 @@ function systemHasTechSkips(
   }
 
   // Check planet attachments for tech skips
-  planets.forEach((planet) => {
-    planet.attachments.forEach((attachment) => {
+  const hasAttachmentTechSkips = planets.some((planet) =>
+    planet.attachments.some((attachment) => {
       const attachmentData = getAttachmentData(attachment);
-      if (
+      return (
         attachmentData?.techSpeciality &&
         attachmentData.techSpeciality.length > 0
-      ) {
-        return true;
-      }
-    });
-  });
+      );
+    })
+  );
 
-  return false;
+  return hasAttachmentTechSkips;
 }
 
 // Check planets, then check space area, otherwise no one faction has control

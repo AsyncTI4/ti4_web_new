@@ -12,6 +12,10 @@ export const Z_INDEX_LAYERS = {
   // Unit type priorities (higher number = higher z-index)
   // Based on actual TI4 unit types from entityZStackPriority
   UNIT_PRIORITIES: {
+    // Special tokens (lower than units)
+    THUNDERS_EDGE: 30, // Thunder's Edge token - renders below other tokens
+
+    // Regular units
     GF: 100, // Ground Forces
     FF: 110, // Fighters
     MF: 120, // Mechs
@@ -37,7 +41,7 @@ export function getUnitZIndex(
     return Z_INDEX_LAYERS.UNIT_BASE + stackIndex;
   }
 
-  const capitalizedUnitType = unitType.toUpperCase();
+  const capitalizedUnitType = unitType.toUpperCase().replace(/_/g, "_");
   const basePriority =
     Z_INDEX_LAYERS.UNIT_PRIORITIES[
       capitalizedUnitType as keyof typeof Z_INDEX_LAYERS.UNIT_PRIORITIES

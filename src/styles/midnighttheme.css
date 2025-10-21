@@ -106,4 +106,10 @@
 
     /* Resource/Influence Display */
     --resource-divider-color: rgba(148, 163, 184, 0.35);
-  }
+
+    /* Unit Upgrade Card */
+    --upgrade-card-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%);
+    --upgrade-card-border: 1px solid rgba(59, 130, 246, 0.25);
+    --upgrade-card-text-color: rgba(147, 197, 253, 0.9);
+    --upgrade-card-icon-color: rgba(96, 165, 250, 0.8);
+}

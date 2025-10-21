@@ -38,18 +38,9 @@ export function Nombox({ capturedUnits }: Props) {
     <Surface
       className={styles.nombox}
       p="md"
-      pattern="grid"
       label="CAPTURED"
       labelColor="red.3"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, rgba(239, 68, 68, 0.015) 50%, rgba(239, 68, 68, 0.01) 100%)",
-        border: "1px solid rgba(239, 68, 68, 0.18)",
-        height: "100%",
-      }}
     >
-      <Box className={styles.patternOverlay} />
-      <Box className={styles.redGlow} />
       <Group
         gap="lg"
         pos="relative"

@@ -1,5 +1,9 @@
 .nombox {
   position: relative;
+  height: 100%;
+  background:
+          linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, rgba(239, 68, 68, 0.015) 50%, rgba(239, 68, 68, 0.01) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.18);
 }
 
 .capturedContainer {
@@ -98,28 +102,6 @@
   opacity: 0.95;
 }
 
-.patternOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    linear-gradient(rgba(239, 68, 68, 0.0125) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(239, 68, 68, 0.0125) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
-}
-
-.redGlow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.02) 0%, transparent 70%);
-  pointer-events: none;
-}
 
 .popoverDropdown {
   padding: 0;
