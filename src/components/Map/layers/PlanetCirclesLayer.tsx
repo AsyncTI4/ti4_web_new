@@ -1,9 +1,9 @@
 import React from "react";
 import classes from "../MapTile.module.css";
 import { getPlanetCoordsBySystemId, getPlanetById, getPlanetsByTileId } from "@/lookup/planets";
-import { MapTileType, Planet } from "@/data/types";
+import { MapTileType } from "@/data/types";
 import { useSettingsStore } from "@/utils/appStore";
-import { rgba } from "@mantine/core";
+import { getAttachmentData } from "@/lookup/attachments";
 
 type Props = {
   systemId: string;
@@ -27,6 +27,9 @@ export function PlanetCirclesLayer({
 
   const planetTypesMode = useSettingsStore(
     (state) => state.settings.planetTypesMode
+  );
+  const techSkipsMode = useSettingsStore(
+    (state) => state.settings.techSkipsMode
   );
   const planetsById = getPlanetsByTileId(mapTile.systemId);
 
@@ -73,11 +76,9 @@ export function PlanetCirclesLayer({
 
     const [x, y] = planetCoords[planetId].split(",").map(Number);
     const planet = getPlanetById(planetId);
-    const planetTypeStyles = getPlanetBackdropStyles(planetsById.find((planet) => cleanPlanetName(planet.name) === cleanPlanetName(planetTile.name)));
-
+    
     const isLegendary = planet?.legendaryAbilityName || planet?.legendaryAbilityText;
     const isMecatolRex = planetId === "mr";
-
 
     let radius = 60;
     if (isMecatolRex) {
@@ -94,17 +95,49 @@ export function PlanetCirclesLayer({
         }
         : {};
 
+    const techSpecialties = (() => {
+      const specs: string[] = [];
+      if (planet?.techSpecialties) {
+        specs.push(...planet.techSpecialties);
+      }
+      const planetTileData = mapTile.planets?.find(p => p.name === planetId);
+      if (planetTileData?.attachments) {
+        planetTileData.attachments.forEach(attachmentId => {
+          const attachmentData = getAttachmentData(attachmentId);
+          if (attachmentData?.techSpeciality) {
+            specs.push(...attachmentData.techSpeciality);
+          }
+        });
+      }
+      return specs;
+    })();
+
+    const glowClassName = (() => {
+      if (techSkipsMode && techSpecialties.length > 0) {
+        return techSpecialties[0]?.toLowerCase();
+      }
+      if (planetTypesMode && planet?.planetType) {
+        return planet.planetType.toLowerCase();
+      }
+      return undefined;
+    })();
+
+    const glowStyle = glowClassName ? {
+      background: `radial-gradient(circle, transparent 30%, var(--glow-color-dark) 50%, var(--glow-color-mid) 70%, transparent 100%)`,
+      boxShadow: `0 0 8px 4px var(--rim-color-bright), 0 0 15px var(--rim-color-base), inset 0 0 8px 2px var(--rim-color-inner), 0 0 2px 1px rgba(0, 0, 0, 0.8)`,
+    } : {};
+
     return [
       <div
         key={`${systemId}-${planetId}-circle`}
-        className={classes.planetCircle}
+        className={`${classes.planetCircle} ${glowClassName ? classes[glowClassName] || '' : ''}`}
         style={{
           position: 'absolute',
           left: `${x}px`,
           top: `${y}px`,
           width: `${diameter}px`,
           height: `${diameter}px`,
-          backgroundColor: `${planetTypesMode ? planetTypeStyles : ""}`,
+          ...glowStyle,
           ...exhaustedBackdropFilter
         }}
         onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
@@ -115,19 +148,4 @@ export function PlanetCirclesLayer({
   });
 
   return <>{circles}</>;
-}
-
-function getPlanetBackdropStyles(planet: Planet | undefined) {
-  if (!planet) return "";
-
-  switch (planet.planetType) {
-    case "CULTURAL":
-      return "rgba(0, 123, 255, 0.8)";
-    case "HAZARDOUS":
-      return "rgba(220, 38, 38, 0.8)";
-    case "INDUSTRIAL":
-      return "rgba(34, 197, 94, 0.8)";
-    default:
-      return "";
-  }
 }

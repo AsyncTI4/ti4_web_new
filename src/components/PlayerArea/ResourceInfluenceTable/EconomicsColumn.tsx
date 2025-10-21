@@ -40,6 +40,7 @@ type Props = {
   totalInfluence: number;
   currentFlex?: number;
   totalFlex?: number;
+  showTotal?: boolean;
   showFlex?: boolean;
 };
 
@@ -50,6 +51,7 @@ export function EconomicsColumn({
   totalInfluence,
   currentFlex,
   totalFlex,
+  showTotal = true,
   showFlex = false,
 }: Props) {
   // Calculate max digits for alignment
@@ -121,51 +123,58 @@ export function EconomicsColumn({
         </div>
       )}
 
-      <Divider
-        size="xs"
-        style={{
-          width: "60%",
-          alignSelf: "center",
-          borderColor:
-            "var(--resource-divider-color, rgba(148, 163, 184, 0.3))",
-        }}
-      />
-
-      <Group gap={4} align="baseline" wrap="nowrap">
-        <div style={{ width: 18 }} />
-        <StatMono
-          size="lg"
-          fw={700}
-          c="gray.3"
-          style={{ lineHeight: 1, minWidth: currentWidth, textAlign: "right" }}
-        >
-          {padNumber(
-            currentResources +
-              currentInfluence +
-              (showFlex && currentFlex !== undefined ? currentFlex : 0)
-          )}
-        </StatMono>
-        <StatMono
+      {showTotal && (
+        <Divider
           size="xs"
-          c="gray.5"
-          fw={500}
-          style={{ lineHeight: 1, width: "1ch" }}
-        >
-          /
-        </StatMono>
-        <StatMono
-          size="xs"
-          c="gray.5"
-          fw={500}
-          style={{ lineHeight: 1, minWidth: totalWidth, textAlign: "right" }}
-        >
-          {Math.floor(
-            totalResources +
-              totalInfluence +
-              (showFlex && totalFlex !== undefined ? totalFlex : 0)
-          )}
-        </StatMono>
-      </Group>
+          style={{
+            width: "60%",
+            alignSelf: "center",
+            borderColor:
+              "var(--resource-divider-color, rgba(148, 163, 184, 0.3))",
+          }}
+        />
+      )}
+      {showTotal && (
+        <Group gap={4} align="baseline" wrap="nowrap">
+          <div style={{ width: 18 }} />
+          <StatMono
+            size="lg"
+            fw={700}
+            c="gray.3"
+            style={{
+              lineHeight: 1,
+              minWidth: currentWidth,
+              textAlign: "right",
+            }}
+          >
+            {padNumber(
+              currentResources +
+                currentInfluence +
+                (showFlex && currentFlex !== undefined ? currentFlex : 0)
+            )}
+          </StatMono>
+          <StatMono
+            size="xs"
+            c="gray.5"
+            fw={500}
+            style={{ lineHeight: 1, width: "1ch" }}
+          >
+            /
+          </StatMono>
+          <StatMono
+            size="xs"
+            c="gray.5"
+            fw={500}
+            style={{ lineHeight: 1, minWidth: totalWidth, textAlign: "right" }}
+          >
+            {Math.floor(
+              totalResources +
+                totalInfluence +
+                (showFlex && totalFlex !== undefined ? totalFlex : 0)
+            )}
+          </StatMono>
+        </Group>
+      )}
     </Stack>
   );
 }

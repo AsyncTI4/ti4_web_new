@@ -1,6 +1,7 @@
 import { Stack, Text, Image, Divider } from "@mantine/core";
 import { getRelicData } from "../../../lookup/relics";
 import { DetailsCard } from "@/components/shared/DetailsCard";
+import { cdnImage } from "@/data/cdnImage";
 
 type Props = {
   relicId: string;
@@ -14,14 +15,17 @@ export function RelicCard({ relicId }: Props) {
     return null;
   }
 
-  const renderRelicIcon = () => <Image src="/relicicon.webp" w={50} h={50} />;
+  const isFake = relicData.isFakeRelic ?? false;
+  const cardColor = isFake ? "gray" : "orange";
+  const iconSrc = isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp";
+  const renderRelicIcon = () => <Image src={iconSrc} w={50} h={50} />;
 
   return (
-    <DetailsCard width={320} color="orange">
+    <DetailsCard width={320} color={cardColor}>
       <Stack gap="md">
         <DetailsCard.Title
           title={relicData.name}
-          subtitle="Relic"
+          subtitle={isFake ? "Frontier Explore" : "Relic"}
           icon={<DetailsCard.Icon icon={renderRelicIcon()} />}
         />
 
@@ -38,7 +42,7 @@ export function RelicCard({ relicId }: Props) {
         <Divider c="gray.7" opacity={0.8} />
 
         {/* Bespoke flavor text */}
-        <Text size="sm" c="orange.3" fs="italic" lh={1.5}>
+        <Text size="sm" c={isFake ? "gray.3" : "orange.3"} fs="italic" lh={1.5}>
           {relicData.flavourText}
         </Text>
       </Stack>

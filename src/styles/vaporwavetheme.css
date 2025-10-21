@@ -147,6 +147,12 @@
 
     /* Resource/Influence Display */
     --resource-divider-color: rgba(255, 0, 170, 0.35);
+
+    /* Unit Upgrade Card */
+    --upgrade-card-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.08) 0%, rgba(0, 240, 255, 0.06) 100%);
+    --upgrade-card-border: 1px solid rgba(0, 240, 255, 0.28);
+    --upgrade-card-text-color: rgba(232, 121, 249, 0.9);
+    --upgrade-card-icon-color: rgba(167, 243, 208, 0.8);
 }
 
 

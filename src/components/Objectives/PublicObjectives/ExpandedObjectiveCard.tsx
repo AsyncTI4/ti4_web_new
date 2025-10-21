@@ -50,8 +50,12 @@ function ExpandedObjectiveCard({
     }
 
     if (custom) {
-      return objective.scoredFactions.map((faction) => (
-        <CircularFactionIcon key={faction} faction={faction} size={28} />
+      return objective.scoredFactions.map((faction, index) => (
+        <CircularFactionIcon
+          key={`${faction}-${index}`}
+          faction={faction}
+          size={28}
+        />
       ));
     }
 

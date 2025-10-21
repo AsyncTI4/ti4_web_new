@@ -11,7 +11,7 @@ type Props = {
 
 function ExpandedPublicObjectives({ objectives, playerData }: Props) {
   return (
-    <Box>
+    <Box className={styles.themedContainer}>
       <Stack gap="md">
         <Box>
           {/* Stage I Objectives (Orange) */}

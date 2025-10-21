@@ -109,7 +109,7 @@ export default function PlayerCardMobile(props: Props) {
     nombox,
     exhaustedPlanetAbilities,
     notResearchedFactionTechs,
-    factionTechs,
+
     abilities,
   } = props.playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
@@ -236,16 +236,16 @@ export default function PlayerCardMobile(props: Props) {
             })}
           </Group>
         </Stack>
-
-        <Stack gap={4}>
-          <Caption size="xs">Faction Techs</Caption>
-          <Group gap={2}>
-            {notResearchedFactionTechs?.length > 0 &&
-              notResearchedFactionTechs.map((techId) => (
+        {notResearchedFactionTechs?.length > 0 && (
+          <Stack gap={4}>
+            <Caption size="xs">Faction Techs</Caption>
+            <Group gap={2}>
+              {notResearchedFactionTechs.map((techId) => (
                 <Tech techId={techId} key={techId} />
               ))}
-          </Group>
-        </Stack>
+            </Group>
+          </Stack>
+        )}
       </Group>
 
       <Grid gutter="xs" columns={24}>
@@ -277,21 +277,16 @@ export default function PlayerCardMobile(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={14}>
-          <Group align="flex-start">
-            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-            <Group gap={4} wrap="wrap" flex={1}>
-              {planets.map((planetId, index) => {
-                return (
-                  <PlanetCard
-                    key={index}
-                    planetId={planetId}
-                    legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                      planetId
-                    )}
-                  />
-                );
-              })}
-            </Group>
+          <Group gap="xs" align="flex-start">
+            <DynamicTechGrid
+              techs={techs}
+              layout="grid"
+              exhaustedTechs={props.playerData.exhaustedTechs}
+              minSlotsPerColor={4}
+              mobile
+            />
+
+            {UnitsArea}
           </Group>
         </Grid.Col>
 
@@ -320,18 +315,28 @@ export default function PlayerCardMobile(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={24}>
-          <Group gap="xs" align="flex-start">
-            <DynamicTechGrid
-              techs={techs}
-              layout="grid"
-              exhaustedTechs={props.playerData.exhaustedTechs}
-              minSlotsPerColor={4}
-              mobile
-            />
-
-            {UnitsArea}
+          <Group align="flex-start">
+            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+            <Group gap={4} wrap="wrap" flex={1}>
+              {planets.map((planetId, index) => {
+                return (
+                  <PlanetCard
+                    key={index}
+                    planetId={planetId}
+                    legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                      planetId
+                    )}
+                  />
+                );
+              })}
+            </Group>
             {nombox !== undefined && Object.keys(nombox).length > 0 && (
-              <div style={{ minWidth: "200px" }}>
+              <div
+                style={{
+                  minWidth: "200px",
+                  minHeight: "150px",
+                }}
+              >
                 <Nombox capturedUnits={nombox || {}} />
               </div>
             )}

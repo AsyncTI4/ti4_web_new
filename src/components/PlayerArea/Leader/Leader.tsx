@@ -30,34 +30,36 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Chip accent={accentColor} onClick={() => setOpened((o) => !o)}>
-          <Group gap={8} className={styles.leaderGroup}>
-            {showLeaderImage ? (
-              <div className={styles.leaderImageContainer}>
-                <Image
-                  src={`/leaders/${id}.webp`}
-                  className={styles.leaderImage}
-                />
-              </div>
-            ) : undefined}
-            <Stack gap={0} className={styles.textContainer}>
-              <Text
-                className={`${styles.leaderName} ${shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive}`}
-              >
-                {leaderData.name}
-              </Text>
-              <Text
-                className={`${styles.leaderType} ${shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive}`}
-              >
-                {type}
-              </Text>
-            </Stack>
-            {active && <Box className={styles.onlineDot} />}
+          <Box className={styles.leaderWrapper}>
+            <Group gap={8} className={styles.leaderGroup}>
+              {showLeaderImage ? (
+                <div className={styles.leaderImageContainer}>
+                  <Image
+                    src={`/leaders/${id}.webp`}
+                    className={styles.leaderImage}
+                  />
+                </div>
+              ) : undefined}
+              <Stack gap={0} className={styles.textContainer}>
+                <Text
+                  className={`${styles.leaderName} ${shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive}`}
+                >
+                  {leaderData.name}
+                </Text>
+                <Text
+                  className={`${styles.leaderType} ${shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive}`}
+                >
+                  {type}
+                </Text>
+              </Stack>
+              {active && <Box className={styles.onlineDot} />}
+            </Group>
             {locked && (
               <Box className={styles.lockIcon}>
                 <IconLock size={16} color="white" stroke={2.5} />
               </Box>
             )}
-          </Group>
+          </Box>
         </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

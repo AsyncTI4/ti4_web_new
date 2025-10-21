@@ -56,117 +56,16 @@ export function PlanetCard({
     planetData.legendaryAbilityName && planetData.legendaryAbilityText
   );
 
-  if (isLegendary && hasLegendaryAbility) {
-    return (
-      <div
-        className={styles.legendaryWrapper}
-        style={getCSSVariables(cssTypeKey) as React.CSSProperties}
-      >
-        <SmoothPopover opened={opened} onChange={setOpened}>
-          <SmoothPopover.Target>
-            <Stack
-              onClick={() => setOpened((o) => !o)}
-              className={cx(
-                styles.mainStack,
-                isLegendary && styles.legendaryBackground,
-                isLegendary && styles.legendary,
-                styles.planetCard,
-                styles.noRightRadius,
-                isExhausted && styles.exhausted
-              )}
-            >
-              <Box className={styles.planetCardHighlight} />
-
-              {isLegendary && !isExhausted && (
-                <>
-                  <Box className={styles.legendaryConstellation} />
-                  <Box
-                    className={cx(styles.floatingParticle, styles.particle1)}
-                  />
-                  <Box
-                    className={cx(styles.floatingParticle, styles.particle2)}
-                  />
-                  <Box
-                    className={cx(styles.floatingParticle, styles.particle3)}
-                  />
-                  <Box
-                    className={cx(styles.floatingParticle, styles.particle4)}
-                  />
-                  <Box
-                    className={cx(styles.floatingParticle, styles.particle5)}
-                  />
-                </>
-              )}
-
-              <Box
-                className={cx(
-                  styles.topHighlight,
-                  isLegendary && styles.legendary
-                )}
-              />
-
-              <Box className={styles.iconContainer}>
-                <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
-              </Box>
-              <Stack className={styles.bottomStack}>
-                <Group className={styles.nameGroup}>
-                  <Text className={styles.planetName} ff="monospace">
-                    {planetData.shortName ?? planetData.name}
-                  </Text>
-                  <Stack className={styles.valuesStack} align="top">
-                    {allIcons.length > 0 && (
-                      <Stack className={styles.iconsStack}>
-                        {allIcons.map((icon, index) => (
-                          <Box key={index}>{icon}</Box>
-                        ))}
-                      </Stack>
-                    )}
-                    <Box className={styles.valueContainer}>
-                      <Image
-                        src="/pa_resources.png"
-                        className={styles.resourceImage}
-                      />
-                      <Text className={styles.valueText}>{finalResources}</Text>
-                    </Box>
-
-                    <Box className={styles.valueContainer}>
-                      <Box className={styles.influenceIconContainer}>
-                        <InfluenceIcon size={18} />
-                      </Box>
-                      <Text className={styles.influenceValueText}>
-                        {finalInfluence}
-                      </Text>
-                    </Box>
-                  </Stack>
-                </Group>
-              </Stack>
-            </Stack>
-          </SmoothPopover.Target>
-          <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-            <PlanetDetailsCard planetId={planetId} planetTile={planetTile} />
-          </SmoothPopover.Dropdown>
-        </SmoothPopover>
-        <PlanetAbilityCard
-          planetId={planetId}
-          abilityName={planetData.legendaryAbilityName!}
-          abilityText={planetData.legendaryAbilityText!}
-          exhausted={legendaryAbilityExhausted}
-          joinedRight
-        />
-      </div>
-    );
-  }
-
-  return (
+  const planetCardContent = (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Stack
           onClick={() => setOpened((o) => !o)}
           className={cx(
             styles.mainStack,
-            styles.planetCard,
             isLegendary && styles.legendaryBackground,
             isLegendary && styles.legendary,
+            hasLegendaryAbility && styles.noRightRadius,
             isExhausted && styles.exhausted
           )}
           style={getCSSVariables(cssTypeKey) as React.CSSProperties}
@@ -184,9 +83,7 @@ export function PlanetCard({
             </>
           )}
 
-          <Box
-            className={cx(styles.topHighlight, isLegendary && styles.legendary)}
-          />
+          <Box className={styles.topHighlight} />
 
           <Box className={styles.iconContainer}>
             <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
@@ -198,11 +95,7 @@ export function PlanetCard({
               </Text>
               <Stack className={styles.valuesStack} align="top">
                 {allIcons.length > 0 && (
-                  <Stack className={styles.iconsStack}>
-                    {allIcons.map((icon, index) => (
-                      <Box key={index}>{icon}</Box>
-                    ))}
-                  </Stack>
+                  <Stack className={styles.iconsStack}>{allIcons}</Stack>
                 )}
                 <Box className={styles.valueContainer}>
                   <Image
@@ -230,6 +123,26 @@ export function PlanetCard({
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );
+
+  if (hasLegendaryAbility) {
+    return (
+      <div
+        className={styles.legendaryWrapper}
+        style={getCSSVariables(cssTypeKey) as React.CSSProperties}
+      >
+        {planetCardContent}
+        <PlanetAbilityCard
+          planetId={planetId}
+          abilityName={planetData.legendaryAbilityName!}
+          abilityText={planetData.legendaryAbilityText!}
+          exhausted={legendaryAbilityExhausted}
+          joinedRight
+        />
+      </div>
+    );
+  }
+
+  return planetCardContent;
 }
 
 function calculateAttachmentModifiers(attachments: string[]) {

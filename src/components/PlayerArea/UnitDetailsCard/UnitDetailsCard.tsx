@@ -3,6 +3,8 @@ import { cdnImage } from "@/data/cdnImage";
 import { getColorAlias } from "@/lookup/colors";
 import { getUnitData } from "@/lookup/units";
 import { DetailsCard } from "@/components/shared/DetailsCard";
+import { getTechData } from "@/lookup/tech";
+import { IconArrowRight } from "@tabler/icons-react";
 
 type Props = {
   unitId: string;
@@ -19,6 +21,16 @@ export function UnitDetailsCard({ unitId, color }: Props) {
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const isFaction = unitData.faction !== undefined;
   const colorAlias = getColorAlias(color);
+
+  const upgradeInfo = !isUpgraded && unitData.upgradesToUnitId ? (() => {
+    const upgradeUnit = getUnitData(unitData.upgradesToUnitId);
+    if (!upgradeUnit || !upgradeUnit.requiredTechId) return null;
+
+    const upgradeTech = getTechData(upgradeUnit.requiredTechId);
+    if (!upgradeTech) return null;
+
+    return { upgradeUnit, upgradeTech };
+  })() : null;
 
   const unitIcon = (
     <Box
@@ -198,6 +210,77 @@ export function UnitDetailsCard({ unitId, color }: Props) {
             </Box>
           }
         />
+
+        {/* Upgrade info for non-upgraded units */}
+        {upgradeInfo && (
+          <>
+            <Divider c="gray.7" opacity={0.8} />
+            <Box
+              p="sm"
+              style={{
+                background: "var(--upgrade-card-bg, linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%))",
+                border: "var(--upgrade-card-border, 1px solid rgba(59, 130, 246, 0.2))",
+                borderRadius: 8,
+              }}
+            >
+              <Stack gap="xs">
+                <Group gap="xs" align="center" justify="space-between" wrap="nowrap">
+                  <Group gap="xs" align="center" wrap="nowrap">
+                    <Text size="xs" fw={600} tt="uppercase" style={{ color: "var(--upgrade-card-text-color, rgba(147, 197, 253, 0.9))" }}>
+                      Upgrades to
+                    </Text>
+                    <IconArrowRight size={14} style={{ color: "var(--upgrade-card-icon-color, rgba(96, 165, 250, 0.8))" }} />
+                    <Text size="sm" fw={700} c="white">
+                      {upgradeInfo.upgradeUnit.name}
+                    </Text>
+                  </Group>
+                  {upgradeInfo.upgradeTech.requirements && (
+                    <Group gap={4}>
+                      {upgradeInfo.upgradeTech.requirements.split("").map((char, i) => {
+                        const iconMap: Record<string, string> = {
+                          B: "/blue.png",
+                          G: "/green.png",
+                          R: "/red.png",
+                          Y: "/yellow.png",
+                        };
+                        const src = iconMap[char];
+                        if (!src) return null;
+                        return (
+                          <Image
+                            key={`${char}-${i}`}
+                            src={src}
+                            alt={`${char} prerequisite`}
+                            w={14}
+                            h={14}
+                          />
+                        );
+                      })}
+                    </Group>
+                  )}
+                </Group>
+                {upgradeInfo.upgradeUnit.ability && (
+                  <Text size="xs" c="gray.3" style={{ whiteSpace: "pre-line" }}>
+                    {upgradeInfo.upgradeUnit.ability}
+                  </Text>
+                )}
+                <Divider c="gray.7" opacity={0.4} />
+                <Group gap={4} justify="space-between">
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase">Cost</Text>
+                  <Text size="xs" fw={600} c="white">{upgradeInfo.upgradeUnit.cost ?? "—"}</Text>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase">Combat</Text>
+                  <Text size="xs" fw={600} c="white">
+                    {upgradeInfo.upgradeUnit.combatHitsOn ?? "—"}
+                    {upgradeInfo.upgradeUnit.combatDieCount && upgradeInfo.upgradeUnit.combatDieCount > 1 && ` (x${upgradeInfo.upgradeUnit.combatDieCount})`}
+                  </Text>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase">Move</Text>
+                  <Text size="xs" fw={600} c="white">{upgradeInfo.upgradeUnit.moveValue ?? "—"}</Text>
+                  <Text size="xs" fw={600} c="gray.3" tt="uppercase">Cap</Text>
+                  <Text size="xs" fw={600} c="white">{upgradeInfo.upgradeUnit.capacityValue ?? "—"}</Text>
+                </Group>
+              </Stack>
+            </Box>
+          </>
+        )}
       </Stack>
     </DetailsCard>
   );

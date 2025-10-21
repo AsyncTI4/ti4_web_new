@@ -1,11 +1,11 @@
-import { Text } from "@mantine/core";
+import { Text, BoxProps } from "@mantine/core";
 
 type Props = {
   children: React.ReactNode;
   color?: string;
-};
+} & Omit<BoxProps, "children">;
 
-export function Caption({ children, color = "gray.3" }: Props) {
+export function Caption({ children, color = "gray.3", ...boxProps }: Props) {
   return (
     <Text
       size="xs"
@@ -19,6 +19,7 @@ export function Caption({ children, color = "gray.3" }: Props) {
         fontSize: "10px",
         lineHeight: 1,
       }}
+      {...boxProps}
     >
       {children}
     </Text>
