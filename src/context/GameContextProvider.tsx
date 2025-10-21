@@ -146,6 +146,8 @@ function calculateArmyRankings(playerData: PlayerData[]): Record<string, number>
     const totalValue =
       (player.spaceArmyRes ?? 0) +
       (player.groundArmyRes ?? 0) +
+      (player.spaceArmyHealth ?? 0) +
+      (player.groundArmyHealth ?? 0) +
       (player.spaceArmyCombat ?? 0) +
       (player.groundArmyCombat ?? 0);
     return {
