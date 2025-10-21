@@ -148,8 +148,8 @@ function calculateArmyRankings(
     const totalValue =
       (player.spaceArmyHealth ?? 0) +
       (player.groundArmyHealth ?? 0) +
-      (player.spaceArmyCombat ?? 0) +
-      (player.groundArmyCombat ?? 0);
+      (player.spaceArmyCombat ?? 0) * 2 +
+      (player.groundArmyCombat ?? 0) * 2;
     return {
       faction: player.faction,
       totalValue,
