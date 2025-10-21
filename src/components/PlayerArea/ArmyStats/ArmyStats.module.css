@@ -22,4 +22,14 @@
   letter-spacing: 0.03em;
 }
 
-
+.rankBadge {
+  position: absolute;
+  top: -4px;
+  left: -12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  z-index: 10;
+}

@@ -111,6 +111,12 @@
     --upgrade-card-border: 1px solid rgba(16, 185, 129, 0.25);
     --upgrade-card-text-color: rgba(110, 231, 183, 0.9);
     --upgrade-card-icon-color: rgba(52, 211, 153, 0.8);
+
+    /* Army Rankings */
+    --army-rank-first-color: rgba(255, 215, 0, 0.95);
+    --army-rank-first-glow: rgba(255, 215, 0, 0.4);
+    --army-rank-second-color: rgba(192, 192, 192, 0.9);
+    --army-rank-third-color: rgba(205, 127, 50, 0.85);
 }
 
 

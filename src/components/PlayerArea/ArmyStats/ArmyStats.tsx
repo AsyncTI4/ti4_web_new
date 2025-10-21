@@ -1,5 +1,6 @@
 import { cdnImage } from "../../../data/cdnImage";
-import { Table, Image, Text, Flex } from "@mantine/core";
+import { Table, Image, Text, Flex, Box } from "@mantine/core";
+import { IconTrophy } from "@tabler/icons-react";
 import classes from "./ArmyStats.module.css";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
     spaceArmyCombat: number;
     groundArmyCombat: number;
   };
+  rank?: number;
 };
 
 function formatOneDecimal(value: number): string {
@@ -185,30 +187,61 @@ function MetricRowDual({ iconPath, ground, space }: MetricRowDualProps) {
   );
 }
 
-export function ArmyStats({ stats }: Props) {
+export function ArmyStats({ stats, rank }: Props) {
+  const getRankBadge = () => {
+    if (!rank) return null;
+
+    const rankConfig = {
+      1: { color: "var(--army-rank-first-color)", bg: "rgba(255, 215, 0, 0.12)", border: "rgba(255, 215, 0, 0.3)" },
+      2: { color: "var(--army-rank-second-color)", bg: "rgba(192, 192, 192, 0.12)", border: "rgba(192, 192, 192, 0.3)" },
+      3: { color: "var(--army-rank-third-color)", bg: "rgba(205, 127, 50, 0.12)", border: "rgba(205, 127, 50, 0.3)" },
+      default: { color: "rgba(180, 180, 180, 0.9)", bg: "rgba(20, 20, 20, 0.4)", border: "rgba(80, 80, 80, 0.3)" }
+    };
+
+    const config = rank <= 3
+      ? rankConfig[rank as keyof typeof rankConfig]
+      : rankConfig.default;
+
+    return (
+      <Box className={classes.rankBadge} style={{
+        background: config.bg,
+        border: `1px solid ${config.border}`,
+        boxShadow: `inset 0 1px 0 rgba(255, 255, 255, 0.05)`
+      }}>
+        <IconTrophy size={12} style={{ color: config.color }} />
+        <Text size="xs" fw={700} style={{ color: config.color }}>
+          {rank}
+        </Text>
+      </Box>
+    );
+  };
+
   return (
-    <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
-      <Table.Thead>
-        <TopHeaderRow />
-      </Table.Thead>
-      <Table.Tbody>
-        <MetricRowDual
-          iconPath="/player_area/pa_resources.png"
-          ground={stats.groundArmyRes}
-          space={stats.spaceArmyRes}
-        />
-        <MetricRowDual
-          iconPath="/player_area/pa_health.png"
-          ground={stats.groundArmyHealth}
-          space={stats.spaceArmyHealth}
-        />
-        <MetricRowDual
-          iconPath="/player_area/pa_hit.png"
-          ground={stats.groundArmyCombat}
-          space={stats.spaceArmyCombat}
-        />
-      </Table.Tbody>
-    </Table>
+    <Box style={{ position: "relative" }}>
+      {getRankBadge()}
+      <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
+        <Table.Thead>
+          <TopHeaderRow />
+        </Table.Thead>
+        <Table.Tbody>
+          <MetricRowDual
+            iconPath="/player_area/pa_resources.png"
+            ground={stats.groundArmyRes}
+            space={stats.spaceArmyRes}
+          />
+          <MetricRowDual
+            iconPath="/player_area/pa_health.png"
+            ground={stats.groundArmyHealth}
+            space={stats.spaceArmyHealth}
+          />
+          <MetricRowDual
+            iconPath="/player_area/pa_hit.png"
+            ground={stats.groundArmyCombat}
+            space={stats.spaceArmyCombat}
+          />
+        </Table.Tbody>
+      </Table>
+    </Box>
   );
 }
 
