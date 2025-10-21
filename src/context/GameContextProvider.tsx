@@ -141,15 +141,15 @@ export const EnhancedDataContext = createContext<GameContext | undefined>(
   undefined
 );
 
-function calculateArmyRankings(playerData: PlayerData[]): Record<string, number> {
+function calculateArmyRankings(
+  playerData: PlayerData[]
+): Record<string, number> {
   const armyValues = playerData.map((player) => {
     const totalValue =
-      (player.spaceArmyRes ?? 0) +
-      (player.groundArmyRes ?? 0) +
       (player.spaceArmyHealth ?? 0) +
       (player.groundArmyHealth ?? 0) +
-      (player.spaceArmyCombat ?? 0) * 2 +
-      (player.groundArmyCombat ?? 0) * 2;
+      (player.spaceArmyCombat ?? 0) +
+      (player.groundArmyCombat ?? 0);
     return {
       faction: player.faction,
       totalValue,
