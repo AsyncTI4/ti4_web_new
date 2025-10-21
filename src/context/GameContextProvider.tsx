@@ -65,6 +65,7 @@ type GameData = {
     { faction: string; color: string; count: number; expected: number }[]
   >;
   planetIdToPlanetTile: Record<string, PlanetMapTile>;
+  armyRankings: Record<string, number>;
 
   // Added properties migrated from old enhancedData
   // have not been massaged yet
@@ -140,6 +141,29 @@ export const EnhancedDataContext = createContext<GameContext | undefined>(
   undefined
 );
 
+function calculateArmyRankings(playerData: PlayerData[]): Record<string, number> {
+  const armyValues = playerData.map((player) => {
+    const totalValue =
+      (player.spaceArmyRes ?? 0) +
+      (player.groundArmyRes ?? 0) +
+      (player.spaceArmyCombat ?? 0) +
+      (player.groundArmyCombat ?? 0);
+    return {
+      faction: player.faction,
+      totalValue,
+    };
+  });
+
+  armyValues.sort((a, b) => b.totalValue - a.totalValue);
+
+  const rankings: Record<string, number> = {};
+  armyValues.forEach((item, index) => {
+    rankings[item.faction] = index + 1;
+  });
+
+  return rankings;
+}
+
 export function buildGameContext(
   data: PlayerDataResponse,
   accessibleColors: boolean
@@ -209,6 +233,8 @@ export function buildGameContext(
         }))
       : playerData;
 
+  const armyRankings = calculateArmyRankings(overriddenPlayerData);
+
   return {
     mapTiles,
     tilePositions: data.tilePositions,
@@ -219,6 +245,7 @@ export function buildGameContext(
     dominantPdsFaction,
     pdsByTile,
     planetIdToPlanetTile,
+    armyRankings,
     playerData: overriddenPlayerData,
     objectives: data.objectives,
     lawsInPlay: data.lawsInPlay,

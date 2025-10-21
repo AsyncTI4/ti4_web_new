@@ -37,6 +37,7 @@ import { getFactionImage } from "@/lookup/factions";
 import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 import Caption from "./shared/Caption/Caption";
+import { useGameData } from "@/hooks/useGameContext";
 
 type Props = {
   playerData: PlayerData;
@@ -57,6 +58,9 @@ const unitPriorityOrder = [
 ];
 
 export default function PlayerCardMobile(props: Props) {
+  const gameData = useGameData();
+  const rank = gameData?.armyRankings?.[props.playerData.faction];
+
   const {
     userName,
     faction,
@@ -351,7 +355,7 @@ export default function PlayerCardMobile(props: Props) {
           right: 0,
         }}
       >
-        <ArmyStats stats={armyStats} />
+        <ArmyStats stats={armyStats} rank={rank} />
       </Box>
     </PlayerCardBox>
   );
