@@ -66,17 +66,13 @@ export function PlanetCirclesLayer({
   if (!mapTile?.planets) return [] as React.ReactElement[];
   const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-  function cleanPlanetName(name: string) {
-    return name.toLowerCase().replace(/[^a-zA-Z]/g, '');
-  }
-
   const circles = mapTile.planets.flatMap((planetTile) => {
     const planetId = planetTile.name;
     if (!planetCoords[planetId]) return [];
 
     const [x, y] = planetCoords[planetId].split(",").map(Number);
     const planet = getPlanetById(planetId);
-    
+
     const isLegendary = planet?.legendaryAbilityName || planet?.legendaryAbilityText;
     const isMecatolRex = planetId === "mr";
 

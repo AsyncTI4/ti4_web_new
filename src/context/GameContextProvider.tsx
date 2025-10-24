@@ -84,6 +84,7 @@ type GameData = {
   calculatedTilePositions: ReturnType<typeof calculateTilePositions>;
   tableTalkJumpLink?: PlayerDataResponse["tableTalkJumpLink"];
   actionsJumpLink?: PlayerDataResponse["actionsJumpLink"];
+  playerScoreBreakdowns?: PlayerDataResponse["playerScoreBreakdowns"];
 };
 
 export type GameDataState = {
@@ -263,6 +264,7 @@ export function buildGameContext(
     calculatedTilePositions,
     tableTalkJumpLink: data.tableTalkJumpLink,
     actionsJumpLink: data.actionsJumpLink,
+    playerScoreBreakdowns: data.scoreBreakdowns,
   };
 }
 

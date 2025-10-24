@@ -3,6 +3,7 @@ import type { EntryType, EntryState } from "@/data/types";
 import cx from "clsx";
 import styles from "./ObjectiveChip.module.css";
 import { Tooltip } from "@mantine/core";
+import { shouldShowProgress } from "./utils";
 
 type ObjectiveChipProps = {
   icon?: ReactNode;
@@ -40,6 +41,24 @@ const STATE_CLASS_MAP: Record<EntryState, string> = {
   UNSCORED: styles.unscored,
 };
 
+function getChipClasses(
+  span: number,
+  entryType: EntryType,
+  state: EntryState,
+  losable: boolean,
+  hideLeftBorder: boolean,
+  hideRightBorder: boolean
+): string {
+  return cx(
+    span === 2 ? styles.chipWide : styles.chip,
+    ENTRY_TYPE_CLASS_MAP[entryType],
+    STATE_CLASS_MAP[state],
+    losable && styles.losable,
+    hideLeftBorder && styles.hideLeftBorder,
+    hideRightBorder && styles.hideRightBorder
+  );
+}
+
 export function ObjectiveChip({
   icon,
   entryType = "PO_1",
@@ -54,40 +73,25 @@ export function ObjectiveChip({
   description,
   zIndex,
 }: ObjectiveChipProps) {
-  const isTwoPoint = span === 2;
   const shouldApplyGrayscale = state === "UNSCORED";
+  const showProgress = shouldShowProgress(currentProgress, totalProgress, entryType, state);
 
   const chipContent = (
     <div
-      className={cx(
-        isTwoPoint ? styles.chipWide : styles.chip,
-        ENTRY_TYPE_CLASS_MAP[entryType],
-        STATE_CLASS_MAP[state],
-        losable && styles.losable,
-        hideLeftBorder && styles.hideLeftBorder,
-        hideRightBorder && styles.hideRightBorder
-      )}
+      className={getChipClasses(span, entryType, state, losable, hideLeftBorder, hideRightBorder)}
       style={zIndex !== undefined ? { zIndex } : undefined}
     >
       {icon && (
-        <div
-          className={cx(
-            styles.iconContainer,
-            shouldApplyGrayscale && styles.grayscale
-          )}
-        >
+        <div className={cx(styles.iconContainer, shouldApplyGrayscale && styles.grayscale)}>
           {icon}
         </div>
       )}
       {warningIcon && <div className={styles.warningIcon}>{warningIcon}</div>}
-      {currentProgress !== undefined &&
-        totalProgress !== undefined &&
-        entryType !== "SECRET" &&
-        (state === "QUALIFIES" || state === "POTENTIAL") && (
-          <div className={styles.progress}>
-            {currentProgress}/{totalProgress}
-          </div>
-        )}
+      {showProgress && (
+        <div className={styles.progress}>
+          {currentProgress}/{totalProgress}
+        </div>
+      )}
     </div>
   );
 
