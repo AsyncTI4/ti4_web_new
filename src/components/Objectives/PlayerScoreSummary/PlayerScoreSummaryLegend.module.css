@@ -1,0 +1,52 @@
+.legendContainer {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: rgba(156, 163, 175, 0.9);
+  justify-content: flex-end;
+}
+
+.legendItem {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.legendBox {
+  width: 20px;
+  height: 20px;
+}
+
+.scored {
+  background-color: rgba(234, 179, 8, 0.6);
+}
+
+.qualifies {
+  border: 2px dashed rgba(156, 163, 175, 0.5);
+  background: linear-gradient(
+    to top right,
+    rgba(59, 130, 246, 0.6) 0%,
+    rgba(59, 130, 246, 0.6) 50%,
+    transparent 50%,
+    transparent 100%
+  );
+}
+
+.potential {
+  border: 2px dashed rgba(156, 163, 175, 0.5);
+}
+
+.unscored {
+  border: 2px dashed rgba(107, 114, 128, 0.7);
+}
+
+.losable {
+  background-color: rgba(249, 115, 22, 0.6);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(0, 0, 0, 0.2) 4px,
+    rgba(0, 0, 0, 0.2) 6px
+  );
+}

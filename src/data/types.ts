@@ -237,6 +237,39 @@ type CardPoolData = {
 
 export type { CardPoolData };
 
+export type EntryType =
+  | "PO_1"
+  | "PO_2"
+  | "SECRET"
+  | "CUSTODIAN"
+  | "IMPERIAL"
+  | "CROWN"
+  | "LATVINIA"
+  | "SFTT"
+  | "SHARD"
+  | "STYX"
+  | "AGENDA";
+
+export type EntryState = "SCORED" | "QUALIFIES" | "POTENTIAL" | "UNSCORED";
+
+export type ScoreBreakdownEntry = {
+  type: EntryType;
+  objectiveKey?: string;
+  agendaKey?: string;
+  description: string;
+  state: EntryState;
+  losable: boolean;
+  currentProgress?: number;
+  totalProgress?: number;
+  pointValue: number;
+  tombInPlay?: boolean;
+  canDrawSecret?: boolean;
+};
+
+export type WebScoreBreakdown = {
+  entries: ScoreBreakdownEntry[];
+};
+
 export type PlayerDataResponse = {
   ringCount: number;
   playerData: PlayerData[];
@@ -254,6 +287,7 @@ export type PlayerDataResponse = {
   gameCustomName?: string;
   tableTalkJumpLink?: string;
   actionsJumpLink?: string;
+  scoreBreakdowns?: Record<string, WebScoreBreakdown>;
 };
 
 export type PlayerData = {

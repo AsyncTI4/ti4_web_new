@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  SegmentedControl,
-} from "@mantine/core";
-import { IconRefresh, IconList, IconLayoutGrid } from "@tabler/icons-react";
+import { Box, Button, Grid, Group, Modal, Stack, Text } from "@mantine/core";
+import { IconRefresh } from "@tabler/icons-react";
 import classes from "@/components/MapUI.module.css";
 import { MapTile } from "@/components/Map/MapTile";
 import { PathVisualization } from "@/components/PathVisualization";
@@ -43,6 +34,7 @@ import PlayerCardMobile from "@/components/PlayerCardMobile";
 import { SecretHand } from "@/components/main/SecretHand";
 import { usePlayerHand } from "@/hooks/usePlayerHand";
 import secretHandClasses from "@/components/main/SecretHand/SecretHand.module.css";
+import { PlayerScoreSummary } from "@/components/Objectives/PlayerScoreSummary/PlayerScoreSummary";
 
 const MAP_PADDING = 0;
 
@@ -393,7 +385,6 @@ export function PannableMapView({ gameId }: Props) {
             ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
             ...areaStyles,
             padding: "0px 8px",
-            marginBottom: "240px",
           }}
         >
           {gameData?.playerData
@@ -407,6 +398,16 @@ export function PannableMapView({ gameId }: Props) {
               </Grid.Col>
             ))}
         </Grid>
+
+        {gameData && (
+          <Box px="md" pt="lg">
+            <PlayerScoreSummary
+              playerData={gameData.playerData}
+              objectives={gameData.objectives}
+            />
+          </Box>
+        )}
+        <div style={{ height: "240px", width: "100%" }} />
 
         {/* Reconnect button when disconnected */}
         {gameDataState?.readyState === SocketReadyState.CLOSED && (
