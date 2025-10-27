@@ -400,7 +400,13 @@ export function PannableMapView({ gameId }: Props) {
         </Grid>
 
         {gameData && (
-          <Box px="md" pt="lg">
+          <Box
+            px="md"
+            pt="lg"
+            style={{
+              ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
+            }}
+          >
             <PlayerScoreSummary
               playerData={gameData.playerData}
               objectives={gameData.objectives}
