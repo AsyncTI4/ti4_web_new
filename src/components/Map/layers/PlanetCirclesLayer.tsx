@@ -28,8 +28,7 @@ export function PlanetCirclesLayer({
   const planetTypesMode = useSettingsStore(
     (state) => state.settings.planetTypesMode
   );
-  const d = getPlanetsByTileId(mapTile.systemId);
-  
+  const planetsById = getPlanetsByTileId(mapTile.systemId);
 
   const handlePlanetMouseEnter = React.useCallback(
     (planetId: string, x: number, y: number) => {
@@ -60,75 +59,75 @@ export function PlanetCirclesLayer({
     };
   }, []);
 
-  
-    if (!mapTile?.planets) return [] as React.ReactElement[];
-    const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-  const circles = mapTile.planets.flatMap((planetTile, index) => {
-      const planetId = planetTile.name;
-      if (!planetCoords[planetId]) return [];
-      const [x, y] = planetCoords[planetId].split(",").map(Number);
+  if (!mapTile?.planets) return [] as React.ReactElement[];
+  const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-      const planet = getPlanetById(planetId);
-      const isLegendary =
-        planet?.legendaryAbilityName || planet?.legendaryAbilityText;
-      const isMecatolRex = planetId === "mr";
+  function cleanPlanetName(name: string) {
+    return name.toLowerCase().replace(/[^a-zA-Z]/g, '');
+  }
 
-      let radius = 60;
-      if (isMecatolRex) radius = 120;
-      else if (
-        planetId === "mallice" ||
-        planetId === "lockedmallice" ||
-        planetId === "hexmallice" ||
-        planetId === "hexlockedmallice"
-      ) {
-        radius = 60;
-      } else if (isLegendary) {
-        radius = 100;
-      }
+  const circles = mapTile.planets.flatMap((planetTile) => {
+    const planetId = planetTile.name;
+    if (!planetCoords[planetId]) return [];
 
-      const diameter = radius * 2;
-      const exhaustedBackdropFilter =
-        planetTile.exhausted && showExhaustedPlanets
-          ? {
-            backdropFilter: "brightness(0.7) blur(0px)" as const,
-          }
-          : {};
+    const [x, y] = planetCoords[planetId].split(",").map(Number);
+    const planet = getPlanetById(planetId);
+    const planetTypeStyles = getPlanetBackdropStyles(planetsById.find((planet) => cleanPlanetName(planet.name) === cleanPlanetName(planetTile.name)));
 
-      return [
-        <div
-          key={`${systemId}-${planetId}-circle`}
-          className={classes.planetCircle}
-          style={{
-            position: 'absolute',
-            left: `${x}px`,
-            top: `${y}px`,
-            width: `${diameter}px`,
-            height: `${diameter}px`,
-            backgroundColor: `${planetTypesMode ? getPlanetBackdropStyles(d[index]): ""}`,
-            ...exhaustedBackdropFilter
-          }}
-          onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
-          onMouseLeave={() => handlePlanetMouseLeave(planetId)}
-        />,
-      ];
+    const isLegendary = planet?.legendaryAbilityName || planet?.legendaryAbilityText;
+    const isMecatolRex = planetId === "mr";
+
+
+    let radius = 60;
+    if (isMecatolRex) {
+      radius = 120;
+    } else if (isLegendary && !planetId.includes("mallice")) {
+      radius = 100;
+    }
+
+    const diameter = radius * 2;
+    const exhaustedBackdropFilter =
+      planetTile.exhausted && showExhaustedPlanets
+        ? {
+          backdropFilter: "brightness(0.7) blur(0px)" as const,
+        }
+        : {};
+
+    return [
+      <div
+        key={`${systemId}-${planetId}-circle`}
+        className={classes.planetCircle}
+        style={{
+          position: 'absolute',
+          left: `${x}px`,
+          top: `${y}px`,
+          width: `${diameter}px`,
+          height: `${diameter}px`,
+          backgroundColor: `${planetTypesMode ? planetTypeStyles : ""}`,
+          ...exhaustedBackdropFilter
+        }}
+        onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
+        onMouseLeave={() => handlePlanetMouseLeave(planetId)}
+      />,
+    ];
 
   });
 
   return <>{circles}</>;
 }
 
-  function getPlanetBackdropStyles(planet: Planet | undefined) {
-    if (!planet) return "";
+function getPlanetBackdropStyles(planet: Planet | undefined) {
+  if (!planet) return "";
 
-    switch (planet.planetType) {
-      case "CULTURAL":
-        return "rgba(0, 123, 255, 0.8)";
-      case "HAZARDOUS":
-        return "rgba(220, 38, 38, 0.8)";
-      case "INDUSTRIAL":
-        return "rgba(34, 197, 94, 0.8)";
-      default:
-        return "";
-    }
+  switch (planet.planetType) {
+    case "CULTURAL":
+      return "rgba(0, 123, 255, 0.8)";
+    case "HAZARDOUS":
+      return "rgba(220, 38, 38, 0.8)";
+    case "INDUSTRIAL":
+      return "rgba(34, 197, 94, 0.8)";
+    default:
+      return "";
   }
+}

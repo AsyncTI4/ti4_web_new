@@ -20,7 +20,7 @@ export function TabsControls() {
     <>
       <Group gap={4} pl={8} pb={4}>
         <Button
-          variant="light"
+          variant={settings.planetTypesMode ? "filled" : "light"}
           size="sm"
           color={settings.planetTypesMode ? "cyan" : "gray"}
           style={{ height: "36px", minWidth: "36px" }}
