@@ -16,6 +16,7 @@ import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import { VoidTetherLayer } from "./layers/VoidTetherLayer";
 
 type Props = {
   mapTile: MapTileType;
@@ -176,6 +177,7 @@ export const MapTile = React.memo<Props>(
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
           <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
           <CommodityIndicatorsLayer systemId={systemId} mapTile={mapTile} />
+          <VoidTetherLayer systemId={systemId} mapTile={mapTile} />
           <ProductionIconLayer
             systemId={systemId}
             highestProduction={mapTile.highestProduction}

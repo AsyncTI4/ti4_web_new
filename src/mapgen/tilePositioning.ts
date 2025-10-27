@@ -20,6 +20,33 @@ const TILE_PADDING = 100;
 const RING_MAX_COUNT = 8;
 const RING_MIN_COUNT = 3;
 
+export const HEXAGON_EDGE_MIDPOINTS = [
+  {
+    x: TILE_WIDTH / 2,
+    y: 0,
+  },
+  {
+    x: (7 * TILE_WIDTH) / 8,
+    y: TILE_HEIGHT / 4,
+  },
+  {
+    x: (3 * TILE_WIDTH) / 4,
+    y: (7 * TILE_HEIGHT) / 8,
+  },
+  {
+    x: TILE_WIDTH / 2,
+    y: TILE_HEIGHT,
+  },
+  {
+    x: TILE_WIDTH / 8,
+    y: (3 * TILE_HEIGHT) / 4,
+  },
+  {
+    x: TILE_WIDTH / 8,
+    y: TILE_HEIGHT / 4,
+  },
+];
+
 /**
  * Normalize ring count to valid bounds
  */
