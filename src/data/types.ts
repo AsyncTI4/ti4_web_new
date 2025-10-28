@@ -246,6 +246,14 @@ export type PlayerDataResponse = {
   tilePositions: string[];
   statTilePositions: Record<string, string[]>;
   lawsInPlay: LawInPlay[];
+  expeditions?: {
+    res: string | null,
+    inf: string | null,
+    tg: string | null,
+    ac: string | null,
+    tech: string | null,
+    secret: string | null,
+  };
   strategyCards: StrategyCard[];
   vpsToWin: number;
   objectives: Objectives;
@@ -330,14 +338,6 @@ export type PlayerData = {
   abilities?: string[];
   nekroBT?: string[];
   plots?: Plot[];
-  expeditions: {
-    res: string | null,
-    inf: string | null,
-    tg: string | null,
-    ac: string | null,
-    tech: string | null,
-    secret: string | null,
-  };
   
   // card counts
   soCount: number;
