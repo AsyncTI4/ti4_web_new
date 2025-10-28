@@ -18,6 +18,8 @@ export type TileData = {
   source: string;
   tileBack?: string;
   valid?: boolean;
+  // index 0 is the topmost edge, following clockwise. if the array contains an index, the index has a void tether.
+  voidTethers: (0 | 1 | 2 | 3 | 4 | 5)[];
 };
 
 export type EntityData = {
@@ -326,7 +328,17 @@ export type PlayerData = {
   debtTokens?: Record<string, number>;
   nombox?: CapturedUnitsData;
   abilities?: string[];
-
+  nekroBT?: string[];
+  plots?: Record<string, string[]>;
+  expeditions: {
+    res: string | null,
+    inf: string | null,
+    tg: string | null,
+    ac: string | null,
+    tech: string | null,
+    secret: string | null,
+  };
+  
   // card counts
   soCount: number;
   pnCount: number;
