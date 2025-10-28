@@ -329,7 +329,7 @@ export type PlayerData = {
   nombox?: CapturedUnitsData;
   abilities?: string[];
   nekroBT?: string[];
-  plots?: Record<string, string[]>;
+  plots?: Plot[];
   expeditions: {
     res: string | null,
     inf: string | null,
@@ -404,6 +404,11 @@ export type Planet = {
   spaceCannonHitsOn?: number;
   searchTags?: string[];
 };
+
+export type Plot = {
+  name: string;
+  tokens: string[];
+}
 
 export type Objective = {
   key: string;
