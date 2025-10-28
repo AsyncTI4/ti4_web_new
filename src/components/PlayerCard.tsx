@@ -7,6 +7,7 @@ import {
   Image,
   Flex,
   SimpleGrid,
+  Divider,
 } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
@@ -37,6 +38,7 @@ import FactionAbilitiesTechs from "./PlayerArea/FactionAbilitiesTechs";
 import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
+import Plots from "./Plots";
 
 type Props = {
   playerData: PlayerData;
@@ -306,6 +308,8 @@ export default function PlayerCard(props: Props) {
               knownUnscoredSecrets={knownUnscoredSecrets}
               unscoredSecrets={soCount || 0}
             />
+            <Plots />
+            {/* {plots !== undefined && <Plots />} */}
           </Stack>
         </Grid.Col>
 
@@ -333,7 +337,8 @@ export default function PlayerCard(props: Props) {
           </Group>
         </Grid.Col>
         <FadedDivider orientation="horizontal" />
-
+        <Divider w={"100%"} ff={"text"} fs={"xl"} color="white" size="xs" my="xs" label="BREAKTHROUGH ACHIEVED" labelPosition="center" />
+        
         <Grid.Col
           span={{
             base: 12,

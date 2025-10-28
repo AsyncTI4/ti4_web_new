@@ -23,10 +23,8 @@ export function VoidTetherLayer({ systemId, mapTile }: Props) {
           return [];
 
         const edgeCoords = HEXAGON_EDGE_MIDPOINTS[edge];
-        console.log(mapTile.properties);
-        console.log(edgeCoords);
 
-        const tilee = [
+        return [
           <VoidTetherIndicator
             key={`${systemId}-tether-${edge}`}
             x={edgeCoords.x}
@@ -34,7 +32,6 @@ export function VoidTetherLayer({ systemId, mapTile }: Props) {
             edge={edge}
           />,
         ];
-        return tilee;
       })}
     </>
   );
