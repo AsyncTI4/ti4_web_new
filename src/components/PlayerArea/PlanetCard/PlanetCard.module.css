@@ -227,14 +227,9 @@
 }
 
 .bubble1 { top: 22%; left: 12%; --bubble-duration: 4.8s; --bubble-delay: 0s; }
-.bubble2 { top: 38%; left: 28%; --bubble-duration: 5.4s; --bubble-delay: 1.2s; }
-.bubble3 { top: 54%; left: 48%; --bubble-duration: 6.0s; --bubble-delay: 2.4s; }
-.bubble4 { top: 68%; left: 68%; --bubble-duration: 6.6s; --bubble-delay: 3.6s; }
-.bubble5 { top: 84%; left: 88%; --bubble-duration: 7.2s; --bubble-delay: 4.8s; }
-.bubble6 { top: 28%; left: 20%; --bubble-duration: 7.8s; --bubble-delay: 6.0s; }
-.bubble7 { top: 44%; left: 60%; --bubble-duration: 8.4s; --bubble-delay: 7.2s; }
-.bubble8 { top: 58%; left: 35%; --bubble-duration: 9.0s; --bubble-delay: 8.4s; }
-.bubble9 { top: 76%; left: 18%; --bubble-duration: 9.6s; --bubble-delay: 9.6s; }
+.bubble2 { top: 38%; left: 35%; --bubble-duration: 6.0s; --bubble-delay: 1.5s; }
+.bubble3 { top: 60%; left: 60%; --bubble-duration: 7.2s; --bubble-delay: 3.0s; }
+.bubble4 { top: 80%; left: 25%; --bubble-duration: 8.4s; --bubble-delay: 4.5s; }
 
 /* Planet color variables */
 :root {

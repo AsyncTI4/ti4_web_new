@@ -95,11 +95,6 @@ export function PlanetCard({
               <Box className={cx(styles.bubbleParticle, styles.bubble2)} />
               <Box className={cx(styles.bubbleParticle, styles.bubble3)} />
               <Box className={cx(styles.bubbleParticle, styles.bubble4)} />
-              <Box className={cx(styles.bubbleParticle, styles.bubble5)} />
-              <Box className={cx(styles.bubbleParticle, styles.bubble6)} />
-              <Box className={cx(styles.bubbleParticle, styles.bubble7)} />
-              <Box className={cx(styles.bubbleParticle, styles.bubble8)} />
-              <Box className={cx(styles.bubbleParticle, styles.bubble9)} />
             </>
           )}
 

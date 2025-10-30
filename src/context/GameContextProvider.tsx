@@ -1,6 +1,7 @@
 import {
   calculateSingleTilePosition,
   calculateTilePositions,
+  isFractureInPlay,
 } from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
@@ -288,9 +289,19 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
   if (!data.tileUnitData) return [];
 
   const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
+  // Detect if fracture is in play and set fractureYbump accordingly
+  const fractureYbump = data.tilePositions
+    ? isFractureInPlay(data.tilePositions)
+      ? 400
+      : 0
+    : 0;
   const mapTiles = Object.entries(data.tileUnitData).map(
     ([position, tileData]) => {
-      const coordinates = calculateSingleTilePosition(position, data.ringCount);
+      const coordinates = calculateSingleTilePosition(
+        position,
+        data.ringCount,
+        fractureYbump
+      );
       const { space, tokens } = buildTileSpaceData(tileData);
 
       const systemId = data.tilePositions

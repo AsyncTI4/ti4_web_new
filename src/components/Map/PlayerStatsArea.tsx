@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import { Group, Stack, Text } from "@mantine/core";
-import { calculateTilePositions } from "../../mapgen/tilePositioning";
+import {
+  calculateTilePositions,
+  isFractureInPlay,
+} from "../../mapgen/tilePositioning";
 import { determineOpenSides } from "../../utils/tileAdjacency";
 import { findColorData, getColorValues } from "../../lookup/colors";
 import { cdnImage } from "../../data/cdnImage";
@@ -37,7 +40,8 @@ export function PlayerStatsArea({
 
   if (!enhancedData) return null;
 
-  const { vpsToWin = 10, ringCount = 3 } = enhancedData;
+  const { vpsToWin = 10, ringCount = 3, tilePositions: gameTilePositions } =
+    enhancedData;
   const color = factionColorMap[faction]?.color || playerData.color;
 
   const tilePositions = useMemo(() => {
@@ -45,8 +49,17 @@ export function PlayerStatsArea({
     const statTilePositionsArray = statTilePositions.map(
       (position) => `${position}:stat_${position}`
     );
-    return calculateTilePositions(statTilePositionsArray, ringCount);
-  }, [statTilePositions, ringCount]);
+    // Stat tiles SHOULD be shifted down when fracture is in play (matching Java logic)
+    // Check fracture status from full game tile positions, not just stat tiles
+    const fractureYbump =
+      gameTilePositions && isFractureInPlay(gameTilePositions) ? 400 : 0;
+    const positions = calculateTilePositions(
+      statTilePositionsArray,
+      ringCount,
+      fractureYbump
+    );
+    return positions;
+  }, [statTilePositions, ringCount, gameTilePositions]);
 
   // Determine which sides should be open/closed for borders
   const openSides = useMemo(() => {

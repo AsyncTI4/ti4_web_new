@@ -28,6 +28,19 @@ function normalizeRingCount(ringCount: number): number {
 }
 
 /**
+ * Check if fracture is in play by verifying all 7 fracture positions exist
+ * @param tilePositions Array of strings in format "position:systemId"
+ * @returns true if all fracture positions (frac1-frac7) are present
+ */
+function isFractureInPlay(tilePositions: string[]): boolean {
+  const fracturePositions = ["frac1", "frac2", "frac3", "frac4", "frac5", "frac6", "frac7"];
+  const positionSet = new Set(
+    tilePositions.map((entry) => entry.split(":")[0])
+  );
+  return fracturePositions.every((pos) => positionSet.has(pos));
+}
+
+/**
  * Get base coordinates for a position
  */
 function getBaseCoordinates(position: string): { x: number; y: number } {
@@ -45,7 +58,8 @@ function applyRingAdjustments(
   x: number,
   y: number,
   position: string,
-  ringCount: number
+  ringCount: number,
+  fractureYbump: number = 0
 ): { x: number; y: number } {
   const normalizedRingCount = normalizeRingCount(ringCount);
 
@@ -64,16 +78,23 @@ function applyRingAdjustments(
       y -= 150;
     } else if (lowerPos === "bl") {
       y -= lower * SPACE_FOR_TILE_HEIGHT * 2 - 150;
+      y += fractureYbump;
     } else if (lowerPos === "tr") {
       x -= lower * HORIZONTAL_TILE_SPACING * 2;
       y -= 150;
     } else if (lowerPos === "br") {
       x -= lower * HORIZONTAL_TILE_SPACING * 2;
       y -= lower * SPACE_FOR_TILE_HEIGHT * 2 - 150;
+      y += fractureYbump;
+    } else if (position.startsWith("frac")) {
+      // Fracture positions: special handling matching Java implementation
+      x -= lower * HORIZONTAL_TILE_SPACING;
+      y -= (fractureYbump - 300) / 2; // equals 50 when fractureYbump is 400
     } else {
       // Regular tiles: center the map by reducing coordinates
       x -= lower * HORIZONTAL_TILE_SPACING;
       y -= lower * SPACE_FOR_TILE_HEIGHT;
+      y += fractureYbump;
     }
   }
 
@@ -95,7 +116,8 @@ function applyFinalPadding(x: number, y: number): { x: number; y: number } {
  */
 function calculateSingleTilePosition(
   position: string,
-  ringCount: number = 3
+  ringCount: number = 3,
+  fractureYbump: number = 0
 ): { x: number; y: number } {
   // Step 1: Get base coordinates
   const baseCoords = getBaseCoordinates(position);
@@ -105,7 +127,8 @@ function calculateSingleTilePosition(
     baseCoords.x,
     baseCoords.y,
     position,
-    ringCount
+    ringCount,
+    fractureYbump
   );
 
   // Step 3: Apply final padding
@@ -116,15 +139,31 @@ function calculateSingleTilePosition(
  * Main function: Calculate tile positions from input data
  * @param inputData Array of strings in format "position:systemId"
  * @param ringCount Number of rings in the map (3-8, defaults to 6)
+ * @param fractureYbump Optional fracture Y offset. If not provided, will be detected automatically.
+ *                       Pass 0 explicitly to skip fracture detection (e.g., for stat tiles).
  * @returns Array of tile position objects
  */
 const calculateTilePositions = (
   inputData: string[],
-  ringCount: number = 3
-): TilePosition[] =>
-  inputData.map((entry) => {
+  ringCount: number = 3,
+  fractureYbump?: number
+): TilePosition[] => {
+  // Detect if fracture is in play and set fractureYbump accordingly
+  // Only auto-detect if fractureYbump wasn't explicitly provided
+  const finalFractureYbump =
+    fractureYbump !== undefined
+      ? fractureYbump
+      : isFractureInPlay(inputData)
+      ? 400
+      : 0;
+
+  return inputData.map((entry) => {
     const [position, systemId] = entry.split(":");
-    const coordinates = calculateSingleTilePosition(position, ringCount);
+    const coordinates = calculateSingleTilePosition(
+      position,
+      ringCount,
+      finalFractureYbump
+    );
 
     return {
       systemId,
@@ -133,6 +172,7 @@ const calculateTilePositions = (
       y: coordinates.y,
     };
   });
+};
 
 /**
  * Helper function to get all valid positions
@@ -154,5 +194,6 @@ export {
   getValidPositions,
   isValidPosition,
   normalizeRingCount,
+  isFractureInPlay,
   type TilePosition,
 };

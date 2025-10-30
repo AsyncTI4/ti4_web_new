@@ -109,8 +109,7 @@ export function Plot({ plotCard }: Props) {
                     {displayName}
                   </Text> */}
                   <Text
-                    size="8px"
-                    c="dimmed"
+                    size="xs"
                     ff="monospace"
                     ta="center"
                     style={{ letterSpacing: "0.3px", opacity: 0.7 }}

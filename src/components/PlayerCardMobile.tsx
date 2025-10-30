@@ -376,21 +376,6 @@ export default function PlayerCardMobile(props: Props) {
                   </Group>
                 </>
               )}
-              {plotCards &&
-                Array.isArray(plotCards) &&
-                plotCards.length > 0 && (
-                  <>
-                    <Box ml="xs" />
-                    <Stack gap={4}>
-                      <Caption size="xs">Plots</Caption>
-                      {plotCards.map((plotCard, index) => {
-                        return (
-                          <Plot key={`plot-${index}`} plotCard={plotCard} />
-                        );
-                      })}
-                    </Stack>
-                  </>
-                )}
             </Group>
 
             {nombox !== undefined && Object.keys(nombox).length > 0 && (
@@ -404,6 +389,18 @@ export default function PlayerCardMobile(props: Props) {
               </div>
             )}
           </Group>
+        </Grid.Col>
+        <Grid.Col span={24}>
+          {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (
+            <Stack gap={4} align="flex-start" h="100%">
+              <Caption size="xs">Plots</Caption>
+              <Group gap={4} wrap="wrap" flex={1}>
+                {plotCards.map((plotCard, index) => {
+                  return <Plot key={`plot-${index}`} plotCard={plotCard} />;
+                })}
+              </Group>
+            </Stack>
+          )}
         </Grid.Col>
       </Grid>
 
