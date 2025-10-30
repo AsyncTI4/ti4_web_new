@@ -170,23 +170,9 @@ function calculateArmyRankings(
 }
 
 export function buildGameContext(
-  rawData: PlayerDataResponse,
+  data: PlayerDataResponse,
   accessibleColors: boolean
 ): GameData {
-  const data = {
-    ...rawData,
-    expeditions: {
-      techSkip: {
-        completedBy: "grey",
-      },
-      tradeGoods: { completedBy: "navy" },
-      fiveRes: { completedBy: "yellow" },
-      fiveInf: { completedBy: "grey" },
-      secret: { completedBy: "grey" },
-      actionCards: { completedBy: null },
-    },
-  };
-
   const playerData = data.playerData.filter(
     (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
   );
