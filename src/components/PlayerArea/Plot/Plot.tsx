@@ -94,7 +94,7 @@ export function Plot({ plotCard }: Props) {
                 </Text>
               ) : (
                 <>
-                  <Text
+                  {/* <Text
                     size="10px"
                     fw={600}
                     ta="center"
@@ -107,7 +107,7 @@ export function Plot({ plotCard }: Props) {
                     }}
                   >
                     {displayName}
-                  </Text>
+                  </Text> */}
                   <Text
                     size="8px"
                     c="dimmed"

@@ -383,7 +383,7 @@ export default function PlayerCardMobile(props: Props) {
                     <Box ml="xs" />
                     <Stack gap={4}>
                       <Caption size="xs">Plots</Caption>
-                      {(plotCards as PlotCard[]).map((plotCard, index) => {
+                      {plotCards.map((plotCard, index) => {
                         return (
                           <Plot key={`plot-${index}`} plotCard={plotCard} />
                         );
