@@ -1,12 +1,13 @@
-import { Group, Text, Stack, Box, Image } from "@mantine/core";
-import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { PlayerColor } from "./PlayerArea/PlayerColor";
+import { Stack, Box } from "@mantine/core";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { PlayerData } from "../data/types";
 import { getFactionImage } from "@/lookup/factions";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { ArmyStats } from "./PlayerArea";
 import layout from "./PlayerCardSidebarStrength.module.css";
+import { PlayerCardHeaderCompact } from "./PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
+import { PlayerCardPlanetsArea } from "./PlayerArea/PlayerCardPlanetsArea";
+import { usePlanetEconomics } from "@/hooks/usePlanetEconomics";
 
 type Props = {
   playerData: PlayerData;
@@ -31,92 +32,18 @@ export default function PlayerCardSidebarStrength(props: Props) {
 
   const exhaustedPlanetAbilities =
     props.playerData.exhaustedPlanetAbilities || [];
-
-  // Create planet economics object from pre-calculated values
-  const planetEconomics = {
-    total: {
-      currentResources: props.playerData.resources,
-      totalResources: props.playerData.totResources,
-      currentInfluence: props.playerData.influence,
-      totalInfluence: props.playerData.totInfluence,
-    },
-    optimal: {
-      currentResources: props.playerData.optimalResources,
-      totalResources: props.playerData.totOptimalResources,
-      currentInfluence: props.playerData.optimalInfluence,
-      totalInfluence: props.playerData.totOptimalInfluence,
-    },
-    flex: {
-      currentFlex: props.playerData.flexValue,
-      totalFlex: props.playerData.totFlexValue,
-    },
-  };
+  const planetEconomics = usePlanetEconomics(props.playerData);
 
   return (
     <PlayerCardBox color={color} faction={faction}>
-      <Group
-        gap={4}
-        px={4}
-        w="100%"
-        align="center"
-        wrap="nowrap"
-        justify="space-between"
-        style={{ minWidth: 0 }}
-      >
-        <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
-          {/* Small circular faction icon */}
-          <Image
-            src={factionUrl}
-            alt={faction}
-            w={24}
-            h={24}
-            style={{
-              filter:
-                "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(1.1)",
-              flexShrink: 0,
-            }}
-          />
-          <Text
-            span
-            c="white"
-            size="sm"
-            ff="heading"
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              flexShrink: 0, // Username has lowest priority for truncation
-              minWidth: 0,
-            }}
-          >
-            {userName}
-          </Text>
-          <Text
-            size="xs"
-            span
-            ml={4}
-            opacity={0.9}
-            c="white"
-            ff="heading"
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-              flexShrink: 1, // Faction has medium priority for truncation
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              minWidth: 0,
-            }}
-          >
-            [{faction}]
-          </Text>
-          <Box style={{ flexShrink: 2 }}>
-            {" "}
-            {/* Color has highest priority for truncation/hiding */}
-            <PlayerColor color={color} size="sm" />
-          </Box>
-        </Group>
-      </Group>
+      <PlayerCardHeaderCompact
+        userName={userName}
+        faction={faction}
+        color={color}
+        factionImageUrl={factionUrl}
+        variant="compact"
+        showStrategyCards={false}
+      />
 
       <div className={layout.strengthRow}>
         <div className={layout.box} style={{ flex: "0 0 auto" }}>
@@ -125,15 +52,10 @@ export default function PlayerCardSidebarStrength(props: Props) {
 
         <div className={`${layout.box} ${layout.planetCardsBox}`}>
           <div className={layout.planetCards}>
-            {planets.map((planetId, index) => (
-              <PlanetCard
-                key={index}
-                planetId={planetId}
-                legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                  planetId
-                )}
-              />
-            ))}
+            <PlayerCardPlanetsArea
+              planets={planets}
+              exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+            />
           </div>
         </div>
 

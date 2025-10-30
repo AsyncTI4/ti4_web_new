@@ -1,6 +1,3 @@
-// CSS-first gradient system utilities
-// This provides type-safe helpers for applying global gradient CSS classes
-
 export type ColorKey =
   | "red"
   | "green"
@@ -13,7 +10,6 @@ export type ColorKey =
   | "gray"
   | "grey";
 
-// Helper function to generate gradient class names for global utilities
 export function getGradientClasses(color: ColorKey) {
   const baseClass = `gradient-${color}`;
 
@@ -41,25 +37,25 @@ export function getGradientClasses(color: ColorKey) {
   };
 }
 
-// Helper function for backward compatibility - returns CSS class names instead of inline styles
-export function getGradientConfig(color: ColorKey) {
-  const classes = getGradientClasses(color);
+export type HybridKey =
+  | "blueRed"
+  | "blueGreen"
+  | "blueYellow"
+  | "greenRed"
+  | "greenYellow"
+  | "yellowRed";
 
-  // Return an object that mimics the old structure but with CSS classes
+export function getHybridGradientClasses(combo: HybridKey) {
+  const baseClass = `hybrid-${combo}`;
+
   return {
-    // These return class names instead of CSS values
-    backgroundClass: classes.background,
-    backgroundStrongClass: classes.backgroundStrong,
-    borderClass: classes.border,
-    shadowClass: classes.shadow,
-    accentClass: classes.accent,
-    iconFilterClass: classes.iconFilter,
-    innerGlowClass: classes.innerGlow,
-    patternClass: classes.pattern,
-    leftBorderClass: classes.leftBorder,
-    shimmerClass: classes.shimmer,
+    // Hybrid two-sided utilities
+    background: `${baseClass}-bg`,
+    backgroundStrong: `${baseClass}-bg-strong`,
+    border: `${baseClass}-border`,
+    shimmer: `${baseClass}-shimmer`,
 
-    // For components that need the base color class
-    colorClass: classes.color,
+    // Shimmer container utility (affects ::before)
+    shimmerContainer: `shimmer-container ${baseClass}`,
   };
 }

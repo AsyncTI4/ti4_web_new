@@ -1,0 +1,2 @@
+export { PlayerCardPlanetsArea } from "./PlayerCardPlanetsArea";
+

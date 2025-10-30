@@ -34,6 +34,20 @@ export const tokens: Token[] = [
     source: "ds",
   },
   {
+    id: "breachactive",
+    imagePath: "token_breachActive.png",
+    spaceOrPlanet: "space",
+    aliasList: ["breachactive", "token_breachactive"],
+    source: "thunders_edge",
+  },
+  {
+    id: "breachinactive",
+    imagePath: "token_breachInactive.png",
+    spaceOrPlanet: "space",
+    aliasList: ["breachinactive", "token_breachinactive"],
+    source: "thunders_edge",
+  },
+  {
     id: "consulate",
     imagePath: "token_consulate.png",
     spaceOrPlanet: "planet",
@@ -250,6 +264,13 @@ export const tokens: Token[] = [
     source: "other",
   },
   {
+    id: "ingress",
+    imagePath: "token_ingress.png",
+    spaceOrPlanet: "space",
+    aliasList: ["ingress", "token_ingress"],
+    source: "thunders_edge",
+  },
+  {
     id: "installation",
     imagePath: "token_installation.png",
     source: "asteroid",
@@ -294,6 +315,13 @@ export const tokens: Token[] = [
     tokenPlanetName: "phantasm",
     aliasList: ["phantasm", "token_phantasm"],
     source: "other",
+  },
+  {
+    id: "relictoken",
+    imagePath: "token_relictoken.png",
+    spaceOrPlanet: "planet",
+    aliasList: ["relic", "token_relic", "relictoken", "token_relictoken"],
+    source: "thunders_edge",
   },
   {
     id: "sigil",

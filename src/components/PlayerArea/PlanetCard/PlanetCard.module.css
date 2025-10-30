@@ -17,6 +17,48 @@
   }
 }
 
+@keyframes bubbleRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.35;
+  }
+  80% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0px) scale(0.95);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(-8px) scale(1);
+    opacity: 0.55;
+  }
+  60% {
+    transform: translateY(-20px) scale(1.02);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(-32px) scale(1.04);
+    opacity: 0;
+  }
+}
+
+@keyframes bubbleSway {
+  0% { margin-left: 0px; }
+  20% { margin-left: 1.2px; }
+  40% { margin-left: 0px; }
+  60% { margin-left: -1.2px; }
+  80% { margin-left: 0px; }
+  100% { margin-left: 0px; }
+}
+
 @keyframes constellationTwinkle {
   0%, 100% {
     opacity: 0.3;
@@ -67,6 +109,13 @@
 
 :global(.mobile) .floatingParticle {
   animation: none !important;
+}
+
+.deepAbyssBackground {
+  background:
+    linear-gradient(135deg, var(--planet-background) 0%, rgba(15, 23, 42, 0.7) 100%),
+    radial-gradient(circle at 25% 75%, rgba(80, 180, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 25%, rgba(80, 180, 255, 0.06) 0%, transparent 50%);
 }
 
 .floatingParticle {
@@ -122,6 +171,71 @@
   animation-delay: 3.2s;
 }
 
+/* Deep Abyss bubbles */
+.bubbleParticle {
+  --bubble-delay: 0s;
+  --bubble-duration: 4.8s;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: transparent;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 200, 255, 0.7);
+  z-index: 1;
+  opacity: 0;
+  /* Run vertical rise and a gentle horizontal sway in parallel */
+  animation-name: bubbleRise, bubbleSway;
+  animation-duration: var(--bubble-duration), calc(var(--bubble-duration) * 0.9);
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-delay: var(--bubble-delay), calc(var(--bubble-delay) + 0.2s);
+  animation-fill-mode: both, both;
+  filter: drop-shadow(0 0 2px rgba(120, 200, 255, 0.25));
+  will-change: transform, margin-left;
+}
+
+.bubbleParticle::after,
+.bubbleParticle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(120, 200, 255, 0.45);
+  transform: translate(-50%, -50%);
+  animation-name: bubbleRipple;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-duration: 1.2s;
+  /* Fire the ripple near the end of the rise, slower pop */
+  animation-delay: calc(var(--bubble-delay) + var(--bubble-duration) - 1.2s);
+}
+
+.bubbleParticle::before {
+  animation-duration: 0.9s;
+  animation-delay: calc(var(--bubble-delay) + var(--bubble-duration) - 0.9s);
+  border-color: rgba(120, 200, 255, 0.25);
+}
+
+:global(.mobile) .bubbleParticle,
+:global(.mobile) .bubbleParticle::after,
+:global(.mobile) .bubbleParticle::before {
+  animation: none !important;
+}
+
+.bubble1 { top: 22%; left: 12%; --bubble-duration: 4.8s; --bubble-delay: 0s; }
+.bubble2 { top: 38%; left: 28%; --bubble-duration: 5.4s; --bubble-delay: 1.2s; }
+.bubble3 { top: 54%; left: 48%; --bubble-duration: 6.0s; --bubble-delay: 2.4s; }
+.bubble4 { top: 68%; left: 68%; --bubble-duration: 6.6s; --bubble-delay: 3.6s; }
+.bubble5 { top: 84%; left: 88%; --bubble-duration: 7.2s; --bubble-delay: 4.8s; }
+.bubble6 { top: 28%; left: 20%; --bubble-duration: 7.8s; --bubble-delay: 6.0s; }
+.bubble7 { top: 44%; left: 60%; --bubble-duration: 8.4s; --bubble-delay: 7.2s; }
+.bubble8 { top: 58%; left: 35%; --bubble-duration: 9.0s; --bubble-delay: 8.4s; }
+.bubble9 { top: 76%; left: 18%; --bubble-duration: 9.6s; --bubble-delay: 9.6s; }
+
 /* Planet color variables */
 :root {
   --cultural-background: rgba(59, 130, 246, 0.12);
@@ -153,6 +267,12 @@
   --default-border: rgba(107, 114, 128, 0.3);
   --default-shadow: rgba(107, 114, 128, 0.08);
   --default-highlight: rgba(107, 114, 128, 0.4);
+
+  /* Ocean (Deep Abyss) - deep greyish cyan distinct from cultural */
+  --ocean-background: rgba(64, 112, 128, 0.14);
+  --ocean-border: rgba(64, 160, 176, 0.32);
+  --ocean-shadow: rgba(24, 44, 50, 0.10);
+  --ocean-highlight: rgba(96, 192, 208, 0.36);
 }
 
 /* Main stack styling */

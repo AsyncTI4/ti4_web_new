@@ -261,3 +261,235 @@
 .gradient-blue .gradient-pattern {
   background: rgba(var(--gd-blue), 0.025);
 }
+
+/* Hybrid gradients (two-sided, hard split at 50%) */
+/*
+  Each combo defines:
+  - bg: subtle background
+  - bg-strong: slightly stronger background
+  - border: two-tone border using border-image
+  - shimmer: subtle background shimmer
+  For shimmer-container usage, add the combo class to the same element to affect ::before.
+*/
+
+/* blue | red */
+.hybrid-blueRed-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.06) 0 50%,
+    rgba(var(--gd-red), 0.06) 50% 100%
+  );
+}
+
+.hybrid-blueRed-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.09) 0 50%,
+    rgba(var(--gd-red), 0.09) 50% 100%
+  );
+}
+
+.hybrid-blueRed-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.16),
+    rgba(var(--gd-red), 0.16)
+  ) 1;
+}
+
+.hybrid-blueRed-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.07) 0 50%,
+    rgba(var(--gd-red), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-blueRed::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.03) 0 50%,
+    rgba(var(--gd-red), 0.03) 50% 100%
+  );
+}
+
+/* blue | green */
+.hybrid-blueGreen-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.06) 0 50%,
+    rgba(var(--gd-green), 0.06) 50% 100%
+  );
+}
+
+.hybrid-blueGreen-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.09) 0 50%,
+    rgba(var(--gd-green), 0.09) 50% 100%
+  );
+}
+
+.hybrid-blueGreen-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.16),
+    rgba(var(--gd-green), 0.16)
+  ) 1;
+}
+
+.hybrid-blueGreen-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.07) 0 50%,
+    rgba(var(--gd-green), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-blueGreen::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.03) 0 50%,
+    rgba(var(--gd-green), 0.03) 50% 100%
+  );
+}
+
+/* blue | yellow */
+.hybrid-blueYellow-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.06) 0 50%,
+    rgba(var(--gd-yellow), 0.06) 50% 100%
+  );
+}
+
+.hybrid-blueYellow-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.09) 0 50%,
+    rgba(var(--gd-yellow), 0.09) 50% 100%
+  );
+}
+
+.hybrid-blueYellow-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.16),
+    rgba(var(--gd-yellow), 0.16)
+  ) 1;
+}
+
+.hybrid-blueYellow-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.07) 0 50%,
+    rgba(var(--gd-yellow), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-blueYellow::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-blue), 0.03) 0 50%,
+    rgba(var(--gd-yellow), 0.03) 50% 100%
+  );
+}
+
+/* green | red */
+.hybrid-greenRed-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.06) 0 50%,
+    rgba(var(--gd-red), 0.06) 50% 100%
+  );
+}
+
+.hybrid-greenRed-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.09) 0 50%,
+    rgba(var(--gd-red), 0.09) 50% 100%
+  );
+}
+
+.hybrid-greenRed-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.16),
+    rgba(var(--gd-red), 0.16)
+  ) 1;
+}
+
+.hybrid-greenRed-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.07) 0 50%,
+    rgba(var(--gd-red), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-greenRed::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.03) 0 50%,
+    rgba(var(--gd-red), 0.03) 50% 100%
+  );
+}
+
+/* green | yellow */
+.hybrid-greenYellow-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.06) 0 50%,
+    rgba(var(--gd-yellow), 0.06) 50% 100%
+  );
+}
+
+.hybrid-greenYellow-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.09) 0 50%,
+    rgba(var(--gd-yellow), 0.09) 50% 100%
+  );
+}
+
+.hybrid-greenYellow-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.16),
+    rgba(var(--gd-yellow), 0.16)
+  ) 1;
+}
+
+.hybrid-greenYellow-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.07) 0 50%,
+    rgba(var(--gd-yellow), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-greenYellow::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-green), 0.03) 0 50%,
+    rgba(var(--gd-yellow), 0.03) 50% 100%
+  );
+}
+
+/* yellow | red */
+.hybrid-yellowRed-bg {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-yellow), 0.06) 0 50%,
+    rgba(var(--gd-red), 0.06) 50% 100%
+  );
+}
+
+.hybrid-yellowRed-bg-strong {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-yellow), 0.09) 0 50%,
+    rgba(var(--gd-red), 0.09) 50% 100%
+  );
+}
+
+.hybrid-yellowRed-border {
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    rgba(var(--gd-yellow), 0.16),
+    rgba(var(--gd-red), 0.16)
+  ) 1;
+}
+
+.hybrid-yellowRed-shimmer {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-yellow), 0.07) 0 50%,
+    rgba(var(--gd-red), 0.07) 50% 100%
+  );
+}
+
+.shimmer-container.hybrid-yellowRed::before {
+  background-image: linear-gradient(90deg,
+    rgba(var(--gd-yellow), 0.03) 0 50%,
+    rgba(var(--gd-red), 0.03) 50% 100%
+  );
+}

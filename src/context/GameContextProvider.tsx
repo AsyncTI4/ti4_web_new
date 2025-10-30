@@ -10,13 +10,13 @@ import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { colors } from "@/data/colors";
 import {
   MapTileType,
-  EntityData,
   PlanetEntityData,
   PlanetMapTile,
   PlayerDataResponse,
   TileUnitData,
   UnitMapTile,
   PlayerData,
+  WebScoreBreakdown,
 } from "@/data/types";
 import {
   getPlanetsByTileId,
@@ -26,6 +26,7 @@ import { getAttachmentData } from "@/lookup/attachments";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 import { useMovementStore } from "@/utils/movementStore";
 import { applyDisplacementToPlayerData } from "@/utils/displacement";
+import { SocketReadyState } from "@/hooks/useGameSocket";
 
 export type FactionImageMap = Record<string, { image: string; type: string }>;
 
@@ -46,7 +47,7 @@ type GameContext = {
 
 type GameData = {
   mapTiles: MapTileType[];
-  tilePositions: any;
+  tilePositions: string[];
   factionColorMap: FactionColorMap;
   originalFactionColorMap: FactionColorMap;
   factionImageMap: FactionImageMap;
@@ -84,15 +85,16 @@ type GameData = {
   calculatedTilePositions: ReturnType<typeof calculateTilePositions>;
   tableTalkJumpLink?: PlayerDataResponse["tableTalkJumpLink"];
   actionsJumpLink?: PlayerDataResponse["actionsJumpLink"];
-  playerScoreBreakdowns?: PlayerDataResponse["playerScoreBreakdowns"];
+  playerScoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  expeditions: PlayerDataResponse["expeditions"];
 };
 
 export type GameDataState = {
   isLoading: boolean;
   isError: boolean;
-  readyState: any;
+  readyState: SocketReadyState;
   reconnect: () => void;
-  isReconnecting: any;
+  isReconnecting: boolean;
 };
 
 type Props = {
@@ -113,7 +115,7 @@ export function GameContextProvider({ children, gameId }: Props) {
 
   const adjustedData = useMemo(() => {
     if (!data) return undefined;
-    return applyDisplacementToPlayerData(data as PlayerDataResponse, draft);
+    return applyDisplacementToPlayerData(data, draft);
   }, [data, draft]);
 
   const enhancedData = adjustedData
@@ -168,9 +170,23 @@ function calculateArmyRankings(
 }
 
 export function buildGameContext(
-  data: PlayerDataResponse,
+  rawData: PlayerDataResponse,
   accessibleColors: boolean
 ): GameData {
+  const data = {
+    ...rawData,
+    expeditions: {
+      techSkip: {
+        completedBy: "grey",
+      },
+      tradeGoods: { completedBy: "navy" },
+      fiveRes: { completedBy: "yellow" },
+      fiveInf: { completedBy: "grey" },
+      secret: { completedBy: "grey" },
+      actionCards: { completedBy: null },
+    },
+  };
+
   const playerData = data.playerData.filter(
     (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
   );
@@ -238,6 +254,8 @@ export function buildGameContext(
 
   const armyRankings = calculateArmyRankings(overriddenPlayerData);
 
+  console.log("tileUnitData", data.tileUnitData[313]);
+
   return {
     mapTiles,
     tilePositions: data.tilePositions,
@@ -265,6 +283,7 @@ export function buildGameContext(
     tableTalkJumpLink: data.tableTalkJumpLink,
     actionsJumpLink: data.actionsJumpLink,
     playerScoreBreakdowns: data.scoreBreakdowns,
+    expeditions: data.expeditions,
   };
 }
 
@@ -335,6 +354,7 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
           hexOutline: {
             points: points,
             sides: generateHexagonSides(points),
+            midpoints: generateHexagonMidpoints(points),
           },
           width: 0,
           height: 0,
@@ -406,7 +426,7 @@ function getTileController(planets: PlanetMapTile[], space: UnitMapTile[]) {
 }
 
 function buildTileSpaceData(tileData: TileUnitData) {
-  const entries = Object.entries(tileData.space) as [string, EntityData[]][];
+  const entries = Object.entries(tileData.space);
 
   const space: UnitMapTile[] = entries.flatMap(([faction, entities]) =>
     (entities || [])
@@ -435,10 +455,7 @@ function buildPlanetMapTile(
   allExhaustedPlanets: Set<string>,
   planetCoords: Record<string, string>
 ): PlanetMapTile {
-  const entityEntries = Object.entries(planetData.entities) as [
-    string,
-    EntityData[],
-  ][];
+  const entityEntries = Object.entries(planetData.entities);
 
   const attachments: string[] = entityEntries.flatMap(([, entities]) =>
     entities
@@ -506,6 +523,18 @@ function generateHexagonSides(points: { x: number; y: number }[]) {
   return sides;
 }
 
+function generateHexagonMidpoints(points: { x: number; y: number }[]) {
+  const midpoints = [];
+  for (let i = 0; i < 6; i++) {
+    const nextI = (i + 1) % 6;
+    midpoints.push({
+      x: (points[i].x + points[nextI].x) / 2,
+      y: (points[i].y + points[nextI].y) / 2,
+    });
+  }
+  return midpoints;
+}
+
 function buildFactionToColor(playerData: PlayerData[]): Record<string, string> {
   if (!playerData) return {};
   return playerData.reduce(
@@ -526,7 +555,7 @@ function computeOptimizedColors(
     .filter((color) => colorsInUse.has(color.name))
     .map((color) => {
       const primaryColorValues = getColorValues(
-        (color as any).primaryColorRef,
+        color.primaryColorRef,
         color.primaryColor
       );
 
@@ -622,7 +651,7 @@ function computePdsData(
     return { tilesWithPds, dominantPdsFaction, pdsByTile };
 
   Object.entries(data.tileUnitData).forEach(
-    ([position, tileData]: [string, any]) => {
+    ([position, tileData]: [string, TileUnitData]) => {
       if (!(tileData.pds && Object.keys(tileData.pds).length > 0)) return;
 
       tilesWithPds.add(position);
@@ -640,7 +669,7 @@ function computePdsData(
       }[] = [];
 
       Object.entries(tileData.pds).forEach(
-        ([faction, pdsData]: [string, any]) => {
+        ([faction, pdsData]: [string, { count: number; expected: number }]) => {
           if (factionToColor[faction]) {
             allForTile.push({
               faction,

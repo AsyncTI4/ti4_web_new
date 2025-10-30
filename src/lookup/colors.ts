@@ -5,7 +5,7 @@ const FALLBACK_COLOR_ALIAS = "lgy";
 // Helper function to get color values, prioritizing refs over direct colors
 export const getColorValues = (
   colorRef: string | undefined,
-  directColor: any
+  directColor: { red: number; green: number; blue: number } | undefined
 ) => {
   if (colorRef) {
     const referencedColor = colors.find(
@@ -47,7 +47,7 @@ export const getPrimaryColorCSS = (color: string) => {
   }
 
   const primaryColorValues = getColorValues(
-    (colorData as any).primaryColorRef,
+    colorData.primaryColorRef,
     colorData.primaryColor
   );
 
@@ -69,7 +69,7 @@ export const getPrimaryColorWithOpacity = (
   }
 
   const primaryColorValues = getColorValues(
-    (colorData as any).primaryColorRef,
+    colorData.primaryColorRef,
     colorData.primaryColor
   );
 
@@ -89,13 +89,13 @@ export const generateColorGradient = (color: string, opacity: number = 0.6) => {
 
   // Get primary color values (prioritize ref over direct)
   const primaryColorValues = getColorValues(
-    (colorData as any).primaryColorRef,
+    colorData.primaryColorRef,
     colorData.primaryColor
   );
 
   // Get secondary color values (prioritize ref over direct)
   const secondaryColorValues = getColorValues(
-    (colorData as any).secondaryColorRef,
+    colorData.secondaryColorRef,
     colorData.secondaryColor
   );
 

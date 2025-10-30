@@ -25,14 +25,15 @@ function GeneralArea() {
       className={styles.scoreBoardSurface}
     >
       <Flex wrap={"wrap"} justify={"center"} mb="md" gap={64}>
-            <UnpickedSCs strategyCards={strategyCards} />
-          <Stack gap={32}>
-            <FactionsInGame playerData={playerData} />
-            <CardPool cardPool={cardPool} playerData={playerData} />
-          </Stack>
-          <Box mb="lg">
-            <LawsInPlay laws={lawsInPlay} />
-          </Box>
+        <UnpickedSCs strategyCards={strategyCards} />
+        <Stack gap={32}>
+          <FactionsInGame playerData={playerData} />
+          <CardPool cardPool={cardPool} playerData={playerData} />
+        </Stack>
+
+        <Box mb="lg">
+          <LawsInPlay laws={lawsInPlay} />
+        </Box>
       </Flex>
     </Surface>
   );

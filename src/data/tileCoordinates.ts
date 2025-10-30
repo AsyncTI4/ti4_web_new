@@ -4,6 +4,13 @@ export interface TileCoordinates {
 
 // Base tile coordinates from tileImageCoordinates.properties
 export const TILE_COORDINATES: TileCoordinates = {
+  frac1: { x: 1300, y: 450 },
+  frac2: { x: 1560, y: 300 },
+  frac3: { x: 1820, y: 150 },
+  frac4: { x: 2080, y: 0 },
+  frac5: { x: 2340, y: 150 },
+  frac6: { x: 2600, y: 300 },
+  frac7: { x: 2860, y: 450 },
   "0": { x: 0, y: 0 },
   "000": { x: 2080, y: 2550 },
   "1001": { x: 2080, y: -450 },

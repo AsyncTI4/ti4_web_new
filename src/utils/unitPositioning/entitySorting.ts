@@ -77,13 +77,28 @@ const buildFactionQueues = (
 };
 
 const interleaveQueues = (
-  factionQueues: { [faction: string]: QueueItem[] }
+  factionQueues: { [faction: string]: QueueItem[] },
+  controller?: string
 ): EntityStackBase[] => {
   const sortedStacks: EntityStackBase[] = [];
   const factionNames = Object.keys(factionQueues);
 
-  while (factionNames.some((faction) => factionQueues[faction].length > 0)) {
-    for (const faction of factionNames) {
+  if (!factionNames.length) return sortedStacks;
+
+  const orderedFactions: string[] = [];
+  if (controller && factionNames.includes(controller)) {
+    orderedFactions.push(controller);
+    factionNames.forEach((faction) => {
+      if (faction !== controller) {
+        orderedFactions.push(faction);
+      }
+    });
+  } else {
+    orderedFactions.push(...factionNames);
+  }
+
+  while (orderedFactions.some((faction) => factionQueues[faction].length > 0)) {
+    for (const faction of orderedFactions) {
       if (factionQueues[faction].length > 0) {
         const stack = factionQueues[faction].shift()!;
         sortedStacks.push({
@@ -101,9 +116,10 @@ const interleaveQueues = (
 };
 
 export const createSortedEntityStacks = (
-  factionEntities: FactionUnits
+  factionEntities: FactionUnits,
+  controller?: string
 ): EntityStackBase[] => {
   const priorityMap = buildPriorityMap();
   const factionQueues = buildFactionQueues(factionEntities, priorityMap);
-  return interleaveQueues(factionQueues);
+  return interleaveQueues(factionQueues, controller);
 };
