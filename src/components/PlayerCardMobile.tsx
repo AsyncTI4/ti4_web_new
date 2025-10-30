@@ -22,7 +22,13 @@ import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import { ArmyStats, PromissoryNote, Tech } from "./PlayerArea";
+import {
+  ArmyStats,
+  PromissoryNote,
+  Tech,
+  Breakthrough,
+  Plot,
+} from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { PlayerCardBox } from "./PlayerCardBox";
@@ -38,6 +44,8 @@ import { getAbility } from "@/lookup/abilities";
 import { Ability } from "./PlayerArea/Ability";
 import Caption from "./shared/Caption/Caption";
 import { useGameData } from "@/hooks/useGameContext";
+import { filterPlanetsByOcean } from "@/utils/planets";
+import type { PlotCard } from "@/data/types";
 
 type Props = {
   playerData: PlayerData;
@@ -115,6 +123,7 @@ export default function PlayerCardMobile(props: Props) {
     notResearchedFactionTechs,
 
     abilities,
+    plotCards,
   } = props.playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
@@ -148,6 +157,8 @@ export default function PlayerCardMobile(props: Props) {
       totalFlex: totFlexValue,
     },
   };
+
+  const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
 
   const UnitsArea = (
     <SimpleGrid h="100%" cols={6} spacing="8px">
@@ -230,6 +241,20 @@ export default function PlayerCardMobile(props: Props) {
         </Group>
       </Group>
       <Group gap="xs" wrap="wrap" align="center" mb="lg" mt="xs">
+        {props.playerData.breakthrough?.unlocked &&
+          props.playerData.breakthrough.breakthroughId && (
+            <Stack gap={4}>
+              <Caption size="xs">Breakthrough</Caption>
+              <Breakthrough
+                breakthroughId={props.playerData.breakthrough.breakthroughId}
+                exhausted={props.playerData.breakthrough.exhausted}
+                tradeGoodsStored={
+                  props.playerData.breakthrough.tradeGoodsStored
+                }
+              />
+            </Stack>
+          )}
+
         <Stack gap={4}>
           <Caption size="xs">Abilities</Caption>
           <Group gap={2}>
@@ -322,7 +347,7 @@ export default function PlayerCardMobile(props: Props) {
           <Group align="flex-start">
             <ResourceInfluenceCompact planetEconomics={planetEconomics} />
             <Group gap={4} wrap="wrap" flex={1}>
-              {planets.map((planetId, index) => {
+              {regularPlanets.map((planetId, index) => {
                 return (
                   <PlanetCard
                     key={index}
@@ -333,7 +358,41 @@ export default function PlayerCardMobile(props: Props) {
                   />
                 );
               })}
+              {oceanPlanets.length > 0 && (
+                <>
+                  <Box ml="xs" />
+                  <Group gap={1} wrap="wrap" flex={1}>
+                    {oceanPlanets.map((planetId, index) => {
+                      return (
+                        <PlanetCard
+                          key={`ocean-${index}`}
+                          planetId={planetId}
+                          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                            planetId
+                          )}
+                        />
+                      );
+                    })}
+                  </Group>
+                </>
+              )}
+              {plotCards &&
+                Array.isArray(plotCards) &&
+                plotCards.length > 0 && (
+                  <>
+                    <Box ml="xs" />
+                    <Stack gap={4}>
+                      <Caption size="xs">Plots</Caption>
+                      {(plotCards as PlotCard[]).map((plotCard, index) => {
+                        return (
+                          <Plot key={`plot-${index}`} plotCard={plotCard} />
+                        );
+                      })}
+                    </Stack>
+                  </>
+                )}
             </Group>
+
             {nombox !== undefined && Object.keys(nombox).length > 0 && (
               <div
                 style={{

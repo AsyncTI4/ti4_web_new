@@ -20,8 +20,8 @@ export const GROUND_HEAT_CONFIG = {
   rimDecayRate: 0.06,
   unitHeat: 400,
   unitDecayRate: 0.06,
-  factionRepulsionHeat: 600,
-  factionDecayRate: 0.02,
+  factionRepulsionHeat: 300,
+  factionDecayRate: 0.03,
   stackSizeMultiplier: 0.15,
 } as const;
 

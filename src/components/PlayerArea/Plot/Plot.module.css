@@ -1,0 +1,47 @@
+.plotCard {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.plotCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--mantine-spacing-sm);
+  right: var(--mantine-spacing-sm);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0) 0%,
+    rgba(239, 68, 68, 0.6) 50%,
+    rgba(239, 68, 68, 0) 100%
+  );
+  border-radius: 1px;
+}
+
+.plotCard::after {
+  content: '';
+  position: absolute;
+  right: var(--mantine-spacing-xs);
+  top: var(--mantine-spacing-xs);
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid rgba(220, 38, 38, 0.6);
+  border-right: 2px solid rgba(220, 38, 38, 0.6);
+  border-top-right-radius: 6px;
+  opacity: 0.8;
+}
+
+.plotCard:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.plotCard:hover::before {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0) 0%,
+    rgba(239, 68, 68, 0.8) 50%,
+    rgba(239, 68, 68, 0) 100%
+  );
+}

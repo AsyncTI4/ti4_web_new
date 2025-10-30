@@ -1,5 +1,14 @@
 import { EntityStack } from "@/utils/unitPositioning";
 
+export type Breakthrough = {
+  alias: string;
+  name: string;
+  displayName?: string;
+  faction: string;
+  synergy: string[];
+  text: string;
+  source: string;
+};
 export type TileData = {
   id: string;
   name?: string | null;
@@ -272,7 +281,21 @@ export type WebScoreBreakdown = {
   entries: ScoreBreakdownEntry[];
 };
 
+export type Expedition = {
+  completedBy: string | null;
+};
+
+export type Expeditions = {
+  techSkip: Expedition;
+  tradeGoods: Expedition;
+  fiveRes: Expedition;
+  fiveInf: Expedition;
+  secret: Expedition;
+  actionCards: Expedition;
+};
+
 export type PlayerDataResponse = {
+  expeditions: Expeditions;
   ringCount: number;
   playerData: PlayerData[];
   tileUnitData: Record<string, TileUnitData>;
@@ -300,7 +323,22 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
 };
 
+export type BreakthroughData = {
+  breakthroughId: string;
+  unlocked: boolean;
+  exhausted: boolean;
+  tradeGoodsStored: number;
+};
+
+export type PlotCard = {
+  plotAlias?: string;
+  identifier: number;
+  factions: string[];
+};
+
 export type PlayerData = {
+  breakthrough?: BreakthroughData;
+  plotCards?: PlotCard[];
   discordId: string;
   userName: string;
   faction: string;
@@ -407,8 +445,8 @@ export type Planet = {
   name: string;
   shortName?: string;
   shrinkName?: boolean;
-  shortNamePNAttach?: any;
-  shrinkNamePNAttach?: any;
+  shortNamePNAttach?: string | null;
+  shrinkNamePNAttach?: boolean | null;
   aliases: string[];
   positionInTile?: { x: number; y: number } | null;
   resources: number;

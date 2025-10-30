@@ -9,8 +9,20 @@ type Props = Omit<BoxProps, "color" | "onClick"> & {
   children?: React.ReactNode;
   ribbon?: boolean;
   accentLine?: boolean;
-  accent?: ColorKey | "grey" | "gray" | "deepRed" | "bloodOrange";
+  accent?:
+    | ColorKey
+    | "grey"
+    | "gray"
+    | "deepRed"
+    | "bloodOrange"
+    | "blueRed"
+    | "blueGreen"
+    | "blueYellow"
+    | "greenRed"
+    | "greenYellow"
+    | "yellowRed";
   strong?: boolean;
+  breakthrough?: boolean;
   /** When true, shows an absolute-positioned full title on hover */
   revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
@@ -27,6 +39,7 @@ export function Chip({
   ribbon = false,
   accentLine = false,
   strong = false,
+  breakthrough = false,
   revealFullTitleOnHover = false,
   onClick,
   px,
@@ -34,6 +47,17 @@ export function Chip({
   ...boxProps
 }: Props) {
   const clickable = onClick !== undefined;
+  const HYBRID_ACCENTS = [
+    "blueRed",
+    "blueGreen",
+    "blueYellow",
+    "greenRed",
+    "greenYellow",
+    "yellowRed",
+  ] as const;
+  const isHybrid = HYBRID_ACCENTS.includes(
+    accent as (typeof HYBRID_ACCENTS)[number]
+  );
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!clickable) return;
     if (event.key === "Enter" || event.key === " ") {
@@ -52,6 +76,7 @@ export function Chip({
       className={cx(
         classes.chip,
         classes[accent ?? "gray"],
+        breakthrough && classes.breakthrough,
         clickable && classes.hover,
         clickable && classes.clickable,
         ribbon && classes.ribbon,
@@ -59,7 +84,14 @@ export function Chip({
         strong && classes.strong,
         className
       )}
+      data-split={isHybrid ? "true" : undefined}
     >
+      {isHybrid && (
+        <>
+          <div className={classes.halfLeft} />
+          <div className={classes.halfRight} />
+        </>
+      )}
       <Box
         className={cx(
           classes.inner,

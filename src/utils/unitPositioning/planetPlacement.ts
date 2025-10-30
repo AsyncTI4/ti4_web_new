@@ -154,6 +154,7 @@ export const placeGroundEntities = ({
   planetRadius,
   factionEntities,
   heatSources = [],
+  controller,
 }: PlaceGroundEntitiesOptions) => {
   const { costMap: initialCostMap, rimSquares } = initializeGroundCostMap(
     gridSize,
@@ -174,13 +175,15 @@ export const placeGroundEntities = ({
     factionEntities,
     heatConfig: GROUND_HEAT_CONFIG,
     initialHeatSources: heatSources,
+    controller,
   });
 };
 
 const placeGroundEntitiesForPlanet = (
   planet: Planet,
   filteredPlanetEntities: FactionUnits,
-  attachmentHeatSources: HeatSource[]
+  attachmentHeatSources: HeatSource[],
+  controller?: string
 ): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
   if (Object.keys(filteredPlanetEntities).length === 0) {
     return { entityPlacements: [], finalCostMap: [] };
@@ -200,6 +203,7 @@ const placeGroundEntitiesForPlanet = (
     planetRadius: planet.radius,
     factionEntities: filteredPlanetEntities,
     heatSources: allHeatSources,
+    controller,
   });
 
   return { entityPlacements, finalCostMap };
@@ -227,7 +231,8 @@ export const processPlanetEntities = (
     placeGroundEntitiesForPlanet(
       planet,
       filteredPlanetEntities,
-      attachmentHeatSources
+      attachmentHeatSources,
+      planetEntityData.controlledBy
     );
 
   const planetEntitiesWithPlanetName = [

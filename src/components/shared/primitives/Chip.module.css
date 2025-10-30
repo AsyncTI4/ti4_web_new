@@ -146,8 +146,6 @@
 }
 
 .hover:hover {
-    border-color: var(--hover-border-color);
-    border-width: 1px;
     box-shadow: 0 0 0 1px var(--hover-shadow-1), 0 2px 10px var(--hover-shadow-2);
 }
 
@@ -163,6 +161,7 @@
     padding: 4px 6px;
     align-items: center;
     min-height: 28px;
+    z-index: 2;
 }
 
 .leftSection {
@@ -210,4 +209,111 @@
 
 /* Provide a standalone export for CSS Modules */
 .strong { outline: none; }
+
+/* Hybrid two-sided chip variants (hard split at 50%) */
+/* blue | red */
+.blueRed {
+    --left-color:  var(--gd-blue);
+    --right-color: var(--gd-red);
+}
+
+/* blue | green */
+.blueGreen {
+    --left-color: var(--gd-blue);
+    --right-color: var(--gd-green);
+}
+
+
+/* blue | yellow */
+.blueYellow {
+    --left-color: var(--gd-blue);
+    --right-color: var(--gd-yellow);
+}
+
+
+/* green | red */
+.greenRed {
+    --left-color: var(--gd-green);
+    --right-color: var(--gd-red);
+}
+
+/* green | yellow */
+.greenYellow {
+    --left-color: var(--gd-green);
+    --right-color: var(--gd-yellow);
+}
+
+/* yellow | red */
+.yellowRed {
+    --left-color: var(--gd-yellow);
+    --right-color: var(--gd-red);
+}
+
+
+/* Generic hybrid layout: two absolutely-positioned halves */
+[data-split="true"].chip {
+    background: transparent;
+    background-image: none;
+    border: none;
+}
+
+[data-split="true"] .halfLeft,
+[data-split="true"] .halfRight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+[data-split="true"] .halfLeft {
+    left: 0;
+    border: 1px solid rgba(var(--left-color), 0.18);
+    border-right-width: 0;
+    border-radius: var(--mantine-radius-md) 0 0 var(--mantine-radius-md);
+    background: rgba(var(--left-color), 0.10);
+}
+
+[data-split="true"] .halfRight {
+    right: 0;
+    border: 1px solid rgba(var(--right-color), 0.18);
+    border-left-width: 0;
+    border-radius: 0 var(--mantine-radius-md) var(--mantine-radius-md) 0;
+    background: rgba(var(--right-color), 0.10);
+}
+
+.chip:hover .halfLeft {
+    border-color: rgba(var(--left-color), 0.35);
+    border-width: 3px;
+    border-right-width: 0;
+}
+
+.chip:hover .halfRight {
+    border-color: rgba(var(--right-color), 0.35);
+    border-width: 3px;
+    border-left-width: 0;
+}
+
+[data-split="true"].strong .halfLeft { background: rgba(var(--left-color), 0.18); }
+[data-split="true"].strong .halfRight { background: rgba(var(--right-color), 0.18); }
+
+/* Standalone export to satisfy CSS Modules for breakthrough */
+.breakthrough { outline: none; }
+
+.breakthrough.chip::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 3px;
+    width: 26px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(
+        90deg,
+        rgb(var(--left-color)),
+        rgb(var(--right-color)));
+    z-index: 1;
+}
 

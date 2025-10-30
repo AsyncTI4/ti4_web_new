@@ -38,7 +38,9 @@ import FactionAbilitiesTechs from "./PlayerArea/FactionAbilitiesTechs";
 import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
-import Plots from "./Plots";
+import { filterPlanetsByOcean } from "@/utils/planets";
+import { Plot } from "./PlayerArea";
+import Caption from "./shared/Caption/Caption";
 
 type Props = {
   playerData: PlayerData;
@@ -113,6 +115,7 @@ export default function PlayerCard(props: Props) {
     notResearchedFactionTechs,
     factionTechs,
     abilities,
+    plotCards,
   } = props.playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
@@ -146,6 +149,8 @@ export default function PlayerCard(props: Props) {
       totalFlex: totFlexValue,
     },
   };
+
+  const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
 
   const UnitsArea = (
     <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
@@ -309,7 +314,6 @@ export default function PlayerCard(props: Props) {
                 unscoredSecrets={soCount || 0}
               />
             </Box>
-            <Plots />
           </Stack>
         </Grid.Col>
 
@@ -400,7 +404,7 @@ export default function PlayerCard(props: Props) {
             </Flex>
 
             <Group gap={4} wrap="wrap" flex={1}>
-              {planets.map((planetId, index) => {
+              {regularPlanets.map((planetId, index) => {
                 return (
                   <PlanetCard
                     key={index}
@@ -412,8 +416,38 @@ export default function PlayerCard(props: Props) {
                 );
               })}
             </Group>
+            {oceanPlanets.length > 0 && (
+              <>
+                <Box style={{ marginLeft: "2px" }} />
+                <Group gap={1} wrap="wrap" flex={1}>
+                  {oceanPlanets.map((planetId, index) => {
+                    return (
+                      <PlanetCard
+                        key={`ocean-${index}`}
+                        planetId={planetId}
+                        legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                          planetId
+                        )}
+                      />
+                    );
+                  })}
+                </Group>
+              </>
+            )}
           </Group>
         </Grid.Col>
+        {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (
+          <Grid.Col span={12}>
+            <Group gap="md" align="flex-start">
+              <Caption size="xs">Plots</Caption>
+              <Group gap={4} wrap="wrap" flex={1}>
+                {plotCards.map((plotCard, index) => {
+                  return <Plot key={`plot-${index}`} plotCard={plotCard} />;
+                })}
+              </Group>
+            </Group>
+          </Grid.Col>
+        )}
       </Grid>
       {nombox !== undefined && Object.keys(nombox).length > 0 && (
         <Box mt="md">

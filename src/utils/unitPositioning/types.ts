@@ -63,6 +63,7 @@ export type PlaceEntitiesOptions = {
   heatConfig: HeatConfig;
   factionEntities: FactionUnits;
   initialHeatSources?: HeatSource[];
+  controller?: string;
 };
 
 export type PlaceSpaceEntitiesOptions = {
@@ -84,4 +85,5 @@ export type PlaceGroundEntitiesOptions = {
   planetRadius: number;
   factionEntities: FactionUnits;
   heatSources?: HeatSource[];
+  controller?: string;
 };

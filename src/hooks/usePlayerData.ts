@@ -29,8 +29,8 @@ export function usePlayerDataSocket(gameId: string) {
       console.log(
         "Game refresh received, refetching player data and player hands..."
       );
-      refetch();
-      queryClient.invalidateQueries({
+      void refetch();
+      void queryClient.invalidateQueries({
         queryKey: ["playerHand", gameId],
       });
     }

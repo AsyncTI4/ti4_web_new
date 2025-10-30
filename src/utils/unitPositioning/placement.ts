@@ -14,10 +14,11 @@ export const placeEntitiesWithCostMap = ({
   factionEntities,
   heatConfig,
   initialHeatSources = [],
+  controller,
 }: PlaceEntitiesOptions) => {
   const heatSources: HeatSource[] = [...initialHeatSources];
   const entityPlacements: EntityStack[] = [];
-  const sortedStacks = createSortedEntityStacks(factionEntities);
+  const sortedStacks = createSortedEntityStacks(factionEntities, controller);
 
   for (const stack of sortedStacks) {
     const currentCostMap = updateCostMap({

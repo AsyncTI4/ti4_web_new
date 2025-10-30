@@ -12,6 +12,7 @@ import { getAttachmentData } from "@/lookup/attachments";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
 import { usePlanet } from "@/hooks/usePlanet";
+import { Planet } from "@/data/types";
 
 type Props = {
   planetId: string;
@@ -41,7 +42,7 @@ export function PlanetCard({
     planetData.planetType ?? "NONE",
     attachmentModifiers.planetTypes
   );
-  const cssTypeKey = resolveCssTypeKey(finalTraits);
+  const baseCssTypeKey = resolveCssTypeKey(finalTraits);
   const allIcons = createAllIcons(
     planetData,
     attachmentModifiers,
@@ -55,6 +56,10 @@ export function PlanetCard({
   const hasLegendaryAbility = !!(
     planetData.legendaryAbilityName && planetData.legendaryAbilityText
   );
+  const isOcean = planetId.startsWith("ocean");
+  const isDeepAbyss =
+    (planetData.shortName ?? planetData.name) === "Deep Abyss";
+  const cssTypeKey = isOcean || isDeepAbyss ? "ocean" : baseCssTypeKey;
 
   const planetCardContent = (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -64,6 +69,7 @@ export function PlanetCard({
           className={cx(
             styles.mainStack,
             isLegendary && styles.legendaryBackground,
+            (isOcean || isDeepAbyss) && styles.deepAbyssBackground,
             isLegendary && styles.legendary,
             hasLegendaryAbility && styles.noRightRadius,
             isExhausted && styles.exhausted
@@ -80,6 +86,20 @@ export function PlanetCard({
               <Box className={cx(styles.floatingParticle, styles.particle3)} />
               <Box className={cx(styles.floatingParticle, styles.particle4)} />
               <Box className={cx(styles.floatingParticle, styles.particle5)} />
+            </>
+          )}
+
+          {(isOcean || isDeepAbyss) && !isExhausted && (
+            <>
+              <Box className={cx(styles.bubbleParticle, styles.bubble1)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble2)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble3)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble4)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble5)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble6)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble7)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble8)} />
+              <Box className={cx(styles.bubbleParticle, styles.bubble9)} />
             </>
           )}
 
@@ -159,7 +179,7 @@ function calculateAttachmentModifiers(attachments: string[]) {
           ],
           planetTypes: [
             ...totals.planetTypes,
-            ...((attachmentData as any).planetTypes || []),
+            ...(attachmentData.planetTypes || []),
           ],
         };
       }
@@ -175,8 +195,8 @@ function calculateAttachmentModifiers(attachments: string[]) {
 }
 
 function createAllIcons(
-  planetData: any,
-  attachmentModifiers: any,
+  planetData: Planet,
+  attachmentModifiers: AttachmentModifiers,
   attachments: string[]
 ) {
   const allIcons = [];
@@ -204,21 +224,31 @@ function createAllIcons(
   return allIcons;
 }
 
-function calculateFinalValues(planetData: any, attachmentModifiers: any) {
+function calculateFinalValues(
+  planetData: Planet,
+  attachmentModifiers: AttachmentModifiers
+) {
   return {
     finalResources: planetData.resources + attachmentModifiers.resources,
     finalInfluence: planetData.influence + attachmentModifiers.influence,
   };
 }
 
-function checkIsLegendary(planetData: any, attachments: string[]) {
+function checkIsLegendary(planetData: Planet, attachments: string[]) {
   return !!planetData.legendaryAbilityText || attachments.includes("nanoforge");
 }
 
 function getCSSVariables(planetType: string) {
   const typeKey = planetType?.toLowerCase() || "default";
   // Map known planet types, fallback to 'default' for unknown types
-  const validTypes = ["cultural", "hazardous", "industrial", "faction", "mr"];
+  const validTypes = [
+    "cultural",
+    "hazardous",
+    "industrial",
+    "faction",
+    "mr",
+    "ocean",
+  ];
   const finalType = validTypes.includes(typeKey) ? typeKey : "default";
 
   return {
@@ -250,7 +280,7 @@ const getTechSkipIconKey = (techSpecialty: string): string | null => {
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
 
-type AttachmentUpgradeIconProps = {};
+type AttachmentUpgradeIconProps = object;
 
 function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
   return (
@@ -262,7 +292,7 @@ function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
 }
 
 type PlanetIconProps = {
-  planetData: any;
+  planetData: Planet;
   finalTraits: SingleTrait[];
 };
 
@@ -300,3 +330,10 @@ function resolveCssTypeKey(finalTraits: SingleTrait[]) {
   if (finalTraits.length !== 1) return "default";
   return finalTraits[0];
 }
+
+type AttachmentModifiers = {
+  resources: number;
+  influence: number;
+  techSpecialties: string[];
+  planetTypes: string[];
+};
