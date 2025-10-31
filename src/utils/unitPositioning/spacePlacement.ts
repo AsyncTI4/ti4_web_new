@@ -155,6 +155,48 @@ export const preplaceFighters = (
   };
 };
 
+const findLeftmostNonRimSquare = (
+  costMap: number[][],
+  rimSquares: { row: number; col: number }[],
+  gridSize: number
+): { row: number; col: number } | null => {
+  const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
+
+  // Find the leftmost valid non-rim square without offset
+  for (let col = 0; col < gridSize; col++) {
+    for (let row = 0; row < gridSize; row++) {
+      if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
+        return { row, col };
+      }
+    }
+  }
+
+  return null;
+};
+
+const preplaceCommandCounterHeatSource = (
+  costMap: number[][],
+  rimSquares: { row: number; col: number }[],
+  gridSize: number,
+  squareWidth: number,
+  squareHeight: number,
+  hasCommandCounters: boolean
+): HeatSource | null => {
+  if (!hasCommandCounters) return null;
+
+  const square = findLeftmostNonRimSquare(costMap, rimSquares, gridSize);
+  if (!square) return null;
+
+  const { x, y } = gridToPixel(square, squareWidth, squareHeight);
+
+  // Use a very small stack size to create minimal heat
+  return {
+    x,
+    y,
+    stackSize: 0.5,
+  };
+};
+
 const preplaceThundersEdge = (
   factionEntities: FactionUnits,
   squareWidth: number,
@@ -227,12 +269,23 @@ export const placeSpaceEntities = ({
   planets,
   factionEntities,
   initialHeatSources = [],
+  commandCounters = [],
 }: PlaceSpaceEntitiesOptions) => {
   const { costMap: initialCostMap, rimSquares } = initializeSpaceCostMap(
     gridSize,
     squareWidth,
     squareHeight,
     hexagonVertices
+  );
+
+  // Pre-place a small heat source for command counters at the leftmost valid square
+  const commandCounterHeatSource = preplaceCommandCounterHeatSource(
+    initialCostMap,
+    rimSquares,
+    gridSize,
+    squareWidth,
+    squareHeight,
+    commandCounters.length > 0
   );
 
   const {
@@ -250,6 +303,10 @@ export const placeSpaceEntities = ({
     ? [thundersEdgeHeatSource]
     : [];
 
+  const commandCounterHeatSources = commandCounterHeatSource
+    ? [commandCounterHeatSource]
+    : [];
+
   const {
     placements: fighterPlacements,
     heatSources: fighterHeatSources,
@@ -265,6 +322,7 @@ export const placeSpaceEntities = ({
 
   const combinedHeatSources = [
     ...initialHeatSources,
+    ...commandCounterHeatSources,
     ...thundersEdgeHeatSources,
     ...fighterHeatSources,
   ];

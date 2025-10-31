@@ -74,6 +74,7 @@ export type PlaceSpaceEntitiesOptions = {
   planets: Planet[];
   factionEntities: FactionUnits;
   initialHeatSources?: HeatSource[];
+  commandCounters?: string[];
 };
 
 export type PlaceGroundEntitiesOptions = {

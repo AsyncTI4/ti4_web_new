@@ -1,6 +1,8 @@
 .plotCard {
   position: relative;
   transition: all 0.2s ease-in-out;
+  /* Reduce background opacity while keeping border */
+  background: rgba(191, 71, 0, 0.08) !important;
 }
 
 .plotCard::before {
@@ -19,18 +21,6 @@
   border-radius: 1px;
 }
 
-.plotCard::after {
-  content: '';
-  position: absolute;
-  right: var(--mantine-spacing-xs);
-  top: var(--mantine-spacing-xs);
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid rgba(220, 38, 38, 0.6);
-  border-right: 2px solid rgba(220, 38, 38, 0.6);
-  border-top-right-radius: 6px;
-  opacity: 0.8;
-}
 
 .plotCard:hover {
   transform: translateY(-2px);

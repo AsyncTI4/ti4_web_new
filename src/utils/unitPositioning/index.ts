@@ -35,6 +35,7 @@ export const getAllEntityPlacementsForTile = (
     planets,
     factionEntities: tileUnitData.space || {},
     initialHeatSources,
+    commandCounters: tileUnitData.ccs || [],
   });
 
   spaceEntityPlacements.forEach((entity) => {

@@ -318,10 +318,12 @@ export const tokens: Token[] = [
   },
   {
     id: "relictoken",
-    imagePath: "token_relictoken.png",
+    imagePath: "token_relic.png",
     spaceOrPlanet: "planet",
     aliasList: ["relic", "token_relic", "relictoken", "token_relictoken"],
     source: "thunders_edge",
+    placement: "center",
+    scale: 0.8,
   },
   {
     id: "sigil",
