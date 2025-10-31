@@ -6,6 +6,8 @@ import { PlayerData } from "../data/types";
 import { getUnitAsyncId, isUnitUpgradedOrWarSun } from "@/lookup/units";
 import { getFactionImage } from "@/lookup/factions";
 import { PlayerCardHeaderCompact } from "./PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
+import { Breakthrough } from "./PlayerArea";
+import Caption from "./shared/Caption/Caption";
 
 type Props = {
   playerData: PlayerData;
@@ -41,6 +43,20 @@ export default function PlayerCardSidebarTech(props: Props) {
             exhaustedTechs={props.playerData.exhaustedTechs}
           />
         </Stack>
+
+        {props.playerData.breakthrough?.breakthroughId && (
+          <Stack gap={4}>
+            <Caption size="xs">Breakthrough</Caption>
+            <Breakthrough
+              breakthroughId={props.playerData.breakthrough.breakthroughId}
+              exhausted={props.playerData.breakthrough.exhausted}
+              tradeGoodsStored={
+                props.playerData.breakthrough.tradeGoodsStored
+              }
+              unlocked={props.playerData.breakthrough.unlocked ?? false}
+            />
+          </Stack>
+        )}
 
         {/* Units Section - Only show upgraded units */}
         {upgradedUnits.length > 0 && (

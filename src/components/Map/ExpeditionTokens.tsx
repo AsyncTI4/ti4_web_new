@@ -5,21 +5,18 @@ import { ControlToken } from "./ControlToken";
 
 type ExpeditionPosition = {
   key: keyof import("@/data/types").Expeditions;
-  angle: number;
+  offsetX: number;
+  offsetY: number;
 };
 
 const EXPEDITION_POSITIONS: ExpeditionPosition[] = [
-  { key: "fiveRes", angle: 0 }, // 12 o'clock
-  { key: "actionCards", angle: 60 }, // 2 o'clock
-  { key: "fiveInf", angle: 120 }, // 4 o'clock
-  { key: "secret", angle: 180 }, // 6 o'clock
-  { key: "techSkip", angle: 240 }, // 8 o'clock
-  { key: "tradeGoods", angle: 300 }, // 10 o'clock
+  { key: "tradeGoods", offsetX: 47, offsetY: 101 },
+  { key: "fiveRes", offsetX: 114, offsetY: 5 },
+  { key: "actionCards", offsetX: 182, offsetY: 101 },
+  { key: "techSkip", offsetX: 47, offsetY: 150 },
+  { key: "secret", offsetX: 114, offsetY: 243 },
+  { key: "fiveInf", offsetX: 182, offsetY: 150 },
 ];
-
-const RADIUS = 100;
-const CENTER_X = 180 * 0.5;
-const CENTER_Y = 180 * 0.5;
 
 type Props = {
   expeditionsImageLeft: number;
@@ -36,34 +33,28 @@ export function ExpeditionTokens({
 
   return (
     <>
-      {EXPEDITION_POSITIONS.map(({ key, angle }) => {
+      {EXPEDITION_POSITIONS.map(({ key, offsetX, offsetY }) => {
         const expedition = gameData.expeditions[key];
-        if (!expedition.completedBy) return null;
+        if (!expedition || !expedition.completedBy) return null;
 
-        const faction = gameData.playerData.find(
-          (p) => p.color === expedition.completedBy
-        )?.faction;
+        const faction = factionColorMap[expedition.completedBy];
         if (!faction) return null;
+        const colorAlias = getColorAlias(faction.color);
 
-        const colorAlias = getColorAlias(factionColorMap?.[faction]?.color);
-
-        const angleRadians = (angle * Math.PI) / 180;
-        const x =
-          expeditionsImageLeft + CENTER_X + RADIUS * Math.sin(angleRadians);
-        const y =
-          expeditionsImageTop + CENTER_Y - RADIUS * Math.cos(angleRadians);
+        const x = expeditionsImageLeft + offsetX;
+        const y = expeditionsImageTop + offsetY;
 
         return (
           <ControlToken
             key={key}
             colorAlias={colorAlias}
-            faction={faction}
+            faction={faction.faction}
             style={{
               position: "absolute",
               left: `${x}px`,
               top: `${y}px`,
-              transform: "translate(25%, 75%) rotate(90deg)",
-              zIndex: "var(--z-control-token)",
+              transform: "translate(0%, -100%) rotate(90deg)",
+              zIndex: 100,
             }}
           />
         );

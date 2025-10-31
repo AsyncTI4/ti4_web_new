@@ -22,6 +22,8 @@ import { useMapTooltips } from "./hooks/useMapTooltips";
 import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { MapTilesRenderer } from "./components/MapTilesRenderer";
+import { ExpeditionLayer } from "@/components/Map/ExpeditionLayer";
+import { useMapContentSize } from "./hooks/useMapContentSize";
 
 const MAP_PADDING = 200;
 
@@ -121,6 +123,8 @@ export function MapView({ gameId }: Props) {
     return !!(gameData.lawsInPlay && gameData.lawsInPlay.length > 0);
   }, [gameData]);
 
+  const contentSize = useMapContentSize();
+
   return (
     <Box className={classes.mapContainer}>
       {/* Map Container - Full Width */}
@@ -190,6 +194,7 @@ export function MapView({ gameId }: Props) {
                 onTileSelect={createTileSelectHandler(handleTileSelect)}
                 onTileHover={handleTileHover}
               />
+              <ExpeditionLayer contentSize={contentSize} />
             </Box>
 
             {!draft.targetPositionId && (

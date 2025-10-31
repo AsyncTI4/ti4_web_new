@@ -272,6 +272,7 @@ export default function PlayerCard(props: Props) {
         abilities={abilities}
         factionTechs={factionTechs}
         notResearchedFactionTechs={notResearchedFactionTechs}
+        breakthrough={props.playerData.breakthrough}
       />
 
       <Grid gutter="md" columns={12}>

@@ -25,8 +25,6 @@ import { Leaders } from "./PlayerArea/Leaders";
 import {
   ArmyStats,
   PromissoryNote,
-  Tech,
-  Breakthrough,
   Plot,
 } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
@@ -40,12 +38,11 @@ import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
 import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
-import { getAbility } from "@/lookup/abilities";
-import { Ability } from "./PlayerArea/Ability";
-import Caption from "./shared/Caption/Caption";
 import { useGameData } from "@/hooks/useGameContext";
 import { filterPlanetsByOcean } from "@/utils/planets";
 import type { PlotCard } from "@/data/types";
+import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
+import Caption from "./shared/Caption/Caption";
 
 type Props = {
   playerData: PlayerData;
@@ -240,42 +237,12 @@ export default function PlayerCardMobile(props: Props) {
           {isSpeaker && <SpeakerToken isVisible />}
         </Group>
       </Group>
-      <Group gap="xs" wrap="wrap" align="center" mb="lg" mt="xs">
-        {props.playerData.breakthrough?.unlocked &&
-          props.playerData.breakthrough.breakthroughId && (
-            <Stack gap={4}>
-              <Caption size="xs">Breakthrough</Caption>
-              <Breakthrough
-                breakthroughId={props.playerData.breakthrough.breakthroughId}
-                exhausted={props.playerData.breakthrough.exhausted}
-                tradeGoodsStored={
-                  props.playerData.breakthrough.tradeGoodsStored
-                }
-              />
-            </Stack>
-          )}
-
-        <Stack gap={4}>
-          <Caption size="xs">Abilities</Caption>
-          <Group gap={2}>
-            {abilities?.map((abilityId, index) => {
-              const abilityData = getAbility(abilityId);
-              if (!abilityData) return;
-              return <Ability id={abilityId} key={index} />;
-            })}
-          </Group>
-        </Stack>
-        {notResearchedFactionTechs?.length > 0 && (
-          <Stack gap={4}>
-            <Caption size="xs">Faction Techs</Caption>
-            <Group gap={2}>
-              {notResearchedFactionTechs.map((techId) => (
-                <Tech techId={techId} key={techId} />
-              ))}
-            </Group>
-          </Stack>
-        )}
-      </Group>
+      <PlayerCardAbilitiesFactionTechs
+        abilities={abilities}
+        notResearchedFactionTechs={notResearchedFactionTechs}
+        variant="mobile"
+        breakthrough={props.playerData.breakthrough}
+      />
 
       <Grid gutter="xs" columns={24}>
         <Grid.Col span={6}>

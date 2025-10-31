@@ -74,6 +74,7 @@ export default function PlayerCardSidebar(props: Props) {
         abilities={abilities}
         notResearchedFactionTechs={notResearchedFactionTechs}
         variant="compact"
+        breakthrough={playerData.breakthrough}
       />
 
       <Stack gap={0}>

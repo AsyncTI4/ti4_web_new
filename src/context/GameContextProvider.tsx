@@ -241,8 +241,6 @@ export function buildGameContext(
 
   const armyRankings = calculateArmyRankings(overriddenPlayerData);
 
-  console.log("tileUnitData", data.tileUnitData[313]);
-
   return {
     mapTiles,
     tilePositions: data.tilePositions,

@@ -5,11 +5,15 @@ import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { getBreakthroughData } from "@/lookup/breakthroughs";
 import type { ColorKey } from "@/components/PlayerArea/gradientClasses";
 import { BreakthroughCard } from "./BreakthroughCard.tsx";
+import { IconLock } from "@tabler/icons-react";
+import { cdnImage } from "@/data/cdnImage.ts";
+import styles from "./Breakthrough.module.css";
 
 type Props = {
   breakthroughId: string;
   exhausted?: boolean;
   tradeGoodsStored?: number;
+  unlocked?: boolean;
 };
 
 const synergyToColor: Record<string, ColorKey> = {
@@ -48,6 +52,7 @@ export function Breakthrough({
   breakthroughId,
   exhausted = false,
   tradeGoodsStored,
+  unlocked = true,
 }: Props) {
   const [opened, setOpened] = useState(false);
   const data = getBreakthroughData(breakthroughId);
@@ -60,7 +65,9 @@ export function Breakthrough({
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Box>
+        <Box
+          className={`${styles.container} ${!unlocked ? styles.locked : ""}`}
+        >
           <Chip
             accent={accent}
             breakthrough
@@ -72,21 +79,22 @@ export function Breakthrough({
             accentLine={exhausted}
             leftSection={
               <img
-                src="/public/synergy.png"
-                style={{
-                  width: 20,
-                  height: 22,
-                  bottom: 1,
-                  position: "relative",
-                  marginRight: -2,
-                }}
+                src={cdnImage("/general/synergy.png")}
+                className={styles.synergyIcon}
               />
             }
           >
             {tradeGoodsStored && tradeGoodsStored > 0 ? (
-              <Box style={{ marginLeft: 6 }}>+{tradeGoodsStored} TG</Box>
+              <Box className={styles.tradeGoodsText}>
+                +{tradeGoodsStored} TG
+              </Box>
             ) : null}
           </Chip>
+          {!unlocked && (
+            <Box className={styles.lockIcon}>
+              <IconLock size={12} color="white" stroke={2} />
+            </Box>
+          )}
         </Box>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

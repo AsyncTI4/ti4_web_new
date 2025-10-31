@@ -1,0 +1,28 @@
+.container {
+  position: relative;
+}
+
+.container.locked {
+  filter: grayscale(0.8);
+  opacity: 0.7;
+}
+
+.synergyIcon {
+  width: 20px;
+  height: 22px;
+  bottom: 1px;
+  position: relative;
+  margin-right: -2px;
+}
+
+.tradeGoodsText {
+  margin-left: 6px;
+}
+
+.lockIcon {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  pointer-events: none;
+}
+

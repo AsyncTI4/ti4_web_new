@@ -141,7 +141,8 @@ export function FactionTabBar({
             );
           })}
 
-        <TabButton
+        {/* Temporarily hidden */}
+        {/* <TabButton
           icon={<IconFlask size={16} />}
           text="TECH"
           areaType="tech"
@@ -153,9 +154,10 @@ export function FactionTabBar({
           onAreaSelect={onAreaSelect}
           onAreaMouseEnter={onAreaMouseEnter}
           onAreaMouseLeave={onAreaMouseLeave}
-        />
+        /> */}
 
-        <TabButton
+        {/* Temporarily hidden */}
+        {/* <TabButton
           icon={<IconHandStop size={16} />}
           text="HAND"
           areaType="components"
@@ -167,9 +169,10 @@ export function FactionTabBar({
           onAreaSelect={onAreaSelect}
           onAreaMouseEnter={onAreaMouseEnter}
           onAreaMouseLeave={onAreaMouseLeave}
-        />
+        /> */}
 
-        <TabButton
+        {/* Temporarily hidden */}
+        {/* <TabButton
           icon={<IconTank size={16} />}
           text="Strength"
           areaType="strength"
@@ -181,7 +184,7 @@ export function FactionTabBar({
           onAreaSelect={onAreaSelect}
           onAreaMouseEnter={onAreaMouseEnter}
           onAreaMouseLeave={onAreaMouseLeave}
-        />
+        /> */}
       </Group>
     </Box>
   );

@@ -10,6 +10,8 @@ import { Leaders } from "./PlayerArea/Leaders";
 import { getFactionImage } from "@/lookup/factions";
 import { Relic } from "./PlayerArea/Relic";
 import { PlayerCardHeaderCompact } from "./PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
+import { Breakthrough } from "./PlayerArea";
+import Caption from "./shared/Caption/Caption";
 
 type Props = {
   playerData: PlayerData;
@@ -70,6 +72,19 @@ export default function PlayerCardSidebarComponents(props: Props) {
         </Stack>
         <Stack gap={8}>
           <Leaders leaders={leaders} faction={faction} />
+          {props.playerData.breakthrough?.breakthroughId && (
+            <Stack gap={4}>
+              <Caption size="xs">Breakthrough</Caption>
+              <Breakthrough
+                breakthroughId={props.playerData.breakthrough.breakthroughId}
+                exhausted={props.playerData.breakthrough.exhausted}
+                tradeGoodsStored={
+                  props.playerData.breakthrough.tradeGoodsStored
+                }
+                unlocked={props.playerData.breakthrough.unlocked ?? false}
+              />
+            </Stack>
+          )}
           {relics.map((relicId, index) => (
             <Relic
               key={index}

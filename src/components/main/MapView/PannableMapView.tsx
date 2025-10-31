@@ -14,7 +14,7 @@ import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
 import { ScoreTracker } from "@/components/Objectives";
 import ExpandedPublicObjectives from "@/components/Objectives/PublicObjectives/ExpandedPublicObjectives";
-import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import { useMapContentSize } from "./hooks/useMapContentSize";
 import {
   shouldHideZoomControls,
   computeMapZoom,
@@ -133,37 +133,7 @@ export function PannableMapView({ gameId }: Props) {
     selectedArea,
   });
 
-  const contentSize = useMemo(() => {
-    const tiles = gameData?.mapTiles || [];
-    if (!tiles.length) return { width: 0, height: 0 };
-
-    let maxRight = 0;
-    let maxBottom = 0;
-
-    for (const t of tiles) {
-      const right = t.properties.x + TILE_WIDTH;
-      const bottom = t.properties.y + TILE_HEIGHT;
-      if (right > maxRight) maxRight = right;
-      if (bottom > maxBottom) maxBottom = bottom;
-    }
-
-    const baseWidth = maxRight + MAP_PADDING;
-    const baseHeight = maxBottom + MAP_PADDING + 320;
-
-    // For Firefox, we need to account for the MozTransform scale
-    // since it doesn't affect layout dimensions like CSS zoom does
-    if (settings.isFirefox) {
-      return {
-        width: baseWidth * zoom,
-        height: baseHeight * zoom,
-      };
-    }
-
-    return {
-      width: baseWidth,
-      height: baseHeight,
-    };
-  }, [gameData?.mapTiles, settings.isFirefox, zoom]);
+  const contentSize = useMapContentSize();
 
   const areaStyles = isMobileDevice()
     ? {
