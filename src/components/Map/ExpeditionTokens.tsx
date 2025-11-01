@@ -9,13 +9,25 @@ type ExpeditionPosition = {
   offsetY: number;
 };
 
+const CENTER_X = 90;
+const CENTER_Y = 90;
+const RADIUS = 90;
+
+function calculatePosition(angleDegrees: number) {
+  const angleRadians = (angleDegrees * Math.PI) / 180;
+  return {
+    offsetX: CENTER_X + RADIUS * Math.cos(angleRadians),
+    offsetY: CENTER_Y - RADIUS * Math.sin(angleRadians),
+  };
+}
+
 const EXPEDITION_POSITIONS: ExpeditionPosition[] = [
-  { key: "tradeGoods", offsetX: 47, offsetY: 101 },
-  { key: "fiveRes", offsetX: 114, offsetY: 5 },
-  { key: "actionCards", offsetX: 182, offsetY: 101 },
-  { key: "techSkip", offsetX: 47, offsetY: 150 },
-  { key: "secret", offsetX: 114, offsetY: 243 },
-  { key: "fiveInf", offsetX: 182, offsetY: 150 },
+  { key: "tradeGoods", ...calculatePosition(-90) }, // 12 o'clock
+  { key: "fiveRes", ...calculatePosition(-30) }, // 2 o'clock
+  { key: "actionCards", ...calculatePosition(30) }, // 4 o'clock
+  { key: "techSkip", ...calculatePosition(90) }, // 6 o'clock
+  { key: "secret", ...calculatePosition(150) }, // 8 o'clock
+  { key: "fiveInf", ...calculatePosition(210) }, // 10 o'clock
 ];
 
 type Props = {
@@ -35,6 +47,7 @@ export function ExpeditionTokens({
     <>
       {EXPEDITION_POSITIONS.map(({ key, offsetX, offsetY }) => {
         const expedition = gameData.expeditions[key];
+        console.log(key, expedition);
         if (!expedition || !expedition.completedBy) return null;
 
         const faction = factionColorMap[expedition.completedBy];
@@ -53,7 +66,7 @@ export function ExpeditionTokens({
               position: "absolute",
               left: `${x}px`,
               top: `${y}px`,
-              transform: "translate(0%, -100%) rotate(90deg)",
+              transform: "translate(25%, 50%) rotate(90deg)",
               zIndex: 100,
             }}
           />

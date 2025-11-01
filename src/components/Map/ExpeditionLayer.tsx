@@ -62,8 +62,6 @@ export function ExpeditionLayer({ contentSize }: Props) {
 
   const position = calculateExpeditionPosition(contentSize);
 
-  console.log("gameData.expeditions", gameData.expeditions);
-
   return (
     <>
       <img
