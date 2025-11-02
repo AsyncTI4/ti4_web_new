@@ -126,7 +126,7 @@ export function Plot({ plotCard }: Props) {
         <DetailsCard width={300} color="red">
           <Stack gap="md">
             <DetailsCard.Title
-              title={displayName || `Plot Card #${plotCard.identifier}`}
+              title={`Plot Card #${plotCard.identifier}`}
               subtitle={`Plot Card #${plotCard.identifier}`}
             />
             {plotCard.factions.length > 0 && (
