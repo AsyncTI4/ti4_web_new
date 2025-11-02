@@ -22,12 +22,12 @@ function calculatePosition(angleDegrees: number) {
 }
 
 const EXPEDITION_POSITIONS: ExpeditionPosition[] = [
-  { key: "tradeGoods", ...calculatePosition(-90) }, // 12 o'clock
-  { key: "fiveRes", ...calculatePosition(-30) }, // 2 o'clock
-  { key: "actionCards", ...calculatePosition(30) }, // 4 o'clock
-  { key: "techSkip", ...calculatePosition(90) }, // 6 o'clock
-  { key: "secret", ...calculatePosition(150) }, // 8 o'clock
-  { key: "fiveInf", ...calculatePosition(210) }, // 10 o'clock
+  { key: "actionCards", ...calculatePosition(30) }, // 2 o'clock 30
+  { key: "fiveInf", ...calculatePosition(-30) }, // 4 o'clock 210
+  { key: "secret", ...calculatePosition(-90) }, // 6 o'clock 150
+  { key: "techSkip", ...calculatePosition(-150) }, // 8 o'clock 90
+  { key: "tradeGoods", ...calculatePosition(150) }, // 10 o'clock -90
+  { key: "fiveRes", ...calculatePosition(90) }, // 12 o'clock -30
 ];
 
 type Props = {
