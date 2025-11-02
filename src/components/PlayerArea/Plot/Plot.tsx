@@ -10,17 +10,21 @@ import { DetailsCard } from "@/components/shared/DetailsCard";
 
 type Props = {
   plotCard: PlotCard;
+  faction?: string;
 };
 
 const MAX_PLOT_SLOTS = 4;
 
-export function Plot({ plotCard }: Props) {
+export function Plot({ plotCard, faction }: Props) {
   const [opened, setOpened] = useState(false);
 
+  // Only reveal plot names if:
+  // 1. plotAlias exists AND
+  // 2. faction is "obsidian" (not "firmament")
+  const isRevealed = !!plotCard.plotAlias && faction === "obsidian";
   const displayName = plotCard.plotAlias
     ? plotCard.plotAlias.charAt(0).toUpperCase() + plotCard.plotAlias.slice(1)
     : undefined;
-  const showIdentifier = !plotCard.plotAlias;
 
   const renderFactionSlots = (): ReactElement[] => {
     const slots: ReactElement[] = [];
@@ -77,25 +81,10 @@ export function Plot({ plotCard }: Props) {
               <Group gap={2} justify="center" wrap="wrap">
                 {renderFactionSlots()}
               </Group>
-              {showIdentifier ? (
-                <Text
-                  size="md"
-                  fw={700}
-                  ff="monospace"
-                  ta="center"
-                  c="white"
-                  style={{
-                    letterSpacing: "0.5px",
-                    textShadow: "0 2px 4px rgba(0, 0, 0, 0.9)",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  #{plotCard.identifier}
-                </Text>
-              ) : (
+              {isRevealed ? (
                 <>
-                  {/* <Text
-                    size="10px"
+                  <Text
+                    size="xs"
                     fw={600}
                     ta="center"
                     tt="uppercase"
@@ -107,7 +96,7 @@ export function Plot({ plotCard }: Props) {
                     }}
                   >
                     {displayName}
-                  </Text> */}
+                  </Text>
                   <Text
                     size="xs"
                     ff="monospace"
@@ -115,6 +104,35 @@ export function Plot({ plotCard }: Props) {
                     style={{ letterSpacing: "0.3px", opacity: 0.7 }}
                   >
                     #{plotCard.identifier}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text
+                    size="md"
+                    fw={700}
+                    ff="monospace"
+                    ta="center"
+                    c="white"
+                    style={{
+                      letterSpacing: "0.5px",
+                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.9)",
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    #{plotCard.identifier}
+                  </Text>
+                  <Text
+                    size="xs"
+                    ta="center"
+                    c="dimmed"
+                    style={{
+                      letterSpacing: "0.2px",
+                      opacity: 0.8,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    Hidden Plot
                   </Text>
                 </>
               )}
@@ -126,9 +144,23 @@ export function Plot({ plotCard }: Props) {
         <DetailsCard width={300} color="red">
           <Stack gap="md">
             <DetailsCard.Title
-              title={`Plot Card #${plotCard.identifier}`}
-              subtitle={`Plot Card #${plotCard.identifier}`}
+              title={
+                isRevealed
+                  ? `${displayName} (Plot #${plotCard.identifier})`
+                  : `Hidden Plot Card #${plotCard.identifier}`
+              }
+              subtitle={
+                isRevealed
+                  ? `Plot Card #${plotCard.identifier}`
+                  : `Plot Card #${plotCard.identifier}`
+              }
             />
+            {!isRevealed && (
+              <Text size="sm" c="dimmed" style={{ fontStyle: "italic" }}>
+                This plot card has not been revealed yet. The plot name will be
+                shown when the Firmament player becomes the Obsidian.
+              </Text>
+            )}
             {plotCard.factions.length > 0 && (
               <Stack gap="xs">
                 <Text size="sm" fw={600}>

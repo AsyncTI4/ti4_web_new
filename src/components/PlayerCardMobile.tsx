@@ -363,7 +363,13 @@ export default function PlayerCardMobile(props: Props) {
               <Caption size="xs">Plots</Caption>
               <Group gap={4} wrap="wrap" flex={1}>
                 {plotCards.map((plotCard, index) => {
-                  return <Plot key={`plot-${index}`} plotCard={plotCard} />;
+                  return (
+                    <Plot
+                      key={`plot-${index}`}
+                      plotCard={plotCard}
+                      faction={faction}
+                    />
+                  );
                 })}
               </Group>
             </Stack>
