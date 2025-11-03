@@ -2,6 +2,7 @@ import { cdnImage } from "@/data/cdnImage";
 import { ExpeditionTokens } from "./ExpeditionTokens";
 import { useGameData } from "@/hooks/useGameContext";
 import { useMemo } from "react";
+import { useAppStore, useSettingsStore } from "@/utils/appStore";
 
 type Props = {
   contentSize: {
@@ -34,19 +35,29 @@ function useExpeditionVisibility() {
   };
 }
 
-function calculateExpeditionPosition(contentSize: {
-  width: number;
-  height: number;
-}) {
-  const containerWidth = contentSize.width + 400;
+function calculateExpeditionPosition(
+  contentSize: {
+    width: number;
+    height: number;
+  },
+  isFirefox: boolean,
+  zoom: number
+) {
+  // For Firefox, contentSize is already multiplied by zoom in useMapContentSize
+  // But since the container uses MozTransform: scale(zoom), we need to use
+  // the base (unscaled) size for position calculation
+  const baseWidth = isFirefox ? contentSize.width / zoom : contentSize.width;
+  const baseHeight = isFirefox ? contentSize.height / zoom : contentSize.height;
+
+  const containerWidth = baseWidth + 400;
   const expeditionsImageLeft =
     containerWidth >= 1200
       ? containerWidth - 1200 + 200
       : Math.max(0, containerWidth - 300) + 200;
   const expeditionsImageTop =
-    contentSize.height >= 800
-      ? contentSize.height - 800 + 200
-      : Math.max(0, contentSize.height - 300) + 200;
+    baseHeight >= 800
+      ? baseHeight - 800 + 200
+      : Math.max(0, baseHeight - 300) + 200;
 
   return {
     left: expeditionsImageLeft,
@@ -57,10 +68,16 @@ function calculateExpeditionPosition(contentSize: {
 export function ExpeditionLayer({ contentSize }: Props) {
   const gameData = useGameData();
   const visibility = useExpeditionVisibility();
+  const zoom = useAppStore((state) => state.zoomLevel);
+  const settings = useSettingsStore((state) => state.settings);
 
   if (!gameData?.expeditions || !visibility.shouldShow) return null;
 
-  const position = calculateExpeditionPosition(contentSize);
+  const position = calculateExpeditionPosition(
+    contentSize,
+    settings.isFirefox,
+    zoom
+  );
 
   return (
     <>
