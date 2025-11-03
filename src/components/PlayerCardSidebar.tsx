@@ -19,6 +19,10 @@ import { PlayerCardPlanetsArea } from "./PlayerArea/PlayerCardPlanetsArea";
 import { PlayerCardRelicsPromissoryArea } from "./PlayerArea/PlayerCardRelicsPromissoryArea";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
 import { usePlanetEconomics } from "@/hooks/usePlanetEconomics";
+import { BreachTokens } from "./PlayerArea/BreachTokens";
+import { SleeperTokens } from "./PlayerArea/SleeperTokens";
+import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
+import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
 
 type Props = {
   playerData: PlayerData;
@@ -47,6 +51,11 @@ export default function PlayerCardSidebar(props: Props) {
     factionImage,
     factionImageType,
     plotCards,
+    customPromissoryNotes,
+    breachTokensReinf,
+    galvanizeTokensReinf,
+    sleeperTokensReinf,
+    ghostWormholesReinf,
   } = playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
@@ -73,6 +82,7 @@ export default function PlayerCardSidebar(props: Props) {
       <PlayerCardAbilitiesFactionTechs
         abilities={abilities}
         notResearchedFactionTechs={notResearchedFactionTechs}
+        customPromissoryNotes={customPromissoryNotes}
         variant="compact"
         breakthrough={playerData.breakthrough}
       />
@@ -133,13 +143,28 @@ export default function PlayerCardSidebar(props: Props) {
 
           <Group gap={8} align="flex-start">
             <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-            <Box style={{ flex: 1 }}>
+
+            <Group gap={0} wrap="wrap" align="flex-start">
               <PlayerCardPlanetsArea
                 planets={planets}
                 exhaustedPlanetAbilities={exhaustedPlanetAbilities}
                 gap={0}
               />
-            </Box>
+              <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
+                {breachTokensReinf && breachTokensReinf > 0 && (
+                  <BreachTokens count={breachTokensReinf} />
+                )}
+                {sleeperTokensReinf && sleeperTokensReinf > 0 && (
+                  <SleeperTokens count={sleeperTokensReinf} />
+                )}
+                {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
+                  <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
+                )}
+                {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
+                  <GalvanizeTokens count={galvanizeTokensReinf} />
+                )}
+              </Group>
+            </Group>
           </Group>
           <Box className={softStyles.softDividerTight} />
         </Stack>

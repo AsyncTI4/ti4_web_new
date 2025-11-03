@@ -40,6 +40,10 @@ import { getFactionImage } from "@/lookup/factions";
 import { filterPlanetsByOcean } from "@/utils/planets";
 import { Plot } from "./PlayerArea";
 import Caption from "./shared/Caption/Caption";
+import { BreachTokens } from "./PlayerArea/BreachTokens";
+import { SleeperTokens } from "./PlayerArea/SleeperTokens";
+import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
+import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
 
 type Props = {
   playerData: PlayerData;
@@ -115,6 +119,11 @@ export default function PlayerCard(props: Props) {
     factionTechs,
     abilities,
     plotCards,
+    customPromissoryNotes,
+    breachTokensReinf,
+    galvanizeTokensReinf,
+    sleeperTokensReinf,
+    ghostWormholesReinf,
   } = props.playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
@@ -272,6 +281,7 @@ export default function PlayerCard(props: Props) {
         abilities={abilities}
         factionTechs={factionTechs}
         notResearchedFactionTechs={notResearchedFactionTechs}
+        customPromissoryNotes={customPromissoryNotes}
         breakthrough={props.playerData.breakthrough}
       />
 
@@ -405,11 +415,9 @@ export default function PlayerCard(props: Props) {
                   />
                 );
               })}
-            </Group>
-            {oceanPlanets.length > 0 && (
-              <>
-                <Box style={{ marginLeft: "2px" }} />
-                <Group gap={1} wrap="wrap" flex={1}>
+              {oceanPlanets.length > 0 && (
+                <>
+                  <Box style={{ marginLeft: "2px" }} />
                   {oceanPlanets.map((planetId, index) => {
                     return (
                       <PlanetCard
@@ -421,9 +429,21 @@ export default function PlayerCard(props: Props) {
                       />
                     );
                   })}
-                </Group>
-              </>
-            )}
+                </>
+              )}
+              {breachTokensReinf && breachTokensReinf > 0 && (
+                <BreachTokens count={breachTokensReinf} />
+              )}
+              {sleeperTokensReinf && sleeperTokensReinf > 0 && (
+                <SleeperTokens count={sleeperTokensReinf} />
+              )}
+              {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
+                <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
+              )}
+              {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
+                <GalvanizeTokens count={galvanizeTokensReinf} />
+              )}
+            </Group>
           </Group>
         </Grid.Col>
         {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (

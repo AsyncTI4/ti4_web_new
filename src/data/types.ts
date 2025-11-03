@@ -378,6 +378,7 @@ export type PlayerData = {
   followedSCs: number[];
   unfollowedSCs: number[];
   promissoryNotesInPlayArea: string[];
+  customPromissoryNotes?: string[];
   techs: string[];
   exhaustedTechs: string[];
   factionTechs: string[];
@@ -420,6 +421,8 @@ export type PlayerData = {
   // ghost-specific properties
   sleeperTokensReinf?: number;
   ghostWormholesReinf?: string[];
+  breachTokensReinf?: number;
+  galvanizeTokensReinf?: number;
 
   // mahact-specific properties
   mahactEdict?: string[];

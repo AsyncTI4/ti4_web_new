@@ -1,0 +1,10 @@
+.container {
+  position: relative;
+  height: 110px;
+}
+
+.token {
+  position: absolute;
+  width: 24px;
+}
+

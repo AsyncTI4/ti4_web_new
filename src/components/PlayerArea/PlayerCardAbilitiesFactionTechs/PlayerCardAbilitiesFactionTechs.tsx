@@ -3,11 +3,13 @@ import { getAbility } from "@/lookup/abilities";
 import { Ability } from "../Ability";
 import { Tech } from "../Tech";
 import { Breakthrough } from "../Breakthrough/Breakthrough";
+import { PromissoryNote } from "../PromissoryNote";
 import Caption from "../../shared/Caption/Caption";
 
 type PlayerCardAbilitiesFactionTechsProps = {
   abilities?: string[];
   notResearchedFactionTechs?: string[];
+  customPromissoryNotes?: string[];
   variant?: "compact" | "mobile";
   gap?: number | string;
   breakthrough?: {
@@ -21,6 +23,7 @@ type PlayerCardAbilitiesFactionTechsProps = {
 export function PlayerCardAbilitiesFactionTechs({
   abilities = [],
   notResearchedFactionTechs = [],
+  customPromissoryNotes = [],
   variant = "compact",
   gap = 2,
   breakthrough,
@@ -50,6 +53,16 @@ export function PlayerCardAbilitiesFactionTechs({
                 if (!abilityData) return null;
                 return <Ability id={abilityId} key={index} />;
               })}
+            </Group>
+          </Stack>
+        )}
+        {customPromissoryNotes.length > 0 && (
+          <Stack gap={4}>
+            <Caption size="xs">Promissory Notes</Caption>
+            <Group gap={gap}>
+              {customPromissoryNotes.map((pnId) => (
+                <PromissoryNote promissoryNoteId={pnId} key={pnId} />
+              ))}
             </Group>
           </Stack>
         )}
@@ -103,6 +116,16 @@ export function PlayerCardAbilitiesFactionTechs({
                 </Box>
               );
             })}
+          </Group>
+        </Stack>
+      )}
+      {customPromissoryNotes.length > 0 && (
+        <Stack gap={4}>
+          <Caption size="xs">Promissory Notes</Caption>
+          <Group gap={gap}>
+            {customPromissoryNotes.map((pnId) => (
+              <PromissoryNote promissoryNoteId={pnId} key={pnId} />
+            ))}
           </Group>
         </Stack>
       )}

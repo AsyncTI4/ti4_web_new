@@ -22,11 +22,7 @@ import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import {
-  ArmyStats,
-  PromissoryNote,
-  Plot,
-} from "./PlayerArea";
+import { ArmyStats, PromissoryNote, Plot } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { PlayerCardBox } from "./PlayerCardBox";
@@ -40,9 +36,12 @@ import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
 import { useGameData } from "@/hooks/useGameContext";
 import { filterPlanetsByOcean } from "@/utils/planets";
-import type { PlotCard } from "@/data/types";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
 import Caption from "./shared/Caption/Caption";
+import { BreachTokens } from "./PlayerArea/BreachTokens";
+import { SleeperTokens } from "./PlayerArea/SleeperTokens";
+import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
+import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
 
 type Props = {
   playerData: PlayerData;
@@ -121,6 +120,11 @@ export default function PlayerCardMobile(props: Props) {
 
     abilities,
     plotCards,
+    customPromissoryNotes,
+    breachTokensReinf,
+    galvanizeTokensReinf,
+    sleeperTokensReinf,
+    ghostWormholesReinf,
   } = props.playerData;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
@@ -240,6 +244,7 @@ export default function PlayerCardMobile(props: Props) {
       <PlayerCardAbilitiesFactionTechs
         abilities={abilities}
         notResearchedFactionTechs={notResearchedFactionTechs}
+        customPromissoryNotes={customPromissoryNotes}
         variant="mobile"
         breakthrough={props.playerData.breakthrough}
       />
@@ -328,21 +333,33 @@ export default function PlayerCardMobile(props: Props) {
               {oceanPlanets.length > 0 && (
                 <>
                   <Box ml="xs" />
-                  <Group gap={1} wrap="wrap" flex={1}>
-                    {oceanPlanets.map((planetId, index) => {
-                      return (
-                        <PlanetCard
-                          key={`ocean-${index}`}
-                          planetId={planetId}
-                          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                            planetId
-                          )}
-                        />
-                      );
-                    })}
-                  </Group>
+                  {oceanPlanets.map((planetId, index) => {
+                    return (
+                      <PlanetCard
+                        key={`ocean-${index}`}
+                        planetId={planetId}
+                        legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
+                          planetId
+                        )}
+                      />
+                    );
+                  })}
                 </>
               )}
+              <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
+                {breachTokensReinf && breachTokensReinf > 0 && (
+                  <BreachTokens count={breachTokensReinf} />
+                )}
+                {sleeperTokensReinf && sleeperTokensReinf > 0 && (
+                  <SleeperTokens count={sleeperTokensReinf} />
+                )}
+                {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
+                  <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
+                )}
+                {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
+                  <GalvanizeTokens count={galvanizeTokensReinf} />
+                )}
+              </Group>
             </Group>
 
             {nombox !== undefined && Object.keys(nombox).length > 0 && (

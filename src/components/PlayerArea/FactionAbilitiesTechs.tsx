@@ -3,12 +3,14 @@ import { Ability } from "./Ability";
 import { getAbility } from "@/lookup/abilities";
 import { Tech } from "./Tech";
 import { Breakthrough } from "./Breakthrough/Breakthrough";
+import { PromissoryNote } from "./PromissoryNote";
 import Caption from "../shared/Caption/Caption";
 
 interface FactionAbilitiesTechsProps {
   abilities: string[] | undefined;
   factionTechs: string[] | undefined;
   notResearchedFactionTechs: string[];
+  customPromissoryNotes?: string[];
   breakthrough?: {
     unlocked?: boolean;
     breakthroughId?: string;
@@ -21,6 +23,7 @@ export default function FactionAbilitiesTechs({
   abilities,
   notResearchedFactionTechs,
   factionTechs,
+  customPromissoryNotes,
   breakthrough,
 }: FactionAbilitiesTechsProps) {
   const researchedFactionTechs = factionTechs?.filter(
@@ -48,6 +51,16 @@ export default function FactionAbilitiesTechs({
               if (!abilityData) return;
               return <Ability id={abilityId} key={index} />;
             })}
+          </Group>
+        </Stack>
+      )}
+      {customPromissoryNotes && customPromissoryNotes.length > 0 && (
+        <Stack gap={4}>
+          <Caption size="xs">Promissory Notes</Caption>
+          <Group gap={2}>
+            {customPromissoryNotes.map((pnId) => (
+              <PromissoryNote promissoryNoteId={pnId} key={pnId} />
+            ))}
           </Group>
         </Stack>
       )}

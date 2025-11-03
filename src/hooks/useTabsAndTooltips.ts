@@ -7,9 +7,6 @@ export type AreaType =
       unitId?: string;
       coords: { x: number; y: number };
     }
-  | { type: "tech" }
-  | { type: "components" }
-  | { type: "strength" }
   | null;
 
 export function useTabsAndTooltips() {

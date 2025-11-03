@@ -127,24 +127,15 @@ export function useKeyboardShortcuts({
           break;
 
         case "T":
-          event.preventDefault();
-          // Toggle tech tab
-          const isTechSelected = selectedArea?.type === "tech";
-          onAreaSelect(isTechSelected ? null : { type: "tech" });
+          // Tech tab removed
           break;
 
         case "H":
-          event.preventDefault();
-          // Toggle hand/components tab
-          const isHandSelected = selectedArea?.type === "components";
-          onAreaSelect(isHandSelected ? null : { type: "components" });
+          // Hand/components tab removed
           break;
 
         case "S":
-          event.preventDefault();
-          // Toggle strength tab
-          const isStrengthSelected = selectedArea?.type === "strength";
-          onAreaSelect(isStrengthSelected ? null : { type: "strength" });
+          // Strength tab removed
           break;
 
         case "1":
