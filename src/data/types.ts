@@ -403,6 +403,7 @@ export type PlayerData = {
   debtTokens?: Record<string, number>;
   nombox?: CapturedUnitsData;
   abilities?: string[];
+  decalId?: string;
 
   // card counts
   soCount: number;

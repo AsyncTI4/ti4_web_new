@@ -12,6 +12,8 @@ import { getTextColor } from "@/lookup/colors";
 import { useRef, useCallback } from "react";
 import { LawInPlay } from "../../data/types";
 import { lookupUnit } from "@/lookup/units";
+import { useGameData } from "@/hooks/useGameContext";
+import { getUnitDecalPath } from "@/lookup/decals";
 
 interface UnitStackProps {
   stack: EntityStack;
@@ -47,6 +49,11 @@ export function UnitStack({
   // Look up unit data to get bgDecalPath
   const unitData = lookupUnit(unitType, faction);
   const bgDecalPath = unitData?.bgDecalPath;
+
+  // Get player data for decal overlay
+  const gameData = useGameData();
+  const playerData = gameData?.playerData?.find((p) => p.faction === faction);
+  const decalPath = getUnitDecalPath(playerData, unitType, colorAlias);
 
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent) => {
@@ -177,6 +184,7 @@ export function UnitStack({
               {...commonProps}
               sustained={sustained ? i < sustained : false}
               bgDecalPath={bgDecalPath}
+              decalPath={decalPath || undefined}
               lawsInPlay={lawsInPlay}
             />
           );

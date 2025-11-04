@@ -1,0 +1,105 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 400px;
+  max-width: 90vw;
+  height: 100vh;
+  background: var(--sidebar-bg, var(--mantine-color-dark-8));
+  border-right: 1px solid var(--sidebar-border, var(--mantine-color-dark-4));
+  z-index: var(--z-decal-sidebar);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar.opened {
+  transform: translateX(0);
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Only styles that cannot be replaced with Mantine props remain */
+
+.decalItem {
+  aspect-ratio: 1;
+  border: 2px solid var(--mantine-color-dark-4);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mantine-color-dark-7);
+  overflow: hidden;
+}
+
+.decalItem:hover {
+  border-color: var(--mantine-color-blue-6);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.decalItem.selected {
+  border-color: var(--mantine-color-blue-5);
+  background: var(--mantine-color-dark-6);
+  box-shadow: 0 0 0 2px var(--mantine-color-blue-5);
+}
+
+.decalImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: crisp-edges;
+}
+
+.colorItem {
+  aspect-ratio: 1;
+  border: 2px solid var(--mantine-color-dark-4);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--mantine-color-dark-7);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 45px;
+  max-height: 45px;
+  position: relative;
+  overflow: visible;
+}
+
+.colorItem:hover {
+  border-color: var(--mantine-color-blue-6);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.colorItem.selected {
+  border-color: var(--mantine-color-blue-5);
+  box-shadow: 0 0 0 2px var(--mantine-color-blue-5);
+}
+
+.colorBadge {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  padding: 2px 6px;
+  z-index: 1;
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.colorBadge * {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+

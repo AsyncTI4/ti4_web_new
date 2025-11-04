@@ -5,6 +5,7 @@ import {
   IconSettings,
   IconHash,
   IconMenu2,
+  IconSticker,
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import { SettingsStore, useSettingsStore } from "@/utils/appStore";
@@ -14,6 +15,7 @@ import classes from "./TabsControls.module.css";
 
 type TabsControlsProps = {
   onMenuClick?: () => void;
+  onTryDecalsClick?: () => void;
 };
 
 type ControlButtonsProps = {
@@ -21,6 +23,7 @@ type ControlButtonsProps = {
   handlers: SettingsStore["handlers"];
   game: ReturnType<typeof useGameData>;
   showDistanceButton?: boolean;
+  onTryDecalsClick?: () => void;
 };
 
 function ControlButtons({
@@ -28,6 +31,7 @@ function ControlButtons({
   handlers,
   game,
   showDistanceButton = true,
+  onTryDecalsClick,
 }: ControlButtonsProps) {
   return (
     <>
@@ -151,6 +155,19 @@ function ControlButtons({
           />
         </svg>
       </Button>
+
+      {onTryDecalsClick && (
+        <Button
+          variant="light"
+          size="sm"
+          color="gray"
+          px={8}
+          onClick={onTryDecalsClick}
+          title="Try Unit Decals"
+        >
+          <IconSticker size={16} />
+        </Button>
+      )}
     </>
   );
 }
@@ -199,16 +216,23 @@ function DesktopTabsControls({
   handlers,
   game,
   setThemeName,
+  onTryDecalsClick,
 }: {
   settings: SettingsStore["settings"];
   handlers: SettingsStore["handlers"];
   game: ReturnType<typeof useGameData>;
   setThemeName: SettingsStore["handlers"]["setThemeName"];
+  onTryDecalsClick?: () => void;
 }) {
   return (
     <>
       <Group gap={4} pl={8} pb={4}>
-        <ControlButtons settings={settings} handlers={handlers} game={game} />
+        <ControlButtons
+          settings={settings}
+          handlers={handlers}
+          game={game}
+          onTryDecalsClick={onTryDecalsClick}
+        />
       </Group>
 
       <div style={{ flex: 1 }} />
@@ -288,11 +312,13 @@ function MobileTabsControls({
   handlers,
   game,
   onMenuClick,
+  onTryDecalsClick,
 }: {
   settings: SettingsStore["settings"];
   handlers: SettingsStore["handlers"];
   game: ReturnType<typeof useGameData>;
   onMenuClick: () => void;
+  onTryDecalsClick?: () => void;
 }) {
   return (
     <>
@@ -303,6 +329,7 @@ function MobileTabsControls({
           handlers={handlers}
           game={game}
           showDistanceButton={false}
+          onTryDecalsClick={onTryDecalsClick}
         />
         <div style={{ flex: 1 }} />
         <ActionIcon
@@ -323,7 +350,10 @@ function MobileTabsControls({
   );
 }
 
-export function TabsControls({ onMenuClick }: TabsControlsProps) {
+export function TabsControls({
+  onMenuClick,
+  onTryDecalsClick,
+}: TabsControlsProps) {
   const game = useGameData();
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
@@ -337,6 +367,7 @@ export function TabsControls({ onMenuClick }: TabsControlsProps) {
           handlers={handlers}
           game={game}
           setThemeName={setThemeName}
+          onTryDecalsClick={onTryDecalsClick}
         />
       </Box>
       {onMenuClick && (
@@ -346,6 +377,7 @@ export function TabsControls({ onMenuClick }: TabsControlsProps) {
             handlers={handlers}
             game={game}
             onMenuClick={onMenuClick}
+            onTryDecalsClick={onTryDecalsClick}
           />
         </Box>
       )}

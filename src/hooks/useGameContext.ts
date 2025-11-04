@@ -19,3 +19,29 @@ export function useGameDataState(): GameDataState | undefined {
 export function useGameData(): ReturnType<typeof useGameContext> {
   return useGameContext();
 }
+
+export function useDecalOverrides(): {
+  decalOverrides: Record<string, string>;
+  setDecalOverride: (faction: string, decalId: string | null) => void;
+  clearDecalOverride: (faction: string) => void;
+} {
+  const contextValue = useContext(EnhancedDataContext);
+  return {
+    decalOverrides: contextValue?.decalOverrides ?? {},
+    setDecalOverride: contextValue?.setDecalOverride ?? (() => {}),
+    clearDecalOverride: contextValue?.clearDecalOverride ?? (() => {}),
+  };
+}
+
+export function useColorOverrides(): {
+  colorOverrides: Record<string, string>;
+  setColorOverride: (faction: string, colorAlias: string | null) => void;
+  clearColorOverride: (faction: string) => void;
+} {
+  const contextValue = useContext(EnhancedDataContext);
+  return {
+    colorOverrides: contextValue?.colorOverrides ?? {},
+    setColorOverride: contextValue?.setColorOverride ?? (() => {}),
+    clearColorOverride: contextValue?.clearColorOverride ?? (() => {}),
+  };
+}

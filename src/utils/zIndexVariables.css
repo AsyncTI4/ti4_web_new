@@ -36,8 +36,9 @@
 
   /* MAP UI - Left sidebar, faction tab bar, scrollbar, controls (2000-2999) */
   --z-left-sidebar: 2000;
-  --z-faction-tab-bar: 2010;
   --z-player-card: 2001;
+  --z-faction-tab-bar: 2010;
+  --z-decal-sidebar: 2210;
   --z-drag-handle: 2100;
   --z-drag-handle-active: 2101;
   --z-panel-toggle-button: 2200;

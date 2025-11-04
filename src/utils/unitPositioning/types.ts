@@ -75,6 +75,8 @@ export type PlaceSpaceEntitiesOptions = {
   factionEntities: FactionUnits;
   initialHeatSources?: HeatSource[];
   commandCounters?: string[];
+  systemId?: string;
+  highestProduction?: number;
 };
 
 export type PlaceGroundEntitiesOptions = {

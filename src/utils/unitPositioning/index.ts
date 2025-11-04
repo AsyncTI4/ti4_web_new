@@ -27,6 +27,11 @@ export const getAllEntityPlacementsForTile = (
   const planets = parsePlanetsFromCoords(systemId);
   const initialHeatSources = getInitialHeatSourcesForSystem(systemId);
 
+  // Calculate highest production from tileUnitData
+  const highestProduction = tileUnitData.production
+    ? Math.max(...Object.values(tileUnitData.production))
+    : 0;
+
   const { entityPlacements: spaceEntityPlacements } = placeSpaceEntities({
     gridSize: HEX_GRID_SIZE,
     squareWidth: HEX_SQUARE_WIDTH,
@@ -36,6 +41,8 @@ export const getAllEntityPlacementsForTile = (
     factionEntities: tileUnitData.space || {},
     initialHeatSources,
     commandCounters: tileUnitData.ccs || [],
+    systemId,
+    highestProduction,
   });
 
   spaceEntityPlacements.forEach((entity) => {

@@ -55,6 +55,10 @@ const SystemTileDisplay = ({
           planets,
           factionEntities: tileUnitData.space || {},
           initialHeatSources: [],
+          systemId,
+          highestProduction: tileUnitData.production
+            ? Math.max(...Object.values(tileUnitData.production))
+            : 0,
         });
 
       return {

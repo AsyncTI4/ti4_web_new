@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Box, Grid, Stack, Text } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
 import { PathVisualization } from "@/components/PathVisualization";
@@ -33,6 +33,7 @@ import { useMapTooltips } from "./hooks/useMapTooltips";
 import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { MapTilesRenderer } from "./components/MapTilesRenderer";
+import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 
 const MAP_PADDING = 0;
 
@@ -134,6 +135,19 @@ export function PannableMapView({ gameId }: Props) {
   });
 
   const contentSize = useMapContentSize();
+
+  const [tryDecalsOpened, setTryDecalsOpened] = useState(false);
+
+  // Listen for the toggleTryDecals event
+  useEffect(() => {
+    const handleToggleTryDecals = () => {
+      setTryDecalsOpened((prev) => !prev);
+    };
+    window.addEventListener("toggleTryDecals", handleToggleTryDecals);
+    return () => {
+      window.removeEventListener("toggleTryDecals", handleToggleTryDecals);
+    };
+  }, []);
 
   const areaStyles = isMobileDevice()
     ? {
@@ -323,6 +337,11 @@ export function PannableMapView({ gameId }: Props) {
         onCloseOriginModal={() => setOriginModalOpen(false)}
         activeOrigin={activeOrigin}
         gameData={gameData ? { mapTiles: gameData.mapTiles } : null}
+      />
+
+      <TryUnitDecalsSidebar
+        opened={tryDecalsOpened}
+        onClose={() => setTryDecalsOpened(false)}
       />
     </Box>
   );

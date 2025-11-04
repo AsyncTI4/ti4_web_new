@@ -160,7 +160,14 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               >
                 Player
               </Tabs.Tab>
-              <TabsControls onMenuClick={() => setDrawerOpened(true)} />
+              <TabsControls
+                onMenuClick={() => setDrawerOpened(true)}
+                onTryDecalsClick={() => {
+                  // This will be handled by MapView/PannableMapView
+                  // We'll use a custom event to toggle the sidebar
+                  window.dispatchEvent(new CustomEvent("toggleTryDecals"));
+                }}
+              />
             </Tabs.List>
 
             {/* Map Tab */}

@@ -1,10 +1,12 @@
 import { EntityData, FactionUnits } from "@/data/types";
-import { FIGHTER_OFFSET_COLUMNS, SPACE_HEAT_CONFIG } from "./constants";
+import { FIGHTER_OFFSET_COLUMNS, SPACE_HEAT_CONFIG, HEX_VERTICES, DEFAULT_PLANET_RADIUS } from "./constants";
 import { gridToPixel } from "./coordinateUtils";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { placeEntitiesWithCostMap } from "./placement";
 import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
+import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { calculatePlanetHeat } from "./heatMap";
 
 const findNonRimSquare = (
   costMap: number[][],
@@ -174,6 +176,75 @@ const findLeftmostNonRimSquare = (
   return null;
 };
 
+const preplaceProductionHeatSource = (
+  systemId: string | undefined,
+  highestProduction: number | undefined
+): HeatSource | null => {
+  if (!systemId || !highestProduction || highestProduction <= 0) return null;
+
+  const planetCoords = getPlanetCoordsBySystemId(systemId);
+  const planetsWithCoords = Object.entries(planetCoords).map(([planetId, coordStr]) => {
+    const [x, y] = coordStr.split(",").map(Number);
+    return {
+      name: planetId,
+      x,
+      y,
+      radius: DEFAULT_PLANET_RADIUS,
+    };
+  });
+
+  const hexagonCorners = [
+    { vertex: HEX_VERTICES[0], position: "top-left" },
+    { vertex: HEX_VERTICES[1], position: "top-right" },
+  ];
+
+  let lowestHeat = Infinity;
+  let bestCorner: {
+    vertex: { x: number; y: number };
+    position: string;
+  } | null = null;
+
+  for (const corner of hexagonCorners) {
+    const heat = calculatePlanetHeat(
+      corner.vertex.x,
+      corner.vertex.y,
+      planetsWithCoords,
+      SPACE_HEAT_CONFIG.planetDecayRate,
+      SPACE_HEAT_CONFIG.maxHeat
+    );
+
+    if (heat < lowestHeat) {
+      lowestHeat = heat;
+      bestCorner = corner;
+    }
+  }
+
+  if (!bestCorner) {
+    bestCorner = { vertex: { x: 86.25, y: 0 }, position: "top-left" };
+  }
+
+  const IMAGE_SIZE = 48;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  switch (bestCorner.position) {
+    case "top-left":
+      offsetX = -10;
+      offsetY = 0;
+      break;
+    case "top-right":
+      offsetX = -IMAGE_SIZE + 10;
+      offsetY = 0;
+      break;
+  }
+
+  return {
+    x: bestCorner.vertex.x + offsetX,
+    y: bestCorner.vertex.y + offsetY,
+    stackSize: 0.5,
+  };
+};
+
 const preplaceCommandCounterHeatSource = (
   costMap: number[][],
   rimSquares: { row: number; col: number }[],
@@ -270,6 +341,8 @@ export const placeSpaceEntities = ({
   factionEntities,
   initialHeatSources = [],
   commandCounters = [],
+  systemId,
+  highestProduction,
 }: PlaceSpaceEntitiesOptions) => {
   const { costMap: initialCostMap, rimSquares } = initializeSpaceCostMap(
     gridSize,
@@ -286,6 +359,12 @@ export const placeSpaceEntities = ({
     squareWidth,
     squareHeight,
     commandCounters.length > 0
+  );
+
+  // Pre-place a small heat source for production icon at the optimal corner
+  const productionHeatSource = preplaceProductionHeatSource(
+    systemId,
+    highestProduction
   );
 
   const {
@@ -307,6 +386,10 @@ export const placeSpaceEntities = ({
     ? [commandCounterHeatSource]
     : [];
 
+  const productionHeatSources = productionHeatSource
+    ? [productionHeatSource]
+    : [];
+
   const {
     placements: fighterPlacements,
     heatSources: fighterHeatSources,
@@ -323,6 +406,7 @@ export const placeSpaceEntities = ({
   const combinedHeatSources = [
     ...initialHeatSources,
     ...commandCounterHeatSources,
+    ...productionHeatSources,
     ...thundersEdgeHeatSources,
     ...fighterHeatSources,
   ];

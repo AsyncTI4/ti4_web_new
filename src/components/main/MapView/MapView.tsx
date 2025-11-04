@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Box } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
 import { LeftSidebar } from "@/components/main/LeftSidebar";
@@ -24,6 +24,7 @@ import { ReconnectButton } from "./components/ReconnectButton";
 import { MapTilesRenderer } from "./components/MapTilesRenderer";
 import { ExpeditionLayer } from "@/components/Map/ExpeditionLayer";
 import { useMapContentSize } from "./hooks/useMapContentSize";
+import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 
 const MAP_PADDING = 200;
 
@@ -124,6 +125,19 @@ export function MapView({ gameId }: Props) {
   }, [gameData]);
 
   const contentSize = useMapContentSize();
+
+  const [tryDecalsOpened, setTryDecalsOpened] = useState(false);
+
+  // Listen for the toggleTryDecals event
+  useEffect(() => {
+    const handleToggleTryDecals = () => {
+      setTryDecalsOpened((prev) => !prev);
+    };
+    window.addEventListener("toggleTryDecals", handleToggleTryDecals);
+    return () => {
+      window.removeEventListener("toggleTryDecals", handleToggleTryDecals);
+    };
+  }, []);
 
   return (
     <Box className={classes.mapContainer}>
@@ -260,6 +274,11 @@ export function MapView({ gameId }: Props) {
         onAreaMouseEnter={handleAreaMouseEnter}
         onAreaMouseLeave={handleAreaMouseLeave}
         gameId={gameId}
+      />
+
+      <TryUnitDecalsSidebar
+        opened={tryDecalsOpened}
+        onClose={() => setTryDecalsOpened(false)}
       />
     </Box>
   );

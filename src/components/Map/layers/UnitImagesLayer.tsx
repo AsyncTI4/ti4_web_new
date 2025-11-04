@@ -4,7 +4,7 @@ import { getColorAlias } from "@/lookup/colors";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { MapTileType } from "@/data/types";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData, useColorOverrides } from "@/hooks/useGameContext";
 
 type Props = {
   systemId: string;
@@ -30,6 +30,7 @@ export function UnitImagesLayer({
 }: Props) {
   const factionColorMap = useFactionColors();
   const lawsInPlay = useGameData()?.lawsInPlay;
+  const { colorOverrides } = useColorOverrides();
 
   const unitImages = React.useMemo(() => {
     const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -41,11 +42,17 @@ export function UnitImagesLayer({
         planetCenter = { x, y };
       }
 
+      // Check for color override, otherwise use faction color
+      const overrideColorAlias = colorOverrides[stack.faction];
+      const colorAlias = overrideColorAlias
+        ? overrideColorAlias
+        : getColorAlias(factionColorMap?.[stack.faction]?.color);
+
       return [
         <UnitStack
           key={`${systemId}-${key}-stack`}
           stack={stack}
-          colorAlias={getColorAlias(factionColorMap?.[stack.faction]?.color)}
+          colorAlias={colorAlias}
           stackKey={key}
           planetCenter={planetCenter}
           lawsInPlay={lawsInPlay}
@@ -79,6 +86,7 @@ export function UnitImagesLayer({
     position.y,
     factionColorMap,
     lawsInPlay,
+    colorOverrides,
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,

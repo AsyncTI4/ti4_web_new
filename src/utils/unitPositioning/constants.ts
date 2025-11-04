@@ -18,7 +18,7 @@ export const GROUND_HEAT_CONFIG = {
   planetDecayRate: 0.035,
   rimMaxHeat: 100,
   rimDecayRate: 0.06,
-  unitHeat: 400,
+  unitHeat: 500,
   unitDecayRate: 0.08,
   factionRepulsionHeat: 500,
   factionDecayRate: 0.03,

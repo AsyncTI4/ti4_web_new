@@ -5,7 +5,7 @@ import {
 } from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
-import { createContext, ReactNode, useMemo } from "react";
+import { createContext, ReactNode, useMemo, useState, useCallback } from "react";
 import { useSettingsStore } from "@/utils/appStore";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { colors } from "@/data/colors";
@@ -44,6 +44,12 @@ export type FactionColorData = {
 type GameContext = {
   data: GameData | undefined;
   dataState: GameDataState;
+  decalOverrides: Record<string, string>;
+  setDecalOverride: (faction: string, decalId: string | null) => void;
+  clearDecalOverride: (faction: string) => void;
+  colorOverrides: Record<string, string>;
+  setColorOverride: (faction: string, colorAlias: string | null) => void;
+  clearColorOverride: (faction: string) => void;
 };
 
 type GameData = {
@@ -114,13 +120,57 @@ export function GameContextProvider({ children, gameId }: Props) {
 
   const draft = useMovementStore((s) => s.draft);
 
+  const [decalOverrides, setDecalOverrides] = useState<Record<string, string>>(
+    {}
+  );
+
+  const [colorOverrides, setColorOverrides] = useState<Record<string, string>>(
+    {}
+  );
+
+  const setDecalOverride = useCallback(
+    (faction: string, decalId: string | null) => {
+      setDecalOverrides((prev) => {
+        if (decalId === null) {
+          const updated = { ...prev };
+          delete updated[faction];
+          return updated;
+        }
+        return { ...prev, [faction]: decalId };
+      });
+    },
+    []
+  );
+
+  const clearDecalOverride = useCallback((faction: string) => {
+    setDecalOverride(faction, null);
+  }, [setDecalOverride]);
+
+  const setColorOverride = useCallback(
+    (faction: string, colorAlias: string | null) => {
+      setColorOverrides((prev) => {
+        if (colorAlias === null) {
+          const updated = { ...prev };
+          delete updated[faction];
+          return updated;
+        }
+        return { ...prev, [faction]: colorAlias };
+      });
+    },
+    []
+  );
+
+  const clearColorOverride = useCallback((faction: string) => {
+    setColorOverride(faction, null);
+  }, [setColorOverride]);
+
   const adjustedData = useMemo(() => {
     if (!data) return undefined;
     return applyDisplacementToPlayerData(data, draft);
   }, [data, draft]);
 
   const enhancedData = adjustedData
-    ? buildGameContext(adjustedData, accessibleColors)
+    ? buildGameContext(adjustedData, accessibleColors, decalOverrides)
     : undefined;
 
   const gameContext: GameContext = {
@@ -132,7 +182,13 @@ export function GameContextProvider({ children, gameId }: Props) {
       readyState,
       reconnect,
     },
-  } as GameContext;
+    decalOverrides,
+    setDecalOverride,
+    clearDecalOverride,
+    colorOverrides,
+    setColorOverride,
+    clearColorOverride,
+  };
 
   return (
     <EnhancedDataContext.Provider value={gameContext}>
@@ -172,7 +228,8 @@ function calculateArmyRankings(
 
 export function buildGameContext(
   data: PlayerDataResponse,
-  accessibleColors: boolean
+  accessibleColors: boolean,
+  decalOverrides: Record<string, string> = {}
 ): GameData {
   const playerData = data.playerData.filter(
     (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
@@ -231,15 +288,19 @@ export function buildGameContext(
     ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
 
-  const overriddenPlayerData =
-    accessibleColors && playerData
-      ? playerData.map((p) => ({
-          ...p,
-          color: factionToColor[p.faction] ?? p.color,
-        }))
-      : playerData;
+  const armyRankings = calculateArmyRankings(playerData);
 
-  const armyRankings = calculateArmyRankings(overriddenPlayerData);
+  // Apply decal overrides to playerData
+  const playerDataWithOverrides = playerData.map((player) => {
+    const overrideDecalId = decalOverrides[player.faction];
+    if (overrideDecalId !== undefined) {
+      return {
+        ...player,
+        decalId: overrideDecalId || player.decalId,
+      };
+    }
+    return player;
+  });
 
   return {
     mapTiles,
@@ -252,7 +313,7 @@ export function buildGameContext(
     pdsByTile,
     planetIdToPlanetTile,
     armyRankings,
-    playerData: overriddenPlayerData,
+    playerData: playerDataWithOverrides,
     objectives: data.objectives,
     lawsInPlay: data.lawsInPlay,
     strategyCards: data.strategyCards,

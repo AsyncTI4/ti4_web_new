@@ -9,6 +9,7 @@ interface UnitProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   faction?: string;
   sustained?: boolean;
   bgDecalPath?: string;
+  decalPath?: string; // Decal overlay path (from player's active decal)
   lawsInPlay?: LawInPlay[];
 }
 
@@ -19,6 +20,7 @@ export const Unit: React.FC<UnitProps> = ({
   alt,
   sustained,
   bgDecalPath,
+  decalPath,
   lawsInPlay,
   ...imageProps
 }) => {
@@ -31,6 +33,7 @@ export const Unit: React.FC<UnitProps> = ({
   const isSchematicsActive = lawsInPlay?.some((law) => law.id === "schematics");
   const isMech = unitType === "mf";
   const isWarSun = unitType === "ws";
+  const isFighterOrInfantry = unitType === "ff" || unitType === "gf";
 
   const shouldShowArticlesOverlay = isArticlesOfWarActive && isMech;
   const shouldShowSchematicsOverlay = isSchematicsActive && isWarSun;
@@ -47,8 +50,10 @@ export const Unit: React.FC<UnitProps> = ({
       {bgDecalPath && (
         <img
           src={cdnImage(`/decals/${bgDecalPath}`)}
-          alt={`${defaultAlt} background decal`}
           {...imageProps}
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
           style={{
             ...imageProps.style,
             zIndex: (imageProps.style?.zIndex as number) - 1 || -1,
@@ -60,10 +65,24 @@ export const Unit: React.FC<UnitProps> = ({
         alt={defaultAlt}
         {...imageProps}
       />
-
+      {/* Decal overlay - only show for non-fighter/infantry units */}
+      {decalPath && !isFighterOrInfantry && (
+        <img
+          src={cdnImage(`/decals/${decalPath}`)}
+          {...imageProps}
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
+          style={{
+            ...imageProps.style,
+            position: "absolute",
+            zIndex: (imageProps.style?.zIndex as number) || 0,
+          }}
+        />
+      )}
       {shouldShowArticlesOverlay && (
         <img
-          src={cdnImage(`/tokens/agenda_articles_of_war${tokenSuffix}.png`)}
+          src={cdnImage(`/tokens/agenda_articles_war${tokenSuffix}.png`)}
           alt={`${defaultAlt} articles of war`}
           {...imageProps}
           style={{
