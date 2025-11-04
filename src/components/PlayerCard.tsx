@@ -254,9 +254,6 @@ export default function PlayerCard(props: Props) {
               <PlayerColor color={color} size="xs" />
             </Group>
           </Stack>
-          <Box visibleFrom="sm" ml="xs">
-            <Neighbors neighbors={neighbors || []} />
-          </Box>
         </Group>
         <Box>
           <Group gap="xs" align="center">
@@ -293,6 +290,9 @@ export default function PlayerCard(props: Props) {
           }}
         >
           <Stack gap={6}>
+          <Box visibleFrom="sm" ml="xs">
+            <Neighbors neighbors={neighbors || []} />
+          </Box>
             <Group gap={4}>
               <PlayerCardCounts pnCount={pnCount || 0} acCount={acCount || 0} />
 
@@ -355,6 +355,8 @@ export default function PlayerCard(props: Props) {
                 unscoredSecrets={soCount || 0}
                 horizontal
               />
+              {/* <Plots  /> */}
+              {/* once firmament is available, add them   {isFirmament && <Plots plots={plots} />} */}
             </Box>
           </Group>
         </Grid.Col>

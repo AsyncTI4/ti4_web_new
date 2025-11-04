@@ -6,6 +6,7 @@ import { FactionsInGame } from "./FactionsInGame";
 import { UnpickedSCs } from "./UnpickedSCs";
 import { CardPool } from "./CardPool";
 import { LawsInPlay } from "./LawsInPlay";
+import Expeditions from "./Expeditions/Expeditions";
 
 function GeneralArea() {
   const gameData = useGameData();
@@ -30,6 +31,8 @@ function GeneralArea() {
           <FactionsInGame playerData={playerData} />
           <CardPool cardPool={cardPool} playerData={playerData} />
         </Stack>
+
+        {/* <Expeditions expeditions={gameData.expeditions} /> */}
 
         <Box mb="lg">
           <LawsInPlay laws={lawsInPlay} />

@@ -11,13 +11,14 @@ type Props = {
 const POSSIBLE_LOCATIONS = [0, 1, 5];
 
 export function VoidTetherLayer({ systemId, mapTile }: Props) {
-  if (!mapTile?.planets) return [] as React.ReactElement[];
+  if (!mapTile?.planets || !("voidTethers" in mapTile)) return [] as React.ReactElement[];
 
-  const voidTetherLocations = mapTile.voidTethers || [];
+  // mapTile.voidTethers should be a number[]
+  const voidTetherLocations: any = mapTile.voidTethers || [];
 
   return (
     <>
-      {voidTetherLocations.flatMap((edge) => {
+      {voidTetherLocations.flatMap((edge: any) => {
         if (!POSSIBLE_LOCATIONS.includes(edge)) return [];
 
         const edgeCoords = HEXAGON_EDGE_MIDPOINTS[edge];

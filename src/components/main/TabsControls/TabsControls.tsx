@@ -31,14 +31,13 @@ function ControlButtons({
   handlers,
   game,
   showDistanceButton = true,
-  onTryDecalsClick,
 }: ControlButtonsProps) {
   return (
     <>
       <Button
-        variant="light"
+        variant={settings.planetTypesMode ? "filled" : "light"}
         size="sm"
-        color={settings.planetTypesMode ? "cyan" : "gray"}
+        color={settings.planetTypesMode ? "green" : "gray"}
         style={{ height: "36px", minWidth: "36px" }}
         px={8}
         onClick={handlers.togglePlanetTypesMode}
@@ -97,7 +96,7 @@ function ControlButtons({
         <Button
           variant={settings.showPDSLayer ? "filled" : "light"}
           size="sm"
-          color={settings.showPDSLayer ? "blue" : "gray"}
+          color={settings.showPDSLayer ? "red" : "gray"}
           px={8}
           onClick={handlers.togglePdsMode}
         >
@@ -105,9 +104,33 @@ function ControlButtons({
         </Button>
       )}
 
+      <Button
+        variant={settings.overlaysEnabled ? "filled" : "light"}
+        size="sm"
+        color={settings.overlaysEnabled ? "cyan" : "gray"}
+        px={8}
+        onClick={handlers.toggleOverlays}
+      >
+        <svg
+          width="16"
+          height="18"
+          viewBox="0 0 16 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
+            fill="#3b82f6"
+            stroke="#3b82f6"
+            strokeWidth="1.5"
+            strokeLinejoin="miter"
+          />
+        </svg>
+      </Button>
+
       {showDistanceButton && (
         <Button
-          variant="light"
+          variant={settings.planetTypesMode ? "filled" : "light"}
           size="sm"
           color="gray"
           style={{ height: "36px", minWidth: "36px" }}
@@ -129,43 +152,6 @@ function ControlButtons({
           onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
         >
           <IconKeyboard size={16} />
-        </Button>
-      )}
-
-      <Button
-        variant={settings.overlaysEnabled ? "filled" : "light"}
-        size="sm"
-        color={settings.overlaysEnabled ? "blue" : "gray"}
-        px={8}
-        onClick={handlers.toggleOverlays}
-      >
-        <svg
-          width="16"
-          height="18"
-          viewBox="0 0 16 18"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
-            fill="#3b82f6"
-            stroke="#3b82f6"
-            strokeWidth="1.5"
-            strokeLinejoin="miter"
-          />
-        </svg>
-      </Button>
-
-      {onTryDecalsClick && (
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          px={8}
-          onClick={onTryDecalsClick}
-          title="Try Unit Decals"
-        >
-          <IconSticker size={16} />
         </Button>
       )}
     </>
