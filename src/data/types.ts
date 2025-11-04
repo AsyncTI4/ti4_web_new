@@ -26,7 +26,8 @@ export type TileData = {
   imageURL?: string;
   source: string;
   tileBack?: string;
-  valid?: boolean;
+  valid?: boolean;  // index 0 is the topmost edge, following clockwise. if the array contains an index, the index has a void tether.
+  voidTethers: (0 | 1 | 2 | 3 | 4 | 5)[];
 };
 
 export type EntityData = {
@@ -320,11 +321,19 @@ export type BreakthroughData = {
   tradeGoodsStored: number;
 };
 
+export type PlotCardInfo = {
+  identifier: number;
+  name: string;
+  text: string;
+  source: string;
+}
+
 export type PlotCard = {
   plotAlias?: string;
   identifier: number;
   factions: string[];
 };
+
 
 export type PlayerData = {
   breakthrough?: BreakthroughData;
