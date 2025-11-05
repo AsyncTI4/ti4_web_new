@@ -131,16 +131,17 @@ export function UnitStack({
   // We need to account for both positive and negative offsets
   const UNIT_SIZE = 60; // Approximate unit image size
 
-  // Pre-calculate all unit arrangements once
-  const unitArrangements = Array.from({ length: count }, (_, i) =>
-    calculateUnitArrangement(unitType, entityType, i, count)
-  );
-
-  // Calculate max absolute offsets in each direction
+  // Calculate max absolute offsets in each direction by iterating through all possible indices
   let maxOffsetX = 0;
   let maxOffsetY = 0;
 
-  for (const { stackOffsetX, stackOffsetY } of unitArrangements) {
+  for (let i = 0; i < count; i++) {
+    const { stackOffsetX, stackOffsetY } = calculateUnitArrangement(
+      unitType,
+      entityType,
+      i,
+      count
+    );
     maxOffsetX = Math.max(maxOffsetX, Math.abs(stackOffsetX));
     maxOffsetY = Math.max(maxOffsetY, Math.abs(stackOffsetY));
   }
@@ -162,7 +163,7 @@ export function UnitStack({
     sustained = false,
   }: PositionedUnitProps) => {
     const { stackOffsetX, stackOffsetY, zIndexOffset } =
-      unitArrangements[index];
+      calculateUnitArrangement(unitType, entityType, index, count);
 
     const unitKey = `${stackKey}-${index}`;
 
