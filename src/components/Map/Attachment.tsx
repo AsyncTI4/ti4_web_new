@@ -40,6 +40,7 @@ export const Attachment = ({
         position: "absolute" as const,
         left: `${x}px`,
         top: `${y}px`,
+        transform: "translate(-50%, -50%)",
         zIndex: zIndex,
       }}
     />

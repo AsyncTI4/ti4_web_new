@@ -58,7 +58,7 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
             left: `${x - 10}px`,
             top: `${y + 15}px`,
             transform: "translate(-50%, -50%)",
-            zIndex: 'var(--z-control-token)',
+            zIndex: "var(--z-control-token)",
           }}
         />,
       ];

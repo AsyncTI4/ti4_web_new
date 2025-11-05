@@ -11,7 +11,7 @@ export function CommandCounterLayer({ systemId, factions }: Props) {
     <CommandCounterStack
       key={`${systemId}-command-stack`}
       factions={factions}
-      style={{ position: "absolute", left: "0px", top: "0px" }}
+      style={{ position: "absolute", left: "0px", top: "0px", zIndex: 52 }}
     />
   );
 }

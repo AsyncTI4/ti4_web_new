@@ -192,7 +192,7 @@ export function UnitStack({
           faction={faction}
           x={xPos}
           y={yPos}
-          zIndex={baseZIndex + zIndexOffset}
+          zIndex={baseZIndex}
         />
       );
     } else {
