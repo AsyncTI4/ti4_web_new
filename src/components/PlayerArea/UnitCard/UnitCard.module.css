@@ -101,11 +101,13 @@
 .unitImage {
   height: 30px;
   width: auto;
+  padding-top: 4px;
 }
 
 .unitImageCompact {
   height: 28px;
   width: auto;
+  padding-top: 4px;
 }
 
 .infoStack {

@@ -26,6 +26,7 @@ type UnitProps = {
   y?: number;
   zIndex?: number;
   alt?: string;
+  className?: string;
 
   onMouseEnter?: (event: React.MouseEvent<HTMLImageElement>) => void;
   onMouseLeave?: (event: React.MouseEvent<HTMLImageElement>) => void;
@@ -45,6 +46,7 @@ export function Unit({
   x,
   y,
   zIndex,
+  className,
 }: UnitProps) {
   const defaultAlt = computeDefaultAlt(alt, faction, colorAlias, unitType);
   const tokenSuffix = computeTokenSuffix(colorAlias);
@@ -58,18 +60,31 @@ export function Unit({
   const showArticles = isArticlesOfWarActive && unitType === "mf";
   const showSchematics = isSchematicsActive && unitType === "ws";
 
+  const isPositioned = x !== undefined && y !== undefined;
+
   return (
     <div
       style={{
-        position: "absolute",
-        left: `${x}px`,
-        top: `${y}px`,
-        transform: "translate(-50%, -50%)",
-        zIndex: zIndex,
+        ...(isPositioned
+          ? {
+              position: "absolute",
+              left: `${x}px`,
+              top: `${y}px`,
+              transform: "translate(-50%, -50%)",
+              zIndex: zIndex,
+            }
+          : {
+              position: "relative",
+            }),
       }}
     >
       <BackgroundDecal path={bgDecalPath} />
-      <BaseUnitImage urlColor={urlColor} unitType={unitType} alt={defaultAlt} />
+      <BaseUnitImage
+        urlColor={urlColor}
+        unitType={unitType}
+        alt={defaultAlt}
+        className={className}
+      />
       <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
       {showArticles && (
         <LawOverlay
