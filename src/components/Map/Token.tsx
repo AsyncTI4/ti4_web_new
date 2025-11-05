@@ -36,7 +36,6 @@ export const Token = ({
         planetCenter={planetCenter}
         x={x}
         y={y}
-        {...imageProps}
       />
     );
   }
@@ -94,7 +93,7 @@ const DMZToken = ({
       position: "absolute" as const,
       left: `${planetCenter.x}px`,
       top: `${planetCenter.y}px`,
-      transform: "translate(-50%, -50%)",
+      transform: "translate(-25%, -25%)",
       zIndex: 1000,
     };
   } else {
@@ -105,6 +104,7 @@ const DMZToken = ({
       position: "absolute" as const,
       left: `${x}px`,
       top: `${y}px`,
+      transform: "translate(-50%, -50%)",
     };
   }
 

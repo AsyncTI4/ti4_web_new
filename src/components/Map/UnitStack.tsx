@@ -172,13 +172,22 @@ export function UnitStack({
     const yPos = WRAPPER_HEIGHT / 2 + stackOffsetY;
 
     if (entityType === "token") {
+      // Convert planetCenter from tile-relative to wrapper-relative coordinates
+      // The wrapper is positioned at (x, y) relative to the tile
+      const wrapperRelativePlanetCenter = planetCenter
+        ? {
+            x: planetCenter.x - x,
+            y: planetCenter.y - y,
+          }
+        : undefined;
+
       return (
         <Token
           key={unitKey}
           tokenId={unitType}
           colorAlias={colorAlias}
           faction={faction}
-          planetCenter={planetCenter}
+          planetCenter={wrapperRelativePlanetCenter}
           x={xPos}
           y={yPos}
           zIndex={baseZIndex + zIndexOffset}
