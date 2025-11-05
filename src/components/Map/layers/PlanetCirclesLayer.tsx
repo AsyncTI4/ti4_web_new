@@ -78,9 +78,10 @@ export function PlanetCirclesLayer({
 
     const isLegendary =
       planet?.legendaryAbilityName || planet?.legendaryAbilityText;
-    const isMecatolRex = planetId === "mr";
-
+    const isMecatolRex = planetId === "mr" || planetId === "mrte";
     let radius = 60;
+    let circleOffsetX = 0;
+    let circleOffsetY = 0;
     if (isMecatolRex) radius = 120;
     else if (
       planetId === "mallice" ||
@@ -90,6 +91,17 @@ export function PlanetCirclesLayer({
       planetId === "ordinian"
     ) {
       radius = 60;
+    } else if (planetId === "avernus") {
+      radius = 62;
+      // needs to be offset to account for the image having the 'avernus' text in the bottom
+      circleOffsetX = 10;
+      circleOffsetY = -10;
+    } else if (planetId === "industrex") {
+      radius = 55;
+    } else if (planetId === "emelpar") {
+      radius = 100;
+      circleOffsetX = 0;
+      circleOffsetY = -5;
     } else if (isLegendary) {
       radius = 100;
     }
@@ -142,8 +154,8 @@ export function PlanetCirclesLayer({
         className={`${classes.planetCircle} ${glowClassName ? classes[glowClassName] || "" : ""}`}
         style={{
           position: "absolute",
-          left: `${x}px`,
-          top: `${y}px`,
+          left: `${x + circleOffsetX}px`,
+          top: `${y + circleOffsetY}px`,
           width: `${diameter}px`,
           height: `${diameter}px`,
           zIndex: 52,
