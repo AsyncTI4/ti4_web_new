@@ -87,6 +87,7 @@ type GameData = {
   objectives: PlayerDataResponse["objectives"];
   lawsInPlay: PlayerDataResponse["lawsInPlay"];
   strategyCards: PlayerDataResponse["strategyCards"];
+  strategyCardIdMap?: PlayerDataResponse["strategyCardIdMap"];
   vpsToWin: PlayerDataResponse["vpsToWin"];
   cardPool: PlayerDataResponse["cardPool"];
   versionSchema?: PlayerDataResponse["versionSchema"];
@@ -330,6 +331,7 @@ export function buildGameContext(
     objectives: data.objectives,
     lawsInPlay: data.lawsInPlay,
     strategyCards: data.strategyCards,
+    strategyCardIdMap: data.strategyCardIdMap,
     vpsToWin: data.vpsToWin,
     cardPool: data.cardPool,
     versionSchema: data.versionSchema,

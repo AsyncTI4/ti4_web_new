@@ -305,8 +305,8 @@
 }
 
 .exhausted {
-  filter: grayscale(0.4);
-  opacity: 0.4;
+  filter: grayscale(0.4) !important;
+  opacity: 0.4 !important;
 }
 
 /* Icon container */

@@ -10,6 +10,7 @@ interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   planetCenter?: { x: number; y: number };
   x?: number;
   y?: number;
+  zIndex?: number;
 }
 
 export const Token = ({
@@ -20,6 +21,7 @@ export const Token = ({
   planetCenter,
   x,
   y,
+  zIndex,
   ...imageProps
 }: TokenProps) => {
   // Short-circuit render DMZToken for token_dmz_large.png
@@ -66,6 +68,7 @@ export const Token = ({
         left: `${x}px`,
         top: `${y}px`,
         transform: "translate(-50%, -50%)",
+        zIndex: zIndex,
       }}
     />
   );

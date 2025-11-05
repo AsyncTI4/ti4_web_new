@@ -39,7 +39,7 @@ export function PlanetCard({
 
   const attachmentModifiers = calculateAttachmentModifiers(resolvedAttachments);
   const finalTraits = resolveFinalTraits(
-    planetData.planetType ?? "NONE",
+    planetData.planetTypes || (planetData.planetType ? [planetData.planetType] : []),
     attachmentModifiers.planetTypes
   );
   const baseCssTypeKey = resolveCssTypeKey(finalTraits);
@@ -308,12 +308,16 @@ function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
 }
 
 function resolveFinalTraits(
-  planetType: string,
+  planetTypes: string[],
   attachmentPlanetTypes: string[]
 ): SingleTrait[] {
-  const base = getTraitIconKey(planetType);
   const traits = new Set<SingleTrait>();
-  if (base) traits.add(base);
+  // Add planet types from planet data
+  for (const t of planetTypes) {
+    const key = t.toLowerCase();
+    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
+  }
+  // Add planet types from attachments
   for (const t of attachmentPlanetTypes) {
     const key = t.toLowerCase();
     if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);

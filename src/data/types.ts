@@ -308,6 +308,7 @@ export type PlayerDataResponse = {
   statTilePositions: Record<string, string[]>;
   lawsInPlay: LawInPlay[];
   strategyCards: StrategyCard[];
+  strategyCardIdMap?: Record<number, string>; // Map of initiative -> strategy card ID
   vpsToWin: number;
   objectives: Objectives;
   cardPool: CardPoolData;
@@ -333,14 +334,13 @@ export type PlotCardInfo = {
   name: string;
   text: string;
   source: string;
-}
+};
 
 export type PlotCard = {
   plotAlias?: string;
   identifier: number;
   factions: string[];
 };
-
 
 export type PlayerData = {
   breakthrough?: BreakthroughData;
@@ -718,8 +718,8 @@ export type StrategyCardDefinition = {
   name: string;
   primaryTexts: string[];
   secondaryTexts: string[];
-  imageFileName: string;
-  colourHexCode: string;
+  imageFileName?: string;
+  colourHexCode?: string;
   source: string;
   imageURL: string;
 };

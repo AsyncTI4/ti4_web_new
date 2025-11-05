@@ -37,6 +37,11 @@
   opacity: 0.5;
 }
 
+/* Preserve exhausted state on mobile */
+:global(.mobile) .exhaustedContainer {
+  opacity: 0.5 !important;
+}
+
 /* Leader image */
 .leaderImageContainer {
   width: 35px;

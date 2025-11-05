@@ -10,6 +10,7 @@ type AttachmentProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   faction?: string;
   x?: number;
   y?: number;
+  zIndex?: number;
 };
 
 export const Attachment = ({
@@ -18,6 +19,7 @@ export const Attachment = ({
   alt,
   x,
   y,
+  zIndex,
   ...imageProps
 }: AttachmentProps) => {
   // Look up attachment data by ID
@@ -38,6 +40,7 @@ export const Attachment = ({
         position: "absolute" as const,
         left: `${x}px`,
         top: `${y}px`,
+        zIndex: zIndex,
       }}
     />
   );

@@ -1,14 +1,10 @@
 import React from "react";
 import classes from "../MapTile.module.css";
-import {
-  getPlanetCoordsBySystemId,
-  getPlanetById,
-  getPlanetsByTileId,
-} from "@/lookup/planets";
-import { MapTileType, Planet } from "@/data/types";
+import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
+import { MapTileType } from "@/data/types";
 import { useSettingsStore } from "@/utils/appStore";
-import { rgba } from "@mantine/core";
 import { getAttachmentData } from "@/lookup/attachments";
+import { getTokenData } from "@/lookup/tokens";
 
 type Props = {
   systemId: string;
@@ -36,7 +32,6 @@ export function PlanetCirclesLayer({
   const techSkipsMode = useSettingsStore(
     (state) => state.settings.techSkipsMode
   );
-  const d = getPlanetsByTileId(mapTile.systemId);
 
   const handlePlanetMouseEnter = React.useCallback(
     (planetId: string, x: number, y: number) => {
@@ -70,12 +65,17 @@ export function PlanetCirclesLayer({
   if (!mapTile?.planets) return [] as React.ReactElement[];
   const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-  const circles = mapTile.planets.flatMap((planetTile, index) => {
-    const planetId = planetTile.name;
-    if (!planetCoords[planetId]) return [];
-    const [x, y] = planetCoords[planetId].split(",").map(Number);
-
+  // Helper function to create a planet circle element
+  const createPlanetCircle = (
+    planetId: string,
+    x: number,
+    y: number,
+    isExhausted: boolean,
+    keySuffix: string = ""
+  ) => {
     const planet = getPlanetById(planetId);
+    if (!planet) return null;
+
     const isLegendary =
       planet?.legendaryAbilityName || planet?.legendaryAbilityText;
     const isMecatolRex = planetId === "mr";
@@ -86,7 +86,8 @@ export function PlanetCirclesLayer({
       planetId === "mallice" ||
       planetId === "lockedmallice" ||
       planetId === "hexmallice" ||
-      planetId === "hexlockedmallice"
+      planetId === "hexlockedmallice" ||
+      planetId === "ordinian"
     ) {
       radius = 60;
     } else if (isLegendary) {
@@ -95,18 +96,18 @@ export function PlanetCirclesLayer({
 
     const diameter = radius * 2;
     const exhaustedBackdropFilter =
-      planetTile.exhausted && showExhaustedPlanets
+      isExhausted && showExhaustedPlanets
         ? {
-            backdropFilter: "brightness(0.7) blur(0px)" as const,
+            backdropFilter: "brightness(0.7) grayscale(1) blur(0px)" as const,
           }
         : {};
 
+    const planetTileData = mapTile.planets?.find((p) => p.name === planetId);
     const techSpecialties = (() => {
       const specs: string[] = [];
       if (planet?.techSpecialties) {
         specs.push(...planet.techSpecialties);
       }
-      const planetTileData = mapTile.planets?.find((p) => p.name === planetId);
       if (planetTileData?.attachments) {
         planetTileData.attachments.forEach((attachmentId) => {
           const attachmentData = getAttachmentData(attachmentId);
@@ -135,9 +136,9 @@ export function PlanetCirclesLayer({
         }
       : {};
 
-    return [
+    return (
       <div
-        key={`${systemId}-${planetId}-circle`}
+        key={`${systemId}-${planetId}${keySuffix}-circle`}
         className={`${classes.planetCircle} ${glowClassName ? classes[glowClassName] || "" : ""}`}
         style={{
           position: "absolute",
@@ -145,14 +146,66 @@ export function PlanetCirclesLayer({
           top: `${y}px`,
           width: `${diameter}px`,
           height: `${diameter}px`,
+          zIndex: 52,
           ...glowStyle,
           ...exhaustedBackdropFilter,
         }}
         onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
         onMouseLeave={() => handlePlanetMouseLeave(planetId)}
-      />,
-    ];
+      />
+    );
+  };
+
+  // Build a map of token planets from entityPlacements
+  const tokenPlanets = React.useMemo(() => {
+    const tokenPlanetMap: Record<
+      string,
+      { x: number; y: number; planetName: string }
+    > = {};
+    if (mapTile.entityPlacements) {
+      Object.values(mapTile.entityPlacements).forEach((placement) => {
+        if (placement.entityType === "token") {
+          const tokenData = getTokenData(placement.entityId);
+          if (tokenData?.isPlanet && tokenData.tokenPlanetName) {
+            tokenPlanetMap[tokenData.tokenPlanetName] = {
+              x: placement.x,
+              y: placement.y,
+              planetName: tokenData.tokenPlanetName,
+            };
+          }
+        }
+      });
+    }
+    return tokenPlanetMap;
+  }, [mapTile.entityPlacements]);
+
+  // Regular planets from mapTile.planets
+  const regularPlanetCircles = mapTile.planets.flatMap((planetTile) => {
+    const planetId = planetTile.name;
+    if (!planetCoords[planetId]) return [];
+    const [x, y] = planetCoords[planetId].split(",").map(Number);
+    const circle = createPlanetCircle(planetId, x, y, planetTile.exhausted);
+    return circle ? [circle] : [];
   });
 
-  return <>{circles}</>;
+  // Token planets (like Thunder's Edge)
+  const tokenPlanetCircles = Object.entries(tokenPlanets).flatMap(
+    ([planetName, tokenPlanet]) => {
+      // Skip if already rendered as a regular planet
+      if (planetCoords[planetName]) return [];
+      const planetTileData = mapTile.planets?.find(
+        (p) => p.name === planetName
+      );
+      const circle = createPlanetCircle(
+        planetName,
+        tokenPlanet.x,
+        tokenPlanet.y,
+        planetTileData?.exhausted || false,
+        "-token"
+      );
+      return circle ? [circle] : [];
+    }
+  );
+
+  return <>{[...regularPlanetCircles, ...tokenPlanetCircles]}</>;
 }

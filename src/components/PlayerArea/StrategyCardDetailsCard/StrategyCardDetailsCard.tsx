@@ -1,6 +1,7 @@
 import { Divider, Stack, Text } from "@mantine/core";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import { getStrategyCardByInitiative } from "@/lookup/strategyCards";
+import { useGameData } from "@/hooks/useGameContext";
 
 type DetailsColor =
   | "none"
@@ -38,7 +39,11 @@ function mapDetailsCardColor(color?: Props["color"]): DetailsColor {
 }
 
 export function StrategyCardDetailsCard({ initiative, color }: Props) {
-  const sc = getStrategyCardByInitiative(initiative);
+  const gameData = useGameData();
+  const sc = getStrategyCardByInitiative(
+    initiative,
+    gameData?.strategyCardIdMap
+  );
   if (!sc) return null;
 
   const detailsCardColor = mapDetailsCardColor(color);
@@ -58,13 +63,19 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
         <DetailsCard.Section
           title="Primary"
           content={
-            <Stack gap={6}>
-              {sc.primaryTexts.map((line, idx) => (
-                <Text key={idx} size="sm" c="gray.2" lh={1.4}>
-                  {line}
-                </Text>
-              ))}
-            </Stack>
+            sc.primaryTexts.length > 0 ? (
+              <Stack gap={6}>
+                {sc.primaryTexts.map((line, idx) => (
+                  <Text key={idx} size="sm" c="gray.2" lh={1.4}>
+                    {line}
+                  </Text>
+                ))}
+              </Stack>
+            ) : (
+              <Text size="sm" c="gray.5" fs="italic">
+                No primary ability
+              </Text>
+            )
           }
         />
 
@@ -73,13 +84,19 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
         <DetailsCard.Section
           title="Secondary"
           content={
-            <Stack gap={6}>
-              {sc.secondaryTexts.map((line, idx) => (
-                <Text key={idx} size="sm" c="gray.2" lh={1.4}>
-                  {line}
-                </Text>
-              ))}
-            </Stack>
+            sc.secondaryTexts.length > 0 ? (
+              <Stack gap={6}>
+                {sc.secondaryTexts.map((line, idx) => (
+                  <Text key={idx} size="sm" c="gray.2" lh={1.4}>
+                    {line}
+                  </Text>
+                ))}
+              </Stack>
+            ) : (
+              <Text size="sm" c="gray.5" fs="italic">
+                No secondary ability
+              </Text>
+            )
           }
         />
       </Stack>

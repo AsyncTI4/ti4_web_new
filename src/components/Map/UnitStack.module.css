@@ -1,0 +1,37 @@
+.badgeContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.badgeInnerWrapper {
+  position: relative;
+  width: 70px;
+  height: 35px;
+}
+
+.stackWrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.galvanizeBadgeContainer {
+  position: absolute;
+  transform: translate(-50%, -110%);
+}
+
+.galvanizeBadgeInner {
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid var(--mantine-color-dark-3);
+}
+
+.galvanizeBadgeImage {
+  width: 28px;
+  position: absolute;
+  left: -8px;
+  top: -6px;
+}
+
+

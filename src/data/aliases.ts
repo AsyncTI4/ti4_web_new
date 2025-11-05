@@ -111,3 +111,4 @@ export const decalAliases: Record<string, string> = {
   "ln_wt": "White Lightning",
 };
 
+

@@ -39,7 +39,7 @@ export function PlanetTraitIcon(props: Props) {
   const allThree = hasC && hasH && hasI;
   const suffix = allThree
     ? "CHI"
-    : `${hasC ? "c" : ""}${hasH ? "h" : ""}${hasI ? "i" : ""}`;
+    : `${hasC ? "C" : ""}${hasH ? "H" : ""}${hasI ? "I" : ""}`;
 
   const src = cdnImage(`/planet_cards/pc_attribute_combo_${suffix}.png`);
   return <Image src={src} alt={`traits:${suffix}`} w={size} h={size} />;

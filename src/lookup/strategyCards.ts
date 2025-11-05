@@ -13,6 +13,17 @@ const strategyCardsByName = new Map<string, StrategyCardDefinition>(
   strategyCards.map((card) => [card.name.toLowerCase(), card])
 );
 
+const defaultStrategyCardIdMap: Record<number, string> = {
+  1: "pok1leadership",
+  2: "pok2diplomacy",
+  3: "pok3politics",
+  4: "te4construction",
+  5: "pok5trade",
+  6: "te6warfare",
+  7: "pok7technology",
+  8: "pok8imperial",
+};
+
 export function getStrategyCardById(
   id: string
 ): StrategyCardDefinition | undefined {
@@ -20,8 +31,20 @@ export function getStrategyCardById(
 }
 
 export function getStrategyCardByInitiative(
-  initiative: number
+  initiative: number,
+  strategyCardIdMap?: Record<number, string>
 ): StrategyCardDefinition | undefined {
+  if (strategyCardIdMap && strategyCardIdMap[initiative]) {
+    const cardId = strategyCardIdMap[initiative];
+    return getStrategyCardById(cardId);
+  }
+
+  const defaultCardId = defaultStrategyCardIdMap[initiative];
+  if (defaultCardId) {
+    const card = getStrategyCardById(defaultCardId);
+    if (card) return card;
+  }
+
   return strategyCardsByInitiative.get(initiative);
 }
 

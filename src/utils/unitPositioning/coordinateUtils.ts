@@ -70,7 +70,12 @@ export const getInitialHeatSourcesForSystem = (
     });
   }
 
-  if (systemId === "25" || systemId === "26" || systemId === "64") {
+  if (
+    systemId === "25" ||
+    systemId === "26" ||
+    systemId === "64" ||
+    systemId === "102"
+  ) {
     initialHeatSources.push({
       x: 200,
       y: 190,

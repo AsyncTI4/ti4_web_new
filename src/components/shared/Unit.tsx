@@ -27,10 +27,6 @@ type UnitProps = {
   zIndex?: number;
   alt?: string;
   className?: string;
-
-  onMouseEnter?: (event: React.MouseEvent<HTMLImageElement>) => void;
-  onMouseLeave?: (event: React.MouseEvent<HTMLImageElement>) => void;
-  onMouseDown?: (event: React.MouseEvent<HTMLImageElement>) => void;
 };
 
 export function Unit({
@@ -88,7 +84,7 @@ export function Unit({
       <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
       {showArticles && (
         <LawOverlay
-          tokenPath={`/tokens/agenda_articles_war${tokenSuffix}.png`}
+          tokenPath={`/tokens/agenda_articles_of_war${tokenSuffix}.png`}
           alt={`${defaultAlt} articles of war`}
           zIndexDelta={1}
         />

@@ -12,6 +12,7 @@ import { useDelayedHover } from "./UnitStack/hooks/useDelayedHover";
 import { useDecalPaths } from "./UnitStack/hooks/useDecalPaths";
 import { Group, Text } from "@mantine/core";
 import { cdnImage } from "@/data/cdnImage";
+import classes from "./UnitStack.module.css";
 
 interface UnitStackProps {
   stack: EntityStack;
@@ -74,6 +75,17 @@ export function UnitStack({
 
   const showIndividualGalvanized = galvanizedCount === 1 || unitType === "mf";
 
+  const handlers = {
+    onMouseEnter:
+      entityType === "unit" && onUnitMouseOver ? handleMouseEnter : undefined,
+    onMouseLeave:
+      entityType === "unit" && onUnitMouseLeave ? handleMouseLeave : undefined,
+    onMouseDown:
+      entityType === "unit" && onUnitSelect
+        ? (e: React.MouseEvent) => onUnitSelect(stackKey, e)
+        : undefined,
+  };
+
   // For fighters and infantry, render as a badge with count instead of individual units
   if (isBadgeUnit(unitType)) {
     const badgeType = unitType as "ff" | "gf";
@@ -81,15 +93,15 @@ export function UnitStack({
     return (
       <div
         key={`${stackKey}-badge-container`}
+        className={classes.badgeContainer}
         style={{
-          position: "absolute",
           left: `${x}px`,
           top: `${y}px`,
-          transform: "translate(-50%, -50%)",
           zIndex: baseZIndex,
         }}
+        {...handlers}
       >
-        <div style={{ position: "relative" }}>
+        <div className={classes.badgeInnerWrapper}>
           <UnitBadge
             key={`${stackKey}-badge`}
             unitType={badgeType}
@@ -97,32 +109,14 @@ export function UnitStack({
             faction={faction}
             count={count}
             textColor={getTextColor(colorAlias)}
-            onMouseEnter={
-              entityType === "unit" && onUnitMouseOver
-                ? handleMouseEnter
-                : undefined
-            }
-            onMouseLeave={
-              entityType === "unit" && onUnitMouseLeave
-                ? handleMouseLeave
-                : undefined
-            }
-            onMouseDown={
-              entityType === "unit" && onUnitSelect
-                ? (e: React.MouseEvent<HTMLDivElement>) =>
-                    onUnitSelect(stackKey, e)
-                : undefined
-            }
           />
           {galvanizedCount > 0 && (
             <GalvanizeBadge
               key={`${stackKey}-galvanized`}
               count={galvanizedCount}
               style={{
-                position: "absolute",
                 top: "5%",
                 left: "100%",
-                transform: "translate(-50%, -50%)",
                 zIndex: baseZIndex + 100,
               }}
             />
@@ -131,6 +125,31 @@ export function UnitStack({
       </div>
     );
   }
+
+  // Calculate wrapper size to contain all units
+  // Units are positioned absolutely within the wrapper, which is centered at (x, y)
+  // We need to account for both positive and negative offsets
+  const UNIT_SIZE = 60; // Approximate unit image size
+
+  // Pre-calculate all unit arrangements once
+  const unitArrangements = Array.from({ length: count }, (_, i) =>
+    calculateUnitArrangement(unitType, entityType, i, count)
+  );
+
+  // Calculate max absolute offsets in each direction
+  let maxOffsetX = 0;
+  let maxOffsetY = 0;
+
+  for (const { stackOffsetX, stackOffsetY } of unitArrangements) {
+    maxOffsetX = Math.max(maxOffsetX, Math.abs(stackOffsetX));
+    maxOffsetY = Math.max(maxOffsetY, Math.abs(stackOffsetY));
+  }
+
+  // Wrapper needs to be large enough for max offset + half unit size on each side
+  // Since wrapper is centered, we need 2x the max offset + unit size
+  // If count is 0, use minimum size
+  const WRAPPER_WIDTH = count > 0 ? maxOffsetX * 2 + UNIT_SIZE : UNIT_SIZE;
+  const WRAPPER_HEIGHT = count > 0 ? maxOffsetY * 2 + UNIT_SIZE : UNIT_SIZE;
 
   type PositionedUnitProps = {
     index: number;
@@ -143,21 +162,14 @@ export function UnitStack({
     sustained = false,
   }: PositionedUnitProps) => {
     const { stackOffsetX, stackOffsetY, zIndexOffset } =
-      calculateUnitArrangement(unitType, entityType, index, count);
+      unitArrangements[index];
 
     const unitKey = `${stackKey}-${index}`;
 
-    const unitStyle = {
-      position: "absolute" as const,
-      pointerEvents: "auto" as const,
-      cursor:
-        entityType === "unit" ? ("pointer" as const) : ("default" as const),
-
-      zIndex: baseZIndex + zIndexOffset,
-    };
-
-    const xPos = x + stackOffsetX;
-    const yPos = y + stackOffsetY;
+    // Position relative to the wrapper's center (wrapper is centered at x, y)
+    // Units are positioned absolutely within the wrapper, so we use calc(50% + offset)
+    const xPos = WRAPPER_WIDTH / 2 + stackOffsetX;
+    const yPos = WRAPPER_HEIGHT / 2 + stackOffsetY;
 
     if (entityType === "token") {
       return (
@@ -167,9 +179,9 @@ export function UnitStack({
           colorAlias={colorAlias}
           faction={faction}
           planetCenter={planetCenter}
-          style={unitStyle}
           x={xPos}
           y={yPos}
+          zIndex={baseZIndex + zIndexOffset}
         />
       );
     } else if (entityType === "attachment") {
@@ -178,9 +190,9 @@ export function UnitStack({
           key={unitKey}
           unitType={unitType}
           faction={faction}
-          style={unitStyle}
           x={xPos}
           y={yPos}
+          zIndex={baseZIndex + zIndexOffset}
         />
       );
     } else {
@@ -190,14 +202,6 @@ export function UnitStack({
           unitType={unitType}
           colorAlias={colorAlias}
           faction={faction}
-          onMouseEnter={onUnitMouseOver ? handleMouseEnter : undefined}
-          onMouseLeave={onUnitMouseLeave ? handleMouseLeave : undefined}
-          onMouseDown={
-            onUnitSelect
-              ? (e: React.MouseEvent<HTMLImageElement>) =>
-                  onUnitSelect(stackKey, e)
-              : undefined
-          }
           bgDecalPath={bgDecalPath}
           decalPath={decalPath || undefined}
           lawsInPlay={lawsInPlay}
@@ -212,16 +216,25 @@ export function UnitStack({
   };
 
   return (
-    <>
+    <div
+      {...handlers}
+      className={classes.stackWrapper}
+      style={{
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${WRAPPER_WIDTH}px`,
+        height: `${WRAPPER_HEIGHT}px`,
+        zIndex: baseZIndex,
+      }}
+    >
       {galvanizedCount > 1 && !showIndividualGalvanized && (
         <GalvanizeBadge
           key={`${stackKey}-galvanized`}
           count={galvanizedCount}
+          className={classes.galvanizeBadgeContainer}
           style={{
-            position: "absolute",
-            left: `${x}px`,
-            top: `${y}px`,
-            transform: "translate(0%, -110%)",
+            left: "50%",
+            top: "0%",
             zIndex: baseZIndex + 100,
           }}
         />
@@ -278,36 +291,35 @@ export function UnitStack({
           />
         );
       })}
-    </>
+    </div>
   );
 }
 
 type GalvanizeBadgeProps = {
   count: number;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
+  className?: string;
 };
-function GalvanizeBadge({ count, style }: GalvanizeBadgeProps) {
+function GalvanizeBadge({ count, style, className }: GalvanizeBadgeProps) {
   return (
     <Group
       bg="dark.9"
       w="45px"
       h="20px"
       gap="xs"
-      style={{
-        position: "relative",
-        borderRadius: 8,
-        border: "1px solid var(--mantine-color-dark-3)",
-        ...style,
-      }}
+      className={className}
+      style={style}
     >
-      <img
-        src={cdnImage("/extra/marker_galvanize.png")}
-        alt="Galvanize"
-        style={{ width: "28px", position: "absolute", left: -8, top: -6 }}
-      />
-      <Text inline pl="24px" fz="16px" fw={600} c="white">
-        {count}
-      </Text>
+      <div className={classes.galvanizeBadgeInner}>
+        <img
+          src={cdnImage("/extra/marker_galvanize.png")}
+          alt="Galvanize"
+          className={classes.galvanizeBadgeImage}
+        />
+        <Text inline pl="24px" fz="16px" fw={600} c="white">
+          {count}
+        </Text>
+      </div>
     </Group>
   );
 }

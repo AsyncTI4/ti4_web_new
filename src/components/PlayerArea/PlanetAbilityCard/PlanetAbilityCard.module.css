@@ -30,7 +30,7 @@
 .exhausted {
   border-color: var(--ability-border-exhausted);
   background: linear-gradient(135deg, var(--ability-background-exhausted) 0%, rgba(70, 70, 70, 0.35) 100%);
-  filter: grayscale(0.4) opacity(0.5);
+  filter: grayscale(0.4) opacity(0.5) !important;
 }
 
 .joinedRight {
