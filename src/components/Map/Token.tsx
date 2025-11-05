@@ -8,6 +8,8 @@ interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   colorAlias?: string;
   faction?: string;
   planetCenter?: { x: number; y: number };
+  x?: number;
+  y?: number;
 }
 
 export const Token = ({
@@ -16,6 +18,8 @@ export const Token = ({
   faction,
   alt,
   planetCenter,
+  x,
+  y,
   ...imageProps
 }: TokenProps) => {
   // Short-circuit render DMZToken for token_dmz_large.png
@@ -28,6 +32,8 @@ export const Token = ({
         faction={faction}
         alt={alt}
         planetCenter={planetCenter}
+        x={x}
+        y={y}
         {...imageProps}
       />
     );
@@ -35,22 +41,16 @@ export const Token = ({
 
   const imagePath =
     getTokenImagePath(tokenId) || getAttachmentImagePath(tokenId);
-
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
-
-  // Get token data to check for scale
   const tokenData = getTokenData(tokenId);
   const scale = tokenData?.scale || 1;
 
-  // Apply scale to the existing style
   const existingStyle = imageProps.style || {};
   const scaledStyle =
     scale !== 1
       ? {
           ...existingStyle,
-          transform: existingStyle.transform
-            ? `${existingStyle.transform} scale(${scale})`
-            : `scale(${scale})`,
+          transform: `${existingStyle.transform || ""} scale(${scale})`.trim(),
         }
       : existingStyle;
 
@@ -60,25 +60,29 @@ export const Token = ({
       src={cdnImage(imagePath)}
       alt={defaultAlt}
       {...imageProps}
-      style={scaledStyle}
+      style={{
+        ...scaledStyle,
+        position: "absolute" as const,
+        left: `${x}px`,
+        top: `${y}px`,
+        transform: "translate(-50%, -50%)",
+      }}
     />
   );
 };
 
 const DMZToken = ({
   tokenId,
-  colorAlias,
   faction,
   alt,
   planetCenter,
+  x,
+  y,
   ...imageProps
 }: TokenProps) => {
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
-
   const existingStyle = imageProps.style || {};
-
   let dmzStyles;
-
   if (planetCenter) {
     // If planetCenter is provided, render dead center
     dmzStyles = {
@@ -95,6 +99,9 @@ const DMZToken = ({
     dmzStyles = {
       ...existingStyle,
       width: "120px",
+      position: "absolute" as const,
+      left: `${x}px`,
+      top: `${y}px`,
     };
   }
 

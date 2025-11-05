@@ -20,6 +20,12 @@ import {
   PlaceGroundEntitiesOptions,
 } from "./types";
 
+const GRID_CONFIG = {
+  gridSize: HEX_GRID_SIZE,
+  squareWidth: HEX_SQUARE_WIDTH,
+  squareHeight: HEX_SQUARE_HEIGHT,
+};
+
 const calculateAttachmentAngle = (
   index: number,
   totalAttachments: number
@@ -48,10 +54,7 @@ export const placeAttachmentsOnRim = (
   }
 
   return attachmentEntities.map((attachment, index) => {
-    const angle = calculateAttachmentAngle(
-      index,
-      attachmentEntities.length
-    );
+    const angle = calculateAttachmentAngle(index, attachmentEntities.length);
     const x = planetX + planetRadius * Math.cos(angle);
     const y = planetY + planetRadius * Math.sin(angle);
 
@@ -73,11 +76,8 @@ const separateEntityTypes = (planetEntityData: PlanetEntityData) => {
 
     entities.forEach((entity) => {
       const entityStack: EntityStackBase = {
+        ...entity,
         faction,
-        entityId: entity.entityId,
-        entityType: entity.entityType,
-        count: entity.count,
-        sustained: entity.sustained,
       };
 
       if (entity.entityType === "attachment") {
@@ -195,9 +195,9 @@ const placeGroundEntitiesForPlanet = (
     : attachmentHeatSources;
 
   const { entityPlacements, finalCostMap } = placeGroundEntities({
-    gridSize: HEX_GRID_SIZE,
-    squareWidth: HEX_SQUARE_WIDTH,
-    squareHeight: HEX_SQUARE_HEIGHT,
+    gridSize: GRID_CONFIG.gridSize,
+    squareWidth: GRID_CONFIG.squareWidth,
+    squareHeight: GRID_CONFIG.squareHeight,
     planetX: planet.x,
     planetY: planet.y,
     planetRadius: planet.radius,
@@ -213,20 +213,24 @@ export const processPlanetEntities = (
   planet: Planet,
   planetEntityData: PlanetEntityData
 ): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
+  // Step 1: Separate entities by type
   const { filteredPlanetEntities, attachmentEntities, centerTokens } =
     separateEntityTypes(planetEntityData);
 
+  // Step 2: Place attachments and create heat sources
   const {
     placements: attachmentPlacements,
     heatSources: attachmentHeatSources,
   } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
 
+  // Step 3: Place center tokens at planet center
   const centerTokenPlacements: EntityStack[] = centerTokens.map((token) => ({
     ...token,
     x: planet.x,
     y: planet.y,
   }));
 
+  // Step 4: Place ground entities with heat map
   const { entityPlacements: groundEntityPlacements, finalCostMap } =
     placeGroundEntitiesForPlanet(
       planet,
@@ -235,11 +239,14 @@ export const processPlanetEntities = (
       planetEntityData.controlledBy
     );
 
-  const planetEntitiesWithPlanetName = [
+  // Step 5: Combine all placements and add planet name
+  const allPlacements = [
     ...centerTokenPlacements,
     ...attachmentPlacements,
     ...groundEntityPlacements,
-  ].map((entity) => ({
+  ];
+
+  const planetEntitiesWithPlanetName = allPlacements.map((entity) => ({
     ...entity,
     planetName: planet.name,
   }));

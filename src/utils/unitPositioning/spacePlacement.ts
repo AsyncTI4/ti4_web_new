@@ -1,5 +1,10 @@
 import { EntityData, FactionUnits } from "@/data/types";
-import { FIGHTER_OFFSET_COLUMNS, SPACE_HEAT_CONFIG, HEX_VERTICES, DEFAULT_PLANET_RADIUS } from "./constants";
+import {
+  FIGHTER_OFFSET_COLUMNS,
+  SPACE_HEAT_CONFIG,
+  HEX_VERTICES,
+  DEFAULT_PLANET_RADIUS,
+} from "./constants";
 import { gridToPixel } from "./coordinateUtils";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
@@ -7,6 +12,12 @@ import { placeEntitiesWithCostMap } from "./placement";
 import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
 import { calculatePlanetHeat } from "./heatMap";
+
+type GridDimensions = {
+  gridSize: number;
+  squareWidth: number;
+  squareHeight: number;
+};
 
 const findNonRimSquare = (
   costMap: number[][],
@@ -64,21 +75,16 @@ const placeFighterAt = (
   position: "rightmost" | "leftmost",
   costMap: number[][],
   rimSquares: { row: number; col: number }[],
-  gridSize: number,
-  squareWidth: number,
-  squareHeight: number
+  grid: GridDimensions
 ): { placement: EntityStack; heatSource: HeatSource } | null => {
-  const square = findNonRimSquare(costMap, rimSquares, gridSize, position);
+  const square = findNonRimSquare(costMap, rimSquares, grid.gridSize, position);
   if (!square) return null;
 
-  const { x, y } = gridToPixel(square, squareWidth, squareHeight);
+  const { x, y } = gridToPixel(square, grid.squareWidth, grid.squareHeight);
 
   const placement: EntityStack = {
+    ...fighter.fighterStack,
     faction: fighter.faction,
-    entityId: fighter.fighterStack.entityId,
-    entityType: fighter.fighterStack.entityType,
-    count: fighter.fighterStack.count,
-    sustained: fighter.fighterStack.sustained,
     x,
     y,
   };
@@ -117,9 +123,7 @@ export const preplaceFighters = (
   factionEntities: FactionUnits,
   costMap: number[][],
   rimSquares: { row: number; col: number }[],
-  gridSize: number,
-  squareWidth: number,
-  squareHeight: number
+  grid: GridDimensions
 ): {
   placements: EntityStack[];
   heatSources: HeatSource[];
@@ -131,15 +135,7 @@ export const preplaceFighters = (
   const results = fighters
     .slice(0, 2)
     .map((fighter, index) =>
-      placeFighterAt(
-        fighter,
-        positions[index],
-        costMap,
-        rimSquares,
-        gridSize,
-        squareWidth,
-        squareHeight
-      )
+      placeFighterAt(fighter, positions[index], costMap, rimSquares, grid)
     )
     .filter((result): result is NonNullable<typeof result> => result !== null);
 
@@ -164,7 +160,6 @@ const findLeftmostNonRimSquare = (
 ): { row: number; col: number } | null => {
   const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
 
-  // Find the leftmost valid non-rim square without offset
   for (let col = 0; col < gridSize; col++) {
     for (let row = 0; row < gridSize; row++) {
       if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
@@ -183,15 +178,17 @@ const preplaceProductionHeatSource = (
   if (!systemId || !highestProduction || highestProduction <= 0) return null;
 
   const planetCoords = getPlanetCoordsBySystemId(systemId);
-  const planetsWithCoords = Object.entries(planetCoords).map(([planetId, coordStr]) => {
-    const [x, y] = coordStr.split(",").map(Number);
-    return {
-      name: planetId,
-      x,
-      y,
-      radius: DEFAULT_PLANET_RADIUS,
-    };
-  });
+  const planetsWithCoords = Object.entries(planetCoords).map(
+    ([planetId, coordStr]) => {
+      const [x, y] = coordStr.split(",").map(Number);
+      return {
+        name: planetId,
+        x,
+        y,
+        radius: DEFAULT_PLANET_RADIUS,
+      };
+    }
+  );
 
   const hexagonCorners = [
     { vertex: HEX_VERTICES[0], position: "top-left" },
@@ -248,19 +245,16 @@ const preplaceProductionHeatSource = (
 const preplaceCommandCounterHeatSource = (
   costMap: number[][],
   rimSquares: { row: number; col: number }[],
-  gridSize: number,
-  squareWidth: number,
-  squareHeight: number,
+  grid: GridDimensions,
   hasCommandCounters: boolean
 ): HeatSource | null => {
   if (!hasCommandCounters) return null;
 
-  const square = findLeftmostNonRimSquare(costMap, rimSquares, gridSize);
+  const square = findLeftmostNonRimSquare(costMap, rimSquares, grid.gridSize);
   if (!square) return null;
 
-  const { x, y } = gridToPixel(square, squareWidth, squareHeight);
+  const { x, y } = gridToPixel(square, grid.squareWidth, grid.squareHeight);
 
-  // Use a very small stack size to create minimal heat
   return {
     x,
     y,
@@ -270,9 +264,7 @@ const preplaceCommandCounterHeatSource = (
 
 const preplaceThundersEdge = (
   factionEntities: FactionUnits,
-  squareWidth: number,
-  squareHeight: number,
-  gridSize: number
+  grid: GridDimensions
 ): {
   placement: EntityStack | null;
   heatSource: HeatSource | null;
@@ -289,20 +281,17 @@ const preplaceThundersEdge = (
 
     if (thundersEdgeIndex !== -1 && !thundersEdgePlacement) {
       const thundersEdge = entities[thundersEdgeIndex];
-      const centerRow = Math.floor(gridSize / 2);
-      const centerCol = Math.floor(gridSize / 2);
+      const centerRow = Math.floor(grid.gridSize / 2);
+      const centerCol = Math.floor(grid.gridSize / 2);
       const { x, y } = gridToPixel(
         { row: centerRow, col: centerCol },
-        squareWidth,
-        squareHeight
+        grid.squareWidth,
+        grid.squareHeight
       );
 
       thundersEdgePlacement = {
+        ...thundersEdge,
         faction,
-        entityId: thundersEdge.entityId,
-        entityType: thundersEdge.entityType,
-        count: thundersEdge.count,
-        sustained: thundersEdge.sustained,
         x,
         y,
       };
@@ -344,6 +333,9 @@ export const placeSpaceEntities = ({
   systemId,
   highestProduction,
 }: PlaceSpaceEntitiesOptions) => {
+  const grid: GridDimensions = { gridSize, squareWidth, squareHeight };
+
+  // Step 1: Initialize cost map
   const { costMap: initialCostMap, rimSquares } = initializeSpaceCostMap(
     gridSize,
     squareWidth,
@@ -351,17 +343,14 @@ export const placeSpaceEntities = ({
     hexagonVertices
   );
 
-  // Pre-place a small heat source for command counters at the leftmost valid square
+  // Step 2: Pre-place special entities (command counters, production, thunders edge)
   const commandCounterHeatSource = preplaceCommandCounterHeatSource(
     initialCostMap,
     rimSquares,
-    gridSize,
-    squareWidth,
-    squareHeight,
+    grid,
     commandCounters.length > 0
   );
 
-  // Pre-place a small heat source for production icon at the optimal corner
   const productionHeatSource = preplaceProductionHeatSource(
     systemId,
     highestProduction
@@ -371,25 +360,9 @@ export const placeSpaceEntities = ({
     placement: thundersEdgePlacement,
     heatSource: thundersEdgeHeatSource,
     remainingEntities: entitiesAfterThundersEdge,
-  } = preplaceThundersEdge(
-    factionEntities,
-    squareWidth,
-    squareHeight,
-    gridSize
-  );
+  } = preplaceThundersEdge(factionEntities, grid);
 
-  const thundersEdgeHeatSources = thundersEdgeHeatSource
-    ? [thundersEdgeHeatSource]
-    : [];
-
-  const commandCounterHeatSources = commandCounterHeatSource
-    ? [commandCounterHeatSource]
-    : [];
-
-  const productionHeatSources = productionHeatSource
-    ? [productionHeatSource]
-    : [];
-
+  // Step 3: Pre-place fighters
   const {
     placements: fighterPlacements,
     heatSources: fighterHeatSources,
@@ -398,19 +371,19 @@ export const placeSpaceEntities = ({
     entitiesAfterThundersEdge,
     initialCostMap,
     rimSquares,
-    gridSize,
-    squareWidth,
-    squareHeight
+    grid
   );
 
-  const combinedHeatSources = [
+  // Step 4: Combine all heat sources
+  const allHeatSources = [
     ...initialHeatSources,
-    ...commandCounterHeatSources,
-    ...productionHeatSources,
-    ...thundersEdgeHeatSources,
+    ...(commandCounterHeatSource ? [commandCounterHeatSource] : []),
+    ...(productionHeatSource ? [productionHeatSource] : []),
+    ...(thundersEdgeHeatSource ? [thundersEdgeHeatSource] : []),
     ...fighterHeatSources,
   ];
 
+  // Step 5: Place remaining entities with heat map
   const { entityPlacements: heatMapPlacements, finalCostMap } =
     placeEntitiesWithCostMap({
       gridSize,
@@ -421,9 +394,10 @@ export const placeSpaceEntities = ({
       repellantPlanets: planets,
       factionEntities: remainingEntities,
       heatConfig: SPACE_HEAT_CONFIG,
-      initialHeatSources: combinedHeatSources,
+      initialHeatSources: allHeatSources,
     });
 
+  // Step 6: Combine all placements
   const allPlacements = [
     ...(thundersEdgePlacement ? [thundersEdgePlacement] : []),
     ...fighterPlacements,

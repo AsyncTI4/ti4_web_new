@@ -5,7 +5,13 @@ import {
 } from "../mapgen/tilePositioning";
 import { optimizeFactionColors, RGBColor } from "../utils/colorOptimization";
 import { getColorValues } from "../lookup/colors";
-import { createContext, ReactNode, useMemo, useState, useCallback } from "react";
+import {
+  createContext,
+  ReactNode,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import { useSettingsStore } from "@/utils/appStore";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { colors } from "@/data/colors";
@@ -142,9 +148,12 @@ export function GameContextProvider({ children, gameId }: Props) {
     []
   );
 
-  const clearDecalOverride = useCallback((faction: string) => {
-    setDecalOverride(faction, null);
-  }, [setDecalOverride]);
+  const clearDecalOverride = useCallback(
+    (faction: string) => {
+      setDecalOverride(faction, null);
+    },
+    [setDecalOverride]
+  );
 
   const setColorOverride = useCallback(
     (faction: string, colorAlias: string | null) => {
@@ -160,9 +169,12 @@ export function GameContextProvider({ children, gameId }: Props) {
     []
   );
 
-  const clearColorOverride = useCallback((faction: string) => {
-    setColorOverride(faction, null);
-  }, [setColorOverride]);
+  const clearColorOverride = useCallback(
+    (faction: string) => {
+      setColorOverride(faction, null);
+    },
+    [setColorOverride]
+  );
 
   const adjustedData = useMemo(() => {
     if (!data) return undefined;
@@ -234,6 +246,7 @@ export function buildGameContext(
   const playerData = data.playerData.filter(
     (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
   );
+
   const baseFactionToColor = buildFactionToColor(playerData);
   const accessibleOrder = [
     "blue",
@@ -389,6 +402,11 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
         tileData
       );
 
+      // Filter border anomalies for this tile
+      const tileBorderAnomalies = data.borderAnomalies?.filter(
+        (anomaly) => anomaly.tile === position
+      );
+
       return {
         position: position,
         systemId: systemId,
@@ -403,6 +421,7 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
         highestProduction: Math.max(...Object.values(tileData.production)),
         capacity: {},
         tokens: tokens,
+        borderAnomalies: tileBorderAnomalies,
         entityPlacements: allEntityPlacements,
         properties: {
           x: coordinates.x,

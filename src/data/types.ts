@@ -26,14 +26,14 @@ export type TileData = {
   imageURL?: string;
   source: string;
   tileBack?: string;
-  valid?: boolean;  // index 0 is the topmost edge, following clockwise. if the array contains an index, the index has a void tether.
-  voidTethers: (0 | 1 | 2 | 3 | 4 | 5)[];
+  valid?: boolean;
 };
 
 export type EntityData = {
   entityId: string;
   entityType: "unit" | "token" | "attachment";
   count: number;
+  unitStates?: [number, number, number, number];
   sustained?: number | null;
 };
 
@@ -293,6 +293,12 @@ export type Expeditions = {
   actionCards: Expedition;
 };
 
+export type BorderAnomalyInfo = {
+  tile: string;
+  direction: number;
+  type: string; // e.g., "void_tether", "spatial_tear", etc.
+};
+
 export type PlayerDataResponse = {
   expeditions: Expeditions;
   ringCount: number;
@@ -312,6 +318,7 @@ export type PlayerDataResponse = {
   tableTalkJumpLink?: string;
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  borderAnomalies?: BorderAnomalyInfo[];
 };
 
 export type BreakthroughData = {
@@ -644,6 +651,7 @@ export type MapTileType = {
   capacity?: {
     [factionColor: string]: { total: number; used: number; ignored: number };
   };
+  borderAnomalies?: BorderAnomalyInfo[]; // Border anomalies on this tile
   properties: {
     x: number;
     y: number;
@@ -657,6 +665,10 @@ export type MapTileType = {
         x2: number;
         y1: number;
         y2: number;
+      }[];
+      midpoints?: {
+        x: number;
+        y: number;
       }[];
     };
     width: number;

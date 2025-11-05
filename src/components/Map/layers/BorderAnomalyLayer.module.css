@@ -1,0 +1,7 @@
+.borderAnomaly {
+  width: 120px;
+  height: auto;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+

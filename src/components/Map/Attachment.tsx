@@ -7,15 +7,17 @@ import {
 
 type AttachmentProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   unitType: string;
-  colorAlias?: string;
   faction?: string;
+  x?: number;
+  y?: number;
 };
 
 export const Attachment = ({
   unitType,
-  colorAlias,
   faction,
   alt,
+  x,
+  y,
   ...imageProps
 }: AttachmentProps) => {
   // Look up attachment data by ID
@@ -26,5 +28,17 @@ export const Attachment = ({
     alt || `${faction || "attachment"} ${attachmentData?.name || unitType}`;
 
   if (!imagePath) return null;
-  return <img src={cdnImage(imagePath)} alt={defaultAlt} {...imageProps} />;
+  return (
+    <img
+      src={cdnImage(imagePath)}
+      alt={defaultAlt}
+      {...imageProps}
+      style={{
+        ...imageProps.style,
+        position: "absolute" as const,
+        left: `${x}px`,
+        top: `${y}px`,
+      }}
+    />
+  );
 };

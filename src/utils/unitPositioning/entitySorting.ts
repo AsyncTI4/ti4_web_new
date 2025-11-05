@@ -21,11 +21,7 @@ export const createHeatSource = (
   squareWidth: number,
   squareHeight: number
 ): HeatSource => {
-  const { x, y } = gridToPixel(
-    optimalResult.square,
-    squareWidth,
-    squareHeight
-  );
+  const { x, y } = gridToPixel(optimalResult.square, squareWidth, squareHeight);
   return {
     x,
     y,
@@ -42,12 +38,8 @@ const buildPriorityMap = (): { [key: string]: number } => {
   return map;
 };
 
-type QueueItem = {
-  entityId: string;
-  count: number;
+type QueueItem = EntityData & {
   priority: number;
-  entityType: "unit" | "token" | "attachment";
-  sustained?: number | null;
 };
 
 const buildFactionQueues = (
@@ -62,11 +54,8 @@ const buildFactionQueues = (
       if (entity.count > 0) {
         const priority = priorityMap[entity.entityId] ?? 999;
         factionQueues[faction].push({
-          entityId: entity.entityId,
-          count: entity.count,
+          ...entity,
           priority,
-          entityType: entity.entityType,
-          sustained: entity.sustained,
         });
       }
     });
@@ -100,13 +89,10 @@ const interleaveQueues = (
   while (orderedFactions.some((faction) => factionQueues[faction].length > 0)) {
     for (const faction of orderedFactions) {
       if (factionQueues[faction].length > 0) {
-        const stack = factionQueues[faction].shift()!;
+        const queueItem = factionQueues[faction].shift()!;
         sortedStacks.push({
+          ...queueItem,
           faction,
-          entityId: stack.entityId,
-          entityType: stack.entityType,
-          count: stack.count,
-          sustained: stack.sustained,
         });
       }
     }

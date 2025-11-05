@@ -1,19 +1,38 @@
 import React from "react";
-import { cdnImage } from "../../data/cdnImage";
 import { LawInPlay } from "../../data/types";
-import { getTextColor, findColorData } from "../../lookup/colors";
+import {
+  isFighterOrInfantry,
+  computeDefaultAlt,
+  computeUrlColor,
+  computeTokenSuffix,
+} from "./Unit/utils";
+import { BackgroundDecal } from "./Unit/components/BackgroundDecal";
+import { BaseUnitImage } from "./Unit/components/BaseUnitImage";
+import { PlayerDecalOverlay } from "./Unit/overlays/PlayerDecalOverlay";
+import { LawOverlay } from "./Unit/overlays/LawOverlay";
+import { DamageMarker } from "./Unit/overlays/DamageMarker";
+import { cdnImage } from "@/data/cdnImage";
 
-interface UnitProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+type UnitProps = {
   unitType: string;
   colorAlias: string;
   faction?: string;
   sustained?: boolean;
   bgDecalPath?: string;
-  decalPath?: string; // Decal overlay path (from player's active decal)
+  decalPath?: string;
   lawsInPlay?: LawInPlay[];
-}
+  galvanized?: boolean;
+  x?: number;
+  y?: number;
+  zIndex?: number;
+  alt?: string;
 
-export const Unit: React.FC<UnitProps> = ({
+  onMouseEnter?: (event: React.MouseEvent<HTMLImageElement>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLImageElement>) => void;
+  onMouseDown?: (event: React.MouseEvent<HTMLImageElement>) => void;
+};
+
+export function Unit({
   unitType,
   colorAlias,
   faction,
@@ -22,102 +41,92 @@ export const Unit: React.FC<UnitProps> = ({
   bgDecalPath,
   decalPath,
   lawsInPlay,
-  ...imageProps
-}) => {
-  const defaultAlt = alt || `${faction || colorAlias} ${unitType}`;
+  galvanized,
+  x,
+  y,
+  zIndex,
+}: UnitProps) {
+  const defaultAlt = computeDefaultAlt(alt, faction, colorAlias, unitType);
+  const tokenSuffix = computeTokenSuffix(colorAlias);
+  const urlColor = computeUrlColor(unitType, colorAlias);
+  const fighterOrInfantry = isFighterOrInfantry(unitType);
 
-  // Check for law overlays
   const isArticlesOfWarActive = lawsInPlay?.some(
     (law) => law.id === "articles_war"
   );
   const isSchematicsActive = lawsInPlay?.some((law) => law.id === "schematics");
-  const isMech = unitType === "mf";
-  const isWarSun = unitType === "ws";
-  const isFighterOrInfantry = unitType === "ff" || unitType === "gf";
-
-  const shouldShowArticlesOverlay = isArticlesOfWarActive && isMech;
-  const shouldShowSchematicsOverlay = isSchematicsActive && isWarSun;
-
-  const textColor = getTextColor(colorAlias);
-  const tokenSuffix = textColor.toLowerCase() === "white" ? "_wht" : "_blk";
-  const urlColor =
-    unitType === "monument" || unitType === "lady"
-      ? findColorData(colorAlias)?.name || colorAlias
-      : colorAlias;
+  const showArticles = isArticlesOfWarActive && unitType === "mf";
+  const showSchematics = isSchematicsActive && unitType === "ws";
 
   return (
-    <>
-      {bgDecalPath && (
-        <img
-          src={cdnImage(`/decals/${bgDecalPath}`)}
-          {...imageProps}
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-          style={{
-            ...imageProps.style,
-            zIndex: (imageProps.style?.zIndex as number) - 1 || -1,
-          }}
-        />
-      )}
-      <img
-        src={cdnImage(`/units/${urlColor}_${unitType}.png`)}
-        alt={defaultAlt}
-        {...imageProps}
-      />
-      {/* Decal overlay - only show for non-fighter/infantry units */}
-      {decalPath && !isFighterOrInfantry && (
-        <img
-          src={cdnImage(`/decals/${decalPath}`)}
-          {...imageProps}
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-          style={{
-            ...imageProps.style,
-            position: "absolute",
-            zIndex: (imageProps.style?.zIndex as number) || 0,
-          }}
-        />
-      )}
-      {shouldShowArticlesOverlay && (
-        <img
-          src={cdnImage(`/tokens/agenda_articles_war${tokenSuffix}.png`)}
+    <div
+      style={{
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        transform: "translate(-50%, -50%)",
+        zIndex: zIndex,
+      }}
+    >
+      <BackgroundDecal path={bgDecalPath} />
+      <BaseUnitImage urlColor={urlColor} unitType={unitType} alt={defaultAlt} />
+      <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
+      {showArticles && (
+        <LawOverlay
+          tokenPath={`/tokens/agenda_articles_war${tokenSuffix}.png`}
           alt={`${defaultAlt} articles of war`}
-          {...imageProps}
-          style={{
-            ...imageProps.style,
-            position: "absolute",
-            zIndex: (imageProps.style?.zIndex as number) + 1 || 1,
-          }}
+          zIndexDelta={1}
         />
       )}
-      {shouldShowSchematicsOverlay && (
-        <img
-          src={cdnImage(
-            `/tokens/agenda_publicize_weapon_schematics${tokenSuffix}.png`
-          )}
+      {showSchematics && (
+        <LawOverlay
+          tokenPath={`/tokens/agenda_publicize_weapon_schematics${tokenSuffix}.png`}
           alt={`${defaultAlt} weapon schematics`}
-          {...imageProps}
-          style={{
-            ...imageProps.style,
-            position: "absolute",
-            zIndex: (imageProps.style?.zIndex as number) + 1 || 1,
-          }}
+          zIndexDelta={1}
         />
       )}
-      {sustained && (
-        <img
-          src={cdnImage(`/extra/marker_damage.png`)}
-          alt={defaultAlt}
-          {...imageProps}
-          style={{
-            ...imageProps.style,
-            position: "absolute",
-            zIndex: (imageProps.style?.zIndex as number) + 2 || 2,
-          }}
+
+      <DamageMarker show={sustained} alt={defaultAlt} />
+
+      {galvanized && (
+        <GalvanizeMarker
+          alt="Galvanize Marker"
+          zIndex={zIndex ? zIndex + 1 : undefined}
+          unitType={unitType}
         />
       )}
-    </>
+    </div>
   );
+}
+
+type GalvanizeMarkerProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+  alt: string;
+  zIndex?: number;
+  unitType: string;
 };
+
+function GalvanizeMarker({ alt, zIndex, unitType }: GalvanizeMarkerProps) {
+  const styles =
+    unitType === "mf"
+      ? {
+          right: "0%",
+          top: "25%",
+        }
+      : {
+          left: "70%",
+          top: "30%",
+        };
+  return (
+    <img
+      src={cdnImage("/extra/marker_galvanize.png")}
+      alt={alt}
+      style={{
+        position: "absolute",
+        ...styles,
+        transform: "translate(-50%, -50%)",
+        width: "28px",
+        zIndex: zIndex ? zIndex + 10000 : undefined,
+      }}
+    />
+  );
+}
