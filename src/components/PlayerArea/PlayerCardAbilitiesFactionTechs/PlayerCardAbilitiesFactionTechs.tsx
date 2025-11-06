@@ -32,49 +32,42 @@ export function PlayerCardAbilitiesFactionTechs({
 
   if (isMobile) {
     return (
-      <Group gap="xs" wrap="wrap" align="center" mb="lg" mt="xs">
+      <Group gap="xs" wrap="wrap" align="center" mb="xs" mt="md">
         {breakthrough?.breakthroughId && (
-          <Stack gap={4}>
-            <Caption size="xs">Breakthrough</Caption>
-            <Breakthrough
-              breakthroughId={breakthrough.breakthroughId}
-              exhausted={breakthrough.exhausted}
-              tradeGoodsStored={breakthrough.tradeGoodsStored}
-              unlocked={breakthrough.unlocked ?? false}
-            />
-          </Stack>
+          <Breakthrough
+            breakthroughId={breakthrough.breakthroughId}
+            exhausted={breakthrough.exhausted}
+            tradeGoodsStored={breakthrough.tradeGoodsStored}
+            unlocked={breakthrough.unlocked ?? false}
+            strong={false}
+          />
         )}
         {abilities.length > 0 && (
-          <Stack gap={4}>
-            <Caption size="xs">Abilities</Caption>
-            <Group gap={gap}>
-              {abilities.map((abilityId, index) => {
-                const abilityData = getAbility(abilityId);
-                if (!abilityData) return null;
-                return <Ability id={abilityId} key={index} />;
-              })}
-            </Group>
-          </Stack>
+          <Group gap={gap}>
+            {abilities.map((abilityId, index) => {
+              const abilityData = getAbility(abilityId);
+              if (!abilityData) return null;
+              return <Ability id={abilityId} key={index} strong={false} />;
+            })}
+          </Group>
         )}
         {customPromissoryNotes.length > 0 && (
-          <Stack gap={4}>
-            <Caption size="xs">Promissory Notes</Caption>
-            <Group gap={gap}>
-              {customPromissoryNotes.map((pnId) => (
-                <PromissoryNote promissoryNoteId={pnId} key={pnId} />
-              ))}
-            </Group>
-          </Stack>
+          <Group gap={gap}>
+            {customPromissoryNotes.map((pnId) => (
+              <PromissoryNote
+                promissoryNoteId={pnId}
+                key={pnId}
+                strong={false}
+              />
+            ))}
+          </Group>
         )}
         {notResearchedFactionTechs.length > 0 && (
-          <Stack gap={4}>
-            <Caption size="xs">Faction Techs</Caption>
-            <Group gap={gap}>
-              {notResearchedFactionTechs.map((techId) => (
-                <Tech techId={techId} key={techId} />
-              ))}
-            </Group>
-          </Stack>
+          <Group gap={gap}>
+            {notResearchedFactionTechs.map((techId) => (
+              <Tech techId={techId} key={techId} />
+            ))}
+          </Group>
         )}
       </Group>
     );

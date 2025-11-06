@@ -121,11 +121,13 @@ export default function PlayerCardSidebar(props: Props) {
           </Stack>
         </SimpleGrid>
 
-        <PlayerCardRelicsPromissoryArea
-          relics={relics}
-          promissoryNotes={promissoryNotes}
-          exhaustedRelics={playerData.exhaustedRelics}
-        />
+        <Box mt="xs">
+          <PlayerCardRelicsPromissoryArea
+            relics={relics}
+            promissoryNotes={promissoryNotes}
+            exhaustedRelics={playerData.exhaustedRelics}
+          />
+        </Box>
 
         <Box className={softStyles.softDivider} mt="xs" />
 

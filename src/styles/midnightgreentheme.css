@@ -117,6 +117,10 @@
     --army-rank-first-glow: rgba(255, 215, 0, 0.4);
     --army-rank-second-color: rgba(192, 192, 192, 0.9);
     --army-rank-third-color: rgba(205, 127, 50, 0.85);
+
+    /* PlayerCardMobile Panel Sections */
+    --player-card-mobile-panel-bg: rgba(16, 185, 129, 0.03);
+    --player-card-mobile-panel-border: 1px solid rgba(16, 185, 129, 0.08);
 }
 
 

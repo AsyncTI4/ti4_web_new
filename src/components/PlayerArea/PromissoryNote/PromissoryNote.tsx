@@ -9,9 +9,10 @@ import { FactionIcon } from "@/components/shared/FactionIcon";
 type Props = {
   promissoryNoteId: string;
   onClick?: () => void;
+  strong?: boolean;
 };
 
-export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
+export function PromissoryNote({ promissoryNoteId, onClick, strong = true }: Props) {
   const [opened, setOpened] = useState(false);
   const factionColorMap = useFactionColors();
   const promissoryNoteData = getPromissoryNoteData(
@@ -34,7 +35,7 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
             ribbon
             leftSection={<FactionIcon faction={faction!} />}
             title={noteData.shortName || displayName}
-            strong
+            strong={strong}
             px={8}
             py={4}
           />

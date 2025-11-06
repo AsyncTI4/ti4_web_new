@@ -14,6 +14,7 @@ type Props = {
   exhausted?: boolean;
   tradeGoodsStored?: number;
   unlocked?: boolean;
+  strong?: boolean;
 };
 
 const synergyToColor: Record<string, ColorKey> = {
@@ -53,6 +54,7 @@ export function Breakthrough({
   exhausted = false,
   tradeGoodsStored,
   unlocked = true,
+  strong = true,
 }: Props) {
   const [opened, setOpened] = useState(false);
   const data = getBreakthroughData(breakthroughId);
@@ -75,7 +77,7 @@ export function Breakthrough({
             title={title}
             px={8}
             py={4}
-            strong
+            strong={strong}
             accentLine={exhausted}
             leftSection={
               <img

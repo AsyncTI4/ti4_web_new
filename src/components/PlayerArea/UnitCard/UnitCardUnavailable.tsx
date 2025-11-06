@@ -10,20 +10,17 @@ type Props = {
   lockedLabel?: string;
 };
 
-export function UnitCardUnavailable({
-  asyncId,
-  color,
-  compact,
-  lockedLabel,
-}: Props) {
+export function UnitCardUnavailable({ asyncId, color, compact }: Props) {
   const colorAlias = getColorAlias(color);
   return (
-    <BaseCard compact={compact} locked enableAnimations={false}>
-      <Unit
-        unitType={asyncId}
-        colorAlias={colorAlias}
-        className={compact ? styles.unitImageCompact : styles.unitImage}
-      />
-    </BaseCard>
+    <div>
+      <BaseCard compact={compact} locked enableAnimations={false}>
+        <Unit
+          unitType={asyncId}
+          colorAlias={colorAlias}
+          className={compact ? styles.unitImageCompact : styles.unitImage}
+        />
+      </BaseCard>
+    </div>
   );
 }

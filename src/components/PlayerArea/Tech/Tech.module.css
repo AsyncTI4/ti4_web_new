@@ -14,8 +14,8 @@
   border-radius: 4px;
   position: relative;
   overflow: hidden;
-  background: rgba(var(--gradient-color), 0.12);
-  border: 1px solid rgba(var(--gradient-color), 0.25);
+  background: rgba(var(--gradient-color), 0.08);
+  border: 1px solid rgba(var(--gradient-color), 0.18);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(0);
   cursor: pointer;
@@ -23,9 +23,9 @@
 
 /* Enhanced styling for tier 3 and faction techs */
 .techCard.enhanced {
-  background: rgba(var(--gradient-color), 0.25);
-  border: 1px solid rgba(var(--gradient-color), 0.9);
-  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.15);
+  background: rgba(var(--gradient-color), 0.15);
+  border: 1px solid rgba(var(--gradient-color), 0.5);
+  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -53,16 +53,16 @@
 }
 
 .techCard:hover {
-  background: rgba(var(--gradient-color), 0.18);
-  border: 1px solid rgba(var(--gradient-color), 0.4);
-  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: rgba(var(--gradient-color), 0.12);
+  border: 1px solid rgba(var(--gradient-color), 0.3);
+  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   /* transform: translateY(-2px); */
 }
 
 .techCard.enhanced:hover {
-  background: rgba(var(--gradient-color), 0.5);
-  border: 1px solid rgba(var(--gradient-color), 0.5);
-  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: rgba(var(--gradient-color), 0.22);
+  border: 1px solid rgba(var(--gradient-color), 0.45);
+  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 
@@ -73,7 +73,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: rgba(var(--gradient-color), 0.6);
+  background: rgba(var(--gradient-color), 0.4);
 }
 
 /* Faction icon positioning */
@@ -110,8 +110,8 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(var(--gradient-color), 0.9);
-  box-shadow: 0 0 3px rgba(var(--gradient-color), 0.9), inset 0 0 1px rgba(255, 255, 255, 0.3);
+  background: rgba(var(--gradient-color), 0.6);
+  box-shadow: 0 0 3px rgba(var(--gradient-color), 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Main content group */
@@ -126,7 +126,7 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.2));
 }
 
 /* Faction tech icon with darkening background */
@@ -161,7 +161,7 @@
 
 /* Icon filter */
 .iconFilter {
-  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.3));
+  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.2));
 }
 
 /* Color-specific classes using global variables */

@@ -56,7 +56,7 @@ export function Tech({ techId, isExhausted = false, mobile = false }: Props) {
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
   const isFactionTech = !!techData.faction;
-  const isEnhanced = tier === 3 || isFactionTech;
+  const isEnhanced = false;
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>

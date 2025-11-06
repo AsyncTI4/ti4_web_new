@@ -74,8 +74,7 @@ export function Plot({ plotCard, faction }: Props) {
             onClick={() => setOpened((o) => !o)}
             strong
             px="xs"
-            py="xs"
-            style={{ minHeight: 65 }}
+            py={6}
           >
             <Stack gap={2} align="center">
               <Group gap={2} justify="center" wrap="wrap">

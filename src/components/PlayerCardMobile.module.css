@@ -1,0 +1,98 @@
+/* Subtle section for abilities/faction techs - reduces visual prominence without opacity */
+
+.subtleSection :global(.chip) {
+  background: rgba(var(--background-color), 0.06) !important;
+  border-color: rgba(var(--border-color), 0.5) !important;
+}
+
+.subtleSection :global(.chip.inner) {
+  min-height: 22px !important;
+  padding: 2px 4px !important;
+}
+
+.subtleSection :global(.chip.strong) {
+  background: rgba(var(--background-color), 0.08) !important;
+}
+
+.subtleSection :global(.chip .textContainer),
+.subtleSection :global(.chip .textContainer *) {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+.subtleSection :global(.chip.accentLine::before) {
+  width: 1.5px !important;
+  opacity: 0.4 !important;
+}
+
+.subtleSection :global(.chip.ribbon::before) {
+  opacity: 0.3 !important;
+}
+
+.subtleSection :global(.chip.breakthrough::before) {
+  opacity: 0.4 !important;
+}
+
+.subtleSection :global(.techCard) {
+  background: rgba(var(--gradient-color), 0.06) !important;
+  border-color: rgba(var(--gradient-color), 0.15) !important;
+  padding: 2px 4px !important;
+}
+
+.subtleSection :global(.techCard.enhanced) {
+  background: rgba(var(--gradient-color), 0.12) !important;
+  border-color: rgba(var(--gradient-color), 0.3) !important;
+  box-shadow: none !important;
+}
+
+.subtleSection :global(.techCard::before) {
+  width: 1.5px !important;
+  opacity: 0.4 !important;
+}
+
+.subtleSection :global(.techCard .techName) {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+.subtleSection :global(.caption) {
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.gridItems {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: start;
+  justify-items: start;
+}
+
+/* Unified subtle panel wrapper for major sections */
+.panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-xs);
+}
+
+.sectionTitle {
+  color: var(--mantine-color-gray-5);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sectionGap {
+  margin-top: var(--mantine-spacing-xs);
+}
+
+/* Extremely subtle panel styling for primary sections */
+.sectionPanel {
+  background: var(--player-card-mobile-panel-bg);
+  border: var(--player-card-mobile-panel-border);
+  border-radius: var(--mantine-radius-sm);
+  padding: var(--mantine-spacing-xs);
+}

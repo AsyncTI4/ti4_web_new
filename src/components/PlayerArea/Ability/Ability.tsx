@@ -8,9 +8,10 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   id: string;
+  strong?: boolean;
 };
 
-export function Ability({ id }: Props) {
+export function Ability({ id, strong = true }: Props) {
   const [opened, setOpened] = useState(false);
   const abilityData = getAbility(id);
   if (!abilityData) return null;
@@ -21,7 +22,7 @@ export function Ability({ id }: Props) {
         <Chip
           accent="purple"
           accentLine
-          strong
+          strong={strong}
           title={abilityData.name}
           onClick={() => setOpened((o) => !o)}
           leftSection={
