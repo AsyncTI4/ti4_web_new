@@ -5,11 +5,91 @@ export const MOBILE_PANELS_ZOOM = 0.31;
 const PLAYER_AREAS_WIDTH = 1300;
 const DECIMAL_PLACES = 4;
 
-  return isMobileDevice() ? MOBILE_MAP_ZOOM : storeZoom;
+// Cache for mobile panels zoom (device-width based)
+let cachedPanelsZoom: number | null = null;
+let cachedPanelsDeviceWidth: number | null = null;
+
+// Cache for mobile map zoom (content-width based)
+type MapZoomCache = {
+  zoom: number;
+  contentWidth: number;
+  viewportWidth: number;
+};
+let cachedMapZoom: MapZoomCache | null = null;
+
+function roundToDecimalPlaces(value: number, places: number): number {
+  const multiplier = Math.pow(10, places);
+  return Math.round(value * multiplier) / multiplier;
+}
+
+function getViewportWidth(): number {
+  if (typeof window === "undefined") return 0;
+  return window.innerWidth;
+}
+
+function calculateMobilePanelsZoom(): number {
+  if (typeof window === "undefined") {
+    return MOBILE_PANELS_ZOOM;
+  }
+
+  const deviceWidth = getViewportWidth();
+
+  if (cachedPanelsZoom !== null && cachedPanelsDeviceWidth === deviceWidth) {
+    return cachedPanelsZoom;
+  }
+
+  const zoom = deviceWidth / PLAYER_AREAS_WIDTH;
+  const roundedZoom = roundToDecimalPlaces(zoom, DECIMAL_PLACES);
+
+  cachedPanelsZoom = roundedZoom;
+  cachedPanelsDeviceWidth = deviceWidth;
+
+  return roundedZoom;
+}
+
+function calculateMobileMapZoom(contentWidth: number): number {
+  if (typeof window === "undefined" || contentWidth <= 0) {
+    return MOBILE_MAP_ZOOM;
+  }
+
+  const viewportWidth = getViewportWidth();
+
+  if (
+    cachedMapZoom !== null &&
+    cachedMapZoom.contentWidth === contentWidth &&
+    cachedMapZoom.viewportWidth === viewportWidth
+  ) {
+    return cachedMapZoom.zoom;
+  }
+
+  const zoom = viewportWidth / contentWidth;
+  const roundedZoom = roundToDecimalPlaces(zoom, DECIMAL_PLACES);
+
+  cachedMapZoom = {
+    zoom: roundedZoom,
+    contentWidth,
+    viewportWidth,
+  };
+
+  return roundedZoom;
+}
+
+export function computeMapZoom(
+  storeZoom: number,
+  contentWidth?: number
+): number {
+  if (!isMobileDevice()) {
+    return storeZoom;
+  }
+
+  if (typeof contentWidth === "number") {
+    return calculateMobileMapZoom(contentWidth);
+  }
+
+  return MOBILE_MAP_ZOOM;
 }
 
 export function computePanelsZoom(): number {
-  return isMobileDevice() ? MOBILE_PANELS_ZOOM : 1;
   if (!isMobileDevice()) {
     return 1;
   }
