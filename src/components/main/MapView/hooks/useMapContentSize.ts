@@ -25,7 +25,7 @@ export function useMapContentSize() {
     }
 
     const baseWidth = maxRight + MAP_PADDING;
-    const baseHeight = maxBottom + MAP_PADDING + 320;
+    const baseHeight = maxBottom + MAP_PADDING + 50;
 
     if (settings.isFirefox) {
       return {
@@ -42,4 +42,3 @@ export function useMapContentSize() {
 
   return contentSize;
 }
-

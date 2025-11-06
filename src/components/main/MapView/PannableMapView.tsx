@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Grid, Stack, Text } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
 import { PathVisualization } from "@/components/PathVisualization";
@@ -69,8 +69,8 @@ export function PannableMapView({ gameId }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
-  const zoom = computeMapZoom(storeZoom);
-
+  const contentSize = useMapContentSize();
+  const zoom = computeMapZoom(storeZoom, contentSize.width + 150);
   const hideZoomControls = shouldHideZoomControls();
 
   const {
@@ -91,7 +91,6 @@ export function PannableMapView({ gameId }: Props) {
 
   const playerCardLayout = isMobileDevice() ? "list" : "grid";
 
-  // Fetch player hand data
   const {
     data: handData,
     isLoading: isHandLoading,
@@ -134,11 +133,8 @@ export function PannableMapView({ gameId }: Props) {
     selectedArea,
   });
 
-  const contentSize = useMapContentSize();
-
   const [tryDecalsOpened, setTryDecalsOpened] = useState(false);
 
-  // Listen for the toggleTryDecals event
   useEffect(() => {
     const handleToggleTryDecals = () => {
       setTryDecalsOpened((prev) => !prev);
@@ -179,7 +175,6 @@ export function PannableMapView({ gameId }: Props) {
                 ...getScaleStyle(zoom, settings.isFirefox),
                 top: MAP_PADDING / zoom,
                 left: MAP_PADDING / zoom,
-                // offset to account for mallice meaning 'centering' looks weird
                 width: contentSize.width + 400,
                 height: contentSize.height,
                 marginLeft: "auto",
@@ -221,7 +216,6 @@ export function PannableMapView({ gameId }: Props) {
             <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
             <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
 
-            {/* Secret Hand - Top left of pannable area */}
             {isUserAuthenticated && isInGame && !isMobileDevice() && (
               <Box className={secretHandClasses.pannableWrapper}>
                 <SecretHand
@@ -241,7 +235,6 @@ export function PannableMapView({ gameId }: Props) {
           </>
         )}
 
-        {/* Game info and scoreboard summary area */}
         {gameData && (
           <Box
             style={{
@@ -251,7 +244,6 @@ export function PannableMapView({ gameId }: Props) {
             }}
           >
             <Stack gap="md">
-              {/* Game Name and Round */}
               {gameData.gameName && (
                 <Box>
                   <Text size="lg" c="gray.1" fw={600}>
@@ -277,7 +269,6 @@ export function PannableMapView({ gameId }: Props) {
           </Box>
         )}
 
-        {/* Player cards */}
         <Grid
           gutter="md"
           columns={12}
@@ -318,7 +309,6 @@ export function PannableMapView({ gameId }: Props) {
         <ReconnectButton gameDataState={gameDataState} />
       </Box>
 
-      {/* Movement Mode Box (bottom-left) */}
       {draft.targetPositionId && (
         <MovementModeBox
           gameId={gameId}
