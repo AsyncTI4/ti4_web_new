@@ -9,6 +9,18 @@ type Props = {
   mapTile: MapTileType;
 };
 
+function isSmallLegendaryPlanet(planetId: string): boolean {
+  return (
+    planetId === "mirage" ||
+    planetId === "mallice" ||
+    planetId === "lockedmallice" ||
+    planetId === "hexmallice" ||
+    planetId === "hexlockedmallice" ||
+    planetId === "industrex" ||
+    planetId === "ordinian"
+  );
+}
+
 export function PlanetaryShieldOverlayLayer({ systemId, mapTile }: Props) {
   const planetCoords = getPlanetCoordsBySystemId(systemId);
   const overlays = mapTile.planets.flatMap((planetTile) => {
@@ -24,14 +36,7 @@ export function PlanetaryShieldOverlayLayer({ systemId, mapTile }: Props) {
     const isLegendary = !!(
       planet?.legendaryAbilityName || planet?.legendaryAbilityText
     );
-    const isSmallLegendary =
-      planetId === "mirage" ||
-      planetId === "mallice" ||
-      planetId === "lockedmallice" ||
-      planetId === "hexmallice" ||
-      planetId === "hexlockedmallice" ||
-      planetId === "industrex" ||
-      planetId === "ordinian";
+    const isSmallLegendary = isSmallLegendaryPlanet(planetId);
 
     let scale = 0.95;
     if (isMecatolRex) {

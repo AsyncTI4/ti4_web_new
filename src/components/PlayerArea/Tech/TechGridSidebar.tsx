@@ -1,11 +1,26 @@
+import type { ReactNode } from "react";
 import { SimpleGrid, Stack } from "@mantine/core";
-import { buildCategoriesWithTechs } from "./TechGridShared";
+import { buildCategoriesWithTechs, TechCategory } from "./TechGridShared";
+import { getTechData } from "@/lookup/tech";
 
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
   minSlotsPerColor?: number;
 };
+
+function filterCategoriesWithTechs(
+  categories: { type: TechCategory; techs: ReactNode[] }[],
+  techs: string[]
+): { type: TechCategory; techs: ReactNode[] }[] {
+  return categories.filter((category) => {
+    // Check if there are any techs of this category type in the techs array
+    return techs.some((techId) => {
+      const techData = getTechData(techId);
+      return techData?.types[0] === category.type;
+    });
+  });
+}
 
 export function TechGridSidebar({
   techs = [],
@@ -18,9 +33,15 @@ export function TechGridSidebar({
     minSlotsPerColor
   );
 
-  const rows: typeof categoriesWithTechs[] = [];
-  for (let i = 0; i < categoriesWithTechs.length; i += 2) {
-    rows.push(categoriesWithTechs.slice(i, i + 2));
+  // Filter out categories that have no actual techs (only show colors that have techs)
+  const categoriesWithActualTechs = filterCategoriesWithTechs(
+    categoriesWithTechs,
+    techs
+  );
+
+  const rows: typeof categoriesWithActualTechs[] = [];
+  for (let i = 0; i < categoriesWithActualTechs.length; i += 2) {
+    rows.push(categoriesWithActualTechs.slice(i, i + 2));
   }
 
   return (
