@@ -43,22 +43,9 @@ function calculateExpeditionPosition(
   isFirefox: boolean,
   zoom: number
 ) {
-  // For Firefox, contentSize is already multiplied by zoom in useMapContentSize
-  // But since the container uses MozTransform: scale(zoom), we need to use
-  // the base (unscaled) size for position calculation
-  const baseWidth = isFirefox ? contentSize.width / zoom : contentSize.width;
   const baseHeight = isFirefox ? contentSize.height / zoom : contentSize.height;
-
-  const containerWidth = baseWidth + 400;
-  const expeditionsImageLeft =
-    containerWidth >= 1200
-      ? containerWidth - 1200 + 200
-      : Math.max(0, containerWidth - 300) + 200;
-  const expeditionsImageTop =
-    baseHeight >= 800
-      ? baseHeight - 800 + 200
-      : Math.max(0, baseHeight - 300) + 200;
-
+  const expeditionsImageLeft = 100;
+  const expeditionsImageTop = baseHeight - 400;
   return {
     left: expeditionsImageLeft,
     top: expeditionsImageTop,

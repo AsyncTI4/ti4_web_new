@@ -7,13 +7,13 @@
 
 export const Z_INDEX_LAYERS = {
   // Game Units Layer (100-999)
-  UNIT_BASE: 50,
+  UNIT_BASE: 53,
 
   // Unit type priorities (higher number = higher z-index)
   // Based on actual TI4 unit types from entityZStackPriority
   UNIT_PRIORITIES: {
     // Special tokens (lower than units)
-    THUNDERS_EDGE: 30, // Thunder's Edge token - renders below other tokens
+    THUNDERS_EDGE: 53, // Thunder's Edge token - renders below other tokens
 
     // Regular units
     GF: 100, // Ground Forces
