@@ -107,8 +107,9 @@ export function PlanetCirclesLayer({
     }
 
     const diameter = radius * 2;
+    const isSpaceStation = planet.planetTypes?.includes("SPACESTATION");
     const exhaustedBackdropFilter =
-      isExhausted && showExhaustedPlanets
+      isExhausted && showExhaustedPlanets && !isSpaceStation
         ? {
             backdropFilter: "brightness(0.7) grayscale(1) blur(0px)" as const,
           }
