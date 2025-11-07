@@ -247,6 +247,12 @@ function DesktopTabsControls({
         >
           {[
             {
+              name: "midnightgraytheme" as const,
+              gradient:
+                "linear-gradient(135deg, rgba(8,8,8,1) 0%, rgba(24,24,24,1) 100%)",
+              highlight: "rgba(200,200,200,1)",
+            },
+            {
               name: "midnightbluetheme" as const,
               gradient:
                 "linear-gradient(135deg, rgba(8,14,33,1) 0%, rgba(20,29,45,1) 100%)",
@@ -269,12 +275,6 @@ function DesktopTabsControls({
               gradient:
                 "linear-gradient(135deg, rgba(8,20,14,1) 0%, rgba(12,38,26,1) 100%)",
               highlight: "rgba(16,185,129,1)",
-            },
-            {
-              name: "midnightgraytheme" as const,
-              gradient:
-                "linear-gradient(135deg, rgba(8,8,8,1) 0%, rgba(24,24,24,1) 100%)",
-              highlight: "rgba(200,200,200,1)",
             },
             {
               name: "vaporwavetheme" as const,

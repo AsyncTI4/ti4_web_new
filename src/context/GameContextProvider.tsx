@@ -24,6 +24,7 @@ import {
   UnitMapTile,
   PlayerData,
   WebScoreBreakdown,
+  EntityData,
 } from "@/data/types";
 import {
   getPlanetsByTileId,
@@ -298,7 +299,11 @@ export function buildGameContext(
   );
   const mapTiles = buildMapTiles(data);
   const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
-  const planetIdToPlanetTile = buildPlanetIdToPlanetTileMap(mapTiles, data.tileUnitData, allExhaustedPlanets);
+  const planetIdToPlanetTile = buildPlanetIdToPlanetTileMap(
+    mapTiles,
+    data.tileUnitData,
+    allExhaustedPlanets
+  );
   const calculatedTilePositions = data.tilePositions
     ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
@@ -316,6 +321,47 @@ export function buildGameContext(
     }
     return player;
   });
+
+  const splitEntitiesByType = (entities: EntityData[]) => {
+    return {
+      attachments: entities.filter((e) => e.entityType === "attachment"),
+      tokens: entities
+        .filter((e) => e.entityType === "token")
+        .map((e) => e.entityId),
+      unitsByFaction: entities.filter((e) => e.entityType === "unit"),
+    };
+  };
+
+  const aggregateEntities = (data: Record<string, EntityData[]>) => {
+    const tokens: string[] = [];
+    const attachments: string[] = [];
+    const unitsByFaction: Record<string, EntityData[]> = {};
+
+    Object.entries(data).forEach(([_, entities]) => {
+      const { tokens, attachments, unitsByFaction } =
+        splitEntitiesByType(entities);
+
+      tokens.push(...tokens);
+      attachments.push(...attachments);
+      unitsByFaction.push(...unitsByFaction);
+    });
+
+    return { tokens, attachments, unitsByFaction };
+  };
+
+  const tiles = {};
+  Object.entries(data.tileUnitData).forEach(([position, tileData]) => {
+    const { tokens, attachments, unitsByFaction } = aggregateEntities(
+      tileData.space
+    );
+    tiles[position] = {
+      tokens,
+      attachments,
+      unitsByFaction,
+    };
+  });
+
+  console.log(tiles);
 
   return {
     mapTiles,
@@ -439,8 +485,7 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
           height: 0,
         },
       } as MapTileType;
-    }
-  );
+    });
 
   return mapTiles;
 }
@@ -462,7 +507,9 @@ function buildPlanetIdToPlanetTileMap(
   // Also include planets from the "special" tile (off-tile planets like custodiavigilia)
   if (tileUnitData?.special?.planets) {
     const exhaustedSet = allExhaustedPlanets || new Set<string>();
-    for (const [planetName, planetData] of Object.entries(tileUnitData.special.planets)) {
+    for (const [planetName, planetData] of Object.entries(
+      tileUnitData.special.planets
+    )) {
       const planetTile = buildPlanetMapTile(
         planetName,
         planetData,

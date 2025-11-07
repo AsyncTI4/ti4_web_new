@@ -34,7 +34,7 @@ const DEFAULT_SETTINGS = {
   showControlLayer: false,
   showControlTokens: true,
   showExhaustedPlanets: true,
-  themeName: "midnightbluetheme" as const,
+  themeName: "midnightgraytheme" as const,
   accessibleColors: false,
   mapViewPreference: null as MapViewPreference | null,
 };
@@ -98,7 +98,7 @@ function loadThemeFromStorage(): Settings["themeName"] {
   } catch (error) {
     console.warn("Failed to load theme from localStorage:", error);
   }
-  return "midnightbluetheme";
+  return "midnightgraytheme";
 }
 
 function saveThemeToStorage(themeName: Settings["themeName"]) {
