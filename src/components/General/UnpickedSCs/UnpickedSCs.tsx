@@ -1,7 +1,9 @@
 import { Box, Group, SimpleGrid, Text } from "@mantine/core";
-import { StrategyCard } from "../../PlayerArea/StrategyCard";
+import { StrategyCardBannerCompact } from "../../PlayerArea/StrategyCardBannerCompact";
 import { StrategyCard as StrategyCardType } from "../../../data/types";
 import { SC_COLORS, SC_NAMES } from "../../../data/strategyCardColors";
+import { getStrategyCardByInitiative } from "@/lookup/strategyCards";
+import { useGameData } from "@/hooks/useGameContext";
 import styles from "./UnpickedSCs.module.css";
 
 type Props = {
@@ -9,24 +11,24 @@ type Props = {
 };
 
 function UnpickedSCs({ strategyCards }: Props) {
+  const gameData = useGameData();
+
   // Filter for unpicked strategy cards and map to component format
   const unpickedCards = strategyCards
     .filter((card) => !card.picked)
-    .map((card) => ({
-      number: card.initiative,
-      name: SC_NAMES[card.initiative] || card.name.toUpperCase(),
-      color: SC_COLORS[card.initiative] as
-        | "blue"
-        | "purple"
-        | "yellow"
-        | "red"
-        | "green"
-        | "orange"
-        | "gray"
-        | "teal"
-        | undefined,
-      tradeGoods: card.tradeGoods,
-    }));
+    .map((card) => {
+      const sc = getStrategyCardByInitiative(
+        card.initiative,
+        gameData?.strategyCardIdMap
+      );
+      const displayName = sc?.name || SC_NAMES[card.initiative] || card.name.toUpperCase();
+
+      return {
+        number: card.initiative,
+        name: displayName,
+        color: SC_COLORS[card.initiative] || "red",
+      };
+    });
 
   if (unpickedCards.length === 0) return null;
 
@@ -36,12 +38,11 @@ function UnpickedSCs({ strategyCards }: Props) {
       <Group gap="md" wrap="wrap">
         <SimpleGrid cols={1} spacing="xs">
           {unpickedCards.map((card, index) => (
-            <StrategyCard
+            <StrategyCardBannerCompact
               key={index}
               number={card.number}
-              name={card.name}
+              text={card.name}
               color={card.color}
-              tradeGoods={card.tradeGoods}
             />
           ))}
         </SimpleGrid>

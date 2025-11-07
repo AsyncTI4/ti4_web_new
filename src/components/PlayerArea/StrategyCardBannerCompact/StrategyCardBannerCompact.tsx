@@ -6,6 +6,9 @@ import { Chip } from "@/components/shared/primitives/Chip";
 import classes from "./StrategyCardBannerCompact.module.css";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { StrategyCardDetailsCard } from "../StrategyCardDetailsCard";
+import { getStrategyCardByInitiative } from "@/lookup/strategyCards";
+import { useGameData } from "@/hooks/useGameContext";
+import { ColorKey } from "../gradientClasses";
 
 interface Props {
   number: number;
@@ -45,6 +48,9 @@ export function StrategyCardBannerCompact({
   isExhausted = false,
 }: Props) {
   const [opened, setOpened] = useState(false);
+  const gameData = useGameData();
+  const sc = getStrategyCardByInitiative(number, gameData?.strategyCardIdMap);
+  const displayText = sc?.name || text;
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const colorClass =
@@ -55,7 +61,7 @@ export function StrategyCardBannerCompact({
       <SmoothPopover.Target>
         <Group className={classes.container} gap="lg">
           <Chip
-            accent={color as any}
+            accent={color as ColorKey}
             className={`${classes.cardContainer} ${colorClass}`}
             onClick={() => setOpened((o) => !o)}
           >
@@ -79,7 +85,7 @@ export function StrategyCardBannerCompact({
               )}
             </Box>
             <Text ff="heading" className={classes.cardText}>
-              {text}
+              {displayText}
             </Text>
           </Chip>
         </Group>
