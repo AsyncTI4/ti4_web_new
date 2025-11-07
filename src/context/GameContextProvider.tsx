@@ -297,7 +297,8 @@ export function buildGameContext(
     factionToColor
   );
   const mapTiles = buildMapTiles(data);
-  const planetIdToPlanetTile = buildPlanetIdToPlanetTileMap(mapTiles);
+  const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
+  const planetIdToPlanetTile = buildPlanetIdToPlanetTileMap(mapTiles, data.tileUnitData, allExhaustedPlanets);
   const calculatedTilePositions = data.tilePositions
     ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
@@ -369,8 +370,9 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
       ? 400
       : 0
     : 0;
-  const mapTiles = Object.entries(data.tileUnitData).map(
-    ([position, tileData]) => {
+  const mapTiles = Object.entries(data.tileUnitData)
+    .filter(([position]) => position !== "special") // Filter out special tile (off-tile planets)
+    .map(([position, tileData]) => {
       const coordinates = calculateSingleTilePosition(
         position,
         data.ringCount,
@@ -444,7 +446,9 @@ function buildMapTiles(data: PlayerDataResponse): MapTileType[] {
 }
 
 function buildPlanetIdToPlanetTileMap(
-  mapTiles: MapTileType[]
+  mapTiles: MapTileType[],
+  tileUnitData?: Record<string, TileUnitData>,
+  allExhaustedPlanets?: Set<string>
 ): Record<string, PlanetMapTile> {
   const map: Record<string, PlanetMapTile> = {};
   for (const tile of mapTiles) {
@@ -454,6 +458,21 @@ function buildPlanetIdToPlanetTileMap(
       map[planet.name] = planet;
     }
   }
+
+  // Also include planets from the "special" tile (off-tile planets like custodiavigilia)
+  if (tileUnitData?.special?.planets) {
+    const exhaustedSet = allExhaustedPlanets || new Set<string>();
+    for (const [planetName, planetData] of Object.entries(tileUnitData.special.planets)) {
+      const planetTile = buildPlanetMapTile(
+        planetName,
+        planetData,
+        exhaustedSet,
+        {} // No coordinates for off-tile planets
+      );
+      map[planetName] = planetTile;
+    }
+  }
+
   return map;
 }
 
