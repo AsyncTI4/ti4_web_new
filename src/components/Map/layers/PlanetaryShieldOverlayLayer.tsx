@@ -29,7 +29,9 @@ export function PlanetaryShieldOverlayLayer({ systemId, mapTile }: Props) {
       planetId === "mallice" ||
       planetId === "lockedmallice" ||
       planetId === "hexmallice" ||
-      planetId === "hexlockedmallice";
+      planetId === "hexlockedmallice" ||
+      planetId === "industrex" ||
+      planetId === "ordinian";
 
     let scale = 0.95;
     if (isMecatolRex) {
