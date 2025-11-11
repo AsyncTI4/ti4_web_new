@@ -100,17 +100,34 @@ export function shouldHideZoomControls(): boolean {
   return isMobileDevice();
 }
 
-export function getScaleStyle(
-  scale: number,
-  isFirefox: boolean
-): Record<string, string | number> {
+export function getScaleStyle(scale: number): Record<string, string | number> {
+  return {
+    transform: `scale(${scale})`,
+    transformOrigin: "top left",
+  } as const;
+}
+
+export function getCssScaleStyle(scale: number, isFirefox: boolean) {
   if (isFirefox) {
     return {
       MozTransform: `scale(${scale})`,
       MozTransformOrigin: "top left",
-    } as const;
+    };
   }
-  return { zoom: scale } as const;
+  return {
+    zoom: scale,
+  };
+}
+
+export function getScaledDimensions(
+  width: number,
+  height: number,
+  scale: number
+): { width: number; height: number } {
+  return {
+    width: width * scale,
+    height: height * scale,
+  };
 }
 
 export function getBrowserZoomScale(): number {

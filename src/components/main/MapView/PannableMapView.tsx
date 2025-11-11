@@ -20,6 +20,7 @@ import {
   computeMapZoom,
   getScaleStyle,
   computePanelsZoom,
+  getCssScaleStyle,
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/components/PlayerCardMobile";
@@ -176,11 +177,11 @@ export function PannableMapView({ gameId }: Props) {
             <Box
               className={classes.tileRenderingContainer}
               style={{
-                ...getScaleStyle(zoom, settings.isFirefox),
-                top: MAP_PADDING / zoom,
-                left: MAP_PADDING / zoom,
-                width: contentSize.width + 400,
-                height: contentSize.height,
+                ...getScaleStyle(zoom),
+                top: MAP_PADDING,
+                left: MAP_PADDING,
+                width: (contentSize.width + 400) * zoom,
+                height: contentSize.height * zoom,
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
@@ -242,7 +243,7 @@ export function PannableMapView({ gameId }: Props) {
         {gameData && (
           <Box
             style={{
-              ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
+              ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
               ...areaStyles,
               padding: "12px 8px",
             }}
@@ -277,7 +278,7 @@ export function PannableMapView({ gameId }: Props) {
           gutter="md"
           columns={12}
           style={{
-            ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
+            ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
             ...areaStyles,
             padding: "0px 8px",
           }}
@@ -299,7 +300,7 @@ export function PannableMapView({ gameId }: Props) {
             px="md"
             pt="lg"
             style={{
-              ...getScaleStyle(computePanelsZoom(), settings.isFirefox),
+              ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
             }}
           >
             <PlayerScoreSummary

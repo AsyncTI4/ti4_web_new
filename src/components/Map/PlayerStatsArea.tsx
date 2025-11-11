@@ -40,8 +40,11 @@ export function PlayerStatsArea({
 
   if (!enhancedData) return null;
 
-  const { vpsToWin = 10, ringCount = 3, tilePositions: gameTilePositions } =
-    enhancedData;
+  const {
+    vpsToWin = 10,
+    ringCount = 3,
+    tilePositions: gameTilePositions,
+  } = enhancedData;
   const color = factionColorMap[faction]?.color || playerData.color;
 
   const tilePositions = useMemo(() => {
@@ -49,8 +52,6 @@ export function PlayerStatsArea({
     const statTilePositionsArray = statTilePositions.map(
       (position) => `${position}:stat_${position}`
     );
-    // Stat tiles SHOULD be shifted down when fracture is in play (matching Java logic)
-    // Check fracture status from full game tile positions, not just stat tiles
     const fractureYbump =
       gameTilePositions && isFractureInPlay(gameTilePositions) ? 400 : 0;
     const positions = calculateTilePositions(
@@ -61,12 +62,10 @@ export function PlayerStatsArea({
     return positions;
   }, [statTilePositions, ringCount, gameTilePositions]);
 
-  // Determine which sides should be open/closed for borders
   const openSides = useMemo(() => {
     return determineOpenSides(statTilePositions);
   }, [statTilePositions]);
 
-  // Generate border color from player color
   const borderColor = useMemo(() => {
     const colorData = findColorData(color);
     if (!colorData) return "rgba(148, 163, 184, 0.8)"; // fallback
