@@ -9,11 +9,12 @@ import { getAttachmentData } from "@/lookup/attachments";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import DetailsCardTitle from "@/components/shared/DetailsCard/DetailsCardTitle";
 import DetailsCardIcon from "@/components/shared/DetailsCard/DetailsCardIcon";
-import { PlanetMapTile } from "@/data/types";
+
+import { TilePlanet } from "@/context/types";
 
 type Props = {
   planetId: string;
-  planetTile?: PlanetMapTile;
+  planetTile?: TilePlanet;
 };
 
 export function PlanetDetailsCard({ planetId, planetTile }: Props) {
@@ -270,7 +271,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
         )}
 
         {/* Flavor Text */}
-        {(planetData as any).flavourText && (
+        {planetData.flavourText && (
           <>
             <Divider c="gray.7" opacity={0.8} />
             <Box>
@@ -278,7 +279,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
                 Description
               </Text>
               <Text size="xs" c="gray.4" lh={1.3} fs="italic" opacity={0.7}>
-                {(planetData as any).flavourText}
+                {planetData.flavourText}
               </Text>
             </Box>
           </>

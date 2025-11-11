@@ -33,7 +33,7 @@ export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
         position: "absolute",
         left: `${scaledX + MAP_PADDING}px`,
         top: `${scaledY + MAP_PADDING - 25}px`,
-        zIndex: 'var(--z-map-planet-details)',
+        zIndex: "var(--z-map-planet-details)",
         pointerEvents: "none",
         transform: `translate(-50%, -100%) scale(${inverse})`,
         transformOrigin: "top left",
@@ -41,7 +41,7 @@ export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
     >
       <PlanetDetailsCard
         planetId={tooltipPlanet.planetId}
-        planetTile={planetTile!}
+        planetTile={planetTile}
       />
     </Box>
   );

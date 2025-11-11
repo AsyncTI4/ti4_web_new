@@ -73,6 +73,7 @@ export type GameData = {
   actionsJumpLink?: PlayerDataResponse["actionsJumpLink"];
   playerScoreBreakdowns?: Record<string, WebScoreBreakdown>;
   expeditions: PlayerDataResponse["expeditions"];
+  planetIdToPlanetTile: Record<string, TilePlanet>;
 };
 
 export type GameDataState = {
@@ -121,4 +122,3 @@ export type TilePlanet = {
   techSpecialties: string[];
   exhausted: boolean;
 };
-

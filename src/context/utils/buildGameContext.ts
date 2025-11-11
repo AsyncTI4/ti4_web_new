@@ -209,6 +209,13 @@ export function buildGameContext(
     };
   });
 
+  const planetIdToPlanetTile: Record<string, TilePlanet> = {};
+  Object.values(tiles).forEach((tile) => {
+    Object.entries(tile.planets).forEach(([planetId, planet]) => {
+      planetIdToPlanetTile[planetId] = planet;
+    });
+  });
+
   return {
     tiles,
     tilePositions: data.tilePositions,
@@ -237,5 +244,6 @@ export function buildGameContext(
     actionsJumpLink: data.actionsJumpLink,
     playerScoreBreakdowns: data.scoreBreakdowns,
     expeditions: data.expeditions,
+    planetIdToPlanetTile,
   };
 }

@@ -1,7 +1,7 @@
+import { TilePlanet } from "@/context/types";
 import { useGameData } from "./useGameContext";
-import type { PlanetMapTile } from "@/data/types";
 
-export function usePlanet(planetId: string): PlanetMapTile | undefined {
+export function usePlanet(planetId: string): TilePlanet | undefined {
   const game = useGameData();
   return game?.planetIdToPlanetTile?.[planetId];
 }

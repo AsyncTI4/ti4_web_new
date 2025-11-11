@@ -39,7 +39,8 @@ export function PlanetCard({
 
   const attachmentModifiers = calculateAttachmentModifiers(resolvedAttachments);
   const finalTraits = resolveFinalTraits(
-    planetData.planetTypes || (planetData.planetType ? [planetData.planetType] : []),
+    planetData.planetTypes ||
+      (planetData.planetType ? [planetData.planetType] : []),
     attachmentModifiers.planetTypes
   );
   const baseCssTypeKey = resolveCssTypeKey(finalTraits);
@@ -264,11 +265,6 @@ const VALID_TECH_SPECIALTIES = new Set([
 ]);
 
 type SingleTrait = "cultural" | "hazardous" | "industrial";
-
-const getTraitIconKey = (planetType: string): SingleTrait | null => {
-  const lowercase = planetType.toLowerCase();
-  return VALID_PLANET_TYPES.has(lowercase) ? (lowercase as SingleTrait) : null;
-};
 
 const getTechSkipIconKey = (techSpecialty: string): string | null => {
   const lowercase = techSpecialty.toLowerCase();
