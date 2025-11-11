@@ -14,10 +14,11 @@ import { CommandCounterLayer } from "./layers/CommandCounterLayer";
 import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
-import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { hasTechSkips } from "@/utils/tileDistances";
 import { Tile as TileType } from "@/context/types";
+import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
+import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
 
 type Props = {
   mapTile: TileType;
@@ -177,19 +178,29 @@ export const MapTile = React.memo<Props>(
             onPlanetMouseLeave={onPlanetMouseLeave}
           />
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
-          <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
+          {!techSkipsMode && !planetTypesMode && (
+            <>
+              <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
+              <UnitImagesLayer
+                systemId={systemId}
+                mapTile={mapTile}
+                position={position}
+                onUnitMouseOver={onUnitMouseOver}
+                onUnitMouseLeave={onUnitMouseLeave}
+                onUnitSelect={onUnitSelect}
+              />
+            </>
+          )}
+          {techSkipsMode && (
+            <TechSkipIconsLayer systemId={systemId} mapTile={mapTile} />
+          )}
+          {planetTypesMode && (
+            <PlanetTraitIconsLayer systemId={systemId} mapTile={mapTile} />
+          )}
           <CommodityIndicatorsLayer systemId={systemId} mapTile={mapTile} />
           <ProductionIconLayer
             systemId={systemId}
             highestProduction={mapTile.highestProduction}
-          />
-          <UnitImagesLayer
-            systemId={systemId}
-            mapTile={mapTile}
-            position={position}
-            onUnitMouseOver={onUnitMouseOver}
-            onUnitMouseLeave={onUnitMouseLeave}
-            onUnitSelect={onUnitSelect}
           />
           <CommandCounterLayer
             systemId={systemId}

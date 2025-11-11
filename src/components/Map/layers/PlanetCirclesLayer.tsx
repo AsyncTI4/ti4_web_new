@@ -25,13 +25,6 @@ export function PlanetCirclesLayer({
   );
   const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
-  const planetTypesMode = useSettingsStore(
-    (state) => state.settings.planetTypesMode
-  );
-  const techSkipsMode = useSettingsStore(
-    (state) => state.settings.techSkipsMode
-  );
-
   const handlePlanetMouseEnter = React.useCallback(
     (planetId: string, x: number, y: number) => {
       if (!onPlanetMouseEnter) return;
@@ -106,7 +99,9 @@ export function PlanetCirclesLayer({
     }
 
     const diameter = radius * 2;
-    const isSpaceStation = planet.planetTypes?.includes("SPACESTATION");
+    const isSpaceStation =
+      planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
+      false;
     const exhaustedBackdropFilter =
       isExhausted && showExhaustedPlanets && !isSpaceStation
         ? {
@@ -114,30 +109,10 @@ export function PlanetCirclesLayer({
           }
         : {};
 
-    const planetTileData = mapTile.planets[planetId];
-    const techSpecialties = planetTileData?.techSpecialties ?? [];
-
-    const glowClassName = (() => {
-      if (techSkipsMode && techSpecialties.length > 0) {
-        return techSpecialties[0]?.toLowerCase();
-      }
-      if (planetTypesMode && planet?.planetType) {
-        return planet.planetType.toLowerCase();
-      }
-      return undefined;
-    })();
-
-    const glowStyle = glowClassName
-      ? {
-          background: `radial-gradient(circle, transparent 30%, var(--glow-color-dark) 50%, var(--glow-color-mid) 70%, transparent 100%)`,
-          boxShadow: `0 0 8px 4px var(--rim-color-bright), 0 0 15px var(--rim-color-base), inset 0 0 8px 2px var(--rim-color-inner), 0 0 2px 1px rgba(0, 0, 0, 0.8)`,
-        }
-      : {};
-
     return (
       <div
         key={`${systemId}-${planetId}${keySuffix}-circle`}
-        className={`${classes.planetCircle} ${glowClassName ? classes[glowClassName] || "" : ""}`}
+        className={classes.planetCircle}
         style={{
           position: "absolute",
           left: `${x + circleOffsetX}px`,
@@ -145,7 +120,6 @@ export function PlanetCirclesLayer({
           width: `${diameter}px`,
           height: `${diameter}px`,
           zIndex: 52,
-          ...glowStyle,
           ...exhaustedBackdropFilter,
         }}
         onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
