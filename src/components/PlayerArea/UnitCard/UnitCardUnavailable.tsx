@@ -13,7 +13,7 @@ type Props = {
 export function UnitCardUnavailable({ asyncId, color, compact }: Props) {
   const colorAlias = getColorAlias(color);
   return (
-    <div>
+    <div style={{ minWidth: "50px" }}>
       <BaseCard compact={compact} locked enableAnimations={false}>
         <Unit
           unitType={asyncId}

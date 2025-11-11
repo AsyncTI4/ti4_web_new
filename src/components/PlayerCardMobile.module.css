@@ -96,3 +96,15 @@
   border-radius: var(--mantine-radius-sm);
   padding: var(--mantine-spacing-xs);
 }
+
+.techGridDesktop {
+  flex: 1;
+}
+
+.unitGridDesktop {
+  flex: 0.5;
+}
+
+.unitGridMobile {
+  flex: 1;
+}

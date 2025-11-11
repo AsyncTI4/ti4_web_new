@@ -49,7 +49,7 @@ export function UnitCard({
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <div>
+        <div style={{ minWidth: "50px" }}>
           <BaseCard
             onClick={locked ? undefined : () => setOpened((o) => !o)}
             isUpgraded={isUpgraded}

@@ -4,7 +4,6 @@ import { getTileById } from "../mapgen/systems";
 import { getTokenData } from "../lookup/tokens";
 import { Tile, TilePlanet } from "@/context/types";
 import { PlayerDataResponse, TileUnitData, EntityData } from "@/data/types";
-import { getAttachmentData } from "@/lookup/attachments";
 
 /**
  * Helper function to get all wormholes present on a tile
@@ -626,20 +625,10 @@ export function getTileController(
 }
 
 export function hasTechSkips(planets: Record<string, TilePlanet>): boolean {
-  if (
-    Object.values(planets).some((planet: TilePlanet) =>
-      planet.attachments.some((attachment) => {
-        const attachmentData = getAttachmentData(attachment);
-        return (
-          attachmentData?.techSpeciality &&
-          attachmentData.techSpeciality.length > 0
-        );
-      })
-    )
-  )
-    return true;
-
-  return false;
+  return Object.values(planets).some(
+    (planet: TilePlanet) =>
+      planet.techSpecialties && planet.techSpecialties.length > 0
+  );
 }
 
 export function computePdsData(

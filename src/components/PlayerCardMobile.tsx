@@ -43,6 +43,8 @@ import { SleeperTokens } from "./PlayerArea/SleeperTokens";
 import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
 import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
 import styles from "./PlayerCardMobile.module.css";
+import cx from "clsx";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   playerData: PlayerData;
@@ -349,8 +351,11 @@ export default function PlayerCardMobile(props: Props) {
         <Grid.Col span={24}>
           <Group gap="xs" align="flex-start" h="100%">
             <Box
-              className={styles.sectionPanel}
-              style={{ flex: 1, height: "100%" }}
+              className={cx(
+                styles.sectionPanel,
+                !isMobileDevice() && styles.techGridDesktop
+              )}
+              style={{ height: "100%" }}
             >
               <DynamicTechGrid
                 techs={techs}
@@ -363,10 +368,21 @@ export default function PlayerCardMobile(props: Props) {
             </Box>
 
             <Box
-              className={styles.sectionPanel}
-              style={{ flex: 0.5, height: "100%" }}
+              className={cx(
+                styles.sectionPanel,
+                isMobileDevice()
+                  ? styles.unitGridMobile
+                  : styles.unitGridDesktop
+              )}
+              style={{ height: "100%" }}
             >
-              {UnitsArea}
+              <Box
+                style={
+                  isMobileDevice() ? { width: "fit-content" } : { flex: 1 }
+                }
+              >
+                {UnitsArea}
+              </Box>
             </Box>
           </Group>
         </Grid.Col>

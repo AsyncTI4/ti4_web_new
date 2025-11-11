@@ -117,7 +117,7 @@ export const MapTile = React.memo<Props>(
           opacity: (() => {
             // Tech skips mode takes priority
             if (techSkipsMode) {
-              return hasTechSkips(mapTile) ? 1.0 : 0.2;
+              return hasTechSkips(mapTile.planets ?? {}) ? 1.0 : 0.2;
             }
 
             if (planetTypesMode) {
