@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { Tech } from "./Tech";
 import { PhantomTech } from "./PhantomTech";
 import { getTechData, getTechTier } from "@/lookup/tech";
+import { getBreakthroughData } from "@/lookup/breakthroughs";
+import type { BreakthroughData } from "@/data/types";
 
 export type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
@@ -17,7 +19,8 @@ export function buildTechElementsForType(
   techIds: string[] = [],
   exhaustedTechs: string[] = [],
   minSlotsPerColor?: number,
-  mobile?: boolean
+  mobile?: boolean,
+  breakthrough?: BreakthroughData
 ): ReactNode[] {
   const filteredTechs = techIds.filter((techId) => {
     const techData = getTechData(techId);
@@ -32,12 +35,20 @@ export function buildTechElementsForType(
     return tierA - tierB;
   });
 
+  const breakthroughData = breakthrough?.breakthroughId
+    ? getBreakthroughData(breakthrough.breakthroughId)
+    : undefined;
+  const synergy = breakthroughData?.synergy;
+  const breakthroughUnlocked = breakthrough?.unlocked ?? false;
+
   const techElements: ReactNode[] = sortedTechs.map((techId, index) => (
     <Tech
       key={`tech-${techId}-${index}`}
       techId={techId}
       isExhausted={exhaustedTechs.includes(techId)}
       mobile={mobile}
+      synergy={synergy}
+      breakthroughUnlocked={breakthroughUnlocked}
     />
   ));
 
@@ -58,7 +69,8 @@ export function buildTechElementsForType(
 export function buildCategoriesWithTechs(
   techIds: string[] = [],
   exhaustedTechs: string[] = [],
-  minSlotsPerColor?: number
+  minSlotsPerColor?: number,
+  breakthrough?: BreakthroughData
 ): { type: TechCategory; techs: ReactNode[] }[] {
   return techCategories.map((techType) => ({
     type: techType,
@@ -66,7 +78,9 @@ export function buildCategoriesWithTechs(
       techType,
       techIds,
       exhaustedTechs,
-      minSlotsPerColor
+      minSlotsPerColor,
+      false,
+      breakthrough
     ),
   }));
 }

@@ -5,16 +5,18 @@ import {
   buildTechElementsForType,
   chunkInto,
 } from "./TechGridShared";
+import type { BreakthroughData } from "@/data/types";
 
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
   minSlotsPerColor?: number;
+  breakthrough?: BreakthroughData;
 };
 
-export function TechGridMobile({ techs = [], exhaustedTechs = [] }: Props) {
+export function TechGridMobile({ techs = [], exhaustedTechs = [], breakthrough }: Props) {
   const allTechElements: ReactNode[] = techCategories.flatMap((techType) =>
-    buildTechElementsForType(techType, techs, exhaustedTechs, undefined, true)
+    buildTechElementsForType(techType, techs, exhaustedTechs, undefined, true, breakthrough)
   );
 
   const chunks = chunkInto(allTechElements, 4);

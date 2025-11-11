@@ -373,6 +373,7 @@ export default function PlayerCard(props: Props) {
               layout="grid"
               exhaustedTechs={props.playerData.exhaustedTechs}
               minSlotsPerColor={4}
+              breakthrough={props.playerData.breakthrough}
             />
           </Grid>
         </Grid.Col>

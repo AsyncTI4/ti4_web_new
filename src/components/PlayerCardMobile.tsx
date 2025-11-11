@@ -358,6 +358,7 @@ export default function PlayerCardMobile(props: Props) {
                 exhaustedTechs={props.playerData.exhaustedTechs}
                 minSlotsPerColor={4}
                 mobile
+                breakthrough={props.playerData.breakthrough}
               />
             </Box>
 

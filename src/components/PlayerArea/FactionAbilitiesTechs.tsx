@@ -5,18 +5,15 @@ import { Tech } from "./Tech";
 import { Breakthrough } from "./Breakthrough/Breakthrough";
 import { PromissoryNote } from "./PromissoryNote";
 import Caption from "../shared/Caption/Caption";
+import { getBreakthroughData } from "@/lookup/breakthroughs";
+import type { BreakthroughData } from "@/data/types";
 
 interface FactionAbilitiesTechsProps {
   abilities: string[] | undefined;
   factionTechs: string[] | undefined;
   notResearchedFactionTechs: string[];
   customPromissoryNotes?: string[];
-  breakthrough?: {
-    unlocked?: boolean;
-    breakthroughId?: string;
-    exhausted?: boolean;
-    tradeGoodsStored?: number;
-  };
+  breakthrough?: BreakthroughData;
 }
 
 export default function FactionAbilitiesTechs({
@@ -29,6 +26,13 @@ export default function FactionAbilitiesTechs({
   const researchedFactionTechs = factionTechs?.filter(
     (techId) => !notResearchedFactionTechs.includes(techId)
   );
+
+  const breakthroughData = breakthrough?.breakthroughId
+    ? getBreakthroughData(breakthrough.breakthroughId)
+    : undefined;
+  const synergy = breakthroughData?.synergy;
+  const breakthroughUnlocked = breakthrough?.unlocked ?? false;
+
   return (
     <Group gap="xs" wrap="wrap" align="center" mb="md" mt="xs">
       {breakthrough?.breakthroughId && (
@@ -70,11 +74,21 @@ export default function FactionAbilitiesTechs({
           <Caption size="xs">Faction Techs</Caption>
           <Group gap={2}>
             {researchedFactionTechs?.map((techId, index) => (
-              <Tech techId={techId} key={index} />
+              <Tech
+                techId={techId}
+                key={index}
+                synergy={synergy}
+                breakthroughUnlocked={breakthroughUnlocked}
+              />
             ))}
             {notResearchedFactionTechs?.length > 0 &&
               notResearchedFactionTechs.map((techId) => (
-                <Tech techId={techId} key={techId} />
+                <Tech
+                  techId={techId}
+                  key={techId}
+                  synergy={synergy}
+                  breakthroughUnlocked={breakthroughUnlocked}
+                />
               ))}
           </Group>
         </Stack>

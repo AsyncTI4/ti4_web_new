@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import { SimpleGrid, Stack } from "@mantine/core";
 import { buildCategoriesWithTechs, TechCategory } from "./TechGridShared";
 import { getTechData } from "@/lookup/tech";
+import type { BreakthroughData } from "@/data/types";
 
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
   minSlotsPerColor?: number;
+  breakthrough?: BreakthroughData;
 };
 
 function filterCategoriesWithTechs(
@@ -26,11 +28,13 @@ export function TechGridSidebar({
   techs = [],
   exhaustedTechs = [],
   minSlotsPerColor,
+  breakthrough,
 }: Props) {
   const categoriesWithTechs = buildCategoriesWithTechs(
     techs,
     exhaustedTechs,
-    minSlotsPerColor
+    minSlotsPerColor,
+    breakthrough
   );
 
   // Filter out categories that have no actual techs (only show colors that have techs)

@@ -4,6 +4,7 @@ import { TechGrid } from "./TechGrid";
 import { TechGridMobile } from "./TechGridMobile";
 import { TechGridSidebar } from "./TechGridSidebar";
 import { Grid } from "@mantine/core";
+import type { BreakthroughData } from "@/data/types";
 
 type Props = {
   techs?: string[];
@@ -12,6 +13,7 @@ type Props = {
   /** Optional: ensure at least N slots per tech color by adding placeholders (PhantomTech). */
   minSlotsPerColor?: number;
   mobile?: boolean;
+  breakthrough?: BreakthroughData;
 };
 
 export function DynamicTechGrid({
@@ -20,6 +22,7 @@ export function DynamicTechGrid({
   exhaustedTechs = [],
   minSlotsPerColor,
   mobile,
+  breakthrough,
 }: Props) {
   if (layout === "grid") {
     if (mobile) {
@@ -29,6 +32,7 @@ export function DynamicTechGrid({
             techs={techs}
             exhaustedTechs={exhaustedTechs}
             minSlotsPerColor={minSlotsPerColor}
+            breakthrough={breakthrough}
           />
         </Grid>
       );
@@ -39,6 +43,7 @@ export function DynamicTechGrid({
           techs={techs}
           exhaustedTechs={exhaustedTechs}
           minSlotsPerColor={minSlotsPerColor}
+          breakthrough={breakthrough}
         />
       </Grid>
     );
@@ -50,6 +55,7 @@ export function DynamicTechGrid({
       techs={techs}
       exhaustedTechs={exhaustedTechs}
       minSlotsPerColor={minSlotsPerColor}
+      breakthrough={breakthrough}
     />
   );
 }

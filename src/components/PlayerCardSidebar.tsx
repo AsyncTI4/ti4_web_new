@@ -136,6 +136,7 @@ export default function PlayerCardSidebar(props: Props) {
             <DynamicTechGrid
               techs={techs}
               exhaustedTechs={props.playerData.exhaustedTechs}
+              breakthrough={props.playerData.breakthrough}
             />
           </Stack>
         </Box>

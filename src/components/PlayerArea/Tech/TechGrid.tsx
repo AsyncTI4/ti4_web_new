@@ -2,17 +2,20 @@ import { Grid, Stack } from "@mantine/core";
 import type { ReactNode } from "react";
 import { techCategories, buildTechElementsForType } from "./TechGridShared";
 import { PhantomTech } from "./PhantomTech";
+import type { BreakthroughData } from "@/data/types";
 
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
   minSlotsPerColor?: number;
+  breakthrough?: BreakthroughData;
 };
 
 export function TechGrid({
   techs = [],
   exhaustedTechs = [],
   minSlotsPerColor,
+  breakthrough,
 }: Props) {
   const colSpan: number | { base: number; md: number } = { base: 6, md: 3 };
 
@@ -23,7 +26,9 @@ export function TechGrid({
           techType,
           techs,
           exhaustedTechs,
-          minSlotsPerColor
+          minSlotsPerColor,
+          false,
+          breakthrough
         );
         return (
           <Grid.Col key={techType} span={colSpan}>

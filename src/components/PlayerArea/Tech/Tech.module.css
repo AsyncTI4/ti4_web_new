@@ -76,6 +76,49 @@
   background: rgba(var(--gradient-color), 0.4);
 }
 
+/* Synergy-specific ::before gradients with opacity 1 */
+.synergyBlueGreen::before {
+  background: linear-gradient(
+    rgba(var(--gd-blue), 0.8) 0 50%,
+    rgba(var(--gd-green), 1) 50% 100%
+  );
+}
+
+.synergyBlueYellow::before {
+  background: linear-gradient(
+    rgba(var(--gd-blue), 0.8) 0 50%,
+    rgba(var(--gd-yellow), 0.8) 50% 100%
+  );
+}
+
+.synergyBlueRed::before {
+  background: linear-gradient(
+    rgba(var(--gd-blue), 0.8) 0 50%,
+    rgba(var(--gd-red), 0.8) 50% 100%
+  );
+}
+
+.synergyGreenRed::before {
+  background: linear-gradient(
+    rgba(var(--gd-green), 0.8) 0 50%,
+          rgba(var(--gd-red), 0.8) 50% 100%
+  );
+}
+
+.synergyGreenYellow::before {
+  background: linear-gradient(
+    rgba(var(--gd-green), 0.8) 0 50%,
+    rgba(var(--gd-yellow), 0.8) 50% 100%
+  );
+}
+
+.synergyYellowRed::before {
+  background: linear-gradient(
+    rgba(var(--gd-yellow), 0.8) 0 50%,
+    rgba(var(--gd-red), 0.8) 50% 100%
+  );
+}
+
 /* Faction icon positioning */
 .factionIcon {
   position: absolute;

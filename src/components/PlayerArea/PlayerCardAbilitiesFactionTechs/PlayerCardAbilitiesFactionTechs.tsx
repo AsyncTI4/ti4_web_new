@@ -5,6 +5,7 @@ import { Tech } from "../Tech";
 import { Breakthrough } from "../Breakthrough/Breakthrough";
 import { PromissoryNote } from "../PromissoryNote";
 import Caption from "../../shared/Caption/Caption";
+import type { BreakthroughData } from "@/data/types";
 
 type PlayerCardAbilitiesFactionTechsProps = {
   abilities?: string[];
@@ -12,12 +13,7 @@ type PlayerCardAbilitiesFactionTechsProps = {
   customPromissoryNotes?: string[];
   variant?: "compact" | "mobile";
   gap?: number | string;
-  breakthrough?: {
-    unlocked?: boolean;
-    breakthroughId?: string;
-    exhausted?: boolean;
-    tradeGoodsStored?: number;
-  };
+  breakthrough?: BreakthroughData;
 };
 
 export function PlayerCardAbilitiesFactionTechs({
