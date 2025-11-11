@@ -1,5 +1,4 @@
-import { EntityData, FactionUnits, PlanetEntityData } from "@/data/types";
-import { getTokenData } from "@/lookup/tokens";
+import { FactionUnits } from "@/data/types";
 import {
   GROUND_HEAT_CONFIG,
   DEFAULT_PLANET_RADIUS,
@@ -19,8 +18,16 @@ import {
   HeatSource,
   PlaceGroundEntitiesOptions,
 } from "./types";
+import {
+  GridDimensions,
+  createHeatSourceFromCoords,
+  createHeatSourceFromPlacement,
+  createPlacementFromCoords,
+  tokenToEntityStack,
+} from "./placementHelpers";
+import { TilePlanet } from "@/context/types";
 
-const GRID_CONFIG = {
+const GRID_CONFIG: GridDimensions = {
   gridSize: HEX_GRID_SIZE,
   squareWidth: HEX_SQUARE_WIDTH,
   squareHeight: HEX_SQUARE_HEIGHT,
@@ -43,65 +50,16 @@ export const placeAttachmentsOnRim = (
 ): EntityStack[] => {
   if (attachmentEntities.length === 0) return [];
 
-  if (attachmentEntities.length === 1) {
-    return [
-      {
-        ...attachmentEntities[0],
-        x: planetX + planetRadius,
-        y: planetY,
-      },
-    ];
-  }
-
   return attachmentEntities.map((attachment, index) => {
-    const angle = calculateAttachmentAngle(index, attachmentEntities.length);
+    const angle =
+      attachmentEntities.length === 1
+        ? 0
+        : calculateAttachmentAngle(index, attachmentEntities.length);
     const x = planetX + planetRadius * Math.cos(angle);
     const y = planetY + planetRadius * Math.sin(angle);
 
-    return {
-      ...attachment,
-      x,
-      y,
-    };
+    return createPlacementFromCoords(x, y, attachment);
   });
-};
-
-const separateEntityTypes = (planetEntityData: PlanetEntityData) => {
-  const filteredPlanetEntities: FactionUnits = {};
-  const attachmentEntities: EntityStackBase[] = [];
-  const centerTokens: EntityStackBase[] = [];
-
-  Object.entries(planetEntityData.entities).forEach(([faction, entities]) => {
-    const regularEntities: EntityData[] = [];
-
-    entities.forEach((entity) => {
-      const entityStack: EntityStackBase = {
-        ...entity,
-        faction,
-      };
-
-      if (entity.entityType === "attachment") {
-        attachmentEntities.push(entityStack);
-        return;
-      }
-
-      if (entity.entityType === "token") {
-        const tokenData = getTokenData(entity.entityId);
-        if (tokenData?.placement === "center") {
-          centerTokens.push(entityStack);
-          return;
-        }
-      }
-
-      regularEntities.push(entity);
-    });
-
-    if (regularEntities.length > 0) {
-      filteredPlanetEntities[faction] = regularEntities;
-    }
-  });
-
-  return { filteredPlanetEntities, attachmentEntities, centerTokens };
 };
 
 const placeAttachmentsAndCreateHeatSources = (
@@ -119,12 +77,9 @@ const placeAttachmentsAndCreateHeatSources = (
     attachmentEntities
   );
 
-  const heatSources = placements.map((attachment) => ({
-    x: attachment.x,
-    y: attachment.y,
-    faction: attachment.faction,
-    stackSize: attachment.count,
-  }));
+  const heatSources = placements.map((attachment) =>
+    createHeatSourceFromPlacement(attachment, attachment.count)
+  );
 
   return { placements, heatSources };
 };
@@ -138,11 +93,7 @@ const createStatsHeatSource = (planet: Planet): HeatSource | null => {
   const statsX = planet.x + statsHeatDistance * Math.cos(statsAngle);
   const statsY = planet.y + statsHeatDistance * Math.sin(statsAngle);
 
-  return {
-    x: statsX,
-    y: statsY,
-    stackSize: STATS_HEAT_STACK_SIZE,
-  };
+  return createHeatSourceFromCoords(statsX, statsY, STATS_HEAT_STACK_SIZE);
 };
 
 export const placeGroundEntities = ({
@@ -211,11 +162,18 @@ const placeGroundEntitiesForPlanet = (
 
 export const processPlanetEntities = (
   planet: Planet,
-  planetEntityData: PlanetEntityData
+  planetEntityData: TilePlanet
 ): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
   // Step 1: Separate entities by type
-  const { filteredPlanetEntities, attachmentEntities, centerTokens } =
-    separateEntityTypes(planetEntityData);
+  const attachmentEntities: EntityStackBase[] =
+    planetEntityData.attachments.map((attachment) =>
+      tokenToEntityStack(attachment, planetEntityData.controlledBy ?? "neutral")
+    );
+
+  const tokenEntities: EntityStackBase[] = planetEntityData.tokens.map(
+    (token) =>
+      tokenToEntityStack(token, planetEntityData.controlledBy ?? "neutral")
+  );
 
   // Step 2: Place attachments and create heat sources
   const {
@@ -224,17 +182,15 @@ export const processPlanetEntities = (
   } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
 
   // Step 3: Place center tokens at planet center
-  const centerTokenPlacements: EntityStack[] = centerTokens.map((token) => ({
-    ...token,
-    x: planet.x,
-    y: planet.y,
-  }));
+  const centerTokenPlacements: EntityStack[] = tokenEntities.map((token) =>
+    createPlacementFromCoords(planet.x, planet.y, token)
+  );
 
   // Step 4: Place ground entities with heat map
   const { entityPlacements: groundEntityPlacements, finalCostMap } =
     placeGroundEntitiesForPlanet(
       planet,
-      filteredPlanetEntities,
+      planetEntityData.unitsByFaction,
       attachmentHeatSources,
       planetEntityData.controlledBy
     );

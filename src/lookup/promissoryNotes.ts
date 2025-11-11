@@ -1,6 +1,6 @@
 import { promissoryNotes } from "../data/promissoryNotes";
 import { PromissoryNote } from "../data/types";
-import type { FactionColorMap } from "@/context/GameContextProvider";
+import type { FactionColorMap } from "@/context/types";
 
 // Create efficient lookup maps
 const promissoryNotesMap = new Map(

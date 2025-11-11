@@ -2,13 +2,13 @@ import React from "react";
 import { ControlToken } from "../ControlToken";
 import { getColorAlias } from "@/lookup/colors";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
-import { MapTileType } from "@/data/types";
+import { Tile } from "@/context/types";
 import { useSettingsStore } from "@/utils/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
 
 type Props = {
   systemId: string;
-  mapTile: MapTileType;
+  mapTile: Tile;
 };
 
 export function ControlTokensLayer({ systemId, mapTile }: Props) {
@@ -20,9 +20,8 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
     if (!mapTile?.planets) return [] as React.ReactElement[];
     const planetCoords = getPlanetCoordsBySystemId(systemId);
 
-    return mapTile.planets.flatMap((planetData) => {
-      const planetId = planetData.name;
-      if (!planetData.controller) return [];
+    return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
+      if (!planetData.controlledBy) return [];
 
       if (!alwaysShowControlTokens) {
         const planetHasUnits = Object.values(mapTile.entityPlacements).some(
@@ -45,14 +44,14 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
       }
 
       const colorAlias = getColorAlias(
-        factionColorMap?.[planetData.controller]?.color
+        factionColorMap?.[planetData.controlledBy]?.color
       );
 
       return [
         <ControlToken
           key={`${systemId}-${planetId}-control`}
           colorAlias={colorAlias}
-          faction={planetData.controller}
+          faction={planetData.controlledBy}
           style={{
             position: "absolute",
             left: `${x - 10}px`,

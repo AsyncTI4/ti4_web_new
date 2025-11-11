@@ -67,6 +67,11 @@ export function MapView({ gameId }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
+  const tilesList = useMemo(
+    () => Object.values(gameData?.tiles || {}),
+    [gameData?.tiles]
+  );
+
   const {
     draft,
     targetSystemId,
@@ -93,7 +98,7 @@ export function MapView({ gameId }: Props) {
     handlePathIndexChange,
   } = useDistanceRendering({
     distanceMode: settings.distanceMode,
-    mapTiles: gameData?.mapTiles || [],
+    tiles: tilesList,
   });
 
   const { mapContainerRef } = useMapScrollPosition({
@@ -187,7 +192,7 @@ export function MapView({ gameId }: Props) {
               }}
             >
               <MapTilesRenderer
-                mapTiles={gameData.mapTiles || []}
+                tiles={tilesList}
                 playerData={gameData.playerData}
                 statTilePositions={gameData.statTilePositions}
                 isMovingMode={!!draft.targetPositionId}
@@ -260,7 +265,7 @@ export function MapView({ gameId }: Props) {
         originModalOpen={originModalOpen}
         onCloseOriginModal={() => setOriginModalOpen(false)}
         activeOrigin={activeOrigin}
-        gameData={gameData ? { mapTiles: gameData.mapTiles } : null}
+        tiles={tilesList}
       />
 
       <RightSidebar

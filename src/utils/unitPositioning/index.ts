@@ -1,4 +1,3 @@
-import { TileUnitData } from "@/data/types";
 import { getTokenData } from "@/lookup/tokens";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
 import {
@@ -17,20 +16,15 @@ import { calculatePlanetHeat } from "./heatMap";
 import { processPlanetEntities } from "./planetPlacement";
 import { placeSpaceEntities } from "./spacePlacement";
 import { EntityStack } from "./types";
+import { PrePlacementTile } from "@/context/types";
 
 export const getAllEntityPlacementsForTile = (
   systemId: string,
-  tileUnitData: TileUnitData | undefined
+  tile: PrePlacementTile
 ): EntityStack[] => {
-  if (!tileUnitData) return [];
-
-  const planets = parsePlanetsFromCoords(systemId);
+  const planets = parsePlanetsFromCoords(tile.systemId);
   const initialHeatSources = getInitialHeatSourcesForSystem(systemId);
-
-  // Calculate highest production from tileUnitData
-  const highestProduction = tileUnitData.production
-    ? Math.max(...Object.values(tileUnitData.production))
-    : 0;
+  const highestProduction = tile.highestProduction;
 
   const { entityPlacements: spaceEntityPlacements } = placeSpaceEntities({
     gridSize: HEX_GRID_SIZE,
@@ -38,9 +32,10 @@ export const getAllEntityPlacementsForTile = (
     squareHeight: HEX_SQUARE_HEIGHT,
     hexagonVertices: HEX_VERTICES,
     planets,
-    factionEntities: tileUnitData.space || {},
+    tokens: tile.tokens,
+    factionEntities: tile.unitsByFaction,
     initialHeatSources,
-    commandCounters: tileUnitData.ccs || [],
+    commandCounters: tile.commandCounters || [],
     systemId,
     highestProduction,
   });
@@ -61,13 +56,7 @@ export const getAllEntityPlacementsForTile = (
 
   const planetEntityPlacements = planets
     .map((planet) => {
-      const planetEntityData = tileUnitData.planets?.[planet.name];
-      if (
-        !planetEntityData ||
-        Object.keys(planetEntityData.entities).length === 0
-      ) {
-        return [];
-      }
+      const planetEntityData = tile.planets[planet.name];
       return processPlanetEntities(planet, planetEntityData).entityPlacements;
     })
     .flat();

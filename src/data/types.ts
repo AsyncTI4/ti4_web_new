@@ -1,5 +1,3 @@
-import { EntityStack } from "@/utils/unitPositioning";
-
 export type Breakthrough = {
   alias: string;
   name: string;
@@ -633,71 +631,6 @@ export type AttachmentData = {
   spaceCannonHitsOn?: number;
   spaceCannonDieCount?: number;
   source: string;
-};
-
-export type MapTileType = {
-  position: string;
-  systemId: string;
-  planets: PlanetMapTile[];
-  space: UnitMapTile[];
-  anomaly: boolean;
-  wormholes: string[];
-  hasTechSkips: boolean;
-  tokens: string[];
-  controller: string;
-  commandCounters: string[];
-  production: { [factionColor: string]: number };
-  highestProduction: number;
-  capacity?: {
-    [factionColor: string]: { total: number; used: number; ignored: number };
-  };
-  borderAnomalies?: BorderAnomalyInfo[]; // Border anomalies on this tile
-  properties: {
-    x: number;
-    y: number;
-    hexOutline: {
-      points: {
-        x: number;
-        y: number;
-      }[];
-      sides: {
-        x1: number;
-        x2: number;
-        y1: number;
-        y2: number;
-      }[];
-      midpoints?: {
-        x: number;
-        y: number;
-      }[];
-    };
-    width: number;
-    height: number;
-  };
-  entityPlacements: EntityStack[];
-};
-
-export type PlanetMapTile = {
-  name: string;
-  attachments: string[];
-  tokens: string[];
-  units: UnitMapTile[];
-  controller: string;
-  exhausted: boolean;
-  commodities: number | null;
-  planetaryShield?: boolean;
-  properties: {
-    x: number;
-    y: number;
-  };
-};
-
-export type UnitMapTile = {
-  type: "unit" | "token" | "attachment";
-  entityId: string;
-  amount: number;
-  amountSustained: number;
-  owner: string;
 };
 
 export type ActionCard = {

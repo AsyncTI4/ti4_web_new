@@ -2,40 +2,28 @@ import { hyperlaneIds, hyperlanes } from "@/data/hyperlanes";
 import { tileAdjacencies } from "../data/tileAdjacencies";
 import { getTileById } from "../mapgen/systems";
 import { getTokenData } from "../lookup/tokens";
-import { MapTileType } from "@/data/types";
+import { Tile, TilePlanet } from "@/context/types";
+import { PlayerDataResponse, TileUnitData, EntityData } from "@/data/types";
+import { getAttachmentData } from "@/lookup/attachments";
 
 /**
  * Helper function to get all wormholes present on a tile
  */
-export function getTileWormholes(
-  position: string,
-  mapTiles: MapTileType[]
-): string[] {
+export function getTileWormholes(position: string, tiles: Tile[]): string[] {
   const wormholes = new Set<string>();
 
-  // Get wormholes from the base tile
-  const tile = mapTiles.find((t) => t.position === position);
+  const tile = tiles.find((t) => t.position === position);
   const tileData = tile?.systemId ? getTileById(tile.systemId) : undefined;
   if (tileData?.wormholes) {
     tileData.wormholes.forEach((wh) => wormholes.add(wh));
   }
 
-  // Get wormholes from tokens in space (like Creuss wormhole tokens)
-  const tileSpatialData = tile; // MapTileType has tokens in space via entityPlacements
-
-  // Look through mapTile tokens and attachments in space for wormhole tokens
-  if (tileSpatialData?.entityPlacements) {
-    Object.values(tileSpatialData.entityPlacements).forEach(
-      (placement: any) => {
-        if (placement.entityType === "token") {
-          const tokenData = getTokenData(placement.entityId);
-          if (tokenData?.wormholes) {
-            tokenData.wormholes.forEach((wh: string) => wormholes.add(wh));
-          }
-        }
-      }
-    );
-  }
+  tile?.tokens.forEach((token) => {
+    const tokenData = getTokenData(token);
+    if (tokenData?.wormholes) {
+      tokenData.wormholes.forEach((wh: string) => wormholes.add(wh));
+    }
+  });
 
   return Array.from(wormholes);
 }
@@ -134,20 +122,20 @@ export type PathResult = {
  */
 export function calculateTileDistances(
   startPosition: string,
-  mapTiles: MapTileType[]
+  tiles: Tile[]
 ): Record<string, number> {
   if (!startPosition) return {};
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(mapTiles.map((t) => t.position));
+  const validPositions = new Set(tiles.map((t) => t.position));
 
   // Pre-calculate wormhole connections by creating a map of wormhole types to positions
   const wormholeMap: Record<string, string[]> = {};
 
   // Collect wormholes per position
-  mapTiles.forEach((t) => {
+  tiles.forEach((t) => {
     const pos = t.position;
-    const wormholes = getTileWormholes(pos, mapTiles);
+    const wormholes = getTileWormholes(pos, tiles);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -174,7 +162,7 @@ export function calculateTileDistances(
       previousPosition,
     } = queue.shift()!;
 
-    const currentSystemId = mapTiles.find((t) => t.position === currentPosition)
+    const currentSystemId = tiles.find((t) => t.position === currentPosition)
       ?.systemId as string;
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
@@ -238,7 +226,7 @@ export function calculateTileDistances(
 
       // Add wormhole connections
       if (currentSystemId) {
-        const currentWormholes = getTileWormholes(currentPosition, mapTiles);
+        const currentWormholes = getTileWormholes(currentPosition, tiles);
         currentWormholes.forEach((whType) => {
           const connectedPositions = wormholeMap[whType] || [];
           connectedPositions.forEach((pos) => {
@@ -281,19 +269,19 @@ export function calculateTileDistances(
 export function calculateOptimalPaths(
   startPosition: string,
   endPosition: string,
-  mapTiles: MapTileType[]
+  tiles: Tile[]
 ): PathResult | null {
   if (!startPosition || !endPosition) return null;
 
   // Get set of valid positions (only positions that are actually in play)
-  const validPositions = new Set(mapTiles.map((t) => t.position));
+  const validPositions = new Set(Object.values(tiles).map((t) => t.position));
 
   // Pre-calculate wormhole connections and position mappings
   const wormholeMap: Record<string, string[]> = {};
 
-  mapTiles.forEach((t) => {
+  tiles.forEach((t) => {
     const pos = t.position;
-    const wormholes = getTileWormholes(pos, mapTiles);
+    const wormholes = getTileWormholes(pos, tiles);
     wormholes.forEach((whType) => {
       if (!wormholeMap[whType]) wormholeMap[whType] = [];
       wormholeMap[whType].push(pos);
@@ -320,7 +308,7 @@ export function calculateOptimalPaths(
     distance: 0,
     path: [startPosition],
     systemPath: [
-      mapTiles.find((t) => t.position === startPosition)?.systemId as string,
+      tiles.find((t) => t.position === startPosition)?.systemId as string,
     ],
     hyperlanePositions: new Set(),
   });
@@ -360,7 +348,7 @@ export function calculateOptimalPaths(
       continue;
     }
 
-    const currentSystemId = mapTiles.find((t) => t.position === currentPosition)
+    const currentSystemId = tiles.find((t) => t.position === currentPosition)
       ?.systemId as string;
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
@@ -423,7 +411,7 @@ export function calculateOptimalPaths(
       }
 
       // Wormhole connections
-      const currentWormholes = getTileWormholes(currentPosition, mapTiles);
+      const currentWormholes = getTileWormholes(currentPosition, tiles);
       currentWormholes.forEach((whType) => {
         const connectedPositions = wormholeMap[whType] || [];
         connectedPositions.forEach((pos) => {
@@ -439,7 +427,7 @@ export function calculateOptimalPaths(
     for (const adjacentPosition of allAdjacentPositions) {
       if (!adjacentPosition) continue;
 
-      const adjacentSystemId = mapTiles.find(
+      const adjacentSystemId = tiles.find(
         (t) => t.position === adjacentPosition
       )?.systemId as string;
       const distanceCost = currentIsHyperlane ? 0 : 1;
@@ -617,4 +605,116 @@ function getHyperlaneConnections(
     connections,
     connectedTiles: Array.from(connectedTileSet),
   };
+}
+
+export function getTileController(
+  planets: Record<string, TilePlanet>,
+  unitsByFaction: Record<string, EntityData[]>
+): string | undefined {
+  const uniquePlanetFactions = new Set(
+    Object.values(planets).map((planet: TilePlanet) => planet.controlledBy)
+  );
+  const uniqueFactions = new Set(Object.keys(unitsByFaction));
+
+  if (uniquePlanetFactions.size === 1) {
+    return uniquePlanetFactions.values().next().value;
+  } else if (uniqueFactions.size === 1) {
+    return uniqueFactions.values().next().value;
+  } else {
+    return undefined;
+  }
+}
+
+export function hasTechSkips(planets: Record<string, TilePlanet>): boolean {
+  if (
+    Object.values(planets).some((planet: TilePlanet) =>
+      planet.attachments.some((attachment) => {
+        const attachmentData = getAttachmentData(attachment);
+        return (
+          attachmentData?.techSpeciality &&
+          attachmentData.techSpeciality.length > 0
+        );
+      })
+    )
+  )
+    return true;
+
+  return false;
+}
+
+export function computePdsData(
+  data: PlayerDataResponse,
+  factionToColor: Record<string, string>
+) {
+  const tilesWithPds = new Set<string>();
+  const dominantPdsFaction: Record<
+    string,
+    { faction: string; color: string; count: number; expected: number }
+  > = {};
+  const pdsByTile: Record<
+    string,
+    { faction: string; color: string; count: number; expected: number }[]
+  > = {};
+
+  if (!data.tileUnitData)
+    return { tilesWithPds, dominantPdsFaction, pdsByTile };
+
+  Object.entries(data.tileUnitData).forEach(
+    ([position, tileData]: [string, TileUnitData]) => {
+      if (!(tileData.pds && Object.keys(tileData.pds).length > 0)) return;
+
+      tilesWithPds.add(position);
+
+      let highestExpected = -1;
+      let dominantFaction = "";
+      let dominantCount = 0;
+      let dominantExpectedValue = 0;
+
+      const allForTile: {
+        faction: string;
+        color: string;
+        count: number;
+        expected: number;
+      }[] = [];
+
+      Object.entries(tileData.pds).forEach(
+        ([faction, pdsData]: [string, { count: number; expected: number }]) => {
+          if (factionToColor[faction]) {
+            allForTile.push({
+              faction,
+              color: factionToColor[faction],
+              count: pdsData.count,
+              expected: pdsData.expected,
+            });
+          }
+          if (pdsData.expected > highestExpected) {
+            highestExpected = pdsData.expected;
+            dominantFaction = faction;
+            dominantCount = pdsData.count;
+            dominantExpectedValue = pdsData.expected;
+          }
+        }
+      );
+
+      if (allForTile.length > 0) {
+        allForTile.sort((a, b) =>
+          b.expected !== a.expected
+            ? b.expected - a.expected
+            : b.count - a.count
+        );
+        pdsByTile[position] = allForTile;
+      }
+
+      if (dominantFaction && factionToColor[dominantFaction]) {
+        dominantPdsFaction[position] = {
+          faction: dominantFaction,
+          color: factionToColor[dominantFaction],
+          count: dominantCount,
+          expected: dominantExpectedValue,
+        };
+      }
+    }
+  );
+
+  return { tilesWithPds, dominantPdsFaction, pdsByTile };
 }

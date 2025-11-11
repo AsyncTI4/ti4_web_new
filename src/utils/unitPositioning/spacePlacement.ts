@@ -1,51 +1,21 @@
 import { EntityData, FactionUnits } from "@/data/types";
-import {
-  FIGHTER_OFFSET_COLUMNS,
-  SPACE_HEAT_CONFIG,
-  HEX_VERTICES,
-  DEFAULT_PLANET_RADIUS,
-} from "./constants";
-import { gridToPixel } from "./coordinateUtils";
+import { SPACE_HEAT_CONFIG, DEFAULT_PLANET_RADIUS } from "./constants";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { placeEntitiesWithCostMap } from "./placement";
 import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
-import { calculatePlanetHeat } from "./heatMap";
-
-type GridDimensions = {
-  gridSize: number;
-  squareWidth: number;
-  squareHeight: number;
-};
-
-const findNonRimSquare = (
-  costMap: number[][],
-  rimSquares: { row: number; col: number }[],
-  gridSize: number,
-  position: "rightmost" | "leftmost"
-): { row: number; col: number } | null => {
-  const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
-
-  const colRange =
-    position === "rightmost"
-      ? Array.from({ length: gridSize }, (_, i) => gridSize - 1 - i)
-      : Array.from({ length: gridSize }, (_, i) => i);
-
-  for (const col of colRange) {
-    for (let row = 0; row < gridSize; row++) {
-      if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
-        const offsetCol =
-          position === "rightmost"
-            ? col - FIGHTER_OFFSET_COLUMNS
-            : col + FIGHTER_OFFSET_COLUMNS;
-        return { row, col: offsetCol };
-      }
-    }
-  }
-
-  return null;
-};
+import {
+  GridDimensions,
+  createHeatSourceFromSquare,
+  createHeatSourceFromCoords,
+  createPlacementFromSquare,
+  tokenToEntityStack,
+  findNonRimSquare,
+  findBestHexagonCorner,
+  calculateCornerOffset,
+  findNonRimSquareWithoutOffset,
+} from "./placementHelpers";
 
 type FighterStack = {
   faction: string;
@@ -80,26 +50,25 @@ const placeFighterAt = (
   const square = findNonRimSquare(costMap, rimSquares, grid.gridSize, position);
   if (!square) return null;
 
-  const { x, y } = gridToPixel(square, grid.squareWidth, grid.squareHeight);
+  const stackSize = getEntityStackSize(
+    fighter.fighterStack.entityId,
+    fighter.fighterStack.count
+  );
 
-  const placement: EntityStack = {
-    ...fighter.fighterStack,
-    faction: fighter.faction,
-    x,
-    y,
-  };
-
-  const heatSource: HeatSource = {
-    x,
-    y,
-    faction: fighter.faction,
-    stackSize: getEntityStackSize(
-      fighter.fighterStack.entityId,
-      fighter.fighterStack.count
+  return {
+    placement: createPlacementFromSquare(
+      square,
+      grid,
+      fighter.fighterStack,
+      fighter.faction
+    ),
+    heatSource: createHeatSourceFromSquare(
+      square,
+      grid,
+      stackSize,
+      fighter.faction
     ),
   };
-
-  return { placement, heatSource };
 };
 
 const removeFightersFromEntities = (
@@ -130,7 +99,7 @@ export const preplaceFighters = (
   remainingEntities: FactionUnits;
 } => {
   const fighters = extractFighterStacks(factionEntities);
-  const positions: Array<"rightmost" | "leftmost"> = ["rightmost", "leftmost"];
+  const positions = ["rightmost", "leftmost"] as const;
 
   const results = fighters
     .slice(0, 2)
@@ -153,24 +122,6 @@ export const preplaceFighters = (
   };
 };
 
-const findLeftmostNonRimSquare = (
-  costMap: number[][],
-  rimSquares: { row: number; col: number }[],
-  gridSize: number
-): { row: number; col: number } | null => {
-  const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
-
-  for (let col = 0; col < gridSize; col++) {
-    for (let row = 0; row < gridSize; row++) {
-      if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
-        return { row, col };
-      }
-    }
-  }
-
-  return null;
-};
-
 const preplaceProductionHeatSource = (
   systemId: string | undefined,
   highestProduction: number | undefined
@@ -190,56 +141,14 @@ const preplaceProductionHeatSource = (
     }
   );
 
-  const hexagonCorners = [
-    { vertex: HEX_VERTICES[0], position: "top-left" },
-    { vertex: HEX_VERTICES[1], position: "top-right" },
-  ];
+  const bestCorner = findBestHexagonCorner(planetsWithCoords);
+  const { offsetX, offsetY } = calculateCornerOffset(bestCorner.position);
 
-  let lowestHeat = Infinity;
-  let bestCorner: {
-    vertex: { x: number; y: number };
-    position: string;
-  } | null = null;
-
-  for (const corner of hexagonCorners) {
-    const heat = calculatePlanetHeat(
-      corner.vertex.x,
-      corner.vertex.y,
-      planetsWithCoords,
-      SPACE_HEAT_CONFIG.planetDecayRate,
-      SPACE_HEAT_CONFIG.maxHeat
-    );
-
-    if (heat < lowestHeat) {
-      lowestHeat = heat;
-      bestCorner = corner;
-    }
-  }
-
-  if (!bestCorner) {
-    bestCorner = { vertex: { x: 86.25, y: 0 }, position: "top-left" };
-  }
-
-  const IMAGE_SIZE = 48;
-  let offsetX = 0;
-  let offsetY = 0;
-
-  switch (bestCorner.position) {
-    case "top-left":
-      offsetX = -10;
-      offsetY = 0;
-      break;
-    case "top-right":
-      offsetX = -IMAGE_SIZE + 10;
-      offsetY = 0;
-      break;
-  }
-
-  return {
-    x: bestCorner.vertex.x + offsetX,
-    y: bestCorner.vertex.y + offsetY,
-    stackSize: 0.5,
-  };
+  return createHeatSourceFromCoords(
+    bestCorner.vertex.x + offsetX,
+    bestCorner.vertex.y + offsetY,
+    0.5
+  );
 };
 
 const preplaceCommandCounterHeatSource = (
@@ -250,74 +159,46 @@ const preplaceCommandCounterHeatSource = (
 ): HeatSource | null => {
   if (!hasCommandCounters) return null;
 
-  const square = findLeftmostNonRimSquare(costMap, rimSquares, grid.gridSize);
+  const square = findNonRimSquareWithoutOffset(
+    costMap,
+    rimSquares,
+    grid.gridSize,
+    "leftmost"
+  );
   if (!square) return null;
 
-  const { x, y } = gridToPixel(square, grid.squareWidth, grid.squareHeight);
-
-  return {
-    x,
-    y,
-    stackSize: 0.5,
-  };
+  return createHeatSourceFromSquare(square, grid, 0.5);
 };
 
 const preplaceThundersEdge = (
-  factionEntities: FactionUnits,
+  tokens: string[],
   grid: GridDimensions
 ): {
   placement: EntityStack | null;
   heatSource: HeatSource | null;
-  remainingEntities: FactionUnits;
 } => {
-  let thundersEdgePlacement: EntityStack | null = null;
-  let thundersEdgeHeatSource: HeatSource | null = null;
-  const updatedEntities: FactionUnits = {};
+  const thundersEdgeToken = tokens.find((t) => t === "thundersedge");
+  if (!thundersEdgeToken)
+    return {
+      placement: null,
+      heatSource: null,
+    };
 
-  Object.entries(factionEntities).forEach(([faction, entities]) => {
-    const thundersEdgeIndex = entities.findIndex(
-      (e) => e.entityId === "thundersedge"
-    );
+  const centerRow = Math.floor(grid.gridSize / 2);
+  const centerCol = Math.floor(grid.gridSize / 2);
+  const square = { row: centerRow, col: centerCol };
 
-    if (thundersEdgeIndex !== -1 && !thundersEdgePlacement) {
-      const thundersEdge = entities[thundersEdgeIndex];
-      const centerRow = Math.floor(grid.gridSize / 2);
-      const centerCol = Math.floor(grid.gridSize / 2);
-      const { x, y } = gridToPixel(
-        { row: centerRow, col: centerCol },
-        grid.squareWidth,
-        grid.squareHeight
-      );
+  const entityData: EntityData = {
+    entityId: thundersEdgeToken,
+    entityType: "token",
+    count: 1,
+  };
 
-      thundersEdgePlacement = {
-        ...thundersEdge,
-        faction,
-        x,
-        y,
-      };
-
-      thundersEdgeHeatSource = {
-        x,
-        y,
-        faction,
-        stackSize: getEntityStackSize(
-          thundersEdge.entityId,
-          thundersEdge.count
-        ),
-      };
-
-      updatedEntities[faction] = entities.filter(
-        (_, index) => index !== thundersEdgeIndex
-      );
-    } else {
-      updatedEntities[faction] = [...entities];
-    }
-  });
+  const stackSize = getEntityStackSize(thundersEdgeToken, 1);
 
   return {
-    placement: thundersEdgePlacement,
-    heatSource: thundersEdgeHeatSource,
-    remainingEntities: updatedEntities,
+    placement: createPlacementFromSquare(square, grid, entityData, "neutral"),
+    heatSource: createHeatSourceFromSquare(square, grid, stackSize, "neutral"),
   };
 };
 
@@ -327,6 +208,7 @@ export const placeSpaceEntities = ({
   squareHeight,
   hexagonVertices,
   planets,
+  tokens,
   factionEntities,
   initialHeatSources = [],
   commandCounters = [],
@@ -335,7 +217,6 @@ export const placeSpaceEntities = ({
 }: PlaceSpaceEntitiesOptions) => {
   const grid: GridDimensions = { gridSize, squareWidth, squareHeight };
 
-  // Step 1: Initialize cost map
   const { costMap: initialCostMap, rimSquares } = initializeSpaceCostMap(
     gridSize,
     squareWidth,
@@ -343,7 +224,6 @@ export const placeSpaceEntities = ({
     hexagonVertices
   );
 
-  // Step 2: Pre-place special entities (command counters, production, thunders edge)
   const commandCounterHeatSource = preplaceCommandCounterHeatSource(
     initialCostMap,
     rimSquares,
@@ -359,20 +239,14 @@ export const placeSpaceEntities = ({
   const {
     placement: thundersEdgePlacement,
     heatSource: thundersEdgeHeatSource,
-    remainingEntities: entitiesAfterThundersEdge,
-  } = preplaceThundersEdge(factionEntities, grid);
+  } = preplaceThundersEdge(tokens, grid);
 
   // Step 3: Pre-place fighters
   const {
     placements: fighterPlacements,
     heatSources: fighterHeatSources,
     remainingEntities,
-  } = preplaceFighters(
-    entitiesAfterThundersEdge,
-    initialCostMap,
-    rimSquares,
-    grid
-  );
+  } = preplaceFighters(factionEntities, initialCostMap, rimSquares, grid);
 
   // Step 4: Combine all heat sources
   const allHeatSources = [
@@ -383,7 +257,11 @@ export const placeSpaceEntities = ({
     ...fighterHeatSources,
   ];
 
-  // Step 5: Place remaining entities with heat map
+  const tokenEntities = tokens
+    .filter((t) => t !== "thundersedge")
+    .map((token) => tokenToEntityStack(token, "neutral"));
+
+  // Step 5: Place entities with heat map
   const { entityPlacements: heatMapPlacements, finalCostMap } =
     placeEntitiesWithCostMap({
       gridSize,
@@ -392,7 +270,10 @@ export const placeSpaceEntities = ({
       initialCostMap,
       rimSquares,
       repellantPlanets: planets,
-      factionEntities: remainingEntities,
+      factionEntities: {
+        ...remainingEntities,
+        neutral: [...(remainingEntities.neutral ?? []), ...tokenEntities],
+      },
       heatConfig: SPACE_HEAT_CONFIG,
       initialHeatSources: allHeatSources,
     });

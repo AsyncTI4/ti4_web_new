@@ -6,6 +6,7 @@ import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./Leader.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { showLeader } from "./showLeader";
 
 type Props = {
   id: string;
@@ -23,8 +24,7 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
 
   const shouldShowGreen = !exhausted && !locked;
   const accentColor = shouldShowGreen ? "green" : "gray";
-  const showLeaderImage =
-    leaderData.source === "base" || leaderData.source === "pok";
+  const showLeaderImage = showLeader(leaderData.source);
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>

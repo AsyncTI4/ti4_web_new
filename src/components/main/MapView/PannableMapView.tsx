@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Box, Grid, Stack, Text } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
 import { PathVisualization } from "@/components/PathVisualization";
@@ -43,6 +43,10 @@ type Props = {
 
 export function PannableMapView({ gameId }: Props) {
   const gameData = useGameData();
+  const tilesList = useMemo(
+    () => Object.values(gameData?.tiles || {}),
+    [gameData?.tiles]
+  );
   const gameDataState = useGameDataState();
   const { user } = useUser();
 
@@ -113,7 +117,7 @@ export function PannableMapView({ gameId }: Props) {
     handlePathIndexChange,
   } = useDistanceRendering({
     distanceMode: isMobileDevice() ? false : settings.distanceMode,
-    mapTiles: gameData?.mapTiles || [],
+    tiles: tilesList,
   });
 
   useKeyboardShortcuts({
@@ -182,7 +186,7 @@ export function PannableMapView({ gameId }: Props) {
               }}
             >
               <MapTilesRenderer
-                mapTiles={gameData.mapTiles || []}
+                tiles={tilesList}
                 playerData={gameData.playerData}
                 statTilePositions={gameData.statTilePositions}
                 isMovingMode={!!draft.targetPositionId}
@@ -326,7 +330,7 @@ export function PannableMapView({ gameId }: Props) {
         originModalOpen={originModalOpen}
         onCloseOriginModal={() => setOriginModalOpen(false)}
         activeOrigin={activeOrigin}
-        gameData={gameData ? { mapTiles: gameData.mapTiles } : null}
+        tiles={tilesList}
       />
 
       <TryUnitDecalsSidebar

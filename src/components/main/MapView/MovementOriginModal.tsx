@@ -9,7 +9,7 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
-import type { MapTileType, TileUnitData, EntityData } from "@/data/types";
+import type { EntityData } from "@/data/types";
 import { useMovementStore } from "@/utils/movementStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { getColorAlias } from "@/lookup/colors";
@@ -18,15 +18,19 @@ import { MapTile } from "@/components/Map/MapTile";
 import { getPlanetData } from "@/lookup/planets";
 import { getGenericUnitDataByAsyncId, lookupUnit } from "@/lookup/units";
 import { useGameData } from "@/hooks/useGameContext";
-import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
+import {
+  EntityStack,
+  getAllEntityPlacementsForTile,
+} from "@/utils/unitPositioning";
 import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 import { UnitMultiContextTile } from "./MovementOriginModal/UnitMultiContextTile";
 import { useUser } from "@/hooks/useUser";
+import { Tile } from "@/context/types";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
-  originTile: MapTileType;
+  originTile: Tile;
   originPosition: string;
 };
 
@@ -72,7 +76,7 @@ export function MovementOriginModal({
       byUnit[unitType] = current;
     };
 
-    Object.values(originTile.entityPlacements).forEach((stack: any) => {
+    Object.values(originTile.entityPlacements).forEach((stack: EntityStack) => {
       if (stack.entityType !== "unit") return;
       const areaKey = stack.planetName
         ? `${originPosition}-${stack.planetName}`
@@ -236,79 +240,39 @@ export function MovementOriginModal({
     a.localeCompare(b)
   );
 
-  // Build minimal TileUnitData from a MapTileType
-  const buildTileUnitDataFromMap = (tile: MapTileType): TileUnitData => {
-    const space: Record<string, EntityData[]> = {};
-    (tile.space || []).forEach((u: any) => {
-      if (u.type !== "unit") return;
-      const list = (space[u.owner] ||= []);
-      list.push({
-        entityId: u.entityId,
-        entityType: "unit",
-        count: u.amount,
-        sustained: u.amountSustained,
-      });
-    });
-    const planets: Record<string, any> = {};
-    (tile.planets || []).forEach((p: any) => {
-      const entities: Record<string, EntityData[]> = {};
-      (p.units || []).forEach((u: any) => {
-        if (u.type !== "unit") return;
-        const list = (entities[u.owner] ||= []);
-        list.push({
-          entityId: u.entityId,
-          entityType: "unit",
-          count: u.amount,
-          sustained: u.amountSustained,
-        });
-      });
-      planets[p.name] = {
-        controlledBy: p.controller,
-        entities,
-        commodities: p.commodities ?? null,
-      };
-    });
-    return {
-      space,
-      planets,
-      ccs: [],
-      anomaly: tile.anomaly,
-      production: tile.production,
-      pds: null,
-    } as unknown as TileUnitData;
-  };
-
   // Snapshot origin/target tiles on open to avoid background updates changing the base while editing
   const targetTileFromGame = useMemo(
     () =>
-      game?.mapTiles.find((t) => t.position === draft.targetPositionId) || null,
+      (draft.targetPositionId && game?.tiles[draft.targetPositionId]) || null,
     [game, draft.targetPositionId]
   );
 
   const snapshotRef = useRef<{
-    origin: MapTileType;
-    target: MapTileType | null;
+    origin: Tile;
+    target: Tile | null;
   } | null>(null);
 
   useEffect(() => {
     if (!opened) return;
-    const clone = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj));
+    const clone = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj)) as T;
     snapshotRef.current = {
       origin: clone(originTile),
       target: targetTileFromGame ? clone(targetTileFromGame) : null,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [opened]);
+  }, [opened, originTile, targetTileFromGame]);
 
   // Local preview: apply local draft to origin and target snapshot only and compute new placements
   const previewTiles = useMemo(() => {
     const baseOrigin = snapshotRef.current?.origin ?? originTile;
     const baseTarget = snapshotRef.current?.target ?? targetTileFromGame;
-    const originTu = buildTileUnitDataFromMap(baseOrigin);
-    const targetTu = baseTarget ? buildTileUnitDataFromMap(baseTarget) : null;
+
+    // Deep clone tiles to avoid mutating originals
+    const clone = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj)) as T;
+    const originTileModified = clone(baseOrigin);
+    const targetTileModified = baseTarget ? clone(baseTarget) : null;
 
     const decFromArea = (
-      tu: TileUnitData,
+      tile: Tile,
       areaKey: string,
       faction: string,
       unitType: string,
@@ -317,9 +281,11 @@ export function MovementOriginModal({
     ) => {
       const [, rest] = areaKey.split("-");
       const isSpace = rest === "space";
-      const bucket: any = isSpace ? tu.space : tu.planets?.[rest]?.entities;
+      const bucket: Record<string, EntityData[]> | undefined = isSpace
+        ? tile.unitsByFaction
+        : tile.planets[rest]?.unitsByFaction;
       if (!bucket) return;
-      const list: any[] = bucket[faction];
+      const list: EntityData[] | undefined = bucket[faction];
       if (!list) return;
       const idx = list.findIndex(
         (e) => e.entityId === unitType && e.entityType === "unit"
@@ -335,14 +301,14 @@ export function MovementOriginModal({
     };
 
     const addToTargetSpace = (
-      tu: TileUnitData | null,
+      tile: Tile | null,
       faction: string,
       unitType: string,
       healthy: number,
       sustained: number
     ) => {
-      if (!tu) return;
-      const list = (tu.space[faction] ||= []);
+      if (!tile) return;
+      const list = (tile.unitsByFaction[faction] ||= []);
       const idx = list.findIndex(
         (e) => e.entityId === unitType && e.entityType === "unit"
       );
@@ -362,37 +328,53 @@ export function MovementOriginModal({
     Object.entries(local).forEach(([areaKey, entries]) => {
       entries.forEach(({ faction, unitType, healthy, sustained }) => {
         if (healthy <= 0 && sustained <= 0) return;
-        decFromArea(originTu, areaKey, faction, unitType, healthy, sustained);
-        addToTargetSpace(targetTu, faction, unitType, healthy, sustained);
+        decFromArea(
+          originTileModified,
+          areaKey,
+          faction,
+          unitType,
+          healthy,
+          sustained
+        );
+        addToTargetSpace(
+          targetTileModified,
+          faction,
+          unitType,
+          healthy,
+          sustained
+        );
       });
     });
 
     const originPlacements = getAllEntityPlacementsForTile(
-      baseOrigin.systemId,
-      originTu
+      originTileModified.systemId,
+      originTileModified,
+      undefined
     );
     const originPreview = {
-      ...baseOrigin,
+      ...originTileModified,
       entityPlacements: originPlacements,
-    } as MapTileType;
-    let targetPreview: MapTileType | null = null;
-    if (baseTarget && targetTu) {
+    } as Tile;
+
+    let targetPreview: Tile | null = null;
+    if (targetTileModified) {
       const targetPlacements = getAllEntityPlacementsForTile(
-        baseTarget.systemId,
-        targetTu
+        targetTileModified.systemId,
+        targetTileModified,
+        undefined
       );
       targetPreview = {
-        ...baseTarget,
+        ...targetTileModified,
         entityPlacements: targetPlacements,
-      } as MapTileType;
+      } as Tile;
     }
     return { originPreview, targetPreview };
   }, [originTile, targetTileFromGame, local]);
 
   const currentUserFaction = useMemo(() => {
-    if (!user?.authenticated) return null;
+    if (!user?.authenticated || !user?.discord_id) return null;
     const player = game?.playerData?.find(
-      (p: any) => p.discordId === (user as any)?.discord_id
+      (p) => p.discordId === user.discord_id
     );
     return player?.faction || null;
   }, [user, game?.playerData]);

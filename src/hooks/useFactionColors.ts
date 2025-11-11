@@ -1,5 +1,5 @@
 import { useGameData } from "./useGameContext";
-import type { FactionColorMap } from "@/context/GameContextProvider";
+import type { FactionColorMap } from "@/context/types";
 
 export function useFactionColors(): FactionColorMap {
   const game = useGameData();

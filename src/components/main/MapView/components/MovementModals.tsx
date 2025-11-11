@@ -4,7 +4,7 @@ import { getDiscordOauthUrl } from "@/components/DiscordLogin";
 import classes from "@/components/MapUI.module.css";
 import { MovementOriginModal } from "../MovementOriginModal";
 import type { ActiveOrigin } from "../hooks/useMovementMode";
-import type { MapTileType } from "@/data/types";
+import { Tile } from "@/context/types";
 
 type Props = {
   showAuthModal: boolean;
@@ -14,7 +14,7 @@ type Props = {
   originModalOpen: boolean;
   onCloseOriginModal: () => void;
   activeOrigin: ActiveOrigin;
-  gameData: { mapTiles: MapTileType[] } | null;
+  tiles: Tile[];
 };
 
 export function MovementModals({
@@ -25,7 +25,7 @@ export function MovementModals({
   originModalOpen,
   onCloseOriginModal,
   activeOrigin,
-  gameData,
+  tiles,
 }: Props) {
   return (
     <>
@@ -74,13 +74,11 @@ export function MovementModals({
         </Stack>
       </Modal>
 
-      {activeOrigin && gameData && (
+      {activeOrigin && tiles && (
         <MovementOriginModal
           opened={originModalOpen}
           onClose={onCloseOriginModal}
-          originTile={
-            gameData.mapTiles.find((t) => t.position === activeOrigin.position)!
-          }
+          originTile={tiles.find((t) => t.position === activeOrigin.position)!}
           originPosition={activeOrigin.position}
         />
       )}

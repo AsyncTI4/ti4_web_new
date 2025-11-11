@@ -1,14 +1,13 @@
 import React from "react";
 import classes from "../MapTile.module.css";
 import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
-import { MapTileType } from "@/data/types";
+import { Tile } from "@/context/types";
 import { useSettingsStore } from "@/utils/appStore";
-import { getAttachmentData } from "@/lookup/attachments";
 import { getTokenData } from "@/lookup/tokens";
 
 type Props = {
   systemId: string;
-  mapTile: MapTileType;
+  mapTile: Tile;
   position: { x: number; y: number };
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
@@ -115,22 +114,8 @@ export function PlanetCirclesLayer({
           }
         : {};
 
-    const planetTileData = mapTile.planets?.find((p) => p.name === planetId);
-    const techSpecialties = (() => {
-      const specs: string[] = [];
-      if (planet?.techSpecialties) {
-        specs.push(...planet.techSpecialties);
-      }
-      if (planetTileData?.attachments) {
-        planetTileData.attachments.forEach((attachmentId) => {
-          const attachmentData = getAttachmentData(attachmentId);
-          if (attachmentData?.techSpeciality) {
-            specs.push(...attachmentData.techSpeciality);
-          }
-        });
-      }
-      return specs;
-    })();
+    const planetTileData = mapTile.planets[planetId];
+    const techSpecialties = planetTileData?.techSpecialties ?? [];
 
     const glowClassName = (() => {
       if (techSkipsMode && techSpecialties.length > 0) {
@@ -193,22 +178,21 @@ export function PlanetCirclesLayer({
   }, [mapTile.entityPlacements]);
 
   // Regular planets from mapTile.planets
-  const regularPlanetCircles = mapTile.planets.flatMap((planetTile) => {
-    const planetId = planetTile.name;
-    if (!planetCoords[planetId]) return [];
-    const [x, y] = planetCoords[planetId].split(",").map(Number);
-    const circle = createPlanetCircle(planetId, x, y, planetTile.exhausted);
-    return circle ? [circle] : [];
-  });
+  const regularPlanetCircles = Object.entries(mapTile.planets).flatMap(
+    ([planetId, planetTile]) => {
+      if (!planetCoords[planetId]) return [];
+      const [x, y] = planetCoords[planetId].split(",").map(Number);
+      const circle = createPlanetCircle(planetId, x, y, planetTile.exhausted);
+      return circle ? [circle] : [];
+    }
+  );
 
   // Token planets (like Thunder's Edge)
   const tokenPlanetCircles = Object.entries(tokenPlanets).flatMap(
     ([planetName, tokenPlanet]) => {
       // Skip if already rendered as a regular planet
       if (planetCoords[planetName]) return [];
-      const planetTileData = mapTile.planets?.find(
-        (p) => p.name === planetName
-      );
+      const planetTileData = mapTile.planets[planetName];
       const circle = createPlanetCircle(
         planetName,
         tokenPlanet.x,

@@ -4,7 +4,7 @@ import {
   useFactionColors,
   useOriginalFactionColors,
 } from "@/hooks/useFactionColors";
-import { FactionColorMap } from "@/context/GameContextProvider";
+import { FactionColorMap } from "@/context/types";
 import Caption from "@/components/shared/Caption/Caption";
 import { FactionIcon } from "@/components/shared/FactionIcon";
 

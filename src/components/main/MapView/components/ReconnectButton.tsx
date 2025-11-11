@@ -1,7 +1,7 @@
 import { Button } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { SocketReadyState } from "@/hooks/useGameSocket";
-import type { GameDataState } from "@/context/GameContextProvider";
+import type { GameDataState } from "@/context/types";
 
 type Props = {
   gameDataState: GameDataState | null | undefined;

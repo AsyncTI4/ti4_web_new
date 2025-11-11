@@ -2,13 +2,13 @@ import React from "react";
 import { UnitStack } from "../UnitStack";
 import { getColorAlias } from "@/lookup/colors";
 import { getPlanetCoordsBySystemId } from "@/lookup/planets";
-import { MapTileType } from "@/data/types";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameData, useColorOverrides } from "@/hooks/useGameContext";
+import { Tile } from "@/context/types";
 
 type Props = {
   systemId: string;
-  mapTile: MapTileType;
+  mapTile: Tile;
   position: { x: number; y: number };
   onUnitMouseOver?: (
     faction: string,

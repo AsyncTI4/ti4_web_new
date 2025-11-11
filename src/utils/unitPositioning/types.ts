@@ -72,6 +72,7 @@ export type PlaceSpaceEntitiesOptions = {
   squareHeight: number;
   hexagonVertices: HexagonVertex[];
   planets: Planet[];
+  tokens: string[];
   factionEntities: FactionUnits;
   initialHeatSources?: HeatSource[];
   commandCounters?: string[];

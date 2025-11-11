@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Tile } from "./Tile";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import classes from "./MapTile.module.css";
-import { MapTileType } from "@/data/types";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
 import { useGameData } from "@/hooks/useGameContext";
@@ -17,9 +16,11 @@ import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLaye
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import { hasTechSkips } from "@/utils/tileDistances";
+import { Tile as TileType } from "@/context/types";
 
 type Props = {
-  mapTile: MapTileType;
+  mapTile: TileType;
   style?: React.CSSProperties;
   className?: string;
   onTileSelect?: (position: string, systemId: string) => void;
@@ -97,7 +98,7 @@ export const MapTile = React.memo<Props>(
     const isHoveredForDistance =
       !!distanceMode && hoveredTilePosition === ringPosition;
 
-    const controllingFaction = mapTile.controller;
+    const controllingFaction = mapTile.controlledBy;
 
     return (
       <div
@@ -116,11 +117,11 @@ export const MapTile = React.memo<Props>(
           opacity: (() => {
             // Tech skips mode takes priority
             if (techSkipsMode) {
-              return mapTile.hasTechSkips ? 1.0 : 0.2;
+              return hasTechSkips(mapTile) ? 1.0 : 0.2;
             }
 
             if (planetTypesMode) {
-              return mapTile.planets.length > 0 ? 1.0 : 0.2;
+              return Object.values(mapTile.planets).length > 0 ? 1.0 : 0.2;
             }
 
             // PDS mode - dim tiles that don't have PDS
@@ -163,11 +164,11 @@ export const MapTile = React.memo<Props>(
           />
 
           <AnomalyOverlay
-            show={!!mapTile?.anomaly}
+            show={mapTile.hasAnomaly}
             width={TILE_WIDTH}
             height={TILE_HEIGHT}
           />
-          <BorderAnomalyLayer mapTile={mapTile} />
+          {/* <BorderAnomalyLayer mapTile={mapTile} /> */}
           <PlanetCirclesLayer
             systemId={systemId}
             mapTile={mapTile}

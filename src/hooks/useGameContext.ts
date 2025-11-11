@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { EnhancedDataContext } from "@/context/GameContextProvider";
-import type { buildGameContext } from "@/context/GameContextProvider";
-import type { GameDataState } from "@/context/GameContextProvider";
+import type { buildGameContext } from "@/context/utils/buildGameContext";
+import type { GameDataState } from "@/context/types";
 
 export function useGameContext():
   | ReturnType<typeof buildGameContext>

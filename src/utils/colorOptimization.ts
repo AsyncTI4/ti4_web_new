@@ -1,5 +1,10 @@
 // Color optimization utilities for maximizing color distance while minimizing changes
 
+import { colors } from "@/data/colors";
+import { getColorValues } from "@/lookup/colors";
+import { PlayerDataResponse } from "@/data/types";
+import type { FactionColorMap } from "@/context/types";
+
 export type RGBColor = {
   red: number;
   green: number;
@@ -276,3 +281,95 @@ export const optimizeFactionColors = (
 
   return optimizedColors;
 };
+
+export function buildFactionToColor(
+  playerData: Array<{ faction: string; color: string }>
+): Record<string, string> {
+  if (!playerData) return {};
+  return playerData.reduce(
+    (acc, player) => {
+      acc[player.faction] = player.color;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+}
+
+export function computeOptimizedColors(
+  factionToColor: Record<string, string>
+): Record<string, RGBColor> {
+  const colorsInUse = new Set(Object.values(factionToColor));
+
+  const transformedColors = colors
+    .filter((color) => colorsInUse.has(color.name))
+    .map((color) => {
+      const primaryColorValues = getColorValues(
+        color.primaryColorRef,
+        color.primaryColor
+      );
+
+      if (!primaryColorValues) return null;
+
+      return {
+        alias: color.name,
+        primaryColor: primaryColorValues as RGBColor,
+      };
+    })
+    .filter(
+      (color): color is { alias: string; primaryColor: RGBColor } =>
+        color !== null
+    );
+
+  return optimizeFactionColors(transformedColors);
+}
+
+export function buildFactionColorMap(
+  data: PlayerDataResponse,
+  optimizedColors: Record<string, RGBColor>,
+  accessibleColors: boolean
+): FactionColorMap {
+  const factionColorMap: FactionColorMap = {};
+  if (!data.playerData) return factionColorMap;
+
+  const accessibleOrder = [
+    "blue",
+    "green",
+    "purple",
+    "yellow",
+    "red",
+    "pink",
+    "black",
+    "lightgray",
+  ];
+
+  const assignedByFaction: Record<string, string> = {};
+  const usedAccessible = new Set<string>();
+
+  data.playerData.forEach((player) => {
+    let chosenColor = player.color;
+    if (accessibleColors) {
+      if (assignedByFaction[player.faction]) {
+        chosenColor = assignedByFaction[player.faction];
+      } else {
+        const next = accessibleOrder.find((c) => !usedAccessible.has(c));
+        if (next) {
+          chosenColor = next;
+          usedAccessible.add(next);
+          assignedByFaction[player.faction] = next;
+        }
+      }
+    }
+
+    const entry = {
+      faction: player.faction,
+      color: chosenColor,
+      optimizedColor:
+        optimizedColors[chosenColor] ?? optimizedColors[player.color],
+    };
+
+    factionColorMap[player.faction] = entry;
+    factionColorMap[chosenColor] = entry;
+  });
+
+  return factionColorMap;
+}

@@ -1,10 +1,10 @@
 import { MapTile } from "@/components/Map/MapTile";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
-import type { MapTileType } from "@/data/types";
+import { Tile } from "@/context/types";
 import type { PlayerData } from "@/data/types";
 
 type Props = {
-  mapTiles: MapTileType[];
+  tiles: Tile[];
   playerData: PlayerData[] | undefined;
   statTilePositions: Record<string, string[]> | undefined;
   isMovingMode: boolean;
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export function MapTilesRenderer({
-  mapTiles,
+  tiles,
   playerData,
   statTilePositions,
   isMovingMode,
@@ -62,16 +62,16 @@ export function MapTilesRenderer({
             />
           );
         })}
-      {mapTiles.map((tile, index) => {
+      {tiles.map((tile, index) => {
         return (
           <MapTile
-            key={`${tile.systemId}-${index}`}
+            key={`${tile.position}-${index}`}
             mapTile={tile}
             isMovingMode={isMovingMode}
             isOrigin={isOrigin(tile.position)}
             selectedTiles={selectedTiles}
-            isOnPath={isOnPath(tile.systemId)}
-            isTargetSelected={isTargetSelected(tile.systemId)}
+            isOnPath={isOnPath(tile.position)}
+            isTargetSelected={isTargetSelected(tile.position)}
             hoveredTilePosition={hoveredTilePosition}
             onUnitMouseOver={onUnitMouseOver}
             onUnitMouseLeave={onUnitMouseLeave}

@@ -3,7 +3,7 @@ import { getAbility } from "../../../lookup/abilities";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
 import { Chip } from "@/components/shared/primitives/Chip";
-import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
+import { IconSparkles } from "@tabler/icons-react";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
@@ -26,9 +26,7 @@ export function Ability({ id, strong = true }: Props) {
           title={abilityData.name}
           onClick={() => setOpened((o) => !o)}
           leftSection={
-            !isMobileDevice() ? (
-              <CircularFactionIcon faction={abilityData.faction} size={18} />
-            ) : undefined
+            !isMobileDevice() ? <IconSparkles size={18} /> : undefined
           }
         />
       </SmoothPopover.Target>

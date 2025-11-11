@@ -11,7 +11,7 @@ export function useMapContentSize() {
   const settings = useSettingsStore((state) => state.settings);
 
   const contentSize = useMemo(() => {
-    const tiles = gameData?.mapTiles || [];
+    const tiles = Object.values(gameData?.tiles || {});
     if (!tiles.length) return { width: 0, height: 0 };
 
     let maxRight = 0;
@@ -38,7 +38,7 @@ export function useMapContentSize() {
       width: baseWidth,
       height: baseHeight,
     };
-  }, [gameData?.mapTiles, settings.isFirefox, zoom]);
+  }, [gameData?.tiles, settings.isFirefox, zoom]);
 
   return contentSize;
 }

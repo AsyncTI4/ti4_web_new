@@ -1,6 +1,7 @@
 import { Stack, Image, Divider } from "@mantine/core";
 import { leaders } from "../../../data/leaders";
 import { DetailsCard } from "@/components/shared/DetailsCard";
+import { showLeader } from "../Leader/showLeader";
 
 type Props = {
   leaderId: string;
@@ -12,7 +13,7 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   if (!leaderData) return null;
 
   const renderLeaderIcon = () => {
-    if (leaderData.source === "base" || leaderData.source === "pok") {
+    if (showLeader(leaderData.source)) {
       return (
         <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
       );

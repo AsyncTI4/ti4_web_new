@@ -1,4 +1,8 @@
 import { useMemo, useEffect } from "react";
+import {
+  generateHexagonPoints,
+  generateHexagonSides,
+} from "@/utils/hexagonUtils";
 import styles from "./PlayerStatsArea.module.css";
 
 type HexagonData = {
@@ -215,32 +219,4 @@ export function PlayerStatsHex({
   );
 }
 
-// Generate hexagon points for flat-top hexagon
-const generateHexagonPoints = (cx: number, cy: number, radius: number) => {
-  const points = [];
-  for (let i = 0; i < 6; i++) {
-    const angle = i * 60 * (Math.PI / 180); // Start at 0° for flat-top orientation
-    const x = cx + radius * Math.cos(angle);
-    const y = cy + radius * Math.sin(angle);
-    points.push({ x, y });
-  }
-  return points;
-};
-
-// Generate line segments for each side of the hexagon
-const generateHexagonSides = (points: { x: number; y: number }[]) => {
-  const sides = [];
-  for (let i = 0; i < 6; i++) {
-    const nextI = (i + 1) % 6;
-    sides.push({
-      x1: points[i].x,
-      y1: points[i].y,
-      x2: points[nextI].x,
-      y2: points[nextI].y,
-    });
-  }
-  return sides;
-};
-
-// Export types for use in parent component
 export type { HexagonData, SVGBounds };

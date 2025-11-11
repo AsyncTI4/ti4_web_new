@@ -5,6 +5,8 @@ import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { useState } from "react";
 import { PromissoryNoteCard } from "../PromissoryNoteCard";
 import { FactionIcon } from "@/components/shared/FactionIcon";
+import { cdnImage } from "@/data/cdnImage";
+import { Image } from "@mantine/core";
 
 type Props = {
   promissoryNoteId: string;
@@ -12,7 +14,11 @@ type Props = {
   strong?: boolean;
 };
 
-export function PromissoryNote({ promissoryNoteId, onClick, strong = true }: Props) {
+export function PromissoryNote({
+  promissoryNoteId,
+  onClick,
+  strong = true,
+}: Props) {
   const [opened, setOpened] = useState(false);
   const factionColorMap = useFactionColors();
   const promissoryNoteData = getPromissoryNoteData(
@@ -33,7 +39,7 @@ export function PromissoryNote({ promissoryNoteId, onClick, strong = true }: Pro
               if (onClick) onClick();
             }}
             ribbon
-            leftSection={<FactionIcon faction={faction!} />}
+            leftSection={<FactionIcon faction={faction} />}
             title={noteData.shortName || displayName}
             strong={strong}
             px={8}
