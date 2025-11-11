@@ -244,7 +244,7 @@ export function UnitStack({
           className={classes.galvanizeBadgeContainer}
           style={{
             left: "50%",
-            top: "0%",
+            top: "45%",
             zIndex: baseZIndex + 100,
           }}
         />
@@ -312,21 +312,14 @@ type GalvanizeBadgeProps = {
 };
 function GalvanizeBadge({ count, style, className }: GalvanizeBadgeProps) {
   return (
-    <Group
-      bg="dark.9"
-      w="45px"
-      h="20px"
-      gap="xs"
-      className={className}
-      style={style}
-    >
+    <Group w="45px" h="20px" gap="xs" className={className} style={style}>
       <div className={classes.galvanizeBadgeInner}>
         <img
           src={cdnImage("/extra/marker_galvanize.png")}
           alt="Galvanize"
           className={classes.galvanizeBadgeImage}
         />
-        <Text inline pl="24px" fz="16px" fw={600} c="white">
+        <Text inline pl="22px" fz="18px" fw={600} c="white" ff="'SLIDER'">
           {count}
         </Text>
       </div>

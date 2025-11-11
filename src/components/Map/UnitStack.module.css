@@ -19,12 +19,13 @@
 .galvanizeBadgeContainer {
   position: absolute;
   transform: translate(-50%, -110%);
+  background: var(--mantine-color-dark-9);
+  border-radius: 16px;
+  border: 1px solid var(--mantine-color-dark-3);
 }
 
 .galvanizeBadgeInner {
   position: relative;
-  border-radius: 8px;
-  border: 1px solid var(--mantine-color-dark-3);
 }
 
 .galvanizeBadgeImage {
