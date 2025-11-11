@@ -150,6 +150,13 @@ export function PannableMapView({ gameId }: Props) {
     };
   }, []);
 
+  const mapWidth = !settings.isFirefox
+    ? (contentSize.width + 400) * zoom
+    : contentSize.width + 400;
+  const mapHeight = !settings.isFirefox
+    ? contentSize.height * zoom
+    : contentSize.height;
+
   const areaStyles = isMobileDevice()
     ? {
         width: "1300px",
@@ -180,8 +187,8 @@ export function PannableMapView({ gameId }: Props) {
                 ...getScaleStyle(zoom),
                 top: MAP_PADDING,
                 left: MAP_PADDING,
-                width: (contentSize.width + 400) * zoom,
-                height: contentSize.height * zoom,
+                width: mapWidth,
+                height: mapHeight,
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
