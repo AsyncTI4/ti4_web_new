@@ -112,6 +112,7 @@ function getObjectiveIcon(
 export function PlayerScoreSummary({ playerData, objectives }: Props) {
   const gameData = useGameData();
   const playerScoreBreakdowns = gameData?.playerScoreBreakdowns;
+  const vpsToWin = gameData?.vpsToWin ?? 10;
 
   if (!playerData || !objectives) return null;
 
@@ -122,18 +123,6 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     const bInit = b.scs[0] || 99;
     return aInit - bInit;
   });
-
-  const maxGridColumns = Math.max(
-    ...sortedPlayers.map((player) => {
-      const breakdown = playerScoreBreakdowns?.[player.faction];
-      if (!breakdown) return 10;
-      return breakdown.entries.reduce(
-        (sum, entry) => sum + entry.pointValue,
-        0
-      );
-    }),
-    10
-  );
 
   return (
     <div className={styles.themedContainer}>
@@ -181,9 +170,9 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           <div className={styles.playerInfoColumn} />
           <div
             className={styles.objectivesGrid}
-            style={{ gridTemplateColumns: `repeat(${maxGridColumns}, 1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${vpsToWin}, 1fr)` }}
           >
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+            {Array.from({ length: vpsToWin }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
                 <Text
                   ff="heading"
@@ -250,7 +239,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
               <div
                 className={styles.objectivesGrid}
                 style={{
-                  gridTemplateColumns: `repeat(${maxGridColumns}, 1fr)`,
+                  gridTemplateColumns: `repeat(${vpsToWin}, 1fr)`,
                 }}
               >
                 {breakdown.entries.map((entry, idx) => {
