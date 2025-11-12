@@ -38,7 +38,7 @@ function calculateMobilePanelsZoom(): number {
     return cachedPanelsZoom;
   }
 
-  const zoom = deviceWidth / PLAYER_AREAS_WIDTH;
+  const zoom = deviceWidth / (PLAYER_AREAS_WIDTH + 20);
   const roundedZoom = roundToDecimalPlaces(zoom, DECIMAL_PLACES);
 
   cachedPanelsZoom = roundedZoom;
@@ -90,9 +90,7 @@ export function computeMapZoom(
 }
 
 export function computePanelsZoom(): number {
-  if (!isMobileDevice()) {
-    return 1;
-  }
+  if (!isMobileDevice()) return 1;
   return calculateMobilePanelsZoom();
 }
 
@@ -100,7 +98,16 @@ export function shouldHideZoomControls(): boolean {
   return isMobileDevice();
 }
 
-export function getScaleStyle(scale: number): Record<string, string | number> {
+export function getScaleStyle(
+  scale: number,
+  isFirefox: boolean
+): Record<string, string | number> {
+  if (isFirefox) {
+    return {
+      MozTransform: `scale(${scale})`,
+      MozTransformOrigin: "top left",
+    };
+  }
   return {
     transform: `scale(${scale})`,
     transformOrigin: "top left",

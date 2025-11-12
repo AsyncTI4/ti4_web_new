@@ -27,13 +27,6 @@ export function useMapContentSize() {
     const baseWidth = maxRight + MAP_PADDING;
     const baseHeight = maxBottom + MAP_PADDING + 50;
 
-    if (settings.isFirefox) {
-      return {
-        width: baseWidth * zoom,
-        height: baseHeight * zoom,
-      };
-    }
-
     return {
       width: baseWidth,
       height: baseHeight,

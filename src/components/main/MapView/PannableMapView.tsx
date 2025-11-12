@@ -20,7 +20,6 @@ import {
   computeMapZoom,
   getScaleStyle,
   computePanelsZoom,
-  getCssScaleStyle,
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/components/PlayerCardMobile";
@@ -35,6 +34,7 @@ import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { MapTilesRenderer } from "./components/MapTilesRenderer";
 import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
+import { ScaledContent } from "@/components/shared/ScaledContent";
 
 const MAP_PADDING = 0;
 
@@ -76,6 +76,8 @@ export function PannableMapView({ gameId }: Props) {
 
   const contentSize = useMapContentSize();
   const zoom = computeMapZoom(storeZoom, contentSize.width + 150);
+  const mapWidth = (contentSize.width + 400) * zoom;
+  const mapHeight = contentSize.height * zoom;
   const hideZoomControls = shouldHideZoomControls();
 
   const {
@@ -150,19 +152,13 @@ export function PannableMapView({ gameId }: Props) {
     };
   }, []);
 
-  const mapWidth = !settings.isFirefox
-    ? (contentSize.width + 400) * zoom
-    : contentSize.width + 400;
-  const mapHeight = !settings.isFirefox
-    ? contentSize.height * zoom
-    : contentSize.height;
-
   const areaStyles = isMobileDevice()
     ? {
         width: "1300px",
       }
     : {
         minWidth: "2150px",
+        padding: "0 16px",
       };
   return (
     <Box className={classes.mapContainer}>
@@ -184,7 +180,7 @@ export function PannableMapView({ gameId }: Props) {
             <Box
               className={classes.tileRenderingContainer}
               style={{
-                ...getScaleStyle(zoom),
+                ...getScaleStyle(zoom, settings.isFirefox),
                 top: MAP_PADDING,
                 left: MAP_PADDING,
                 width: mapWidth,
@@ -248,12 +244,10 @@ export function PannableMapView({ gameId }: Props) {
         )}
 
         {gameData && (
-          <Box
-            style={{
-              ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
-              ...areaStyles,
-              padding: "12px 8px",
-            }}
+          <ScaledContent
+            zoom={computePanelsZoom()}
+            innerStyle={areaStyles}
+            enabled={isMobileDevice()}
           >
             <Stack gap="md">
               {gameData.gameName && (
@@ -278,45 +272,41 @@ export function PannableMapView({ gameId }: Props) {
                 playerData={gameData.playerData}
               />
             </Stack>
-          </Box>
+          </ScaledContent>
         )}
 
-        <Grid
-          gutter="md"
-          columns={12}
-          style={{
-            ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
-            ...areaStyles,
-            padding: "0px 8px",
-          }}
+        <ScaledContent
+          zoom={computePanelsZoom()}
+          innerStyle={areaStyles}
+          enabled={isMobileDevice()}
         >
-          {gameData?.playerData
-            .filter((p) => p.faction !== "null")
-            .map((player) => (
-              <Grid.Col
-                key={player.color}
-                span={playerCardLayout === "grid" ? 6 : 12}
-              >
-                <PlayerCardMobile playerData={player} />
-              </Grid.Col>
-            ))}
-        </Grid>
+          <Grid gutter="md" columns={12} style={{ width: "100%" }}>
+            {gameData?.playerData
+              .filter((p) => p.faction !== "null")
+              .map((player) => (
+                <Grid.Col
+                  key={player.color}
+                  span={playerCardLayout === "grid" ? 6 : 12}
+                >
+                  <PlayerCardMobile playerData={player} />
+                </Grid.Col>
+              ))}
+          </Grid>
+        </ScaledContent>
 
         {gameData && (
-          <Box
-            px="md"
-            pt="lg"
-            style={{
-              ...getCssScaleStyle(computePanelsZoom(), settings.isFirefox),
-            }}
+          <ScaledContent
+            zoom={computePanelsZoom()}
+            innerStyle={areaStyles}
+            enabled={isMobileDevice()}
           >
             <PlayerScoreSummary
               playerData={gameData.playerData}
               objectives={gameData.objectives}
             />
-          </Box>
+          </ScaledContent>
         )}
-        <div style={{ height: "240px", width: "100%" }} />
+        <div style={{ height: "50px", width: "100%" }} />
 
         <ReconnectButton gameDataState={gameDataState} />
       </Box>
