@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBotApiUrl } from "../api";
+import { config } from "../config";
+
+interface LatestImageResponse {
+  image: string;
+}
 
 async function fetchMapImageUrl(gameId: string): Promise<string> {
-  const apiUrl = getBotApiUrl(`/public/game/${gameId}/image`);
+  const apiUrl = `${config.api.gameDataUrl}/${gameId}/latestImage.json`;
 
   const response = await fetch(apiUrl, {
     method: "GET",
@@ -14,8 +18,8 @@ async function fetchMapImageUrl(gameId: string): Promise<string> {
     );
   }
 
-  const text = await response.text();
-  return "https://asyncti4.com/map/" + gameId + "/" + text.trim();
+  const data = (await response.json()) as LatestImageResponse;
+  return "https://asyncti4.com/map/" + gameId + "/" + data.image;
 }
 
 export function useMapImage(gameId?: string | null) {

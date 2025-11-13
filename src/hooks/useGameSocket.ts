@@ -24,7 +24,7 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
 
   useEffect(() => {
     const brokerURL = config.api.websocketUrl;
-    const client = new Client({ brokerURL });
+    const client = new Client({ brokerURL, reconnectDelay: 0 });
 
     client.beforeConnect = () => {
       setReadyState(SocketReadyState.CONNECTING);
