@@ -307,9 +307,9 @@ export default function PlayerCard(props: Props) {
           }}
         >
           <Stack gap={6}>
-          <Box visibleFrom="sm" ml="xs">
-            <Neighbors neighbors={neighbors || []} />
-          </Box>
+            <Box visibleFrom="sm" ml="xs">
+              <Neighbors neighbors={neighbors || []} />
+            </Box>
             <Group gap={4}>
               <PlayerCardCounts pnCount={pnCount || 0} acCount={acCount || 0} />
 
@@ -384,15 +384,13 @@ export default function PlayerCard(props: Props) {
             base: 12,
           }}
         >
-          <Grid gutter={4}>
-            <DynamicTechGrid
-              techs={filteredTechs}
-              layout="grid"
-              exhaustedTechs={props.playerData.exhaustedTechs}
-              minSlotsPerColor={4}
-              breakthrough={props.playerData.breakthrough}
-            />
-          </Grid>
+          <DynamicTechGrid
+            techs={filteredTechs}
+            layout="grid"
+            exhaustedTechs={props.playerData.exhaustedTechs}
+            minSlotsPerColor={4}
+            breakthrough={props.playerData.breakthrough}
+          />
         </Grid.Col>
 
         <Grid.Col span={12}>
