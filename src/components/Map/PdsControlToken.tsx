@@ -40,12 +40,10 @@ export const PdsControlToken = ({
             className={styles.factionIcon}
           />
         )}
-        {dominant && (
-          <div className={styles.pdsOverlay}>
-            <div className={styles.pdsCount}>{count} PDS</div>
-            <div className={styles.pdsHits}>{expected} hits</div>
-          </div>
-        )}
+        <div className={styles.pdsOverlay}>
+          <div className={styles.pdsCount}>{count} PDS</div>
+          <div className={styles.pdsHits}>{expected} hits</div>
+        </div>
       </div>
     </div>
   );

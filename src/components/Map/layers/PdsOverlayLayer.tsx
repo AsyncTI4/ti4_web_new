@@ -40,21 +40,23 @@ export function PdsOverlayLayer({
     >
       <div className={styles.grid}>
         {all.map((entry) => {
-          const isDominant = dominant && entry.faction === dominant.faction;
           return (
-            <PdsControlToken
+            <div
               key={`${ringPosition}-${entry.faction}`}
-              colorAlias={getColorAlias(entry.color)}
-              faction={entry.faction}
-              count={entry.count}
-              expected={entry.expected}
-              style={{
-                width: isDominant ? 80 : 56,
-                height: isDominant ? 80 : 56,
-              }}
-              dominant={!!isDominant}
-              compact={!isDominant}
-            />
+              className={styles.gridItem}
+            >
+              <PdsControlToken
+                colorAlias={getColorAlias(entry.color)}
+                faction={entry.faction}
+                count={entry.count}
+                expected={entry.expected}
+                style={{
+                  width: 80,
+                  height: 80,
+                }}
+                dominant
+              />
+            </div>
           );
         })}
       </div>
