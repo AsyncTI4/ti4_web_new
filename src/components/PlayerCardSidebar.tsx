@@ -11,6 +11,7 @@ import { Leaders } from "./PlayerArea/Leaders";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { Nombox } from "./Nombox";
 import { getFactionImage } from "@/lookup/factions";
+import { getTechData } from "@/lookup/tech";
 import { Plot } from "./PlayerArea/Plot";
 import Caption from "./shared/Caption/Caption";
 import { PlayerCardHeaderCompact } from "./PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
@@ -62,7 +63,23 @@ export default function PlayerCardSidebar(props: Props) {
   const scs = playerData.scs || [];
   const promissoryNotes = playerData.promissoryNotesInPlayArea || [];
   const exhaustedPlanetAbilities = playerData.exhaustedPlanetAbilities || [];
+  const exhaustedPlanets = playerData.exhaustedPlanets || [];
   const planetEconomics = usePlanetEconomics(playerData);
+
+  const noneTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] === "NONE";
+  });
+
+  const filteredTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] !== "NONE";
+  });
+
+  const allNotResearchedFactionTechs = [
+    ...(notResearchedFactionTechs || []),
+    ...noneTechs,
+  ];
 
   return (
     <PlayerCardBox color={color} faction={faction}>
@@ -81,7 +98,7 @@ export default function PlayerCardSidebar(props: Props) {
 
       <PlayerCardAbilitiesFactionTechs
         abilities={abilities}
-        notResearchedFactionTechs={notResearchedFactionTechs}
+        notResearchedFactionTechs={allNotResearchedFactionTechs}
         customPromissoryNotes={customPromissoryNotes}
         variant="compact"
         breakthrough={playerData.breakthrough}
@@ -134,7 +151,7 @@ export default function PlayerCardSidebar(props: Props) {
         <Box p="md" className={softStyles.sectionBlock}>
           <Stack gap="xs">
             <DynamicTechGrid
-              techs={techs}
+              techs={filteredTechs}
               exhaustedTechs={props.playerData.exhaustedTechs}
               breakthrough={props.playerData.breakthrough}
             />
@@ -151,6 +168,7 @@ export default function PlayerCardSidebar(props: Props) {
               <PlayerCardPlanetsArea
                 planets={planets}
                 exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+                exhaustedPlanets={exhaustedPlanets}
                 gap={0}
               />
               <Group gap={0} wrap="wrap" align="flex-start" ml="xs">

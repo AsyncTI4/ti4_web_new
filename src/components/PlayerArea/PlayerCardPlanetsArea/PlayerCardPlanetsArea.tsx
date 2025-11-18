@@ -6,6 +6,7 @@ import type { PlayerData } from "@/data/types";
 type PlayerCardPlanetsAreaProps = {
   planets: string[];
   exhaustedPlanetAbilities?: string[];
+  exhaustedPlanets?: string[];
   gap?: number | string;
   wrap?: "wrap" | "nowrap";
   align?: "flex-start" | "flex-end" | "center";
@@ -15,6 +16,7 @@ type PlayerCardPlanetsAreaProps = {
 export function PlayerCardPlanetsArea({
   planets,
   exhaustedPlanetAbilities = [],
+  exhaustedPlanets = [],
   gap = 4,
   wrap = "wrap",
   align = "flex-start",
@@ -30,6 +32,7 @@ export function PlayerCardPlanetsArea({
             key={index}
             planetId={planetId}
             legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
+            isExhausted={exhaustedPlanets.includes(planetId)}
           />
         ))}
       </Group>
@@ -42,6 +45,7 @@ export function PlayerCardPlanetsArea({
                 key={`ocean-${index}`}
                 planetId={planetId}
                 legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
+                isExhausted={exhaustedPlanets.includes(planetId)}
               />
             ))}
           </Group>

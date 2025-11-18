@@ -80,12 +80,38 @@ export function Tech({
                   alt={`${techData.faction} faction`}
                 />
               </Box>
+            ) : techData.name === "Antimatter" ? (
+              <Box
+                className={cx(
+                  styles.techIcon,
+                  styles.techLetter,
+                  styles[color]
+                )}
+              >
+                <Text fw={700} fz={14} c="white">
+                  A
+                </Text>
+              </Box>
+            ) : techData.name === "Wavelength" ? (
+              <Box
+                className={cx(
+                  styles.techIcon,
+                  styles.techLetter,
+                  styles[color]
+                )}
+              >
+                <Text fw={700} fz={14} c="white">
+                  W
+                </Text>
+              </Box>
             ) : (
               <Image
                 src={
                   isFactionTech
                     ? cdnImage(`/factions/${techData.faction}.png`)
-                    : `/${color}.png`
+                    : color === "white"
+                      ? undefined
+                      : `/${color}.png`
                 }
                 alt={techData.name}
                 className={cx(styles.techIcon, styles[color])}
@@ -118,6 +144,8 @@ const getTechColor = (techType: string): string => {
       return "red";
     case "CYBERNETIC":
       return "yellow";
+    case "NONE":
+      return "white";
     default:
       return "gray";
   }

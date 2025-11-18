@@ -1,4 +1,4 @@
-import { Box, Group, Image, Stack } from "@mantine/core";
+import { Box, Group, Image, Stack, Text } from "@mantine/core";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 import styles from "./TechCard.module.css";
@@ -18,6 +18,8 @@ const getTechColor = (techType: string): string => {
       return "red";
     case "CYBERNETIC":
       return "yellow";
+    case "NONE":
+      return "white";
     default:
       return "grey";
   }
@@ -40,7 +42,9 @@ export function TechCard({ techId }: Props) {
   const isUnitUpgrade = techData.types.includes("UNITUPGRADE");
 
   const detailsCardColor =
-    color === "grey" ? "none" : (color as "blue" | "green" | "red" | "yellow");
+    color === "grey" || color === "white"
+      ? "none"
+      : (color as "blue" | "green" | "red" | "yellow");
 
   const formatType = (type: string) => {
     if (type === "PROPULSION") return "Propulsion";
@@ -48,10 +52,14 @@ export function TechCard({ techId }: Props) {
     if (type === "WARFARE") return "Warfare";
     if (type === "CYBERNETIC") return "Cybernetic";
     if (type === "UNITUPGRADE") return "Unit Upgrade";
+    if (type === "NONE") return "Special";
     return type;
   };
 
-  const techIconSrc = color === "grey" ? undefined : (`/${color}.png` as const);
+  const techIconSrc =
+    color === "grey" || color === "white"
+      ? undefined
+      : (`/${color}.png` as const);
 
   // Build unit icon for unit upgrade techs (fallback to neutral color alias)
   const unitIcon = (() => {
@@ -92,7 +100,23 @@ export function TechCard({ techId }: Props) {
           subtitle={`${formatType(techData.types[0])} Technology`}
           icon={
             unitIcon ??
-            (techIconSrc ? (
+            (techData.name === "Antimatter" ? (
+              <DetailsCard.Icon
+                icon={
+                  <Text fw={700} fz={28} c="white" style={{ lineHeight: 1 }}>
+                    A
+                  </Text>
+                }
+              />
+            ) : techData.name === "Wavelength" ? (
+              <DetailsCard.Icon
+                icon={
+                  <Text fw={700} fz={28} c="white" style={{ lineHeight: 1 }}>
+                    W
+                  </Text>
+                }
+              />
+            ) : techIconSrc ? (
               <DetailsCard.Icon
                 icon={<Image src={techIconSrc} w={28} h={28} />}
               />

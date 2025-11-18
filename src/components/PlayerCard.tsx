@@ -38,6 +38,7 @@ import { Nombox } from "./Nombox";
 import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
 import { filterPlanetsByOcean } from "@/utils/planets";
+import { getTechData } from "@/lookup/tech";
 import { Plot } from "./PlayerArea";
 import Caption from "./shared/Caption/Caption";
 import { BreachTokens } from "./PlayerArea/BreachTokens";
@@ -115,6 +116,7 @@ export default function PlayerCard(props: Props) {
     exhaustedRelics,
     nombox,
     exhaustedPlanetAbilities,
+    exhaustedPlanets,
     notResearchedFactionTechs,
     factionTechs,
     abilities,
@@ -159,6 +161,21 @@ export default function PlayerCard(props: Props) {
   };
 
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
+
+  const noneTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] === "NONE";
+  });
+
+  const filteredTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] !== "NONE";
+  });
+
+  const allNotResearchedFactionTechs = [
+    ...(notResearchedFactionTechs || []),
+    ...noneTechs,
+  ];
 
   const UnitsArea = (
     <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
@@ -277,7 +294,7 @@ export default function PlayerCard(props: Props) {
       <FactionAbilitiesTechs
         abilities={abilities}
         factionTechs={factionTechs}
-        notResearchedFactionTechs={notResearchedFactionTechs}
+        notResearchedFactionTechs={allNotResearchedFactionTechs}
         customPromissoryNotes={customPromissoryNotes}
         breakthrough={props.playerData.breakthrough}
       />
@@ -369,7 +386,7 @@ export default function PlayerCard(props: Props) {
         >
           <Grid gutter={4}>
             <DynamicTechGrid
-              techs={techs}
+              techs={filteredTechs}
               layout="grid"
               exhaustedTechs={props.playerData.exhaustedTechs}
               minSlotsPerColor={4}
@@ -415,6 +432,7 @@ export default function PlayerCard(props: Props) {
                     legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
                       planetId
                     )}
+                    isExhausted={exhaustedPlanets?.includes(planetId)}
                   />
                 );
               })}
@@ -429,6 +447,7 @@ export default function PlayerCard(props: Props) {
                         legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
                           planetId
                         )}
+                        isExhausted={exhaustedPlanets?.includes(planetId)}
                       />
                     );
                   })}

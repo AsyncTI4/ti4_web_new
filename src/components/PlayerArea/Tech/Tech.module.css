@@ -172,6 +172,16 @@
   filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.2));
 }
 
+/* Tech letter (for Antimatter, Wavelength, etc.) */
+.techLetter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 /* Faction tech icon with darkening background */
 .factionTechIcon {
   position: relative;
@@ -226,4 +236,8 @@
 
 .gray {
   --gradient-color: var(--gd-gray);
+}
+
+.white {
+  --gradient-color: 255, 255, 255;
 }

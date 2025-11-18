@@ -17,17 +17,20 @@ import { Planet } from "@/data/types";
 type Props = {
   planetId: string;
   legendaryAbilityExhausted?: boolean;
+  isExhausted?: boolean; // Optional prop to override exhausted status from playerData
 };
 
 export function PlanetCard({
   planetId,
   legendaryAbilityExhausted = false,
+  isExhausted: isExhaustedProp,
 }: Props) {
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
 
-  const isExhausted = planetTile?.exhausted ?? false;
+  // Use prop if provided (from playerData.exhaustedPlanets), otherwise fall back to planetTile
+  const isExhausted = isExhaustedProp ?? planetTile?.exhausted ?? false;
   const resolvedAttachments = useMemo(() => {
     return planetTile?.attachments || [];
   }, [planetTile]);

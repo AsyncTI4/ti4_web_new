@@ -37,6 +37,7 @@ import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
 import { useGameData } from "@/hooks/useGameContext";
 import { filterPlanetsByOcean } from "@/utils/planets";
+import { getTechData } from "@/lookup/tech";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
 import { BreachTokens } from "./PlayerArea/BreachTokens";
 import { SleeperTokens } from "./PlayerArea/SleeperTokens";
@@ -119,6 +120,7 @@ export default function PlayerCardMobile(props: Props) {
     exhaustedRelics,
     nombox,
     exhaustedPlanetAbilities,
+    exhaustedPlanets,
     notResearchedFactionTechs,
 
     abilities,
@@ -129,6 +131,7 @@ export default function PlayerCardMobile(props: Props) {
     sleeperTokensReinf,
     ghostWormholesReinf,
   } = props.playerData;
+
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
   const promissoryNotes = promissoryNotesInPlayArea;
@@ -163,6 +166,21 @@ export default function PlayerCardMobile(props: Props) {
   };
 
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
+
+  const noneTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] === "NONE";
+  });
+
+  const filteredTechs = techs.filter((techId) => {
+    const techData = getTechData(techId);
+    return techData?.types[0] !== "NONE";
+  });
+
+  const allNotResearchedFactionTechs = [
+    ...(notResearchedFactionTechs || []),
+    ...noneTechs,
+  ];
 
   const UnitsArea = (
     <SimpleGrid cols={6} spacing="8px">
@@ -249,7 +267,7 @@ export default function PlayerCardMobile(props: Props) {
         <Grid.Col span={22}>
           <PlayerCardAbilitiesFactionTechs
             abilities={abilities}
-            notResearchedFactionTechs={notResearchedFactionTechs}
+            notResearchedFactionTechs={allNotResearchedFactionTechs}
             customPromissoryNotes={customPromissoryNotes}
             variant="mobile"
             breakthrough={props.playerData.breakthrough}
@@ -358,7 +376,7 @@ export default function PlayerCardMobile(props: Props) {
               style={{ height: "100%" }}
             >
               <DynamicTechGrid
-                techs={techs}
+                techs={filteredTechs}
                 layout="grid"
                 exhaustedTechs={props.playerData.exhaustedTechs}
                 minSlotsPerColor={4}
@@ -400,6 +418,7 @@ export default function PlayerCardMobile(props: Props) {
                       legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
                         planetId
                       )}
+                      isExhausted={exhaustedPlanets?.includes(planetId)}
                     />
                   );
                 })}
@@ -414,6 +433,7 @@ export default function PlayerCardMobile(props: Props) {
                           legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
                             planetId
                           )}
+                          isExhausted={exhaustedPlanets?.includes(planetId)}
                         />
                       );
                     })}
