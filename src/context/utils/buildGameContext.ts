@@ -144,8 +144,34 @@ export function buildGameContext(
     data.tilePositions && isFractureInPlay(data.tilePositions) ? 400 : 0;
 
   const tiles: Record<string, Tile> = {};
+  const planetIdToPlanetTile: Record<string, TilePlanet> = {};
+
   Object.entries(data.tileUnitData).forEach(([position, tileData]) => {
-    if (position === "special") return;
+    // Process "special" tile separately - it contains off-tile planets (triad, custodiavigilia, etc.)
+    if (position === "special") {
+      Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
+        const { tokens, unitsByFaction, attachments } = aggregateEntities(
+          planetData.entities
+        );
+
+        const exhausted = allExhaustedPlanets.has(planetName);
+        const planetTile: TilePlanet = {
+          tokens,
+          unitsByFaction,
+          attachments,
+          controlledBy: planetData.controlledBy,
+          commodities: planetData.commodities,
+          planetaryShield: planetData.planetaryShield,
+          techSpecialties: getTechSpecialties(planetName, attachments),
+          exhausted,
+        };
+
+        // Add planets from special tile to the planet mapping
+        planetIdToPlanetTile[planetName] = planetTile;
+      });
+      return;
+    }
+
     const { tokens, unitsByFaction } = aggregateEntities(tileData.space);
 
     const planets: Record<string, TilePlanet> = {};
@@ -209,7 +235,7 @@ export function buildGameContext(
     };
   });
 
-  const planetIdToPlanetTile: Record<string, TilePlanet> = {};
+  // Add planets from regular tiles to the planet mapping
   Object.values(tiles).forEach((tile) => {
     Object.entries(tile.planets).forEach(([planetId, planet]) => {
       planetIdToPlanetTile[planetId] = planet;
