@@ -19,6 +19,7 @@ import { hasTechSkips } from "@/utils/tileDistances";
 import { Tile as TileType } from "@/context/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
 import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
+import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 
 type Props = {
   mapTile: TileType;
@@ -178,6 +179,7 @@ export const MapTile = React.memo<Props>(
             onPlanetMouseLeave={onPlanetMouseLeave}
           />
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
+          <WormholeBlockedLayer systemId={systemId} mapTile={mapTile} />
           {!techSkipsMode && !planetTypesMode && (
             <>
               <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
