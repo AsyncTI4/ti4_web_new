@@ -121,4 +121,6 @@ export type TilePlanet = {
   unitsByFaction: Record<string, EntityData[]>;
   techSpecialties: string[];
   exhausted: boolean;
+  resources?: number;
+  influence?: number;
 };

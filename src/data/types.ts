@@ -138,6 +138,8 @@ export type PlanetEntityData = {
   };
   commodities: number | null;
   planetaryShield: boolean;
+  resources: number;
+  influence: number;
 };
 
 type PlanetData = {

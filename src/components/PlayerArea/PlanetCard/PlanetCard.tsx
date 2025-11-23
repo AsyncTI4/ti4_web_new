@@ -12,6 +12,7 @@ import { getAttachmentData } from "@/lookup/attachments";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/lookup/planets";
 import { usePlanet } from "@/hooks/usePlanet";
+import { TilePlanet } from "@/context/types";
 import { Planet } from "@/data/types";
 
 type Props = {
@@ -54,7 +55,8 @@ export function PlanetCard({
   );
   const { finalResources, finalInfluence } = calculateFinalValues(
     planetData,
-    attachmentModifiers
+    attachmentModifiers,
+    planetTile
   );
   const isLegendary = checkIsLegendary(planetData, resolvedAttachments);
   const hasLegendaryAbility = !!(
@@ -225,8 +227,22 @@ function createAllIcons(
 
 function calculateFinalValues(
   planetData: Planet,
-  attachmentModifiers: AttachmentModifiers
+  attachmentModifiers: AttachmentModifiers,
+  planetTile?: TilePlanet
 ) {
+  // If the server provides calculated values (e.g. for Triad), use them
+  if (
+    planetTile?.resources !== undefined &&
+    planetTile?.influence !== undefined
+  ) {
+    debugger;
+    return {
+      finalResources: planetTile.resources,
+      finalInfluence: planetTile.influence,
+    };
+  }
+
+  // Fallback to client-side calculation
   return {
     finalResources: planetData.resources + attachmentModifiers.resources,
     finalInfluence: planetData.influence + attachmentModifiers.influence,

@@ -164,6 +164,8 @@ export function buildGameContext(
           planetaryShield: planetData.planetaryShield,
           techSpecialties: getTechSpecialties(planetName, attachments),
           exhausted,
+          resources: planetData.resources,
+          influence: planetData.influence,
         };
 
         // Add planets from special tile to the planet mapping
@@ -190,6 +192,8 @@ export function buildGameContext(
         planetaryShield: planetData.planetaryShield,
         techSpecialties: getTechSpecialties(planetName, attachments),
         exhausted,
+        resources: planetData.resources,
+        influence: planetData.influence,
       };
     });
 
