@@ -353,45 +353,9 @@
   gap: 1px;
 }
 
-/* Resource/Influence containers */
-.valueContainer {
-  position: relative;
-  width: 16px;
-  height: 16px;
-}
-
-/* Value text */
-.valueText {
-  font-size: var(--mantine-font-size-xs);
-  color: white;
-  font-weight: 700;
-  position: absolute;
-  top: 1px;
-  left: 5px;
-}
-
-.influenceValueText {
-  font-size: var(--mantine-font-size-xs);
-  color: white;
-  font-weight: 700;
-  position: absolute;
-  top: 2px;
-  left: 5px;
-}
-
-/* Resource image */
+/* Resource image for IconValue */
 .resourceImage {
   width: 16px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Influence icon container */
-.influenceIconContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 /* Faction icon */

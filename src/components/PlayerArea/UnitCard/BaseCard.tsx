@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { Chip } from "@/components/shared/primitives/Chip";
+import cx from "clsx";
 
 type BaseCardProps = {
   children: ReactNode;
@@ -33,15 +34,19 @@ export function BaseCard({
   locked = false,
   lockedLabel = "",
 }: BaseCardProps) {
-  const cardClass = isUpgraded ? `${styles.upgraded}` : `${styles.standard}`;
-  const animatedClass = enableAnimations ? styles.animated : "";
-  const lockedClass = locked ? styles.locked : "";
-  const compactClass = compact ? styles.compactCard : "";
+  const showReinforcements =
+    !compact && !locked && reinforcements !== undefined && totalCapacity !== undefined;
 
   return (
     <Chip
       accent="blue"
-      className={`${cardClass} ${animatedClass} ${lockedClass} ${compactClass} ${className || ""}`}
+      className={cx(
+        isUpgraded ? styles.upgraded : styles.standard,
+        enableAnimations && styles.animated,
+        locked && styles.locked,
+        compact && styles.compactCard,
+        className
+      )}
       onClick={onClick}
       px={0}
       py={0}
@@ -53,48 +58,58 @@ export function BaseCard({
         </>
       )}
       <Stack gap={0} align="center" w="100%">
-        {/* Faction icon badge for faction-specific units */}
-        {isFaction && faction && (
-          <Box className={styles.factionBadge}>
-            <Image
-              src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-              className={styles.factionIcon}
-            />
-          </Box>
-        )}
-
+        <FactionBadge faction={faction} show={isFaction && !!faction} />
         <Flex className={styles.imageContainer}>{children}</Flex>
-
-        {!compact && locked && (
-          <div className={styles.infoStack}>
-            <Group className={styles.mainGroup}>
-              <Text className={styles.lockedText}>{lockedLabel}</Text>
-            </Group>
-          </div>
+        {!compact && locked && <LockedLabel label={lockedLabel} />}
+        {showReinforcements && (
+          <ReinforcementsDisplay
+            reinforcements={reinforcements!}
+            totalCapacity={totalCapacity!}
+          />
         )}
-
-        {!compact &&
-          !locked &&
-          reinforcements !== undefined &&
-          totalCapacity !== undefined && (
-            <div className={styles.infoStack}>
-              <Group
-                className={`${styles.mainGroup} ${styles.reinforcementGroup} ${styles.countGroup}`}
-              >
-                <Text
-                  className={
-                    reinforcements === 0
-                      ? styles.countTextZero
-                      : styles.countText
-                  }
-                >
-                  {reinforcements}
-                </Text>
-                <Text className={styles.maxCountText}>/{totalCapacity}</Text>
-              </Group>
-            </div>
-          )}
       </Stack>
     </Chip>
+  );
+}
+
+function FactionBadge({ faction, show }: { faction?: string; show: boolean }) {
+  if (!show || !faction) return null;
+
+  return (
+    <Box className={styles.factionBadge}>
+      <Image
+        src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+        className={styles.factionIcon}
+      />
+    </Box>
+  );
+}
+
+function LockedLabel({ label }: { label: string }) {
+  return (
+    <div className={styles.infoStack}>
+      <Group className={styles.mainGroup}>
+        <Text className={styles.lockedText}>{label}</Text>
+      </Group>
+    </div>
+  );
+}
+
+function ReinforcementsDisplay({
+  reinforcements,
+  totalCapacity,
+}: {
+  reinforcements: number;
+  totalCapacity: number;
+}) {
+  return (
+    <div className={styles.infoStack}>
+      <Group className={cx(styles.mainGroup, styles.reinforcementGroup, styles.countGroup)}>
+        <Text className={reinforcements === 0 ? styles.countTextZero : styles.countText}>
+          {reinforcements}
+        </Text>
+        <Text className={styles.maxCountText}>/{totalCapacity}</Text>
+      </Group>
+    </div>
   );
 }

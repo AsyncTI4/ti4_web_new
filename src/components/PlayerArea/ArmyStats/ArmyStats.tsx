@@ -3,15 +3,17 @@ import { Table, Image, Text, Flex, Box } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
 import classes from "./ArmyStats.module.css";
 
+type ArmyStatsData = {
+  spaceArmyRes: number;
+  groundArmyRes: number;
+  spaceArmyHealth: number;
+  groundArmyHealth: number;
+  spaceArmyCombat: number;
+  groundArmyCombat: number;
+};
+
 type Props = {
-  stats: {
-    spaceArmyRes: number;
-    groundArmyRes: number;
-    spaceArmyHealth: number;
-    groundArmyHealth: number;
-    spaceArmyCombat: number;
-    groundArmyCombat: number;
-  };
+  stats: ArmyStatsData;
   rank?: number;
 };
 
@@ -22,95 +24,36 @@ function formatOneDecimal(value: number): string {
   return Number(value).toFixed(1);
 }
 
-type StatRowProps = {
-  label: string;
-  res: number;
-  health: number;
-  combat: number;
-};
-
-function HeaderRow() {
+function StatIcon({ path }: { path: string }) {
   return (
-    <Table.Tr>
-      <Table.Th></Table.Th>
-      <Table.Th>
-        <Flex justify={"center"}>
-          <Image
-            src={cdnImage("/player_area/pa_resources.png")}
-            className={classes.headerIcon}
-          />
-        </Flex>
-      </Table.Th>
-      <Table.Th>
-        <Flex justify={"center"}>
-          <Image
-            src={cdnImage("/player_area/pa_health.png")}
-            className={classes.headerIcon}
-          />
-        </Flex>
-      </Table.Th>
-      <Table.Th>
-        <Flex justify={"center"}>
-          <Image
-            src={cdnImage("/player_area/pa_hit.png")}
-            className={classes.headerIcon}
-          />
-        </Flex>
-      </Table.Th>
-    </Table.Tr>
+    <Flex justify="center">
+      <Image src={cdnImage(path)} className={classes.headerIcon} />
+    </Flex>
   );
 }
 
-function StatRow({ label, res, health, combat }: StatRowProps) {
+function StatValue({ value, size = "sm" }: { value: number; size?: "sm" | "md" }) {
+  return (
+    <Text size={size} ff="mono" fw={700} c="white" ta="right" className={classes.number}>
+      {formatOneDecimal(value)}
+    </Text>
+  );
+}
+
+function HeaderLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <Text size="xs" ff="mono" fw={700} ta="center" className={classes.caption}>
+      {children}
+    </Text>
+  );
+}
+
+function TopHeaderRow() {
   return (
     <Table.Tr>
-      <Table.Td>
-        <Text
-          size="xs"
-          ff={"mono"}
-          fw={700}
-          ta="left"
-          className={classes.caption}
-        >
-          {label}
-        </Text>
-      </Table.Td>
-      <Table.Td>
-        <Text
-          size="md"
-          ff={"mono"}
-          fw={700}
-          c="white"
-          ta="right"
-          className={classes.number}
-        >
-          {formatOneDecimal(res)}
-        </Text>
-      </Table.Td>
-      <Table.Td>
-        <Text
-          size="md"
-          ff={"mono"}
-          fw={700}
-          c="white"
-          ta="right"
-          className={classes.number}
-        >
-          {formatOneDecimal(health)}
-        </Text>
-      </Table.Td>
-      <Table.Td>
-        <Text
-          size="md"
-          ff={"mono"}
-          fw={700}
-          c="white"
-          ta="right"
-          className={classes.number}
-        >
-          {formatOneDecimal(combat)}
-        </Text>
-      </Table.Td>
+      <Table.Th />
+      <Table.Th><HeaderLabel>GROUND</HeaderLabel></Table.Th>
+      <Table.Th><HeaderLabel>SPACE</HeaderLabel></Table.Th>
     </Table.Tr>
   );
 }
@@ -121,104 +64,47 @@ type MetricRowDualProps = {
   space: number;
 };
 
-function TopHeaderRow() {
+function MetricRowDual({ iconPath, ground, space }: MetricRowDualProps) {
   return (
     <Table.Tr>
-      <Table.Th></Table.Th>
-      <Table.Th>
-        <Text
-          size="xs"
-          ff={"mono"}
-          fw={700}
-          ta="center"
-          className={classes.caption}
-        >
-          GROUND
-        </Text>
-      </Table.Th>
-      <Table.Th>
-        <Text
-          size="xs"
-          ff={"mono"}
-          fw={700}
-          ta="center"
-          className={classes.caption}
-        >
-          SPACE
-        </Text>
-      </Table.Th>
+      <Table.Td><StatIcon path={iconPath} /></Table.Td>
+      <Table.Td><StatValue value={ground} /></Table.Td>
+      <Table.Td><StatValue value={space} /></Table.Td>
     </Table.Tr>
   );
 }
 
-function MetricRowDual({ iconPath, ground, space }: MetricRowDualProps) {
+const RANK_CONFIG = {
+  1: { color: "var(--army-rank-first-color)", bg: "rgba(255, 215, 0, 0.12)", border: "rgba(255, 215, 0, 0.3)" },
+  2: { color: "var(--army-rank-second-color)", bg: "rgba(192, 192, 192, 0.12)", border: "rgba(192, 192, 192, 0.3)" },
+  3: { color: "var(--army-rank-third-color)", bg: "rgba(205, 127, 50, 0.12)", border: "rgba(205, 127, 50, 0.3)" },
+  default: { color: "rgba(180, 180, 180, 0.9)", bg: "rgba(20, 20, 20, 0.4)", border: "rgba(80, 80, 80, 0.3)" },
+} as const;
+
+function RankBadge({ rank }: { rank: number }) {
+  const config = rank <= 3 ? RANK_CONFIG[rank as 1 | 2 | 3] : RANK_CONFIG.default;
+
   return (
-    <Table.Tr>
-      <Table.Td>
-        <Flex justify={"center"}>
-          <Image src={cdnImage(iconPath)} className={classes.headerIcon} />
-        </Flex>
-      </Table.Td>
-      <Table.Td>
-        <Text
-          size="sm"
-          ff={"mono"}
-          fw={700}
-          c="white"
-          ta="right"
-          className={classes.number}
-        >
-          {formatOneDecimal(ground)}
-        </Text>
-      </Table.Td>
-      <Table.Td>
-        <Text
-          size="sm"
-          ff={"mono"}
-          fw={700}
-          c="white"
-          ta="right"
-          className={classes.number}
-        >
-          {formatOneDecimal(space)}
-        </Text>
-      </Table.Td>
-    </Table.Tr>
+    <Box
+      className={classes.rankBadge}
+      style={{
+        background: config.bg,
+        border: `1px solid ${config.border}`,
+        boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+      }}
+    >
+      <IconTrophy size={12} style={{ color: config.color }} />
+      <Text size="xs" fw={700} style={{ color: config.color }}>
+        {rank}
+      </Text>
+    </Box>
   );
 }
 
 export function ArmyStats({ stats, rank }: Props) {
-  const getRankBadge = () => {
-    if (!rank) return null;
-
-    const rankConfig = {
-      1: { color: "var(--army-rank-first-color)", bg: "rgba(255, 215, 0, 0.12)", border: "rgba(255, 215, 0, 0.3)" },
-      2: { color: "var(--army-rank-second-color)", bg: "rgba(192, 192, 192, 0.12)", border: "rgba(192, 192, 192, 0.3)" },
-      3: { color: "var(--army-rank-third-color)", bg: "rgba(205, 127, 50, 0.12)", border: "rgba(205, 127, 50, 0.3)" },
-      default: { color: "rgba(180, 180, 180, 0.9)", bg: "rgba(20, 20, 20, 0.4)", border: "rgba(80, 80, 80, 0.3)" }
-    };
-
-    const config = rank <= 3
-      ? rankConfig[rank as keyof typeof rankConfig]
-      : rankConfig.default;
-
-    return (
-      <Box className={classes.rankBadge} style={{
-        background: config.bg,
-        border: `1px solid ${config.border}`,
-        boxShadow: `inset 0 1px 0 rgba(255, 255, 255, 0.05)`
-      }}>
-        <IconTrophy size={12} style={{ color: config.color }} />
-        <Text size="xs" fw={700} style={{ color: config.color }}>
-          {rank}
-        </Text>
-      </Box>
-    );
-  };
-
   return (
     <Box style={{ position: "relative" }}>
-      {getRankBadge()}
+      {rank && <RankBadge rank={rank} />}
       <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
         <Table.Thead>
           <TopHeaderRow />
@@ -242,49 +128,5 @@ export function ArmyStats({ stats, rank }: Props) {
         </Table.Tbody>
       </Table>
     </Box>
-  );
-}
-
-export function SpaceArmyStats({ stats }: Props) {
-  return (
-    <Table
-      horizontalSpacing={12}
-      verticalSpacing={10}
-      className={classes.table}
-    >
-      <Table.Thead>
-        <HeaderRow />
-      </Table.Thead>
-      <Table.Tbody>
-        <StatRow
-          label="SPACE"
-          res={stats.spaceArmyRes}
-          health={stats.spaceArmyHealth}
-          combat={stats.spaceArmyCombat}
-        />
-      </Table.Tbody>
-    </Table>
-  );
-}
-
-export function GroundArmyStats({ stats }: Props) {
-  return (
-    <Table
-      horizontalSpacing={12}
-      verticalSpacing={10}
-      className={classes.table}
-    >
-      <Table.Thead>
-        <HeaderRow />
-      </Table.Thead>
-      <Table.Tbody>
-        <StatRow
-          label="GROUND"
-          res={stats.groundArmyRes}
-          health={stats.groundArmyHealth}
-          combat={stats.groundArmyCombat}
-        />
-      </Table.Tbody>
-    </Table>
   );
 }

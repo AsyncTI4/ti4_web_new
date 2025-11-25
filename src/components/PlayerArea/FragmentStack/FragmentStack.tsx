@@ -1,5 +1,8 @@
 import { Group, Image } from "@mantine/core";
+import cx from "clsx";
 import { cdnImage } from "../../../data/cdnImage";
+import styles from "./FragmentStack.module.css";
+
 type FragmentType = "crf" | "hrf" | "irf" | "urf";
 
 type Props = {
@@ -10,7 +13,6 @@ type Props = {
 export function FragmentStack({ count, type }: Props) {
   const fragmentSrc = getFragmentSrc(type);
 
-  // Don't render anything if count is 0
   if (count === 0) return null;
 
   return (
@@ -19,10 +21,7 @@ export function FragmentStack({ count, type }: Props) {
         <Image
           key={index}
           src={fragmentSrc}
-          style={{
-            width: 36,
-            marginLeft: index === 0 ? 0 : -8,
-          }}
+          className={cx(styles.fragment, index > 0 && styles.stacked)}
         />
       ))}
     </Group>
@@ -36,6 +35,4 @@ const FRAGMENT_SOURCES: Record<FragmentType, string> = {
   urf: cdnImage("/player_area/pa_fragment_urf.png"),
 };
 
-const getFragmentSrc = (type: FragmentType) => {
-  return FRAGMENT_SOURCES[type] || FRAGMENT_SOURCES.crf;
-};
+const getFragmentSrc = (type: FragmentType) => FRAGMENT_SOURCES[type] || FRAGMENT_SOURCES.crf;

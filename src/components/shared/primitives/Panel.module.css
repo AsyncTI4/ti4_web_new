@@ -1,0 +1,56 @@
+.panel {
+  border-radius: var(--mantine-radius-sm);
+  padding: var(--mantine-spacing-xs);
+}
+
+.noPadding {
+  padding: 0;
+}
+
+/* Subtle variant - minimal visual presence */
+.subtle {
+  background: var(--panel-subtle-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--panel-subtle-border, rgba(255, 255, 255, 0.06));
+}
+
+/* Standard variant - moderate visual presence */
+.standard {
+  background: var(--panel-standard-bg, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--panel-standard-border, rgba(107, 114, 128, 0.25));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Elevated variant - prominent visual presence */
+.elevated {
+  background: var(--panel-elevated-bg, rgba(15, 23, 42, 0.8));
+  border: 1px solid var(--panel-elevated-border, rgba(107, 114, 128, 0.35));
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Accent color variants */
+.accent_red {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.accent_green {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.accent_blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.accent_yellow {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(202, 138, 4, 0.05) 100%);
+  border-color: rgba(234, 179, 8, 0.2);
+}
+
+.accent_orange {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(234, 88, 12, 0.05) 100%);
+  border-color: rgba(249, 115, 22, 0.2);
+}

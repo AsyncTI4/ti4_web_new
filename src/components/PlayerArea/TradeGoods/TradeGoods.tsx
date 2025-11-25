@@ -1,6 +1,6 @@
 import { Image, Text } from "@mantine/core";
-import styles from "./TradeGoodsCommodities.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
+import classes from "./TradeGoods.module.css";
 
 type Props = {
   tg: number;
@@ -8,13 +8,10 @@ type Props = {
 
 export function TradeGoods({ tg }: Props) {
   return (
-    <Chip
-      accent="yellow"
-      ff={"monospace"}
-      leftSection={<Image src="/tg.png" />}
-      py={4}
-    >
-      <Text className={styles.countText}>{tg}</Text>
+    <Chip accent="yellow" leftSection={<Image src="/tg.png" />} py={4}>
+      <Text ff="monospace" fw={800} fz={18} lh={1} c="white" className={classes.value}>
+        {tg}
+      </Text>
     </Chip>
   );
 }

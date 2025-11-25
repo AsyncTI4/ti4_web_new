@@ -14,6 +14,7 @@ import { getPlanetData } from "@/lookup/planets";
 import { usePlanet } from "@/hooks/usePlanet";
 import { TilePlanet } from "@/context/types";
 import { Planet } from "@/data/types";
+import { IconValue } from "@/components/shared/primitives/IconValue";
 
 type Props = {
   planetId: string;
@@ -118,22 +119,14 @@ export function PlanetCard({
                 {allIcons.length > 0 && (
                   <Stack className={styles.iconsStack}>{allIcons}</Stack>
                 )}
-                <Box className={styles.valueContainer}>
-                  <Image
-                    src="/pa_resources.png"
-                    className={styles.resourceImage}
-                  />
-                  <Text className={styles.valueText}>{finalResources}</Text>
-                </Box>
-
-                <Box className={styles.valueContainer}>
-                  <Box className={styles.influenceIconContainer}>
-                    <InfluenceIcon size={18} />
-                  </Box>
-                  <Text className={styles.influenceValueText}>
-                    {finalInfluence}
-                  </Text>
-                </Box>
+                <IconValue
+                  icon={<Image src="/pa_resources.png" className={styles.resourceImage} />}
+                  value={finalResources}
+                />
+                <IconValue
+                  icon={<InfluenceIcon size={18} />}
+                  value={finalInfluence}
+                />
               </Stack>
             </Group>
           </Stack>

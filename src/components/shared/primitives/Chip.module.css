@@ -154,6 +154,35 @@
     transition: all 0.2s ease;
 }
 
+/* Size variants */
+.size_xs .inner {
+    padding: 2px 4px;
+    min-height: 22px;
+    gap: 4px;
+}
+
+.size_xs .leftSection {
+    max-width: 14px;
+    max-height: 14px;
+}
+
+.size_sm .inner {
+    padding: 3px 5px;
+    min-height: 26px;
+    gap: 6px;
+}
+
+.size_sm .leftSection {
+    max-width: 18px;
+    max-height: 18px;
+}
+
+.size_md .inner {
+    padding: 4px 6px;
+    min-height: 28px;
+    gap: var(--mantine-spacing-xs);
+}
+
 .inner {
     position: relative;
     display: flex;

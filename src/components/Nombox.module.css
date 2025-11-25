@@ -1,36 +1,12 @@
 .nombox {
   position: relative;
   height: 100%;
-  background:
-          linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, rgba(239, 68, 68, 0.015) 50%, rgba(239, 68, 68, 0.01) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.18);
-}
-
-.capturedContainer {
-  background: linear-gradient(135deg, rgba(185, 28, 28, 0.08) 0%, rgba(153, 27, 27, 0.06) 50%, rgba(127, 29, 29, 0.06) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.18);
-}
-
-.factionSection {
-  min-width: 200px;
-  flex: 1 1 auto;
-  padding: var(--mantine-spacing-sm);
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.10) 0%, rgba(220, 38, 38, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .factionHeader {
-  position: relative;
   margin-bottom: var(--mantine-spacing-xs);
-}
-
-.factionIndicator {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(220, 38, 38, 0.16) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.30);
-  border-radius: 3px;
-  width: 16px;
-  height: 16px;
 }
 
 .factionName {
@@ -39,7 +15,6 @@
   font-size: var(--mantine-font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  opacity: 0.95;
 }
 
 .unitsRow {
@@ -50,70 +25,30 @@
 }
 
 .unitGroup {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 0;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.unitGroup:hover {
-  transform: translateY(-1px);
-}
-
-.stackedUnit {
-  position: relative;
-}
-
-.stackedUnit:not(:first-child) {
-  margin-left: -20px; /* 80% overlap */
 }
 
 .unitContainer {
   width: 20px;
   height: 20px;
-  background: transparent;
-  border: none;
-  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.unitContainer:hover {
-  transform: translateY(-1px);
 }
 
 .unitImage {
   width: 22px;
   height: 22px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
 }
 
 .countBadge {
   color: var(--mantine-color-red-2);
   font-weight: 700;
   font-size: var(--mantine-font-size-xs);
-  min-width: 16px;
-  margin-left: var(--mantine-spacing-xs);
-  opacity: 0.95;
-}
-
-
-.popoverDropdown {
-  padding: 0;
-}
-
-/* Responsive behavior */
-@media (max-width: 768px) {
-  .factionSection {
-    min-width: 150px;
-  }
-
-  .unitsRow {
-    gap: var(--mantine-spacing-xs);
-  }
+  font-family: var(--mantine-font-family-monospace);
+  margin-left: 2px;
 }

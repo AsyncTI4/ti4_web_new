@@ -3,31 +3,42 @@ import type { ColorKey } from "@/components/PlayerArea/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";
 
+type ChipSize = "xs" | "sm" | "md";
+
+type ChipAccent =
+  | ColorKey
+  | "grey"
+  | "gray"
+  | "deepRed"
+  | "bloodOrange"
+  | "blueRed"
+  | "blueGreen"
+  | "blueYellow"
+  | "greenRed"
+  | "greenYellow"
+  | "yellowRed";
+
 type Props = Omit<BoxProps, "color" | "onClick"> & {
   title?: string;
   leftSection?: React.ReactNode;
   children?: React.ReactNode;
   ribbon?: boolean;
   accentLine?: boolean;
-  accent?:
-    | ColorKey
-    | "grey"
-    | "gray"
-    | "deepRed"
-    | "bloodOrange"
-    | "blueRed"
-    | "blueGreen"
-    | "blueYellow"
-    | "greenRed"
-    | "greenYellow"
-    | "yellowRed";
+  accent?: ChipAccent;
   strong?: boolean;
   breakthrough?: boolean;
+  size?: ChipSize;
   /** When true, shows an absolute-positioned full title on hover */
   revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.KeyboardEventHandler<HTMLDivElement>;
+};
+
+const TEXT_SIZES: Record<ChipSize, string> = {
+  xs: "10px",
+  sm: "xs",
+  md: "xs",
 };
 
 export function Chip({
@@ -40,12 +51,14 @@ export function Chip({
   accentLine = false,
   strong = false,
   breakthrough = false,
+  size = "md",
   revealFullTitleOnHover = false,
   onClick,
   px,
   py,
   ...boxProps
 }: Props) {
+  const textSize = TEXT_SIZES[size];
   const clickable = onClick !== undefined;
   const HYBRID_ACCENTS = [
     "blueRed",
@@ -76,6 +89,7 @@ export function Chip({
       className={cx(
         classes.chip,
         classes[accent ?? "gray"],
+        classes[`size_${size}`],
         breakthrough && classes.breakthrough,
         clickable && classes.hover,
         clickable && classes.clickable,
@@ -104,12 +118,12 @@ export function Chip({
           <Box className={classes.leftSection}>{leftSection}</Box>
         )}
         {title && (
-          <Text size="xs" fw={700} c="white" className={classes.textContainer}>
+          <Text size={textSize} fw={700} c="white" className={classes.textContainer}>
             {title}
           </Text>
         )}
         {title && revealFullTitleOnHover && (
-          <Text size="xs" fw={700} c="white" className={classes.fullTitle}>
+          <Text size={textSize} fw={700} c="white" className={classes.fullTitle}>
             {title}
           </Text>
         )}

@@ -1,12 +1,4 @@
-import {
-  Group,
-  Text,
-  Grid,
-  Stack,
-  Box,
-  Image,
-  SimpleGrid,
-} from "@mantine/core";
+import { Group, Text, Grid, Stack, Box, Image, SimpleGrid } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
 import { PlanetCard } from "./PlayerArea/PlanetCard";
 import { FragmentsPool } from "./PlayerArea/FragmentsPool";
@@ -43,6 +35,7 @@ import { BreachTokens } from "./PlayerArea/BreachTokens";
 import { SleeperTokens } from "./PlayerArea/SleeperTokens";
 import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
 import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
+import { Panel } from "./shared/primitives/Panel";
 import styles from "./PlayerCardMobile.module.css";
 import cx from "clsx";
 import { isMobileDevice } from "@/utils/isTouchDevice";
@@ -64,6 +57,153 @@ const unitPriorityOrder = [
   "sd", // Space Dock
   "pd", // PDS
 ];
+
+type ObjectivesGridProps = {
+  secretsScored: Record<string, unknown>;
+  knownUnscoredSecrets?: Record<string, unknown>;
+  soCount?: number;
+  promissoryNotes: string[];
+  relics: string[];
+  exhaustedRelics?: string[];
+};
+
+function ObjectivesGrid({
+  secretsScored,
+  knownUnscoredSecrets,
+  soCount,
+  promissoryNotes,
+  relics,
+  exhaustedRelics,
+}: ObjectivesGridProps) {
+  const scoredIds = Object.keys(secretsScored);
+  const knownUnscoredIds = Object.keys(knownUnscoredSecrets || {});
+  const unscored = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
+
+  return (
+    <Box className={styles.objectivesGrid}>
+      {scoredIds.map((secretId) => (
+        <ScoredSecret key={`scored-${secretId}`} secretId={secretId} variant="scored" />
+      ))}
+      {knownUnscoredIds.map((secretId) => (
+        <ScoredSecret key={`unscored-${secretId}`} secretId={secretId} variant="unscored" />
+      ))}
+      {Array.from({ length: unscored }, (_, index) => (
+        <UnscoredSecret key={`unscored-placeholder-${index}`} />
+      ))}
+      {promissoryNotes.map((pn) => (
+        <PromissoryNote promissoryNoteId={pn} key={pn} />
+      ))}
+      {relics.map((relicId, index) => {
+        const isExhausted = exhaustedRelics?.includes(relicId);
+        return <Relic key={`relic-${index}`} relicId={relicId} isExhausted={!!isExhausted} />;
+      })}
+    </Box>
+  );
+}
+
+type PlanetsAreaProps = {
+  regularPlanets: string[];
+  oceanPlanets: string[];
+  exhaustedPlanetAbilities: string[];
+  exhaustedPlanets?: string[];
+  plotCards?: unknown[];
+  faction: string;
+  breachTokensReinf?: number;
+  sleeperTokensReinf?: number;
+  ghostWormholesReinf?: string[];
+  galvanizeTokensReinf?: number;
+};
+
+function PlanetsArea({
+  regularPlanets,
+  oceanPlanets,
+  exhaustedPlanetAbilities,
+  exhaustedPlanets,
+  plotCards,
+  faction,
+  breachTokensReinf,
+  sleeperTokensReinf,
+  ghostWormholesReinf,
+  galvanizeTokensReinf,
+}: PlanetsAreaProps) {
+  return (
+    <Group gap={4} wrap="wrap" flex={1}>
+      {regularPlanets.map((planetId, index) => (
+        <PlanetCard
+          key={index}
+          planetId={planetId}
+          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
+          isExhausted={exhaustedPlanets?.includes(planetId)}
+        />
+      ))}
+      {oceanPlanets.length > 0 && (
+        <>
+          <Box ml="xs" />
+          {oceanPlanets.map((planetId, index) => (
+            <PlanetCard
+              key={`ocean-${index}`}
+              planetId={planetId}
+              legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
+              isExhausted={exhaustedPlanets?.includes(planetId)}
+            />
+          ))}
+        </>
+      )}
+      {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (
+        <SimpleGrid cols={3} spacing="4px">
+          {plotCards.map((plotCard, index) => (
+            <Plot key={`plot-${index}`} plotCard={plotCard} faction={faction} />
+          ))}
+        </SimpleGrid>
+      )}
+      <TokensGroup
+        breachTokensReinf={breachTokensReinf}
+        sleeperTokensReinf={sleeperTokensReinf}
+        ghostWormholesReinf={ghostWormholesReinf}
+        galvanizeTokensReinf={galvanizeTokensReinf}
+      />
+    </Group>
+  );
+}
+
+type TokensGroupProps = {
+  breachTokensReinf?: number;
+  sleeperTokensReinf?: number;
+  ghostWormholesReinf?: string[];
+  galvanizeTokensReinf?: number;
+};
+
+function TokensGroup({
+  breachTokensReinf,
+  sleeperTokensReinf,
+  ghostWormholesReinf,
+  galvanizeTokensReinf,
+}: TokensGroupProps) {
+  const hasTokens =
+    (breachTokensReinf && breachTokensReinf > 0) ||
+    (sleeperTokensReinf && sleeperTokensReinf > 0) ||
+    (ghostWormholesReinf && ghostWormholesReinf.length > 0) ||
+    (galvanizeTokensReinf && galvanizeTokensReinf > 0);
+
+  if (!hasTokens) return null;
+
+  return (
+    <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
+      {breachTokensReinf && breachTokensReinf > 0 && (
+        <BreachTokens count={breachTokensReinf} />
+      )}
+      {sleeperTokensReinf && sleeperTokensReinf > 0 && (
+        <SleeperTokens count={sleeperTokensReinf} />
+      )}
+      {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
+        <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
+      )}
+      {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
+        <GalvanizeTokens count={galvanizeTokensReinf} />
+      )}
+    </Group>
+  );
+}
 
 export default function PlayerCardMobile(props: Props) {
   const gameData = useGameData();
@@ -275,7 +415,7 @@ export default function PlayerCardMobile(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={24}>
-          <Box className={styles.sectionPanel}>
+          <Panel>
             <Grid gutter="xs" columns={24}>
               <Grid.Col span={6}>
                 <Group gap={2} align="flex-start">
@@ -308,71 +448,23 @@ export default function PlayerCardMobile(props: Props) {
               </Grid.Col>
 
               <Grid.Col span={15}>
-                {(() => {
-                  const scoredIds = Object.keys(secretsScored);
-                  const knownUnscoredIds = Object.keys(
-                    knownUnscoredSecrets || {}
-                  );
-                  const unscored = Math.max(
-                    (soCount || 0) - knownUnscoredIds.length,
-                    0
-                  );
-
-                  return (
-                    <Box
-                      style={{
-                        display: "grid",
-                        gridTemplateRows: "repeat(3, auto)",
-                        gridTemplateColumns: `repeat(4, max-content)`,
-                        gridAutoFlow: "column",
-                        gap: "4px",
-                      }}
-                    >
-                      {scoredIds.map((secretId) => (
-                        <ScoredSecret
-                          key={`scored-${secretId}`}
-                          secretId={secretId}
-                          variant="scored"
-                        />
-                      ))}
-                      {knownUnscoredIds.map((secretId) => (
-                        <ScoredSecret
-                          key={`unscored-${secretId}`}
-                          secretId={secretId}
-                          variant="unscored"
-                        />
-                      ))}
-                      {Array.from({ length: unscored }, (_, index) => (
-                        <UnscoredSecret key={`unscored-placeholder-${index}`} />
-                      ))}
-                      {promissoryNotes.map((pn) => (
-                        <PromissoryNote promissoryNoteId={pn} key={pn} />
-                      ))}
-                      {relics.map((relicId, index) => {
-                        const isExhausted = exhaustedRelics?.includes(relicId);
-                        return (
-                          <Relic
-                            key={`relic-${index}`}
-                            relicId={relicId}
-                            isExhausted={!!isExhausted}
-                          />
-                        );
-                      })}
-                    </Box>
-                  );
-                })()}
+                <ObjectivesGrid
+                  secretsScored={secretsScored}
+                  knownUnscoredSecrets={knownUnscoredSecrets}
+                  soCount={soCount}
+                  promissoryNotes={promissoryNotes}
+                  relics={relics}
+                  exhaustedRelics={exhaustedRelics}
+                />
               </Grid.Col>
             </Grid>
-          </Box>
+          </Panel>
         </Grid.Col>
 
         <Grid.Col span={24}>
           <Group gap="xs" align="flex-start" h="100%">
-            <Box
-              className={cx(
-                styles.sectionPanel,
-                !isMobileDevice() && styles.techGridDesktop
-              )}
+            <Panel
+              className={cx(!isMobileDevice() && styles.techGridDesktop)}
               style={{ height: "100%" }}
             >
               <DynamicTechGrid
@@ -383,106 +475,44 @@ export default function PlayerCardMobile(props: Props) {
                 mobile
                 breakthrough={props.playerData.breakthrough}
               />
-            </Box>
+            </Panel>
 
-            <Box
+            <Panel
               className={cx(
-                styles.sectionPanel,
-                isMobileDevice()
-                  ? styles.unitGridMobile
-                  : styles.unitGridDesktop
+                isMobileDevice() ? styles.unitGridMobile : styles.unitGridDesktop
               )}
               style={{ height: "100%" }}
             >
-              <Box
-                style={
-                  isMobileDevice() ? { width: "fit-content" } : { flex: 1 }
-                }
-              >
+              <Box style={isMobileDevice() ? { width: "fit-content" } : { flex: 1 }}>
                 {UnitsArea}
               </Box>
-            </Box>
+            </Panel>
           </Group>
         </Grid.Col>
 
-        <Grid.Col span={24} mt="">
-          <Box className={styles.sectionPanel}>
+        <Grid.Col span={24}>
+          <Panel>
             <Group align="flex-start">
               <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-              <Group gap={4} wrap="wrap" flex={1}>
-                {regularPlanets.map((planetId, index) => {
-                  return (
-                    <PlanetCard
-                      key={index}
-                      planetId={planetId}
-                      legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                        planetId
-                      )}
-                      isExhausted={exhaustedPlanets?.includes(planetId)}
-                    />
-                  );
-                })}
-                {oceanPlanets.length > 0 && (
-                  <>
-                    <Box ml="xs" />
-                    {oceanPlanets.map((planetId, index) => {
-                      return (
-                        <PlanetCard
-                          key={`ocean-${index}`}
-                          planetId={planetId}
-                          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(
-                            planetId
-                          )}
-                          isExhausted={exhaustedPlanets?.includes(planetId)}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-
-                {plotCards &&
-                  Array.isArray(plotCards) &&
-                  plotCards.length > 0 && (
-                    <SimpleGrid cols={3} spacing="4px">
-                      {plotCards.map((plotCard, index) => {
-                        return (
-                          <Plot
-                            key={`plot-${index}`}
-                            plotCard={plotCard}
-                            faction={faction}
-                          />
-                        );
-                      })}
-                    </SimpleGrid>
-                  )}
-                <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
-                  {breachTokensReinf && breachTokensReinf > 0 && (
-                    <BreachTokens count={breachTokensReinf} />
-                  )}
-                  {sleeperTokensReinf && sleeperTokensReinf > 0 && (
-                    <SleeperTokens count={sleeperTokensReinf} />
-                  )}
-                  {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
-                    <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
-                  )}
-                  {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
-                    <GalvanizeTokens count={galvanizeTokensReinf} />
-                  )}
-                </Group>
-              </Group>
-
+              <PlanetsArea
+                regularPlanets={regularPlanets}
+                oceanPlanets={oceanPlanets}
+                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+                exhaustedPlanets={exhaustedPlanets}
+                plotCards={plotCards}
+                faction={faction}
+                breachTokensReinf={breachTokensReinf}
+                sleeperTokensReinf={sleeperTokensReinf}
+                ghostWormholesReinf={ghostWormholesReinf}
+                galvanizeTokensReinf={galvanizeTokensReinf}
+              />
               {nombox !== undefined && Object.keys(nombox).length > 0 && (
-                <div
-                  style={{
-                    minWidth: "200px",
-                    minHeight: "150px",
-                  }}
-                >
+                <Box style={{ minWidth: "200px", minHeight: "150px" }}>
                   <Nombox capturedUnits={nombox || {}} />
-                </div>
+                </Box>
               )}
             </Group>
-          </Box>
+          </Panel>
         </Grid.Col>
       </Grid>
 

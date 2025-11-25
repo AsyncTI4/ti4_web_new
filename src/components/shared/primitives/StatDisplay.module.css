@@ -1,0 +1,20 @@
+.container {
+  align-items: center;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.value {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.label {
+  color: var(--mantine-color-gray-5);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}

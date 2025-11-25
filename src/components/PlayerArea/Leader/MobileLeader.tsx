@@ -7,6 +7,7 @@ import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./Leader.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { showLeader } from "./showLeader";
+import cx from "clsx";
 
 type Props = {
   id: string;
@@ -35,17 +36,17 @@ export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
           className={styles.mobile}
         >
           <Group gap={8} className={styles.leaderGroup}>
-            {showLeaderImage ? (
+            {showLeaderImage && (
               <div className={styles.leaderImageContainer}>
-                <Image
-                  src={`/leaders/${id}.webp`}
-                  className={styles.leaderImage}
-                />
+                <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
               </div>
-            ) : undefined}
+            )}
 
             <Text
-              className={`${styles.leaderType} ${shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive}`}
+              className={cx(
+                styles.leaderType,
+                shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive
+              )}
             >
               {type}
             </Text>
@@ -66,6 +67,6 @@ export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
   );
 }
 
-const getLeaderData = (leaderId: string) => {
+function getLeaderData(leaderId: string) {
   return leaders.find((leader) => leader.id === leaderId);
-};
+}

@@ -1,5 +1,4 @@
-import { Group, Stack, Text } from "@mantine/core";
-import classes from "./CCPool.module.css";
+import { StatGroup } from "@/components/shared/primitives/StatGroup";
 
 type Props = {
   tacticalCC: number;
@@ -8,40 +7,23 @@ type Props = {
   mahactEdict?: string[];
 };
 
-const lh = 1.1;
 export function CCPool({
   tacticalCC,
   fleetCC,
   strategicCC,
   mahactEdict = [],
 }: Props) {
+  const fleetValue = fleetCC + mahactEdict.length;
+  const fleetSuffix = mahactEdict.length > 0 ? "*" : "";
+
   return (
-    <Stack gap={0} ff="mono" fw={500}>
-      <Group gap={6}>
-        <Text size="xl" c="white" lh={lh} className={classes.num}>
-          {tacticalCC}
-        </Text>
-        <Text size="xs" lh={lh} fw={400} className={classes.label}>
-          TAC
-        </Text>
-      </Group>
-      <Group gap={6}>
-        <Text size="xl" c="white" lh={lh} className={classes.num}>
-          {fleetCC + mahactEdict.length}
-          {mahactEdict.length > 0 ? "*" : ""}
-        </Text>
-        <Text size="xs" lh={lh} fw={400} className={classes.label}>
-          FLT
-        </Text>
-      </Group>
-      <Group gap={6}>
-        <Text size="xl" c="white" lh={lh} className={classes.num}>
-          {strategicCC}
-        </Text>
-        <Text size="xs" lh={lh} fw={400} className={classes.label}>
-          STR
-        </Text>
-      </Group>
-    </Stack>
+    <StatGroup
+      size="lg"
+      items={[
+        { value: tacticalCC, label: "TAC" },
+        { value: fleetValue, label: "FLT", suffix: fleetSuffix },
+        { value: strategicCC, label: "STR" },
+      ]}
+    />
   );
 }

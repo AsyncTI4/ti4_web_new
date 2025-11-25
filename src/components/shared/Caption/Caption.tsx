@@ -1,11 +1,13 @@
-import { Text } from "@mantine/core";
+import { Text, TextProps } from "@mantine/core";
+import cx from "clsx";
 import styles from "./Caption.module.css";
 
-type Props = {
+type CaptionSize = "xs" | "sm" | "md";
+
+type Props = Omit<TextProps, "size"> & {
   children: React.ReactNode;
-  size?: "xs" | "sm" | "md";
+  size?: CaptionSize;
   uppercase?: boolean;
-  className?: string;
 };
 
 export function Caption({
@@ -13,18 +15,13 @@ export function Caption({
   size = "xs",
   uppercase = true,
   className,
+  ...textProps
 }: Props) {
-  const sizeMap: Record<string, string> = {
-    xs: styles.xs,
-    sm: styles.sm,
-    md: styles.md,
-  };
-
   return (
     <Text
       c="gray.4"
-      className={`${styles.caption} ${sizeMap[size]} ${className || ""}`}
-      fw={600}
+      className={cx(styles.caption, styles[size], className)}
+      {...textProps}
     >
       {uppercase ? String(children).toUpperCase() : children}
     </Text>

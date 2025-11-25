@@ -1,48 +1,7 @@
-.techCard {
-  position: relative;
-  width: 320px;
-}
-
-.innerGlow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.backgroundPattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.02) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.5;
-  pointer-events: none;
-}
-
 .content {
   height: 100%;
   position: relative;
   z-index: 1;
-}
-
-.header {
-  position: relative;
-}
-
-.title {
-  letter-spacing: 0.5px;
-  padding: 0 var(--mantine-spacing-sm);
-}
-
-.titleWithFaction {
-  padding-right: 32px;
 }
 
 .factionIcon {
@@ -50,17 +9,6 @@
   top: 16px;
   right: 16px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
-}
-
-.description {
-  flex: 1;
-  padding: 0 var(--mantine-spacing-xs);
-}
-
-.descriptionText {
-  text-shadow: none;
-  line-height: 1.6;
-  white-space: pre-line;
 }
 
 .bottomSection {
@@ -80,24 +28,7 @@
   justify-content: flex-end;
 }
 
-/* Stack and diagonal splay for prerequisite icons */
-/* Splayed duplicate icons inside a single background container */
-.iconStack {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: center;
-  padding-bottom: 6px;
-}
-
 .stackIcon {
   width: 14px !important;
   height: 14px !important;
 }
-
-/* Base class for icon to satisfy CSS modules and share filters */
-.techIcon {
-  position: relative;
-}
-
-/* Remove bespoke gradient/border styles to rely on DetailsCard visuals */

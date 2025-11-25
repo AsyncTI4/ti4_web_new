@@ -108,3 +108,11 @@
 .unitGridMobile {
   flex: 1;
 }
+
+.objectivesGrid {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(4, max-content);
+  grid-auto-flow: column;
+  gap: 4px;
+}

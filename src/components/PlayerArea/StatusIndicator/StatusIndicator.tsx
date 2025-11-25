@@ -1,5 +1,5 @@
-import { Box, Text } from "@mantine/core";
 import { memo } from "react";
+import { Chip } from "@/components/shared/primitives/Chip";
 import styles from "./StatusIndicator.module.css";
 
 type Props = {
@@ -14,19 +14,11 @@ export const StatusIndicator = memo(function StatusIndicator({
   if (!passed && !active) return null;
 
   return (
-    <Box
-      px={8}
-      py={2}
-      className={passed ? styles.passedContainer : styles.activeContainer}
-    >
-      <Text
-        size="xs"
-        fw={700}
-        c={passed ? "red.3" : "green.3"}
-        className={styles.statusText}
-      >
-        {passed ? "PASSED" : "ACTIVE"}
-      </Text>
-    </Box>
+    <Chip
+      accent={passed ? "red" : "green"}
+      title={passed ? "PASSED" : "ACTIVE"}
+      size="xs"
+      className={styles.indicator}
+    />
   );
 });
