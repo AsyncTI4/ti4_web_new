@@ -28,10 +28,13 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
     noteData.noteData.alias.includes("_an") ||
     noteData.noteData.name.toLowerCase() === "alliance";
 
-  // Find commander for the faction when Alliance
+  // Find commander for the faction when Alliance (exclude homebrew replacements)
   const commander = isAlliance
     ? leaders.find(
-        (l) => l.faction === noteData.faction && l.type === "commander"
+        (l) =>
+          l.faction === noteData.faction &&
+          l.type === "commander" &&
+          !l.homebrewReplacesID
       )
     : undefined;
 
