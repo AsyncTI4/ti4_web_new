@@ -1,18 +1,11 @@
 import { cdnImage } from "@/data/cdnImage";
-import { MapTileType, BorderAnomalyInfo } from "@/data/types";
+import { BorderAnomalyInfo } from "@/data/types";
+import { Tile } from "@/context/types";
+import { HEXAGON_EDGE_MIDPOINTS } from "@/mapgen/tilePositioning";
 import classes from "./BorderAnomalyLayer.module.css";
 
 type Props = {
-  mapTile: MapTileType;
-};
-
-const DIRECTION_TO_SIDE_MAP: Record<number, number> = {
-  0: 4, // N -> side 4
-  1: 5, // NE -> side 5
-  2: 0, // SE -> side 0
-  3: 1, // S -> side 1
-  4: 2, // SW -> side 2
-  5: 3, // NW -> side 3
+  mapTile: Tile;
 };
 
 function getBorderAnomalyImagePath(type: string): string {
@@ -32,20 +25,15 @@ function getBorderAnomalyImagePath(type: string): string {
   return imageMap[type.toLowerCase()] || "/borders/void_tether.png";
 }
 
-function getRotationForSide(
-  hexOutline: MapTileType["properties"]["hexOutline"],
-  sideIndex: number
-): number {
-  const side = hexOutline.sides[sideIndex];
-  if (!side) return 0;
-
-  const dx = side.x2 - side.x1;
-  const dy = side.y2 - side.y1;
-  const angleRad = Math.atan2(dy, dx);
-  const angleDeg = (angleRad * 180) / Math.PI;
-
-  return angleDeg;
-}
+// Rotation angles for each direction (0=N, 1=NE, 2=SE, 3=S, 4=SW, 5=NW)
+const DIRECTION_ROTATION: Record<number, number> = {
+  0: 0, // N - horizontal edge at top
+  1: 60, // NE
+  2: 120, // SE
+  3: 180, // S - horizontal edge at bottom (or 0, same visual)
+  4: 240, // SW (or -120)
+  5: 300, // NW (or -60)
+};
 
 export function BorderAnomalyLayer({ mapTile }: Props) {
   const borderAnomalies = mapTile.borderAnomalies;
@@ -54,28 +42,22 @@ export function BorderAnomalyLayer({ mapTile }: Props) {
     return null;
   }
 
-  const hexOutline = mapTile.properties.hexOutline;
-  if (!hexOutline.midpoints || hexOutline.midpoints.length < 6) {
-    return null;
-  }
-
   return (
     <>
       {borderAnomalies.map((anomaly: BorderAnomalyInfo, index: number) => {
-        const sideIndex = DIRECTION_TO_SIDE_MAP[anomaly.direction];
-        if (sideIndex === undefined) {
+        const direction = anomaly.direction;
+        if (direction < 0 || direction > 5) {
           console.warn(
-            `Invalid direction ${anomaly.direction} for border anomaly`
+            `Invalid direction ${direction} for border anomaly`
           );
           return null;
         }
 
-        const midpoint = hexOutline.midpoints![sideIndex];
-        const rotation = getRotationForSide(hexOutline, sideIndex);
+        // Use pre-calculated tile-relative midpoints
+        // HEXAGON_EDGE_MIDPOINTS indices match API directions: 0=N, 1=NE, 2=SE, 3=S, 4=SW, 5=NW
+        const midpoint = HEXAGON_EDGE_MIDPOINTS[direction];
+        const rotation = DIRECTION_ROTATION[direction];
         const imagePath = getBorderAnomalyImagePath(anomaly.type);
-
-        const relativeX = midpoint.x - mapTile.properties.x;
-        const relativeY = midpoint.y - mapTile.properties.y;
 
         return (
           <img
@@ -85,8 +67,8 @@ export function BorderAnomalyLayer({ mapTile }: Props) {
             className={classes.borderAnomaly}
             style={{
               position: "absolute",
-              left: `${relativeX}px`,
-              top: `${relativeY}px`,
+              left: `${midpoint.x}px`,
+              top: `${midpoint.y}px`,
               transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
               transformOrigin: "center center",
               pointerEvents: "none",

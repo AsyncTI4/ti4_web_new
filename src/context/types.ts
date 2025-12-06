@@ -6,6 +6,7 @@ import {
   PlayerDataResponse,
   WebScoreBreakdown,
   EntityData,
+  BorderAnomalyInfo,
 } from "@/data/types";
 import { EntityStack } from "@/utils/unitPositioning";
 
@@ -103,11 +104,14 @@ export type Tile = {
     y: number;
     hexOutline: {
       points: { x: number; y: number }[];
+      sides?: { x1: number; y1: number; x2: number; y2: number }[];
+      midpoints?: { x: number; y: number }[];
     };
   };
   highestProduction: number;
   commandCounters: string[];
   entityPlacements: EntityStack[];
+  borderAnomalies?: BorderAnomalyInfo[];
 };
 
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;

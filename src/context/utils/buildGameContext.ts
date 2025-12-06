@@ -25,7 +25,7 @@ import {
   generateHexagonMidpoints,
   RADIUS,
 } from "@/utils/hexagonUtils";
-import { PlayerDataResponse, EntityData } from "@/data/types";
+import { PlayerDataResponse, EntityData, BorderAnomalyInfo } from "@/data/types";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 import type { GameData, Tile, TilePlanet } from "@/context/types";
 
@@ -140,6 +140,17 @@ export function buildGameContext(
     {} as Record<string, string>
   );
 
+  // Build map of border anomalies by tile position
+  const borderAnomaliesByTile: Record<string, BorderAnomalyInfo[]> = {};
+  if (data.borderAnomalies) {
+    for (const anomaly of data.borderAnomalies) {
+      if (!borderAnomaliesByTile[anomaly.tile]) {
+        borderAnomaliesByTile[anomaly.tile] = [];
+      }
+      borderAnomaliesByTile[anomaly.tile].push(anomaly);
+    }
+  }
+
   const fractureYbump =
     data.tilePositions && isFractureInPlay(data.tilePositions) ? 400 : 0;
 
@@ -229,6 +240,7 @@ export function buildGameContext(
       highestProduction: Math.max(...Object.values(tileData.production)),
       hasTechSkips: hasTechSkips(planets),
       controlledBy: getTileController(planets, unitsByFaction),
+      borderAnomalies: borderAnomaliesByTile[position],
     };
 
     const entityPlacements = getAllEntityPlacementsForTile(systemId, tile);

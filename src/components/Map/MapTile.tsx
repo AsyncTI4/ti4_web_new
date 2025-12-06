@@ -14,6 +14,7 @@ import { CommandCounterLayer } from "./layers/CommandCounterLayer";
 import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
+import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { hasTechSkips } from "@/utils/tileDistances";
 import { Tile as TileType } from "@/context/types";
@@ -170,7 +171,7 @@ export const MapTile = React.memo<Props>(
             width={TILE_WIDTH}
             height={TILE_HEIGHT}
           />
-          {/* <BorderAnomalyLayer mapTile={mapTile} /> */}
+          <BorderAnomalyLayer mapTile={mapTile} />
           <PlanetCirclesLayer
             systemId={systemId}
             mapTile={mapTile}
