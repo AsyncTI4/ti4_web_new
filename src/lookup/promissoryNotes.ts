@@ -2,14 +2,19 @@ import { promissoryNotes } from "../data/promissoryNotes";
 import { PromissoryNote } from "../data/types";
 import type { FactionColorMap } from "@/context/types";
 
-// Create efficient lookup maps
+// Filter out homebrew replacement notes - keep only original/official versions
+const officialPromissoryNotes = promissoryNotes.filter(
+  (note) => !note.homebrewReplacesID
+);
+
+// Create efficient lookup maps using official notes only
 const promissoryNotesMap = new Map(
-  promissoryNotes.map((note) => [note.alias, note])
+  officialPromissoryNotes.map((note) => [note.alias, note])
 );
 
 // For faction map, we need to handle multiple promissory notes with same faction
 const promissoryNotesByFactionMap = new Map<string, PromissoryNote[]>();
-promissoryNotes.forEach((note) => {
+officialPromissoryNotes.forEach((note) => {
   if (note.faction) {
     const existingNotes = promissoryNotesByFactionMap.get(note.faction) || [];
     promissoryNotesByFactionMap.set(note.faction, [...existingNotes, note]);
@@ -18,22 +23,22 @@ promissoryNotes.forEach((note) => {
 
 // For source map, we need to handle multiple promissory notes with same source
 const promissoryNotesBySourceMap = new Map<string, PromissoryNote[]>();
-promissoryNotes.forEach((note) => {
+officialPromissoryNotes.forEach((note) => {
   const existingNotes = promissoryNotesBySourceMap.get(note.source) || [];
   promissoryNotesBySourceMap.set(note.source, [...existingNotes, note]);
 });
 
-// Pre-filter different categories
-const templatePromissoryNotes = promissoryNotes.filter((note) =>
+// Pre-filter different categories (using official notes only)
+const templatePromissoryNotes = officialPromissoryNotes.filter((note) =>
   note.alias.includes("<color>")
 );
-const factionSpecificPromissoryNotes = promissoryNotes.filter(
+const factionSpecificPromissoryNotes = officialPromissoryNotes.filter(
   (note) => note.faction && !note.alias.includes("<color>")
 );
-const playImmediatelyPromissoryNotes = promissoryNotes.filter(
+const playImmediatelyPromissoryNotes = officialPromissoryNotes.filter(
   (note) => note.playImmediately === true
 );
-const playAreaPromissoryNotes = promissoryNotes.filter(
+const playAreaPromissoryNotes = officialPromissoryNotes.filter(
   (note) => note.playArea === true
 );
 
@@ -169,7 +174,7 @@ export function searchPromissoryNotesByName(
   searchTerm: string
 ): PromissoryNote[] {
   const lowerSearchTerm = searchTerm.toLowerCase();
-  return promissoryNotes.filter(
+  return officialPromissoryNotes.filter(
     (note) =>
       note.name.toLowerCase().includes(lowerSearchTerm) ||
       (note.shortName && note.shortName.toLowerCase().includes(lowerSearchTerm))
@@ -191,8 +196,8 @@ export function getPromissoryNoteFactions(): string[] {
 }
 
 /**
- * Get all promissory notes
+ * Get all promissory notes (official only, excludes homebrew replacements)
  */
 export function getAllPromissoryNotes(): PromissoryNote[] {
-  return promissoryNotes;
+  return officialPromissoryNotes;
 }

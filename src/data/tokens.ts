@@ -112,6 +112,7 @@ export const tokens: Token[] = [
     spaceOrPlanet: "planet",
     aliasList: ["custodian", "token_custodian"],
     source: "base",
+    scale: 0.5,
   },
   {
     id: "custodianvp",
@@ -119,6 +120,7 @@ export const tokens: Token[] = [
     spaceOrPlanet: "planet",
     aliasList: ["custodianvp", "token_custodianvp"],
     source: "base",
+    scale: 0.5,
   },
   {
     id: "custom_eronous_whepsilon",

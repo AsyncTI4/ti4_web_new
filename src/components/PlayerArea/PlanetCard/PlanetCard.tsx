@@ -120,7 +120,12 @@ export function PlanetCard({
                   <Stack className={styles.iconsStack}>{allIcons}</Stack>
                 )}
                 <IconValue
-                  icon={<Image src="/pa_resources.png" className={styles.resourceImage} />}
+                  icon={
+                    <Image
+                      src="/pa_resources.png"
+                      className={styles.resourceImage}
+                    />
+                  }
                   value={finalResources}
                 />
                 <IconValue
@@ -228,7 +233,6 @@ function calculateFinalValues(
     planetTile?.resources !== undefined &&
     planetTile?.influence !== undefined
   ) {
-    debugger;
     return {
       finalResources: planetTile.resources,
       finalInfluence: planetTile.influence,

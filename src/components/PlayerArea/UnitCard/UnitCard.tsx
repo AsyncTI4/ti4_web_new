@@ -11,6 +11,7 @@ type Props = {
   unitId: string;
   color?: string;
   deployedCount: number;
+  unitCap?: number;
   compact?: boolean;
   locked?: boolean;
   lockedLabel?: string;
@@ -32,6 +33,7 @@ export function UnitCard({
   unitId,
   color,
   deployedCount,
+  unitCap: unitCapProp,
   compact,
   locked,
   lockedLabel,
@@ -43,8 +45,9 @@ export function UnitCard({
   const isUpgraded =
     unitData.upgradesFromUnitId !== undefined || unitData.baseType === "warsun";
   const isFaction = unitData.faction !== undefined;
-  const unitCap =
+  const defaultCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
+  const unitCap = unitCapProp ?? defaultCap;
   const reinforcements = unitCap - deployedCount;
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>

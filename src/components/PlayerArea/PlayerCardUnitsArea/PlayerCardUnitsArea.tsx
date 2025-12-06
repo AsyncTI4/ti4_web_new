@@ -57,12 +57,15 @@ export function PlayerCardUnitsArea({
           );
         }
 
+        const unitCap = unitCounts?.[asyncId]?.unitCap;
+
         return (
           <UnitCard
             key={bestUnit.id}
             unitId={bestUnit.id}
             color={color}
             deployedCount={deployedCount}
+            unitCap={unitCap}
           />
         );
       })}

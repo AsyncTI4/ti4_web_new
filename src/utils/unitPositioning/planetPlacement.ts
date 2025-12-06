@@ -181,10 +181,32 @@ export const processPlanetEntities = (
     heatSources: attachmentHeatSources,
   } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
 
-  // Step 3: Place center tokens at planet center
-  const centerTokenPlacements: EntityStack[] = tokenEntities.map((token) =>
-    createPlacementFromCoords(planet.x, planet.y, token)
-  );
+  // Step 3: Place center tokens at planet center (with jiggle for multiple)
+  const nonDmzTokens = tokenEntities.filter((t) => t.entityId !== "dmz_large");
+  const centerTokenPlacements: EntityStack[] = tokenEntities.map((token) => {
+    // DMZ always stays centered
+    if (token.entityId === "dmz_large") {
+      return createPlacementFromCoords(planet.x, planet.y, token);
+    }
+
+    // Apply jiggle offset when multiple non-DMZ center tokens exist
+    if (nonDmzTokens.length > 1) {
+      const jiggleIndex = nonDmzTokens.findIndex(
+        (t) => t.entityId === token.entityId
+      );
+      const angle = (jiggleIndex * 2 * Math.PI) / nonDmzTokens.length;
+      const jiggleRadius = 30;
+      const offsetX = jiggleRadius * Math.cos(angle);
+      const offsetY = jiggleRadius * Math.sin(angle);
+      return createPlacementFromCoords(
+        planet.x + offsetX,
+        planet.y + offsetY,
+        token
+      );
+    }
+
+    return createPlacementFromCoords(planet.x, planet.y, token);
+  });
 
   // Step 4: Place ground entities with heat map
   const { entityPlacements: groundEntityPlacements, finalCostMap } =

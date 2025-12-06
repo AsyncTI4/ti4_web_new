@@ -36,30 +36,11 @@ function getPhaseColor(phase: string): "red" | "blue" | "orange" {
   }
 }
 
-// Get all scored secret IDs from all players
-function getScoredSecretIds(playerData: PlayerData[]): Set<string> {
-  const scoredIds = new Set<string>();
-
-  playerData.forEach((player) => {
-    // secretsScored is Record<string, number> where key is secret ID
-    Object.keys(player.secretsScored || {}).forEach((secretId) => {
-      scoredIds.add(secretId);
-    });
-  });
-
-  return scoredIds;
-}
-
-// Process secret objectives with filtering and grouping
+// Process secret objectives with grouping
 export function processSecretObjectives(
   secretIds: string[],
-  playerData: PlayerData[]
+  _playerData: PlayerData[]
 ): ProcessedSecretData[] {
-  const scoredSecretIds = getScoredSecretIds(playerData);
-
-  // Filter out scored secrets
-  const filteredSecretIds = secretIds.filter((id) => !scoredSecretIds.has(id));
-
   const secretMap = new Map<
     string,
     {
@@ -70,7 +51,7 @@ export function processSecretObjectives(
     }
   >();
 
-  filteredSecretIds.forEach((secretId) => {
+  secretIds.forEach((secretId) => {
     const secret = getSecretObjectiveData(secretId);
     if (!secret) {
       console.warn(`Secret objective with ID "${secretId}" not found`);

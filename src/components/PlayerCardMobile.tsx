@@ -327,6 +327,7 @@ export default function PlayerCardMobile(props: Props) {
       {unitPriorityOrder.map((asyncId) => {
         const bestUnit = lookupUnit(asyncId, faction, props.playerData);
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
+        const unitCap = unitCounts?.[asyncId]?.unitCap;
         if (!bestUnit) {
           return (
             <UnitCardUnavailable
@@ -342,6 +343,7 @@ export default function PlayerCardMobile(props: Props) {
             unitId={bestUnit.id}
             color={color}
             deployedCount={deployedCount}
+            unitCap={unitCap}
           />
         );
       })}
