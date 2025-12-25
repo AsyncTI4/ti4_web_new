@@ -499,6 +499,7 @@ export type Objective = {
   scoredFactions: string[];
   peekingFactions: string[];
   multiScoring: boolean;
+  hasRedTape: boolean;
   progressThreshold: number;
   factionProgress: Record<string, number>;
 };

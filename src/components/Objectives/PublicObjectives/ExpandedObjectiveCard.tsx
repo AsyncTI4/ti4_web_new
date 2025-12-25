@@ -1,4 +1,4 @@
-import { Box, Text, Group, Stack } from "@mantine/core";
+import { Box, Text, Group, Stack, Image } from "@mantine/core";
 import { Shimmer } from "../../PlayerArea/Shimmer";
 import { getGradientClasses } from "../../PlayerArea/gradientClasses";
 import { Objective, PlayerData } from "../../../data/types";
@@ -69,6 +69,7 @@ function ExpandedObjectiveCard({
       className={`${getGradientClasses(color).border} ${getGradientClasses(color).backgroundStrong} ${getGradientClasses(color).leftBorder} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
     >
       <Group className={styles.mainRow}>
+        {objective.hasRedTape && (<Image className={styles.redTape} src={"/redTape.png"} w={23} h={23} />)}
         <Box className={styles.contentArea}>
           <Text
             className={`${styles.objectiveTitle} ${objective.revealed ? styles.revealed : styles.hidden}`}
