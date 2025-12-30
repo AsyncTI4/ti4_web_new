@@ -14,6 +14,7 @@ import {
   IconTarget,
   IconUsers,
   IconAlertCircle,
+  IconHistory,
 } from "@tabler/icons-react";
 // @ts-ignore
 import Logo from "./components/Logo";
@@ -50,6 +51,7 @@ import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import { NavigationDrawer } from "./components/NavigationDrawer";
+import { ActionHistoryView } from "./components/History/ActionHistoryView";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -160,6 +162,14 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               >
                 Player
               </Tabs.Tab>
+              <Tabs.Tab
+                value="history"
+                className={classes.tabsTab}
+                leftSection={<IconHistory size={16} />}
+                visibleFrom="sm"
+              >
+                History
+              </Tabs.Tab>
               <TabsControls
                 onMenuClick={() => setDrawerOpened(true)}
                 onTryDecalsClick={() => {
@@ -203,6 +213,28 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                         <PlayerCard key={player.color} playerData={player} />
                       ))}
                   </SimpleGrid>
+                )}
+              </Box>
+            </Tabs.Panel>
+
+            {/* History Tab */}
+            <Tabs.Panel value="history" h="calc(100% - 60px)">
+              <Box className={classes.playersTabContent}>
+                {isError && (
+                  <Alert
+                    variant="light"
+                    color="red"
+                    title="Error loading history"
+                    icon={<IconAlertCircle />}
+                    mb="md"
+                  >
+                    Could not load history data for game {gameId}. Please try
+                    again later.
+                  </Alert>
+                )}
+
+                {data && (
+                  <ActionHistoryView/>
                 )}
               </Box>
             </Tabs.Panel>
