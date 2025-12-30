@@ -14,6 +14,15 @@ export const tokens: Token[] = [
     source: "other",
   },
   {
+    id: "asteroids",
+    imagePath: "token_asteroids_async.png",
+    spaceOrPlanet: "space",
+    isAnomaly: true,
+    isAsteroids: true,
+    aliasList: ["asteroids", "token_asteroids_async"],
+    source: "pok",
+  },
+  {
     id: "avernus",
     imagePath: "token_avernus.png",
     spaceOrPlanet: "space",
@@ -112,7 +121,6 @@ export const tokens: Token[] = [
     spaceOrPlanet: "planet",
     aliasList: ["custodian", "token_custodian"],
     source: "base",
-    scale: 0.5,
   },
   {
     id: "custodianvp",
@@ -120,7 +128,6 @@ export const tokens: Token[] = [
     spaceOrPlanet: "planet",
     aliasList: ["custodianvp", "token_custodianvp"],
     source: "base",
-    scale: 0.5,
   },
   {
     id: "custom_eronous_whepsilon",
@@ -203,6 +210,15 @@ export const tokens: Token[] = [
     aliasList: ["dmz_large", "token_dmz_large", "dmz"],
     source: "pok",
     placement: "center",
+  },
+  {
+    id: "entropicscar",
+    imagePath: "token_entropicscar_async.png",
+    spaceOrPlanet: "space",
+    isAnomaly: true,
+    isScar: true,
+    aliasList: ["entropicscar", "token_entropicscar_async", "scar"],
+    source: "pok",
   },
   {
     id: "freepeople",
@@ -303,6 +319,15 @@ export const tokens: Token[] = [
     isPlanet: true,
   },
   {
+    id: "nebula",
+    imagePath: "token_nebula_async.png",
+    spaceOrPlanet: "space",
+    isAnomaly: true,
+    isNebula: true,
+    aliasList: ["nebula", "token_nebula_async"],
+    source: "pok",
+  },
+  {
     id: "oasis",
     imagePath: "token_oasis.png",
     spaceOrPlanet: "space",
@@ -320,12 +345,17 @@ export const tokens: Token[] = [
   },
   {
     id: "relictoken",
-    imagePath: "token_relic.png",
+    imagePath: "token_relictoken.png",
     spaceOrPlanet: "planet",
     aliasList: ["relic", "token_relic", "relictoken", "token_relictoken"],
     source: "thunders_edge",
-    placement: "center",
-    scale: 0.8,
+  },
+  {
+    id: "severed",
+    imagePath: "token_severed.png",
+    spaceOrPlanet: "space",
+    aliasList: ["sever", "token_sever", "severed", "token_severed"],
+    source: "thunders_edge",
   },
   {
     id: "sigil",
@@ -349,6 +379,15 @@ export const tokens: Token[] = [
     source: "other",
   },
   {
+    id: "supernova",
+    imagePath: "token_supernova_async.png",
+    spaceOrPlanet: "space",
+    isAnomaly: true,
+    isNova: true,
+    aliasList: ["supernova", "token_supernova_async", "nova"],
+    source: "pok",
+  },
+  {
     id: "thundersedge",
     imagePath: "token_thundersedge.png",
     spaceOrPlanet: "space",
@@ -356,6 +395,12 @@ export const tokens: Token[] = [
     tokenPlanetName: "thundersedge",
     isPlanet: true,
     source: "thunders_edge",
+  },
+  {
+    id: "tyrant",
+    imagePath: "token_tyrant.png",
+    aliasList: ["tyrant", "token_tyrant"],
+    source: "other",
   },
   {
     id: "vortex",

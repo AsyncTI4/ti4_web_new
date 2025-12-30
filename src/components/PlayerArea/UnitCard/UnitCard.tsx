@@ -6,6 +6,7 @@ import { Unit } from "@/components/shared/Unit";
 import { BaseCard } from "./BaseCard";
 import { getColorAlias } from "@/lookup/colors";
 import { getUnitData } from "@/lookup/units";
+import { useGameContext } from "@/hooks/useGameContext";
 
 type Props = {
   unitId: string;
@@ -41,7 +42,27 @@ export function UnitCard({
   const [opened, setOpened] = useState(false);
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
-  if (!unitData) return null; // or some fallback UI
+  const gameData = useGameContext();
+
+  if (!unitData) return null;
+
+  const isMech = unitData.baseType === "mech";
+  const playerUnitsOwned = color
+    ? gameData?.playerData?.find((p) => p.color === color)?.unitsOwned
+    : undefined;
+
+  const hasCabalMechUpgrade =
+    isMech && playerUnitsOwned?.includes("tf-eidolonterminus");
+  const hasNaazMechUpgrade =
+    isMech && playerUnitsOwned?.includes("tf-eidolonlandwaster");
+  const hasNekroMechUpgrade =
+    isMech && playerUnitsOwned?.includes("tf-valefarprime");
+
+  const upgradeFactions = [
+    ...(hasCabalMechUpgrade ? ["cabal"] : []),
+    ...(hasNaazMechUpgrade ? ["naaz"] : []),
+    ...(hasNekroMechUpgrade ? ["nekro"] : []),
+  ];
   const isUpgraded =
     unitData.upgradesFromUnitId !== undefined || unitData.baseType === "warsun";
   const isFaction = unitData.faction !== undefined;
@@ -63,18 +84,33 @@ export function UnitCard({
             totalCapacity={unitCap}
             locked={locked}
             lockedLabel={lockedLabel}
+            upgradeFactions={
+              upgradeFactions.length > 0 ? upgradeFactions : undefined
+            }
           >
             <Unit
               unitType={unitData.asyncId}
               colorAlias={colorAlias}
               faction={unitData.faction}
               className={compact ? styles.unitImageCompact : styles.unitImage}
+              showFactionTokens={false}
             />
           </BaseCard>
         </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
-        {!locked && <UnitDetailsCard unitId={unitId} color={color} />}
+        {!locked && (
+          <UnitDetailsCard
+            unitId={unitId}
+            color={color}
+            bonusCombatDice={hasNaazMechUpgrade ? 1 : undefined}
+            combatValueModifier={hasCabalMechUpgrade ? -1 : undefined}
+            costModifier={hasNekroMechUpgrade ? -1 : undefined}
+            playerUnitsOwned={
+              unitId === "pinktf_flagship" ? playerUnitsOwned : undefined
+            }
+          />
+        )}
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

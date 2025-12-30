@@ -418,6 +418,12 @@ export const relics: Relic[] = [
     shrinkName: true,
   },
   {
+    alias: "endurance_steroids",
+    name: "Endurance Steroids",
+    text: "When you gain this card gain 2 neutral command tokens to your reinforcements. The neutral command tokens can be used and spent as your command tokens. Action: Exhaust this card to gain 1 command token.",
+    source: "other",
+  },
+  {
     alias: "enigmaticdevice",
     name: "Enigmatic Device",
     text: "Place this card faceup in your play area. ACTION: You may spend 6 resources and purge this card to research 1 technology.",
@@ -433,12 +439,24 @@ export const relics: Relic[] = [
     imageURL: "/hover_images/relics/ds/eye_of_vogul.png",
   },
   {
+    alias: "gravitation_drivetrain",
+    name: "Gravitation Drivetrain",
+    text: "After you activate a system, apply +1 to the move value of one of your ships. You may spend command tokens from your strategy pool to resolve this card additional times.",
+    source: "other",
+  },
+  {
     alias: "heartofixth",
     name: "Heart of Ixth",
     text: "After any die is rolled, you may exhaust this card to add or subtract 1 from its result.",
     flavourText:
       '"It should be impossible." Feng glanced sidelong at his compatriot. The Thundarian merely stared ahead, as if he did not hear. Feng snorted. "One day I mean to know the source of this so-called power of yours."',
     source: "thunders_edge",
+  },
+  {
+    alias: "hyperaviary",
+    name: "Hyperaviary",
+    text: "When one of your units makes a roll for a unit ability or a combat roll, you may choose one of those units to roll 1 additional dice.",
+    source: "other",
   },
   {
     alias: "king_tis_golden_tooth",
@@ -462,6 +480,12 @@ export const relics: Relic[] = [
     source: "pok",
     flavourText:
       "*No larger than a carrier, the spherical lattice held a captive singularity at its heart. As they dumped the planet's entire energy grid into its core, the black hole began to spin, the complex logic-circuitry along the lattice slowly coming to life.*",
+  },
+  {
+    alias: "metali_void_pods",
+    name: "Metali Void Pods",
+    text: "Apply +1 capacity to each of your non-fighter ships with a capacity value.",
+    source: "other",
   },
   {
     alias: "metalivoidarmaments",
@@ -625,6 +649,12 @@ export const relics: Relic[] = [
       "https://cdn.statically.io/gh/AsyncTI4/TI4_map_generator_bot/src/main/resources/hover_images/relics/misc_homebrew/the_silver_flame.png",
   },
   {
+    alias: "space_frog",
+    name: "Space Frog",
+    text: "When you draw a card from an planet trait exploration deck you may draw a card from any other exploration deck instead. You may allow neighbours to use this ability.  ",
+    source: "other",
+  },
+  {
     alias: "starchartcultural",
     name: "Star Chart Cultural",
     text: "This card may be exchanged as part of a transaction. ACTION: Purge 2 of your Star Charts to draw 1 system tile with a blue-colored back at random. Place that tile at the edge of the game board, adjacent to at least 2 other systems.",
@@ -714,9 +744,21 @@ export const relics: Relic[] = [
       "*A cloud of satellites spewed from the dreadnought's hull, drifting into a halo around the vessel. The battle seemed to pause for one long moment, before the drones' weapons flared, unleashing beams of energy in all directions.*",
   },
   {
+    alias: "the_brooch_of_mordai",
+    name: "The Brooch of Mordai",
+    text: "After you gain control of a planet from another player, you may place 1 infantry from that player's reinforcements into coexistence on that planet. Apply +1 to the resource and influence values of planets you control that contain coexisting units.",
+    source: "other",
+  },
+  {
+    alias: "the_incursion_gate",
+    name: "The Incursion Gate",
+    text: "Action: Exhaust this card and choose a non-home system that does not contain players' ships.  You may produce up to 3 neutral ships in that system. ",
+    source: "other",
+  },
+  {
     alias: "thesilverflame",
     name: "The Silver Flame",
-    text: "The Silver Flame may be exchanged as part of a transaction.\n> ACTION: Roll 1 die and purge this card; if the result is a 10, gain 1 victory point. Otherwise, purge your home system and all units in it; you cannot score public objectives. Put The Fracture into play if it is not already.",
+    text: "The Silver Flame may be exchanged as part of a transaction.\n> ACTION: Roll 1 die and purge this card; if the result is a 10, gain 1 victory point. Otherwise, purge your home system and all units in it; you cannot score public objectives. Put The Fracture into play if it is not already. [Note: Per Dane, you can score become a martyr off of this, and Saar can still score public objectives]",
     flavourText: "Shen're Ix Ianovar. The flame beyond time and space.",
     source: "thunders_edge",
   },

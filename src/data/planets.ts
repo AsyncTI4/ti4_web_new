@@ -971,6 +971,24 @@ export const planets: Planet[] = [
     source: "pok",
   },
   {
+    id: "atropos",
+    tileId: "cpti20atropos",
+    name: "Atropos",
+    aliases: ["atropos"],
+    resources: 2,
+    influence: 0,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "atropos",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 100.0,
+        y: 80.0,
+      },
+    },
+    source: "other",
+  },
+  {
     id: "auldane",
     tileId: "d16",
     name: "Auldane",
@@ -1408,6 +1426,32 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "briareus",
+    tileId: "cpti20cottus",
+    name: "Briareus",
+    aliases: ["briareus"],
+    positionInTile: {
+      x: 221,
+      y: 229,
+    },
+    resources: 0,
+    influence: 2,
+    factionHomeworld: null,
+    planetType: "SPACESTATION",
+    cardImagePath: null,
+    legendaryAbilityName: null,
+    legendaryAbilityText: null,
+    planetLayout: {
+      unitHolderName: "briareus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 221,
+        y: 229,
+      },
+    },
+    source: "other",
+  },
+  {
     id: "briistheta",
     tileId: "s21",
     name: "Briis Theta",
@@ -1494,6 +1538,27 @@ export const planets: Planet[] = [
     flavourText:
       "Despite, or perhaps because of, its dangerous surface radiation, many influential criminal enterprises have contacts on Cahgaris.",
     source: "eronous",
+  },
+  {
+    id: "campe",
+    tileId: "cpti20campe",
+    name: "Campe",
+    aliases: ["campe"],
+    resources: 1,
+    influence: 0,
+    planetTypes: ["NONE"],
+    legendaryAbilityName: "The Big Scoop",
+    legendaryAbilityText:
+      "At the end of your turn, you may exhaust this card to move up to 3 ground forces from the main galaxy onto Campe and Typhon, place any other player's units into coexistence. Units on Campe are also on Typhon.",
+    planetLayout: {
+      unitHolderName: "campe",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
+    },
+    source: "other",
   },
   {
     id: "cantris",
@@ -1621,6 +1686,28 @@ export const planets: Planet[] = [
     source: "eronous",
   },
   {
+    id: "cerberuscpti",
+    tileId: "cpti20cerberus",
+    name: "Cerberus",
+    aliases: ["cerberuscpti"],
+    resources: 0,
+    influence: 1,
+    planetTypes: ["NONE"],
+    legendaryAbilityName: "An Eye for Two Eyes Is a Good Deal",
+    legendaryAbilityText:
+      "When you pass, you may spend any number of resources to place a neutral ship with the cost lower or equal to double that number in any system that contains no players' ships.",
+    legendaryAbilityFlavourText: "The last memory of the universe before.",
+    planetLayout: {
+      unitHolderName: "cerberuscpti",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "other",
+  },
+  {
     id: "char",
     tileId: "er90",
     name: "Char",
@@ -1657,6 +1744,24 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "ds",
+  },
+  {
+    id: "clotho",
+    tileId: "cpti20lachesis",
+    name: "Clotho",
+    aliases: ["clotho"],
+    resources: 1,
+    influence: 0,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "clotho",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "other",
   },
   {
     id: "cocytus",
@@ -1717,6 +1822,33 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     source: "base",
+  },
+  {
+    id: "cottus",
+    tileId: "cpti20cottus",
+    name: "Cottus",
+    aliases: ["cottus"],
+    positionInTile: {
+      x: 214,
+      y: 89,
+    },
+    resources: 1,
+    influence: 0,
+    factionHomeworld: null,
+    planetType: "HAZARDOUS",
+    cardImagePath: null,
+    techSpecialties: ["CYBERNETIC", "WARFARE"],
+    legendaryAbilityName: null,
+    legendaryAbilityText: null,
+    planetLayout: {
+      unitHolderName: "cottus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 214,
+        y: 89,
+      },
+    },
+    source: "other",
   },
   {
     id: "cradle",
@@ -2696,6 +2828,27 @@ export const planets: Planet[] = [
     source: "ds",
   },
   {
+    id: "erebus",
+    tileId: "cpti20erebus",
+    name: "Erebus",
+    aliases: ["erebus"],
+    resources: 3,
+    influence: 3,
+    planetTypes: ["NONE"],
+    legendaryAbilityName: "Ixthian Imposter",
+    legendaryAbilityText:
+      "When you pass, you may exhaust this card to roll 1 die. On a result of 1-4, each player must remove 3 units from the fracture if able, if this removes the last units on a planet, place 2 neutral infantry there and return it to the planet deck. On a result of 5-10, start an Evolution splice with each player in the Fracture participating.",
+    planetLayout: {
+      unitHolderName: "erebus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
+    },
+    source: "other",
+  },
+  {
     id: "erissiha",
     tileId: "er61",
     name: "Erissiha",
@@ -3205,6 +3358,15 @@ export const planets: Planet[] = [
     source: "somno",
   },
   {
+    id: "grove",
+    name: "The Grove",
+    aliases: ["grove"],
+    resources: 2,
+    influence: 0,
+    planetTypes: ["FAKE"],
+    source: "ds",
+  },
+  {
     id: "gryphoniii",
     tileId: "s24",
     name: "Gryphon III",
@@ -3268,6 +3430,33 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     source: "uncharted_space",
+  },
+  {
+    id: "gyges",
+    tileId: "cpti20cottus",
+    name: "Gyges",
+    aliases: ["gyges"],
+    positionInTile: {
+      x: 83.0,
+      y: 139.0,
+    },
+    resources: 1,
+    influence: 0,
+    factionHomeworld: null,
+    planetType: "INDUSTRIAL",
+    cardImagePath: null,
+    techSpecialties: ["BIOTIC", "PROPULSION"],
+    legendaryAbilityName: null,
+    legendaryAbilityText: null,
+    planetLayout: {
+      unitHolderName: "gyges",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 83,
+        y: 139,
+      },
+    },
+    source: "other",
   },
   {
     id: "hau",
@@ -4353,6 +4542,24 @@ export const planets: Planet[] = [
     flavourText:
       "Located in between both an alpha and beta wormhole. Kytos has a unique composition, in terms of both populace and resources.",
     source: "eronous",
+  },
+  {
+    id: "lachesis",
+    tileId: "cpti20lachesis",
+    name: "Lachesis",
+    aliases: ["lachesis"],
+    resources: 0,
+    influence: 1,
+    planetTypes: ["SPACESTATION"],
+    planetLayout: {
+      unitHolderName: "lachesis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 250.0,
+        y: 110.0,
+      },
+    },
+    source: "other",
   },
   {
     id: "lapidus",
@@ -5767,8 +5974,8 @@ export const planets: Planet[] = [
   {
     id: "neutera",
     tileId: "105",
-    name: "Neutera",
-    aliases: ["neuter", "neutera"],
+    name: "New Terra",
+    aliases: ["neuter", "neutera", "newterra", "neu"],
     resources: 1,
     influence: 1,
     planetTypes: ["INDUSTRIAL"],
@@ -8447,6 +8654,27 @@ export const planets: Planet[] = [
       },
     },
     source: "thunders_edge",
+  },
+  {
+    id: "typhon",
+    tileId: "cpti20campe",
+    name: "Typhon",
+    aliases: ["typhon"],
+    resources: 1,
+    influence: 0,
+    planetTypes: ["NONE"],
+    legendaryAbilityName: "The Big Yeet",
+    legendaryAbilityText:
+      "When you pass, you may move up to 3 ground forces on Campe and Typhon to planets you control in the main galaxy, place any other player's units into coexistence. Units on Typhon are also on Campe.",
+    planetLayout: {
+      unitHolderName: "typhon",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
+    },
+    source: "other",
   },
   {
     id: "tyriaprime",

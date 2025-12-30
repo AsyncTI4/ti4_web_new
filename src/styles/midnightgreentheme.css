@@ -138,6 +138,12 @@
     --scrollbar-corner-bg: rgba(3, 6, 2, 0.85);
     --scrollbar-color-thumb: rgba(45, 100, 55, 0.7);
     --scrollbar-color-track: rgba(3, 6, 2, 0.85);
+
+    /* Unit Details Card */
+    --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
+    --unit-details-inherited-bg: rgba(45, 100, 55, 0.08);
+    --unit-details-inherited-border: rgba(45, 100, 55, 0.2);
+    --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
 }
 
 

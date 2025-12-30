@@ -1,4 +1,28 @@
 import { getTextColor, findColorData } from "@/lookup/colors";
+import { lookupUnit } from "@/lookup/units";
+
+/** Unit IDs that have the Dimensional Tear ability (create a gravity rift) */
+const DIMENSIONAL_TEAR_UNIT_IDS = new Set([
+  "cabal_spacedock",
+  "cabal_spacedock2",
+  "absol_cabal_spacedock2",
+  "absol_cabal_spacedock2Alt",
+]);
+
+/**
+ * Checks if a unit is a Dimensional Tear space dock (Cabal faction units that create gravity rifts)
+ */
+export function isDimensionalTearSpaceDock(
+  unitType: string,
+  faction?: string
+): boolean {
+  if (unitType !== "sd" || !faction) return false;
+
+  const unit = lookupUnit(unitType, faction);
+  if (!unit) return false;
+
+  return DIMENSIONAL_TEAR_UNIT_IDS.has(unit.id);
+}
 
 /**
  * Checks if a unit type is a fighter or infantry
