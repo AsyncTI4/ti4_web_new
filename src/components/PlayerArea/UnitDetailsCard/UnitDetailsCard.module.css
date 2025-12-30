@@ -1,4 +1,73 @@
-/* Intentionally left minimal; this module previously held custom styles for
-   UnitDetailsCard and its Dice. With DetailsCard abstraction now in place,
-   bespoke styles are no longer needed. Keeping the file to avoid breaking
-   imports during transition. */
+.unitIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unitImage {
+  object-fit: contain;
+}
+
+.factionBadge {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.statBox {
+  flex: 1;
+  background: var(--unit-details-stat-bg);
+  border-radius: 4px;
+}
+
+.statLabel {
+  text-transform: uppercase;
+}
+
+.statValue {
+  line-height: 1;
+}
+
+.modifierAttribution {
+  text-align: center;
+  line-height: 1.4;
+}
+
+.sectionTitle {
+  text-transform: uppercase;
+}
+
+.abilityText {
+  line-height: 1.5;
+}
+
+.inheritedAbilityBox {
+  background: var(--unit-details-inherited-bg);
+  border: 1px solid var(--unit-details-inherited-border);
+  border-radius: 4px;
+}
+
+.inheritedAbilityTitle {
+  text-transform: uppercase;
+}
+
+.inheritedAbilityText {
+  line-height: 1.4;
+}
+
+.inheritedTag {
+  font-style: italic;
+}
+
+.upgradeBox {
+  background: var(--unit-details-upgrade-bg);
+  border-radius: 4px;
+}
+
+.upgradeAbilityText {
+  line-height: 1.4;
+}
+
+.techIcon {
+  opacity: 0.6;
+}

@@ -92,6 +92,33 @@
   height: 24px;
 }
 
+.upgradeFactionBadgesContainer {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  z-index: 2;
+}
+
+.upgradeFactionBadge {
+  position: absolute;
+  top: 0;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.95) 0%, rgba(124, 58, 237, 0.95) 100%);
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow:
+    0 0 8px rgba(168, 85, 247, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.upgradeFactionIcon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
 .imageContainer {
   justify-content: center;
   align-items: center;

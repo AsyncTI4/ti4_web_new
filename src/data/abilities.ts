@@ -191,7 +191,7 @@ export const abilities: Ability[] = [
   },
   {
     id: "song_of_something",
-    name: "Song of Something",
+    name: "Echo of Something",
     faction: "neutral",
     permanentEffect:
       "During your tactical actions, apply +1 to the move value of each of your ships that starts its movement in your home system.",

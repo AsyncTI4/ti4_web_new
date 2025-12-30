@@ -5,12 +5,14 @@ import {
   computeDefaultAlt,
   computeUrlColor,
   computeTokenSuffix,
+  isDimensionalTearSpaceDock,
 } from "./Unit/utils";
 import { BackgroundDecal } from "./Unit/components/BackgroundDecal";
 import { BaseUnitImage } from "./Unit/components/BaseUnitImage";
 import { PlayerDecalOverlay } from "./Unit/overlays/PlayerDecalOverlay";
 import { LawOverlay } from "./Unit/overlays/LawOverlay";
 import { DamageMarker } from "./Unit/overlays/DamageMarker";
+import { DimensionalTearToken } from "./Unit/overlays/DimensionalTearToken";
 import { cdnImage } from "@/data/cdnImage";
 
 type UnitProps = {
@@ -27,6 +29,8 @@ type UnitProps = {
   zIndex?: number;
   alt?: string;
   className?: string;
+  /** Show faction-specific tokens like dimensional tear. Defaults to true. */
+  showFactionTokens?: boolean;
 };
 
 export function Unit({
@@ -43,6 +47,7 @@ export function Unit({
   y,
   zIndex,
   className,
+  showFactionTokens = true,
 }: UnitProps) {
   const defaultAlt = computeDefaultAlt(alt, faction, colorAlias, unitType);
   const tokenSuffix = computeTokenSuffix(colorAlias);
@@ -55,6 +60,10 @@ export function Unit({
   const isSchematicsActive = lawsInPlay?.some((law) => law.id === "schematics");
   const showArticles = isArticlesOfWarActive && unitType === "mf";
   const showSchematics = isSchematicsActive && unitType === "ws";
+
+  // Cabal space docks (Dimensional Tear) create a gravity rift in their system
+  const showDimensionalTear =
+    showFactionTokens && isDimensionalTearSpaceDock(unitType, faction);
 
   const isPositioned = x !== undefined && y !== undefined;
 
@@ -74,6 +83,7 @@ export function Unit({
             }),
       }}
     >
+      {showDimensionalTear && <DimensionalTearToken />}
       <BackgroundDecal path={bgDecalPath} />
       <BaseUnitImage
         urlColor={urlColor}

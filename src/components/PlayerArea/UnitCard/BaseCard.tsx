@@ -18,6 +18,7 @@ type BaseCardProps = {
   enableAnimations?: boolean;
   locked?: boolean;
   lockedLabel?: string;
+  upgradeFactions?: string[];
 };
 
 export function BaseCard({
@@ -33,6 +34,7 @@ export function BaseCard({
   enableAnimations = true,
   locked = false,
   lockedLabel = "",
+  upgradeFactions,
 }: BaseCardProps) {
   const showReinforcements =
     !compact && !locked && reinforcements !== undefined && totalCapacity !== undefined;
@@ -58,7 +60,10 @@ export function BaseCard({
         </>
       )}
       <Stack gap={0} align="center" w="100%">
-        <FactionBadge faction={faction} show={isFaction && !!faction} />
+        {!upgradeFactions?.length && (
+          <FactionBadge faction={faction} show={isFaction && !!faction} />
+        )}
+        <UpgradeFactionBadges factions={upgradeFactions} />
         <Flex className={styles.imageContainer}>{children}</Flex>
         {!compact && locked && <LockedLabel label={lockedLabel} />}
         {showReinforcements && (
@@ -81,6 +86,27 @@ function FactionBadge({ faction, show }: { faction?: string; show: boolean }) {
         src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
         className={styles.factionIcon}
       />
+    </Box>
+  );
+}
+
+function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
+  if (!factions || factions.length === 0) return null;
+
+  return (
+    <Box className={styles.upgradeFactionBadgesContainer}>
+      {factions.map((faction, index) => (
+        <Box
+          key={faction}
+          className={styles.upgradeFactionBadge}
+          style={{ right: index * 20 }}
+        >
+          <Image
+            src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+            className={styles.upgradeFactionIcon}
+          />
+        </Box>
+      ))}
     </Box>
   );
 }
