@@ -1,4 +1,4 @@
-import { Stack, Box, Text, Group, Divider } from "@mantine/core";
+import { Stack, Box, Text, Group, Divider, Image } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { publicObjectives } from "../../../data/publicObjectives";
 import { PlayerData } from "../../../data/types";
@@ -9,6 +9,7 @@ import classes from "./ObjectiveDetailsCard.module.css";
 type Props = {
   objectiveKey: string;
   playerData: PlayerData[];
+  hasRedTape?: boolean;
   scoredFactions?: string[];
   color?: "orange" | "blue" | "gray";
   factionProgress?: Record<string, number>;
@@ -18,6 +19,7 @@ type Props = {
 export function ObjectiveDetailsCard({
   objectiveKey,
   playerData,
+  hasRedTape,
   scoredFactions = [],
   color = "blue",
 
@@ -64,11 +66,18 @@ export function ObjectiveDetailsCard({
     return "yellow";
   };
 
+  const renderRedTape = () => {
+      return (
+          <Image src={"/redTape.png"} className={"redTape"} w={48} h={48} />
+      ) 
+    }
+
   return (
     <DetailsCard width={320} color={mapCardColor(color)}>
       <Stack gap="md">
         <DetailsCard.Title
           title={objectiveData.name}
+          icon={hasRedTape && renderRedTape()}
           subtitle={`${objectiveData.phase} Phase`}
           caption={`${objectiveData.points} VP`}
           captionColor={mapCaptionColor(color)}

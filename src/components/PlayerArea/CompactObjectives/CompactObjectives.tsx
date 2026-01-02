@@ -44,6 +44,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                       scoredFactions={objective.scoredFactions}
                       playerData={playerData}
                       multiScoring={objective.multiScoring}
+                      hasRedTape={objective.hasRedTape}
                     />
                   </div>
                 </SmoothPopover.Target>
@@ -51,6 +52,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                   <ObjectiveDetailsCard
                     objectiveKey={objective.key}
                     playerData={playerData}
+                    hasRedTape={objective.hasRedTape}
                     scoredFactions={objective.scoredFactions}
                     color="orange"
                     factionProgress={objective.factionProgress}
@@ -90,6 +92,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                       scoredFactions={objective.scoredFactions}
                       playerData={playerData}
                       multiScoring={objective.multiScoring}
+                      hasRedTape={objective.hasRedTape}
                     />
                   </div>
                 </SmoothPopover.Target>
@@ -97,6 +100,7 @@ export function CompactObjectives({ objectives, playerData }: Props) {
                   <ObjectiveDetailsCard
                     objectiveKey={objective.key}
                     playerData={playerData}
+                    hasRedTape={objective.hasRedTape}
                     scoredFactions={objective.scoredFactions}
                     color="blue"
                     factionProgress={objective.factionProgress}

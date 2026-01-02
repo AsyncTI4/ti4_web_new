@@ -1,4 +1,4 @@
-import { Box, Group } from "@mantine/core";
+import { Box, Group, Image } from "@mantine/core";
 import { CircularFactionIcon } from "../../shared/CircularFactionIcon";
 import { PlayerData } from "../../../data/types";
 import styles from "./CompactObjective.module.css";
@@ -13,6 +13,7 @@ type Props = {
   scoredFactions?: string[];
   playerData?: PlayerData[];
   multiScoring?: boolean;
+  hasRedTape?: boolean;
 };
 
 export function CompactObjective({
@@ -23,6 +24,7 @@ export function CompactObjective({
   scoredFactions = [],
   playerData = [],
   multiScoring = false,
+  hasRedTape = false,
 }: Props) {
   const isClickable = revealed && color !== "gray";
 
@@ -86,9 +88,16 @@ export function CompactObjective({
     }
   };
 
+  const renderRedTape = () => {
+    return (
+        <Image src={"/redTape.png"} className={"redTape"} w={16} h={16} />
+    ) 
+  }
+
   return (
     <Chip
       accent={color}
+      leftSection={hasRedTape && renderRedTape()}
       className={`${!revealed ? styles.unrevealed : ""}`}
       onClick={isClickable ? onClick : undefined}
       accentLine
