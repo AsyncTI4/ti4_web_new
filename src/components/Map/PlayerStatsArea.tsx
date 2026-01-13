@@ -229,6 +229,7 @@ export function PlayerStatsArea({
         playerData &&
         (playerData.tacticalCC > 0 ||
           playerData.fleetCC > 0 ||
+          (playerData.mahactEdict?.length && playerData.mahactEdict.length > 0) ||
           playerData.strategicCC > 0) && (
           <div
             className={styles.commandCountersOverlay}
