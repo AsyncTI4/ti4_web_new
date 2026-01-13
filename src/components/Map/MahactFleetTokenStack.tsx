@@ -25,8 +25,8 @@ export function MahactFleetTokenStack({
         {hasEdict ? "*" : ""}
       </Text>
       <Box pos="relative" style={{ height: 65 }}>
-        {/* Render blank token when regular count is 0 */}
-        {count === 0 && (
+        {/* Render blank token when total count is 0 */}
+        {totalCount === 0 && (
           <CommandCounter
             colorAlias="blank"
             style={{
@@ -60,7 +60,7 @@ export function MahactFleetTokenStack({
               colorAlias={edictColorAlias}
               style={{
                 position: "absolute",
-                left: count * 20 + 20 + index * 20,
+                left: count * 20 + (count === 0 ? 0 : 20) + index * 20,
                 zIndex: count + index + 1,
               }}
               type="fleet"
