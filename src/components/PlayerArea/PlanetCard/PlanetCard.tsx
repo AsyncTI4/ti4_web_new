@@ -15,6 +15,7 @@ import { usePlanet } from "@/hooks/usePlanet";
 import { TilePlanet } from "@/context/types";
 import { Planet } from "@/data/types";
 import { IconValue } from "@/components/shared/primitives/IconValue";
+import { useAppStore } from "@/utils/appStore";
 
 type Props = {
   planetId: string;
@@ -30,6 +31,7 @@ export function PlanetCard({
   const [opened, setOpened] = useState(false);
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
+  const setHoveredPlanetId = useAppStore((state) => state.setHoveredPlanetId);
 
   // Use prop if provided (from playerData.exhaustedPlanets), otherwise fall back to planetTile
   const isExhausted = isExhaustedProp ?? planetTile?.exhausted ?? false;
@@ -73,6 +75,8 @@ export function PlanetCard({
       <SmoothPopover.Target>
         <Stack
           onClick={() => setOpened((o) => !o)}
+          onMouseEnter={() => setHoveredPlanetId(planetId)}
+          onMouseLeave={() => setHoveredPlanetId(null)}
           className={cx(
             styles.mainStack,
             isLegendary && styles.legendaryBackground,
@@ -148,6 +152,8 @@ export function PlanetCard({
       <div
         className={styles.legendaryWrapper}
         style={getCSSVariables(cssTypeKey) as React.CSSProperties}
+        onMouseEnter={() => setHoveredPlanetId(planetId)}
+        onMouseLeave={() => setHoveredPlanetId(null)}
       >
         {planetCardContent}
         <PlanetAbilityCard

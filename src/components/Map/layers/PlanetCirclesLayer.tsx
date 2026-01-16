@@ -1,8 +1,9 @@
 import React from "react";
+import cx from "clsx";
 import classes from "../MapTile.module.css";
 import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
 import { Tile } from "@/context/types";
-import { useSettingsStore } from "@/utils/appStore";
+import { useSettingsStore, useAppStore } from "@/utils/appStore";
 import { getTokenData } from "@/lookup/tokens";
 
 type Props = {
@@ -23,6 +24,7 @@ export function PlanetCirclesLayer({
   const showExhaustedPlanets = useSettingsStore(
     (state) => state.settings.showExhaustedPlanets
   );
+  const hoveredPlanetId = useAppStore((state) => state.hoveredPlanetId);
   const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
   const handlePlanetMouseEnter = React.useCallback(
@@ -109,10 +111,12 @@ export function PlanetCirclesLayer({
           }
         : {};
 
+    const isHighlighted = hoveredPlanetId === planetId;
+
     return (
       <div
         key={`${systemId}-${planetId}${keySuffix}-circle`}
-        className={classes.planetCircle}
+        className={cx(classes.planetCircle, isHighlighted && classes.highlighted)}
         style={{
           position: "absolute",
           left: `${x + circleOffsetX}px`,
