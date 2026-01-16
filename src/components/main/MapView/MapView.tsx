@@ -11,6 +11,7 @@ import { MapUnitDetailsCard } from "@/components/main/MapUnitDetailsCard";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
+import { useScrollToPlanet } from "@/hooks/useScrollToPlanet";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
@@ -104,6 +105,11 @@ export function MapView({ gameId }: Props) {
   const { mapContainerRef } = useMapScrollPosition({
     zoom,
     gameId,
+  });
+
+  useScrollToPlanet({
+    mapContainerRef,
+    zoom,
   });
 
   useKeyboardShortcuts({
