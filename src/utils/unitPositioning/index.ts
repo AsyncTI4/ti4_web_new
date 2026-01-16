@@ -55,6 +55,7 @@ export const getAllEntityPlacementsForTile = (
   });
 
   const planetEntityPlacements = planets
+    .filter((planet) => tile.planets[planet.name] !== undefined)
     .map((planet) => {
       const planetEntityData = tile.planets[planet.name];
       return processPlanetEntities(planet, planetEntityData).entityPlacements;
