@@ -42,6 +42,7 @@ type Props = {
   totalFlex?: number;
   showTotal?: boolean;
   showFlex?: boolean;
+  flexSpendOnly?: boolean;
 };
 
 export function EconomicsColumn({
@@ -53,7 +54,31 @@ export function EconomicsColumn({
   totalFlex,
   showTotal = true,
   showFlex = false,
+  flexSpendOnly = false,
 }: Props) {
+  // When flexSpendOnly is true, show only a single flex row with the combined total
+  if (flexSpendOnly) {
+    const combinedCurrent =
+      currentResources + currentInfluence + (currentFlex ?? 0);
+    const combinedTotal = totalResources + totalInfluence + (totalFlex ?? 0);
+
+    const currentDigits = Math.floor(combinedCurrent).toString().length;
+    const totalDigits = Math.floor(combinedTotal).toString().length;
+
+    return (
+      <Stack gap={6} align="flex-start" mt={2}>
+        <StatRow
+          icon={<CombinedResourceInfluenceIcon size={16} />}
+          current={combinedCurrent}
+          total={combinedTotal}
+          currentWidth={`${currentDigits}ch`}
+          totalWidth={`${totalDigits}ch`}
+          color="gray"
+        />
+      </Stack>
+    );
+  }
+
   // Calculate max digits for alignment
   const currentValues = [currentResources, currentInfluence];
   if (showFlex && currentFlex !== undefined) {

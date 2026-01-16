@@ -19,6 +19,7 @@ type PlanetEconomics = {
     currentFlex: number;
     totalFlex: number;
   };
+  flexSpendOnly?: boolean;
 };
 
 type Props = {
@@ -40,6 +41,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
           currentFlex={planetEconomics.flex.currentFlex}
           totalFlex={planetEconomics.flex.totalFlex}
           showFlex={true}
+          flexSpendOnly={planetEconomics.flexSpendOnly}
         />
       </Stack>
 

@@ -30,6 +30,7 @@ import { getFactionImage } from "@/lookup/factions";
 import { useGameData } from "@/hooks/useGameContext";
 import { filterPlanetsByOcean } from "@/utils/planets";
 import { getTechData } from "@/lookup/tech";
+import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
 import { BreachTokens } from "./PlayerArea/BreachTokens";
 import { SleeperTokens } from "./PlayerArea/SleeperTokens";
@@ -286,6 +287,12 @@ export default function PlayerCardMobile(props: Props) {
     groundArmyCombat,
   };
 
+  const flexSpendOnly = hasXxchaFlexSpendAbility(
+    faction,
+    props.playerData.breakthrough,
+    leaders
+  );
+
   const planetEconomics = {
     total: {
       currentResources: resources,
@@ -303,6 +310,7 @@ export default function PlayerCardMobile(props: Props) {
       currentFlex: flexValue,
       totalFlex: totFlexValue,
     },
+    flexSpendOnly,
   };
 
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);

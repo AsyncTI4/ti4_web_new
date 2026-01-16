@@ -39,6 +39,7 @@ import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
 import { filterPlanetsByOcean } from "@/utils/planets";
 import { getTechData } from "@/lookup/tech";
+import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 import { Plot } from "./PlayerArea";
 import Caption from "./shared/Caption/Caption";
 import { BreachTokens } from "./PlayerArea/BreachTokens";
@@ -141,6 +142,12 @@ export default function PlayerCard(props: Props) {
     groundArmyCombat,
   };
 
+  const flexSpendOnly = hasXxchaFlexSpendAbility(
+    faction,
+    props.playerData.breakthrough,
+    leaders
+  );
+
   const planetEconomics = {
     total: {
       currentResources: resources,
@@ -158,6 +165,7 @@ export default function PlayerCard(props: Props) {
       currentFlex: flexValue,
       totalFlex: totFlexValue,
     },
+    flexSpendOnly,
   };
 
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);

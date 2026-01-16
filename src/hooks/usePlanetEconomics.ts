@@ -1,9 +1,16 @@
 import { useMemo } from "react";
 import type { PlayerData } from "@/data/types";
+import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 
 export function usePlanetEconomics(playerData: PlayerData) {
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    const flexSpendOnly = hasXxchaFlexSpendAbility(
+      playerData.faction,
+      playerData.breakthrough,
+      playerData.leaders
+    );
+
+    return {
       total: {
         currentResources: playerData.resources,
         totalResources: playerData.totResources,
@@ -20,19 +27,22 @@ export function usePlanetEconomics(playerData: PlayerData) {
         currentFlex: playerData.flexValue,
         totalFlex: playerData.totFlexValue,
       },
-    }),
-    [
-      playerData.resources,
-      playerData.totResources,
-      playerData.influence,
-      playerData.totInfluence,
-      playerData.optimalResources,
-      playerData.totOptimalResources,
-      playerData.optimalInfluence,
-      playerData.totOptimalInfluence,
-      playerData.flexValue,
-      playerData.totFlexValue,
-    ]
-  );
+      flexSpendOnly,
+    };
+  }, [
+    playerData.resources,
+    playerData.totResources,
+    playerData.influence,
+    playerData.totInfluence,
+    playerData.optimalResources,
+    playerData.totOptimalResources,
+    playerData.optimalInfluence,
+    playerData.totOptimalInfluence,
+    playerData.flexValue,
+    playerData.totFlexValue,
+    playerData.faction,
+    playerData.breakthrough,
+    playerData.leaders,
+  ]);
 }
 
