@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Paper, Popover, Box } from '@mantine/core';
 
-interface ActionHistoryItemCardProps {
+interface ActivitySummaryItemCardProps {
   children: React.ReactNode;
   extraContent?: React.ReactNode;
   clickable?: boolean;
 }
 
-export function ActionHistoryItemCard({
+export function ActivitySummaryItemCard({
   children,
   extraContent,
   clickable = Boolean(extraContent),
-}: ActionHistoryItemCardProps) {
+}: ActivitySummaryItemCardProps) {
   const [opened, setOpened] = useState(false);
 
   return (

@@ -51,7 +51,8 @@ import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import { NavigationDrawer } from "./components/NavigationDrawer";
-import { ActionHistoryView } from "./components/History/ActionHistoryView";
+import { ActivityHistoryView } from "./components/History/ActivityHistoryView";
+import { mockActivityHistoryData } from "./data/mockActivityHistoryData";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -234,7 +235,15 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                 )}
 
                 {data && (
-                  <ActionHistoryView/>
+                  <ActivityHistoryView
+                    activities={data.activitySummary?.activities ?? mockActivityHistoryData.activities.sort((a, b) => {
+                      if (a.timestamp > b.timestamp) {
+                        return -1;
+                      } else {
+                        return 1;
+                      }
+                    })}
+                  />
                 )}
               </Box>
             </Tabs.Panel>

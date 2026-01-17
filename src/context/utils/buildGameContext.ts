@@ -28,6 +28,7 @@ import {
 import { PlayerDataResponse, EntityData, BorderAnomalyInfo } from "@/data/types";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 import type { GameData, Tile, TilePlanet } from "@/context/types";
+import { mockActivityHistoryData } from "@/data/mockActivityHistoryData";
 
 function splitEntitiesByType(entities: EntityData[]) {
   return {
@@ -287,5 +288,6 @@ export function buildGameContext(
     playerScoreBreakdowns: data.scoreBreakdowns,
     expeditions: data.expeditions,
     planetIdToPlanetTile,
+    activitySummary: mockActivityHistoryData
   };
 }

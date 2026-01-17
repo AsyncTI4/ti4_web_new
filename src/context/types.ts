@@ -75,6 +75,7 @@ export type GameData = {
   playerScoreBreakdowns?: Record<string, WebScoreBreakdown>;
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
+  activitySummary: PlayerDataResponse["activityHistory"];
 };
 
 export type GameDataState = {

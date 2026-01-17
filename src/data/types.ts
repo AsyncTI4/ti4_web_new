@@ -320,6 +320,7 @@ export type PlayerDataResponse = {
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
+  activityHistory?: WebActivityHistory;
 };
 
 export type BreakthroughData = {
@@ -658,3 +659,138 @@ export type StrategyCardDefinition = {
   source: string;
   imageURL: string;
 };
+
+export type WebActivityHistory = {
+  activities: GameActivitySummary[];
+}
+
+/* ============================================================
+ * CORE ACTIVITY FIELDS (REQUIRED)
+ * ============================================================ */
+interface BaseGameActivitySummary {
+  gameStateId: string;
+  activitySummaryType: ActivitySummaryType;
+  activityStatus: "COMPLETE" | "IN-PROGRESS"
+  timestamp: string;
+  summaryDetails?: BaseGameActivitySummaryDetails;
+}
+
+/* ============================================================
+ * COMMON ACTIVITY DETAILS (OPTIONAL) 
+ * ============================================================ */
+interface BaseGameActivitySummaryDetails {
+  actionCardsUsed?: string[];
+  transactions?: Transaction[];
+}
+
+/* ============================================================
+ * SHARED ACTIVITY TYPES
+ * ============================================================ */
+export type ActivitySummaryType = "AGENDA" | "ACTION";
+
+export type TransactionDetails = {
+  player: string;
+  debt?: number;
+  commodities?: number;
+  tradeGoods?: number;
+
+  hazardousRelicFragment?: number;
+  industrialRelicFragment?: number;
+  culturalRelicFragment?: number;
+  unknownRelicFragment?: number;
+
+  promissories?: string[];
+  actionCards?: string[];
+}
+
+export interface Transaction {
+  transactor: TransactionDetails
+  transactee: TransactionDetails
+}
+
+/* ============================================================
+ * ACTION ACTIVITY
+ * ============================================================ */
+export type ActionType = "TACTICAL" | "STRATEGY" | "COMPONENT";
+
+interface ActionActivitySummary extends BaseGameActivitySummary {
+  activitySummaryType: "ACTION";
+  actionType: ActionType;
+  actionedBy?: string;
+}
+
+/* ============================================================
+ * TACTICAL ACTION FIELDS (REQUIRED)
+ * ============================================================ */
+export interface TacticalActionActivitySummary extends ActionActivitySummary {
+  actionType: "TACTICAL";
+  activeSystemId: string;
+  summaryDetails: TacticalActionActivitySummaryDetails;
+}
+
+/* ============================================================
+ * TACTICAL ACTION DETAILS (OPTIONAL) 
+ * ============================================================ */
+interface TacticalActionActivitySummaryDetails extends BaseGameActivitySummaryDetails {
+  explores?: string[];
+  spaceCombatUnits?: string[];
+  groundCombatUnits?: Record<string, string[]>;
+  planetsGained?: string[];
+  producedUnits?: string[];
+  scoredSOIds?: Record<string, string[]>;
+  retreatSystemId?: string;
+}
+
+/* ============================================================
+ * STRATEGY ACTION FIELDS (REQUIRED)
+ * ============================================================ */
+export interface StrategyActionActivitySummary extends ActionActivitySummary {
+  actionType: "STRATEGY";
+  strategyCardId: number;
+  summaryDetails: StrategyActionActivitySummaryDetails;
+}
+
+/* ============================================================
+ * STRATEGY ACTION DETAILS (OPTIONAL) 
+ * ============================================================ */
+interface StrategyActionActivitySummaryDetails extends BaseGameActivitySummaryDetails {
+  secondaryUsers?: string[];
+}
+
+
+/* ============================================================
+ * COMPONENT ACTION FIELDS (REQUIRED)
+ * ============================================================ */
+export interface ComponentActionActivitySummary extends ActionActivitySummary {
+  actionType: "COMPONENT";
+  componentId: string;
+}
+
+/* ============================================================
+ * AGENDA ACTIVITY FIELDS (REQUIRED)
+ * ============================================================ */
+export interface AgendaActivitySummary extends BaseGameActivitySummary {
+  activitySummaryType: "AGENDA";
+  agendaId: string;
+  summaryDetails: AgendaActivitySummaryDetails;
+}
+
+/* ============================================================
+ * AGENDA DETAILS (OPTIONAL) 
+ * ============================================================ */
+interface AgendaActivitySummaryDetails extends BaseGameActivitySummaryDetails {
+  agendaOutcome?: string;
+  votes?: string[];
+}
+
+export type GameActivitySummary =
+  | TacticalActionActivitySummary
+  | StrategyActionActivitySummary
+  | ComponentActionActivitySummary
+  | AgendaActivitySummary;
+
+export type GameActivitySummaryDetails =
+  | BaseGameActivitySummaryDetails
+  | TacticalActionActivitySummaryDetails
+  | StrategyActionActivitySummaryDetails
+  | AgendaActivitySummaryDetails;
