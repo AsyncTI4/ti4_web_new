@@ -10,25 +10,29 @@ type UseScrollToPlanetProps = {
 };
 
 /**
- * Hook that scrolls the map to bring a hovered planet into view.
- * Watches the hoveredPlanetId from the app store and scrolls smoothly
+ * Hook that scrolls the map to bring a clicked planet into view.
+ * Watches the scrollToPlanetId from the app store and scrolls smoothly
  * to center the planet if it's outside the visible viewport.
  */
 export function useScrollToPlanet({
   mapContainerRef,
   zoom,
 }: UseScrollToPlanetProps) {
-  const hoveredPlanetId = useAppStore((state) => state.hoveredPlanetId);
+  const scrollToPlanetId = useAppStore((state) => state.scrollToPlanetId);
+  const setScrollToPlanetId = useAppStore((state) => state.setScrollToPlanetId);
   const enhancedData = useGameContext();
   const tilePositions = enhancedData?.calculatedTilePositions || [];
 
   useEffect(() => {
-    if (!hoveredPlanetId || !mapContainerRef.current || tilePositions.length === 0) {
+    if (!scrollToPlanetId || !mapContainerRef.current || tilePositions.length === 0) {
       return;
     }
 
-    const planetPosition = getPlanetWorldPosition(hoveredPlanetId, tilePositions);
-    if (!planetPosition) return;
+    const planetPosition = getPlanetWorldPosition(scrollToPlanetId, tilePositions);
+    if (!planetPosition) {
+      setScrollToPlanetId(null);
+      return;
+    }
 
     const container = mapContainerRef.current;
     const { x: planetX, y: planetY } = planetPosition;
@@ -52,6 +56,9 @@ export function useScrollToPlanet({
       scaledY > visibleTop + margin &&
       scaledY < visibleBottom - margin;
 
+    // Clear the scroll target after processing (allows re-clicking same planet)
+    setScrollToPlanetId(null);
+
     if (isVisible) return;
 
     // Calculate scroll position to center the planet
@@ -63,7 +70,7 @@ export function useScrollToPlanet({
       top: targetScrollTop,
       behavior: "smooth",
     });
-  }, [hoveredPlanetId, mapContainerRef, tilePositions, zoom]);
+  }, [scrollToPlanetId, mapContainerRef, tilePositions, zoom, setScrollToPlanetId]);
 }
 
 /**

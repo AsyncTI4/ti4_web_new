@@ -126,6 +126,7 @@ function getInitialZoomIndex() {
 type AppStore = {
   hoveredTile: string;
   hoveredPlanetId: string | null;
+  scrollToPlanetId: string | null;
   zoomLevel: number;
   overlayZoom: number;
   zoomFitToScreen: boolean;
@@ -143,6 +144,7 @@ type AppStore = {
   setTooltipUnit: (unit: TooltipUnit | null) => void;
   setTooltipPlanet: (planet: TooltipPlanet | null) => void;
   setHoveredPlanetId: (planetId: string | null) => void;
+  setScrollToPlanetId: (planetId: string | null) => void;
 
   handleZoomIn: () => void;
   handleZoomOut: () => void;
@@ -182,6 +184,7 @@ export const useAppStore = create<AppStore>((set) => {
   return {
     hoveredTile: "",
     hoveredPlanetId: null,
+    scrollToPlanetId: null,
     zoomLevel: zoom,
     overlayZoom: zoomFitToScreen ? 1 : zoom,
     zoomFitToScreen,
@@ -251,6 +254,11 @@ export const useAppStore = create<AppStore>((set) => {
       set((state) => ({
         ...state,
         hoveredPlanetId: planetId,
+      })),
+    setScrollToPlanetId: (planetId: string | null) =>
+      set((state) => ({
+        ...state,
+        scrollToPlanetId: planetId,
       })),
 
     handleZoomIn: () => {

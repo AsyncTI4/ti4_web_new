@@ -32,6 +32,7 @@ export function PlanetCard({
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
   const setHoveredPlanetId = useAppStore((state) => state.setHoveredPlanetId);
+  const setScrollToPlanetId = useAppStore((state) => state.setScrollToPlanetId);
 
   // Use prop if provided (from playerData.exhaustedPlanets), otherwise fall back to planetTile
   const isExhausted = isExhaustedProp ?? planetTile?.exhausted ?? false;
@@ -74,7 +75,10 @@ export function PlanetCard({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Stack
-          onClick={() => setOpened((o) => !o)}
+          onClick={() => {
+            setOpened((o) => !o);
+            setScrollToPlanetId(planetId);
+          }}
           onMouseEnter={() => setHoveredPlanetId(planetId)}
           onMouseLeave={() => setHoveredPlanetId(null)}
           className={cx(
@@ -152,6 +156,7 @@ export function PlanetCard({
       <div
         className={styles.legendaryWrapper}
         style={getCSSVariables(cssTypeKey) as React.CSSProperties}
+        onClick={() => setScrollToPlanetId(planetId)}
         onMouseEnter={() => setHoveredPlanetId(planetId)}
         onMouseLeave={() => setHoveredPlanetId(null)}
       >
