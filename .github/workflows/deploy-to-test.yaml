@@ -1,0 +1,76 @@
+name: Deploy to Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy (leave empty for current branch)'
+        required: false
+        default: ''
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for requesting the JWT
+      contents: read # Required for actions/checkout
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Display deployment info
+        run: |
+          echo "Deploying to test.asyncti4.com"
+          echo "Branch: ${{ github.event.inputs.branch || github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Configure AWS credentials (for data download)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::412381764112:role/GithubActionsWebsiteRole
+          role-duration-seconds: 900
+          aws-region: us-east-1
+
+      - name: Download data files from S3
+        run: |
+          echo "Downloading TypeScript data files from S3..."
+          aws s3 sync s3://bot-images-asyncti4.com/web_data/ src/data/ --exclude "*" --include "*.ts"
+          echo "Files downloaded and replaced:"
+          ls -lh src/data/*.ts | awk '{print $9}' | xargs -I {} sh -c 'echo "  [REPLACED] {}"'
+
+      - name: Build app
+        run: yarn build
+
+      - name: Configure AWS credentials (for deployment)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NEW }}:role/GithubActionsWebsiteRole
+          role-duration-seconds: 900
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to Test S3
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.TEST_AWS_S3_BUCKET }}
+
+      - name: CloudFront Invalidate
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.TEST_AWS_DISTRIBUTION_ID }} --paths "/*"
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Deployment complete
+        run: |
+          echo "Deployment complete!"
+          echo "Test site available at: https://test.asyncti4.com"
