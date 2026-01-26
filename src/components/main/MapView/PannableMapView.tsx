@@ -244,7 +244,12 @@ export function PannableMapView({ gameId }: Props) {
           </>
         )}
 
-        <div style={{ width: "100%", overflowX: "auto" }}>
+        <div
+          style={{
+            width: isMobileDevice() ? "200%" : "100%",
+            overflowX: "auto",
+          }}
+        >
           {gameData?.playerData
             .filter((p) => p.faction !== "null")
             .map((player) => (
