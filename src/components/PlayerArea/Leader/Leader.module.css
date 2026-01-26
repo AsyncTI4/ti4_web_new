@@ -80,11 +80,12 @@
 
 .leaderName {
   font-size: var(--mantine-font-size-sm);
-  font-weight: 700;
+  font-weight: 600;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.01em;
 }
 
 
@@ -98,18 +99,19 @@
 
 .leaderType {
   font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
-  opacity: 0.8;
-  text-transform: capitalize;
+  font-weight: 600;
+  text-transform: uppercase;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 }
 
 
 .mobile .leaderType {
   text-overflow: clip;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .leaderTypeActive {

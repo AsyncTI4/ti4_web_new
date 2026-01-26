@@ -1,14 +1,68 @@
-/* Relic card styles */
+/* Relic card styles - matches Tech card structure */
+
+/* Color variables */
+.gold {
+  --relic-color: 251, 191, 36;
+}
+
+.fake {
+  --relic-color: 148, 163, 184;
+}
+
+/* Main card - mirrors .techCard */
+.relicCard {
+  padding: 2px var(--mantine-spacing-xs);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(var(--relic-color), 0.14);
+  border: 1px solid rgba(var(--relic-color), 0.32);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.relicCard:hover {
+  background: rgba(var(--relic-color), 0.18);
+  border-color: rgba(var(--relic-color), 0.45);
+  box-shadow: 0 4px 16px rgba(var(--relic-color), 0.18);
+}
+
+/* Left edge accent bar - mirrors .techCard::before */
+.relicCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(var(--relic-color), 0.7);
+}
+
+/* Exhausted state */
+.exhausted {
+  opacity: 0.5;
+}
+
+/* Content group - mirrors .contentGroup */
+.contentGroup {
+  gap: var(--mantine-spacing-xs);
+  position: relative;
+  min-width: 0;
+}
+
+/* Icon - mirrors .techIcon */
 .icon {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(var(--relic-color), 0.3));
 }
 
 .iconWrapper {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 .exhaustedIcon {
@@ -17,55 +71,24 @@
 
 .exhaustedX {
   position: absolute;
-  right: -4px;
-  bottom: -4px;
+  right: -6px;
+  bottom: -6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-.textContainer {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
+/* Relic name - mirrors .techName */
+.relicName {
+  color: var(--mantine-color-white);
+  font-weight: 600;
   flex: 1;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
-}
-
-/* Relic card - ancient artifact styling */
-.relicCard {
-  /* Inset shadow creates depth like a carved artifact */
-  box-shadow:
-    inset 0 0 0 1px rgba(251, 191, 36, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-/* Top-left corner notch accent */
-.relicCard::before {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 6px;
-  height: 6px;
-  border-left: 1.5px solid rgba(251, 191, 36, 0.6);
-  border-top: 1.5px solid rgba(251, 191, 36, 0.6);
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Bottom-right corner notch accent */
-.relicCard::after {
-  content: '';
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
-  width: 6px;
-  height: 6px;
-  border-right: 1.5px solid rgba(251, 191, 36, 0.6);
-  border-bottom: 1.5px solid rgba(251, 191, 36, 0.6);
-  pointer-events: none;
-  z-index: 3;
+  min-width: 0;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9);
+  padding-right: 16px;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
 }

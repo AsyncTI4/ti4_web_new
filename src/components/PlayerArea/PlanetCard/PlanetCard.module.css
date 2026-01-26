@@ -233,39 +233,39 @@
 
 /* Planet color variables */
 :root {
-  --cultural-background: rgba(59, 130, 246, 0.12);
-  --cultural-border: rgba(59, 130, 246, 0.3);
+  --cultural-background: rgba(59, 130, 246, 0.15);
+  --cultural-border: rgba(59, 130, 246, 0.4);
   --cultural-shadow: rgba(59, 130, 246, 0.08);
   --cultural-highlight: rgba(59, 130, 246, 0.4);
 
-  --hazardous-background: rgba(239, 68, 68, 0.12);
-  --hazardous-border: rgba(239, 68, 68, 0.3);
+  --hazardous-background: rgba(239, 68, 68, 0.15);
+  --hazardous-border: rgba(239, 68, 68, 0.4);
   --hazardous-shadow: rgba(239, 68, 68, 0.08);
   --hazardous-highlight: rgba(239, 68, 68, 0.4);
 
-  --industrial-background: rgba(34, 197, 94, 0.12);
-  --industrial-border: rgba(34, 197, 94, 0.3);
+  --industrial-background: rgba(34, 197, 94, 0.15);
+  --industrial-border: rgba(34, 197, 94, 0.4);
   --industrial-shadow: rgba(34, 197, 94, 0.08);
   --industrial-highlight: rgba(34, 197, 94, 0.4);
 
-  --faction-background: rgba(107, 114, 128, 0.12);
-  --faction-border: rgba(107, 114, 128, 0.3);
+  --faction-background: rgba(107, 114, 128, 0.15);
+  --faction-border: rgba(107, 114, 128, 0.4);
   --faction-shadow: rgba(107, 114, 128, 0.08);
   --faction-highlight: rgba(107, 114, 128, 0.4);
 
-  --mr-background: rgba(107, 114, 128, 0.12);
-  --mr-border: rgba(107, 114, 128, 0.3);
+  --mr-background: rgba(107, 114, 128, 0.15);
+  --mr-border: rgba(107, 114, 128, 0.4);
   --mr-shadow: rgba(107, 114, 128, 0.08);
   --mr-highlight: rgba(107, 114, 128, 0.4);
 
-  --default-background: rgba(107, 114, 128, 0.12);
-  --default-border: rgba(107, 114, 128, 0.3);
+  --default-background: rgba(107, 114, 128, 0.15);
+  --default-border: rgba(107, 114, 128, 0.4);
   --default-shadow: rgba(107, 114, 128, 0.08);
   --default-highlight: rgba(107, 114, 128, 0.4);
 
   /* Ocean (Deep Abyss) - deep greyish cyan distinct from cultural */
-  --ocean-background: rgba(64, 112, 128, 0.14);
-  --ocean-border: rgba(64, 160, 176, 0.32);
+  --ocean-background: rgba(64, 112, 128, 0.18);
+  --ocean-border: rgba(64, 160, 176, 0.42);
   --ocean-shadow: rgba(24, 44, 50, 0.10);
   --ocean-highlight: rgba(96, 192, 208, 0.36);
 }
@@ -278,9 +278,9 @@
   height: 140px;
   position: relative;
   justify-content: space-between;
-  border-radius: 12px;
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--planet-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px var(--planet-shadow);
   border: 1px solid var(--planet-border);
 }
 
@@ -334,12 +334,12 @@
 .planetName {
   font-size: 13px;
   color: white;
-  font-weight: 800;
+  font-weight: 600;
   writing-mode: vertical-rl;
   text-orientation: sideways;
   white-space: nowrap;
   transform: rotate(180deg);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.95);
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 100%;
@@ -347,6 +347,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: geometricPrecision;
+  letter-spacing: 0.02em;
 }
 
 /* Faction icon */

@@ -1,11 +1,12 @@
-import { Box, Image, rem } from "@mantine/core";
+import { Box, Group, Text, Image, rem } from "@mantine/core";
+import { useState } from "react";
 import { getRelicData } from "../../../lookup/relics";
 import { RelicCard } from "./RelicCard";
-import { getGradientClasses } from "../gradientClasses";
-import styles from "./Relic.module.css";
-import { ChipWithPopover } from "@/components/shared/primitives/ChipWithPopover";
+import { SmoothPopover } from "../../shared/SmoothPopover";
 import { IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/data/cdnImage";
+import { isMobileDevice } from "@/utils/isTouchDevice";
+import styles from "./Relic.module.css";
 import cx from "clsx";
 
 type Props = {
@@ -13,34 +14,8 @@ type Props = {
   isExhausted?: boolean;
 };
 
-type RelicIconProps = {
-  isFake: boolean;
-  isExhausted: boolean;
-};
-
-function RelicIcon({ isFake, isExhausted }: RelicIconProps) {
-  const gradientClasses = getGradientClasses(isFake ? "gray" : "yellow");
-
-  return (
-    <Box className={styles.iconWrapper}>
-      <Image
-        src={isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp"}
-        className={cx(
-          styles.icon,
-          !isFake && gradientClasses.iconFilter,
-          isExhausted && styles.exhaustedIcon
-        )}
-      />
-      {isExhausted && (
-        <span className={styles.exhaustedX}>
-          <IconX size={rem(18)} stroke={3} color="var(--mantine-color-red-1)" />
-        </span>
-      )}
-    </Box>
-  );
-}
-
 export function Relic({ relicId, isExhausted = false }: Props) {
+  const [opened, setOpened] = useState(false);
   const relicData = getRelicData(relicId);
 
   if (!relicData) {
@@ -49,16 +24,39 @@ export function Relic({ relicId, isExhausted = false }: Props) {
   }
 
   const isFake = relicData.isFakeRelic ?? false;
-  const accentColor = isFake ? "grey" : isExhausted ? "bloodOrange" : "yellow";
 
   return (
-    <ChipWithPopover
-      className={styles.relicCard}
-      accent={accentColor}
-      leftSection={<RelicIcon isFake={isFake} isExhausted={isExhausted} />}
-      title={relicData.shortName || relicData.name}
-      dropdownContent={<RelicCard relicId={relicId} />}
-      px="sm"
-    />
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
+        <Box
+          className={cx(
+            styles.relicCard,
+            isFake ? styles.fake : styles.gold,
+            isExhausted && styles.exhausted
+          )}
+          onClick={() => setOpened((o) => !o)}
+        >
+          <Group className={styles.contentGroup}>
+            <Box className={styles.iconWrapper}>
+              <Image
+                src={isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp"}
+                className={cx(styles.icon, isExhausted && styles.exhaustedIcon)}
+              />
+              {isExhausted && (
+                <span className={styles.exhaustedX}>
+                  <IconX size={rem(14)} stroke={3} color="var(--mantine-color-red-1)" />
+                </span>
+              )}
+            </Box>
+            <Text className={styles.relicName} fz={isMobileDevice() ? 14 : "xs"}>
+              {relicData.shortName || relicData.name}
+            </Text>
+          </Group>
+        </Box>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
+        <RelicCard relicId={relicId} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
   );
 }

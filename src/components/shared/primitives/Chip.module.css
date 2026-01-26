@@ -27,17 +27,20 @@
 }
 
 .deepRed {
-    /* Use RGB triplet for consistency with other accents */
-    --background-color: 48,6,6;
-    --border-color: rgba(48,6,6,1);
-    --hover-border-color: rgba(48,6,6,1);
-    --hover-shadow-1: rgba(48,6,6,0.3);
-    --hover-shadow-2: rgba(48,6,6,0.18);
-    --ribbon-color: rgb(48,6,6);
+    /* Deep blood red for unscored secrets */
+    --background-color: 80, 20, 20;
+    --border-color: rgba(80, 20, 20, 0.6);
+    --hover-border-color: rgba(80, 20, 20, 0.8);
+    --hover-shadow-1: rgba(80, 20, 20, 0.4);
+    --hover-shadow-2: rgba(80, 20, 20, 0.25);
+    --ribbon-color: 80, 20, 20;
 }
 
 /* Strengthen deep red background to be clearly visible */
-.deepRed.chip { background: rgba(var(--background-color), 0.28); }
+.deepRed.chip {
+    background: rgba(var(--background-color), 0.35);
+    border-color: rgba(var(--background-color), 0.5);
+}
 
 .blue {
     --background-color: var(--gd-blue);
@@ -102,25 +105,22 @@
     content: "";
     position: absolute;
     left: 0;
-    top: 6px;
-    bottom: 6px;
+    top: 0;
+    bottom: 0;
     width: 3px;
-    border-radius: 0 2px 2px 0;
-    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.6) 0%, rgba(var(--ribbon-color), 0.2) 100%);
-    opacity: 0.9;
+    border-radius: 0;
+    background: rgba(var(--ribbon-color), 0.7);
 }
 
 .accentLine::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 2px;
-    bottom: 2px;
+    top: 0;
+    bottom: 0;
     width: 2px;
-    border-radius: 0 2px 2px 0;
-    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.85) 0%, rgba(var(--ribbon-color), 0.35) 100%);
-    box-shadow: 0 0 6px rgba(var(--ribbon-color), 0.12);
-    opacity: 1;
+    border-radius: 0;
+    background: rgba(var(--ribbon-color), 0.6);
 }
 
 .accentLine {
@@ -130,15 +130,16 @@
 
 .chip {
     position: relative;
-    border-radius: var(--mantine-radius-md);
-    background: rgba(var(--background-color), 0.10);
-    border: 1px solid var(--border-color);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border-radius: var(--mantine-radius-sm);
+    background: rgba(var(--background-color), 0.14);
+    border: 1px solid rgba(var(--background-color), 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     cursor: pointer;
 }
 
 .chip.strong {
-    background: rgba(var(--background-color), 0.18);
+    background: rgba(var(--background-color), 0.22);
+    border-color: rgba(var(--background-color), 0.35);
 }
 
 .hover {
@@ -205,7 +206,8 @@
     white-space: nowrap;
     min-width: 0;
     flex: 1;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9);
+    letter-spacing: 0.01em;
 }
 
 
@@ -214,18 +216,19 @@
 
 .fullTitle {
     position: absolute;
-    left: 0px; /* match inner horizontal padding */
+    left: 0px;
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
     pointer-events: none;
     display: none;
     z-index: 2;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9);
     width: max-content;
-    background: rgba(0,0, 0, 1);
+    background: rgba(0, 0, 0, 0.95);
     padding-left: 6px;
     padding-right: 8px;
+    letter-spacing: 0.01em;
 }
 
 .revealFullTitle:hover .fullTitle {
@@ -298,34 +301,36 @@
 
 [data-split="true"] .halfLeft {
     left: 0;
-    border: 1px solid rgba(var(--left-color), 0.18);
+    border: 1px solid rgba(var(--left-color), 0.3);
     border-right-width: 0;
-    border-radius: var(--mantine-radius-md) 0 0 var(--mantine-radius-md);
-    background: rgba(var(--left-color), 0.10);
+    border-radius: var(--mantine-radius-sm) 0 0 var(--mantine-radius-sm);
+    background: rgba(var(--left-color), 0.14);
 }
 
 [data-split="true"] .halfRight {
     right: 0;
-    border: 1px solid rgba(var(--right-color), 0.18);
+    border: 1px solid rgba(var(--right-color), 0.3);
     border-left-width: 0;
-    border-radius: 0 var(--mantine-radius-md) var(--mantine-radius-md) 0;
-    background: rgba(var(--right-color), 0.10);
+    border-radius: 0 var(--mantine-radius-sm) var(--mantine-radius-sm) 0;
+    background: rgba(var(--right-color), 0.14);
 }
 
 .chip:hover .halfLeft {
-    border-color: rgba(var(--left-color), 0.35);
-    border-width: 3px;
+    border-color: rgba(var(--left-color), 0.5);
+    border-width: 1px;
     border-right-width: 0;
+    background: rgba(var(--left-color), 0.2);
 }
 
 .chip:hover .halfRight {
-    border-color: rgba(var(--right-color), 0.35);
-    border-width: 3px;
+    border-color: rgba(var(--right-color), 0.5);
+    border-width: 1px;
     border-left-width: 0;
+    background: rgba(var(--right-color), 0.2);
 }
 
-[data-split="true"].strong .halfLeft { background: rgba(var(--left-color), 0.18); }
-[data-split="true"].strong .halfRight { background: rgba(var(--right-color), 0.18); }
+[data-split="true"].strong .halfLeft { background: rgba(var(--left-color), 0.22); }
+[data-split="true"].strong .halfRight { background: rgba(var(--right-color), 0.22); }
 
 /* Standalone export to satisfy CSS Modules for breakthrough */
 .breakthrough { outline: none; }
