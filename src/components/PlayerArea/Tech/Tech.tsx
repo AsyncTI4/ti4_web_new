@@ -119,7 +119,6 @@ export function Tech({
             )}
             <Text
               className={styles.techName}
-              ff={mobile ? "text" : "monospace"}
               fz={isMobileDevice() ? 14 : "xs"}
             >
               {techData.name}

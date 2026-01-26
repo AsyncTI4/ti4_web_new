@@ -118,20 +118,22 @@ export function PlanetCard({
           <Box className={styles.iconContainer}>
             <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
           </Box>
-          <Stack className={styles.bottomStack}>
-            <Group className={styles.nameGroup}>
-              <Text className={styles.planetName} ff="monospace">
+          <Stack className={styles.bottomStack} gap={4}>
+            <Group className={styles.nameGroup} gap={0}>
+              <Text className={styles.planetName} size="sm">
                 {planetData.shortName ?? planetData.name}
               </Text>
-              <Stack className={styles.valuesStack} align="top">
+              <Stack gap={2} align="flex-start">
                 {allIcons.length > 0 && (
-                  <Stack className={styles.iconsStack}>{allIcons}</Stack>
+                  <Stack gap={1}>{allIcons}</Stack>
                 )}
                 <IconValue
                   icon={
                     <Image
                       src="/pa_resources.png"
-                      className={styles.resourceImage}
+                      w={16}
+                      h={16}
+                      style={{ flexShrink: 0 }}
                     />
                   }
                   value={finalResources}

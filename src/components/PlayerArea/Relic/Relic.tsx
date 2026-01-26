@@ -1,4 +1,4 @@
-import { Box, Image } from "@mantine/core";
+import { Box, Image, rem } from "@mantine/core";
 import { getRelicData } from "../../../lookup/relics";
 import { RelicCard } from "./RelicCard";
 import { getGradientClasses } from "../gradientClasses";
@@ -33,7 +33,7 @@ function RelicIcon({ isFake, isExhausted }: RelicIconProps) {
       />
       {isExhausted && (
         <span className={styles.exhaustedX}>
-          <IconX size={18} stroke={3} color="var(--mantine-color-red-1)" />
+          <IconX size={rem(18)} stroke={3} color="var(--mantine-color-red-1)" />
         </span>
       )}
     </Box>

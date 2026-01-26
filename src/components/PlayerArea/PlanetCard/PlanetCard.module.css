@@ -318,44 +318,35 @@
 
 /* Bottom stack */
 .bottomStack {
-  gap: 4px;
   position: relative;
   z-index: 1;
 }
 
 /* Name and values group */
 .nameGroup {
-  gap: 0;
   align-items: flex-end;
   min-width: 34px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* Planet name text */
 .planetName {
-  font-size: 12px;
+  font-size: 13px;
   color: white;
-  font-weight: 700;
+  font-weight: 800;
   writing-mode: vertical-rl;
   text-orientation: sideways;
   white-space: nowrap;
   transform: rotate(180deg);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* Values stack */
-.valuesStack {
-  gap: 2px;
-  align-items: flex-start;
-}
-
-/* Icons stack */
-.iconsStack {
-  gap: 1px;
-}
-
-/* Resource image for IconValue */
-.resourceImage {
-  width: 16px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100%;
+  display: block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
 }
 
 /* Faction icon */

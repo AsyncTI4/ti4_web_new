@@ -56,7 +56,7 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
             </Group>
             {locked && (
               <Box className={styles.lockIcon}>
-                <IconLock size={16} color="white" stroke={2.5} />
+                <IconLock size={12} color="white" stroke={2} />
               </Box>
             )}
           </Box>

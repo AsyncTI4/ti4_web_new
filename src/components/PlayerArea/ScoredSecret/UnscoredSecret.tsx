@@ -7,7 +7,6 @@ export function UnscoredSecret() {
       accent="deepRed"
       leftSection={<Image src="/so_icon.png" />}
       title="Unscored Secret"
-      style={{ minWidth: 160 }}
     />
   );
 }

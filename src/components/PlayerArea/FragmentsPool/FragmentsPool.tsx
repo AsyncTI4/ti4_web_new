@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group, SimpleGrid } from "@mantine/core";
 import { FragmentStack } from "../FragmentStack";
 
 type Props = {
@@ -24,11 +24,11 @@ export function FragmentsPool({ fragments }: Props) {
   }
 
   return (
-    <Group gap="xs" p="xs">
+    <SimpleGrid cols={2} spacing={0}>
       <FragmentStack count={fragmentCounts.cultural} type="crf" />
       <FragmentStack count={fragmentCounts.hazardous} type="hrf" />
       <FragmentStack count={fragmentCounts.industrial} type="irf" />
       <FragmentStack count={fragmentCounts.unknown} type="urf" />
-    </Group>
+    </SimpleGrid>
   );
 }

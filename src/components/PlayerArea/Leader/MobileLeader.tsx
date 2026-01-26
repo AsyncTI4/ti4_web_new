@@ -54,7 +54,7 @@ export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
             {active && <Box className={styles.onlineDot} />}
             {locked && (
               <Box className={styles.lockIcon}>
-                <IconLock size={16} color="white" stroke={2.5} />
+                <IconLock size={12} color="white" stroke={2} />
               </Box>
             )}
           </Group>

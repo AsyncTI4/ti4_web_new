@@ -29,25 +29,31 @@ const TEXT_OFFSETS: Record<Size, { top: number; left: number }> = {
 export function IconValue({ icon, value, size = "sm", className }: Props) {
   const iconSize = ICON_SIZES[size];
   const offset = TEXT_OFFSETS[size];
+  
+  // Calculate offsets as percentages of icon size so they scale properly
+  const leftPercent = (offset.left / iconSize) * 100;
+  const topPercent = (offset.top / iconSize) * 100;
 
   return (
     <Box
       className={className}
+      w={iconSize}
+      h={iconSize}
       style={{
         position: "relative",
-        width: iconSize,
-        height: iconSize,
       }}
     >
       <Box className={classes.iconWrapper}>{icon}</Box>
       <Text
         className={classes.value}
-        size="xs"
+        size="sm"
         fw={700}
         c="white"
         style={{
-          top: offset.top,
-          left: offset.left,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(calc(-50% + ${leftPercent}%), calc(-50% + ${topPercent}%))`,
         }}
       >
         {value}

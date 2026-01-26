@@ -35,6 +35,7 @@ import { ReconnectButton } from "./components/ReconnectButton";
 import { MapTilesRenderer } from "./components/MapTilesRenderer";
 import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 import { ScaledContent } from "@/components/shared/ScaledContent";
+import PlayerCardMobile2 from "@/components/PlayerCardMobile2";
 
 const MAP_PADDING = 0;
 
@@ -46,7 +47,7 @@ export function PannableMapView({ gameId }: Props) {
   const gameData = useGameData();
   const tilesList = useMemo(
     () => Object.values(gameData?.tiles || {}),
-    [gameData?.tiles]
+    [gameData?.tiles],
   );
   const gameDataState = useGameDataState();
   const { user } = useUser();
@@ -106,7 +107,7 @@ export function PannableMapView({ gameId }: Props) {
 
   const isUserAuthenticated = user?.authenticated;
   const isInGame = gameData?.playerData?.some(
-    (p) => p.discordId === user?.discord_id
+    (p) => p.discordId === user?.discord_id,
   );
 
   const {
@@ -243,7 +244,15 @@ export function PannableMapView({ gameId }: Props) {
           </>
         )}
 
-        {gameData && (
+        <div style={{ width: "200%", overflowX: "auto" }}>
+          {gameData?.playerData
+            .filter((p) => p.faction !== "null")
+            .map((player) => (
+              <PlayerCardMobile2 key={player.color} playerData={player} />
+            ))}
+        </div>
+
+        {/* {gameData && (
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={areaStyles}
@@ -273,9 +282,9 @@ export function PannableMapView({ gameId }: Props) {
               />
             </Stack>
           </ScaledContent>
-        )}
+        )} */}
 
-        <ScaledContent
+        {/* <ScaledContent
           zoom={computePanelsZoom()}
           innerStyle={areaStyles}
           enabled={isMobileDevice()}
@@ -305,7 +314,7 @@ export function PannableMapView({ gameId }: Props) {
               objectives={gameData.objectives}
             />
           </ScaledContent>
-        )}
+        )} */}
         <div style={{ height: "50px", width: "100%" }} />
 
         <ReconnectButton gameDataState={gameDataState} />

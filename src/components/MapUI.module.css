@@ -76,6 +76,7 @@
 /* Tile rendering container */
 .tileRenderingContainer {
   position: relative;
+  --mantine-scale: 1;
 }
 
 .mainBackground {

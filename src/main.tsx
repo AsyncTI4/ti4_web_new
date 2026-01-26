@@ -111,6 +111,8 @@ const myColor: MantineColorsTuple = [
 ];
 
 const theme = createTheme({
+  scale: isMobileDevice() ? 0.4 : 1,
+  fontFamily: "'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   colors: {
     tomato: tomatoBg,
     blueGray: myColor,
@@ -134,7 +136,7 @@ const theme = createTheme({
 });
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
@@ -143,5 +145,5 @@ root.render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

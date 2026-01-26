@@ -39,7 +39,7 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
     : [];
   const otherLeaders = isNomad
     ? leaders.filter(
-        (l) => !(l.type === "agent" && nomadAgentIds.includes(l.id))
+        (l) => !(l.type === "agent" && nomadAgentIds.includes(l.id)),
       )
     : leaders;
 

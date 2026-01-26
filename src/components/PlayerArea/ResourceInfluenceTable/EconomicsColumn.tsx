@@ -1,4 +1,4 @@
-import { Stack, Divider, Group } from "@mantine/core";
+import { Stack, Divider, Group, Box, Image } from "@mantine/core";
 import { StatMono } from "@/components/shared/primitives/StatMono";
 // @ts-ignore
 import InfluenceIcon from "../../InfluenceIcon";
@@ -10,20 +10,22 @@ function CombinedResourceInfluenceIcon({ size = 20 }: { size?: number }) {
   const gradientId = `half-yellow-blue-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24">
-      <defs>
-        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="50%" stopColor="#eab308" />
-          <stop offset="50%" stopColor="#3b82f6" />
-        </linearGradient>
-      </defs>
-      <polygon
-        points="6,2 18,2 22,12 18,22 6,22 2,12"
-        fill="transparent"
-        stroke={`url(#${gradientId})`}
-        strokeWidth="2"
-      />
-    </svg>
+    <Box w={size} h={size} style={{ flexShrink: 0 }}>
+      <svg width="100%" height="100%" viewBox="0 0 24 24" style={{ display: "block" }}>
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="50%" stopColor="#eab308" />
+            <stop offset="50%" stopColor="#3b82f6" />
+          </linearGradient>
+        </defs>
+        <polygon
+          points="6,2 18,2 22,12 18,22 6,22 2,12"
+          fill="transparent"
+          stroke={`url(#${gradientId})`}
+          strokeWidth="2"
+        />
+      </svg>
+    </Box>
   );
 }
 
@@ -103,10 +105,10 @@ export function EconomicsColumn({
     <Stack gap={6} align="flex-start" mt={2}>
       <StatRow
         icon={
-          <img
+          <Image
             src={cdnImage("/player_area/pa_resources.png")}
-            width={16}
-            height={16}
+            w={16}
+            h={16}
             style={{ flexShrink: 0 }}
           />
         }
@@ -161,7 +163,6 @@ export function EconomicsColumn({
       )}
       {showTotal && (
         <Group gap={4} align="baseline" wrap="nowrap">
-          <div style={{ width: 18 }} />
           <StatMono
             size="lg"
             fw={700}

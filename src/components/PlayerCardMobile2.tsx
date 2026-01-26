@@ -23,7 +23,7 @@ import { PlayerColor } from "./PlayerArea/PlayerColor";
 import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import { ArmyStats, PromissoryNote, Plot } from "./PlayerArea";
+import { ArmyStats, PromissoryNote, Plot, Tech } from "./PlayerArea";
 import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
 import { StatusIndicator } from "./PlayerArea/StatusIndicator";
 import { PlayerCardBox } from "./PlayerCardBox";
@@ -37,7 +37,7 @@ import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
 import { getFactionImage } from "@/lookup/factions";
 import { useGameData } from "@/hooks/useGameContext";
 import { filterPlanetsByOcean } from "@/utils/planets";
-import { getTechData } from "@/lookup/tech";
+import { getTechData, getTechTier } from "@/lookup/tech";
 import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
 import { BreachTokens } from "./PlayerArea/BreachTokens";
@@ -232,7 +232,7 @@ function TokensGroup({
   );
 }
 
-export default function PlayerCardMobile(props: Props) {
+export default function PlayerCardMobile2(props: Props) {
   const gameData = useGameData();
   const rank = gameData?.armyRankings?.[props.playerData.faction];
 
@@ -351,6 +351,29 @@ export default function PlayerCardMobile(props: Props) {
     return techData?.types[0] !== "NONE";
   });
 
+  const colorTechTypes = ["PROPULSION", "CYBERNETIC", "BIOTIC", "WARFARE"];
+  const colorTechs = techs
+    .filter((techId) => {
+      const techData = getTechData(techId);
+      return colorTechTypes.includes(techData?.types[0] || "");
+    })
+    .sort((techIdA, techIdB) => {
+      const techDataA = getTechData(techIdA);
+      const techDataB = getTechData(techIdB);
+      const colorA = techDataA?.types[0] || "";
+      const colorB = techDataB?.types[0] || "";
+      const colorIndexA = colorTechTypes.indexOf(colorA);
+      const colorIndexB = colorTechTypes.indexOf(colorB);
+
+      if (colorIndexA !== colorIndexB) {
+        return colorIndexA - colorIndexB;
+      }
+
+      const tierA = getTechTier(techDataA?.requirements);
+      const tierB = getTechTier(techDataB?.requirements);
+      return tierA - tierB;
+    });
+
   const allNotResearchedFactionTechs = [
     ...(notResearchedFactionTechs || []),
     ...noneTechs,
@@ -399,162 +422,124 @@ export default function PlayerCardMobile(props: Props) {
     </SimpleGrid>
   );
 
+  const scoredIds = Object.keys(secretsScored);
+  const knownUnscoredIds = Object.keys(knownUnscoredSecrets || {});
+  const unscored = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
+
   return (
     <PlayerCardBox color={color} faction={faction}>
-      <Group gap="md" px={4} align="center">
-        <Image src={factionUrl} alt={faction} w={32} h={32} />
-        <Stack gap={0}>
-          <Group>
-            <Text span c="white" size="lg" ff="heading">
-              {userName}
-            </Text>
-            <StatusIndicator passed={passed} active={active} />
+      <Group gap={0} align="flex-start">
+        <Stack w="20%">
+          <Group gap="xs" px={4} align="center">
+            <Image src={factionUrl} alt={faction} w={32} h={32} />
+            <Stack gap={0}>
+              <Group>
+                <Text span c="white" size="lg" ff="heading">
+                  {userName}
+                </Text>
+                <StatusIndicator passed={passed} active={active} />
+              </Group>
+              <Group gap={8}>
+                <Text size="sm" span ml={4} opacity={0.9} c="white" ff="text">
+                  {faction}
+                </Text>
+                <PlayerColor color={color} size="xs" />
+              </Group>
+            </Stack>
+            <div style={{ flex: 1 }} />
+            <Box>
+              <Neighbors neighbors={neighbors || []} />
+            </Box>
           </Group>
-          <Group gap={8}>
-            <Text size="sm" span ml={4} opacity={0.9} c="white" ff="text">
-              {faction}
-            </Text>
-            <PlayerColor color={color} size="xs" />
+
+          <Group gap="xs" align="flex-start" ml="xs">
+            <Stack gap={4}>
+              <TradeGoods tg={tg || 0} />
+              <Commodities
+                commodities={commodities || 0}
+                commoditiesTotal={commoditiesTotal || 0}
+              />
+            </Stack>
+            <PlayerCardCounts pnCount={pnCount || 0} acCount={acCount || 0} />
+            <CCPool
+              tacticalCC={tacticalCC}
+              fleetCC={fleetCC}
+              strategicCC={strategicCC}
+              mahactEdict={mahactEdict}
+            />
+            <FragmentsPool fragments={fragments} />
+          </Group>
+
+          <Group align="flex-start" gap="xs">
+            <Stack gap={2} flex={1}>
+              {scoredIds.map((secretId) => (
+                <div>
+                  <ScoredSecret
+                    key={`scored-${secretId}`}
+                    secretId={secretId}
+                    variant="scored"
+                  />
+                </div>
+              ))}
+              {knownUnscoredIds.map((secretId) => (
+                <ScoredSecret
+                  key={`unscored-${secretId}`}
+                  secretId={secretId}
+                  variant="unscored"
+                />
+              ))}
+              {Array.from({ length: unscored }, (_, index) => (
+                <UnscoredSecret key={`unscored-placeholder-${index}`} />
+              ))}
+            </Stack>
+            <Leaders leaders={leaders} faction={faction} mobile />
           </Group>
         </Stack>
 
-        <Box ml="xs">
-          <Neighbors neighbors={neighbors || []} />
-        </Box>
-
-        <Group gap="xs" align="center" mt={8}>
-          {scs.map((scNumber) => {
-            const isExhausted = exhaustedSCs?.includes(scNumber);
-            return (
-              <StrategyCardBannerCompact
-                key={scNumber}
-                number={scNumber}
-                text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                isExhausted={isExhausted}
-              />
-            );
-          })}
-          {isSpeaker && <SpeakerToken isVisible />}
-        </Group>
-      </Group>
-
-      <Grid gutter="xs" columns={24}>
-        <Grid.Col span={22}>
-          <PlayerCardAbilitiesFactionTechs
-            abilities={abilities}
-            notResearchedFactionTechs={allNotResearchedFactionTechs}
-            customPromissoryNotes={customPromissoryNotes}
-            variant="mobile"
-            breakthrough={props.playerData.breakthrough}
-          />
-        </Grid.Col>
-
-        <Grid.Col span={24}>
-          <Panel>
-            <Grid gutter="xs" columns={24}>
-              <Grid.Col span={6}>
-                <Group gap={2} align="flex-start">
-                  <Stack gap={4}>
-                    <TradeGoods tg={tg || 0} />
-                    <Commodities
-                      commodities={commodities || 0}
-                      commoditiesTotal={commoditiesTotal || 0}
+        <Stack ml="md">
+          <Group gap={4} align="flex-start">
+            {relics.length > 0 && (
+              <Box className={styles.relicsColumnFlow}>
+                {relics.map((relicId, index) => {
+                  const isExhausted = exhaustedRelics?.includes(relicId);
+                  return (
+                    <Relic
+                      key={`relic-${index}`}
+                      relicId={relicId}
+                      isExhausted={!!isExhausted}
                     />
-                    <DebtTokens debts={debtTokens!} />
-                  </Stack>
-                  <PlayerCardCounts
-                    pnCount={pnCount || 0}
-                    acCount={acCount || 0}
-                  />
-                  <CCPool
-                    tacticalCC={tacticalCC}
-                    fleetCC={fleetCC}
-                    strategicCC={strategicCC}
-                    mahactEdict={mahactEdict}
-                  />
-                  <FragmentsPool fragments={fragments} />
-                </Group>
-              </Grid.Col>
-
-              <Grid.Col span={3}>
-                <Stack gap={2}>
-                  <Leaders leaders={leaders} faction={faction} mobile />
-                </Stack>
-              </Grid.Col>
-
-              <Grid.Col span={15}>
-                <ObjectivesGrid
-                  secretsScored={secretsScored}
-                  knownUnscoredSecrets={knownUnscoredSecrets}
-                  soCount={soCount}
-                  promissoryNotes={promissoryNotes}
-                  relics={relics}
-                  exhaustedRelics={exhaustedRelics}
+                  );
+                })}
+              </Box>
+            )}
+            <Box className={styles.techGridColumnFlow}>
+              {colorTechs.map((techId) => (
+                <Tech
+                  key={`tech-${techId}`}
+                  techId={techId}
+                  isExhausted={props.playerData.exhaustedTechs.includes(techId)}
                 />
-              </Grid.Col>
-            </Grid>
-          </Panel>
-        </Grid.Col>
-
-        <Grid.Col span={24}>
-          <Group gap="xs" align="flex-start" h="100%">
-            <Panel
-              className={styles.techGridDesktop}
-              style={{ height: "100%" }}
-            >
-              <DynamicTechGrid
-                techs={filteredTechs}
-                exhaustedTechs={props.playerData.exhaustedTechs}
-                minSlotsPerColor={0}
-                breakthrough={props.playerData.breakthrough}
-              />
-            </Panel>
-
-            <Panel
-              className={styles.unitGridDesktop}
-              style={{ height: "100%" }}
-            >
-              <Box style={{ flex: 1 }}>{UnitsArea}</Box>
-            </Panel>
+              ))}
+            </Box>
           </Group>
-        </Grid.Col>
 
-        <Grid.Col span={24}>
-          <Panel>
-            <Group align="flex-start">
-              <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-              <PlanetsArea
-                regularPlanets={regularPlanets}
-                oceanPlanets={oceanPlanets}
-                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
-                exhaustedPlanets={exhaustedPlanets}
-                plotCards={plotCards}
-                faction={faction}
-                breachTokensReinf={breachTokensReinf}
-                sleeperTokensReinf={sleeperTokensReinf}
-                ghostWormholesReinf={ghostWormholesReinf}
-                galvanizeTokensReinf={galvanizeTokensReinf}
-              />
-              {nombox !== undefined && Object.keys(nombox).length > 0 && (
-                <Box style={{ minWidth: "200px", minHeight: "150px" }}>
-                  <Nombox capturedUnits={nombox || {}} />
-                </Box>
-              )}
-            </Group>
-          </Panel>
-        </Grid.Col>
-      </Grid>
-
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-        }}
-      >
-        <ArmyStats stats={armyStats} rank={rank} />
-      </Box>
+          <Group align="flex-start" mt="md">
+            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
+            <PlanetsArea
+              regularPlanets={regularPlanets}
+              oceanPlanets={oceanPlanets}
+              exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+              exhaustedPlanets={exhaustedPlanets}
+              plotCards={plotCards}
+              faction={faction}
+              breachTokensReinf={breachTokensReinf}
+              sleeperTokensReinf={sleeperTokensReinf}
+              ghostWormholesReinf={ghostWormholesReinf}
+              galvanizeTokensReinf={galvanizeTokensReinf}
+            />
+          </Group>
+        </Stack>
+      </Group>
     </PlayerCardBox>
   );
 }

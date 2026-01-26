@@ -10,7 +10,7 @@
 
 /* Tech card styles */
 .techCard {
-  padding: 4px var(--mantine-spacing-xs);
+  padding: 2px var(--mantine-spacing-xs);
   border-radius: 4px;
   position: relative;
   overflow: hidden;

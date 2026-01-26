@@ -14,9 +14,20 @@ type Props = {
   breakthrough?: BreakthroughData;
 };
 
-export function TechGridMobile({ techs = [], exhaustedTechs = [], breakthrough }: Props) {
+export function TechGridMobile({
+  techs = [],
+  exhaustedTechs = [],
+  breakthrough,
+}: Props) {
   const allTechElements: ReactNode[] = techCategories.flatMap((techType) =>
-    buildTechElementsForType(techType, techs, exhaustedTechs, undefined, true, breakthrough)
+    buildTechElementsForType(
+      techType,
+      techs,
+      exhaustedTechs,
+      undefined,
+      true,
+      breakthrough,
+    ),
   );
 
   const chunks = chunkInto(allTechElements, 4);

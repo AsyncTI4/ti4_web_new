@@ -28,11 +28,9 @@ type Props = {
 
 export function ResourceInfluenceCompact({ planetEconomics }: Props) {
   return (
-    <Group gap="lg" align="flex-start" wrap="nowrap">
+    <Group gap="md" align="flex-start" wrap="nowrap">
       <Stack gap={4} align="flex-start">
-        <Caption mb={2} mt={2}>
-          Optimal
-        </Caption>
+        <Caption>Optimal</Caption>
         <EconomicsColumn
           currentResources={planetEconomics.optimal.currentResources}
           totalResources={planetEconomics.optimal.totalResources}
@@ -46,9 +44,7 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
       </Stack>
 
       <Stack gap={4} align="flex-start">
-        <Caption mb={2} mt={2}>
-          Total
-        </Caption>
+        <Caption>Total</Caption>
         <EconomicsColumn
           currentResources={planetEconomics.total.currentResources}
           totalResources={planetEconomics.total.totalResources}
