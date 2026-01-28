@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Tile } from "./Tile";
 import { FactionColorOverlay } from "./FactionColorOverlay";
+import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import classes from "./MapTile.module.css";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
@@ -40,6 +41,7 @@ type Props = {
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
   selectedTiles?: string[];
+  controlOpenSides?: number[];
   tileDistance?: number | null;
   isOnPath?: boolean; // Whether this tile is on any of the calculated paths
   isTargetSelected?: boolean;
@@ -63,6 +65,7 @@ export const MapTile = React.memo<Props>(
     onPlanetMouseEnter,
     onPlanetMouseLeave,
     selectedTiles,
+    controlOpenSides,
     isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
     isTargetSelected = false,
     isMovingMode = false,
@@ -222,7 +225,16 @@ export const MapTile = React.memo<Props>(
           </div>
 
           {controllingFaction && overlaysEnabled && (
-            <FactionColorOverlay faction={controllingFaction} opacity={0.3} />
+            <>
+              <FactionColorOverlay
+                faction={controllingFaction}
+                opacity={0.15}
+              />
+              <FactionControlBorderOverlay
+                faction={controllingFaction}
+                openSides={controlOpenSides}
+              />
+            </>
           )}
 
           {pdsMode && (

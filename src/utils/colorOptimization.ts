@@ -125,6 +125,21 @@ const adjustColorLuminanceAndChroma = (
   return labToRgb(adjustedLab);
 };
 
+export const normalizeColorForOverlay = (
+  color: RGBColor,
+  targetLuminance: number = 0,
+  targetChroma: number = 35
+): RGBColor => {
+  return adjustColorLuminanceAndChroma(color, targetLuminance, targetChroma);
+};
+
+export const normalizeBorderColor = (color: RGBColor): RGBColor => {
+  const isNeutral = color.red === color.green && color.green === color.blue;
+  return isNeutral
+    ? normalizeColorForOverlay(color, 70, 0)
+    : normalizeColorForOverlay(color, 65, 53);
+};
+
 // Calculate perceptual color distance using Delta E (CIE76)
 const calculateColorDistance = (color1: RGBColor, color2: RGBColor): number => {
   const lab1 = rgbToLab(color1);

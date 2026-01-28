@@ -2,6 +2,8 @@ import { MapTile } from "@/components/Map/MapTile";
 import { PlayerStatsArea } from "@/components/Map/PlayerStatsArea";
 import { Tile } from "@/context/types";
 import type { PlayerData } from "@/data/types";
+import { computeControlOpenSides } from "@/utils/controlBorders";
+import { useMemo } from "react";
 
 type Props = {
   tiles: Tile[];
@@ -45,6 +47,11 @@ export function MapTilesRenderer({
   onTileSelect,
   onTileHover,
 }: Props) {
+  const controlOpenSides = useMemo(
+    () => computeControlOpenSides(tiles),
+    [tiles]
+  );
+
   return (
     <>
       {playerData &&
@@ -67,6 +74,7 @@ export function MapTilesRenderer({
           <MapTile
             key={`${tile.position}-${index}`}
             mapTile={tile}
+            controlOpenSides={controlOpenSides[tile.position]}
             isMovingMode={isMovingMode}
             isOrigin={isOrigin(tile.position)}
             selectedTiles={selectedTiles}

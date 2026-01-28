@@ -45,3 +45,4 @@ export function generateHexagonMidpoints(
   return midpoints;
 }
 
+export const HEX_SIDE_TO_TILE_DIRECTION = [2, 3, 4, 5, 0, 1];

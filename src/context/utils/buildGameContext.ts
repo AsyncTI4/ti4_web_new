@@ -51,7 +51,9 @@ function aggregateEntities(data: Record<string, EntityData[]>) {
 
     allTokens.push(...tokens);
     allAttachments.push(...attachments);
-    allUnitsByFaction[faction] = unitsByFaction;
+    if (unitsByFaction.length > 0) {
+      allUnitsByFaction[faction] = unitsByFaction;
+    }
   });
 
   return {

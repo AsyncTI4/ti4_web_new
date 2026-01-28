@@ -1,9 +1,15 @@
-import { hyperlaneIds, hyperlanes } from "@/data/hyperlanes";
 import { tileAdjacencies } from "../data/tileAdjacencies";
 import { getTileById } from "../mapgen/systems";
 import { getTokenData } from "../lookup/tokens";
 import { Tile, TilePlanet } from "@/context/types";
 import { PlayerDataResponse, TileUnitData, EntityData } from "@/data/types";
+import {
+  getConnectingSide,
+  getHyperlaneConnections,
+  getValidHyperlaneExits,
+  isHyperlane,
+  type TileAdjacencies,
+} from "@/utils/hyperlaneUtils";
 
 /**
  * Helper function to get all wormholes present on a tile
@@ -26,8 +32,6 @@ export function getTileWormholes(position: string, tiles: Tile[]): string[] {
 
   return Array.from(wormholes);
 }
-
-const isHyperlane = (systemId: string) => hyperlaneIds.includes(systemId);
 
 /**
  * Helper function to get hyperlane connections for a tile
@@ -54,32 +58,19 @@ function getHyperlaneConnectionsForTile(
 /**
  * Get valid hyperlane exits from a specific entrance direction
  */
-function getValidHyperlaneExits(
+const getSafeValidHyperlaneExits = (
   hyperlaneId: string,
   hyperlanePosition: string,
   entranceSide: number,
   tileAdjacencies: TileAdjacencies
-): string[] {
+): string[] => {
   try {
-    const result = getHyperlaneConnections(
+    return getValidHyperlaneExits(
       hyperlaneId,
       hyperlanePosition,
+      entranceSide,
       tileAdjacencies
     );
-    const validExits: string[] = [];
-
-    // Find all connections that include our entrance side
-    result.connections.forEach((connection) => {
-      if (connection.throughSides[0] === entranceSide) {
-        // We entered from side 0 of the connection, can exit to side 1
-        validExits.push(connection.toTile);
-      } else if (connection.throughSides[1] === entranceSide) {
-        // We entered from side 1 of the connection, can exit to side 0
-        validExits.push(connection.fromTile);
-      }
-    });
-
-    return validExits;
   } catch (error) {
     console.warn(
       `Failed to get valid hyperlane exits for ${hyperlaneId} at ${hyperlanePosition} from side ${entranceSide}:`,
@@ -87,21 +78,7 @@ function getValidHyperlaneExits(
     );
     return [];
   }
-}
-
-/**
- * Get the side index (0-5) that connects two adjacent positions
- */
-function getConnectingSide(
-  fromPosition: string,
-  toPosition: string,
-  tileAdjacencies: TileAdjacencies
-): number | null {
-  const adjacentPositions = tileAdjacencies[fromPosition];
-  if (!adjacentPositions) return null;
-
-  return adjacentPositions.findIndex((pos) => pos === toPosition);
-}
+};
 
 export type TilePath = {
   systemIds: string[];
@@ -177,7 +154,7 @@ export function calculateTileDistances(
         tileAdjacencies
       );
       if (entranceSide !== null) {
-        const validExits = getValidHyperlaneExits(
+        const validExits = getSafeValidHyperlaneExits(
           currentSystemId,
           currentPosition,
           entranceSide,
@@ -363,7 +340,7 @@ export function calculateOptimalPaths(
         tileAdjacencies
       );
       if (entranceSide !== null) {
-        const validExits = getValidHyperlaneExits(
+        const validExits = getSafeValidHyperlaneExits(
           currentSystemId,
           currentPosition,
           entranceSide,
@@ -473,138 +450,7 @@ export function calculateOptimalPaths(
   };
 }
 
-interface TileAdjacencies {
-  [tilePosition: string]: (string | null)[]; // 6 adjacent positions in clockwise order [N, NE, SE, S, SW, NW]
-}
-
-interface HyperlaneConnection {
-  fromTile: string;
-  toTile: string;
-  throughSides: [number, number]; // [fromSide, toSide]
-}
-
-interface HyperlaneConnectionResult {
-  hyperlaneId: string;
-  tilePosition: string;
-  connections: HyperlaneConnection[];
-  connectedTiles: string[]; // Unique list of all reachable tiles
-}
-
-/**
- * Parse a hyperlane matrix string into a 6x6 boolean matrix
- */
-function parseHyperlaneMatrix(matrixString: string): boolean[][] {
-  const rows = matrixString.split(";");
-  const matrix: boolean[][] = [];
-
-  for (let i = 0; i < 6; i++) {
-    const cols = rows[i].split(",");
-    const row: boolean[] = [];
-    for (let j = 0; j < 6; j++) {
-      row.push(cols[j].trim() === "1");
-    }
-    matrix.push(row);
-  }
-
-  return matrix;
-}
-
-/**
- * Get all connection pairs from a hyperlane matrix
- * Returns pairs as [min(i,j), max(i,j)] to avoid duplicates
- */
-function getConnectionPairs(matrix: boolean[][]): [number, number][] {
-  const pairs: [number, number][] = [];
-  const seen = new Set<string>();
-
-  for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 6; j++) {
-      if (matrix[i][j]) {
-        const pair: [number, number] = [Math.min(i, j), Math.max(i, j)];
-        const key = `${pair[0]},${pair[1]}`;
-
-        if (!seen.has(key)) {
-          pairs.push(pair);
-          seen.add(key);
-        }
-      }
-    }
-  }
-
-  return pairs;
-}
-
-/**
- * Check if a tile position is valid (not "x" which represents invalid/missing tiles)
- */
-function isValidTilePosition(position: string | null): position is string {
-  if (!position) return false;
-  return position !== "x" && position.length > 0;
-}
-
-/**
- * Get all tiles connected through a hyperlane at a specific position
- */
-function getHyperlaneConnections(
-  hyperlaneId: string,
-  tilePosition: string,
-  adjacencyData: TileAdjacencies
-): HyperlaneConnectionResult {
-  // Get the hyperlane matrix data
-  const matrixString = hyperlanes[hyperlaneId];
-  if (!matrixString) {
-    throw new Error(`Hyperlane ${hyperlaneId} not found in data`);
-  }
-
-  // Get adjacent tile positions for this tile
-  const adjacentTiles = adjacencyData[tilePosition];
-  if (!adjacentTiles || adjacentTiles.length !== 6) {
-    throw new Error(
-      `Adjacent tiles for position ${tilePosition} not found or invalid`
-    );
-  }
-
-  // Parse the hyperlane matrix
-  const matrix = parseHyperlaneMatrix(matrixString);
-
-  // Get all connection pairs
-  const connectionPairs = getConnectionPairs(matrix);
-
-  // Build connections
-  const connections: HyperlaneConnection[] = [];
-  const connectedTileSet = new Set<string>();
-
-  for (const [side1, side2] of connectionPairs) {
-    const tile1 = adjacentTiles[side1];
-    const tile2 = adjacentTiles[side2];
-
-    // Only add valid tile positions (not null and not "x")
-    if (isValidTilePosition(tile1) && isValidTilePosition(tile2)) {
-      // Add bidirectional connections
-      connections.push({
-        fromTile: tile1,
-        toTile: tile2,
-        throughSides: [side1, side2],
-      });
-
-      connections.push({
-        fromTile: tile2,
-        toTile: tile1,
-        throughSides: [side2, side1],
-      });
-
-      connectedTileSet.add(tile1);
-      connectedTileSet.add(tile2);
-    }
-  }
-
-  return {
-    hyperlaneId,
-    tilePosition,
-    connections,
-    connectedTiles: Array.from(connectedTileSet),
-  };
-}
+// Hyperlane connection helpers live in src/utils/hyperlaneUtils.ts.
 
 export function getTileController(
   planets: Record<string, TilePlanet>,

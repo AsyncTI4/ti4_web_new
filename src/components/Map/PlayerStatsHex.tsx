@@ -2,6 +2,7 @@ import { useMemo, useEffect } from "react";
 import {
   generateHexagonPoints,
   generateHexagonSides,
+  HEX_SIDE_TO_TILE_DIRECTION,
 } from "@/utils/hexagonUtils";
 import styles from "./PlayerStatsArea.module.css";
 
@@ -58,8 +59,6 @@ export function PlayerStatsHex({
 
     // Map hexagon side indices to tile adjacency directions
     // Hexagon starts at 0° (East), tile adjacency: 0=N, 1=NE, 2=SE, 3=S, 4=SW, 5=NW
-    const sideToDirectionMap = [2, 3, 4, 5, 0, 1]; // SE, S, SW, NW, N, NE
-
     const hexagons: HexagonData[] = tilePositions.map((tile, index) => {
       const position = tile.systemId.replace("stat_", "");
       const cx = tile.x + 172.5; // Center the hexagon in the 345px width
@@ -76,7 +75,9 @@ export function PlayerStatsHex({
         points: points.map((p) => `${p.x},${p.y}`).join(" "),
         sides: sides.map((side, sideIndex) => ({
           ...side,
-          isOpen: tileOpenSides.includes(sideToDirectionMap[sideIndex]),
+          isOpen: tileOpenSides.includes(
+            HEX_SIDE_TO_TILE_DIRECTION[sideIndex]
+          ),
         })),
       };
     });
