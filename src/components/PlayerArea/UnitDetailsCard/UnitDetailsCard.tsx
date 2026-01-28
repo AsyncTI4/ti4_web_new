@@ -371,7 +371,7 @@ export function UnitDetailsCard({
               <Group gap={8}>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Cost</Text>
-                  <Text size="sm" fw={700} c="white" className={styles.statValue}>
+                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
                     {upgradeCombat.cost != null ? (
                       <strong>
                         {upgradeCombat.cost > 0 ? `+${upgradeCombat.cost}` : `${upgradeCombat.cost}`}
@@ -381,7 +381,7 @@ export function UnitDetailsCard({
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Combat</Text>
-                  <Text size="sm" fw={700} c="white" className={styles.statValue}>
+                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
                     {upgradeCombat.combatHitsOn != null || upgradeCombat.combatDieCount != null ? (
                       <>
                         {/* Don't show "+" for hit value when gaining the ability to do combat. */}
@@ -407,7 +407,7 @@ export function UnitDetailsCard({
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Move</Text>
-                  <Text size="sm" fw={700} c="white" className={styles.statValue}>
+                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
                     {upgradeCombat.moveValue != null ? (
                       <strong>
                         {upgradeCombat.moveValue > 0 ? `+${upgradeCombat.moveValue}` : `${upgradeCombat.moveValue}`}
@@ -417,7 +417,7 @@ export function UnitDetailsCard({
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Capacity</Text>
-                  <Text size="sm" fw={700} c="white" className={styles.statValue}>
+                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
                     {upgradeCombat.capacityValue != null ? (
                       <strong>
                         {upgradeCombat.capacityValue > 0 ? `+${upgradeCombat.capacityValue}` : `${upgradeCombat.capacityValue}`}
