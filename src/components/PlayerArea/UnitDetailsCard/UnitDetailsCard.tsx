@@ -371,33 +371,24 @@ export function UnitDetailsCard({
               <Group gap={8}>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Cost</Text>
-                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
-                    {upgradeCombat.cost != null ? (
-                      <strong>
-                        {upgradeCombat.cost > 0 ? `+${upgradeCombat.cost}` : `${upgradeCombat.cost}`}
-                      </strong>
-                    ) : "—"}
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.cost != null ? upgradeCombat.cost > 0 ? `+${upgradeCombat.cost}` : upgradeCombat.cost : "—"}
                   </Text>
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Combat</Text>
-                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
                     {upgradeCombat.combatHitsOn != null || upgradeCombat.combatDieCount != null ? (
                       <>
                         {/* Don't show "+" for hit value when gaining the ability to do combat. */}
-                        {upgradeCombat.combatHitsOn != null ? (
-                          <strong>
-                            {upgradeCombat.combatHitsOn > 0
-                              ? `${typeof unitData.combatHitsOn === "number" ? "+": ""}${upgradeCombat.combatHitsOn}`
-                              : `${upgradeCombat.combatHitsOn}`}
-                          </strong>
-                          )
-                          : "—"
+                        {upgradeCombat.combatHitsOn != null
+                            ? (upgradeCombat.combatHitsOn > 0 ? `${unitData.combatHitsOn ? "+" : ""}${upgradeCombat.combatHitsOn}` : upgradeCombat.combatHitsOn)
+                            : "—"
                         }
                         {/* Don't show "—" for no change in die count. */}
                         {upgradeCombat.combatDieCount != null && (
                           <Text component="span" c="gray.5" fz="xs" ml={2}>
-                            ×{upgradeCombat.combatDieCount > 0 ? `+${upgradeCombat.combatDieCount}` : `${upgradeCombat.combatDieCount}`}
+                            ×{upgradeCombat.combatDieCount > 0 ? `+${upgradeCombat.combatDieCount}` : upgradeCombat.combatDieCount}
                           </Text>
                         )}
                       </>
@@ -407,22 +398,18 @@ export function UnitDetailsCard({
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Move</Text>
-                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
-                    {upgradeCombat.moveValue != null ? (
-                      <strong>
-                        {upgradeCombat.moveValue > 0 ? `+${upgradeCombat.moveValue}` : `${upgradeCombat.moveValue}`}
-                      </strong>
-                    ) : "—"}
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.moveValue != null
+                      ? (upgradeCombat.moveValue > 0 ? `+${upgradeCombat.moveValue}` : upgradeCombat.moveValue)
+                      : "—"}
                   </Text>
                 </Box>
                 <Box ta="center" py={6} className={styles.statBox}>
                   <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Capacity</Text>
-                  <Text size="sm" fw={700} c="gray.6" className={styles.statValue}>
-                    {upgradeCombat.capacityValue != null ? (
-                      <strong>
-                        {upgradeCombat.capacityValue > 0 ? `+${upgradeCombat.capacityValue}` : `${upgradeCombat.capacityValue}`}
-                      </strong>
-                    ) : "—"}
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.capacityValue != null
+                      ? (upgradeCombat.capacityValue > 0 ? `+${upgradeCombat.capacityValue}` : upgradeCombat.capacityValue)
+                      : "—"}
                   </Text>
                 </Box>
               </Group>
