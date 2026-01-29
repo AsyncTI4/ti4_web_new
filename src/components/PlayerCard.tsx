@@ -46,24 +46,11 @@ import { BreachTokens } from "./PlayerArea/BreachTokens";
 import { SleeperTokens } from "./PlayerArea/SleeperTokens";
 import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
 import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
+import { UNIT_PRIORITY_ORDER } from "@/utils/unitPriorityOrder";
 
 type Props = {
   playerData: PlayerData;
 };
-
-const unitPriorityOrder = [
-  "ws", // War Sun
-  "fs", // Flagship
-  "dn", // Dreadnought
-  "cv", // Carrier
-  "ca", // Cruiser
-  "dd", // Destroyer
-  "ff", // Fighter
-  "mf", // Mech
-  "gf", // Infantry
-  "sd", // Space Dock
-  "pd", // PDS
-];
 
 export default function PlayerCard(props: Props) {
   const {
@@ -170,14 +157,15 @@ export default function PlayerCard(props: Props) {
 
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
 
+  const specialTechTypes = ["NONE", "GENERICTF"];
   const noneTechs = techs.filter((techId) => {
     const techData = getTechData(techId);
-    return techData?.types[0] === "NONE";
+    return specialTechTypes.includes(techData?.types[0] ?? "");
   });
 
   const filteredTechs = techs.filter((techId) => {
     const techData = getTechData(techId);
-    return techData?.types[0] !== "NONE";
+    return !specialTechTypes.includes(techData?.types[0] ?? "");
   });
 
   const allNotResearchedFactionTechs = [
@@ -187,7 +175,7 @@ export default function PlayerCard(props: Props) {
 
   const UnitsArea = (
     <SimpleGrid h="100%" cols={{ base: 4, xl: 6 }} spacing="8px">
-      {unitPriorityOrder.map((asyncId) => {
+      {UNIT_PRIORITY_ORDER.map((asyncId) => {
         const bestUnit = lookupUnit(asyncId, faction, props.playerData);
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
         const unitCap = unitCounts?.[asyncId]?.unitCap;

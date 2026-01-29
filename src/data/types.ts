@@ -170,6 +170,10 @@ export type LeaderData = {
   shrinkName?: boolean;
   searchTags?: string[];
   homebrewReplacesID?: string;
+  tfName?: string;
+  tfTitle?: string;
+  tfAbilityWindow?: string;
+  tfAbilityText?: string;
 };
 
 export type CapturedUnitsData = {
@@ -320,6 +324,7 @@ export type PlayerDataResponse = {
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
+  isTwilightsFallMode?: boolean;
 };
 
 export type BreakthroughData = {

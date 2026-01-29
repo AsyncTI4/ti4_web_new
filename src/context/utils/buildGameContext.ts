@@ -289,5 +289,6 @@ export function buildGameContext(
     playerScoreBreakdowns: data.scoreBreakdowns,
     expeditions: data.expeditions,
     planetIdToPlanetTile,
+    isTwilightsFallMode: data.isTwilightsFallMode,
   };
 }

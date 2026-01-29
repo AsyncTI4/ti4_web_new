@@ -19,6 +19,7 @@ const getTechColor = (techType: string): string => {
     case "CYBERNETIC":
       return "yellow";
     case "NONE":
+    case "GENERICTF":
       return "white";
     default:
       return "grey";
@@ -52,7 +53,7 @@ export function TechCard({ techId }: Props) {
     if (type === "WARFARE") return "Warfare";
     if (type === "CYBERNETIC") return "Cybernetic";
     if (type === "UNITUPGRADE") return "Unit Upgrade";
-    if (type === "NONE") return "Special";
+    if (type === "NONE" || type === "GENERICTF") return "Special";
     return type;
   };
 

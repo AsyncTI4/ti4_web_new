@@ -12,7 +12,7 @@ type Props = {
   isMovingMode: boolean;
   isOrigin: (position: string) => boolean;
   selectedTiles: string[];
-  isOnPath: (systemId: string) => boolean;
+  isOnPath: (position: string) => boolean;
   isTargetSelected: (systemId: string) => boolean;
   hoveredTilePosition: string | null;
   onUnitMouseOver: (
@@ -79,7 +79,7 @@ export function MapTilesRenderer({
             isOrigin={isOrigin(tile.position)}
             selectedTiles={selectedTiles}
             isOnPath={isOnPath(tile.position)}
-            isTargetSelected={isTargetSelected(tile.position)}
+            isTargetSelected={isTargetSelected(tile.systemId)}
             hoveredTilePosition={hoveredTilePosition}
             onUnitMouseOver={onUnitMouseOver}
             onUnitMouseLeave={onUnitMouseLeave}

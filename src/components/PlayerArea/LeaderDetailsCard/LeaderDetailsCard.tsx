@@ -2,6 +2,7 @@ import { Stack, Image, Divider } from "@mantine/core";
 import { leaders } from "../../../data/leaders";
 import { DetailsCard } from "@/components/shared/DetailsCard";
 import { showLeader } from "../Leader/showLeader";
+import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
 
 type Props = {
   leaderId: string;
@@ -9,8 +10,19 @@ type Props = {
 
 export function LeaderDetailsCard({ leaderId }: Props) {
   const leaderData = getLeaderData(leaderId);
+  const isTwilightsFallMode = useIsTwilightsFallMode();
 
   if (!leaderData) return null;
+
+  const displayName =
+    (isTwilightsFallMode && leaderData.tfName) || leaderData.name;
+  const displayTitle =
+    (isTwilightsFallMode && leaderData.tfTitle) || leaderData.title;
+  const displayAbilityWindow =
+    (isTwilightsFallMode && leaderData.tfAbilityWindow) ||
+    leaderData.abilityWindow;
+  const displayAbilityText =
+    (isTwilightsFallMode && leaderData.tfAbilityText) || leaderData.abilityText;
 
   const renderLeaderIcon = () => {
     if (showLeader(leaderData.source)) {
@@ -26,8 +38,8 @@ export function LeaderDetailsCard({ leaderId }: Props) {
       <Stack gap="md">
         {/* Header with image and basic info */}
         <DetailsCard.Title
-          title={leaderData.name}
-          subtitle={leaderData.title}
+          title={displayName}
+          subtitle={displayTitle}
           icon={<DetailsCard.Icon icon={renderLeaderIcon()} />}
           caption={leaderData.type}
         />
@@ -42,8 +54,8 @@ export function LeaderDetailsCard({ leaderId }: Props) {
         <Divider c="gray.7" opacity={0.8} />
 
         <DetailsCard.Section
-          title={leaderData.abilityWindow}
-          content={leaderData.abilityText}
+          title={displayAbilityWindow}
+          content={displayAbilityText}
         />
       </Stack>
     </DetailsCard>

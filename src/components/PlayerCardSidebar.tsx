@@ -66,14 +66,15 @@ export default function PlayerCardSidebar(props: Props) {
   const exhaustedPlanets = playerData.exhaustedPlanets || [];
   const planetEconomics = usePlanetEconomics(playerData);
 
+  const specialTechTypes = ["NONE", "GENERICTF"];
   const noneTechs = techs.filter((techId) => {
     const techData = getTechData(techId);
-    return techData?.types[0] === "NONE";
+    return specialTechTypes.includes(techData?.types[0] ?? "");
   });
 
   const filteredTechs = techs.filter((techId) => {
     const techData = getTechData(techId);
-    return techData?.types[0] !== "NONE";
+    return !specialTechTypes.includes(techData?.types[0] ?? "");
   });
 
   const allNotResearchedFactionTechs = [

@@ -13,6 +13,7 @@ type PathVisualizationProps = {
   pathResult: PathResult | null;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
+  mapPadding?: number;
 };
 
 const PATH_COLORS = [
@@ -43,6 +44,7 @@ export const PathVisualization = ({
   pathResult,
   activePathIndex,
   onPathIndexChange,
+  mapPadding,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
 
@@ -53,6 +55,7 @@ export const PathVisualization = ({
   const zoom = useAppStore((state) => state.zoomLevel);
   const settings = useSettingsStore().settings;
   const gameData = useGameData();
+  const resolvedMapPadding = mapPadding ?? MAP_PADDING;
 
   const positionMap = createPositionMap(gameData?.calculatedTilePositions || []);
 
@@ -181,8 +184,8 @@ export const PathVisualization = ({
           ...(settings.isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: MAP_PADDING / zoom,
-          left: MAP_PADDING / zoom,
+          top: resolvedMapPadding / zoom,
+          left: resolvedMapPadding / zoom,
         }}
       >
         {renderPathLines()}

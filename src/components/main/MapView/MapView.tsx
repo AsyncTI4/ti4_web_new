@@ -1,13 +1,11 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import { Box } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
 import { LeftSidebar } from "@/components/main/LeftSidebar";
 import { DragHandle } from "@/components/DragHandle";
 import { PanelToggleButton } from "@/components/PanelToggleButton";
 import { RightSidebar } from "@/components/main/RightSidebar";
-import { PathVisualization } from "@/components/PathVisualization";
-import { MapPlanetDetailsCard } from "@/components/main/MapPlanetDetailsCard";
-import { MapUnitDetailsCard } from "@/components/main/MapUnitDetailsCard";
+import { MapRenderLayer } from "./components/MapRenderLayer";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
@@ -22,10 +20,11 @@ import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
 import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
-import { MapTilesRenderer } from "./components/MapTilesRenderer";
-import { ExpeditionLayer } from "@/components/Map/ExpeditionLayer";
 import { useMapContentSize } from "./hooks/useMapContentSize";
 import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
+import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
+import { useTilesList } from "@/hooks/useTilesList";
+import { getCssScaleStyle } from "@/utils/zoom";
 
 const MAP_PADDING = 200;
 
@@ -68,10 +67,7 @@ export function MapView({ gameId }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
-  const tilesList = useMemo(
-    () => Object.values(gameData?.tiles || {}),
-    [gameData?.tiles]
-  );
+  const tilesList = useTilesList(gameData?.tiles);
 
   const {
     draft,
@@ -137,18 +133,7 @@ export function MapView({ gameId }: Props) {
 
   const contentSize = useMapContentSize();
 
-  const [tryDecalsOpened, setTryDecalsOpened] = useState(false);
-
-  // Listen for the toggleTryDecals event
-  useEffect(() => {
-    const handleToggleTryDecals = () => {
-      setTryDecalsOpened((prev) => !prev);
-    };
-    window.addEventListener("toggleTryDecals", handleToggleTryDecals);
-    return () => {
-      window.removeEventListener("toggleTryDecals", handleToggleTryDecals);
-    };
-  }, []);
+  const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
   return (
     <Box className={classes.mapContainer}>
@@ -184,57 +169,35 @@ export function MapView({ gameId }: Props) {
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
 
-        {/* Tile-based rendering */}
-        {gameData && (
-          <>
-            <Box
-              className={classes.tileRenderingContainer}
-              style={{
-                ...(settings.isFirefox ? {} : { zoom: zoom }),
-                MozTransform: `scale(${zoom})`,
-                MozTransformOrigin: "top left",
-                top: MAP_PADDING / zoom,
-                left: MAP_PADDING / zoom,
-              }}
-            >
-              <MapTilesRenderer
-                tiles={tilesList}
-                playerData={gameData.playerData}
-                statTilePositions={gameData.statTilePositions}
-                isMovingMode={!!draft.targetPositionId}
-                isOrigin={(position) => !!draft.origins?.[position]}
-                selectedTiles={Array.from(selectedTiles)}
-                isOnPath={(systemId) =>
-                  targetSystemId ? true : systemsOnPath.has(systemId)
-                }
-                isTargetSelected={(systemId) =>
-                  targetSystemId ? systemId === targetSystemId : false
-                }
-                hoveredTilePosition={hoveredTile}
-                onUnitMouseOver={handleUnitMouseEnter}
-                onUnitMouseLeave={handleUnitMouseLeave}
-                onUnitSelect={(faction) => handleMouseDown(faction)}
-                onPlanetMouseEnter={handlePlanetMouseEnter}
-                onPlanetMouseLeave={handlePlanetMouseLeave}
-                onTileSelect={createTileSelectHandler(handleTileSelect)}
-                onTileHover={handleTileHover}
-              />
-              <ExpeditionLayer contentSize={contentSize} />
-            </Box>
-
-            {!draft.targetPositionId && (
-              <PathVisualization
-                pathResult={pathResult}
-                activePathIndex={activePathIndex}
-                onPathIndexChange={handlePathIndexChange}
-              />
-            )}
-
-            <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
-
-            <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
-          </>
-        )}
+        <MapRenderLayer
+          gameData={gameData}
+          tilesList={tilesList}
+          contentSize={contentSize}
+          tileContainerStyle={{
+            ...getCssScaleStyle(zoom, settings.isFirefox),
+            top: MAP_PADDING / zoom,
+            left: MAP_PADDING / zoom,
+          }}
+          hoveredTilePosition={hoveredTile}
+          selectedTiles={Array.from(selectedTiles)}
+          systemsOnPath={systemsOnPath}
+          targetSystemId={targetSystemId}
+          pathResult={pathResult}
+          activePathIndex={activePathIndex}
+          showPathVisualization={!draft.targetPositionId}
+          onPathIndexChange={handlePathIndexChange}
+          isMovingMode={!!draft.targetPositionId}
+          isOrigin={(position) => !!draft.origins?.[position]}
+          onTileSelect={createTileSelectHandler(handleTileSelect)}
+          onTileHover={handleTileHover}
+          onUnitMouseOver={handleUnitMouseEnter}
+          onUnitMouseLeave={handleUnitMouseLeave}
+          onUnitSelect={(faction) => handleMouseDown(faction)}
+          onPlanetMouseEnter={handlePlanetMouseEnter}
+          onPlanetMouseLeave={handlePlanetMouseLeave}
+          tooltipUnit={tooltipUnit}
+          tooltipPlanet={tooltipPlanet}
+        />
 
         <ReconnectButton gameDataState={gameDataState} />
       </Box>

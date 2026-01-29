@@ -196,8 +196,8 @@ export function PannableMapView({ gameId }: Props) {
                 isMovingMode={!!draft.targetPositionId}
                 isOrigin={(position) => !!draft.origins?.[position]}
                 selectedTiles={selectedTiles}
-                isOnPath={(systemId) =>
-                  targetSystemId ? true : systemsOnPath.has(systemId)
+                isOnPath={(position) =>
+                  targetSystemId ? true : systemsOnPath.has(position)
                 }
                 isTargetSelected={(systemId) =>
                   targetSystemId ? systemId === targetSystemId : false
@@ -219,6 +219,7 @@ export function PannableMapView({ gameId }: Props) {
                 pathResult={pathResult}
                 activePathIndex={activePathIndex}
                 onPathIndexChange={handlePathIndexChange}
+                mapPadding={MAP_PADDING}
               />
             )}
             <MapUnitDetailsCard tooltipUnit={tooltipUnit} />

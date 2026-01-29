@@ -937,7 +937,7 @@ export const techs: Tech[] = [
   {
     alias: "antimatter",
     name: "Antimatter",
-    types: ["NONE"],
+    types: ["GENERICTF"],
     source: "twilights_fall",
     text: "After you perform a tactical action in a system that contains a frontier token, if you have 1 or more ships in that system, explore that token.\nYour ships can retreat into adjacent systems that do not contain other players' units, even if you do not have units or control planets in that system.",
   },
@@ -5159,7 +5159,7 @@ export const techs: Tech[] = [
   {
     alias: "wavelength",
     name: "Wavelength",
-    types: ["NONE"],
+    types: ["GENERICTF"],
     source: "twilights_fall",
     text: "Your ships can move into and through asteroid fields. When you activate a system, you may explore 1 planet in that system that contains 1 or more of your units.",
   },

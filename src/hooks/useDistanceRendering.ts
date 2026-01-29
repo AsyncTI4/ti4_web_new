@@ -31,8 +31,8 @@ export function useDistanceRendering({
       return new Set<string>();
     }
 
-    // Only include systems from the currently active path
-    return new Set(activePath.systemIds);
+    // Only include positions from the currently active path
+    return new Set(activePath.positions);
   }, [pathResult, activePathIndex]);
 
   const handleTileSelect = useCallback(

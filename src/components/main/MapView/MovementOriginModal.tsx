@@ -26,6 +26,7 @@ import { CircularFactionIcon } from "@/components/shared/CircularFactionIcon";
 import { UnitMultiContextTile } from "./MovementOriginModal/UnitMultiContextTile";
 import { useUser } from "@/hooks/useUser";
 import { Tile } from "@/context/types";
+import { deepClone } from "@/utils/clone";
 
 type Props = {
   opened: boolean;
@@ -254,10 +255,9 @@ export function MovementOriginModal({
 
   useEffect(() => {
     if (!opened) return;
-    const clone = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj)) as T;
     snapshotRef.current = {
-      origin: clone(originTile),
-      target: targetTileFromGame ? clone(targetTileFromGame) : null,
+      origin: deepClone(originTile),
+      target: targetTileFromGame ? deepClone(targetTileFromGame) : null,
     };
   }, [opened, originTile, targetTileFromGame]);
 
@@ -267,9 +267,8 @@ export function MovementOriginModal({
     const baseTarget = snapshotRef.current?.target ?? targetTileFromGame;
 
     // Deep clone tiles to avoid mutating originals
-    const clone = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj)) as T;
-    const originTileModified = clone(baseOrigin);
-    const targetTileModified = baseTarget ? clone(baseTarget) : null;
+    const originTileModified = deepClone(baseOrigin);
+    const targetTileModified = baseTarget ? deepClone(baseTarget) : null;
 
     const decFromArea = (
       tile: Tile,

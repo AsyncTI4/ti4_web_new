@@ -1,17 +1,15 @@
 import { useMemo } from "react";
 import { useGameData } from "@/hooks/useGameContext";
-import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
+import { useTilesList } from "@/hooks/useTilesList";
 
 const MAP_PADDING = 200;
 
 export function useMapContentSize() {
   const gameData = useGameData();
-  const zoom = useAppStore((state) => state.zoomLevel);
-  const settings = useSettingsStore((state) => state.settings);
+  const tiles = useTilesList(gameData?.tiles);
 
   const contentSize = useMemo(() => {
-    const tiles = Object.values(gameData?.tiles || {});
     if (!tiles.length) return { width: 0, height: 0 };
 
     let maxRight = 0;
@@ -31,7 +29,7 @@ export function useMapContentSize() {
       width: baseWidth,
       height: baseHeight,
     };
-  }, [gameData?.tiles, settings.isFirefox, zoom]);
+  }, [tiles]);
 
   return contentSize;
 }
