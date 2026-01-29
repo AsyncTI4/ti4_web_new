@@ -140,8 +140,10 @@ export function UnitDetailsCard({
     const upgradeTech = getTechData(upgradeUnit.requiredTechId);
     if (!upgradeTech) return null;
 
-    const combatKeys: Array<keyof Pick<Unit, "cost" | "combatHitsOn" | "combatDieCount" | "moveValue" | "capacityValue">> = ["cost", "combatHitsOn", "combatDieCount", "moveValue", "capacityValue"];
-    const toStat = (value?: number) => (typeof value === "number" ? value : 0);
+    const combatKeys: Array<keyof Pick<Unit, "cost" | "combatHitsOn" | "combatDieCount" | "moveValue" | "capacityValue">> =
+	                                        ["cost" , "combatHitsOn" , "combatDieCount" , "moveValue" , "capacityValue"];
+
+	const toStat = (value?: number) => (typeof value === "number" ? value : 0);
 
     const upgradeCombat: Partial<Record<typeof combatKeys[number], number>> = combatKeys.reduce(
       (acc, key) => {
