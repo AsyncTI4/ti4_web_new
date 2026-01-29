@@ -6,6 +6,7 @@ import { DetailsCard } from "@/components/shared/DetailsCard";
 import { getTechData } from "@/lookup/tech";
 import { IconArrowRight } from "@tabler/icons-react";
 import styles from "./UnitDetailsCard.module.css";
+import { Unit } from "@/data/types";
 
 type Props = {
   unitId: string;
@@ -139,7 +140,22 @@ export function UnitDetailsCard({
     const upgradeTech = getTechData(upgradeUnit.requiredTechId);
     if (!upgradeTech) return null;
 
-    return { upgradeUnit, upgradeTech };
+    const combatKeys: Array<keyof Pick<Unit, "cost" | "combatHitsOn" | "combatDieCount" | "moveValue" | "capacityValue">> =
+                                            ["cost" , "combatHitsOn" , "combatDieCount" , "moveValue" , "capacityValue"];
+
+    const toStat = (value?: number) => (typeof value === "number" ? value : 0);
+
+    const upgradeCombat: Partial<Record<typeof combatKeys[number], number>> = combatKeys.reduce(
+      (acc, key) => {
+        const valueBase = toStat(unitData[key]);
+        const valueU = toStat(upgradeUnit[key]);
+        if (valueBase !== valueU) acc[key] = valueU - valueBase;
+        return acc;
+      },
+      {} as Partial<Record<typeof combatKeys[number], number>>
+    );
+
+    return { upgradeUnit, upgradeTech, upgradeCombat };
   })() : null;
 
   const unitIcon = (
@@ -168,6 +184,10 @@ export function UnitDetailsCard({
     unitData.sustainDamage || unitData.productionValue ||
     inheritedAbilities?.afbHitsOn || inheritedAbilities?.bombardHitsOn ||
     inheritedAbilities?.spaceCannonHitsOn || inheritedAbilities?.sustainDamage;
+
+  const upgradeCombat = upgradeInfo && Object.keys(upgradeInfo.upgradeCombat).length > 0
+    ? upgradeInfo.upgradeCombat
+    : null;
 
   return (
     <DetailsCard width={380}>
@@ -347,6 +367,56 @@ export function UnitDetailsCard({
               {upgradeInfo.upgradeUnit.ability && (
                 <Text size="sm" c="gray.6" className={styles.upgradeAbilityText}>{upgradeInfo.upgradeUnit.ability}</Text>
               )}
+
+              {/* Upgraded combat modifiers */}
+              {upgradeCombat && (
+              <Group gap={8}>
+                <Box ta="center" py={6} className={styles.statBox}>
+                  <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Cost</Text>
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.cost != null ? upgradeCombat.cost > 0 ? `+${upgradeCombat.cost}` : upgradeCombat.cost : "—"}
+                  </Text>
+                </Box>
+                <Box ta="center" py={6} className={styles.statBox}>
+                  <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Combat</Text>
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.combatHitsOn != null || upgradeCombat.combatDieCount != null ? (
+                      <>
+                        {/* Don't show "+" for hit value when gaining the ability to do combat. */}
+                        {upgradeCombat.combatHitsOn != null
+                            ? (upgradeCombat.combatHitsOn > 0 ? `${unitData.combatHitsOn ? "+" : ""}${upgradeCombat.combatHitsOn}` : upgradeCombat.combatHitsOn)
+                            : "—"
+                        }
+                        {/* Don't show "—" for no change in die count. */}
+                        {upgradeCombat.combatDieCount != null && (
+                          <Text component="span" c="gray.5" fz="xs" ml={2}>
+                            ×{upgradeCombat.combatDieCount > 0 ? `+${upgradeCombat.combatDieCount}` : upgradeCombat.combatDieCount}
+                          </Text>
+                        )}
+                      </>
+                     ) : "—"
+                  }
+                  </Text>
+                </Box>
+                <Box ta="center" py={6} className={styles.statBox}>
+                  <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Move</Text>
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.moveValue != null
+                      ? (upgradeCombat.moveValue > 0 ? `+${upgradeCombat.moveValue}` : upgradeCombat.moveValue)
+                      : "—"}
+                  </Text>
+                </Box>
+                <Box ta="center" py={6} className={styles.statBox}>
+                  <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>Capacity</Text>
+                  <Text size="sm" fw={600} c="gray.6" className={styles.statValue}>
+                    {upgradeCombat.capacityValue != null
+                      ? (upgradeCombat.capacityValue > 0 ? `+${upgradeCombat.capacityValue}` : upgradeCombat.capacityValue)
+                      : "—"}
+                  </Text>
+                </Box>
+              </Group>
+            )}
+
             </Box>
           </>
         )}
