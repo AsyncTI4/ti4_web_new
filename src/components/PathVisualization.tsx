@@ -1,4 +1,5 @@
 import { useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { PathResult } from "../utils/tileDistances";
 import {
   createPositionMap,
@@ -19,6 +20,8 @@ type PathVisualizationProps = {
   onPathIndexChange: (index: number) => void;
   mapLayout?: MapLayout;
   mapZoom?: number;
+  containerMode?: "mapArea" | "tileContainer";
+  renderSelectorInPortal?: boolean;
 };
 
 const PATH_COLORS = [
@@ -51,6 +54,8 @@ export const PathVisualization = ({
   onPathIndexChange,
   mapLayout = "panels",
   mapZoom,
+  containerMode = "mapArea",
+  renderSelectorInPortal = false,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
 
@@ -62,7 +67,10 @@ export const PathVisualization = ({
   const settings = useSettingsStore().settings;
   const gameData = useGameData();
   const layoutConfig = getMapLayoutConfig(mapLayout);
-  const { top, left } = getMapContainerOffset(layoutConfig, zoom);
+  const { top, left } =
+    containerMode === "tileContainer"
+      ? { top: 0, left: 0 }
+      : getMapContainerOffset(layoutConfig, zoom);
 
   const positionMap = createPositionMap(gameData?.calculatedTilePositions || []);
 
@@ -182,23 +190,28 @@ export const PathVisualization = ({
     );
   };
 
-  return (
-    <>
-      <svg
-        id="pathviz"
-        className={classes.svg}
-        style={{
+  const svgStyle =
+    containerMode === "tileContainer"
+      ? { top, left }
+      : {
           ...(settings.isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
           top,
           left,
-        }}
-      >
+        };
+
+  const selector = renderPathSelector();
+
+  return (
+    <>
+      <svg id="pathviz" className={classes.svg} style={svgStyle}>
         {renderPathLines()}
         {renderStepDots()}
       </svg>
-      {renderPathSelector()}
+      {renderSelectorInPortal && typeof document !== "undefined"
+        ? createPortal(selector, document.body)
+        : selector}
     </>
   );
 };

@@ -97,17 +97,18 @@ export function MapRenderLayer({
           onTileHover={onTileHover}
         />
         <ExpeditionLayer contentSize={contentSize} />
+        {showPathVisualization && (
+          <PathVisualization
+            pathResult={pathResult}
+            activePathIndex={activePathIndex}
+            onPathIndexChange={onPathIndexChange}
+            mapLayout={mapLayout}
+            mapZoom={mapZoom}
+            containerMode="tileContainer"
+            renderSelectorInPortal
+          />
+        )}
       </Box>
-
-      {showPathVisualization && (
-        <PathVisualization
-          pathResult={pathResult}
-          activePathIndex={activePathIndex}
-          onPathIndexChange={onPathIndexChange}
-          mapLayout={mapLayout}
-          mapZoom={mapZoom}
-        />
-      )}
 
       <MapUnitDetailsCard
         tooltipUnit={tooltipUnit}

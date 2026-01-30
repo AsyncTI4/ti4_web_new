@@ -180,6 +180,8 @@ export function MapView({ gameId }: Props) {
           tileContainerStyle={{
             ...getMapScaleStyle(mapLayout, zoom, settings.isFirefox),
             ...getMapContainerOffset(mapLayout, zoom),
+            width: contentSize.width,
+            height: contentSize.height,
           }}
           hoveredTilePosition={hoveredTile}
           selectedTiles={Array.from(selectedTiles)}
