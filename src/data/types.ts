@@ -449,6 +449,9 @@ export type PlayerData = {
   // mahact-specific properties
   mahactEdict?: string[];
 
+  // nekro-specific properties (Thunder's Edge)
+  valefarZTargets?: string[];
+
   hasZeroToken?: boolean;
 };
 

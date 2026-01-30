@@ -6,6 +6,7 @@ import { DetailsCard } from "@/components/shared/DetailsCard";
 import { getTechData } from "@/lookup/tech";
 import { IconArrowRight } from "@tabler/icons-react";
 import styles from "./UnitDetailsCard.module.css";
+import { PlayerData } from "@/data/types";
 
 type Props = {
   unitId: string;
@@ -14,6 +15,8 @@ type Props = {
   combatValueModifier?: number;
   costModifier?: number;
   playerUnitsOwned?: string[];
+  valefarZTargets?: string[];
+  allPlayerData?: PlayerData[];
 };
 
 type InheritedAbilities = {
@@ -108,6 +111,57 @@ function getInheritedAbilitiesForPinktfFlagship(
   };
 }
 
+type AssimilatedAbility = {
+  faction: string;
+  flagshipName: string;
+  ability: string;
+};
+
+function getAssimilatedAbilitiesForNekroFlagship(
+  valefarZTargets?: string[],
+  allPlayerData?: PlayerData[]
+): AssimilatedAbility[] {
+  if (!valefarZTargets?.length || !allPlayerData?.length) return [];
+
+  const assimilatedAbilities: AssimilatedAbility[] = [];
+
+  for (const targetFaction of valefarZTargets) {
+    // Find the player with this faction
+    const targetPlayer = allPlayerData.find(
+      (p) => p.faction.toLowerCase() === targetFaction.toLowerCase()
+    );
+    if (!targetPlayer) continue;
+
+    // Find the flagship unit from their owned units
+    const flagshipUnitId = targetPlayer.unitsOwned.find(
+      (unitId) => {
+        const unit = getUnitData(unitId);
+        return unit?.baseType === "flagship";
+      }
+    );
+    if (!flagshipUnitId) continue;
+
+    const flagshipData = getUnitData(flagshipUnitId);
+    if (!flagshipData?.ability) continue;
+
+    assimilatedAbilities.push({
+      faction: targetFaction,
+      flagshipName: flagshipData.name,
+      ability: flagshipData.ability,
+    });
+  }
+
+  return assimilatedAbilities;
+}
+
+function isNekroFlagship(unitId: string): boolean {
+  return (
+    unitId === "nekro_flagship" ||
+    unitId === "sigma_nekro_flagship_1" ||
+    unitId === "sigma_nekro_flagship_2"
+  );
+}
+
 export function UnitDetailsCard({
   unitId,
   color,
@@ -115,6 +169,8 @@ export function UnitDetailsCard({
   combatValueModifier,
   costModifier,
   playerUnitsOwned,
+  valefarZTargets,
+  allPlayerData,
 }: Props) {
   const unitData = getUnitData(unitId);
   if (!unitData) {
@@ -131,6 +187,11 @@ export function UnitDetailsCard({
     unitId === "pinktf_flagship"
       ? getInheritedAbilitiesForPinktfFlagship(playerUnitsOwned)
       : null;
+
+  // Special handling for nekro flagship with Valefar Z assimilator tokens
+  const assimilatedAbilities = isNekroFlagship(unitId)
+    ? getAssimilatedAbilitiesForNekroFlagship(valefarZTargets, allPlayerData)
+    : [];
 
   const upgradeInfo = !isUpgraded && unitData.upgradesToUnitId ? (() => {
     const upgradeUnit = getUnitData(unitData.upgradesToUnitId);
@@ -264,6 +325,38 @@ export function UnitDetailsCard({
                     </Box>
                   );
                 })}
+              </Stack>
+            </Box>
+          </>
+        )}
+
+        {/* Assimilated abilities for Nekro flagship (Valefar Z tokens) */}
+        {assimilatedAbilities.length > 0 && (
+          <>
+            <Divider color="gray.8" />
+            <Box>
+              <Text size="xs" fw={500} c="teal.4" mb={6}>
+                Assimilated Flagship Abilities (Valefar Z)
+              </Text>
+              <Stack gap={6}>
+                {assimilatedAbilities.map((assimilated, index) => (
+                  <Box key={index} p={8} className={styles.inheritedAbilityBox}>
+                    <Group gap={6} mb={3}>
+                      <Image
+                        src={cdnImage(`/factions/${assimilated.faction.toLowerCase()}.png`)}
+                        alt={assimilated.faction}
+                        w={16}
+                        h={16}
+                      />
+                      <Text size="xs" c="teal.3" fw={600} className={styles.inheritedAbilityTitle}>
+                        {assimilated.flagshipName}
+                      </Text>
+                    </Group>
+                    <Text size="sm" c="gray.4" className={styles.inheritedAbilityText}>
+                      {assimilated.ability}
+                    </Text>
+                  </Box>
+                ))}
               </Stack>
             </Box>
           </>

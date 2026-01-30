@@ -30,6 +30,14 @@ const DEFAULT_UNIT_CAPS = {
   infantry: 12,
   fighter: 10,
 };
+
+function isNekroFlagship(unitId: string): boolean {
+  return (
+    unitId === "nekro_flagship" ||
+    unitId === "sigma_nekro_flagship_1" ||
+    unitId === "sigma_nekro_flagship_2"
+  );
+}
 export function UnitCard({
   unitId,
   color,
@@ -47,9 +55,10 @@ export function UnitCard({
   if (!unitData) return null;
 
   const isMech = unitData.baseType === "mech";
-  const playerUnitsOwned = color
-    ? gameData?.playerData?.find((p) => p.color === color)?.unitsOwned
+  const playerData = color
+    ? gameData?.playerData?.find((p) => p.color === color)
     : undefined;
+  const playerUnitsOwned = playerData?.unitsOwned;
 
   const hasCabalMechUpgrade =
     isMech && playerUnitsOwned?.includes("tf-eidolonterminus");
@@ -108,6 +117,12 @@ export function UnitCard({
             costModifier={hasNekroMechUpgrade ? -1 : undefined}
             playerUnitsOwned={
               unitId === "pinktf_flagship" ? playerUnitsOwned : undefined
+            }
+            valefarZTargets={
+              isNekroFlagship(unitId) ? playerData?.valefarZTargets : undefined
+            }
+            allPlayerData={
+              isNekroFlagship(unitId) ? gameData?.playerData : undefined
             }
           />
         )}
