@@ -123,6 +123,16 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     const bInit = b.scs[0] || 99;
     return aInit - bInit;
   });
+  const maxPotentialVPs = sortedPlayers.reduce((maxTotal, player) => {
+    const breakdown = playerScoreBreakdowns?.[player.faction];
+    if (!breakdown) return maxTotal;
+    const total = breakdown.entries.reduce(
+      (sum, entry) => sum + entry.pointValue,
+      0
+    );
+    return Math.max(maxTotal, total);
+  }, 0);
+  const gridColumns = Math.max(vpsToWin, maxPotentialVPs);
 
   return (
     <div className={styles.themedContainer}>
@@ -170,18 +180,20 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           <div className={styles.playerInfoColumn} />
           <div
             className={styles.objectivesGrid}
-            style={{ gridTemplateColumns: `repeat(${vpsToWin}, 1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${gridColumns}, 1fr)` }}
           >
-            {Array.from({ length: vpsToWin }, (_, i) => i + 1).map((num) => (
+            {Array.from({ length: gridColumns }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
-                <Text
-                  ff="heading"
-                  size="sm"
-                  c="dimmed"
-                  style={{ opacity: 0.7 }}
-                >
-                  {num}
-                </Text>
+                {num <= vpsToWin ? (
+                  <Text
+                    ff="heading"
+                    size="sm"
+                    c="dimmed"
+                    style={{ opacity: 0.7 }}
+                  >
+                    {num}
+                  </Text>
+                ) : null}
               </div>
             ))}
           </div>
@@ -239,7 +251,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
               <div
                 className={styles.objectivesGrid}
                 style={{
-                  gridTemplateColumns: `repeat(${vpsToWin}, 1fr)`,
+                  gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
                 }}
               >
                 {breakdown.entries.map((entry, idx) => {
