@@ -1,6 +1,6 @@
 import { Box, Text, Stack, Group } from "@mantine/core";
 import { SmoothPopover } from "../../shared/SmoothPopover";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import type { ReactElement } from "react";
 import styles from "./Plot.module.css";
 import { Chip } from "@/components/shared/primitives/Chip";
@@ -16,7 +16,7 @@ type Props = {
 const MAX_PLOT_SLOTS = 4;
 
 export function Plot({ plotCard, faction }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
 
   // Only reveal plot names if:
   // 1. plotAlias exists AND
@@ -71,7 +71,7 @@ export function Plot({ plotCard, faction }: Props) {
           <Chip
             className={styles.plotCard}
             accent="bloodOrange"
-            onClick={() => setOpened((o) => !o)}
+            onClick={toggle}
             strong
             px="xs"
             py={6}

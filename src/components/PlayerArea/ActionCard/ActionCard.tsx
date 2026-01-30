@@ -1,5 +1,5 @@
 import { Box, Text, Image } from "@mantine/core";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { Shimmer } from "../Shimmer";
 import { getActionCard } from "../../../lookup/actionCards";
 import { getGradientClasses } from "../gradientClasses";
@@ -18,7 +18,7 @@ export function ActionCard({
   onClick,
   showDetails = true,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const actionCardData = getActionCard(actionCardId);
 
   if (!actionCardData) return null;
@@ -30,7 +30,7 @@ export function ActionCard({
       onClick();
     }
     if (showDetails) {
-      setOpened((o) => !o);
+      toggle();
     }
   };
 

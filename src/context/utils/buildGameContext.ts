@@ -69,7 +69,11 @@ export function buildGameContext(
   decalOverrides: Record<string, string> = {}
 ): GameData {
   const playerData = data.playerData.filter(
-    (p) => p.faction !== "null" && p.faction !== "" && p.faction !== undefined
+    (p) =>
+      p.faction !== "null" &&
+      p.faction !== "" &&
+      p.faction !== undefined &&
+      p.faction !== "Dicecord"
   );
 
   const baseFactionToColor = buildFactionToColor(playerData);

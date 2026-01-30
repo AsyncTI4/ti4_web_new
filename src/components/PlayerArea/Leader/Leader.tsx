@@ -1,6 +1,6 @@
 import { Group, Stack, Text, Image, Box } from "@mantine/core";
 import { IconLock } from "@tabler/icons-react";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { leaders } from "../../../data/leaders";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
@@ -18,7 +18,7 @@ type Props = {
 };
 
 export function Leader({ id, type, exhausted, locked, active }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const leaderData = getLeaderData(id);
   if (!leaderData) return null;
 
@@ -29,7 +29,7 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip accent={accentColor} onClick={() => setOpened((o) => !o)}>
+        <Chip accent={accentColor} onClick={toggle}>
           <Box className={styles.leaderWrapper}>
             <Group gap={8} className={styles.leaderGroup}>
               {showLeaderImage ? (

@@ -1,10 +1,13 @@
 import { Box } from "@mantine/core";
 import { PlanetDetailsCard } from "../PlayerArea/PlanetDetailsCard";
-const MAP_PADDING = 200;
-
 import { usePlanet } from "@/hooks/usePlanet";
 import { useAppStore } from "@/utils/appStore";
 import { getBrowserZoomScale } from "@/utils/zoom";
+import {
+  getMapLayoutConfig,
+  mapCoordsToScreen,
+  type MapLayout,
+} from "./MapView/mapLayout";
 
 type TooltipPlanet = {
   planetId: string;
@@ -13,26 +16,39 @@ type TooltipPlanet = {
 
 type Props = {
   tooltipPlanet: TooltipPlanet | null;
+  mapPadding?: number;
+  mapZoom?: number;
+  mapLayout?: MapLayout;
 };
 
-export function MapPlanetDetailsCard({ tooltipPlanet }: Props) {
+export function MapPlanetDetailsCard({
+  tooltipPlanet,
+  mapPadding,
+  mapZoom,
+  mapLayout = "panels",
+}: Props) {
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
 
-  const zoom = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
   const planetTile = usePlanet(tooltipPlanet.planetId);
+  const resolvedPadding =
+    mapPadding ?? getMapLayoutConfig(mapLayout).mapPadding;
 
   const browserScale = getBrowserZoomScale();
   const inverse = browserScale ? 1 / browserScale : 1;
-  const scaledX = tooltipPlanet.coords.x * zoom;
-  const scaledY = tooltipPlanet.coords.y * zoom;
+  const { x, y } = mapCoordsToScreen(
+    tooltipPlanet.coords,
+    zoom,
+    resolvedPadding
+  );
 
   return (
     <Box
       key="planet-tooltip"
       style={{
         position: "absolute",
-        left: `${scaledX + MAP_PADDING}px`,
-        top: `${scaledY + MAP_PADDING - 25}px`,
+        left: `${x}px`,
+        top: `${y - 25}px`,
         zIndex: "var(--z-map-planet-details)",
         pointerEvents: "none",
         transform: `translate(-50%, -100%) scale(${inverse})`,

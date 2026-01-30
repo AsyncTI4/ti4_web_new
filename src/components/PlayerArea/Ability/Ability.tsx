@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { getAbility } from "../../../lookup/abilities";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { AbilityDetailsCard } from "../AbilityDetailsCard/AbilityDetailsCard";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function Ability({ id, strong = true }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const abilityData = getAbility(id);
   if (!abilityData) return null;
 
@@ -24,7 +24,7 @@ export function Ability({ id, strong = true }: Props) {
           accentLine
           strong={strong}
           title={abilityData.name}
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
           leftSection={
             !isMobileDevice() ? <IconSparkles size={18} /> : undefined
           }

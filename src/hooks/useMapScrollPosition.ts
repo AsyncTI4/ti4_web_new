@@ -5,14 +5,15 @@ import { useEffect, useRef } from "react";
 type UseMapScrollPositionProps = {
   zoom: number;
   gameId: string;
+  mapPadding: number;
 };
 
 export function useMapScrollPosition({
   zoom,
   gameId,
+  mapPadding,
 }: UseMapScrollPositionProps) {
   const enhancedData = useGameContext();
-  const MAP_PADDING = 200;
   // Ref for the scrollable map container
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // Track if we've set the initial scroll position and for which game
@@ -47,13 +48,18 @@ export function useMapScrollPosition({
           const centerX = (container.scrollWidth - container.clientWidth) / 2;
           const centerY = (container.scrollHeight - container.clientHeight) / 2;
 
-          container.scrollLeft = centerX + MAP_PADDING * zoom;
-          container.scrollTop = centerY + MAP_PADDING * zoom;
+          container.scrollLeft = centerX + mapPadding * zoom;
+          container.scrollTop = centerY + mapPadding * zoom;
           hasSetInitialScroll.current = true;
         }
       });
     }
-  }, [enhancedData?.playerData, enhancedData?.calculatedTilePositions, zoom]);
+  }, [
+    enhancedData?.playerData,
+    enhancedData?.calculatedTilePositions,
+    zoom,
+    mapPadding,
+  ]);
 
   return {
     mapContainerRef,

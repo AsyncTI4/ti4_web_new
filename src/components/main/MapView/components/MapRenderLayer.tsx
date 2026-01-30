@@ -9,6 +9,7 @@ import type { GameData } from "@/context/types";
 import type { PathResult } from "@/utils/tileDistances";
 import type { Tile } from "@/context/types";
 import classes from "@/components/MapUI.module.css";
+import type { MapLayout } from "../mapLayout";
 
 type Props = {
   gameData: GameData | undefined;
@@ -34,6 +35,9 @@ type Props = {
   onPlanetMouseLeave: () => void;
   tooltipUnit: unknown;
   tooltipPlanet: unknown;
+  mapLayout: MapLayout;
+  mapPadding: number;
+  mapZoom: number;
 };
 
 export function MapRenderLayer({
@@ -60,6 +64,9 @@ export function MapRenderLayer({
   onPlanetMouseLeave,
   tooltipUnit,
   tooltipPlanet,
+  mapLayout,
+  mapPadding,
+  mapZoom,
 }: Props) {
   if (!gameData) return null;
 
@@ -97,11 +104,23 @@ export function MapRenderLayer({
           pathResult={pathResult}
           activePathIndex={activePathIndex}
           onPathIndexChange={onPathIndexChange}
+          mapLayout={mapLayout}
+          mapZoom={mapZoom}
         />
       )}
 
-      <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
-      <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
+      <MapUnitDetailsCard
+        tooltipUnit={tooltipUnit}
+        mapPadding={mapPadding}
+        mapZoom={mapZoom}
+        mapLayout={mapLayout}
+      />
+      <MapPlanetDetailsCard
+        tooltipPlanet={tooltipPlanet}
+        mapPadding={mapPadding}
+        mapZoom={mapZoom}
+        mapLayout={mapLayout}
+      />
     </>
   );
 }

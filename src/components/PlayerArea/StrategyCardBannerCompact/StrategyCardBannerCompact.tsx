@@ -1,5 +1,5 @@
 import { Box, Group, Text } from "@mantine/core";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import cx from "clsx";
 import { IconX } from "@tabler/icons-react";
 import { Chip } from "@/components/shared/primitives/Chip";
@@ -47,7 +47,7 @@ export function StrategyCardBannerCompact({
   color,
   isExhausted = false,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const gameData = useGameData();
   const sc = getStrategyCardByInitiative(number, gameData?.strategyCardIdMap);
   const displayText = sc?.name || text;
@@ -63,7 +63,7 @@ export function StrategyCardBannerCompact({
           <Chip
             accent={color as ColorKey}
             className={`${classes.cardContainer} ${colorClass}`}
-            onClick={() => setOpened((o) => !o)}
+            onClick={toggle}
           >
             <Box
               className={cx(

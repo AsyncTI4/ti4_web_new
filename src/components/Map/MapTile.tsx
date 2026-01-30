@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Tile } from "./Tile";
-import { FactionColorOverlay } from "./FactionColorOverlay";
-import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import classes from "./MapTile.module.css";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
@@ -22,6 +20,8 @@ import { Tile as TileType } from "@/context/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
 import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
 import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
+import { FactionColorOverlay } from "./FactionColorOverlay";
+import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 
 type Props = {
   mapTile: TileType;

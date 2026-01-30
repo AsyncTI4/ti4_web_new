@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import styles from "./UnitCard.module.css";
 import { UnitDetailsCard } from "../UnitDetailsCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
@@ -47,7 +47,7 @@ export function UnitCard({
   locked,
   lockedLabel,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const unitData = getUnitData(unitId);
   const colorAlias = getColorAlias(color);
   const gameData = useGameContext();
@@ -84,7 +84,7 @@ export function UnitCard({
       <SmoothPopover.Target>
         <div style={{ minWidth: "50px" }}>
           <BaseCard
-            onClick={locked ? undefined : () => setOpened((o) => !o)}
+            onClick={locked ? undefined : toggle}
             isUpgraded={isUpgraded}
             isFaction={isFaction}
             faction={unitData.faction}

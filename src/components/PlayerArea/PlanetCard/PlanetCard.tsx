@@ -1,5 +1,5 @@
 import { Stack, Box, Group, Text, Image } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
 import InfluenceIcon from "../../InfluenceIcon";
@@ -16,6 +16,7 @@ import { TilePlanet } from "@/context/types";
 import { Planet } from "@/data/types";
 import { IconValue } from "@/components/shared/primitives/IconValue";
 import { useAppStore } from "@/utils/appStore";
+import { useDisclosure } from "@/hooks/useDisclosure";
 
 type Props = {
   planetId: string;
@@ -28,7 +29,7 @@ export function PlanetCard({
   legendaryAbilityExhausted = false,
   isExhausted: isExhaustedProp,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const planetData = getPlanetData(planetId);
   const planetTile = usePlanet(planetId);
   const setHoveredPlanetId = useAppStore((state) => state.setHoveredPlanetId);
@@ -76,7 +77,7 @@ export function PlanetCard({
       <SmoothPopover.Target>
         <Stack
           onClick={() => {
-            setOpened((o) => !o);
+            toggle();
             setScrollToPlanetId(planetId);
           }}
           onMouseEnter={() => setHoveredPlanetId(planetId)}

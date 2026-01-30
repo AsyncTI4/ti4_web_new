@@ -54,8 +54,6 @@ import { NavigationDrawer } from "./components/NavigationDrawer";
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
-export const MAP_PADDING = 200;
-
 function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const data = useGameContext();
   const gameDataState = useGameDataState();

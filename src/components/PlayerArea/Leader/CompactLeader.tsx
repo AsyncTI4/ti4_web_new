@@ -2,7 +2,7 @@ import { Image } from "@mantine/core";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./CompactLeader.module.css";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 
 type Props = {
   id: string;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function CompactLeader({ id, exhausted, locked }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const shouldShowGreen = !exhausted && !locked;
 
   return (
@@ -20,13 +20,13 @@ export function CompactLeader({ id, exhausted, locked }: Props) {
       <SmoothPopover.Target>
         <div
           className={`${styles.compact} ${shouldShowGreen ? styles.active : styles.inactive}`}
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              setOpened((o) => !o);
+              toggle();
             }
           }}
         >

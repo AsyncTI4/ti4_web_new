@@ -1,6 +1,6 @@
 import { Group, Text, Image, Box } from "@mantine/core";
 import { IconLock } from "@tabler/icons-react";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { leaders } from "../../../data/leaders";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const leaderData = getLeaderData(id);
   if (!leaderData) return null;
 
@@ -32,7 +32,7 @@ export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
       <SmoothPopover.Target>
         <Chip
           accent={accentColor}
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
           className={styles.mobile}
         >
           <Group gap={8} className={styles.leaderGroup}>

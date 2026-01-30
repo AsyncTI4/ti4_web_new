@@ -3,7 +3,11 @@ import { UnitDetailsCard } from "../PlayerArea/UnitDetailsCard";
 import { lookupUnit } from "../../lookup/units";
 import { useGameData } from "@/hooks/useGameContext";
 import { useAppStore } from "@/utils/appStore";
-const MAP_PADDING = 200;
+import {
+  getMapLayoutConfig,
+  mapCoordsToScreen,
+  type MapLayout,
+} from "./MapView/mapLayout";
 
 type TooltipUnit = {
   unitId?: string;
@@ -13,21 +17,30 @@ type TooltipUnit = {
 
 type Props = {
   tooltipUnit: TooltipUnit | null;
+  mapPadding?: number;
+  mapZoom?: number;
+  mapLayout?: MapLayout;
 };
 
-export function MapUnitDetailsCard({ tooltipUnit }: Props) {
+export function MapUnitDetailsCard({
+  tooltipUnit,
+  mapPadding,
+  mapZoom,
+  mapLayout = "panels",
+}: Props) {
   if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
   const gameData = useGameData();
-  const zoom = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
   const playerData = gameData?.playerData;
+  const resolvedPadding =
+    mapPadding ?? getMapLayoutConfig(mapLayout).mapPadding;
 
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction
   );
   if (!activePlayer) return null;
 
-  const scaledX = tooltipUnit.coords.x * zoom;
-  const scaledY = tooltipUnit.coords.y * zoom;
+  const { x, y } = mapCoordsToScreen(tooltipUnit.coords, zoom, resolvedPadding);
   const unitIdToUse =
     lookupUnit(tooltipUnit.unitId, activePlayer.faction, activePlayer)?.id ||
     tooltipUnit.unitId;
@@ -36,9 +49,9 @@ export function MapUnitDetailsCard({ tooltipUnit }: Props) {
     <Box
       style={{
         position: "absolute",
-        left: `${scaledX + MAP_PADDING}px`,
-        top: `${scaledY + MAP_PADDING - 25}px`,
-        zIndex: 'var(--z-map-unit-details)',
+        left: `${x}px`,
+        top: `${y - 25}px`,
+        zIndex: "var(--z-map-unit-details)",
         pointerEvents: "none",
         transform: "translate(-50%, -100%)", // Center horizontally, position above the unit
       }}

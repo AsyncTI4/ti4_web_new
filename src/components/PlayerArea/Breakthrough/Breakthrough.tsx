@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { Box } from "@mantine/core";
 import { Chip } from "@/components/shared/primitives/Chip";
 import { SmoothPopover } from "@/components/shared/SmoothPopover";
@@ -56,7 +56,7 @@ export function Breakthrough({
   unlocked = true,
   strong = true,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const data = getBreakthroughData(breakthroughId);
 
   if (!data) return null;
@@ -73,7 +73,7 @@ export function Breakthrough({
           <Chip
             accent={accent}
             breakthrough
-            onClick={() => setOpened((o) => !o)}
+            onClick={toggle}
             title={title}
             px={8}
             py={4}

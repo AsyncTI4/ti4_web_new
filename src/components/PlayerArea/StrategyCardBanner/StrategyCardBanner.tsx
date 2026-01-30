@@ -1,5 +1,5 @@
 import { Box, Group, Text } from "@mantine/core";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { Shimmer } from "../Shimmer/Shimmer";
 import { getGradientClasses, type ColorKey } from "../gradientClasses";
 import { Chip } from "@/components/shared/primitives/Chip";
@@ -22,7 +22,7 @@ export function StrategyCardBanner({
   color,
   isExhausted = false,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const numberColor =
     SC_NUMBER_COLORS[color as keyof typeof SC_NUMBER_COLORS] || "red.9";
   const gradientClasses = getGradientClasses(color as ColorKey);
@@ -31,7 +31,7 @@ export function StrategyCardBanner({
     <SmoothPopover opened={opened} onChange={setOpened} position="bottom">
       <SmoothPopover.Target>
         <Group className={styles.container}>
-          <Chip accent={color as any} onClick={() => setOpened((o) => !o)}>
+          <Chip accent={color as any} onClick={toggle}>
             <Shimmer
               color={color as any}
               className={`${styles.strategyCardBanner} ${styles[color as keyof typeof styles]} ${gradientClasses.border}`}

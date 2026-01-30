@@ -3,7 +3,7 @@ import styles from "./Tech.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { TechCard } from "./TechCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { getTechData } from "../../../lookup/tech";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import cx from "clsx";
@@ -23,7 +23,7 @@ export function Tech({
   synergy,
   breakthroughUnlocked = false,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
 
   // Look up tech data
   const techData = getTechData(techId);
@@ -52,7 +52,7 @@ export function Tech({
             isEnhanced && styles.enhanced,
             synergyClass && styles[synergyClass]
           )}
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
           style={{ opacity: isExhausted ? 0.5 : 1 }}
         >
           {/* Tier indicator dots in top-right */}

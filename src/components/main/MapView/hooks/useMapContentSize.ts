@@ -2,12 +2,12 @@ import { useMemo } from "react";
 import { useGameData } from "@/hooks/useGameContext";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/mapgen/tilePositioning";
 import { useTilesList } from "@/hooks/useTilesList";
+import { getMapLayoutConfig, type MapLayout } from "../mapLayout";
 
-const MAP_PADDING = 200;
-
-export function useMapContentSize() {
+export function useMapContentSize(layout: MapLayout) {
   const gameData = useGameData();
   const tiles = useTilesList(gameData?.tiles);
+  const { contentPadding, mapHeightExtra } = getMapLayoutConfig(layout);
 
   const contentSize = useMemo(() => {
     if (!tiles.length) return { width: 0, height: 0 };
@@ -22,14 +22,14 @@ export function useMapContentSize() {
       if (bottom > maxBottom) maxBottom = bottom;
     }
 
-    const baseWidth = maxRight + MAP_PADDING;
-    const baseHeight = maxBottom + MAP_PADDING + 50;
+    const baseWidth = maxRight + contentPadding;
+    const baseHeight = maxBottom + contentPadding + mapHeightExtra;
 
     return {
       width: baseWidth,
       height: baseHeight,
     };
-  }, [tiles]);
+  }, [tiles, contentPadding, mapHeightExtra]);
 
   return contentSize;
 }

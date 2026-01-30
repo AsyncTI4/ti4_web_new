@@ -24,9 +24,11 @@ import { useMapContentSize } from "./hooks/useMapContentSize";
 import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { useTilesList } from "@/hooks/useTilesList";
-import { getCssScaleStyle } from "@/utils/zoom";
-
-const MAP_PADDING = 200;
+import {
+  getMapContainerOffset,
+  getMapLayoutConfig,
+  getMapScaleStyle,
+} from "./mapLayout";
 
 type Props = {
   gameId: string;
@@ -98,9 +100,11 @@ export function MapView({ gameId }: Props) {
     tiles: tilesList,
   });
 
+  const mapLayout = getMapLayoutConfig("panels");
   const { mapContainerRef } = useMapScrollPosition({
     zoom,
     gameId,
+    mapPadding: mapLayout.mapPadding,
   });
 
   useScrollToPlanet({
@@ -131,7 +135,7 @@ export function MapView({ gameId }: Props) {
     return !!(gameData.lawsInPlay && gameData.lawsInPlay.length > 0);
   }, [gameData]);
 
-  const contentSize = useMapContentSize();
+  const contentSize = useMapContentSize("panels");
 
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
@@ -174,9 +178,8 @@ export function MapView({ gameId }: Props) {
           tilesList={tilesList}
           contentSize={contentSize}
           tileContainerStyle={{
-            ...getCssScaleStyle(zoom, settings.isFirefox),
-            top: MAP_PADDING / zoom,
-            left: MAP_PADDING / zoom,
+            ...getMapScaleStyle(mapLayout, zoom, settings.isFirefox),
+            ...getMapContainerOffset(mapLayout, zoom),
           }}
           hoveredTilePosition={hoveredTile}
           selectedTiles={Array.from(selectedTiles)}
@@ -197,6 +200,9 @@ export function MapView({ gameId }: Props) {
           onPlanetMouseLeave={handlePlanetMouseLeave}
           tooltipUnit={tooltipUnit}
           tooltipPlanet={tooltipPlanet}
+          mapLayout="panels"
+          mapPadding={mapLayout.mapPadding}
+          mapZoom={zoom}
         />
 
         <ReconnectButton gameDataState={gameDataState} />

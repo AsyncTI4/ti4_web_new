@@ -5,15 +5,20 @@ import {
   calculatePathPoints,
 } from "../utils/pathVisualization";
 import classes from "./PathVisualization.module.css";
-import { MAP_PADDING } from "@/NewMapUI";
 import { useGameData } from "@/hooks/useGameContext";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
+import {
+  getMapContainerOffset,
+  getMapLayoutConfig,
+  type MapLayout,
+} from "@/components/main/MapView/mapLayout";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;
   activePathIndex: number;
   onPathIndexChange: (index: number) => void;
-  mapPadding?: number;
+  mapLayout?: MapLayout;
+  mapZoom?: number;
 };
 
 const PATH_COLORS = [
@@ -44,7 +49,8 @@ export const PathVisualization = ({
   pathResult,
   activePathIndex,
   onPathIndexChange,
-  mapPadding,
+  mapLayout = "panels",
+  mapZoom,
 }: PathVisualizationProps) => {
   if (!pathResult?.paths.length) return null;
 
@@ -52,10 +58,11 @@ export const PathVisualization = ({
     activePathIndex >= pathResult.paths.length ? 0 : activePathIndex;
   const currentPath = pathResult.paths[validatedPathIndex];
 
-  const zoom = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
   const settings = useSettingsStore().settings;
   const gameData = useGameData();
-  const resolvedMapPadding = mapPadding ?? MAP_PADDING;
+  const layoutConfig = getMapLayoutConfig(mapLayout);
+  const { top, left } = getMapContainerOffset(layoutConfig, zoom);
 
   const positionMap = createPositionMap(gameData?.calculatedTilePositions || []);
 
@@ -184,8 +191,8 @@ export const PathVisualization = ({
           ...(settings.isFirefox ? {} : { zoom: zoom }),
           MozTransform: `scale(${zoom})`,
           MozTransformOrigin: "top left",
-          top: resolvedMapPadding / zoom,
-          left: resolvedMapPadding / zoom,
+          top,
+          left,
         }}
       >
         {renderPathLines()}

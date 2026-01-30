@@ -1,5 +1,5 @@
 import { Stack, Text, Image } from "@mantine/core";
-import { useState } from "react";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "../../shared/SmoothPopover";
 import { getPlanetData } from "@/lookup/planets";
 import { PlanetAbilityDetailsCard } from "./PlanetAbilityDetailsCard";
@@ -21,7 +21,7 @@ export function PlanetAbilityCard({
   exhausted = false,
   joinedRight = false,
 }: Props) {
-  const [opened, setOpened] = useState(false);
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const planetData = getPlanetData(planetId);
 
   if (!planetData) {
@@ -33,7 +33,7 @@ export function PlanetAbilityCard({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Stack
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
           className={`${styles.mainStack} ${styles.abilityCard} ${joinedRight ? styles.joinedRight : ""} ${exhausted ? styles.exhausted : ""}`}
         >
           {/* Exhausted badge removed; exhausted state now uses lower opacity filter */}

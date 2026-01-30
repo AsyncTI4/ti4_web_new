@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Box, Grid, Stack, Text } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
-import { PathVisualization } from "@/components/PathVisualization";
-import { MapPlanetDetailsCard } from "@/components/main/MapPlanetDetailsCard";
-import { MapUnitDetailsCard } from "@/components/main/MapUnitDetailsCard";
+import { MapRenderLayer } from "./components/MapRenderLayer";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
@@ -18,7 +16,6 @@ import { useMapContentSize } from "./hooks/useMapContentSize";
 import {
   shouldHideZoomControls,
   computeMapZoom,
-  getScaleStyle,
   computePanelsZoom,
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
@@ -27,16 +24,17 @@ import { SecretHand } from "@/components/main/SecretHand";
 import { usePlayerHand } from "@/hooks/usePlayerHand";
 import secretHandClasses from "@/components/main/SecretHand/SecretHand.module.css";
 import { PlayerScoreSummary } from "@/components/Objectives/PlayerScoreSummary/PlayerScoreSummary";
-import { ExpeditionLayer } from "@/components/Map/ExpeditionLayer";
 import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
 import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
-import { MapTilesRenderer } from "./components/MapTilesRenderer";
 import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 import { ScaledContent } from "@/components/shared/ScaledContent";
-
-const MAP_PADDING = 0;
+import {
+  getMapContainerOffset,
+  getMapLayoutConfig,
+  getMapScaleStyle,
+} from "./mapLayout";
 
 type Props = {
   gameId: string;
@@ -74,9 +72,10 @@ export function PannableMapView({ gameId }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
-  const contentSize = useMapContentSize();
+  const mapLayout = getMapLayoutConfig("pannable");
+  const contentSize = useMapContentSize("pannable");
   const zoom = computeMapZoom(storeZoom, contentSize.width + 150);
-  const mapWidth = (contentSize.width + 400) * zoom;
+  const mapWidth = (contentSize.width + mapLayout.mapWidthExtra) * zoom;
   const mapHeight = contentSize.height * zoom;
   const hideZoomControls = shouldHideZoomControls();
 
@@ -177,53 +176,41 @@ export function PannableMapView({ gameId }: Props) {
 
         {gameData && (
           <>
-            <Box
-              className={classes.tileRenderingContainer}
-              style={{
-                ...getScaleStyle(zoom, settings.isFirefox),
-                top: MAP_PADDING,
-                left: MAP_PADDING,
+            <MapRenderLayer
+              gameData={gameData}
+              tilesList={tilesList}
+              contentSize={contentSize}
+              tileContainerStyle={{
+                ...getMapScaleStyle(mapLayout, zoom, settings.isFirefox),
+                ...getMapContainerOffset(mapLayout, zoom),
                 width: mapWidth,
                 height: mapHeight,
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
-            >
-              <MapTilesRenderer
-                tiles={tilesList}
-                playerData={gameData.playerData}
-                statTilePositions={gameData.statTilePositions}
-                isMovingMode={!!draft.targetPositionId}
-                isOrigin={(position) => !!draft.origins?.[position]}
-                selectedTiles={selectedTiles}
-                isOnPath={(position) =>
-                  targetSystemId ? true : systemsOnPath.has(position)
-                }
-                isTargetSelected={(systemId) =>
-                  targetSystemId ? systemId === targetSystemId : false
-                }
-                hoveredTilePosition={hoveredTile}
-                onUnitMouseOver={handleUnitMouseEnter}
-                onUnitMouseLeave={handleUnitMouseLeave}
-                onUnitSelect={(faction) => handleMouseDown(faction)}
-                onPlanetMouseEnter={handlePlanetMouseEnter}
-                onPlanetMouseLeave={handlePlanetMouseLeave}
-                onTileSelect={createTileSelectHandler(handleTileSelect)}
-                onTileHover={handleTileHover}
-              />
-              <ExpeditionLayer contentSize={contentSize} />
-            </Box>
-
-            {!draft.targetPositionId && (
-              <PathVisualization
-                pathResult={pathResult}
-                activePathIndex={activePathIndex}
-                onPathIndexChange={handlePathIndexChange}
-                mapPadding={MAP_PADDING}
-              />
-            )}
-            <MapUnitDetailsCard tooltipUnit={tooltipUnit} />
-            <MapPlanetDetailsCard tooltipPlanet={tooltipPlanet} />
+              hoveredTilePosition={hoveredTile}
+              selectedTiles={selectedTiles}
+              systemsOnPath={systemsOnPath}
+              targetSystemId={targetSystemId}
+              pathResult={pathResult}
+              activePathIndex={activePathIndex}
+              showPathVisualization={!draft.targetPositionId}
+              onPathIndexChange={handlePathIndexChange}
+              isMovingMode={!!draft.targetPositionId}
+              isOrigin={(position) => !!draft.origins?.[position]}
+              onTileSelect={createTileSelectHandler(handleTileSelect)}
+              onTileHover={handleTileHover}
+              onUnitMouseOver={handleUnitMouseEnter}
+              onUnitMouseLeave={handleUnitMouseLeave}
+              onUnitSelect={(faction) => handleMouseDown(faction)}
+              onPlanetMouseEnter={handlePlanetMouseEnter}
+              onPlanetMouseLeave={handlePlanetMouseLeave}
+              tooltipUnit={tooltipUnit}
+              tooltipPlanet={tooltipPlanet}
+              mapLayout="pannable"
+              mapPadding={mapLayout.mapPadding}
+              mapZoom={zoom}
+            />
 
             {isUserAuthenticated && isInGame && !isMobileDevice() && (
               <Box className={secretHandClasses.pannableWrapper}>
