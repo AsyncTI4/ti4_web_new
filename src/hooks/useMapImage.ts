@@ -26,7 +26,7 @@ export function useMapImage(gameId?: string | null) {
       if (!gameIdStr) {
         throw new Error("gameId is required");
       }
-      return fetchMapImageAttachmentUrl(String(gameId));
+      return fetchMapImageAttachmentUrl(gameIdStr);
     },
     enabled: !!gameId,
     retry: false,
