@@ -1,9 +1,7 @@
 import {
-  Anchor,
   AppShell,
   Box,
   Button,
-  Card,
   Container,
   Grid,
   Group,
@@ -12,54 +10,16 @@ import {
   Stack,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import Logo from "./components/Logo";
-import { DiscordLogin } from "./components/DiscordLogin";
 import { GamesBar } from "@/components/shared/GamesBar";
 import { Surface } from "./components/PlayerArea/Surface";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
-import { useMaps } from "./hooks/useMaps";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { useMemo } from "react";
-import { config } from "./config";
-
-function useMapDetails(mapIds) {
-  const baseApiUrl = config.api.prodmapuri;
-
-  return useQuery({
-    queryKey: ["mapDetails", mapIds],
-    queryFn: () =>
-      Promise.all(
-        mapIds.map((id) =>
-          fetch(`${baseApiUrl}${id}`).then((res) => res.json())
-        )
-      ).then((results) => results.flat()),
-    enabled: !!mapIds && mapIds.length > 0,
-  });
-}
 
 export default function LandingPage() {
-  const theme = useMantineTheme();
-  const mapsQuery = useMaps();
-  const maps = mapsQuery.data ?? [];
-
-  const mapsToHighlight = useMemo(() => {
-    return maps.length > 6
-      ? maps
-          .map((m) => m.MapName)
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 6)
-      : maps.map((m) => m.MapName);
-  }, [maps]);
-
-  const mapDetailsQuery = useMapDetails(mapsToHighlight);
-  const mapDetails = mapDetailsQuery.data ?? [];
-
   return (
     <AppShell header={{ height: 60 }}>
       <AppShell.Header className="appHeader">
@@ -103,7 +63,7 @@ export default function LandingPage() {
                       size={28}
                       lh={1.2}
                       fw={500}
-                      c="gray.2"
+                      c="gray.3"
                       className="enhancedText fadeInUp delay-1"
                     >
                       Conquer the galaxy at your own pace. Experience the epic
@@ -153,7 +113,7 @@ export default function LandingPage() {
                 align="center"
                 mb={64}
                 size={52}
-                c="blue.4"
+                c="gray.3"
                 className="gradient-text space-title"
               >
                 How it Works
@@ -164,12 +124,12 @@ export default function LandingPage() {
                   <Grid.Col span={{ base: 12, lg: 6 }}>
                     <List spacing="xl" size="lg" center icon={<></>}>
                       <List.Item className="enhancedListItem">
-                        <Text size="xl" fw={700} c="blue.4">
+                        <Text size="xl" fw={700} c="gray.2">
                           Play at your pace
                         </Text>
                         <Text
                           size="lg"
-                          c="gray.3"
+                          c="gray.4"
                           mt="xs"
                           className="enhancedText"
                         >
@@ -182,12 +142,12 @@ export default function LandingPage() {
                       </List.Item>
 
                       <List.Item className="enhancedListItem">
-                        <Text size="xl" fw={700} c="blue.4">
+                        <Text size="xl" fw={700} c="gray.2">
                           Easy to use interface
                         </Text>
                         <Text
                           size="lg"
-                          c="gray.3"
+                          c="gray.4"
                           mt="xs"
                           className="enhancedText"
                         >
@@ -199,12 +159,12 @@ export default function LandingPage() {
                       </List.Item>
 
                       <List.Item className="enhancedListItem">
-                        <Text size="xl" fw={700} c="blue.4">
+                        <Text size="xl" fw={700} c="gray.2">
                           Constantly updating map
                         </Text>
                         <Text
                           size="lg"
-                          c="gray.3"
+                          c="gray.4"
                           mt="xs"
                           className="enhancedText"
                         >
@@ -218,12 +178,12 @@ export default function LandingPage() {
                       </List.Item>
 
                       <List.Item className="enhancedListItem">
-                        <Text size="xl" fw={700} c="blue.4">
+                        <Text size="xl" fw={700} c="gray.2">
                           Fully reversible
                         </Text>
                         <Text
                           size="lg"
-                          c="gray.3"
+                          c="gray.4"
                           mt="xs"
                           className="enhancedText"
                         >
@@ -250,102 +210,6 @@ export default function LandingPage() {
             </Container>
           </Box>
 
-          <Box pt={60} pb={120} className="enhancedSection sectionVariant2">
-            <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
-              <Title
-                order={2}
-                align="center"
-                mb={32}
-                size={52}
-                c="violet.4"
-                className="gradient-text-purple space-title"
-              >
-                Active Games
-              </Title>
-
-              <Text
-                size="lg"
-                c="violet.2"
-                mt="xs"
-                align="center"
-                mb={32}
-                className="enhancedText"
-              >
-                Peek into the current state of active games to see what it looks
-                like!
-              </Text>
-
-              <Grid>
-                {mapDetails.map((mapDetail, index) => (
-                  <Grid.Col
-                    key={index}
-                    span={{
-                      base: 12,
-                      sm: 6,
-                      md: 4,
-                      lg: 3,
-                    }}
-                  >
-                    <Card
-                      shadow="sm"
-                      padding="lg"
-                      radius="md"
-                      withBorder
-                      className="cleanCard"
-                    >
-                      <Card.Section>
-                        <Text
-                          size="xl"
-                          fw={700}
-                          c="violet.4"
-                          p="md"
-                          className="enhancedText"
-                          style={{
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {mapDetail.customName}
-                        </Text>
-                      </Card.Section>
-
-                      <Stack spacing={2} mt="md">
-                        {mapDetail.mapTemplateID != "null" ? (
-                          <Text c="violet.2" className="enhancedText">
-                            Type: {mapDetail.mapTemplateID}
-                          </Text>
-                        ) : (
-                          <Text c="violet.2" className="enhancedText">
-                            Type: Other
-                          </Text>
-                        )}
-                        <Text c="violet.2" className="enhancedText">
-                          Current Round: {mapDetail.round}
-                        </Text>
-                        <Text c="violet.2" className="enhancedText">
-                          VPs: {mapDetail.vp}
-                        </Text>
-                      </Stack>
-
-                      <Button
-                        fullWidth
-                        mt="lg"
-                        size="md"
-                        variant="gradient"
-                        gradient={{ from: "violet", to: "purple" }}
-                        component={Link}
-                        to={`/game/${mapDetail.name}`}
-                        className="purpleButton"
-                      >
-                        Observe Game
-                      </Button>
-                    </Card>
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Container>
-          </Box>
           <Box pt={120} pb={120} className="enhancedSection sectionVariant3">
             <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
               <Title
@@ -361,7 +225,7 @@ export default function LandingPage() {
 
               <Text
                 size="lg"
-                c="gray.3"
+                c="gray.4"
                 mt="xs"
                 align="center"
                 mb={32}

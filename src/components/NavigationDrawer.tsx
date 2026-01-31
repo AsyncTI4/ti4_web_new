@@ -5,7 +5,6 @@ import {
   Divider,
   Box,
   Group,
-  Anchor,
   ActionIcon,
   TextInput,
   Button,
@@ -17,7 +16,6 @@ import {
   IconPencil,
   IconX,
 } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 // @ts-ignore
 import Logo from "./Logo";
@@ -154,18 +152,6 @@ export function NavigationDrawer({
         <Divider />
 
         <Stack gap="xs">
-          <Anchor
-            to="/games"
-            size="sm"
-            fw={600}
-            c="orange"
-            underline="hover"
-            component={Link}
-            onClick={onClose}
-          >
-            All Games
-          </Anchor>
-
           {activeTabs.map((tab) => (
             <Box
               key={tab.id}

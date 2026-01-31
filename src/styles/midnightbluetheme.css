@@ -41,6 +41,7 @@
     --header-tab-dropdown-bg: rgba(8, 14, 33, 0.92);
     --header-tab-dropdown-border: 1px solid rgba(59, 130, 246, 0.425);
     --header-tab-dropdown-hover-bg: rgba(37, 99, 235, 0.34);
+    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: #0A111E;

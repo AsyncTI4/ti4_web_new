@@ -1,3 +1,19 @@
+/* Header tab variables for GamesBar - matching midnightgray theme */
+:root {
+  --header-tab-bg: linear-gradient(180deg, #080808, #161616 100%);
+  --header-tab-border: 1px solid rgba(200, 200, 200, 0.4);
+  --header-tab-hover-bg: #181818;
+  --header-tab-hover-border: #858585;
+  --header-tab-active-bg: #3F3F3F;
+  --header-tab-active-border: #A9A9A9;
+  --header-tab-input-bg: rgba(8, 8, 8, 0.86);
+  --header-tab-input-border: 1px solid rgba(200, 200, 200, 0.45);
+  --header-tab-dropdown-bg: rgba(8, 8, 8, 0.94);
+  --header-tab-dropdown-border: 1px solid rgba(200, 200, 200, 0.45);
+  --header-tab-dropdown-hover-bg: rgba(180, 180, 180, 0.38);
+  --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
 .main {
   background-color: black;
 }

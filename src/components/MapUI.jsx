@@ -1,25 +1,22 @@
 import { AppShell, Button, Group, useMantineTheme, Box } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { Atom } from "react-loading-indicators";
-import { useNavigate } from "react-router-dom";
 import MapImageErrorDialog from "@/components/MapImageErrorDialog";
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "./DiscordLogin";
 import Logo from "./Logo";
-import { HeaderMenu } from "./HeaderMenu";
+import { GamesBar } from "./shared/GamesBar";
 
 import "./MapScreen.css";
 
 function MapUI({
-  activeTabs,
   params,
-  changeTab,
-  removeTab,
   imageUrl,
   reconnect,
   isReconnecting,
   showRefresh,
   isError,
+  error,
   onShowNewUI,
 }) {
   const theme = useMantineTheme();
@@ -36,12 +33,7 @@ function MapUI({
         >
           <Logo />
           <div className="logo-divider" />
-          <HeaderMenu
-            mapId={params.mapid}
-            activeTabs={activeTabs}
-            changeTab={changeTab}
-            removeTab={removeTab}
-          />
+          <GamesBar currentMapId={params.mapid} />
 
           <Button
             variant="light"
@@ -64,7 +56,7 @@ function MapUI({
             </Box>
 
             {isError ? (
-              <MapImageErrorDialog gameId={params.mapid} />
+              <MapImageErrorDialog gameId={params.mapid} error={error} />
             ) : !imageUrl ? (
               <div
                 style={{

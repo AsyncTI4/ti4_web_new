@@ -6,13 +6,11 @@ import {
   useCombobox,
   Combobox,
   CheckIcon,
-  Anchor,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { IconPencil } from "@tabler/icons-react";
 // @ts-ignore
 import { DiscordLogin } from "./DiscordLogin";
-import { Link } from "react-router-dom";
 import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { CircularFactionIcon } from "./shared/CircularFactionIcon";
@@ -92,21 +90,6 @@ export function HeaderMenuNew({
 
   return (
     <>
-      {!isMobileDevice() && (
-        <Anchor
-          to="/games"
-          size="sm"
-          fw={600}
-          underline="hover"
-          c="orange"
-          ml="sm"
-          mr="sm"
-          component={Link}
-          className={classes.gamesLink}
-        >
-          All Games
-        </Anchor>
-      )}
       <div className={classes.tabsContainer}>
         {!showDropdown ? (
           <TabView

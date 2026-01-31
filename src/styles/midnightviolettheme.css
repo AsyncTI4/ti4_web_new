@@ -61,6 +61,7 @@
     --header-tab-dropdown-bg: rgba(14, 10, 26, 0.92);
     --header-tab-dropdown-border: 1px solid rgba(168, 85, 247, 0.425);
     --header-tab-dropdown-hover-bg: rgba(147, 51, 234, 0.34);
+    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
     /** Objectives Tab **/
     --score-board-bg: linear-gradient(135deg, rgba(14, 10, 26, 0.983) 0%, rgba(34, 16, 46, 0.955) 50%, rgba(14, 10, 26, 0.983) 100%);
