@@ -147,6 +147,11 @@ export const MapTile = React.memo<Props>(
               return 0.2;
             }
 
+            // Overlay mode - dim tiles without any controller/border
+            if (overlaysEnabled && !controllingFaction) {
+              return 0.7;
+            }
+
             return 1;
           })(),
           ...style,
