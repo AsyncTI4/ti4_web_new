@@ -58,9 +58,8 @@ export function EconomicsColumn({
 }: Props) {
   // When flexSpendOnly is true, show only a single flex row with the combined total
   if (flexSpendOnly) {
-    const combinedCurrent =
-      currentResources + currentInfluence + (currentFlex ?? 0);
-    const combinedTotal = totalResources + totalInfluence + (totalFlex ?? 0);
+    const combinedCurrent = currentFlex;
+    const combinedTotal = totalFlex;
 
     const currentDigits = Math.floor(combinedCurrent).toString().length;
     const totalDigits = Math.floor(combinedTotal).toString().length;
