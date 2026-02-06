@@ -6,18 +6,16 @@
 
 /* Strategy card banner styles */
 .strategyCardBanner {
-  border-radius: 6px;
   position: relative;
   overflow: visible;
   background: linear-gradient(135deg, rgba(var(--gradient-color), 0.12) 0%, rgba(var(--gradient-color), 0.06) 100%);
   border: 1px solid rgba(var(--gradient-color), 0.25);
   padding: 2px;
-  padding-left: var(--mantine-spacing-sm);
+  border-radius: 8px;
   padding-right: var(--mantine-spacing-sm);
   padding-left: var(--mantine-spacing-lg);
   display: flex;
-  min-width: 100;
-  border-radius: 8px;
+  min-width: 100px;
   margin-left: 15px;
 }
 
@@ -25,10 +23,7 @@
 .innerGlow {
   background: radial-gradient(ellipse at center, rgba(var(--gradient-color), 0.15) 0%, transparent 70%);
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
 }
@@ -42,11 +37,18 @@
   left: -15px;
   width: 35px;
   height: 35px;
-  display: flex;
   border-radius: 999px;
-  align-items: center;
-  justify-content: center;
   z-index: 2;
+}
+
+.strategyCardBanner,
+.iconFilter {
+  display: flex;
+  align-items: center;
+}
+
+.iconFilter {
+  justify-content: center;
 }
 
 /* Number text */

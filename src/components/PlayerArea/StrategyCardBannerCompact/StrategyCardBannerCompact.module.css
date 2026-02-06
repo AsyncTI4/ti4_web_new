@@ -50,13 +50,10 @@
 }
 
 .numberCircle {
-  background: rgb(255, 255, 255);
+  background: #fff;
   width: 26px;
   height: 26px;
-  display: flex;
   border-radius: 50%;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
   position: relative;
 }
@@ -92,9 +89,18 @@
 /* Inner wrapper to keep Chip padding and glow from colliding with content */
 .inner {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
   min-width: 0;
+}
+
+.cardContainer,
+.numberCircle,
+.inner {
+  display: flex;
+  align-items: center;
+}
+
+.cardContainer,
+.numberCircle {
+  justify-content: center;
 }

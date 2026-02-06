@@ -25,12 +25,6 @@
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.leftSidebarOverlay.collapsed {
-  transform: translateX(-310px);
-  opacity: 0;
-}
-
-
 /* Dedicated class to avoid relying on nested selector in modules checks */
 .leftSidebarOverlayCollapsed {
   transform: translateX(-310px);
@@ -121,7 +115,6 @@
   background: var(--map-tab-hover-bg);
   border-color: var(--map-tab-hover-border);
   border-width: 1px;
-  border-bottom: none;
   text-shadow: var(--map-tab-hover-text-shadow);
   box-shadow: var(--map-tab-hover-shadow);
 }
@@ -130,7 +123,6 @@
   color: rgba(255, 255, 255, 1);
   background: var(--map-tab-active-bg);
   border-color: var(--map-tab-active-border);
-  border-bottom: none;
   text-shadow: var(--map-tab-active-text-shadow);
 }
 
@@ -141,10 +133,8 @@
 }
 
 .mapArea {
-  height: 100%;
   position: relative;
   overflow: auto;
-
 }
 
 /* When user is performing a two-finger gesture, let the page receive it */
@@ -152,14 +142,8 @@
   pointer-events: none;
 }
 
-/* Adds space when movement banner is present so content isn't overlapped */
-.mapAreaWithBanner {
-  padding-top: 64px;
-}
-
 .sidebar {
   overflow: scroll;
-  height: 100%;
   background: var(--sidebar-bg);
 }
 
@@ -193,33 +177,14 @@
 }
 
 .playersTabContent {
-  height: 100%;
   overflow-y: scroll;
   padding: 16px;
 }
 
-/* Sci-fi segmented control styling, aligned with map tabs look */
-.segmentedSciFiRoot {
-  background: var(--map-tabs-bg);
-  border: var(--map-tab-border);
-  box-shadow: var(--map-tabs-shadow);
-  padding: 4px;
-  border-radius: 10px;
-}
-
-.segmentedSciFiControl {
-  color: rgba(255, 255, 255, 0.75);
-  text-shadow: var(--map-tab-text-shadow);
-}
-
-.segmentedSciFiLabel {
-  font-weight: 700;
-}
-
-.segmentedSciFiIndicator {
-  background: var(--map-tab-active-bg);
-  border: var(--map-tab-active-border);
-  box-shadow: var(--map-tab-hover-shadow);
+.mapArea,
+.sidebar,
+.playersTabContent {
+  height: 100%;
 }
 
 /* Custom scrollbar styling for thematic blue-gray design */
@@ -313,9 +278,7 @@
 :global(.theme-vaporwavetheme) .tabsList::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   height: 1px;
   background: linear-gradient(90deg, rgba(255, 0, 170, 0.8), rgba(0, 240, 255, 0.8));
   box-shadow: 0 0 8px rgba(255, 0, 170, 0.35), 0 0 10px rgba(0, 240, 255, 0.25);
@@ -343,19 +306,9 @@
 
 
 /* Movement banner - MUCH more prominent and theme-colored */
-.movementBanner {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: var(--z-movement-banner);
-  height: 64px;
-  padding: 0 22px;
-  display: flex;
-  align-items: center;
+.movementBanner,
+.movementBox {
   background: var(--movement-banner-bg);
-  border-bottom: var(--movement-banner-border);
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(0, 0, 0, 0.25) inset,
@@ -363,11 +316,28 @@
   animation: movement-banner-pulse 3.6s ease-in-out infinite;
 }
 
+.movementBanner {
+  position: fixed;
+  top: 60px;
+  inset-inline: 0;
+  width: 100%;
+  z-index: var(--z-movement-banner);
+  height: 64px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  border-bottom: var(--movement-banner-border);
+}
+
 .movementBannerTitle {
   color: var(--movement-banner-title-color);
   font-weight: 800;
   font-size: 18px;
   letter-spacing: 0.2px;
+}
+
+.movementBannerTitle,
+.movementBannerTargetName {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
@@ -389,12 +359,6 @@
   padding: 10px 12px;
   display: flex;
   align-items: center;
-  background: var(--movement-banner-bg);
   border: var(--movement-banner-border);
   border-radius: var(--mantine-radius-md);
-  box-shadow:
-    0 14px 32px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.25) inset,
-    0 0 22px 2px color-mix(in srgb, var(--movement-banner-glow) 60%, transparent);
-  animation: movement-banner-pulse 3.6s ease-in-out infinite;
 }

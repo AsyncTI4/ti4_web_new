@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&display=swap');
 
-body, h1, h2, h3, h4, h5, h6 {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -18,6 +24,9 @@ body, h1, h2, h3, h4, h5, h6 {
   --landing-bg-primary: #0a0a0a;
   --landing-bg-secondary: #111111;
   --landing-bg-tertiary: #161616;
+  --landing-rgb-primary: 10, 10, 10;
+  --landing-rgb-secondary: 17, 17, 17;
+  --landing-rgb-tertiary: 22, 22, 22;
   --landing-border-subtle: rgba(160, 160, 160, 0.15);
   --landing-border-medium: rgba(160, 160, 160, 0.25);
   --landing-border-strong: rgba(200, 200, 200, 0.35);
@@ -64,41 +73,33 @@ body, h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   background-color: var(--landing-bg-primary);
   min-height: 85vh;
-  display: flex;
-  align-items: center;
+}
+
+.heroSection::before,
+.heroSection::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .heroSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background: linear-gradient(
     135deg,
     rgba(10, 10, 10, 0.85) 0%,
     rgba(17, 17, 17, 0.75) 50%,
     rgba(10, 10, 10, 0.85) 100%
   );
-  pointer-events: none;
   z-index: 1;
 }
 
 /* Subtle vignette effect */
 .heroSection::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background: radial-gradient(
     ellipse at center,
     transparent 40%,
     rgba(10, 10, 10, 0.5) 100%
   );
-  pointer-events: none;
   z-index: 2;
 }
 
@@ -112,9 +113,6 @@ body, h1, h2, h3, h4, h5, h6 {
     rgba(180, 180, 180, 1) 50%,
     rgba(220, 220, 220, 1) 100%
   );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .gradient-text-grey {
@@ -124,6 +122,10 @@ body, h1, h2, h3, h4, h5, h6 {
     rgba(140, 140, 140, 1) 50%,
     rgba(180, 180, 180, 1) 100%
   );
+}
+
+.gradient-text,
+.gradient-text-grey {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -171,9 +173,6 @@ body, h1, h2, h3, h4, h5, h6 {
    ============================================ */
 .mapImageContainer {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 500px;
   padding: var(--mantine-spacing-lg);
 }
@@ -235,8 +234,8 @@ body, h1, h2, h3, h4, h5, h6 {
   border-radius: 8px;
   background: linear-gradient(
     135deg,
-    rgba(17, 17, 17, 0.8) 0%,
-    rgba(22, 22, 22, 0.6) 100%
+    rgba(var(--landing-rgb-secondary), 0.8) 0%,
+    rgba(var(--landing-rgb-tertiary), 0.6) 100%
   );
   border: 1px solid var(--landing-border-subtle);
   transition: all 0.25s ease;
@@ -262,7 +261,7 @@ body, h1, h2, h3, h4, h5, h6 {
 .enhancedListItem:hover {
   background: linear-gradient(
     135deg,
-    rgba(22, 22, 22, 0.9) 0%,
+    rgba(var(--landing-rgb-tertiary), 0.9) 0%,
     rgba(28, 28, 28, 0.7) 100%
   );
   border-color: var(--landing-border-medium);
@@ -276,62 +275,6 @@ body, h1, h2, h3, h4, h5, h6 {
     rgba(200, 200, 200, 0.7) 0%,
     rgba(160, 160, 160, 0.3) 100%
   );
-}
-
-/* ============================================
-   GLASS CARDS - For Surface components
-   ============================================ */
-.glassCard {
-  border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(17, 17, 17, 0.95) 0%,
-    rgba(22, 22, 22, 0.9) 100%
-  );
-  border: 1px solid var(--landing-border-medium);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-  transition: all 0.25s ease;
-}
-
-.glassCard:hover {
-  border-color: var(--landing-border-strong);
-  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.45);
-  transform: translateY(-2px);
-}
-
-.glassSurface {
-  border-radius: 8px;
-  background: linear-gradient(
-    135deg,
-    rgba(17, 17, 17, 0.85) 0%,
-    rgba(22, 22, 22, 0.8) 100%
-  );
-  border: 1px solid var(--landing-border-subtle);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-.cleanCard {
-  border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(17, 17, 17, 0.92) 0%,
-    rgba(22, 22, 22, 0.88) 100%
-  );
-  border: 1px solid var(--landing-border-subtle);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  transition: all 0.25s ease;
-}
-
-.cleanCard:hover {
-  border-color: var(--landing-border-medium);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  transform: translateY(-3px);
 }
 
 /* ============================================
@@ -370,17 +313,31 @@ body, h1, h2, h3, h4, h5, h6 {
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
-.fadeInUp.delay-1 {
-  animation-delay: 0.1s;
+.heroSection,
+.mapImageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.mapImageContainer {
+  justify-content: center;
+}
+
+.fadeInUp.delay-1,
+.fadeInUp.delay-2,
+.fadeInUp.delay-3 {
   opacity: 0;
+  animation-delay: var(--fade-in-delay);
+}
+
+.fadeInUp.delay-1 {
+  --fade-in-delay: 0.1s;
 }
 
 .fadeInUp.delay-2 {
-  animation-delay: 0.2s;
-  opacity: 0;
+  --fade-in-delay: 0.2s;
 }
 
 .fadeInUp.delay-3 {
-  animation-delay: 0.3s;
-  opacity: 0;
+  --fade-in-delay: 0.3s;
 }

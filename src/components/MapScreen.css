@@ -14,42 +14,38 @@
   --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
-.main {
-  background-color: black;
-}
-
+.main,
 body {
   background-color: black;
 }
 
 .zoomContainer {
-  position: fixed;
   top: 75px;
   right: 15px;
-  z-index: 1;
-  /* float: right; */
 }
 
 .zoomContainer2 {
-  position: fixed;
   top: 75px;
   right: calc(25vw + 35px);
-  z-index: 1;
 }
 
 
 .zoomContainer3 {
-  position: fixed;
   top: 125px;
   right: 15px;
-  z-index: 1;
 }
 
 
 .zoomContainer4 {
-  position: fixed;
   top: 125px;
   right: calc(25vw + 35px);
+}
+
+.zoomContainer,
+.zoomContainer2,
+.zoomContainer3,
+.zoomContainer4 {
+  position: fixed;
   z-index: 1;
 }
 
@@ -96,8 +92,8 @@ body {
 .tabs-scrollable {
   flex-wrap: nowrap;
   overflow-x: auto;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .tabs-scrollable::-webkit-scrollbar {
@@ -112,4 +108,3 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-

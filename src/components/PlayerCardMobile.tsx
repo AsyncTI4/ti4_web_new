@@ -504,14 +504,15 @@ export default function PlayerCardMobile(props: Props) {
                 ghostWormholesReinf={ghostWormholesReinf}
                 galvanizeTokensReinf={galvanizeTokensReinf}
               />
-              {nombox !== undefined && Object.keys(nombox).length > 0 && (
-                <Box style={{ minWidth: "200px", minHeight: "150px" }}>
-                  <Nombox capturedUnits={nombox || {}} />
-                </Box>
-              )}
             </Group>
           </Panel>
         </Grid.Col>
+
+        {nombox !== undefined && Object.keys(nombox).length > 0 && (
+          <Grid.Col span={24}>
+            <Nombox capturedUnits={nombox || {}} compact />
+          </Grid.Col>
+        )}
       </Grid>
 
       <Box

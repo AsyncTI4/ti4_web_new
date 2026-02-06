@@ -63,8 +63,6 @@
 .gridItems {
   display: grid;
   grid-template-rows: repeat(3, auto);
-  grid-auto-flow: column;
-  gap: 4px;
   align-items: start;
   justify-items: start;
 }
@@ -73,8 +71,6 @@
 .panel {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--mantine-radius-md);
-  padding: var(--mantine-spacing-xs);
 }
 
 .sectionTitle {
@@ -93,8 +89,6 @@
 .sectionPanel {
   background: var(--player-card-mobile-panel-bg);
   border: var(--player-card-mobile-panel-border);
-  border-radius: var(--mantine-radius-sm);
-  padding: var(--mantine-spacing-xs);
 }
 
 .techGridDesktop {
@@ -105,7 +99,8 @@
   flex: 0.5;
 }
 
-.unitGridMobile {
+.unitGridMobile,
+.techGridDesktop {
   flex: 1;
 }
 
@@ -113,6 +108,23 @@
   display: grid;
   grid-template-rows: repeat(3, auto);
   grid-template-columns: repeat(4, max-content);
+}
+
+.gridItems,
+.objectivesGrid {
   grid-auto-flow: column;
   gap: 4px;
+}
+
+.panel,
+.sectionPanel {
+  padding: var(--mantine-spacing-xs);
+}
+
+.panel {
+  border-radius: var(--mantine-radius-md);
+}
+
+.sectionPanel {
+  border-radius: var(--mantine-radius-sm);
 }

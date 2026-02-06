@@ -22,10 +22,7 @@
 
 .patternOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
   opacity: 0.5;
 }
@@ -111,4 +108,3 @@
   text-shadow: 0 0 6px rgba(255, 0, 170, 0.35), 0 0 10px rgba(0, 240, 255, 0.25);
   letter-spacing: 0.06em;
 }
-

@@ -19,17 +19,12 @@
 }
 
 .gavelBadge {
-  position: absolute;
   top: -8px;
   right: -8px;
   width: 32px;
   height: 32px;
   background: linear-gradient(135deg, rgba(71, 85, 105, 0.9), rgba(51, 65, 85, 0.8));
   border: 1px solid rgba(148, 163, 184, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 3;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -40,19 +35,23 @@
 }
 
 .factionBadge {
-  position: absolute;
   top: 4px;
   left: 4px;
   width: 36px;
   height: 36px;
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
   border: 2px solid rgba(59, 130, 246, 0.4);
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.gavelBadge,
+.factionBadge {
+  position: absolute;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .factionIcon {
@@ -71,10 +70,7 @@
 
 .backgroundPattern {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-image:
     repeating-linear-gradient(
       45deg,
@@ -98,11 +94,8 @@
   font-weight: 700;
   font-family: var(--mantine-font-family-heading);
   color: var(--mantine-color-slate-1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  position: relative;
-  z-index: 1;
   line-height: 1.1;
   min-width: 0;
 }
@@ -112,12 +105,23 @@
   font-weight: 400;
   color: var(--mantine-color-slate-3);
   line-height: 1.3;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  position: relative;
-  z-index: 1;
   padding-left: 8px;
   border-left: 2px solid rgba(148, 163, 184, 0.2);
   margin-bottom: 4px;
+}
+
+.lawTitle,
+.mapText {
+  position: relative;
+  z-index: 1;
+}
+
+.lawTitle {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.mapText {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .electedBadge {

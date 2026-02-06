@@ -264,26 +264,24 @@ function checkIsLegendary(planetData: Planet, attachments: string[]) {
 
 function getCSSVariables(planetType: string) {
   const typeKey = planetType?.toLowerCase() || "default";
-  // Map known planet types, fallback to 'default' for unknown types
-  const validTypes = [
-    "cultural",
-    "hazardous",
-    "industrial",
-    "faction",
-    "mr",
-    "ocean",
-  ];
-  const finalType = validTypes.includes(typeKey) ? typeKey : "default";
+  const finalType = VALID_CSS_TYPES.has(typeKey) ? typeKey : "default";
 
   return {
     "--planet-background": `var(--${finalType}-background)`,
     "--planet-border": `var(--${finalType}-border)`,
     "--planet-shadow": `var(--${finalType}-shadow)`,
-    "--planet-highlight": `var(--${finalType}-highlight)`,
   };
 }
 
 const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
+const VALID_CSS_TYPES = new Set([
+  "cultural",
+  "hazardous",
+  "industrial",
+  "faction",
+  "mr",
+  "ocean",
+]);
 
 const VALID_TECH_SPECIALTIES = new Set([
   "biotic",

@@ -1,8 +1,5 @@
 .nombox {
   position: relative;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .factionHeader {
@@ -18,24 +15,16 @@
 }
 
 .unitsRow {
-  display: flex;
-  align-items: center;
   gap: var(--mantine-spacing-xs);
-  flex-wrap: wrap;
 }
 
 .unitGroup {
-  display: flex;
-  align-items: center;
   gap: 0;
 }
 
 .unitContainer {
   width: 20px;
   height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .unitImage {
@@ -51,4 +40,116 @@
   font-size: var(--mantine-font-size-xs);
   font-family: var(--mantine-font-family-monospace);
   margin-left: 2px;
+}
+
+/* Compact variant for mobile/pannable view */
+
+.compactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, max-content));
+  gap: 8px 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.compactFaction {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.compactFactionHeader {
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.compactFactionName {
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1;
+}
+
+.compactFactionIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.compactUnitsRow {
+  gap: 4px;
+}
+
+.compactUnitGroup {
+  gap: 0;
+}
+
+.compactUnitContainer {
+  width: 18px;
+  height: 18px;
+}
+
+.unitContainer,
+.compactUnitContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compactUnitImage {
+  width: 20px;
+  height: 20px;
+}
+
+.unitImage,
+.compactUnitImage {
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+.compactCountBadge {
+  font-size: 10px;
+  margin-left: 1px;
+  line-height: 1;
+}
+
+.compactNombox {
+  position: relative;
+}
+
+.nombox,
+.compactNombox {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.nombox {
+  height: 100%;
+}
+
+.unitsRow,
+.compactUnitsRow,
+.unitGroup,
+.compactUnitGroup,
+.compactFactionHeader {
+  display: flex;
+  align-items: center;
+}
+
+.unitsRow,
+.compactUnitsRow {
+  flex-wrap: wrap;
+}
+
+.countBadge,
+.compactCountBadge {
+  color: var(--mantine-color-red-2);
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+}
+
+.factionName,
+.compactFactionName {
+  color: var(--mantine-color-red-2);
 }

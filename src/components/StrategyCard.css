@@ -17,6 +17,7 @@
   min-width: 140px;
   border: 2px solid var(--border-color);
   border-radius: 9px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Text styling */
@@ -59,6 +60,7 @@
 
   z-index: 10;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Size variants */
@@ -113,15 +115,6 @@
     0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Smooth transitions */
-.strategy-card-main {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.strategy-card-number {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
   .strategy-card {
@@ -147,10 +140,7 @@
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .strategy-card-main {
-    border-width: 3px;
-  }
-
+  .strategy-card-main,
   .strategy-card-number {
     border-width: 3px;
   }

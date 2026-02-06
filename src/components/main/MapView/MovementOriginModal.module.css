@@ -4,8 +4,12 @@
   width: 100%;
 }
 
-.modalContent {
+.modalContent,
+.areaCard {
   background: var(--details-card-bg);
+}
+
+.modalContent {
   border: var(--details-card-border);
   border-radius: 12px;
 }
@@ -21,7 +25,6 @@
 }
 
 .areaCard {
-  background: var(--details-card-bg);
   border: var(--card-details-item-border);
   box-shadow: var(--player-card-box-shadow);
   padding: 10px;
@@ -34,15 +37,13 @@
 .areaCaption { letter-spacing: 0.04em; }
 
 .factionBlock {
-  padding: 6px 6px 6px 6px;
+  padding: 6px;
   background: var(--card-details-item-bg);
   border-radius: 6px;
 }
 
 .factionHeader {
-  margin-bottom: 12px;
-  margin-top: 6px;
-  margin-left: 6px;
+  margin: 6px 0 12px 6px;
 }
 
 
@@ -69,11 +70,15 @@
   text-align: center;
 }
 
+.tilePreviewBox,
+.unitTile {
+  background: var(--card-details-item-bg);
+  border: var(--card-details-item-border);
+}
+
 .tilePreviewBox {
   padding: 10px;
   border-radius: 8px;
-  background: var(--card-details-item-bg);
-  border: var(--card-details-item-border);
   overflow: hidden;
   height: 345px;
   width: 345px;
@@ -106,8 +111,6 @@
 }
 
 .unitTile {
-  background: var(--card-details-item-bg);
-  border: var(--card-details-item-border);
   border-radius: 6px;
   padding: 6px;
 }
@@ -137,5 +140,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-

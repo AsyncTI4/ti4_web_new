@@ -1,25 +1,32 @@
-.mapTile {
-  position: absolute;
-  pointer-events: none;
-}
-
 .tileContainer {
   position: relative;
 }
 
-.tile {
+.mapTile,
+.tile,
+.interactiveOverlay {
   position: absolute;
+}
+
+.mapTile {
+  pointer-events: none;
+}
+
+.tile {
   pointer-events: auto;
 }
 
-.anomalyOverlay {
+.anomalyOverlay,
+.controlBorderOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  z-index: var(--z-anomaly-overlay);
   pointer-events: none;
+}
+
+.anomalyOverlay {
+  z-index: var(--z-anomaly-overlay);
 }
 
 /* Interactive states */
@@ -88,13 +95,7 @@
 }
 
 .controlBorderOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   z-index: var(--z-control-border);
-  pointer-events: none;
 }
 
 .planetCircle {
@@ -132,67 +133,8 @@
 
 .highlighted {}
 
-/* Planet type glows */
-.planetCircle.cultural {
-  --glow-color-dark: rgba(80, 140, 255, 0.08);
-  --glow-color-mid: rgba(100, 160, 255, 0.2);
-  --rim-color-bright: rgba(140, 200, 255, 1);
-  --rim-color-base: rgba(100, 150, 255, 0.5);
-  --rim-color-inner: rgba(180, 220, 255, 1);
-}
-
-.planetCircle.hazardous {
-  --glow-color-dark: rgba(220, 38, 38, 0.05);
-  --glow-color-mid: rgba(220, 38, 38, 0.15);
-  --rim-color-bright: rgba(255, 100, 100, 1);
-  --rim-color-base: rgba(220, 38, 38, 0.4);
-  --rim-color-inner: rgba(255, 150, 150, 1);
-}
-
-.planetCircle.industrial {
-  --glow-color-dark: rgba(34, 197, 94, 0.05);
-  --glow-color-mid: rgba(34, 197, 94, 0.15);
-  --rim-color-bright: rgba(100, 230, 150, 1);
-  --rim-color-base: rgba(34, 197, 94, 0.4);
-  --rim-color-inner: rgba(150, 250, 180, 1);
-}
-
-/* Tech specialty glows */
-.planetCircle.cybernetic {
-  --glow-color-dark: rgba(255, 215, 0, 0.05);
-  --glow-color-mid: rgba(255, 215, 0, 0.15);
-  --rim-color-bright: rgba(255, 215, 0, 1);
-  --rim-color-base: rgba(255, 215, 0, 0.4);
-  --rim-color-inner: rgba(255, 235, 100, 1);
-}
-
-.planetCircle.biotic {
-  --glow-color-dark: rgba(34, 197, 94, 0.05);
-  --glow-color-mid: rgba(34, 197, 94, 0.15);
-  --rim-color-bright: rgba(100, 230, 150, 1);
-  --rim-color-base: rgba(34, 197, 94, 0.4);
-  --rim-color-inner: rgba(150, 250, 180, 1);
-}
-
-.planetCircle.propulsion {
-  --glow-color-dark: rgba(80, 140, 255, 0.08);
-  --glow-color-mid: rgba(100, 160, 255, 0.2);
-  --rim-color-bright: rgba(140, 200, 255, 1);
-  --rim-color-base: rgba(100, 150, 255, 0.5);
-  --rim-color-inner: rgba(180, 220, 255, 1);
-}
-
-.planetCircle.warfare {
-  --glow-color-dark: rgba(220, 38, 38, 0.05);
-  --glow-color-mid: rgba(220, 38, 38, 0.15);
-  --rim-color-bright: rgba(255, 100, 100, 1);
-  --rim-color-base: rgba(220, 38, 38, 0.4);
-  --rim-color-inner: rgba(255, 150, 150, 1);
-}
-
 /* Overlay that sits above all tile content when in movement mode */
 .interactiveOverlay {
-  position: absolute;
   top: 0;
   left: 0;
   z-index: var(--z-interactive-overlay);

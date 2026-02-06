@@ -1,101 +1,66 @@
-
-.yellow {
-    --background-color: var(--gd-yellow);
-    --border-color: rgba(var(--gd-yellow), 0.18);
-    --hover-border-color: rgba(var(--gd-yellow), 0.6);
-    --hover-shadow-1: rgba(var(--gd-yellow), 0.35);
-    --hover-shadow-2: rgba(var(--gd-yellow), 0.22);
-    --ribbon-color: var(--gd-yellow);
+.yellow,
+.cyan,
+.red,
+.blue,
+.green,
+.purple,
+.orange,
+.gray,
+.grey {
+    --background-color: var(--accent-rgb);
+    --border-color: rgba(var(--accent-rgb), 0.18);
+    --hover-border-color: rgba(var(--accent-rgb), 0.6);
+    --hover-shadow-1: rgba(var(--accent-rgb), 0.35);
+    --hover-shadow-2: rgba(var(--accent-rgb), 0.22);
+    --ribbon-color: var(--accent-rgb);
 }
 
-.cyan {
-    --background-color: var(--gd-cyan);
-    --border-color: rgba(var(--gd-cyan), 0.18);
-    --hover-border-color: rgba(var(--gd-cyan), 0.6);
-    --hover-shadow-1: rgba(var(--gd-cyan), 0.35);
-    --hover-shadow-2: rgba(var(--gd-cyan), 0.22);
-    --ribbon-color: var(--gd-cyan);
-}
-
-.red {
-    --background-color: var(--gd-red);
-    --border-color: rgba(var(--gd-red), 0.18);
-    --hover-border-color: rgba(var(--gd-red), 0.6);
-    --hover-shadow-1: rgba(var(--gd-red), 0.35);
-    --hover-shadow-2: rgba(var(--gd-red), 0.22);
-    --ribbon-color: var(--gd-red);
-}
+.yellow { --accent-rgb: var(--gd-yellow); }
+.cyan { --accent-rgb: var(--gd-cyan); }
+.red { --accent-rgb: var(--gd-red); }
+.blue { --accent-rgb: var(--gd-blue); }
+.green { --accent-rgb: var(--gd-green); }
+.purple { --accent-rgb: var(--gd-purple); }
 
 .deepRed {
     /* Use RGB triplet for consistency with other accents */
-    --background-color: 48,6,6;
-    --border-color: rgba(48,6,6,1);
-    --hover-border-color: rgba(48,6,6,1);
-    --hover-shadow-1: rgba(48,6,6,0.3);
-    --hover-shadow-2: rgba(48,6,6,0.18);
-    --ribbon-color: rgb(48,6,6);
+    --background-color: 48, 6, 6;
+    --border-color: rgba(var(--background-color), 1);
+    --hover-border-color: rgba(var(--background-color), 1);
+    --hover-shadow-1: rgba(var(--background-color), 0.3);
+    --hover-shadow-2: rgba(var(--background-color), 0.18);
+    --ribbon-color: var(--background-color);
 }
 
 /* Strengthen deep red background to be clearly visible */
 .deepRed.chip { background: rgba(var(--background-color), 0.28); }
 
-.blue {
-    --background-color: var(--gd-blue);
-    --border-color: rgba(var(--gd-blue), 0.18);
-    --hover-border-color: rgba(var(--gd-blue), 0.6);
-    --hover-shadow-1: rgba(var(--gd-blue), 0.35);
-    --hover-shadow-2: rgba(var(--gd-blue), 0.22);
-    --ribbon-color: var(--gd-blue);
-}
-
-.green {
-    --background-color: var(--gd-green);
-    --border-color: rgba(var(--gd-green), 0.18);
-    --hover-border-color: rgba(var(--gd-green), 0.6);
-    --hover-shadow-1: rgba(var(--gd-green), 0.35);
-    --hover-shadow-2: rgba(var(--gd-green), 0.22);
-    --ribbon-color: var(--gd-green);
-}
-
 .orange {
-    --background-color: var(--gd-orange);
-    --border-color: rgba(var(--gd-orange), 0.18);
-    --hover-border-color: rgba(var(--gd-orange), 0.64);
-    --hover-shadow-1: rgba(var(--gd-orange), 0.4);
-    --hover-shadow-2: rgba(var(--gd-orange), 0.25);
-    --ribbon-color: var(--gd-orange);
+    --accent-rgb: var(--gd-orange);
+    --hover-border-color: rgba(var(--accent-rgb), 0.64);
+    --hover-shadow-1: rgba(var(--accent-rgb), 0.4);
+    --hover-shadow-2: rgba(var(--accent-rgb), 0.25);
 }
 
 /* Darker, deeper orange accent for exhausted relics */
 .bloodOrange {
     /* RGB triplet chosen to be darker and richer than standard orange */
     --background-color: 191, 71, 0;
-    --border-color: rgba(191, 71, 0, 0.5);
-    --hover-border-color: rgba(191, 71, 0, 0.9);
-    --hover-shadow-1: rgba(191, 71, 0, 0.45);
-    --hover-shadow-2: rgba(191, 71, 0, 0.28);
-    --ribbon-color: rgb(191, 71, 0);
+    --border-color: rgba(var(--background-color), 0.5);
+    --hover-border-color: rgba(var(--background-color), 0.9);
+    --hover-shadow-1: rgba(var(--background-color), 0.45);
+    --hover-shadow-2: rgba(var(--background-color), 0.28);
+    --ribbon-color: var(--background-color);
 }
 
 .bloodOrange.chip { background: rgba(var(--background-color), 0.20); }
 
-.purple {
-    --background-color: var(--gd-purple);
-    --border-color: rgba(var(--gd-purple), 0.18);
-    --hover-border-color: rgba(var(--gd-purple), 0.6);
-    --hover-shadow-1: rgba(var(--gd-purple), 0.35);
-    --hover-shadow-2: rgba(var(--gd-purple), 0.22);
-    --ribbon-color: var(--gd-purple);
-}
-
 .gray,
 .grey {
-    --background-color: var(--gd-gray);
-    --border-color: rgba(var(--gd-gray), 0.18);
-    --hover-border-color: rgba(var(--gd-gray), 0.55);
-    --hover-shadow-1: rgba(var(--gd-gray), 0.3);
-    --hover-shadow-2: rgba(var(--gd-gray), 0.18);
-    --ribbon-color: var(--gd-gray);
+    --accent-rgb: var(--gd-gray);
+    --hover-border-color: rgba(var(--accent-rgb), 0.55);
+    --hover-shadow-1: rgba(var(--accent-rgb), 0.3);
+    --hover-shadow-2: rgba(var(--accent-rgb), 0.18);
 }
 
 .ribbon::before {
@@ -129,6 +94,10 @@
 
 
 .chip {
+    --chip-inner-padding: 4px 6px;
+    --chip-inner-min-height: 28px;
+    --chip-inner-gap: var(--mantine-spacing-xs);
+    --chip-left-section-size: 20px;
     position: relative;
     border-radius: var(--mantine-radius-md);
     background: rgba(var(--background-color), 0.10);
@@ -155,47 +124,40 @@
 }
 
 /* Size variants */
-.size_xs .inner {
-    padding: 2px 4px;
-    min-height: 22px;
-    gap: 4px;
+.size_xs {
+    --chip-inner-padding: 2px 4px;
+    --chip-inner-min-height: 22px;
+    --chip-inner-gap: 4px;
+    --chip-left-section-size: 14px;
 }
 
-.size_xs .leftSection {
-    max-width: 14px;
-    max-height: 14px;
+.size_sm {
+    --chip-inner-padding: 3px 5px;
+    --chip-inner-min-height: 26px;
+    --chip-inner-gap: 6px;
+    --chip-left-section-size: 18px;
 }
 
-.size_sm .inner {
-    padding: 3px 5px;
-    min-height: 26px;
-    gap: 6px;
-}
-
-.size_sm .leftSection {
-    max-width: 18px;
-    max-height: 18px;
-}
-
-.size_md .inner {
-    padding: 4px 6px;
-    min-height: 28px;
-    gap: var(--mantine-spacing-xs);
+.size_md {
+    --chip-inner-padding: 4px 6px;
+    --chip-inner-min-height: 28px;
+    --chip-inner-gap: var(--mantine-spacing-xs);
+    --chip-left-section-size: 20px;
 }
 
 .inner {
     position: relative;
     display: flex;
-    gap: var(--mantine-spacing-xs);
-    padding: 4px 6px;
+    gap: var(--chip-inner-gap);
+    padding: var(--chip-inner-padding);
     align-items: center;
-    min-height: 28px;
+    min-height: var(--chip-inner-min-height);
     z-index: 2;
 }
 
 .leftSection {
-    max-width: 20px;
-    max-height: 20px;
+    max-width: var(--chip-left-section-size);
+    max-height: var(--chip-left-section-size);
     flex-shrink: 0;
 }
 
@@ -214,7 +176,7 @@
 
 .fullTitle {
     position: absolute;
-    left: 0px; /* match inner horizontal padding */
+    left: 0; /* match inner horizontal padding */
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
@@ -223,9 +185,8 @@
     z-index: 2;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
     width: max-content;
-    background: rgba(0,0, 0, 1);
-    padding-left: 6px;
-    padding-right: 8px;
+    background: rgba(0, 0, 0, 1);
+    padding: 0 8px 0 6px;
 }
 
 .revealFullTitle:hover .fullTitle {
@@ -345,4 +306,3 @@
         rgb(var(--right-color)));
     z-index: 1;
 }
-

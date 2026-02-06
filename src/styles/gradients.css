@@ -11,7 +11,7 @@
   --gd-gray: 148, 163, 184;
 }
 
-/* Base gradient utility classes */
+/* Base gradient utilities */
 .gradient-bg {
   background: rgba(var(--gradient-color), 0.06);
 }
@@ -94,54 +94,13 @@
   --gradient-color: var(--color-grey);
 }
 
-/* Generic player area card utility */
+/* Shared component wrappers */
 .player-area-card {
   border-radius: 4px;
   position: relative;
   overflow: hidden;
 }
 
-.player-area-card.gradient-red {
-  --gradient-color: var(--gd-red);
-}
-
-.player-area-card.gradient-green {
-  --gradient-color: var(--gd-green);
-}
-
-.player-area-card.gradient-blue {
-  --gradient-color: var(--gd-blue);
-}
-
-.player-area-card.gradient-cyan {
-  --gradient-color: var(--gd-cyan);
-}
-
-.player-area-card.gradient-orange {
-  --gradient-color: var(--gd-orange);
-}
-
-.player-area-card.gradient-yellow {
-  --gradient-color: var(--gd-yellow);
-}
-
-.player-area-card.gradient-teal {
-  --gradient-color: var(--gd-teal);
-}
-
-.player-area-card.gradient-purple {
-  --gradient-color: var(--gd-purple);
-}
-
-.player-area-card.gradient-gray {
-  --gradient-color: var(--gd-gray);
-}
-
-.player-area-card.gradient-grey {
-  --gradient-color: var(--color-grey);
-}
-
-/* Shimmer component styles */
 .shimmer-container {
   position: relative;
   overflow: hidden;
@@ -158,102 +117,41 @@
   pointer-events: none;
 }
 
-.shimmer-container.gradient-red {
-  --gradient-color: var(--gd-red);
-}
-
-.shimmer-container.gradient-green {
-  --gradient-color: var(--gd-green);
-}
-
-.shimmer-container.gradient-blue {
-  --gradient-color: var(--gd-blue);
-}
-
-.shimmer-container.gradient-cyan {
-  --gradient-color: var(--gd-cyan);
-}
-
-.shimmer-container.gradient-orange {
-  --gradient-color: var(--gd-orange);
-}
-
-.shimmer-container.gradient-yellow {
-  --gradient-color: var(--gd-yellow);
-}
-
-.shimmer-container.gradient-teal {
-  --gradient-color: var(--gd-teal);
-}
-
-.shimmer-container.gradient-purple {
-  --gradient-color: var(--gd-purple);
-}
-
-.shimmer-container.gradient-gray {
-  --gradient-color: var(--gd-gray);
-}
-
-.shimmer-container.gradient-grey {
-  --gradient-color: var(--color-grey);
-}
-
 /* Slightly stronger red for better contrast on secret objectives */
-.gradient-red.gradient-border {
-  border-color: rgba(var(--gd-red), 0.26);
+.gradient-red { --gradient-border-alpha-strong: 0.26; --gradient-shimmer-alpha-strong: 0.06; }
+.gradient-cyan { --gradient-border-alpha-strong: 0.3; --gradient-bg-alpha-strong: 0.08; }
+.gradient-blue { --gradient-border-alpha-strong: 0.24; --gradient-bg-alpha-strong: 0.08; --gradient-shimmer-alpha-strong: 0.05; }
+.gradient-orange { --gradient-border-alpha-strong: 0.28; --gradient-bg-alpha-strong: 0.10; --gradient-shimmer-alpha-strong: 0.055; }
+.gradient-purple { --gradient-border-alpha-strong: 0.26; --gradient-bg-alpha-strong: 0.09; --gradient-shimmer-alpha-strong: 0.055; }
+.gradient-green { --gradient-border-alpha-strong: 0.26; --gradient-bg-alpha-strong: 0.05; --gradient-shimmer-alpha-strong: 0.025; }
+
+.gradient-red.gradient-border,
+.gradient-cyan.gradient-border,
+.gradient-blue.gradient-border,
+.gradient-orange.gradient-border,
+.gradient-purple.gradient-border,
+.gradient-green.gradient-border {
+  border-color: rgba(var(--gradient-color), var(--gradient-border-alpha-strong));
+}
+
+.gradient-cyan.gradient-border,
+.gradient-blue.gradient-border,
+.gradient-orange.gradient-border,
+.gradient-purple.gradient-border,
+.gradient-green.gradient-border {
+  background: rgba(var(--gradient-color), var(--gradient-bg-alpha-strong));
 }
 
 .gradient-red.gradient-shimmer {
-  background: rgba(var(--gd-red), 0.1);
+  background: rgba(var(--gradient-color), 0.1);
 }
 
-.shimmer-container.gradient-red::before {
-  background: rgba(var(--gd-red), 0.06);
-}
-
-/* Stronger cyan for Promissory Notes */
-.gradient-cyan.gradient-border {
-  border-color: rgba(var(--gd-cyan), 0.3);
-  background: rgba(var(--gd-cyan), 0.08);
-}
-/* Slightly stronger blue for Stage II objectives */
-.gradient-blue.gradient-border {
-  border-color: rgba(var(--gd-blue), 0.24);
-  background: rgba(var(--gd-blue), 0.08);
-}
-
-.shimmer-container.gradient-blue::before {
-  background: rgba(var(--gd-blue), 0.05);
-}
-
-/* Slightly stronger orange for Stage I objectives */
-.gradient-orange.gradient-border {
-  border-color: rgba(var(--gd-orange), 0.28);
-  background: rgba(var(--gd-orange), 0.10);
-}
-
-.shimmer-container.gradient-orange::before {
-  background: rgba(var(--gd-orange), 0.055);
-}
-
-/* Slightly stronger purple for Law chips */
-.gradient-purple.gradient-border {
-  border-color: rgba(var(--gd-purple), 0.26);
-  background: rgba(var(--gd-purple), 0.09);
-}
-
-.shimmer-container.gradient-purple::before {
-  background: rgba(var(--gd-purple), 0.055);
-}
-
-/* Slightly stronger green for Leader chips */
-.gradient-green.gradient-border {
-  border-color: rgba(var(--gd-green), 0.26);
-  background: rgba(var(--gd-green), 0.05);
-}
-
+.shimmer-container.gradient-red::before,
+.shimmer-container.gradient-blue::before,
+.shimmer-container.gradient-orange::before,
+.shimmer-container.gradient-purple::before,
 .shimmer-container.gradient-green::before {
-  background: rgba(var(--gd-green), 0.025);
+  background: rgba(var(--gradient-color), var(--gradient-shimmer-alpha-strong));
 }
 
 
@@ -263,233 +161,73 @@
 }
 
 /* Hybrid gradients (two-sided, hard split at 50%) */
-/*
-  Each combo defines:
-  - bg: subtle background
-  - bg-strong: slightly stronger background
-  - border: two-tone border using border-image
-  - shimmer: subtle background shimmer
-  For shimmer-container usage, add the combo class to the same element to affect ::before.
-*/
-
-/* blue | red */
-.hybrid-blueRed-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.06) 0 50%,
-    rgba(var(--gd-red), 0.06) 50% 100%
+.hybrid-bg {
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--hybrid-left), 0.06) 0 50%,
+    rgba(var(--hybrid-right), 0.06) 50% 100%
   );
 }
 
-.hybrid-blueRed-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.09) 0 50%,
-    rgba(var(--gd-red), 0.09) 50% 100%
+.hybrid-bg-strong {
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--hybrid-left), 0.09) 0 50%,
+    rgba(var(--hybrid-right), 0.09) 50% 100%
   );
 }
 
-.hybrid-blueRed-border {
+.hybrid-border {
   border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.16),
-    rgba(var(--gd-red), 0.16)
+  border-image: linear-gradient(
+    90deg,
+    rgba(var(--hybrid-left), 0.16),
+    rgba(var(--hybrid-right), 0.16)
   ) 1;
 }
 
-.hybrid-blueRed-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.07) 0 50%,
-    rgba(var(--gd-red), 0.07) 50% 100%
+.hybrid-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--hybrid-left), 0.07) 0 50%,
+    rgba(var(--hybrid-right), 0.07) 50% 100%
   );
 }
 
-.shimmer-container.hybrid-blueRed::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.03) 0 50%,
-    rgba(var(--gd-red), 0.03) 50% 100%
+.shimmer-container.hybrid::before {
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--hybrid-left), 0.03) 0 50%,
+    rgba(var(--hybrid-right), 0.03) 50% 100%
   );
 }
 
-/* blue | green */
-.hybrid-blueGreen-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.06) 0 50%,
-    rgba(var(--gd-green), 0.06) 50% 100%
-  );
+.hybrid-blueRed {
+  --hybrid-left: var(--gd-blue);
+  --hybrid-right: var(--gd-red);
 }
 
-.hybrid-blueGreen-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.09) 0 50%,
-    rgba(var(--gd-green), 0.09) 50% 100%
-  );
+.hybrid-blueGreen {
+  --hybrid-left: var(--gd-blue);
+  --hybrid-right: var(--gd-green);
 }
 
-.hybrid-blueGreen-border {
-  border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.16),
-    rgba(var(--gd-green), 0.16)
-  ) 1;
+.hybrid-blueYellow {
+  --hybrid-left: var(--gd-blue);
+  --hybrid-right: var(--gd-yellow);
 }
 
-.hybrid-blueGreen-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.07) 0 50%,
-    rgba(var(--gd-green), 0.07) 50% 100%
-  );
+.hybrid-greenRed {
+  --hybrid-left: var(--gd-green);
+  --hybrid-right: var(--gd-red);
 }
 
-.shimmer-container.hybrid-blueGreen::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.03) 0 50%,
-    rgba(var(--gd-green), 0.03) 50% 100%
-  );
+.hybrid-greenYellow {
+  --hybrid-left: var(--gd-green);
+  --hybrid-right: var(--gd-yellow);
 }
 
-/* blue | yellow */
-.hybrid-blueYellow-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.06) 0 50%,
-    rgba(var(--gd-yellow), 0.06) 50% 100%
-  );
-}
-
-.hybrid-blueYellow-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.09) 0 50%,
-    rgba(var(--gd-yellow), 0.09) 50% 100%
-  );
-}
-
-.hybrid-blueYellow-border {
-  border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.16),
-    rgba(var(--gd-yellow), 0.16)
-  ) 1;
-}
-
-.hybrid-blueYellow-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.07) 0 50%,
-    rgba(var(--gd-yellow), 0.07) 50% 100%
-  );
-}
-
-.shimmer-container.hybrid-blueYellow::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-blue), 0.03) 0 50%,
-    rgba(var(--gd-yellow), 0.03) 50% 100%
-  );
-}
-
-/* green | red */
-.hybrid-greenRed-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.06) 0 50%,
-    rgba(var(--gd-red), 0.06) 50% 100%
-  );
-}
-
-.hybrid-greenRed-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.09) 0 50%,
-    rgba(var(--gd-red), 0.09) 50% 100%
-  );
-}
-
-.hybrid-greenRed-border {
-  border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.16),
-    rgba(var(--gd-red), 0.16)
-  ) 1;
-}
-
-.hybrid-greenRed-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.07) 0 50%,
-    rgba(var(--gd-red), 0.07) 50% 100%
-  );
-}
-
-.shimmer-container.hybrid-greenRed::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.03) 0 50%,
-    rgba(var(--gd-red), 0.03) 50% 100%
-  );
-}
-
-/* green | yellow */
-.hybrid-greenYellow-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.06) 0 50%,
-    rgba(var(--gd-yellow), 0.06) 50% 100%
-  );
-}
-
-.hybrid-greenYellow-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.09) 0 50%,
-    rgba(var(--gd-yellow), 0.09) 50% 100%
-  );
-}
-
-.hybrid-greenYellow-border {
-  border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.16),
-    rgba(var(--gd-yellow), 0.16)
-  ) 1;
-}
-
-.hybrid-greenYellow-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.07) 0 50%,
-    rgba(var(--gd-yellow), 0.07) 50% 100%
-  );
-}
-
-.shimmer-container.hybrid-greenYellow::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-green), 0.03) 0 50%,
-    rgba(var(--gd-yellow), 0.03) 50% 100%
-  );
-}
-
-/* yellow | red */
-.hybrid-yellowRed-bg {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-yellow), 0.06) 0 50%,
-    rgba(var(--gd-red), 0.06) 50% 100%
-  );
-}
-
-.hybrid-yellowRed-bg-strong {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-yellow), 0.09) 0 50%,
-    rgba(var(--gd-red), 0.09) 50% 100%
-  );
-}
-
-.hybrid-yellowRed-border {
-  border: 1px solid transparent;
-  border-image: linear-gradient(90deg,
-    rgba(var(--gd-yellow), 0.16),
-    rgba(var(--gd-red), 0.16)
-  ) 1;
-}
-
-.hybrid-yellowRed-shimmer {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-yellow), 0.07) 0 50%,
-    rgba(var(--gd-red), 0.07) 50% 100%
-  );
-}
-
-.shimmer-container.hybrid-yellowRed::before {
-  background-image: linear-gradient(90deg,
-    rgba(var(--gd-yellow), 0.03) 0 50%,
-    rgba(var(--gd-red), 0.03) 50% 100%
-  );
+.hybrid-yellowRed {
+  --hybrid-left: var(--gd-yellow);
+  --hybrid-right: var(--gd-red);
 }

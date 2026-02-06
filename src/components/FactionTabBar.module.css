@@ -7,18 +7,6 @@
   overflow: hidden;
 }
 
-.factionTabBar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  pointer-events: none;
-  opacity: 0.7;
-}
-
 .tab {
   width: 44px;
   height: 36px;
@@ -96,79 +84,4 @@
 
 .imgPinned {
   filter: drop-shadow(0 2px 4px rgba(74, 158, 255, 0.4)) brightness(1.2);
-}
-
-.btnTab {
-  border-left: none;
-  transition: all 0.2s ease;
-  width: auto;
-  min-width: 50px;
-  padding: 4px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.btnLeft {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.btnRight {
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-left: none;
-}
-
-.icon {
-  color: var(--mantine-color-gray-5);
-  transition: color 0.2s ease;
-  line-height: 1;
-}
-
-.iconTech {
-  --active-color: var(--mantine-color-blue-4);
-  --pinned-color: var(--mantine-color-blue-3);
-}
-
-.iconComp {
-  --active-color: var(--mantine-color-green-4);
-  --pinned-color: var(--mantine-color-green-3);
-}
-
-.iconActive {
-  color: var(--active-color);
-}
-
-.iconPinned {
-  color: var(--pinned-color);
-}
-
-.text {
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1;
-  color: var(--mantine-color-gray-5);
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.textTech {
-  --active-color: var(--mantine-color-blue-4);
-  --pinned-color: var(--mantine-color-blue-3);
-}
-
-.textComp {
-  --active-color: var(--mantine-color-green-4);
-  --pinned-color: var(--mantine-color-green-3);
-}
-
-.textActive {
-  color: var(--active-color);
-}
-
-.textPinned {
-  color: var(--pinned-color);
 }

@@ -42,111 +42,13 @@
 
 .tile {
   position: absolute;
-  width: 345px;
-  height: 299px;
   pointer-events: auto;
 }
 
-.mapTile {
-  position: relative !important;
-  left: auto !important;
-  top: auto !important;
-  transform: scale(1.2);
-}
-
-.info {
-  background: var(--mantine-color-dark-7);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--mantine-color-dark-4);
-}
-
-.info h3 {
-  color: var(--mantine-color-blue-4);
-  margin-bottom: 1rem;
-  border-bottom: 2px solid var(--mantine-color-dark-4);
-  padding-bottom: 0.5rem;
-}
-
-.info h4 {
-  color: var(--mantine-color-green-4);
-  margin: 1rem 0 0.5rem 0;
-}
-
-.info p {
-  margin: 0.5rem 0;
-  color: var(--mantine-color-gray-2);
-}
-
-.planetList {
-  margin-top: 1rem;
-}
-
-.planetList ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.planetList li {
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  background: var(--mantine-color-dark-6);
-  border-radius: 4px;
-  border-left: 3px solid var(--mantine-color-blue-6);
-}
-
-.controlledBy {
-  color: var(--mantine-color-yellow-4);
-  font-weight: 500;
-}
-
-.entityList {
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-}
-
-.entityList li {
-  background: var(--mantine-color-dark-5);
-  border-left: 3px solid var(--mantine-color-green-6);
-  margin: 0.25rem 0;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.9rem;
-}
-
-.faction {
-  color: var(--mantine-color-blue-3);
-  font-weight: 600;
-}
-
-.entity {
-  color: var(--mantine-color-gray-1);
-}
-
-.sustained {
-  color: var(--mantine-color-red-4);
-  font-style: italic;
-}
-
-.errorContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-  padding: 2rem;
-  background: var(--mantine-color-dark-8);
-  color: var(--mantine-color-gray-0);
-}
-
-.errorContainer h1 {
-  color: var(--mantine-color-red-4);
-  margin-bottom: 1rem;
-}
-
-.errorContainer p {
-  color: var(--mantine-color-gray-4);
-  font-size: 1.1rem;
+.systemTileDisplay,
+.tile {
+  width: 345px;
+  height: 299px;
 }
 
 .costMapSquare {

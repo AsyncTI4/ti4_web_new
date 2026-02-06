@@ -1,39 +1,45 @@
 .theme-vaporwavetheme {
+    --vw-pink-rgb: 255, 0, 170;
+    --vw-cyan-rgb: 0, 240, 255;
+    --vw-white-rgb: 255, 255, 255;
+    --vw-panel-strong-rgb: 22, 10, 36;
+    --vw-panel-soft-rgb: 10, 16, 38;
+    --vw-panel-mid-rgb: 18, 14, 32;
 
     /* Surface.tsx */
-    --surface-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
-    --surface-border: 1px solid rgba(255, 255, 255, 0.14);
-    --surface-corner-accent: 2px solid rgba(255, 0, 170, 0.35);
-    --surface-shadow: 0 10px 40px rgba(255, 0, 170, 0.15), 0 6px 24px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --surface-bg: linear-gradient(135deg, rgba(var(--vw-white-rgb), 0.06) 0%, rgba(var(--vw-white-rgb), 0.03) 100%);
+    --surface-border: 1px solid rgba(var(--vw-white-rgb), 0.14);
+    --surface-corner-accent: 2px solid rgba(var(--vw-pink-rgb), 0.35);
+    --surface-shadow: 0 10px 40px rgba(var(--vw-pink-rgb), 0.15), 0 6px 24px rgba(var(--vw-cyan-rgb), 0.12), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.08);
 
     /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: linear-gradient(135deg, rgba(22, 10, 36, 1) 0%, rgba(10, 16, 38, 1) 100%);
-    --faction-tab-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.72) 0%, rgba(10, 16, 38, 0.68) 100%);
-    --faction-tab-border: 1px solid rgba(255, 0, 170, 0.22);
-    --faction-tab-shadow: 0 1px 3px rgba(255, 0, 170, 0.2);
+    --faction-tab-bar-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 1) 0%, rgba(var(--vw-panel-soft-rgb), 1) 100%);
+    --faction-tab-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.72) 0%, rgba(var(--vw-panel-soft-rgb), 0.68) 100%);
+    --faction-tab-border: 1px solid rgba(var(--vw-pink-rgb), 0.22);
+    --faction-tab-shadow: 0 1px 3px rgba(var(--vw-pink-rgb), 0.2);
 
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.82) 0%, rgba(10, 16, 38, 0.78) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.35) 0%, rgba(0, 240, 255, 0.28) 50%, rgba(22, 10, 36, 0.78) 100%);
-    --faction-tab-active-shadow: 0 2px 10px rgba(255, 0, 170, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    --faction-tab-pinned-shadow: 0 4px 14px rgba(0, 240, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    --faction-tab-active-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.82) 0%, rgba(var(--vw-panel-soft-rgb), 0.78) 100%);
+    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(var(--vw-pink-rgb), 0.35) 0%, rgba(var(--vw-cyan-rgb), 0.28) 50%, rgba(var(--vw-panel-strong-rgb), 0.78) 100%);
+    --faction-tab-active-shadow: 0 2px 10px rgba(var(--vw-pink-rgb), 0.35), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.1);
+    --faction-tab-pinned-shadow: 0 4px 14px rgba(var(--vw-cyan-rgb), 0.35), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.12);
 
     /* PlayerCard.tsx */
-    --player-card-box-bg: linear-gradient(135deg, rgba(22, 10, 36, 1) 0%, rgba(10, 16, 38, 1) 100%);
-    --player-card-box-shadow: 0 12px 48px rgba(255, 0, 170, 0.15), 0 6px 28px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --player-card-box-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 1) 0%, rgba(var(--vw-panel-soft-rgb), 1) 100%);
+    --player-card-box-shadow: 0 12px 48px rgba(var(--vw-pink-rgb), 0.15), 0 6px 28px rgba(var(--vw-cyan-rgb), 0.12), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.08);
 
     /** Sidebar **/
     --sidebar-bg: rgba(10, 8, 24, 0.6);
     --left-sidebar-bg: rgba(10, 8, 24, 0.6);
-    --sidebar-border: 1px solid rgba(0, 240, 255, 0.22);
+    --sidebar-border: 1px solid rgba(var(--vw-cyan-rgb), 0.22);
     --sidebar-blur: 8px;
 
     /** Secret Hand Popup Tab (Right Sidebar) **/
-    --secret-tab-bg:  linear-gradient(135deg, rgba(22, 10, 36, 0.7) 0%, rgba(10, 16, 38, 0.66) 100%);
-    --secret-tab-header-bg: linear-gradient(135deg, rgba(22, 10, 36, 0.58) 0%, rgba(10, 16, 38, 0.54) 100%);
-    --secret-tab-header-border: 1px solid rgba(255, 255, 255, 0.16);
+    --secret-tab-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.7) 0%, rgba(var(--vw-panel-soft-rgb), 0.66) 100%);
+    --secret-tab-header-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.58) 0%, rgba(var(--vw-panel-soft-rgb), 0.54) 100%);
+    --secret-tab-header-border: 1px solid rgba(var(--vw-white-rgb), 0.16);
 
-    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(255, 0, 170, 0.14) 0%, rgba(0, 240, 255, 0.12) 100%);
-    --secret-tab-hover-border: 1px solid rgba(255, 0, 170, 0.3);
+    --secret-tab-hover-bg: linear-gradient(135deg, rgba(var(--vw-pink-rgb), 0.14) 0%, rgba(var(--vw-cyan-rgb), 0.12) 100%);
+    --secret-tab-hover-border: 1px solid rgba(var(--vw-pink-rgb), 0.3);
 
     /** Map **/
     --main-bg:
@@ -41,47 +47,47 @@
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 80px),
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 80px),
       /* Glow halo and horizon */
-      radial-gradient(60% 40% at 50% 20%, rgba(255, 0, 170, 0.22) 0%, rgba(255, 0, 170, 0.0) 60%),
-      radial-gradient(80% 60% at 50% 120%, rgba(0, 240, 255, 0.12) 0%, rgba(0, 240, 255, 0.0) 50%),
+      radial-gradient(60% 40% at 50% 20%, rgba(var(--vw-pink-rgb), 0.22) 0%, rgba(var(--vw-pink-rgb), 0.0) 60%),
+      radial-gradient(80% 60% at 50% 120%, rgba(var(--vw-cyan-rgb), 0.12) 0%, rgba(var(--vw-cyan-rgb), 0.0) 50%),
       /* Base sky */
       linear-gradient(180deg, rgba(12, 8, 28, 0.98) 0%, rgba(10, 8, 26, 0.98) 60%, rgba(6, 6, 18, 0.98) 100%);
-    --map-tabs-bg: linear-gradient(180deg, rgba(22, 10, 36, 0.85) 0%, rgba(10, 16, 38, 0.8) 100%);
+    --map-tabs-bg: linear-gradient(180deg, rgba(var(--vw-panel-strong-rgb), 0.85) 0%, rgba(var(--vw-panel-soft-rgb), 0.8) 100%);
     --map-tabs-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 
-    --map-tab-border: 1px solid rgba(255, 0, 170, 0.22);
-    --map-tab-hover-bg: rgba(255, 0, 170, 0.18);
-    --map-tab-hover-border: rgba(255, 0, 170, 0.5);
+    --map-tab-border: 1px solid rgba(var(--vw-pink-rgb), 0.22);
+    --map-tab-hover-bg: rgba(var(--vw-pink-rgb), 0.18);
+    --map-tab-hover-border: rgba(var(--vw-pink-rgb), 0.5);
     --map-tab-default-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     --map-tab-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    --map-tab-hover-text-shadow: 0 1px 4px rgba(255, 0, 170, 0.4);
+    --map-tab-hover-text-shadow: 0 1px 4px rgba(var(--vw-pink-rgb), 0.4);
     --map-tab-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
 
-    --map-tab-active-bg: rgba(0, 240, 255, 0.16);
-    --map-tab-active-border: rgba(0, 240, 255, 0.55);
-    --map-tab-active-text-shadow: 0 1px 6px rgba(0, 240, 255, 0.5);
+    --map-tab-active-bg: rgba(var(--vw-cyan-rgb), 0.16);
+    --map-tab-active-border: rgba(var(--vw-cyan-rgb), 0.55);
+    --map-tab-active-text-shadow: 0 1px 6px rgba(var(--vw-cyan-rgb), 0.5);
 
     /** Header **/
-    --header-bg: linear-gradient(90deg, rgba(22, 10, 36, 0.85) 0%, rgba(10, 16, 38, 0.8) 100%);
-    --header-border: 1px solid rgba(0, 240, 255, 0.22);
-    --header-shadow: 0 3px 10px rgba(255, 0, 170, 0.15);
+    --header-bg: linear-gradient(90deg, rgba(var(--vw-panel-strong-rgb), 0.85) 0%, rgba(var(--vw-panel-soft-rgb), 0.8) 100%);
+    --header-border: 1px solid rgba(var(--vw-cyan-rgb), 0.22);
+    --header-shadow: 0 3px 10px rgba(var(--vw-pink-rgb), 0.15);
 
     /** Header Tabs  **/
-    --header-tab-bg: rgba(18, 14, 32, 0.5);
-    --header-tab-border: 1px solid rgba(255, 0, 170, 0.35);
-    --header-tab-hover-bg: rgba(255, 0, 170, 0.28);
-    --header-tab-hover-border: rgba(255, 0, 170, 0.55);
+    --header-tab-bg: rgba(var(--vw-panel-mid-rgb), 0.5);
+    --header-tab-border: 1px solid rgba(var(--vw-pink-rgb), 0.35);
+    --header-tab-hover-bg: rgba(var(--vw-pink-rgb), 0.28);
+    --header-tab-hover-border: rgba(var(--vw-pink-rgb), 0.55);
 
-    --header-tab-active-bg: rgba(0, 240, 255, 0.28);
-    --header-tab-active-border: rgba(0, 240, 255, 0.6);
+    --header-tab-active-bg: rgba(var(--vw-cyan-rgb), 0.28);
+    --header-tab-active-border: rgba(var(--vw-cyan-rgb), 0.6);
 
     /** Header Tabs Input **/
-    --header-tab-input-bg: rgba(18, 14, 32, 0.66);
-    --header-tab-input-border: 1px solid rgba(0, 240, 255, 0.36);
+    --header-tab-input-bg: rgba(var(--vw-panel-mid-rgb), 0.66);
+    --header-tab-input-border: 1px solid rgba(var(--vw-cyan-rgb), 0.36);
 
     /** Dropdown **/
-    --header-tab-dropdown-bg: rgba(18, 14, 32, 0.8);
-    --header-tab-dropdown-border: 1px solid rgba(255, 0, 170, 0.36);
-    --header-tab-dropdown-hover-bg: rgba(255, 0, 170, 0.28);
+    --header-tab-dropdown-bg: rgba(var(--vw-panel-mid-rgb), 0.8);
+    --header-tab-dropdown-border: 1px solid rgba(var(--vw-pink-rgb), 0.36);
+    --header-tab-dropdown-hover-bg: rgba(var(--vw-pink-rgb), 0.28);
     --header-dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 
     /** Objectives Tab **/
@@ -155,20 +161,13 @@
     --upgrade-card-icon-color: rgba(167, 243, 208, 0.8);
 
     /* Army Rankings */
-    --army-rank-first-color: rgba(255, 215, 0, 0.95);
-    --army-rank-first-glow: rgba(255, 215, 0, 0.4);
-    --army-rank-second-color: rgba(192, 192, 192, 0.9);
-    --army-rank-third-color: rgba(205, 127, 50, 0.85);
 
     /* PlayerCardMobile Panel Sections */
     --player-card-mobile-panel-bg: rgba(255, 0, 170, 0.03);
     --player-card-mobile-panel-border: 1px solid rgba(0, 240, 255, 0.08);
 
     /* Unit Details Card */
-    --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
     --unit-details-inherited-bg: rgba(255, 0, 170, 0.06);
     --unit-details-inherited-border: rgba(255, 0, 170, 0.15);
-    --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
 }
-
 

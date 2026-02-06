@@ -1,11 +1,3 @@
-.gamesLink {
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  transition: color 0.2s ease;
-}
-
-
 .tabsContainer {
   flex: 1;
   display: flex;
@@ -49,7 +41,6 @@
 .tab:hover {
   background: var(--header-tab-hover-bg);
   border-color: var(--header-tab-hover-border);
-  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .tab[data-active="true"] {
@@ -73,7 +64,7 @@
 
 .tabInput input {
   background: transparent !important;
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: inherit !important;
   border: none !important;
 }
 
@@ -98,8 +89,6 @@
   min-width: 20px;
   height: 20px;
   border-radius: 4px;
-  transition: all 0.2s ease;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,7 +110,6 @@
   border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 6px;
   color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
   transition: border-color 0.2s ease;
   width: 100%;
   padding: 8px 12px;
@@ -133,7 +121,7 @@
 .comboboxInput input {
   background: transparent !important;
   border: none !important;
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: inherit !important;
 }
 
 .comboboxInput:hover {
@@ -148,25 +136,41 @@
 }
 
 .dropdownOption {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
   padding: 8px 12px;
   border-radius: 4px;
   margin: 2px;
   transition: background-color 0.2s ease;
 }
 
-.dropdownOption:hover {
+.dropdownOption:hover,
+.dropdownOption[data-combobox-selected="true"] {
   background: var(--header-tab-dropdown-hover-bg);
-  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .dropdownOption[data-combobox-selected="true"] {
-  background: var(--header-tab-dropdown-hover-bg);
   color: rgba(255, 255, 255, 1) !important;
 }
 
 .dropdownText {
   color: inherit;
+}
+
+.tab,
+.closeButton,
+.comboboxInput {
+  cursor: pointer;
+}
+
+.closeButton,
+.comboboxInput {
+  display: flex;
+  align-items: center;
+}
+
+.tab,
+.closeButton {
+  transition: all 0.2s ease;
 }
 
 /* Responsive adjustments */
@@ -179,32 +183,6 @@
   .tabsList {
     padding: 3px;
   }
-}
-
-/* Vaporwave (TRON) decorations, scoped to active theme */
-:global(.theme-vaporwavetheme) .newHeaderGroup {
-  position: relative;
-}
-
-:global(.theme-vaporwavetheme) .newHeaderGroup::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-bottom: 1px solid rgba(255, 0, 170, 0.35);
-  box-shadow: 0 10px 32px rgba(255, 0, 170, 0.08), 0 8px 26px rgba(0, 240, 255, 0.06);
-}
-
-:global(.theme-vaporwavetheme) .newHeaderGroup::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 0, 170, 0.9), rgba(0, 240, 255, 0.9));
-  box-shadow: 0 0 10px rgba(255, 0, 170, 0.4), 0 0 12px rgba(0, 240, 255, 0.3);
-  opacity: 0.6;
 }
 
 :global(.theme-vaporwavetheme) .tab {

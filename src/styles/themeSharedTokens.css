@@ -1,0 +1,9 @@
+:root {
+  /* Shared across all themes */
+  --army-rank-first-color: rgba(255, 215, 0, 0.95);
+  --army-rank-first-glow: rgba(255, 215, 0, 0.4);
+  --army-rank-second-color: rgba(192, 192, 192, 0.9);
+  --army-rank-third-color: rgba(205, 127, 50, 0.85);
+  --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
+  --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
+}

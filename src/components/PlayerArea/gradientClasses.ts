@@ -50,12 +50,12 @@ export function getHybridGradientClasses(combo: HybridKey) {
 
   return {
     // Hybrid two-sided utilities
-    background: `${baseClass}-bg`,
-    backgroundStrong: `${baseClass}-bg-strong`,
-    border: `${baseClass}-border`,
-    shimmer: `${baseClass}-shimmer`,
+    background: `${baseClass} hybrid-bg`,
+    backgroundStrong: `${baseClass} hybrid-bg-strong`,
+    border: `${baseClass} hybrid-border`,
+    shimmer: `${baseClass} hybrid-shimmer`,
 
     // Shimmer container utility (affects ::before)
-    shimmerContainer: `shimmer-container ${baseClass}`,
+    shimmerContainer: `shimmer-container hybrid ${baseClass}`,
   };
 }
