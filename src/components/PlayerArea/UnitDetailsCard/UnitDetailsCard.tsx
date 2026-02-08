@@ -143,12 +143,12 @@ export function UnitDetailsCard({
     const combatKeys: Array<keyof Pick<Unit, "cost" | "combatHitsOn" | "combatDieCount" | "moveValue" | "capacityValue">> =
                                             ["cost" , "combatHitsOn" , "combatDieCount" , "moveValue" , "capacityValue"];
 
-    const toStat = (value?: number) => (typeof value === "number" ? value : 0);
+    const numberOrZero = (value?: number) => (typeof value === "number" ? value : 0);
 
     const upgradeCombat: Partial<Record<typeof combatKeys[number], number>> = combatKeys.reduce(
       (acc, key) => {
-        const valueBase = toStat(unitData[key]);
-        const valueU = toStat(upgradeUnit[key]);
+        const valueBase = numberOrZero(unitData[key]);
+        const valueU = numberOrZero(upgradeUnit[key]);
         if (valueBase !== valueU) acc[key] = valueU - valueBase;
         return acc;
       },
