@@ -365,7 +365,7 @@ export function UnitDetailsCard({
                 )}
               </Group>
               {upgradeInfo.upgradeUnit.ability && (
-                <Text size="sm" c="gray.6" className={styles.upgradeAbilityText}>{upgradeInfo.upgradeUnit.ability}</Text>
+                <Text size="sm" c="gray.6" mb={upgradeCombat ? 6 : 0} className={styles.upgradeAbilityText}>{upgradeInfo.upgradeUnit.ability}</Text>
               )}
 
               {/* Upgraded combat modifiers */}
