@@ -349,7 +349,7 @@ export function UnitDetailsCard({
           <>
             <Divider color="gray.8" />
             <Box p={8} className={styles.upgradeBox}>
-              <Group gap={6} align="center" mb={upgradeInfo.upgradeUnit.ability ? 6 : 0}>
+              <Group gap={6} align="center" mb={upgradeInfo.upgradeUnit.ability || upgradeCombat ? 6 : 0}>
                 <Text size="xs" fw={500} c="gray.6" className={styles.sectionTitle}>Upgrades to</Text>
                 <IconArrowRight size={12} color="var(--mantine-color-gray-6)" />
                 <Text size="sm" fw={600} c="gray.4">{upgradeInfo.upgradeUnit.name}</Text>
