@@ -58,7 +58,6 @@ export function Relic({ relicId, isExhausted = false }: Props) {
       leftSection={<RelicIcon isFake={isFake} isExhausted={isExhausted} />}
       title={relicData.shortName || relicData.name}
       dropdownContent={<RelicCard relicId={relicId} />}
-      px="sm"
     />
   );
 }

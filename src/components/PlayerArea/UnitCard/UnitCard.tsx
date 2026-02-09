@@ -82,7 +82,7 @@ export function UnitCard({
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <div style={{ minWidth: "50px" }}>
+        <div style={{ minWidth: "44px" }}>
           <BaseCard
             onClick={locked ? undefined : toggle}
             isUpgraded={isUpgraded}

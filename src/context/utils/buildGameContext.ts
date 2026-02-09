@@ -25,7 +25,11 @@ import {
   generateHexagonMidpoints,
   RADIUS,
 } from "@/utils/hexagonUtils";
-import { PlayerDataResponse, EntityData, BorderAnomalyInfo } from "@/data/types";
+import {
+  PlayerDataResponse,
+  EntityData,
+  BorderAnomalyInfo,
+} from "@/data/types";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
 import type { GameData, Tile, TilePlanet } from "@/context/types";
 
@@ -66,14 +70,14 @@ function aggregateEntities(data: Record<string, EntityData[]>) {
 export function buildGameContext(
   data: PlayerDataResponse,
   accessibleColors: boolean,
-  decalOverrides: Record<string, string> = {}
+  decalOverrides: Record<string, string> = {},
 ): GameData {
   const playerData = data.playerData.filter(
     (p) =>
       p.faction !== "null" &&
       p.faction !== "" &&
       p.faction !== undefined &&
-      p.faction !== "Dicecord"
+      p.faction !== "neutral",
   );
 
   const baseFactionToColor = buildFactionToColor(playerData);
@@ -93,31 +97,31 @@ export function buildGameContext(
     const mapping = Object.fromEntries(
       playerData
         .slice(0, accessibleOrder.length)
-        .map((player, idx) => [player.faction, accessibleOrder[idx]])
+        .map((player, idx) => [player.faction, accessibleOrder[idx]]),
     );
 
     factionToColor = Object.fromEntries(
-      playerData.map((p) => [p.faction, mapping[p.faction] ?? p.color])
+      playerData.map((p) => [p.faction, mapping[p.faction] ?? p.color]),
     );
   }
   const optimizedColors = computeOptimizedColors(factionToColor);
   const factionColorMap = buildFactionColorMap(
     data,
     optimizedColors,
-    accessibleColors
+    accessibleColors,
   );
 
   const originalFactionColorMap = buildFactionColorMap(
     data,
     optimizedColors,
-    false
+    false,
   );
 
   const factionImageMap = buildFactionImageMap(playerData);
 
   const { tilesWithPds, dominantPdsFaction, pdsByTile } = computePdsData(
     data,
-    factionToColor
+    factionToColor,
   );
   const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
   const calculatedTilePositions = data.tilePositions
@@ -143,7 +147,7 @@ export function buildGameContext(
       acc[position] = systemId;
       return acc;
     },
-    {} as Record<string, string>
+    {} as Record<string, string>,
   );
 
   // Build map of border anomalies by tile position
@@ -168,7 +172,7 @@ export function buildGameContext(
     if (position === "special") {
       Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
         const { tokens, unitsByFaction, attachments } = aggregateEntities(
-          planetData.entities
+          planetData.entities,
         );
 
         const exhausted = allExhaustedPlanets.has(planetName);
@@ -196,7 +200,7 @@ export function buildGameContext(
     const planets: Record<string, TilePlanet> = {};
     Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
       const { tokens, unitsByFaction, attachments } = aggregateEntities(
-        planetData.entities
+        planetData.entities,
       );
 
       const exhausted = allExhaustedPlanets.has(planetName);
@@ -217,7 +221,7 @@ export function buildGameContext(
     const coordinates = calculateSingleTilePosition(
       position,
       data.ringCount,
-      fractureYbump
+      fractureYbump,
     );
     const points = generateHexagonPoints(coordinates.x, coordinates.y, RADIUS);
     const properties = {

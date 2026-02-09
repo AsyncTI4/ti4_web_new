@@ -22,9 +22,9 @@
 }
 
 .standard {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(107, 114, 128, 0.25);
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .animated.standard:hover {
@@ -44,7 +44,7 @@
 
 .compactCard {
   min-height: unset;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
 }
 
 .glassySheen {
@@ -70,8 +70,8 @@
 }
 
 .factionIcon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
 .upgradeFactionBadgesContainer {
@@ -104,36 +104,36 @@
 .imageContainer {
   justify-content: center;
   align-items: center;
-  min-height: 40px;
+  min-height: 34px;
 }
 
 .unitImage {
-  height: 30px;
+  height: 26px;
 }
 
 .unitImageCompact {
-  height: 28px;
+  height: 24px;
 }
 
 .unitImage,
 .unitImageCompact {
   width: auto;
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .infoStack {
-  gap: var(--mantine-spacing-xs);
+  gap: 4px;
   align-items: center;
 }
 
 .mainGroup {
-  gap: var(--mantine-spacing-xs);
+  gap: 4px;
   justify-content: center;
   align-items: baseline;
 }
 
 .reinforcementGroup {
-  gap: 3px;
+  gap: 2px;
   align-items: baseline;
 }
 
@@ -153,7 +153,7 @@
 .countText,
 .countTextZero {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
@@ -161,7 +161,7 @@
 .maxCountText {
   color: var(--mantine-color-gray-5);
   font-weight: 500;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }

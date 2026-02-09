@@ -115,7 +115,7 @@ function PlanetsArea({
   galvanizeTokensReinf,
 }: PlanetsAreaProps) {
   return (
-    <Group gap={4} wrap="wrap" flex={1}>
+    <Group gap={6} wrap="wrap" flex={1}>
       {regularPlanets.map((planetId, index) => (
         <PlanetCard
           key={index}
@@ -319,7 +319,7 @@ export default function PlayerCardMobile(props: Props) {
   ];
 
   const UnitsArea = (
-    <SimpleGrid cols={6} spacing="8px">
+    <SimpleGrid cols={6} spacing={6}>
       {UNIT_PRIORITY_ORDER.map((asyncId) => {
         const bestUnit = lookupUnit(asyncId, faction, props.playerData);
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
@@ -363,7 +363,7 @@ export default function PlayerCardMobile(props: Props) {
 
   return (
     <PlayerCardBox color={color} faction={faction}>
-      <Group gap="md" px={4} align="center">
+      <Group gap={8} px={4} align="center">
         <Image src={factionUrl} alt={faction} w={32} h={32} />
         <Stack gap={0}>
           <Group>
@@ -372,7 +372,7 @@ export default function PlayerCardMobile(props: Props) {
             </Text>
             <StatusIndicator passed={passed} active={active} />
           </Group>
-          <Group gap={8}>
+          <Group gap={6}>
             <Text size="sm" span ml={4} opacity={0.9} c="white" ff="text">
               {faction}
             </Text>
@@ -384,7 +384,7 @@ export default function PlayerCardMobile(props: Props) {
           <Neighbors neighbors={neighbors || []} />
         </Box>
 
-        <Group gap="xs" align="center" mt={8}>
+        <Group gap={6} align="center" mt={8}>
           {scs.map((scNumber) => {
             const isExhausted = exhaustedSCs?.includes(scNumber);
             return (
@@ -401,7 +401,7 @@ export default function PlayerCardMobile(props: Props) {
         </Group>
       </Group>
 
-      <Grid gutter="xs" columns={24}>
+      <Grid gutter={6} columns={24}>
         <Grid.Col span={22}>
           <PlayerCardAbilitiesFactionTechs
             abilities={abilities}
@@ -414,7 +414,7 @@ export default function PlayerCardMobile(props: Props) {
 
         <Grid.Col span={24}>
           <Panel>
-            <Grid gutter="xs" columns={24}>
+            <Grid gutter={6} columns={24}>
               <Grid.Col span={6}>
                 <Group gap={2} align="flex-start">
                   <Stack gap={4}>
@@ -460,7 +460,7 @@ export default function PlayerCardMobile(props: Props) {
         </Grid.Col>
 
         <Grid.Col span={24}>
-          <Group gap="xs" align="flex-start" h="100%">
+          <Group gap={6} align="flex-start" h="100%">
             <Panel
               className={cx(!isMobileDevice() && styles.techGridDesktop)}
               style={{ height: "100%" }}

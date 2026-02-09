@@ -10,10 +10,10 @@
 
 /* Tech card styles */
 .techCard {
-  --tech-bg-alpha: 0.08;
-  --tech-border-alpha: 0.18;
-  --tech-accent-alpha: 0.4;
-  padding: 4px var(--mantine-spacing-xs);
+  --tech-bg-alpha: 0.10;
+  --tech-border-alpha: 0.25;
+  --tech-accent-alpha: 0.5;
+  padding: 4px 6px;
   border-radius: 4px;
   position: relative;
   overflow: hidden;
@@ -26,9 +26,9 @@
 
 /* Enhanced styling for tier 3 and faction techs */
 .techCard.enhanced {
-  --tech-bg-alpha: 0.15;
+  --tech-bg-alpha: 0.18;
   --tech-border-alpha: 0.5;
-  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.1);
+  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.12);
 }
 
 .techCard.enhanced::after {
@@ -152,7 +152,7 @@
 
 /* Main content group */
 .contentGroup {
-  gap: var(--mantine-spacing-xs);
+  gap: 6px;
   position: relative;
   min-width: 0;
 }

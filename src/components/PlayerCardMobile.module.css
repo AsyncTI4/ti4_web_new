@@ -1,8 +1,8 @@
 /* Subtle section for abilities/faction techs - reduces visual prominence without opacity */
 
 .subtleSection :global(.chip) {
-  background: rgba(var(--background-color), 0.06) !important;
-  border-color: rgba(var(--border-color), 0.5) !important;
+  background: rgba(var(--background-color), 0.08) !important;
+  border-color: rgba(var(--border-color), 0.55) !important;
 }
 
 .subtleSection :global(.chip.inner) {
@@ -11,7 +11,7 @@
 }
 
 .subtleSection :global(.chip.strong) {
-  background: rgba(var(--background-color), 0.08) !important;
+  background: rgba(var(--background-color), 0.10) !important;
 }
 
 .subtleSection :global(.chip .textContainer),
@@ -22,7 +22,7 @@
 
 .subtleSection :global(.chip.accentLine::before) {
   width: 1.5px !important;
-  opacity: 0.4 !important;
+  opacity: 0.5 !important;
 }
 
 .subtleSection :global(.chip.ribbon::before) {
@@ -34,14 +34,14 @@
 }
 
 .subtleSection :global(.techCard) {
-  background: rgba(var(--gradient-color), 0.06) !important;
-  border-color: rgba(var(--gradient-color), 0.15) !important;
+  background: rgba(var(--gradient-color), 0.08) !important;
+  border-color: rgba(var(--gradient-color), 0.20) !important;
   padding: 2px 4px !important;
 }
 
 .subtleSection :global(.techCard.enhanced) {
-  background: rgba(var(--gradient-color), 0.12) !important;
-  border-color: rgba(var(--gradient-color), 0.3) !important;
+  background: rgba(var(--gradient-color), 0.14) !important;
+  border-color: rgba(var(--gradient-color), 0.35) !important;
   box-shadow: none !important;
 }
 
@@ -69,8 +69,8 @@
 
 /* Unified subtle panel wrapper for major sections */
 .panel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sectionTitle {
@@ -82,7 +82,7 @@
 }
 
 .sectionGap {
-  margin-top: var(--mantine-spacing-xs);
+  margin-top: 6px;
 }
 
 /* Extremely subtle panel styling for primary sections */
@@ -113,12 +113,12 @@
 .gridItems,
 .objectivesGrid {
   grid-auto-flow: column;
-  gap: 4px;
+  gap: 4px 4px;
 }
 
 .panel,
 .sectionPanel {
-  padding: var(--mantine-spacing-xs);
+  padding: 6px;
 }
 
 .panel {

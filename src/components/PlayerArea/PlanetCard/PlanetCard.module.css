@@ -239,21 +239,21 @@
 
 /* Planet color variables */
 :root {
-  --cultural-background: rgba(59, 130, 246, 0.12);
-  --cultural-border: rgba(59, 130, 246, 0.3);
-  --cultural-shadow: rgba(59, 130, 246, 0.08);
+  --cultural-background: rgba(59, 130, 246, 0.14);
+  --cultural-border: rgba(59, 130, 246, 0.35);
+  --cultural-shadow: rgba(59, 130, 246, 0.10);
 
-  --hazardous-background: rgba(239, 68, 68, 0.12);
-  --hazardous-border: rgba(239, 68, 68, 0.3);
-  --hazardous-shadow: rgba(239, 68, 68, 0.08);
+  --hazardous-background: rgba(239, 68, 68, 0.14);
+  --hazardous-border: rgba(239, 68, 68, 0.35);
+  --hazardous-shadow: rgba(239, 68, 68, 0.10);
 
-  --industrial-background: rgba(34, 197, 94, 0.12);
-  --industrial-border: rgba(34, 197, 94, 0.3);
-  --industrial-shadow: rgba(34, 197, 94, 0.08);
+  --industrial-background: rgba(34, 197, 94, 0.14);
+  --industrial-border: rgba(34, 197, 94, 0.35);
+  --industrial-shadow: rgba(34, 197, 94, 0.10);
 
-  --default-background: rgba(107, 114, 128, 0.12);
-  --default-border: rgba(107, 114, 128, 0.3);
-  --default-shadow: rgba(107, 114, 128, 0.08);
+  --default-background: rgba(107, 114, 128, 0.14);
+  --default-border: rgba(107, 114, 128, 0.35);
+  --default-shadow: rgba(107, 114, 128, 0.10);
 
   --faction-background: var(--default-background);
   --faction-border: var(--default-border);
@@ -264,22 +264,22 @@
   --mr-shadow: var(--default-shadow);
 
   /* Ocean (Deep Abyss) - deep greyish cyan distinct from cultural */
-  --ocean-background: rgba(64, 112, 128, 0.14);
-  --ocean-border: rgba(64, 160, 176, 0.32);
-  --ocean-shadow: rgba(24, 44, 50, 0.10);
+  --ocean-background: rgba(64, 112, 128, 0.16);
+  --ocean-border: rgba(64, 160, 176, 0.38);
+  --ocean-shadow: rgba(24, 44, 50, 0.12);
 }
 
 /* Main stack styling */
 .mainStack {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  padding: 6px 3px;
+  padding: 6px 4px;
   height: 140px;
   position: relative;
   justify-content: space-between;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--planet-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px var(--planet-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   border: 1px solid var(--planet-border);
 }
 
@@ -317,7 +317,7 @@
 
 /* Bottom stack */
 .bottomStack {
-  gap: 4px;
+  gap: 2px;
   position: relative;
   z-index: 1;
 }

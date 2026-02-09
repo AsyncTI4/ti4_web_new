@@ -31,7 +31,7 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
       <SmoothPopover.Target>
         <Chip accent={accentColor} onClick={toggle}>
           <Box className={styles.leaderWrapper}>
-            <Group gap={8} className={styles.leaderGroup}>
+            <Group gap={6} className={styles.leaderGroup}>
               {showLeaderImage ? (
                 <div className={styles.leaderImageContainer}>
                   <Image

@@ -34,8 +34,6 @@ export function PromissoryNote({
       title={noteData.shortName || displayName}
       onClick={onClick}
       dropdownContent={<PromissoryNoteCard promissoryNoteId={promissoryNoteId} />}
-      px={8}
-      py={4}
     />
   );
 }
