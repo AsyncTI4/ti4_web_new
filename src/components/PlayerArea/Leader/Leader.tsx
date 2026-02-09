@@ -29,7 +29,7 @@ export function Leader({ id, type, exhausted, locked, active }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip accent={accentColor} onClick={toggle}>
+        <Chip accent={accentColor} onClick={toggle} className={styles.pill}>
           <Box className={styles.leaderWrapper}>
             <Group gap={6} className={styles.leaderGroup}>
               {showLeaderImage ? (

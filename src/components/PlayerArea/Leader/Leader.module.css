@@ -1,5 +1,10 @@
 /* Leader card styles */
 
+/* Pill shape — leaders are characters/people, softer organic shape */
+.pill {
+  border-radius: 20px;
+}
+
 /* Layout components */
 .leaderWrapper {
   position: relative;
@@ -46,8 +51,8 @@
   position: absolute;
   top: -6px;
   left: -5px;
-  border-top-left-radius: var(--mantine-radius-md);
-  border-bottom-left-radius: var(--mantine-radius-md);
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   object-fit: cover;
   object-position: center;
 }

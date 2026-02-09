@@ -43,6 +43,7 @@ export function BaseCard({
     <Chip
       accent="blue"
       className={cx(
+        styles.unitCardShape,
         isUpgraded ? styles.upgraded : styles.standard,
         enableAnimations && styles.animated,
         locked && styles.locked,

@@ -2,6 +2,7 @@ import { Image } from "@mantine/core";
 import { getSecretObjectiveData } from "../../../lookup/secretObjectives";
 import { ChipWithPopover } from "@/components/shared/primitives/ChipWithPopover";
 import { SecretObjectiveCard } from "../SecretObjectiveCard";
+import styles from "./ScoredSecret.module.css";
 
 type Props = {
   secretId: string;
@@ -16,6 +17,7 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
 
   return (
     <ChipWithPopover
+      className={styles.secretCard}
       accent={isScored ? "red" : "gray"}
       leftSection={<Image src="/so_icon.png" />}
       ribbon

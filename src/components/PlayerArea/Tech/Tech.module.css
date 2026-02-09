@@ -12,7 +12,7 @@
 .techCard {
   --tech-bg-alpha: 0.10;
   --tech-border-alpha: 0.25;
-  --tech-accent-alpha: 0.5;
+  --tech-accent-alpha: 0.7;
   padding: 4px 6px;
   border-radius: 4px;
   position: relative;
@@ -70,7 +70,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 3px;
   background: rgba(var(--gradient-color), var(--tech-accent-alpha));
 }
 

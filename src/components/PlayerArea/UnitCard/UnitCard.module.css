@@ -1,6 +1,11 @@
 
 
 
+/* Rounded token shape — units feel like coins/tokens */
+.unitCardShape {
+  border-radius: 10px;
+}
+
 .animated {
   transition: all 0.2s ease;
 }

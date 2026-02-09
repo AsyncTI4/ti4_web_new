@@ -35,6 +35,11 @@
 }
 
 
+/* Carved artifact shape — slightly sharper than default chip */
+.relicCard {
+  border-radius: 2px;
+}
+
 /* Subtle artifact filigree top line */
 .relicCard::before {
   content: '';
@@ -43,7 +48,7 @@
   left: 10px;
   right: 10px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(251, 191, 36, 0) 0%, rgba(251, 191, 36, 0.35) 50%, rgba(251, 191, 36, 0) 100%);
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0) 0%, rgba(251, 191, 36, 0.5) 50%, rgba(251, 191, 36, 0) 100%);
 }
 
 /* Tiny inset corner cuts to imply carved edges */
