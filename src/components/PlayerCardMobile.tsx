@@ -414,7 +414,7 @@ export default function PlayerCardMobile(props: Props) {
 
         <Grid.Col span={24}>
           <Panel>
-            <Grid gutter={6} columns={24}>
+            <Grid gutter={8} columns={24}>
               <Grid.Col span={6}>
                 <Group gap={2} align="flex-start">
                   <Stack gap={4}>
@@ -429,23 +429,25 @@ export default function PlayerCardMobile(props: Props) {
                     pnCount={pnCount || 0}
                     acCount={acCount || 0}
                   />
-                  <CCPool
-                    tacticalCC={tacticalCC}
-                    fleetCC={fleetCC}
-                    strategicCC={strategicCC}
-                    mahactEdict={mahactEdict}
-                  />
+                  <Box ml={4}>
+                    <CCPool
+                      tacticalCC={tacticalCC}
+                      fleetCC={fleetCC}
+                      strategicCC={strategicCC}
+                      mahactEdict={mahactEdict}
+                    />
+                  </Box>
                   <FragmentsPool fragments={fragments} />
                 </Group>
               </Grid.Col>
 
-              <Grid.Col span={3}>
+              <Grid.Col span={3} className={styles.dividerLeft}>
                 <Stack gap={2}>
                   <Leaders leaders={leaders} faction={faction} mobile />
                 </Stack>
               </Grid.Col>
 
-              <Grid.Col span={15}>
+              <Grid.Col span={15} className={styles.dividerLeft}>
                 <ObjectivesGrid
                   secretsScored={secretsScored}
                   knownUnscoredSecrets={knownUnscoredSecrets}

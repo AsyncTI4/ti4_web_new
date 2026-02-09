@@ -128,3 +128,9 @@
 .sectionPanel {
   border-radius: var(--mantine-radius-sm);
 }
+
+/* Subtle vertical divider on the left edge of a grid column */
+.dividerLeft {
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  padding-left: 8px;
+}

@@ -3,7 +3,7 @@ import styles from "./Tech.module.css";
 import { cdnImage } from "../../../data/cdnImage";
 import { TechCard } from "./TechCard";
 import { SmoothPopover } from "../../shared/SmoothPopover";
-import { useDisclosure } from "@/hooks/useDisclosure";
+import { useState } from "react";
 import { getTechData } from "../../../lookup/tech";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import cx from "clsx";
@@ -23,7 +23,7 @@ export function Tech({
   synergy,
   breakthroughUnlocked = false,
 }: Props) {
-  const { opened, setOpened, toggle } = useDisclosure(false);
+  const [opened, setOpened] = useState(false);
 
   // Look up tech data
   const techData = getTechData(techId);
@@ -50,9 +50,9 @@ export function Tech({
             styles[color],
             isFactionTech && styles.factionTech,
             isEnhanced && styles.enhanced,
-            synergyClass && styles[synergyClass]
+            synergyClass && styles[synergyClass],
           )}
-          onClick={toggle}
+          onClick={() => setOpened((o) => !o)}
           style={{ opacity: isExhausted ? 0.5 : 1 }}
         >
           {/* Tier indicator dots in top-right */}
@@ -72,7 +72,7 @@ export function Tech({
                 className={cx(
                   styles.techIcon,
                   styles.factionTechIcon,
-                  styles[color]
+                  styles[color],
                 )}
               >
                 <Image
@@ -85,7 +85,7 @@ export function Tech({
                 className={cx(
                   styles.techIcon,
                   styles.techLetter,
-                  styles[color]
+                  styles[color],
                 )}
               >
                 <Text fw={700} fz={14} c="white">
@@ -97,7 +97,7 @@ export function Tech({
                 className={cx(
                   styles.techIcon,
                   styles.techLetter,
-                  styles[color]
+                  styles[color],
                 )}
               >
                 <Text fw={700} fz={14} c="white">
@@ -145,7 +145,6 @@ const getTechColor = (techType: string): string => {
     case "CYBERNETIC":
       return "yellow";
     case "NONE":
-    case "GENERICTF":
       return "white";
     default:
       return "gray";
@@ -154,7 +153,7 @@ const getTechColor = (techType: string): string => {
 
 function getSynergyClass(
   synergy: string[] | undefined,
-  techColor: string
+  techColor: string,
 ): string {
   if (!synergy || synergy.length === 0) return "";
   const colors = synergy
