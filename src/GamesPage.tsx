@@ -8,10 +8,10 @@ import {
   Text,
 } from "@mantine/core";
 import { useMaps } from "./hooks/useMaps";
-import { MapViewportLoader } from "@/shared/ui/primitives/Loaders";
+import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import { useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
-import { DiscordLogin } from "./domains/auth/components/DiscordLogin";
+import { DiscordLogin } from "./domains/auth/DiscordLogin";
 import { AppHeader } from "@/shared/ui/AppHeader";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 

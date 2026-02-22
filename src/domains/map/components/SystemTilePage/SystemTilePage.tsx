@@ -1,6 +1,6 @@
 import React from "react";
-import { Tile } from "../Map/Tile";
-import { UnitStack } from "../Map/UnitStack";
+import { Tile } from "../Tile";
+import { UnitStack } from "../UnitStack";
 import {
   processPlanetEntities,
   HEX_SQUARE_WIDTH,

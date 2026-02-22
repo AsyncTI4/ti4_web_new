@@ -1,19 +1,19 @@
 import { Stack, Box, SimpleGrid } from "@mantine/core";
 import softStyles from "./PlayerCardSidebar.module.css";
-import { DynamicTechGrid } from "@/domains/player/components/PlayerArea/Tech/DynamicTechGrid";
-import { ScoredSecrets } from "@/domains/player/components/PlayerArea/ScoredSecrets";
+import { DynamicTechGrid } from "@/domains/player/components/Tech/DynamicTechGrid";
+import { ScoredSecrets } from "@/domains/player/components/ScoredSecrets";
 import { PlayerData } from "@/entities/data/types";
-import { Leaders } from "@/domains/player/components/PlayerArea/Leaders";
-import { PlayerCardBox } from "./PlayerCardBox";
-import { PlayerCardHeaderCompact } from "@/domains/player/components/PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
-import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerArea/PlayerCardUnitsArea";
-import { PlayerCardRelicsPromissoryArea } from "@/domains/player/components/PlayerArea/PlayerCardRelicsPromissoryArea";
-import { PlayerCardAbilitiesFactionTechs } from "@/domains/player/components/PlayerArea/PlayerCardAbilitiesFactionTechs";
-import { PlotCardsSection } from "@/domains/player/components/PlayerArea/PlotCardsSection";
-import { usePlayerCardComputedData } from "@/domains/player/components/PlayerArea/PlayerCardShared/usePlayerCardComputedData";
-import { PlayerCardCapturedUnits } from "@/domains/player/components/PlayerArea/PlayerCardShared/PlayerCardCapturedUnits";
-import { PlayerCardLogisticsRow } from "@/domains/player/components/PlayerArea/PlayerCardShared/PlayerCardLogisticsRow";
-import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerArea/PlayerCardShared/PlayerCardPlanetsSection";
+import { Leaders } from "@/domains/player/components/Leaders";
+import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
+import { PlayerCardHeaderCompact } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
+import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
+import { PlayerCardRelicsPromissoryArea } from "@/domains/player/components/PlayerCardRelicsPromissoryArea";
+import { PlayerCardAbilitiesFactionTechs } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
+import { PlotCardsSection } from "@/domains/player/components/PlotCardsSection";
+import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
+import { PlayerCardCapturedUnits } from "@/domains/player/components/PlayerCardShared/PlayerCardCapturedUnits";
+import { PlayerCardLogisticsRow } from "@/domains/player/components/PlayerCardShared/PlayerCardLogisticsRow";
+import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCardShared/PlayerCardPlanetsSection";
 
 type Props = {
   playerData: PlayerData;

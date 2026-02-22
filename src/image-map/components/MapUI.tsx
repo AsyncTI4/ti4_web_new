@@ -1,10 +1,10 @@
 import { AppShell, Box } from "@mantine/core";
 import MapImageErrorDialog from "@/image-map/components/MapImageErrorDialog";
 import { ScrollMap } from "./ScrollMap";
-import { DiscordLogin } from "@/domains/auth/components/DiscordLogin";
+import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { FloatingRefreshButton } from "@/shared/ui/FloatingRefreshButton";
 import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
-import { MapViewportLoader } from "@/shared/ui/primitives/Loaders";
+import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import type { MapImageError } from "@/hooks/useMapImage";
 import type { Params } from "react-router-dom";
 

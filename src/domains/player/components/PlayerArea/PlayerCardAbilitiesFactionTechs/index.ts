@@ -1,2 +1,0 @@
-export { PlayerCardAbilitiesFactionTechs } from "./PlayerCardAbilitiesFactionTechs";
-

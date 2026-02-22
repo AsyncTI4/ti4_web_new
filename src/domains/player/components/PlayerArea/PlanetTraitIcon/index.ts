@@ -1,1 +1,0 @@
-export { PlanetTraitIcon } from "./PlanetTraitIcon";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { Chip } from "./Chip";
-import type { ColorKey } from "@/domains/player/components/PlayerArea/gradientClasses";
+import type { ColorKey } from "@/domains/player/components/gradientClasses";
 
 type ChipAccent =
   | ColorKey

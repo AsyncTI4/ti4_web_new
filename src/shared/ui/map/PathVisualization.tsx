@@ -12,7 +12,7 @@ import {
   getMapContainerOffset,
   getMapLayoutConfig,
   type MapLayout,
-} from "@/domains/map/components/MapView/mapLayout";
+} from "@/domains/map/components/mapLayout";
 
 type PathVisualizationProps = {
   pathResult: PathResult | null;

@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import { GamesBar } from "@/shared/ui/GamesBar";
-import { Surface } from "./domains/player/components/PlayerArea/Surface";
+import { Surface } from "./domains/player/components/Surface";
 import { AppHeader } from "@/shared/ui/AppHeader";
 
 import "./LandingPage.css";

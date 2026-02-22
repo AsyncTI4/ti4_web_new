@@ -16,16 +16,16 @@ import {
   useGameDataState,
 } from "./hooks/useGameContext";
 import PlayerCard from "./domains/player/components/composition/PlayerCard";
-import { TabsControls } from "./domains/game-shell/components/main/TabsControls";
+import { TabsControls } from "./domains/game-shell/components/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
-import GeneralArea from "./domains/game-shell/components/General/GeneralArea";
-import { PannableMapView } from "./domains/map/components/MapView/PannableMapView";
+import GeneralArea from "./domains/game-shell/components/GeneralArea";
+import { PannableMapView } from "./domains/map/components/PannableMapView";
 import { MapView } from "./domains/map/components/MapView";
-import ChangeLogModal from "./domains/changelog/components/ChangeLogModal/ChangeLogModal";
+import ChangeLogModal from "./domains/changelog/components/ChangeLogModal";
 import {
   CHANGELOG_090,
   CURRENT_CHANGELOG_VERSION,
-} from "./domains/changelog/components/ChangeLogModal/changelogData";
+} from "./domains/changelog/components/changelogData";
 import { MapViewSelectionModal } from "./domains/game-shell/components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
@@ -33,8 +33,8 @@ import { NavigationDrawer } from "./domains/game-shell/components/navigation/Nav
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
-import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/main/mainTabs";
-import { TabPanelSection } from "./domains/game-shell/components/main/TabPanelSection";
+import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/mainTabs";
+import { TabPanelSection } from "./domains/game-shell/components/TabPanelSection";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;

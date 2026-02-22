@@ -13,7 +13,6 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import GamePage from "./image-map/pages/GamePage";
 import GamesPage from "./GamesPage";
 import {
   createTheme,
@@ -129,7 +128,7 @@ const theme = createTheme({
 });
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
@@ -138,5 +137,5 @@ root.render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

@@ -1,7 +1,7 @@
 import { Button, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import { IconRefresh, IconLogin, IconLock } from "@tabler/icons-react";
 import { useRefreshMap } from "@/hooks/useRefreshMap";
-import { DiscordLogin } from "@/domains/auth/components/DiscordLogin";
+import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { MapViewportCenter } from "@/shared/ui/MapViewportCenter";
 import type { MapImageError } from "@/hooks/useMapImage";
 

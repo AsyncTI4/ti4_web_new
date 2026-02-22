@@ -4,7 +4,7 @@ import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import MapUI from "@/image-map/components/MapUI";
 import { useFrogMap } from "@/image-map/hooks/useFrogMap";
 import { useUser } from "@/hooks/useUser";
-import { DiscordAuthButton } from "@/domains/auth/components/DiscordLogin";
+import { DiscordAuthButton } from "@/domains/auth/DiscordLogin";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 

@@ -1,7 +1,7 @@
 import { AppShell, Center, Stack, Title, Text, Button } from "@mantine/core";
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { HeaderMenuNew } from "./HeaderMenuNew";
-import { Surface } from "@/domains/player/components/PlayerArea/Surface";
+import { Surface } from "@/domains/player/components/Surface";
 import classes from "./UpdateNeededScreen.module.css";
 import { AppHeader } from "@/shared/ui/AppHeader";
 

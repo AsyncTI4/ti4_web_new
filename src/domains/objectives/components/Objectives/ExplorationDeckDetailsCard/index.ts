@@ -1,1 +1,0 @@
-export { ExplorationDeckDetailsCard } from "./ExplorationDeckDetailsCard";

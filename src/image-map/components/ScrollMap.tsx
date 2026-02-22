@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect, type CSSProperties } from "react";
-import ZoomControls from "@/components/ZoomControls";
+import ZoomControls from "@/shared/ui/map/ZoomControls";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import { getCssScaleStyle } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";

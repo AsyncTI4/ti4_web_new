@@ -1,7 +1,7 @@
 import { Box } from "@mantine/core";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { DiscordLogin } from "@/domains/auth/components/DiscordLogin";
+import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 
 type PinchZoomMapProps = {
   imageUrl?: string;

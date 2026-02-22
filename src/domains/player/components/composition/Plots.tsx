@@ -6,7 +6,7 @@ import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useState } from "react";
 import {  PlotCardInfo } from "@/entities/data/types";
 import { getPlotCardInfo } from "@/entities/lookup/plots";
-import { PlotDetails } from "@/domains/player/components/PlayerArea/PlotDetails";
+import { PlotDetails } from "@/domains/player/components/PlotDetails";
 
 const plots = [
   {

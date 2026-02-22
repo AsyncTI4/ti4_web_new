@@ -1,1 +1,0 @@
-export { AbilityDetailsCard } from "./AbilityDetailsCard";

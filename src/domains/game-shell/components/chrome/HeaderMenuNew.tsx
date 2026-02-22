@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { IconPencil } from "@tabler/icons-react";
-import { DiscordLogin } from "@/domains/auth/components/DiscordLogin";
+import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";

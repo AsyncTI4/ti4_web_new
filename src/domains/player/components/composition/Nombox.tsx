@@ -1,5 +1,5 @@
 import { Box, Image, Group, Text } from "@mantine/core";
-import { Surface } from "@/domains/player/components/PlayerArea/Surface";
+import { Surface } from "@/domains/player/components/Surface";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { units } from "@/entities/data/units";
 import { CapturedUnitsData } from "@/entities/data/types";

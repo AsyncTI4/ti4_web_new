@@ -1,1 +1,0 @@
-export { HeaderAccent } from "./HeaderAccent";

@@ -1,2 +1,0 @@
-export { GhostWormholeTokens } from "./GhostWormholeTokens";
-

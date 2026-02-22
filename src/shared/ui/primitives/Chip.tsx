@@ -1,5 +1,5 @@
 import { Box, Text, type BoxProps } from "@mantine/core";
-import type { ColorKey } from "@/domains/player/components/PlayerArea/gradientClasses";
+import type { ColorKey } from "@/domains/player/components/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";
 

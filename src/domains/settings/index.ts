@@ -1,1 +1,1 @@
-export * from "./domains/settings/components/SettingsModal";
+export * from "./components/SettingsModal";

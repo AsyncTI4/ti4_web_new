@@ -1,1 +1,0 @@
-export { ShimmerDivider } from "./ShimmerDivider";

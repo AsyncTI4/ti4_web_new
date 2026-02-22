@@ -1,6 +1,6 @@
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { AppShell, Group, type GroupProps } from "@mantine/core";
-import Logo from "@/shared/ui/branding/Logo";
+import Logo from "@/shared/ui/Logo";
 
 const defaultGroupStyle: CSSProperties = {
   flexWrap: "nowrap",

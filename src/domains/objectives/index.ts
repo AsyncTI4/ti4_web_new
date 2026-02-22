@@ -1,1 +1,1 @@
-export * from "./components/Objectives";
+export * from "./components";

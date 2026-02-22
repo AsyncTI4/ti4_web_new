@@ -9,13 +9,13 @@ import {
   Button,
 } from "@mantine/core";
 import { IconPencil, IconX } from "@tabler/icons-react";
-import Logo from "@/shared/ui/branding/Logo";
-import { DiscordLogin } from "@/domains/auth/components/DiscordLogin";
+import Logo from "@/shared/ui/Logo";
+import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { EditableTabLabel } from "@/shared/ui/EditableTabLabel";
 import { generateColorGradient } from "@/entities/lookup/colors";
 import { useTabLabelEditing } from "@/hooks/useTabLabelEditing";
-import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/main/mainTabs";
+import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
 
 type EnrichedTab = {
   id: string;
