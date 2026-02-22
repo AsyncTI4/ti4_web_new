@@ -1,0 +1,88 @@
+.dashboard-main {
+  --dash-bg-0: #0a1014;
+  --dash-bg-1: #12212b;
+  --dash-bg-2: #203847;
+  --dash-accent: #e3ba68;
+  --dash-accent-soft: #6cb6bd;
+  --dash-danger: #dc6a7a;
+  --dash-ok: #7ec98f;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(108, 182, 189, 0.24), transparent 42%),
+    radial-gradient(circle at 88% 8%, rgba(227, 186, 104, 0.2), transparent 36%),
+    linear-gradient(165deg, var(--dash-bg-1), var(--dash-bg-0) 42%, var(--dash-bg-2));
+  min-height: calc(100vh - 60px);
+}
+
+.dashboard-wrap {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.25rem;
+}
+
+.dashboard-hero {
+  border: 1px solid rgba(227, 186, 104, 0.3);
+  background: linear-gradient(
+    140deg,
+    rgba(15, 26, 33, 0.92),
+    rgba(20, 36, 45, 0.86)
+  );
+  box-shadow:
+    0 28px 90px rgba(4, 7, 10, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.dashboard-hero-title {
+  font-family: Slider, "Times New Roman", serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.dashboard-stat-card {
+  border: 1px solid rgba(190, 209, 223, 0.18);
+  background: linear-gradient(
+    180deg,
+    rgba(13, 24, 32, 0.9),
+    rgba(12, 19, 28, 0.96)
+  );
+  box-shadow: 0 12px 45px rgba(7, 11, 15, 0.45);
+}
+
+.dashboard-game-card {
+  border: 1px solid rgba(191, 210, 222, 0.2);
+  background:
+    radial-gradient(circle at 90% 0%, rgba(108, 182, 189, 0.15), transparent 40%),
+    linear-gradient(180deg, rgba(13, 23, 31, 0.95), rgba(11, 18, 27, 0.97));
+}
+
+.dashboard-mode-pill {
+  border: 1px solid rgba(108, 182, 189, 0.35);
+  color: #c8e3e7;
+  background: rgba(30, 70, 79, 0.28);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.73rem;
+}
+
+.dashboard-tag-active {
+  color: #c7f2d2;
+  border-color: rgba(126, 201, 143, 0.45);
+  background: rgba(39, 87, 55, 0.25);
+}
+
+.dashboard-tag-finished {
+  color: #d4d9df;
+  border-color: rgba(175, 187, 201, 0.35);
+  background: rgba(52, 61, 72, 0.3);
+}
+
+.dashboard-tag-abandoned {
+  color: #ffd1d8;
+  border-color: rgba(220, 106, 122, 0.45);
+  background: rgba(97, 30, 45, 0.3);
+}
+
+.dashboard-title-item {
+  border-left: 3px solid rgba(227, 186, 104, 0.5);
+  padding-left: 0.65rem;
+}

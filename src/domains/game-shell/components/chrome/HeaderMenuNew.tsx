@@ -31,6 +31,7 @@ type HeaderMenuNewProps = {
   activeTabs: EnrichedTab[];
   changeTab: (tab: string) => void;
   removeTab: (tab: string) => void;
+  actions?: React.ReactNode;
 };
 
 export function HeaderMenuNew({
@@ -38,6 +39,7 @@ export function HeaderMenuNew({
   activeTabs,
   changeTab,
   removeTab,
+  actions,
 }: HeaderMenuNewProps) {
   const [showDesktopDropdown, setShowDesktopDropdown] = useState(false);
   const [widthThreshold, setWidthThreshold] = useState<number | null>(null);
@@ -98,6 +100,7 @@ export function HeaderMenuNew({
           />
         )}
       </div>
+      {actions}
       <Box visibleFrom="sm">
         <DiscordLogin />
       </Box>

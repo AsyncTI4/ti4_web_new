@@ -1,0 +1,316 @@
+/* ─── Badge Strip Container ─── */
+.strip {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.15) transparent;
+  padding-bottom: 4px;
+}
+
+.strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.strip::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 2px;
+}
+
+/* ─── Individual Badge Card ─── */
+.badge {
+  --badge-color: var(--gd-gray);
+  position: relative;
+  flex: 0 0 auto;
+  width: 220px;
+  padding: 14px 14px 10px;
+  border-radius: var(--mantine-radius-md);
+  background: linear-gradient(
+    155deg,
+    rgba(var(--badge-color), 0.10) 0%,
+    rgba(var(--badge-color), 0.02) 50%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  border: 1px solid rgba(var(--badge-color), 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 2px 10px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.badge:hover {
+  border-color: rgba(var(--badge-color), 0.4);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 16px rgba(var(--badge-color), 0.12),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Top accent bar — asymmetric, starts strong left, fades right */
+.badge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--badge-color), 0.85) 0%,
+    rgba(var(--badge-color), 0.4) 40%,
+    rgba(var(--badge-color), 0.05) 100%
+  );
+}
+
+/* Inner radial glow — gives depth behind the icon area */
+.badge::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--badge-color), 0.10) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Corner bracket — top-left, echoing Surface component */
+.cornerAccent {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 12px;
+  height: 12px;
+  border-left: 1.5px solid rgba(var(--badge-color), 0.35);
+  border-top: 1.5px solid rgba(var(--badge-color), 0.35);
+  border-radius: 2px 0 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Badge Icon ─── */
+.iconWrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--badge-color), 0.14);
+  border: 1px solid rgba(var(--badge-color), 0.25);
+  flex-shrink: 0;
+  color: rgb(var(--badge-color));
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 8px rgba(var(--badge-color), 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Badge Name ─── */
+.badgeName {
+  font-family: Slider, "Times New Roman", serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Badge Metric Readout ─── */
+.metric {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.metricValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: rgb(var(--badge-color));
+  text-shadow: 0 0 10px rgba(var(--badge-color), 0.25), 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.metricLabel {
+  font-size: 10px;
+  color: var(--mantine-color-gray-4);
+  white-space: nowrap;
+}
+
+.metricThreshold {
+  font-size: 9px;
+  color: var(--mantine-color-gray-6);
+  font-family: var(--mantine-font-family-monospace);
+}
+
+/* ─── Badge Description (thematic flavor) ─── */
+.badgeDesc {
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--mantine-color-gray-6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Tier Indicator ─── */
+.tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.tierSilver {
+  color: rgba(192, 203, 220, 0.9);
+}
+
+.tierGold {
+  color: rgba(255, 215, 0, 0.95);
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.tierLegendary {
+  color: rgba(220, 140, 255, 0.95);
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+/* Tier pip — small metallic dot */
+.tierPip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.tierPipSilver {
+  background: linear-gradient(135deg, rgba(192, 203, 220, 0.8), rgba(148, 163, 184, 0.5));
+  box-shadow: 0 0 3px rgba(192, 203, 220, 0.3);
+}
+
+.tierPipGold {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(202, 138, 4, 0.65));
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+}
+
+.tierPipLegendary {
+  background: linear-gradient(135deg, rgba(220, 140, 255, 0.9), rgba(147, 51, 234, 0.6));
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+  animation: legendaryPulse 3s ease-in-out infinite;
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.7), 0 0 16px rgba(168, 85, 247, 0.25); }
+}
+
+/* ─── Score / Progress Bar ─── */
+.scoreBar {
+  position: relative;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  margin-top: 3px;
+  z-index: 1;
+}
+
+.scoreFill {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--badge-color), 0.45),
+    rgba(var(--badge-color), 0.85)
+  );
+  transition: width 0.5s ease;
+}
+
+/* Glow on the fill when score exceeds threshold */
+.scoreOverflow .scoreFill {
+  box-shadow: 0 0 6px rgba(var(--badge-color), 0.3);
+}
+
+/* ─── Shimmer line at bottom edge (1px accent) ─── */
+.shimmer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--badge-color), 0.2) 30%,
+    rgba(var(--badge-color), 0.12) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── GOLD tier ambient warmth ─── */
+.tierGoldCard {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 2px 10px rgba(0, 0, 0, 0.18),
+    0 0 20px rgba(255, 215, 0, 0.04);
+}
+
+.tierGoldCard:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 16px rgba(var(--badge-color), 0.12),
+    0 0 24px rgba(255, 215, 0, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── LEGENDARY tier breathing border ─── */
+.tierLegendaryCard {
+  animation: legendaryBreathe 5s ease-in-out infinite;
+}
+
+@keyframes legendaryBreathe {
+  0%, 100% {
+    border-color: rgba(var(--badge-color), 0.2);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 2px 10px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    border-color: rgba(var(--badge-color), 0.35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 18px rgba(var(--badge-color), 0.1),
+      0 2px 10px rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* ─── Per-badge color mappings ─── */
+.badge_fleet_logistics { --badge-color: var(--gd-cyan); }
+.badge_from_the_brink { --badge-color: var(--gd-red); }
+.badge_galactic_endurance { --badge-color: var(--gd-teal); }
+.badge_speakers_hand { --badge-color: var(--gd-purple); }
+.badge_twilight_strategist { --badge-color: var(--gd-blue); }
+.badge_galactic_metamorph { --badge-color: var(--gd-orange); }

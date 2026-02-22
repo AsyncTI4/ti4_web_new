@@ -217,3 +217,51 @@
   0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 0, 170, 0)) drop-shadow(0 0 0 rgba(0, 240, 255, 0)); }
   50% { filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.35)) drop-shadow(0 0 6px rgba(0, 240, 255, 0.25)); }
 }
+
+/* ─── Dashboard Link ─── */
+.dashboardLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--gd-yellow), 0.08);
+  border: 1px solid rgba(var(--gd-yellow), 0.2);
+  transition: all 0.2s ease;
+}
+
+.dashboardLink:hover {
+  background: rgba(var(--gd-yellow), 0.15);
+  border-color: rgba(var(--gd-yellow), 0.4);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.dashboardLink[data-active="true"] {
+  background: rgba(var(--gd-yellow), 0.18);
+  border-color: rgba(var(--gd-yellow), 0.5);
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 8px rgba(var(--gd-yellow), 0.12);
+}
+
+.dashboardLinkIcon {
+  opacity: 0.7;
+}
+
+:global(.theme-vaporwavetheme) .dashboardLink {
+  background: rgba(var(--vw-cyan-rgb, 0, 240, 255), 0.08);
+  border-color: rgba(var(--vw-cyan-rgb, 0, 240, 255), 0.25);
+  text-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
+}
+
+:global(.theme-vaporwavetheme) .dashboardLink:hover {
+  background: rgba(var(--vw-cyan-rgb, 0, 240, 255), 0.15);
+  border-color: rgba(var(--vw-cyan-rgb, 0, 240, 255), 0.45);
+}

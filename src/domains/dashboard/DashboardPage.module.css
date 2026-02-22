@@ -1,0 +1,322 @@
+/* ─── Page Shell ─── */
+.main {
+  background: var(--main-bg, #060a13);
+  min-height: calc(100vh - 60px);
+}
+
+.wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+/* ─── Hero: Player Identity ─── */
+.hero {
+  position: relative;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+}
+
+.playerName {
+  font-family: Slider, "Times New Roman", serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.rankRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* ─── Dice Ratio Meter ─── */
+.diceBar {
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.diceFill {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.diceFillGood {
+  background: linear-gradient(90deg, rgba(var(--gd-teal), 0.6), rgba(var(--gd-teal), 0.9));
+  box-shadow: 0 0 8px rgba(var(--gd-teal), 0.3);
+}
+
+.diceFillBad {
+  background: linear-gradient(90deg, rgba(var(--gd-red), 0.6), rgba(var(--gd-red), 0.9));
+  box-shadow: 0 0 8px rgba(var(--gd-red), 0.3);
+}
+
+/* ─── KPI Strip ─── */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .kpiGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.kpiCard {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kpiValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.1;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Middle Section (3-col) ─── */
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .middleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sectionCard {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.titleItem {
+  padding: 6px 0 6px 10px;
+  border-left: 3px solid rgba(var(--gd-yellow), 0.4);
+  background: linear-gradient(90deg, rgba(var(--gd-yellow), 0.04) 0%, transparent 60%);
+}
+
+/* ─── Combat Form Stats ─── */
+.combatRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.combatValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Game Deck Header ─── */
+.deckHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* ─── Game Cards ─── */
+.gameCard {
+  position: relative;
+  padding: 14px 16px;
+  transition: border-color 0.2s ease;
+}
+
+.gameCard:hover {
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.gameCardInner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .gameCardInner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gameTitle {
+  font-family: Slider, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.gameActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  align-items: flex-start;
+}
+
+.gameDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .gameDetails {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.factionRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.packRow {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* ─── Quick Index List ─── */
+.indexItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.indexItem + .indexItem {
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+/* ─── Segmented Control Override ─── */
+.filterControl {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: var(--mantine-radius-sm);
+}
+
+/* ─── Empty State ─── */
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* ─── Footer Link ─── */
+.footerLink {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* ─── Loading State ─── */
+.loadingWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 120px;
+}
+
+/* ─── Color-coded accent on game card left edge ─── */
+.gameCardAccent {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+}
+
+.accentActive {
+  background: linear-gradient(180deg, rgba(var(--gd-green), 0.8) 0%, rgba(var(--gd-green), 0.2) 100%);
+  box-shadow: 0 0 6px rgba(var(--gd-green), 0.2);
+}
+
+.accentFinished {
+  background: linear-gradient(180deg, rgba(var(--gd-gray), 0.5) 0%, rgba(var(--gd-gray), 0.1) 100%);
+}
+
+.accentAbandoned {
+  background: linear-gradient(180deg, rgba(var(--gd-red), 0.7) 0%, rgba(var(--gd-red), 0.15) 100%);
+  box-shadow: 0 0 6px rgba(var(--gd-red), 0.15);
+}
+
+/* ─── Winner glow on game card ─── */
+.winnerCard {
+  border-color: rgba(var(--gd-yellow), 0.25) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(var(--gd-yellow), 0.08);
+}
+
+/* ─── Active turn indicator ─── */
+.activeTurn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.activeTurnDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(var(--gd-green), 0.9);
+  box-shadow: 0 0 6px rgba(var(--gd-green), 0.5);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
