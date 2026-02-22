@@ -15,3 +15,4 @@ export { CompactObjectives } from "./CompactObjectives";
 export { PromissoryNote } from "./PromissoryNote";
 export { Caption } from "./Caption";
 export { ArmyStats } from "./ArmyStats";
+export { RelicsPromissoryList } from "./RelicsPromissoryList";

@@ -1,4 +1,5 @@
-import { Box, Text, Image } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
+import { SecretObjectiveIcon } from "@/components/shared/SecretObjectiveIcon";
 
 export function EmptyScoredSecretsPlaceholder() {
   return (
@@ -21,11 +22,9 @@ export function EmptyScoredSecretsPlaceholder() {
           minWidth: 0,
         }}
       >
-        <Image
-          src="/so_icon.png"
+        <SecretObjectiveIcon
+          size={20}
           style={{
-            width: "20px",
-            height: "20px",
             flexShrink: 0,
             opacity: 0.3,
             filter: "grayscale(1)",

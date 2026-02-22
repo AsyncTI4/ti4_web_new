@@ -1,7 +1,7 @@
-import { Box, Group, Text, ActionIcon, Stack } from "@mantine/core";
+import { Group, Text, ActionIcon, Stack } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { Unit } from "@/components/shared/Unit";
 import styles from "../MovementOriginModal.module.css";
+import { UnitTileHeader } from "./UnitTileHeader";
 
 type Context = {
   key: string;
@@ -34,23 +34,20 @@ export function UnitMultiContextTile({
 }: Props) {
   return (
     <div className={styles.unitTile}>
-      <Group gap={8} align="center" className={styles.unitTileHeader}>
-        <Box className={styles.unitIconWrap}>
-          <Unit
-            unitType={unitType}
-            colorAlias={colorAlias}
-            faction={faction}
-            style={{ width: 22, height: 22, objectFit: "contain" }}
-          />
-        </Box>
-        <Text size="xs" c="gray.2" fw={600} lineClamp={1}>
-          {unitLabel}
-          <Text span c="gray.5">
-            {" "}
-            ({totalAvailable})
-          </Text>
-        </Text>
-      </Group>
+      <UnitTileHeader
+        unitType={unitType}
+        faction={faction}
+        colorAlias={colorAlias}
+        label={
+          <>
+            {unitLabel}
+            <Text span c="gray.5">
+              {" "}
+              ({totalAvailable})
+            </Text>
+          </>
+        }
+      />
 
       <Stack gap={6}>
         {contexts.map((ctx) => {

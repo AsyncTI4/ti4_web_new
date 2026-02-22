@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { loadJsonSettings, saveJsonSettings } from "@/utils/localStorageSettings";
 import {
   getMapViewPreference,
   setMapViewPreference,
@@ -40,27 +41,11 @@ const DEFAULT_SETTINGS = {
 };
 
 export function loadSettingsFromStorage(): Settings {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return DEFAULT_SETTINGS;
-
-    const parsed = JSON.parse(stored);
-    return {
-      ...DEFAULT_SETTINGS,
-      ...parsed,
-    };
-  } catch (error) {
-    console.warn("Failed to load settings from localStorage:", error);
-    return DEFAULT_SETTINGS;
-  }
+  return loadJsonSettings<Settings>(STORAGE_KEY, DEFAULT_SETTINGS);
 }
 
 export function saveSettingsToStorage(settings: Settings) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch (error) {
-    console.warn("Failed to save settings to localStorage:", error);
-  }
+  saveJsonSettings<Settings>(STORAGE_KEY, settings);
 }
 
 function loadThemeFromStorage(): Settings["themeName"] {

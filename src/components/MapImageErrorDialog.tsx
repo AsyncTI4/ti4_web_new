@@ -2,6 +2,7 @@ import { Button, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import { IconRefresh, IconLogin, IconLock } from "@tabler/icons-react";
 import { useRefreshMap } from "@/hooks/useRefreshMap";
 import { DiscordLogin } from "./DiscordLogin";
+import { MapViewportCenter } from "./shared/MapViewportCenter";
 import type { MapImageError } from "@/hooks/useMapImage";
 
 type MapImageErrorDialogProps = {
@@ -27,15 +28,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
   const notParticipant = mapError?.notParticipant;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "calc(100vh - 110px)",
-        width: "100%",
-      }}
-    >
+    <MapViewportCenter>
       <Paper
         shadow="md"
         radius="md"
@@ -115,7 +108,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
           </>
         )}
       </Paper>
-    </div>
+    </MapViewportCenter>
   );
 }
 

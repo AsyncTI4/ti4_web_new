@@ -1,9 +1,8 @@
 import { Group, Box } from "@mantine/core";
 import { PlanetCard } from "../PlanetCard";
 import { filterPlanetsByOcean } from "@/utils/planets";
-import type { PlayerData } from "@/data/types";
 
-type PlayerCardPlanetsAreaProps = {
+export type PlayerCardPlanetsAreaProps = {
   planets: string[];
   exhaustedPlanetAbilities?: string[];
   exhaustedPlanets?: string[];
@@ -54,4 +53,3 @@ export function PlayerCardPlanetsArea({
     </>
   );
 }
-

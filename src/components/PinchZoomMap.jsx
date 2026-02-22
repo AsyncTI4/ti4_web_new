@@ -75,7 +75,7 @@ function PinchZoomMap({ imageUrl }) {
     <div
       style={{
         width: "100%",
-        height: "calc(100vh - 110px)",
+        height: "var(--map-viewport-height)",
       }}
       ref={(el) => setContainer(el)}
     >

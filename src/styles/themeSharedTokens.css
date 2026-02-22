@@ -6,4 +6,5 @@
   --army-rank-third-color: rgba(205, 127, 50, 0.85);
   --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
   --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
+  --map-viewport-height: calc(100vh - 110px);
 }

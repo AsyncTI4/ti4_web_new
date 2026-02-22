@@ -1,7 +1,6 @@
 import React from "react";
 import { cdnImage } from "../../data/cdnImage";
-import { getFactionImage } from "@/lookup/factions";
-import { useFactionImages } from "@/hooks/useFactionImages";
+import { useFactionTokenImage } from "@/hooks/useFactionTokenImage";
 
 type CommandCounterProps = {
   colorAlias: string;
@@ -16,10 +15,7 @@ export const CommandCounter = ({
   style,
   type = "command",
 }: CommandCounterProps) => {
-  const factionImages = useFactionImages();
-  const factionImage = factionImages[faction!]?.image;
-  const factionImageType = factionImages[faction!]?.type;
-  const factionUrl = getFactionImage(faction!, factionImage, factionImageType);
+  const factionUrl = useFactionTokenImage(faction);
   return (
     <div style={style}>
       <div style={{ position: "relative" }}>
@@ -27,7 +23,7 @@ export const CommandCounter = ({
           src={cdnImage(`/command_token/${type}_${colorAlias}.png`)}
           alt={`${faction || type} ${type} token`}
         />
-        {faction && type === "command" && (
+        {faction && type === "command" && factionUrl && (
           <img
             src={factionUrl}
             alt={`${faction} faction`}

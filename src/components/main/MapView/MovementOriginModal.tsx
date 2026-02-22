@@ -1,13 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Box,
-  SimpleGrid,
-} from "@mantine/core";
+import { Button, Group, Stack, Text, Box, SimpleGrid } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import type { EntityData } from "@/data/types";
 import { useMovementStore } from "@/utils/movementStore";
@@ -27,6 +19,7 @@ import { UnitMultiContextTile } from "./MovementOriginModal/UnitMultiContextTile
 import { useUser } from "@/hooks/useUser";
 import { Tile } from "@/context/types";
 import { deepClone } from "@/utils/clone";
+import { AppModal } from "@/components/shared/AppModal";
 
 type Props = {
   opened: boolean;
@@ -379,13 +372,11 @@ export function MovementOriginModal({
   }, [user, game?.playerData]);
 
   return (
-    <Modal
+    <AppModal
       opened={opened}
       onClose={onClose}
       title={`Move from ${originPosition}`}
       size={920}
-      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
-      zIndex={3500}
       classNames={{
         content: classes.modalContent,
         header: classes.modalHeader,
@@ -543,6 +534,6 @@ export function MovementOriginModal({
           </Button>
         </Group>
       </Stack>
-    </Modal>
+    </AppModal>
   );
 }

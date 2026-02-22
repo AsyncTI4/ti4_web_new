@@ -3,6 +3,7 @@ import { cdnImage } from "../data/cdnImage";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
 import { PlayerData } from "@/data/types";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 
 type FactionTabBarProps = {
   playerData: PlayerData[];
@@ -24,9 +25,7 @@ export function FactionTabBar({
   return (
     <Box className={classes.factionTabBar}>
       <Group gap={0} justify="center" wrap="wrap">
-        {playerData
-          .filter((p) => p.faction !== "null")
-          .map((player) => {
+        {filterPlayersWithAssignedFaction(playerData).map((player) => {
             const isActive =
               activeArea?.type === "faction" &&
               activeArea.faction === player.faction;

@@ -1,18 +1,9 @@
-import {
-  AppShell,
-  Center,
-  Stack,
-  Title,
-  Text,
-  Button,
-  Group,
-} from "@mantine/core";
+import { AppShell, Center, Stack, Title, Text, Button } from "@mantine/core";
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
-// @ts-ignore
-import Logo from "./Logo";
 import { HeaderMenuNew } from "./HeaderMenuNew";
 import { Surface } from "./PlayerArea/Surface";
 import classes from "./UpdateNeededScreen.module.css";
+import { AppHeader } from "./shared/AppHeader";
 
 type UpdateNeededScreenProps = {
   gameId: string;
@@ -29,18 +20,18 @@ export function UpdateNeededScreen({
 }: UpdateNeededScreenProps) {
   return (
     <AppShell header={{ height: 60 }}>
-      <AppShell.Header>
-        <Group className={classes.headerGroup}>
-          <Logo />
-          <div className={classes.logoDivider} />
-          <HeaderMenuNew
-            mapId={gameId}
-            activeTabs={activeTabs}
-            changeTab={changeTab}
-            removeTab={removeTab}
-          />
-        </Group>
-      </AppShell.Header>
+      <AppHeader
+        showDivider={false}
+        groupProps={{ className: classes.headerGroup }}
+      >
+        <div className={classes.logoDivider} />
+        <HeaderMenuNew
+          mapId={gameId}
+          activeTabs={activeTabs}
+          changeTab={changeTab}
+          removeTab={removeTab}
+        />
+      </AppHeader>
 
       <AppShell.Main>
         <Center className={classes.container}>

@@ -1,54 +1,34 @@
-import { Group, Text, Grid, Stack, Box, Image, SimpleGrid } from "@mantine/core";
+import { Group, Grid, Stack, Box, SimpleGrid } from "@mantine/core";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
-import { PlanetCard } from "./PlayerArea/PlanetCard";
-import { FragmentsPool } from "./PlayerArea/FragmentsPool";
-import { UnitCard, UnitCardUnavailable } from "./PlayerArea/UnitCard";
-import { CommandTokenCard } from "./PlayerArea/UnitCard/CommandTokenCard";
-import { StasisInfantryCard } from "./PlayerArea/StasisInfantryCard";
-import { StrategyCardBannerCompact } from "./PlayerArea/StrategyCardBannerCompact";
-import { SpeakerToken } from "./PlayerArea/SpeakerToken";
-import { Neighbors } from "./PlayerArea/Neighbors";
-import { ScoredSecret } from "./PlayerArea/ScoredSecret";
-import { UnscoredSecret } from "./PlayerArea/ScoredSecret/UnscoredSecret";
-import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
-import { PlayerColor } from "./PlayerArea/PlayerColor";
-import { CCPool } from "./PlayerArea/CCPool";
-import { PlayerData } from "../data/types";
+import { PlayerData, type PlotCard } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
-import { ArmyStats, PromissoryNote, Plot } from "./PlayerArea";
-import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
-import { StatusIndicator } from "./PlayerArea/StatusIndicator";
-import { PlayerCardBox } from "./PlayerCardBox";
-import { DebtTokens } from "./PlayerArea/DebtTokens";
-import { lookupUnit } from "@/lookup/units";
-import { Relic } from "./PlayerArea/Relic/Relic";
-import { Commodities } from "./PlayerArea/Commodities/Commodities";
-import { TradeGoods } from "./PlayerArea/TradeGoods/TradeGoods";
+import { ArmyStats } from "./PlayerArea";
 import { Nombox } from "./Nombox";
-import { SC_NAMES, SC_COLORS } from "@/lookup/strategyCards";
-import { getFactionImage } from "@/lookup/factions";
 import { useGameData } from "@/hooks/useGameContext";
-import { filterPlanetsByOcean } from "@/utils/planets";
-import { getTechData } from "@/lookup/tech";
-import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
-import { BreachTokens } from "./PlayerArea/BreachTokens";
-import { SleeperTokens } from "./PlayerArea/SleeperTokens";
-import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
-import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
 import { Panel } from "./shared/primitives/Panel";
+import { PlayerCardPlanetsWithReinforcements } from "./PlayerArea/PlayerCardPlanetsArea";
 import styles from "./PlayerCardMobile.module.css";
 import cx from "clsx";
 import { isMobileDevice } from "@/utils/isTouchDevice";
-import { UNIT_PRIORITY_ORDER } from "@/utils/unitPriorityOrder";
+import { PlayerCardUnitsArea } from "./PlayerArea/PlayerCardUnitsArea";
+import { PlotCardsList } from "./PlayerArea/PlotCardsList";
+import { usePlayerCardComputedData } from "./PlayerArea/PlayerCardShared/usePlayerCardComputedData";
+import { PlayerEconomyStack } from "./PlayerArea/PlayerCardShared/PlayerEconomyStack";
+import { PlayerCardLogisticsRow } from "./PlayerArea/PlayerCardShared/PlayerCardLogisticsRow";
+import { PlayerCardRelicsPromissoryArea } from "./PlayerArea/PlayerCardRelicsPromissoryArea";
+import { PlayerCardPlanetsSection } from "./PlayerArea/PlayerCardShared/PlayerCardPlanetsSection";
+import { getPlayerCardLayoutFields } from "./PlayerArea/PlayerCardShared/getPlayerCardLayoutFields";
+import { PlayerCardShell } from "./PlayerArea/PlayerCardShared/PlayerCardShell";
+import { PlayerCardCapturedUnits } from "./PlayerArea/PlayerCardShared/PlayerCardCapturedUnits";
 
 type Props = {
   playerData: PlayerData;
 };
 
 type ObjectivesGridProps = {
-  secretsScored: Record<string, unknown>;
-  knownUnscoredSecrets?: Record<string, unknown>;
+  secretsScored: Record<string, number>;
+  knownUnscoredSecrets?: Record<string, number>;
   soCount?: number;
   promissoryNotes: string[];
   relics: string[];
@@ -63,38 +43,31 @@ function ObjectivesGrid({
   relics,
   exhaustedRelics,
 }: ObjectivesGridProps) {
-  const scoredIds = Object.keys(secretsScored);
-  const knownUnscoredIds = Object.keys(knownUnscoredSecrets || {});
-  const unscored = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
-
   return (
-    <Box className={styles.objectivesGrid}>
-      {scoredIds.map((secretId) => (
-        <ScoredSecret key={`scored-${secretId}`} secretId={secretId} variant="scored" />
-      ))}
-      {knownUnscoredIds.map((secretId) => (
-        <ScoredSecret key={`unscored-${secretId}`} secretId={secretId} variant="unscored" />
-      ))}
-      {Array.from({ length: unscored }, (_, index) => (
-        <UnscoredSecret key={`unscored-placeholder-${index}`} />
-      ))}
-      {promissoryNotes.map((pn) => (
-        <PromissoryNote promissoryNoteId={pn} key={pn} />
-      ))}
-      {relics.map((relicId, index) => {
-        const isExhausted = exhaustedRelics?.includes(relicId);
-        return <Relic key={`relic-${index}`} relicId={relicId} isExhausted={!!isExhausted} />;
-      })}
-    </Box>
+    <PlayerCardRelicsPromissoryArea
+      relics={relics}
+      promissoryNotes={promissoryNotes}
+      exhaustedRelics={exhaustedRelics}
+      secretsScored={secretsScored}
+      knownUnscoredSecrets={knownUnscoredSecrets}
+      unscoredSecrets={soCount || 0}
+      showSecrets
+      renderArea={({ items, secrets }) => (
+        <Box className={styles.objectivesGrid}>
+          {secrets}
+          {items}
+        </Box>
+      )}
+      secretsRenderWrapper={(items) => items}
+    />
   );
 }
 
 type PlanetsAreaProps = {
-  regularPlanets: string[];
-  oceanPlanets: string[];
-  exhaustedPlanetAbilities: string[];
+  planets: string[];
+  exhaustedPlanetAbilities?: string[];
   exhaustedPlanets?: string[];
-  plotCards?: unknown[];
+  plotCards?: PlotCard[] | null;
   faction: string;
   breachTokensReinf?: number;
   sleeperTokensReinf?: number;
@@ -103,9 +76,8 @@ type PlanetsAreaProps = {
 };
 
 function PlanetsArea({
-  regularPlanets,
-  oceanPlanets,
-  exhaustedPlanetAbilities,
+  planets,
+  exhaustedPlanetAbilities = [],
   exhaustedPlanets,
   plotCards,
   faction,
@@ -116,297 +88,80 @@ function PlanetsArea({
 }: PlanetsAreaProps) {
   return (
     <Group gap={6} wrap="wrap" flex={1}>
-      {regularPlanets.map((planetId, index) => (
-        <PlanetCard
-          key={index}
-          planetId={planetId}
-          legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
-          isExhausted={exhaustedPlanets?.includes(planetId)}
-        />
-      ))}
-      {oceanPlanets.length > 0 && (
-        <>
-          <Box ml="xs" />
-          {oceanPlanets.map((planetId, index) => (
-            <PlanetCard
-              key={`ocean-${index}`}
-              planetId={planetId}
-              legendaryAbilityExhausted={exhaustedPlanetAbilities.includes(planetId)}
-              isExhausted={exhaustedPlanets?.includes(planetId)}
-            />
-          ))}
-        </>
-      )}
-      {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (
-        <SimpleGrid cols={3} spacing="4px">
-          {plotCards.map((plotCard, index) => (
-            <Plot key={`plot-${index}`} plotCard={plotCard} faction={faction} />
-          ))}
-        </SimpleGrid>
-      )}
-      <TokensGroup
-        breachTokensReinf={breachTokensReinf}
-        sleeperTokensReinf={sleeperTokensReinf}
-        ghostWormholesReinf={ghostWormholesReinf}
-        galvanizeTokensReinf={galvanizeTokensReinf}
+      <PlayerCardPlanetsWithReinforcements
+        planets={planets}
+        exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+        exhaustedPlanets={exhaustedPlanets}
+        groupProps={{
+          gap: 6,
+          wrap: "wrap",
+          align: "flex-start",
+          style: { flex: 1, minWidth: 0 },
+        }}
+        reinforcementProps={{
+          breachTokensReinf,
+          sleeperTokensReinf,
+          ghostWormholesReinf,
+          galvanizeTokensReinf,
+          ml: "xs",
+        }}
       />
-    </Group>
-  );
-}
-
-type TokensGroupProps = {
-  breachTokensReinf?: number;
-  sleeperTokensReinf?: number;
-  ghostWormholesReinf?: string[];
-  galvanizeTokensReinf?: number;
-};
-
-function TokensGroup({
-  breachTokensReinf,
-  sleeperTokensReinf,
-  ghostWormholesReinf,
-  galvanizeTokensReinf,
-}: TokensGroupProps) {
-  const hasTokens =
-    (breachTokensReinf && breachTokensReinf > 0) ||
-    (sleeperTokensReinf && sleeperTokensReinf > 0) ||
-    (ghostWormholesReinf && ghostWormholesReinf.length > 0) ||
-    (galvanizeTokensReinf && galvanizeTokensReinf > 0);
-
-  if (!hasTokens) return null;
-
-  return (
-    <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
-      {breachTokensReinf && breachTokensReinf > 0 && (
-        <BreachTokens count={breachTokensReinf} />
-      )}
-      {sleeperTokensReinf && sleeperTokensReinf > 0 && (
-        <SleeperTokens count={sleeperTokensReinf} />
-      )}
-      {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
-        <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
-      )}
-      {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
-        <GalvanizeTokens count={galvanizeTokensReinf} />
-      )}
+      <PlotCardsList
+        plotCards={plotCards}
+        faction={faction}
+        keyPrefix="mobile-plot"
+        renderWrapper={(items) => (
+          <SimpleGrid cols={3} spacing="4px">
+            {items}
+          </SimpleGrid>
+        )}
+      />
     </Group>
   );
 }
 
 export default function PlayerCardMobile(props: Props) {
   const gameData = useGameData();
-  const rank = gameData?.armyRankings?.[props.playerData.faction];
+  const player = getPlayerCardLayoutFields(props.playerData);
+  const rank = gameData?.armyRankings?.[player.faction];
 
   const {
-    userName,
-    faction,
-    factionImage,
-    factionImageType,
-    color,
-    tacticalCC,
-    fleetCC,
-    strategicCC,
-    fragments,
-    isSpeaker,
-    spaceArmyRes,
-    groundArmyRes,
-    spaceArmyHealth,
-    groundArmyHealth,
-    spaceArmyCombat,
-    groundArmyCombat,
-    techs,
-    relics,
-    planets,
-    secretsScored,
-    knownUnscoredSecrets,
-    leaders,
-    scs = [],
-    promissoryNotesInPlayArea = [],
-    resources,
-    totResources,
-    influence,
-    totInfluence,
-    optimalResources,
-    totOptimalResources,
-    optimalInfluence,
-    totOptimalInfluence,
-    flexValue,
-    totFlexValue,
-    unitCounts,
-    stasisInfantry,
-    exhaustedSCs,
-    passed,
-    active,
-    neighbors,
-    tg,
-    commodities,
-    commoditiesTotal,
-    soCount,
-    pnCount,
-    acCount,
-    debtTokens,
-    exhaustedRelics,
-    nombox,
-    exhaustedPlanetAbilities,
-    exhaustedPlanets,
-    notResearchedFactionTechs,
-
-    abilities,
-    plotCards,
-    customPromissoryNotes,
-    breachTokensReinf,
-    galvanizeTokensReinf,
-    sleeperTokensReinf,
-    ghostWormholesReinf,
-  } = props.playerData;
-
-  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
-
-  const promissoryNotes = promissoryNotesInPlayArea;
-
-  const mahactEdict = props.playerData.mahactEdict || [];
-  const armyStats = {
-    spaceArmyRes,
-    groundArmyRes,
-    spaceArmyHealth,
-    groundArmyHealth,
-    spaceArmyCombat,
-    groundArmyCombat,
-  };
-
-  const flexSpendOnly = hasXxchaFlexSpendAbility(
-    faction,
-    props.playerData.breakthrough,
-    leaders
-  );
-
-  const planetEconomics = {
-    total: {
-      currentResources: resources,
-      totalResources: totResources,
-      currentInfluence: influence,
-      totalInfluence: totInfluence,
-    },
-    optimal: {
-      currentResources: optimalResources,
-      totalResources: totOptimalResources,
-      currentInfluence: optimalInfluence,
-      totalInfluence: totOptimalInfluence,
-    },
-    flex: {
-      currentFlex: flexValue,
-      totalFlex: totFlexValue,
-    },
-    flexSpendOnly,
-  };
-
-  const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
-
-  const specialTechTypes = ["NONE", "GENERICTF"];
-  const noneTechs = techs.filter((techId) => {
-    const techData = getTechData(techId);
-    return specialTechTypes.includes(techData?.types[0] ?? "");
-  });
-
-  const filteredTechs = techs.filter((techId) => {
-    const techData = getTechData(techId);
-    return !specialTechTypes.includes(techData?.types[0] ?? "");
-  });
-
-  const allNotResearchedFactionTechs = [
-    ...(notResearchedFactionTechs || []),
-    ...noneTechs,
-  ];
+    factionImageUrl: factionUrl,
+    planetEconomics,
+    filteredTechs,
+    allNotResearchedFactionTechs,
+    promissoryNotes,
+    mahactEdict,
+    armyStats,
+  } = usePlayerCardComputedData(props.playerData);
 
   const UnitsArea = (
-    <SimpleGrid cols={6} spacing={6}>
-      {UNIT_PRIORITY_ORDER.map((asyncId) => {
-        const bestUnit = lookupUnit(asyncId, faction, props.playerData);
-        const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
-        const unitCap = unitCounts?.[asyncId]?.unitCap;
-        if (!bestUnit) {
-          return (
-            <UnitCardUnavailable
-              key={`unavailable-${asyncId}`}
-              asyncId={asyncId}
-              color={color}
-            />
-          );
-        }
-        return (
-          <UnitCard
-            key={bestUnit.id}
-            unitId={bestUnit.id}
-            color={color}
-            deployedCount={deployedCount}
-            unitCap={unitCap}
-          />
-        );
-      })}
-
-      {/* Command Token Card */}
-      {props.playerData.ccReinf !== undefined && (
-        <CommandTokenCard
-          color={color}
-          faction={faction}
-          reinforcements={props.playerData.ccReinf}
-          totalCapacity={16}
-        />
-      )}
-
-      {/* Add StasisInfantryCard if there are any stasisInfantry */}
-      {stasisInfantry > 0 && (
-        <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
-      )}
-    </SimpleGrid>
+    <PlayerCardUnitsArea
+      playerData={props.playerData}
+      color={player.color}
+      faction={player.faction}
+      cols={6}
+      spacing="6px"
+      showUnavailable
+    />
   );
 
   return (
-    <PlayerCardBox color={color} faction={faction}>
-      <Group gap={8} px={4} align="center">
-        <Image src={factionUrl} alt={faction} w={32} h={32} />
-        <Stack gap={0}>
-          <Group>
-            <Text span c="white" size="lg" ff="heading">
-              {userName}
-            </Text>
-            <StatusIndicator passed={passed} active={active} />
-          </Group>
-          <Group gap={6}>
-            <Text size="sm" span ml={4} opacity={0.9} c="white" ff="text">
-              {faction}
-            </Text>
-            <PlayerColor color={color} size="xs" />
-          </Group>
-        </Stack>
-
-        <Box ml="xs">
-          <Neighbors neighbors={neighbors || []} />
-        </Box>
-
-        <Group gap={6} align="center" mt={8}>
-          {scs.map((scNumber) => {
-            const isExhausted = exhaustedSCs?.includes(scNumber);
-            return (
-              <StrategyCardBannerCompact
-                key={scNumber}
-                number={scNumber}
-                text={SC_NAMES[scNumber as keyof typeof SC_NAMES]}
-                color={SC_COLORS[scNumber as keyof typeof SC_COLORS]}
-                isExhausted={isExhausted}
-              />
-            );
-          })}
-          {isSpeaker && <SpeakerToken isVisible />}
-        </Group>
-      </Group>
-
+    <PlayerCardShell
+      player={player}
+      factionImageUrl={factionUrl}
+      variant="mobile"
+      headerOverrides={{
+        neighbors: player.neighbors,
+        showNeighbors: true,
+      }}
+    >
       <Grid gutter={6} columns={24}>
         <Grid.Col span={22}>
           <PlayerCardAbilitiesFactionTechs
-            abilities={abilities}
+            abilities={player.abilities}
             notResearchedFactionTechs={allNotResearchedFactionTechs}
-            customPromissoryNotes={customPromissoryNotes}
+            customPromissoryNotes={player.customPromissoryNotes}
             variant="mobile"
             breakthrough={props.playerData.breakthrough}
           />
@@ -417,44 +172,44 @@ export default function PlayerCardMobile(props: Props) {
             <Grid gutter={8} columns={24}>
               <Grid.Col span={6}>
                 <Group gap={2} align="flex-start">
-                  <Stack gap={4}>
-                    <TradeGoods tg={tg || 0} />
-                    <Commodities
-                      commodities={commodities || 0}
-                      commoditiesTotal={commoditiesTotal || 0}
-                    />
-                    <DebtTokens debts={debtTokens!} />
-                  </Stack>
-                  <PlayerCardCounts
-                    pnCount={pnCount || 0}
-                    acCount={acCount || 0}
+                  <PlayerEconomyStack
+                    tg={player.tg}
+                    commodities={player.commodities}
+                    commoditiesTotal={player.commoditiesTotal}
+                    debtTokens={player.debtTokens}
                   />
-                  <Box ml={4}>
-                    <CCPool
-                      tacticalCC={tacticalCC}
-                      fleetCC={fleetCC}
-                      strategicCC={strategicCC}
-                      mahactEdict={mahactEdict}
-                    />
-                  </Box>
-                  <FragmentsPool fragments={fragments} />
+                  <PlayerCardLogisticsRow
+                    counts={{
+                      pnCount: player.pnCount,
+                      acCount: player.acCount,
+                    }}
+                    commandCounters={{
+                      tacticalCC: player.tacticalCC,
+                      fleetCC: player.fleetCC,
+                      strategicCC: player.strategicCC,
+                      mahactEdict,
+                    }}
+                    fragments={player.fragments}
+                    groupProps={{ gap: 2 }}
+                    commandCountersWrapperProps={{ ml: 4 }}
+                  />
                 </Group>
               </Grid.Col>
 
               <Grid.Col span={3} className={styles.dividerLeft}>
                 <Stack gap={2}>
-                  <Leaders leaders={leaders} faction={faction} mobile />
+                  <Leaders leaders={player.leaders} faction={player.faction} mobile />
                 </Stack>
               </Grid.Col>
 
               <Grid.Col span={15} className={styles.dividerLeft}>
                 <ObjectivesGrid
-                  secretsScored={secretsScored}
-                  knownUnscoredSecrets={knownUnscoredSecrets}
-                  soCount={soCount}
+                  secretsScored={player.secretsScored}
+                  knownUnscoredSecrets={player.knownUnscoredSecrets}
+                  soCount={player.soCount}
                   promissoryNotes={promissoryNotes}
-                  relics={relics}
-                  exhaustedRelics={exhaustedRelics}
+                  relics={player.relics}
+                  exhaustedRelics={player.exhaustedRelics}
                 />
               </Grid.Col>
             </Grid>
@@ -492,29 +247,33 @@ export default function PlayerCardMobile(props: Props) {
 
         <Grid.Col span={24}>
           <Panel>
-            <Group align="flex-start">
-              <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-              <PlanetsArea
-                regularPlanets={regularPlanets}
-                oceanPlanets={oceanPlanets}
-                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
-                exhaustedPlanets={exhaustedPlanets}
-                plotCards={plotCards}
-                faction={faction}
-                breachTokensReinf={breachTokensReinf}
-                sleeperTokensReinf={sleeperTokensReinf}
-                ghostWormholesReinf={ghostWormholesReinf}
-                galvanizeTokensReinf={galvanizeTokensReinf}
-              />
-            </Group>
+            <PlayerCardPlanetsSection
+              planetEconomics={planetEconomics}
+              groupProps={{ gap: 6, align: "flex-start" }}
+              renderPlanets={() => (
+                <PlanetsArea
+                  planets={player.planets}
+                  exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
+                  exhaustedPlanets={player.exhaustedPlanets}
+                  plotCards={player.plotCards}
+                  faction={player.faction}
+                  breachTokensReinf={player.breachTokensReinf}
+                  sleeperTokensReinf={player.sleeperTokensReinf}
+                  ghostWormholesReinf={player.ghostWormholesReinf}
+                  galvanizeTokensReinf={player.galvanizeTokensReinf}
+                />
+              )}
+            />
           </Panel>
         </Grid.Col>
 
-        {nombox !== undefined && Object.keys(nombox).length > 0 && (
-          <Grid.Col span={24}>
-            <Nombox capturedUnits={nombox || {}} compact />
-          </Grid.Col>
-        )}
+        <PlayerCardCapturedUnits nombox={player.nombox}>
+          {(units) => (
+            <Grid.Col span={24}>
+              <Nombox capturedUnits={units} compact />
+            </Grid.Col>
+          )}
+        </PlayerCardCapturedUnits>
       </Grid>
 
       <Box
@@ -526,6 +285,6 @@ export default function PlayerCardMobile(props: Props) {
       >
         <ArmyStats stats={armyStats} rank={rank} />
       </Box>
-    </PlayerCardBox>
+    </PlayerCardShell>
   );
 }

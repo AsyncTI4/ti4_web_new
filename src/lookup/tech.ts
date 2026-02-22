@@ -36,3 +36,28 @@ export const getTechTier = (requirements?: string): number => {
 
   return 0;
 };
+
+const DEFAULT_GENERIC_TECH_TYPES = ["NONE", "GENERICTF"];
+
+type PartitionedTechs = {
+  genericTechs: string[];
+  standardTechs: string[];
+};
+
+export const partitionGenericTechs = (
+  techIds: string[],
+  genericTypes: string[] = DEFAULT_GENERIC_TECH_TYPES,
+): PartitionedTechs => {
+  return techIds.reduce<PartitionedTechs>(
+    (acc, techId) => {
+      const techType = getTechData(techId)?.types[0] ?? "";
+      if (genericTypes.includes(techType)) {
+        acc.genericTechs.push(techId);
+      } else {
+        acc.standardTechs.push(techId);
+      }
+      return acc;
+    },
+    { genericTechs: [], standardTechs: [] },
+  );
+};

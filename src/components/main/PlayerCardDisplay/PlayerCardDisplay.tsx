@@ -2,6 +2,7 @@ import { Box, Stack } from "@mantine/core";
 import PlayerCardSidebar from "../../PlayerCardSidebar";
 import classes from "../../MapUI.module.css";
 import { PlayerData } from "@/data/types";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 
 type ActiveArea =
   | {
@@ -21,7 +22,7 @@ export function PlayerCardDisplay({
   playerData,
   activeArea,
 }: PlayerCardDisplayProps) {
-  const players = playerData.filter((player) => player.faction !== "null");
+  const players = filterPlayersWithAssignedFaction(playerData);
   if (activeArea?.type === "faction") {
     const playerToShow = players.find(
       (player) => player.faction === activeArea.faction

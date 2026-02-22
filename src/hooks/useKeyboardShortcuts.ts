@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useGameData } from "@/hooks/useGameContext";
 
-interface KeyboardShortcutsProps {
+export interface KeyboardShortcutsProps {
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
   togglePlanetTypesMode: () => void;

@@ -1,7 +1,4 @@
-import { useMemo } from "react";
-import { getExploration } from "@/lookup/explorations";
-import { processCardData, createCardSections } from "@/utils/cardDataProcessor";
-import { CardDetailsModal } from "@/components/shared/CardDetailsModal";
+import { ExplorationCardDetailsModal } from "../shared/ExplorationCardDetailsModal";
 
 type Props = {
   type: string;
@@ -10,19 +7,7 @@ type Props = {
 };
 
 export function ExplorationDeckDetailsCard({ deck, discard }: Props) {
-  const sections = useMemo(() => {
-    const deckData = processCardData(deck, getExploration);
-    const discardData = processCardData(discard, getExploration);
-
-    return createCardSections(
-      deckData,
-      discardData,
-      deck,
-      discard,
-      "Deck",
-      "Discard"
-    );
-  }, [deck, discard]);
-
-  return <CardDetailsModal sections={sections} />;
+  return (
+    <ExplorationCardDetailsModal deck={deck} discard={discard} />
+  );
 }

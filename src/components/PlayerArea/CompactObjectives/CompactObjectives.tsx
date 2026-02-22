@@ -1,9 +1,8 @@
 import { Stack, Text, Box } from "@mantine/core";
 import { useState } from "react";
 import { CompactObjective } from "../CompactObjective";
-import { SmoothPopover } from "../../shared/SmoothPopover";
-import { ObjectiveDetailsCard } from "../../Objectives/PublicObjectives/ObjectiveDetailsCard";
 import { Objectives, PlayerData } from "../../../data/types";
+import { StageObjectivesSection } from "./StageObjectivesSection";
 
 type Props = {
   objectives: Objectives;
@@ -17,101 +16,23 @@ export function CompactObjectives({ objectives, playerData }: Props) {
 
   return (
     <Stack gap="xs">
-      {/* Stage 1 Objectives */}
-      {objectives.stage1Objectives.length > 0 && (
-        <Box>
-          <Text size="sm" fw={600} c="orange.4" mb={4}>
-            Stage I
-          </Text>
-          <Stack gap={2}>
-            {objectives.stage1Objectives.map((objective) => (
-              <SmoothPopover
-                position="right"
-                key={objective.key}
-                opened={selectedObjective === objective.key}
-                onChange={(opened) =>
-                  setSelectedObjective(opened ? objective.key : null)
-                }
-              >
-                <SmoothPopover.Target>
-                  <div>
-                    <CompactObjective
-                      objectiveKey={objective.key}
-                      name={objective.name}
-                      color="orange"
-                      revealed={objective.revealed}
-                      onClick={() => setSelectedObjective(objective.key)}
-                      scoredFactions={objective.scoredFactions}
-                      playerData={playerData}
-                      multiScoring={objective.multiScoring}
-                      hasRedTape={objective.hasRedTape}
-                    />
-                  </div>
-                </SmoothPopover.Target>
-                <SmoothPopover.Dropdown p={0}>
-                  <ObjectiveDetailsCard
-                    objectiveKey={objective.key}
-                    playerData={playerData}
-                    hasRedTape={objective.hasRedTape}
-                    scoredFactions={objective.scoredFactions}
-                    color="orange"
-                    factionProgress={objective.factionProgress}
-                    progressThreshold={objective.progressThreshold}
-                  />
-                </SmoothPopover.Dropdown>
-              </SmoothPopover>
-            ))}
-          </Stack>
-        </Box>
-      )}
+      <StageObjectivesSection
+        objectives={objectives.stage1Objectives}
+        playerData={playerData}
+        title="Stage I"
+        color="orange"
+        selectedObjective={selectedObjective}
+        onSelect={setSelectedObjective}
+      />
 
-      {/* Stage 2 Objectives */}
-      {objectives.stage2Objectives.length > 0 && (
-        <Box>
-          <Text size="sm" fw={600} c="blue.4" mb={4}>
-            Stage II
-          </Text>
-          <Stack gap={2}>
-            {objectives.stage2Objectives.map((objective) => (
-              <SmoothPopover
-                position="right"
-                key={objective.key}
-                opened={selectedObjective === objective.key}
-                onChange={(opened) =>
-                  setSelectedObjective(opened ? objective.key : null)
-                }
-              >
-                <SmoothPopover.Target>
-                  <div>
-                    <CompactObjective
-                      objectiveKey={objective.key}
-                      name={objective.name}
-                      color="blue"
-                      revealed={objective.revealed}
-                      onClick={() => setSelectedObjective(objective.key)}
-                      scoredFactions={objective.scoredFactions}
-                      playerData={playerData}
-                      multiScoring={objective.multiScoring}
-                      hasRedTape={objective.hasRedTape}
-                    />
-                  </div>
-                </SmoothPopover.Target>
-                <SmoothPopover.Dropdown p={0}>
-                  <ObjectiveDetailsCard
-                    objectiveKey={objective.key}
-                    playerData={playerData}
-                    hasRedTape={objective.hasRedTape}
-                    scoredFactions={objective.scoredFactions}
-                    color="blue"
-                    factionProgress={objective.factionProgress}
-                    progressThreshold={objective.progressThreshold}
-                  />
-                </SmoothPopover.Dropdown>
-              </SmoothPopover>
-            ))}
-          </Stack>
-        </Box>
-      )}
+      <StageObjectivesSection
+        objectives={objectives.stage2Objectives}
+        playerData={playerData}
+        title="Stage II"
+        color="blue"
+        selectedObjective={selectedObjective}
+        onSelect={setSelectedObjective}
+      />
 
       {/* Other Objectives */}
       {objectives.customObjectives.length > 0 && (

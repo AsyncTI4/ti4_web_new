@@ -1,25 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  AppShell,
-  Box,
-  Tabs,
-  Button,
-  Group,
-  Alert,
-  SimpleGrid,
-} from "@mantine/core";
-import {
-  IconMap2,
-  IconTarget,
-  IconUsers,
-  IconAlertCircle,
-} from "@tabler/icons-react";
-// @ts-ignore
-import Logo from "./components/Logo";
-// @ts-ignore
-import { DiscordLogin } from "./components/DiscordLogin";
-import { GamesBar } from "./components/shared/GamesBar";
+import { AppShell, Box, Tabs, SimpleGrid } from "@mantine/core";
+import { MapHeaderSwitch } from "./components/shared/MapHeaderSwitch";
 import "./components/ScrollMap.css";
 // @ts-ignore
 import * as dragscroll from "dragscroll";
@@ -50,6 +32,11 @@ import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import { NavigationDrawer } from "./components/NavigationDrawer";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
+import { PlayerDataErrorAlert } from "./components/shared/PlayerDataErrorAlert";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
+import { MAIN_TAB_CONFIGS } from "./components/main/mainTabs";
+import { TabPanelSection } from "./components/main/TabPanelSection";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -69,8 +56,9 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [activeTab, setActiveTab] = useState("map");
 
+  useDocumentTitle(`${gameId} - Async TI`);
+
   useEffect(() => {
-    document.title = `${gameId} - Async TI`;
     dragscroll.reset();
   }, [gameId]);
 
@@ -91,30 +79,15 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
 
   return (
     <AppShell header={{ height: { base: 0, sm: 60 } }}>
-      <AppShell.Header visibleFrom="sm">
-        <Group
-          align="center"
-          h="100%"
-          px="sm"
-          gap="sm"
-          className={classes.newHeaderGroup}
-        >
-          <Logo />
-          <div className="logo-divider" />
-          <GamesBar currentMapId={gameId} />
-
-          <Button
-            variant="light"
-            size="xs"
-            color="cyan"
-            onClick={() => {
-              onShowOldUI?.();
-            }}
-          >
-            OLD UI
-          </Button>
-        </Group>
-      </AppShell.Header>
+      <MapHeaderSwitch
+        gameId={gameId}
+        buttonLabel="OLD UI"
+        onButtonClick={onShowOldUI}
+        appHeaderProps={{
+          visibleFrom: "sm",
+          groupProps: { className: classes.newHeaderGroup },
+        }}
+      />
 
       <AppShell.Main>
         <Box className={classes.mainBackground}>
@@ -125,39 +98,24 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
             h={{ base: "100vh", sm: "calc(100vh - 68px)" }}
           >
             <Tabs.List className={classes.tabsList}>
-              <Tabs.Tab
-                value="map"
-                className={classes.tabsTab}
-                leftSection={<IconMap2 size={16} />}
-                visibleFrom="sm"
-              >
-                Map
-              </Tabs.Tab>
-              {!isMobileDevice() && (
-                <Tabs.Tab
-                  value="objectives"
-                  className={classes.tabsTab}
-                  leftSection={<IconTarget size={16} />}
-                >
-                  Objectives
-                </Tabs.Tab>
-              )}
-              <Tabs.Tab
-                value="general"
-                className={classes.tabsTab}
-                leftSection={<IconTarget size={16} />}
-                visibleFrom="sm"
-              >
-                General
-              </Tabs.Tab>
-              <Tabs.Tab
-                value="players"
-                className={classes.tabsTab}
-                leftSection={<IconUsers size={16} />}
-                visibleFrom="sm"
-              >
-                Player
-              </Tabs.Tab>
+              {MAIN_TAB_CONFIGS.map((tab) => {
+                if (tab.hideOnMobile && isMobileDevice()) {
+                  return null;
+                }
+
+                const Icon = tab.Icon;
+                return (
+                  <Tabs.Tab
+                    key={tab.value}
+                    value={tab.value}
+                    className={classes.tabsTab}
+                    leftSection={<Icon size={16} />}
+                    {...(tab.visibleFrom ? { visibleFrom: tab.visibleFrom } : {})}
+                  >
+                    {tab.label}
+                  </Tabs.Tab>
+                );
+              })}
               <TabsControls
                 onMenuClick={() => setDrawerOpened(true)}
                 onTryDecalsClick={() => {
@@ -178,44 +136,27 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
             </Tabs.Panel>
 
             {/* Player Areas Tab */}
-            <Tabs.Panel value="players" h="calc(100% - 60px)">
-              <Box className={classes.playersTabContent}>
-                {isError && (
-                  <Alert
-                    variant="light"
-                    color="red"
-                    title="Error loading player data"
-                    icon={<IconAlertCircle />}
-                    mb="md"
-                  >
-                    Could not load player data for game {gameId}. Please try
-                    again later.
-                  </Alert>
-                )}
+            <TabPanelSection value="players" className={classes.playersTabContent}>
+              {isError && <PlayerDataErrorAlert gameId={gameId} mb="md" />}
 
-                {data?.playerData && (
-                  <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                    {data.playerData
-                      .filter((player) => player.faction !== "null")
-                      .map((player) => (
-                        <PlayerCard key={player.color} playerData={player} />
-                      ))}
-                  </SimpleGrid>
-                )}
-              </Box>
-            </Tabs.Panel>
+              {data?.playerData && (
+                <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
+                  {filterPlayersWithAssignedFaction(data.playerData).map(
+                    (player) => (
+                      <PlayerCard key={player.color} playerData={player} />
+                    ),
+                  )}
+                </SimpleGrid>
+              )}
+            </TabPanelSection>
 
-            <Tabs.Panel value="objectives" h="calc(100% - 60px)">
-              <Box className={classes.playersTabContent}>
-                {data && <ScoreBoard />}
-              </Box>
-            </Tabs.Panel>
+            <TabPanelSection value="objectives" className={classes.playersTabContent}>
+              {data && <ScoreBoard />}
+            </TabPanelSection>
 
-            <Tabs.Panel value="general" h="calc(100% - 60px)">
-              <Box className={classes.playersTabContent}>
-                {data && <GeneralArea />}
-              </Box>
-            </Tabs.Panel>
+            <TabPanelSection value="general" className={classes.playersTabContent}>
+              {data && <GeneralArea />}
+            </TabPanelSection>
           </Tabs>
         </Box>
       </AppShell.Main>

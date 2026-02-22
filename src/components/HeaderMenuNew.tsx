@@ -2,19 +2,23 @@ import {
   Group,
   Tabs,
   Box,
-  TextInput,
   useCombobox,
   Combobox,
   CheckIcon,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { IconPencil } from "@tabler/icons-react";
-// @ts-ignore
+// @ts-expect-error -- DiscordLogin is a JS module without TS defs
 import { DiscordLogin } from "./DiscordLogin";
 import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { CircularFactionIcon } from "./shared/CircularFactionIcon";
 import { generateColorGradient } from "@/lookup/colors";
+import {
+  useTabLabelEditing,
+  type TabLabelEditingApi,
+} from "@/hooks/useTabLabelEditing";
+import { EditableTabLabel } from "./shared/EditableTabLabel";
 
 type EnrichedTab = {
   id: string;
@@ -64,23 +68,7 @@ export function HeaderMenuNew({
     return () => window.removeEventListener("resize", checkForOverflow);
   }, [activeTabs, showDesktopDropdown, widthThreshold]);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [editingTab, setEditingTab] = useState<string | null>(null);
-
-  const handleEditClick = (tab: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    if (editingTab === tab) {
-      if (inputRef.current) handleTabRename(tab, inputRef.current.value);
-      setEditingTab(null);
-    } else {
-      setEditingTab(tab);
-    }
-  };
-
-  const handleTabRename = (oldTab: string, newTab: string) => {
-    if (oldTab !== newTab) localStorage.setItem(oldTab, newTab);
-    setEditingTab(null);
-  };
+  const tabLabelEditing = useTabLabelEditing();
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -97,10 +85,7 @@ export function HeaderMenuNew({
             activeTabs={activeTabs}
             changeTab={changeTab}
             tabsListRef={tabsListRef}
-            editingTab={editingTab}
-            inputRef={inputRef}
-            handleEditClick={handleEditClick}
-            handleTabRename={handleTabRename}
+            tabLabelEditing={tabLabelEditing}
             removeTab={removeTab}
           />
         ) : (
@@ -109,10 +94,7 @@ export function HeaderMenuNew({
             combobox={combobox}
             changeTab={changeTab}
             activeTabs={activeTabs}
-            editingTab={editingTab}
-            inputRef={inputRef}
-            handleEditClick={handleEditClick}
-            handleTabRename={handleTabRename}
+            tabLabelEditing={tabLabelEditing}
             removeTab={removeTab}
           />
         )}
@@ -129,10 +111,7 @@ type TabViewProps = {
   activeTabs: EnrichedTab[];
   changeTab: (tab: string) => void;
   tabsListRef: React.RefObject<HTMLDivElement | null>;
-  editingTab: string | null;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  handleEditClick: (tab: string, event: React.MouseEvent) => void;
-  handleTabRename: (oldTab: string, newTab: string) => void;
+  tabLabelEditing: TabLabelEditingApi;
   removeTab: (tab: string) => void;
 };
 
@@ -141,12 +120,11 @@ function TabView({
   activeTabs,
   changeTab,
   tabsListRef,
-  editingTab,
-  inputRef,
-  handleEditClick,
-  handleTabRename,
+  tabLabelEditing,
   removeTab,
 }: TabViewProps) {
+  const { toggleEditing } = tabLabelEditing;
+
   return (
     <Tabs
       variant="pills"
@@ -180,7 +158,7 @@ function TabView({
                   size={14}
                   className={classes.editIcon}
                   onClick={(event: React.MouseEvent) =>
-                    handleEditClick(tab.id, event)
+                    toggleEditing(tab.id, event)
                   }
                 />
                 {!tab.isManaged && (
@@ -205,28 +183,17 @@ function TabView({
               </Group>
             }
           >
-            {editingTab === tab.id ? (
-              <TextInput
-                ref={inputRef}
-                size="xs"
-                defaultValue={localStorage.getItem(tab.id) || tab.id}
-                className={classes.tabInput}
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleTabRename(tab.id, e.currentTarget.value);
-                  } else if (e.key === "Escape") {
-                    handleTabRename(tab.id, tab.id); // Reset to original value
-                  }
-                }}
-                onBlur={(e) => handleTabRename(tab.id, e.currentTarget.value)}
-                autoFocus
-              />
-            ) : (
-              <span className={classes.tabText}>
-                {localStorage.getItem(tab.id) || tab.id}
-              </span>
-            )}
+            <EditableTabLabel
+              tabId={tab.id}
+              editingApi={tabLabelEditing}
+              inputProps={{
+                className: classes.tabInput,
+                onClick: (event) => event.stopPropagation(),
+              }}
+              renderDisplay={(displayName) => (
+                <span className={classes.tabText}>{displayName}</span>
+              )}
+            />
           </Tabs.Tab>
         ))}
       </Tabs.List>
@@ -239,10 +206,7 @@ type DropdownViewProps = {
   combobox: ReturnType<typeof useCombobox>;
   changeTab: (tab: string) => void;
   activeTabs: EnrichedTab[];
-  editingTab: string | null;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  handleEditClick: (tab: string, event: React.MouseEvent) => void;
-  handleTabRename: (oldTab: string, newTab: string) => void;
+  tabLabelEditing: TabLabelEditingApi;
   removeTab: (tab: string) => void;
 };
 
@@ -251,12 +215,11 @@ function DropdownView({
   combobox,
   changeTab,
   activeTabs,
-  editingTab,
-  inputRef,
-  handleEditClick,
-  handleTabRename,
+  tabLabelEditing,
   removeTab,
 }: DropdownViewProps) {
+  const { toggleEditing, getDisplayName } = tabLabelEditing;
+
   const options = activeTabs.map((item) => (
     <Combobox.Option
       value={item.id}
@@ -278,59 +241,51 @@ function DropdownView({
           <CircularFactionIcon faction={item.faction} size={12} />
         )}
         {item.id === mapId && <CheckIcon size={12} />}
-        {editingTab === item.id ? (
-          <TextInput
-            ref={inputRef}
-            size="xs"
-            defaultValue={localStorage.getItem(item.id) || item.id}
-            className={classes.tabInput}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleTabRename(item.id, e.currentTarget.value);
-              } else if (e.key === "Escape") {
-                handleTabRename(item.id, item.id);
-              }
-            }}
-            onBlur={(e) => handleTabRename(item.id, e.currentTarget.value)}
-            autoFocus
-          />
-        ) : (
-          <>
-            <span style={{ flex: 1 }} className={classes.dropdownText}>
-              {localStorage.getItem(item.id) || item.id}
-            </span>
-            <Group gap="xs">
-              <IconPencil
-                size={14}
-                className={classes.editIcon}
-                onClick={(event: React.MouseEvent) => {
-                  event.preventDefault();
-                  handleEditClick(item.id, event);
-                }}
-              />
-              {!item.isManaged && (
-                <div
-                  className={classes.closeButton}
+        <EditableTabLabel
+          tabId={item.id}
+          editingApi={tabLabelEditing}
+          inputProps={{
+            className: classes.tabInput,
+            style: { flex: 1 },
+            onClick: (event) => event.stopPropagation(),
+          }}
+          renderDisplay={(displayName) => (
+            <>
+              <span style={{ flex: 1 }} className={classes.dropdownText}>
+                {displayName}
+              </span>
+              <Group gap="xs">
+                <IconPencil
+                  size={14}
+                  className={classes.editIcon}
                   onClick={(event: React.MouseEvent) => {
-                    event.stopPropagation();
-                    removeTab(item.id);
+                    event.preventDefault();
+                    toggleEditing(item.id, event);
                   }}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(event: React.KeyboardEvent) => {
-                    if (event.key === "Enter" || event.key === " ") {
+                />
+                {!item.isManaged && (
+                  <div
+                    className={classes.closeButton}
+                    onClick={(event: React.MouseEvent) => {
                       event.stopPropagation();
                       removeTab(item.id);
-                    }
-                  }}
-                >
-                  ×
-                </div>
-              )}
-            </Group>
-          </>
-        )}
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event: React.KeyboardEvent) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.stopPropagation();
+                        removeTab(item.id);
+                      }
+                    }}
+                  >
+                    ×
+                  </div>
+                )}
+              </Group>
+            </>
+          )}
+        />
       </Group>
     </Combobox.Option>
   ));
@@ -375,7 +330,7 @@ function DropdownView({
                     />
                   )}
                   <span style={{ userSelect: "none" }}>
-                    {localStorage.getItem(mapId) || mapId}
+                    {getDisplayName(mapId)}
                   </span>
                 </Group>
                 <Combobox.Chevron />

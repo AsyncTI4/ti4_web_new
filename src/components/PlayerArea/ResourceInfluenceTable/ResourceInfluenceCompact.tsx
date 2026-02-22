@@ -2,7 +2,7 @@ import { Group, Stack } from "@mantine/core";
 import { Caption } from "../Caption";
 import { EconomicsColumn } from "./EconomicsColumn";
 
-type PlanetEconomics = {
+export type PlanetEconomics = {
   total: {
     currentResources: number;
     totalResources: number;

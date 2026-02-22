@@ -1,1 +1,4 @@
-export { ResourceInfluenceCompact } from "./ResourceInfluenceCompact";
+export {
+  ResourceInfluenceCompact,
+  type PlanetEconomics,
+} from "./ResourceInfluenceCompact";

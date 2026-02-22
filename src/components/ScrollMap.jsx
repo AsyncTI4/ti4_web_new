@@ -1,6 +1,8 @@
 import { useCallback, useState, useEffect } from "react";
 import ZoomControls from "@/components/ZoomControls";
-import { useAppStore } from "@/utils/appStore";
+import { useAppStore, useSettingsStore } from "@/utils/appStore";
+import { getCssScaleStyle } from "@/utils/zoom";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { useOverlayData } from "../hooks/useOverlayData";
 import { abilities } from "../data/abilities";
 import { publicObjectives } from "../data/publicObjectives";
@@ -26,6 +28,9 @@ export function ScrollMap({ gameId, imageUrl }) {
   } = useOverlay(gameId);
   const zoom = useAppStore((s) => s.zoomLevel);
   const zoomFitToScreen = useAppStore((s) => s.zoomFitToScreen);
+  const isFirefox = useSettingsStore((s) => s.settings.isFirefox);
+  const imageScale = zoomFitToScreen ? 1 : zoom;
+  const imageScaleStyle = getCssScaleStyle(imageScale, isFirefox);
 
   // Compute overlay scale for fit-to-screen mode
   const [containerWidth, setContainerWidth] = useState(() => window.innerWidth);
@@ -39,13 +44,9 @@ export function ScrollMap({ gameId, imageUrl }) {
       ? containerWidth / imageNaturalWidth
       : 1;
 
-  const isFirefox =
-    typeof navigator !== "undefined" &&
-    navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
-
   return (
     <div style={{ width: "100%", position: "relative" }}>
-      {!isTouchDevice() && <ZoomControls />}
+      {!isMobileDevice() && <ZoomControls />}
 
       {imageUrl ? (
         <img
@@ -53,9 +54,7 @@ export function ScrollMap({ gameId, imageUrl }) {
           src={imageUrl}
           onLoad={(e) => setImageNaturalWidth(e.target.naturalWidth)}
           style={{
-            ...(isFirefox ? {} : { zoom: zoomFitToScreen ? 1 : zoom }),
-            [`-moz-transform`]: `scale(${zoomFitToScreen ? 1 : zoom})`,
-            [`-moz-transform-origin`]: "top left",
+            ...imageScaleStyle,
             ...(zoomFitToScreen ? { width: "100%", height: "100%" } : {}),
           }}
         />
@@ -208,7 +207,7 @@ const useOverlay = (gameId) => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipTimer, setTooltipTimer] = useState(null);
 
-  const tooltipDelay = isTouchDevice() ? 0 : 600;
+  const tooltipDelay = isMobileDevice() ? 0 : 600;
 
   const handleMouseEnter = useCallback((key) => {
     const timer = setTimeout(() => setActiveTooltip(key), tooltipDelay);
@@ -230,21 +229,13 @@ const useOverlay = (gameId) => {
 
 const filterOverlays = (overlays) => Object.values(overlays);
 
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0
-  );
-}
-
 const useZoom = (imageNaturalWidth) => {
   const [zoomIndex, setZoomIndex] = useState(() => {
     const savedZoomIndex = localStorage.getItem("zoomIndex");
     if (savedZoomIndex !== null) {
       return parseInt(savedZoomIndex, 10);
     }
-    return isTouchDevice() ? 0 : defaultZoomIndex;
+    return isMobileDevice() ? 0 : defaultZoomIndex;
   });
 
   const [zoomFitToScreen, setZoomFitToScreen] = useState(() => {
@@ -279,7 +270,7 @@ const useZoom = (imageNaturalWidth) => {
   };
 
   const handleZoomReset = () => {
-    const resetIndex = isTouchDevice() ? 0 : defaultZoomIndex;
+    const resetIndex = isMobileDevice() ? 0 : defaultZoomIndex;
     changeZoomIndex(resetIndex);
     changeZoomFitToScreen(false);
   };

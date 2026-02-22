@@ -1,72 +1,7 @@
-import { Group, Text, Image, Box } from "@mantine/core";
-import { IconLock } from "@tabler/icons-react";
-import { useDisclosure } from "@/hooks/useDisclosure";
-import { leaders } from "../../../data/leaders";
-import { SmoothPopover } from "../../shared/SmoothPopover";
-import { LeaderDetailsCard } from "../LeaderDetailsCard";
-import styles from "./Leader.module.css";
-import { Chip } from "@/components/shared/primitives/Chip";
-import { showLeader } from "./showLeader";
-import cx from "clsx";
+import { LeaderChip, type LeaderChipProps } from "./LeaderChip";
 
-type Props = {
-  id: string;
-  type: "agent" | "commander" | "hero";
-  tgCount: number;
-  exhausted: boolean;
-  locked: boolean;
-  active: boolean;
-};
+type Props = Omit<LeaderChipProps, "variant">;
 
-export function MobileLeader({ id, type, exhausted, locked, active }: Props) {
-  const { opened, setOpened, toggle } = useDisclosure(false);
-  const leaderData = getLeaderData(id);
-  if (!leaderData) return null;
-
-  const shouldShowGreen = !exhausted && !locked;
-  const accentColor = shouldShowGreen ? "green" : "gray";
-  const showLeaderImage = showLeader(leaderData.source);
-
-  return (
-    <SmoothPopover opened={opened} onChange={setOpened}>
-      <SmoothPopover.Target>
-        <Chip
-          accent={accentColor}
-          onClick={toggle}
-          className={styles.mobile}
-        >
-          <Group gap={8} className={styles.leaderGroup}>
-            {showLeaderImage && (
-              <div className={styles.leaderImageContainer}>
-                <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
-              </div>
-            )}
-
-            <Text
-              className={cx(
-                styles.leaderType,
-                shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive
-              )}
-            >
-              {type}
-            </Text>
-
-            {active && <Box className={styles.onlineDot} />}
-            {locked && (
-              <Box className={styles.lockIcon}>
-                <IconLock size={16} color="white" stroke={2.5} />
-              </Box>
-            )}
-          </Group>
-        </Chip>
-      </SmoothPopover.Target>
-      <SmoothPopover.Dropdown p={0}>
-        <LeaderDetailsCard leaderId={id} />
-      </SmoothPopover.Dropdown>
-    </SmoothPopover>
-  );
-}
-
-function getLeaderData(leaderId: string) {
-  return leaders.find((leader) => leader.id === leaderId);
+export function MobileLeader(props: Props) {
+  return <LeaderChip {...props} variant="mobile" />;
 }

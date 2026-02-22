@@ -108,51 +108,42 @@ export function useHexRingNavigation(
     [selectedPosition, ringsOrdered]
   );
 
-  const selectInward = useCallback(() => {
-    if (!selectedPosition) return;
-    const currentRing = getRingFromPosition(selectedPosition);
-    if (currentRing <= 0) return;
+  const selectRingNeighbor = useCallback(
+    (direction: -1 | 1) => {
+      if (!selectedPosition) return;
+      const currentRing = getRingFromPosition(selectedPosition);
+      const targetRing = currentRing + direction;
+      if (targetRing < 0) return;
 
-    const candidates = (tileAdjacencies as any)[selectedPosition]?.filter(
-      (p: string | null) => {
-        if (!p) return false;
-        if (!positionToTile[p]) return false;
-        const r = getRingFromPosition(p);
-        return r === currentRing - 1;
-      }
-    ) as string[];
+      const candidates = (tileAdjacencies as any)[selectedPosition]?.filter(
+        (p: string | null) => {
+          if (!p) return false;
+          if (!positionToTile[p]) return false;
+          return getRingFromPosition(p) === targetRing;
+        }
+      ) as string[];
 
-    if (!candidates || candidates.length === 0) return;
-    const currentAngle = angleByPosition[selectedPosition];
-    const best = candidates.reduce((bestPos, p) => {
-      const diffBest = Math.abs(angleByPosition[bestPos] - currentAngle);
-      const diffP = Math.abs(angleByPosition[p] - currentAngle);
-      return diffP < diffBest ? p : bestPos;
-    }, candidates[0]);
-    setSelectedPosition(best);
-  }, [selectedPosition, positionToTile, angleByPosition]);
+      if (!candidates || candidates.length === 0) return;
+      const currentAngle = angleByPosition[selectedPosition];
+      const best = candidates.reduce((bestPos, p) => {
+        const diffBest = Math.abs(angleByPosition[bestPos] - currentAngle);
+        const diffP = Math.abs(angleByPosition[p] - currentAngle);
+        return diffP < diffBest ? p : bestPos;
+      }, candidates[0]);
+      setSelectedPosition(best);
+    },
+    [selectedPosition, positionToTile, angleByPosition]
+  );
 
-  const selectOutward = useCallback(() => {
-    if (!selectedPosition) return;
-    const currentRing = getRingFromPosition(selectedPosition);
-    const candidates = (tileAdjacencies as any)[selectedPosition]?.filter(
-      (p: string | null) => {
-        if (!p) return false;
-        if (!positionToTile[p]) return false;
-        const r = getRingFromPosition(p);
-        return r === currentRing + 1;
-      }
-    ) as string[];
+  const selectInward = useCallback(
+    () => selectRingNeighbor(-1),
+    [selectRingNeighbor]
+  );
 
-    if (!candidates || candidates.length === 0) return;
-    const currentAngle = angleByPosition[selectedPosition];
-    const best = candidates.reduce((bestPos, p) => {
-      const diffBest = Math.abs(angleByPosition[bestPos] - currentAngle);
-      const diffP = Math.abs(angleByPosition[p] - currentAngle);
-      return diffP < diffBest ? p : bestPos;
-    }, candidates[0]);
-    setSelectedPosition(best);
-  }, [selectedPosition, positionToTile, angleByPosition]);
+  const selectOutward = useCallback(
+    () => selectRingNeighbor(1),
+    [selectRingNeighbor]
+  );
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

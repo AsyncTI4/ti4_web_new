@@ -1,7 +1,0 @@
-.full-screen-loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 110px);
-  width: 100%;
-}

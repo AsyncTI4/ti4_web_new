@@ -1,7 +1,24 @@
 import { PlayerData } from "@/data/types";
 
+const INVALID_FACTION_VALUES = new Set(["", "null", "neutral"]);
+
+export function hasAssignedFaction(
+  player?: PlayerData | null,
+): player is PlayerData {
+  if (!player) return false;
+  const factionValue =
+    typeof player.faction === "string" ? player.faction.trim() : "";
+
+  if (!factionValue) return false;
+  return !INVALID_FACTION_VALUES.has(factionValue.toLowerCase());
+}
+
+export function filterPlayersWithAssignedFaction(playerData: PlayerData[]) {
+  return playerData.filter(hasAssignedFaction);
+}
+
 export function calculateArmyRankings(
-  playerData: PlayerData[]
+  playerData: PlayerData[],
 ): Record<string, number> {
   const armyValues = playerData.map((player) => {
     const totalValue =
@@ -24,4 +41,3 @@ export function calculateArmyRankings(
 
   return rankings;
 }
-

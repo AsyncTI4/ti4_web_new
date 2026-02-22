@@ -5,22 +5,19 @@ import {
   Box,
   Button,
   Card,
-  Group,
   SimpleGrid,
   Text,
 } from "@mantine/core";
 import { useMaps } from "./hooks/useMaps";
-import { FullScreenLoader } from "./components/FullScreenLoader";
+import { MapViewportLoader } from "./components/shared/primitives/Loaders";
 import { Link, useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
-import Logo from "./components/Logo";
 import { DiscordLogin } from "./components/DiscordLogin";
-import { useEffect } from "react";
+import { AppHeader } from "./components/shared/AppHeader";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function GamesPage() {
-  useEffect(() => {
-    document.title = `AsyncTI4`;
-  }, []);
+  useDocumentTitle("AsyncTI4");
   const navigate = useNavigate();
   const mapsQuery = useMaps();
   const games =
@@ -30,19 +27,15 @@ function GamesPage() {
 
   return (
     <AppShell header={{ height: 60 }}>
-      <AppShell.Header>
-        <Group align="center" h="100%" px="sm" gap="sm">
-          <Logo />
-          <div className="logo-divider" />
-          <div style={{ flexGrow: 1 }} />
-          <Box visibleFrom="sm">
-            <DiscordLogin />
-          </Box>
-        </Group>
-      </AppShell.Header>
+      <AppHeader>
+        <div style={{ flexGrow: 1 }} />
+        <Box visibleFrom="sm">
+          <DiscordLogin />
+        </Box>
+      </AppHeader>
       <AppShell.Main>
         <Box m="lg">
-          {mapsQuery.isLoading && <FullScreenLoader />}
+          {mapsQuery.isLoading && <MapViewportLoader />}
           {mapsQuery.isError && (
             <Alert
               variant="light"

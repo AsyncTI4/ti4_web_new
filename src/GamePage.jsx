@@ -1,15 +1,16 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import MapUI from "./components/MapUI";
 import { useMapImage } from "./hooks/useMapImage";
 import { useGameSocket } from "./hooks/useGameSocket";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 export function GamePage({ onShowNewUI }) {
   const params = useParams();
-  useEffect(() => {
-    document.title = `${params.mapid} - | Async TI`;
-  }, [params.mapid]);
+  useDocumentTitle(
+    params.mapid ? `${params.mapid} - | Async TI` : null,
+    "Async TI",
+  );
 
   const gameId = params.mapid;
   const { data: imageUrl, refetch, isFetching, isError, error } = useMapImage(gameId);

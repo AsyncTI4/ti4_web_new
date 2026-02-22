@@ -80,6 +80,95 @@ const getSafeValidHyperlaneExits = (
   }
 };
 
+type AdjacentPositionParams = {
+  currentPosition: string;
+  previousPosition?: string;
+  currentSystemId: string;
+  currentIsHyperlane: boolean;
+  tiles: Tile[];
+  validPositions: Set<string>;
+  wormholeMap: Record<string, string[]>;
+};
+
+/**
+ * Builds the set of adjacent tile positions that can be traversed next, taking
+ * into account hyperlane entrance rules, normal adjacencies, and wormholes.
+ */
+function getAvailableAdjacentPositions({
+  currentPosition,
+  previousPosition,
+  currentSystemId,
+  currentIsHyperlane,
+  tiles,
+  validPositions,
+  wormholeMap,
+}: AdjacentPositionParams): Set<string> {
+  const allAdjacentPositions = new Set<string>();
+
+  if (currentIsHyperlane && previousPosition) {
+    const entranceSide = getConnectingSide(
+      currentPosition,
+      previousPosition,
+      tileAdjacencies
+    );
+    if (entranceSide !== null) {
+      const validExits = getSafeValidHyperlaneExits(
+        currentSystemId,
+        currentPosition,
+        entranceSide,
+        tileAdjacencies
+      );
+      validExits.forEach((exitPosition) => {
+        if (
+          exitPosition &&
+          exitPosition !== currentPosition &&
+          validPositions.has(exitPosition)
+        ) {
+          allAdjacentPositions.add(exitPosition);
+        }
+      });
+    }
+  } else if (currentIsHyperlane && !previousPosition) {
+    const hyperlaneConnections = getHyperlaneConnectionsForTile(
+      currentSystemId,
+      currentPosition,
+      tileAdjacencies
+    );
+    hyperlaneConnections.forEach((connectedPosition: string) => {
+      if (
+        connectedPosition &&
+        connectedPosition !== currentPosition &&
+        validPositions.has(connectedPosition)
+      ) {
+        allAdjacentPositions.add(connectedPosition);
+      }
+    });
+  } else {
+    const adjacentPositions = tileAdjacencies[currentPosition];
+    if (adjacentPositions) {
+      adjacentPositions.forEach((pos) => {
+        if (pos && validPositions.has(pos)) {
+          allAdjacentPositions.add(pos);
+        }
+      });
+    }
+
+    if (currentSystemId) {
+      const currentWormholes = getTileWormholes(currentPosition, tiles);
+      currentWormholes.forEach((whType) => {
+        const connectedPositions = wormholeMap[whType] || [];
+        connectedPositions.forEach((pos) => {
+          if (pos !== currentPosition && validPositions.has(pos)) {
+            allAdjacentPositions.add(pos);
+          }
+        });
+      });
+    }
+  }
+
+  return allAdjacentPositions;
+}
+
 export type TilePath = {
   systemIds: string[];
   positions: string[];
@@ -142,78 +231,15 @@ export function calculateTileDistances(
       ?.systemId as string;
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
-    // Get all adjacent positions based on tile type
-    const allAdjacentPositions = new Set<string>();
-
-    if (currentIsHyperlane && previousPosition) {
-      // For hyperlanes, only allow exits based on entrance direction
-      // Need to find which side of the hyperlane connects to the previous position
-      const entranceSide = getConnectingSide(
-        currentPosition,
-        previousPosition,
-        tileAdjacencies
-      );
-      if (entranceSide !== null) {
-        const validExits = getSafeValidHyperlaneExits(
-          currentSystemId,
-          currentPosition,
-          entranceSide,
-          tileAdjacencies
-        );
-        validExits.forEach((exitPosition) => {
-          // Only add positions that are actually in play
-          if (
-            exitPosition &&
-            exitPosition !== currentPosition &&
-            validPositions.has(exitPosition)
-          ) {
-            allAdjacentPositions.add(exitPosition);
-          }
-        });
-      }
-    } else if (currentIsHyperlane && !previousPosition) {
-      // If we start on a hyperlane (no previous position), we can go to any connected tile
-      const hyperlaneConnections = getHyperlaneConnectionsForTile(
-        currentSystemId,
-        currentPosition,
-        tileAdjacencies
-      );
-      hyperlaneConnections.forEach((connectedPosition: string) => {
-        // Only add positions that are actually in play
-        if (
-          connectedPosition &&
-          connectedPosition !== currentPosition &&
-          validPositions.has(connectedPosition)
-        ) {
-          allAdjacentPositions.add(connectedPosition);
-        }
-      });
-    } else {
-      // For normal tiles, use normal adjacencies + wormhole connections
-      const adjacentPositions = tileAdjacencies[currentPosition];
-      if (adjacentPositions) {
-        adjacentPositions.forEach((pos) => {
-          // Only add positions that are actually in play
-          if (pos && validPositions.has(pos)) {
-            allAdjacentPositions.add(pos);
-          }
-        });
-      }
-
-      // Add wormhole connections
-      if (currentSystemId) {
-        const currentWormholes = getTileWormholes(currentPosition, tiles);
-        currentWormholes.forEach((whType) => {
-          const connectedPositions = wormholeMap[whType] || [];
-          connectedPositions.forEach((pos) => {
-            // Only add positions that are actually in play
-            if (pos !== currentPosition && validPositions.has(pos)) {
-              allAdjacentPositions.add(pos);
-            }
-          });
-        });
-      }
-    }
+    const allAdjacentPositions = getAvailableAdjacentPositions({
+      currentPosition,
+      previousPosition,
+      currentSystemId,
+      currentIsHyperlane,
+      tiles,
+      validPositions,
+      wormholeMap,
+    });
 
     // Explore each adjacent tile (normal + wormhole + hyperlane)
     for (const adjacentPosition of allAdjacentPositions) {
@@ -329,75 +355,15 @@ export function calculateOptimalPaths(
     const currentIsHyperlane = isHyperlane(currentSystemId);
 
     // Get all adjacent positions
-    const allAdjacentPositions = new Set<string>();
-
-    if (currentIsHyperlane && previousPosition) {
-      // For hyperlanes, only allow exits based on entrance direction
-      // Need to find which side of the hyperlane connects to the previous position
-      const entranceSide = getConnectingSide(
-        currentPosition,
-        previousPosition,
-        tileAdjacencies
-      );
-      if (entranceSide !== null) {
-        const validExits = getSafeValidHyperlaneExits(
-          currentSystemId,
-          currentPosition,
-          entranceSide,
-          tileAdjacencies
-        );
-        validExits.forEach((exitPosition) => {
-          // Only add positions that are actually in play
-          if (
-            exitPosition &&
-            exitPosition !== currentPosition &&
-            validPositions.has(exitPosition)
-          ) {
-            allAdjacentPositions.add(exitPosition);
-          }
-        });
-      }
-    } else if (currentIsHyperlane && !previousPosition) {
-      // If we start on a hyperlane (no previous position), we can go to any connected tile
-      const hyperlaneConnections = getHyperlaneConnectionsForTile(
-        currentSystemId,
-        currentPosition,
-        tileAdjacencies
-      );
-      hyperlaneConnections.forEach((connectedPosition: string) => {
-        // Only add positions that are actually in play
-        if (
-          connectedPosition &&
-          connectedPosition !== currentPosition &&
-          validPositions.has(connectedPosition)
-        ) {
-          allAdjacentPositions.add(connectedPosition);
-        }
-      });
-    } else {
-      // Normal adjacencies
-      const adjacentPositions = tileAdjacencies[currentPosition];
-      if (adjacentPositions) {
-        adjacentPositions.forEach((pos) => {
-          // Only add positions that are actually in play
-          if (pos && validPositions.has(pos)) {
-            allAdjacentPositions.add(pos);
-          }
-        });
-      }
-
-      // Wormhole connections
-      const currentWormholes = getTileWormholes(currentPosition, tiles);
-      currentWormholes.forEach((whType) => {
-        const connectedPositions = wormholeMap[whType] || [];
-        connectedPositions.forEach((pos) => {
-          // Only add positions that are actually in play
-          if (pos !== currentPosition && validPositions.has(pos)) {
-            allAdjacentPositions.add(pos);
-          }
-        });
-      });
-    }
+    const allAdjacentPositions = getAvailableAdjacentPositions({
+      currentPosition,
+      previousPosition,
+      currentSystemId,
+      currentIsHyperlane,
+      tiles,
+      validPositions,
+      wormholeMap,
+    });
 
     // Explore adjacent positions
     for (const adjacentPosition of allAdjacentPositions) {

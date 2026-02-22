@@ -1,5 +1,6 @@
-import { Modal, Title, Text, Box, Grid, Group } from "@mantine/core";
+import { Title, Text, Box, Grid, Group } from "@mantine/core";
 import classes from "./KeyboardShortcutsModal.module.css";
+import { AppModal } from "@/components/shared/AppModal";
 
 type KeyboardShortcutsModalProps = {
   opened: boolean;
@@ -44,7 +45,7 @@ export function KeyboardShortcutsModal({
   onClose,
 }: KeyboardShortcutsModalProps) {
   return (
-    <Modal
+    <AppModal
       opened={opened}
       onClose={onClose}
       title={
@@ -54,8 +55,6 @@ export function KeyboardShortcutsModal({
       }
       size="lg"
       centered
-      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
-      zIndex={3500}
     >
       <Box className={classes.content}>
         <Grid>
@@ -101,6 +100,6 @@ export function KeyboardShortcutsModal({
           </Text>
         </Box>
       </Box>
-    </Modal>
+    </AppModal>
   );
 }

@@ -5,7 +5,6 @@ import {
   Button,
   Container,
   Grid,
-  Group,
   Image,
   List,
   Stack,
@@ -13,9 +12,9 @@ import {
   Title,
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons-react";
-import Logo from "./components/Logo";
 import { GamesBar } from "@/components/shared/GamesBar";
 import { Surface } from "./components/PlayerArea/Surface";
+import { AppHeader } from "./components/shared/AppHeader";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
@@ -23,13 +22,9 @@ import WidgetBot from "@widgetbot/react-embed";
 export default function LandingPage() {
   return (
     <AppShell header={{ height: 60 }}>
-      <AppShell.Header className="appHeader">
-        <Group align="center" h="100%" px="sm" gap="sm">
-          <Logo />
-          <div className="logo-divider" />
-          <GamesBar />
-        </Group>
-      </AppShell.Header>
+      <AppHeader className="appHeader">
+        <GamesBar />
+      </AppHeader>
       <AppShell.Main>
         <Stack gap={0} w="100%">
           <Box

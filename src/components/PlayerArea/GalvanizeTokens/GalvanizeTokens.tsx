@@ -1,6 +1,5 @@
-import { Box } from "@mantine/core";
 import { cdnImage } from "@/data/cdnImage";
-import styles from "./GalvanizeTokens.module.css";
+import { StackedTokenStrip } from "../ReinforcementTokens/StackedTokenStrip";
 
 type GalvanizeTokensProps = {
   count: number;
@@ -9,24 +8,18 @@ type GalvanizeTokensProps = {
 export function GalvanizeTokens({ count }: GalvanizeTokensProps) {
   if (count <= 0) return null;
 
+  const tokens = Array.from({ length: count }).map((_, index) => ({
+    key: index,
+    src: cdnImage("/extra/marker_galvanize.png"),
+    alt: "Galvanize Token",
+  }));
+
   return (
-    <Box
-      className={styles.container}
-      style={{ width: `${Math.min(count * 18, 280)}px` }}
-    >
-      {Array.from({ length: count }).map((_, index) => (
-        <img
-          key={index}
-          src={cdnImage("/extra/marker_galvanize.png")}
-          alt="Galvanize Token"
-          className={styles.token}
-          style={{
-            left: `${index * 18}px`,
-            top: `${10 * ((index + 1) % 2)}px`,
-          }}
-        />
-      ))}
-    </Box>
+    <StackedTokenStrip
+      tokens={tokens}
+      horizontalSpacing={18}
+      verticalOffset={10}
+      tokenWidth={24}
+    />
   );
 }
-

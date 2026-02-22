@@ -1,5 +1,4 @@
 import {
-  Modal,
   Stack,
   Switch,
   Text,
@@ -8,6 +7,7 @@ import {
 } from "@mantine/core";
 import { useSettingsStore } from "../../utils/appStore";
 import { isMobileDevice } from "../../utils/isTouchDevice";
+import { AppModal } from "@/components/shared/AppModal";
 
 type SettingsModalProps = {
   opened: boolean;
@@ -19,14 +19,12 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
   const handlers = useSettingsStore((state) => state.handlers);
 
   return (
-    <Modal
+    <AppModal
       opened={opened}
       onClose={onClose}
       title="Settings"
       size="md"
       centered
-      // Hardcoded to match --z-settings-modal; see src/utils/zIndexVariables.css
-      zIndex={3500}
     >
       <Stack gap="md">
         <div>
@@ -116,6 +114,6 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
           </Stack>
         </div>
       </Stack>
-    </Modal>
+    </AppModal>
   );
 }

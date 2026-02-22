@@ -1,29 +1,19 @@
-import { Group, Stack, Box, SimpleGrid } from "@mantine/core";
+import { Stack, Box, SimpleGrid } from "@mantine/core";
 import softStyles from "./PlayerCardSidebar.module.css";
 import { DynamicTechGrid } from "./PlayerArea/Tech/DynamicTechGrid";
-import { FragmentsPool } from "./PlayerArea/FragmentsPool";
 import { ScoredSecrets } from "./PlayerArea/ScoredSecrets";
-import { PlayerCardCounts } from "./PlayerArea/PlayerCardCounts";
-import { ResourceInfluenceCompact } from "./PlayerArea/ResourceInfluenceTable/ResourceInfluenceCompact";
-import { CCPool } from "./PlayerArea/CCPool";
 import { PlayerData } from "../data/types";
 import { Leaders } from "./PlayerArea/Leaders";
 import { PlayerCardBox } from "./PlayerCardBox";
-import { Nombox } from "./Nombox";
-import { getFactionImage } from "@/lookup/factions";
-import { getTechData } from "@/lookup/tech";
-import { Plot } from "./PlayerArea/Plot";
-import Caption from "./shared/Caption/Caption";
 import { PlayerCardHeaderCompact } from "./PlayerArea/PlayerCardHeader/PlayerCardHeaderCompact";
 import { PlayerCardUnitsArea } from "./PlayerArea/PlayerCardUnitsArea";
-import { PlayerCardPlanetsArea } from "./PlayerArea/PlayerCardPlanetsArea";
 import { PlayerCardRelicsPromissoryArea } from "./PlayerArea/PlayerCardRelicsPromissoryArea";
 import { PlayerCardAbilitiesFactionTechs } from "./PlayerArea/PlayerCardAbilitiesFactionTechs";
-import { usePlanetEconomics } from "@/hooks/usePlanetEconomics";
-import { BreachTokens } from "./PlayerArea/BreachTokens";
-import { SleeperTokens } from "./PlayerArea/SleeperTokens";
-import { GhostWormholeTokens } from "./PlayerArea/GhostWormholeTokens";
-import { GalvanizeTokens } from "./PlayerArea/GalvanizeTokens";
+import { PlotCardsSection } from "./PlayerArea/PlotCardsSection";
+import { usePlayerCardComputedData } from "./PlayerArea/PlayerCardShared/usePlayerCardComputedData";
+import { PlayerCardCapturedUnits } from "./PlayerArea/PlayerCardShared/PlayerCardCapturedUnits";
+import { PlayerCardLogisticsRow } from "./PlayerArea/PlayerCardShared/PlayerCardLogisticsRow";
+import { PlayerCardPlanetsSection } from "./PlayerArea/PlayerCardShared/PlayerCardPlanetsSection";
 
 type Props = {
   playerData: PlayerData;
@@ -41,16 +31,12 @@ export default function PlayerCardSidebar(props: Props) {
     fragments,
     isSpeaker,
     nombox,
-    techs,
     relics,
     planets,
     secretsScored,
     knownUnscoredSecrets,
     leaders,
     abilities,
-    notResearchedFactionTechs,
-    factionImage,
-    factionImageType,
     plotCards,
     customPromissoryNotes,
     breachTokensReinf,
@@ -58,29 +44,19 @@ export default function PlayerCardSidebar(props: Props) {
     sleeperTokensReinf,
     ghostWormholesReinf,
   } = playerData;
-  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
+
+  const {
+    factionImageUrl: factionUrl,
+    planetEconomics,
+    filteredTechs,
+    allNotResearchedFactionTechs,
+    promissoryNotes,
+    mahactEdict,
+  } = usePlayerCardComputedData(playerData);
 
   const scs = playerData.scs || [];
-  const promissoryNotes = playerData.promissoryNotesInPlayArea || [];
   const exhaustedPlanetAbilities = playerData.exhaustedPlanetAbilities || [];
   const exhaustedPlanets = playerData.exhaustedPlanets || [];
-  const planetEconomics = usePlanetEconomics(playerData);
-
-  const specialTechTypes = ["NONE", "GENERICTF"];
-  const noneTechs = techs.filter((techId) => {
-    const techData = getTechData(techId);
-    return specialTechTypes.includes(techData?.types[0] ?? "");
-  });
-
-  const filteredTechs = techs.filter((techId) => {
-    const techData = getTechData(techId);
-    return !specialTechTypes.includes(techData?.types[0] ?? "");
-  });
-
-  const allNotResearchedFactionTechs = [
-    ...(notResearchedFactionTechs || []),
-    ...noneTechs,
-  ];
 
   return (
     <PlayerCardBox color={color} faction={faction}>
@@ -108,23 +84,24 @@ export default function PlayerCardSidebar(props: Props) {
       <Stack gap={0}>
         <SimpleGrid cols={2} spacing="xs">
           <Stack gap="sm">
-            <Group gap={4}>
-              <PlayerCardCounts
-                pnCount={props.playerData.pnCount || 0}
-                acCount={props.playerData.acCount || 0}
-                tg={props.playerData.tg}
-                commodities={props.playerData.commodities}
-                commoditiesTotal={props.playerData.commoditiesTotal}
-                debtTokens={props.playerData.debtTokens}
-              />
-              <CCPool
-                tacticalCC={tacticalCC}
-                fleetCC={fleetCC}
-                strategicCC={strategicCC}
-                mahactEdict={props.playerData.mahactEdict}
-              />
-              <FragmentsPool fragments={fragments} />
-            </Group>
+            <PlayerCardLogisticsRow
+              counts={{
+                pnCount: props.playerData.pnCount || 0,
+                acCount: props.playerData.acCount || 0,
+                tg: props.playerData.tg,
+                commodities: props.playerData.commodities,
+                commoditiesTotal: props.playerData.commoditiesTotal,
+                debtTokens: props.playerData.debtTokens,
+              }}
+              commandCounters={{
+                tacticalCC,
+                fleetCC,
+                strategicCC,
+                mahactEdict,
+              }}
+              fragments={fragments}
+              groupProps={{ gap: 4 }}
+            />
             <ScoredSecrets
               secretsScored={secretsScored}
               unscoredSecrets={props.playerData.soCount || 0}
@@ -162,32 +139,23 @@ export default function PlayerCardSidebar(props: Props) {
         <Stack gap="xs">
           <Box className={softStyles.softDividerTight} />
 
-          <Group gap={8} align="flex-start">
-            <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-
-            <Group gap={0} wrap="wrap" align="flex-start">
-              <PlayerCardPlanetsArea
-                planets={planets}
-                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
-                exhaustedPlanets={exhaustedPlanets}
-                gap={0}
-              />
-              <Group gap={0} wrap="wrap" align="flex-start" ml="xs">
-                {breachTokensReinf && breachTokensReinf > 0 && (
-                  <BreachTokens count={breachTokensReinf} />
-                )}
-                {sleeperTokensReinf && sleeperTokensReinf > 0 && (
-                  <SleeperTokens count={sleeperTokensReinf} />
-                )}
-                {ghostWormholesReinf && ghostWormholesReinf.length > 0 && (
-                  <GhostWormholeTokens wormholeIds={ghostWormholesReinf} />
-                )}
-                {galvanizeTokensReinf && galvanizeTokensReinf > 0 && (
-                  <GalvanizeTokens count={galvanizeTokensReinf} />
-                )}
-              </Group>
-            </Group>
-          </Group>
+          <PlayerCardPlanetsSection
+            planetEconomics={planetEconomics}
+            groupProps={{ gap: 8, align: "flex-start" }}
+            planetsProps={{
+              planets,
+              exhaustedPlanetAbilities,
+              exhaustedPlanets,
+              groupProps: { gap: 0, wrap: "wrap", align: "flex-start" },
+              reinforcementProps: {
+                breachTokensReinf,
+                sleeperTokensReinf,
+                ghostWormholesReinf,
+                galvanizeTokensReinf,
+                ml: "xs",
+              },
+            }}
+          />
           <Box className={softStyles.softDividerTight} />
         </Stack>
         <Box p="md" className={softStyles.sectionBlock}>
@@ -198,32 +166,20 @@ export default function PlayerCardSidebar(props: Props) {
             cols={6}
           />
         </Box>
-        {plotCards && Array.isArray(plotCards) && plotCards.length > 0 && (
-          <Stack gap="xs">
-            <Box className={softStyles.softDividerTight} />
-            <Caption size="xs">Plots</Caption>
-            <Group gap="md" align="flex-start">
-              <Group gap={4} wrap="wrap" flex={1}>
-                {plotCards.map((plotCard, index) => {
-                  return (
-                    <Plot
-                      key={`plot-${index}`}
-                      plotCard={plotCard}
-                      faction={faction}
-                    />
-                  );
-                })}
-              </Group>
-            </Group>
-            <Box className={softStyles.softDividerTight} />
-          </Stack>
-        )}
+        <PlotCardsSection
+          plotCards={plotCards}
+          faction={faction}
+          layout="vertical"
+          renderContainer={(content) => (
+            <Stack gap="xs">
+              <Box className={softStyles.softDividerTight} />
+              {content}
+              <Box className={softStyles.softDividerTight} />
+            </Stack>
+          )}
+        />
 
-        {nombox !== undefined && Object.keys(nombox).length > 0 && (
-          <Box mt="md">
-            <Nombox capturedUnits={nombox || {}} />
-          </Box>
-        )}
+        <PlayerCardCapturedUnits nombox={nombox} />
       </Stack>
     </PlayerCardBox>
   );

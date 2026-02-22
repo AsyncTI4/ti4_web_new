@@ -1,11 +1,11 @@
-import { Image } from "@mantine/core";
 import { Chip } from "@/components/shared/primitives/Chip";
+import { SecretObjectiveIcon } from "@/components/shared/SecretObjectiveIcon";
 
 export function UnscoredSecret() {
   return (
     <Chip
       accent="deepRed"
-      leftSection={<Image src="/so_icon.png" />}
+      leftSection={<SecretObjectiveIcon />}
       title="Unscored Secret"
       style={{ minWidth: 160 }}
     />

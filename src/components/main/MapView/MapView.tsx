@@ -5,30 +5,24 @@ import { LeftSidebar } from "@/components/main/LeftSidebar";
 import { DragHandle } from "@/components/DragHandle";
 import { PanelToggleButton } from "@/components/PanelToggleButton";
 import { RightSidebar } from "@/components/main/RightSidebar";
-import { MapRenderLayer } from "./components/MapRenderLayer";
+import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useScrollToPlanet } from "@/hooks/useScrollToPlanet";
-import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
-import { MovementModeBox } from "./MovementModeBox";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
 import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
-import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { useMapContentSize } from "./hooks/useMapContentSize";
-import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { useTilesList } from "@/hooks/useTilesList";
-import {
-  getMapContainerOffset,
-  getMapLayoutConfig,
-  getMapScaleStyle,
-} from "./mapLayout";
+import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
+import { getMapLayoutConfig } from "./mapLayout";
+import { MovementLayerPortal } from "./components/MovementLayerPortal";
 
 type Props = {
   gameId: string;
@@ -71,20 +65,8 @@ export function MapView({ gameId }: Props) {
 
   const tilesList = useTilesList(gameData?.tiles);
 
-  const {
-    draft,
-    targetSystemId,
-    showAuthModal,
-    setShowAuthModal,
-    originModalOpen,
-    setOriginModalOpen,
-    showSuccessModal,
-    setShowSuccessModal,
-    activeOrigin,
-    handleResetMovement,
-    handleCancelMovement,
-    createTileSelectHandler,
-  } = useMovementMode();
+  const movementState = useMovementMode();
+  const { draft, targetSystemId, createTileSelectHandler } = movementState;
 
   const {
     selectedTiles,
@@ -99,6 +81,10 @@ export function MapView({ gameId }: Props) {
     distanceMode: settings.distanceMode,
     tiles: tilesList,
   });
+  const selectedTileList = useMemo(
+    () => Array.from(selectedTiles),
+    [selectedTiles]
+  );
 
   const mapLayout = getMapLayoutConfig("panels");
   const { mapContainerRef } = useMapScrollPosition({
@@ -112,20 +98,12 @@ export function MapView({ gameId }: Props) {
     zoom,
   });
 
-  useKeyboardShortcuts({
-    toggleOverlays: handlers.toggleOverlays,
-    toggleTechSkipsMode: handlers.toggleTechSkipsMode,
-    togglePlanetTypesMode: handlers.togglePlanetTypesMode,
-    toggleDistanceMode: handlers.toggleDistanceMode,
-    togglePdsMode: handlers.togglePdsMode,
-    toggleLeftPanelCollapsed: handlers.toggleLeftPanelCollapsed,
-    toggleRightPanelCollapsed: handlers.toggleRightPanelCollapsed,
-    isLeftPanelCollapsed: settings.leftPanelCollapsed,
-    isRightPanelCollapsed: settings.rightPanelCollapsed,
-    updateSettings: handlers.updateSettings,
+  useMapKeyboardShortcuts({
+    handlers,
+    settings,
     handleZoomIn,
     handleZoomOut,
-    onAreaSelect: handleAreaSelect,
+    handleAreaSelect,
     selectedArea,
   });
 
@@ -173,18 +151,16 @@ export function MapView({ gameId }: Props) {
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
 
-        <MapRenderLayer
+        <InteractiveMapRenderer
+          layout="panels"
+          mapLayoutConfig={mapLayout}
+          zoom={zoom}
+          isFirefox={settings.isFirefox}
+          contentSize={contentSize}
           gameData={gameData}
           tilesList={tilesList}
-          contentSize={contentSize}
-          tileContainerStyle={{
-            ...getMapScaleStyle(mapLayout, zoom, settings.isFirefox),
-            ...getMapContainerOffset(mapLayout, zoom),
-            width: contentSize.width,
-            height: contentSize.height,
-          }}
           hoveredTilePosition={hoveredTile}
-          selectedTiles={Array.from(selectedTiles)}
+          selectedTiles={selectedTileList}
           systemsOnPath={systemsOnPath}
           targetSystemId={targetSystemId}
           pathResult={pathResult}
@@ -197,14 +173,11 @@ export function MapView({ gameId }: Props) {
           onTileHover={handleTileHover}
           onUnitMouseOver={handleUnitMouseEnter}
           onUnitMouseLeave={handleUnitMouseLeave}
-          onUnitSelect={(faction) => handleMouseDown(faction)}
+          onUnitSelect={handleMouseDown}
           onPlanetMouseEnter={handlePlanetMouseEnter}
           onPlanetMouseLeave={handlePlanetMouseLeave}
           tooltipUnit={tooltipUnit}
           tooltipPlanet={tooltipPlanet}
-          mapLayout="panels"
-          mapPadding={mapLayout.mapPadding}
-          mapZoom={zoom}
         />
 
         <ReconnectButton gameDataState={gameDataState} />
@@ -224,44 +197,26 @@ export function MapView({ gameId }: Props) {
         }}
       />
 
-      {/* Movement Mode Box (bottom-left) */}
-      {draft.targetPositionId && (
-        <MovementModeBox
-          gameId={gameId}
-          onCancel={handleCancelMovement}
-          onReset={handleResetMovement}
-          onSuccess={() => setShowSuccessModal(true)}
-        />
-      )}
-
-      <MovementModals
-        showAuthModal={showAuthModal}
-        onCloseAuthModal={() => setShowAuthModal(false)}
-        showSuccessModal={showSuccessModal}
-        onCloseSuccessModal={() => setShowSuccessModal(false)}
-        originModalOpen={originModalOpen}
-        onCloseOriginModal={() => setOriginModalOpen(false)}
-        activeOrigin={activeOrigin}
-        tiles={tilesList}
-      />
-
-      <RightSidebar
-        isRightPanelCollapsed={settings.rightPanelCollapsed}
-        sidebarWidth={sidebarWidth}
-        selectedArea={selectedArea}
-        activeArea={activeArea}
-        selectedFaction={selectedFaction}
-        activeUnit={activeUnit}
-        onAreaSelect={handleAreaSelect}
-        onAreaMouseEnter={handleAreaMouseEnter}
-        onAreaMouseLeave={handleAreaMouseLeave}
+      <MovementLayerPortal
         gameId={gameId}
-      />
-
-      <TryUnitDecalsSidebar
-        opened={tryDecalsOpened}
-        onClose={() => setTryDecalsOpened(false)}
-      />
+        tiles={tilesList}
+        movementState={movementState}
+        tryDecalsOpened={tryDecalsOpened}
+        setTryDecalsOpened={setTryDecalsOpened}
+      >
+        <RightSidebar
+          isRightPanelCollapsed={settings.rightPanelCollapsed}
+          sidebarWidth={sidebarWidth}
+          selectedArea={selectedArea}
+          activeArea={activeArea}
+          selectedFaction={selectedFaction}
+          activeUnit={activeUnit}
+          onAreaSelect={handleAreaSelect}
+          onAreaMouseEnter={handleAreaMouseEnter}
+          onAreaMouseLeave={handleAreaMouseLeave}
+          gameId={gameId}
+        />
+      </MovementLayerPortal>
     </Box>
   );
 }

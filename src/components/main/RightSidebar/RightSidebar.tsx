@@ -1,14 +1,12 @@
-import { Box, Alert, Center } from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
-import { useState } from "react";
+import { Box, Center } from "@mantine/core";
 import { FactionTabBar } from "../../FactionTabBar";
 import { PlayerCardDisplay } from "../PlayerCardDisplay";
 import { SecretHand } from "../SecretHand";
 import { AreaType } from "../../../hooks/useTabsAndTooltips";
 import classes from "../../MapUI.module.css";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
-import { usePlayerHand } from "../../../hooks/usePlayerHand";
-import { useUser } from "../../../hooks/useUser";
+import { PlayerDataErrorAlert } from "../../shared/PlayerDataErrorAlert";
+import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;
@@ -35,23 +33,23 @@ export function RightSidebar({
   onAreaMouseLeave,
   gameId,
 }: RightSidebarProps) {
-  const [isSecretHandCollapsed, setIsSecretHandCollapsed] = useState(false);
   const gameData = useGameData();
   const playerData = gameData?.playerData;
   const loadingState = useGameDataState();
   const isError = !!loadingState?.isError;
 
-  const { user } = useUser();
-  const isUserAuthenticated = user?.authenticated;
-  const isInGame = playerData?.some((p) => p.discordId === user?.discord_id);
-
-  // Fetch player hand data
   const {
-    data: handData,
-    isLoading: isHandLoading,
-    error: handError,
-  } = usePlayerHand(gameId);
-  const userPlayer = playerData?.find((p) => p.discordId === user?.discord_id);
+    canViewSecretHand,
+    userDiscordId,
+    handData,
+    isHandLoading,
+    handError,
+    isSecretHandCollapsed,
+    toggleSecretHandCollapsed,
+  } = useSecretHandPanel({ gameId, playerData });
+  const userPlayer = playerData?.find(
+    (p) => p.discordId === userDiscordId,
+  );
 
   // Determine the effective active area - default to user's faction if they're in the game
   const effectiveActiveArea = (() => {
@@ -104,18 +102,7 @@ export function RightSidebar({
             />
           )}
 
-          {isError && (
-            <Alert
-              variant="light"
-              color="red"
-              title="Error loading player data"
-              icon={<IconAlertCircle />}
-              mb="md"
-            >
-              Could not load player data for game {gameId}. Please try again
-              later.
-            </Alert>
-          )}
+          {isError && <PlayerDataErrorAlert gameId={gameId} mb="md" />}
 
           {playerData &&
             !selectedFaction &&
@@ -136,17 +123,17 @@ export function RightSidebar({
       </Box>
 
       {/* Secret Hand Pane - Bottom - Only show if user is authenticated */}
-      {isUserAuthenticated && isInGame && (
+      {canViewSecretHand && (
         <Box style={{ flexShrink: 0 }}>
           <SecretHand
             isCollapsed={isSecretHandCollapsed}
-            onToggle={() => setIsSecretHandCollapsed(!isSecretHandCollapsed)}
+            onToggle={toggleSecretHandCollapsed}
             handData={handData}
             isLoading={isHandLoading}
             error={handError}
             playerData={playerData}
             activeArea={effectiveActiveArea}
-            userDiscordId={user?.discord_id}
+            userDiscordId={userDiscordId ?? undefined}
           />
         </Box>
       )}

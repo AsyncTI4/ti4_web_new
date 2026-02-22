@@ -4,16 +4,17 @@ import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import MapUI from "./components/MapUI";
 import { useFrogMap } from "./hooks/useFrogMap";
 import { useUser } from "./hooks/useUser";
-import { getDiscordOauthUrl } from "./components/DiscordLogin";
+import { DiscordAuthButton } from "./components/DiscordLogin";
 
-import { useEffect } from "react";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function FrogGamePage() {
   const navigate = useNavigate();
   const params = useParams();
-  useEffect(() => {
-    document.title = `${params.mapid} - | AsyncTI4`;
-  }, [params.mapid]);
+  useDocumentTitle(
+    params.mapid ? `${params.mapid} - | AsyncTI4` : null,
+    "AsyncTI4",
+  );
   const frogMap = useFrogMap(params.discordid, params.mapid);
   const imageUrl = frogMap?.data;
   const user = useUser();
@@ -28,14 +29,12 @@ function FrogGamePage() {
           <Stack align="center" spacing="md">
             <Text size="xl">You are not the owner of this map</Text>
             <Text size="xl">Please log in with Discord to continue</Text>
-            <Button
-              component="a"
-              href={getDiscordOauthUrl()}
+            <DiscordAuthButton
               size="xl"
               leftSection={<IconBrandDiscordFilled />}
             >
               Discord Login
-            </Button>
+            </DiscordAuthButton>
           </Stack>
         </Container>
       </Center>

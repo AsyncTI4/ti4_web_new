@@ -89,3 +89,5 @@ export function useMovementMode() {
     createTileSelectHandler,
   };
 }
+
+export type MovementModeState = ReturnType<typeof useMovementMode>;

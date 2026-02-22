@@ -1,13 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Box, Grid, Stack, Text } from "@mantine/core";
 import classes from "@/components/MapUI.module.css";
-import { MapRenderLayer } from "./components/MapRenderLayer";
+import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
-import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
-import { useUser } from "@/hooks/useUser";
-import { MovementModeBox } from "./MovementModeBox";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/components/ZoomControls";
 import { ScoreTracker } from "@/components/Objectives";
@@ -21,20 +18,18 @@ import {
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/components/PlayerCardMobile";
 import { SecretHand } from "@/components/main/SecretHand";
-import { usePlayerHand } from "@/hooks/usePlayerHand";
 import secretHandClasses from "@/components/main/SecretHand/SecretHand.module.css";
 import { PlayerScoreSummary } from "@/components/Objectives/PlayerScoreSummary/PlayerScoreSummary";
 import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
-import { MovementModals } from "./components/MovementModals";
 import { ReconnectButton } from "./components/ReconnectButton";
-import { TryUnitDecalsSidebar } from "@/components/TryUnitDecalsSidebar";
 import { ScaledContent } from "@/components/shared/ScaledContent";
-import {
-  getMapContainerOffset,
-  getMapLayoutConfig,
-  getMapScaleStyle,
-} from "./mapLayout";
+import { getMapLayoutConfig } from "./mapLayout";
+import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
+import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
+import { MovementLayerPortal } from "./components/MovementLayerPortal";
+import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 
 type Props = {
   gameId: string;
@@ -47,8 +42,6 @@ export function PannableMapView({ gameId }: Props) {
     [gameData?.tiles]
   );
   const gameDataState = useGameDataState();
-  const { user } = useUser();
-
   const {
     selectedArea,
     tooltipUnit,
@@ -79,34 +72,19 @@ export function PannableMapView({ gameId }: Props) {
   const mapHeight = contentSize.height * zoom;
   const hideZoomControls = shouldHideZoomControls();
 
+  const movementState = useMovementMode();
+  const { draft, targetSystemId, createTileSelectHandler } = movementState;
   const {
-    draft,
-    targetSystemId,
-    showAuthModal,
-    setShowAuthModal,
-    originModalOpen,
-    setOriginModalOpen,
-    showSuccessModal,
-    setShowSuccessModal,
-    activeOrigin,
-    handleResetMovement,
-    handleCancelMovement,
-    createTileSelectHandler,
-  } = useMovementMode();
-  const [isSecretHandCollapsed, setIsSecretHandCollapsed] = useState(false);
+    canViewSecretHand,
+    userDiscordId,
+    handData,
+    isHandLoading,
+    handError,
+    isSecretHandCollapsed,
+    toggleSecretHandCollapsed,
+  } = useSecretHandPanel({ gameId, playerData: gameData?.playerData });
 
   const playerCardLayout = isMobileDevice() ? "list" : "grid";
-
-  const {
-    data: handData,
-    isLoading: isHandLoading,
-    error: handError,
-  } = usePlayerHand(gameId);
-
-  const isUserAuthenticated = user?.authenticated;
-  const isInGame = gameData?.playerData?.some(
-    (p) => p.discordId === user?.discord_id
-  );
 
   const {
     selectedTiles,
@@ -122,34 +100,16 @@ export function PannableMapView({ gameId }: Props) {
     tiles: tilesList,
   });
 
-  useKeyboardShortcuts({
-    toggleOverlays: handlers.toggleOverlays,
-    toggleTechSkipsMode: handlers.toggleTechSkipsMode,
-    togglePlanetTypesMode: handlers.togglePlanetTypesMode,
-    toggleDistanceMode: handlers.toggleDistanceMode,
-    togglePdsMode: handlers.togglePdsMode,
-    toggleLeftPanelCollapsed: handlers.toggleLeftPanelCollapsed,
-    toggleRightPanelCollapsed: handlers.toggleRightPanelCollapsed,
-    isLeftPanelCollapsed: settings.leftPanelCollapsed,
-    isRightPanelCollapsed: settings.rightPanelCollapsed,
-    updateSettings: handlers.updateSettings,
+  useMapKeyboardShortcuts({
+    handlers,
+    settings,
     handleZoomIn,
     handleZoomOut,
-    onAreaSelect: handleAreaSelect,
+    handleAreaSelect,
     selectedArea,
   });
 
-  const [tryDecalsOpened, setTryDecalsOpened] = useState(false);
-
-  useEffect(() => {
-    const handleToggleTryDecals = () => {
-      setTryDecalsOpened((prev) => !prev);
-    };
-    window.addEventListener("toggleTryDecals", handleToggleTryDecals);
-    return () => {
-      window.removeEventListener("toggleTryDecals", handleToggleTryDecals);
-    };
-  }, []);
+  const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
   const areaStyles = isMobileDevice()
     ? {
@@ -176,18 +136,20 @@ export function PannableMapView({ gameId }: Props) {
 
         {gameData && (
           <>
-            <MapRenderLayer
-              gameData={gameData}
-              tilesList={tilesList}
+            <InteractiveMapRenderer
+              layout="pannable"
+              mapLayoutConfig={mapLayout}
+              zoom={zoom}
+              isFirefox={settings.isFirefox}
               contentSize={contentSize}
-              tileContainerStyle={{
-                ...getMapScaleStyle(mapLayout, zoom, settings.isFirefox),
-                ...getMapContainerOffset(mapLayout, zoom),
-                width: mapWidth,
-                height: mapHeight,
+              widthOverride={mapWidth}
+              heightOverride={mapHeight}
+              styleOverrides={{
                 marginLeft: "auto",
                 marginRight: "auto",
               }}
+              gameData={gameData}
+              tilesList={tilesList}
               hoveredTilePosition={hoveredTile}
               selectedTiles={selectedTiles}
               systemsOnPath={systemsOnPath}
@@ -202,29 +164,24 @@ export function PannableMapView({ gameId }: Props) {
               onTileHover={handleTileHover}
               onUnitMouseOver={handleUnitMouseEnter}
               onUnitMouseLeave={handleUnitMouseLeave}
-              onUnitSelect={(faction) => handleMouseDown(faction)}
+              onUnitSelect={handleMouseDown}
               onPlanetMouseEnter={handlePlanetMouseEnter}
               onPlanetMouseLeave={handlePlanetMouseLeave}
               tooltipUnit={tooltipUnit}
               tooltipPlanet={tooltipPlanet}
-              mapLayout="pannable"
-              mapPadding={mapLayout.mapPadding}
-              mapZoom={zoom}
             />
 
-            {isUserAuthenticated && isInGame && !isMobileDevice() && (
+            {canViewSecretHand && !isMobileDevice() && (
               <Box className={secretHandClasses.pannableWrapper}>
                 <SecretHand
                   isCollapsed={isSecretHandCollapsed}
-                  onToggle={() =>
-                    setIsSecretHandCollapsed(!isSecretHandCollapsed)
-                  }
+                  onToggle={toggleSecretHandCollapsed}
                   handData={handData}
                   isLoading={isHandLoading}
                   error={handError}
                   playerData={gameData?.playerData}
                   activeArea={null}
-                  userDiscordId={user?.discord_id}
+                  userDiscordId={userDiscordId ?? undefined}
                 />
               </Box>
             )}
@@ -269,16 +226,16 @@ export function PannableMapView({ gameId }: Props) {
           enabled={isMobileDevice()}
         >
           <Grid gutter="md" columns={12} style={{ width: "100%" }}>
-            {gameData?.playerData
-              .filter((p) => p.faction !== "null")
-              .map((player) => (
+            {filterPlayersWithAssignedFaction(gameData?.playerData || []).map(
+              (player) => (
                 <Grid.Col
                   key={player.color}
                   span={playerCardLayout === "grid" ? 6 : 12}
                 >
                   <PlayerCardMobile playerData={player} />
                 </Grid.Col>
-              ))}
+              ),
+            )}
           </Grid>
         </ScaledContent>
 
@@ -299,29 +256,12 @@ export function PannableMapView({ gameId }: Props) {
         <ReconnectButton gameDataState={gameDataState} />
       </Box>
 
-      {draft.targetPositionId && (
-        <MovementModeBox
-          gameId={gameId}
-          onCancel={handleCancelMovement}
-          onReset={handleResetMovement}
-          onSuccess={() => setShowSuccessModal(true)}
-        />
-      )}
-
-      <MovementModals
-        showAuthModal={showAuthModal}
-        onCloseAuthModal={() => setShowAuthModal(false)}
-        showSuccessModal={showSuccessModal}
-        onCloseSuccessModal={() => setShowSuccessModal(false)}
-        originModalOpen={originModalOpen}
-        onCloseOriginModal={() => setOriginModalOpen(false)}
-        activeOrigin={activeOrigin}
+      <MovementLayerPortal
+        gameId={gameId}
         tiles={tilesList}
-      />
-
-      <TryUnitDecalsSidebar
-        opened={tryDecalsOpened}
-        onClose={() => setTryDecalsOpened(false)}
+        movementState={movementState}
+        tryDecalsOpened={tryDecalsOpened}
+        setTryDecalsOpened={setTryDecalsOpened}
       />
     </Box>
   );

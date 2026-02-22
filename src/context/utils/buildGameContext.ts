@@ -18,7 +18,10 @@ import {
   getTileController,
   hasTechSkips,
 } from "@/utils/tileDistances";
-import { calculateArmyRankings } from "@/utils/playerUtils";
+import {
+  calculateArmyRankings,
+  filterPlayersWithAssignedFaction,
+} from "@/utils/playerUtils";
 import {
   generateHexagonPoints,
   generateHexagonSides,
@@ -72,13 +75,7 @@ export function buildGameContext(
   accessibleColors: boolean,
   decalOverrides: Record<string, string> = {},
 ): GameData {
-  const playerData = data.playerData.filter(
-    (p) =>
-      p.faction !== "null" &&
-      p.faction !== "" &&
-      p.faction !== undefined &&
-      p.faction !== "neutral",
-  );
+  const playerData = filterPlayersWithAssignedFaction(data.playerData);
 
   const baseFactionToColor = buildFactionToColor(playerData);
   const accessibleOrder = [

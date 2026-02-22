@@ -13,7 +13,7 @@
   left: 20px;
   top: 110px;
   width: 300px;
-  max-height: calc(100vh - 110px);
+  max-height: var(--map-viewport-height);
   height: auto;
   overflow-y: auto;
   overflow-x: hidden;

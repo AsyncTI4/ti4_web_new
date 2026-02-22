@@ -6,23 +6,18 @@ import {
   Box,
   Group,
   ActionIcon,
-  TextInput,
   Button,
 } from "@mantine/core";
-import {
-  IconMap2,
-  IconTarget,
-  IconUsers,
-  IconPencil,
-  IconX,
-} from "@tabler/icons-react";
-import { useRef, useState } from "react";
-// @ts-ignore
+import { IconPencil, IconX } from "@tabler/icons-react";
+// @ts-expect-error -- Logo is a JS module without TS defs
 import Logo from "./Logo";
-// @ts-ignore
+// @ts-expect-error -- DiscordLogin is a JS module without TS defs
 import { DiscordLogin } from "./DiscordLogin";
 import { CircularFactionIcon } from "./shared/CircularFactionIcon";
+import { EditableTabLabel } from "./shared/EditableTabLabel";
 import { generateColorGradient } from "@/lookup/colors";
+import { useTabLabelEditing } from "@/hooks/useTabLabelEditing";
+import { MAIN_TAB_CONFIGS } from "./main/mainTabs";
 
 type EnrichedTab = {
   id: string;
@@ -54,8 +49,8 @@ export function NavigationDrawer({
   onRemoveTab,
   onShowOldUI,
 }: NavigationDrawerProps) {
-  const [editingTab, setEditingTab] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const tabLabelEditing = useTabLabelEditing();
+  const { editingTabId, toggleEditing } = tabLabelEditing;
 
   const handleTabClick = (tab: string) => {
     onTabChange(tab);
@@ -63,28 +58,9 @@ export function NavigationDrawer({
   };
 
   const handleGameClick = (id: string) => {
-    if (editingTab) return;
+    if (editingTabId) return;
     onGameChange(id);
     onClose();
-  };
-
-  const handleEditClick = (tabId: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    if (editingTab === tabId) {
-      if (inputRef.current) {
-        handleTabRename(tabId, inputRef.current.value);
-      }
-      setEditingTab(null);
-    } else {
-      setEditingTab(tabId);
-    }
-  };
-
-  const handleTabRename = (oldTab: string, newTab: string) => {
-    if (oldTab !== newTab) {
-      localStorage.setItem(oldTab, newTab);
-    }
-    setEditingTab(null);
   };
 
   const handleRemoveClick = (tabId: string, event: React.MouseEvent) => {
@@ -129,24 +105,20 @@ export function NavigationDrawer({
         )}
 
         <Stack gap="xs">
-          <NavLink
-            label="Map"
-            leftSection={<IconMap2 size={20} />}
-            active={activeTab === "map"}
-            onClick={() => handleTabClick("map")}
-          />
-          <NavLink
-            label="General"
-            leftSection={<IconTarget size={20} />}
-            active={activeTab === "general"}
-            onClick={() => handleTabClick("general")}
-          />
-          <NavLink
-            label="Player"
-            leftSection={<IconUsers size={20} />}
-            active={activeTab === "players"}
-            onClick={() => handleTabClick("players")}
-          />
+          {MAIN_TAB_CONFIGS.filter(
+            (tab) => tab.includeInDrawer !== false
+          ).map((tab) => {
+            const Icon = tab.Icon;
+            return (
+              <NavLink
+                key={tab.value}
+                label={tab.label}
+                leftSection={<Icon size={20} />}
+                active={activeTab === tab.value}
+                onClick={() => handleTabClick(tab.value)}
+              />
+            );
+          })}
         </Stack>
 
         <Divider />
@@ -161,53 +133,39 @@ export function NavigationDrawer({
             >
               <NavLink
                 label={
-                  editingTab === tab.id ? (
-                    <TextInput
-                      ref={inputRef}
-                      size="xs"
-                      defaultValue={localStorage.getItem(tab.id) || tab.id}
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleTabRename(tab.id, e.currentTarget.value);
-                        } else if (e.key === "Escape") {
-                          handleTabRename(tab.id, tab.id);
-                        }
-                      }}
-                      onBlur={(e) =>
-                        handleTabRename(tab.id, e.currentTarget.value)
-                      }
-                      autoFocus
-                      style={{ flex: 1 }}
-                    />
-                  ) : (
-                    <Group justify="space-between" style={{ width: "100%" }}>
-                      <span>{localStorage.getItem(tab.id) || tab.id}</span>
-                      <Group gap="xs">
-                        <ActionIcon
-                          size="xs"
-                          variant="subtle"
-                          onClick={(event: React.MouseEvent) =>
-                            handleEditClick(tab.id, event)
-                          }
-                        >
-                          <IconPencil size={14} />
-                        </ActionIcon>
-                        {!tab.isManaged && (
+                  <EditableTabLabel
+                    tabId={tab.id}
+                    editingApi={tabLabelEditing}
+                    inputProps={{ style: { flex: 1 } }}
+                    renderDisplay={(displayName) => (
+                      <Group justify="space-between" style={{ width: "100%" }}>
+                        <span>{displayName}</span>
+                        <Group gap="xs">
                           <ActionIcon
                             size="xs"
                             variant="subtle"
-                            color="red"
                             onClick={(event: React.MouseEvent) =>
-                              handleRemoveClick(tab.id, event)
+                              toggleEditing(tab.id, event)
                             }
                           >
-                            <IconX size={14} />
+                            <IconPencil size={14} />
                           </ActionIcon>
-                        )}
+                          {!tab.isManaged && (
+                            <ActionIcon
+                              size="xs"
+                              variant="subtle"
+                              color="red"
+                              onClick={(event: React.MouseEvent) =>
+                                handleRemoveClick(tab.id, event)
+                              }
+                            >
+                              <IconX size={14} />
+                            </ActionIcon>
+                          )}
+                        </Group>
                       </Group>
-                    </Group>
-                  )
+                    )}
+                  />
                 }
                 active={tab.id === gameId}
                 onClick={() => handleGameClick(tab.id)}

@@ -3,50 +3,15 @@ import { getPlanetCoordsBySystemId, getPlanetById } from "@/lookup/planets";
 import { Tile } from "@/context/types";
 import { getAttachmentData } from "@/lookup/attachments";
 import { cdnImage } from "@/data/cdnImage";
+import {
+  getPlanetTraitIconSrc,
+  mergePlanetTraits,
+} from "@/utils/planetTraits";
 
 type Props = {
   systemId: string;
   mapTile: Tile;
 };
-
-type SingleTrait = "cultural" | "hazardous" | "industrial";
-
-const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
-
-function resolveFinalTraits(
-  planetTypes: string[],
-  attachmentPlanetTypes: string[]
-): SingleTrait[] {
-  const traits = new Set<SingleTrait>();
-  for (const t of planetTypes) {
-    const key = t.toLowerCase();
-    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
-  }
-  for (const t of attachmentPlanetTypes) {
-    const key = t.toLowerCase();
-    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
-  }
-  return Array.from(traits);
-}
-
-function getTraitIconSrc(traits: SingleTrait[]): string | null {
-  if (traits.length === 0) return null;
-
-  if (traits.length === 1) {
-    return `/planet_attributes/pc_attribute_${traits[0]}.png`;
-  }
-
-  const hasC = traits.includes("cultural");
-  const hasH = traits.includes("hazardous");
-  const hasI = traits.includes("industrial");
-
-  const allThree = hasC && hasH && hasI;
-  const suffix = allThree
-    ? "CHI"
-    : `${hasC ? "C" : ""}${hasH ? "H" : ""}${hasI ? "I" : ""}`;
-
-  return cdnImage(`/planet_cards/pc_attribute_combo_${suffix}.png`);
-}
 
 export function PlanetTraitIconsLayer({ systemId, mapTile }: Props) {
   const planetCoords = getPlanetCoordsBySystemId(systemId);
@@ -104,14 +69,14 @@ export function PlanetTraitIconsLayer({ systemId, mapTile }: Props) {
             })
             .flat() || [];
 
-        const finalTraits = resolveFinalTraits(
+        const finalTraits = mergePlanetTraits(
           planetTypes,
           attachmentPlanetTypes
         );
 
         if (finalTraits.length === 0) return null;
 
-        const iconSrc = getTraitIconSrc(finalTraits);
+        const iconSrc = getPlanetTraitIconSrc(finalTraits);
         if (!iconSrc) return null;
 
         return (

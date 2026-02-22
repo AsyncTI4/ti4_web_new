@@ -31,18 +31,25 @@ export function setLocalUser(user: LocalUser): void {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
+function createAnonymousUser(): LocalUser {
+  const newUser: LocalUser = {
+    id: uuidv4(),
+    authenticated: false,
+  };
+  setLocalUser(newUser);
+  return newUser;
+}
+
+export function ensureLocalUser(): LocalUser {
+  return getLocalUser() ?? createAnonymousUser();
+}
+
 export function useUser(): { user: LocalUser | null; resetUser: () => void } {
   const [user, setUser] = useState<LocalUser | null>(getLocalUser());
 
   useEffect(() => {
     if (user) return;
-
-    const newUser: LocalUser = {
-      id: uuidv4(),
-      authenticated: false,
-    };
-    localStorage.setItem("user", JSON.stringify(newUser));
-    setUser(newUser);
+    setUser(ensureLocalUser());
   }, [user]);
 
   const resetUser = () => {

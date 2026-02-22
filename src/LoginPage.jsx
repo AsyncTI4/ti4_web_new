@@ -1,7 +1,10 @@
 import { redirect, useLoaderData } from "react-router-dom";
-import { getLocalUser, setLocalUser } from "./hooks/useUser";
+import {
+  ensureLocalUser,
+  getLocalUser,
+  setLocalUser,
+} from "./hooks/useUser";
 import { getBotApiUrl } from "./api";
-import { v4 as uuidv4 } from "uuid";
 
 async function login(code, userId) {
   const apiUrl = getBotApiUrl("/public/auth/login");
@@ -27,9 +30,7 @@ export async function loginLoader({ request }) {
   const code = url.searchParams.get("code");
   let user = getLocalUser();
   if (!user) {
-    const newUser = { id: uuidv4(), authenticated: false };
-    setLocalUser(newUser);
-    user = newUser;
+    user = ensureLocalUser();
   }
 
   if (code) {

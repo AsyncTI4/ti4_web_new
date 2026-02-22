@@ -17,6 +17,7 @@ import { Planet } from "@/data/types";
 import { IconValue } from "@/components/shared/primitives/IconValue";
 import { useAppStore } from "@/utils/appStore";
 import { useDisclosure } from "@/hooks/useDisclosure";
+import { mergePlanetTraits, type PlanetTrait } from "@/utils/planetTraits";
 
 type Props = {
   planetId: string;
@@ -47,7 +48,7 @@ export function PlanetCard({
   }
 
   const attachmentModifiers = calculateAttachmentModifiers(resolvedAttachments);
-  const finalTraits = resolveFinalTraits(
+  const finalTraits = mergePlanetTraits(
     planetData.planetTypes ||
       (planetData.planetType ? [planetData.planetType] : []),
     attachmentModifiers.planetTypes
@@ -273,7 +274,6 @@ function getCSSVariables(planetType: string) {
   };
 }
 
-const VALID_PLANET_TYPES = new Set(["cultural", "hazardous", "industrial"]);
 const VALID_CSS_TYPES = new Set([
   "cultural",
   "hazardous",
@@ -289,8 +289,6 @@ const VALID_TECH_SPECIALTIES = new Set([
   "cybernetic",
   "warfare",
 ]);
-
-type SingleTrait = "cultural" | "hazardous" | "industrial";
 
 const getTechSkipIconKey = (techSpecialty: string): string | null => {
   const lowercase = techSpecialty.toLowerCase();
@@ -310,7 +308,7 @@ function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
 
 type PlanetIconProps = {
   planetData: Planet;
-  finalTraits: SingleTrait[];
+  finalTraits: PlanetTrait[];
 };
 
 function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
@@ -329,25 +327,7 @@ function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
   return <PlanetTraitIcon traits={finalTraits} />;
 }
 
-function resolveFinalTraits(
-  planetTypes: string[],
-  attachmentPlanetTypes: string[]
-): SingleTrait[] {
-  const traits = new Set<SingleTrait>();
-  // Add planet types from planet data
-  for (const t of planetTypes) {
-    const key = t.toLowerCase();
-    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
-  }
-  // Add planet types from attachments
-  for (const t of attachmentPlanetTypes) {
-    const key = t.toLowerCase();
-    if (VALID_PLANET_TYPES.has(key)) traits.add(key as SingleTrait);
-  }
-  return Array.from(traits);
-}
-
-function resolveCssTypeKey(finalTraits: SingleTrait[]) {
+function resolveCssTypeKey(finalTraits: PlanetTrait[]) {
   if (finalTraits.length !== 1) return "default";
   return finalTraits[0];
 }
