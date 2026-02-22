@@ -1,4 +1,4 @@
-import { EntityData, FactionUnits, PlanetEntityData } from "@/data/types";
+import { EntityData, FactionUnits, PlanetEntityData } from "@/entities/data/types";
 import { HexagonVertex } from "../hitbox";
 import { SPACE_HEAT_CONFIG, GROUND_HEAT_CONFIG } from "./constants";
 

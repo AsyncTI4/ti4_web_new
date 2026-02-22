@@ -1,5 +1,5 @@
-import { tileAdjacencies } from "@/data/tileAdjacencies";
-import type { Tile } from "@/context/types";
+import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
+import type { Tile } from "@/app/providers/context/types";
 import { getHyperlaneActiveSides, isHyperlane } from "@/utils/hyperlaneUtils";
 
 export type ControlOpenSides = Record<string, number[]>;

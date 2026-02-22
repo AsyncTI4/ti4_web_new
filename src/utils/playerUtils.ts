@@ -1,4 +1,4 @@
-import { PlayerData } from "@/data/types";
+import { PlayerData } from "@/entities/data/types";
 
 const INVALID_FACTION_VALUES = new Set(["", "null", "neutral"]);
 

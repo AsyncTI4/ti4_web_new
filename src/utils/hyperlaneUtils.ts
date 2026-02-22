@@ -1,4 +1,4 @@
-import { hyperlaneIds, hyperlanes } from "@/data/hyperlanes";
+import { hyperlaneIds, hyperlanes } from "@/entities/data/hyperlanes";
 
 export const isHyperlane = (systemId: string | undefined) =>
   !!systemId && hyperlaneIds.includes(systemId);

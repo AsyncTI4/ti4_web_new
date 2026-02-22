@@ -1,8 +1,8 @@
-import { tileAdjacencies } from "../data/tileAdjacencies";
-import { getTileById } from "../mapgen/systems";
-import { getTokenData } from "../lookup/tokens";
-import { Tile, TilePlanet } from "@/context/types";
-import { PlayerDataResponse, TileUnitData, EntityData } from "@/data/types";
+import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
+import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTokenData } from "@/entities/lookup/tokens";
+import { Tile, TilePlanet } from "@/app/providers/context/types";
+import { PlayerDataResponse, TileUnitData, EntityData } from "@/entities/data/types";
 import {
   getConnectingSide,
   getHyperlaneConnections,

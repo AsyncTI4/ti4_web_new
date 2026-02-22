@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlayerHandData } from "../types/playerHand";
-import { authenticatedFetch, getBotApiUrl } from "../api";
+import { PlayerHandData } from "@/shared/types/playerHand";
+import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 import { useSecretHandAccess } from "./useSecretHandAccess";
 
 const fetchPlayerHand = async (gameId: string): Promise<PlayerHandData> => {

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { authenticatedFetch, getBotApiUrl } from "../api";
+import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 import { usePersistentGameTabs } from "./usePersistentGameTabs";
 
 type PlayerGame = {

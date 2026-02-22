@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NewMapUI from "./NewMapUI";
-// @ts-ignore
-import { GamePage } from "./GamePage";
+import { GamePage } from "./image-map/pages/GamePage";
 
 type Props = {
   pannable?: boolean;

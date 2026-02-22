@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { PlayerData } from "@/data/types";
+import type { PlayerData } from "@/entities/data/types";
 import { usePlayerHand } from "./usePlayerHand";
 import { useSecretHandAccess } from "./useSecretHandAccess";
 

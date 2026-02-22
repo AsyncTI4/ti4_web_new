@@ -1,5 +1,5 @@
 import { PathResult } from "./tileDistances";
-import type { TilePosition as CalcTilePosition } from "../mapgen/tilePositioning";
+import type { TilePosition as CalcTilePosition } from "@/domains/map/model/mapgen/tilePositioning";
 
 export type PathPoint = {
   x: number;
@@ -17,9 +17,7 @@ export function createPositionMap(
 ): Map<string, { x: number; y: number }> {
   const map = new Map<string, { x: number; y: number }>();
   tilePositions.forEach((tile) => {
-    // Key by unique ring position
-    // @ts-ignore ringPosition exists on CalcTilePosition
-    const key = (tile as any).ringPosition as string;
+    const key = tile.ringPosition;
     map.set(key, { x: tile.x, y: tile.y });
   });
   return map;

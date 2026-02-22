@@ -1,4 +1,4 @@
-import { EntityData } from "@/data/types";
+import { EntityData } from "@/entities/data/types";
 import { gridToPixel } from "./coordinateUtils";
 import { EntityStack, EntityStackBase, HeatSource } from "./types";
 import { calculatePlanetHeat } from "./heatMap";

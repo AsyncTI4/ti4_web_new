@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { authenticatedFetch, getBotApiUrl } from "../api";
+import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 
 async function requestMapRefresh(gameId: string): Promise<void> {
   const apiUrl = getBotApiUrl(`/public/game/${gameId}/refresh`);

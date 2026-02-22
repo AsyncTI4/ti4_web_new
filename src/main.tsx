@@ -13,9 +13,7 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-// @ts-ignore
-import GamePage from "./GamePage";
-// @ts-ignore
+import GamePage from "./image-map/pages/GamePage";
 import GamesPage from "./GamesPage";
 import {
   createTheme,
@@ -24,14 +22,11 @@ import {
   MantineColorsTuple,
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// @ts-ignore
 import LoginPage, { loginLoader } from "./LoginPage";
-// @ts-ignore
-import FrogGamePage from "./FrogGamePage";
-// @ts-ignore
+import FrogGamePage from "./image-map/pages/FrogGamePage";
 import LandingPage from "./LandingPage";
 import MapTogglePage from "./MapTogglePage";
-import { SystemTilePage } from "./components/SystemTilePage/SystemTilePage";
+import { SystemTilePage } from "./domains/map/components/SystemTilePage/SystemTilePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
 
 const queryClient = new QueryClient();

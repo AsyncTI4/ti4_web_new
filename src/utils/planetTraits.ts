@@ -1,4 +1,4 @@
-import { cdnImage } from "@/data/cdnImage";
+import { cdnImage } from "@/entities/data/cdnImage";
 
 export type PlanetTrait = "cultural" | "hazardous" | "industrial";
 

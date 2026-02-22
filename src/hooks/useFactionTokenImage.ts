@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { getFactionImage } from "@/lookup/factions";
+import { getFactionImage } from "@/entities/lookup/factions";
 import { useFactionImages } from "./useFactionImages";
 
 export function useFactionTokenImage(faction?: string) {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { config } from "../config";
-import { authenticatedFetch } from "../api";
+import { authenticatedFetch } from "@/domains/auth/api";
 import { getLocalUser } from "./useUser";
 
 export type MapImageError = {

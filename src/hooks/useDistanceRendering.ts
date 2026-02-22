@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { calculateOptimalPaths, PathResult } from "../utils/tileDistances";
 
-import { Tile } from "@/context/types";
+import { Tile } from "@/app/providers/context/types";
 
 type UseDistanceRenderingProps = {
   distanceMode: boolean;

@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppShell, Box, Tabs, SimpleGrid } from "@mantine/core";
-import { MapHeaderSwitch } from "./components/shared/MapHeaderSwitch";
-import "./components/ScrollMap.css";
-// @ts-ignore
+import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
 import * as dragscroll from "dragscroll";
-import classes from "./components/MapUI.module.css";
-import ScoreBoard from "./components/ScoreBoard";
-import { UpdateNeededScreen } from "./components/UpdateNeededScreen";
-import { SettingsProvider } from "./context/SettingsContext";
-import { SettingsModal } from "./components/SettingsModal";
-import { KeyboardShortcutsModal } from "./components/KeyboardShortcutsModal";
-import { GameContextProvider } from "./context/GameContextProvider";
+import classes from "@/shared/ui/map/MapUI.module.css";
+import ScoreBoard from "./domains/player/components/composition/ScoreBoard";
+import { UpdateNeededScreen } from "./domains/game-shell/components/chrome/UpdateNeededScreen";
+import { SettingsProvider } from "@/app/providers/context/SettingsContext";
+import { SettingsModal } from "./domains/settings/components/SettingsModal";
+import { KeyboardShortcutsModal } from "./domains/game-shell/components/KeyboardShortcutsModal";
+import { GameContextProvider } from "@/app/providers/context/GameContextProvider";
 import { useSettingsStore } from "./utils/appStore";
 import {
   useGameData as useGameContext,
   useGameDataState,
 } from "./hooks/useGameContext";
-import PlayerCard from "./components/PlayerCard";
-import { TabsControls } from "./components/main/TabsControls";
+import PlayerCard from "./domains/player/components/composition/PlayerCard";
+import { TabsControls } from "./domains/game-shell/components/main/TabsControls";
 import { useTabManagementV2 } from "./hooks/useTabManagementV2";
-import GeneralArea from "./components/General/GeneralArea";
-import { PannableMapView } from "./components/main/MapView/PannableMapView";
-import { MapView } from "./components/main/MapView";
-import ChangeLogModal from "./components/ChangeLogModal/ChangeLogModal";
+import GeneralArea from "./domains/game-shell/components/General/GeneralArea";
+import { PannableMapView } from "./domains/map/components/MapView/PannableMapView";
+import { MapView } from "./domains/map/components/MapView";
+import ChangeLogModal from "./domains/changelog/components/ChangeLogModal/ChangeLogModal";
 import {
   CHANGELOG_090,
   CURRENT_CHANGELOG_VERSION,
-} from "./components/ChangeLogModal/changelogData";
-import { MapViewSelectionModal } from "./components/MapViewSelectionModal";
+} from "./domains/changelog/components/ChangeLogModal/changelogData";
+import { MapViewSelectionModal } from "./domains/game-shell/components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
-import { NavigationDrawer } from "./components/NavigationDrawer";
+import { NavigationDrawer } from "./domains/game-shell/components/navigation/NavigationDrawer";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
-import { PlayerDataErrorAlert } from "./components/shared/PlayerDataErrorAlert";
+import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
-import { MAIN_TAB_CONFIGS } from "./components/main/mainTabs";
-import { TabPanelSection } from "./components/main/TabPanelSection";
+import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/main/mainTabs";
+import { TabPanelSection } from "./domains/game-shell/components/main/TabPanelSection";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;

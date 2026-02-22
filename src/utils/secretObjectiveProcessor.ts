@@ -1,5 +1,5 @@
-import { PlayerData, SecretObjective } from "@/data/types";
-import { getSecretObjectiveData } from "@/lookup/secretObjectives";
+import { PlayerData, SecretObjective } from "@/entities/data/types";
+import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 
 export type SecretObjectiveWithPhase = SecretObjective & {
   phaseColor: "red" | "blue" | "orange";

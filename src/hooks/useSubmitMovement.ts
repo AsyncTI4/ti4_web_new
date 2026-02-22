@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { authenticatedFetch, getBotApiUrl } from "../api";
+import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 
 export type MovementPayload = {
   targetPosition: string;

@@ -1,4 +1,4 @@
-import { FactionUnits } from "@/data/types";
+import { FactionUnits } from "@/entities/data/types";
 import {
   GROUND_HEAT_CONFIG,
   DEFAULT_PLANET_RADIUS,
@@ -25,7 +25,7 @@ import {
   createPlacementFromCoords,
   tokenToEntityStack,
 } from "./placementHelpers";
-import { TilePlanet } from "@/context/types";
+import { TilePlanet } from "@/app/providers/context/types";
 
 const GRID_CONFIG: GridDimensions = {
   gridSize: HEX_GRID_SIZE,

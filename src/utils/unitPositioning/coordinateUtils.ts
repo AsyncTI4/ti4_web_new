@@ -1,4 +1,4 @@
-import { getPlanetById, getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getPlanetById, getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import {
   HEX_GRID_WIDTH,
   HEX_GRID_HEIGHT,

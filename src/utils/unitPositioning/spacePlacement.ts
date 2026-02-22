@@ -1,10 +1,10 @@
-import { EntityData, FactionUnits } from "@/data/types";
+import { EntityData, FactionUnits } from "@/entities/data/types";
 import { SPACE_HEAT_CONFIG, DEFAULT_PLANET_RADIUS } from "./constants";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { placeEntitiesWithCostMap } from "./placement";
 import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
-import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import {
   GridDimensions,
   createHeatSourceFromSquare,

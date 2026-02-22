@@ -1,9 +1,9 @@
 // Color optimization utilities for maximizing color distance while minimizing changes
 
-import { colors } from "@/data/colors";
-import { getColorValues } from "@/lookup/colors";
-import { PlayerDataResponse } from "@/data/types";
-import type { FactionColorMap } from "@/context/types";
+import { colors } from "@/entities/data/colors";
+import { getColorValues } from "@/entities/lookup/colors";
+import { PlayerDataResponse } from "@/entities/data/types";
+import type { FactionColorMap } from "@/app/providers/context/types";
 
 export type RGBColor = {
   red: number;

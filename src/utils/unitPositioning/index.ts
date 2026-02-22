@@ -1,5 +1,5 @@
-import { getTokenData } from "@/lookup/tokens";
-import { getPlanetCoordsBySystemId } from "@/lookup/planets";
+import { getTokenData } from "@/entities/lookup/tokens";
+import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import {
   HEX_GRID_SIZE,
   HEX_SQUARE_WIDTH,
@@ -16,7 +16,7 @@ import { calculatePlanetHeat } from "./heatMap";
 import { processPlanetEntities } from "./planetPlacement";
 import { placeSpaceEntities } from "./spacePlacement";
 import { EntityStack } from "./types";
-import { PrePlacementTile } from "@/context/types";
+import { PrePlacementTile } from "@/app/providers/context/types";
 
 export const getAllEntityPlacementsForTile = (
   systemId: string,

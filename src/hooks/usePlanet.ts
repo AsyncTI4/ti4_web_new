@@ -1,4 +1,4 @@
-import { TilePlanet } from "@/context/types";
+import { TilePlanet } from "@/app/providers/context/types";
 import { useGameData } from "./useGameContext";
 
 export function usePlanet(planetId: string): TilePlanet | undefined {

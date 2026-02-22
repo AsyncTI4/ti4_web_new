@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PlayerData } from "../data/types";
+import { PlayerData } from "@/entities/data/types";
 
 /**
  * Custom hook that provides consistent faction ordering across all components.

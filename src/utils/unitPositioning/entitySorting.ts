@@ -1,4 +1,4 @@
-import { EntityData, FactionUnits } from "@/data/types";
+import { EntityData, FactionUnits } from "@/entities/data/types";
 import { entityIdPriority } from "./constants";
 import { gridToPixel } from "./coordinateUtils";
 import { EntityStackBase, HeatSource } from "./types";

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { PlayerDataResponse } from "../data/types";
+import { PlayerDataResponse } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
 import { useRef } from "react";
 import { config } from "@/config";

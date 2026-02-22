@@ -1,6 +1,6 @@
-import { PlayerDataResponse } from "@/data/types";
-import { getPlanetData } from "@/lookup/planets";
-import { getAttachmentData } from "@/lookup/attachments";
+import { PlayerDataResponse } from "@/entities/data/types";
+import { getPlanetData } from "@/entities/lookup/planets";
+import { getAttachmentData } from "@/entities/lookup/attachments";
 
 export function isOceanPlanet(planetId: string): boolean {
   return planetId.startsWith("ocean");

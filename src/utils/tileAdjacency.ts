@@ -1,4 +1,4 @@
-import { tileAdjacencies } from "../data/tileAdjacencies";
+import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
 
 /**
  * Core logic: Determine which hex sides should be "open" (sparse borders) vs "closed" (solid borders)

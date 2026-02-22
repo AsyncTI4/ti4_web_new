@@ -1,4 +1,4 @@
-import type { Leader, BreakthroughData } from "@/data/types";
+import type { Leader, BreakthroughData } from "@/entities/data/types";
 
 /**
  * Determines if the Xxcha faction has the flex spend ability unlocked.

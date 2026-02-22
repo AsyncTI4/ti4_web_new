@@ -1,4 +1,4 @@
-import type { PlayerDataResponse, EntityData } from "@/data/types";
+import type { PlayerDataResponse, EntityData } from "@/entities/data/types";
 import type { DisplacementDraft, UnitCounts } from "@/utils/movementStore";
 
 /**

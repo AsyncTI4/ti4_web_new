@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { PlayerData } from "@/data/types";
+import type { PlayerData } from "@/entities/data/types";
 import { hasXxchaFlexSpendAbility } from "@/utils/xxchaFlexSpend";
 
 export function usePlanetEconomics(playerData: PlayerData) {

@@ -1,4 +1,4 @@
-import type { PlayerData } from "@/data/types";
+import type { PlayerData } from "@/entities/data/types";
 import { useUser } from "./useUser";
 import { useGameData } from "./useGameContext";
 
