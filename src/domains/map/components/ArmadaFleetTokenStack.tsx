@@ -1,18 +1,19 @@
 import { cdnImage } from "@/entities/data/cdnImage";
 import { FleetTokenStackBase } from "./FleetTokenStackBase";
 
-type LetnevFleetTokenStackProps = {
+type ArmadaFleetTokenStackProps = {
   count: number;
   colorAlias: string;
   faction: string;
 };
 
-export function LetnevFleetTokenStack({
+export function ArmadaFleetTokenStack({
   count,
   colorAlias,
   faction,
-}: LetnevFleetTokenStackProps) {
-  const totalCount = count + 2; // Always add 2 for Letnev
+}: ArmadaFleetTokenStackProps) {
+  // Armada increases effective fleet capacity by 2.
+  const totalCount = count + 2;
 
   return (
     <FleetTokenStackBase
@@ -25,7 +26,7 @@ export function LetnevFleetTokenStack({
         <>
           {Array.from({ length: 2 }).map((_, index) => (
             <div
-              key={`letnev-armada-${index}`}
+              key={`armada-fleet-token-${index}`}
               style={{
                 position: "absolute",
                 left: baseCount * 20 + 20 + index * 20,

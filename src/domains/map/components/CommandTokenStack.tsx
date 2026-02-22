@@ -1,6 +1,6 @@
 import { Box, Text } from "@mantine/core";
 import { CommandCounter } from "./CommandCounter";
-import { LetnevFleetTokenStack } from "./LetnevFleetTokenStack";
+import { ArmadaFleetTokenStack } from "./ArmadaFleetTokenStack";
 import { MahactFleetTokenStack } from "./MahactFleetTokenStack";
 
 type CommandTokenStackProps = {
@@ -9,6 +9,7 @@ type CommandTokenStackProps = {
   faction: string;
   type: "command" | "fleet";
   mahactEdict?: string[];
+  hasArmadaBonus?: boolean;
 };
 
 export function CommandTokenStack({
@@ -17,12 +18,13 @@ export function CommandTokenStack({
   faction,
   type,
   mahactEdict = [],
+  hasArmadaBonus = false,
 }: CommandTokenStackProps) {
   // Use specialized components for fleet tokens
   if (type === "fleet") {
-    if (faction === "letnev") {
+    if (hasArmadaBonus) {
       return (
-        <LetnevFleetTokenStack
+        <ArmadaFleetTokenStack
           count={count}
           colorAlias={colorAlias}
           faction={faction}

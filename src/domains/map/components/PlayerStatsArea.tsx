@@ -99,6 +99,16 @@ export function PlayerStatsArea({
   const numScoredSecrets = playerData.secretsScored
     ? Object.values(playerData.secretsScored).length
     : 0;
+  const hasArmadaBonus = (() => {
+    const normalize = (id: string) => id.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const abilityIds = playerData.abilities ?? [];
+    const techIds = [...(playerData.techs ?? []), ...(playerData.factionTechs ?? [])];
+
+    return [...abilityIds, ...techIds].some((id) => {
+      const normalized = normalize(id);
+      return normalized === "armada" || normalized === "tfarmada";
+    });
+  })();
 
   if (tilePositions.length === 0) return null;
 
@@ -251,6 +261,7 @@ export function PlayerStatsArea({
                 faction={faction}
                 type="fleet"
                 mahactEdict={playerData.mahactEdict}
+                hasArmadaBonus={hasArmadaBonus}
               />
               <CommandTokenStack
                 count={playerData.strategicCC}
