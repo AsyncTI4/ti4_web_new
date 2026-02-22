@@ -225,6 +225,11 @@ h6 {
   );
 }
 
+.banAppealsSection {
+  background: var(--landing-bg-primary);
+  border-top: 1px solid var(--landing-border-subtle);
+}
+
 /* ============================================
    LIST ITEMS - How it works section
    ============================================ */

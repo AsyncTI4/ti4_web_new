@@ -1,4 +1,5 @@
 import {
+  Anchor,
   AppShell,
   Box,
   Button,
@@ -247,6 +248,54 @@ export default function LandingPage() {
                   height="600px"
                 />
               </Surface>
+            </Container>
+          </Box>
+          <Box pt={80} pb={80} className="enhancedSection banAppealsSection">
+            <Container size={800} style={{ position: "relative", zIndex: 1 }}>
+              <Stack align="center" gap="md">
+                <Title
+                  order={2}
+                  ta="center"
+                  size={36}
+                  c="gray.4"
+                  className="space-title"
+                >
+                  Server Ban Appeals
+                </Title>
+                <Text size="md" c="gray.5" ta="center" maw={620}>
+                  If you have been banned from the AsyncTI4 Discord server and
+                  believe the ban was issued in error, or you would like to
+                  request reconsideration, you may submit an appeal using the
+                  form below. Our moderation team reviews all submissions and
+                  will follow up with you directly.
+                </Text>
+                <Button
+                  component="a"
+                  href="https://forms.gle/o5D9JoXTbxpXEQfT9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="md"
+                  variant="outline"
+                  color="gray"
+                  mt="sm"
+                >
+                  Submit a Ban Appeal
+                </Button>
+                <Text size="xs" c="gray.6" ta="center">
+                  Appeals are only for bans from the{" "}
+                  <Anchor
+                    href="https://discord.gg/asyncti4"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    c="gray.5"
+                    size="xs"
+                  >
+                    AsyncTI4 Discord server
+                  </Anchor>
+                  . Do not use this form to report bugs or request game
+                  support.
+                </Text>
+              </Stack>
             </Container>
           </Box>
         </Stack>
