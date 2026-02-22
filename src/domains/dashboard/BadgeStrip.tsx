@@ -20,33 +20,6 @@ const BADGE_ICONS: Record<string, React.ComponentType<{ size: number }>> = {
   galactic_metamorph: IconShape,
 };
 
-const BADGE_METRIC_LABELS: Record<string, { unit: string; flavor: string }> = {
-  fleet_logistics: {
-    unit: "turns taken",
-    flavor: "Rapid operational tempo",
-  },
-  from_the_brink: {
-    unit: "clutch finishes",
-    flavor: "Wins at match point",
-  },
-  galactic_endurance: {
-    unit: "marathon games finished",
-    flavor: "Campaigns over 180 days",
-  },
-  speakers_hand: {
-    unit: "diplomacy titles earned",
-    flavor: "Table influence broker",
-  },
-  twilight_strategist: {
-    unit: "late-night sessions",
-    flavor: "Active in twilight hours",
-  },
-  galactic_metamorph: {
-    unit: "unique faction wins",
-    flavor: "Adapts across identities",
-  },
-};
-
 function badgeColorClass(key: string) {
   const safe = key.replace(/-/g, "_");
   return classes[`badge_${safe}` as keyof typeof classes] ?? "";
@@ -63,14 +36,20 @@ function tierClasses(tier: BadgeAward["tier"]) {
   }
 }
 
-function scorePercent(badge: BadgeAward) {
-  if (badge.threshold == null || badge.threshold === 0 || badge.score == null) return 100;
-  return Math.min(100, (badge.score / badge.threshold) * 100);
+function formatMetric(value: number, unit: string) {
+  if (unit === "seconds") {
+    if (value < 60) return `${Math.round(value)}s`;
+    if (value < 3600) return `${Math.round(value / 60)}m`;
+    return `${(value / 3600).toFixed(1)}h`;
+  }
+  if (unit === "ratio") return `${(value * 100).toFixed(1)}%`;
+  if (Number.isInteger(value)) return `${value}`;
+  return value.toFixed(2);
 }
 
-function isOverThreshold(badge: BadgeAward) {
-  if (badge.threshold == null || badge.score == null) return false;
-  return badge.score > badge.threshold;
+function requirementPercent(current: number, target: number) {
+  if (target <= 0) return 100;
+  return Math.min(100, (current / target) * 100);
 }
 
 type Props = {
@@ -85,8 +64,8 @@ export function BadgeStrip({ badges }: Props) {
       {badges.map((badge) => {
         const Icon = BADGE_ICONS[badge.key] ?? IconBolt;
         const tier = tierClasses(badge.tier);
-        const meta = BADGE_METRIC_LABELS[badge.key];
-        const overflow = isOverThreshold(badge);
+        const primary = badge.primaryMetric;
+        const firstRequirement = badge.requirements[0];
 
         return (
           <div
@@ -110,24 +89,38 @@ export function BadgeStrip({ badges }: Props) {
                 </Stack>
               </Group>
 
-              {badge.score != null && meta && (
+              {primary && (
                 <div className={classes.metric}>
-                  <span className={classes.metricValue}>{badge.score}</span>
-                  <span className={classes.metricLabel}>{meta.unit}</span>
-                  {badge.threshold != null && (
-                    <span className={classes.metricThreshold}>
-                      / {badge.threshold} req
-                    </span>
-                  )}
+                  <span className={classes.metricValue}>
+                    {formatMetric(primary.value, primary.unit)}
+                  </span>
+                  <span className={classes.metricLabel}>{primary.label}</span>
                 </div>
               )}
 
-              {meta && <div className={classes.badgeDesc}>{meta.flavor}</div>}
+              <Stack gap={2}>
+                {badge.requirements.map((req, idx) => (
+                  <div
+                    key={`${badge.key}-${idx}`}
+                    className={classes.badgeDesc}
+                    style={{ color: req.met ? "var(--mantine-color-green-4)" : "var(--mantine-color-gray-5)" }}
+                  >
+                    {req.label}: {formatMetric(req.current, req.unit)} / {formatMetric(req.target, req.unit)}
+                  </div>
+                ))}
+              </Stack>
 
-              <div className={cx(classes.scoreBar, overflow && classes.scoreOverflow)}>
+              <div className={classes.badgeDesc}>{badge.summary}</div>
+              <div className={classes.badgeDesc}>{badge.tierRuleText}</div>
+
+              <div className={classes.scoreBar}>
                 <div
                   className={classes.scoreFill}
-                  style={{ width: `${scorePercent(badge)}%` }}
+                  style={{
+                    width: firstRequirement
+                      ? `${requirementPercent(firstRequirement.current, firstRequirement.target)}%`
+                      : "100%",
+                  }}
                 />
               </div>
             </Stack>

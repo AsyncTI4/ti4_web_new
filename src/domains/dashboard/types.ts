@@ -31,9 +31,24 @@ export type BadgeAward = {
   name: string;
   tier: "SILVER" | "GOLD" | "LEGENDARY";
   description: string;
-  score: number | null;
-  threshold: number | null;
-  ratio: number | null;
+  primaryMetric: BadgeMetric;
+  requirements: BadgeRequirement[];
+  summary: string;
+  tierRuleText: string;
+};
+
+export type BadgeMetric = {
+  label: string;
+  value: number;
+  unit: "seconds" | "count" | "ratio" | string;
+};
+
+export type BadgeRequirement = {
+  label: string;
+  current: number;
+  target: number;
+  unit: "seconds" | "count" | "ratio" | string;
+  met: boolean;
 };
 
 export type ImperialDoctrine = {
