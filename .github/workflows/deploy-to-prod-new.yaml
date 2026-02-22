@@ -36,9 +36,9 @@ jobs:
       - name: Download data files from S3
         run: |
           echo "Downloading TypeScript data files from S3..."
-          aws s3 sync s3://bot-images-asyncti4.com/web_data/ src/data/ --exclude "*" --include "*.ts"
+          aws s3 sync s3://bot-images-asyncti4.com/web_data/ src/entities/data/ --exclude "*" --include "*.ts"
           echo "Files downloaded and replaced:"
-          ls -lh src/data/*.ts | awk '{print $9}' | xargs -I {} sh -c 'echo "  [REPLACED] {}"'
+          ls -lh src/entities/data/*.ts | awk '{print $9}' | xargs -I {} sh -c 'echo "  [REPLACED] {}"'
 
       - name: Build app
         run: yarn build
