@@ -35,8 +35,21 @@ import { StatDisplay } from "@/shared/ui/primitives/StatDisplay";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
 import { BadgeStrip } from "./BadgeStrip";
+import { getTechData } from "@/entities/lookup/tech";
 
 import classes from "./DashboardPage.module.css";
+
+const TECH_TYPE_COLORS: Record<string, string> = {
+  BIOTIC: classes.techBiotic,
+  PROPULSION: classes.techPropulsion,
+  CYBERNETIC: classes.techCybernetic,
+  WARFARE: classes.techWarfare,
+};
+
+function techTypeColorClass(type?: string) {
+  if (!type) return "";
+  return TECH_TYPE_COLORS[type] ?? "";
+}
 
 type StatusFilter = "all" | "active" | "finished" | "abandoned";
 
@@ -153,6 +166,15 @@ export default function DashboardPage() {
   const filteredGames = data.games.filter((g) => statusFilterMatch(g, filter));
   const diceRatio = data.profile.diceLuck.ratio;
   const diceGood = diceRatio != null && diceRatio >= 1;
+  const topResearchedTechs = Object.entries(data.profile.aggregates.techStats.byTech)
+    .sort((a, b) => {
+      if (b[1].gamesWithTech !== a[1].gamesWithTech) {
+        return b[1].gamesWithTech - a[1].gamesWithTech;
+      }
+      return b[1].percentInEligibleGames - a[1].percentInEligibleGames;
+    })
+    .slice(0, 8);
+  const hasTopResearchedTechs = topResearchedTechs.length > 0;
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -245,6 +267,54 @@ export default function DashboardPage() {
 
           {/* ── Badges ── */}
           <BadgeStrip badges={data.profile.insights.badges} />
+
+          {hasTopResearchedTechs && (
+            <Panel variant="elevated" className={classes.sectionCard}>
+              <div className={classes.sectionHeader}>
+                <Group gap={6}>
+                  <IconCrosshair size={16} color="var(--mantine-color-blue-4)" />
+                  <Caption size="sm">Top Researched Techs</Caption>
+                </Group>
+                <Chip accent="blue" size="xs">
+                  <Text size="10px" fw={700} c="white">
+                    {data.profile.aggregates.eligibleGameCount} Eligible
+                  </Text>
+                </Chip>
+              </div>
+              <FadedDivider orientation="horizontal" />
+              <div className={classes.techTopGrid}>
+                {topResearchedTechs.map(([techId, stat]) => {
+                  const tech = getTechData(techId);
+                  const techName = tech?.name ?? techId;
+                  const colorClass = techTypeColorClass(tech?.types[0]);
+                  return (
+                    <div key={techId} className={cx(classes.techTopItem, colorClass)}>
+                      <div className={classes.techTopHeader}>
+                        <span className={classes.techTypePip} />
+                        <span className={classes.techName} title={techName}>
+                          {techName}
+                        </span>
+                      </div>
+                      <div className={classes.techTopMeta}>
+                        <span className={classes.techGames}>
+                          {stat.gamesWithTech} game{stat.gamesWithTech === 1 ? "" : "s"}
+                        </span>
+                        <span className={classes.techPercent}>
+                          {stat.percentInEligibleGames.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className={classes.techBar}>
+                        <div
+                          className={classes.techBarFill}
+                          style={{ width: `${Math.min(100, stat.percentInEligibleGames)}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Panel>
+          )}
 
           {/* ── Middle: Titles / Game Index / Combat Form ── */}
           <div className={classes.middleGrid}>

@@ -12,6 +12,7 @@ export type PlayerProfile = {
   titles: TitleSummary;
   diceLuck: DiceLuckSummary;
   insights: PlayerInsights;
+  aggregates: PlayerAggregates;
 };
 
 export type PlayerInsights = {
@@ -87,6 +88,26 @@ export type DashboardSummary = {
   abandonedGames: number;
   wins: number;
   winPercent: number | null;
+};
+
+export type PlayerAggregates = {
+  ready: boolean;
+  completedGamesHash: string;
+  completedGameCount: number;
+  eligibleGameCount: number;
+  aggregatesVersion: number;
+  computedAtEpochMs: number | null;
+  completedGameIds: string[];
+  techStats: TechStatsAggregate;
+};
+
+export type TechStatsAggregate = {
+  byTech: Record<string, TechAggregateStat>;
+};
+
+export type TechAggregateStat = {
+  gamesWithTech: number;
+  percentInEligibleGames: number;
 };
 
 export type DashboardGame = {
