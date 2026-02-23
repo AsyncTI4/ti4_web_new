@@ -13,6 +13,7 @@ import { explorations } from "@/entities/data/explorations";
 import { leaders } from "@/entities/data/leaders";
 import { units } from "@/entities/data/units";
 import { techs as technologies } from "@/entities/data/tech";
+import { breakthroughs } from "@/entities/data/breakthroughs";
 import { cdnImage } from "@/entities/data/cdnImage";
 
 import "../styles/ScrollMap.css";
@@ -34,7 +35,8 @@ type DataModelType =
   | "PromissoryNoteModel"
   | "RelicModel"
   | "ExploreModel"
-  | "TechnologyModel";
+  | "TechnologyModel"
+  | "BreakthroughModel";
 
 type OverlayCardContent = {
   title?: string;
@@ -277,6 +279,8 @@ function lookupDataModel(overlay: OverlayData) {
       return units.find((u) => u.id === dataModelID);
     case "TechnologyModel":
       return technologies.find((t) => t.alias === dataModelID);
+    case "BreakthroughModel":
+      return breakthroughs.find((b) => b.alias === dataModelID);
     default:
       return undefined;
   }
