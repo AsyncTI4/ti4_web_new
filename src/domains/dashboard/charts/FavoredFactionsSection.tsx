@@ -80,7 +80,7 @@ export function FavoredFactionsSection({ factions }: Props) {
       <div className={classes.sectionHeader}>
         <Group gap={6}>
           <IconUsers size={16} color="var(--mantine-color-gray-4)" />
-          <Caption size="sm">Favored Factions</Caption>
+          <Caption size="sm">Most Played Factions</Caption>
         </Group>
       </div>
       <FadedDivider orientation="horizontal" />
