@@ -37,79 +37,51 @@
   margin-top: 6px;
 }
 
-/* ─── Dice Ratio Meter ─── */
-.diceBar {
-  position: relative;
-  height: 6px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.06);
-  overflow: hidden;
-  margin-top: 4px;
+/* ─── Hero Inline Stats ─── */
+.heroStats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
-.diceFill {
-  position: absolute;
-  inset: 0;
-  border-radius: 3px;
-  transition: width 0.6s ease;
+.heroStat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
 }
 
-.diceFillGood {
-  background: linear-gradient(90deg, rgba(var(--gd-teal), 0.6), rgba(var(--gd-teal), 0.9));
-  box-shadow: 0 0 8px rgba(var(--gd-teal), 0.3);
+.heroStatValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--mantine-color-gray-2);
 }
 
-.diceFillBad {
-  background: linear-gradient(90deg, rgba(var(--gd-red), 0.6), rgba(var(--gd-red), 0.9));
-  box-shadow: 0 0 8px rgba(var(--gd-red), 0.3);
+.heroStatLabel {
+  font-size: 10px;
+  color: var(--mantine-color-gray-5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-/* ─── KPI Strip ─── */
-.kpiGrid {
+.heroStatDot {
+  color: var(--mantine-color-gray-6);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ─── Aggregate Analytics Grid (2-col) ─── */
+.aggregateGrid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   margin-bottom: 1.25rem;
 }
 
-@media (max-width: 768px) {
-  .kpiGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .kpiGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.kpiCard {
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.kpiValue {
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 1.1;
-  color: var(--mantine-color-gray-1);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-/* ─── Middle Section (3-col) ─── */
-.middleGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-
 @media (max-width: 1024px) {
-  .middleGrid {
+  .aggregateGrid {
     grid-template-columns: 1fr;
   }
 }
@@ -119,7 +91,176 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 0;
 }
+
+/* Stand-alone section cards (outside grids) need bottom spacing */
+.wrap > .sectionCard {
+  margin-bottom: 1.25rem;
+}
+
+/* ─── Top Researched Techs Grid ─── */
+.techTopGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 1100px) {
+  .techTopGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .techTopGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .techTopGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Individual Tech Card ─── */
+.techTopItem {
+  --tech-color: var(--gd-blue);
+  position: relative;
+  border: 1px solid rgba(var(--tech-color), 0.18);
+  background: linear-gradient(
+    155deg,
+    rgba(var(--tech-color), 0.07) 0%,
+    rgba(var(--tech-color), 0.02) 40%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  border-radius: var(--mantine-radius-md);
+  padding: 10px 12px 8px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.2s ease;
+}
+
+.techTopItem:hover {
+  border-color: rgba(var(--tech-color), 0.35);
+  transform: translateY(-1px);
+}
+
+/* Top accent bar — mirroring badge card style */
+.techTopItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--tech-color), 0.7) 0%,
+    rgba(var(--tech-color), 0.3) 40%,
+    transparent 100%
+  );
+}
+
+.techTopHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* Type pip — colored dot indicating tech specialty */
+.techTypePip {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgb(var(--tech-color));
+  box-shadow: 0 0 5px rgba(var(--tech-color), 0.4);
+}
+
+.techName {
+  font-family: Slider, "Times New Roman", serif;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.techTopMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 5px;
+}
+
+.techPercent {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  color: rgb(var(--tech-color));
+  text-shadow: 0 0 8px rgba(var(--tech-color), 0.2), 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.techGames {
+  font-size: 10px;
+  color: var(--mantine-color-gray-5);
+  white-space: nowrap;
+}
+
+/* Progress bar for research percentage */
+.techBar {
+  position: relative;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.techBarFill {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--tech-color), 0.4),
+    rgba(var(--tech-color), 0.8)
+  );
+  transition: width 0.5s ease;
+}
+
+/* Tier label — optional small type indicator */
+.techTierLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(var(--tech-color), 0.7);
+  margin-top: 3px;
+}
+
+/* ─── Unit upgrade icon (neutral gray unit image) ─── */
+.techUnitIcon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 3px rgba(var(--tech-color), 0.35));
+  opacity: 0.85;
+}
+
+/* ─── Per-tech-type color overrides ─── */
+.techBiotic { --tech-color: var(--gd-green); }
+.techPropulsion { --tech-color: var(--gd-blue); }
+.techCybernetic { --tech-color: var(--gd-yellow); }
+.techWarfare { --tech-color: var(--gd-red); }
+.techUnitUpgrade { --tech-color: var(--gd-cyan); }
 
 .sectionHeader {
   display: flex;
@@ -132,21 +273,6 @@
   padding: 6px 0 6px 10px;
   border-left: 3px solid rgba(var(--gd-yellow), 0.4);
   background: linear-gradient(90deg, rgba(var(--gd-yellow), 0.04) 0%, transparent 60%);
-}
-
-/* ─── Combat Form Stats ─── */
-.combatRow {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.combatValue {
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--mantine-color-gray-1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 /* ─── Game Deck Header ─── */
@@ -227,23 +353,29 @@
   flex-wrap: wrap;
 }
 
-/* ─── Quick Index List ─── */
-.indexItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 0;
-}
-
-.indexItem + .indexItem {
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
-}
-
 /* ─── Segmented Control Override ─── */
 .filterControl {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: var(--mantine-radius-sm);
+}
+
+/* ─── Game Deck Controls ─── */
+.gameDeckControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+/* ─── Pagination ─── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 /* ─── Empty State ─── */

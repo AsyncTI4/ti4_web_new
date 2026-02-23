@@ -26,7 +26,7 @@ import { AppHeader } from "@/shared/ui/AppHeader";
 import { GamesBar } from "@/shared/ui/GamesBar";
 import { useDashboard, type DashboardError } from "@/hooks/useDashboard";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import type { DashboardGame, GamePacks } from "@/domains/dashboard/types";
+import type { AggressionProfile, DashboardGame, GamePacks, TitleSummary } from "@/domains/dashboard/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
 import { Surface } from "@/domains/player/components/Surface";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -35,8 +35,39 @@ import { StatDisplay } from "@/shared/ui/primitives/StatDisplay";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
 import { BadgeStrip } from "./BadgeStrip";
+import { getTechData } from "@/entities/lookup/tech";
+import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
+import { cdnImage } from "@/entities/data/cdnImage";
+import {
+  StrategyCardChart,
+  CombatProfileSection,
+  SpeakerEconomySection,
+  AggressionChart,
+  FactionTechSynergySection,
+  FavoredFactionsSection,
+} from "./charts";
 
 import classes from "./DashboardPage.module.css";
+
+const TECH_TYPE_COLORS: Record<string, string> = {
+  BIOTIC: classes.techBiotic,
+  PROPULSION: classes.techPropulsion,
+  CYBERNETIC: classes.techCybernetic,
+  WARFARE: classes.techWarfare,
+  UNITUPGRADE: classes.techUnitUpgrade,
+};
+
+function techTypeColorClass(type?: string) {
+  if (!type) return "";
+  return TECH_TYPE_COLORS[type] ?? "";
+}
+
+function getUnitImageUrl(techId: string, baseUpgrade?: string): string | undefined {
+  const requiredTechId = baseUpgrade || techId;
+  const unitData = getGenericUnitDataByRequiredTechId(requiredTechId);
+  if (!unitData?.asyncId) return undefined;
+  return cdnImage(`/units/lgy_${unitData.asyncId}.png`);
+}
 
 type StatusFilter = "all" | "active" | "finished" | "abandoned";
 
@@ -75,9 +106,21 @@ function accentClass(status: DashboardGame["status"]) {
   return classes.accentFinished;
 }
 
-function diceBarPercent(ratio: number | null) {
-  if (ratio == null) return 0;
-  return Math.max(2, Math.min(100, ratio * 50));
+const AGGRESSION_GAME_LIMIT = 6;
+
+function latestAggression(profile: AggressionProfile, games: DashboardGame[]): AggressionProfile {
+  const gameIds = Object.keys(profile.byGame);
+  if (gameIds.length <= AGGRESSION_GAME_LIMIT) return profile;
+
+  const dateByGame = new Map(games.map((g) => [g.gameId, g.createdAtEpochMs]));
+  const sorted = gameIds.sort((a, b) => (dateByGame.get(b) ?? 0) - (dateByGame.get(a) ?? 0));
+  const keep = new Set(sorted.slice(0, AGGRESSION_GAME_LIMIT));
+
+  const trimmed: Record<string, number> = {};
+  for (const id of keep) {
+    trimmed[id] = profile.byGame[id];
+  }
+  return { ...profile, byGame: trimmed };
 }
 
 type PackEntry = { key: keyof GamePacks; label: string };
@@ -102,6 +145,13 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const dashboardQuery = useDashboard();
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [page, setPage] = useState(0);
+  const GAMES_PER_PAGE = 5;
+
+  function handleFilterChange(v: string) {
+    setFilter(v as StatusFilter);
+    setPage(0);
+  }
 
   if (dashboardQuery.isLoading) {
     return (
@@ -151,8 +201,20 @@ export default function DashboardPage() {
   if (!data) return null;
 
   const filteredGames = data.games.filter((g) => statusFilterMatch(g, filter));
+  const totalPages = Math.max(1, Math.ceil(filteredGames.length / GAMES_PER_PAGE));
+  const paginatedGames = filteredGames.slice(page * GAMES_PER_PAGE, (page + 1) * GAMES_PER_PAGE);
   const diceRatio = data.profile.diceLuck.ratio;
   const diceGood = diceRatio != null && diceRatio >= 1;
+  const topResearchedTechs = Object.entries(data.profile.aggregates.techStats.byTech)
+    .sort((a, b) => {
+      if (b[1].gamesWithTech !== a[1].gamesWithTech) {
+        return b[1].gamesWithTech - a[1].gamesWithTech;
+      }
+      return b[1].percentInEligibleGames - a[1].percentInEligibleGames;
+    })
+    .slice(0, 8);
+  const hasTopResearchedTechs = topResearchedTechs.length > 0;
+  const agg = data.profile.aggregates;
 
   return (
     <AppShell header={{ height: 60 }}>
@@ -165,214 +227,166 @@ export default function DashboardPage() {
           {/* ── Hero: Player Identity + Performance ── */}
           <Surface pattern="grid" cornerAccents className={classes.hero}>
             <div className={classes.heroInner}>
-              <Group justify="space-between" align="flex-start" wrap="wrap" gap="md">
-                <Stack gap={4}>
-                  <Caption size="xs">Player Operations</Caption>
-                  <Title order={1} className={classes.playerName} c="gray.1">
-                    {data.profile.userName ?? "Unknown Player"}
-                  </Title>
-                  <div className={classes.rankRow}>
-                    {data.profile.tiglLatestRankAtGameStart && (
-                      <Chip accent="purple" size="sm" leftSection={<IconShield size={13} />}>
-                        <Text size="xs" fw={700} c="white">
-                          TIGL {data.profile.tiglLatestRankAtGameStart}
-                        </Text>
-                      </Chip>
-                    )}
-                    <Chip accent={diceGood ? "teal" : "red"} size="sm" leftSection={<IconDice5 size={13} />}>
+              <Stack gap={4}>
+                <Caption size="xs">Player Operations</Caption>
+                <Title order={1} className={classes.playerName} c="gray.1">
+                  {data.profile.userName ?? "Unknown Player"}
+                </Title>
+                <div className={classes.rankRow}>
+                  {data.profile.tiglLatestRankAtGameStart && (
+                    <Chip accent="purple" size="sm" leftSection={<IconShield size={13} />}>
                       <Text size="xs" fw={700} c="white">
-                        Dice {formatRatio(diceRatio)}
+                        TIGL {data.profile.tiglLatestRankAtGameStart}
                       </Text>
                     </Chip>
-                    <Chip accent="yellow" size="sm" leftSection={<IconTrophy size={13} />}>
-                      <Text size="xs" fw={700} c="white">
-                        {data.summary.wins}W / {data.summary.gamesPlayed}G
-                      </Text>
-                    </Chip>
-                  </div>
-                </Stack>
-
-                <Stack gap={4} maw={320} miw={200} style={{ flex: "0 1 320px" }}>
-                  <Group justify="space-between">
-                    <Text size="xs" c="gray.5">
-                      Actual {data.profile.diceLuck.actualHits.toFixed(0)}
+                  )}
+                  <Chip accent="yellow" size="sm" leftSection={<IconTrophy size={13} />}>
+                    <Text size="xs" fw={700} c="white">
+                      {data.summary.wins}W / {data.summary.gamesPlayed}G
                     </Text>
-                    <Text size="xs" c="gray.5">
-                      Expected {data.profile.diceLuck.expectedHits.toFixed(0)}
+                  </Chip>
+                  <Chip accent={diceGood ? "teal" : "red"} size="sm" leftSection={<IconDice5 size={13} />}>
+                    <Text size="xs" fw={700} c="white">
+                      {formatRatio(diceRatio)}
                     </Text>
-                  </Group>
-                  <div className={classes.diceBar}>
-                    <div
-                      className={cx(classes.diceFill, diceGood ? classes.diceFillGood : classes.diceFillBad)}
-                      style={{ width: `${diceBarPercent(diceRatio)}%` }}
-                    />
-                  </div>
-                  <Text size="10px" c="gray.6" ta="center">
-                    1.00x = expected &middot; above = lucky
-                  </Text>
-                </Stack>
-              </Group>
+                  </Chip>
+                </div>
+                <div className={classes.heroStats}>
+                  <span className={classes.heroStat}>
+                    <span className={classes.heroStatValue}>{data.summary.gamesPlayed}</span>
+                    <span className={classes.heroStatLabel}>Played</span>
+                  </span>
+                  <span className={classes.heroStatDot}>&middot;</span>
+                  <span className={classes.heroStat}>
+                    <span className={classes.heroStatValue}>{data.summary.activeGames}</span>
+                    <span className={classes.heroStatLabel}>Active</span>
+                  </span>
+                  <span className={classes.heroStatDot}>&middot;</span>
+                  <span className={classes.heroStat}>
+                    <span className={classes.heroStatValue}>{data.summary.wins}</span>
+                    <span className={classes.heroStatLabel}>Wins</span>
+                  </span>
+                  <span className={classes.heroStatDot}>&middot;</span>
+                  <span className={classes.heroStat}>
+                    <span className={classes.heroStatValue}>{formatPercent(data.summary.winPercent)}</span>
+                    <span className={classes.heroStatLabel}>Win Rate</span>
+                  </span>
+                </div>
+              </Stack>
             </div>
           </Surface>
-
-          {/* ── KPI Strip ── */}
-          <div className={classes.kpiGrid}>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Played</Caption>
-              <span className={classes.kpiValue}>{data.summary.gamesPlayed}</span>
-            </Panel>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Active</Caption>
-              <span className={classes.kpiValue}>{data.summary.activeGames}</span>
-            </Panel>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Finished</Caption>
-              <span className={classes.kpiValue}>{data.summary.finishedGames}</span>
-            </Panel>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Abandoned</Caption>
-              <span className={classes.kpiValue}>{data.summary.abandonedGames}</span>
-            </Panel>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Wins</Caption>
-              <span className={classes.kpiValue}>{data.summary.wins}</span>
-            </Panel>
-            <Panel variant="standard" className={classes.kpiCard}>
-              <Caption size="xs">Win %</Caption>
-              <span className={classes.kpiValue}>{formatPercent(data.summary.winPercent)}</span>
-            </Panel>
-          </div>
 
           {/* ── Badges ── */}
           <BadgeStrip badges={data.profile.insights.badges} />
 
-          {/* ── Middle: Titles / Game Index / Combat Form ── */}
-          <div className={classes.middleGrid}>
-            {/* Titles */}
+          {hasTopResearchedTechs && (
             <Panel variant="elevated" className={classes.sectionCard}>
               <div className={classes.sectionHeader}>
                 <Group gap={6}>
-                  <IconTrophy size={16} color="var(--mantine-color-yellow-5)" />
-                  <Caption size="sm">Titles</Caption>
+                  <IconCrosshair size={16} color="var(--mantine-color-blue-4)" />
+                  <Caption size="sm">Top Researched Techs</Caption>
                 </Group>
-                <Chip accent="yellow" size="xs">
+                <Chip accent="blue" size="xs">
                   <Text size="10px" fw={700} c="white">
-                    {data.profile.titles.totalCount}
+                    {data.profile.aggregates.eligibleGameCount} Eligible
                   </Text>
                 </Chip>
               </div>
               <FadedDivider orientation="horizontal" />
-              <ScrollArea h={200} scrollbarSize={4}>
-                <Stack gap={8}>
-                  {data.profile.titles.items.length === 0 ? (
-                    <Text c="gray.6" size="xs">
-                      No titles earned yet.
-                    </Text>
-                  ) : (
-                    data.profile.titles.items.map((titleItem) => (
-                      <div key={titleItem.title} className={classes.titleItem}>
-                        <Group justify="space-between" gap="xs">
-                          <Text fw={600} size="sm" c="gray.2">
-                            {titleItem.title}
-                          </Text>
-                          <Text size="xs" ff="mono" c="yellow.4" fw={700}>
-                            x{titleItem.count}
-                          </Text>
-                        </Group>
-                        <Text c="gray.6" size="10px" truncate>
-                          {titleItem.gameIds.join(" · ")}
-                        </Text>
+              <div className={classes.techTopGrid}>
+                {topResearchedTechs.map(([techId, stat]) => {
+                  const tech = getTechData(techId);
+                  const techName = tech?.name ?? techId;
+                  const isUnit = tech?.types.includes("UNITUPGRADE");
+                  const colorClass = techTypeColorClass(tech?.types[0]);
+                  const unitImg = isUnit ? getUnitImageUrl(techId, tech?.baseUpgrade) : undefined;
+                  return (
+                    <div key={techId} className={cx(classes.techTopItem, colorClass)}>
+                      <div className={classes.techTopHeader}>
+                        {unitImg ? (
+                          <img
+                            src={unitImg}
+                            alt={techName}
+                            className={classes.techUnitIcon}
+                          />
+                        ) : (
+                          <span className={classes.techTypePip} />
+                        )}
+                        <span className={classes.techName} title={techName}>
+                          {techName}
+                        </span>
                       </div>
-                    ))
-                  )}
-                </Stack>
-              </ScrollArea>
-            </Panel>
-
-            {/* Game Index */}
-            <Panel variant="elevated" className={classes.sectionCard}>
-              <div className={classes.sectionHeader}>
-                <Group gap={6}>
-                  <IconCrosshair size={16} color="var(--mantine-color-gray-4)" />
-                  <Caption size="sm">Game Index</Caption>
-                </Group>
-              </div>
-              <SegmentedControl
-                fullWidth
-                size="xs"
-                value={filter}
-                onChange={(v) => setFilter(v as StatusFilter)}
-                className={classes.filterControl}
-                data={[
-                  { label: "All", value: "all" },
-                  { label: "Active", value: "active" },
-                  { label: "Done", value: "finished" },
-                  { label: "Abn", value: "abandoned" },
-                ]}
-              />
-              <Text c="gray.5" size="xs">
-                {filteredGames.length} of {data.games.length} games
-              </Text>
-              <ScrollArea h={160} scrollbarSize={4}>
-                <div>
-                  {filteredGames.slice(0, 10).map((game) => (
-                    <div key={game.gameId} className={classes.indexItem}>
-                      <Text
-                        size="xs"
-                        c="gray.3"
-                        truncate
-                        style={{ cursor: "pointer" }}
-                        onClick={() => navigate(`/game/${game.gameId}`)}
-                      >
-                        {game.gameId}
-                      </Text>
-                      <Chip accent={statusAccent(game.status)} size="xs">
-                        <Text size="10px" fw={700} c="white">
-                          {game.status}
-                        </Text>
-                      </Chip>
+                      <div className={classes.techTopMeta}>
+                        <span className={classes.techGames}>
+                          {stat.gamesWithTech} game{stat.gamesWithTech === 1 ? "" : "s"}
+                        </span>
+                        <span className={classes.techPercent}>
+                          {stat.percentInEligibleGames.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className={classes.techBar}>
+                        <div
+                          className={classes.techBarFill}
+                          style={{ width: `${Math.min(100, stat.percentInEligibleGames)}%` }}
+                        />
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </Panel>
-
-            {/* Combat Form */}
-            <Panel variant="elevated" className={classes.sectionCard}>
-              <div className={classes.sectionHeader}>
-                <Group gap={6}>
-                  <IconDice5 size={16} color="var(--mantine-color-teal-5)" />
-                  <Caption size="sm">Combat Form</Caption>
-                </Group>
+                  );
+                })}
               </div>
-              <FadedDivider orientation="horizontal" />
-              <Stack gap={8}>
-                <Group justify="space-between">
-                  <Text size="xs" c="gray.5">
-                    Dice Ratio
-                  </Text>
-                  <StatDisplay value={formatRatio(diceRatio)} size="sm" color={diceGood ? "teal.4" : "red.4"} />
-                </Group>
-                <Group justify="space-between">
-                  <Text size="xs" c="gray.5">
-                    Actual Hits
-                  </Text>
-                  <StatDisplay value={data.profile.diceLuck.actualHits.toFixed(0)} size="sm" />
-                </Group>
-                <Group justify="space-between">
-                  <Text size="xs" c="gray.5">
-                    Expected Hits
-                  </Text>
-                  <StatDisplay value={data.profile.diceLuck.expectedHits.toFixed(0)} size="sm" />
-                </Group>
-                <FadedDivider orientation="horizontal" />
-                <Text size="10px" c="gray.6" lh={1.3}>
-                  Aggregate dice performance across all tracked games. 1.00x = exactly expected. Above 1.00x is above
-                  expectation.
-                </Text>
-              </Stack>
             </Panel>
-          </div>
+          )}
+
+          {/* ── Aggregates: Charts & Tables ── */}
+          {agg.ready && (
+            <>
+              <div className={classes.deckHeader}>
+                <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
+                  ANALYTICS
+                </Title>
+                <div>
+                  <Text c="gray.6" size="xs">
+                    Across {agg.completedGameCount} completed games
+                  </Text>
+                  <Text c="gray.7" size="10px" mt={2}>
+                    Some analytics are only available for newer games where detailed round data was collected and may be incomplete.
+                  </Text>
+                </div>
+              </div>
+
+              <div className={classes.aggregateGrid}>
+                {/* Combat pair */}
+                {agg.combatProfile && (
+                  <CombatProfileSection profile={agg.combatProfile} />
+                )}
+                {agg.aggressionProfile && (
+                  <AggressionChart profile={latestAggression(agg.aggressionProfile, data.games)} />
+                )}
+
+                {/* Strategy + meta */}
+                {agg.strategyCardStats && (
+                  <StrategyCardChart stats={agg.strategyCardStats} />
+                )}
+                {data.profile.insights.favoredFactions.length > 0 && (
+                  <FavoredFactionsSection factions={data.profile.insights.favoredFactions} />
+                )}
+
+                {/* Meta-game pair */}
+                {(agg.speakerImpact || agg.economyProfile) && (
+                  <SpeakerEconomySection
+                    impact={agg.speakerImpact}
+                    economy={agg.economyProfile}
+                  />
+                )}
+                <TitlesCard titles={data.profile.titles} />
+
+                {/* Full-width synergy */}
+                {agg.factionTechSynergy && (
+                  <FactionTechSynergySection synergy={agg.factionTechSynergy} />
+                )}
+              </div>
+            </>
+          )}
 
           {/* ── Game Deck ── */}
           <div className={classes.deckHeader}>
@@ -384,8 +398,26 @@ export default function DashboardPage() {
             </Text>
           </div>
 
+          <div className={classes.gameDeckControls}>
+            <SegmentedControl
+              size="xs"
+              value={filter}
+              onChange={handleFilterChange}
+              className={classes.filterControl}
+              data={[
+                { label: "All", value: "all" },
+                { label: "Active", value: "active" },
+                { label: "Done", value: "finished" },
+                { label: "Abn", value: "abandoned" },
+              ]}
+            />
+            <Text c="gray.5" size="xs">
+              {filteredGames.length} game{filteredGames.length === 1 ? "" : "s"}
+            </Text>
+          </div>
+
           <Stack gap="sm">
-            {filteredGames.map((game) => (
+            {paginatedGames.map((game) => (
               <GameCard key={game.gameId} game={game} onOpen={() => navigate(`/game/${game.gameId}`)} />
             ))}
           </Stack>
@@ -398,9 +430,81 @@ export default function DashboardPage() {
             </Panel>
           )}
 
+          {totalPages > 1 && (
+            <div className={classes.pagination}>
+              <Button
+                size="compact-xs"
+                variant="subtle"
+                color="gray"
+                disabled={page === 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+              >
+                Prev
+              </Button>
+              <Text size="xs" c="gray.4" ff="mono">
+                {page + 1} / {totalPages}
+              </Text>
+              <Button
+                size="compact-xs"
+                variant="subtle"
+                color="gray"
+                disabled={page >= totalPages - 1}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+
         </Box>
       </AppShell.Main>
     </AppShell>
+  );
+}
+
+/* ─── Titles Card (lives in analytics grid) ─── */
+
+function TitlesCard({ titles }: { titles: TitleSummary }) {
+  return (
+    <Panel variant="elevated" className={classes.sectionCard}>
+      <div className={classes.sectionHeader}>
+        <Group gap={6}>
+          <IconTrophy size={16} color="var(--mantine-color-yellow-5)" />
+          <Caption size="sm">Titles</Caption>
+        </Group>
+        <Chip accent="yellow" size="xs">
+          <Text size="10px" fw={700} c="white">
+            {titles.totalCount}
+          </Text>
+        </Chip>
+      </div>
+      <FadedDivider orientation="horizontal" />
+      <ScrollArea h={200} scrollbarSize={4}>
+        <Stack gap={8}>
+          {titles.items.length === 0 ? (
+            <Text c="gray.6" size="xs">
+              No titles earned yet.
+            </Text>
+          ) : (
+            titles.items.map((titleItem) => (
+              <div key={titleItem.title} className={classes.titleItem}>
+                <Group justify="space-between" gap="xs">
+                  <Text fw={600} size="sm" c="gray.2">
+                    {titleItem.title}
+                  </Text>
+                  <Text size="xs" ff="mono" c="yellow.4" fw={700}>
+                    x{titleItem.count}
+                  </Text>
+                </Group>
+                <Text c="gray.6" size="10px" truncate>
+                  {titleItem.gameIds.join(" · ")}
+                </Text>
+              </div>
+            ))
+          )}
+        </Stack>
+      </ScrollArea>
+    </Panel>
   );
 }
 

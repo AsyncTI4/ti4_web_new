@@ -1,0 +1,230 @@
+/* ─── Aggregate Card ─── */
+.aggregateCard {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.aggregateCardFull {
+  composes: aggregateCard;
+  grid-column: 1 / -1;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ─── Data Table ─── */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.dataTable th {
+  padding: 3px 6px;
+  text-align: left;
+  color: var(--mantine-color-gray-5);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  white-space: nowrap;
+}
+
+.dataTable th.alignRight {
+  text-align: right;
+}
+
+.dataTable td {
+  padding: 3px 6px;
+  font-family: var(--mantine-font-family-monospace);
+  color: var(--mantine-color-gray-2);
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.dataTable td.alignRight {
+  text-align: right;
+}
+
+.dataTable td.label {
+  font-family: Slider, "Times New Roman", serif;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--mantine-color-gray-3);
+}
+
+.dataTable tr + tr td {
+  border-top: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.dataTable tr:hover td {
+  background: rgba(148, 163, 184, 0.03);
+}
+
+/* ─── KPI Row (Economy) ─── */
+.kpiRow {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.kpiBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 80px;
+}
+
+.kpiBlockValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Speaker Comparison ─── */
+.speakerComparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .speakerComparison {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.speakerBucket {
+  --bucket-color: var(--gd-gray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 8px;
+  border-radius: var(--mantine-radius-md);
+  background: linear-gradient(
+    155deg,
+    rgba(var(--bucket-color), 0.08) 0%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  border: 1px solid rgba(var(--bucket-color), 0.15);
+}
+
+.speakerBucket.speaker {
+  --bucket-color: var(--gd-yellow);
+}
+
+.speakerBucket.nonSpeaker {
+  --bucket-color: var(--gd-purple);
+}
+
+.speakerBucketRate {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: rgb(var(--bucket-color));
+  text-shadow: 0 0 10px rgba(var(--bucket-color), 0.2);
+}
+
+.speakerDelta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.speakerDeltaValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.deltaPositive {
+  color: rgb(var(--gd-green));
+}
+
+.deltaNegative {
+  color: rgb(var(--gd-red));
+}
+
+/* ─── Combat Stat Grid ─── */
+.combatStatGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .combatStatGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.combatStatItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px;
+  border-radius: var(--mantine-radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.combatStatValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.1;
+  color: var(--mantine-color-gray-1);
+}
+
+.combatStatAvg {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 9px;
+  color: var(--mantine-color-teal-4);
+}
+
+/* ─── Economy (compact inline) ─── */
+.economyRow {
+  display: flex;
+  gap: 20px;
+  padding: 6px 8px;
+  border-radius: var(--mantine-radius-sm);
+  background: rgba(var(--gd-teal), 0.03);
+  border: 1px solid rgba(var(--gd-teal), 0.08);
+}
+
+.economyStat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.economyValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Chart Container ─── */
+.chartWrap {
+  width: 100%;
+  min-height: 180px;
+}

@@ -12,13 +12,14 @@ export type PlayerProfile = {
   titles: TitleSummary;
   diceLuck: DiceLuckSummary;
   insights: PlayerInsights;
+  aggregates: PlayerAggregates;
 };
 
 export type PlayerInsights = {
   activity: PlayerActivity;
   badges: BadgeAward[];
-  imperialDoctrine: ImperialDoctrine;
-  favoredHouses: FavoredHouse[];
+  imperialDoctrine?: ImperialDoctrine;
+  favoredFactions: FavoredFaction[];
 };
 
 export type PlayerActivity = {
@@ -56,7 +57,7 @@ export type ImperialDoctrine = {
   traits: string[];
 };
 
-export type FavoredHouse = {
+export type FavoredFaction = {
   faction: string;
   gamesPlayed: number;
   wins: number;
@@ -89,10 +90,144 @@ export type DashboardSummary = {
   winPercent: number | null;
 };
 
+/* ─── Aggregates ─── */
+
+export type PlayerAggregates = {
+  ready: boolean;
+  completedGamesHash: string;
+  completedGameCount: number;
+  eligibleGameCount: number;
+  aggregatesVersion: number;
+  computedAtEpochMs: number | null;
+  completedGameIds: string[];
+  techStats: TechStatsAggregate;
+  factionWinStats: FactionWinStatsAggregate;
+  strategyCardStats?: StrategyCardStats;
+  combatProfile?: CombatProfile;
+  economyProfile?: EconomyProfile;
+  factionTechSynergy?: FactionTechSynergy;
+  speakerImpact?: SpeakerImpact;
+  aggressionProfile?: AggressionProfile;
+};
+
+export type TechStatsAggregate = {
+  byTech: Record<string, TechAggregateStat>;
+};
+
+export type TechAggregateStat = {
+  gamesWithTech: number;
+  percentInEligibleGames: number;
+};
+
+export type FactionWinStatsAggregate = {
+  byFaction: Record<string, number>;
+};
+
+/* ── Strategy Card Stats ── */
+
+export type ScStat = {
+  totalPicks: number;
+  gamesPicked: number;
+  winsInGamesPicked: number;
+  winRateWhenPicked: number;
+};
+
+export type StrategyCardStats = {
+  bySc: Record<string, ScStat>;
+  meta: {
+    completedGamesConsidered: number;
+    gamesWithRoundStats: number;
+  };
+};
+
+/* ── Combat Profile ── */
+
+export type CombatTotals = {
+  combatsInitiated: number;
+  tacticalsWithCombat: number;
+  planetsTaken: number;
+  planetsStolen: number;
+  diceRolled: number;
+};
+
+export type CombatProfile = {
+  totals: CombatTotals;
+  averagesPerCompletedGame: CombatTotals;
+  coverage: AggregateCoverage;
+};
+
+export type AggregateCoverage = {
+  completedGamesConsidered: number;
+  gamesWithRoundStats: number;
+};
+
+/* ── Economy Profile ── */
+
+export type EconomyProfile = {
+  totalExpensesSum: number;
+  avgTotalExpenses: number;
+  completedGamesConsidered: number;
+};
+
+/* ── Faction-Tech Synergy ── */
+
+export type FactionTechSynergyStat = {
+  gamesWithTech: number;
+  winsWithTech: number;
+  nonWinsWithTech: number;
+  winRateWhenTech: number;
+};
+
+export type FactionSynergyEntry = {
+  games: number;
+  wins: number;
+  nonWins: number;
+  byTech: Record<string, FactionTechSynergyStat>;
+};
+
+export type FactionTechSynergy = {
+  byFaction: Record<string, FactionSynergyEntry>;
+};
+
+/* ── Speaker Impact ── */
+
+export type SpeakerBucket = {
+  games: number;
+  wins: number;
+  winRate: number;
+};
+
+export type SpeakerImpact = {
+  speaker: SpeakerBucket;
+  nonSpeaker: SpeakerBucket;
+  deltaWinRate: number;
+};
+
+/* ── Aggression Profile ── */
+
+export type AggressionProfile = {
+  weights: {
+    combatsInitiated: number;
+    planetsStolen: number;
+    tacticalsWithCombat: number;
+  };
+  byGame: Record<string, number>;
+  summary: {
+    avgScore: number;
+    medianScore: number;
+    maxScore: number;
+    minScore: number;
+    mostAggressiveGameId: string;
+  };
+  coverage: AggregateCoverage;
+};
+
+/* ─── Game Types ─── */
+
 export type DashboardGame = {
   gameId: string;
   title: string;
-  status: "ACTIVE" | "FINISHED" | "ABANDONED" | "INACTIVE";
+  status: string;
   isActive: boolean;
   isFinished: boolean;
   isAbandoned: boolean;
