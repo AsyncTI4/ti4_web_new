@@ -19,6 +19,8 @@
     "@widgetbot/react-embed": "^1.9.0",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
     "dragscroll": "^0.0.8",
+    "echarts": "^6.0.0",
+    "echarts-for-react": "^3.0.6",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-loading-indicators": "1.0.1",
