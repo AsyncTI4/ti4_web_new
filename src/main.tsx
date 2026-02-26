@@ -28,7 +28,7 @@ import MapTogglePage from "./MapTogglePage";
 import { SystemTilePage } from "./domains/map/components/SystemTilePage/SystemTilePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import DashboardPage from "./domains/dashboard/DashboardPage";
-import { useUser } from "./hooks/useUser";
+import EmbeddedMapPage from "./EmbeddedMapPage";
 
 const queryClient = new QueryClient();
 
@@ -37,21 +37,10 @@ const RedirectToGame = () => {
   return <Navigate to={`/game/${mapid}`} replace />;
 };
 
-const RootRoute = () => {
-  const { user } = useUser();
-  const isAuthenticated = Boolean(user?.authenticated && user?.token);
-
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  return <LandingPage />;
-};
-
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootRoute />,
+    element: <LandingPage />,
   },
   {
     path: "/game/:mapid",
@@ -68,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: "/game/:mapid/newui",
     element: <RedirectToGame />,
+  },
+  {
+    path: "/embed/:mapid/map-only",
+    element: <EmbeddedMapPage />,
   },
 
   {

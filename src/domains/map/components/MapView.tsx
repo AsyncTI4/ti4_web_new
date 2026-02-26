@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Box } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { LeftSidebar } from "@/domains/game-shell/components/LeftSidebar";
 import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";
@@ -23,12 +24,19 @@ import { useTilesList } from "@/hooks/useTilesList";
 import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
 import { getMapLayoutConfig } from "./mapLayout";
 import { MovementLayerPortal } from "./components/MovementLayerPortal";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 
 type Props = {
   gameId: string;
+  embedded?: boolean;
+  embeddedSidebar?: "left" | "right";
 };
 
-export function MapView({ gameId }: Props) {
+export function MapView({
+  gameId,
+  embedded = false,
+  embeddedSidebar = "left",
+}: Props) {
   const gameData = useGameData();
   const gameDataState = useGameDataState();
 
@@ -55,7 +63,7 @@ export function MapView({ gameId }: Props) {
   } = useMapTooltips(handleMouseEnter, handleMouseLeave);
 
   const { sidebarWidth, isDragging, handleSidebarMouseDown } =
-    useSidebarDragHandle(30);
+    useSidebarDragHandle(embedded ? 22 : 30);
 
   const zoom = useAppStore((state) => state.zoomLevel);
   const handleZoomIn = useAppStore((state) => state.handleZoomIn);
@@ -116,6 +124,33 @@ export function MapView({ gameId }: Props) {
   const contentSize = useMapContentSize("panels");
 
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
+  const isBelowEmbeddedSidebarBreakpoint = useMediaQuery("(max-width: 1300px)");
+  const showEmbeddedRightSidebar =
+    embedded && embeddedSidebar === "right" && !isBelowEmbeddedSidebarBreakpoint;
+  const showLeftSidebar = !embedded || embeddedSidebar === "left";
+  const showRightSidebar = !embedded || showEmbeddedRightSidebar;
+  const embeddedRightSidebarWidth = `max(420px, ${sidebarWidth}%)`;
+  const hasAutoSelectedFactionRef = useRef(false);
+
+  useEffect(() => {
+    hasAutoSelectedFactionRef.current = false;
+  }, [gameId]);
+
+  useEffect(() => {
+    if (!embedded || hasAutoSelectedFactionRef.current || selectedArea) {
+      return;
+    }
+    const players = filterPlayersWithAssignedFaction(gameData?.playerData || []);
+    const firstFaction = players[0]?.faction;
+    if (!firstFaction) return;
+
+    handleAreaSelect({
+      type: "faction",
+      faction: firstFaction,
+      coords: { x: 0, y: 0 },
+    });
+    hasAutoSelectedFactionRef.current = true;
+  }, [embedded, selectedArea, gameData?.playerData, handleAreaSelect]);
 
   return (
     <Box className={classes.mapContainer}>
@@ -124,14 +159,18 @@ export function MapView({ gameId }: Props) {
         ref={mapContainerRef}
         className={`dragscroll ${classes.mapArea}`}
         style={{
-          width: settings.rightPanelCollapsed
-            ? "100%"
-            : `${100 - sidebarWidth}%`,
+          width: embedded
+            ? showEmbeddedRightSidebar
+              ? `calc(100% - ${embeddedRightSidebarWidth})`
+              : "100%"
+            : settings.rightPanelCollapsed
+              ? "100%"
+              : `${100 - sidebarWidth}%`,
         }}
       >
-        <LeftSidebar />
+        {showLeftSidebar && <LeftSidebar />}
 
-        {showLeftPanelToggle && (
+        {!embedded && showLeftPanelToggle && (
           <PanelToggleButton
             isCollapsed={settings.leftPanelCollapsed}
             onClick={handlers.toggleLeftPanelCollapsed}
@@ -140,11 +179,15 @@ export function MapView({ gameId }: Props) {
         )}
 
         <div
-          className={classes.zoomControlsDynamic}
+          className={`${classes.zoomControlsDynamic} ${embedded ? classes.zoomControlsEmbedded : ""}`}
           style={{
-            right: settings.rightPanelCollapsed
-              ? "35px"
-              : `calc(${sidebarWidth}vw + 35px)`,
+            right: embedded
+              ? showEmbeddedRightSidebar
+                ? `calc(${embeddedRightSidebarWidth} + 35px)`
+                : "35px"
+              : settings.rightPanelCollapsed
+                ? "35px"
+                : `calc(${sidebarWidth}vw + 35px)`,
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >
@@ -183,40 +226,47 @@ export function MapView({ gameId }: Props) {
         <ReconnectButton gameDataState={gameDataState} />
       </Box>
 
-      <DragHandle onMouseDown={handleSidebarMouseDown} />
+      {!embedded && <DragHandle onMouseDown={handleSidebarMouseDown} />}
 
-      <PanelToggleButton
-        isCollapsed={settings.rightPanelCollapsed}
-        onClick={handlers.toggleRightPanelCollapsed}
-        position="right"
-        style={{
-          right: settings.rightPanelCollapsed
-            ? "10px"
-            : `calc(${sidebarWidth}vw + 14px)`,
-          transition: isDragging ? "none" : "right 0.1s ease",
-        }}
-      />
-
-      <MovementLayerPortal
-        gameId={gameId}
-        tiles={tilesList}
-        movementState={movementState}
-        tryDecalsOpened={tryDecalsOpened}
-        setTryDecalsOpened={setTryDecalsOpened}
-      >
-        <RightSidebar
-          isRightPanelCollapsed={settings.rightPanelCollapsed}
-          sidebarWidth={sidebarWidth}
-          selectedArea={selectedArea}
-          activeArea={activeArea}
-          selectedFaction={selectedFaction}
-          activeUnit={activeUnit}
-          onAreaSelect={handleAreaSelect}
-          onAreaMouseEnter={handleAreaMouseEnter}
-          onAreaMouseLeave={handleAreaMouseLeave}
-          gameId={gameId}
+      {!embedded && (
+        <PanelToggleButton
+          isCollapsed={settings.rightPanelCollapsed}
+          onClick={handlers.toggleRightPanelCollapsed}
+          position="right"
+          style={{
+            right: settings.rightPanelCollapsed
+              ? "10px"
+              : `calc(${sidebarWidth}vw + 14px)`,
+            transition: isDragging ? "none" : "right 0.1s ease",
+          }}
         />
-      </MovementLayerPortal>
+      )}
+
+      {showRightSidebar && (
+        <MovementLayerPortal
+          gameId={gameId}
+          tiles={tilesList}
+          movementState={movementState}
+          tryDecalsOpened={tryDecalsOpened}
+          setTryDecalsOpened={setTryDecalsOpened}
+        >
+          <RightSidebar
+            isRightPanelCollapsed={
+              embedded ? false : settings.rightPanelCollapsed
+            }
+            sidebarWidth={embedded ? 0 : sidebarWidth}
+            selectedArea={selectedArea}
+            activeArea={activeArea}
+            selectedFaction={selectedFaction}
+            activeUnit={activeUnit}
+            onAreaSelect={handleAreaSelect}
+            onAreaMouseEnter={handleAreaMouseEnter}
+            onAreaMouseLeave={handleAreaMouseLeave}
+            gameId={gameId}
+            embeddedWidth={showEmbeddedRightSidebar ? embeddedRightSidebarWidth : undefined}
+          />
+        </MovementLayerPortal>
+      )}
     </Box>
   );
 }

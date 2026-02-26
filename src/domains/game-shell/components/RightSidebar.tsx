@@ -11,6 +11,7 @@ import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;
   sidebarWidth: number;
+  embeddedWidth?: string;
   selectedArea: AreaType;
   activeArea: AreaType;
   selectedFaction: string | null;
@@ -24,6 +25,7 @@ type RightSidebarProps = {
 export function RightSidebar({
   isRightPanelCollapsed,
   sidebarWidth,
+  embeddedWidth,
   selectedArea,
   activeArea,
   selectedFaction,
@@ -68,7 +70,7 @@ export function RightSidebar({
     <Box
       className={`${classes.sidebar} ${isRightPanelCollapsed ? classes.collapsedRight : ""}`}
       style={{
-        width: isRightPanelCollapsed ? "0%" : `${sidebarWidth}%`,
+        width: isRightPanelCollapsed ? "0%" : embeddedWidth || `${sidebarWidth}%`,
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",

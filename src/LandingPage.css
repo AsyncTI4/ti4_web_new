@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 body,
 h1,
@@ -17,38 +17,43 @@ h6 {
   line-height: 1.1;
 }
 
+.mono {
+  font-family: 'Space Mono', 'SF Mono', monospace;
+}
+
 /* ============================================
-   ROOT VARIABLES - Matching app's internal UI
+   ROOT VARIABLES
    ============================================ */
 :root {
-  --landing-bg-primary: #0a0a0a;
-  --landing-bg-secondary: #111111;
-  --landing-bg-tertiary: #161616;
-  --landing-rgb-primary: 10, 10, 10;
-  --landing-rgb-secondary: 17, 17, 17;
-  --landing-rgb-tertiary: 22, 22, 22;
-  --landing-border-subtle: rgba(160, 160, 160, 0.15);
-  --landing-border-medium: rgba(160, 160, 160, 0.25);
-  --landing-border-strong: rgba(200, 200, 200, 0.35);
-  --landing-text-primary: rgba(255, 255, 255, 0.95);
-  --landing-text-secondary: rgba(255, 255, 255, 0.7);
-  --landing-text-tertiary: rgba(255, 255, 255, 0.5);
-  --landing-accent: rgba(200, 200, 200, 0.9);
-  --landing-accent-muted: rgba(160, 160, 160, 0.6);
+  --landing-bg-primary: #080b12;
+  --landing-bg-secondary: #0e1219;
+  --landing-bg-tertiary: #141a23;
+  --landing-rgb-primary: 8, 11, 18;
+  --landing-rgb-secondary: 14, 18, 25;
+  --landing-rgb-tertiary: 20, 26, 35;
+  --landing-border-subtle: rgba(130, 155, 190, 0.12);
+  --landing-border-medium: rgba(130, 155, 190, 0.22);
+  --landing-border-strong: rgba(170, 190, 215, 0.32);
+  --landing-text-primary: rgba(215, 225, 240, 0.95);
+  --landing-text-secondary: rgba(195, 208, 228, 0.7);
+  --landing-text-tertiary: rgba(170, 185, 210, 0.5);
+  --landing-accent: rgba(180, 195, 218, 0.9);
+  --landing-accent-muted: rgba(140, 160, 192, 0.6);
+  --landing-accent-warm: rgba(186, 160, 110, 0.85);
 
-  /* Header tab variables for GamesBar - matching midnightgray theme */
-  --header-tab-bg: linear-gradient(180deg, #080808, #161616 100%);
-  --header-tab-border: 1px solid rgba(200, 200, 200, 0.4);
-  --header-tab-hover-bg: #181818;
-  --header-tab-hover-border: #858585;
-  --header-tab-active-bg: #3F3F3F;
-  --header-tab-active-border: #A9A9A9;
-  --header-tab-input-bg: rgba(8, 8, 8, 0.86);
-  --header-tab-input-border: 1px solid rgba(200, 200, 200, 0.45);
-  --header-tab-dropdown-bg: rgba(8, 8, 8, 0.94);
-  --header-tab-dropdown-border: 1px solid rgba(200, 200, 200, 0.45);
-  --header-tab-dropdown-hover-bg: rgba(180, 180, 180, 0.38);
-  --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  /* Header tab variables for GamesBar */
+  --header-tab-bg: linear-gradient(180deg, #060910, #141a23 100%);
+  --header-tab-border: 1px solid rgba(150, 175, 210, 0.35);
+  --header-tab-hover-bg: #151c28;
+  --header-tab-hover-border: #6b7fa0;
+  --header-tab-active-bg: #2a3548;
+  --header-tab-active-border: #8a9dba;
+  --header-tab-input-bg: rgba(6, 9, 16, 0.86);
+  --header-tab-input-border: 1px solid rgba(150, 175, 210, 0.4);
+  --header-tab-dropdown-bg: rgba(6, 9, 16, 0.94);
+  --header-tab-dropdown-border: 1px solid rgba(150, 175, 210, 0.4);
+  --header-tab-dropdown-hover-bg: rgba(140, 165, 200, 0.3);
+  --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================
@@ -75,6 +80,14 @@ h6 {
   min-height: 85vh;
 }
 
+.heroDockViewport {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: none;
+  padding: 0 20px;
+}
+
 .heroSection::before,
 .heroSection::after {
   content: '';
@@ -86,41 +99,56 @@ h6 {
 .heroSection::before {
   background: linear-gradient(
     135deg,
-    rgba(10, 10, 10, 0.85) 0%,
-    rgba(17, 17, 17, 0.75) 50%,
-    rgba(10, 10, 10, 0.85) 100%
+    rgba(8, 11, 18, 0.88) 0%,
+    rgba(14, 18, 25, 0.76) 50%,
+    rgba(8, 11, 18, 0.88) 100%
   );
   z-index: 1;
 }
 
-/* Subtle vignette effect */
 .heroSection::after {
   background: radial-gradient(
     ellipse at center,
     transparent 40%,
-    rgba(10, 10, 10, 0.5) 100%
+    rgba(8, 11, 18, 0.55) 100%
   );
   z-index: 2;
 }
 
+.heroTag {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--landing-accent-warm);
+  opacity: 0.7;
+}
+
+.heroDivider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--landing-accent-warm), transparent);
+  opacity: 0.4;
+}
+
 /* ============================================
-   TYPOGRAPHY - Refined gradients
+   TYPOGRAPHY
    ============================================ */
 .gradient-text {
   background: linear-gradient(
     135deg,
-    rgba(220, 220, 220, 1) 0%,
-    rgba(180, 180, 180, 1) 50%,
-    rgba(220, 220, 220, 1) 100%
+    rgba(200, 212, 232, 1) 0%,
+    rgba(155, 172, 200, 1) 50%,
+    rgba(200, 212, 232, 1) 100%
   );
 }
 
 .gradient-text-grey {
   background: linear-gradient(
     135deg,
-    rgba(180, 180, 180, 1) 0%,
-    rgba(140, 140, 140, 1) 50%,
-    rgba(180, 180, 180, 1) 100%
+    rgba(160, 175, 200, 1) 0%,
+    rgba(120, 140, 170, 1) 50%,
+    rgba(160, 175, 200, 1) 100%
   );
 }
 
@@ -132,11 +160,11 @@ h6 {
 }
 
 .enhancedText {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================
-   BUTTONS - Understated elegance
+   BUTTONS
    ============================================ */
 .enhancedButton {
   position: relative;
@@ -144,33 +172,88 @@ h6 {
   border-radius: 8px;
   background: linear-gradient(
     135deg,
-    rgba(60, 60, 60, 0.9) 0%,
-    rgba(45, 45, 45, 0.9) 100%
+    rgba(56, 76, 110, 0.98) 0%,
+    rgba(34, 48, 76, 0.98) 100%
   );
-  border: 1px solid var(--landing-border-medium);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(142, 176, 228, 0.7);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(180, 205, 242, 0.25) inset,
+    0 0 20px rgba(77, 122, 200, 0.22);
   transition: all 0.25s ease;
 }
 
 .enhancedButton:hover {
   background: linear-gradient(
     135deg,
-    rgba(75, 75, 75, 0.95) 0%,
-    rgba(60, 60, 60, 0.95) 100%
+    rgba(70, 96, 138, 1) 0%,
+    rgba(42, 60, 92, 1) 100%
   );
-  border-color: var(--landing-border-strong);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  transform: translateY(-1px);
+  border-color: rgba(182, 209, 246, 0.95);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.5),
+    0 0 26px rgba(95, 146, 234, 0.34);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .enhancedButton:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* ============================================
-   MAP IMAGE CONTAINER
+   HERO DOCK LAYOUT
    ============================================ */
+.heroDockLayout {
+  display: grid;
+  grid-template-columns: minmax(260px, 20%) minmax(0, 80%);
+  align-items: stretch;
+  gap: 18px;
+  min-height: 78vh;
+  width: 100%;
+}
+
+.heroDockContent {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px 14px 12px;
+}
+
+.heroGameEmbedContainer {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.heroGameEmbedFrameWrap {
+  position: relative;
+  width: 100%;
+  min-height: 68vh;
+  border-radius: 0;
+  background: var(--landing-bg-secondary);
+  border: 1px solid var(--landing-border-medium);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(180, 200, 230, 0.03);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.heroGameEmbedFrameWrap:hover {
+  border-color: var(--landing-border-strong);
+  box-shadow:
+    0 16px 50px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(180, 200, 230, 0.05);
+}
+
+.heroGameEmbedFrame {
+  width: 100%;
+  height: 100%;
+  min-height: 68vh;
+  border: 0;
+  display: block;
+}
+
 .mapImageContainer {
   position: relative;
   min-height: 500px;
@@ -185,8 +268,8 @@ h6 {
   background: var(--landing-bg-secondary);
   border: 1px solid var(--landing-border-medium);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(180, 200, 230, 0.03);
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -194,9 +277,118 @@ h6 {
 .mapImageWrapper:hover {
   border-color: var(--landing-border-strong);
   box-shadow:
-    0 16px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 16px 50px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(180, 200, 230, 0.05);
   transform: translateY(-4px);
+}
+
+@media (max-width: 1200px) {
+  .heroDockLayout {
+    grid-template-columns: minmax(250px, 25%) minmax(0, 75%);
+  }
+}
+
+@media (max-width: 992px) {
+  .heroDockLayout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 14px;
+  }
+
+  .heroDockContent {
+    padding: 0;
+  }
+
+  .heroGameEmbedFrameWrap,
+  .heroGameEmbedFrame {
+    min-height: 60vh;
+  }
+}
+
+@media (max-width: 48em) {
+  .heroGameEmbedContainer {
+    display: none;
+  }
+}
+
+/* ============================================
+   FACTION ICON STRIP
+   ============================================ */
+.factionStrip {
+  background: var(--landing-bg-primary);
+  border-top: 1px solid var(--landing-border-subtle);
+  padding: 20px 0;
+  overflow: hidden;
+}
+
+.factionStripInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+
+.factionStripIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: opacity 0.25s ease;
+  border-radius: 4px;
+}
+
+.factionStripIcon:hover {
+  opacity: 1;
+}
+
+/* ============================================
+   STATS STRIP
+   ============================================ */
+.statsStrip {
+  background: var(--landing-bg-secondary);
+  border-top: 1px solid var(--landing-border-subtle);
+  border-bottom: 1px solid var(--landing-border-subtle);
+  padding: 28px 0;
+}
+
+.statsGrid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 52px;
+  border-right: 1px solid var(--landing-border-subtle);
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.statValue {
+  font-family: 'Space Mono', monospace;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--landing-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--landing-text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 8px;
 }
 
 /* ============================================
@@ -217,6 +409,49 @@ h6 {
   );
 }
 
+.howItWorksSection {
+  overflow: hidden;
+}
+
+.howItWorksContentWrap {
+  padding-bottom: clamp(320px, 28vw, 520px);
+}
+
+.howItWorksCornerArt {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(43.2vw, 662px);
+  max-width: 44%;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.9;
+}
+
+.howItWorksCornerArtRight {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(30vw, 460px);
+  max-width: 44%;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.9;
+}
+
+.sectionVariant2 {
+  background: linear-gradient(
+    180deg,
+    var(--landing-bg-primary) 0%,
+    var(--landing-bg-tertiary) 50%,
+    var(--landing-bg-primary) 100%
+  );
+}
+
 .sectionVariant3 {
   background: linear-gradient(
     180deg,
@@ -231,7 +466,7 @@ h6 {
 }
 
 /* ============================================
-   LIST ITEMS - How it works section
+   LIST ITEMS
    ============================================ */
 .enhancedListItem {
   padding: var(--mantine-spacing-lg);
@@ -257,8 +492,8 @@ h6 {
   height: 100%;
   background: linear-gradient(
     180deg,
-    rgba(160, 160, 160, 0.5) 0%,
-    rgba(160, 160, 160, 0.15) 100%
+    rgba(130, 155, 190, 0.45) 0%,
+    rgba(130, 155, 190, 0.1) 100%
   );
   transition: all 0.25s ease;
 }
@@ -267,19 +502,75 @@ h6 {
   background: linear-gradient(
     135deg,
     rgba(var(--landing-rgb-tertiary), 0.9) 0%,
-    rgba(28, 28, 28, 0.7) 100%
+    rgba(22, 30, 44, 0.7) 100%
   );
   border-color: var(--landing-border-medium);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .enhancedListItem:hover::before {
   background: linear-gradient(
     180deg,
-    rgba(200, 200, 200, 0.7) 0%,
-    rgba(160, 160, 160, 0.3) 100%
+    rgba(170, 192, 220, 0.65) 0%,
+    rgba(130, 155, 190, 0.2) 100%
   );
+}
+
+/* ============================================
+   GAME CARDS
+   ============================================ */
+.gameCardGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.gameCard {
+  background: rgba(var(--landing-rgb-secondary), 0.7);
+  border: 1px solid var(--landing-border-subtle);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+
+.gameCard:hover {
+  background: rgba(var(--landing-rgb-tertiary), 0.85);
+  border-color: var(--landing-border-medium);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.gameCardTitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gameCardMeta {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.gameCardFactions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.gameCardFactionIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+}
+
+.gameCardButton {
+  margin-top: auto;
 }
 
 /* ============================================
@@ -298,10 +589,54 @@ h6 {
   .enhancedListItem {
     padding: var(--mantine-spacing-md);
   }
+
+  .statsGrid {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .stat {
+    flex: 0 0 42%;
+    padding: 12px 0;
+    border-right: none;
+  }
+
+  .factionStripIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .factionStripInner {
+    gap: 10px;
+  }
+
+  .gameCardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .howItWorksCornerArt {
+    width: min(72vw, 432px);
+    opacity: 0.75;
+  }
+
+  .howItWorksCornerArtRight {
+    width: min(50vw, 300px);
+    opacity: 0.75;
+  }
+
+  .howItWorksContentWrap {
+    padding-bottom: clamp(300px, 56vw, 460px);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gameCardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ============================================
-   ANIMATIONS - Subtle and refined
+   ANIMATIONS
    ============================================ */
 @keyframes fadeInUp {
   0% {

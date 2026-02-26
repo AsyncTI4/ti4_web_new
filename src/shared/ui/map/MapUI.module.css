@@ -46,6 +46,10 @@
   z-index: var(--z-zoom-controls);
 }
 
+.zoomControlsEmbedded {
+  top: 24px;
+}
+
 /* Details-style modal content hook for summary modal */
 .detailsModalContent {
   background: var(--details-card-bg);
