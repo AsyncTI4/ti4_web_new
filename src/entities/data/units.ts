@@ -511,7 +511,6 @@ export const units: Unit[] = [
     source: "absol",
     productionValue: "+4",
     basicProduction: "res",
-    capacityValue: 5,
     fleetSupplyBonus: 1,
     isStructure: true,
     ability:
@@ -1215,7 +1214,6 @@ export const units: Unit[] = [
     source: "ignis_aurora",
     productionValue: "+5",
     basicProduction: "res",
-    capacityValue: 6,
     ability:
       "This unit's PRODUCTION value is equal to 5 more than the resource value of this planet.\nUp to 6 fighters in this system do not count against your ships' capacity.",
     isStructure: true,
@@ -4960,7 +4958,6 @@ export const units: Unit[] = [
     basicProduction: "res",
     ability:
       "This unit's PRODUCTION value is equal to 2 more than the resource value of this planet.\nUp to 3 fighters in this system do not count against your ships' capacity.",
-    capacityValue: 3,
     isStructure: true,
     homebrewReplacesID: "spacedock",
   },
@@ -4974,7 +4971,6 @@ export const units: Unit[] = [
     source: "miltymod",
     productionValue: "+5",
     basicProduction: "res",
-    capacityValue: 5,
     isStructure: true,
     ability:
       "This unit's PRODUCTION value is equal to 5 more than the resource value of this planet.\nUp to 5 fighters in this system do not count against your ships' capacity.\nWhen you use this unit's PRODUCTION ability, you may place the produced units on any planet in this system.",
@@ -9401,7 +9397,6 @@ export const units: Unit[] = [
     source: "base",
     productionValue: "+2",
     basicProduction: "res",
-    capacityValue: 3,
     isStructure: true,
     imageURL: "/hover_images/units/generic/spacedock.png",
     ability:
@@ -9418,7 +9413,6 @@ export const units: Unit[] = [
     source: "base",
     productionValue: "+4",
     basicProduction: "res",
-    capacityValue: 3,
     isStructure: true,
     imageURL: "/hover_images/techs/generic/spacedock_2.jpg",
     ability:
