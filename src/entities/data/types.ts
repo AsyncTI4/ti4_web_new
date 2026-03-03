@@ -170,6 +170,7 @@ export type LeaderData = {
   shrinkName?: boolean;
   searchTags?: string[];
   homebrewReplacesID?: string;
+  imageID?: string;
   tfName?: string;
   tfTitle?: string;
   tfAbilityWindow?: string;

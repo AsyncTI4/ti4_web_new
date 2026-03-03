@@ -5,7 +5,7 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
-import { leaders } from "@/entities/data/leaders";
+import { leaders, getLeaderImageId } from "@/entities/data/leaders";
 import { showLeader } from "./showLeader";
 import styles from "./Leader.module.css";
 
@@ -51,7 +51,7 @@ export function LeaderChip({ variant = "default", ...props }: LeaderChipProps) {
             <Group gap={variant === "mobile" ? 8 : 6} className={styles.leaderGroup}>
               {showLeaderImage && (
                 <div className={styles.leaderImageContainer}>
-                  <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
+                  <Image src={`/leaders/${getLeaderImageId(id)}.webp`} className={styles.leaderImage} />
                 </div>
               )}
 
