@@ -1,5 +1,5 @@
 import { Stack, Image, Divider } from "@mantine/core";
-import { leaders } from "@/entities/data/leaders";
+import { leaders, getLeaderImageId } from "@/entities/data/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { showLeader } from "./Leader/showLeader";
 import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
@@ -27,7 +27,7 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   const renderLeaderIcon = () => {
     if (showLeader(leaderData.source)) {
       return (
-        <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
+        <Image src={`/leaders/${getLeaderImageId(leaderId)}.webp`} w={60} h={80} radius="50%" />
       );
     }
     return <></>;

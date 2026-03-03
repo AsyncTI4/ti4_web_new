@@ -181,6 +181,7 @@ export const leaders: LeaderData[] = [
       "Place any combination of up to 4 PDS or mechs onto planets you control; ready each planet that you place a unit on. Then, purge this card.",
     unlockCondition: "Have 3 scored objectives.",
     homebrewReplacesID: "xxchahero",
+    imageID: "xxchahero",
     source: "thunders_edge",
   },
   {
@@ -5243,3 +5244,8 @@ export const leaders: LeaderData[] = [
     source: "twilights_fall",
   },
 ];
+
+export function getLeaderImageId(id: string): string {
+  const leader = leaders.find((l) => l.id === id);
+  return leader?.imageID ?? id;
+}

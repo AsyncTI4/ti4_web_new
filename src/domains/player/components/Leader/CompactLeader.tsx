@@ -3,6 +3,7 @@ import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import styles from "./CompactLeader.module.css";
 import { useDisclosure } from "@/hooks/useDisclosure";
+import { getLeaderImageId } from "@/entities/data/leaders";
 
 type Props = {
   id: string;
@@ -31,7 +32,7 @@ export function CompactLeader({ id, exhausted, locked }: Props) {
           }}
         >
           <div className={styles.imageFrame}>
-            <Image src={`/leaders/${id}.webp`} className={styles.image} />
+            <Image src={`/leaders/${getLeaderImageId(id)}.webp`} className={styles.image} />
           </div>
         </div>
       </SmoothPopover.Target>
