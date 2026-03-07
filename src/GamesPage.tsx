@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { DiscordLogin } from "./domains/auth/DiscordLogin";
 import { AppHeader } from "@/shared/ui/AppHeader";
+import { Footer } from "@/shared/ui/Footer";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 type MapSummary = {
@@ -29,7 +30,7 @@ function GamesPage() {
       .sort((a, b) => a.MapName.localeCompare(b.MapName)) ?? [];
 
   return (
-    <AppShell header={{ height: 60 }}>
+    <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
       <AppHeader>
         <div style={{ flexGrow: 1 }} />
         <Box visibleFrom="sm">
@@ -83,6 +84,7 @@ function GamesPage() {
           </SimpleGrid>
         </Box>
       </AppShell.Main>
+      <Footer />
     </AppShell>
   );
 }

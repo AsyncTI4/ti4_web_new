@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { GamesBar } from "@/shared/ui/GamesBar";
 import { Surface } from "./domains/player/components/Surface";
 import { AppHeader } from "@/shared/ui/AppHeader";
+import { Footer } from "@/shared/ui/Footer";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { useCommunityStats } from "@/hooks/useCommunityStats";
 
@@ -80,7 +81,7 @@ export default function LandingPage() {
     (!communityStatsQuery.isLoading && !communityStats);
 
   return (
-    <AppShell header={{ height: 60 }}>
+    <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
       <AppHeader className="appHeader">
         <GamesBar />
       </AppHeader>
@@ -445,6 +446,7 @@ export default function LandingPage() {
           </Box>
         </Stack>
       </AppShell.Main>
+      <Footer />
     </AppShell>
   );
 }
