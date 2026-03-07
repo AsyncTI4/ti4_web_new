@@ -108,6 +108,9 @@ export default function LandingPage() {
                     >
                       Async Twilight Imperium
                     </Title>
+                    <Text size="sm" c="gray.6">
+                      A fan project for Twilight Imperium™
+                    </Text>
                     <Text
                       size={22}
                       lh={1.3}
