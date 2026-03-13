@@ -4,6 +4,7 @@ import cx from "clsx";
 import styles from "./ObjectiveChip.module.css";
 import { Tooltip } from "@mantine/core";
 import { shouldShowProgress } from "./utils";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type ObjectiveChipProps = {
   icon?: ReactNode;
@@ -73,6 +74,7 @@ export function ObjectiveChip({
   description,
   zIndex,
 }: ObjectiveChipProps) {
+  const isMobile = isMobileDevice();
   const shouldApplyGrayscale = state === "UNSCORED";
   const showProgress = shouldShowProgress(currentProgress, totalProgress, entryType, state);
 
@@ -97,7 +99,14 @@ export function ObjectiveChip({
 
   if (description) {
     return (
-      <Tooltip label={description} withinPortal zIndex={6000}>
+      <Tooltip
+        label={description}
+        events={{ hover: !isMobile, focus: true, touch: isMobile }}
+        multiline
+        w={260}
+        withinPortal={!isMobile}
+        zIndex={6000}
+      >
         {chipContent}
       </Tooltip>
     );

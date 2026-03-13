@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, Stack, SimpleGrid, Flex } from "@mantine/core";
 import ExpandedObjectiveCard from "./ExpandedObjectiveCard";
 import { Objectives, PlayerData } from "@/entities/data/types";
@@ -10,6 +11,8 @@ type Props = {
 };
 
 function ExpandedPublicObjectives({ objectives, playerData }: Props) {
+  const [openObjectiveKey, setOpenObjectiveKey] = useState<string | null>(null);
+
   return (
     <Box className={styles.themedContainer}>
       <Stack gap="md">
@@ -31,6 +34,15 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
                       playerData={playerData}
                       objective={objective}
                       color="orange"
+                      opened={openObjectiveKey === objective.key}
+                      onToggle={() =>
+                        setOpenObjectiveKey((current) =>
+                          current === objective.key ? null : objective.key
+                        )
+                      }
+                      onOpenChange={(nextOpened) =>
+                        setOpenObjectiveKey(nextOpened ? objective.key : null)
+                      }
                     />
                   ))}
                 </SimpleGrid>
@@ -53,6 +65,15 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
                       playerData={playerData}
                       objective={objective}
                       color="blue"
+                      opened={openObjectiveKey === objective.key}
+                      onToggle={() =>
+                        setOpenObjectiveKey((current) =>
+                          current === objective.key ? null : objective.key
+                        )
+                      }
+                      onOpenChange={(nextOpened) =>
+                        setOpenObjectiveKey(nextOpened ? objective.key : null)
+                      }
                     />
                   ))}
                 </SimpleGrid>
@@ -72,6 +93,15 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
                   objective={objective}
                   color="gray"
                   custom
+                  opened={openObjectiveKey === objective.key}
+                  onToggle={() =>
+                    setOpenObjectiveKey((current) =>
+                      current === objective.key ? null : objective.key
+                    )
+                  }
+                  onOpenChange={(nextOpened) =>
+                    setOpenObjectiveKey(nextOpened ? objective.key : null)
+                  }
                 />
               ))}
             </Flex>

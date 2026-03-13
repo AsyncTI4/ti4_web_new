@@ -14,6 +14,7 @@ type Props = {
   color?: "orange" | "blue" | "gray";
   factionProgress?: Record<string, number>;
   progressThreshold?: number;
+  showFactionProgress?: boolean;
 };
 
 export function ObjectiveDetailsCard({
@@ -22,9 +23,9 @@ export function ObjectiveDetailsCard({
   hasRedTape,
   scoredFactions = [],
   color = "blue",
-
   factionProgress = {},
   progressThreshold = 0,
+  showFactionProgress = true,
 }: Props) {
   const objectiveData = publicObjectives.find(
     (obj) => obj.alias === objectiveKey
@@ -87,53 +88,57 @@ export function ObjectiveDetailsCard({
 
         <DetailsCard.Section title="Requirement" content={objectiveData.text} />
 
-        <Divider c="gray.7" opacity={0.8} />
+        {showFactionProgress && (
+          <>
+            <Divider c="gray.7" opacity={0.8} />
 
-        <DetailsCard.Section
-          title="Faction Progress"
-          content={
-            <Stack gap={6}>
-              {factionProgressData.map(({ player, progress, isScored }) => (
-                <Group
-                  key={player.faction}
-                  gap="sm"
-                  align="center"
-                  wrap="nowrap"
-                >
-                  <Box w={24} className={classes.factionIconBox}>
-                    <CircularFactionIcon faction={player.faction} size={24} />
-                  </Box>
-                  <Text
-                    size="xs"
-                    c="gray.4"
-                    fw={600}
-                    tt="uppercase"
-                    className={classes.factionName}
-                  >
-                    {player.faction}
-                  </Text>
-                  <Text size="sm" c="gray.3" className={classes.playerName}>
-                    {player.userName.length > 12
-                      ? `${player.userName.slice(0, 12)}...`
-                      : player.userName}
-                  </Text>
-                  <Box w={40} className={classes.progressValueBox}>
-                    {isScored ? (
-                      <IconCheck
-                        size={18}
-                        color="var(--mantine-color-green-5)"
-                      />
-                    ) : (
-                      <Text size="sm" c="gray.4" fw={500}>
-                        {progress}/{progressThreshold}
+            <DetailsCard.Section
+              title="Faction Progress"
+              content={
+                <Stack gap={6}>
+                  {factionProgressData.map(({ player, progress, isScored }) => (
+                    <Group
+                      key={player.faction}
+                      gap="sm"
+                      align="center"
+                      wrap="nowrap"
+                    >
+                      <Box w={24} className={classes.factionIconBox}>
+                        <CircularFactionIcon faction={player.faction} size={24} />
+                      </Box>
+                      <Text
+                        size="xs"
+                        c="gray.4"
+                        fw={600}
+                        tt="uppercase"
+                        className={classes.factionName}
+                      >
+                        {player.faction}
                       </Text>
-                    )}
-                  </Box>
-                </Group>
-              ))}
-            </Stack>
-          }
-        />
+                      <Text size="sm" c="gray.3" className={classes.playerName}>
+                        {player.userName.length > 12
+                          ? `${player.userName.slice(0, 12)}...`
+                          : player.userName}
+                      </Text>
+                      <Box w={40} className={classes.progressValueBox}>
+                        {isScored ? (
+                          <IconCheck
+                            size={18}
+                            color="var(--mantine-color-green-5)"
+                          />
+                        ) : (
+                          <Text size="sm" c="gray.4" fw={500}>
+                            {progress}/{progressThreshold}
+                          </Text>
+                        )}
+                      </Box>
+                    </Group>
+                  ))}
+                </Stack>
+              }
+            />
+          </>
+        )}
       </Stack>
     </DetailsCard>
   );

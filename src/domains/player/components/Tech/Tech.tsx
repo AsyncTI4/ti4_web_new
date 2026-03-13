@@ -165,12 +165,17 @@ function getSynergyClass(
   // Only apply synergy if the tech color matches one of the synergy colors
   if (!colors.includes(techColor)) return "";
 
-  // Sort colors alphabetically and capitalize first letter of each
-  const [a, b] = [...colors].sort();
-  const colorA = a.charAt(0).toUpperCase() + a.slice(1);
-  const colorB = b.charAt(0).toUpperCase() + b.slice(1);
+  const pairKey = [...colors].sort().join("-");
+  const synergyClassMap: Record<string, string> = {
+    "blue-green": "synergyBlueGreen",
+    "blue-red": "synergyBlueRed",
+    "blue-yellow": "synergyBlueYellow",
+    "green-red": "synergyGreenRed",
+    "green-yellow": "synergyGreenYellow",
+    "red-yellow": "synergyYellowRed",
+  };
 
-  return `synergy${colorA}${colorB}`;
+  return synergyClassMap[pairKey] ?? "";
 }
 
 const getTechTier = (requirements?: string): number => {

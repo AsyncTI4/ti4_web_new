@@ -84,6 +84,11 @@ function formatDate(value: number | null) {
   return new Date(value).toLocaleDateString();
 }
 
+function isFogOfWarGame(game: DashboardGame) {
+  return game.gameModes.some((mode) => mode.toLowerCase() === "fog_of_war")
+    || game.gameId.toLowerCase().startsWith("fow");
+}
+
 function statusFilterMatch(game: DashboardGame, filter: StatusFilter) {
   if (filter === "all") return true;
   if (filter === "active") return game.isActive;
@@ -109,8 +114,16 @@ function accentClass(status: DashboardGame["status"]) {
 const AGGRESSION_GAME_LIMIT = 6;
 
 function latestAggression(profile: AggressionProfile, games: DashboardGame[]): AggressionProfile {
-  const gameIds = Object.keys(profile.byGame);
-  if (gameIds.length <= AGGRESSION_GAME_LIMIT) return profile;
+  const visibleGameIds = new Set(games.map((game) => game.gameId));
+  const gameIds = Object.keys(profile.byGame).filter((gameId) => visibleGameIds.has(gameId));
+  const visibleByGame: Record<string, number> = {};
+  for (const gameId of gameIds) {
+    visibleByGame[gameId] = profile.byGame[gameId];
+  }
+  if (gameIds.length === 0) {
+    return { ...profile, byGame: visibleByGame };
+  }
+  if (gameIds.length <= AGGRESSION_GAME_LIMIT) return { ...profile, byGame: visibleByGame };
 
   const dateByGame = new Map(games.map((g) => [g.gameId, g.createdAtEpochMs]));
   const sorted = gameIds.sort((a, b) => (dateByGame.get(b) ?? 0) - (dateByGame.get(a) ?? 0));
@@ -200,7 +213,8 @@ export default function DashboardPage() {
   const data = dashboardQuery.data;
   if (!data) return null;
 
-  const filteredGames = data.games.filter((g) => statusFilterMatch(g, filter));
+  const visibleGames = data.games.filter((game) => !isFogOfWarGame(game));
+  const filteredGames = visibleGames.filter((g) => statusFilterMatch(g, filter));
   const totalPages = Math.max(1, Math.ceil(filteredGames.length / GAMES_PER_PAGE));
   const paginatedGames = filteredGames.slice(page * GAMES_PER_PAGE, (page + 1) * GAMES_PER_PAGE);
   const diceRatio = data.profile.diceLuck.ratio;
@@ -360,7 +374,7 @@ export default function DashboardPage() {
                   <CombatProfileSection profile={agg.combatProfile} />
                 )}
                 {agg.aggressionProfile && (
-                  <AggressionChart profile={latestAggression(agg.aggressionProfile, data.games)} />
+                  <AggressionChart profile={latestAggression(agg.aggressionProfile, visibleGames)} />
                 )}
 
                 {/* Strategy + meta */}

@@ -5,6 +5,7 @@ import { Tech } from "./Tech";
 import { Breakthrough } from "./Breakthrough/Breakthrough";
 import { PromissoryNote } from "./PromissoryNote";
 import Caption from "@/shared/ui/Caption/Caption";
+import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
 import type { BreakthroughData } from "@/entities/data/types";
 
 type PlayerCardAbilitiesFactionTechsProps = {
@@ -25,6 +26,11 @@ export function PlayerCardAbilitiesFactionTechs({
   breakthrough,
 }: PlayerCardAbilitiesFactionTechsProps) {
   const isMobile = variant === "mobile";
+  const breakthroughData = breakthrough?.breakthroughId
+    ? getBreakthroughData(breakthrough.breakthroughId)
+    : undefined;
+  const synergy = breakthroughData?.synergy;
+  const breakthroughUnlocked = breakthrough?.unlocked ?? false;
 
   if (isMobile) {
     return (
@@ -61,7 +67,12 @@ export function PlayerCardAbilitiesFactionTechs({
         {notResearchedFactionTechs.length > 0 && (
           <Group gap={gap}>
             {notResearchedFactionTechs.map((techId) => (
-              <Tech techId={techId} key={techId} />
+              <Tech
+                techId={techId}
+                key={techId}
+                synergy={synergy}
+                breakthroughUnlocked={breakthroughUnlocked}
+              />
             ))}
           </Group>
         )}
@@ -129,7 +140,11 @@ export function PlayerCardAbilitiesFactionTechs({
                   filter: "grayscale(0.5)",
                 }}
               >
-                <Tech techId={techId} />
+                <Tech
+                  techId={techId}
+                  synergy={synergy}
+                  breakthroughUnlocked={breakthroughUnlocked}
+                />
               </Box>
             ))}
           </Group>

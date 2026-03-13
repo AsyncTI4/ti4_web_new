@@ -5,7 +5,7 @@ import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
 import type { ColorKey } from "@/domains/player/components/gradientClasses";
 import { BreakthroughCard } from "./BreakthroughCard.tsx";
-import { IconLock } from "@tabler/icons-react";
+import { IconLock, IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage.ts";
 import styles from "./Breakthrough.module.css";
 
@@ -68,7 +68,7 @@ export function Breakthrough({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          className={`${styles.container} ${!unlocked ? styles.locked : ""}`}
+          className={`${styles.container} ${exhausted ? styles.exhausted : ""} ${!unlocked ? styles.locked : ""}`}
         >
           <Chip
             accent={accent}
@@ -79,10 +79,11 @@ export function Breakthrough({
             py={4}
             strong={strong}
             accentLine={exhausted}
+            className={exhausted ? styles.exhaustedChip : ""}
             leftSection={
               <img
                 src={cdnImage("/general/synergy.png")}
-                className={styles.synergyIcon}
+                className={`${styles.synergyIcon} ${exhausted ? styles.exhaustedIcon : ""}`}
               />
             }
           >
@@ -95,6 +96,11 @@ export function Breakthrough({
           {!unlocked && (
             <Box className={styles.lockIcon}>
               <IconLock size={12} color="white" stroke={2} />
+            </Box>
+          )}
+          {exhausted && (
+            <Box className={styles.exhaustedBadge}>
+              <IconX size={16} color="var(--mantine-color-red-1)" stroke={2.75} />
             </Box>
           )}
         </Box>
