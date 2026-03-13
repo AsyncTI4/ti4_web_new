@@ -6,7 +6,7 @@
 }
 
 .actionCard:hover {
-  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.3), 0 0 12px rgba(250, 204, 21, 0.2);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.28), 0 0 12px rgba(239, 68, 68, 0.18);
 }
 
 .contentContainer {
@@ -15,6 +15,14 @@
   align-items: center;
   gap: var(--mantine-spacing-xs);
   min-width: 0;
+}
+
+.textGroup {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .icon {
@@ -27,15 +35,15 @@
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  background: rgba(234, 179, 8, 0.2);
-  border: 1px solid rgba(234, 179, 8, 0.4);
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.22) 0%, rgba(239, 68, 68, 0.18) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.44);
   border-radius: var(--mantine-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 8px;
   font-weight: 700;
-  color: rgb(234, 179, 8);
+  color: rgb(251, 146, 60);
 }
 
 .textContainer {
@@ -43,5 +51,15 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
-  flex: 1;
+}
+
+.windowText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  color: rgba(255, 206, 166, 0.78);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.42);
 }

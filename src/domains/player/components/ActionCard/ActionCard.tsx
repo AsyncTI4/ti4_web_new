@@ -1,4 +1,4 @@
-import { Box, Text, Image } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { Shimmer } from "../Shimmer";
 import { getActionCard } from "@/entities/lookup/actionCards";
@@ -23,7 +23,10 @@ export function ActionCard({
 
   if (!actionCardData) return null;
 
-  const gradientClasses = getGradientClasses("yellow");
+  const gradientClasses = getGradientClasses("orange");
+  const timingWindow = actionCardData.window?.trim().replace(/:$/, "");
+  const timingLabel =
+    timingWindow?.toLowerCase() === "action" ? "ACTION" : timingWindow;
 
   const handleClick = () => {
     if (onClick) {
@@ -36,16 +39,23 @@ export function ActionCard({
 
   const cardContent = (
     <Box className={styles.actionCard} onClick={handleClick}>
-      <Shimmer color="yellow" py={2} px={6} className={gradientClasses.border}>
+      <Shimmer color="orange" py={4} px={6} className={gradientClasses.border}>
         <Box className={styles.contentContainer}>
           <Box
             className={`${styles.iconPlaceholder} ${gradientClasses.iconFilter}`}
           >
             AC
           </Box>
-          <Text size="xs" fw={700} c="white" className={styles.textContainer}>
-            {actionCardData.name}
-          </Text>
+          <Box className={styles.textGroup}>
+            <Text size="xs" fw={700} c="white" className={styles.textContainer}>
+              {actionCardData.name}
+            </Text>
+            {timingLabel && (
+              <Text size="10px" className={styles.windowText}>
+                {timingLabel}
+              </Text>
+            )}
+          </Box>
         </Box>
       </Shimmer>
     </Box>
