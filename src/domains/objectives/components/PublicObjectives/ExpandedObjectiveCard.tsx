@@ -8,6 +8,7 @@ import styles from "./ExpandedObjectiveCard.module.css";
 import ProgressObjectiveDisplay from "./ProgressObjectiveDisplay";
 import { ObjectiveDetailsCard } from "./ObjectiveDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   playerData: PlayerData[];
