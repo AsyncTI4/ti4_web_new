@@ -2,7 +2,6 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { ExpeditionTokens } from "./ExpeditionTokens";
 import { useGameData } from "@/hooks/useGameContext";
 import { useMemo } from "react";
-import { useAppStore, useSettingsStore } from "@/utils/appStore";
 
 type Props = {
   contentSize: {
@@ -40,12 +39,9 @@ function calculateExpeditionPosition(
     width: number;
     height: number;
   },
-  isFirefox: boolean,
-  zoom: number
 ) {
-  const baseHeight = isFirefox ? contentSize.height / zoom : contentSize.height;
   const expeditionsImageLeft = 100;
-  const expeditionsImageTop = baseHeight - 400;
+  const expeditionsImageTop = contentSize.height - 400;
   return {
     left: expeditionsImageLeft,
     top: expeditionsImageTop,
@@ -55,15 +51,11 @@ function calculateExpeditionPosition(
 export function ExpeditionLayer({ contentSize }: Props) {
   const gameData = useGameData();
   const visibility = useExpeditionVisibility();
-  const zoom = useAppStore((state) => state.zoomLevel);
-  const settings = useSettingsStore((state) => state.settings);
 
   if (!gameData?.expeditions || !visibility.shouldShow) return null;
 
   const position = calculateExpeditionPosition(
     contentSize,
-    settings.isFirefox,
-    zoom
   );
 
   return (
