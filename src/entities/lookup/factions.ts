@@ -7,6 +7,7 @@ export function getFactionImage(
   factionImage?: string,
   factionImageType?: string
 ): string | undefined {
+  if (factionImageType === "EMOJI") return `https://emoji-cdn.mqrio.dev/${factionImage}?style=twitter`
   if (factionImageType === "DISCORD") return factionImage;
   return cdnImage(`/factions/${faction}.png`);
 }
