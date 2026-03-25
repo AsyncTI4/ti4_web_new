@@ -12,6 +12,7 @@ export type Settings = {
   alwaysShowControlTokens: boolean;
   techSkipsMode: boolean;
   planetTypesMode: boolean;
+  attachmentsMode: boolean;
   distanceMode: boolean;
   pdsMode: boolean;
   isLeftPanelCollapsed: boolean;
@@ -24,6 +25,7 @@ const DEFAULT_SETTINGS: Settings = {
   alwaysShowControlTokens: true,
   techSkipsMode: false,
   planetTypesMode: false,
+  attachmentsMode: false,
   distanceMode: false,
   pdsMode: false,
   isLeftPanelCollapsed: false,
@@ -48,6 +50,7 @@ type SettingsContextValue = {
   toggleAlwaysShowControlTokens: () => void;
   toggleTechSkipsMode: () => void;
   togglePlanetTypesMode: () => void;
+  toggleAttachmentsMode: () => void;
   toggleDistanceMode: () => void;
   togglePdsMode: () => void;
   toggleLeftPanelCollapsed: () => void;
@@ -109,6 +112,14 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     });
   }, []);
 
+  const toggleAttachmentsMode = useCallback(() => {
+    setSettings((prev) => {
+      const newSettings = { ...prev, attachmentsMode: !prev.attachmentsMode };
+      saveSettingsToStorage(newSettings);
+      return newSettings;
+    });
+  }, []);
+
   const toggleDistanceMode = useCallback(() => {
     setSettings((prev) => {
       const newSettings = { ...prev, distanceMode: !prev.distanceMode };
@@ -165,6 +176,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleAlwaysShowControlTokens,
     toggleTechSkipsMode,
     togglePlanetTypesMode,
+    toggleAttachmentsMode,
     toggleDistanceMode,
     togglePdsMode,
     toggleLeftPanelCollapsed,

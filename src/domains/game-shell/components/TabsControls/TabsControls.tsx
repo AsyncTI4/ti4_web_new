@@ -6,6 +6,7 @@ import {
   IconHash,
   IconMenu2,
   IconSticker,
+  IconLinkPlus,
 } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import { SettingsStore, useSettingsStore } from "@/utils/appStore";
@@ -36,7 +37,7 @@ function ControlButtons({
   return (
     <>
       <Button
-        variant="light"
+        variant={settings.planetTypesMode ? "filled" : "light"}
         size="sm"
         color={settings.planetTypesMode ? "cyan" : "gray"}
         style={{ height: "36px", minWidth: "36px" }}
@@ -79,6 +80,17 @@ function ControlButtons({
             marginLeft: "-4px",
           }}
         />
+      </Button>
+
+      <Button
+        variant={settings.attachmentsMode ? "filled" : "light"}
+        size="sm"
+        color={settings.attachmentsMode ? "cyan" : "gray"}
+        style={{ height: "36px", minWidth: "36px" }}
+        px={8}
+        onClick={handlers.toggleAttachmentsMode}
+      >
+        <IconLinkPlus size={16} />
       </Button>
 
       {showDistanceButton && (

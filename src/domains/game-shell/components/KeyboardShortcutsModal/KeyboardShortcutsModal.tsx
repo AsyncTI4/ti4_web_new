@@ -73,6 +73,7 @@ export function KeyboardShortcutsModal({
               <ShortcutItem keys="-" description="Zoom out" />
               <ShortcutItem keys="u" description="Toggle ruler/distance mode" />
               <ShortcutItem keys="t" description="Toggle tech skip rendering" />
+              <ShortcutItem keys="a" description="Toggle attachments mode" />
               <ShortcutItem keys="o" description="Toggle overlays" />
             </Box>
           </Grid.Col>

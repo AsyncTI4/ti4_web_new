@@ -100,6 +100,7 @@ export type Tile = {
   planets: Record<string, TilePlanet>;
   hasAnomaly: boolean;
   hasTechSkips: boolean;
+  hasAttachments: boolean;
   properties: {
     x: number;
     y: number;

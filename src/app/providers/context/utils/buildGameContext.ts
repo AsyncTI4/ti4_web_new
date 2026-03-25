@@ -17,6 +17,7 @@ import {
   computePdsData,
   getTileController,
   hasTechSkips,
+  hasAttachments,
 } from "@/utils/tileDistances";
 import {
   calculateArmyRankings,
@@ -246,6 +247,7 @@ export function buildGameContext(
       commandCounters: tileData.ccs ?? [],
       highestProduction: Math.max(...Object.values(tileData.production)),
       hasTechSkips: hasTechSkips(planets),
+      hasAttachments: hasAttachments(planets),
       controlledBy: getTileController(planets, unitsByFaction),
       borderAnomalies: borderAnomaliesByTile[position],
     };

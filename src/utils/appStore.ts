@@ -30,6 +30,7 @@ const DEFAULT_SETTINGS = {
   overlaysEnabled: false,
   planetTypesMode: false,
   techSkipsMode: false,
+  attachmentsMode: false,
   showPDSLayer: false,
   distanceMode: false,
   showControlLayer: false,
@@ -297,6 +298,7 @@ export type Settings = {
   overlaysEnabled: boolean;
   planetTypesMode: boolean;
   techSkipsMode: boolean;
+  attachmentsMode: boolean;
   showPDSLayer: boolean;
   distanceMode: boolean;
   showControlLayer: boolean;
@@ -327,6 +329,7 @@ type SettingsHandlers = {
   toggleOverlays: () => void;
   togglePlanetTypesMode: () => void;
   toggleTechSkipsMode: () => void;
+  toggleAttachmentsMode: () => void;
   togglePdsMode: () => void;
   toggleDistanceMode: () => void;
   toggleShowControlLayer: () => void;
@@ -348,6 +351,7 @@ export type SettingsStore = {
   toggleRightPanelCollapsed: () => void;
   toggleOverlays: () => void;
   togglePlanetTypesMode: () => void;
+  toggleAttachmentsMode: () => void;
   toggleTechSkipsMode: () => void;
   toggleShowPDSLayer: () => void;
   toggleDistanceMode: () => void;
@@ -435,6 +439,16 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       const newSettings = {
         ...state.settings,
         techSkipsMode: !state.settings.techSkipsMode,
+      };
+      saveSettingsToStorage(newSettings as Settings);
+      return { ...state, settings: newSettings };
+    });
+
+  const toggleAttachmentsMode = () =>
+    set((state) => {
+      const newSettings = {
+        ...state.settings,
+        attachmentsMode: !state.settings.attachmentsMode,
       };
       saveSettingsToStorage(newSettings as Settings);
       return { ...state, settings: newSettings };
@@ -543,6 +557,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       toggleOverlays,
       togglePlanetTypesMode,
       toggleTechSkipsMode,
+      toggleAttachmentsMode,
       togglePdsMode: toggleShowPDSLayer,
       toggleDistanceMode,
       toggleShowControlLayer,
@@ -562,6 +577,7 @@ export const useSettingsStore = create<SettingsStore>((set) => {
     toggleOverlays,
     togglePlanetTypesMode,
     toggleTechSkipsMode,
+    toggleAttachmentsMode,
     toggleShowPDSLayer,
     toggleDistanceMode,
     toggleShowControlLayer,

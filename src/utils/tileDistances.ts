@@ -443,6 +443,12 @@ export function hasTechSkips(planets: Record<string, TilePlanet>): boolean {
   );
 }
 
+export function hasAttachments(planets: Record<string, TilePlanet>): boolean {
+  return Object.values(planets).some(
+    (planet: TilePlanet) => planet.attachments && planet.attachments.length > 0
+  );
+}
+
 export function computePdsData(
   data: PlayerDataResponse,
   factionToColor: Record<string, string>
