@@ -125,12 +125,19 @@ export const MapTile = React.memo<Props>(
           top: embedded ? 0 : `${position.y}px`,
           position: embedded ? "relative" : undefined,
           opacity: (() => {
-            // Tech skips mode takes priority
+            // If both tech skips and attachments modes are enabled, require both conditions
+            if (techSkipsMode && attachmentsMode) {
+              const hasTech = hasTechSkips(mapTile.planets ?? {});
+              const hasAttach = hasAttachments(mapTile.planets ?? {});
+              return (hasTech && hasAttach) ? 1.0 : 0.2;
+            }
+
+            // Tech skips mode takes priority (when attachments mode is off)
             if (techSkipsMode) {
               return hasTechSkips(mapTile.planets ?? {}) ? 1.0 : 0.2;
             }
 
-            // Attachments mode second priority
+            // Attachments mode (when tech skips mode is off)
             if (attachmentsMode) {
               return hasAttachments(mapTile.planets ?? {}) ? 1.0 : 0.2;
             }
