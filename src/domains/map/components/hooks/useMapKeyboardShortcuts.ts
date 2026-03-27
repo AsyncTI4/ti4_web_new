@@ -6,6 +6,7 @@ type ShortcutHandlers = Pick<
   SettingsStore["handlers"],
   | "toggleOverlays"
   | "toggleTechSkipsMode"
+  | "toggleAttachmentsMode"
   | "togglePlanetTypesMode"
   | "toggleDistanceMode"
   | "togglePdsMode"
@@ -39,6 +40,7 @@ export function useMapKeyboardShortcuts({
   useKeyboardShortcuts({
     toggleOverlays: handlers.toggleOverlays,
     toggleTechSkipsMode: handlers.toggleTechSkipsMode,
+    toggleAttachmentsMode: handlers.toggleAttachmentsMode,
     togglePlanetTypesMode: handlers.togglePlanetTypesMode,
     toggleDistanceMode: handlers.toggleDistanceMode,
     togglePdsMode: handlers.togglePdsMode,

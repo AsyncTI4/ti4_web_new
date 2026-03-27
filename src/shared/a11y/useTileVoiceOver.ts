@@ -21,6 +21,7 @@ export function useTileVoiceOver(options?: Options) {
 
     if (tile.anomaly) parts.push("Anomaly present");
     if (tile.hasTechSkips) parts.push("Tech skip");
+    if (tile.hasAttachments) parts.push("Attachments present");
     if (tile.tokens?.length) parts.push(`${tile.tokens.length} tokens`);
 
     const planets: PlanetMapTile[] = tile.planets || [];

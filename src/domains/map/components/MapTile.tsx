@@ -15,9 +15,10 @@ import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLaye
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
-import { hasTechSkips } from "@/utils/tileDistances";
+import { hasAttachments, hasTechSkips } from "@/utils/tileDistances";
 import { Tile as TileType } from "@/app/providers/context/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
+import { AttachmentsLayer } from "./layers/AttachmentsLayer";
 import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
 import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 import { FactionColorOverlay } from "./FactionColorOverlay";
@@ -95,6 +96,9 @@ export const MapTile = React.memo<Props>(
     const planetTypesMode = useSettingsStore(
       (state) => state.settings.planetTypesMode
     );
+    const attachmentsMode = useSettingsStore(
+      (state) => state.settings.attachmentsMode
+    );
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
 
@@ -121,9 +125,21 @@ export const MapTile = React.memo<Props>(
           top: embedded ? 0 : `${position.y}px`,
           position: embedded ? "relative" : undefined,
           opacity: (() => {
-            // Tech skips mode takes priority
+            // If both tech skips and attachments modes are enabled, require both conditions
+            if (techSkipsMode && attachmentsMode) {
+              const hasTech = hasTechSkips(mapTile.planets ?? {});
+              const hasAttach = hasAttachments(mapTile.planets ?? {});
+              return (hasTech && hasAttach) ? 1.0 : 0.2;
+            }
+
+            // Tech skips mode takes priority (when attachments mode is off)
             if (techSkipsMode) {
               return hasTechSkips(mapTile.planets ?? {}) ? 1.0 : 0.2;
+            }
+
+            // Attachments mode (when tech skips mode is off)
+            if (attachmentsMode) {
+              return hasAttachments(mapTile.planets ?? {}) ? 1.0 : 0.2;
             }
 
             if (planetTypesMode) {
@@ -189,7 +205,7 @@ export const MapTile = React.memo<Props>(
           />
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
           <WormholeBlockedLayer systemId={systemId} mapTile={mapTile} />
-          {!techSkipsMode && !planetTypesMode && (
+          {!techSkipsMode && !planetTypesMode && !attachmentsMode && (
             <>
               <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
               <UnitImagesLayer
@@ -204,6 +220,9 @@ export const MapTile = React.memo<Props>(
           )}
           {techSkipsMode && (
             <TechSkipIconsLayer systemId={systemId} mapTile={mapTile} />
+          )}
+          {attachmentsMode && (
+            <AttachmentsLayer systemId={systemId} mapTile={mapTile} />
           )}
           {planetTypesMode && (
             <PlanetTraitIconsLayer systemId={systemId} mapTile={mapTile} />

@@ -4,6 +4,7 @@ import { useGameData } from "@/hooks/useGameContext";
 export interface KeyboardShortcutsProps {
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
+  toggleAttachmentsMode: () => void;
   togglePlanetTypesMode: () => void;
   toggleDistanceMode: () => void;
   togglePdsMode: () => void;
@@ -21,6 +22,7 @@ export interface KeyboardShortcutsProps {
 export function useKeyboardShortcuts({
   toggleOverlays,
   toggleTechSkipsMode,
+  toggleAttachmentsMode,
   togglePlanetTypesMode,
   toggleDistanceMode,
   togglePdsMode,
@@ -109,6 +111,11 @@ export function useKeyboardShortcuts({
         case "t":
           event.preventDefault();
           toggleTechSkipsMode();
+          break;
+
+        case "a":
+          event.preventDefault();
+          toggleAttachmentsMode();
           break;
 
         case "y":
