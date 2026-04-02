@@ -1,7 +1,6 @@
 import { useCallback, useState, useEffect, type CSSProperties } from "react";
 import ZoomControls from "@/shared/ui/map/ZoomControls";
-import { useAppStore, useSettingsStore } from "@/utils/appStore";
-import { getCssScaleStyle } from "@/utils/zoom";
+import { useAppStore } from "@/utils/appStore";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { useOverlayData, type OverlayData } from "../hooks/useOverlayData";
 import { abilities } from "@/entities/data/abilities";
@@ -54,9 +53,10 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
 
   const zoom = useAppStore((s) => s.zoomLevel);
   const zoomFitToScreen = useAppStore((s) => s.zoomFitToScreen);
-  const isFirefox = useSettingsStore((s) => s.settings.isFirefox);
   const imageScale = zoomFitToScreen ? 1 : zoom;
-  const imageScaleStyle = getCssScaleStyle(imageScale, isFirefox);
+  const imageScaleStyle = {
+    zoom: imageScale,
+  };
 
   const [containerWidth, setContainerWidth] = useState(() => window.innerWidth);
   useEffect(() => {

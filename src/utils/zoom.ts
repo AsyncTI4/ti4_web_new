@@ -114,18 +114,6 @@ export function getScaleStyle(
   } as const;
 }
 
-export function getCssScaleStyle(scale: number, isFirefox: boolean) {
-  if (isFirefox) {
-    return {
-      MozTransform: `scale(${scale})`,
-      MozTransformOrigin: "top left",
-    };
-  }
-  return {
-    zoom: scale,
-  };
-}
-
 export function getScaledDimensions(
   width: number,
   height: number,

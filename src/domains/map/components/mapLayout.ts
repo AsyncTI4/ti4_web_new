@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { getCssScaleStyle, getScaleStyle } from "@/utils/zoom";
+import { getScaleStyle } from "@/utils/zoom";
 
 export type MapLayout = "panels" | "pannable";
 
@@ -45,7 +45,9 @@ export function getMapScaleStyle(
   isFirefox: boolean
 ): CSSProperties {
   return config.useCssZoom
-    ? getCssScaleStyle(zoom, isFirefox)
+    ? {
+        zoom: zoom,
+      }
     : getScaleStyle(zoom, isFirefox);
 }
 
