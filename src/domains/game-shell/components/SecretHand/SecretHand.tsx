@@ -10,7 +10,7 @@ import { SecretObjectiveCard } from "@/domains/player/components/SecretObjective
 import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCard";
 import { PlayerHandData } from "@/shared/types/playerHand";
 import { PlayerData } from "@/entities/data/types";
-import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import classes from "./SecretHand.module.css";
 
 type Props = {
@@ -45,14 +45,19 @@ export function SecretHand({
   const currentPlayer = playerData?.find((p) => p.faction === currentFaction);
   const isViewingOwnFaction =
     currentPlayer && userDiscordId && currentPlayer.discordId === userDiscordId;
+  const imageUrl = currentPlayer !== undefined ? getFactionImage(
+    currentPlayer.faction,
+    currentPlayer.factionImage,
+    currentPlayer.factionImageType
+  ) : null;
 
   // Get title and icon for the header
   const headerTitle = isViewingOwnFaction ? "Your Hand" : "Hand";
   const headerIcon =
-    isViewingOwnFaction && currentFaction ? (
+    isViewingOwnFaction && currentPlayer ? (
       <Image
-        src={cdnImage(`/factions/${currentFaction}.png`)}
-        alt={currentFaction}
+        src={imageUrl}
+        alt={currentPlayer.faction}
         w={16}
         h={16}
       />

@@ -84,7 +84,7 @@ The project uses two TypeScript configurations:
 
 ### Adding Types
 
-- Global types can be added to `src/types/global.d.ts`
+- Global types can be added to `src/app/providers/context/types.ts`
 - Component-specific types should be defined in the same file or nearby
 - Third-party library types are automatically included when available
 

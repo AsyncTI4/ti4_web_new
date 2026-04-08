@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 import { usePersistentGameTabs } from "./usePersistentGameTabs";
+import { EnrichedTab } from "@/app/providers/context/types";
 
 type PlayerGame = {
   gameId: string;
@@ -10,13 +11,6 @@ type PlayerGame = {
 };
 
 type PlayerGamesResponse = PlayerGame[];
-
-type EnrichedTab = {
-  id: string;
-  faction: string | null;
-  factionColor: string | null;
-  isManaged: boolean;
-};
 
 function usePlayerGames() {
   const apiUrl = getBotApiUrl("/my-games");
@@ -48,6 +42,8 @@ export function useTabManagementV2() {
             gameData?.faction === "null" ? null : gameData?.faction || null,
           factionColor:
             gameData?.color === "null" ? null : gameData?.color || null,
+          factionImage: null,
+          factionImageType: null,
           isManaged,
         };
       })

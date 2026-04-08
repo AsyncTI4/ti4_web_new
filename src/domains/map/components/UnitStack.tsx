@@ -186,7 +186,6 @@ export function UnitStack({
         <Token
           key={unitKey}
           tokenId={unitType}
-          colorAlias={colorAlias}
           faction={faction}
           planetCenter={wrapperRelativePlanetCenter}
           x={xPos}

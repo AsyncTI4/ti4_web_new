@@ -1,7 +1,7 @@
 import { Box, Group, Text, Image, Stack } from "@mantine/core";
 import { StatusBadge } from "@/domains/player/components/StatusBadge";
 import { PlayerData } from "@/entities/data/types";
-import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import styles from "./FactionsInGame.module.css";
 
 type Props = {
@@ -34,11 +34,16 @@ function FactionsInGame({ playerData }: Props) {
           } else if (index === nextPlayerIndex) {
             statusBadge = <StatusBadge status="next" />;
           }
+          const imageUrl = getFactionImage(
+            player.faction,
+            player.factionImage,
+            player.factionImageType
+          );
 
           return (
             <Stack key={player.faction} gap="xs" align="center">
               <Image
-                src={cdnImage(`/factions/${player.faction}.png`)}
+                src={imageUrl}
                 w={36}
                 h={36}
                 className={styles.factionIcon}

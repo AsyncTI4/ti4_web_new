@@ -13,18 +13,12 @@ import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { generateColorGradient } from "@/entities/lookup/colors";
+import { EnrichedTab } from "@/app/providers/context/types";
 import {
   useTabLabelEditing,
   type TabLabelEditingApi,
 } from "@/hooks/useTabLabelEditing";
 import { EditableTabLabel } from "@/shared/ui/EditableTabLabel";
-
-type EnrichedTab = {
-  id: string;
-  faction: string | null;
-  factionColor: string | null;
-  isManaged: boolean;
-};
 
 type HeaderMenuNewProps = {
   mapId: string;
@@ -151,7 +145,7 @@ function TabView({
             }
             leftSection={
               tab.faction ? (
-                <CircularFactionIcon faction={tab.faction} size={16} />
+                <CircularFactionIcon faction={tab.faction} size={16} factionImageOverride={tab.factionImage} factionImageTypeOverride={tab.factionImageType} />
               ) : null
             }
             rightSection={
@@ -240,7 +234,7 @@ function DropdownView({
     >
       <Group gap="xs" style={{ width: "100%" }}>
         {item.faction && (
-          <CircularFactionIcon faction={item.faction} size={12} />
+          <CircularFactionIcon faction={item.faction} size={12} factionImageOverride={item.factionImage} factionImageTypeOverride={item.factionImageType} />
         )}
         {item.id === mapId && <CheckIcon size={12} />}
         <EditableTabLabel
@@ -328,6 +322,8 @@ function DropdownView({
                   {currentTab?.faction && (
                     <CircularFactionIcon
                       faction={currentTab.faction}
+                      factionImageOverride={currentTab.factionImage}
+                      factionImageTypeOverride={currentTab.factionImageType}
                       size={16}
                     />
                   )}

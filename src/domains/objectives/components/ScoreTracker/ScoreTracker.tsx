@@ -64,7 +64,7 @@ function ScoreTracker({ playerData, vpsToWin }: Props) {
               <Box className={styles.factionTokens}>
                 {playersAtScore.map((player) => (
                   <Box key={player.faction} className={styles.tokenContainer}>
-                    <CircularFactionIcon faction={player.faction} size={32} />
+                    <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={32} />
                   </Box>
                 ))}
               </Box>

@@ -30,3 +30,6 @@ yarn-error.log*
 /login
 
 public/tiles
+
+# .idea project files
+.idea/

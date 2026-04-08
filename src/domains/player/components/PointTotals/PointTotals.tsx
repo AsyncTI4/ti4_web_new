@@ -46,6 +46,8 @@ export function PointTotals({ playerData, vpsToWin }: Props) {
           >
             <CircularFactionIcon
               faction={player.faction}
+              factionImageOverride={player.factionImage}
+              factionImageTypeOverride={player.factionImageType}
               size={20}
               className={styles.factionIcon}
             />

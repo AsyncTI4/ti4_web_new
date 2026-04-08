@@ -104,7 +104,7 @@ export function ObjectiveDetailsCard({
                       wrap="nowrap"
                     >
                       <Box w={24} className={classes.factionIconBox}>
-                        <CircularFactionIcon faction={player.faction} size={24} />
+                        <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={24} />
                       </Box>
                       <Text
                         size="xs"
