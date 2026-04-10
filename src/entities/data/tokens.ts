@@ -264,6 +264,18 @@ export const tokens: Token[] = [
     source: "ds",
   },
   {
+    id: "glory2",
+    imagePath: "token_ds_glory2.png",
+    spaceOrPlanet: "space",
+    source: "ds",
+  },
+  {
+    id: "glory3",
+    imagePath: "token_ds_glory3.png",
+    spaceOrPlanet: "space",
+    source: "ds",
+  },
+  {
     id: "gravityrift",
     imagePath: "token_gravityrift.png",
     spaceOrPlanet: "space",
