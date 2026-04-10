@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mantine/core";
+import { Box } from "@mantine/core";
 import PlayerCardSidebar from "@/domains/player/components/composition/PlayerCardSidebar";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { PlayerData } from "@/entities/data/types";

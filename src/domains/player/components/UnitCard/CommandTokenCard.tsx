@@ -3,6 +3,7 @@ import styles from "./UnitCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { BaseCard } from "./BaseCard";
 import { getColorAlias } from "@/entities/lookup/colors";
+import { useFactionTokenImage } from "@/hooks/useFactionTokenImage";
 
 type Props = {
   color?: string;
@@ -20,6 +21,7 @@ export function CommandTokenCard({
   compact,
 }: Props) {
   const colorAlias = getColorAlias(color);
+  const factionUrl = useFactionTokenImage(faction);
 
   return (
     <div>
@@ -39,7 +41,7 @@ export function CommandTokenCard({
           />
           {faction && (
             <Image
-              src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+              src={factionUrl}
               alt={`${faction} faction`}
               style={{
                 position: "absolute",
