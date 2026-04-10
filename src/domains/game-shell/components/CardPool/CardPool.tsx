@@ -68,21 +68,25 @@ function CardPool({ cardPool, playerData }: Props) {
         />
         {[
           <ExplorationCardBack
+            key="explore_cultural"
             type="Cultural"
             deck={cardPool.culturalExploreDeck}
             discard={cardPool.culturalExploreDiscard}
           ></ExplorationCardBack>,
           <ExplorationCardBack
+            key="explore_industrial"
             type="Industrial"
             deck={cardPool.industrialExploreDeck}
             discard={cardPool.industrialExploreDiscard}
           ></ExplorationCardBack>,
           <ExplorationCardBack
+            key="explore_hazardous"
             type="Hazardous"
             deck={cardPool.hazardousExploreDeck}
             discard={cardPool.hazardousExploreDiscard}
           ></ExplorationCardBack>,
           <ExplorationCardBack
+            key="explore_frontier"
             type="Frontier"
             deck={cardPool.frontierExploreDeck}
             discard={cardPool.frontierExploreDiscard}
