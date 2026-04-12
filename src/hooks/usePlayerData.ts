@@ -4,12 +4,22 @@ import { useGameSocket } from "./useGameSocket";
 import { useRef } from "react";
 import { config } from "@/config";
 
+async function fetchPlayerData(apiUrl: string): Promise<PlayerDataResponse> {
+  const response = await fetch(apiUrl);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch player data: ${response.status} ${response.statusText}`
+    );
+  }
+  return response.json() as Promise<PlayerDataResponse>;
+}
+
 export function usePlayerData(gameId: string) {
-  const apiUrl = `${config.api.gameDataUrl}/${gameId}/${gameId}.json`;
+  const apiUrl = `${config.api.gameDataUrl}/${gameId}/web-data`;
 
   return useQuery<PlayerDataResponse>({
     queryKey: ["playerData", gameId],
-    queryFn: () => fetch(apiUrl).then((res) => res.json()),
+    queryFn: () => fetchPlayerData(apiUrl),
     retry: false,
   });
 }
