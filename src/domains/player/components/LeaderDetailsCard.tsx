@@ -1,5 +1,5 @@
 import { Stack, Image, Divider } from "@mantine/core";
-import { leaders } from "@/entities/data/leaders";
+import { getLeaderById } from "@/entities/lookup/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { showLeader } from "./Leader/showLeader";
 import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function LeaderDetailsCard({ leaderId }: Props) {
-  const leaderData = getLeaderData(leaderId);
+  const leaderData = getLeaderById(leaderId);
   const isTwilightsFallMode = useIsTwilightsFallMode();
 
   if (!leaderData) return null;
@@ -61,8 +61,3 @@ export function LeaderDetailsCard({ leaderId }: Props) {
     </DetailsCard>
   );
 }
-
-// Helper function to get leader data by ID
-const getLeaderData = (leaderId: string) => {
-  return leaders.find((leader) => leader.id === leaderId);
-};

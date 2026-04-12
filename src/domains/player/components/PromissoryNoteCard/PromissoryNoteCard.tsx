@@ -1,9 +1,10 @@
 import { Stack, Box, Image, Divider, Text, Group } from "@mantine/core";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
+import { getAllianceCommander } from "@/entities/lookup/leaders";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { useGameData } from "@/hooks/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
-import { leaders } from "@/entities/data/leaders";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 
 export function PromissoryNoteCard({ promissoryNoteId }: Props) {
   const factionColorMap = useFactionColors();
+  const gameData = useGameData();
   const noteData = getPromissoryNoteData(promissoryNoteId, factionColorMap);
 
   if (!noteData) return null;
@@ -28,13 +30,14 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
     noteData.noteData.alias.includes("_an") ||
     noteData.noteData.name.toLowerCase() === "alliance";
 
-  // Find commander for the faction when Alliance (exclude homebrew replacements)
+  // Resolve the actual commander in play for alliance notes. Some variants share a
+  // faction key (for example Ghosts/Red Creuss), so a plain faction match can pick
+  // the wrong leader data.
   const commander = isAlliance
-    ? leaders.find(
-        (l) =>
-          l.faction === noteData.faction &&
-          l.type === "commander" &&
-          !l.homebrewReplacesID
+    ? getAllianceCommander(
+        noteData.faction,
+        gameData?.playerData.find((player) => player.faction === noteData.faction)
+          ?.leaders
       )
     : undefined;
 

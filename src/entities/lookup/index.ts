@@ -6,6 +6,7 @@ export * from "./colors";
 export * from "./decals";
 export * from "./explorations";
 export * from "./factions";
+export * from "./leaders";
 export * from "./planets";
 export * from "./plots";
 export * from "./promissoryNotes";

@@ -5,7 +5,7 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "../LeaderDetailsCard";
-import { leaders } from "@/entities/data/leaders";
+import { getLeaderById } from "@/entities/lookup/leaders";
 import { showLeader } from "./showLeader";
 import styles from "./Leader.module.css";
 
@@ -22,7 +22,7 @@ export type LeaderChipProps = {
 export function LeaderChip({ variant = "default", ...props }: LeaderChipProps) {
   const { id, type, exhausted, locked, active } = props;
   const { opened, setOpened, toggle } = useDisclosure(false);
-  const leaderData = getLeaderData(id);
+  const leaderData = getLeaderById(id);
   if (!leaderData) return null;
 
   const shouldShowGreen = !exhausted && !locked;
@@ -79,8 +79,4 @@ export function LeaderChip({ variant = "default", ...props }: LeaderChipProps) {
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );
-}
-
-function getLeaderData(leaderId: string) {
-  return leaders.find((leader) => leader.id === leaderId);
 }
