@@ -11,8 +11,8 @@ type Props = {
 export function RelicDeckDetailsCard({ deck, discard }: Props) {
   // Memoized data processing using the generic utility
   const sections = useMemo(() => {
-    const deckData = processCardData(deck, getRelicData);
-    const discardData = processCardData(discard, getRelicData);
+    const deckData = processCardData(deck, getRelicData, "alphanumeric");
+    const discardData = processCardData(discard, getRelicData, "alphanumeric");
 
     return createCardSections(
       deckData,
