@@ -1,4 +1,4 @@
-import { getLocalUser } from "@/hooks/useUser";
+import { clearLocalUser, getLocalUser } from "@/hooks/useUser";
 import { refreshToken } from "./refreshToken";
 
 export async function authenticatedFetch(
@@ -37,6 +37,8 @@ export async function authenticatedFetch(
         ...options,
         headers: newHeaders,
       });
+    } else {
+      clearLocalUser();
     }
   }
 

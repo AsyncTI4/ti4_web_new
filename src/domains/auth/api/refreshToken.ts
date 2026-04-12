@@ -1,7 +1,27 @@
-import { getLocalUser, setLocalUser, LocalUser } from "@/hooks/useUser";
+import {
+  clearLocalUser,
+  getLocalUser,
+  setLocalUser,
+  LocalUser,
+} from "@/hooks/useUser";
 import { getBotApiUrl } from "./botApiUrl";
 
+let inFlightRefresh: Promise<LocalUser | null> | null = null;
+
 export async function refreshToken(): Promise<LocalUser | null> {
+  if (inFlightRefresh) {
+    return inFlightRefresh;
+  }
+
+  inFlightRefresh = performRefresh();
+  try {
+    return await inFlightRefresh;
+  } finally {
+    inFlightRefresh = null;
+  }
+}
+
+async function performRefresh(): Promise<LocalUser | null> {
   const user = getLocalUser();
 
   if (!user?.refreshToken || !user.authenticated) {
@@ -42,6 +62,7 @@ export async function refreshToken(): Promise<LocalUser | null> {
     return updatedUser;
   } catch (error) {
     console.error("Token refresh failed:", error);
+    clearLocalUser();
     return null;
   }
 }
