@@ -13,16 +13,43 @@ export type ProcessedCardData = {
   text: string;
 };
 
+export type CardSortMode = "percentage" | "alphanumeric";
+
 export type CardSection = {
   title: string;
   count: number;
   items: Array<ProcessedCardData & { percentage?: number }>;
 };
 
+const naturalNameCollator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base",
+});
+
+function compareByName(a: ProcessedCardData, b: ProcessedCardData) {
+  return naturalNameCollator.compare(a.name, b.name);
+}
+
+function compareCards(
+  a: ProcessedCardData,
+  b: ProcessedCardData,
+  sortMode: CardSortMode
+) {
+  if (sortMode === "alphanumeric") {
+    return compareByName(a, b);
+  }
+
+  // For percentage-based views, sort by frequency first and then use
+  // an alphanumeric tiebreaker so equal-% buckets render in a stable order.
+  const countDifference = b.count - a.count;
+  return countDifference !== 0 ? countDifference : compareByName(a, b);
+}
+
 // Generic function to process card IDs into grouped data
 export function processCardData<T extends CardDataItem>(
   cardIds: string[],
-  lookupFunction: (id: string) => T | undefined
+  lookupFunction: (id: string) => T | undefined,
+  sortMode: CardSortMode = "alphanumeric"
 ): ProcessedCardData[] {
   const cardMap = new Map<string, { aliases: string[]; text: string }>();
 
@@ -39,7 +66,6 @@ export function processCardData<T extends CardDataItem>(
     }
   });
 
-  // Convert to array and sort by count (most common first)
   return Array.from(cardMap.entries())
     .map(([name, data]) => ({
       name,
@@ -47,7 +73,7 @@ export function processCardData<T extends CardDataItem>(
       count: data.aliases.length,
       text: data.text,
     }))
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => compareCards(a, b, sortMode));
 }
 
 // Helper to create card sections with percentages

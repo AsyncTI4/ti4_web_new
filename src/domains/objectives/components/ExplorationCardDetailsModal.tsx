@@ -17,8 +17,8 @@ export function ExplorationCardDetailsModal({
   discardLabel = "Discard",
 }: ExplorationCardDetailsModalProps) {
   const sections = useMemo(() => {
-    const deckData = processCardData(deck, getExploration);
-    const discardData = processCardData(discard, getExploration);
+    const deckData = processCardData(deck, getExploration, "percentage");
+    const discardData = processCardData(discard, getExploration, "alphanumeric");
 
     return createCardSections(
       deckData,
