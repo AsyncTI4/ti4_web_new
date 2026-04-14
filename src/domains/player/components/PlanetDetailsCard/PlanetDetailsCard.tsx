@@ -4,6 +4,7 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import classes from "./PlanetDetailsCard.module.css";
+import { getActionCard } from "@/entities/lookup/actionCards";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
@@ -22,6 +23,13 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   if (!planetData) return null;
 
   const isLegendary = !!planetData.legendaryAbilityText;
+  const actionCardCounts = Object.entries(
+    planetTile?.actionCards?.reduce<Record<string, number>>((acc, alias) => {
+      acc[alias] = (acc[alias] ?? 0) + 1;
+      return acc;
+    }, {}) ?? {}
+  );
+  
   const isFactionPlanet = planetData.planetType === "FACTION";
 
   // Calculate attachment modifiers
@@ -266,6 +274,35 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
               <Text size="sm" c="gray.1" lh={1.5}>
                 {planetData.legendaryAbilityText}
               </Text>
+            </Box>
+          </>
+        )}
+
+        {actionCardCounts.length > 0 && (
+          <>
+            <Divider c="gray.7" opacity={0.8} />
+            <Box>
+              <Text size="sm" c="gray.3" fw={500} mb={4}>
+                Action Cards
+              </Text>
+              {actionCardCounts.map(([alias, count]) => {
+                const card = getActionCard(alias);
+                const cardLabel = card?.name ?? alias;
+                return (
+                  <Group key={alias} gap="xs" align="center">
+                    <Image
+                      src={cdnImage("/player_area/cardback_action.jpg")}
+                      alt={`Action card ${cardLabel}`}
+                      w={18}
+                      h={12}
+                    />
+                    <Text size="sm" c="gray.1" lh={1.5}>
+                      {cardLabel}
+                      {count > 1 ? ` x${count}` : ""}
+                    </Text>
+                  </Group>
+                );
+              })}
             </Box>
           </>
         )}

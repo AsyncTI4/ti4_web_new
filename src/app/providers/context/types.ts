@@ -124,6 +124,7 @@ export type TilePlanet = {
   planetaryShield: boolean;
   tokens: string[];
   attachments: string[];
+  actionCards: string[];
   unitsByFaction: Record<string, EntityData[]>;
   techSpecialties: string[];
   exhausted: boolean;

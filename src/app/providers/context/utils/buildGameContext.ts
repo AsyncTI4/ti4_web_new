@@ -45,6 +45,9 @@ function splitEntitiesByType(entities: EntityData[]) {
     tokens: entities
       .filter((e) => e.entityType === "token")
       .map((e) => e.entityId),
+    actionCards: entities
+      .filter((e) => e.entityType === "actioncard")
+      .flatMap((e) => Array.from({ length: e.count }, () => e.entityId)),
     unitsByFaction: entities.filter((e) => e.entityType === "unit"),
   };
 }
@@ -52,13 +55,15 @@ function splitEntitiesByType(entities: EntityData[]) {
 function aggregateEntities(data: Record<string, EntityData[]>) {
   const allTokens: string[] = [];
   const allAttachments: string[] = [];
+  const allActionCards: string[] = [];
   const allUnitsByFaction: Record<string, EntityData[]> = {};
   Object.entries(data).forEach(([faction, entities]) => {
-    const { tokens, attachments, unitsByFaction } =
+    const { tokens, attachments, actionCards, unitsByFaction } =
       splitEntitiesByType(entities);
 
     allTokens.push(...tokens);
     allAttachments.push(...attachments);
+    allActionCards.push(...actionCards);
     if (unitsByFaction.length > 0) {
       allUnitsByFaction[faction] = unitsByFaction;
     }
@@ -67,6 +72,7 @@ function aggregateEntities(data: Record<string, EntityData[]>) {
   return {
     tokens: allTokens,
     attachments: allAttachments,
+    actionCards: allActionCards,
     unitsByFaction: allUnitsByFaction,
   };
 }
@@ -169,15 +175,15 @@ export function buildGameContext(
     // Process "special" tile separately - it contains off-tile planets (triad, custodiavigilia, etc.)
     if (position === "special") {
       Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
-        const { tokens, unitsByFaction, attachments } = aggregateEntities(
-          planetData.entities,
-        );
+        const { tokens, unitsByFaction, attachments, actionCards } =
+          aggregateEntities(planetData.entities);
 
         const exhausted = allExhaustedPlanets.has(planetName);
         const planetTile: TilePlanet = {
           tokens,
           unitsByFaction,
           attachments,
+          actionCards,
           controlledBy: planetData.controlledBy,
           commodities: planetData.commodities,
           planetaryShield: planetData.planetaryShield,
@@ -197,15 +203,15 @@ export function buildGameContext(
 
     const planets: Record<string, TilePlanet> = {};
     Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
-      const { tokens, unitsByFaction, attachments } = aggregateEntities(
-        planetData.entities,
-      );
+      const { tokens, unitsByFaction, attachments, actionCards } =
+        aggregateEntities(planetData.entities);
 
       const exhausted = allExhaustedPlanets.has(planetName);
       planets[planetName] = {
         tokens,
         unitsByFaction,
         attachments,
+        actionCards,
         controlledBy: planetData.controlledBy,
         commodities: planetData.commodities,
         planetaryShield: planetData.planetaryShield,
