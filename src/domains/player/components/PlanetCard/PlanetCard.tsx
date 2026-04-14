@@ -167,6 +167,7 @@ export function PlanetCard({
           planetId={planetId}
           abilityName={planetData.legendaryAbilityName!}
           abilityText={planetData.legendaryAbilityText!}
+          actionCards={planetTile?.actionCards}
           exhausted={legendaryAbilityExhausted}
           joinedRight
         />

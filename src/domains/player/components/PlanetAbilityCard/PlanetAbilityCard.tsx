@@ -10,6 +10,7 @@ type Props = {
   planetId: string;
   abilityName: string;
   abilityText: string;
+  actionCards?: string[];
   exhausted?: boolean;
   joinedRight?: boolean;
 };
@@ -18,6 +19,7 @@ export function PlanetAbilityCard({
   planetId,
   abilityName,
   abilityText,
+  actionCards,
   exhausted = false,
   joinedRight = false,
 }: Props) {
@@ -51,6 +53,7 @@ export function PlanetAbilityCard({
           planetId={planetId}
           abilityName={abilityName}
           abilityText={abilityText}
+          actionCards={actionCards}
         />
       </SmoothPopover.Dropdown>
     </SmoothPopover>

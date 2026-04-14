@@ -29,7 +29,7 @@ export type TileData = {
 
 export type EntityData = {
   entityId: string;
-  entityType: "unit" | "token" | "attachment";
+  entityType: "unit" | "token" | "attachment" | "actioncard";
   count: number;
   unitStates?: [number, number, number, number];
   sustained?: number | null;
