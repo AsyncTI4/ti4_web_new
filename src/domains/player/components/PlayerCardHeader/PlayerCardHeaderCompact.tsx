@@ -2,6 +2,7 @@ import { Group, Text, Box, Image, Stack } from "@mantine/core";
 import { PlayerColor } from "../PlayerColor";
 import { StatusIndicator } from "../StatusIndicator";
 import { SpeakerToken } from "../SpeakerToken";
+import { TyrantToken } from "../TyrantToken";
 import { StrategyCardBannerCompact } from "../StrategyCardBannerCompact";
 import { Neighbors } from "../Neighbors";
 import { SC_COLORS, SC_NAMES } from "@/entities/data/strategyCardColors";
@@ -16,6 +17,7 @@ type PlayerCardHeaderCompactProps = {
   factionImageUrl: string;
   variant?: Variant;
   isSpeaker?: boolean;
+  isTyrant?: boolean;
   scs?: number[];
   exhaustedSCs?: number[];
   passed?: boolean;
@@ -32,6 +34,7 @@ export function PlayerCardHeaderCompact({
   factionImageUrl,
   variant = "compact",
   isSpeaker = false,
+  isTyrant = false,
   scs = [],
   exhaustedSCs = [],
   passed = false,
@@ -103,6 +106,7 @@ export function PlayerCardHeaderCompact({
           <Box>
             <Group gap="xs" align="center">
               {isSpeaker && <SpeakerToken isVisible />}
+              {isTyrant && <TyrantToken isVisible />}
               {scs.map((scNumber) => {
                 const isExhausted = exhaustedSCs?.includes(scNumber);
                 return (
@@ -167,6 +171,7 @@ export function PlayerCardHeaderCompact({
               );
             })}
             {isSpeaker && <SpeakerToken isVisible />}
+            {isTyrant && <TyrantToken isVisible />}
           </Group>
         )}
       </Group>
@@ -237,6 +242,7 @@ export function PlayerCardHeaderCompact({
       {showStrategyCards && (
         <Group gap={8} style={{ flexShrink: 0 }}>
           {isSpeaker && <SpeakerToken isVisible />}
+          {isTyrant && <TyrantToken isVisible />}
           {scs.map((scNumber) => {
             const isExhausted = exhaustedSCs?.includes(scNumber);
             return (

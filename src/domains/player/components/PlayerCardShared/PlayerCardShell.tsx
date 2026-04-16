@@ -30,6 +30,7 @@ export function PlayerCardShell({
     factionImageUrl: factionImageUrl ?? "",
     variant,
     isSpeaker: player.isSpeaker,
+    isTyrant: player.isTyrant,
     scs: player.scs,
     exhaustedSCs: player.exhaustedSCs,
     passed: player.passed,

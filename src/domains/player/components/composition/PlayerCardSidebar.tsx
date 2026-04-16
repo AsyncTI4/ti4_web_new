@@ -30,6 +30,7 @@ export default function PlayerCardSidebar(props: Props) {
     strategicCC,
     fragments,
     isSpeaker,
+    isTyrant,
     nombox,
     relics,
     planets,
@@ -67,6 +68,7 @@ export default function PlayerCardSidebar(props: Props) {
         factionImageUrl={factionUrl}
         variant="compact"
         isSpeaker={isSpeaker}
+        isTyrant={isTyrant}
         scs={scs}
         exhaustedSCs={playerData.exhaustedSCs}
         passed={playerData.passed}
