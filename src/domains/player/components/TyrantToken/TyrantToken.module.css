@@ -44,7 +44,7 @@
 }
 
 .metalTexture,
-.purpleGlow {
+.yellowGlow {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -90,7 +90,7 @@
   pointer-events: none;
 }
 
-.purpleGlow {
+.yellowGlow {
   background: radial-gradient(
     ellipse at center,
     rgba(255, 222, 105, 0.2) 0%,

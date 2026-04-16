@@ -25,7 +25,7 @@ export function TyrantToken({ isVisible = false }: Props) {
       <Box className={styles.bottomLeftHighlight} />
 
       {/* Yellow metallic glow */}
-      <Box className={styles.purpleGlow} />
+      <Box className={styles.yellowGlow} />
 
       <Group justify="center" align="center" className={styles.content}>
         <Text
