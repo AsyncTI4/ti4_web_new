@@ -15,7 +15,6 @@ interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 export const Token = ({
   tokenId,
-  colorAlias,
   faction,
   alt,
   planetCenter,
@@ -30,7 +29,6 @@ export const Token = ({
     return (
       <DMZToken
         tokenId={tokenId}
-        colorAlias={colorAlias}
         faction={faction}
         alt={alt}
         planetCenter={planetCenter}

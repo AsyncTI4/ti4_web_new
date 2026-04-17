@@ -47,7 +47,6 @@ export function ExpeditionTokens({
     <>
       {EXPEDITION_POSITIONS.map(({ key, offsetX, offsetY }) => {
         const expedition = gameData.expeditions[key];
-        console.log(key, expedition);
         if (!expedition || !expedition.completedBy) return null;
 
         const faction = factionColorMap[expedition.completedBy];

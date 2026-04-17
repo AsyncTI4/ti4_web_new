@@ -1,5 +1,5 @@
 import { Box, Group, Image } from "@mantine/core";
-import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup";
 import classes from "./FactionTabBar.module.css";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
 import { PlayerData } from "@/entities/data/types";
@@ -33,11 +33,11 @@ export function FactionTabBar({
               selectedArea?.type === "faction" &&
               selectedArea.faction === player.faction;
             const isActivePlayer = player.active;
-            const factionUrl = (
-              player.factionImageType === "DISCORD"
-                ? player.factionImage!
-                : cdnImage(`/factions/${player.faction}.png`)
-            )!;
+            const factionUrl = getFactionImage(
+              player.faction,
+              player.factionImage,
+              player.factionImageType
+            );
 
             return (
               <Box

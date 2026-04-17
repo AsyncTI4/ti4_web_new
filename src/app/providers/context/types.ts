@@ -20,6 +20,8 @@ export type FactionColorData = {
   faction: string;
   color: string;
   optimizedColor: RGBColor;
+  factionImage: string | null;
+  factionImageType: string | null;
 };
 
 export type GameContext = {
@@ -130,4 +132,13 @@ export type TilePlanet = {
   exhausted: boolean;
   resources?: number;
   influence?: number;
+};
+
+export type EnrichedTab = {
+  id: string;
+  faction: string | null;
+  factionColor: string | null;
+  factionImage: string | null;
+  factionImageType: string | null;
+  isManaged: boolean;
 };

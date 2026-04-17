@@ -15,14 +15,8 @@ import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { EditableTabLabel } from "@/shared/ui/EditableTabLabel";
 import { generateColorGradient } from "@/entities/lookup/colors";
 import { useTabLabelEditing } from "@/hooks/useTabLabelEditing";
+import { EnrichedTab } from "@/app/providers/context/types";
 import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
-
-type EnrichedTab = {
-  id: string;
-  faction: string | null;
-  factionColor: string | null;
-  isManaged: boolean;
-};
 
 type NavigationDrawerProps = {
   opened: boolean;
@@ -169,7 +163,7 @@ export function NavigationDrawer({
                 onClick={() => handleGameClick(tab.id)}
                 leftSection={
                   tab.faction ? (
-                    <CircularFactionIcon faction={tab.faction} size={16} />
+                    <CircularFactionIcon faction={tab.faction} factionImageOverride={tab.factionImage} factionImageTypeOverride={tab.factionImageType} size={16} />
                   ) : null
                 }
                 style={

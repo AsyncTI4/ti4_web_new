@@ -1,12 +1,12 @@
-import { Group, Text, Image, Stack, Flex } from "@mantine/core";
+import { Text, Image, Stack } from "@mantine/core";
 import { PlayerData, Objectives, EntryType } from "@/entities/data/types";
 import { PlayerColor } from "@/domains/player/components/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
 import legendStyles from "./PlayerScoreSummaryLegend.module.css";
 import styxStyles from "./StyxIcon.module.css";
-import { useFactionImages } from "@/hooks/useFactionImages";
 import { ObjectiveChip } from "../ObjectiveChip";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import { IconAlertTriangle, IconBook2, IconDiamond } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import cx from "clsx";
@@ -116,8 +116,6 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
 
   if (!playerData || !objectives) return null;
 
-  const factionImages = useFactionImages();
-
   const sortedPlayers = [...playerData].sort((a, b) => {
     const aInit = a.scs[0] || 99;
     const bInit = b.scs[0] || 99;
@@ -211,12 +209,17 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
             (sum, entry) => sum + entry.pointValue,
             0
           );
+          const factionImageUrl = getFactionImage(
+              player.faction,
+              player.factionImage,
+              player.factionImageType
+          );
 
           return (
             <div key={player.faction} className={styles.rowContainer}>
               <div className={cx(styles.nameBody, styles.playerInfoColumn)}>
                 <Image
-                  src={factionImages[player.faction!]?.image}
+                  src={factionImageUrl}
                   alt={player.faction}
                   w={24}
                   h={24}

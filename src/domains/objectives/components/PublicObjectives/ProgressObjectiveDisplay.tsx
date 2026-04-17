@@ -34,7 +34,7 @@ function ProgressObjectiveDisplay({
 
           return (
             <Group key={player.faction} className={badgeClass} gap={4}>
-              <CircularFactionIcon faction={player.faction} size={28} />
+              <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={28} />
               {isScored ? (
                 <IconCheck size={16} color="var(--mantine-color-green-5)" />
               ) : (

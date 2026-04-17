@@ -7,12 +7,14 @@ type Props = {
   faction: string;
   size?: number;
   className?: string;
+  factionImageOverride?: string | null;
+  factionImageTypeOverride?: string | null;
 };
 
-export function CircularFactionIcon({ faction, size = 28, className }: Props) {
+export function CircularFactionIcon({ faction, size = 28, className, factionImageOverride, factionImageTypeOverride }: Props) {
   const factionImages = useFactionImages();
-  const factionImage = factionImages[faction]?.image;
-  const factionImageType = factionImages[faction]?.type;
+  const factionImage = factionImageOverride ?? factionImages[faction]?.image;
+  const factionImageType = factionImageTypeOverride ?? factionImages[faction]?.type;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
   return (

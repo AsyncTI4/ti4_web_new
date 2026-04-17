@@ -1,9 +1,5 @@
 import { Group, Stack } from "@mantine/core";
-import { cdnImage } from "@/entities/data/cdnImage";
-import {
-  useFactionColors,
-  useOriginalFactionColors,
-} from "@/hooks/useFactionColors";
+import { useOriginalFactionColors } from "@/hooks/useFactionColors";
 import { FactionColorMap } from "@/app/providers/context/types";
 import Caption from "@/shared/ui/Caption/Caption";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
@@ -12,14 +8,24 @@ type Props = {
   neighbors: string[];
 };
 
+type NeighborFaction = {
+    faction: string | null;
+    factionImage: string | null;
+    factionImageType: string | null;
+};
+
 // Helper function to get neighbor faction icons from neighbor colors
 const getNeighborFactionIcons = (
   neighbors: string[],
   factionColorMap: FactionColorMap
-) => {
+): NeighborFaction[] => {
   return neighbors
     .map((neighborColor) => {
-      return factionColorMap[neighborColor]?.faction || null;
+      return {
+          faction: factionColorMap[neighborColor]?.faction || null,
+          factionImage: factionColorMap[neighborColor]?.factionImage || null,
+          factionImageType: factionColorMap[neighborColor]?.factionImageType || null,
+      };
     })
     .filter(Boolean); // Remove null values
 };
@@ -35,7 +41,9 @@ export function Neighbors({ neighbors }: Props) {
         {neighborFactions.map((neighborFaction, index) => (
           <FactionIcon
             key={index}
-            faction={neighborFaction!}
+            faction={neighborFaction.faction!}
+            factionImageOverride={neighborFaction.factionImage}
+            factionImageTypeOverride={neighborFaction.factionImageType}
             w={24}
             h={24}
             style={{
