@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 
 async function requestMapRefresh(gameId: string): Promise<void> {
-  const apiUrl = getBotApiUrl(`/public/game/${gameId}/refresh`);
+  const apiUrl = getBotApiUrl(`/public/game/${gameId}/image/refresh`);
 
   const res = await authenticatedFetch(apiUrl, { method: "POST" });
   if (!res.ok) {
