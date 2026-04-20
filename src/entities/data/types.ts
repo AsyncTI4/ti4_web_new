@@ -359,6 +359,7 @@ export type PlayerData = {
   color: string;
   displayName: string;
   isSpeaker: boolean;
+  isTyrant: boolean;
   passed: boolean;
   eliminated: boolean;
   active: boolean;

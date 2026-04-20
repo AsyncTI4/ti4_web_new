@@ -331,6 +331,13 @@ export function PlayerStatsArea({
               alt="Speaker Token"
             />
           )}
+          {/* Tyrant Token if applicable */}
+          {playerData.isTyrant && (
+            <img
+              src={cdnImage("/tokens/token_tyrant.png")}
+              alt="Tyrant Token"
+            />
+          )}
         </div>
       )}
     </>
