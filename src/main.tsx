@@ -28,6 +28,7 @@ import MapTogglePage from "./MapTogglePage";
 import { SystemTilePage } from "./domains/map/components/SystemTilePage/SystemTilePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import DashboardPage from "./domains/dashboard/DashboardPage";
+import DashboardSettingsPage from "./domains/dashboard/DashboardSettingsPage";
 import EmbeddedMapPage from "./EmbeddedMapPage";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPage />,
+  },
+  {
+    path: "/dashboard/settings",
+    element: <DashboardSettingsPage />,
   },
   {
     path: "/game/:mapid/newui",

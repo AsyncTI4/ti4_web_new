@@ -81,10 +81,6 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
         gameId={gameId}
         buttonLabel="OLD UI"
         onButtonClick={onShowOldUI}
-        appHeaderProps={{
-          visibleFrom: "sm",
-          groupProps: { className: classes.newHeaderGroup },
-        }}
       />
 
       <AppShell.Main>

@@ -11,10 +11,10 @@ import { useMaps } from "./hooks/useMaps";
 import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import { useNavigate } from "react-router-dom";
 import { IconAlertCircle } from "@tabler/icons-react";
-import { DiscordLogin } from "./domains/auth/DiscordLogin";
-import { AppHeader } from "@/shared/ui/AppHeader";
 import { Footer } from "@/shared/ui/Footer";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
+import { usePageThemeClass } from "@/hooks/usePageThemeClass";
+import { SiteHeader } from "@/shared/ui/SiteHeader";
 
 type MapSummary = {
   MapName: string;
@@ -22,6 +22,7 @@ type MapSummary = {
 
 function GamesPage() {
   useDocumentTitle("AsyncTI4");
+  const themeClassName = usePageThemeClass();
   const navigate = useNavigate();
   const mapsQuery = useMaps();
   const games =
@@ -30,13 +31,9 @@ function GamesPage() {
       .sort((a, b) => a.MapName.localeCompare(b.MapName)) ?? [];
 
   return (
+    <div className={themeClassName}>
     <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
-      <AppHeader>
-        <div style={{ flexGrow: 1 }} />
-        <Box visibleFrom="sm">
-          <DiscordLogin />
-        </Box>
-      </AppHeader>
+      <SiteHeader />
       <AppShell.Main>
         <Box m="lg">
           {mapsQuery.isLoading && <MapViewportLoader />}
@@ -86,6 +83,7 @@ function GamesPage() {
       </AppShell.Main>
       <Footer />
     </AppShell>
+    </div>
   );
 }
 

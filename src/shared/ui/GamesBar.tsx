@@ -1,7 +1,7 @@
 import { HeaderMenuNew } from "@/domains/game-shell/components/chrome/HeaderMenuNew";
 import { useTabManagementV2 } from "@/hooks/useTabManagementV2";
 import { useUser } from "@/hooks/useUser";
-import { DashboardLink } from "@/shared/ui/DashboardLink";
+import { DashboardLinks } from "@/shared/ui/DashboardLinks";
 
 type GamesBarProps = {
   currentMapId?: string;
@@ -10,7 +10,7 @@ type GamesBarProps = {
 export function GamesBar({ currentMapId }: GamesBarProps) {
   const { activeTabs, changeTab, removeTab } = useTabManagementV2();
   const { user } = useUser();
-  const effectiveMapId = currentMapId || activeTabs[0]?.id || "";
+  const effectiveMapId = currentMapId ?? "";
 
   return (
     <HeaderMenuNew
@@ -18,7 +18,7 @@ export function GamesBar({ currentMapId }: GamesBarProps) {
       activeTabs={activeTabs}
       changeTab={changeTab}
       removeTab={removeTab}
-      actions={user?.authenticated ? <DashboardLink /> : undefined}
+      actions={user?.authenticated ? <DashboardLinks /> : undefined}
     />
   );
 }

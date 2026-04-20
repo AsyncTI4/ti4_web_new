@@ -8,7 +8,8 @@ import {
   ActionIcon,
   Button,
 } from "@mantine/core";
-import { IconPencil, IconX } from "@tabler/icons-react";
+import { IconLayoutDashboard, IconPencil, IconSettings, IconX } from "@tabler/icons-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/shared/ui/Logo";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
@@ -17,6 +18,7 @@ import { generateColorGradient } from "@/entities/lookup/colors";
 import { useTabLabelEditing } from "@/hooks/useTabLabelEditing";
 import { EnrichedTab } from "@/app/providers/context/types";
 import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
+import { useUser } from "@/hooks/useUser";
 
 type NavigationDrawerProps = {
   opened: boolean;
@@ -43,6 +45,9 @@ export function NavigationDrawer({
 }: NavigationDrawerProps) {
   const tabLabelEditing = useTabLabelEditing();
   const { editingTabId, toggleEditing } = tabLabelEditing;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useUser();
 
   const handleTabClick = (tab: string) => {
     onTabChange(tab);
@@ -58,6 +63,11 @@ export function NavigationDrawer({
   const handleRemoveClick = (tabId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     onRemoveTab(tabId);
+  };
+
+  const handleRouteClick = (route: string) => {
+    navigate(route);
+    onClose();
   };
 
   return (
@@ -79,6 +89,27 @@ export function NavigationDrawer({
         <Box>
           <DiscordLogin />
         </Box>
+
+        {user?.authenticated && (
+          <>
+            <Divider />
+
+            <Stack gap="xs">
+              <NavLink
+                label="Dashboard"
+                leftSection={<IconLayoutDashboard size={18} />}
+                active={location.pathname === "/dashboard"}
+                onClick={() => handleRouteClick("/dashboard")}
+              />
+              <NavLink
+                label="Settings"
+                leftSection={<IconSettings size={18} />}
+                active={location.pathname === "/dashboard/settings"}
+                onClick={() => handleRouteClick("/dashboard/settings")}
+              />
+            </Stack>
+          </>
+        )}
 
         <Divider />
 

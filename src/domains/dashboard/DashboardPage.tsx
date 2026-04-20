@@ -22,8 +22,6 @@ import {
   IconTrophy,
 } from "@tabler/icons-react";
 import cx from "clsx";
-import { AppHeader } from "@/shared/ui/AppHeader";
-import { GamesBar } from "@/shared/ui/GamesBar";
 import { useDashboard, type DashboardError } from "@/hooks/useDashboard";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import type { AggressionProfile, DashboardGame, GamePacks, TitleSummary } from "@/domains/dashboard/types";
@@ -34,6 +32,8 @@ import { Chip } from "@/shared/ui/primitives/Chip";
 import { StatDisplay } from "@/shared/ui/primitives/StatDisplay";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
+import { usePageThemeClass } from "@/hooks/usePageThemeClass";
+import { SiteHeader } from "@/shared/ui/SiteHeader";
 import { BadgeStrip } from "./BadgeStrip";
 import { getTechData } from "@/entities/lookup/tech";
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
@@ -157,6 +157,7 @@ export default function DashboardPage() {
   useDocumentTitle("Player Dashboard");
   const navigate = useNavigate();
   const dashboardQuery = useDashboard();
+  const themeClassName = usePageThemeClass();
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [page, setPage] = useState(0);
   const GAMES_PER_PAGE = 5;
@@ -168,10 +169,9 @@ export default function DashboardPage() {
 
   if (dashboardQuery.isLoading) {
     return (
+      <div className={themeClassName}>
       <AppShell header={{ height: 60 }}>
-        <AppHeader>
-          <GamesBar />
-        </AppHeader>
+        <SiteHeader />
         <AppShell.Main className={classes.main}>
           <div className={classes.loadingWrap}>
             <Loader size="lg" color="teal" />
@@ -181,6 +181,7 @@ export default function DashboardPage() {
           </div>
         </AppShell.Main>
       </AppShell>
+      </div>
     );
   }
 
@@ -188,10 +189,9 @@ export default function DashboardPage() {
     const error = dashboardQuery.error as DashboardError;
     const unauthorized = typeof error === "object" && error?.status === 401;
     return (
+      <div className={themeClassName}>
       <AppShell header={{ height: 60 }}>
-        <AppHeader>
-          <GamesBar />
-        </AppHeader>
+        <SiteHeader />
         <AppShell.Main className={classes.main}>
           <Box className={classes.wrap}>
             <Alert
@@ -207,6 +207,7 @@ export default function DashboardPage() {
           </Box>
         </AppShell.Main>
       </AppShell>
+      </div>
     );
   }
 
@@ -231,248 +232,237 @@ export default function DashboardPage() {
   const agg = data.profile.aggregates;
 
   return (
+    <div className={themeClassName}>
     <AppShell header={{ height: 60 }}>
-      <AppHeader>
-        <GamesBar />
-      </AppHeader>
+      <SiteHeader />
 
       <AppShell.Main className={classes.main}>
         <Box className={classes.wrap}>
-          {/* ── Hero: Player Identity + Performance ── */}
-          <Surface pattern="grid" cornerAccents className={classes.hero}>
-            <div className={classes.heroInner}>
-              <Stack gap={4}>
-                <Caption size="xs">Player Operations</Caption>
-                <Title order={1} className={classes.playerName} c="gray.1">
-                  {data.profile.userName ?? "Unknown Player"}
-                </Title>
-                <div className={classes.rankRow}>
-                  {data.profile.tiglLatestRankAtGameStart && (
-                    <Chip accent="purple" size="sm" leftSection={<IconShield size={13} />}>
-                      <Text size="xs" fw={700} c="white">
-                        TIGL {data.profile.tiglLatestRankAtGameStart}
+              {/* ── Hero: Player Identity + Performance ── */}
+              <Surface pattern="grid" cornerAccents className={classes.hero}>
+                <div className={classes.heroInner}>
+                  <Stack gap={4}>
+                    <Caption size="xs">Player Operations</Caption>
+                    <Title order={1} className={classes.playerName} c="gray.1">
+                      {data.profile.userName ?? "Unknown Player"}
+                    </Title>
+                    <div className={classes.rankRow}>
+                      {data.profile.tiglLatestRankAtGameStart && (
+                        <Chip accent="purple" size="sm" leftSection={<IconShield size={13} />}>
+                          <Text size="xs" fw={700} c="white">
+                            TIGL {data.profile.tiglLatestRankAtGameStart}
+                          </Text>
+                        </Chip>
+                      )}
+                      <Chip accent="yellow" size="sm" leftSection={<IconTrophy size={13} />}>
+                        <Text size="xs" fw={700} c="white">
+                          {data.summary.wins}W / {data.summary.gamesPlayed}G
+                        </Text>
+                      </Chip>
+                      <Chip accent={diceGood ? "teal" : "red"} size="sm" leftSection={<IconDice5 size={13} />}>
+                        <Text size="xs" fw={700} c="white">
+                          {formatRatio(diceRatio)}
+                        </Text>
+                      </Chip>
+                    </div>
+                    <div className={classes.heroStats}>
+                      <span className={classes.heroStat}>
+                        <span className={classes.heroStatValue}>{data.summary.gamesPlayed}</span>
+                        <span className={classes.heroStatLabel}>Played</span>
+                      </span>
+                      <span className={classes.heroStatDot}>&middot;</span>
+                      <span className={classes.heroStat}>
+                        <span className={classes.heroStatValue}>{data.summary.activeGames}</span>
+                        <span className={classes.heroStatLabel}>Active</span>
+                      </span>
+                      <span className={classes.heroStatDot}>&middot;</span>
+                      <span className={classes.heroStat}>
+                        <span className={classes.heroStatValue}>{data.summary.wins}</span>
+                        <span className={classes.heroStatLabel}>Wins</span>
+                      </span>
+                      <span className={classes.heroStatDot}>&middot;</span>
+                      <span className={classes.heroStat}>
+                        <span className={classes.heroStatValue}>{formatPercent(data.summary.winPercent)}</span>
+                        <span className={classes.heroStatLabel}>Win Rate</span>
+                      </span>
+                    </div>
+                  </Stack>
+                </div>
+              </Surface>
+
+              <BadgeStrip badges={data.profile.insights.badges} />
+
+              {hasTopResearchedTechs && (
+                <Panel variant="elevated" className={classes.sectionCard}>
+                  <div className={classes.sectionHeader}>
+                    <Group gap={6}>
+                      <IconCrosshair size={16} color="var(--mantine-color-blue-4)" />
+                      <Caption size="sm">Top Researched Techs</Caption>
+                    </Group>
+                    <Chip accent="blue" size="xs">
+                      <Text size="10px" fw={700} c="white">
+                        {data.profile.aggregates.eligibleGameCount} Eligible
                       </Text>
                     </Chip>
-                  )}
-                  <Chip accent="yellow" size="sm" leftSection={<IconTrophy size={13} />}>
-                    <Text size="xs" fw={700} c="white">
-                      {data.summary.wins}W / {data.summary.gamesPlayed}G
-                    </Text>
-                  </Chip>
-                  <Chip accent={diceGood ? "teal" : "red"} size="sm" leftSection={<IconDice5 size={13} />}>
-                    <Text size="xs" fw={700} c="white">
-                      {formatRatio(diceRatio)}
-                    </Text>
-                  </Chip>
-                </div>
-                <div className={classes.heroStats}>
-                  <span className={classes.heroStat}>
-                    <span className={classes.heroStatValue}>{data.summary.gamesPlayed}</span>
-                    <span className={classes.heroStatLabel}>Played</span>
-                  </span>
-                  <span className={classes.heroStatDot}>&middot;</span>
-                  <span className={classes.heroStat}>
-                    <span className={classes.heroStatValue}>{data.summary.activeGames}</span>
-                    <span className={classes.heroStatLabel}>Active</span>
-                  </span>
-                  <span className={classes.heroStatDot}>&middot;</span>
-                  <span className={classes.heroStat}>
-                    <span className={classes.heroStatValue}>{data.summary.wins}</span>
-                    <span className={classes.heroStatLabel}>Wins</span>
-                  </span>
-                  <span className={classes.heroStatDot}>&middot;</span>
-                  <span className={classes.heroStat}>
-                    <span className={classes.heroStatValue}>{formatPercent(data.summary.winPercent)}</span>
-                    <span className={classes.heroStatLabel}>Win Rate</span>
-                  </span>
-                </div>
-              </Stack>
-            </div>
-          </Surface>
+                  </div>
+                  <FadedDivider orientation="horizontal" />
+                  <div className={classes.techTopGrid}>
+                    {topResearchedTechs.map(([techId, stat]) => {
+                      const tech = getTechData(techId);
+                      const techName = tech?.name ?? techId;
+                      const isUnit = tech?.types.includes("UNITUPGRADE");
+                      const colorClass = techTypeColorClass(tech?.types[0]);
+                      const unitImg = isUnit ? getUnitImageUrl(techId, tech?.baseUpgrade) : undefined;
+                      return (
+                        <div key={techId} className={cx(classes.techTopItem, colorClass)}>
+                          <div className={classes.techTopHeader}>
+                            {unitImg ? (
+                              <img
+                                src={unitImg}
+                                alt={techName}
+                                className={classes.techUnitIcon}
+                              />
+                            ) : (
+                              <span className={classes.techTypePip} />
+                            )}
+                            <span className={classes.techName} title={techName}>
+                              {techName}
+                            </span>
+                          </div>
+                          <div className={classes.techTopMeta}>
+                            <span className={classes.techGames}>
+                              {stat.gamesWithTech} game{stat.gamesWithTech === 1 ? "" : "s"}
+                            </span>
+                            <span className={classes.techPercent}>
+                              {stat.percentInEligibleGames.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className={classes.techBar}>
+                            <div
+                              className={classes.techBarFill}
+                              style={{ width: `${Math.min(100, stat.percentInEligibleGames)}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Panel>
+              )}
 
-          {/* ── Badges ── */}
-          <BadgeStrip badges={data.profile.insights.badges} />
-
-          {hasTopResearchedTechs && (
-            <Panel variant="elevated" className={classes.sectionCard}>
-              <div className={classes.sectionHeader}>
-                <Group gap={6}>
-                  <IconCrosshair size={16} color="var(--mantine-color-blue-4)" />
-                  <Caption size="sm">Top Researched Techs</Caption>
-                </Group>
-                <Chip accent="blue" size="xs">
-                  <Text size="10px" fw={700} c="white">
-                    {data.profile.aggregates.eligibleGameCount} Eligible
-                  </Text>
-                </Chip>
-              </div>
-              <FadedDivider orientation="horizontal" />
-              <div className={classes.techTopGrid}>
-                {topResearchedTechs.map(([techId, stat]) => {
-                  const tech = getTechData(techId);
-                  const techName = tech?.name ?? techId;
-                  const isUnit = tech?.types.includes("UNITUPGRADE");
-                  const colorClass = techTypeColorClass(tech?.types[0]);
-                  const unitImg = isUnit ? getUnitImageUrl(techId, tech?.baseUpgrade) : undefined;
-                  return (
-                    <div key={techId} className={cx(classes.techTopItem, colorClass)}>
-                      <div className={classes.techTopHeader}>
-                        {unitImg ? (
-                          <img
-                            src={unitImg}
-                            alt={techName}
-                            className={classes.techUnitIcon}
-                          />
-                        ) : (
-                          <span className={classes.techTypePip} />
-                        )}
-                        <span className={classes.techName} title={techName}>
-                          {techName}
-                        </span>
-                      </div>
-                      <div className={classes.techTopMeta}>
-                        <span className={classes.techGames}>
-                          {stat.gamesWithTech} game{stat.gamesWithTech === 1 ? "" : "s"}
-                        </span>
-                        <span className={classes.techPercent}>
-                          {stat.percentInEligibleGames.toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className={classes.techBar}>
-                        <div
-                          className={classes.techBarFill}
-                          style={{ width: `${Math.min(100, stat.percentInEligibleGames)}%` }}
-                        />
-                      </div>
+              {agg.ready && (
+                <>
+                  <div className={classes.deckHeader}>
+                    <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
+                      ANALYTICS
+                    </Title>
+                    <div>
+                      <Text c="gray.6" size="xs">
+                        Across {agg.completedGameCount} completed games
+                      </Text>
+                      <Text c="gray.7" size="10px" mt={2}>
+                        Some analytics are only available for newer games where detailed round data was collected and may be incomplete.
+                      </Text>
                     </div>
-                  );
-                })}
-              </div>
-            </Panel>
-          )}
+                  </div>
 
-          {/* ── Aggregates: Charts & Tables ── */}
-          {agg.ready && (
-            <>
+                  <div className={classes.aggregateGrid}>
+                    {agg.combatProfile && (
+                      <CombatProfileSection profile={agg.combatProfile} />
+                    )}
+                    {agg.aggressionProfile && (
+                      <AggressionChart profile={latestAggression(agg.aggressionProfile, visibleGames)} />
+                    )}
+                    {agg.strategyCardStats && (
+                      <StrategyCardChart stats={agg.strategyCardStats} />
+                    )}
+                    {data.profile.insights.favoredFactions.length > 0 && (
+                      <FavoredFactionsSection factions={data.profile.insights.favoredFactions} />
+                    )}
+                    {(agg.speakerImpact || agg.economyProfile) && (
+                      <SpeakerEconomySection
+                        impact={agg.speakerImpact}
+                        economy={agg.economyProfile}
+                      />
+                    )}
+                    <TitlesCard titles={data.profile.titles} />
+                    {agg.factionTechSynergy && (
+                      <FactionTechSynergySection synergy={agg.factionTechSynergy} />
+                    )}
+                  </div>
+                </>
+              )}
+
               <div className={classes.deckHeader}>
                 <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
-                  ANALYTICS
+                  GAME DECK
                 </Title>
-                <div>
-                  <Text c="gray.6" size="xs">
-                    Across {agg.completedGameCount} completed games
+                <Text c="gray.6" size="xs">
+                  Ordered by latest activity
+                </Text>
+              </div>
+
+              <div className={classes.gameDeckControls}>
+                <SegmentedControl
+                  size="xs"
+                  value={filter}
+                  onChange={handleFilterChange}
+                  className={classes.filterControl}
+                  data={[
+                    { label: "All", value: "all" },
+                    { label: "Active", value: "active" },
+                    { label: "Done", value: "finished" },
+                    { label: "Abn", value: "abandoned" },
+                  ]}
+                />
+                <Text c="gray.5" size="xs">
+                  {filteredGames.length} game{filteredGames.length === 1 ? "" : "s"}
+                </Text>
+              </div>
+
+              <Stack gap="sm">
+                {paginatedGames.map((game) => (
+                  <GameCard key={game.gameId} game={game} onOpen={() => navigate(`/game/${game.gameId}`)} />
+                ))}
+              </Stack>
+
+              {filteredGames.length === 0 && (
+                <Panel variant="subtle" className={classes.emptyState}>
+                  <Text c="gray.5" size="sm">
+                    No games in this filter.
                   </Text>
-                  <Text c="gray.7" size="10px" mt={2}>
-                    Some analytics are only available for newer games where detailed round data was collected and may be incomplete.
+                </Panel>
+              )}
+
+              {totalPages > 1 && (
+                <div className={classes.pagination}>
+                  <Button
+                    size="compact-xs"
+                    variant="subtle"
+                    color="gray"
+                    disabled={page === 0}
+                    onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  >
+                    Prev
+                  </Button>
+                  <Text size="xs" c="gray.4" ff="mono">
+                    {page + 1} / {totalPages}
                   </Text>
+                  <Button
+                    size="compact-xs"
+                    variant="subtle"
+                    color="gray"
+                    disabled={page >= totalPages - 1}
+                    onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  >
+                    Next
+                  </Button>
                 </div>
-              </div>
-
-              <div className={classes.aggregateGrid}>
-                {/* Combat pair */}
-                {agg.combatProfile && (
-                  <CombatProfileSection profile={agg.combatProfile} />
-                )}
-                {agg.aggressionProfile && (
-                  <AggressionChart profile={latestAggression(agg.aggressionProfile, visibleGames)} />
-                )}
-
-                {/* Strategy + meta */}
-                {agg.strategyCardStats && (
-                  <StrategyCardChart stats={agg.strategyCardStats} />
-                )}
-                {data.profile.insights.favoredFactions.length > 0 && (
-                  <FavoredFactionsSection factions={data.profile.insights.favoredFactions} />
-                )}
-
-                {/* Meta-game pair */}
-                {(agg.speakerImpact || agg.economyProfile) && (
-                  <SpeakerEconomySection
-                    impact={agg.speakerImpact}
-                    economy={agg.economyProfile}
-                  />
-                )}
-                <TitlesCard titles={data.profile.titles} />
-
-                {/* Full-width synergy */}
-                {agg.factionTechSynergy && (
-                  <FactionTechSynergySection synergy={agg.factionTechSynergy} />
-                )}
-              </div>
-            </>
-          )}
-
-          {/* ── Game Deck ── */}
-          <div className={classes.deckHeader}>
-            <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
-              GAME DECK
-            </Title>
-            <Text c="gray.6" size="xs">
-              Ordered by latest activity
-            </Text>
-          </div>
-
-          <div className={classes.gameDeckControls}>
-            <SegmentedControl
-              size="xs"
-              value={filter}
-              onChange={handleFilterChange}
-              className={classes.filterControl}
-              data={[
-                { label: "All", value: "all" },
-                { label: "Active", value: "active" },
-                { label: "Done", value: "finished" },
-                { label: "Abn", value: "abandoned" },
-              ]}
-            />
-            <Text c="gray.5" size="xs">
-              {filteredGames.length} game{filteredGames.length === 1 ? "" : "s"}
-            </Text>
-          </div>
-
-          <Stack gap="sm">
-            {paginatedGames.map((game) => (
-              <GameCard key={game.gameId} game={game} onOpen={() => navigate(`/game/${game.gameId}`)} />
-            ))}
-          </Stack>
-
-          {filteredGames.length === 0 && (
-            <Panel variant="subtle" className={classes.emptyState}>
-              <Text c="gray.5" size="sm">
-                No games in this filter.
-              </Text>
-            </Panel>
-          )}
-
-          {totalPages > 1 && (
-            <div className={classes.pagination}>
-              <Button
-                size="compact-xs"
-                variant="subtle"
-                color="gray"
-                disabled={page === 0}
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-              >
-                Prev
-              </Button>
-              <Text size="xs" c="gray.4" ff="mono">
-                {page + 1} / {totalPages}
-              </Text>
-              <Button
-                size="compact-xs"
-                variant="subtle"
-                color="gray"
-                disabled={page >= totalPages - 1}
-                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-              >
-                Next
-              </Button>
-            </div>
-          )}
-
+              )}
         </Box>
       </AppShell.Main>
     </AppShell>
+    </div>
   );
 }
 

@@ -13,12 +13,12 @@ import {
 } from "@mantine/core";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
-import { GamesBar } from "@/shared/ui/GamesBar";
 import { Surface } from "./domains/player/components/Surface";
-import { AppHeader } from "@/shared/ui/AppHeader";
 import { Footer } from "@/shared/ui/Footer";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { useCommunityStats } from "@/hooks/useCommunityStats";
+import { usePageThemeClass } from "@/hooks/usePageThemeClass";
+import { SiteHeader } from "@/shared/ui/SiteHeader";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
@@ -59,6 +59,7 @@ const SHOWCASE_FACTIONS = [
 ];
 
 export default function LandingPage() {
+  const themeClassName = usePageThemeClass();
   const communityStatsQuery = useCommunityStats();
   const communityStats = communityStatsQuery.data;
   const stats = [
@@ -81,10 +82,9 @@ export default function LandingPage() {
     (!communityStatsQuery.isLoading && !communityStats);
 
   return (
+    <div className={themeClassName}>
     <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
-      <AppHeader className="appHeader">
-        <GamesBar />
-      </AppHeader>
+      <SiteHeader />
       <AppShell.Main>
         <Stack gap={0} w="100%">
           {/* HERO */}
@@ -451,5 +451,6 @@ export default function LandingPage() {
       </AppShell.Main>
       <Footer />
     </AppShell>
+    </div>
   );
 }

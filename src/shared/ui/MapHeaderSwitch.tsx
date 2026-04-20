@@ -1,12 +1,10 @@
 import { Button } from "@mantine/core";
-import { GamesBar } from "./GamesBar";
-import { AppHeader, type AppHeaderProps } from "./AppHeader";
+import { SiteHeader } from "./SiteHeader";
 
 export type MapHeaderSwitchProps = {
   gameId: string;
   buttonLabel: string;
   onButtonClick?: () => void;
-  appHeaderProps?: AppHeaderProps;
 };
 
 /**
@@ -17,14 +15,12 @@ export function MapHeaderSwitch({
   gameId,
   buttonLabel,
   onButtonClick,
-  appHeaderProps,
 }: MapHeaderSwitchProps) {
   return (
-    <AppHeader {...appHeaderProps}>
-      <GamesBar currentMapId={gameId} />
+    <SiteHeader currentMapId={gameId}>
       <Button variant="light" size="xs" color="cyan" onClick={onButtonClick}>
         {buttonLabel}
       </Button>
-    </AppHeader>
+    </SiteHeader>
   );
 }

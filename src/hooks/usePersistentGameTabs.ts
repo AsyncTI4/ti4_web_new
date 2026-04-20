@@ -51,7 +51,7 @@ export function usePersistentGameTabs() {
   const changeTab = useCallback(
     (tab: string) => {
       if (!tab || tab === params.mapid) return;
-      navigate(`/game/${tab}/newui`);
+      navigate(`/game/${tab}`);
     },
     [navigate, params.mapid],
   );

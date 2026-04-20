@@ -40,28 +40,6 @@ h6 {
   --landing-accent: rgba(180, 195, 218, 0.9);
   --landing-accent-muted: rgba(140, 160, 192, 0.6);
   --landing-accent-warm: rgba(186, 160, 110, 0.85);
-
-  /* Header tab variables for GamesBar */
-  --header-tab-bg: linear-gradient(180deg, #060910, #141a23 100%);
-  --header-tab-border: 1px solid rgba(150, 175, 210, 0.35);
-  --header-tab-hover-bg: #151c28;
-  --header-tab-hover-border: #6b7fa0;
-  --header-tab-active-bg: #2a3548;
-  --header-tab-active-border: #8a9dba;
-  --header-tab-input-bg: rgba(6, 9, 16, 0.86);
-  --header-tab-input-border: 1px solid rgba(150, 175, 210, 0.4);
-  --header-tab-dropdown-bg: rgba(6, 9, 16, 0.94);
-  --header-tab-dropdown-border: 1px solid rgba(150, 175, 210, 0.4);
-  --header-tab-dropdown-hover-bg: rgba(140, 165, 200, 0.3);
-  --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* ============================================
-   HEADER
-   ============================================ */
-.appHeader {
-  background: linear-gradient(180deg, var(--landing-bg-primary) 0%, var(--landing-bg-secondary) 100%);
-  border-bottom: 1px solid var(--landing-border-subtle);
 }
 
 .logo-divider {
