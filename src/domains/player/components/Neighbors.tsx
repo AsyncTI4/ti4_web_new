@@ -8,23 +8,15 @@ type Props = {
   neighbors: string[];
 };
 
-type NeighborFaction = {
-    faction: string | null;
-    factionImage: string | null;
-    factionImageType: string | null;
-};
-
 // Helper function to get neighbor faction icons from neighbor colors
 const getNeighborFactionIcons = (
   neighbors: string[],
   factionColorMap: FactionColorMap
-): NeighborFaction[] => {
+) => {
   return neighbors
     .map((neighborColor) => {
       return {
-          faction: factionColorMap[neighborColor]?.faction || null,
-          factionImage: factionColorMap[neighborColor]?.factionImage || null,
-          factionImageType: factionColorMap[neighborColor]?.factionImageType || null,
+          faction: factionColorMap[neighborColor]?.faction || null
       };
     })
     .filter(Boolean); // Remove null values
@@ -42,8 +34,6 @@ export function Neighbors({ neighbors }: Props) {
           <FactionIcon
             key={index}
             faction={neighborFaction.faction!}
-            factionImageOverride={neighborFaction.factionImage}
-            factionImageTypeOverride={neighborFaction.factionImageType}
             w={24}
             h={24}
             style={{

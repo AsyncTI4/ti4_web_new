@@ -7,6 +7,7 @@ import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
 import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import type { MapImageError } from "@/hooks/useMapImage";
 import type { Params } from "react-router-dom";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 import "../styles/MapScreen.css";
 
@@ -34,7 +35,7 @@ function MapUI({
   const gameId = params.mapid ?? "";
 
   return (
-    <AppShell header={{ height: 60 }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }}>
       <MapHeaderSwitch
         gameId={gameId}
         buttonLabel="NEW UI"

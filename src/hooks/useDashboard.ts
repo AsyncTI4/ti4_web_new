@@ -3,18 +3,19 @@ import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 import { DashboardResponse } from "@/domains/dashboard/types";
 import { getLocalUser } from "./useUser";
 
-export type DashboardError = {
+export class DashboardError extends Error {
   status: number;
-  message: string;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "DashboardError";
+    this.status = status;
+  }
 };
 
 async function fetchDashboard(): Promise<DashboardResponse> {
   const user = getLocalUser();
   if (!user?.token) {
-    throw {
-      status: 401,
-      message: "Unauthorized",
-    } as DashboardError;
+    throw new DashboardError(401, "Unauthorized");
   }
 
   const apiUrl = getBotApiUrl("/dashboard");
@@ -25,25 +26,21 @@ async function fetchDashboard(): Promise<DashboardResponse> {
     },
   });
 
-  if (response.status === 401) {
-    const error: DashboardError = {
-      status: 401,
-      message: "Unauthorized",
-    };
-    throw error;
-  }
-
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch dashboard: ${response.status} ${response.statusText}`,
+    throw new DashboardError(
+        response.status,
+        response.status === 401
+            ? "Unauthorized"
+            : `Failed to fetch dashboard: ${response.status} ${response.statusText}`,
     );
   }
 
-  return response.json();
+  const data = (await response.json()) as unknown;
+  return data as DashboardResponse;
 }
 
 export function useDashboard() {
-  return useQuery({
+  return useQuery<DashboardResponse, DashboardError>({
     queryKey: ["dashboard"],
     queryFn: fetchDashboard,
     retry: false,

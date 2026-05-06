@@ -15,6 +15,7 @@ import { Footer } from "@/shared/ui/Footer";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 import { usePageThemeClass } from "@/hooks/usePageThemeClass";
 import { SiteHeader } from "@/shared/ui/SiteHeader";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 type MapSummary = {
   MapName: string;
@@ -32,7 +33,7 @@ function GamesPage() {
 
   return (
     <div className={themeClassName}>
-    <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }} footer={{ height: 56 }}>
       <SiteHeader />
       <AppShell.Main>
         <Box m="lg">

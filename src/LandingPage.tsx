@@ -19,6 +19,7 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { useCommunityStats } from "@/hooks/useCommunityStats";
 import { usePageThemeClass } from "@/hooks/usePageThemeClass";
 import { SiteHeader } from "@/shared/ui/SiteHeader";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 import "./LandingPage.css";
 import WidgetBot from "@widgetbot/react-embed";
@@ -83,7 +84,7 @@ export default function LandingPage() {
 
   return (
     <div className={themeClassName}>
-    <AppShell header={{ height: 60 }} footer={{ height: 56 }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }} footer={{ height: 56 }}>
       <SiteHeader />
       <AppShell.Main>
         <Stack gap={0} w="100%">
