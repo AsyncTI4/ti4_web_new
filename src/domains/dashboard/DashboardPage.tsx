@@ -22,7 +22,7 @@ import {
   IconTrophy,
 } from "@tabler/icons-react";
 import cx from "clsx";
-import { useDashboard, type DashboardError } from "@/hooks/useDashboard";
+import { useDashboard } from "@/hooks/useDashboard";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import type { AggressionProfile, DashboardGame, GamePacks, TitleSummary } from "@/domains/dashboard/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
@@ -46,6 +46,7 @@ import {
   FactionTechSynergySection,
   FavoredFactionsSection,
 } from "./charts";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 import classes from "./DashboardPage.module.css";
 
@@ -170,7 +171,7 @@ export default function DashboardPage() {
   if (dashboardQuery.isLoading) {
     return (
       <div className={themeClassName}>
-      <AppShell header={{ height: 60 }}>
+      <AppShell header={{ height: APP_HEADER_HEIGHT }}>
         <SiteHeader />
         <AppShell.Main className={classes.main}>
           <div className={classes.loadingWrap}>
@@ -186,11 +187,11 @@ export default function DashboardPage() {
   }
 
   if (dashboardQuery.isError) {
-    const error = dashboardQuery.error as DashboardError;
+    const error = dashboardQuery.error;
     const unauthorized = typeof error === "object" && error?.status === 401;
     return (
       <div className={themeClassName}>
-      <AppShell header={{ height: 60 }}>
+      <AppShell header={{ height: APP_HEADER_HEIGHT }}>
         <SiteHeader />
         <AppShell.Main className={classes.main}>
           <Box className={classes.wrap}>
@@ -233,7 +234,7 @@ export default function DashboardPage() {
 
   return (
     <div className={themeClassName}>
-    <AppShell header={{ height: 60 }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }}>
       <SiteHeader />
 
       <AppShell.Main className={classes.main}>

@@ -5,15 +5,12 @@ import {
   type DashboardSettingsUpdateRequest,
 } from "@/domains/dashboard/userSettings";
 import { getLocalUser } from "./useUser";
-import type { DashboardError } from "./useDashboard";
+import { DashboardError } from "./useDashboard";
 
 async function fetchDashboardSettings(): Promise<DashboardSettingsResponse> {
   const user = getLocalUser();
   if (!user?.token) {
-    throw {
-      status: 401,
-      message: "Unauthorized",
-    } as DashboardError;
+    throw new DashboardError(401, "Unauthorized");
   }
 
   const response = await authenticatedFetch(getBotApiUrl("/dashboard/settings"), {
@@ -23,18 +20,17 @@ async function fetchDashboardSettings(): Promise<DashboardSettingsResponse> {
     },
   });
 
-  if (response.status === 401) {
-    throw {
-      status: 401,
-      message: "Unauthorized",
-    } as DashboardError;
-  }
-
   if (!response.ok) {
-    throw new Error(`Failed to fetch dashboard settings: ${response.status} ${response.statusText}`);
+    throw new DashboardError(
+        response.status,
+        response.status === 401
+            ? "Unauthorized"
+            : `Failed to fetch dashboard: ${response.status} ${response.statusText}`,
+    );
   }
 
-  return response.json();
+  const data = (await response.json()) as unknown;
+  return data as DashboardSettingsResponse;
 }
 
 async function saveDashboardSettings(

@@ -7,6 +7,7 @@ import styles from "./Nombox.module.css";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { Unit } from "@/shared/ui/Unit";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
 
 type Props = {
   capturedUnits: CapturedUnitsData;
@@ -29,11 +30,11 @@ const parseUnitString = (unitString: string) => {
 };
 
 export function Nombox({ capturedUnits, compact = false }: Props) {
-  const factionColorMap = useFactionColors();
   // Early return if no captured units
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
     return null;
   }
+  const factionColorMap = useFactionColors();
 
   if (compact) {
     return (
@@ -50,9 +51,9 @@ export function Nombox({ capturedUnits, compact = false }: Props) {
             return (
               <Box key={factionName} className={styles.compactFaction}>
                 <Box className={styles.compactFactionHeader}>
-                  <Image
-                    src={cdnImage(`/factions/${factionName.toLowerCase()}.png`)}
-                    className={styles.compactFactionIcon}
+                  <FactionIcon
+                      faction={factionName}
+                      className={styles.compactFactionIcon}
                   />
                   <Text className={styles.compactFactionName}>
                     {factionName}

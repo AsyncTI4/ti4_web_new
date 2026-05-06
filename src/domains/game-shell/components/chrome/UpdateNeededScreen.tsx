@@ -3,11 +3,12 @@ import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { HeaderMenuNew } from "./HeaderMenuNew";
 import { Surface } from "@/domains/player/components/Surface";
 import classes from "./UpdateNeededScreen.module.css";
-import { AppHeader } from "@/shared/ui/AppHeader";
+import { APP_HEADER_HEIGHT, AppHeader } from "@/shared/ui/AppHeader";
+import {EnrichedTab} from "@/app/providers/context/types.ts";
 
 type UpdateNeededScreenProps = {
   gameId: string;
-  activeTabs: string[];
+  activeTabs: EnrichedTab[];
   changeTab: (tab: string) => void;
   removeTab: (tab: string) => void;
 };
@@ -19,7 +20,7 @@ export function UpdateNeededScreen({
   removeTab,
 }: UpdateNeededScreenProps) {
   return (
-    <AppShell header={{ height: 60 }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }}>
       <AppHeader
         showDivider={false}
         groupProps={{ className: classes.headerGroup }}

@@ -35,6 +35,7 @@ import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/mainTabs";
 import { TabPanelSection } from "./domains/game-shell/components/TabPanelSection";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -68,7 +69,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
     return (
       <UpdateNeededScreen
         gameId={gameId}
-        activeTabs={activeTabs.map((tab) => tab.id)}
+        activeTabs={activeTabs}
         changeTab={changeTab}
         removeTab={removeTab}
       />
@@ -76,7 +77,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   }
 
   return (
-    <AppShell header={{ height: { base: 0, sm: 60 } }}>
+    <AppShell header={{ height: APP_HEADER_HEIGHT }}>
       <MapHeaderSwitch
         gameId={gameId}
         buttonLabel="OLD UI"

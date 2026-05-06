@@ -4,6 +4,7 @@ import { usePageThemeClass } from "@/hooks/usePageThemeClass";
 import { SiteHeader } from "@/shared/ui/SiteHeader";
 import { DashboardSettingsPanel } from "./DashboardSettingsPanel";
 import classes from "./DashboardPage.module.css";
+import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 export default function DashboardSettingsPage() {
   useDocumentTitle("Dashboard Settings");
@@ -11,7 +12,7 @@ export default function DashboardSettingsPage() {
 
   return (
     <div className={themeClassName}>
-      <AppShell header={{ height: 60 }}>
+      <AppShell header={{ height: APP_HEADER_HEIGHT }}>
         <SiteHeader />
         <AppShell.Main className={classes.main}>
           <Box className={classes.wrap}>

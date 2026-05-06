@@ -7,6 +7,8 @@ const defaultGroupStyle: CSSProperties = {
   maxWidth: "100vw",
 };
 
+export const APP_HEADER_HEIGHT = 60;
+
 export type AppHeaderProps = ComponentProps<typeof AppShell.Header> & {
   children?: ReactNode;
   groupProps?: GroupProps;
@@ -17,12 +19,14 @@ export function AppHeader({
   children,
   groupProps,
   showDivider = true,
+  h = APP_HEADER_HEIGHT,
+  mih = APP_HEADER_HEIGHT,
   ...headerProps
 }: AppHeaderProps) {
   const { style: userGroupStyle, ...restGroupProps } = groupProps ?? {};
 
   return (
-    <AppShell.Header {...headerProps}>
+    <AppShell.Header h={h} mih={mih} {...headerProps}>
       <Group
         align="center"
         h="100%"

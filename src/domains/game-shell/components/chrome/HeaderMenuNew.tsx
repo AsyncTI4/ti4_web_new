@@ -316,7 +316,7 @@ function DropdownView({
             >
               <Group
                 gap="xs"
-                style={{ width: "100%", justifyContent: "space-between" }}
+                style={{ width: "100%", justifyContent: "space-between", flexWrap: "nowrap" }}
               >
                 <Group gap="xs">
                   {currentTab?.faction && (
@@ -338,7 +338,7 @@ function DropdownView({
         })()}
       </Combobox.Target>
 
-      <Combobox.Dropdown className={classes.dropdown}>
+      <Combobox.Dropdown className={classes.dropdown} style={{ minWidth: "220px" }}>
         <Combobox.Options>
           {options.length > 0 ? (
             options
