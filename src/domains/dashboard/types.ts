@@ -102,12 +102,9 @@ export type PlayerAggregates = {
   completedGameIds: string[];
   techStats: TechStatsAggregate;
   factionWinStats: FactionWinStatsAggregate;
-  strategyCardStats?: StrategyCardStats;
-  combatProfile?: CombatProfile;
   economyProfile?: EconomyProfile;
   factionTechSynergy?: FactionTechSynergy;
   speakerImpact?: SpeakerImpact;
-  aggressionProfile?: AggressionProfile;
 };
 
 export type TechStatsAggregate = {
@@ -121,44 +118,6 @@ export type TechAggregateStat = {
 
 export type FactionWinStatsAggregate = {
   byFaction: Record<string, number>;
-};
-
-/* ── Strategy Card Stats ── */
-
-export type ScStat = {
-  totalPicks: number;
-  gamesPicked: number;
-  winsInGamesPicked: number;
-  winRateWhenPicked: number;
-};
-
-export type StrategyCardStats = {
-  bySc: Record<string, ScStat>;
-  meta: {
-    completedGamesConsidered: number;
-    gamesWithRoundStats: number;
-  };
-};
-
-/* ── Combat Profile ── */
-
-export type CombatTotals = {
-  combatsInitiated: number;
-  tacticalsWithCombat: number;
-  planetsTaken: number;
-  planetsStolen: number;
-  diceRolled: number;
-};
-
-export type CombatProfile = {
-  totals: CombatTotals;
-  averagesPerCompletedGame: CombatTotals;
-  coverage: AggregateCoverage;
-};
-
-export type AggregateCoverage = {
-  completedGamesConsidered: number;
-  gamesWithRoundStats: number;
 };
 
 /* ── Economy Profile ── */
@@ -201,25 +160,6 @@ export type SpeakerImpact = {
   speaker: SpeakerBucket;
   nonSpeaker: SpeakerBucket;
   deltaWinRate: number;
-};
-
-/* ── Aggression Profile ── */
-
-export type AggressionProfile = {
-  weights: {
-    combatsInitiated: number;
-    planetsStolen: number;
-    tacticalsWithCombat: number;
-  };
-  byGame: Record<string, number>;
-  summary: {
-    avgScore: number;
-    medianScore: number;
-    maxScore: number;
-    minScore: number;
-    mostAggressiveGameId: string;
-  };
-  coverage: AggregateCoverage;
 };
 
 /* ─── Game Types ─── */

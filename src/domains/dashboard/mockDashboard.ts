@@ -180,42 +180,6 @@ export const mockDashboard: DashboardResponse = {
           "Yin Brotherhood": 1,
         },
       },
-      strategyCardStats: {
-        bySc: {
-          "1": { totalPicks: 34, gamesPicked: 22, winsInGamesPicked: 7, winRateWhenPicked: 31.82 },
-          "2": { totalPicks: 29, gamesPicked: 19, winsInGamesPicked: 4, winRateWhenPicked: 21.05 },
-          "3": { totalPicks: 27, gamesPicked: 17, winsInGamesPicked: 5, winRateWhenPicked: 29.41 },
-          "4": { totalPicks: 31, gamesPicked: 20, winsInGamesPicked: 6, winRateWhenPicked: 30.0 },
-          "5": { totalPicks: 22, gamesPicked: 15, winsInGamesPicked: 3, winRateWhenPicked: 20.0 },
-          "6": { totalPicks: 28, gamesPicked: 18, winsInGamesPicked: 4, winRateWhenPicked: 22.22 },
-          "7": { totalPicks: 25, gamesPicked: 16, winsInGamesPicked: 3, winRateWhenPicked: 18.75 },
-          "8": { totalPicks: 30, gamesPicked: 21, winsInGamesPicked: 6, winRateWhenPicked: 28.57 },
-        },
-        meta: {
-          completedGamesConsidered: 29,
-          gamesWithRoundStats: 26,
-        },
-      },
-      combatProfile: {
-        totals: {
-          combatsInitiated: 132,
-          tacticalsWithCombat: 119,
-          planetsTaken: 87,
-          planetsStolen: 18,
-          diceRolled: 2579,
-        },
-        averagesPerCompletedGame: {
-          combatsInitiated: 4.55,
-          tacticalsWithCombat: 4.1,
-          planetsTaken: 3.0,
-          planetsStolen: 0.62,
-          diceRolled: 88.93,
-        },
-        coverage: {
-          completedGamesConsidered: 29,
-          gamesWithRoundStats: 26,
-        },
-      },
       economyProfile: {
         totalExpensesSum: 1942.5,
         avgTotalExpenses: 66.98,
@@ -267,32 +231,6 @@ export const mockDashboard: DashboardResponse = {
         speaker: { games: 9, wins: 4, winRate: 44.44 },
         nonSpeaker: { games: 20, wins: 5, winRate: 25.0 },
         deltaWinRate: 19.44,
-      },
-      aggressionProfile: {
-        weights: {
-          combatsInitiated: 0.45,
-          planetsStolen: 0.35,
-          tacticalsWithCombat: 0.2,
-        },
-        byGame: {
-          pbd1732: 7.42,
-          pbd1710: 6.88,
-          pbd1708: 5.11,
-          pbd1684: 8.05,
-          pbd1673: 4.74,
-          pbd1661: 5.96,
-        },
-        summary: {
-          avgScore: 6.19,
-          medianScore: 6.03,
-          maxScore: 8.05,
-          minScore: 3.82,
-          mostAggressiveGameId: "pbd1684",
-        },
-        coverage: {
-          completedGamesConsidered: 29,
-          gamesWithRoundStats: 26,
-        },
       },
     },
   },

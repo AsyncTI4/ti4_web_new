@@ -24,7 +24,7 @@ import {
 import cx from "clsx";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import type { AggressionProfile, DashboardGame, GamePacks, TitleSummary } from "@/domains/dashboard/types";
+import type { DashboardGame, GamePacks, TitleSummary } from "@/domains/dashboard/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
 import { Surface } from "@/domains/player/components/Surface";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -38,14 +38,7 @@ import { BadgeStrip } from "./BadgeStrip";
 import { getTechData } from "@/entities/lookup/tech";
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
 import { cdnImage } from "@/entities/data/cdnImage";
-import {
-  StrategyCardChart,
-  CombatProfileSection,
-  SpeakerEconomySection,
-  AggressionChart,
-  FactionTechSynergySection,
-  FavoredFactionsSection,
-} from "./charts";
+import { SpeakerEconomySection, FactionTechSynergySection, FavoredFactionsSection } from "./charts";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 import classes from "./DashboardPage.module.css";
@@ -110,31 +103,6 @@ function accentClass(status: DashboardGame["status"]) {
   if (status === "ACTIVE") return classes.accentActive;
   if (status === "ABANDONED") return classes.accentAbandoned;
   return classes.accentFinished;
-}
-
-const AGGRESSION_GAME_LIMIT = 6;
-
-function latestAggression(profile: AggressionProfile, games: DashboardGame[]): AggressionProfile {
-  const visibleGameIds = new Set(games.map((game) => game.gameId));
-  const gameIds = Object.keys(profile.byGame).filter((gameId) => visibleGameIds.has(gameId));
-  const visibleByGame: Record<string, number> = {};
-  for (const gameId of gameIds) {
-    visibleByGame[gameId] = profile.byGame[gameId];
-  }
-  if (gameIds.length === 0) {
-    return { ...profile, byGame: visibleByGame };
-  }
-  if (gameIds.length <= AGGRESSION_GAME_LIMIT) return { ...profile, byGame: visibleByGame };
-
-  const dateByGame = new Map(games.map((g) => [g.gameId, g.createdAtEpochMs]));
-  const sorted = gameIds.sort((a, b) => (dateByGame.get(b) ?? 0) - (dateByGame.get(a) ?? 0));
-  const keep = new Set(sorted.slice(0, AGGRESSION_GAME_LIMIT));
-
-  const trimmed: Record<string, number> = {};
-  for (const id of keep) {
-    trimmed[id] = profile.byGame[id];
-  }
-  return { ...profile, byGame: trimmed };
 }
 
 type PackEntry = { key: keyof GamePacks; label: string };
@@ -362,21 +330,12 @@ export default function DashboardPage() {
                         Across {agg.completedGameCount} completed games
                       </Text>
                       <Text c="gray.7" size="10px" mt={2}>
-                        Some analytics are only available for newer games where detailed round data was collected and may be incomplete.
+                        Computed from completed games that are eligible for aggregate tracking.
                       </Text>
                     </div>
                   </div>
 
                   <div className={classes.aggregateGrid}>
-                    {agg.combatProfile && (
-                      <CombatProfileSection profile={agg.combatProfile} />
-                    )}
-                    {agg.aggressionProfile && (
-                      <AggressionChart profile={latestAggression(agg.aggressionProfile, visibleGames)} />
-                    )}
-                    {agg.strategyCardStats && (
-                      <StrategyCardChart stats={agg.strategyCardStats} />
-                    )}
                     {data.profile.insights.favoredFactions.length > 0 && (
                       <FavoredFactionsSection factions={data.profile.insights.favoredFactions} />
                     )}
