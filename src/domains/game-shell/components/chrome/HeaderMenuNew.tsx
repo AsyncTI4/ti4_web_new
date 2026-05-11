@@ -318,7 +318,8 @@ function DropdownView({
                 gap="xs"
                 style={{ width: "100%", justifyContent: "space-between", flexWrap: "nowrap" }}
               >
-                <Group gap="xs">
+                <Group gap="xs"
+                       style={{ flexWrap: "nowrap" }}>
                   {currentTab?.faction && (
                     <CircularFactionIcon
                       faction={currentTab.faction}

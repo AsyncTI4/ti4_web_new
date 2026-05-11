@@ -1,18 +1,21 @@
 import { Image } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
-import logo from "@/assets/banner.png";
+import desktopLogo from "@/assets/banner.png";
+import mobileLogo from "@/assets/bannerStacked.png";
 import { useNavigate } from "react-router-dom";
 
 function Logo() {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 47.999em)");
   return (
     <Image
-      src={logo}
+      src={isMobile ? mobileLogo : desktopLogo}
       alt="banner"
       className="logo"
       onClick={() => navigate("/")}
       style={{ cursor: "pointer" }}
-      h={{ base: 12, sm: 25 }}
+      h={ 25 }
       p={{ base: 0, sm: 4 }}
       w="auto"
       fit="contain"

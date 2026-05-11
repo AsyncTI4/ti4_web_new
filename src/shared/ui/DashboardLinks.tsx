@@ -9,7 +9,7 @@ export function DashboardLinks() {
   const { pathname } = useLocation();
 
   return (
-    <Group gap={6} wrap="nowrap">
+    <Group gap={6} wrap="nowrap" visibleFrom="sm">
       <NavLink
         to="/dashboard"
         active={pathname === "/dashboard"}
