@@ -18,7 +18,7 @@ export function MapHeaderSwitch({
 }: MapHeaderSwitchProps) {
   return (
     <SiteHeader currentMapId={gameId}>
-      <Button variant="light" size="xs" color="cyan" onClick={onButtonClick}>
+      <Button variant="light" size="xs" color="cyan" onClick={onButtonClick} visibleFrom="sm">
         {buttonLabel}
       </Button>
     </SiteHeader>

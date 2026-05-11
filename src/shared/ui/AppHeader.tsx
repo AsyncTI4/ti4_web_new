@@ -31,7 +31,7 @@ export function AppHeader({
         align="center"
         h="100%"
         px="sm"
-        gap="sm"
+        gap="xs"
         style={{ ...defaultGroupStyle, ...(userGroupStyle ?? {}) }}
         {...restGroupProps}
       >
