@@ -18,7 +18,7 @@ export function GamesBar({ currentMapId }: GamesBarProps) {
       activeTabs={activeTabs}
       changeTab={changeTab}
       removeTab={removeTab}
-      actions={user?.authenticated ? <DashboardLinks /> : undefined}
+      actions={user?.authenticated ? <DashboardLinks hideOnMobile={true} /> : undefined}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { AppShell, Box } from "@mantine/core";
+import {AppShell, Flex} from "@mantine/core";
 import MapImageErrorDialog from "@/image-map/components/MapImageErrorDialog";
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
@@ -10,6 +10,8 @@ import type { Params } from "react-router-dom";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 
 import "../styles/MapScreen.css";
+import {DashboardLinks} from "@/shared/ui/DashboardLinks.tsx";
+import {useUser} from "@/hooks/useUser.ts";
 
 type MapUIProps = {
   params: Params<"mapid">;
@@ -33,6 +35,7 @@ function MapUI({
   onShowNewUI,
 }: MapUIProps) {
   const gameId = params.mapid ?? "";
+  const { user } = useUser();
 
   return (
     <AppShell header={{ height: APP_HEADER_HEIGHT }}>
@@ -45,9 +48,10 @@ function MapUI({
       <AppShell.Main>
         <div className="main">
           <div className="imageContainer">
-            <Box p="xs" hiddenFrom="sm">
+            <Flex p="xs" hiddenFrom="sm" justify="space-between">
+              {user?.authenticated && ( <DashboardLinks /> )}
               <DiscordLogin />
-            </Box>
+            </Flex>
 
             {isError ? (
               <MapImageErrorDialog gameId={gameId} error={error} />
