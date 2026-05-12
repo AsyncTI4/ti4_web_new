@@ -82,6 +82,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
         gameId={gameId}
         buttonLabel="OLD UI"
         onButtonClick={onShowOldUI}
+        hideOnMobile={true}
       />
 
       <AppShell.Main>

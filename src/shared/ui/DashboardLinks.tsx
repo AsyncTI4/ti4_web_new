@@ -5,11 +5,17 @@ import { Group } from "@mantine/core";
 import cx from "clsx";
 import classes from "@/domains/game-shell/components/chrome/HeaderMenuNew.module.css";
 
-export function DashboardLinks() {
+export type DashboardLinksProps = {
+    hideOnMobile?: boolean;
+};
+
+export function DashboardLinks({
+    hideOnMobile
+}: DashboardLinksProps) {
   const { pathname } = useLocation();
 
   return (
-    <Group gap={6} wrap="nowrap" visibleFrom="sm">
+    <Group gap={6} wrap="nowrap" visibleFrom={hideOnMobile ? "sm" : undefined}>
       <NavLink
         to="/dashboard"
         active={pathname === "/dashboard"}

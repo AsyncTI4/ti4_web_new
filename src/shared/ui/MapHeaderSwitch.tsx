@@ -5,6 +5,7 @@ export type MapHeaderSwitchProps = {
   gameId: string;
   buttonLabel: string;
   onButtonClick?: () => void;
+  hideOnMobile?: boolean;
 };
 
 /**
@@ -15,10 +16,11 @@ export function MapHeaderSwitch({
   gameId,
   buttonLabel,
   onButtonClick,
+  hideOnMobile,
 }: MapHeaderSwitchProps) {
   return (
     <SiteHeader currentMapId={gameId}>
-      <Button variant="light" size="xs" color="cyan" onClick={onButtonClick} visibleFrom="sm">
+      <Button variant="light" size="xs" color="cyan" onClick={onButtonClick} visibleFrom={hideOnMobile ? "sm" : undefined}>
         {buttonLabel}
       </Button>
     </SiteHeader>
