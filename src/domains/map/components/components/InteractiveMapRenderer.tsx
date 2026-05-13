@@ -20,6 +20,8 @@ export type InteractiveMapRendererProps = {
   zoom: number;
   isFirefox: boolean;
   contentSize: Dimensions;
+  layoutWidthOverride?: number;
+  layoutHeightOverride?: number;
   widthOverride?: number;
   heightOverride?: number;
   styleOverrides?: CSSProperties;
@@ -37,7 +39,12 @@ export type InteractiveMapRendererProps = {
   isOrigin: (position: string) => boolean;
   onTileSelect: (position: string, systemId: string) => void;
   onTileHover: (position: string, isHovered: boolean) => void;
-  onUnitMouseOver: (faction: string, unitId: string, x: number, y: number) => void;
+  onUnitMouseOver: (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number,
+  ) => void;
   onUnitMouseLeave: () => void;
   onUnitSelect: (faction: string) => void;
   onPlanetMouseEnter: (planetId: string, x: number, y: number) => void;
@@ -52,6 +59,8 @@ export function InteractiveMapRenderer({
   zoom,
   isFirefox,
   contentSize,
+  layoutWidthOverride,
+  layoutHeightOverride,
   widthOverride,
   heightOverride,
   styleOverrides,
@@ -77,15 +86,18 @@ export function InteractiveMapRenderer({
   tooltipUnit,
   tooltipPlanet,
 }: InteractiveMapRendererProps) {
+  const hasLayoutOverride =
+    typeof layoutWidthOverride === "number" ||
+    typeof layoutHeightOverride === "number";
   const tileContainerStyle: CSSProperties = {
     ...getMapScaleStyle(mapLayoutConfig, zoom, isFirefox),
     ...getMapContainerOffset(mapLayoutConfig, zoom),
     width: widthOverride ?? contentSize.width,
     height: heightOverride ?? contentSize.height,
-    ...styleOverrides,
+    ...(hasLayoutOverride ? {} : styleOverrides),
   };
 
-  return (
+  const renderLayer = (
     <MapRenderLayer
       gameData={gameData}
       tilesList={tilesList}
@@ -114,5 +126,22 @@ export function InteractiveMapRenderer({
       mapPadding={mapLayoutConfig.mapPadding}
       mapZoom={zoom}
     />
+  );
+
+  if (!hasLayoutOverride) {
+    return renderLayer;
+  }
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: layoutWidthOverride ?? widthOverride ?? contentSize.width,
+        height: layoutHeightOverride ?? heightOverride ?? contentSize.height,
+        ...styleOverrides,
+      }}
+    >
+      {renderLayer}
+    </div>
   );
 }

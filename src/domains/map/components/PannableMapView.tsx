@@ -30,6 +30,7 @@ import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
+import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
 type Props = {
   gameId: string;
@@ -39,7 +40,7 @@ export function PannableMapView({ gameId }: Props) {
   const gameData = useGameData();
   const tilesList = useMemo(
     () => Object.values(gameData?.tiles || {}),
-    [gameData?.tiles]
+    [gameData?.tiles],
   );
   const gameDataState = useGameDataState();
   const {
@@ -68,8 +69,10 @@ export function PannableMapView({ gameId }: Props) {
   const mapLayout = getMapLayoutConfig("pannable");
   const contentSize = useMapContentSize("pannable");
   const zoom = computeMapZoom(storeZoom, contentSize.width + 150);
-  const mapWidth = (contentSize.width + mapLayout.mapWidthExtra) * zoom;
-  const mapHeight = contentSize.height * zoom;
+  const unscaledMapWidth = contentSize.width + mapLayout.mapWidthExtra;
+  const unscaledMapHeight = contentSize.height;
+  const mapWidth = unscaledMapWidth * zoom;
+  const mapHeight = unscaledMapHeight * zoom;
   const hideZoomControls = shouldHideZoomControls();
 
   const movementState = useMovementMode();
@@ -142,8 +145,10 @@ export function PannableMapView({ gameId }: Props) {
               zoom={zoom}
               isFirefox={settings.isFirefox}
               contentSize={contentSize}
-              widthOverride={mapWidth}
-              heightOverride={mapHeight}
+              layoutWidthOverride={mapWidth}
+              layoutHeightOverride={mapHeight}
+              widthOverride={unscaledMapWidth}
+              heightOverride={unscaledMapHeight}
               styleOverrides={{
                 marginLeft: "auto",
                 marginRight: "auto",
@@ -171,20 +176,22 @@ export function PannableMapView({ gameId }: Props) {
               tooltipPlanet={tooltipPlanet}
             />
 
-            {canViewSecretHand && !isMobileDevice() && (
-              <Box className={secretHandClasses.pannableWrapper}>
-                <SecretHand
-                  isCollapsed={isSecretHandCollapsed}
-                  onToggle={toggleSecretHandCollapsed}
-                  handData={handData}
-                  isLoading={isHandLoading}
-                  error={handError}
-                  playerData={gameData?.playerData}
-                  activeArea={null}
-                  userDiscordId={userDiscordId ?? undefined}
-                />
-              </Box>
-            )}
+            {!DISABLE_PLAYER_AREA_RENDERING &&
+              canViewSecretHand &&
+              !isMobileDevice() && (
+                <Box className={secretHandClasses.pannableWrapper}>
+                  <SecretHand
+                    isCollapsed={isSecretHandCollapsed}
+                    onToggle={toggleSecretHandCollapsed}
+                    handData={handData}
+                    isLoading={isHandLoading}
+                    error={handError}
+                    playerData={gameData?.playerData}
+                    activeArea={null}
+                    userDiscordId={userDiscordId ?? undefined}
+                  />
+                </Box>
+              )}
           </>
         )}
 
@@ -220,26 +227,28 @@ export function PannableMapView({ gameId }: Props) {
           </ScaledContent>
         )}
 
-        <ScaledContent
-          zoom={computePanelsZoom()}
-          innerStyle={areaStyles}
-          enabled={isMobileDevice()}
-        >
-          <Grid gutter="md" columns={12} style={{ width: "100%" }}>
-            {filterPlayersWithAssignedFaction(gameData?.playerData || []).map(
-              (player) => (
-                <Grid.Col
-                  key={player.color}
-                  span={playerCardLayout === "grid" ? 6 : 12}
-                >
-                  <PlayerCardMobile playerData={player} />
-                </Grid.Col>
-              ),
-            )}
-          </Grid>
-        </ScaledContent>
+        {!DISABLE_PLAYER_AREA_RENDERING && (
+          <ScaledContent
+            zoom={computePanelsZoom()}
+            innerStyle={areaStyles}
+            enabled={isMobileDevice()}
+          >
+            <Grid gutter="md" columns={12} style={{ width: "100%" }}>
+              {filterPlayersWithAssignedFaction(gameData?.playerData || []).map(
+                (player) => (
+                  <Grid.Col
+                    key={player.color}
+                    span={playerCardLayout === "grid" ? 6 : 12}
+                  >
+                    <PlayerCardMobile playerData={player} />
+                  </Grid.Col>
+                ),
+              )}
+            </Grid>
+          </ScaledContent>
+        )}
 
-        {gameData && (
+        {!DISABLE_PLAYER_AREA_RENDERING && gameData && (
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={areaStyles}

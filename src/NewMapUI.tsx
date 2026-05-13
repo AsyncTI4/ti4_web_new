@@ -36,6 +36,7 @@ import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/mainTabs";
 import { TabPanelSection } from "./domains/game-shell/components/TabPanelSection";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
+import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -106,7 +107,9 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                     value={tab.value}
                     className={classes.tabsTab}
                     leftSection={<Icon size={16} />}
-                    {...(tab.visibleFrom ? { visibleFrom: tab.visibleFrom } : {})}
+                    {...(tab.visibleFrom
+                      ? { visibleFrom: tab.visibleFrom }
+                      : {})}
                   >
                     {tab.label}
                   </Tabs.Tab>
@@ -132,10 +135,15 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
             </Tabs.Panel>
 
             {/* Player Areas Tab */}
-            <TabPanelSection value="players" className={classes.playersTabContent}>
-              {isError && <PlayerDataErrorAlert gameId={gameId} mb="md" />}
+            <TabPanelSection
+              value="players"
+              className={classes.playersTabContent}
+            >
+              {!DISABLE_PLAYER_AREA_RENDERING && isError && (
+                <PlayerDataErrorAlert gameId={gameId} mb="md" />
+              )}
 
-              {data?.playerData && (
+              {!DISABLE_PLAYER_AREA_RENDERING && data?.playerData && (
                 <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
                   {filterPlayersWithAssignedFaction(data.playerData).map(
                     (player) => (
@@ -146,11 +154,17 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               )}
             </TabPanelSection>
 
-            <TabPanelSection value="objectives" className={classes.playersTabContent}>
+            <TabPanelSection
+              value="objectives"
+              className={classes.playersTabContent}
+            >
               {data && <ScoreBoard />}
             </TabPanelSection>
 
-            <TabPanelSection value="general" className={classes.playersTabContent}>
+            <TabPanelSection
+              value="general"
+              className={classes.playersTabContent}
+            >
               {data && <GeneralArea />}
             </TabPanelSection>
           </Tabs>
@@ -193,7 +207,7 @@ export function NewMapUI({ pannable, onShowOldUI }: Props) {
   const gameId = params.mapid!;
   const themeName = useSettingsStore((state) => state.settings.themeName);
   const mapViewPreference = useSettingsStore(
-    (state) => state.settings.mapViewPreference
+    (state) => state.settings.mapViewPreference,
   );
   const handlers = useSettingsStore((state) => state.handlers);
 

@@ -4,6 +4,7 @@ import { Tile } from "@/app/providers/context/types";
 import type { PlayerData } from "@/entities/data/types";
 import { computeControlOpenSides } from "@/utils/controlBorders";
 import { useMemo } from "react";
+import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
 type Props = {
   tiles: Tile[];
@@ -19,7 +20,7 @@ type Props = {
     faction: string,
     unitId: string,
     x: number,
-    y: number
+    y: number,
   ) => void;
   onUnitMouseLeave: () => void;
   onUnitSelect: (faction: string) => void;
@@ -49,12 +50,13 @@ export function MapTilesRenderer({
 }: Props) {
   const controlOpenSides = useMemo(
     () => computeControlOpenSides(tiles),
-    [tiles]
+    [tiles],
   );
 
   return (
     <>
-      {playerData &&
+      {!DISABLE_PLAYER_AREA_RENDERING &&
+        playerData &&
         statTilePositions &&
         Object.entries(statTilePositions).map(([faction, statTiles]) => {
           const player = playerData.find((p) => p.faction === faction);
