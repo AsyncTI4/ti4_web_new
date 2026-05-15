@@ -1,6 +1,9 @@
 import { Box, Image, Text } from "@mantine/core";
 import cx from "clsx";
 import { getTechData, getTechTier } from "@/entities/lookup/tech";
+import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
+import { getColorAlias } from "@/entities/lookup/colors";
+import { cdnImage } from "@/entities/data/cdnImage";
 import type { Tech } from "@/entities/data/types";
 import styles from "./GeneralTechCatalog.module.css";
 
@@ -95,11 +98,30 @@ function HeaderRequirementIcons({ requirements }: { requirements?: string }) {
   );
 }
 
+function getUnitUpgradeImageSrc(tech: Tech) {
+  if (!tech.types.includes("UNITUPGRADE")) return undefined;
+
+  const requiredTechId = tech.baseUpgrade || tech.alias;
+  const unitData = getGenericUnitDataByRequiredTechId(requiredTechId);
+  if (!unitData?.asyncId) return undefined;
+
+  return cdnImage(`/units/${getColorAlias(undefined)}_${unitData.asyncId}.png`);
+}
+
 function TechItem({ tech, color }: { tech: Tech; color: TechColor }) {
+  const unitImageSrc = getUnitUpgradeImageSrc(tech);
+
   return (
     <Box className={cx(styles.techItem, styles[color])}>
       <Box className={styles.techHeader}>
         <Box className={styles.techNameGroup}>
+          {unitImageSrc && (
+            <Image
+              src={unitImageSrc}
+              alt=""
+              className={styles.unitUpgradeIcon}
+            />
+          )}
           <Text className={styles.techName}>{tech.name}</Text>
         </Box>
         <HeaderRequirementIcons requirements={tech.requirements} />

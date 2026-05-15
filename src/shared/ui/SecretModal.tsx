@@ -22,7 +22,9 @@ function SecretItem({ name, text, phase, phaseColor }: SecretItemProps) {
         <Group justify="space-between" align="center">
           <Group gap="xs" align="center">
             <Text className={styles.secretName}>{name}</Text>
-            <Text className={styles.phaseText}>{phase}</Text>
+            <Text className={`${styles.phaseText} ${styles[phaseColor]}`}>
+              {phase}
+            </Text>
           </Group>
         </Group>
         <Text className={styles.secretText}>{text}</Text>
