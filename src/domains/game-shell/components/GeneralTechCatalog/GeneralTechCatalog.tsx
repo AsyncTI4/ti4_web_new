@@ -21,7 +21,7 @@ const COLORED_TECH_GROUPS: TechGroup[] = [
     label: "Propulsion",
     color: "blue",
     icon: "/blue.png",
-    aliases: ["amd", "det", "gd", "fl", "lwd"],
+    aliases: ["amd", "det", "gd", "fl", "lwd", "sr"],
   },
   {
     label: "Biotic",
