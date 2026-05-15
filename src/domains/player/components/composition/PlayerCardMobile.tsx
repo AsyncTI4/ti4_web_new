@@ -170,7 +170,7 @@ export default function PlayerCardMobile(props: Props) {
         <Grid.Col span={24}>
           <Panel>
             <Grid gutter={8} columns={24}>
-              <Grid.Col span={6}>
+              <Grid.Col span={7}>
                 <Group gap={2} align="flex-start">
                   <PlayerEconomyStack
                     tg={player.tg}
@@ -196,13 +196,13 @@ export default function PlayerCardMobile(props: Props) {
                 </Group>
               </Grid.Col>
 
-              <Grid.Col span={3} className={styles.dividerLeft}>
+              <Grid.Col span={3.25} className={styles.dividerLeft}>
                 <Stack gap={2}>
                   <Leaders leaders={player.leaders} faction={player.faction} mobile />
                 </Stack>
               </Grid.Col>
 
-              <Grid.Col span={15} className={styles.dividerLeft}>
+              <Grid.Col span={13.75} className={styles.dividerLeft}>
                 <ObjectivesGrid
                   secretsScored={player.secretsScored}
                   knownUnscoredSecrets={player.knownUnscoredSecrets}

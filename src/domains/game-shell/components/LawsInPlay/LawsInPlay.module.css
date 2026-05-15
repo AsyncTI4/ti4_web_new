@@ -6,3 +6,10 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
+.emptyText {
+  color: var(--mantine-color-gray-5);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  text-transform: lowercase;
+}

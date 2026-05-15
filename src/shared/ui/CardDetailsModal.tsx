@@ -1,6 +1,5 @@
-import { Text, Stack, Divider } from "@mantine/core";
+import { Box, Text, Stack, Divider } from "@mantine/core";
 import styles from "./CardDetailsModal.module.css";
-import { DetailsCard } from "@/shared/ui/DetailsCard";
 
 type CardItemData = {
   name: string;
@@ -17,10 +16,16 @@ type CardSectionData = {
 
 type Props = {
   sections: CardSectionData[];
-  width?: number;
+  showCounts?: boolean;
 };
 
-function CardItem({ name, count, text, percentage }: CardItemData) {
+function CardItem({
+  name,
+  count,
+  text,
+  percentage,
+  showCount,
+}: CardItemData & { showCount: boolean }) {
   return (
     <div className={styles.cardItem}>
       <Stack gap="xs">
@@ -33,7 +38,7 @@ function CardItem({ name, count, text, percentage }: CardItemData) {
         >
           <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
             <Text className={styles.cardName}>{name}</Text>
-            <div className={styles.copyBadge}>{count}</div>
+            {showCount && <div className={styles.copyBadge}>{count}</div>}
           </div>
           {percentage !== undefined && (
             <div className={styles.percentage}>{percentage?.toFixed(2)}%</div>
@@ -45,42 +50,41 @@ function CardItem({ name, count, text, percentage }: CardItemData) {
   );
 }
 
-function CardSection({ title, count, items }: CardSectionData) {
+function CardSection({
+  title,
+  count,
+  items,
+  showCounts,
+}: CardSectionData & { showCounts: boolean }) {
   if (items.length === 0) return null;
 
   return (
-    <DetailsCard.Section
-      title={`${title} (${count})`}
-      content={
-        <Stack gap="2px">
-          {items.map((item) => (
-            <CardItem key={item.name} {...item} />
-          ))}
-        </Stack>
-      }
-    />
+    <Box>
+      <Text className={styles.sectionTitle}>{title} ({count})</Text>
+      <Box className={styles.cardGrid}>
+        {items.map((item) => (
+          <CardItem key={item.name} {...item} showCount={showCounts} />
+        ))}
+      </Box>
+    </Box>
   );
 }
 
-export function CardDetailsModal({ sections, width = 450 }: Props) {
+export function CardDetailsModal({ sections, showCounts = true }: Props) {
   const visibleSections = sections.filter(
     (section) => section.items.length > 0
   );
 
   return (
-    <DetailsCard
-      width={width}
-      className={styles.container}
-      style={{ maxHeight: "70vh", overflowY: "auto" }}
-    >
+    <Stack className={styles.container} gap="sm">
       {visibleSections.map((section, index) => (
         <div key={section.title}>
-          <CardSection {...section} />
+          <CardSection {...section} showCounts={showCounts} />
           {index < visibleSections.length - 1 && (
             <Divider c="gray.7" opacity={0.3} />
           )}
         </div>
       ))}
-    </DetailsCard>
+    </Stack>
   );
 }

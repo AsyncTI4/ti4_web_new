@@ -1,4 +1,4 @@
-import { Paper, Box } from "@mantine/core";
+import { Paper, Box, type PaperProps } from "@mantine/core";
 import { generateColorGradient } from "@/entities/lookup/colors";
 import { getPrimaryColorWithOpacity } from "@/entities/lookup/colors";
 import "@/styles/theme.css";
@@ -10,7 +10,7 @@ type Props = {
   faction: string;
   children: React.ReactNode;
   showFactionBackground?: boolean;
-  paperProps?: Record<string, any>;
+  paperProps?: PaperProps;
 };
 
 export function PlayerCardBox({
@@ -20,6 +20,8 @@ export function PlayerCardBox({
   showFactionBackground = true,
   paperProps = {},
 }: Props) {
+  const { style: paperStyle, ...restPaperProps } = paperProps;
+
   return (
     <Box className={styles.wrapper}>
       <Box
@@ -34,11 +36,11 @@ export function PlayerCardBox({
         p="sm"
         radius="md"
         className={styles.paper}
+        {...restPaperProps}
         style={{
           border: `1px solid ${getPrimaryColorWithOpacity(color, 0.3)}`,
-          ...paperProps.style,
+          ...paperStyle,
         }}
-        {...paperProps}
       >
         <Box className={styles.content}>{children}</Box>
         <Box className={styles.innerGlow} />

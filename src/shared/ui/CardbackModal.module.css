@@ -1,0 +1,23 @@
+.content {
+  background: var(--details-card-bg);
+  border: var(--card-details-item-border);
+}
+
+.header {
+  background: var(--header-tab-bg);
+  border-bottom: var(--card-details-section-title-border);
+}
+
+.title {
+  color: white;
+  font-weight: 600;
+  text-shadow: var(--map-tab-text-shadow);
+}
+
+.body {
+  padding-top: var(--mantine-spacing-md);
+}
+
+.close {
+  color: white;
+}

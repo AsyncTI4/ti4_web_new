@@ -1,23 +1,29 @@
 .container {
-  max-height: 70vh;
+  width: 100%;
   overflow-y: auto;
 }
 
 .sectionTitle {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 600;
-  color: rgba(148, 163, 184, 0.7);
+  font-weight: 700;
+  color: rgba(203, 213, 225, 0.9);
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.04em;
   margin-bottom: var(--mantine-spacing-xs);
   padding-bottom: 4px;
   border-bottom: var(--card-details-section-title-border);
 }
 
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
 .cardItem {
-  padding: 6px var(--mantine-spacing-xs);
-  border-radius: 4px;
+  padding: 12px 14px;
+  border-radius: 6px;
   background: var(--card-details-item-bg);
   border: var(--card-details-item-border);
   margin-bottom: 1px;
@@ -32,6 +38,7 @@
   font-weight: 700;
   font-size: var(--mantine-font-size-sm);
   color: white;
+  line-height: 1.2;
 }
 
 .copyBadge {
@@ -62,15 +69,15 @@
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
   font-weight: 600;
   font-size: var(--mantine-font-size-xs);
-  color: rgba(148, 163, 184, 0.9);
+  color: rgba(203, 213, 225, 0.95);
   line-height: 1;
 }
 
 .cardText {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 600;
-  color: rgba(203, 213, 225, 0.9);
-  line-height: 1.4;
-  padding-top: 2px;
+  font-weight: 400;
+  color: rgba(226, 232, 240, 0.92);
+  line-height: 1.45;
+  padding-top: 4px;
 }

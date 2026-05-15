@@ -25,8 +25,7 @@ export const MAIN_TAB_CONFIGS: MainTabConfig[] = [
     value: "objectives",
     label: "Objectives",
     Icon: IconTarget,
-    hideOnMobile: true,
-    includeInDrawer: false,
+    visibleFrom: "sm",
   },
   {
     value: "general",

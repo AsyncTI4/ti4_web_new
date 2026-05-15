@@ -2,6 +2,12 @@
   background: var(--score-board-bg);
 }
 
+.generalPanelSurface {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .divider {
   height: 1px;
   background: var(--score-board-divider);

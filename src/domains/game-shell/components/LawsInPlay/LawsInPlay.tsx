@@ -11,12 +11,14 @@ function LawsInPlay({ laws }: Props) {
   return (
     <Box>
       <SimpleGrid cols={1} spacing="xs">
-        <SimpleGrid cols={1} spacing="xs">
         <Text className={styles.sectionTitle}>Laws in Play</Text>
-          {laws.map((law, index) => (
+        {laws.length === 0 ? (
+          <Text className={styles.emptyText}>none</Text>
+        ) : (
+          laws.map((law, index) => (
             <LawCard key={index} law={law} />
-          ))}
-        </SimpleGrid>
+          ))
+        )}
       </SimpleGrid>
     </Box>
   );

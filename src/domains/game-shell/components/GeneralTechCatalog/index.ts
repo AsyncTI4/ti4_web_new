@@ -1,0 +1,1 @@
+export { GeneralTechCatalog } from "./GeneralTechCatalog";

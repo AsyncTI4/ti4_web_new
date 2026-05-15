@@ -9,6 +9,10 @@ export function calculateBorderVisibility(
   const isLastEntry = idx === entries.length - 1;
   const entry = entries[idx];
 
+  if (isFirstNonScored && isLastEntry) {
+    return { hideLeftBorder: false, hideRightBorder: false };
+  }
+
   if (isFirstNonScored) {
     return { hideLeftBorder: false, hideRightBorder: true };
   }

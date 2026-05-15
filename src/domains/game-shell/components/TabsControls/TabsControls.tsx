@@ -27,6 +27,25 @@ type ControlButtonsProps = {
   onTryDecalsClick?: () => void;
 };
 
+function SettingsButton({
+  handlers,
+}: {
+  handlers: SettingsStore["handlers"];
+}) {
+  return (
+    <Button
+      variant="light"
+      size="sm"
+      color="gray"
+      style={{ height: "36px", minWidth: "36px" }}
+      px={8}
+      onClick={() => handlers.setSettingsModalOpened(true)}
+    >
+      <IconSettings size={16} />
+    </Button>
+  );
+}
+
 function ControlButtons({
   settings,
   handlers,
@@ -114,19 +133,6 @@ function ControlButtons({
           onClick={handlers.togglePdsMode}
         >
           <img src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
-        </Button>
-      )}
-
-      {showDistanceButton && (
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          style={{ height: "36px", minWidth: "36px" }}
-          px={8}
-          onClick={() => handlers.setSettingsModalOpened(true)}
-        >
-          <IconSettings size={16} />
         </Button>
       )}
 
@@ -315,6 +321,10 @@ function DesktopTabsControls({
           ))}
         </Box>
       )}
+
+      <Group gap={4} mr={12}>
+        <SettingsButton handlers={handlers} />
+      </Group>
     </>
   );
 }
