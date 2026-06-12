@@ -22,9 +22,10 @@ export function PlayerCardPlanetsSection({
 }: PlayerCardPlanetsSectionProps) {
   return (
     <Group align="flex-start" gap={gap} wrap={wrap}>
-      {showTotalSpend && (
-        <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-      )}
+      <ResourceInfluenceCompact
+        planetEconomics={planetEconomics}
+        showTotalSpend={showTotalSpend}
+      />
       {children}
     </Group>
   );

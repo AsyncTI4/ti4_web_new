@@ -177,7 +177,7 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
               }
               size="sm"
               label="Total Spend"
-              description="Show total resource and influence spend summaries."
+              description="Show the literal total resource and influence spend column. Optimal spend stays visible."
             />
             <Switch
               checked={settings.showPlayerAreaReinforcements}

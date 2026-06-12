@@ -24,9 +24,13 @@ export type PlanetEconomics = {
 
 type Props = {
   planetEconomics: PlanetEconomics;
+  showTotalSpend?: boolean;
 };
 
-export function ResourceInfluenceCompact({ planetEconomics }: Props) {
+export function ResourceInfluenceCompact({
+  planetEconomics,
+  showTotalSpend = true,
+}: Props) {
   return (
     <Group gap="lg" align="flex-start" wrap="nowrap">
       <Stack gap={4} align="flex-start">
@@ -45,19 +49,21 @@ export function ResourceInfluenceCompact({ planetEconomics }: Props) {
         />
       </Stack>
 
-      <Stack gap={4} align="flex-start">
-        <Caption mb={2} mt={2}>
-          Total
-        </Caption>
-        <EconomicsColumn
-          currentResources={planetEconomics.total.currentResources}
-          totalResources={planetEconomics.total.totalResources}
-          currentInfluence={planetEconomics.total.currentInfluence}
-          totalInfluence={planetEconomics.total.totalInfluence}
-          showFlex={false}
-          showTotal={false}
-        />
-      </Stack>
+      {showTotalSpend && (
+        <Stack gap={4} align="flex-start">
+          <Caption mb={2} mt={2}>
+            Total
+          </Caption>
+          <EconomicsColumn
+            currentResources={planetEconomics.total.currentResources}
+            totalResources={planetEconomics.total.totalResources}
+            currentInfluence={planetEconomics.total.currentInfluence}
+            totalInfluence={planetEconomics.total.totalInfluence}
+            showFlex={false}
+            showTotal={false}
+          />
+        </Stack>
+      )}
     </Group>
   );
 }

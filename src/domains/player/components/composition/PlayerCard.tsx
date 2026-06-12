@@ -196,18 +196,20 @@ export default function PlayerCard(props: Props) {
               commoditiesTotal={player.commoditiesTotal}
               debtTokens={player.debtTokens}
             >
-              {settings.showPlayerAreaTotalSpend && (
-                <Box hiddenFrom="sm">
-                  <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-                </Box>
-              )}
+              <Box hiddenFrom="sm">
+                <ResourceInfluenceCompact
+                  planetEconomics={planetEconomics}
+                  showTotalSpend={settings.showPlayerAreaTotalSpend}
+                />
+              </Box>
             </PlayerEconomyStack>
 
-            {settings.showPlayerAreaTotalSpend && (
-              <Flex visibleFrom="sm" miw={90}>
-                <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-              </Flex>
-            )}
+            <Flex visibleFrom="sm" miw={90}>
+              <ResourceInfluenceCompact
+                planetEconomics={planetEconomics}
+                showTotalSpend={settings.showPlayerAreaTotalSpend}
+              />
+            </Flex>
 
             <Group gap={4} wrap="wrap" align="flex-start" flex={1}>
               <Box style={{ flex: 1, minWidth: 0 }}>
