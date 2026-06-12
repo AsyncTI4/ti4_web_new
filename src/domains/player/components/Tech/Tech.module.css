@@ -8,27 +8,59 @@
   }
 }
 
-/* Tech card styles */
+/* Tech card styles: squared "circuit module" with a chamfer accent
+   painted into the bottom-right corner (background layer, not clip) */
 .techCard {
-  --tech-bg-alpha: 0.10;
-  --tech-border-alpha: 0.25;
-  --tech-accent-alpha: 0.7;
+  --tech-bg-alpha: 0.075;
+  --tech-border-alpha: 0.18;
+  --tech-accent-alpha: 0.42;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 1px;
   position: relative;
   overflow: hidden;
-  background: rgba(var(--gradient-color), var(--tech-bg-alpha));
+  background:
+    linear-gradient(
+      315deg,
+      rgba(var(--gradient-color), 0.36) 0,
+      rgba(var(--gradient-color), 0.36) 4px,
+      transparent 4.5px
+    ),
+    linear-gradient(
+      rgba(var(--gradient-color), var(--tech-bg-alpha)),
+      rgba(var(--gradient-color), var(--tech-bg-alpha))
+    );
   border: 1px solid rgba(var(--gradient-color), var(--tech-border-alpha));
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(0);
   cursor: pointer;
 }
 
+/* Exhausted: dimmed with diagonal hatching, matching exhausted relics */
+.techCard.exhausted {
+  opacity: 0.6;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 5px,
+      rgba(0, 0, 0, 0.34) 5px 9px
+    ),
+    linear-gradient(
+      315deg,
+      rgba(var(--gradient-color), 0.34) 0,
+      rgba(var(--gradient-color), 0.34) 4px,
+      transparent 4.5px
+    ),
+    linear-gradient(
+      rgba(var(--gradient-color), var(--tech-bg-alpha)),
+      rgba(var(--gradient-color), var(--tech-bg-alpha))
+    );
+}
+
 /* Enhanced styling for tier 3 and faction techs */
 .techCard.enhanced {
-  --tech-bg-alpha: 0.18;
-  --tech-border-alpha: 0.5;
-  box-shadow: 0 0 8px rgba(var(--gradient-color), 0.12);
+  --tech-bg-alpha: 0.11;
+  --tech-border-alpha: 0.28;
+  box-shadow: none;
 }
 
 .techCard.enhanced::after {
@@ -38,7 +70,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.025),
     transparent
   );
   animation: shimmer 6s ease-in-out infinite;
@@ -51,16 +83,16 @@
 }
 
 .techCard:hover {
-  --tech-bg-alpha: 0.12;
-  --tech-border-alpha: 0.3;
-  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --tech-bg-alpha: 0.10;
+  --tech-border-alpha: 0.26;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   /* transform: translateY(-2px); */
 }
 
 .techCard.enhanced:hover {
-  --tech-bg-alpha: 0.22;
-  --tech-border-alpha: 0.45;
-  box-shadow: 0 4px 16px rgba(var(--gradient-color), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --tech-bg-alpha: 0.13;
+  --tech-border-alpha: 0.34;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 
@@ -81,8 +113,8 @@
 .synergyGreenRed,
 .synergyGreenYellow,
 .synergyYellowRed {
-  --synergy-alpha-left: 0.8;
-  --synergy-alpha-right: 0.8;
+  --synergy-alpha-left: 0.56;
+  --synergy-alpha-right: 0.56;
 }
 
 .synergyBlueGreen::before,
@@ -100,8 +132,8 @@
 .synergyBlueGreen {
   --synergy-left: var(--gd-blue);
   --synergy-right: var(--gd-green);
-  --synergy-alpha-right: 1;
-  --tech-accent-alpha: 1;
+  --synergy-alpha-right: 0.66;
+  --tech-accent-alpha: 0.66;
 }
 
 .synergyBlueYellow {
@@ -141,13 +173,13 @@
   justify-content: flex-end;
 }
 
-/* Tier dots */
+/* Tier pips: square indicator lights */
 .tierDot {
   width: 3px;
   height: 3px;
-  border-radius: 50%;
-  background: rgba(var(--gradient-color), 0.6);
-  box-shadow: 0 0 3px rgba(var(--gradient-color), 0.6), inset 0 0 1px rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  background: rgba(var(--gradient-color), 0.52);
+  box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 /* Main content group */
@@ -162,7 +194,7 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  filter: drop-shadow(0 1px 2px rgba(var(--gradient-color), 0.2));
+  filter: drop-shadow(0 1px 1px rgba(var(--gradient-color), 0.12));
 }
 
 /* Tech letter (for Antimatter, Wavelength, etc.) */
@@ -194,7 +226,7 @@
   font-weight: 800;
   flex: 1;
   min-width: 0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
   padding-right: 16px;
   /* letter-spacing: -0.05em; */
   overflow: hidden;

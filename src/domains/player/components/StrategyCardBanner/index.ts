@@ -1,1 +1,0 @@
-export { StrategyCardBanner } from "./StrategyCardBanner";

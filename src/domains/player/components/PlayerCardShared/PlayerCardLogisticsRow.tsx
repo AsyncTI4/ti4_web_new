@@ -13,7 +13,7 @@ type CCPoolProps = ComponentProps<typeof CCPool>;
 
 type Props = {
   counts: PlayerCardCountsProps;
-  commandCounters: CCPoolProps;
+  commandCounters?: CCPoolProps;
   fragments: string[];
   fragmentsPlacement?: "inline" | "stacked";
   groupProps?: GroupProps;
@@ -35,9 +35,11 @@ export function PlayerCardLogisticsRow({
   const countersGroup = (
     <Group gap={gap ?? DEFAULT_GAP} align="flex-start" {...restGroupProps}>
       <PlayerCardCounts {...counts} />
-      <Box {...commandCountersWrapperProps}>
-        <CCPool {...commandCounters} />
-      </Box>
+      {commandCounters && (
+        <Box {...commandCountersWrapperProps}>
+          <CCPool {...commandCounters} />
+        </Box>
+      )}
       {fragmentsPlacement === "inline" && (
         <Box {...fragmentsWrapperProps}>
           <FragmentsPool fragments={fragments} />

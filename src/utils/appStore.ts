@@ -39,6 +39,13 @@ const DEFAULT_SETTINGS = {
   themeName: "midnightgraytheme" as const,
   accessibleColors: false,
   mapViewPreference: null as MapViewPreference | null,
+  showPlayerAreaCommandTokens: true,
+  showPlayerAreaArmyStrength: true,
+  showPlayerAreaUnitUpgrades: true,
+  showPlayerAreaTotalSpend: true,
+  showPlayerAreaReinforcements: true,
+  showPlayerAreaFactionAbilities: true,
+  showPlayerAreaNeighborship: true,
 };
 
 export function loadSettingsFromStorage(): Settings {
@@ -318,6 +325,13 @@ export type Settings = {
     | "slatetheme";
   accessibleColors: boolean;
   mapViewPreference: MapViewPreference | null;
+  showPlayerAreaCommandTokens: boolean;
+  showPlayerAreaArmyStrength: boolean;
+  showPlayerAreaUnitUpgrades: boolean;
+  showPlayerAreaTotalSpend: boolean;
+  showPlayerAreaReinforcements: boolean;
+  showPlayerAreaFactionAbilities: boolean;
+  showPlayerAreaNeighborship: boolean;
 };
 
 type SettingsHandlers = {

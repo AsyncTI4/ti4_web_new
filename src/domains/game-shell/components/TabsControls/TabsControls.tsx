@@ -37,6 +37,7 @@ function SettingsButton({
       variant="light"
       size="sm"
       color="gray"
+      className={classes.settingsButton}
       style={{ height: "36px", minWidth: "36px" }}
       px={8}
       onClick={() => handlers.setSettingsModalOpened(true)}
@@ -251,6 +252,7 @@ function DesktopTabsControls({
           game={game}
           onTryDecalsClick={onTryDecalsClick}
         />
+        <SettingsButton handlers={handlers} />
       </Group>
 
       <div style={{ flex: 1 }} />
@@ -321,10 +323,6 @@ function DesktopTabsControls({
           ))}
         </Box>
       )}
-
-      <Group gap={4} mr={12}>
-        <SettingsButton handlers={handlers} />
-      </Group>
     </>
   );
 }

@@ -1,9 +1,6 @@
 import { Box, Group, SimpleGrid, Text } from "@mantine/core";
-import { StrategyCardBannerCompact } from "@/domains/player/components/StrategyCardBannerCompact";
+import { StrategyCard } from "@/domains/player/components/StrategyCard";
 import { StrategyCard as StrategyCardType } from "@/entities/data/types";
-import { SC_COLORS, SC_NAMES } from "@/entities/data/strategyCardColors";
-import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
-import { useGameData } from "@/hooks/useGameContext";
 import styles from "./UnpickedSCs.module.css";
 
 type Props = {
@@ -11,24 +8,7 @@ type Props = {
 };
 
 function UnpickedSCs({ strategyCards }: Props) {
-  const gameData = useGameData();
-
-  // Filter for unpicked strategy cards and map to component format
-  const unpickedCards = strategyCards
-    .filter((card) => !card.picked)
-    .map((card) => {
-      const sc = getStrategyCardByInitiative(
-        card.initiative,
-        gameData?.strategyCardIdMap
-      );
-      const displayName = sc?.name || SC_NAMES[card.initiative] || card.name.toUpperCase();
-
-      return {
-        number: card.initiative,
-        name: displayName,
-        color: SC_COLORS[card.initiative] || "red",
-      };
-    });
+  const unpickedCards = strategyCards.filter((card) => !card.picked);
 
   if (unpickedCards.length === 0) return null;
 
@@ -38,11 +18,9 @@ function UnpickedSCs({ strategyCards }: Props) {
       <Group gap="md" wrap="wrap">
         <SimpleGrid cols={1} spacing="xs">
           {unpickedCards.map((card, index) => (
-            <StrategyCardBannerCompact
+            <StrategyCard
               key={index}
-              number={card.number}
-              text={card.name}
-              color={card.color}
+              initiative={card.initiative}
             />
           ))}
         </SimpleGrid>

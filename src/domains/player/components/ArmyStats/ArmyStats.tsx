@@ -103,8 +103,7 @@ function RankBadge({ rank }: { rank: number }) {
 
 export function ArmyStats({ stats, rank }: Props) {
   return (
-    <Box style={{ position: "relative" }}>
-      {rank && <RankBadge rank={rank} />}
+    <Box className={rank ? classes.withRankFooter : undefined}>
       <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
         <Table.Thead>
           <TopHeaderRow />
@@ -127,6 +126,7 @@ export function ArmyStats({ stats, rank }: Props) {
           />
         </Table.Tbody>
       </Table>
+      {rank && <RankBadge rank={rank} />}
     </Box>
   );
 }

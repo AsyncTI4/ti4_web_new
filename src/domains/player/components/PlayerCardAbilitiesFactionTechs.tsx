@@ -12,30 +12,38 @@ type PlayerCardAbilitiesFactionTechsProps = {
   abilities?: string[];
   notResearchedFactionTechs?: string[];
   customPromissoryNotes?: string[];
-  variant?: "compact" | "mobile";
   gap?: number | string;
   breakthrough?: BreakthroughData;
+  className?: string;
+  showFactionAbilities?: boolean;
 };
 
-export function PlayerCardAbilitiesFactionTechs({
-  abilities = [],
-  notResearchedFactionTechs = [],
-  customPromissoryNotes = [],
-  variant = "compact",
-  gap = 2,
-  breakthrough,
-}: PlayerCardAbilitiesFactionTechsProps) {
-  const isMobile = variant === "mobile";
+function useBreakthroughValues(breakthrough?: BreakthroughData) {
   const breakthroughData = breakthrough?.breakthroughId
     ? getBreakthroughData(breakthrough.breakthroughId)
     : undefined;
-  const synergy = breakthroughData?.synergy;
-  const breakthroughUnlocked = breakthrough?.unlocked ?? false;
 
-  if (isMobile) {
-    return (
-      <Group gap="xs" wrap="wrap" align="center" mb="xs" mt="md">
-        {breakthrough?.breakthroughId && (
+  return {
+    synergy: breakthroughData?.synergy,
+    breakthroughUnlocked: breakthrough?.unlocked ?? false,
+  };
+}
+
+export function PlayerCardAbilitiesFactionTechsMobile({
+  abilities = [],
+  notResearchedFactionTechs = [],
+  customPromissoryNotes = [],
+  gap = 2,
+  breakthrough,
+  className,
+  showFactionAbilities = true,
+}: PlayerCardAbilitiesFactionTechsProps) {
+  const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
+
+  return (
+    <Group gap="md" wrap="wrap" align="center" className={className}>
+      {breakthrough?.breakthroughId && (
+        <Group gap={gap}>
           <Breakthrough
             breakthroughId={breakthrough.breakthroughId}
             exhausted={breakthrough.exhausted}
@@ -43,42 +51,49 @@ export function PlayerCardAbilitiesFactionTechs({
             unlocked={breakthrough.unlocked ?? false}
             strong={false}
           />
-        )}
-        {abilities.length > 0 && (
-          <Group gap={gap}>
-            {abilities.map((abilityId, index) => {
-              const abilityData = getAbility(abilityId);
-              if (!abilityData) return null;
-              return <Ability id={abilityId} key={index} strong={false} />;
-            })}
-          </Group>
-        )}
-        {customPromissoryNotes.length > 0 && (
-          <Group gap={gap}>
-            {customPromissoryNotes.map((pnId) => (
-              <PromissoryNote
-                promissoryNoteId={pnId}
-                key={pnId}
-                strong={false}
-              />
-            ))}
-          </Group>
-        )}
-        {notResearchedFactionTechs.length > 0 && (
-          <Group gap={gap}>
-            {notResearchedFactionTechs.map((techId) => (
-              <Tech
-                techId={techId}
-                key={techId}
-                synergy={synergy}
-                breakthroughUnlocked={breakthroughUnlocked}
-              />
-            ))}
-          </Group>
-        )}
-      </Group>
-    );
-  }
+        </Group>
+      )}
+      {showFactionAbilities && abilities.length > 0 && (
+        <Group gap={gap}>
+          {abilities.map((abilityId, index) => {
+            const abilityData = getAbility(abilityId);
+            if (!abilityData) return null;
+            return <Ability id={abilityId} key={index} strong={false} />;
+          })}
+        </Group>
+      )}
+      {showFactionAbilities && customPromissoryNotes.length > 0 && (
+        <Group gap={gap}>
+          {customPromissoryNotes.map((pnId) => (
+            <PromissoryNote promissoryNoteId={pnId} key={pnId} />
+          ))}
+        </Group>
+      )}
+      {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
+        <Group gap={gap}>
+          {notResearchedFactionTechs.map((techId) => (
+            <Tech
+              techId={techId}
+              key={techId}
+              synergy={synergy}
+              breakthroughUnlocked={breakthroughUnlocked}
+            />
+          ))}
+        </Group>
+      )}
+    </Group>
+  );
+}
+
+export function PlayerCardAbilitiesFactionTechs({
+  abilities = [],
+  notResearchedFactionTechs = [],
+  customPromissoryNotes = [],
+  gap = 2,
+  breakthrough,
+  showFactionAbilities = true,
+}: PlayerCardAbilitiesFactionTechsProps) {
+  const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
 
   return (
     <Group wrap="wrap" gap="xs" mb="md" mt="xs" align="flex-start">
@@ -93,7 +108,7 @@ export function PlayerCardAbilitiesFactionTechs({
           />
         </Stack>
       )}
-      {abilities.length > 0 && (
+      {showFactionAbilities && abilities.length > 0 && (
         <Stack gap={4}>
           <Caption size="xs">Abilities</Caption>
           <Group gap={gap}>
@@ -119,7 +134,7 @@ export function PlayerCardAbilitiesFactionTechs({
           </Group>
         </Stack>
       )}
-      {customPromissoryNotes.length > 0 && (
+      {showFactionAbilities && customPromissoryNotes.length > 0 && (
         <Stack gap={4}>
           <Caption size="xs">Promissory Notes</Caption>
           <Group gap={gap}>
@@ -129,7 +144,7 @@ export function PlayerCardAbilitiesFactionTechs({
           </Group>
         </Stack>
       )}
-      {notResearchedFactionTechs.length > 0 && (
+      {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
         <Stack gap={4}>
           <Caption size="xs">Faction Techs</Caption>
           <Group gap={gap} style={{ flexShrink: 1 }}>

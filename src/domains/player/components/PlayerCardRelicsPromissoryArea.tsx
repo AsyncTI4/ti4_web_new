@@ -1,5 +1,4 @@
 import { Group, type GroupProps } from "@mantine/core";
-import type { ReactNode } from "react";
 import { ScoredSecrets } from "./ScoredSecrets";
 import { RelicsPromissoryList } from "./RelicsPromissoryList";
 
@@ -14,11 +13,6 @@ type PlayerCardRelicsPromissoryAreaProps = {
   gap?: number | string;
   showSecrets?: boolean;
   wrap?: GroupProps["wrap"];
-  renderArea?: (content: {
-    items: ReactNode[];
-    secrets: ReactNode | null;
-  }) => ReactNode;
-  secretsRenderWrapper?: (items: ReactNode[]) => ReactNode;
 };
 
 export function PlayerCardRelicsPromissoryArea({
@@ -32,8 +26,6 @@ export function PlayerCardRelicsPromissoryArea({
   gap = 4,
   showSecrets = false,
   wrap = "wrap",
-  renderArea,
-  secretsRenderWrapper,
 }: PlayerCardRelicsPromissoryAreaProps) {
   const secretsNode = showSecrets ? (
     <ScoredSecrets
@@ -41,31 +33,17 @@ export function PlayerCardRelicsPromissoryArea({
       knownUnscoredSecrets={knownUnscoredSecrets}
       unscoredSecrets={unscoredSecrets}
       horizontal={horizontal}
-      renderWrapper={secretsRenderWrapper}
     />
   ) : null;
 
   return (
-    <RelicsPromissoryList
-      relics={relics}
-      promissoryNotes={promissoryNotes}
-      exhaustedRelics={exhaustedRelics}
-      renderWrapper={(items) => {
-        if (!showSecrets && items.length === 0) {
-          return null;
-        }
-
-        const content = renderArea
-          ? renderArea({ items, secrets: secretsNode })
-          : (
-              <Group gap={gap} wrap={wrap}>
-                {items}
-                {secretsNode}
-              </Group>
-            );
-
-        return content;
-      }}
-    />
+    <Group gap={gap} wrap={wrap}>
+      <RelicsPromissoryList
+        relics={relics}
+        promissoryNotes={promissoryNotes}
+        exhaustedRelics={exhaustedRelics}
+      />
+      {secretsNode}
+    </Group>
   );
 }

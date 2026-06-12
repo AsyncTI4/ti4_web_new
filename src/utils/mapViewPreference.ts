@@ -1,4 +1,4 @@
-const MAP_VIEW_PREFERENCE_KEY = "ti4_map_view_preference_4";
+const MAP_VIEW_PREFERENCE_KEY = "ti4_map_view_preference_5";
 
 export type MapViewPreference = "panels" | "pannable";
 

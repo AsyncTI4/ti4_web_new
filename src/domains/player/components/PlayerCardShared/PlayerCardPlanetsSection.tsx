@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
-import { Group, type GroupProps, Box, type BoxProps } from "@mantine/core";
-import {
-  PlayerCardPlanetsWithReinforcements,
-  type PlayerCardPlanetsWithReinforcementsProps,
-} from "../PlayerCardPlanetsArea";
+import { Group } from "@mantine/core";
 import {
   ResourceInfluenceCompact,
   type PlanetEconomics,
@@ -11,33 +7,25 @@ import {
 
 type PlayerCardPlanetsSectionProps = {
   planetEconomics: PlanetEconomics;
-  groupProps?: GroupProps;
-  resourceWrapperProps?: BoxProps;
-  planetsProps?: PlayerCardPlanetsWithReinforcementsProps;
-  renderPlanets?: () => ReactNode;
+  gap?: number | string;
+  wrap?: "wrap" | "nowrap";
+  showTotalSpend?: boolean;
+  children: ReactNode;
 };
 
 export function PlayerCardPlanetsSection({
   planetEconomics,
-  groupProps,
-  resourceWrapperProps,
-  planetsProps,
-  renderPlanets,
+  gap = 8,
+  wrap = "wrap",
+  showTotalSpend = true,
+  children,
 }: PlayerCardPlanetsSectionProps) {
-  const planetsContent = renderPlanets
-    ? renderPlanets()
-    : planetsProps ? (
-        <PlayerCardPlanetsWithReinforcements {...planetsProps} />
-      ) : null;
-
-  if (!planetsContent) return null;
-
   return (
-    <Group align="flex-start" gap={groupProps?.gap ?? 8} {...groupProps}>
-      <Box {...resourceWrapperProps}>
+    <Group align="flex-start" gap={gap} wrap={wrap}>
+      {showTotalSpend && (
         <ResourceInfluenceCompact planetEconomics={planetEconomics} />
-      </Box>
-      {planetsContent}
+      )}
+      {children}
     </Group>
   );
 }

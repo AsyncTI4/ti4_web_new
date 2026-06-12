@@ -11,11 +11,12 @@ import { DetailsCard } from "@/shared/ui/DetailsCard";
 type Props = {
   plotCard: PlotCard;
   faction?: string;
+  compact?: boolean;
 };
 
 const MAX_PLOT_SLOTS = 4;
 
-export function Plot({ plotCard, faction }: Props) {
+export function Plot({ plotCard, faction, compact = false }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
 
   // Only reveal plot names if:
@@ -64,78 +65,110 @@ export function Plot({ plotCard, faction }: Props) {
     return slots;
   };
 
+  const chipContent = compact ? (
+    <Stack gap={2} align="center" className={styles.compactContent}>
+      <Group gap={5} wrap="nowrap" align="center" justify="center">
+        <Text
+          size="xs"
+          fw={700}
+          ff="mono"
+          c="orange.2"
+          className={styles.compactId}
+        >
+          #{plotCard.identifier}
+        </Text>
+        <Text size="xs" fw={700} className={styles.compactName}>
+          {isRevealed ? displayName : "Hidden"}
+        </Text>
+      </Group>
+      {plotCard.factions.length > 0 && (
+        <Group gap={2} wrap="nowrap" className={styles.compactFactions}>
+          {plotCard.factions.map((faction, index) => (
+            <CircularFactionIcon
+              faction={faction}
+              key={`${faction}-${index}`}
+              size={13}
+            />
+          ))}
+        </Group>
+      )}
+    </Stack>
+  ) : (
+    <Stack gap={2} align="center">
+      <Group gap={2} justify="center" wrap="wrap">
+        {renderFactionSlots()}
+      </Group>
+      {isRevealed ? (
+        <>
+          <Text
+            size="xs"
+            fw={600}
+            ta="center"
+            tt="uppercase"
+            c="white"
+            style={{
+              letterSpacing: "0.3px",
+              textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)",
+              lineHeight: 1.1,
+            }}
+          >
+            {displayName}
+          </Text>
+          <Text
+            size="xs"
+            ff="monospace"
+            ta="center"
+            style={{ letterSpacing: "0.3px", opacity: 0.7 }}
+          >
+            #{plotCard.identifier}
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text
+            size="md"
+            fw={700}
+            ff="monospace"
+            ta="center"
+            c="white"
+            style={{
+              letterSpacing: "0.5px",
+              textShadow: "0 1px 1px rgba(0, 0, 0, 0.7)",
+              lineHeight: 1.1,
+            }}
+          >
+            #{plotCard.identifier}
+          </Text>
+          <Text
+            size="xs"
+            ta="center"
+            c="dimmed"
+            style={{
+              letterSpacing: "0.2px",
+              opacity: 0.8,
+              fontStyle: "italic",
+            }}
+          >
+            Hidden Plot
+          </Text>
+        </>
+      )}
+    </Stack>
+  );
+
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Box miw={60}>
+        <Box miw={compact ? undefined : 60}>
           <Chip
-            className={styles.plotCard}
+            className={compact ? styles.plotCardCompact : styles.plotCard}
             accent="bloodOrange"
             onClick={toggle}
-            strong
+            strong={!compact}
             px="xs"
-            py={6}
+            py={compact ? 2 : 6}
           >
-            <Stack gap={2} align="center">
-              <Group gap={2} justify="center" wrap="wrap">
-                {renderFactionSlots()}
-              </Group>
-              {isRevealed ? (
-                <>
-                  <Text
-                    size="xs"
-                    fw={600}
-                    ta="center"
-                    tt="uppercase"
-                    c="white"
-                    style={{
-                      letterSpacing: "0.3px",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    {displayName}
-                  </Text>
-                  <Text
-                    size="xs"
-                    ff="monospace"
-                    ta="center"
-                    style={{ letterSpacing: "0.3px", opacity: 0.7 }}
-                  >
-                    #{plotCard.identifier}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text
-                    size="md"
-                    fw={700}
-                    ff="monospace"
-                    ta="center"
-                    c="white"
-                    style={{
-                      letterSpacing: "0.5px",
-                      textShadow: "0 2px 4px rgba(0, 0, 0, 0.9)",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    #{plotCard.identifier}
-                  </Text>
-                  <Text
-                    size="xs"
-                    ta="center"
-                    c="dimmed"
-                    style={{
-                      letterSpacing: "0.2px",
-                      opacity: 0.8,
-                      fontStyle: "italic",
-                    }}
-                  >
-                    Hidden Plot
-                  </Text>
-                </>
-              )}
-            </Stack>
+            {chipContent}
           </Chip>
         </Box>
       </SmoothPopover.Target>

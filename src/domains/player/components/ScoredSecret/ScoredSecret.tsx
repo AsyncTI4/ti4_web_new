@@ -3,6 +3,7 @@ import { ChipWithPopover } from "@/shared/ui/primitives/ChipWithPopover";
 import { SecretObjectiveCard } from "../SecretObjectiveCard";
 import styles from "./ScoredSecret.module.css";
 import { SecretObjectiveIcon } from "@/shared/ui/SecretObjectiveIcon";
+import cx from "clsx";
 
 type Props = {
   secretId: string;
@@ -17,10 +18,9 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
 
   return (
     <ChipWithPopover
-      className={styles.secretCard}
+      className={cx(styles.secretCard, !isScored && styles.unscoredKnown)}
       accent={isScored ? "red" : "gray"}
-      leftSection={<SecretObjectiveIcon />}
-      ribbon
+      leftSection={<SecretObjectiveIcon size={18} />}
       title={secretName}
       onClick={onClick}
       dropdownContent={<SecretObjectiveCard secretId={secretId} />}

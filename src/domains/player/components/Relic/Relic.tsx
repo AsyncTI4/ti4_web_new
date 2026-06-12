@@ -53,7 +53,11 @@ export function Relic({ relicId, isExhausted = false }: Props) {
 
   return (
     <ChipWithPopover
-      className={styles.relicCard}
+      className={cx(
+        styles.relicCard,
+        isFake && styles.fake,
+        isExhausted && styles.exhausted
+      )}
       accent={accentColor}
       leftSection={<RelicIcon isFake={isFake} isExhausted={isExhausted} />}
       title={relicData.shortName || relicData.name}

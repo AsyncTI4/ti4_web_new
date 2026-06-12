@@ -2,14 +2,18 @@
   width: auto;
 }
 
+.withRankFooter {
+  min-width: max-content;
+}
+
 .headerIcon {
   width: 16px;
   height: 16px;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+  filter: saturate(0.82) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
 }
 
 .caption {
-  color: var(--mantine-color-gray-3);
+  color: var(--mantine-color-gray-4);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -17,19 +21,20 @@
 }
 
 .number {
-  color: var(--mantine-color-white);
+  color: var(--mantine-color-gray-1);
   line-height: 1;
   letter-spacing: 0.03em;
 }
 
 .rankBadge {
-  position: absolute;
-  top: -4px;
-  left: -12px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
+  margin-top: 4px;
   padding: 3px 6px;
-  border-radius: 6px;
-  z-index: 10;
+  border-radius: 0 0 2px 2px;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
 }

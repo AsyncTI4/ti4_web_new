@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Grid, Stack, Text } from "@mantine/core";
+import { Box, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
@@ -87,8 +87,6 @@ export function PannableMapView({ gameId }: Props) {
     toggleSecretHandCollapsed,
   } = useSecretHandPanel({ gameId, playerData: gameData?.playerData });
 
-  const playerCardLayout = isMobileDevice() ? "list" : "grid";
-
   const {
     selectedTiles,
     pathResult,
@@ -122,6 +120,12 @@ export function PannableMapView({ gameId }: Props) {
         minWidth: "2150px",
         padding: "0 16px",
       };
+
+  /* Player cards grow to their content width (no internal scrollbars);
+     the surrounding map area provides the horizontal scrolling */
+  const playerAreaStyles = isMobileDevice()
+    ? { width: "max-content" as const, minWidth: "1300px" }
+    : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
   return (
     <Box className={classes.mapContainer}>
       <Box
@@ -230,21 +234,20 @@ export function PannableMapView({ gameId }: Props) {
         {!DISABLE_PLAYER_AREA_RENDERING && (
           <ScaledContent
             zoom={computePanelsZoom()}
-            innerStyle={areaStyles}
+            innerStyle={playerAreaStyles}
             enabled={isMobileDevice()}
           >
-            <Grid gutter="md" columns={12} style={{ width: "100%" }}>
+            {/* Column stack: width resolves to the widest card so every card
+                shares the same width and data groups align vertically */}
+            <Stack gap={4} style={{ width: "max-content", minWidth: "100%" }}>
               {filterPlayersWithAssignedFaction(gameData?.playerData || []).map(
                 (player) => (
-                  <Grid.Col
-                    key={player.color}
-                    span={playerCardLayout === "grid" ? 6 : 12}
-                  >
+                  <Box key={player.color}>
                     <PlayerCardMobile playerData={player} />
-                  </Grid.Col>
+                  </Box>
                 ),
               )}
-            </Grid>
+            </Stack>
           </ScaledContent>
         )}
 

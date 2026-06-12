@@ -1,136 +1,124 @@
-/* Subtle section for abilities/faction techs - reduces visual prominence without opacity */
-
-.subtleSection :global(.chip) {
-  background: rgba(var(--background-color), 0.08) !important;
-  border-color: rgba(var(--border-color), 0.55) !important;
+/*
+ * Horizontal telemetry band. Sections sit in a fixed left-to-right order with
+ * capped row counts, so each data group (secrets, tech, units, ...) lands at
+ * a similar position on every stacked player card and the cards keep a
+ * consistent height while growing horizontally.
+ */
+.strip {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 6px;
+  margin-top: 8px;
+  width: max-content;
+  min-width: 100%;
 }
 
-.subtleSection :global(.chip.inner) {
-  min-height: 22px !important;
-  padding: 2px 4px !important;
+.section {
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
-.subtleSection :global(.chip.strong) {
-  background: rgba(var(--background-color), 0.10) !important;
+.flexSpacer {
+  flex: 1 1 auto;
+  min-width: 16px;
 }
 
-.subtleSection :global(.chip .textContainer),
-.subtleSection :global(.chip .textContainer *) {
-  font-size: 11px !important;
-  font-weight: 500 !important;
+/* Fixed-width anchors keep the variable sections that follow roughly aligned */
+.statusSection {
+  min-width: 148px;
 }
 
-.subtleSection :global(.chip.accentLine::before) {
-  width: 1.5px !important;
-  opacity: 0.5 !important;
+.leadersSection {
+  width: 170px;
+  overflow: hidden;
 }
 
-.subtleSection :global(.chip.ribbon::before) {
-  opacity: 0.3 !important;
+.techSection {
+  min-width: 202px;
 }
 
-.subtleSection :global(.chip.breakthrough::before) {
-  opacity: 0.4 !important;
-}
-
-.subtleSection :global(.techCard) {
-  background: rgba(var(--gradient-color), 0.08) !important;
-  border-color: rgba(var(--gradient-color), 0.20) !important;
-  padding: 2px 4px !important;
-}
-
-.subtleSection :global(.techCard.enhanced) {
-  background: rgba(var(--gradient-color), 0.14) !important;
-  border-color: rgba(var(--gradient-color), 0.35) !important;
-  box-shadow: none !important;
-}
-
-.subtleSection :global(.techCard::before) {
-  width: 1.5px !important;
-  opacity: 0.4 !important;
-}
-
-.subtleSection :global(.techCard .techName) {
-  font-size: 11px !important;
-  font-weight: 600 !important;
-}
-
-.subtleSection :global(.caption) {
-  font-size: 10px !important;
-  color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.gridItems {
-  display: grid;
-  grid-template-rows: repeat(3, auto);
-  align-items: start;
-  justify-items: start;
-}
-
-/* Unified subtle panel wrapper for major sections */
-.panel {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.sectionTitle {
-  color: var(--mantine-color-gray-5);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.sectionGap {
-  margin-top: 6px;
-}
-
-/* Extremely subtle panel styling for primary sections */
-.sectionPanel {
-  background: var(--player-card-mobile-panel-bg);
-  border: var(--player-card-mobile-panel-border);
-}
-
-.techGridDesktop {
-  flex: 1;
-}
-
-.unitGridDesktop {
-  flex: 0.5;
-}
-
-.unitGridMobile,
-.techGridDesktop {
-  flex: 1;
-}
-
+/* Capped-row column-flow grids: grow horizontally, keep vertical rhythm.
+   Uniform column widths give a consistent scan line across cards. */
 .objectivesGrid {
   display: grid;
-  grid-template-rows: repeat(3, auto);
-  grid-template-columns: repeat(4, max-content);
-}
-
-.gridItems,
-.objectivesGrid {
+  grid-template-rows: repeat(4, min-content);
   grid-auto-flow: column;
-  gap: 4px 4px;
+  grid-auto-columns: minmax(170px, max-content);
+  gap: 4px;
+  align-items: start;
+  min-width: 170px;
+  height: 100%;
 }
 
-.panel,
-.sectionPanel {
-  padding: 6px;
+.objectivesGridSplit {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 170px;
+  height: 100%;
 }
 
-.panel {
-  border-radius: var(--mantine-radius-md);
+.objectivesColumn {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 4px;
+  min-width: 170px;
 }
 
-.sectionPanel {
-  border-radius: var(--mantine-radius-sm);
+.plotPanel {
+  display: flex;
+  align-items: stretch;
+  min-height: 28px;
+  padding: 3px;
+  border: 1px solid rgba(191, 71, 0, 0.16);
+  border-radius: 2px;
+  background:
+    linear-gradient(90deg, rgba(191, 71, 0, 0.06), rgba(191, 71, 0, 0.02)),
+    rgba(18, 13, 11, 0.62);
 }
 
-/* Subtle vertical divider on the left edge of a grid column */
-.dividerLeft {
-  border-left: 1px solid rgba(255, 255, 255, 0.07);
-  padding-left: 8px;
+/* Deliberate "empty bay" texture when a player holds nothing in this group */
+.objectivesGrid:empty {
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 7px,
+    rgba(148, 163, 184, 0.04) 7px 8px
+  );
+  border-radius: 2px;
+}
+
+/* TAC/FLT/STR row: spread evenly across the status box so the three stats
+   form tidy columns that align from card to card */
+.ccRow > div {
+  font-variant-numeric: tabular-nums;
+}
+
+/* SCADA-style panel framing: squared corners with reticle brackets */
+.scadaPanel {
+  position: relative;
+  border-radius: 2px;
+}
+
+.scadaPanel::before,
+.scadaPanel::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+}
+
+.scadaPanel::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid rgba(226, 232, 240, 0.14);
+  border-left: 1px solid rgba(226, 232, 240, 0.14);
+}
+
+.scadaPanel::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.14);
+  border-right: 1px solid rgba(226, 232, 240, 0.14);
 }

@@ -1,4 +1,3 @@
-import { Fragment, type ReactNode } from "react";
 import { Group, type GroupProps } from "@mantine/core";
 import { Relic } from "./Relic";
 import { PromissoryNote } from "./PromissoryNote";
@@ -7,14 +6,12 @@ type RelicsPromissoryListProps = {
   relics?: string[];
   promissoryNotes?: string[];
   exhaustedRelics?: string[];
-  renderWrapper?: (items: ReactNode[]) => ReactNode;
 } & Omit<GroupProps, "children">;
 
 export function RelicsPromissoryList({
   relics = [],
   promissoryNotes = [],
   exhaustedRelics = [],
-  renderWrapper,
   gap = 4,
   wrap = "wrap",
   ...groupProps
@@ -37,10 +34,6 @@ export function RelicsPromissoryList({
       />
     )),
   ];
-
-  if (renderWrapper) {
-    return <Fragment>{renderWrapper(items)}</Fragment>;
-  }
 
   if (items.length === 0) {
     return null;

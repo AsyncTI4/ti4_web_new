@@ -1,5 +1,6 @@
 @keyframes floatParticle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
     opacity: 0.4;
   }
@@ -51,16 +52,29 @@
 }
 
 @keyframes bubbleSway {
-  0% { margin-left: 0px; }
-  20% { margin-left: 1.2px; }
-  40% { margin-left: 0px; }
-  60% { margin-left: -1.2px; }
-  80% { margin-left: 0px; }
-  100% { margin-left: 0px; }
+  0% {
+    margin-left: 0px;
+  }
+  20% {
+    margin-left: 1.2px;
+  }
+  40% {
+    margin-left: 0px;
+  }
+  60% {
+    margin-left: -1.2px;
+  }
+  80% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 0px;
+  }
 }
 
 @keyframes constellationTwinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -70,7 +84,8 @@
   }
 }
 
-.legendary {}
+.legendary {
+}
 
 .planetCardHighlight,
 .legendaryConstellation {
@@ -79,7 +94,11 @@
 }
 
 .planetCardHighlight {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   border-radius: 12px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -109,9 +128,21 @@
 
 .deepAbyssBackground {
   background:
-    linear-gradient(135deg, var(--planet-background) 0%, rgba(15, 23, 42, 0.7) 100%),
-    radial-gradient(circle at 25% 75%, rgba(80, 180, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 25%, rgba(80, 180, 255, 0.06) 0%, transparent 50%);
+    linear-gradient(
+      135deg,
+      var(--planet-background) 0%,
+      rgba(15, 23, 42, 0.7) 100%
+    ),
+    radial-gradient(
+      circle at 25% 75%,
+      rgba(80, 180, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(80, 180, 255, 0.06) 0%,
+      transparent 50%
+    );
 }
 
 .floatingParticle {
@@ -124,7 +155,11 @@
   left: var(--particle-left);
   width: 3px;
   height: 3px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.8) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
   z-index: 1;
   animation: floatParticle ease-in-out infinite;
@@ -134,10 +169,26 @@
 
 .legendaryBackground {
   background:
-    linear-gradient(135deg, var(--planet-background) 0%, rgba(15, 23, 42, 0.6) 100%),
-    radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.06) 0%, transparent 50%);
+    linear-gradient(
+      135deg,
+      var(--planet-background) 0%,
+      rgba(15, 23, 42, 0.6) 100%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 215, 0, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 215, 0, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 215, 0, 0.06) 0%,
+      transparent 50%
+    );
 }
 
 .particle1 {
@@ -193,7 +244,8 @@
   opacity: 0;
   /* Run vertical rise and a gentle horizontal sway in parallel */
   animation-name: bubbleRise, bubbleSway;
-  animation-duration: var(--bubble-duration), calc(var(--bubble-duration) * 0.9);
+  animation-duration:
+    var(--bubble-duration), calc(var(--bubble-duration) * 0.9);
   animation-timing-function: linear, ease-in-out;
   animation-iteration-count: infinite, infinite;
   animation-delay: var(--bubble-delay), calc(var(--bubble-delay) + 0.2s);
@@ -228,32 +280,53 @@
   border-color: rgba(120, 200, 255, 0.25);
 }
 
-:global(.mobile) :is(.bubbleParticle, .bubbleParticle::after, .bubbleParticle::before) {
+:global(.mobile)
+  :is(.bubbleParticle, .bubbleParticle::after, .bubbleParticle::before) {
   animation: none !important;
 }
 
-.bubble1 { --bubble-top: 22%; --bubble-left: 12%; --bubble-duration: 4.8s; --bubble-delay: 0s; }
-.bubble2 { --bubble-top: 38%; --bubble-left: 35%; --bubble-duration: 6s; --bubble-delay: 1.5s; }
-.bubble3 { --bubble-top: 60%; --bubble-left: 60%; --bubble-duration: 7.2s; --bubble-delay: 3s; }
-.bubble4 { --bubble-top: 80%; --bubble-left: 25%; --bubble-duration: 8.4s; --bubble-delay: 4.5s; }
+.bubble1 {
+  --bubble-top: 22%;
+  --bubble-left: 12%;
+  --bubble-duration: 4.8s;
+  --bubble-delay: 0s;
+}
+.bubble2 {
+  --bubble-top: 38%;
+  --bubble-left: 35%;
+  --bubble-duration: 6s;
+  --bubble-delay: 1.5s;
+}
+.bubble3 {
+  --bubble-top: 60%;
+  --bubble-left: 60%;
+  --bubble-duration: 7.2s;
+  --bubble-delay: 3s;
+}
+.bubble4 {
+  --bubble-top: 80%;
+  --bubble-left: 25%;
+  --bubble-duration: 8.4s;
+  --bubble-delay: 4.5s;
+}
 
 /* Planet color variables */
 :root {
   --cultural-background: rgba(59, 130, 246, 0.14);
   --cultural-border: rgba(59, 130, 246, 0.35);
-  --cultural-shadow: rgba(59, 130, 246, 0.10);
+  --cultural-shadow: rgba(59, 130, 246, 0.1);
 
   --hazardous-background: rgba(239, 68, 68, 0.14);
   --hazardous-border: rgba(239, 68, 68, 0.35);
-  --hazardous-shadow: rgba(239, 68, 68, 0.10);
+  --hazardous-shadow: rgba(239, 68, 68, 0.1);
 
   --industrial-background: rgba(34, 197, 94, 0.14);
   --industrial-border: rgba(34, 197, 94, 0.35);
-  --industrial-shadow: rgba(34, 197, 94, 0.10);
+  --industrial-shadow: rgba(34, 197, 94, 0.1);
 
   --default-background: rgba(107, 114, 128, 0.14);
   --default-border: rgba(107, 114, 128, 0.35);
-  --default-shadow: rgba(107, 114, 128, 0.10);
+  --default-shadow: rgba(107, 114, 128, 0.1);
 
   --faction-background: var(--default-background);
   --faction-border: var(--default-border);
@@ -274,19 +347,23 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   padding: 6px 4px;
-  height: 140px;
+  height: 130px;
   position: relative;
   justify-content: space-between;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--planet-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 2px 8px var(--planet-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   border: 1px solid var(--planet-border);
 }
 
 .mainStack:hover {
   transform: translateY(-2px);
   filter: brightness(1.1) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
 .mainStack:hover .planetCardHighlight {
@@ -300,7 +377,11 @@
 }
 
 .mainStack:not(.legendary) {
-  background: linear-gradient(135deg, var(--planet-background) 0%, rgba(15, 23, 42, 0.6) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--planet-background) 0%,
+    rgba(15, 23, 42, 0.6) 100%
+  );
 }
 
 .exhausted {
@@ -372,7 +453,6 @@
   height: 1px;
   z-index: 3;
 }
-
 
 /* Popover dropdown */
 .popoverDropdown {

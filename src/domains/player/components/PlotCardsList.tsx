@@ -1,33 +1,51 @@
-import { Group, type GroupProps } from "@mantine/core";
+import { Group, SimpleGrid, type GroupProps } from "@mantine/core";
 import { Plot } from "./Plot";
 import type { PlotCard } from "@/entities/data/types";
-import { type ReactNode } from "react";
 
 type PlotCardsListProps = {
   plotCards?: PlotCard[] | null;
   faction: string;
   groupProps?: GroupProps;
-  renderWrapper?: (items: ReactNode[]) => ReactNode;
   keyPrefix?: string;
+  columns?: number;
+  compact?: boolean;
 };
 
 export function PlotCardsList({
   plotCards,
   faction,
   groupProps,
-  renderWrapper,
   keyPrefix = "plot",
+  columns,
+  compact = false,
 }: PlotCardsListProps) {
   if (!Array.isArray(plotCards) || plotCards.length === 0) {
     return null;
   }
 
   const items = plotCards.map((plotCard, index) => (
-    <Plot key={`${keyPrefix}-${index}`} plotCard={plotCard} faction={faction} />
+    <Plot
+      key={`${keyPrefix}-${index}`}
+      plotCard={plotCard}
+      faction={faction}
+      compact={compact}
+    />
   ));
 
-  if (renderWrapper) {
-    return <>{renderWrapper(items)}</>;
+  if (columns) {
+    return (
+      <SimpleGrid cols={columns} spacing="4px">
+        {items}
+      </SimpleGrid>
+    );
+  }
+
+  if (compact) {
+    return (
+      <Group gap={4} wrap="nowrap" style={{ flexDirection: "column" }} {...groupProps}>
+        {items}
+      </Group>
+    );
   }
 
   return (

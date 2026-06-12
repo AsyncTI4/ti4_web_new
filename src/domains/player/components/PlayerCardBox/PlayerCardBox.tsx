@@ -4,6 +4,7 @@ import { getPrimaryColorWithOpacity } from "@/entities/lookup/colors";
 import "@/styles/theme.css";
 import styles from "./PlayerCardBox.module.css";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
+import cx from "clsx";
 
 type Props = {
   color: string;
@@ -11,6 +12,8 @@ type Props = {
   children: React.ReactNode;
   showFactionBackground?: boolean;
   paperProps?: PaperProps;
+  /** Skip the gradient edge bars and use a single subtle 1px border */
+  subtleBorder?: boolean;
 };
 
 export function PlayerCardBox({
@@ -19,26 +22,31 @@ export function PlayerCardBox({
   children,
   showFactionBackground = true,
   paperProps = {},
+  subtleBorder = false,
 }: Props) {
   const { style: paperStyle, ...restPaperProps } = paperProps;
 
   return (
-    <Box className={styles.wrapper}>
-      <Box
-        className={`${styles.edgeBar} ${styles.edgeBarTop}`}
-        style={{ background: generateColorGradient(color, 0.6) }}
-      />
-      <Box
-        className={`${styles.edgeBar} ${styles.edgeBarBottom}`}
-        style={{ background: generateColorGradient(color, 0.6) }}
-      />
+    <Box className={cx(styles.wrapper, subtleBorder && styles.wrapperTight)}>
+      {!subtleBorder && (
+        <>
+          <Box
+            className={`${styles.edgeBar} ${styles.edgeBarTop}`}
+            style={{ background: generateColorGradient(color, 0.6) }}
+          />
+          <Box
+            className={`${styles.edgeBar} ${styles.edgeBarBottom}`}
+            style={{ background: generateColorGradient(color, 0.6) }}
+          />
+        </>
+      )}
       <Paper
         p="sm"
         radius="md"
         className={styles.paper}
         {...restPaperProps}
         style={{
-          border: `1px solid ${getPrimaryColorWithOpacity(color, 0.3)}`,
+          border: `1px solid ${getPrimaryColorWithOpacity(color, subtleBorder ? 0.25 : 0.3)}`,
           ...paperStyle,
         }}
       >

@@ -10,7 +10,7 @@ export function PhantomTech({}: Props) {
       py={1}
       px="xs"
       style={{
-        borderRadius: "4px",
+        borderRadius: "1px",
         border: "1px dashed rgba(156, 163, 175, 0.6)",
         position: "relative",
         overflow: "hidden",

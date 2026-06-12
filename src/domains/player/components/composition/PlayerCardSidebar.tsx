@@ -11,9 +11,11 @@ import { PlayerCardRelicsPromissoryArea } from "@/domains/player/components/Play
 import { PlayerCardAbilitiesFactionTechs } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
 import { PlotCardsSection } from "@/domains/player/components/PlotCardsSection";
 import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
-import { PlayerCardCapturedUnits } from "@/domains/player/components/PlayerCardShared/PlayerCardCapturedUnits";
 import { PlayerCardLogisticsRow } from "@/domains/player/components/PlayerCardShared/PlayerCardLogisticsRow";
 import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCardShared/PlayerCardPlanetsSection";
+import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
+import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
+import { Nombox } from "./Nombox";
 
 type Props = {
   playerData: PlayerData;
@@ -58,6 +60,7 @@ export default function PlayerCardSidebar(props: Props) {
   const scs = playerData.scs || [];
   const exhaustedPlanetAbilities = playerData.exhaustedPlanetAbilities || [];
   const exhaustedPlanets = playerData.exhaustedPlanets || [];
+  const hasCapturedUnits = nombox && Object.keys(nombox).length > 0;
 
   return (
     <PlayerCardBox color={color} faction={faction}>
@@ -66,7 +69,6 @@ export default function PlayerCardSidebar(props: Props) {
         faction={faction}
         color={color}
         factionImageUrl={factionUrl}
-        variant="compact"
         isSpeaker={isSpeaker}
         isTyrant={isTyrant}
         scs={scs}
@@ -79,7 +81,6 @@ export default function PlayerCardSidebar(props: Props) {
         abilities={abilities}
         notResearchedFactionTechs={allNotResearchedFactionTechs}
         customPromissoryNotes={customPromissoryNotes}
-        variant="compact"
         breakthrough={playerData.breakthrough}
       />
 
@@ -143,21 +144,24 @@ export default function PlayerCardSidebar(props: Props) {
 
           <PlayerCardPlanetsSection
             planetEconomics={planetEconomics}
-            groupProps={{ gap: 8, align: "flex-start" }}
-            planetsProps={{
-              planets,
-              exhaustedPlanetAbilities,
-              exhaustedPlanets,
-              groupProps: { gap: 0, wrap: "wrap", align: "flex-start" },
-              reinforcementProps: {
-                breachTokensReinf,
-                sleeperTokensReinf,
-                ghostWormholesReinf,
-                galvanizeTokensReinf,
-                ml: "xs",
-              },
-            }}
-          />
+            gap={8}
+          >
+            <Box style={{ flex: 1, minWidth: 0 }}>
+              <PlayerCardPlanetsArea
+                planets={planets}
+                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+                exhaustedPlanets={exhaustedPlanets}
+                gap={0}
+              />
+            </Box>
+            <ReinforcementTokensGroup
+              breachTokensReinf={breachTokensReinf}
+              sleeperTokensReinf={sleeperTokensReinf}
+              ghostWormholesReinf={ghostWormholesReinf}
+              galvanizeTokensReinf={galvanizeTokensReinf}
+              ml="xs"
+            />
+          </PlayerCardPlanetsSection>
           <Box className={softStyles.softDividerTight} />
         </Stack>
         <Box p="md" className={softStyles.sectionBlock}>
@@ -172,16 +176,14 @@ export default function PlayerCardSidebar(props: Props) {
           plotCards={plotCards}
           faction={faction}
           layout="vertical"
-          renderContainer={(content) => (
-            <Stack gap="xs">
-              <Box className={softStyles.softDividerTight} />
-              {content}
-              <Box className={softStyles.softDividerTight} />
-            </Stack>
-          )}
         />
+        <Box className={softStyles.softDividerTight} />
 
-        <PlayerCardCapturedUnits nombox={nombox} />
+        {hasCapturedUnits && (
+          <Box mt="md">
+            <Nombox capturedUnits={nombox} />
+          </Box>
+        )}
       </Stack>
     </PlayerCardBox>
   );

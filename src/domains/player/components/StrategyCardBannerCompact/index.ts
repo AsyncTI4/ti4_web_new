@@ -1,1 +1,0 @@
-export { StrategyCardBannerCompact } from "./StrategyCardBannerCompact";

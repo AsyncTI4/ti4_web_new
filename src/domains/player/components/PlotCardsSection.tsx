@@ -1,5 +1,4 @@
 import { Group, Stack, type GroupProps } from "@mantine/core";
-import { type ReactNode } from "react";
 import type { PlotCard } from "@/entities/data/types";
 import Caption from "@/shared/ui/Caption/Caption";
 import { PlotCardsList } from "./PlotCardsList";
@@ -13,7 +12,6 @@ type PlotCardsSectionProps = {
   title?: string;
   groupProps?: GroupProps;
   keyPrefix?: string;
-  renderContainer?: (section: ReactNode) => ReactNode;
 };
 
 export function PlotCardsSection({
@@ -23,7 +21,6 @@ export function PlotCardsSection({
   title = "Plots",
   groupProps,
   keyPrefix,
-  renderContainer,
 }: PlotCardsSectionProps) {
   if (!Array.isArray(plotCards) || plotCards.length === 0) {
     return null;
@@ -38,22 +35,19 @@ export function PlotCardsSection({
     />
   );
 
-  const section =
-    layout === "vertical" ? (
+  if (layout === "vertical") {
+    return (
       <Stack gap="xs">
         <Caption size="xs">{title}</Caption>
         {list}
       </Stack>
-    ) : (
-      <Group gap="md" align="flex-start">
-        <Caption size="xs">{title}</Caption>
-        {list}
-      </Group>
     );
-
-  if (renderContainer) {
-    return <>{renderContainer(section)}</>;
   }
 
-  return section;
+  return (
+    <Group gap="md" align="flex-start">
+      <Caption size="xs">{title}</Caption>
+      {list}
+    </Group>
+  );
 }

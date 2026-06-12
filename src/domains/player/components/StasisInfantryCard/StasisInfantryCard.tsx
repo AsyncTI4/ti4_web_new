@@ -2,16 +2,28 @@ import { Stack, Box, Group, Text, Flex } from "@mantine/core";
 import styles from "./StasisInfantryCard.module.css";
 import { Unit } from "@/shared/ui/Unit";
 import { getColorAlias } from "@/entities/lookup/colors";
+import { DenseUnitCell } from "../UnitCard/DenseUnitCell";
 
 type Props = {
   reviveCount: number;
   color?: string;
+  condensed?: boolean;
 };
 
-export function StasisInfantryCard({ reviveCount, color }: Props) {
+export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
   const colorAlias = getColorAlias(color);
-  
+
   if (reviveCount == 0) return <></>;
+
+  if (condensed) {
+    return (
+      <DenseUnitCell
+        image={<Unit unitType="gf" colorAlias={colorAlias} />}
+        reinforcements={reviveCount}
+        label="revive"
+      />
+    );
+  }
 
   return (
     <Stack className={`${styles.stasisCard} ${styles.cardStack}`}>

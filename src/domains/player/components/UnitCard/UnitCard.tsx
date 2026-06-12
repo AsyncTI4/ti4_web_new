@@ -4,6 +4,7 @@ import { UnitDetailsCard } from "../UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { Unit } from "@/shared/ui/Unit";
 import { BaseCard } from "./BaseCard";
+import { DenseUnitCell } from "./DenseUnitCell";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { getUnitData } from "@/entities/lookup/units";
 import { useGameContext } from "@/hooks/useGameContext";
@@ -14,8 +15,10 @@ type Props = {
   deployedCount: number;
   unitCap?: number;
   compact?: boolean;
+  condensed?: boolean;
   locked?: boolean;
   lockedLabel?: string;
+  showUpgradeState?: boolean;
 };
 const DEFAULT_UNIT_CAPS = {
   carrier: 4,
@@ -44,8 +47,10 @@ export function UnitCard({
   deployedCount,
   unitCap: unitCapProp,
   compact,
+  condensed,
   locked,
   lockedLabel,
+  showUpgradeState = true,
 }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const unitData = getUnitData(unitId);
@@ -72,8 +77,9 @@ export function UnitCard({
     ...(hasNaazMechUpgrade ? ["naaz"] : []),
     ...(hasNekroMechUpgrade ? ["nekro"] : []),
   ];
-  const isUpgraded =
+  const unitIsUpgraded =
     unitData.upgradesFromUnitId !== undefined || unitData.baseType === "warsun";
+  const isUpgraded = showUpgradeState && unitIsUpgraded;
   const isFaction = unitData.faction !== undefined;
   const defaultCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
@@ -82,6 +88,24 @@ export function UnitCard({
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
+        {condensed ? (
+          <div>
+            <DenseUnitCell
+              image={
+                <Unit
+                  unitType={unitData.asyncId}
+                  colorAlias={colorAlias}
+                  faction={unitData.faction}
+                  showFactionTokens={false}
+                />
+              }
+              reinforcements={reinforcements}
+              totalCapacity={unitCap}
+              upgraded={isUpgraded}
+              onClick={locked ? undefined : toggle}
+            />
+          </div>
+        ) : (
         <div style={{ minWidth: "44px" }}>
           <BaseCard
             onClick={locked ? undefined : toggle}
@@ -94,7 +118,9 @@ export function UnitCard({
             locked={locked}
             lockedLabel={lockedLabel}
             upgradeFactions={
-              upgradeFactions.length > 0 ? upgradeFactions : undefined
+              showUpgradeState && upgradeFactions.length > 0
+                ? upgradeFactions
+                : undefined
             }
           >
             <Unit
@@ -106,6 +132,7 @@ export function UnitCard({
             />
           </BaseCard>
         </div>
+        )}
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>
         {!locked && (

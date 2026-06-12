@@ -50,10 +50,10 @@ export function Tech({
             styles[color],
             isFactionTech && styles.factionTech,
             isEnhanced && styles.enhanced,
+            isExhausted && styles.exhausted,
             synergyClass && styles[synergyClass],
           )}
           onClick={() => setOpened((o) => !o)}
-          style={{ opacity: isExhausted ? 0.5 : 1 }}
         >
           {/* Tier indicator dots in top-right */}
           {tier > 0 && (

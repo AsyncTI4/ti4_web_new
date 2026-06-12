@@ -17,17 +17,15 @@ export function MapViewSelectionModal({
   onSelect,
 }: MapViewSelectionModalProps) {
   const [selectedPreference, setSelectedPreference] =
-    useState<MapViewPreference | null>(null);
+    useState<MapViewPreference>("pannable");
 
   const handleConfirm = () => {
-    if (selectedPreference) {
-      onSelect(selectedPreference);
-      onClose();
-    }
+    onSelect(selectedPreference);
+    onClose();
   };
 
   const handleClose = () => {
-    setSelectedPreference(null);
+    setSelectedPreference("pannable");
     onClose();
   };
 
@@ -41,31 +39,36 @@ export function MapViewSelectionModal({
     >
       <Stack gap="lg">
         <Text size="sm" c="dimmed">
-          Select your preferred map view style. You can change this later in
-          Settings.
+          Select your preferred map view style. Pannable is denser and built
+          for cross-comparing the whole table quickly. Panels gives everything
+          more breathing room when you want a calmer read. You can change this
+          later in Settings.
         </Text>
 
         <Stack gap="md">
           {[
             {
-              value: "panels" as MapViewPreference,
-              label: "Panels",
-              description:
-                "Includes objective panel and side player info panel. Allows seeing map and player info at the same time, but requires clicking tabs or the map to switch between player areas.",
-              icon: <IconLayoutGrid size={24} />,
-            },
-            {
               value: "pannable" as MapViewPreference,
               label: "Pannable",
+              badge: "Recommended / Dense",
               description:
-                "Full-screen draggable map with everything on one scrollable canvas. More convenient for trackpad usage, or those accustomed to the discord image UI.",
+                "A full-screen draggable map with everything on one canvas. Best when you want to scan relationships and compare players quickly.",
               icon: <IconHandMove size={24} />,
+            },
+            {
+              value: "panels" as MapViewPreference,
+              label: "Panels",
+              badge: "More Breathing Room",
+              description:
+                "A separated panel layout with more spacing and clearer focus areas. Better when you want the interface to feel less packed.",
+              icon: <IconLayoutGrid size={24} />,
             },
           ].map((option) => (
             <MapViewPreferenceOption
               key={option.value}
               icon={option.icon}
               label={option.label}
+              badge={option.badge}
               description={option.description}
               value={option.value}
               selected={selectedPreference === option.value}
@@ -81,7 +84,6 @@ export function MapViewSelectionModal({
           <Button
             size="sm"
             onClick={handleConfirm}
-            disabled={!selectedPreference}
           >
             Confirm
           </Button>
