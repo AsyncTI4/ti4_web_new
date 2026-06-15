@@ -18,34 +18,73 @@ type Props = {
 const TECHS_PER_COLUMN = 6;
 const TECH_COLUMN_WIDTH = 190;
 
-function packTechGroupsIntoColumns(groups: ReactNode[][]): ReactNode[][] {
-  const columns: ReactNode[][] = [];
-  let currentColumn: ReactNode[] = [];
+function getPackableGroups(groups: ReactNode[][]): ReactNode[][] {
+  return groups
+    .flatMap((group) =>
+      group.length > TECHS_PER_COLUMN
+        ? chunkInto(group, TECHS_PER_COLUMN)
+        : [group]
+    )
+    .filter((group) => group.length > 0);
+}
 
-  groups.forEach((group) => {
-    if (group.length === 0) return;
+function getMinimumTechColumnCount(groups: ReactNode[][]): number {
+  const packableGroups = getPackableGroups(groups);
+  if (packableGroups.length === 0) return 1;
 
-    if (
-      currentColumn.length > 0 &&
-      currentColumn.length + group.length > TECHS_PER_COLUMN
-    ) {
-      columns.push(currentColumn);
-      currentColumn = [];
+  let columnCount = 1;
+  let currentCount = 0;
+
+  packableGroups.forEach((group) => {
+    if (currentCount > 0 && currentCount + group.length > TECHS_PER_COLUMN) {
+      columnCount += 1;
+      currentCount = 0;
     }
 
-    if (group.length <= TECHS_PER_COLUMN) {
-      currentColumn.push(...group);
-      return;
-    }
-
-    const groupChunks = chunkInto(group, TECHS_PER_COLUMN);
-    columns.push(...groupChunks.slice(0, -1));
-    currentColumn = groupChunks.at(-1) ?? [];
+    currentCount += group.length;
   });
 
-  if (currentColumn.length > 0) {
-    columns.push(currentColumn);
-  }
+  return columnCount;
+}
+
+function packTechGroupsIntoColumns(
+  groups: ReactNode[][],
+  columnCount: number
+): ReactNode[][] {
+  const packableGroups = getPackableGroups(groups);
+  const totalCount = packableGroups.reduce(
+    (count, group) => count + group.length,
+    0
+  );
+  const targetRows = Math.ceil(totalCount / columnCount);
+  const columns: ReactNode[][] = Array.from({ length: columnCount }, () => []);
+  const columnCounts = Array.from({ length: columnCount }, () => 0);
+  let columnIndex = 0;
+
+  packableGroups.forEach((group, index) => {
+    const remainingGroupsAfterThis = packableGroups.length - index - 1;
+    const remainingColumnsAfterThis = columnCount - columnIndex - 1;
+    const wouldOverflow =
+      columnCounts[columnIndex] > 0 &&
+      columnCounts[columnIndex] + group.length > TECHS_PER_COLUMN;
+    const wouldImproveBalance =
+      Math.abs(columnCounts[columnIndex] + group.length - targetRows) >
+      Math.abs(columnCounts[columnIndex] - targetRows);
+    const shouldMoveToNextColumn =
+      columnIndex < columnCount - 1 &&
+      columnCounts[columnIndex] > 0 &&
+      (wouldOverflow ||
+        (columnCount > 1 &&
+          wouldImproveBalance &&
+          remainingGroupsAfterThis >= remainingColumnsAfterThis));
+
+    if (shouldMoveToNextColumn) {
+      columnIndex += 1;
+    }
+
+    columns[columnIndex].push(...group);
+    columnCounts[columnIndex] += group.length;
+  });
 
   return columns;
 }
@@ -54,9 +93,8 @@ export function getTechGridMobileColumnCount(techs: string[] = []): number {
   const techGroups = techCategories.map((techType) =>
     buildTechElementsForType(techType, techs)
   );
-  const columns = packTechGroupsIntoColumns(techGroups);
 
-  return Math.max(1, columns.length);
+  return getMinimumTechColumnCount(techGroups);
 }
 
 export function TechGridMobile({
@@ -66,26 +104,38 @@ export function TechGridMobile({
   breakthrough,
 }: Props) {
   const techGroups = techCategories.map((techType) =>
-    buildTechElementsForType(techType, techs, exhaustedTechs, undefined, true, breakthrough)
+    buildTechElementsForType(
+      techType,
+      techs,
+      exhaustedTechs,
+      undefined,
+      true,
+      breakthrough
+    )
   );
 
-  const chunks = packTechGroupsIntoColumns(techGroups);
-  const columnCount = Math.max(minColumns, chunks.length || 1);
+  const columnCount = Math.max(
+    minColumns,
+    getMinimumTechColumnCount(techGroups)
+  );
+  const chunks = packTechGroupsIntoColumns(techGroups, columnCount);
 
   return (
     <Group gap={4} align="flex-start" wrap="nowrap">
-      {Array.from({ length: columnCount }, (_, idx) => chunks[idx] ?? []).map((chunk, idx) => (
-        <Stack key={`tech-group-${idx}`} gap={4}>
-          {chunk.map((child, i) => (
-            <Box key={i} style={{ width: TECH_COLUMN_WIDTH }}>
-              {child}
-            </Box>
-          ))}
-          {chunk.length === 0 && (
-            <Box style={{ width: TECH_COLUMN_WIDTH }} aria-hidden="true" />
-          )}
-        </Stack>
-      ))}
+      {Array.from({ length: columnCount }, (_, idx) => chunks[idx] ?? []).map(
+        (chunk, idx) => (
+          <Stack key={`tech-group-${idx}`} gap={4}>
+            {chunk.map((child, i) => (
+              <Box key={i} style={{ width: TECH_COLUMN_WIDTH }}>
+                {child}
+              </Box>
+            ))}
+            {chunk.length === 0 && (
+              <Box style={{ width: TECH_COLUMN_WIDTH }} aria-hidden="true" />
+            )}
+          </Stack>
+        )
+      )}
     </Group>
   );
 }

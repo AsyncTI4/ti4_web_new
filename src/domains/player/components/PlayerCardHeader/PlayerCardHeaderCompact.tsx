@@ -6,6 +6,9 @@ import { SpeakerToken } from "../SpeakerToken";
 import { TyrantToken } from "../TyrantToken";
 import { StrategyCard } from "../StrategyCard";
 import { Neighbors } from "../Neighbors";
+import { Breakthrough } from "../Breakthrough/Breakthrough";
+import breakthroughStyles from "../Breakthrough/Breakthrough.module.css";
+import type { BreakthroughData } from "@/entities/data/types";
 
 type PlayerCardHeaderProps = {
   userName: string;
@@ -19,6 +22,7 @@ type PlayerCardHeaderProps = {
   passed?: boolean;
   active?: boolean;
   showNeighbors?: boolean;
+  breakthrough?: BreakthroughData;
 };
 
 function StrategyCards({
@@ -40,6 +44,9 @@ function StrategyCards({
     </>
   );
 }
+
+const MOBILE_IDENTITY_WIDTH = 354;
+const MOBILE_BREAKTHROUGH_WIDTH = 176;
 
 export function PlayerCardHeaderCompact({
   userName,
@@ -204,10 +211,12 @@ export function PlayerCardHeaderMobile({
   active = false,
   neighbors = [],
   showNeighbors = true,
+  breakthrough,
   rightSection,
 }: PlayerCardHeaderProps & {
   neighbors?: string[];
   showNeighbors?: boolean;
+  breakthrough?: BreakthroughData;
   rightSection?: ReactNode;
 }) {
   return (
@@ -218,7 +227,18 @@ export function PlayerCardHeaderMobile({
       wrap="nowrap"
       style={{ width: "100%", minWidth: 0 }}
     >
-      <Group gap={4} align="center" wrap="nowrap" style={{ minWidth: 0 }}>
+      <Group
+        gap={4}
+        align="center"
+        wrap="nowrap"
+        style={{
+          width: MOBILE_IDENTITY_WIDTH,
+          minWidth: MOBILE_IDENTITY_WIDTH,
+          maxWidth: MOBILE_IDENTITY_WIDTH,
+          overflow: "hidden",
+          flexShrink: 0,
+        }}
+      >
         <Image
           src={factionImageUrl}
           alt={faction}
@@ -236,6 +256,7 @@ export function PlayerCardHeaderMobile({
             overflow: "hidden",
             whiteSpace: "nowrap",
             minWidth: 0,
+            flex: "0 1 auto",
           }}
         >
           {userName}
@@ -250,7 +271,8 @@ export function PlayerCardHeaderMobile({
             textOverflow: "ellipsis",
             overflow: "hidden",
             whiteSpace: "nowrap",
-            minWidth: 0,
+            minWidth: "max-content",
+            flex: "0 0 auto",
           }}
         >
           [{faction}]
@@ -258,6 +280,27 @@ export function PlayerCardHeaderMobile({
         <PlayerColor color={color} size="xs" />
         <StatusIndicator passed={passed} active={active} />
       </Group>
+
+      <Box
+        style={{
+          width: MOBILE_BREAKTHROUGH_WIDTH,
+          minWidth: MOBILE_BREAKTHROUGH_WIDTH,
+          maxWidth: MOBILE_BREAKTHROUGH_WIDTH,
+          flexShrink: 0,
+          overflow: "hidden",
+        }}
+      >
+        {breakthrough?.breakthroughId && (
+          <Breakthrough
+            breakthroughId={breakthrough.breakthroughId}
+            exhausted={breakthrough.exhausted}
+            tradeGoodsStored={breakthrough.tradeGoodsStored}
+            unlocked={breakthrough.unlocked ?? false}
+            strong={false}
+            chipClassName={breakthroughStyles.headerChip}
+          />
+        )}
+      </Box>
 
       {showNeighbors && neighbors.length > 0 && <Neighbors neighbors={neighbors} />}
 

@@ -16,6 +16,7 @@ type PlayerCardAbilitiesFactionTechsProps = {
   breakthrough?: BreakthroughData;
   className?: string;
   showFactionAbilities?: boolean;
+  showBreakthrough?: boolean;
 };
 
 function useBreakthroughValues(breakthrough?: BreakthroughData) {
@@ -37,12 +38,13 @@ export function PlayerCardAbilitiesFactionTechsMobile({
   breakthrough,
   className,
   showFactionAbilities = true,
+  showBreakthrough = true,
 }: PlayerCardAbilitiesFactionTechsProps) {
   const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
 
   return (
     <Group gap="md" wrap="wrap" align="center" className={className}>
-      {breakthrough?.breakthroughId && (
+      {showBreakthrough && breakthrough?.breakthroughId && (
         <Group gap={gap}>
           <Breakthrough
             breakthroughId={breakthrough.breakthroughId}

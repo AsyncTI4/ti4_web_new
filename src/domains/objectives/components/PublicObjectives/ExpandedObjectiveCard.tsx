@@ -1,4 +1,5 @@
 import { Box, Text, Group, Stack, Image } from "@mantine/core";
+import type { KeyboardEvent } from "react";
 import { Shimmer } from "@/domains/player/components/Shimmer";
 import { getGradientClasses } from "@/domains/player/components/gradientClasses";
 import { Objective, PlayerData } from "@/entities/data/types";
@@ -65,7 +66,7 @@ function ExpandedObjectiveCard({
         <CircularFactionIcon
           key={`${faction}-${index}`}
           faction={faction}
-          size={28}
+          size={24}
         />
       ));
     }
@@ -76,7 +77,7 @@ function ExpandedObjectiveCard({
   const cardContent = (
     <Shimmer
       color={color}
-      p="sm"
+      p="xs"
       className={`${getGradientClasses(color).border} ${getGradientClasses(color).backgroundStrong} ${getGradientClasses(color).leftBorder} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
     >
       <Group className={styles.mainRow}>
@@ -103,6 +104,12 @@ function ExpandedObjectiveCard({
       </Group>
     </Shimmer>
   );
+  const handleDetailsKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onToggle?.();
+    }
+  };
 
   if (shouldShowMobileTooltip) {
     return (
@@ -118,12 +125,7 @@ function ExpandedObjectiveCard({
             role="button"
             aria-label={`Objective requirement: ${objectiveData?.text}`}
             onClick={onToggle}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                onToggle?.();
-              }
-            }}
+            onKeyDown={handleDetailsKeyDown}
           >
             {cardContent}
           </Box>

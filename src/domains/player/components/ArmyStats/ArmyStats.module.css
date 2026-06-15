@@ -1,9 +1,32 @@
 .table {
   width: auto;
+  border-collapse: separate;
+  border-spacing: 0 2px;
 }
 
 .withRankFooter {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   min-width: max-content;
+}
+
+.table th,
+.table td {
+  border-bottom: 0;
+  padding-block: 3px;
+}
+
+.table tbody tr {
+  background: rgba(148, 163, 184, 0.035);
+}
+
+.table tbody tr td:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.table tbody tr td:last-child {
+  border-radius: 0 2px 2px 0;
 }
 
 .headerIcon {
@@ -15,7 +38,7 @@
 .caption {
   color: var(--mantine-color-gray-4);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   line-height: 1;
   font-weight: 600;
 }
@@ -23,7 +46,7 @@
 .number {
   color: var(--mantine-color-gray-1);
   line-height: 1;
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
 }
 
 .rankBadge {
@@ -31,7 +54,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 4px;
+  margin-top: auto;
   padding: 3px 6px;
   border-radius: 0 0 2px 2px;
   border-left: 0 !important;

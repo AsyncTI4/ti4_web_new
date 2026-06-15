@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.headerChip {
+  width: 100%;
+}
+
 .container.exhausted {
   filter: grayscale(0.2);
 }

@@ -120,6 +120,10 @@ export function PannableMapView({ gameId }: Props) {
         minWidth: "2150px",
         padding: "0 16px",
       };
+  const scoreSummaryAreaStyles = {
+    ...areaStyles,
+    marginTop: "8px",
+  };
 
   /* Player cards grow to their content width (no internal scrollbars);
      the surrounding map area provides the horizontal scrolling */
@@ -226,6 +230,7 @@ export function PannableMapView({ gameId }: Props) {
               <ExpandedPublicObjectives
                 objectives={gameData.objectives}
                 playerData={gameData.playerData}
+                lawsInPlay={gameData.lawsInPlay}
               />
             </Stack>
           </ScaledContent>
@@ -254,7 +259,7 @@ export function PannableMapView({ gameId }: Props) {
         {!DISABLE_PLAYER_AREA_RENDERING && gameData && (
           <ScaledContent
             zoom={computePanelsZoom()}
-            innerStyle={areaStyles}
+            innerStyle={scoreSummaryAreaStyles}
             enabled={isMobileDevice()}
           >
             <PlayerScoreSummary

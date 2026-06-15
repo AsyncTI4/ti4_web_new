@@ -1,47 +1,58 @@
 .legendContainer {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   font-size: 12px;
-  color: rgba(156, 163, 175, 0.9);
+  color: rgba(203, 213, 225, 0.78);
   justify-content: flex-end;
+  align-items: center;
+  padding: 3px 4px;
 }
 
 .legendItem {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
 }
 
 .legendBox {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(2, 6, 23, 0.65);
 }
 
 .scored {
-  background-color: rgba(234, 179, 8, 0.6);
+  background: rgba(234, 179, 8, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.34);
 }
 
 .qualifies {
-  border: 2px dashed rgba(156, 163, 175, 0.5);
+  border: 1px dashed rgba(96, 165, 250, 0.76);
   background: linear-gradient(
     to top right,
-    rgba(59, 130, 246, 0.6) 0%,
-    rgba(59, 130, 246, 0.6) 50%,
-    transparent 50%,
-    transparent 100%
+    rgba(59, 130, 246, 0.52) 0%,
+    rgba(59, 130, 246, 0.52) 48%,
+    rgba(15, 23, 42, 0.46) 48%,
+    rgba(15, 23, 42, 0.46) 100%
   );
 }
 
 .potential {
-  border: 2px dashed rgba(156, 163, 175, 0.5);
+  border: 1px dashed rgba(148, 163, 184, 0.64);
+  background: rgba(15, 23, 42, 0.28);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .unscored {
-  border: 2px dashed rgba(107, 114, 128, 0.7);
+  border: 1px dashed rgba(100, 116, 139, 0.7);
+  background: rgba(15, 23, 42, 0.18);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.48);
 }
 
 .losable {
-  background-color: rgba(249, 115, 22, 0.6);
+  background-color: rgba(249, 115, 22, 0.44);
   background-image: repeating-linear-gradient(
     45deg,
     transparent,

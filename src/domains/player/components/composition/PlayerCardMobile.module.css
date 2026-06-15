@@ -19,9 +19,8 @@
   min-width: 0;
 }
 
-.flexSpacer {
+.planetsSection {
   flex: 1 1 auto;
-  min-width: 16px;
 }
 
 /* Fixed-width anchors keep the variable sections that follow roughly aligned */
@@ -36,6 +35,26 @@
 
 .techSection {
   min-width: 202px;
+}
+
+.armySection {
+  align-self: stretch;
+  padding-inline: 8px;
+  border-color: rgba(148, 163, 184, 0.22);
+  background:
+    linear-gradient(90deg, rgba(148, 163, 184, 0.12) 0 2px, transparent 2px),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.66), rgba(2, 6, 23, 0.82));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(15, 23, 42, 0.55);
+}
+
+.armySection::before {
+  border-color: rgba(148, 163, 184, 0.34);
+}
+
+.armySection::after {
+  border-color: rgba(148, 163, 184, 0.24);
 }
 
 /* Capped-row column-flow grids: grow horizontally, keep vertical rhythm.

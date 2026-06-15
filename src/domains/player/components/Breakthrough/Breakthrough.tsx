@@ -15,6 +15,8 @@ type Props = {
   tradeGoodsStored?: number;
   unlocked?: boolean;
   strong?: boolean;
+  className?: string;
+  chipClassName?: string;
 };
 
 const synergyToColor: Record<string, ColorKey> = {
@@ -55,6 +57,8 @@ export function Breakthrough({
   tradeGoodsStored,
   unlocked = true,
   strong = true,
+  className,
+  chipClassName,
 }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const data = getBreakthroughData(breakthroughId);
@@ -68,7 +72,7 @@ export function Breakthrough({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          className={`${styles.container} ${exhausted ? styles.exhausted : ""} ${!unlocked ? styles.locked : ""}`}
+          className={`${styles.container} ${exhausted ? styles.exhausted : ""} ${!unlocked ? styles.locked : ""} ${className ?? ""}`}
         >
           <Chip
             accent={accent}
@@ -79,7 +83,7 @@ export function Breakthrough({
             py={4}
             strong={strong}
             accentLine={exhausted}
-            className={exhausted ? styles.exhaustedChip : ""}
+            className={`${exhausted ? styles.exhaustedChip : ""} ${chipClassName ?? ""}`}
             leftSection={
               <img
                 src={cdnImage("/general/synergy.png")}

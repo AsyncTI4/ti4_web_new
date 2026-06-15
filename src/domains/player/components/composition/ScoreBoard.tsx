@@ -7,7 +7,7 @@ import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreS
 function ScoreBoard() {
   const gameData = useGameData();
   if (!gameData) return null;
-  const { objectives, playerData, vpsToWin = 10 } = gameData;
+  const { objectives, playerData, lawsInPlay, vpsToWin = 10 } = gameData;
 
   return (
     <Box p="lg">
@@ -17,6 +17,7 @@ function ScoreBoard() {
         <ExpandedPublicObjectives
           objectives={objectives}
           playerData={playerData}
+          lawsInPlay={lawsInPlay}
         />
 
         <PlayerScoreSummary playerData={playerData} objectives={objectives} />

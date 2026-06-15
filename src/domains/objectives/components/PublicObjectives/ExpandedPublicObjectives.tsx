@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { Box, Stack, SimpleGrid, Flex } from "@mantine/core";
 import ExpandedObjectiveCard from "./ExpandedObjectiveCard";
-import { Objectives, PlayerData } from "@/entities/data/types";
+import { Objectives, PlayerData, type LawInPlay } from "@/entities/data/types";
 import styles from "./PublicObjectives.module.css";
 import Caption from "@/shared/ui/Caption/Caption";
+import { LawCard } from "@/domains/game-shell/components/LawsInPlay";
 
 type Props = {
   objectives: Objectives;
   playerData: PlayerData[];
+  lawsInPlay?: LawInPlay[];
 };
 
-function ExpandedPublicObjectives({ objectives, playerData }: Props) {
+function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: Props) {
   const [openObjectiveKey, setOpenObjectiveKey] = useState<string | null>(null);
 
   return (
@@ -105,6 +107,19 @@ function ExpandedPublicObjectives({ objectives, playerData }: Props) {
                 />
               ))}
             </Flex>
+          </Box>
+        )}
+
+        {lawsInPlay.length > 0 && (
+          <Box>
+            <Caption size="sm" className={`${styles.stageTitle} ${styles.lawsTitle}`}>
+              Laws in Play
+            </Caption>
+            <SimpleGrid cols={{ base: 2, sm: 3 }} spacing="xs">
+              {lawsInPlay.map((law, index) => (
+                <LawCard key={`${law.id}-${index}`} law={law} />
+              ))}
+            </SimpleGrid>
           </Box>
         )}
       </Stack>

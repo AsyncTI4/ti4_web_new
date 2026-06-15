@@ -7,7 +7,6 @@ import { Chip } from "@/shared/ui/primitives/Chip";
 import {
   SC_COLORS,
   SC_NAMES,
-  SC_NUMBER_COLORS,
 } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/hooks/useGameContext";
@@ -51,7 +50,6 @@ export function StrategyCard({ initiative, isExhausted = false }: Props) {
     gameData?.strategyCardIdMap
   );
   const color = getStrategyCardColor(initiative);
-  const numberColor = color === "yellow" ? "yellow.8" : SC_NUMBER_COLORS[color];
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened} position="bottom">
@@ -63,7 +61,7 @@ export function StrategyCard({ initiative, isExhausted = false }: Props) {
               isExhausted && classes.numberExhausted
             )}
           >
-            <Text ff="heading" c={numberColor} className={classes.numberText}>
+            <Text ff="heading" className={classes.numberText}>
               {initiative}
             </Text>
             {isExhausted && (

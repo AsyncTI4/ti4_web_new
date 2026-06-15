@@ -60,9 +60,7 @@ export function PlanetAbilityCard({
   );
 }
 
-type LegendaryIconProps = {};
-
-function LegendaryIcon({}: LegendaryIconProps) {
+function LegendaryIcon() {
   return (
     <Image
       src={cdnImage("/planet_cards/pc_legendary_rdy.png")}

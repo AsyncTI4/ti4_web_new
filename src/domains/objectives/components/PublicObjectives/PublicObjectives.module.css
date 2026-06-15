@@ -27,6 +27,9 @@
 /* Stage variants (placeholders to satisfy module references) */
 .stage1Title {}
 .stage2Title {}
+.lawsTitle {
+  color: rgba(226, 232, 240, 0.92) !important;
+}
 
 
 .otherTitle {

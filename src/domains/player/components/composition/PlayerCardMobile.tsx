@@ -280,6 +280,7 @@ export default function PlayerCardMobile(props: Props) {
         active={player.active}
         neighbors={player.neighbors}
         showNeighbors={settings.showPlayerAreaNeighborship}
+        breakthrough={props.playerData.breakthrough}
         rightSection={
           <PlayerCardAbilitiesFactionTechsMobile
             abilities={player.abilities}
@@ -287,6 +288,7 @@ export default function PlayerCardMobile(props: Props) {
             customPromissoryNotes={player.customPromissoryNotes}
             breakthrough={props.playerData.breakthrough}
             showFactionAbilities={settings.showPlayerAreaFactionAbilities}
+            showBreakthrough={false}
           />
         }
       />
@@ -359,10 +361,11 @@ export default function PlayerCardMobile(props: Props) {
           />
         </Section>
 
-        <Section>
+        <Section className={styles.planetsSection}>
           <PlayerCardPlanetsSection
             planetEconomics={planetEconomics}
             gap={4}
+            economyGap={6}
             wrap="nowrap"
             showTotalSpend={settings.showPlayerAreaTotalSpend}
           >
@@ -382,11 +385,7 @@ export default function PlayerCardMobile(props: Props) {
         </Section>
 
         {settings.showPlayerAreaArmyStrength && (
-          <Box className={styles.flexSpacer} aria-hidden="true" />
-        )}
-
-        {settings.showPlayerAreaArmyStrength && (
-          <Section>
+          <Section className={styles.armySection}>
             <ArmyStats stats={armyStats} rank={rank} />
           </Section>
         )}
