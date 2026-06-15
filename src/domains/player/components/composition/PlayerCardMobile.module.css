@@ -42,9 +42,9 @@
    Uniform column widths give a consistent scan line across cards. */
 .objectivesGrid {
   display: grid;
-  grid-template-rows: repeat(4, min-content);
+  grid-template-rows: repeat(6, min-content);
   grid-auto-flow: column;
-  grid-auto-columns: minmax(170px, max-content);
+  grid-auto-columns: 170px;
   gap: 4px;
   align-items: start;
   min-width: 170px;
@@ -63,7 +63,15 @@
   display: grid;
   grid-auto-rows: min-content;
   gap: 4px;
+  width: 170px;
   min-width: 170px;
+  max-width: 170px;
+}
+
+.objectivesGrid > *,
+.objectivesColumn > * {
+  min-width: 0;
+  width: 100%;
 }
 
 .plotPanel {

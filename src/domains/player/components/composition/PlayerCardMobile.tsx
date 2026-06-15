@@ -63,6 +63,7 @@ type ObjectivesGridProps = {
 
 const OBJECTIVE_COLUMN_WIDTH = 170;
 const OBJECTIVE_GRID_GAP = 4;
+const OBJECTIVES_PER_COLUMN = 6;
 
 function getObjectiveColumnCount({
   secretsScored,
@@ -79,9 +80,9 @@ function getObjectiveColumnCount({
   const otherCount = relics.length + promissoryNotes.length;
   const totalCount = secretCount + otherCount;
 
-  if (totalCount <= 4) return 1;
+  if (totalCount <= OBJECTIVES_PER_COLUMN) return 1;
 
-  return 1 + Math.ceil(otherCount / 4);
+  return 1 + Math.ceil(otherCount / OBJECTIVES_PER_COLUMN);
 }
 
 function ObjectivesGrid({
@@ -133,7 +134,7 @@ function ObjectivesGrid({
   const minWidth =
     minColumns * OBJECTIVE_COLUMN_WIDTH + (minColumns - 1) * OBJECTIVE_GRID_GAP;
 
-  if (allItems.length <= 4) {
+  if (allItems.length <= OBJECTIVES_PER_COLUMN) {
     return (
       <Box className={styles.objectivesGrid} style={{ minWidth }}>
         {allItems}
@@ -142,8 +143,8 @@ function ObjectivesGrid({
   }
 
   const otherColumns = [];
-  for (let start = 0; start < otherItems.length; start += 4) {
-    otherColumns.push(otherItems.slice(start, start + 4));
+  for (let start = 0; start < otherItems.length; start += OBJECTIVES_PER_COLUMN) {
+    otherColumns.push(otherItems.slice(start, start + OBJECTIVES_PER_COLUMN));
   }
 
   return (
