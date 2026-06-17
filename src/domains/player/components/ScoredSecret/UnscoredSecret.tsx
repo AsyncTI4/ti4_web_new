@@ -12,7 +12,7 @@ export function UnscoredSecret() {
         styles.unscoredKnown,
         styles.redactedCard
       )}
-      leftSection={<SecretObjectiveIcon size={18} />}
+      leftSection={<SecretObjectiveIcon size={16} />}
       title="Unscored Secret"
     />
   );

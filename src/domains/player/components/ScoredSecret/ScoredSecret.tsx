@@ -20,7 +20,7 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
     <ChipWithPopover
       className={cx(styles.secretCard, !isScored && styles.unscoredKnown)}
       accent={isScored ? "red" : "gray"}
-      leftSection={<SecretObjectiveIcon size={18} />}
+      leftSection={<SecretObjectiveIcon size={16} />}
       title={secretName}
       onClick={onClick}
       dropdownContent={<SecretObjectiveCard secretId={secretId} />}
