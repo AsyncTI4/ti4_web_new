@@ -16,10 +16,9 @@ export type LeaderChipProps = {
   exhausted: boolean;
   locked: boolean;
   active: boolean;
-  variant?: "default" | "mobile";
 };
 
-export function LeaderChip({ variant = "default", ...props }: LeaderChipProps) {
+export function LeaderChip(props: LeaderChipProps) {
   const { id, type, exhausted, locked, active } = props;
   const { opened, setOpened, toggle } = useDisclosure(false);
   const leaderData = getLeaderById(id);
@@ -45,24 +44,20 @@ export function LeaderChip({ variant = "default", ...props }: LeaderChipProps) {
         <Chip
           accent={accentColor}
           onClick={toggle}
-          className={cx(variant === "mobile" ? styles.mobile : styles.pill)}
+          className={styles.pill}
         >
           <Box className={styles.leaderWrapper}>
-            <Group gap={variant === "mobile" ? 8 : 6} className={styles.leaderGroup}>
+            <Group gap={6} className={styles.leaderGroup}>
               {showLeaderImage && (
                 <div className={styles.leaderImageContainer}>
                   <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
                 </div>
               )}
 
-              {variant === "mobile" ? (
+              <Stack gap={0} className={styles.textContainer}>
+                <Text className={nameClassName}>{leaderData.name}</Text>
                 <Text className={typeClassName}>{type}</Text>
-              ) : (
-                <Stack gap={0} className={styles.textContainer}>
-                  <Text className={nameClassName}>{leaderData.name}</Text>
-                  <Text className={typeClassName}>{type}</Text>
-                </Stack>
-              )}
+              </Stack>
             </Group>
 
             {active && <Box className={styles.onlineDot} />}

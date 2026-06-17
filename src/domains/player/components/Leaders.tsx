@@ -2,13 +2,10 @@ import { Group, Stack, SimpleGrid } from "@mantine/core";
 import { Leader } from "./Leader";
 import { CompactLeader } from "./Leader/CompactLeader";
 import { Leader as LeaderType } from "@/entities/data/types";
-import { MobileLeader } from "./Leader/MobileLeader";
-import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   leaders: LeaderType[];
   faction?: string;
-  mobile?: boolean;
 };
 
 export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
@@ -27,7 +24,7 @@ export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
   );
 }
 
-export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
+export function RegularLeaders({ leaders, faction }: Props) {
   const isNomad = faction === "nomad";
   const nomadAgentIds = [
     "nomadagentartuno",
@@ -42,9 +39,6 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
         (l) => !(l.type === "agent" && nomadAgentIds.includes(l.id))
       )
     : leaders;
-
-  const LeaderComponent = mobile ? MobileLeader : Leader;
-
   return (
     <Stack gap={4} style={{ overflow: "visible" }}>
       {isNomad && nomadAgents.length > 0 && (
@@ -65,7 +59,7 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
       )}
 
       {otherLeaders.map((leader, index) => (
-        <LeaderComponent
+        <Leader
           key={index}
           id={leader.id}
           type={leader.type as "agent" | "commander" | "hero"}
@@ -79,10 +73,10 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
   );
 }
 
-export function Leaders({ leaders, faction, mobile = false }: Props) {
+export function Leaders({ leaders, faction }: Props) {
   const useCompactForAll = leaders.length > 5;
   if (useCompactForAll) {
     return <GridCompactLeaders leaders={leaders} />;
   }
-  return <RegularLeaders leaders={leaders} faction={faction} mobile={mobile} />;
+  return <RegularLeaders leaders={leaders} faction={faction} />;
 }

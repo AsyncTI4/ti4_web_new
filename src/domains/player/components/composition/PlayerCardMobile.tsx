@@ -326,7 +326,7 @@ export default function PlayerCardMobile(props: Props) {
         </Section>
 
         <Section className={styles.leadersSection}>
-          <Leaders leaders={player.leaders} faction={player.faction} mobile />
+          <Leaders leaders={player.leaders} faction={player.faction} />
         </Section>
 
         <Section>
