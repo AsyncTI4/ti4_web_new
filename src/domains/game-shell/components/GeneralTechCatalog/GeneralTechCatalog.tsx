@@ -27,13 +27,13 @@ const COLORED_TECH_GROUPS: TechGroup[] = [
     label: "Biotic",
     color: "green",
     icon: "/green.png",
-    aliases: ["nm", "dxa", "hm", "pa", "bs", "x89"],
+    aliases: ["nm", "dxa", "hm", "pa", "bs", "x89c4"],
   },
   {
     label: "Warfare",
     color: "red",
     icon: "/red.png",
-    aliases: ["ps", "aida", "md_base", "sar", "da", "asc"],
+    aliases: ["ps", "aida", "md", "sar", "da", "asc"],
   },
   {
     label: "Cybernetic",
@@ -70,7 +70,7 @@ function byTierThenName(a: Tech, b: Tech) {
 function resolveTechs(aliases: string[]) {
   return aliases
     .map((alias) => getTechData(alias))
-    .filter((tech): tech is Tech => Boolean(tech))
+    .filter((tech): tech is Tech => Boolean(tech) && !tech.homebrewReplacesID)
     .sort(byTierThenName);
 }
 
