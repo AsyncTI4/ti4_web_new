@@ -287,7 +287,7 @@ export function PlayerCardHeaderMobile({
           minWidth: MOBILE_BREAKTHROUGH_WIDTH,
           maxWidth: MOBILE_BREAKTHROUGH_WIDTH,
           flexShrink: 0,
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         {breakthrough?.breakthroughId && (
