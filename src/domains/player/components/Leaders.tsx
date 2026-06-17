@@ -46,7 +46,7 @@ export function RegularLeaders({ leaders, faction, mobile = false }: Props) {
   const LeaderComponent = mobile ? MobileLeader : Leader;
 
   return (
-    <Stack gap={4} style={{ overflow: "hidden" }}>
+    <Stack gap={4} style={{ overflow: "visible" }}>
       {isNomad && nomadAgents.length > 0 && (
         <Group p={2} gap={6} wrap="nowrap" align="center">
           {nomadAgentIds
