@@ -18,6 +18,8 @@ import { IconValue } from "@/shared/ui/primitives/IconValue";
 import { useAppStore } from "@/utils/appStore";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { mergePlanetTraits, type PlanetTrait } from "@/utils/planetTraits";
+import { isMobileDevice } from "@/utils/isTouchDevice";
+import { getPlanetTileBackground } from "./planetTileBackground";
 
 type Props = {
   planetId: string;
@@ -72,6 +74,9 @@ export function PlanetCard({
   const isDeepAbyss =
     (planetData.shortName ?? planetData.name) === "Deep Abyss";
   const cssTypeKey = isOcean || isDeepAbyss ? "ocean" : baseCssTypeKey;
+  const planetTileBackground = !isMobileDevice()
+    ? getPlanetTileBackground(planetData)
+    : null;
 
   const planetCardContent = (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -116,13 +121,27 @@ export function PlanetCard({
           )}
 
           <Box className={styles.topHighlight} />
+          {planetTileBackground && (
+            <Box
+              className={styles.tileArtMask}
+              style={planetTileBackground.maskStyle}
+              aria-hidden="true"
+            >
+              <img
+                className={styles.tileArtImage}
+                src={planetTileBackground.src}
+                alt=""
+                style={planetTileBackground.imageStyle}
+              />
+            </Box>
+          )}
 
           <Box className={styles.iconContainer}>
             <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
           </Box>
           <Stack className={styles.bottomStack}>
             <Group className={styles.nameGroup}>
-              <Text className={styles.planetName} ff="monospace">
+              <Text className={styles.planetName}>
                 {planetData.shortName ?? planetData.name}
               </Text>
               <Stack className={styles.valuesStack} align="top">

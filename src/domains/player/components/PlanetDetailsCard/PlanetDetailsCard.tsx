@@ -113,9 +113,10 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
       );
     }
 
-    // Default planet icon for special planets like Mecatol Rex (no icon)
-    return <></>;
+    return null;
   };
+
+  const traitIcon = renderTraitIcon();
 
   return (
     <DetailsCard width={320}>
@@ -124,7 +125,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
         <DetailsCardTitle
           title={planetData.name}
           subtitle={getPlanetTypeDisplay(planetData.planetType!)}
-          icon={<DetailsCardIcon icon={renderTraitIcon()} />}
+          icon={traitIcon ? <DetailsCardIcon icon={traitIcon} /> : undefined}
         />
 
         <Divider c="gray.7" opacity={0.8} />
