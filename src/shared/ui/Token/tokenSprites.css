@@ -1,0 +1,1354 @@
+/* Static CSS matching TI4_map_generator_bot/scripts/generate-token-sprites.mjs output. */
+.token-sprite {
+  display: inline-block;
+  flex: 0 0 auto;
+  background-repeat: no-repeat;
+  background-size: var(--token-sprite-sheet-width) var(--token-sprite-sheet-height);
+}
+
+.token-sprite--tokens-official {
+  --token-sprite-sheet-width: 993px;
+  --token-sprite-sheet-height: 504px;
+  background-image: url("https://images.asyncti4.com/tokens/sheets/tokens-official.webp?v=4");
+}
+
+.token-sprite--token-asteroids {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -607px -207px;
+}
+
+.token-sprite--token-avernus {
+  width: 174px;
+  height: 157px;
+  aspect-ratio: 174 / 157;
+  background-position: -371px -0px;
+}
+
+.token-sprite--token-breachactive {
+  width: 66px;
+  height: 106px;
+  aspect-ratio: 66 / 106;
+  background-position: -374px -207px;
+}
+
+.token-sprite--token-breachinactive {
+  width: 66px;
+  height: 106px;
+  aspect-ratio: 66 / 106;
+  background-position: -442px -207px;
+}
+
+.token-sprite--token-creussalpha {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -659px -327px;
+}
+
+.token-sprite--token-creussbeta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -741px -327px;
+}
+
+.token-sprite--token-creussgamma {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -823px -327px;
+}
+
+.token-sprite--token-custc1 {
+  width: 80px;
+  height: 82px;
+  aspect-ratio: 80 / 82;
+  background-position: -577px -327px;
+}
+
+.token-sprite--token-custodian {
+  width: 200px;
+  height: 205px;
+  aspect-ratio: 200 / 205;
+  background-position: -0px -0px;
+}
+
+.token-sprite--token-custodianvp {
+  width: 142px;
+  height: 142px;
+  aspect-ratio: 142 / 142;
+  background-position: -547px -0px;
+}
+
+.token-sprite--token-custvpc1 {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -905px -327px;
+}
+
+.token-sprite--token-egress {
+  width: 90px;
+  height: 90px;
+  aspect-ratio: 90 / 90;
+  background-position: -485px -327px;
+}
+
+.token-sprite--token-entropicscar {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -704px -207px;
+}
+
+.token-sprite--token-frontier {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -0px -424px;
+}
+
+.token-sprite--token-gamma {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -82px -424px;
+}
+
+.token-sprite--token-gravityrift {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -801px -207px;
+}
+
+.token-sprite--token-ingress {
+  width: 95px;
+  height: 96px;
+  aspect-ratio: 95 / 96;
+  background-position: -510px -207px;
+}
+
+.token-sprite--token-ionalpha {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -898px -207px;
+}
+
+.token-sprite--token-ionbeta {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -0px -327px;
+}
+
+.token-sprite--token-mirage {
+  width: 154px;
+  height: 137px;
+  aspect-ratio: 154 / 137;
+  background-position: -691px -0px;
+}
+
+.token-sprite--token-nebula {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -97px -327px;
+}
+
+.token-sprite--token-relictoken {
+  width: 48px;
+  height: 48px;
+  aspect-ratio: 48 / 48;
+  background-position: -246px -424px;
+}
+
+.token-sprite--token-severed {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -164px -424px;
+}
+
+.token-sprite--token-sleeper {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -194px -327px;
+}
+
+.token-sprite--token-speaker {
+  width: 185px;
+  height: 118px;
+  aspect-ratio: 185 / 118;
+  background-position: -0px -207px;
+}
+
+.token-sprite--token-supernova {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -291px -327px;
+}
+
+.token-sprite--token-thundersedge {
+  width: 167px;
+  height: 159px;
+  aspect-ratio: 167 / 159;
+  background-position: -202px -0px;
+}
+
+.token-sprite--token-tyrant {
+  width: 185px;
+  height: 116px;
+  aspect-ratio: 185 / 116;
+  background-position: -187px -207px;
+}
+
+.token-sprite--token-worlddestroyed {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -388px -327px;
+}
+
+.token-sprite--tokens-homebrew {
+  --token-sprite-sheet-width: 994px;
+  --token-sprite-sheet-height: 415px;
+  background-image: url("https://images.asyncti4.com/tokens/sheets/tokens-homebrew.webp?v=4");
+}
+
+.token-sprite--token-anomaly {
+  width: 1px;
+  height: 1px;
+  aspect-ratio: 1 / 1;
+  background-position: -993px -335px;
+}
+
+.token-sprite--token-beansnexus {
+  width: 90px;
+  height: 90px;
+  aspect-ratio: 90 / 90;
+  background-position: -194px -238px;
+}
+
+.token-sprite--token-big_obelisk {
+  width: 100px;
+  height: 100px;
+  aspect-ratio: 100 / 100;
+  background-position: -636px -0px;
+}
+
+.token-sprite--token-blight {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -0px -141px;
+}
+
+.token-sprite--token-compromised {
+  width: 50px;
+  height: 50px;
+  aspect-ratio: 50 / 50;
+  background-position: -941px -335px;
+}
+
+.token-sprite--token-consulate {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -701px -238px;
+}
+
+.token-sprite--token-cradle {
+  width: 160px;
+  height: 136px;
+  aspect-ratio: 160 / 136;
+  background-position: -318px -0px;
+}
+
+.token-sprite--token-creussepsilon {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -783px -238px;
+}
+
+.token-sprite--token-custom_eronous_whepsilon {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -865px -238px;
+}
+
+.token-sprite--token-custom_eronous_wheta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -0px -335px;
+}
+
+.token-sprite--token-custom_eronous_whiota {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -82px -335px;
+}
+
+.token-sprite--token-custom_eronous_whtheta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -246px -335px;
+}
+
+.token-sprite--token-custom_eronous_whzeta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -328px -335px;
+}
+
+.token-sprite--token-customempyrean {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -97px -238px;
+}
+
+.token-sprite--token-customkollecc {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -97px -141px;
+}
+
+.token-sprite--token-customnivyn {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -194px -141px;
+}
+
+.token-sprite--token-customnokar {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -291px -141px;
+}
+
+.token-sprite--token-customtnelis {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -388px -141px;
+}
+
+.token-sprite--token-customwinnu {
+  width: 95px;
+  height: 98px;
+  aspect-ratio: 95 / 98;
+  background-position: -840px -0px;
+}
+
+.token-sprite--token-freepeople {
+  width: 81px;
+  height: 84px;
+  aspect-ratio: 81 / 84;
+  background-position: -286px -238px;
+}
+
+.token-sprite--token-freesystems_raccoon {
+  width: 97px;
+  height: 77px;
+  aspect-ratio: 97 / 77;
+  background-position: -574px -335px;
+}
+
+.token-sprite--token-gledge_core {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -485px -141px;
+}
+
+.token-sprite--token-glory {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -582px -141px;
+}
+
+.token-sprite--token-glory2 {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -679px -141px;
+}
+
+.token-sprite--token-glory3 {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -776px -141px;
+}
+
+.token-sprite--token-illusion {
+  width: 154px;
+  height: 136px;
+  aspect-ratio: 154 / 136;
+  background-position: -480px -0px;
+}
+
+.token-sprite--token-installation {
+  width: 100px;
+  height: 100px;
+  aspect-ratio: 100 / 100;
+  background-position: -738px -0px;
+}
+
+.token-sprite--token-oasis {
+  width: 160px;
+  height: 139px;
+  aspect-ratio: 160 / 139;
+  background-position: -0px -0px;
+}
+
+.token-sprite--token-phantasm {
+  width: 154px;
+  height: 137px;
+  aspect-ratio: 154 / 137;
+  background-position: -162px -0px;
+}
+
+.token-sprite--token-sigil {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -873px -141px;
+}
+
+.token-sprite--token-vortex {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -410px -335px;
+}
+
+.token-sprite--token-whall {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -492px -335px;
+}
+
+.token-sprite--token-whalpha {
+  width: 65px;
+  height: 65px;
+  aspect-ratio: 65 / 65;
+  background-position: -673px -335px;
+}
+
+.token-sprite--token-whbeta {
+  width: 65px;
+  height: 65px;
+  aspect-ratio: 65 / 65;
+  background-position: -740px -335px;
+}
+
+.token-sprite--token-whchampion {
+  width: 81px;
+  height: 81px;
+  aspect-ratio: 81 / 81;
+  background-position: -369px -238px;
+}
+
+.token-sprite--token-whdelta {
+  width: 65px;
+  height: 65px;
+  aspect-ratio: 65 / 65;
+  background-position: -807px -335px;
+}
+
+.token-sprite--token-whepsilon {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -865px -238px;
+}
+
+.token-sprite--token-wheta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -0px -335px;
+}
+
+.token-sprite--token-whgamma {
+  width: 65px;
+  height: 65px;
+  aspect-ratio: 65 / 65;
+  background-position: -874px -335px;
+}
+
+.token-sprite--token-whkappa {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -164px -335px;
+}
+
+.token-sprite--token-whnarrows {
+  width: 81px;
+  height: 81px;
+  aspect-ratio: 81 / 81;
+  background-position: -452px -238px;
+}
+
+.token-sprite--token-whprobability {
+  width: 81px;
+  height: 81px;
+  aspect-ratio: 81 / 81;
+  background-position: -535px -238px;
+}
+
+.token-sprite--token-whvoyage {
+  width: 81px;
+  height: 81px;
+  aspect-ratio: 81 / 81;
+  background-position: -618px -238px;
+}
+
+.token-sprite--token-whzeta {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 80 / 80;
+  background-position: -328px -335px;
+}
+
+.token-sprite--token-wound {
+  width: 95px;
+  height: 95px;
+  aspect-ratio: 95 / 95;
+  background-position: -0px -238px;
+}
+
+.token-sprite--attachment-tokens-official {
+  --token-sprite-sheet-width: 1019px;
+  --token-sprite-sheet-height: 111px;
+  background-image: url("https://images.asyncti4.com/tokens/sheets/attachment-tokens-official.webp?v=4");
+}
+
+.token-sprite--attachment-biotic {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -427px -0px;
+}
+
+.token-sprite--attachment-bioticstat {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -493px -0px;
+}
+
+.token-sprite--attachment-custodiavigilia1 {
+  width: 75px;
+  height: 75px;
+  aspect-ratio: 75 / 75;
+  background-position: -0px -0px;
+}
+
+.token-sprite--attachment-custodiavigilia2 {
+  width: 75px;
+  height: 75px;
+  aspect-ratio: 75 / 75;
+  background-position: -77px -0px;
+}
+
+.token-sprite--attachment-cybernetic {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -559px -0px;
+}
+
+.token-sprite--attachment-cyberneticstat {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -625px -0px;
+}
+
+.token-sprite--attachment-dmz {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -691px -0px;
+}
+
+.token-sprite--attachment-dysonsphere {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -757px -0px;
+}
+
+.token-sprite--attachment-helios1 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -823px -0px;
+}
+
+.token-sprite--attachment-helios2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -889px -0px;
+}
+
+.token-sprite--attachment-lazaxsurvivors {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -955px -0px;
+}
+
+.token-sprite--attachment-miningworld {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -0px -77px;
+}
+
+.token-sprite--attachment-nanoforge {
+  width: 89px;
+  height: 34px;
+  aspect-ratio: 89 / 34;
+  background-position: -154px -0px;
+}
+
+.token-sprite--attachment-paradiseworld {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -66px -77px;
+}
+
+.token-sprite--attachment-propulsion {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -132px -77px;
+}
+
+.token-sprite--attachment-propulsionstat {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -198px -77px;
+}
+
+.token-sprite--attachment-richworld {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -264px -77px;
+}
+
+.token-sprite--attachment-titanshero {
+  width: 89px;
+  height: 34px;
+  aspect-ratio: 89 / 34;
+  background-position: -245px -0px;
+}
+
+.token-sprite--attachment-titanspn {
+  width: 89px;
+  height: 34px;
+  aspect-ratio: 89 / 34;
+  background-position: -336px -0px;
+}
+
+.token-sprite--attachment-tombofemphidia {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -330px -77px;
+}
+
+.token-sprite--attachment-warfare {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -396px -77px;
+}
+
+.token-sprite--attachment-warfarestat {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -462px -77px;
+}
+
+.token-sprite--attachment-tokens-homebrew {
+  --token-sprite-sheet-width: 1017px;
+  --token-sprite-sheet-height: 275px;
+  background-image: url("https://images.asyncti4.com/tokens/sheets/attachment-tokens-homebrew.webp?v=4");
+}
+
+.token-sprite--attachment-arcane_citadel {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -227px -66px;
+}
+
+.token-sprite--attachment-arcane_shield {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -161px -66px;
+}
+
+.token-sprite--attachment-automatons {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -293px -66px;
+}
+
+.token-sprite--attachment-council_preserve {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -359px -66px;
+}
+
+.token-sprite--attachment-cultural {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -425px -66px;
+}
+
+.token-sprite--attachment-designabundance {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -557px -66px;
+}
+
+.token-sprite--attachment-designgrand {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -623px -66px;
+}
+
+.token-sprite--attachment-designprestige {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -689px -66px;
+}
+
+.token-sprite--attachment-designtranspose {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -755px -66px;
+}
+
+.token-sprite--attachment-designunify {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -821px -66px;
+}
+
+.token-sprite--attachment-encryptionkey {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -887px -66px;
+}
+
+.token-sprite--attachment-facilitycolony {
+  width: 45px;
+  height: 64px;
+  aspect-ratio: 45 / 64;
+  background-position: -118px -0px;
+}
+
+.token-sprite--attachment-facilitycorefactory {
+  width: 65px;
+  height: 25px;
+  aspect-ratio: 65 / 25;
+  background-position: -66px -246px;
+}
+
+.token-sprite--attachment-facilityembassy1 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -386px -0px;
+}
+
+.token-sprite--attachment-facilityembassy2 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -452px -0px;
+}
+
+.token-sprite--attachment-facilityembassy3 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -518px -0px;
+}
+
+.token-sprite--attachment-facilityembassy4 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -584px -0px;
+}
+
+.token-sprite--attachment-facilityembassy5 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -650px -0px;
+}
+
+.token-sprite--attachment-facilityembassy6 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -716px -0px;
+}
+
+.token-sprite--attachment-facilityembassy7 {
+  width: 64px;
+  height: 37px;
+  aspect-ratio: 64 / 37;
+  background-position: -782px -0px;
+}
+
+.token-sprite--attachment-facilitylogisticshub {
+  width: 55px;
+  height: 64px;
+  aspect-ratio: 55 / 64;
+  background-position: -61px -0px;
+}
+
+.token-sprite--attachment-facilitynavalbase {
+  width: 64px;
+  height: 29px;
+  aspect-ratio: 64 / 29;
+  background-position: -0px -246px;
+}
+
+.token-sprite--attachment-facilityrefinery {
+  width: 59px;
+  height: 64px;
+  aspect-ratio: 59 / 64;
+  background-position: -0px -0px;
+}
+
+.token-sprite--attachment-facilityresearchlab {
+  width: 64px;
+  height: 62px;
+  aspect-ratio: 64 / 62;
+  background-position: -165px -0px;
+}
+
+.token-sprite--attachment-facilitytransitnode {
+  width: 64px;
+  height: 52px;
+  aspect-ratio: 64 / 52;
+  background-position: -320px -0px;
+}
+
+.token-sprite--attachment-galacticheritagesite {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -953px -66px;
+}
+
+.token-sprite--attachment-garden_worlds {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -0px -102px;
+}
+
+.token-sprite--attachment-gledgebase {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -132px -102px;
+}
+
+.token-sprite--attachment-hazardous {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -198px -102px;
+}
+
+.token-sprite--attachment-imperialinstitute {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -264px -102px;
+}
+
+.token-sprite--attachment-industrial {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -330px -102px;
+}
+
+.token-sprite--attachment-ixthduel {
+  width: 87px;
+  height: 53px;
+  aspect-ratio: 87 / 53;
+  background-position: -231px -0px;
+}
+
+.token-sprite--attachment-legendary {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -396px -102px;
+}
+
+.token-sprite--attachment-lizhotrap {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -462px -102px;
+}
+
+.token-sprite--attachment-lizhotrap1 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -528px -102px;
+}
+
+.token-sprite--attachment-lizhotrap2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -594px -102px;
+}
+
+.token-sprite--attachment-lizhotrap3 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -660px -102px;
+}
+
+.token-sprite--attachment-lizhotrap4 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -726px -102px;
+}
+
+.token-sprite--attachment-lizhotrap5 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -792px -102px;
+}
+
+.token-sprite--attachment-lizhotrap6 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -858px -102px;
+}
+
+.token-sprite--attachment-lloyd_culturalboom {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -491px -66px;
+}
+
+.token-sprite--attachment-lloyd_galacticfinancialcenter {
+  width: 38px;
+  height: 34px;
+  aspect-ratio: 38 / 34;
+  background-position: -886px -210px;
+}
+
+.token-sprite--attachment-lloyd_geothermal {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -66px -102px;
+}
+
+.token-sprite--attachment-lloyd_industrialboom {
+  width: 68px;
+  height: 34px;
+  aspect-ratio: 68 / 34;
+  background-position: -91px -66px;
+}
+
+.token-sprite--attachment-lloyd_interplanetaryhub {
+  width: 39px;
+  height: 34px;
+  aspect-ratio: 39 / 34;
+  background-position: -722px -210px;
+}
+
+.token-sprite--attachment-lloyd_orbitalslingshot {
+  width: 39px;
+  height: 34px;
+  aspect-ratio: 39 / 34;
+  background-position: -763px -210px;
+}
+
+.token-sprite--attachment-lloyd_planetaryarcologies {
+  width: 37px;
+  height: 34px;
+  aspect-ratio: 37 / 34;
+  background-position: -926px -210px;
+}
+
+.token-sprite--attachment-lloyd_populationgrowth {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -660px -138px;
+}
+
+.token-sprite--attachment-lloyd_selfdefense {
+  width: 39px;
+  height: 34px;
+  aspect-ratio: 39 / 34;
+  background-position: -804px -210px;
+}
+
+.token-sprite--attachment-lloyd_terraformingmilestone {
+  width: 60px;
+  height: 34px;
+  aspect-ratio: 60 / 34;
+  background-position: -660px -210px;
+}
+
+.token-sprite--attachment-lloyd_traderoute {
+  width: 39px;
+  height: 34px;
+  aspect-ratio: 39 / 34;
+  background-position: -845px -210px;
+}
+
+.token-sprite--attachment-manufactorum {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -924px -102px;
+}
+
+.token-sprite--attachment-negativeinf {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -0px -138px;
+}
+
+.token-sprite--attachment-negativeinf2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -66px -138px;
+}
+
+.token-sprite--attachment-negativeinf3 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -132px -138px;
+}
+
+.token-sprite--attachment-negativeres {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -198px -138px;
+}
+
+.token-sprite--attachment-negativeres2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -264px -138px;
+}
+
+.token-sprite--attachment-negativeres3 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -330px -138px;
+}
+
+.token-sprite--attachment-obelisk {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -396px -138px;
+}
+
+.token-sprite--attachment-olradin_mech_inf {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -462px -138px;
+}
+
+.token-sprite--attachment-olradin_mech_res {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -528px -138px;
+}
+
+.token-sprite--attachment-orbital_foundries {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -594px -138px;
+}
+
+.token-sprite--attachment-positiveinf {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -726px -138px;
+}
+
+.token-sprite--attachment-positiveinf2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -792px -138px;
+}
+
+.token-sprite--attachment-positiveinf3 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -858px -138px;
+}
+
+.token-sprite--attachment-positiveres {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -924px -138px;
+}
+
+.token-sprite--attachment-positiveres2 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -0px -174px;
+}
+
+.token-sprite--attachment-positiveres3 {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -66px -174px;
+}
+
+.token-sprite--attachment-sigma_ancient_hall {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -132px -174px;
+}
+
+.token-sprite--attachment-sigma_cyber {
+  width: 89px;
+  height: 34px;
+  aspect-ratio: 89 / 34;
+  background-position: -848px -0px;
+}
+
+.token-sprite--attachment-sigma_deserted_factories {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -198px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_admirals {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -264px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_architects {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -330px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_diplomats {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -396px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_merchants {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -462px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_politicians {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -528px -174px;
+}
+
+.token-sprite--attachment-sigma_palace_scientists {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -594px -174px;
+}
+
+.token-sprite--attachment-sigma_senate_sanctuary {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -660px -174px;
+}
+
+.token-sprite--attachment-sigma_unwelcoming {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -726px -174px;
+}
+
+.token-sprite--attachment-sigma_weirdway {
+  width: 89px;
+  height: 34px;
+  aspect-ratio: 89 / 34;
+  background-position: -0px -66px;
+}
+
+.token-sprite--attachment-superweapon_availyn {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -792px -174px;
+}
+
+.token-sprite--attachment-superweapon_caled {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -858px -174px;
+}
+
+.token-sprite--attachment-superweapon_glatison {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -924px -174px;
+}
+
+.token-sprite--attachment-superweapon_grom {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -0px -210px;
+}
+
+.token-sprite--attachment-superweapon_mors {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -66px -210px;
+}
+
+.token-sprite--attachment-threetraits {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -132px -210px;
+}
+
+.token-sprite--attachment-veldyrbroadcasthub {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -198px -210px;
+}
+
+.token-sprite--attachment-veldyrorbitalshipyard {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -264px -210px;
+}
+
+.token-sprite--attachment-veldyrreservebank {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -330px -210px;
+}
+
+.token-sprite--attachment-veldyrtaxhaven {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -396px -210px;
+}
+
+.token-sprite--attachment-weapon {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -462px -210px;
+}
+
+.token-sprite--attachment-weaponstat {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -528px -210px;
+}
+
+.token-sprite--attachment-worldshapernegative {
+  width: 64px;
+  height: 34px;
+  aspect-ratio: 64 / 34;
+  background-position: -594px -210px;
+}

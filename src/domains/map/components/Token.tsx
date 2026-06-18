@@ -2,11 +2,14 @@ import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTokenImagePath, getTokenData } from "@/entities/lookup/tokens";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
+import { TokenSprite } from "@/shared/ui/Token/components/TokenSprite";
+import { getTokenSprite } from "@/shared/ui/Token/tokenSprites";
 
-interface TokenProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface TokenProps extends React.HTMLAttributes<HTMLDivElement> {
   tokenId: string;
   colorAlias?: string;
   faction?: string;
+  alt?: string;
   planetCenter?: { x: number; y: number };
   x?: number;
   y?: number;
@@ -38,35 +41,53 @@ export const Token = ({
     );
   }
 
-  const imagePath =
-    getTokenImagePath(tokenId) || getAttachmentImagePath(tokenId);
+  const tokenImagePath = getTokenImagePath(tokenId);
+  const attachmentImagePath = tokenImagePath ? null : getAttachmentImagePath(tokenId);
+  const imagePath = tokenImagePath || attachmentImagePath;
   const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
   const tokenData = getTokenData(tokenId);
   const scale = tokenData?.scale || 1;
+  const sprite = tokenImagePath
+    ? getTokenSprite("token", tokenId)
+    : getTokenSprite("attachment", tokenId);
 
   const existingStyle = imageProps.style || {};
-  const scaledStyle =
-    scale !== 1
-      ? {
-          ...existingStyle,
-          transform: `${existingStyle.transform || ""} scale(${scale})`.trim(),
-        }
-      : existingStyle;
+  const transform = [
+    "translate(-50%, -50%)",
+    scale !== 1 ? `scale(${scale})` : undefined,
+    existingStyle.transform,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (!imagePath) return null;
+
+  const style = {
+    ...existingStyle,
+    position: "absolute" as const,
+    left: `${x}px`,
+    top: `${y}px`,
+    transform,
+    zIndex: zIndex,
+  };
+
+  if (sprite) {
+    return (
+      <TokenSprite
+        sprite={sprite}
+        alt={defaultAlt}
+        {...imageProps}
+        style={style}
+      />
+    );
+  }
+
   return (
     <img
       src={cdnImage(imagePath)}
       alt={defaultAlt}
-      {...imageProps}
-      style={{
-        ...scaledStyle,
-        position: "absolute" as const,
-        left: `${x}px`,
-        top: `${y}px`,
-        transform: "translate(-50%, -50%)",
-        zIndex: zIndex,
-      }}
+      {...(imageProps as React.ImgHTMLAttributes<HTMLImageElement>)}
+      style={style}
     />
   );
 };
@@ -114,7 +135,7 @@ const DMZToken = ({
     <img
       src={cdnImage(imagePath)}
       alt={defaultAlt}
-      {...imageProps}
+      {...(imageProps as React.ImgHTMLAttributes<HTMLImageElement>)}
       style={dmzStyles}
     />
   );
