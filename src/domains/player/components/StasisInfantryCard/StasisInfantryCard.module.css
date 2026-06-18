@@ -66,6 +66,21 @@
   filter: brightness(0.25);
 }
 
+.unitImage:global(.unit-sprite) {
+  width: 30px !important;
+  height: auto !important;
+}
+
+.denseUnitImage {
+  height: 22px;
+  width: auto;
+}
+
+.denseUnitImage:global(.unit-sprite) {
+  height: 22px !important;
+  width: auto !important;
+}
+
 .infoStack {
   gap: var(--mantine-spacing-xs);
   align-items: center;

@@ -96,6 +96,8 @@ export function UnitCard({
                   unitType={unitData.asyncId}
                   colorAlias={colorAlias}
                   faction={unitData.faction}
+                  className={styles.denseUnitImage}
+                  scaleSprite
                   showFactionTokens={false}
                 />
               }
@@ -128,6 +130,7 @@ export function UnitCard({
               colorAlias={colorAlias}
               faction={unitData.faction}
               className={compact ? styles.unitImageCompact : styles.unitImage}
+              scaleSprite
               showFactionTokens={false}
             />
           </BaseCard>

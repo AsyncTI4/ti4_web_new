@@ -23,7 +23,14 @@ export function UnitCardUnavailable({
   if (condensed) {
     return (
       <DenseUnitCell
-        image={<Unit unitType={asyncId} colorAlias={colorAlias} />}
+        image={
+          <Unit
+            unitType={asyncId}
+            colorAlias={colorAlias}
+            className={styles.denseUnitImage}
+            scaleSprite
+          />
+        }
         dimmed
       />
     );
@@ -36,6 +43,7 @@ export function UnitCardUnavailable({
           unitType={asyncId}
           colorAlias={colorAlias}
           className={compact ? styles.unitImageCompact : styles.unitImage}
+          scaleSprite
         />
       </BaseCard>
     </div>

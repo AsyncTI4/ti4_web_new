@@ -1,6 +1,8 @@
 import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
+import { SpriteUnitImage } from "@/shared/ui/Unit/components/SpriteUnitImage";
+import { getUnitSprite } from "@/shared/ui/Unit/unitSprites";
 import classes from "./UnitBadge.module.css";
 import cx from "clsx";
 
@@ -34,6 +36,7 @@ export function UnitBadge({
   };
 
   const isWhiteText = textColor.toLowerCase() === "white";
+  const sprite = getUnitSprite(colorAlias, `tkn_${unitType}`);
 
   return (
     <div
@@ -43,11 +46,19 @@ export function UnitBadge({
       onMouseDown={onMouseDown}
     >
       <div className={classes.unitBadge}>
-        <img
-          src={cdnImage(`/units/${colorAlias}_tkn_${unitType}.png`)}
-          alt={`${faction} ${unitType}`}
-          className={classes.unitIcon}
-        />
+        {sprite ? (
+          <SpriteUnitImage
+            sprite={sprite}
+            alt={`${faction} ${unitType}`}
+            className={classes.unitIcon}
+          />
+        ) : (
+          <img
+            src={cdnImage(`/units/${colorAlias}_tkn_${unitType}.png`)}
+            alt={`${faction} ${unitType}`}
+            className={classes.unitIcon}
+          />
+        )}
         <div className={classes.unitCountContainer}>
           <span
             className={cx(classes.unitCount, isWhiteText && classes.whiteText)}

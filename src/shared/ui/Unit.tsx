@@ -9,11 +9,13 @@ import {
 } from "./Unit/utils";
 import { BackgroundDecal } from "./Unit/components/BackgroundDecal";
 import { BaseUnitImage } from "./Unit/components/BaseUnitImage";
+import { SpriteUnitImage } from "./Unit/components/SpriteUnitImage";
 import { PlayerDecalOverlay } from "./Unit/overlays/PlayerDecalOverlay";
 import { LawOverlay } from "./Unit/overlays/LawOverlay";
 import { DamageMarker } from "./Unit/overlays/DamageMarker";
 import { DimensionalTearToken } from "./Unit/overlays/DimensionalTearToken";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getUnitSprite } from "./Unit/unitSprites";
 
 type UnitProps = {
   unitType: string;
@@ -29,6 +31,8 @@ type UnitProps = {
   zIndex?: number;
   alt?: string;
   className?: string;
+  /** Use scale-safe sprite positioning for constrained card/grid icons. */
+  scaleSprite?: boolean;
   /** Show faction-specific tokens like dimensional tear. Defaults to true. */
   showFactionTokens?: boolean;
 };
@@ -47,11 +51,13 @@ export function Unit({
   y,
   zIndex,
   className,
+  scaleSprite,
   showFactionTokens = true,
 }: UnitProps) {
   const defaultAlt = computeDefaultAlt(alt, faction, colorAlias, unitType);
   const tokenSuffix = computeTokenSuffix(colorAlias);
   const urlColor = computeUrlColor(unitType, colorAlias);
+  const sprite = getUnitSprite(colorAlias, unitType);
   const fighterOrInfantry = isFighterOrInfantry(unitType);
 
   const isArticlesOfWarActive = lawsInPlay?.some(
@@ -85,12 +91,21 @@ export function Unit({
     >
       {showDimensionalTear && <DimensionalTearToken />}
       <BackgroundDecal path={bgDecalPath} />
-      <BaseUnitImage
-        urlColor={urlColor}
-        unitType={unitType}
-        alt={defaultAlt}
-        className={className}
-      />
+      {sprite ? (
+        <SpriteUnitImage
+          sprite={sprite}
+          alt={defaultAlt}
+          className={className}
+          scaled={scaleSprite}
+        />
+      ) : (
+        <BaseUnitImage
+          urlColor={urlColor}
+          unitType={unitType}
+          alt={defaultAlt}
+          className={className}
+        />
+      )}
       <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
       {showArticles && (
         <LawOverlay

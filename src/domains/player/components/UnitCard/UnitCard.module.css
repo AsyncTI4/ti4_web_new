@@ -126,6 +126,19 @@
   padding-top: 2px;
 }
 
+.unitImage:global(.unit-sprite),
+.unitImageCompact:global(.unit-sprite) {
+  width: auto !important;
+}
+
+.unitImage:global(.unit-sprite) {
+  height: 26px !important;
+}
+
+.unitImageCompact:global(.unit-sprite) {
+  height: 24px !important;
+}
+
 .infoStack {
   gap: 4px;
   align-items: center;
@@ -260,6 +273,16 @@
 .denseCellImage img {
   height: 22px;
   width: auto;
+}
+
+.denseUnitImage {
+  height: 22px;
+  width: auto;
+}
+
+.denseUnitImage:global(.unit-sprite) {
+  width: auto !important;
+  height: 22px !important;
 }
 
 .denseCellCount {

@@ -18,7 +18,14 @@ export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
   if (condensed) {
     return (
       <DenseUnitCell
-        image={<Unit unitType="gf" colorAlias={colorAlias} />}
+        image={
+          <Unit
+            unitType="gf"
+            colorAlias={colorAlias}
+            className={styles.denseUnitImage}
+            scaleSprite
+          />
+        }
         reinforcements={reviveCount}
         label="revive"
       />
@@ -38,6 +45,7 @@ export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
           unitType="gf"
           colorAlias={colorAlias}
           className={styles.unitImage}
+          scaleSprite
         />
       </Flex>
 
