@@ -7,6 +7,7 @@ import { ChipWithPopover } from "@/shared/ui/primitives/ChipWithPopover";
 import { IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import cx from "clsx";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   relicId: string;
@@ -24,11 +25,14 @@ function RelicIcon({ isFake, isExhausted }: RelicIconProps) {
   return (
     <Box className={styles.iconWrapper}>
       <Image
-        src={isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp"}
+        {...lowPriorityImageProps}
+        src={
+          isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp"
+        }
         className={cx(
           styles.icon,
           !isFake && gradientClasses.iconFilter,
-          isExhausted && styles.exhaustedIcon
+          isExhausted && styles.exhaustedIcon,
         )}
       />
       {isExhausted && (
@@ -56,7 +60,7 @@ export function Relic({ relicId, isExhausted = false }: Props) {
       className={cx(
         styles.relicCard,
         isFake && styles.fake,
-        isExhausted && styles.exhausted
+        isExhausted && styles.exhausted,
       )}
       accent={accentColor}
       leftSection={<RelicIcon isFake={isFake} isExhausted={isExhausted} />}

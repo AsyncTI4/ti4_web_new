@@ -20,6 +20,7 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { mergePlanetTraits, type PlanetTrait } from "@/utils/planetTraits";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { getPlanetTileBackground } from "./planetTileBackground";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   planetId: string;
@@ -53,18 +54,18 @@ export function PlanetCard({
   const finalTraits = mergePlanetTraits(
     planetData.planetTypes ||
       (planetData.planetType ? [planetData.planetType] : []),
-    attachmentModifiers.planetTypes
+    attachmentModifiers.planetTypes,
   );
   const baseCssTypeKey = resolveCssTypeKey(finalTraits);
   const allIcons = createAllIcons(
     planetData,
     attachmentModifiers,
-    resolvedAttachments
+    resolvedAttachments,
   );
   const { finalResources, finalInfluence } = calculateFinalValues(
     planetData,
     attachmentModifiers,
-    planetTile
+    planetTile,
   );
   const isLegendary = checkIsLegendary(planetData, resolvedAttachments);
   const hasLegendaryAbility = !!(
@@ -94,7 +95,7 @@ export function PlanetCard({
             (isOcean || isDeepAbyss) && styles.deepAbyssBackground,
             isLegendary && styles.legendary,
             hasLegendaryAbility && styles.noRightRadius,
-            isExhausted && styles.exhausted
+            isExhausted && styles.exhausted,
           )}
           style={getCSSVariables(cssTypeKey) as React.CSSProperties}
         >
@@ -128,6 +129,7 @@ export function PlanetCard({
               aria-hidden="true"
             >
               <img
+                {...lowPriorityImageProps}
                 className={styles.tileArtImage}
                 src={planetTileBackground.src}
                 alt=""
@@ -151,6 +153,7 @@ export function PlanetCard({
                 <IconValue
                   icon={
                     <Image
+                      {...lowPriorityImageProps}
                       src="/pa_resources.png"
                       className={styles.resourceImage}
                     />
@@ -222,14 +225,14 @@ function calculateAttachmentModifiers(attachments: string[]) {
       influence: 0,
       techSpecialties: [] as string[],
       planetTypes: [] as string[],
-    }
+    },
   );
 }
 
 function createAllIcons(
   planetData: Planet,
   attachmentModifiers: AttachmentModifiers,
-  attachments: string[]
+  attachments: string[],
 ) {
   const allIcons = [];
 
@@ -259,7 +262,7 @@ function createAllIcons(
 function calculateFinalValues(
   planetData: Planet,
   attachmentModifiers: AttachmentModifiers,
-  planetTile?: TilePlanet
+  planetTile?: TilePlanet,
 ) {
   // If the server provides calculated values (e.g. for Triad), use them
   if (
@@ -320,6 +323,7 @@ type AttachmentUpgradeIconProps = object;
 function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
   return (
     <Image
+      {...lowPriorityImageProps}
       src={cdnImage("/planet_cards/pc_upgrade.png")}
       className={styles.attachmentIcon}
     />
@@ -335,6 +339,7 @@ function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
   if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
     return (
       <Image
+        {...lowPriorityImageProps}
         src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
         className={styles.factionIcon}
       />

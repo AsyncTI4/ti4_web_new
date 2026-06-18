@@ -4,6 +4,7 @@ import {
   mergePlanetTraits,
   type PlanetTrait,
 } from "@/utils/planetTraits";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props =
   | { trait: PlanetTrait; traits?: never; size?: number }
@@ -28,5 +29,7 @@ export function PlanetTraitIcon(props: Props) {
   const alt =
     traits.length === 1 ? traits[0] : `traits:${traits.join("").toUpperCase()}`;
 
-  return <Image src={src} alt={alt} w={size} h={size} />;
+  return (
+    <Image {...lowPriorityImageProps} src={src} alt={alt} w={size} h={size} />
+  );
 }

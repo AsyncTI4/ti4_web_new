@@ -8,6 +8,7 @@ import { LeaderDetailsCard } from "../LeaderDetailsCard";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { showLeader } from "./showLeader";
 import styles from "./Leader.module.css";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 export type LeaderChipProps = {
   id: string;
@@ -41,16 +42,16 @@ export function LeaderChip(props: LeaderChipProps) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip
-          accent={accentColor}
-          onClick={toggle}
-          className={styles.pill}
-        >
+        <Chip accent={accentColor} onClick={toggle} className={styles.pill}>
           <Box className={styles.leaderWrapper}>
             <Group gap={6} className={styles.leaderGroup}>
               {showLeaderImage && (
                 <div className={styles.leaderImageContainer}>
-                  <Image src={`/leaders/${id}.webp`} className={styles.leaderImage} />
+                  <Image
+                    {...lowPriorityImageProps}
+                    src={`/leaders/${id}.webp`}
+                    className={styles.leaderImage}
+                  />
                 </div>
               )}
 

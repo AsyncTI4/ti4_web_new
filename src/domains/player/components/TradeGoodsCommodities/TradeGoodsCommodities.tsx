@@ -3,6 +3,7 @@ import { getGradientClasses } from "../gradientClasses";
 import styles from "./TradeGoodsCommodities.module.css";
 import { Shimmer } from "../Shimmer";
 import { Chip } from "@/shared/ui/primitives/Chip";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   tg: number;
@@ -32,6 +33,7 @@ export function TradeGoodsCommodities({
         >
           <Box className={styles.chipContent}>
             <Image
+              {...lowPriorityImageProps}
               src="/tg.png"
               className={`${getGradientClasses("yellow").iconFilter} ${styles.icon}`}
             />
@@ -50,6 +52,7 @@ export function TradeGoodsCommodities({
         >
           <Box className={styles.chipContent} ff={"monospace"}>
             <Image
+              {...lowPriorityImageProps}
               src="/comms.png"
               className={`${getGradientClasses("gray").iconFilter} ${styles.icon}`}
             />

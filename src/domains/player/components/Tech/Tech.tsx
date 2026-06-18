@@ -7,6 +7,7 @@ import { useState } from "react";
 import { getTechData } from "@/entities/lookup/tech";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import cx from "clsx";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   techId: string;
@@ -76,6 +77,7 @@ export function Tech({
                 )}
               >
                 <Image
+                  {...lowPriorityImageProps}
                   src={cdnImage(`/factions/${techData.faction}.png`)}
                   alt={`${techData.faction} faction`}
                 />
@@ -106,6 +108,7 @@ export function Tech({
               </Box>
             ) : (
               <Image
+                {...lowPriorityImageProps}
                 src={
                   isFactionTech
                     ? cdnImage(`/factions/${techData.faction}.png`)

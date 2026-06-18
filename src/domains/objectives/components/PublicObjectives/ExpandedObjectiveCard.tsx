@@ -10,6 +10,7 @@ import ProgressObjectiveDisplay from "./ProgressObjectiveDisplay";
 import { ObjectiveDetailsCard } from "./ObjectiveDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   playerData: PlayerData[];
@@ -32,7 +33,7 @@ function ExpandedObjectiveCard({
 }: Props) {
   const isMobile = isMobileDevice();
   const objectiveData = publicObjectives.find(
-    (obj) => obj.alias === objective.key
+    (obj) => obj.alias === objective.key,
   );
   const shouldShowMobileTooltip =
     isMobile && objective.revealed && Boolean(objectiveData?.text);
@@ -82,7 +83,13 @@ function ExpandedObjectiveCard({
     >
       <Group className={styles.mainRow}>
         {objective.hasRedTape && (
-          <Image className={styles.redTape} src={"/redTape.png"} w={23} h={23} />
+          <Image
+            {...lowPriorityImageProps}
+            className={styles.redTape}
+            src={"/redTape.png"}
+            w={23}
+            h={23}
+          />
         )}
         <Box className={styles.contentArea}>
           <Text

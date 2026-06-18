@@ -5,6 +5,7 @@ import { BaseCard } from "./BaseCard";
 import { DenseUnitCell } from "./DenseUnitCell";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useFactionTokenImage } from "@/hooks/useFactionTokenImage";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   color?: string;
@@ -32,11 +33,13 @@ export function CommandTokenCard({
         image={
           <div style={{ position: "relative" }}>
             <Image
+              {...lowPriorityImageProps}
               src={cdnImage(`/command_token/command_${colorAlias}.png`)}
               alt={`${faction || "command"} command token`}
             />
             {faction && (
               <Image
+                {...lowPriorityImageProps}
                 src={factionUrl}
                 alt={`${faction} faction`}
                 style={{
@@ -70,12 +73,14 @@ export function CommandTokenCard({
       >
         <div style={{ position: "relative" }}>
           <Image
+            {...lowPriorityImageProps}
             src={cdnImage(`/command_token/command_${colorAlias}.png`)}
             alt={`${faction || "command"} command token`}
             className={compact ? styles.unitImageCompact : styles.unitImage}
           />
           {faction && (
             <Image
+              {...lowPriorityImageProps}
               src={factionUrl}
               alt={`${faction} faction`}
               style={{

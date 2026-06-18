@@ -9,6 +9,7 @@ import { Neighbors } from "../Neighbors";
 import { Breakthrough } from "../Breakthrough/Breakthrough";
 import breakthroughStyles from "../Breakthrough/Breakthrough.module.css";
 import type { BreakthroughData } from "@/entities/data/types";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type PlayerCardHeaderProps = {
   userName: string;
@@ -72,12 +73,14 @@ export function PlayerCardHeaderCompact({
     >
       <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
         <Image
+          {...lowPriorityImageProps}
           src={factionImageUrl}
           alt={faction}
           w={24}
           h={24}
           style={{
-            filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
+            filter:
+              "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
             flexShrink: 0,
           }}
         />
@@ -148,12 +151,14 @@ export function PlayerCardHeaderFull({
     <Group justify="space-between" align="center" mb="md">
       <Group gap={8} px={4} align="center">
         <Image
+          {...lowPriorityImageProps}
           src={factionImageUrl}
           alt={faction}
           w={32}
           h={32}
           style={{
-            filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
+            filter:
+              "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
           }}
         />
         <Stack gap={0}>
@@ -240,6 +245,7 @@ export function PlayerCardHeaderMobile({
         }}
       >
         <Image
+          {...lowPriorityImageProps}
           src={factionImageUrl}
           alt={faction}
           w={24}
@@ -302,7 +308,9 @@ export function PlayerCardHeaderMobile({
         )}
       </Box>
 
-      {showNeighbors && neighbors.length > 0 && <Neighbors neighbors={neighbors} />}
+      {showNeighbors && neighbors.length > 0 && (
+        <Neighbors neighbors={neighbors} />
+      )}
 
       {rightSection}
 

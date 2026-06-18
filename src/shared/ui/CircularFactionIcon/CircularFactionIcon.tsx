@@ -2,6 +2,7 @@ import { Image } from "@mantine/core";
 import styles from "./CircularFactionIcon.module.css";
 import { useFactionImages } from "@/hooks/useFactionImages";
 import { getFactionImage } from "@/entities/lookup/factions";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   faction: string;
@@ -11,14 +12,22 @@ type Props = {
   factionImageTypeOverride?: string | null;
 };
 
-export function CircularFactionIcon({ faction, size = 28, className, factionImageOverride, factionImageTypeOverride }: Props) {
+export function CircularFactionIcon({
+  faction,
+  size = 28,
+  className,
+  factionImageOverride,
+  factionImageTypeOverride,
+}: Props) {
   const factionImages = useFactionImages();
   const factionImage = factionImageOverride ?? factionImages[faction]?.image;
-  const factionImageType = factionImageTypeOverride ?? factionImages[faction]?.type;
+  const factionImageType =
+    factionImageTypeOverride ?? factionImages[faction]?.type;
   const factionUrl = getFactionImage(faction, factionImage, factionImageType);
 
   return (
     <Image
+      {...lowPriorityImageProps}
       src={factionUrl}
       alt={faction}
       w={size}

@@ -1,6 +1,7 @@
 import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { boardImageLoadingProps } from "@/shared/ui/imageLoading";
 
 interface TileProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   systemId: string;
@@ -13,9 +14,9 @@ export const Tile: React.FC<TileProps> = ({ systemId, alt, ...imgProps }) => {
 
   return (
     <img
+      {...boardImageLoadingProps}
       src={cdnImage(`/tiles/${tile.imagePath}`)}
       alt={alt || `System ${systemId}`}
-      decoding="async"
       {...imgProps}
     />
   );

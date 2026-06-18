@@ -8,6 +8,7 @@ import { BreakthroughCard } from "./BreakthroughCard.tsx";
 import { IconLock, IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage.ts";
 import styles from "./Breakthrough.module.css";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   breakthroughId: string;
@@ -86,6 +87,7 @@ export function Breakthrough({
             className={`${exhausted ? styles.exhaustedChip : ""} ${chipClassName ?? ""}`}
             leftSection={
               <img
+                {...lowPriorityImageProps}
                 src={cdnImage("/general/synergy.png")}
                 className={`${styles.synergyIcon} ${exhausted ? styles.exhaustedIcon : ""}`}
               />
@@ -104,7 +106,11 @@ export function Breakthrough({
           )}
           {exhausted && (
             <Box className={styles.exhaustedBadge}>
-              <IconX size={16} color="var(--mantine-color-red-1)" stroke={2.75} />
+              <IconX
+                size={16}
+                color="var(--mantine-color-red-1)"
+                stroke={2.75}
+              />
             </Box>
           )}
         </Box>

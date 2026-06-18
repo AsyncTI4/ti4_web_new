@@ -4,6 +4,7 @@ import styles from "./UnitCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import cx from "clsx";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type BaseCardProps = {
   children: ReactNode;
@@ -37,7 +38,10 @@ export function BaseCard({
   upgradeFactions,
 }: BaseCardProps) {
   const showReinforcements =
-    !compact && !locked && reinforcements !== undefined && totalCapacity !== undefined;
+    !compact &&
+    !locked &&
+    reinforcements !== undefined &&
+    totalCapacity !== undefined;
 
   return (
     <Chip
@@ -48,7 +52,7 @@ export function BaseCard({
         enableAnimations && styles.animated,
         locked && styles.locked,
         compact && styles.compactCard,
-        className
+        className,
       )}
       onClick={onClick}
       px={0}
@@ -84,6 +88,7 @@ function FactionBadge({ faction, show }: { faction?: string; show: boolean }) {
   return (
     <Box className={styles.factionBadge}>
       <Image
+        {...lowPriorityImageProps}
         src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
         className={styles.factionIcon}
       />
@@ -103,6 +108,7 @@ function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
           style={{ right: index * 20 }}
         >
           <Image
+            {...lowPriorityImageProps}
             src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
             className={styles.upgradeFactionIcon}
           />
@@ -131,8 +137,18 @@ function ReinforcementsDisplay({
 }) {
   return (
     <div className={styles.infoStack}>
-      <Group className={cx(styles.mainGroup, styles.reinforcementGroup, styles.countGroup)}>
-        <Text className={reinforcements === 0 ? styles.countTextZero : styles.countText}>
+      <Group
+        className={cx(
+          styles.mainGroup,
+          styles.reinforcementGroup,
+          styles.countGroup,
+        )}
+      >
+        <Text
+          className={
+            reinforcements === 0 ? styles.countTextZero : styles.countText
+          }
+        >
           {reinforcements}
         </Text>
         <Text className={styles.maxCountText}>/{totalCapacity}</Text>

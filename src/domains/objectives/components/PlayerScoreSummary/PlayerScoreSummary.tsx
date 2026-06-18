@@ -16,6 +16,7 @@ import vpTokenStyles from "./VPTokenIcon.module.css";
 import { OBJECTIVE_IMAGE_MAP } from "./objectiveImageMap";
 import { calculateBorderVisibility } from "./borderVisibility";
 import Caption from "@/shared/ui/Caption/Caption";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   playerData: PlayerData[];
@@ -26,6 +27,7 @@ function StyxIcon() {
   return (
     <div className={styxStyles.styxIcon}>
       <img
+        {...lowPriorityImageProps}
         src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
         alt="legendary ready"
         className={styxStyles.legendaryIcon}
@@ -36,7 +38,7 @@ function StyxIcon() {
 
 function getObjectiveIcon(
   entryType: EntryType,
-  invertAgenda = false
+  invertAgenda = false,
 ): ReactNode {
   if (entryType === "STYX") {
     return <StyxIcon />;
@@ -69,6 +71,7 @@ function getObjectiveIcon(
     return (
       <div className={cornerBadgeStyles.container}>
         <img
+          {...lowPriorityImageProps}
           src={imageSrc}
           alt="Relic"
           className={cornerBadgeStyles.baseImage}
@@ -84,6 +87,7 @@ function getObjectiveIcon(
     return (
       <div className={cornerBadgeStyles.container}>
         <img
+          {...lowPriorityImageProps}
           src={imageSrc}
           alt="Relic"
           className={cornerBadgeStyles.baseImage}
@@ -96,6 +100,7 @@ function getObjectiveIcon(
   }
   return (
     <img
+      {...lowPriorityImageProps}
       src={imageSrc}
       alt={`${entryType} icon`}
       style={
@@ -126,7 +131,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     if (!breakdown) return maxTotal;
     const total = breakdown.entries.reduce(
       (sum, entry) => sum + entry.pointValue,
-      0
+      0,
     );
     return Math.max(maxTotal, total);
   }, 0);
@@ -207,18 +212,19 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           const totalVPs = player.totalVps;
           const potentialVPs = breakdown.entries.reduce(
             (sum, entry) => sum + entry.pointValue,
-            0
+            0,
           );
           const factionImageUrl = getFactionImage(
-              player.faction,
-              player.factionImage,
-              player.factionImageType
+            player.faction,
+            player.factionImage,
+            player.factionImageType,
           );
 
           return (
             <div key={player.faction} className={styles.rowContainer}>
               <div className={cx(styles.nameBody, styles.playerInfoColumn)}>
                 <Image
+                  {...lowPriorityImageProps}
                   src={factionImageUrl}
                   alt={player.faction}
                   w={24}
@@ -263,7 +269,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
 
                   const icon = getObjectiveIcon(
                     entry.type,
-                    entry.type === "AGENDA"
+                    entry.type === "AGENDA",
                   );
 
                   return (
@@ -274,6 +280,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                           <div className={vpTokenStyles.imperialContainer}>
                             {getObjectiveIcon("IMPERIAL")}
                             <img
+                              {...lowPriorityImageProps}
                               className={vpTokenStyles.secretIcon}
                               src={OBJECTIVE_IMAGE_MAP.SECRET}
                               alt="Secret objective"
