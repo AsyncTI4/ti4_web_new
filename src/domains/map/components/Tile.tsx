@@ -15,6 +15,7 @@ export const Tile: React.FC<TileProps> = ({ systemId, alt, ...imgProps }) => {
     <img
       src={cdnImage(`/tiles/${tile.imagePath}`)}
       alt={alt || `System ${systemId}`}
+      decoding="async"
       {...imgProps}
     />
   );

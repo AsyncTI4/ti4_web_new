@@ -20,8 +20,13 @@ export function getUnitDecalPath(
   colorAlias: string
 ): string | null {
   // decalId contains the decal ID directly (e.g., "cb_101")
-  const decalId = player?.decalId as string;
-  if (!decalId) return null;
+  const decalId = player?.decalId as string | null | undefined;
+  if (
+    !decalId ||
+    ["null", "none", "undefined"].includes(decalId.trim().toLowerCase())
+  ) {
+    return null;
+  }
 
   const textColor = getTextColor(colorAlias);
   const colorSuffix = textColor.toLowerCase() === "white" ? "_wht" : "_blk";

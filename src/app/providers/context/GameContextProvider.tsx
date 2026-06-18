@@ -68,9 +68,10 @@ export function GameContextProvider({ children, gameId }: Props) {
     return applyDisplacementToPlayerData(data, draft);
   }, [data, draft]);
 
-  const enhancedData = adjustedData
-    ? buildGameContext(adjustedData, accessibleColors, decalOverrides)
-    : undefined;
+  const enhancedData = useMemo(() => {
+    if (!adjustedData) return undefined;
+    return buildGameContext(adjustedData, accessibleColors, decalOverrides);
+  }, [adjustedData, accessibleColors, decalOverrides]);
 
   const gameContext: GameContext = {
     data: enhancedData,

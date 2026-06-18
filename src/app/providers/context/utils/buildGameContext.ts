@@ -35,6 +35,7 @@ import {
   BorderAnomalyInfo,
 } from "@/entities/data/types";
 import { getAllEntityPlacementsForTile } from "@/utils/unitPositioning";
+import { startPerformanceSpan } from "@/utils/performanceMarks";
 import type { GameData, Tile, TilePlanet } from "@/app/providers/context/types";
 
 function splitEntitiesByType(entities: EntityData[]) {
@@ -82,6 +83,16 @@ export function buildGameContext(
   accessibleColors: boolean,
   decalOverrides: Record<string, string> = {},
 ): GameData {
+  const endBuildGameContextMeasure = startPerformanceSpan(
+    "ti4.buildGameContext",
+    {
+      gameName: data.gameName,
+      tileUnitDataCount: Object.keys(data.tileUnitData ?? {}).length,
+      playerCount: data.playerData?.length ?? 0,
+      accessibleColors,
+      decalOverrideCount: Object.keys(decalOverrides).length,
+    },
+  );
   const playerData = filterPlayersWithAssignedFaction(data.playerData);
 
   const baseFactionToColor = buildFactionToColor(playerData);
@@ -258,7 +269,18 @@ export function buildGameContext(
       borderAnomalies: borderAnomaliesByTile[position],
     };
 
+    const endTilePlacementMeasure = startPerformanceSpan("ti4.tilePlacement", {
+      position,
+      systemId,
+      spaceFactionCount: Object.keys(unitsByFaction).length,
+      planetCount: Object.keys(planets).length,
+      tokenCount: tokens.length,
+      commandCounterCount: tile.commandCounters.length,
+    });
     const entityPlacements = getAllEntityPlacementsForTile(systemId, tile);
+    endTilePlacementMeasure({
+      placementCount: entityPlacements.length,
+    });
 
     tiles[position] = {
       ...tile,
@@ -273,7 +295,7 @@ export function buildGameContext(
     });
   });
 
-  return {
+  const gameContext = {
     tiles,
     tilePositions: data.tilePositions,
     factionColorMap,
@@ -304,4 +326,11 @@ export function buildGameContext(
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,
   };
+
+  endBuildGameContextMeasure({
+    tileCount: Object.keys(tiles).length,
+    planetCount: Object.keys(planetIdToPlanetTile).length,
+  });
+
+  return gameContext;
 }

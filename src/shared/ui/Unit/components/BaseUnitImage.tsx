@@ -10,5 +10,12 @@ type BaseUnitImageProps = {
 
 export function BaseUnitImage(props: BaseUnitImageProps): React.ReactElement {
   const { urlColor, unitType, alt, className } = props;
-  return <img src={cdnImage(`/units/${urlColor}_${unitType}.png`)} alt={alt} className={className} />;
+  return (
+    <img
+      src={cdnImage(`/units/${urlColor}_${unitType}.png`)}
+      alt={alt}
+      className={className}
+      decoding="async"
+    />
+  );
 }

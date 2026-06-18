@@ -88,6 +88,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
             value={activeTab}
             onChange={(value) => setActiveTab(value || "map")}
             h={{ base: "100vh", sm: "calc(100vh - 68px)" }}
+            keepMounted={false}
           >
             <Tabs.List className={classes.tabsList}>
               {MAIN_TAB_CONFIGS.map((tab) => {

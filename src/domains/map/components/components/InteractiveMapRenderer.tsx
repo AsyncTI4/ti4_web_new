@@ -1,6 +1,7 @@
-import type { CSSProperties } from "react";
+import { Profiler, type CSSProperties, type ProfilerOnRenderCallback } from "react";
 import type { GameData, Tile } from "@/app/providers/context/types";
 import type { PathResult } from "@/utils/tileDistances";
+import { recordPerformanceMeasure } from "@/utils/performanceMarks";
 import { MapRenderLayer } from "./MapRenderLayer";
 import {
   getMapContainerOffset,
@@ -12,6 +13,29 @@ import {
 type Dimensions = {
   width: number;
   height: number;
+};
+
+const recordInteractiveMapRender: ProfilerOnRenderCallback = (
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  startTime,
+  commitTime,
+) => {
+  recordPerformanceMeasure(
+    "ti4.reactProfiler.InteractiveMapRenderer",
+    startTime,
+    commitTime,
+    {
+      id,
+      phase,
+      actualDuration,
+      baseDuration,
+      startTime,
+      commitTime,
+    },
+  );
 };
 
 export type InteractiveMapRendererProps = {
@@ -127,9 +151,17 @@ export function InteractiveMapRenderer({
       mapZoom={zoom}
     />
   );
+  const profiledRenderLayer = (
+    <Profiler
+      id={`InteractiveMapRenderer:${layout}`}
+      onRender={recordInteractiveMapRender}
+    >
+      {renderLayer}
+    </Profiler>
+  );
 
   if (!hasLayoutOverride) {
-    return renderLayer;
+    return profiledRenderLayer;
   }
 
   return (
@@ -141,7 +173,7 @@ export function InteractiveMapRenderer({
         ...styleOverrides,
       }}
     >
-      {renderLayer}
+      {profiledRenderLayer}
     </div>
   );
 }
