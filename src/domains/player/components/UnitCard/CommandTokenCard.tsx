@@ -31,7 +31,7 @@ export function CommandTokenCard({
     return (
       <DenseUnitCell
         image={
-          <div style={{ position: "relative" }}>
+          <div className={styles.denseCommandTokenImage}>
             <Image
               {...lowPriorityImageProps}
               src={cdnImage(`/command_token/command_${colorAlias}.png`)}

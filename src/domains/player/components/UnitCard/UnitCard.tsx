@@ -98,30 +98,28 @@ export function UnitCard({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         {condensed ? (
-          <div>
-            <DenseUnitCell
-              image={
-                <Unit
-                  unitType={unitData.asyncId}
-                  colorAlias={colorAlias}
-                  faction={unitData.faction}
-                  className={styles.denseUnitImage}
-                  scaleSprite
-                  showFactionTokens={false}
-                />
-              }
-              reinforcements={reinforcements}
-              totalCapacity={unitCap}
-              upgraded={isUpgraded}
-              faction={isFaction ? unitData.faction : undefined}
-              upgradeFactions={
-                showUpgradeState && upgradeFactions.length > 0
-                  ? upgradeFactions
-                  : undefined
-              }
-              onClick={locked ? undefined : toggle}
-            />
-          </div>
+          <DenseUnitCell
+            image={
+              <Unit
+                unitType={unitData.asyncId}
+                colorAlias={colorAlias}
+                faction={unitData.faction}
+                className={styles.denseUnitImage}
+                scaleSprite
+                showFactionTokens={false}
+              />
+            }
+            reinforcements={reinforcements}
+            totalCapacity={unitCap}
+            upgraded={isUpgraded}
+            faction={isFaction ? unitData.faction : undefined}
+            upgradeFactions={
+              showUpgradeState && upgradeFactions.length > 0
+                ? upgradeFactions
+                : undefined
+            }
+            onClick={locked ? undefined : toggle}
+          />
         ) : (
         <div style={{ minWidth: "44px" }}>
           <BaseCard

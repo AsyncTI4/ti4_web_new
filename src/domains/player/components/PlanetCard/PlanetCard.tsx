@@ -1,4 +1,4 @@
-import { Stack, Box, Group, Text } from "@mantine/core";
+import { Stack, Box, Text } from "@mantine/core";
 import { useMemo } from "react";
 import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
@@ -98,8 +98,14 @@ export function PlanetCard({
             isLegendary && styles.legendary,
             hasLegendaryAbility && styles.noRightRadius,
             isExhausted && styles.exhausted,
+            planetIconSrc && styles.hasPlanetIcon,
           )}
-          style={getCSSVariables(cssTypeKey) as React.CSSProperties}
+          style={
+            {
+              ...getCSSVariables(cssTypeKey),
+              ...getPlanetIconStyle(planetIconSrc),
+            } as React.CSSProperties
+          }
         >
           {isLegendary && !isExhausted && (
             <>
@@ -137,25 +143,14 @@ export function PlanetCard({
             </Box>
           )}
 
-          <Box
-            className={cx(
-              styles.iconContainer,
-              planetIconSrc && styles.hasPlanetIcon,
-            )}
-            style={getPlanetIconStyle(planetIconSrc)}
+          <Text className={styles.planetName}>
+            {planetData.shortName ?? planetData.name}
+          </Text>
+          <PlanetCompactValues
+            iconSources={iconSources}
+            resources={finalResources}
+            influence={finalInfluence}
           />
-          <Stack className={styles.bottomStack}>
-            <Group className={styles.nameGroup}>
-              <Text className={styles.planetName}>
-                {planetData.shortName ?? planetData.name}
-              </Text>
-              <PlanetCompactValues
-                iconSources={iconSources}
-                resources={finalResources}
-                influence={finalInfluence}
-              />
-            </Group>
-          </Stack>
         </Stack>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.popoverDropdown}>

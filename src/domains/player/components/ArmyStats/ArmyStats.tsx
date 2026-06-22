@@ -1,6 +1,6 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import { Table, Image, Text, Flex, Box } from "@mantine/core";
 import { IconTrophy } from "@tabler/icons-react";
+import type { CSSProperties } from "react";
 import classes from "./ArmyStats.module.css";
 
 type ArmyStatsData = {
@@ -17,6 +17,8 @@ type Props = {
   rank?: number;
 };
 
+type Metric = "resources" | "health" | "combat";
+
 function formatOneDecimal(value: number): string {
   if (value === undefined || value === null || Number.isNaN(Number(value))) {
     return "0.0";
@@ -24,68 +26,53 @@ function formatOneDecimal(value: number): string {
   return Number(value).toFixed(1);
 }
 
-function StatIcon({ path }: { path: string }) {
-  return (
-    <Flex justify="center">
-      <Image src={cdnImage(path)} className={classes.headerIcon} />
-    </Flex>
-  );
-}
-
-function StatValue({ value, size = "sm" }: { value: number; size?: "sm" | "md" }) {
-  return (
-    <Text size={size} ff="mono" fw={700} c="white" ta="right" className={classes.number}>
-      {formatOneDecimal(value)}
-    </Text>
-  );
-}
-
-function HeaderLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <Text size="xs" ff="mono" fw={700} ta="center" className={classes.caption}>
-      {children}
-    </Text>
-  );
-}
-
-function TopHeaderRow() {
-  return (
-    <Table.Tr>
-      <Table.Th />
-      <Table.Th><HeaderLabel>GROUND</HeaderLabel></Table.Th>
-      <Table.Th><HeaderLabel>SPACE</HeaderLabel></Table.Th>
-    </Table.Tr>
-  );
-}
-
-type MetricRowDualProps = {
-  iconPath: string;
+function MetricRow({
+  metric,
+  ground,
+  space,
+}: {
+  metric: Metric;
   ground: number;
   space: number;
-};
-
-function MetricRowDual({ iconPath, ground, space }: MetricRowDualProps) {
+}) {
   return (
-    <Table.Tr>
-      <Table.Td><StatIcon path={iconPath} /></Table.Td>
-      <Table.Td><StatValue value={ground} /></Table.Td>
-      <Table.Td><StatValue value={space} /></Table.Td>
-    </Table.Tr>
+    <>
+      <span className={`${classes.metricIcon} ${classes[metric]}`} />
+      <span className={classes.number}>{formatOneDecimal(ground)}</span>
+      <span className={classes.number}>{formatOneDecimal(space)}</span>
+    </>
   );
 }
 
 const RANK_CONFIG = {
-  1: { color: "var(--army-rank-first-color)", bg: "rgba(255, 215, 0, 0.12)", border: "rgba(255, 215, 0, 0.3)" },
-  2: { color: "var(--army-rank-second-color)", bg: "rgba(192, 192, 192, 0.12)", border: "rgba(192, 192, 192, 0.3)" },
-  3: { color: "var(--army-rank-third-color)", bg: "rgba(205, 127, 50, 0.12)", border: "rgba(205, 127, 50, 0.3)" },
-  default: { color: "rgba(180, 180, 180, 0.9)", bg: "rgba(20, 20, 20, 0.4)", border: "rgba(80, 80, 80, 0.3)" },
+  1: {
+    color: "var(--army-rank-first-color)",
+    bg: "rgba(255, 215, 0, 0.12)",
+    border: "rgba(255, 215, 0, 0.3)",
+  },
+  2: {
+    color: "var(--army-rank-second-color)",
+    bg: "rgba(192, 192, 192, 0.12)",
+    border: "rgba(192, 192, 192, 0.3)",
+  },
+  3: {
+    color: "var(--army-rank-third-color)",
+    bg: "rgba(205, 127, 50, 0.12)",
+    border: "rgba(205, 127, 50, 0.3)",
+  },
+  default: {
+    color: "rgba(180, 180, 180, 0.9)",
+    bg: "rgba(20, 20, 20, 0.4)",
+    border: "rgba(80, 80, 80, 0.3)",
+  },
 } as const;
 
 function RankBadge({ rank }: { rank: number }) {
-  const config = rank <= 3 ? RANK_CONFIG[rank as 1 | 2 | 3] : RANK_CONFIG.default;
+  const config =
+    rank <= 3 ? RANK_CONFIG[rank as 1 | 2 | 3] : RANK_CONFIG.default;
 
   return (
-    <Box
+    <div
       className={classes.rankBadge}
       style={{
         background: config.bg,
@@ -94,39 +81,46 @@ function RankBadge({ rank }: { rank: number }) {
       }}
     >
       <IconTrophy size={12} style={{ color: config.color }} />
-      <Text size="xs" fw={700} style={{ color: config.color }}>
+      <span className={classes.rankText} style={{ color: config.color }}>
         {rank}
-      </Text>
-    </Box>
+      </span>
+    </div>
   );
 }
 
 export function ArmyStats({ stats, rank }: Props) {
   return (
-    <Box className={rank ? classes.withRankFooter : undefined}>
-      <Table horizontalSpacing={6} verticalSpacing={6} className={classes.table}>
-        <Table.Thead>
-          <TopHeaderRow />
-        </Table.Thead>
-        <Table.Tbody>
-          <MetricRowDual
-            iconPath="/player_area/pa_resources.png"
-            ground={stats.groundArmyRes}
-            space={stats.spaceArmyRes}
-          />
-          <MetricRowDual
-            iconPath="/player_area/pa_health.png"
-            ground={stats.groundArmyHealth}
-            space={stats.spaceArmyHealth}
-          />
-          <MetricRowDual
-            iconPath="/player_area/pa_hit.png"
-            ground={stats.groundArmyCombat}
-            space={stats.spaceArmyCombat}
-          />
-        </Table.Tbody>
-      </Table>
+    <div
+      className={rank ? classes.withRankFooter : undefined}
+      style={
+        {
+          "--army-res-icon": `url("${cdnImage("/player_area/pa_resources.png")}")`,
+          "--army-health-icon": `url("${cdnImage("/player_area/pa_health.png")}")`,
+          "--army-combat-icon": `url("${cdnImage("/player_area/pa_hit.png")}")`,
+        } as CSSProperties
+      }
+    >
+      <div className={classes.grid}>
+        <span />
+        <span className={classes.caption}>GROUND</span>
+        <span className={classes.caption}>SPACE</span>
+        <MetricRow
+          metric="resources"
+          ground={stats.groundArmyRes}
+          space={stats.spaceArmyRes}
+        />
+        <MetricRow
+          metric="health"
+          ground={stats.groundArmyHealth}
+          space={stats.spaceArmyHealth}
+        />
+        <MetricRow
+          metric="combat"
+          ground={stats.groundArmyCombat}
+          space={stats.spaceArmyCombat}
+        />
+      </div>
       {rank && <RankBadge rank={rank} />}
-    </Box>
+    </div>
   );
 }

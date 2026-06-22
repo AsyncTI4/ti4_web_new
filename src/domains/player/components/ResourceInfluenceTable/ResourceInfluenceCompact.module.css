@@ -1,0 +1,116 @@
+.compact {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-lg);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.caption {
+  grid-column: 1 / -1;
+  margin-block: 2px;
+  color: var(--mantine-color-gray-5);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: 18px max-content max-content;
+  column-gap: 4px;
+  align-items: center;
+  min-height: 16px;
+}
+
+.statRow::before {
+  content: "";
+  grid-column: 1;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.resource::before {
+  background-image: var(--resource-icon);
+}
+
+.influence::before {
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='6,2 18,2 22,12 18,22 6,22 2,12' fill='transparent' stroke='%233b82f6' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.flex::before {
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='50%25' stop-color='%23eab308'/%3E%3Cstop offset='50%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='6,2 18,2 22,12 18,22 6,22 2,12' fill='transparent' stroke='url(%23g)' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.totalRow {
+  padding-top: 5px;
+  border-top: 1px solid var(--resource-divider-color, rgba(148, 163, 184, 0.3));
+}
+
+.totalRow::before {
+  background: none;
+}
+
+.current,
+.total {
+  line-height: 1;
+  text-align: right;
+  white-space: pre;
+}
+
+.current {
+  grid-column: 2;
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+}
+
+.current::after {
+  content: "/";
+  display: inline-block;
+  width: 1ch;
+  margin-left: 4px;
+  color: var(--mantine-color-gray-5);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+}
+
+.total {
+  grid-column: 3;
+  color: var(--mantine-color-gray-5);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+}
+
+.resource .current,
+.resource .current::after,
+.resource .total {
+  color: var(--mantine-color-yellow-5);
+}
+
+.resource .current {
+  color: var(--mantine-color-yellow-3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.influence .current {
+  color: var(--mantine-color-blue-3);
+}
+
+.influence .total {
+  color: var(--mantine-color-blue-5);
+}
+
+.hiddenRow {
+  height: 16px;
+  visibility: hidden;
+}

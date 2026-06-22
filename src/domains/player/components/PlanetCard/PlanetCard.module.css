@@ -93,22 +93,6 @@
   inset: 0;
 }
 
-.mainStack::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  border-radius: 12px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  pointer-events: none;
-  z-index: 2;
-}
-
 .legendaryConstellation {
   background:
     radial-gradient(1px 1px at 20% 30%, rgba(255, 215, 0, 0.8), transparent),
@@ -353,6 +337,9 @@
 .mainStack {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  width: 44px;
+  min-width: 44px;
   padding: 6px 4px;
   height: 150px;
   position: relative;
@@ -371,10 +358,6 @@
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-.mainStack:hover::before {
-  opacity: 0.8;
 }
 
 .noRightRadius {
@@ -491,27 +474,17 @@
   mix-blend-mode: normal;
 }
 
-/* Icon container */
-.iconContainer {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  min-height: 31px;
-  position: relative;
-  z-index: 1;
-  padding: 5px 0 2px;
-}
-
-.iconContainer::before {
+.hasPlanetIcon::before {
   content: "";
   position: absolute;
   top: 2px;
   left: 50%;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   transform: translateX(-50%);
   border-radius: 999px;
   background:
+    var(--planet-icon-image) center / 24px 24px no-repeat,
     radial-gradient(
       circle,
       rgba(3, 7, 12, 0.34) 0%,
@@ -521,44 +494,14 @@
     linear-gradient(180deg, transparent, rgba(3, 7, 12, 0.24));
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.34);
   pointer-events: none;
-}
-
-.iconContainer > * {
-  position: relative;
   z-index: 1;
 }
 
-.iconContainer::after {
-  content: none;
-}
-
-.hasPlanetIcon::after {
-  content: "";
-  position: relative;
+.planetName,
+.planetValues {
+  position: absolute;
+  bottom: 6px;
   z-index: 1;
-  display: block;
-  width: 24px;
-  height: 24px;
-  background-image: var(--planet-icon-image);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-/* Bottom stack */
-.bottomStack {
-  gap: 2px;
-  position: relative;
-  z-index: 1;
-}
-
-/* Name and values group */
-.nameGroup {
-  gap: 0;
-  align-items: flex-end;
-  min-width: 34px;
-  padding: 2px;
-  border-radius: 7px;
   background: linear-gradient(
     180deg,
     rgba(3, 7, 12, 0.18),
@@ -569,6 +512,10 @@
 
 /* Planet name text */
 .planetName {
+  left: 4px;
+  min-width: 18px;
+  padding: 2px 0 2px 2px;
+  border-radius: 7px 0 0 7px;
   font-size: 12px;
   color: white;
   font-weight: 700;
@@ -584,10 +531,14 @@
 
 /* Compact planet counters */
 .planetValues {
+  left: 22px;
   display: flex;
   flex-direction: column;
   gap: 2px;
   align-items: flex-start;
+  min-height: 40px;
+  padding: 2px 2px 2px 0;
+  border-radius: 0 7px 7px 0;
 }
 
 .planetValue {

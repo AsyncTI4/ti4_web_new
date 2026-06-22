@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { Box, Group, Image, Text } from "@mantine/core";
+import { forwardRef, type ReactNode } from "react";
+import { Box, Image, Text } from "@mantine/core";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";
 import { cdnImage } from "@/entities/data/cdnImage";
@@ -21,19 +21,23 @@ type Props = {
  * Minimal cell for the condensed units grid: icon on top, count below.
  * Cells are separated by the grid's hairline gaps rather than card borders.
  */
-export function DenseUnitCell({
-  image,
-  reinforcements,
-  totalCapacity,
-  label,
-  upgraded = false,
-  faction,
-  upgradeFactions,
-  dimmed = false,
-  onClick,
-}: Props) {
+export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUnitCell(
+  {
+    image,
+    reinforcements,
+    totalCapacity,
+    label,
+    upgraded = false,
+    faction,
+    upgradeFactions,
+    dimmed = false,
+    onClick,
+  },
+  ref,
+) {
   return (
     <Box
+      ref={ref}
       className={cx(
         styles.denseCell,
         upgraded && styles.denseCellUpgraded,
@@ -45,23 +49,20 @@ export function DenseUnitCell({
         <FactionBadge faction={faction} className={styles.denseFactionBadge} />
       )}
       <UpgradeFactionBadges factions={upgradeFactions} />
-      <Box className={styles.denseCellImage}>{image}</Box>
+      {image}
       {reinforcements !== undefined && (
-        <Group gap={1} justify="center" wrap="nowrap" className={styles.denseCellCount}>
-          <Text
-            fz={10}
-            lh={1}
-            fw={700}
-            className={reinforcements === 0 ? styles.countTextZero : styles.countText}
-          >
-            {reinforcements}
-          </Text>
-          {totalCapacity !== undefined && (
-            <Text fz={9} lh={1} className={styles.maxCountText}>
-              /{totalCapacity}
-            </Text>
+        <Text
+          fz={10}
+          lh={1}
+          fw={700}
+          className={cx(
+            styles.denseCellCount,
+            reinforcements === 0 ? styles.countTextZero : styles.countText,
           )}
-        </Group>
+          data-total={totalCapacity}
+        >
+          {reinforcements}
+        </Text>
       )}
       {label && (
         <Text fz={8} lh={1} c="gray.5" tt="uppercase">
@@ -70,7 +71,7 @@ export function DenseUnitCell({
       )}
     </Box>
   );
-}
+});
 
 function FactionBadge({
   faction,

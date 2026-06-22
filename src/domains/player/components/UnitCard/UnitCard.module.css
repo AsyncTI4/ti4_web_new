@@ -264,21 +264,21 @@
   cursor: default;
 }
 
-.denseCellImage {
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.denseCellImage img {
-  height: 22px;
-  width: auto;
-}
-
 .denseUnitImage {
+  display: block;
   height: 22px;
   width: auto;
+}
+
+.denseCommandTokenImage {
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
+.denseCommandTokenImage img:first-child {
+  width: 22px;
+  height: 22px;
 }
 
 .denseUnitImage:global(.unit-sprite) {
@@ -290,13 +290,17 @@
   font-family: var(--mantine-font-family-monospace);
 }
 
-.denseCellCount .countText,
-.denseCellCount .countTextZero {
+.denseCellCount.countText,
+.denseCellCount.countTextZero {
   font-size: 10px;
 }
 
-.denseCellCount .maxCountText {
+.denseCellCount[data-total]::after {
+  content: "/" attr(data-total);
   font-size: 9px;
+  color: var(--mantine-color-gray-5);
+  font-weight: 500;
+  margin-left: 1px;
 }
 
 .denseGrid > * {
