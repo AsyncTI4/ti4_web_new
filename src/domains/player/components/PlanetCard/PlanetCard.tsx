@@ -1,10 +1,8 @@
-import { Stack, Box, Group, Text, Image } from "@mantine/core";
+import { Stack, Box, Group, Text } from "@mantine/core";
 import { useMemo } from "react";
 import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
-import InfluenceIcon from "@/shared/ui/InfluenceIcon";
-import { PlanetTraitIcon } from "../PlanetTraitIcon";
-import { TechSkipIcon, TechType } from "../TechSkipIcon";
+import { TECH_SKIP_IMAGES } from "../TechSkipIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { PlanetDetailsCard } from "../PlanetDetailsCard";
@@ -14,10 +12,13 @@ import { getPlanetData } from "@/entities/lookup/planets";
 import { usePlanet } from "@/hooks/usePlanet";
 import { TilePlanet } from "@/app/providers/context/types";
 import { Planet } from "@/entities/data/types";
-import { IconValue } from "@/shared/ui/primitives/IconValue";
 import { useAppStore } from "@/utils/appStore";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { mergePlanetTraits, type PlanetTrait } from "@/utils/planetTraits";
+import {
+  getPlanetTraitIconSrc,
+  mergePlanetTraits,
+  type PlanetTrait,
+} from "@/utils/planetTraits";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { getPlanetTileBackground } from "./planetTileBackground";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
@@ -57,7 +58,7 @@ export function PlanetCard({
     attachmentModifiers.planetTypes,
   );
   const baseCssTypeKey = resolveCssTypeKey(finalTraits);
-  const allIcons = createAllIcons(
+  const iconSources = createIconSources(
     planetData,
     attachmentModifiers,
     resolvedAttachments,
@@ -78,6 +79,7 @@ export function PlanetCard({
   const planetTileBackground = !isMobileDevice()
     ? getPlanetTileBackground(planetData)
     : null;
+  const planetIconSrc = getPlanetIconSrc(planetData, finalTraits);
 
   const planetCardContent = (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -99,8 +101,6 @@ export function PlanetCard({
           )}
           style={getCSSVariables(cssTypeKey) as React.CSSProperties}
         >
-          <Box className={styles.planetCardHighlight} />
-
           {isLegendary && !isExhausted && (
             <>
               <Box className={styles.legendaryConstellation} />
@@ -121,7 +121,6 @@ export function PlanetCard({
             </>
           )}
 
-          <Box className={styles.topHighlight} />
           {planetTileBackground && (
             <Box
               className={styles.tileArtMask}
@@ -138,33 +137,23 @@ export function PlanetCard({
             </Box>
           )}
 
-          <Box className={styles.iconContainer}>
-            <PlanetIcon planetData={planetData} finalTraits={finalTraits} />
-          </Box>
+          <Box
+            className={cx(
+              styles.iconContainer,
+              planetIconSrc && styles.hasPlanetIcon,
+            )}
+            style={getPlanetIconStyle(planetIconSrc)}
+          />
           <Stack className={styles.bottomStack}>
             <Group className={styles.nameGroup}>
               <Text className={styles.planetName}>
                 {planetData.shortName ?? planetData.name}
               </Text>
-              <Stack className={styles.valuesStack} align="top">
-                {allIcons.length > 0 && (
-                  <Stack className={styles.iconsStack}>{allIcons}</Stack>
-                )}
-                <IconValue
-                  icon={
-                    <Image
-                      {...lowPriorityImageProps}
-                      src="/pa_resources.png"
-                      className={styles.resourceImage}
-                    />
-                  }
-                  value={finalResources}
-                />
-                <IconValue
-                  icon={<InfluenceIcon size={18} />}
-                  value={finalInfluence}
-                />
-              </Stack>
+              <PlanetCompactValues
+                iconSources={iconSources}
+                resources={finalResources}
+                influence={finalInfluence}
+              />
             </Group>
           </Stack>
         </Stack>
@@ -200,6 +189,33 @@ export function PlanetCard({
   return planetCardContent;
 }
 
+function PlanetCompactValues({
+  iconSources,
+  resources,
+  influence,
+}: {
+  iconSources: string[];
+  resources: number;
+  influence: number;
+}) {
+  return (
+    <Box className={styles.planetValues}>
+      {iconSources.length > 0 && (
+        <Box
+          className={styles.iconsStack}
+          style={getStackedIconStyle(iconSources)}
+        />
+      )}
+      <span className={cx(styles.planetValue, styles.resourceValue)}>
+        {resources}
+      </span>
+      <span className={cx(styles.planetValue, styles.influenceValue)}>
+        {influence}
+      </span>
+    </Box>
+  );
+}
+
 function calculateAttachmentModifiers(attachments: string[]) {
   return attachments.reduce(
     (totals, attachmentId) => {
@@ -229,12 +245,12 @@ function calculateAttachmentModifiers(attachments: string[]) {
   );
 }
 
-function createAllIcons(
+function createIconSources(
   planetData: Planet,
   attachmentModifiers: AttachmentModifiers,
   attachments: string[],
 ) {
-  const allIcons = [];
+  const iconSources: string[] = [];
 
   // Add tech skip icons
   const allTechSpecialties = [
@@ -242,21 +258,19 @@ function createAllIcons(
     ...attachmentModifiers.techSpecialties,
   ];
 
-  const techSkipIconElements = allTechSpecialties
+  const techSkipSources = allTechSpecialties
     .map((specialty) => getTechSkipIconKey(specialty))
-    .filter((key) => key !== null)
-    .map((key, index) => (
-      <TechSkipIcon key={`${key}-${index}`} techType={key as TechType} />
-    ));
+    .filter((key): key is keyof typeof TECH_SKIP_IMAGES => key !== null)
+    .map((key) => TECH_SKIP_IMAGES[key]);
 
-  allIcons.push(...techSkipIconElements);
+  iconSources.push(...techSkipSources);
 
   // Add attachment upgrade icon if applicable
   if (attachments.length > 0) {
-    allIcons.push(<AttachmentUpgradeIcon key="upgrade" />);
+    iconSources.push(cdnImage("/planet_cards/pc_upgrade.png"));
   }
 
-  return allIcons;
+  return iconSources;
 }
 
 function calculateFinalValues(
@@ -313,43 +327,19 @@ const VALID_TECH_SPECIALTIES = new Set([
   "warfare",
 ]);
 
-const getTechSkipIconKey = (techSpecialty: string): string | null => {
-  const lowercase = techSpecialty.toLowerCase();
+const getTechSkipIconKey = (
+  techSpecialty: string,
+): keyof typeof TECH_SKIP_IMAGES | null => {
+  const lowercase = techSpecialty.toLowerCase() as keyof typeof TECH_SKIP_IMAGES;
   return VALID_TECH_SPECIALTIES.has(lowercase) ? lowercase : null;
 };
 
-type AttachmentUpgradeIconProps = object;
-
-function AttachmentUpgradeIcon({}: AttachmentUpgradeIconProps) {
-  return (
-    <Image
-      {...lowPriorityImageProps}
-      src={cdnImage("/planet_cards/pc_upgrade.png")}
-      className={styles.attachmentIcon}
-    />
-  );
-}
-
-type PlanetIconProps = {
-  planetData: Planet;
-  finalTraits: PlanetTrait[];
-};
-
-function PlanetIcon({ planetData, finalTraits }: PlanetIconProps) {
+function getPlanetIconSrc(planetData: Planet, finalTraits: PlanetTrait[]) {
   if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
-    return (
-      <Image
-        {...lowPriorityImageProps}
-        src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
-        className={styles.factionIcon}
-      />
-    );
+    return cdnImage(`/factions/${planetData.factionHomeworld}.png`);
   }
   if (!finalTraits || finalTraits.length === 0) return null;
-  if (finalTraits.length === 1) {
-    return <PlanetTraitIcon trait={finalTraits[0]} />;
-  }
-  return <PlanetTraitIcon traits={finalTraits} />;
+  return getPlanetTraitIconSrc(finalTraits);
 }
 
 function resolveCssTypeKey(finalTraits: PlanetTrait[]) {
@@ -363,3 +353,43 @@ type AttachmentModifiers = {
   techSpecialties: string[];
   planetTypes: string[];
 };
+
+function getPlanetIconStyle(src: string | null): React.CSSProperties | undefined {
+  if (!src) return undefined;
+
+  return {
+    "--planet-icon-image": `url("${src}")`,
+  } as React.CSSProperties;
+}
+
+function getStackedIconStyle(iconSources: string[]): React.CSSProperties {
+  const iconSize = 16;
+  const gap = 1;
+  const padding = 1;
+
+  return {
+    width: `${iconSize + padding * 2}px`,
+    height: `${
+      padding * 2 +
+      iconSources.length * iconSize +
+      Math.max(0, iconSources.length - 1) * gap
+    }px`,
+    backgroundImage: [
+      "linear-gradient(180deg, rgba(3, 7, 12, 0.08), rgba(3, 7, 12, 0.42))",
+      ...iconSources.map((src) => `url("${src}")`),
+    ].join(", "),
+    backgroundPosition: [
+      "0 0",
+      ...iconSources.map(
+        (_, index) => `center ${padding + index * (iconSize + gap)}px`,
+      ),
+    ].join(", "),
+    backgroundSize: [
+      "100% 100%",
+      ...iconSources.map(() => `${iconSize}px ${iconSize}px`),
+    ].join(", "),
+    backgroundRepeat: ["no-repeat", ...iconSources.map(() => "no-repeat")].join(
+      ", ",
+    ),
+  } as React.CSSProperties;
+}

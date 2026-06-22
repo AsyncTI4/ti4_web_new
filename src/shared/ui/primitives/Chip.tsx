@@ -2,6 +2,7 @@ import { Box, Text, type BoxProps } from "@mantine/core";
 import type { ColorKey } from "@/domains/player/components/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";
+import type { CSSProperties } from "react";
 
 type ChipSize = "xs" | "sm" | "md";
 
@@ -21,6 +22,9 @@ type ChipAccent =
 type Props = Omit<BoxProps, "color" | "onClick"> & {
   title?: string;
   leftSection?: React.ReactNode;
+  leftIconSrc?: string;
+  leftIconClassName?: string;
+  leftIconSize?: number | string;
   children?: React.ReactNode;
   ribbon?: boolean;
   accentLine?: boolean;
@@ -44,6 +48,9 @@ const TEXT_SIZES: Record<ChipSize, string> = {
 export function Chip({
   title,
   leftSection,
+  leftIconSrc,
+  leftIconClassName,
+  leftIconSize,
   children,
   className,
   accent = "gray",
@@ -78,6 +85,19 @@ export function Chip({
       onClick?.(event);
     }
   };
+  const leftIconStyle = leftIconSrc
+    ? ({
+        "--chip-left-icon": `url("${leftIconSrc}")`,
+        ...(leftIconSize
+          ? {
+              "--chip-left-icon-size":
+                typeof leftIconSize === "number"
+                  ? `${leftIconSize}px`
+                  : leftIconSize,
+            }
+          : {}),
+      } as CSSProperties)
+    : undefined;
 
   return (
     <Box
@@ -109,13 +129,18 @@ export function Chip({
       <Box
         className={cx(
           classes.inner,
+          leftIconSrc && classes.innerWithLeftIcon,
+          leftIconSrc && leftIconClassName,
           revealFullTitleOnHover && classes.revealFullTitle
         )}
+        style={leftIconStyle}
         px={px}
         py={py}
       >
         {leftSection && (
-          <Box className={classes.leftSection}>{leftSection}</Box>
+          <Box className={cx(classes.leftSection, leftIconClassName)}>
+            {leftSection}
+          </Box>
         )}
         {title && (
           <Text size={textSize} fw={700} c="white" className={classes.textContainer}>

@@ -2,7 +2,6 @@ import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 import { ChipWithPopover } from "@/shared/ui/primitives/ChipWithPopover";
 import { SecretObjectiveCard } from "../SecretObjectiveCard";
 import styles from "./ScoredSecret.module.css";
-import { SecretObjectiveIcon } from "@/shared/ui/SecretObjectiveIcon";
 import cx from "clsx";
 
 type Props = {
@@ -20,7 +19,8 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
     <ChipWithPopover
       className={cx(styles.secretCard, !isScored && styles.unscoredKnown)}
       accent={isScored ? "red" : "gray"}
-      leftSection={<SecretObjectiveIcon size={16} />}
+      leftIconSrc="/so_icon.png"
+      leftIconSize={16}
       title={secretName}
       onClick={onClick}
       dropdownContent={<SecretObjectiveCard secretId={secretId} />}

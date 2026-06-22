@@ -1,28 +1,41 @@
 /* Relic icon styles */
 .icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+  /* Styles for the chip icon pseudo-element live below. */
 }
 
-.iconWrapper {
-  position: relative;
-  width: 18px;
-  height: 18px;
+.relicIconShadow::before {
+  filter: drop-shadow(0 1px 2px rgba(var(--gd-yellow), 0.2));
 }
 
-.exhaustedIcon {
+.exhaustedIcon::before {
   filter: saturate(0.6) brightness(0.75);
 }
 
-.exhaustedX {
+.exhaustedIconX {
+  position: relative;
+}
+
+.exhaustedIconX::after {
+  content: "";
   position: absolute;
   right: -4px;
   bottom: -4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  width: 12px;
+  height: 12px;
   pointer-events: none;
+  background:
+    linear-gradient(
+      45deg,
+      transparent 43%,
+      var(--mantine-color-red-1) 43% 57%,
+      transparent 57%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 43%,
+      var(--mantine-color-red-1) 43% 57%,
+      transparent 57%
+    );
 }
 
 /*

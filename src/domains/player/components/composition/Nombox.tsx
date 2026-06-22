@@ -41,9 +41,8 @@ export function Nombox({ capturedUnits, compact = false }: Props) {
       <Surface
         className={styles.compactNombox}
         p="xs"
-        label="CAPTURED"
-        labelColor="red.3"
       >
+        <Text className={styles.compactTitle}>CAPTURED</Text>
         <Box className={styles.compactGrid}>
           {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
             const playerColor = factionColorMap?.[factionName]?.color;
@@ -52,8 +51,8 @@ export function Nombox({ capturedUnits, compact = false }: Props) {
               <Box key={factionName} className={styles.compactFaction}>
                 <Box className={styles.compactFactionHeader}>
                   <FactionIcon
-                      faction={factionName}
-                      className={styles.compactFactionIcon}
+                    faction={factionName}
+                    className={styles.compactFactionIcon}
                   />
                   <Text className={styles.compactFactionName}>
                     {factionName}

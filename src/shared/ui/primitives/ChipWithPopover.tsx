@@ -22,6 +22,9 @@ type Props = {
   title: string;
   accent?: ChipAccent;
   leftSection?: React.ReactNode;
+  leftIconSrc?: string;
+  leftIconClassName?: string;
+  leftIconSize?: number | string;
   ribbon?: boolean;
   accentLine?: boolean;
   strong?: boolean;
@@ -41,6 +44,9 @@ export function ChipWithPopover({
   title,
   accent = "gray",
   leftSection,
+  leftIconSrc,
+  leftIconClassName,
+  leftIconSize,
   ribbon = false,
   accentLine = false,
   strong = false,
@@ -66,6 +72,9 @@ export function ChipWithPopover({
             accent={accent}
             onClick={handleClick}
             leftSection={leftSection}
+            leftIconSrc={leftIconSrc}
+            leftIconClassName={leftIconClassName}
+            leftIconSize={leftIconSize}
             title={title}
             ribbon={ribbon}
             accentLine={accentLine}

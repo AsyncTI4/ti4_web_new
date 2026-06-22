@@ -189,35 +189,35 @@
   min-width: 0;
 }
 
-/* Tech icon */
-.techIcon {
+.contentGroupWithIcon::before {
+  content: "";
   width: 14px;
   height: 14px;
   flex-shrink: 0;
   filter: drop-shadow(0 1px 1px rgba(var(--gradient-color), 0.12));
+  background-image: var(--tech-icon-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: var(--tech-icon-bg-size, contain);
 }
 
 /* Tech letter (for Antimatter, Wavelength, etc.) */
-.techLetter {
+.techLetter::before {
+  content: attr(data-tech-letter);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  background-image: none;
 }
 
 /* Faction tech icon with darkening background */
-.factionTechIcon {
+.factionTechIcon::before {
   position: relative;
   overflow: visible;
-}
-
-.factionTechIcon img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 18px !important;
-  height: 18px !important;
-  z-index: 1;
 }
 
 /* Tech name text */

@@ -1,4 +1,4 @@
-import { Box, Group, Text, Image } from "@mantine/core";
+import { Box, Group, Text } from "@mantine/core";
 import styles from "./Tech.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { TechCard } from "./TechCard";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { getTechData } from "@/entities/lookup/tech";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import cx from "clsx";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import type { CSSProperties } from "react";
 
 type Props = {
   techId: string;
@@ -41,6 +41,12 @@ export function Tech({
   const synergyClass = breakthroughUnlocked
     ? getSynergyClass(synergy, color)
     : "";
+  const techLetter = getTechLetter(techData.name);
+  const techIconSrc = isFactionTech
+    ? cdnImage(`/factions/${techData.faction}.png`)
+    : color === "white" || techLetter
+      ? undefined
+      : `/${color}.png`;
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -67,59 +73,21 @@ export function Tech({
               ))}
             </Box>
           )}
-          <Group className={styles.contentGroup}>
-            {isFactionTech ? (
-              <Box
-                className={cx(
-                  styles.techIcon,
-                  styles.factionTechIcon,
-                  styles[color],
-                )}
-              >
-                <Image
-                  {...lowPriorityImageProps}
-                  src={cdnImage(`/factions/${techData.faction}.png`)}
-                  alt={`${techData.faction} faction`}
-                />
-              </Box>
-            ) : techData.name === "Antimatter" ? (
-              <Box
-                className={cx(
-                  styles.techIcon,
-                  styles.techLetter,
-                  styles[color],
-                )}
-              >
-                <Text fw={700} fz={14} c="white">
-                  A
-                </Text>
-              </Box>
-            ) : techData.name === "Wavelength" ? (
-              <Box
-                className={cx(
-                  styles.techIcon,
-                  styles.techLetter,
-                  styles[color],
-                )}
-              >
-                <Text fw={700} fz={14} c="white">
-                  W
-                </Text>
-              </Box>
-            ) : (
-              <Image
-                {...lowPriorityImageProps}
-                src={
-                  isFactionTech
-                    ? cdnImage(`/factions/${techData.faction}.png`)
-                    : color === "white"
-                      ? undefined
-                      : `/${color}.png`
-                }
-                alt={techData.name}
-                className={cx(styles.techIcon, styles[color])}
-              />
+          <Group
+            className={cx(
+              styles.contentGroup,
+              (techIconSrc || techLetter) && styles.contentGroupWithIcon,
+              techLetter && styles.techLetter,
+              isFactionTech && styles.factionTechIcon,
+              styles[color],
             )}
+            style={
+              techIconSrc
+                ? getTechIconStyle(techIconSrc, isFactionTech ? "18px" : "14px")
+                : undefined
+            }
+            data-tech-letter={techLetter}
+          >
             <Text
               className={styles.techName}
               ff={mobile ? "text" : "monospace"}
@@ -135,6 +103,19 @@ export function Tech({
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );
+}
+
+function getTechIconStyle(src: string, size = "14px"): CSSProperties {
+  return {
+    "--tech-icon-image": `url("${src}")`,
+    "--tech-icon-bg-size": size,
+  } as CSSProperties;
+}
+
+function getTechLetter(techName: string): string | undefined {
+  if (techName === "Antimatter") return "A";
+  if (techName === "Wavelength") return "W";
+  return undefined;
 }
 
 const getTechColor = (techType: string): string => {

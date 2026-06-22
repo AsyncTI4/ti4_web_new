@@ -9,10 +9,22 @@
   gap: 4px;
 }
 
-.icon {
+.chipContent::before {
+  content: "";
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.tgContent::before {
+  background-image: url("/tg.png");
+}
+
+.commsContent::before {
+  background-image: url("/comms.png");
 }
 
 .countText {

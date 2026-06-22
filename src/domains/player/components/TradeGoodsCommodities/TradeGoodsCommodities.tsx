@@ -1,9 +1,8 @@
-import { Box, Image, Text, Stack, Group, Flex } from "@mantine/core";
+import { Box, Text, Stack, Group, Flex } from "@mantine/core";
 import { getGradientClasses } from "../gradientClasses";
 import styles from "./TradeGoodsCommodities.module.css";
 import { Shimmer } from "../Shimmer";
 import { Chip } from "@/shared/ui/primitives/Chip";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   tg: number;
@@ -31,12 +30,7 @@ export function TradeGoodsCommodities({
           py={4}
           className={getGradientClasses("yellow").border}
         >
-          <Box className={styles.chipContent}>
-            <Image
-              {...lowPriorityImageProps}
-              src="/tg.png"
-              className={`${getGradientClasses("yellow").iconFilter} ${styles.icon}`}
-            />
+          <Box className={`${styles.chipContent} ${styles.tgContent}`}>
             <Text className={styles.countText}>{tg}</Text>
           </Box>
         </Shimmer>
@@ -50,12 +44,10 @@ export function TradeGoodsCommodities({
           py={4}
           className={getGradientClasses("gray").border}
         >
-          <Box className={styles.chipContent} ff={"monospace"}>
-            <Image
-              {...lowPriorityImageProps}
-              src="/comms.png"
-              className={`${getGradientClasses("gray").iconFilter} ${styles.icon}`}
-            />
+          <Box
+            className={`${styles.chipContent} ${styles.commsContent}`}
+            ff={"monospace"}
+          >
             <Flex gap={0} align={"baseline"}>
               <Text className={styles.countText}>{commodities}</Text>
               <Text className={styles.countTextGray}>/{commoditiesTotal}</Text>

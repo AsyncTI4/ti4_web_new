@@ -1,7 +1,6 @@
-import { Image, Text, Group } from "@mantine/core";
+import { Text, Group } from "@mantine/core";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import classes from "./Commodities.module.css";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   commodities: number;
@@ -12,7 +11,8 @@ export function Commodities({ commodities, commoditiesTotal }: Props) {
   return (
     <Chip
       accent="gray"
-      leftSection={<Image {...lowPriorityImageProps} src="/comms.png" />}
+      leftIconSrc="/comms.png"
+      leftIconSize={18}
       py={6}
     >
       <Group gap={2} align="baseline" ff="monospace">

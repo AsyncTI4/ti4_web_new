@@ -21,14 +21,16 @@
 }
 
 .synergyIcon {
-  width: 20px;
-  height: 22px;
-  bottom: 1px;
+  /* Styles for the chip icon pseudo-element live below. */
+}
+
+.synergyIcon::before {
   position: relative;
+  bottom: 1px;
   margin-right: -2px;
 }
 
-.exhaustedIcon {
+.exhaustedIcon::before {
   filter: grayscale(0.55) brightness(0.9);
 }
 

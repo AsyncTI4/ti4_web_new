@@ -8,7 +8,6 @@ import { BreakthroughCard } from "./BreakthroughCard.tsx";
 import { IconLock, IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage.ts";
 import styles from "./Breakthrough.module.css";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   breakthroughId: string;
@@ -85,13 +84,9 @@ export function Breakthrough({
             strong={strong}
             accentLine={exhausted}
             className={`${exhausted ? styles.exhaustedChip : ""} ${chipClassName ?? ""}`}
-            leftSection={
-              <img
-                {...lowPriorityImageProps}
-                src={cdnImage("/general/synergy.png")}
-                className={`${styles.synergyIcon} ${exhausted ? styles.exhaustedIcon : ""}`}
-              />
-            }
+            leftIconSrc={cdnImage("/general/synergy.png")}
+            leftIconSize="22px"
+            leftIconClassName={`${styles.synergyIcon} ${exhausted ? styles.exhaustedIcon : ""}`}
           >
             {tradeGoodsStored && tradeGoodsStored > 0 ? (
               <Box className={styles.tradeGoodsText}>

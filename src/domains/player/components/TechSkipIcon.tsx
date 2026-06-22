@@ -7,7 +7,7 @@ type Props = {
   size?: number;
 };
 
-const TECH_SKIP_IMAGES = {
+export const TECH_SKIP_IMAGES = {
   biotic: "/green.png",
   propulsion: "/blue.png",
   cybernetic: "/yellow.png",

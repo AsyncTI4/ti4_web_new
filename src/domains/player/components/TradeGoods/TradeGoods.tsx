@@ -1,7 +1,6 @@
-import { Image, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import classes from "./TradeGoods.module.css";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   tg: number;
@@ -9,11 +8,7 @@ type Props = {
 
 export function TradeGoods({ tg }: Props) {
   return (
-    <Chip
-      accent="yellow"
-      leftSection={<Image {...lowPriorityImageProps} src="/tg.png" />}
-      py={4}
-    >
+    <Chip accent="yellow" leftIconSrc="/tg.png" leftIconSize={18} py={4}>
       <Text
         ff="monospace"
         fw={800}

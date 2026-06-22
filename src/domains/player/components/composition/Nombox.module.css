@@ -45,9 +45,9 @@
 /* Compact variant for mobile/pannable view */
 
 .compactGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, max-content));
-  gap: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   position: relative;
   z-index: 1;
 }
@@ -55,12 +55,13 @@
 .compactFaction {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 5px;
+  min-width: 0;
 }
 
 .compactFactionHeader {
   gap: 4px;
-  margin-bottom: 2px;
+  min-width: 0;
 }
 
 .compactFactionName {
@@ -69,6 +70,9 @@
   text-transform: uppercase;
   letter-spacing: 0.4px;
   line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .compactFactionIcon {
@@ -79,6 +83,7 @@
 
 .compactUnitsRow {
   gap: 4px;
+  min-height: 22px;
 }
 
 .compactUnitGroup {
@@ -126,6 +131,27 @@
 
 .compactNombox {
   position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  min-width: 0;
+  max-width: 128px;
+  padding: 8px 10px !important;
+}
+
+.compactTitle {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+  color: var(--mantine-color-red-3);
+  font-size: 10px;
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
 }
 
 .nombox,

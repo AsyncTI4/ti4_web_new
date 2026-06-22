@@ -1,4 +1,4 @@
-import { isMobileDevice } from "@/utils/isTouchDevice";
+import { computePanelsZoom } from "@/utils/zoom";
 import { Popover, PopoverProps } from "@mantine/core";
 import { ReactNode } from "react";
 
@@ -18,7 +18,8 @@ function SmoothPopoverBase({
   positionDependencies,
   ...props
 }: SmoothPopoverProps) {
-  const withinPortal = !isMobileDevice();
+  const dropdownScale = computePanelsZoom();
+
   return (
     <Popover
       position={position}
@@ -26,7 +27,7 @@ function SmoothPopoverBase({
       shadow={shadow}
       opened={opened}
       onChange={onChange}
-      withinPortal={withinPortal}
+      withinPortal
       transitionProps={{
         duration: 280,
         timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -36,6 +37,8 @@ function SmoothPopoverBase({
           background: "transparent",
           padding: 0,
           border: "none",
+          zoom: dropdownScale,
+          transformOrigin: "top left",
         },
       }}
       // Hardcoded to match --z-smooth-popover; see src/utils/zIndexVariables.css

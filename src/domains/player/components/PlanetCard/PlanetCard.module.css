@@ -87,14 +87,16 @@
 .legendary {
 }
 
-.planetCardHighlight,
 .legendaryConstellation,
 .tileArtMask {
   position: absolute;
   inset: 0;
 }
 
-.planetCardHighlight {
+.mainStack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1) 0%,
@@ -371,7 +373,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
-.mainStack:hover .planetCardHighlight {
+.mainStack:hover::before {
   opacity: 0.8;
 }
 
@@ -494,6 +496,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  min-height: 31px;
   position: relative;
   z-index: 1;
   padding: 5px 0 2px;
@@ -523,6 +526,23 @@
 .iconContainer > * {
   position: relative;
   z-index: 1;
+}
+
+.iconContainer::after {
+  content: none;
+}
+
+.hasPlanetIcon::after {
+  content: "";
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-image: var(--planet-icon-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 /* Bottom stack */
@@ -562,15 +582,52 @@
     0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
-/* Values stack */
-.valuesStack {
+/* Compact planet counters */
+.planetValues {
+  display: flex;
+  flex-direction: column;
   gap: 2px;
   align-items: flex-start;
 }
 
+.planetValue {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  padding-top: 1px;
+  padding-left: 5px;
+  color: white;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.planetValue::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.resourceValue::before {
+  background-image: url("/pa_resources.png");
+}
+
+.influenceValue::before {
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='6,2 18,2 22,12 18,22 6,22 2,12' fill='transparent' stroke='%233b82f6' stroke-width='2'/%3E%3C/svg%3E");
+}
+
 /* Icons stack */
 .iconsStack {
-  gap: 1px;
+  display: block;
   padding: 1px;
   border-radius: 999px;
   background: linear-gradient(
@@ -581,37 +638,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.42);
 }
 
-/* Resource image for IconValue */
-.resourceImage {
-  width: 16px;
-}
-
-/* Faction icon */
-.factionIcon {
-  width: 24px;
-  height: 24px;
-}
-
-/* Subtle top highlight */
-.topHighlight {
-  position: absolute;
-  top: 0;
-  left: 20%;
-  right: 20%;
-  height: 1px;
-  z-index: 3;
-}
-
 /* Popover dropdown */
 .popoverDropdown {
   padding: 0;
-}
-
-.attachmentIcon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
 }
 
 .legendaryWrapper {

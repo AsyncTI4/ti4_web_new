@@ -1,5 +1,4 @@
 import { Chip } from "@/shared/ui/primitives/Chip";
-import { SecretObjectiveIcon } from "@/shared/ui/SecretObjectiveIcon";
 import styles from "./ScoredSecret.module.css";
 import cx from "clsx";
 
@@ -12,7 +11,8 @@ export function UnscoredSecret() {
         styles.unscoredKnown,
         styles.redactedCard
       )}
-      leftSection={<SecretObjectiveIcon size={16} />}
+      leftIconSrc="/so_icon.png"
+      leftIconSize={16}
       title="Unscored Secret"
     />
   );

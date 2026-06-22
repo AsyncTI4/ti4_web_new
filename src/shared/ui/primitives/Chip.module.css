@@ -156,9 +156,25 @@
 }
 
 .leftSection {
-    max-width: var(--chip-left-section-size);
-    max-height: var(--chip-left-section-size);
+    width: var(--chip-left-icon-size, var(--chip-left-section-size));
+    height: var(--chip-left-icon-size, var(--chip-left-section-size));
+    max-width: var(--chip-left-icon-size, var(--chip-left-section-size));
+    max-height: var(--chip-left-icon-size, var(--chip-left-section-size));
     flex-shrink: 0;
+}
+
+.innerWithLeftIcon::before {
+    content: "";
+    display: block;
+    width: var(--chip-left-icon-size, var(--chip-left-section-size));
+    height: var(--chip-left-icon-size, var(--chip-left-section-size));
+    max-width: var(--chip-left-icon-size, var(--chip-left-section-size));
+    max-height: var(--chip-left-icon-size, var(--chip-left-section-size));
+    flex-shrink: 0;
+    background-image: var(--chip-left-icon);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .textContainer {
