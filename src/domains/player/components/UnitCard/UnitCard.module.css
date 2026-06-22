@@ -211,6 +211,7 @@
 }
 
 .denseCell {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -300,6 +301,50 @@
 
 .denseGrid > * {
   height: 100%;
+}
+
+.denseFactionBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.denseFactionIcon {
+  width: 11px;
+  height: 11px;
+}
+
+.denseUpgradeFactionBadgesContainer {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  z-index: 2;
+}
+
+.denseUpgradeFactionBadge {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.denseUpgradeFactionIcon {
+  display: block;
+  width: 11px;
+  height: 11px;
 }
 
 .denseCell {

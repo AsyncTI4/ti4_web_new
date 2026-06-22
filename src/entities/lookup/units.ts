@@ -26,6 +26,21 @@ export const getUnitDataByAsyncId = (asyncId: string) => {
   return unitsWithAsyncId?.[0]; // Return first match for backwards compatibility
 };
 
+export const getOwnedTwilightsFallUnitByAsyncId = (
+  asyncId: string,
+  ownedUnits?: string[]
+) => {
+  if (!ownedUnits || ownedUnits.length === 0) return undefined;
+
+  const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId) || [];
+  return unitsWithAsyncId.find(
+    (unit) =>
+      unit.source === "twilights_fall" &&
+      unit.id.startsWith("tf-") &&
+      ownedUnits.includes(unit.id)
+  );
+};
+
 // Build a map from requiredTechId -> units for quick lookup
 const unitsByRequiredTechIdMap = new Map<string, Unit[]>();
 units.forEach((unit) => {

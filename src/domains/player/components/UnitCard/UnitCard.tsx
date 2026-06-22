@@ -6,7 +6,10 @@ import { Unit } from "@/shared/ui/Unit";
 import { BaseCard } from "./BaseCard";
 import { DenseUnitCell } from "./DenseUnitCell";
 import { getColorAlias } from "@/entities/lookup/colors";
-import { getUnitData } from "@/entities/lookup/units";
+import {
+  getOwnedTwilightsFallUnitByAsyncId,
+  getUnitData,
+} from "@/entities/lookup/units";
 import { useGameContext } from "@/hooks/useGameContext";
 
 type Props = {
@@ -71,15 +74,21 @@ export function UnitCard({
     isMech && playerUnitsOwned?.includes("tf-eidolonlandwaster");
   const hasNekroMechUpgrade =
     isMech && playerUnitsOwned?.includes("tf-valefarprime");
+  const ownedTwilightsFallUnit = getOwnedTwilightsFallUnitByAsyncId(
+    unitData.asyncId,
+    playerUnitsOwned
+  );
 
-  const upgradeFactions = [
+  const upgradeFactions = Array.from(new Set([
     ...(hasCabalMechUpgrade ? ["cabal"] : []),
     ...(hasNaazMechUpgrade ? ["naaz"] : []),
     ...(hasNekroMechUpgrade ? ["nekro"] : []),
-  ];
+    ...(ownedTwilightsFallUnit?.faction ? [ownedTwilightsFallUnit.faction] : []),
+  ]));
   const unitIsUpgraded =
     unitData.upgradesFromUnitId !== undefined || unitData.baseType === "warsun";
-  const isUpgraded = showUpgradeState && unitIsUpgraded;
+  const isUpgraded =
+    showUpgradeState && (unitIsUpgraded || upgradeFactions.length > 0);
   const isFaction = unitData.faction !== undefined;
   const defaultCap =
     DEFAULT_UNIT_CAPS[unitData.baseType as keyof typeof DEFAULT_UNIT_CAPS];
@@ -104,6 +113,12 @@ export function UnitCard({
               reinforcements={reinforcements}
               totalCapacity={unitCap}
               upgraded={isUpgraded}
+              faction={isFaction ? unitData.faction : undefined}
+              upgradeFactions={
+                showUpgradeState && upgradeFactions.length > 0
+                  ? upgradeFactions
+                  : undefined
+              }
               onClick={locked ? undefined : toggle}
             />
           </div>

@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Group, Image, Text } from "@mantine/core";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";
+import { cdnImage } from "@/entities/data/cdnImage";
+import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   image: ReactNode;
@@ -9,6 +11,8 @@ type Props = {
   totalCapacity?: number;
   label?: string;
   upgraded?: boolean;
+  faction?: string;
+  upgradeFactions?: string[];
   dimmed?: boolean;
   onClick?: () => void;
 };
@@ -23,6 +27,8 @@ export function DenseUnitCell({
   totalCapacity,
   label,
   upgraded = false,
+  faction,
+  upgradeFactions,
   dimmed = false,
   onClick,
 }: Props) {
@@ -35,6 +41,10 @@ export function DenseUnitCell({
       )}
       onClick={onClick}
     >
+      {!upgradeFactions?.length && faction && (
+        <FactionBadge faction={faction} className={styles.denseFactionBadge} />
+      )}
+      <UpgradeFactionBadges factions={upgradeFactions} />
       <Box className={styles.denseCellImage}>{image}</Box>
       {reinforcements !== undefined && (
         <Group gap={1} justify="center" wrap="nowrap" className={styles.denseCellCount}>
@@ -58,6 +68,46 @@ export function DenseUnitCell({
           {label}
         </Text>
       )}
+    </Box>
+  );
+}
+
+function FactionBadge({
+  faction,
+  className,
+}: {
+  faction: string;
+  className: string;
+}) {
+  return (
+    <Box className={className}>
+      <Image
+        {...lowPriorityImageProps}
+        src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+        className={styles.denseFactionIcon}
+      />
+    </Box>
+  );
+}
+
+function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
+  if (!factions || factions.length === 0) return null;
+
+  return (
+    <Box className={styles.denseUpgradeFactionBadgesContainer}>
+      {factions.map((faction, index) => (
+        <Box
+          key={faction}
+          className={styles.denseUpgradeFactionBadge}
+          style={{ right: index * 13 }}
+        >
+          <Image
+            {...lowPriorityImageProps}
+            src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
+            className={styles.denseUpgradeFactionIcon}
+          />
+        </Box>
+      ))}
     </Box>
   );
 }
