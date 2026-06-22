@@ -1,12 +1,14 @@
 import { computePanelsZoom } from "@/utils/zoom";
 import { Popover, PopoverProps } from "@mantine/core";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 type SmoothPopoverProps = Omit<PopoverProps, "transitionProps" | "styles"> & {
   children: ReactNode;
   opened: boolean;
   onChange: (opened: boolean) => void;
 };
+
+type SmoothPopoverDropdownProps = ComponentProps<typeof Popover.Dropdown>;
 
 function SmoothPopoverBase({
   children,
@@ -18,8 +20,6 @@ function SmoothPopoverBase({
   positionDependencies,
   ...props
 }: SmoothPopoverProps) {
-  const dropdownScale = computePanelsZoom();
-
   return (
     <Popover
       position={position}
@@ -37,8 +37,6 @@ function SmoothPopoverBase({
           background: "transparent",
           padding: 0,
           border: "none",
-          zoom: dropdownScale,
-          transformOrigin: "top left",
         },
       }}
       // Hardcoded to match --z-smooth-popover; see src/utils/zIndexVariables.css
@@ -50,8 +48,28 @@ function SmoothPopoverBase({
   );
 }
 
+function SmoothPopoverDropdown({
+  children,
+  ...props
+}: SmoothPopoverDropdownProps) {
+  const dropdownScale = computePanelsZoom();
+
+  return (
+    <Popover.Dropdown {...props}>
+      <div
+        style={{
+          zoom: dropdownScale,
+          transformOrigin: "top left",
+        }}
+      >
+        {children}
+      </div>
+    </Popover.Dropdown>
+  );
+}
+
 // Attach the sub-components
 export const SmoothPopover = Object.assign(SmoothPopoverBase, {
   Target: Popover.Target,
-  Dropdown: Popover.Dropdown,
+  Dropdown: SmoothPopoverDropdown,
 });
