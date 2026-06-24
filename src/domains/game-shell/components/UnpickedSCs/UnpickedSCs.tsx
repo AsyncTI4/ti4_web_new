@@ -21,6 +21,7 @@ function UnpickedSCs({ strategyCards }: Props) {
             <StrategyCard
               key={index}
               initiative={card.initiative}
+              tradeGoods={card.tradeGoods}
             />
           ))}
         </SimpleGrid>
