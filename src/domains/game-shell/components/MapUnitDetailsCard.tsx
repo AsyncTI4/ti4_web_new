@@ -29,15 +29,10 @@ export function MapUnitDetailsCard({
   const gameData = useGameData();
   const playerData = gameData?.playerData;
 
-  // Try to find a player matching the faction; neutral units may not have an associated player
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction
   );
 
-  // If we don't have a player for this faction (e.g. neutral), still attempt to resolve
-  // a sensible unit id for display. Pass `activePlayer?.faction` when available so
-  // faction-specific lookups prefer that, otherwise fall back to the tooltip faction
-  // which allows `lookupUnit` to return generic unit data.
   const lookupFaction = activePlayer?.faction || tooltipUnit.faction;
   const unitIdToUse =
     lookupUnit(tooltipUnit.unitId, lookupFaction, activePlayer)?.id ||

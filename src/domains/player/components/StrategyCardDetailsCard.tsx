@@ -24,7 +24,6 @@ type Props = {
     | "cyan"
     | "blue"
     | "purple";
-  tradeGoods?: number;
 };
 
 function mapDetailsCardColor(color?: Props["color"]): DetailsColor {
@@ -39,7 +38,7 @@ function mapDetailsCardColor(color?: Props["color"]): DetailsColor {
   return "none";
 }
 
-export function StrategyCardDetailsCard({ initiative, color, tradeGoods }: Props) {
+export function StrategyCardDetailsCard({ initiative, color }: Props) {
   const gameData = useGameData();
   const sc = getStrategyCardByInitiative(
     initiative,
