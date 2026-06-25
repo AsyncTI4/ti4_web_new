@@ -19,6 +19,7 @@
 .cyan { --accent-rgb: var(--gd-cyan); }
 .red { --accent-rgb: var(--gd-red); }
 .blue { --accent-rgb: var(--gd-blue); }
+.teal { --accent-rgb: var(--gd-teal); }
 .green { --accent-rgb: var(--gd-green); }
 .purple { --accent-rgb: var(--gd-purple); }
 

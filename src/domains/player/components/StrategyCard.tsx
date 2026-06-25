@@ -13,6 +13,7 @@ import { useGameData } from "@/hooks/useGameContext";
 import { StrategyCardDetailsCard } from "./StrategyCardDetailsCard";
 import type { ColorKey } from "./gradientClasses";
 import classes from "./StrategyCard.module.css";
+import { cdnImage } from "@/entities/data/cdnImage";
 
 type StrategyCardColor = Extract<
   ColorKey,
@@ -21,6 +22,7 @@ type StrategyCardColor = Extract<
 
 type Props = {
   initiative: number;
+  tradeGoods: number;
   isExhausted?: boolean;
 };
 
@@ -42,7 +44,7 @@ function getStrategyCardColor(initiative: number): StrategyCardColor {
     : "red";
 }
 
-export function StrategyCard({ initiative, isExhausted = false }: Props) {
+export function StrategyCard({ initiative, tradeGoods, isExhausted = false}: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const gameData = useGameData();
   const strategyCard = getStrategyCardByInitiative(
@@ -73,14 +75,26 @@ export function StrategyCard({ initiative, isExhausted = false }: Props) {
                 />
               </span>
             )}
+              {/* Trade Goods */}
           </Box>
           <Text ff="heading" className={classes.name}>
             {strategyCard?.name || SC_NAMES[initiative]}
           </Text>
+            {tradeGoods > 0 && (
+              <span className={classes.tradeGoodsContainer}>
+                <img
+                src={cdnImage("/player_area/pa_cardbacks_tradegoods.png")}
+                className={classes.tradeGoodsImage}
+              />
+              <Text size="16px" fw={600} c="white" ff="heading">
+                  {tradeGoods}
+                </Text>
+              </span>
+            )}
         </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
-        <StrategyCardDetailsCard initiative={initiative} color={color} />
+        <StrategyCardDetailsCard initiative={initiative} color={color} tradeGoods={tradeGoods} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

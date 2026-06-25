@@ -32,10 +32,10 @@ export function MapUnitDetailsCard({
   const activePlayer = playerData?.find(
     (player) => player.faction === tooltipUnit.faction
   );
-  if (!activePlayer) return null;
 
+  const lookupFaction = activePlayer?.faction || tooltipUnit.faction;
   const unitIdToUse =
-    lookupUnit(tooltipUnit.unitId, activePlayer.faction, activePlayer)?.id ||
+    lookupUnit(tooltipUnit.unitId, lookupFaction, activePlayer)?.id ||
     tooltipUnit.unitId;
 
   return (
@@ -46,7 +46,7 @@ export function MapUnitDetailsCard({
       mapLayout={mapLayout}
       zIndexVar="var(--z-map-unit-details)"
     >
-      <UnitDetailsCard unitId={unitIdToUse} color={activePlayer.color} />
+      <UnitDetailsCard unitId={unitIdToUse} color={activePlayer?.color} />
     </MapTooltipPositioner>
   );
 }

@@ -99,3 +99,17 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+.tradeGoodsContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden; 
+  height: 24px;
+
+}
+
+.tradeGoodsImage {
+  height: 24px;
+  margin-top: 8px;
+}
