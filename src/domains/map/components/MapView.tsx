@@ -6,7 +6,7 @@ import { LeftSidebar } from "@/domains/game-shell/components/LeftSidebar";
 import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";
 import { PanelToggleButton } from "@/domains/game-shell/components/PanelToggleButton";
 import { RightSidebar } from "@/domains/game-shell/components/RightSidebar";
-import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar/FloatingMapToolbar";
+import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";

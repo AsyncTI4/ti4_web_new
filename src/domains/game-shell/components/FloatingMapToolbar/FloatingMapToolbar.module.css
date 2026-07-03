@@ -37,7 +37,7 @@
 
 .panel {
   position: fixed;
-  top: max(125px, 15vh);
+  top: max(170px, 15vh);
   width: min(320px, calc(100vw - 96px));
   max-height: 70vh;
   overflow-y: auto;
@@ -46,10 +46,9 @@
   color: var(--mantine-color-gray-1);
   background: var(--left-sidebar-bg, var(--sidebar-bg));
   border: var(--sidebar-border);
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px;
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(var(--sidebar-blur));
-  transition-property: opacity, transform, right;
+  backdrop-filter: blur(var(--sidebar-blur, 8px));
 }
 
 .panelHeader {
@@ -57,9 +56,9 @@
   top: 0;
   z-index: 1;
   padding: 10px 12px;
-  background: rgba(15, 23, 42, 0.78);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-  backdrop-filter: blur(var(--sidebar-blur));
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--sidebar-border);
+  backdrop-filter: blur(var(--sidebar-blur, 8px));
 }
 
 .panelBody {

@@ -18,6 +18,7 @@ import {
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/domains/player/components/composition/PlayerCardMobile";
 import { SecretHand } from "@/domains/game-shell/components/SecretHand";
+import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import secretHandClasses from "@/domains/game-shell/components/SecretHand/SecretHand.module.css";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
 import { useMovementMode } from "./hooks/useMovementMode";
@@ -132,6 +133,8 @@ export function PannableMapView({ gameId }: Props) {
     : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
   return (
     <Box className={classes.mapContainer}>
+      <FloatingMapToolbar rightOffset="12px" />
+
       <Box
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
