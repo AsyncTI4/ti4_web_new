@@ -3,6 +3,7 @@ import { PlayerDataResponse } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
 import { useRef } from "react";
 import { config } from "@/config";
+import { useGameStatePatcher } from "./useGameState";
 
 async function fetchPlayerData(apiUrl: string): Promise<PlayerDataResponse> {
   const response = await fetch(apiUrl);
@@ -28,6 +29,7 @@ export function usePlayerDataSocket(gameId: string) {
   const { data, isLoading, isError, refetch } = usePlayerData(gameId);
   const queryClient = useQueryClient();
   const hasConnectedBefore = useRef(false);
+  const onStateMessage = useGameStatePatcher(gameId);
 
   const { readyState, reconnect, isReconnecting } = useGameSocket(
     gameId,
@@ -43,7 +45,11 @@ export function usePlayerDataSocket(gameId: string) {
       void queryClient.invalidateQueries({
         queryKey: ["playerHand", gameId],
       });
-    }
+      void queryClient.invalidateQueries({
+        queryKey: ["gameState", gameId],
+      });
+    },
+    onStateMessage
   );
 
   return {
