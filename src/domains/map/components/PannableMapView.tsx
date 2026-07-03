@@ -129,13 +129,16 @@ export function PannableMapView({ gameId }: Props) {
   const playerAreaStyles = isMobileDevice()
     ? { width: "max-content" as const, minWidth: "1300px" }
     : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
+  const showGameStatePanel = !isMobileDevice();
   const showFloatingMapToolbar = !isMobileDevice();
 
   return (
     <Box className={classes.mapContainer}>
-      <Box className={classes.gameStateOverlay}>
-        <GameStatePanel />
-      </Box>
+      {showGameStatePanel && (
+        <Box className={classes.gameStateOverlay}>
+          <GameStatePanel />
+        </Box>
+      )}
       {showFloatingMapToolbar && (
         <FloatingMapToolbar
           rightOffset="35px"
