@@ -325,6 +325,53 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
+  gameState?: GameState;
+};
+
+export type GamePhase =
+  | "unknown"
+  | "setup.draft"
+  | "setup.players"
+  | "strategy"
+  | "action"
+  | "status.scoring"
+  | "status.homework"
+  | "agenda.readyToFlip"
+  | "agenda.whens"
+  | "agenda.afters"
+  | "agenda.voting"
+  | "agenda.resolving"
+  | "finished";
+
+export type GameStateAgenda = {
+  id: string;
+  startVoteCounts: Record<string, number>;
+  outcomeVoteCounts: Record<string, number>;
+};
+
+export type GameStateCombat = {
+  system: string | null;
+  unitHolder: string | null;
+  round: number | null;
+  participantColors: string[];
+};
+
+export type GameState = {
+  phase: GamePhase;
+  activePlayer: string | null;
+  turnStartedAt: number | null;
+  winner: string | null;
+  agenda: GameStateAgenda | null;
+  activeSystem: string | null;
+  activeCombat: GameStateCombat | null;
+};
+
+export type GameStateMessage = {
+  type: "gameState";
+  seq: number;
+  timestamp: number;
+  full: boolean;
+  patch: Partial<GameState> | GameState;
 };
 
 export type BreakthroughData = {
