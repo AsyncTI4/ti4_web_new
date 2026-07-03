@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Group, Stack, Text, Divider } from "@mantine/core";
 import { useGameState } from "@/hooks/useGameState";
 import { useGameData } from "@/hooks/useGameContext";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import { Chip } from "@/shared/ui/primitives/Chip";
-import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { agendas } from "@/entities/data/agendas";
 import type {
   GamePhase,
@@ -23,22 +21,33 @@ import type { ColorKey } from "@/domains/player/components/gradientClasses";
 type PhaseConfig = { label: string; accent: ColorKey };
 
 const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
-  unknown: { label: "Unknown", accent: "gray" },
-  "setup.draft": { label: "Setup · Draft", accent: "gray" },
-  "setup.players": { label: "Setup · Players", accent: "gray" },
-  strategy: { label: "Strategy", accent: "blue" },
-  action: { label: "Action", accent: "green" },
-  "status.scoring": { label: "Status · Scoring", accent: "yellow" },
-  "status.homework": { label: "Status · Homework", accent: "yellow" },
-  "agenda.readyToFlip": { label: "Agenda · Ready", accent: "orange" },
-  "agenda.whens": { label: "Agenda · Whens", accent: "orange" },
-  "agenda.afters": { label: "Agenda · Afters", accent: "orange" },
-  "agenda.voting": { label: "Agenda · Voting", accent: "orange" },
-  "agenda.resolving": { label: "Agenda · Resolving", accent: "orange" },
+  unknown: { label: "Unknown Phase", accent: "gray" },
+  "setup.draft": { label: "Setup Phase · Draft", accent: "gray" },
+  "setup.players": { label: "Setup Phase · Players", accent: "gray" },
+  strategy: { label: "Strategy Phase", accent: "blue" },
+  action: { label: "Action Phase", accent: "green" },
+  "status.scoring": { label: "Status Phase · Scoring", accent: "yellow" },
+  "status.homework": { label: "Status Phase · Homework", accent: "yellow" },
+  "agenda.readyToFlip": { label: "Agenda Phase · Ready", accent: "orange" },
+  "agenda.whens": { label: "Agenda Phase · Whens", accent: "orange" },
+  "agenda.afters": { label: "Agenda Phase · Afters", accent: "orange" },
+  "agenda.voting": { label: "Agenda Phase · Voting", accent: "orange" },
+  "agenda.resolving": { label: "Agenda Phase · Resolving", accent: "orange" },
   finished: { label: "Game Over", accent: "red" },
 } as const;
 
 type PanelAccentValue = "red" | "green" | "blue" | "yellow" | "orange" | "none";
+type GameStatePlayer = {
+  color: string;
+  displayName?: string | null;
+  userName?: string | null;
+  flexibleDisplayName?: string | null;
+  faction?: string | null;
+  factionImage?: string | null;
+  factionImageType?: string | null;
+  influence?: number | null;
+  totInfluence?: number | null;
+};
 
 const PANEL_ACCENT: Record<ColorKey, PanelAccentValue> = {
   gray: "none",
@@ -56,17 +65,6 @@ const PANEL_ACCENT: Record<ColorKey, PanelAccentValue> = {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function formatElapsed(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  const mm = String(minutes).padStart(2, "0");
-  const ss = String(seconds).padStart(2, "0");
-  if (hours > 0) return `${hours}:${mm}:${ss}`;
-  return `${mm}:${ss}`;
-}
 
 function titleCaseWords(value: string): string {
   return value
@@ -112,6 +110,31 @@ function activePlayerPhrase(phase: GamePhase): string {
   }
 }
 
+function cleanDisplayName(value?: string | null): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.toLowerCase() === "null") return null;
+  return trimmed;
+}
+
+function getPlayerDisplayName(
+  player: GameStatePlayer | undefined,
+  fallback: string
+): string {
+  return (
+    cleanDisplayName(player?.displayName) ??
+    cleanDisplayName(player?.userName) ??
+    cleanDisplayName(player?.flexibleDisplayName) ??
+    cleanDisplayName(player?.faction) ??
+    fallback
+  );
+}
+
+function isVoteTablePlayer(player: GameStatePlayer): boolean {
+  if (player.faction === "neutral") return false;
+  const name = getPlayerDisplayName(player, player.color).toLowerCase();
+  return !name.endsWith(".deck") && !name.endsWith('.deck"');
+}
+
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
@@ -127,32 +150,17 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
   );
 }
 
-function ElapsedTimer({ turnStartedAt }: { turnStartedAt: number }) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <Text size="xs" c="gray.4" ff="monospace">
-      {formatElapsed(Math.max(0, now - turnStartedAt))}
-    </Text>
-  );
-}
-
 function ActivePlayerRow({
   activePlayer,
-  turnStartedAt,
   phase,
   playerData,
 }: {
   activePlayer: string;
-  turnStartedAt: number | null;
   phase: GamePhase;
-  playerData: Array<{ color: string; displayName: string }>;
+  playerData: GameStatePlayer[];
 }) {
   const player = playerData.find((p) => p.color === activePlayer);
-  const displayName = player?.displayName ?? activePlayer;
+  const displayName = getPlayerDisplayName(player, activePlayer);
   const phrase = activePlayerPhrase(phase);
   const accent = colorToChipAccent(activePlayer);
 
@@ -168,9 +176,6 @@ function ActivePlayerRow({
           {phrase}
         </Text>
       )}
-      {turnStartedAt !== null && (
-        <ElapsedTimer turnStartedAt={turnStartedAt} />
-      )}
     </Group>
   );
 }
@@ -181,16 +186,17 @@ function AgendaRow({
   activePlayer,
   playerData,
 }: {
-  agenda: GameStateAgenda;
+  agenda: GameStateAgenda | null;
   phase: GamePhase;
   activePlayer: string | null;
-  playerData: Array<{ color: string; displayName: string }>;
+  playerData: GameStatePlayer[];
 }) {
-  const [open, setOpen] = useState(false);
-  const agendaData = agendas.find((a) => a.alias === agenda.id);
-  const displayName = agendaData?.name ?? agenda.id;
+  const agendaData = agenda
+    ? agendas.find((a) => a.alias === agenda.id)
+    : undefined;
+  const displayName = agenda ? (agendaData?.name ?? agenda.id) : null;
 
-  const outcomeEntries = Object.entries(agenda.outcomeVoteCounts);
+  const outcomeEntries = Object.entries(agenda?.outcomeVoteCounts ?? {});
   const outcomeSummary = outcomeEntries
     .map(([k, v]) => `${titleCaseWords(k)} ${v}`)
     .join(" · ");
@@ -198,69 +204,192 @@ function AgendaRow({
   const showVoterHint =
     phase === "agenda.voting" &&
     activePlayer !== null &&
+    agenda !== null &&
     agenda.startVoteCounts[activePlayer] !== undefined;
 
-  const activePlayerName = playerData.find((p) => p.color === activePlayer)?.displayName ?? activePlayer;
-  const votes = activePlayer !== null ? agenda.startVoteCounts[activePlayer] : undefined;
+  const activePlayerName =
+    activePlayer === null
+      ? null
+      : getPlayerDisplayName(
+          playerData.find((p) => p.color === activePlayer),
+          activePlayer
+        );
+  const votes =
+    activePlayer !== null && agenda !== null
+      ? agenda.startVoteCounts[activePlayer]
+      : undefined;
+  const votingPlayers = playerData.filter(isVoteTablePlayer);
 
   return (
-    <Stack gap={4}>
-      <SmoothPopover
-        position="right"
-        opened={open}
-        onChange={setOpen}
-      >
-        <SmoothPopover.Target>
-          <div>
-            <Chip accent="orange" size="sm" onClick={() => setOpen((o) => !o)}>
-              <Text size="xs" fw={700} c="white">
-                {displayName}
-              </Text>
-            </Chip>
-          </div>
-        </SmoothPopover.Target>
-        <SmoothPopover.Dropdown p={0}>
-          <DetailsCard width={300} color="orange">
-            <Stack gap="sm">
-              <DetailsCard.Title
-                title={displayName}
-                subtitle={agendaData?.type ?? "Agenda"}
-              />
-              {agendaData?.target && (
-                <>
-                  <Divider c="gray.7" opacity={0.6} />
-                  <DetailsCard.Section
-                    title="Elect"
-                    content={agendaData.target}
-                  />
-                </>
-              )}
-              {(agendaData?.text1 || agendaData?.text2) && (
-                <>
-                  <Divider c="gray.7" opacity={0.6} />
-                  <DetailsCard.Section
-                    title="Effect"
-                    content={
-                      <Stack gap={6}>
-                        {agendaData?.text1 && (
-                          <Text size="sm" c="gray.2" lh={1.4}>
-                            {agendaData.text1}
-                          </Text>
+    <Stack gap="xs">
+      <Stack gap={4}>
+        <Text size="xs" c="orange.2" fw={700}>
+          Agenda
+        </Text>
+        {displayName ? (
+          <Text size="sm" c="gray.1" fw={700} lh={1.25}>
+            {displayName}
+          </Text>
+        ) : (
+          <Text size="sm" c="orange.2" fw={700} lh={1.25}>
+            Current agenda unavailable
+          </Text>
+        )}
+        {agendaData?.target && (
+          <Text size="xs" c="gray.3">
+            Elect: {agendaData.target}
+          </Text>
+        )}
+        {agendaData?.text1 && (
+          <Text size="xs" c="gray.2" lh={1.35}>
+            {agendaData.text1}
+          </Text>
+        )}
+        {agendaData?.text2 && agendaData.text2.trim() && (
+          <Text size="xs" c="gray.2" lh={1.35}>
+            {agendaData.text2}
+          </Text>
+        )}
+      </Stack>
+
+      {phase === "agenda.voting" && activePlayerName && (
+        <Text size="xs" c="gray.3">
+          Current voter:{" "}
+          <Text span size="xs" c="gray.1" fw={700}>
+            {activePlayerName}
+          </Text>
+        </Text>
+      )}
+
+      {phase === "agenda.voting" && votingPlayers.length > 0 && (
+        <Stack gap={4}>
+          <Text size="xs" c="gray.3" fw={700}>
+            Vote counts
+          </Text>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: 12,
+              color: "var(--mantine-color-gray-2)",
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    padding: "3px 6px",
+                    textAlign: "left",
+                    color: "var(--mantine-color-gray-4)",
+                    fontWeight: 700,
+                    borderBottom: "1px solid var(--mantine-color-dark-4)",
+                  }}
+                >
+                  Player
+                </th>
+                <th
+                  style={{
+                    padding: "3px 6px",
+                    textAlign: "right",
+                    color: "var(--mantine-color-gray-4)",
+                    fontWeight: 700,
+                    borderBottom: "1px solid var(--mantine-color-dark-4)",
+                  }}
+                >
+                  Votes
+                </th>
+                <th
+                  style={{
+                    padding: "3px 6px",
+                    textAlign: "right",
+                    color: "var(--mantine-color-gray-4)",
+                    fontWeight: 700,
+                    borderBottom: "1px solid var(--mantine-color-dark-4)",
+                  }}
+                >
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {votingPlayers.map((player) => {
+                const isCurrent = player.color === activePlayer;
+                return (
+                  <tr
+                    key={player.color}
+                    style={{
+                      background: isCurrent
+                        ? "rgba(255, 255, 255, 0.06)"
+                        : "transparent",
+                    }}
+                  >
+                    <td
+                      style={{
+                        padding: "3px 6px",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                        fontWeight: isCurrent ? 700 : 500,
+                        color: isCurrent
+                          ? "var(--mantine-color-gray-1)"
+                          : "var(--mantine-color-gray-3)",
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          minWidth: 0,
+                        }}
+                      >
+                        {player.faction && (
+                          <CircularFactionIcon
+                            faction={player.faction}
+                            size={18}
+                            factionImageOverride={player.factionImage}
+                            factionImageTypeOverride={player.factionImageType}
+                          />
                         )}
-                        {agendaData?.text2 && agendaData.text2.trim() && (
-                          <Text size="sm" c="gray.2" lh={1.4}>
-                            {agendaData.text2}
-                          </Text>
-                        )}
-                      </Stack>
-                    }
-                  />
-                </>
-              )}
-            </Stack>
-          </DetailsCard>
-        </SmoothPopover.Dropdown>
-      </SmoothPopover>
+                        <span
+                          style={{
+                            minWidth: 0,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {getPlayerDisplayName(player, player.color)}
+                        </span>
+                      </span>
+                    </td>
+                    <td
+                      style={{
+                        padding: "3px 6px",
+                        textAlign: "right",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                        fontVariantNumeric: "tabular-nums",
+                        color: "var(--mantine-color-gray-2)",
+                      }}
+                    >
+                      {player.influence ?? "?"}
+                    </td>
+                    <td
+                      style={{
+                        padding: "3px 6px",
+                        textAlign: "right",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                        fontVariantNumeric: "tabular-nums",
+                        color: "var(--mantine-color-gray-4)",
+                      }}
+                    >
+                      {player.totInfluence ?? "?"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </Stack>
+      )}
 
       {outcomeSummary && (
         <Text size="xs" c="gray.3">
@@ -282,7 +411,7 @@ function CombatRow({
   playerData,
 }: {
   combat: GameStateCombat;
-  playerData: Array<{ color: string; displayName: string }>;
+  playerData: GameStatePlayer[];
 }) {
   const parts: string[] = [`Combat — ${combat.system ?? "?"}`];
   if (combat.unitHolder) parts[0] += ` (${combat.unitHolder})`;
@@ -297,7 +426,7 @@ function CombatRow({
         <Group gap={4} wrap="wrap">
           {combat.participantColors.map((color) => {
             const player = playerData.find((p) => p.color === color);
-            const name = player?.displayName ?? color;
+            const name = getPlayerDisplayName(player, color);
             return (
               <Chip key={color} accent={colorToChipAccent(color)} size="xs">
                 <Text size="xs" fw={700} c="white">
@@ -317,10 +446,10 @@ function WinnerBanner({
   playerData,
 }: {
   winner: string;
-  playerData: Array<{ color: string; displayName: string }>;
+  playerData: GameStatePlayer[];
 }) {
   const player = playerData.find((p) => p.color === winner);
-  const displayName = player?.displayName ?? winner;
+  const displayName = getPlayerDisplayName(player, winner);
   const accent = colorToChipAccent(winner);
 
   return (
@@ -346,7 +475,7 @@ function GameStatePanelContent({
   playerData,
 }: {
   gameState: GameState;
-  playerData: Array<{ color: string; displayName: string }>;
+  playerData: GameStatePlayer[];
 }) {
   const { phase } = gameState;
   const cfg = PHASE_CONFIGS[phase];
@@ -371,13 +500,12 @@ function GameStatePanelContent({
         {gameState.activePlayer && (
           <ActivePlayerRow
             activePlayer={gameState.activePlayer}
-            turnStartedAt={gameState.turnStartedAt}
             phase={phase}
             playerData={playerData}
           />
         )}
 
-        {gameState.agenda && (
+        {phaseGroup(phase) === "agenda" && (
           <>
             <Divider c="gray.7" opacity={0.4} />
             <AgendaRow

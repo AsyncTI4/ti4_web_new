@@ -16,6 +16,7 @@ import classes from "./SecretHand.module.css";
 type Props = {
   isCollapsed: boolean;
   onToggle: () => void;
+  hideHeader?: boolean;
   handData?: PlayerHandData;
   isLoading?: boolean;
   error?: Error | null;
@@ -27,6 +28,7 @@ type Props = {
 export function SecretHand({
   isCollapsed,
   onToggle,
+  hideHeader = false,
   handData,
   isLoading,
   error,
@@ -63,7 +65,7 @@ export function SecretHand({
       />
     ) : null;
 
-  if (isCollapsed) {
+  if (isCollapsed && !hideHeader) {
     return (
       <Box className={classes.collapsedContainer}>
         <Box className={classes.collapsedHeader} onClick={onToggle}>
@@ -81,15 +83,17 @@ export function SecretHand({
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.header} onClick={onToggle}>
-        <Group gap="xs" align="center">
-          {headerIcon}
-          <Text size="sm" fw={600} c="white">
-            {headerTitle}
-          </Text>
-        </Group>
-        <IconChevronDown size={14} color="var(--mantine-color-gray-5)" />
-      </Box>
+      {!hideHeader && (
+        <Box className={classes.header} onClick={onToggle}>
+          <Group gap="xs" align="center">
+            {headerIcon}
+            <Text size="sm" fw={600} c="white">
+              {headerTitle}
+            </Text>
+          </Group>
+          <IconChevronDown size={14} color="var(--mantine-color-gray-5)" />
+        </Box>
+      )}
 
       <Box className={classes.content}>
         {isLoading && (

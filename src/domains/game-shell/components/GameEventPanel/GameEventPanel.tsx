@@ -74,6 +74,19 @@ function num(payload: Record<string, unknown>, key: string): number | undefined 
   return typeof v === "number" ? v : undefined;
 }
 
+function eventDescription(payload: Record<string, unknown>): string | undefined {
+  return (
+    str(payload, "description") ??
+    str(payload, "summary") ??
+    str(payload, "message")
+  );
+}
+
+function EventDescription({ children }: { children?: string }) {
+  if (!children) return null;
+  return <div className={classes.description}>{children}</div>;
+}
+
 // ---------------------------------------------------------------------------
 // Row body per archetype. Returns null for events we deliberately drop.
 // ---------------------------------------------------------------------------
@@ -85,10 +98,13 @@ function EventBody({ event }: { event: GameEvent }) {
     const cardName =
       str(p, "cardName") ?? resolveCardName(event.archetype, str(p, "cardId") ?? "");
     return (
-      <div className={classes.headline}>
-        <TypeBadge label={label} hue={hue} />
-        <span className={classes.primary}>{cardName}</span>
-      </div>
+      <>
+        <div className={classes.headline}>
+          <TypeBadge label={label} hue={hue} />
+          <span className={classes.primary}>{cardName}</span>
+        </div>
+        <EventDescription>{eventDescription(p)}</EventDescription>
+      </>
     );
   }
 
@@ -123,22 +139,10 @@ function EventBody({ event }: { event: GameEvent }) {
         <>
           {headline}
           {sub}
+          <EventDescription>{summary}</EventDescription>
         </>
       );
-      return summary ? (
-        <Tooltip
-          label={summary}
-          multiline
-          w={280}
-          position="left"
-          withArrow
-          openDelay={200}
-        >
-          <div>{body}</div>
-        </Tooltip>
-      ) : (
-        body
-      );
+      return body;
     }
 
     case "TURN": {
@@ -154,11 +158,14 @@ function EventBody({ event }: { event: GameEvent }) {
       const name = resolveTechName(str(p, "techId") ?? "");
       const payment = str(p, "paymentType");
       return (
-        <div className={classes.headline}>
-          <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
-          <span className={classes.primary}>Researched {name}</span>
-          {payment && <span className={classes.subline}>{prettifyId(payment)}</span>}
-        </div>
+        <>
+          <div className={classes.headline}>
+            <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
+            <span className={classes.primary}>Researched {name}</span>
+            {payment && <span className={classes.subline}>{prettifyId(payment)}</span>}
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
     }
 
@@ -166,37 +173,43 @@ function EventBody({ event }: { event: GameEvent }) {
       const n = num(p, "scNumber");
       const name = str(p, "scName");
       return (
-        <div className={classes.headline}>
-          {n !== undefined && (
-            <span
-              className={classes.scNum}
-              style={{ background: scNumberBg(n) }}
-            >
-              {n}
-            </span>
-          )}
-          <span className={classes.primary}>Played {name ?? "strategy card"}</span>
-        </div>
+        <>
+          <div className={classes.headline}>
+            {n !== undefined && (
+              <span
+                className={classes.scNum}
+                style={{ background: scNumberBg(n) }}
+              >
+                {n}
+              </span>
+            )}
+            <span className={classes.primary}>Played {name ?? "strategy card"}</span>
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
     }
 
     case "SC_PICKED": {
       const n = num(p, "scNumber");
       return (
-        <div className={classes.headline}>
-          {n !== undefined && (
-            <span
-              className={classes.scNum}
-              style={{
-                background: "rgba(148,163,184,0.18)",
-                color: "var(--mantine-color-gray-3)",
-              }}
-            >
-              {n}
-            </span>
-          )}
-          <span className={classes.subline}>picked strategy card</span>
-        </div>
+        <>
+          <div className={classes.headline}>
+            {n !== undefined && (
+              <span
+                className={classes.scNum}
+                style={{
+                  background: "rgba(148,163,184,0.18)",
+                  color: "var(--mantine-color-gray-3)",
+                }}
+              >
+                {n}
+              </span>
+            )}
+            <span className={classes.subline}>picked strategy card</span>
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
     }
 
@@ -210,15 +223,18 @@ function EventBody({ event }: { event: GameEvent }) {
             ? "oklch(0.7 0.14 90)"
             : "oklch(0.68 0.15 145)";
       return (
-        <div className={classes.headline}>
-          <span className={classes.trophy}>
-            <IconTargetArrow size={14} stroke={2} />
-          </span>
-          <TypeBadge label={category} hue={hue} />
-          <span className={classes.primary}>
-            {id ? resolveObjectiveName(id) : "Scored objective"}
-          </span>
-        </div>
+        <>
+          <div className={classes.headline}>
+            <span className={classes.trophy}>
+              <IconTargetArrow size={14} stroke={2} />
+            </span>
+            <TypeBadge label={category} hue={hue} />
+            <span className={classes.primary}>
+              {id ? resolveObjectiveName(id) : "Scored objective"}
+            </span>
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
     }
 
@@ -240,6 +256,7 @@ function EventBody({ event }: { event: GameEvent }) {
             {outcome && <span>→ {prettifyId(outcome)}</span>}
             {summary && <span>· {summary}</span>}
           </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
     }
@@ -249,24 +266,30 @@ function EventBody({ event }: { event: GameEvent }) {
       const to = str(p, "to");
       const items = Array.isArray(p.items) ? (p.items as string[]) : [];
       return (
-        <div className={classes.headline}>
-          {from && <CircularFactionIcon faction={from} size={16} />}
-          <span className={classes.transactionArrow}>
-            <IconArrowsLeftRight size={13} stroke={2} />
-          </span>
-          {to && <CircularFactionIcon faction={to} size={16} />}
-          <span className={classes.subline}>
-            {items.length} item{items.length === 1 ? "" : "s"}
-          </span>
-        </div>
+        <>
+          <div className={classes.headline}>
+            {from && <CircularFactionIcon faction={from} size={16} />}
+            <span className={classes.transactionArrow}>
+              <IconArrowsLeftRight size={13} stroke={2} />
+            </span>
+            {to && <CircularFactionIcon faction={to} size={16} />}
+            <span className={classes.subline}>
+              {items.length} item{items.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
     }
 
     default:
       return (
-        <div className={classes.headline}>
-          <span className={classes.primary}>{prettifyId(event.archetype)}</span>
-        </div>
+        <>
+          <div className={classes.headline}>
+            <span className={classes.primary}>{prettifyId(event.archetype)}</span>
+          </div>
+          <EventDescription>{eventDescription(p)}</EventDescription>
+        </>
       );
   }
 }

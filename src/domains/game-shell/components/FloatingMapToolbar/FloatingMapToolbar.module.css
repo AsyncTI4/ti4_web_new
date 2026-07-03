@@ -1,11 +1,10 @@
 .toolbar {
   position: fixed;
-  top: 45%;
+  top: 163px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: var(--z-floating-toolbar);
-  transform: translateY(-50%);
   transition: right 0.1s ease;
 }
 
@@ -37,9 +36,9 @@
 
 .panel {
   position: fixed;
-  top: max(170px, 15vh);
+  top: 266px;
   width: min(320px, calc(100vw - 96px));
-  max-height: 70vh;
+  max-height: calc(100vh - 282px);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: var(--z-floating-panel);

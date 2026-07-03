@@ -1,5 +1,4 @@
-import { useEffect, useId, useState } from "react";
-import { useParams } from "react-router-dom";
+import { type ReactNode, useEffect, useId, useState } from "react";
 import {
   ActionIcon,
   Box,
@@ -9,51 +8,37 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import { IconHistory, IconHourglassHigh } from "@tabler/icons-react";
-import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
+import { IconCards, IconHistory } from "@tabler/icons-react";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
-import { useGameState } from "@/hooks/useGameState";
 import classes from "./FloatingMapToolbar.module.css";
 
-type FloatingPanel = "gameState" | "events";
+type FloatingPanel = "events" | "cards";
 
 type Props = {
   rightOffset: string;
   isDragging?: boolean;
+  cardsPanel?: ReactNode;
 };
 
 const panels: Record<FloatingPanel, { title: string; label: string }> = {
-  gameState: { title: "Game State", label: "Game state" },
   events: { title: "Event Log", label: "Events" },
+  cards: { title: "Your Cards", label: "Cards" },
 };
 
-function PanelContent({ panel }: { panel: FloatingPanel }) {
-  const params = useParams<{ mapid: string }>();
-  const gameId = params.mapid ?? "";
-  const { data: gameState } = useGameState(gameId);
+const panelTopByType: Record<FloatingPanel, string> = {
+  events: "163px",
+  cards: "215px",
+};
 
-  if (panel === "gameState") {
-    if (!gameState?.phase || gameState.phase === "unknown") {
-      return (
-        <Text size="sm" c="dimmed">
-          No live game state available for this game.
-        </Text>
-      );
-    }
-
-    return <GameStatePanel />;
-  }
-
-  return <GameEventPanel />;
-}
-
-export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
+export function FloatingMapToolbar({
+  rightOffset,
+  isDragging = false,
+  cardsPanel,
+}: Props) {
   const [openPanel, setOpenPanel] = useState<FloatingPanel | null>(null);
-  const [renderedPanel, setRenderedPanel] = useState<FloatingPanel>("gameState");
   const panelId = useId();
 
   const togglePanel = (panel: FloatingPanel) => {
-    setRenderedPanel(panel);
     setOpenPanel((current) => (current === panel ? null : panel));
   };
 
@@ -71,6 +56,7 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
   }, [openPanel]);
 
   const transitionClassName = isDragging ? classes.noTransition : undefined;
+  const renderedPanel = openPanel ?? "events";
 
   return (
     <>
@@ -78,22 +64,6 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
         className={`${classes.toolbar} ${transitionClassName ?? ""}`}
         style={{ right: rightOffset }}
       >
-        <Tooltip label={panels.gameState.label} position="left" withArrow>
-          <ActionIcon
-            aria-label={panels.gameState.label}
-            aria-controls={panelId}
-            aria-expanded={openPanel === "gameState"}
-            radius="xl"
-            variant="subtle"
-            className={`${classes.button} ${
-              openPanel === "gameState" ? classes.buttonActive : ""
-            }`}
-            onClick={() => togglePanel("gameState")}
-          >
-            <IconHourglassHigh size={22} stroke={1.8} />
-          </ActionIcon>
-        </Tooltip>
-
         <Tooltip label={panels.events.label} position="left" withArrow>
           <ActionIcon
             aria-label={panels.events.label}
@@ -101,14 +71,28 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
             aria-expanded={openPanel === "events"}
             radius="xl"
             variant="subtle"
-            className={`${classes.button} ${
-              openPanel === "events" ? classes.buttonActive : ""
-            }`}
+            className={`${classes.button} ${openPanel === "events" ? classes.buttonActive : ""}`}
             onClick={() => togglePanel("events")}
           >
             <IconHistory size={22} stroke={1.8} />
           </ActionIcon>
         </Tooltip>
+
+        {cardsPanel && (
+          <Tooltip label={panels.cards.label} position="left" withArrow>
+            <ActionIcon
+              aria-label={panels.cards.label}
+              aria-controls={panelId}
+              aria-expanded={openPanel === "cards"}
+              radius="xl"
+              variant="subtle"
+              className={`${classes.button} ${openPanel === "cards" ? classes.buttonActive : ""}`}
+              onClick={() => togglePanel("cards")}
+            >
+              <IconCards size={22} stroke={1.8} />
+            </ActionIcon>
+          </Tooltip>
+        )}
       </Box>
 
       <Transition
@@ -123,7 +107,9 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
             className={`${classes.panel} ${transitionClassName ?? ""}`}
             style={{
               ...transitionStyles,
+              top: panelTopByType[renderedPanel],
               right: `calc(${rightOffset} + 52px)`,
+              maxHeight: `calc(100vh - ${panelTopByType[renderedPanel]} - 16px)`,
             }}
           >
             <Group
@@ -144,7 +130,7 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
             </Group>
 
             <Box className={classes.panelBody}>
-              <PanelContent panel={renderedPanel} />
+              {renderedPanel === "cards" ? cardsPanel : <GameEventPanel />}
             </Box>
           </Box>
         )}

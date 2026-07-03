@@ -31,6 +31,17 @@
   opacity: 0;
 }
 
+.gameStateOverlay {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  z-index: 3600;
+  background: var(--mantine-color-dark-9, #05070d);
+  border-radius: 10px;
+}
+
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;
@@ -131,6 +142,7 @@
 }
 
 .mapContainer {
+  position: relative;
   display: flex;
   height: 100%;
   background: var(--main-bg);

@@ -19,7 +19,7 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/domains/player/components/composition/PlayerCardMobile";
 import { SecretHand } from "@/domains/game-shell/components/SecretHand";
 import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
-import secretHandClasses from "@/domains/game-shell/components/SecretHand/SecretHand.module.css";
+import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
 import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
@@ -84,8 +84,6 @@ export function PannableMapView({ gameId }: Props) {
     handData,
     isHandLoading,
     handError,
-    isSecretHandCollapsed,
-    toggleSecretHandCollapsed,
   } = useSecretHandPanel({ gameId, playerData: gameData?.playerData });
 
   const {
@@ -131,9 +129,33 @@ export function PannableMapView({ gameId }: Props) {
   const playerAreaStyles = isMobileDevice()
     ? { width: "max-content" as const, minWidth: "1300px" }
     : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
+  const showFloatingMapToolbar = !isMobileDevice();
+
   return (
     <Box className={classes.mapContainer}>
-      <FloatingMapToolbar rightOffset="12px" />
+      <Box className={classes.gameStateOverlay}>
+        <GameStatePanel />
+      </Box>
+      {showFloatingMapToolbar && (
+        <FloatingMapToolbar
+          rightOffset="35px"
+          cardsPanel={
+            !DISABLE_PLAYER_AREA_RENDERING && canViewSecretHand ? (
+              <SecretHand
+                isCollapsed={false}
+                onToggle={() => {}}
+                hideHeader
+                handData={handData}
+                isLoading={isHandLoading}
+                error={handError}
+                playerData={gameData?.playerData}
+                activeArea={null}
+                userDiscordId={userDiscordId ?? undefined}
+              />
+            ) : undefined
+          }
+        />
+      )}
 
       <Box
         className={`dragscroll ${classes.mapArea}`}
@@ -187,22 +209,6 @@ export function PannableMapView({ gameId }: Props) {
               tooltipPlanet={tooltipPlanet}
             />
 
-            {!DISABLE_PLAYER_AREA_RENDERING &&
-              canViewSecretHand &&
-              !isMobileDevice() && (
-                <Box className={secretHandClasses.pannableWrapper}>
-                  <SecretHand
-                    isCollapsed={isSecretHandCollapsed}
-                    onToggle={toggleSecretHandCollapsed}
-                    handData={handData}
-                    isLoading={isHandLoading}
-                    error={handError}
-                    playerData={gameData?.playerData}
-                    activeArea={null}
-                    userDiscordId={userDiscordId ?? undefined}
-                  />
-                </Box>
-              )}
           </>
         )}
 
