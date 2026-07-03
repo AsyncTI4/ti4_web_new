@@ -74,6 +74,33 @@
   gap: 2px;
   min-width: 0;
 }
+.cardEventButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+  padding: 3px 5px;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.cardEventButton:hover {
+  background: rgba(96, 165, 250, 0.08);
+}
+.cardEventButton:hover .primary {
+  color: var(--mantine-color-blue-2);
+}
+.cardEventButton:focus-visible {
+  outline: 2px solid var(--mantine-color-blue-5);
+  outline-offset: 2px;
+}
 .headline {
   display: flex;
   align-items: center;
@@ -102,10 +129,6 @@
   font-size: 11px;
   line-height: 1.35;
   color: var(--mantine-color-gray-4);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .combat {
   color: var(--mantine-color-red-4);

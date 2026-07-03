@@ -8,9 +8,14 @@ import {
   IconTrophy,
 } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
 import type { GameEvent } from "@/entities/data/types";
 import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
+import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
+import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
+import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
+import { TechCard } from "@/domains/player/components/Tech";
 import {
   formatAbsoluteTime,
   formatRelativeTime,
@@ -29,7 +34,7 @@ const MAX_VISIBLE = 150;
 
 // Colored type-badge config per card archetype (distinct hues).
 const CARD_BADGES: Record<string, { label: string; hue: string }> = {
-  CARD_PLAY_ACTION_CARD: { label: "AC", hue: "oklch(0.62 0.19 250)" },
+  CARD_PLAY_ACTION_CARD: { label: "AC Played", hue: "oklch(0.62 0.19 250)" },
   CARD_PLAY_PROMISSORY_NOTE: { label: "PN", hue: "oklch(0.65 0.16 300)" },
   CARD_PLAY_AGENT: { label: "Agent", hue: "oklch(0.68 0.15 190)" },
   CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.68 0.19 30)" },
@@ -87,6 +92,46 @@ function EventDescription({ children }: { children?: string }) {
   return <div className={classes.description}>{children}</div>;
 }
 
+function cardEventTitle(archetype: string, cardName: string): string {
+  if (archetype === "CARD_PLAY_AGENT" || archetype === "CARD_PLAY_TECH_EXHAUST") {
+    return `Exhausted ${cardName}`;
+  }
+  return cardName;
+}
+
+function strategyCardName(payload: Record<string, unknown>, initiative?: number): string {
+  const explicitName = str(payload, "scName") ?? str(payload, "strategyCardName");
+  if (explicitName) return explicitName;
+
+  if (initiative === undefined) return "strategy card";
+  return getStrategyCardByInitiative(initiative)?.name ?? "strategy card";
+}
+
+function EventPopover({
+  children,
+  details,
+}: {
+  children: React.ReactNode;
+  details: React.ReactNode;
+}) {
+  const [opened, setOpened] = useState(false);
+
+  return (
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
+        <button
+          type="button"
+          className={classes.cardEventButton}
+          onClick={() => setOpened(true)}
+        >
+          {children}
+        </button>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown>{details}</SmoothPopover.Dropdown>
+    </SmoothPopover>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Row body per archetype. Returns null for events we deliberately drop.
 // ---------------------------------------------------------------------------
@@ -95,17 +140,46 @@ function EventBody({ event }: { event: GameEvent }) {
 
   if (event.archetype in CARD_BADGES) {
     const { label, hue } = CARD_BADGES[event.archetype];
+    const cardId = str(p, "cardId") ?? "";
     const cardName =
-      str(p, "cardName") ?? resolveCardName(event.archetype, str(p, "cardId") ?? "");
-    return (
+      str(p, "cardName") ?? resolveCardName(event.archetype, cardId);
+    const content = (
       <>
         <div className={classes.headline}>
           <TypeBadge label={label} hue={hue} />
-          <span className={classes.primary}>{cardName}</span>
+          <span className={classes.primary}>
+            {cardEventTitle(event.archetype, cardName)}
+          </span>
         </div>
         <EventDescription>{eventDescription(p)}</EventDescription>
       </>
     );
+
+    if (event.archetype === "CARD_PLAY_ACTION_CARD" && cardId) {
+      return (
+        <EventPopover details={<ActionCardDetailsCard actionCardId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    if (event.archetype === "CARD_PLAY_AGENT" && cardId) {
+      return (
+        <EventPopover details={<LeaderDetailsCard leaderId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    if (event.archetype === "CARD_PLAY_TECH_EXHAUST" && cardId) {
+      return (
+        <EventPopover details={<TechCard techId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    return content;
   }
 
   switch (event.archetype) {
@@ -117,7 +191,7 @@ function EventBody({ event }: { event: GameEvent }) {
       const planetNames = planets ? resolvePlanetsList(planets) : [];
       const headline = (
         <div className={classes.headline}>
-          <span className={classes.primary}>Tactical action</span>
+          <span className={classes.primary}>Finished tactical action</span>
           {system && (
             <span className={classes.sysChip}>{resolveSystemName(system)}</span>
           )}
@@ -192,21 +266,11 @@ function EventBody({ event }: { event: GameEvent }) {
 
     case "SC_PICKED": {
       const n = num(p, "scNumber");
+      const name = strategyCardName(p, n);
       return (
         <>
           <div className={classes.headline}>
-            {n !== undefined && (
-              <span
-                className={classes.scNum}
-                style={{
-                  background: "rgba(148,163,184,0.18)",
-                  color: "var(--mantine-color-gray-3)",
-                }}
-              >
-                {n}
-              </span>
-            )}
-            <span className={classes.subline}>picked strategy card</span>
+            <span className={classes.primary}>Picked {name}</span>
           </div>
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
