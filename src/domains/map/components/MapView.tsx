@@ -6,7 +6,6 @@ import { LeftSidebar } from "@/domains/game-shell/components/LeftSidebar";
 import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";
 import { PanelToggleButton } from "@/domains/game-shell/components/PanelToggleButton";
 import { RightSidebar } from "@/domains/game-shell/components/RightSidebar";
-import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
@@ -196,13 +195,6 @@ export function MapView({
         >
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
-
-        {!embedded && (
-          <FloatingMapToolbar
-            rightOffset={floatingControlsRightOffset}
-            isDragging={isDragging}
-          />
-        )}
 
         <InteractiveMapRenderer
           layout="panels"
