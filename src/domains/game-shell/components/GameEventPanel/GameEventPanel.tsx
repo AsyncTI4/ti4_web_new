@@ -23,6 +23,7 @@ import {
   resolveAgendaName,
   resolveCardName,
   resolveObjectiveName,
+  resolvePlanetName,
   resolvePlanetsList,
   resolveSystemName,
   resolveTechName,
@@ -105,6 +106,132 @@ function strategyCardName(payload: Record<string, unknown>, initiative?: number)
 
   if (initiative === undefined) return "strategy card";
   return getStrategyCardByInitiative(initiative)?.name ?? "strategy card";
+}
+
+function pluralize(count: number, singular: string, plural = `${singular}s`): string {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+type TransactionItem = {
+  sender: string;
+  receiver: string;
+  type: string;
+  detail: string;
+};
+
+type TransactionSide = {
+  sender: string;
+  items: string[];
+};
+
+function parseTransactionItem(item: string): TransactionItem | null {
+  const parts = item.split("_");
+  if (parts.length < 4) return null;
+  const sender = parts[0].replace(/^sending/, "");
+  const receiver = parts[1].replace(/^receiving/, "");
+  const type = parts[2];
+  const detail = parts.slice(3).join("_");
+  if (!sender || !receiver || !type || !detail) return null;
+  return { sender, receiver, type, detail };
+}
+
+function genericCount(detail: string): { label: string; count: number } {
+  const match = detail.match(/^(.*?)(\d+)$/);
+  if (!match) return { label: detail, count: 1 };
+  return { label: match[1], count: Number(match[2]) };
+}
+
+function formatTransactionItem(item: TransactionItem): string {
+  const { type, detail } = item;
+
+  switch (type) {
+    case "TGs":
+      return pluralize(Number(detail), "trade good");
+    case "Comms":
+      return pluralize(Number(detail), "commodity", "commodities");
+    case "ACs": {
+      const { label, count } = genericCount(detail);
+      return label === "generic"
+        ? pluralize(count, "action card")
+        : resolveCardName("CARD_PLAY_ACTION_CARD", detail);
+    }
+    case "PNs": {
+      const { count } = genericCount(detail);
+      return pluralize(count, "promissory note");
+    }
+    case "SOs": {
+      const { count } = genericCount(detail);
+      return pluralize(count, "secret objective");
+    }
+    case "Frags": {
+      const { label, count } = genericCount(detail);
+      return `${pluralize(count, `${prettifyId(label)} fragment`)}`;
+    }
+    case "SendDebt":
+      return pluralize(Number(detail), "debt token");
+    case "ClearDebt":
+      return `cleared ${pluralize(Number(detail), "debt token")}`;
+    case "Planets":
+    case "AlliancePlanets":
+    case "dmz":
+      return resolvePlanetName(detail.replace(/exhausted|refreshed/g, ""));
+    case "Technology":
+      return resolveTechName(detail);
+    case "shipOrders":
+    case "starCharts":
+      return resolveCardName("CARD_PLAY_RELIC", detail);
+    case "action":
+      return `${prettifyId(detail)} action`;
+    case "details":
+      return detail.replace(/fin777/g, " ");
+    default:
+      return prettifyId(detail || type);
+  }
+}
+
+function transactionSides(rawItems: string[], from?: string, to?: string): TransactionSide[] {
+  const parsed = rawItems
+    .map(parseTransactionItem)
+    .filter((item): item is TransactionItem => item !== null);
+  if (parsed.length === 0) return [];
+
+  const bySender = new Map<string, string[]>();
+  for (const item of parsed) {
+    const formatted = formatTransactionItem(item);
+    const existing = bySender.get(item.sender) ?? [];
+    existing.push(formatted);
+    bySender.set(item.sender, existing);
+  }
+
+  const orderedSenders = [from, to]
+    .filter((sender): sender is string => !!sender && bySender.has(sender));
+  for (const sender of bySender.keys()) {
+    if (!orderedSenders.includes(sender)) orderedSenders.push(sender);
+  }
+
+  return orderedSenders.map((sender) => ({
+    sender,
+    items: bySender.get(sender) ?? [],
+  }));
+}
+
+function TransactionItems({ sides }: { sides: TransactionSide[] }) {
+  if (sides.length === 0) return null;
+
+  return (
+    <div className={classes.transactionGrid}>
+      {sides.map((side) => (
+        <div key={side.sender} className={classes.transactionSide}>
+          <div className={classes.transactionSender}>{prettifyId(side.sender)}</div>
+          <ul className={classes.transactionList}>
+            {side.items.map((item, index) => (
+              <li key={`${side.sender}-${item}-${index}`}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function EventPopover({
@@ -329,6 +456,7 @@ function EventBody({ event }: { event: GameEvent }) {
       const from = str(p, "from");
       const to = str(p, "to");
       const items = Array.isArray(p.items) ? (p.items as string[]) : [];
+      const sides = transactionSides(items, from, to);
       return (
         <>
           <div className={classes.headline}>
@@ -341,7 +469,11 @@ function EventBody({ event }: { event: GameEvent }) {
               {items.length} item{items.length === 1 ? "" : "s"}
             </span>
           </div>
-          <EventDescription>{eventDescription(p)}</EventDescription>
+          {sides.length > 0 ? (
+            <TransactionItems sides={sides} />
+          ) : (
+            <EventDescription>{eventDescription(p)}</EventDescription>
+          )}
         </>
       );
     }

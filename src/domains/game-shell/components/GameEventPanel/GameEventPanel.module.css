@@ -233,6 +233,35 @@
   display: inline-flex;
   align-items: center;
 }
+.transactionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--mantine-color-gray-4);
+}
+.transactionSide {
+  min-width: 0;
+}
+.transactionSender {
+  margin-bottom: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--mantine-color-gray-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.transactionList {
+  margin: 0;
+  padding-left: 14px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.transactionList li {
+  margin: 0;
+}
 
 /* States --------------------------------------------------------------- */
 .stateBox {
