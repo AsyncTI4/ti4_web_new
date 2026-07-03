@@ -46,9 +46,6 @@ export function usePlayerDataSocket(gameId: string) {
       void queryClient.invalidateQueries({
         queryKey: ["playerHand", gameId],
       });
-      void queryClient.invalidateQueries({
-        queryKey: ["gameState", gameId],
-      });
     },
     onStateMessage,
     () => {

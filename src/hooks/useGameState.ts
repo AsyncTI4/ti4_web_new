@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GameState, GameStateMessage } from "@/entities/data/types";
 import { config } from "@/config";
 
-// RFC 7386-style merge: null deletes/nulls, arrays/scalars replace, objects recurse.
+// RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
 export function deepMergePatch<T>(base: T, patch: unknown): T {
   if (patch === null || typeof patch !== "object" || Array.isArray(patch))
     return patch as T;
@@ -15,7 +15,11 @@ export function deepMergePatch<T>(base: T, patch: unknown): T {
   for (const [key, value] of Object.entries(
     patch as Record<string, unknown>
   )) {
-    result[key] = value === null ? null : deepMergePatch(result[key], value);
+    if (value === null) {
+      delete result[key];
+    } else {
+      result[key] = deepMergePatch(result[key], value);
+    }
   }
   return result as T;
 }
@@ -47,20 +51,17 @@ export function useGameStatePatcher(gameId: string) {
       const key = ["gameState", gameId];
       const cached = queryClient.getQueryData<GameState>(key);
 
-      if (msg.full || cached === undefined) {
+      if (msg.full) {
         queryClient.setQueryData(key, msg.patch as GameState);
         lastSeqRef.current = msg.seq;
         return;
       }
-      if (
-        lastSeqRef.current !== null &&
-        msg.seq === lastSeqRef.current + 1
-      ) {
+      if (cached !== undefined && lastSeqRef.current !== null && msg.seq === lastSeqRef.current + 1) {
         queryClient.setQueryData(key, deepMergePatch(cached, msg.patch));
         lastSeqRef.current = msg.seq;
         return;
       }
-      // Gap or seq reset (bot restart): adopt this seq as the new baseline and resync once.
+      // Gap, seq reset, or delta before initial fetch: adopt seq as baseline and resync once.
       lastSeqRef.current = msg.seq;
       void queryClient.invalidateQueries({ queryKey: key });
     },

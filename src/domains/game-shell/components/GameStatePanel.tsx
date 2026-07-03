@@ -135,7 +135,7 @@ function ElapsedTimer({ turnStartedAt }: { turnStartedAt: number }) {
   }, []);
   return (
     <Text size="xs" c="gray.4" ff="monospace">
-      {formatElapsed(now - turnStartedAt)}
+      {formatElapsed(Math.max(0, now - turnStartedAt))}
     </Text>
   );
 }
