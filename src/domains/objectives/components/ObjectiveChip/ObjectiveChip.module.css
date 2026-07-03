@@ -49,11 +49,11 @@
 /* Base chip */
 .chip {
   grid-column: span 1;
-  height: 50px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 3px;
   box-sizing: border-box;
   position: relative;
   isolation: isolate;
@@ -165,10 +165,10 @@
 /* Warning icon */
 .warningIcon {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 28px;
-  height: 28px;
+  top: -4px;
+  right: -4px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
   background:
     radial-gradient(circle at 35% 28%, rgba(254, 240, 138, 0.94), rgba(161, 98, 7, 0.9));
@@ -185,9 +185,9 @@
 /* Progress indicator */
 .progress {
   position: absolute;
-  bottom: 2px;
-  right: 4px;
-  font-size: 11px;
+  bottom: 0;
+  right: 2px;
+  font-size: 9px;
   font-weight: 800;
   color: rgba(255, 255, 255, 1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.8);

@@ -325,6 +325,85 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
+  gameState?: GameState;
+  /** Increments whenever new game events are available; used to invalidate the events query without polling. */
+  eventSequence?: number;
+};
+
+export type GameEventArchetype =
+  | "TACTICAL_ACTION"
+  | "TURN"
+  | "CARD_PLAY_ACTION_CARD"
+  | "CARD_PLAY_PROMISSORY_NOTE"
+  | "CARD_PLAY_AGENT"
+  | "CARD_PLAY_HERO"
+  | "CARD_PLAY_RELIC"
+  | "CARD_PLAY_TECH_EXHAUST"
+  | "CARD_PLAY_BREAKTHROUGH"
+  | "CARD_PLAY_ABILITY"
+  | "TECH_RESEARCHED"
+  | "SC_PLAYED"
+  | "SC_PICKED"
+  | "OBJECTIVE_SCORED"
+  | "AGENDA_RESOLVED"
+  | "TRANSACTION"
+  | "GAME_ENDED";
+
+export type GameEvent = {
+  seq: number;
+  archetype: GameEventArchetype | (string & {});
+  round: number;
+  phase: string;
+  faction: string | null;
+  timestamp: number;
+  payload: Record<string, unknown>;
+};
+
+export type GamePhase =
+  | "unknown"
+  | "setup.draft"
+  | "setup.players"
+  | "strategy"
+  | "action"
+  | "status.scoring"
+  | "status.homework"
+  | "agenda.readyToFlip"
+  | "agenda.whens"
+  | "agenda.afters"
+  | "agenda.voting"
+  | "agenda.resolving"
+  | "finished";
+
+export type GameStateAgenda = {
+  id: string;
+  startVoteCounts: Record<string, number>;
+  outcomeVoteCounts: Record<string, number>;
+};
+
+export type GameStateCombat = {
+  system: string | null;
+  unitHolder: string | null;
+  round: number | null;
+  participantColors: string[];
+};
+
+export type GameState = {
+  phase: GamePhase;
+  activePlayer: string | null;
+  turnStartedAt: number | null;
+  winner: string | null;
+  agenda: GameStateAgenda | null;
+  activeSystem: string | null;
+  activeCombat: GameStateCombat | null;
+};
+
+export type GameStateMessage = {
+  type: "gameState";
+  seq: number;
+  timestamp: number;
+  full: boolean;
+  /** Deep-partial merge patch of the full web-data document (PlayerDataResponse); the whole document when full=true. */
+  patch: unknown;
 };
 
 export type BreakthroughData = {

@@ -1,0 +1,69 @@
+.toolbar {
+  position: fixed;
+  top: 163px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: var(--z-floating-toolbar);
+  transition: right 0.1s ease;
+}
+
+.button {
+  width: 44px;
+  height: 44px;
+  color: var(--mantine-color-gray-3);
+  background: linear-gradient(135deg, rgba(14, 24, 40, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border: 1px solid var(--mantine-color-dark-4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.button:hover {
+  color: var(--mantine-color-gray-1);
+  background: linear-gradient(135deg, rgba(14, 24, 40, 1) 0%, rgba(30, 41, 59, 0.95) 100%);
+  border-color: var(--mantine-color-blue-5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.buttonActive {
+  color: var(--mantine-color-blue-1);
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.92) 0%, rgba(30, 41, 59, 0.96) 100%);
+  border-color: var(--mantine-color-blue-4);
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.22), 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.panel {
+  position: fixed;
+  top: 266px;
+  width: min(320px, calc(100vw - 96px));
+  max-height: calc(100vh - 282px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: var(--z-floating-panel);
+  color: var(--mantine-color-gray-1);
+  background: var(--left-sidebar-bg, var(--sidebar-bg));
+  border: var(--sidebar-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(var(--sidebar-blur, 8px));
+}
+
+.panelHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--sidebar-border);
+  backdrop-filter: blur(var(--sidebar-blur, 8px));
+}
+
+.panelBody {
+  padding: 12px;
+}
+
+.noTransition {
+  transition: none !important;
+}

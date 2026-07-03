@@ -1,8 +1,8 @@
 .token {
-  width: 36px;
-  height: 36px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
-  border: 3px solid var(--mantine-color-yellow-2);
+  border: 2px solid var(--mantine-color-yellow-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,25 +22,25 @@
 .number {
   color: rgba(255, 255, 255, 0.98);
   font-weight: 900;
-  font-size: 14px;
-  margin-bottom: 1px;
+  font-size: 12px;
+  margin-bottom: 0;
 }
 
 .label {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 700;
-  font-size: 8px;
-  letter-spacing: 0.5px;
+  font-size: 7px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
 }
 
 
 /* Imperial styling: purple background, purple border, Slider font with '8' */
 .imperialToken {
-  width: 36px;
-  height: 36px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
-  border: 3px solid var(--mantine-color-violet-2);
+  border: 2px solid var(--mantine-color-violet-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +51,7 @@
 .imperialNumber {
   color: rgba(255, 255, 255, 0.98);
   font-weight: 900;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Slider', system-ui, -apple-system, sans-serif;
   line-height: 1;
 }
@@ -60,12 +60,12 @@
 .imperialContainer {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
 }
 
 .secretIcon {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   filter: grayscale(100%);
 }
 

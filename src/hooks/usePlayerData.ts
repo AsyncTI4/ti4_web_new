@@ -1,11 +1,34 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { PlayerDataResponse } from "@/entities/data/types";
+import { PlayerDataResponse, GameStateMessage } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { config } from "@/config";
 
-async function fetchPlayerData(apiUrl: string): Promise<PlayerDataResponse> {
-  const response = await fetch(apiUrl);
+// RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
+export function deepMergePatch<T>(base: T, patch: unknown): T {
+  if (patch === null || typeof patch !== "object" || Array.isArray(patch))
+    return patch as T;
+  const baseObj =
+    base !== null && typeof base === "object" && !Array.isArray(base)
+      ? (base as Record<string, unknown>)
+      : {};
+  const result: Record<string, unknown> = { ...baseObj };
+  for (const [key, value] of Object.entries(
+    patch as Record<string, unknown>
+  )) {
+    if (value === null) {
+      delete result[key];
+    } else {
+      result[key] = deepMergePatch(result[key], value);
+    }
+  }
+  return result as T;
+}
+
+export async function fetchPlayerData(
+  gameId: string
+): Promise<PlayerDataResponse> {
+  const response = await fetch(`${config.api.gameDataUrl}/${gameId}/web-data`);
   if (!response.ok) {
     throw new Error(
       `Failed to fetch player data: ${response.status} ${response.statusText}`
@@ -14,20 +37,61 @@ async function fetchPlayerData(apiUrl: string): Promise<PlayerDataResponse> {
   return response.json() as Promise<PlayerDataResponse>;
 }
 
-export function usePlayerData(gameId: string) {
-  const apiUrl = `${config.api.gameDataUrl}/${gameId}/web-data`;
-
-  return useQuery<PlayerDataResponse>({
+export function usePlayerData<TData = PlayerDataResponse>(
+  gameId: string,
+  options?: { select?: (data: PlayerDataResponse) => TData }
+) {
+  return useQuery<PlayerDataResponse, Error, TData>({
     queryKey: ["playerData", gameId],
-    queryFn: () => fetchPlayerData(apiUrl),
+    queryFn: () => fetchPlayerData(gameId),
     retry: false,
+    select: options?.select,
   });
+}
+
+/**
+ * Applies streamed merge patches to the full web-data document (the
+ * ["playerData"] query). The server diffs the entire web payload, so every
+ * consumer of that document — player areas, objectives, tiles, the game-state
+ * panel — updates from this one stream. Give the handler to useGameSocket.
+ */
+export function useWebDataPatcher(gameId: string) {
+  const queryClient = useQueryClient();
+  const lastSeqRef = useRef<number | null>(null);
+
+  return useCallback(
+    (msg: GameStateMessage) => {
+      const key = ["playerData", gameId];
+      const cached = queryClient.getQueryData<PlayerDataResponse>(key);
+
+      if (msg.full) {
+        queryClient.setQueryData(key, msg.patch as PlayerDataResponse);
+        lastSeqRef.current = msg.seq;
+        return;
+      }
+      if (
+        cached !== undefined &&
+        lastSeqRef.current !== null &&
+        msg.seq === lastSeqRef.current + 1
+      ) {
+        queryClient.setQueryData(key, deepMergePatch(cached, msg.patch));
+        lastSeqRef.current = msg.seq;
+        return;
+      }
+      // Gap, seq reset, or delta before initial fetch: adopt seq as baseline and resync once.
+      lastSeqRef.current = msg.seq;
+      void queryClient.invalidateQueries({ queryKey: key });
+    },
+    [gameId, queryClient]
+  );
 }
 
 export function usePlayerDataSocket(gameId: string) {
   const { data, isLoading, isError, refetch } = usePlayerData(gameId);
   const queryClient = useQueryClient();
   const hasConnectedBefore = useRef(false);
+  const hasSocketConnectedBefore = useRef(false);
+  const onStateMessage = useWebDataPatcher(gameId);
 
   const { readyState, reconnect, isReconnecting } = useGameSocket(
     gameId,
@@ -42,6 +106,16 @@ export function usePlayerDataSocket(gameId: string) {
       void refetch();
       void queryClient.invalidateQueries({
         queryKey: ["playerHand", gameId],
+      });
+    },
+    onStateMessage,
+    () => {
+      if (!hasSocketConnectedBefore.current) {
+        hasSocketConnectedBefore.current = true;
+        return;
+      }
+      void queryClient.invalidateQueries({
+        queryKey: ["playerData", gameId],
       });
     }
   );
