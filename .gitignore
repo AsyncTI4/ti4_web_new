@@ -33,3 +33,5 @@ public/tiles
 
 # .idea project files
 .idea/
+# Git worktrees
+.worktrees/
