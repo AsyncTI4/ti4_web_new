@@ -371,7 +371,8 @@ export type GameStateMessage = {
   seq: number;
   timestamp: number;
   full: boolean;
-  patch: Partial<GameState> | GameState;
+  /** Deep-partial merge patch of the full web-data document (PlayerDataResponse); the whole document when full=true. */
+  patch: unknown;
 };
 
 export type BreakthroughData = {
