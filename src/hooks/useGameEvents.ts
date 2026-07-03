@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { config } from "@/config";
 import type { GameEvent, PlayerDataResponse } from "@/entities/data/types";
 import { usePlayerData } from "./usePlayerData";
@@ -22,23 +21,17 @@ async function fetchGameEvents(gameId: string): Promise<GameEvent[]> {
  * don't re-render — and invalidate the events query when it increments.
  */
 export function useGameEvents(gameId: string) {
-  const queryClient = useQueryClient();
-
   const { data: eventSequence } = usePlayerData(gameId, {
     select: (data: PlayerDataResponse) => data.eventSequence ?? 0,
   });
 
   const query = useQuery<GameEvent[]>({
-    queryKey: ["gameEvents", gameId],
+    queryKey: ["gameEvents", gameId, eventSequence],
     queryFn: () => fetchGameEvents(gameId),
-    enabled: gameId.length > 0,
+    enabled: gameId.length > 0 && eventSequence !== undefined,
     retry: false,
+    staleTime: Infinity,
   });
-
-  useEffect(() => {
-    if (eventSequence === undefined) return;
-    void queryClient.invalidateQueries({ queryKey: ["gameEvents", gameId] });
-  }, [eventSequence, gameId, queryClient]);
 
   return query;
 }
