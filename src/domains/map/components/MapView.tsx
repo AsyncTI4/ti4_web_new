@@ -6,6 +6,7 @@ import { LeftSidebar } from "@/domains/game-shell/components/LeftSidebar";
 import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";
 import { PanelToggleButton } from "@/domains/game-shell/components/PanelToggleButton";
 import { RightSidebar } from "@/domains/game-shell/components/RightSidebar";
+import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar/FloatingMapToolbar";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
@@ -130,6 +131,14 @@ export function MapView({
   const showLeftSidebar = !embedded || embeddedSidebar === "left";
   const showRightSidebar = !embedded || showEmbeddedRightSidebar;
   const embeddedRightSidebarWidth = `max(420px, ${sidebarWidth}%)`;
+  const floatingControlsBaseRightOffset = embedded
+    ? showEmbeddedRightSidebar
+      ? embeddedRightSidebarWidth
+      : "0px"
+    : settings.rightPanelCollapsed
+      ? "0px"
+      : `${sidebarWidth}vw`;
+  const floatingControlsRightOffset = `calc(${floatingControlsBaseRightOffset} + 35px)`;
   const hasAutoSelectedFactionRef = useRef(false);
 
   useEffect(() => {
@@ -181,18 +190,19 @@ export function MapView({
         <div
           className={`${classes.zoomControlsDynamic} ${embedded ? classes.zoomControlsEmbedded : ""}`}
           style={{
-            right: embedded
-              ? showEmbeddedRightSidebar
-                ? `calc(${embeddedRightSidebarWidth} + 35px)`
-                : "35px"
-              : settings.rightPanelCollapsed
-                ? "35px"
-                : `calc(${sidebarWidth}vw + 35px)`,
+            right: floatingControlsRightOffset,
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >
           <ZoomControls zoomClass="" hideFitToScreen />
         </div>
+
+        {!embedded && (
+          <FloatingMapToolbar
+            rightOffset={floatingControlsRightOffset}
+            isDragging={isDragging}
+          />
+        )}
 
         <InteractiveMapRenderer
           layout="panels"
