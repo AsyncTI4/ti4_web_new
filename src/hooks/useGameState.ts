@@ -60,8 +60,8 @@ export function useGameStatePatcher(gameId: string) {
         lastSeqRef.current = msg.seq;
         return;
       }
-      // Gap or seq reset (bot restart): resync from the cheap endpoint.
-      lastSeqRef.current = null;
+      // Gap or seq reset (bot restart): adopt this seq as the new baseline and resync once.
+      lastSeqRef.current = msg.seq;
       void queryClient.invalidateQueries({ queryKey: key });
     },
     [gameId, queryClient]

@@ -29,6 +29,7 @@ export function usePlayerDataSocket(gameId: string) {
   const { data, isLoading, isError, refetch } = usePlayerData(gameId);
   const queryClient = useQueryClient();
   const hasConnectedBefore = useRef(false);
+  const hasSocketConnectedBefore = useRef(false);
   const onStateMessage = useGameStatePatcher(gameId);
 
   const { readyState, reconnect, isReconnecting } = useGameSocket(
@@ -49,7 +50,16 @@ export function usePlayerDataSocket(gameId: string) {
         queryKey: ["gameState", gameId],
       });
     },
-    onStateMessage
+    onStateMessage,
+    () => {
+      if (!hasSocketConnectedBefore.current) {
+        hasSocketConnectedBefore.current = true;
+        return;
+      }
+      void queryClient.invalidateQueries({
+        queryKey: ["gameState", gameId],
+      });
+    }
   );
 
   return {

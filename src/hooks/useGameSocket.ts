@@ -15,7 +15,8 @@ export enum SocketReadyState {
 export function useGameSocket(
   gameId: string,
   onRefresh: () => void,
-  onStateMessage?: (msg: GameStateMessage) => void
+  onStateMessage?: (msg: GameStateMessage) => void,
+  onConnect?: () => void
 ) {
   const clientRef = useRef<Client | null>(null);
   const [readyState, setReadyState] = useState<SocketReadyState>(
@@ -32,6 +33,11 @@ export function useGameSocket(
   useEffect(() => {
     onStateMessageRef.current = onStateMessage;
   }, [onStateMessage]);
+
+  const onConnectRef = useRef(onConnect);
+  useEffect(() => {
+    onConnectRef.current = onConnect;
+  }, [onConnect]);
 
   useEffect(() => {
     const brokerURL = config.api.websocketUrl;
@@ -54,6 +60,7 @@ export function useGameSocket(
           console.error("Bad game state message", e);
         }
       });
+      onConnectRef.current?.();
     };
 
     client.onWebSocketClose = () => {

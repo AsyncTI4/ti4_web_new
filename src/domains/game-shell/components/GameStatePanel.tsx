@@ -68,6 +68,13 @@ function formatElapsed(ms: number): string {
   return `${mm}:${ss}`;
 }
 
+function titleCaseWords(value: string): string {
+  return value
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 // Map player color string to a Chip-compatible accent. Best-effort.
 function colorToChipAccent(color: string): ColorKey | "gray" {
   const lower = color.toLowerCase();
@@ -185,7 +192,7 @@ function AgendaRow({
 
   const outcomeEntries = Object.entries(agenda.outcomeVoteCounts);
   const outcomeSummary = outcomeEntries
-    .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)} ${v}`)
+    .map(([k, v]) => `${titleCaseWords(k)} ${v}`)
     .join(" · ");
 
   const showVoterHint =
@@ -277,7 +284,7 @@ function CombatRow({
   combat: GameStateCombat;
   playerData: Array<{ color: string; displayName: string }>;
 }) {
-  const parts: string[] = [`Combat — ${combat.system}`];
+  const parts: string[] = [`Combat — ${combat.system ?? "?"}`];
   if (combat.unitHolder) parts[0] += ` (${combat.unitHolder})`;
   if (combat.round !== null) parts[0] += ` · R${combat.round}`;
 
@@ -403,7 +410,8 @@ export function GameStatePanel() {
   const gameData = useGameData();
   const playerData = gameData?.playerData ?? [];
 
-  if (!gameState || gameState.phase === "unknown") return null;
+  if (!gameState || !gameState.phase || gameState.phase === "unknown")
+    return null;
 
   return (
     <GameStatePanelContent gameState={gameState} playerData={playerData} />
