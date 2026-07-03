@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Group, Stack, Text, Divider } from "@mantine/core";
 import { useGameState } from "@/hooks/useGameState";
@@ -20,7 +20,7 @@ import type { ColorKey } from "@/domains/player/components/gradientClasses";
 // Phase display config
 // ---------------------------------------------------------------------------
 
-type PhaseConfig = { label: string; accent: ColorKey | "gray" };
+type PhaseConfig = { label: string; accent: ColorKey };
 
 const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
   unknown: { label: "Unknown", accent: "gray" },
@@ -36,10 +36,13 @@ const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
   "agenda.voting": { label: "Agenda · Voting", accent: "orange" },
   "agenda.resolving": { label: "Agenda · Resolving", accent: "orange" },
   finished: { label: "Game Over", accent: "red" },
-};
+} as const;
 
-const PANEL_ACCENT: Record<PhaseConfig["accent"], "red" | "green" | "blue" | "yellow" | "orange" | "none"> = {
+type PanelAccentValue = "red" | "green" | "blue" | "yellow" | "orange" | "none";
+
+const PANEL_ACCENT: Record<ColorKey, PanelAccentValue> = {
   gray: "none",
+  grey: "none",
   blue: "blue",
   green: "green",
   yellow: "yellow",
@@ -109,7 +112,7 @@ function activePlayerPhrase(phase: GamePhase): string {
 function PhaseBadge({ phase }: { phase: GamePhase }) {
   const cfg = PHASE_CONFIGS[phase];
   return (
-    <Chip accent={cfg.accent as ColorKey} size="sm">
+    <Chip accent={cfg.accent} size="sm">
       <Text size="xs" fw={700} c="white">
         {cfg.label}
       </Text>

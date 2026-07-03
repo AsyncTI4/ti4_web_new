@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import type { IMessage } from "@stomp/stompjs";
 import { config } from "../config";
 import type { GameStateMessage } from "@/entities/data/types";
 
@@ -46,7 +47,7 @@ export function useGameSocket(
       client.subscribe(`/topic/game/${gameId}`, (msg: any) => {
         if (msg.body === "refresh") onRefreshRef.current?.();
       });
-      client.subscribe(`/topic/game/${gameId}/state`, (msg: any) => {
+      client.subscribe(`/topic/game/${gameId}/state`, (msg: IMessage) => {
         try {
           onStateMessageRef.current?.(JSON.parse(msg.body) as GameStateMessage);
         } catch (e) {
