@@ -9,12 +9,13 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import { IconAdjustments, IconHourglassHigh } from "@tabler/icons-react";
+import { IconHistory, IconHourglassHigh } from "@tabler/icons-react";
 import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
+import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { useGameState } from "@/hooks/useGameState";
 import classes from "./FloatingMapToolbar.module.css";
 
-type FloatingPanel = "gameState" | "tools";
+type FloatingPanel = "gameState" | "events";
 
 type Props = {
   rightOffset: string;
@@ -23,7 +24,7 @@ type Props = {
 
 const panels: Record<FloatingPanel, { title: string; label: string }> = {
   gameState: { title: "Game State", label: "Game state" },
-  tools: { title: "Tools", label: "Tools" },
+  events: { title: "Event Log", label: "Events" },
 };
 
 function PanelContent({ panel }: { panel: FloatingPanel }) {
@@ -43,11 +44,7 @@ function PanelContent({ panel }: { panel: FloatingPanel }) {
     return <GameStatePanel />;
   }
 
-  return (
-    <Text size="sm" c="dimmed">
-      Coming soon
-    </Text>
-  );
+  return <GameEventPanel />;
 }
 
 export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
@@ -97,19 +94,19 @@ export function FloatingMapToolbar({ rightOffset, isDragging = false }: Props) {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={panels.tools.label} position="left" withArrow>
+        <Tooltip label={panels.events.label} position="left" withArrow>
           <ActionIcon
-            aria-label={panels.tools.label}
+            aria-label={panels.events.label}
             aria-controls={panelId}
-            aria-expanded={openPanel === "tools"}
+            aria-expanded={openPanel === "events"}
             radius="xl"
             variant="subtle"
             className={`${classes.button} ${
-              openPanel === "tools" ? classes.buttonActive : ""
+              openPanel === "events" ? classes.buttonActive : ""
             }`}
-            onClick={() => togglePanel("tools")}
+            onClick={() => togglePanel("events")}
           >
-            <IconAdjustments size={22} stroke={1.8} />
+            <IconHistory size={22} stroke={1.8} />
           </ActionIcon>
         </Tooltip>
       </Box>

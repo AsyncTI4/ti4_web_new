@@ -1,0 +1,229 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Round grouping ------------------------------------------------------- */
+.roundHeader {
+  position: sticky;
+  top: -12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px -12px 4px;
+  padding: 5px 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(9, 15, 26, 0.96) 0%,
+    rgba(9, 15, 26, 0.78) 100%
+  );
+  backdrop-filter: blur(6px);
+}
+.roundHeader:first-child {
+  margin-top: -4px;
+}
+.roundLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-4);
+  white-space: nowrap;
+}
+.roundRule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.28),
+    rgba(148, 163, 184, 0)
+  );
+}
+
+/* Event row ------------------------------------------------------------ */
+.row {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: start;
+  column-gap: 8px;
+  padding: 5px 4px;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.row:hover {
+  background: rgba(148, 163, 184, 0.06);
+  border-left-color: rgba(148, 163, 184, 0.35);
+}
+
+.iconCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1px;
+}
+.glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--mantine-color-gray-5);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.headline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.primary {
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--mantine-color-gray-1);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--mantine-color-gray-5);
+  flex-wrap: wrap;
+}
+.combat {
+  color: var(--mantine-color-red-4);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.time {
+  font-size: 10px;
+  color: var(--mantine-color-gray-6);
+  white-space: nowrap;
+  padding-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Type badge ----------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 16px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in oklab, var(--badge-hue) 55%, transparent);
+  color: color-mix(in oklab, var(--badge-hue) 82%, white);
+  background: color-mix(in oklab, var(--badge-hue) 20%, transparent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* System / numbered chips --------------------------------------------- */
+.sysChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 16px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--mantine-color-gray-2);
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  white-space: nowrap;
+}
+.scNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Special rows --------------------------------------------------------- */
+.passed {
+  opacity: 0.65;
+}
+.passed .primary {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--mantine-color-gray-5);
+  font-weight: 400;
+}
+
+.gameEnded {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(202, 138, 4, 0.22) 0%,
+    rgba(120, 53, 15, 0.28) 100%
+  );
+  border: 1px solid rgba(234, 179, 8, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gameEndedText {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--mantine-color-yellow-2);
+  letter-spacing: 0.02em;
+}
+.trophy {
+  color: var(--mantine-color-yellow-4);
+  display: flex;
+}
+
+.transactionArrow {
+  color: var(--mantine-color-gray-5);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* States --------------------------------------------------------------- */
+.stateBox {
+  padding: 6px 2px;
+}
+.showEarlier {
+  align-self: center;
+  margin: 4px 0 8px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mantine-color-gray-4);
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.showEarlier:hover {
+  background: rgba(148, 163, 184, 0.16);
+  color: var(--mantine-color-gray-2);
+}

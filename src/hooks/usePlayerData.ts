@@ -37,11 +37,15 @@ export async function fetchPlayerData(
   return response.json() as Promise<PlayerDataResponse>;
 }
 
-export function usePlayerData(gameId: string) {
-  return useQuery<PlayerDataResponse>({
+export function usePlayerData<TData = PlayerDataResponse>(
+  gameId: string,
+  options?: { select?: (data: PlayerDataResponse) => TData }
+) {
+  return useQuery<PlayerDataResponse, Error, TData>({
     queryKey: ["playerData", gameId],
     queryFn: () => fetchPlayerData(gameId),
     retry: false,
+    select: options?.select,
   });
 }
 
