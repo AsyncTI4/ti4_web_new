@@ -338,14 +338,13 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
     case "CONTROL_ESTABLISHED":
       return (
         <div className={classes.subEventLine}>
-          <span>Took control of {resolvePlanetName(sub.planet ?? "")}</span>
+          <span>Took control of {resolvePlanetName(sub.planet)}</span>
         </div>
       );
 
     case "ACTION_CARD_PLAYED": {
       const name =
-        sub.cardName ||
-        resolveCardName("CARD_PLAY_ACTION_CARD", sub.cardId ?? "");
+        sub.cardName || resolveCardName("CARD_PLAY_ACTION_CARD", sub.cardId);
       return (
         <div className={classes.subEventLine}>
           <EventPopover
@@ -361,7 +360,10 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
     }
 
     case "LEADER_PLAYED": {
-      const name = resolveCardName("CARD_PLAY_AGENT", sub.leaderId ?? "");
+      const name = resolveCardName(
+        sub.leaderType === "HERO" ? "CARD_PLAY_HERO" : "CARD_PLAY_AGENT",
+        sub.leaderId
+      );
       return (
         <div className={classes.subEventLine}>
           <EventPopover
@@ -388,7 +390,7 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
             <SubFaction faction={sub.faction} />
             <span className={classes.subMuted}>exhausted</span>
             <span className={classes.subCardName}>
-              {resolveTechName(sub.techId ?? "")}
+              {resolveTechName(sub.techId)}
             </span>
           </EventPopover>
         </div>
@@ -492,7 +494,7 @@ function EventBody({ event }: { event: GameEvent }) {
             {headline}
             <div className={classes.subEvents}>
               {subEvents.map((sub, index) => (
-                <SubEventLine key={index} sub={sub} />
+                <SubEventLine key={`${sub.type}-${index}`} sub={sub} />
               ))}
             </div>
           </>
