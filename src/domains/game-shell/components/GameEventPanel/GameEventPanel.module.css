@@ -52,6 +52,12 @@
   border-radius: 6px;
   border-left: 2px solid transparent;
 }
+.row + .row {
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+.transactionRow {
+  border-left-color: transparent;
+}
 
 .iconCell {
   display: flex;
@@ -103,17 +109,35 @@
 }
 .headline {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+.metaLine,
+.titleLine {
+  display: flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+.metaLine {
   flex-wrap: wrap;
+}
+.titleLine {
+  overflow: hidden;
+  white-space: nowrap;
 }
 .primary {
   font-size: 13px;
   line-height: 1.25;
   color: var(--mantine-color-gray-1);
   font-weight: 500;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .subline {
   display: flex;
@@ -135,6 +159,12 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
+}
+.productionPlace {
+  color: var(--mantine-color-gray-4);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
 }
 
 /* Tactical-action sub-events ------------------------------------------- */
@@ -295,6 +325,10 @@
 .passed {
   opacity: 1;
 }
+.passed .content {
+  min-height: 20px;
+  justify-content: center;
+}
 .passed .primary {
   font-size: 12px;
   font-style: normal;
@@ -331,6 +365,14 @@
   color: var(--mantine-color-gray-5);
   display: inline-flex;
   align-items: center;
+}
+.transactionEventIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--mantine-color-gray-5);
 }
 .transactionGrid {
   display: grid;
