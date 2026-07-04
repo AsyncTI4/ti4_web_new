@@ -11,6 +11,7 @@ import {
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
+import { useGameData } from "@/hooks/useGameContext";
 import type { GameEvent, GameSubEvent } from "@/entities/data/types";
 import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
@@ -305,6 +306,8 @@ function parseSubEvents(value: unknown): GameSubEvent[] {
   );
 }
 
+type SystemNameResolver = (position: string) => string;
+
 function SubFaction({ faction }: { faction: string }) {
   if (!faction) return null;
   return (
@@ -342,7 +345,13 @@ function ProductionSummary({
   );
 }
 
-function SubEventLine({ sub }: { sub: GameSubEvent }) {
+function SubEventLine({
+  sub,
+  systemName,
+}: {
+  sub: GameSubEvent;
+  systemName: SystemNameResolver;
+}) {
   switch (sub.type) {
     case "COMBAT":
       return (
@@ -350,7 +359,7 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
           <span className={classes.combat}>
             <IconSwords size={11} stroke={2} />
             {sub.kind === "space"
-              ? `Space combat${sub.tile ? ` in ${resolveSystemName(sub.tile)}` : ""}`
+              ? `Space combat${sub.tile ? ` in ${systemName(sub.tile)}` : ""}`
               : `Ground combat${sub.planet ? ` on ${resolvePlanetName(sub.planet)}` : ""}`}
           </span>
           {sub.vsFaction && (
@@ -428,7 +437,7 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
         <div className={classes.subEventLine}>
           <span className={classes.productionPlace}>
             <IconBuildingFactory2 size={11} stroke={2} />
-            {sub.tile ? resolveSystemName(sub.tile) : "Production"}
+            {sub.tile ? systemName(sub.tile) : "Production"}
           </span>
           <ProductionSummary units={sub.units} cost={sub.cost} />
         </div>
@@ -450,7 +459,13 @@ function SubEventLine({ sub }: { sub: GameSubEvent }) {
 // ---------------------------------------------------------------------------
 // Row body per archetype. Returns null for events we deliberately drop.
 // ---------------------------------------------------------------------------
-function EventBody({ event }: { event: GameEvent }) {
+function EventBody({
+  event,
+  systemName,
+}: {
+  event: GameEvent;
+  systemName: SystemNameResolver;
+}) {
   const p = event.payload ?? {};
 
   if (event.archetype in CARD_BADGES) {
@@ -516,7 +531,7 @@ function EventBody({ event }: { event: GameEvent }) {
           title="Tactical action"
           meta={
             system ? (
-              <span className={classes.sysChip}>{resolveSystemName(system)}</span>
+              <span className={classes.sysChip}>{systemName(system)}</span>
             ) : null
           }
         />
@@ -530,7 +545,11 @@ function EventBody({ event }: { event: GameEvent }) {
             {headline}
             <div className={classes.subEvents}>
               {subEvents.map((sub, index) => (
-                <SubEventLine key={`${sub.type}-${index}`} sub={sub} />
+                <SubEventLine
+                  key={`${sub.type}-${index}`}
+                  sub={sub}
+                  systemName={systemName}
+                />
               ))}
             </div>
           </>
@@ -577,7 +596,7 @@ function EventBody({ event }: { event: GameEvent }) {
             }
             meta={
               tile ? (
-                <span className={classes.sysChip}>{resolveSystemName(tile)}</span>
+                <span className={classes.sysChip}>{systemName(tile)}</span>
               ) : null
             }
           />
@@ -747,8 +766,16 @@ function EventBody({ event }: { event: GameEvent }) {
   }
 }
 
-function EventRow({ event, now }: { event: GameEvent; now: number }) {
-  const body = <EventBody event={event} />;
+function EventRow({
+  event,
+  now,
+  systemName,
+}: {
+  event: GameEvent;
+  now: number;
+  systemName: SystemNameResolver;
+}) {
+  const body = <EventBody event={event} systemName={systemName} />;
   const isPassed = event.archetype === "TURN";
   const isTransaction = event.archetype === "TRANSACTION";
   return (
@@ -820,6 +847,7 @@ function GameEndedRow({ event }: { event: GameEvent }) {
 export function GameEventPanel() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid ?? "";
+  const gameData = useGameData();
   const { data, isLoading, isError } = useGameEvents(gameId);
   const [showAll, setShowAll] = useState(false);
   const [now, setNow] = useState(() => Date.now());
@@ -855,6 +883,20 @@ export function GameEventPanel() {
         events: [...events].sort((a, b) => b.seq - a.seq),
       }));
   }, [visibleEvents]);
+
+  const positionToSystemId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const entry of gameData?.tilePositions ?? []) {
+      const [position, systemId] = entry.split(":");
+      if (position && systemId) map[position] = systemId;
+    }
+    return map;
+  }, [gameData?.tilePositions]);
+
+  const systemName = useMemo<SystemNameResolver>(
+    () => (position) => resolveSystemName(position, positionToSystemId),
+    [positionToSystemId]
+  );
 
   if (isLoading) {
     return (
@@ -913,7 +955,14 @@ export function GameEventPanel() {
                 <SectionDividerRow key={event.seq} label={label} />
               ) : null;
             }
-            return <EventRow key={event.seq} event={event} now={now} />;
+              return (
+                <EventRow
+                  key={event.seq}
+                  event={event}
+                  now={now}
+                  systemName={systemName}
+                />
+              );
           })}
         </div>
       ))}

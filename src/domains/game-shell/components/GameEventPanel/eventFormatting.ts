@@ -107,11 +107,21 @@ export function resolvePlanetName(id: string): string {
   return direct?.name ?? prettifyId(id);
 }
 
-/** System tile positions arrive zero-padded ("018"); system ids are stripped. */
-export function resolveSystemName(position: string): string {
-  const stripped = position.replace(/^0+/, "") || position;
-  const sys = systems.find((s) => s.id === stripped || s.id === position);
-  return sys?.name ?? position;
+/**
+ * Event payloads often carry board positions ("105"), not physical system ids.
+ * Prefer the live position -> system map when available so custom maps with an
+ * empty tile at position 105 do not render static system 105's planet name.
+ */
+export function resolveSystemName(
+  position: string,
+  positionToSystemId?: Record<string, string>
+): string {
+  const systemId =
+    positionToSystemId === undefined ? position : positionToSystemId[position];
+  if (!systemId) return position;
+  const stripped = systemId.replace(/^0+/, "") || systemId;
+  const sys = systems.find((s) => s.id === stripped || s.id === systemId);
+  return sys?.name ?? systemId;
 }
 
 export function resolvePlanetsList(underscored: string): string[] {
