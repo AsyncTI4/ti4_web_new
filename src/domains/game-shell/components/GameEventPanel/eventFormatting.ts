@@ -75,14 +75,21 @@ export function resolveCardName(archetype: string, id: string): string {
   }
 }
 
-const unitsById = indexBy(units, (r) => r.id);
+// Produced-unit keys use async short ids ("ff", "dd"); resolve to the base unit type
+// name ("Fighter") rather than a faction/upgrade variant.
+const baseTypeByAsyncId = new Map<string, string>();
+for (const unit of units) {
+  if (!baseTypeByAsyncId.has(unit.asyncId)) {
+    baseTypeByAsyncId.set(unit.asyncId, unit.baseType);
+  }
+}
 
 export function resolveTechName(id: string): string {
   return nameFrom(techsById, id);
 }
 
 export function resolveUnitName(id: string): string {
-  return nameFrom(unitsById, id);
+  return prettifyId(baseTypeByAsyncId.get(id) ?? id);
 }
 
 export function resolveAgendaName(id: string): string {
