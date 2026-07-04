@@ -10,6 +10,7 @@ import { publicObjectives } from "@/entities/data/publicObjectives";
 import { secretObjectives } from "@/entities/data/secretObjectives";
 import { planets } from "@/entities/data/planets";
 import { systems } from "@/entities/data/systems";
+import { units } from "@/entities/data/units";
 
 // ---------------------------------------------------------------------------
 // Name resolution — resolves raw ids to real display names using client-side
@@ -74,8 +75,14 @@ export function resolveCardName(archetype: string, id: string): string {
   }
 }
 
+const unitsById = indexBy(units, (r) => r.id);
+
 export function resolveTechName(id: string): string {
   return nameFrom(techsById, id);
+}
+
+export function resolveUnitName(id: string): string {
+  return nameFrom(unitsById, id);
 }
 
 export function resolveAgendaName(id: string): string {

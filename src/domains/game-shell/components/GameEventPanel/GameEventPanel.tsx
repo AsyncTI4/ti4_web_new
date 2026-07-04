@@ -10,7 +10,7 @@ import {
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
-import type { GameEvent } from "@/entities/data/types";
+import type { GameEvent, GameSubEvent } from "@/entities/data/types";
 import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
@@ -27,6 +27,7 @@ import {
   resolvePlanetsList,
   resolveSystemName,
   resolveTechName,
+  resolveUnitName,
   summarizeVotes,
 } from "./eventFormatting";
 import classes from "./GameEventPanel.module.css";
@@ -237,9 +238,11 @@ function TransactionItems({ sides }: { sides: TransactionSide[] }) {
 function EventPopover({
   children,
   details,
+  buttonClassName,
 }: {
   children: React.ReactNode;
   details: React.ReactNode;
+  buttonClassName?: string;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -248,7 +251,7 @@ function EventPopover({
       <SmoothPopover.Target>
         <button
           type="button"
-          className={classes.cardEventButton}
+          className={buttonClassName ?? classes.cardEventButton}
           onClick={() => setOpened(true)}
         >
           {children}
@@ -257,6 +260,161 @@ function EventPopover({
       <SmoothPopover.Dropdown>{details}</SmoothPopover.Dropdown>
     </SmoothPopover>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Structured tactical-action sub-events (payload.subEvents)
+// ---------------------------------------------------------------------------
+
+/** Validated cast: keep only entries shaped like a sub-event. Unknown `type`
+ *  values pass through and are dropped at render time. */
+function parseSubEvents(value: unknown): GameSubEvent[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (e): e is GameSubEvent =>
+      typeof e === "object" &&
+      e !== null &&
+      typeof (e as { type?: unknown }).type === "string"
+  );
+}
+
+function SubFaction({ faction }: { faction: string }) {
+  if (!faction) return null;
+  return (
+    <span className={classes.subFaction}>
+      <CircularFactionIcon faction={faction} size={13} />
+      {prettifyId(faction)}
+    </span>
+  );
+}
+
+function unitBreakdown(units: Record<string, number>): string {
+  return Object.entries(units)
+    .map(([id, count]) => `${count}× ${resolveUnitName(id)}`)
+    .join(", ");
+}
+
+function ProductionSummary({
+  units,
+  cost,
+}: {
+  units: Record<string, number> | null;
+  cost: number | null;
+}) {
+  const breakdown = units && Object.keys(units).length > 0 ? unitBreakdown(units) : null;
+  return (
+    <>
+      {breakdown && <span>{breakdown}</span>}
+      {typeof cost === "number" && (
+        <span className={classes.subMuted}>
+          {breakdown ? "· " : ""}
+          {pluralize(cost, "resource")}
+        </span>
+      )}
+    </>
+  );
+}
+
+function SubEventLine({ sub }: { sub: GameSubEvent }) {
+  switch (sub.type) {
+    case "COMBAT":
+      return (
+        <div className={classes.subEventLine}>
+          <span className={classes.combat}>
+            <IconSwords size={11} stroke={2} />
+            {sub.kind === "space"
+              ? `Space combat${sub.tile ? ` in ${resolveSystemName(sub.tile)}` : ""}`
+              : `Ground combat${sub.planet ? ` on ${resolvePlanetName(sub.planet)}` : ""}`}
+          </span>
+          {sub.vsFaction && (
+            <>
+              <span className={classes.subMuted}>vs</span>
+              <SubFaction faction={sub.vsFaction} />
+            </>
+          )}
+        </div>
+      );
+
+    case "CONTROL_ESTABLISHED":
+      return (
+        <div className={classes.subEventLine}>
+          <span>Took control of {resolvePlanetName(sub.planet ?? "")}</span>
+        </div>
+      );
+
+    case "ACTION_CARD_PLAYED": {
+      const name =
+        sub.cardName ||
+        resolveCardName("CARD_PLAY_ACTION_CARD", sub.cardId ?? "");
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<ActionCardDetailsCard actionCardId={sub.cardId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>played</span>
+            <span className={classes.subCardName}>{name}</span>
+          </EventPopover>
+        </div>
+      );
+    }
+
+    case "LEADER_PLAYED": {
+      const name = resolveCardName("CARD_PLAY_AGENT", sub.leaderId ?? "");
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<LeaderDetailsCard leaderId={sub.leaderId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>
+              {sub.leaderType === "AGENT" ? "exhausted" : "played"}
+            </span>
+            <span className={classes.subCardName}>{name}</span>
+          </EventPopover>
+        </div>
+      );
+    }
+
+    case "TECH_EXHAUSTED":
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<TechCard techId={sub.techId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>exhausted</span>
+            <span className={classes.subCardName}>
+              {resolveTechName(sub.techId ?? "")}
+            </span>
+          </EventPopover>
+        </div>
+      );
+
+    case "PRODUCTION":
+      return (
+        <div className={classes.subEventLine}>
+          <span>
+            Produced{sub.tile ? ` in ${resolveSystemName(sub.tile)}` : ""}
+          </span>
+          <ProductionSummary units={sub.units} cost={sub.cost} />
+        </div>
+      );
+
+    case "MANUAL_COMMAND":
+      return (
+        <div className={classes.subEventLine}>
+          <span className={classes.mono}>{sub.command}</span>
+        </div>
+      );
+
+    default:
+      // Unknown future sub-event types: render nothing rather than crash.
+      return null;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -316,6 +474,7 @@ function EventBody({ event }: { event: GameEvent }) {
       const combat = str(p, "combat");
       const summary = str(p, "summary");
       const planetNames = planets ? resolvePlanetsList(planets) : [];
+      const subEvents = parseSubEvents(p.subEvents);
       const headline = (
         <div className={classes.headline}>
           <span className={classes.primary}>Finished tactical action</span>
@@ -324,6 +483,22 @@ function EventBody({ event }: { event: GameEvent }) {
           )}
         </div>
       );
+
+      // Structured sub-events take priority; the text summary is only the
+      // fallback for older events that don't carry them.
+      if (subEvents.length > 0) {
+        return (
+          <>
+            {headline}
+            <div className={classes.subEvents}>
+              {subEvents.map((sub, index) => (
+                <SubEventLine key={index} sub={sub} />
+              ))}
+            </div>
+          </>
+        );
+      }
+
       const sub =
         planetNames.length > 0 || combat ? (
           <div className={classes.subline}>
@@ -344,6 +519,40 @@ function EventBody({ event }: { event: GameEvent }) {
         </>
       );
       return body;
+    }
+
+    case "PRODUCTION": {
+      const tile = str(p, "tile");
+      const units =
+        p.units && typeof p.units === "object" && !Array.isArray(p.units)
+          ? (p.units as Record<string, number>)
+          : null;
+      const cost = num(p, "cost");
+      return (
+        <>
+          <div className={classes.headline}>
+            <span className={classes.primary}>Produced</span>
+            {tile && (
+              <span className={classes.sysChip}>{resolveSystemName(tile)}</span>
+            )}
+          </div>
+          {(units !== null || cost !== undefined) && (
+            <div className={classes.subline}>
+              <ProductionSummary units={units} cost={cost ?? null} />
+            </div>
+          )}
+        </>
+      );
+    }
+
+    case "MANUAL_COMMAND": {
+      const command = str(p, "command");
+      if (!command) return null;
+      return (
+        <div className={classes.headline}>
+          <span className={classes.mono}>{command}</span>
+        </div>
+      );
     }
 
     case "TURN": {
@@ -506,6 +715,28 @@ function EventRow({ event, now }: { event: GameEvent; now: number }) {
   );
 }
 
+// Inline section dividers for PHASE_STARTED / ROUND_STARTED (faction is null;
+// like GAME_ENDED these bypass EventRow, so no actor icon / timestamp cell).
+function SectionDividerRow({ label }: { label: string }) {
+  return (
+    <div className={classes.sectionDivider}>
+      <span className={classes.sectionDividerLabel}>{label}</span>
+      <span className={classes.sectionDividerRule} />
+    </div>
+  );
+}
+
+function sectionDividerLabel(event: GameEvent): string | null {
+  if (event.archetype === "PHASE_STARTED") {
+    const phase = str(event.payload ?? {}, "phase");
+    return phase ? `${prettifyId(phase)} Phase` : null;
+  }
+  // ROUND_STARTED: the sticky round headers already announce the round at the
+  // top of each group, so this renders as a minimal in-scroll divider.
+  const round = num(event.payload ?? {}, "round");
+  return round !== undefined ? `Round ${round}` : null;
+}
+
 function GameEndedRow({ event }: { event: GameEvent }) {
   const winners = Array.isArray(event.payload?.winner)
     ? (event.payload.winner as string[])
@@ -612,13 +843,21 @@ export function GameEventPanel() {
             <span className={classes.roundLabel}>Round {round}</span>
             <span className={classes.roundRule} />
           </div>
-          {events.map((event) =>
-            event.archetype === "GAME_ENDED" ? (
-              <GameEndedRow key={event.seq} event={event} />
-            ) : (
-              <EventRow key={event.seq} event={event} now={now} />
-            )
-          )}
+          {events.map((event) => {
+            if (event.archetype === "GAME_ENDED") {
+              return <GameEndedRow key={event.seq} event={event} />;
+            }
+            if (
+              event.archetype === "PHASE_STARTED" ||
+              event.archetype === "ROUND_STARTED"
+            ) {
+              const label = sectionDividerLabel(event);
+              return label ? (
+                <SectionDividerRow key={event.seq} label={label} />
+              ) : null;
+            }
+            return <EventRow key={event.seq} event={event} now={now} />;
+          })}
         </div>
       ))}
     </div>
