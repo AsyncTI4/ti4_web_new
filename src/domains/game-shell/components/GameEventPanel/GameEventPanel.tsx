@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Loader, Text, Tooltip } from "@mantine/core";
 import {
   IconArrowsLeftRight,
+  IconBuildingFactory2,
   IconSwords,
   IconTargetArrow,
   IconTrophy,
@@ -10,11 +11,14 @@ import {
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
-import type { GameEvent } from "@/entities/data/types";
+import { useGameData } from "@/hooks/useGameContext";
+import type { GameEvent, GameSubEvent } from "@/entities/data/types";
 import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
 import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
+import { RelicCard } from "@/domains/player/components/Relic";
+import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
 import { TechCard } from "@/domains/player/components/Tech";
 import {
   formatAbsoluteTime,
@@ -27,6 +31,7 @@ import {
   resolvePlanetsList,
   resolveSystemName,
   resolveTechName,
+  resolveUnitName,
   summarizeVotes,
 } from "./eventFormatting";
 import classes from "./GameEventPanel.module.css";
@@ -35,11 +40,11 @@ const MAX_VISIBLE = 150;
 
 // Colored type-badge config per card archetype (distinct hues).
 const CARD_BADGES: Record<string, { label: string; hue: string }> = {
-  CARD_PLAY_ACTION_CARD: { label: "AC Played", hue: "oklch(0.62 0.19 250)" },
+  CARD_PLAY_ACTION_CARD: { label: "AC Played", hue: "oklch(0.66 0.18 45)" },
   CARD_PLAY_PROMISSORY_NOTE: { label: "PN", hue: "oklch(0.65 0.16 300)" },
   CARD_PLAY_AGENT: { label: "Agent", hue: "oklch(0.68 0.15 190)" },
-  CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.68 0.19 30)" },
-  CARD_PLAY_RELIC: { label: "Relic", hue: "oklch(0.7 0.14 90)" },
+  CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.64 0.18 330)" },
+  CARD_PLAY_RELIC: { label: "Relic Exhausted", hue: "oklch(0.7 0.14 90)" },
   CARD_PLAY_TECH_EXHAUST: { label: "Tech", hue: "oklch(0.66 0.15 150)" },
   CARD_PLAY_BREAKTHROUGH: { label: "BT", hue: "oklch(0.64 0.17 330)" },
   CARD_PLAY_ABILITY: { label: "Ability", hue: "oklch(0.6 0.02 260)" },
@@ -93,8 +98,32 @@ function EventDescription({ children }: { children?: string }) {
   return <div className={classes.description}>{children}</div>;
 }
 
+function Headline({
+  title,
+  meta,
+  beforeTitle,
+}: {
+  title: React.ReactNode;
+  meta?: React.ReactNode;
+  beforeTitle?: React.ReactNode;
+}) {
+  return (
+    <div className={classes.headline}>
+      {meta && <div className={classes.metaLine}>{meta}</div>}
+      <div className={classes.titleLine}>
+        {beforeTitle}
+        <span className={classes.primary}>{title}</span>
+      </div>
+    </div>
+  );
+}
+
 function cardEventTitle(archetype: string, cardName: string): string {
-  if (archetype === "CARD_PLAY_AGENT" || archetype === "CARD_PLAY_TECH_EXHAUST") {
+  if (
+    archetype === "CARD_PLAY_AGENT" ||
+    archetype === "CARD_PLAY_RELIC" ||
+    archetype === "CARD_PLAY_TECH_EXHAUST"
+  ) {
     return `Exhausted ${cardName}`;
   }
   return cardName;
@@ -237,9 +266,11 @@ function TransactionItems({ sides }: { sides: TransactionSide[] }) {
 function EventPopover({
   children,
   details,
+  buttonClassName,
 }: {
   children: React.ReactNode;
   details: React.ReactNode;
+  buttonClassName?: string;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -248,7 +279,7 @@ function EventPopover({
       <SmoothPopover.Target>
         <button
           type="button"
-          className={classes.cardEventButton}
+          className={buttonClassName ?? classes.cardEventButton}
           onClick={() => setOpened(true)}
         >
           {children}
@@ -260,9 +291,181 @@ function EventPopover({
 }
 
 // ---------------------------------------------------------------------------
+// Structured tactical-action sub-events (payload.subEvents)
+// ---------------------------------------------------------------------------
+
+/** Validated cast: keep only entries shaped like a sub-event. Unknown `type`
+ *  values pass through and are dropped at render time. */
+function parseSubEvents(value: unknown): GameSubEvent[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (e): e is GameSubEvent =>
+      typeof e === "object" &&
+      e !== null &&
+      typeof (e as { type?: unknown }).type === "string"
+  );
+}
+
+type SystemNameResolver = (position: string) => string;
+
+function SubFaction({ faction }: { faction: string }) {
+  if (!faction) return null;
+  return (
+    <span className={classes.subFaction}>
+      <CircularFactionIcon faction={faction} size={13} />
+      {prettifyId(faction)}
+    </span>
+  );
+}
+
+function unitBreakdown(units: Record<string, number>): string {
+  return Object.entries(units)
+    .map(([id, count]) => `${count}× ${resolveUnitName(id)}`)
+    .join(", ");
+}
+
+function ProductionSummary({
+  units,
+  cost,
+}: {
+  units: Record<string, number> | null;
+  cost: number | null;
+}) {
+  const breakdown = units && Object.keys(units).length > 0 ? unitBreakdown(units) : null;
+  return (
+    <>
+      {breakdown && <span>{breakdown}</span>}
+      {typeof cost === "number" && (
+        <span className={classes.subMuted}>
+          {breakdown ? "· " : ""}
+          {pluralize(cost, "resource")}
+        </span>
+      )}
+    </>
+  );
+}
+
+function SubEventLine({
+  sub,
+  systemName,
+}: {
+  sub: GameSubEvent;
+  systemName: SystemNameResolver;
+}) {
+  switch (sub.type) {
+    case "COMBAT":
+      return (
+        <div className={classes.subEventLine}>
+          <span className={classes.combat}>
+            <IconSwords size={11} stroke={2} />
+            {sub.kind === "space"
+              ? `Space combat${sub.tile ? ` in ${systemName(sub.tile)}` : ""}`
+              : `Ground combat${sub.planet ? ` on ${resolvePlanetName(sub.planet)}` : ""}`}
+          </span>
+          {sub.vsFaction && (
+            <>
+              <span className={classes.subMuted}>vs</span>
+              <SubFaction faction={sub.vsFaction} />
+            </>
+          )}
+        </div>
+      );
+
+    case "CONTROL_ESTABLISHED":
+      return (
+        <div className={classes.subEventLine}>
+          <span>Took control of {resolvePlanetName(sub.planet)}</span>
+        </div>
+      );
+
+    case "ACTION_CARD_PLAYED": {
+      const name =
+        sub.cardName || resolveCardName("CARD_PLAY_ACTION_CARD", sub.cardId);
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<ActionCardDetailsCard actionCardId={sub.cardId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>played</span>
+            <span className={classes.subCardName}>{name}</span>
+          </EventPopover>
+        </div>
+      );
+    }
+
+    case "LEADER_PLAYED": {
+      const name = resolveCardName(
+        sub.leaderType === "HERO" ? "CARD_PLAY_HERO" : "CARD_PLAY_AGENT",
+        sub.leaderId
+      );
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<LeaderDetailsCard leaderId={sub.leaderId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>
+              {sub.leaderType === "AGENT" ? "exhausted" : "played"}
+            </span>
+            <span className={classes.subCardName}>{name}</span>
+          </EventPopover>
+        </div>
+      );
+    }
+
+    case "TECH_EXHAUSTED":
+      return (
+        <div className={classes.subEventLine}>
+          <EventPopover
+            buttonClassName={classes.subEventButton}
+            details={<TechCard techId={sub.techId} />}
+          >
+            <SubFaction faction={sub.faction} />
+            <span className={classes.subMuted}>exhausted</span>
+            <span className={classes.subCardName}>
+              {resolveTechName(sub.techId)}
+            </span>
+          </EventPopover>
+        </div>
+      );
+
+    case "PRODUCTION":
+      return (
+        <div className={classes.subEventLine}>
+          <span className={classes.productionPlace}>
+            <IconBuildingFactory2 size={11} stroke={2} />
+            {sub.tile ? systemName(sub.tile) : "Production"}
+          </span>
+          <ProductionSummary units={sub.units} cost={sub.cost} />
+        </div>
+      );
+
+    case "MANUAL_COMMAND":
+      return (
+        <div className={classes.subEventLine}>
+          <span className={classes.mono}>{sub.command}</span>
+        </div>
+      );
+
+    default:
+      // Unknown future sub-event types: render nothing rather than crash.
+      return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Row body per archetype. Returns null for events we deliberately drop.
 // ---------------------------------------------------------------------------
-function EventBody({ event }: { event: GameEvent }) {
+function EventBody({
+  event,
+  systemName,
+}: {
+  event: GameEvent;
+  systemName: SystemNameResolver;
+}) {
   const p = event.payload ?? {};
 
   if (event.archetype in CARD_BADGES) {
@@ -272,12 +475,10 @@ function EventBody({ event }: { event: GameEvent }) {
       str(p, "cardName") ?? resolveCardName(event.archetype, cardId);
     const content = (
       <>
-        <div className={classes.headline}>
-          <TypeBadge label={label} hue={hue} />
-          <span className={classes.primary}>
-            {cardEventTitle(event.archetype, cardName)}
-          </span>
-        </div>
+        <Headline
+          meta={<TypeBadge label={label} hue={hue} />}
+          title={cardEventTitle(event.archetype, cardName)}
+        />
         <EventDescription>{eventDescription(p)}</EventDescription>
       </>
     );
@@ -293,6 +494,14 @@ function EventBody({ event }: { event: GameEvent }) {
     if (event.archetype === "CARD_PLAY_AGENT" && cardId) {
       return (
         <EventPopover details={<LeaderDetailsCard leaderId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    if (event.archetype === "CARD_PLAY_RELIC" && cardId) {
+      return (
+        <EventPopover details={<RelicCard relicId={cardId} />}>
           {content}
         </EventPopover>
       );
@@ -316,14 +525,37 @@ function EventBody({ event }: { event: GameEvent }) {
       const combat = str(p, "combat");
       const summary = str(p, "summary");
       const planetNames = planets ? resolvePlanetsList(planets) : [];
+      const subEvents = parseSubEvents(p.subEvents);
       const headline = (
-        <div className={classes.headline}>
-          <span className={classes.primary}>Finished tactical action</span>
-          {system && (
-            <span className={classes.sysChip}>{resolveSystemName(system)}</span>
-          )}
-        </div>
+        <Headline
+          title="Tactical action"
+          meta={
+            system ? (
+              <span className={classes.sysChip}>{systemName(system)}</span>
+            ) : null
+          }
+        />
       );
+
+      // Structured sub-events take priority; the text summary is only the
+      // fallback for older events that don't carry them.
+      if (subEvents.length > 0) {
+        return (
+          <>
+            {headline}
+            <div className={classes.subEvents}>
+              {subEvents.map((sub, index) => (
+                <SubEventLine
+                  key={`${sub.type}-${index}`}
+                  sub={sub}
+                  systemName={systemName}
+                />
+              ))}
+            </div>
+          </>
+        );
+      }
+
       const sub =
         planetNames.length > 0 || combat ? (
           <div className={classes.subline}>
@@ -346,13 +578,50 @@ function EventBody({ event }: { event: GameEvent }) {
       return body;
     }
 
-    case "TURN": {
-      if (p.passed !== true) return null;
+    case "PRODUCTION": {
+      const tile = str(p, "tile");
+      const units =
+        p.units && typeof p.units === "object" && !Array.isArray(p.units)
+          ? (p.units as Record<string, number>)
+          : null;
+      const cost = num(p, "cost");
       return (
-        <div className={classes.headline}>
-          <span className={classes.primary}>passed</span>
+        <>
+          <Headline
+            title="Produced"
+            beforeTitle={
+              <span className={classes.productionPlace}>
+                <IconBuildingFactory2 size={13} stroke={2} />
+              </span>
+            }
+            meta={
+              tile ? (
+                <span className={classes.sysChip}>{systemName(tile)}</span>
+              ) : null
+            }
+          />
+          {(units !== null || cost !== undefined) && (
+            <div className={classes.subline}>
+              <ProductionSummary units={units} cost={cost ?? null} />
+            </div>
+          )}
+        </>
+      );
+    }
+
+    case "MANUAL_COMMAND": {
+      const command = str(p, "command");
+      if (!command) return null;
+      return (
+        <div className={classes.titleLine}>
+          <span className={classes.mono}>{command}</span>
         </div>
       );
+    }
+
+    case "TURN": {
+      if (p.passed !== true) return null;
+      return <Headline title="passed" />;
     }
 
     case "TECH_RESEARCHED": {
@@ -360,11 +629,15 @@ function EventBody({ event }: { event: GameEvent }) {
       const payment = str(p, "paymentType");
       return (
         <>
-          <div className={classes.headline}>
-            <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
-            <span className={classes.primary}>Researched {name}</span>
-            {payment && <span className={classes.subline}>{prettifyId(payment)}</span>}
-          </div>
+          <Headline
+            title={`Researched ${name}`}
+            meta={
+              <>
+                <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
+                {payment && <span className={classes.subline}>{prettifyId(payment)}</span>}
+              </>
+            }
+          />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
@@ -375,17 +648,19 @@ function EventBody({ event }: { event: GameEvent }) {
       const name = str(p, "scName");
       return (
         <>
-          <div className={classes.headline}>
-            {n !== undefined && (
-              <span
-                className={classes.scNum}
-                style={{ background: scNumberBg(n) }}
-              >
-                {n}
-              </span>
-            )}
-            <span className={classes.primary}>Played {name ?? "strategy card"}</span>
-          </div>
+          <Headline
+            title={`Played ${name ?? "strategy card"}`}
+            meta={
+              n !== undefined ? (
+                <span
+                  className={classes.scNum}
+                  style={{ background: scNumberBg(n) }}
+                >
+                  {n}
+                </span>
+              ) : null
+            }
+          />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
@@ -396,9 +671,7 @@ function EventBody({ event }: { event: GameEvent }) {
       const name = strategyCardName(p, n);
       return (
         <>
-          <div className={classes.headline}>
-            <span className={classes.primary}>Picked {name}</span>
-          </div>
+          <Headline title={`Picked ${name}`} />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
@@ -411,22 +684,30 @@ function EventBody({ event }: { event: GameEvent }) {
         category === "SECRET"
           ? "oklch(0.62 0.19 20)"
           : category === "CUSTODIAN"
-            ? "oklch(0.7 0.14 90)"
+          ? "oklch(0.7 0.14 90)"
             : "oklch(0.68 0.15 145)";
-      return (
+      const content = (
         <>
-          <div className={classes.headline}>
-            <span className={classes.trophy}>
-              <IconTargetArrow size={14} stroke={2} />
-            </span>
-            <TypeBadge label={category} hue={hue} />
-            <span className={classes.primary}>
-              {id ? resolveObjectiveName(id) : "Scored objective"}
-            </span>
-          </div>
+          <Headline
+            title={id ? resolveObjectiveName(id) : "Scored objective"}
+            beforeTitle={
+              <span className={classes.trophy}>
+                <IconTargetArrow size={14} stroke={2} />
+              </span>
+            }
+            meta={<TypeBadge label={category} hue={hue} />}
+          />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
+      if (category === "SECRET" && id) {
+        return (
+          <EventPopover details={<SecretObjectiveCard secretId={id} />}>
+            {content}
+          </EventPopover>
+        );
+      }
+      return content;
     }
 
     case "AGENDA_RESOLVED": {
@@ -439,10 +720,10 @@ function EventBody({ event }: { event: GameEvent }) {
           : "";
       return (
         <>
-          <div className={classes.headline}>
-            <TypeBadge label="Agenda" hue="oklch(0.68 0.16 60)" />
-            <span className={classes.primary}>{name}</span>
-          </div>
+          <Headline
+            title={name}
+            meta={<TypeBadge label="Agenda" hue="oklch(0.68 0.16 60)" />}
+          />
           <div className={classes.subline}>
             {outcome && <span>→ {prettifyId(outcome)}</span>}
             {summary && <span>· {summary}</span>}
@@ -459,15 +740,12 @@ function EventBody({ event }: { event: GameEvent }) {
       const sides = transactionSides(items, from, to);
       return (
         <>
-          <div className={classes.headline}>
+          <div className={classes.titleLine}>
             {from && <CircularFactionIcon faction={from} size={16} />}
             <span className={classes.transactionArrow}>
               <IconArrowsLeftRight size={13} stroke={2} />
             </span>
             {to && <CircularFactionIcon faction={to} size={16} />}
-            <span className={classes.subline}>
-              {items.length} item{items.length === 1 ? "" : "s"}
-            </span>
           </div>
           {sides.length > 0 ? (
             <TransactionItems sides={sides} />
@@ -481,22 +759,37 @@ function EventBody({ event }: { event: GameEvent }) {
     default:
       return (
         <>
-          <div className={classes.headline}>
-            <span className={classes.primary}>{prettifyId(event.archetype)}</span>
-          </div>
+          <Headline title={prettifyId(event.archetype)} />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
   }
 }
 
-function EventRow({ event, now }: { event: GameEvent; now: number }) {
-  const body = <EventBody event={event} />;
+function EventRow({
+  event,
+  now,
+  systemName,
+}: {
+  event: GameEvent;
+  now: number;
+  systemName: SystemNameResolver;
+}) {
+  const body = <EventBody event={event} systemName={systemName} />;
   const isPassed = event.archetype === "TURN";
+  const isTransaction = event.archetype === "TRANSACTION";
   return (
-    <div className={`${classes.row} ${isPassed ? classes.passed : ""}`}>
+    <div
+      className={`${classes.row} ${isPassed ? classes.passed : ""} ${isTransaction ? classes.transactionRow : ""}`}
+    >
       <div className={classes.iconCell}>
-        <ActorIcon faction={event.faction} />
+        {isTransaction ? (
+          <span className={classes.transactionEventIcon}>
+            <IconArrowsLeftRight size={16} stroke={2} />
+          </span>
+        ) : (
+          <ActorIcon faction={event.faction} />
+        )}
       </div>
       <div className={classes.content}>{body}</div>
       <Tooltip label={formatAbsoluteTime(event.timestamp)} withArrow openDelay={300}>
@@ -504,6 +797,28 @@ function EventRow({ event, now }: { event: GameEvent; now: number }) {
       </Tooltip>
     </div>
   );
+}
+
+// Inline section dividers for PHASE_STARTED / ROUND_STARTED (faction is null;
+// like GAME_ENDED these bypass EventRow, so no actor icon / timestamp cell).
+function SectionDividerRow({ label }: { label: string }) {
+  return (
+    <div className={classes.sectionDivider}>
+      <span className={classes.sectionDividerLabel}>{label}</span>
+      <span className={classes.sectionDividerRule} />
+    </div>
+  );
+}
+
+function sectionDividerLabel(event: GameEvent): string | null {
+  if (event.archetype === "PHASE_STARTED") {
+    const phase = str(event.payload ?? {}, "phase");
+    return phase ? `${prettifyId(phase)} Phase` : null;
+  }
+  // ROUND_STARTED: the sticky round headers already announce the round at the
+  // top of each group, so this renders as a minimal in-scroll divider.
+  const round = num(event.payload ?? {}, "round");
+  return round !== undefined ? `Round ${round}` : null;
 }
 
 function GameEndedRow({ event }: { event: GameEvent }) {
@@ -532,6 +847,7 @@ function GameEndedRow({ event }: { event: GameEvent }) {
 export function GameEventPanel() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid ?? "";
+  const gameData = useGameData();
   const { data, isLoading, isError } = useGameEvents(gameId);
   const [showAll, setShowAll] = useState(false);
   const [now, setNow] = useState(() => Date.now());
@@ -567,6 +883,20 @@ export function GameEventPanel() {
         events: [...events].sort((a, b) => b.seq - a.seq),
       }));
   }, [visibleEvents]);
+
+  const positionToSystemId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const entry of gameData?.tilePositions ?? []) {
+      const [position, systemId] = entry.split(":");
+      if (position && systemId) map[position] = systemId;
+    }
+    return map;
+  }, [gameData?.tilePositions]);
+
+  const systemName = useMemo<SystemNameResolver>(
+    () => (position) => resolveSystemName(position, positionToSystemId),
+    [positionToSystemId]
+  );
 
   if (isLoading) {
     return (
@@ -612,13 +942,28 @@ export function GameEventPanel() {
             <span className={classes.roundLabel}>Round {round}</span>
             <span className={classes.roundRule} />
           </div>
-          {events.map((event) =>
-            event.archetype === "GAME_ENDED" ? (
-              <GameEndedRow key={event.seq} event={event} />
-            ) : (
-              <EventRow key={event.seq} event={event} now={now} />
-            )
-          )}
+          {events.map((event) => {
+            if (event.archetype === "GAME_ENDED") {
+              return <GameEndedRow key={event.seq} event={event} />;
+            }
+            if (
+              event.archetype === "PHASE_STARTED" ||
+              event.archetype === "ROUND_STARTED"
+            ) {
+              const label = sectionDividerLabel(event);
+              return label ? (
+                <SectionDividerRow key={event.seq} label={label} />
+              ) : null;
+            }
+              return (
+                <EventRow
+                  key={event.seq}
+                  event={event}
+                  now={now}
+                  systemName={systemName}
+                />
+              );
+          })}
         </div>
       ))}
     </div>

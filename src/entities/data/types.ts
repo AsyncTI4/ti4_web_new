@@ -347,7 +347,42 @@ export type GameEventArchetype =
   | "OBJECTIVE_SCORED"
   | "AGENDA_RESOLVED"
   | "TRANSACTION"
+  | "PRODUCTION"
+  | "MANUAL_COMMAND"
+  | "PHASE_STARTED"
+  | "ROUND_STARTED"
   | "GAME_ENDED";
+
+/** Structured sub-events embedded in TACTICAL_ACTION payloads (payload.subEvents). */
+export type GameSubEvent =
+  | {
+      type: "COMBAT";
+      kind: "space" | "ground";
+      tile: string | null;
+      planet: string | null;
+      vsFaction: string;
+    }
+  | { type: "CONTROL_ESTABLISHED"; planet: string }
+  | {
+      type: "ACTION_CARD_PLAYED";
+      faction: string;
+      cardId: string;
+      cardName: string;
+    }
+  | {
+      type: "LEADER_PLAYED";
+      faction: string;
+      leaderType: "AGENT" | "HERO";
+      leaderId: string;
+    }
+  | { type: "TECH_EXHAUSTED"; faction: string; techId: string }
+  | {
+      type: "PRODUCTION";
+      tile: string | null;
+      units: Record<string, number> | null;
+      cost: number | null;
+    }
+  | { type: "MANUAL_COMMAND"; user: string | null; command: string };
 
 export type GameEvent = {
   seq: number;

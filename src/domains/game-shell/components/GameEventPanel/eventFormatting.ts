@@ -10,6 +10,7 @@ import { publicObjectives } from "@/entities/data/publicObjectives";
 import { secretObjectives } from "@/entities/data/secretObjectives";
 import { planets } from "@/entities/data/planets";
 import { systems } from "@/entities/data/systems";
+import { units } from "@/entities/data/units";
 
 // ---------------------------------------------------------------------------
 // Name resolution — resolves raw ids to real display names using client-side
@@ -74,8 +75,21 @@ export function resolveCardName(archetype: string, id: string): string {
   }
 }
 
+// Produced-unit keys use async short ids ("ff", "dd"); resolve to the base unit type
+// name ("Fighter") rather than a faction/upgrade variant.
+const baseTypeByAsyncId = new Map<string, string>();
+for (const unit of units) {
+  if (!baseTypeByAsyncId.has(unit.asyncId)) {
+    baseTypeByAsyncId.set(unit.asyncId, unit.baseType);
+  }
+}
+
 export function resolveTechName(id: string): string {
   return nameFrom(techsById, id);
+}
+
+export function resolveUnitName(id: string): string {
+  return prettifyId(baseTypeByAsyncId.get(id) ?? id);
 }
 
 export function resolveAgendaName(id: string): string {
@@ -93,11 +107,21 @@ export function resolvePlanetName(id: string): string {
   return direct?.name ?? prettifyId(id);
 }
 
-/** System tile positions arrive zero-padded ("018"); system ids are stripped. */
-export function resolveSystemName(position: string): string {
-  const stripped = position.replace(/^0+/, "") || position;
-  const sys = systems.find((s) => s.id === stripped || s.id === position);
-  return sys?.name ?? position;
+/**
+ * Event payloads often carry board positions ("105"), not physical system ids.
+ * Prefer the live position -> system map when available so custom maps with an
+ * empty tile at position 105 do not render static system 105's planet name.
+ */
+export function resolveSystemName(
+  position: string,
+  positionToSystemId?: Record<string, string>
+): string {
+  const systemId =
+    positionToSystemId === undefined ? position : positionToSystemId[position];
+  if (!systemId) return position;
+  const stripped = systemId.replace(/^0+/, "") || systemId;
+  const sys = systems.find((s) => s.id === stripped || s.id === systemId);
+  return sys?.name ?? systemId;
 }
 
 export function resolvePlanetsList(underscored: string): string[] {

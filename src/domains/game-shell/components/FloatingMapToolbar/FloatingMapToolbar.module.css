@@ -37,7 +37,7 @@
 .panel {
   position: fixed;
   top: 266px;
-  width: min(320px, calc(100vw - 96px));
+  width: min(400px, calc(100vw - 96px));
   max-height: calc(100vh - 282px);
   overflow-y: auto;
   overflow-x: hidden;
