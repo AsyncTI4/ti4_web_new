@@ -13,10 +13,10 @@ import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
 import { useGameData } from "@/hooks/useGameContext";
 import type { GameEvent, GameSubEvent } from "@/entities/data/types";
-import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
 import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
+import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCard";
 import { RelicCard } from "@/domains/player/components/Relic";
 import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
 import { TechCard } from "@/domains/player/components/Tech";
@@ -32,7 +32,6 @@ import {
   resolveSystemName,
   resolveTechName,
   resolveUnitName,
-  summarizeVotes,
 } from "./eventFormatting";
 import classes from "./GameEventPanel.module.css";
 
@@ -41,7 +40,10 @@ const MAX_VISIBLE = 150;
 // Colored type-badge config per card archetype (distinct hues).
 const CARD_BADGES: Record<string, { label: string; hue: string }> = {
   CARD_PLAY_ACTION_CARD: { label: "AC Played", hue: "oklch(0.66 0.18 45)" },
-  CARD_PLAY_PROMISSORY_NOTE: { label: "PN", hue: "oklch(0.65 0.16 300)" },
+  CARD_PLAY_PROMISSORY_NOTE: {
+    label: "Played Promissory Note",
+    hue: "oklch(0.65 0.16 300)",
+  },
   CARD_PLAY_AGENT: { label: "Agent", hue: "oklch(0.68 0.15 190)" },
   CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.64 0.18 330)" },
   CARD_PLAY_RELIC: { label: "Relic Exhausted", hue: "oklch(0.7 0.14 90)" },
@@ -50,16 +52,12 @@ const CARD_BADGES: Record<string, { label: string; hue: string }> = {
   CARD_PLAY_ABILITY: { label: "Ability", hue: "oklch(0.6 0.02 260)" },
 };
 
-// SC_NUMBER_COLORS values look like "violet.9"; convert to a Mantine CSS var.
-function scNumberBg(n: number): string {
-  const token = SC_NUMBER_COLORS[SC_COLORS[n]];
-  if (!token) return "var(--mantine-color-gray-7)";
-  return `var(--mantine-color-${token.replace(".", "-")})`;
-}
-
 function TypeBadge({ label, hue }: { label: string; hue: string }) {
   return (
-    <span className={classes.badge} style={{ "--badge-hue": hue } as React.CSSProperties}>
+    <span
+      className={classes.badge}
+      style={{ "--badge-hue": hue } as React.CSSProperties}
+    >
       {label}
     </span>
   );
@@ -76,16 +74,24 @@ function ActorIcon({ faction }: { faction: string | null }) {
   );
 }
 
-function str(payload: Record<string, unknown>, key: string): string | undefined {
+function str(
+  payload: Record<string, unknown>,
+  key: string,
+): string | undefined {
   const v = payload[key];
   return typeof v === "string" && v.length > 0 ? v : undefined;
 }
-function num(payload: Record<string, unknown>, key: string): number | undefined {
+function num(
+  payload: Record<string, unknown>,
+  key: string,
+): number | undefined {
   const v = payload[key];
   return typeof v === "number" ? v : undefined;
 }
 
-function eventDescription(payload: Record<string, unknown>): string | undefined {
+function eventDescription(
+  payload: Record<string, unknown>,
+): string | undefined {
   return (
     str(payload, "description") ??
     str(payload, "summary") ??
@@ -129,15 +135,23 @@ function cardEventTitle(archetype: string, cardName: string): string {
   return cardName;
 }
 
-function strategyCardName(payload: Record<string, unknown>, initiative?: number): string {
-  const explicitName = str(payload, "scName") ?? str(payload, "strategyCardName");
+function strategyCardName(
+  payload: Record<string, unknown>,
+  initiative?: number,
+): string {
+  const explicitName =
+    str(payload, "scName") ?? str(payload, "strategyCardName");
   if (explicitName) return explicitName;
 
   if (initiative === undefined) return "strategy card";
   return getStrategyCardByInitiative(initiative)?.name ?? "strategy card";
 }
 
-function pluralize(count: number, singular: string, plural = `${singular}s`): string {
+function pluralize(
+  count: number,
+  singular: string,
+  plural = `${singular}s`,
+): string {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
@@ -218,7 +232,11 @@ function formatTransactionItem(item: TransactionItem): string {
   }
 }
 
-function transactionSides(rawItems: string[], from?: string, to?: string): TransactionSide[] {
+function transactionSides(
+  rawItems: string[],
+  from?: string,
+  to?: string,
+): TransactionSide[] {
   const parsed = rawItems
     .map(parseTransactionItem)
     .filter((item): item is TransactionItem => item !== null);
@@ -232,8 +250,9 @@ function transactionSides(rawItems: string[], from?: string, to?: string): Trans
     bySender.set(item.sender, existing);
   }
 
-  const orderedSenders = [from, to]
-    .filter((sender): sender is string => !!sender && bySender.has(sender));
+  const orderedSenders = [from, to].filter(
+    (sender): sender is string => !!sender && bySender.has(sender),
+  );
   for (const sender of bySender.keys()) {
     if (!orderedSenders.includes(sender)) orderedSenders.push(sender);
   }
@@ -251,7 +270,9 @@ function TransactionItems({ sides }: { sides: TransactionSide[] }) {
     <div className={classes.transactionGrid}>
       {sides.map((side) => (
         <div key={side.sender} className={classes.transactionSide}>
-          <div className={classes.transactionSender}>{prettifyId(side.sender)}</div>
+          <div className={classes.transactionSender}>
+            {prettifyId(side.sender)}
+          </div>
           <ul className={classes.transactionList}>
             {side.items.map((item, index) => (
               <li key={`${side.sender}-${item}-${index}`}>{item}</li>
@@ -302,7 +323,7 @@ function parseSubEvents(value: unknown): GameSubEvent[] {
     (e): e is GameSubEvent =>
       typeof e === "object" &&
       e !== null &&
-      typeof (e as { type?: unknown }).type === "string"
+      typeof (e as { type?: unknown }).type === "string",
   );
 }
 
@@ -331,7 +352,8 @@ function ProductionSummary({
   units: Record<string, number> | null;
   cost: number | null;
 }) {
-  const breakdown = units && Object.keys(units).length > 0 ? unitBreakdown(units) : null;
+  const breakdown =
+    units && Object.keys(units).length > 0 ? unitBreakdown(units) : null;
   return (
     <>
       {breakdown && <span>{breakdown}</span>}
@@ -398,7 +420,7 @@ function SubEventLine({
     case "LEADER_PLAYED": {
       const name = resolveCardName(
         sub.leaderType === "HERO" ? "CARD_PLAY_HERO" : "CARD_PLAY_AGENT",
-        sub.leaderId
+        sub.leaderId,
       );
       return (
         <div className={classes.subEventLine}>
@@ -431,6 +453,31 @@ function SubEventLine({
           </EventPopover>
         </div>
       );
+
+    case "OBJECTIVE_SCORED": {
+      const objectiveName = resolveObjectiveName(sub.objectiveId);
+      const content = (
+        <>
+          <SubFaction faction={sub.faction} />
+          <span className={classes.subMuted}>{sub.category}</span>
+          <span className={classes.subCardName}>{objectiveName}</span>
+        </>
+      );
+      return (
+        <div className={classes.subEventLine}>
+          {sub.category === "SECRET" && sub.objectiveId ? (
+            <EventPopover
+              buttonClassName={classes.subEventButton}
+              details={<SecretObjectiveCard secretId={sub.objectiveId} />}
+            >
+              {content}
+            </EventPopover>
+          ) : (
+            content
+          )}
+        </div>
+      );
+    }
 
     case "PRODUCTION":
       return (
@@ -486,6 +533,16 @@ function EventBody({
     if (event.archetype === "CARD_PLAY_ACTION_CARD" && cardId) {
       return (
         <EventPopover details={<ActionCardDetailsCard actionCardId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    if (event.archetype === "CARD_PLAY_PROMISSORY_NOTE" && cardId) {
+      return (
+        <EventPopover
+          details={<PromissoryNoteCard promissoryNoteId={cardId} />}
+        >
           {content}
         </EventPopover>
       );
@@ -559,7 +616,9 @@ function EventBody({
       const sub =
         planetNames.length > 0 || combat ? (
           <div className={classes.subline}>
-            {planetNames.length > 0 && <span>Took {planetNames.join(", ")}</span>}
+            {planetNames.length > 0 && (
+              <span>Took {planetNames.join(", ")}</span>
+            )}
             {combat && (
               <span className={classes.combat}>
                 <IconSwords size={11} stroke={2} />
@@ -576,6 +635,29 @@ function EventBody({
         </>
       );
       return body;
+    }
+
+    case "STATUS_SCORING": {
+      const subEvents = parseSubEvents(p.subEvents);
+      return (
+        <>
+          <Headline
+            title="Status phase scoring"
+            meta={<TypeBadge label="Status" hue="oklch(0.68 0.15 145)" />}
+          />
+          {subEvents.length > 0 && (
+            <div className={classes.subEvents}>
+              {subEvents.map((sub, index) => (
+                <SubEventLine
+                  key={`${sub.type}-${index}`}
+                  sub={sub}
+                  systemName={systemName}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      );
     }
 
     case "PRODUCTION": {
@@ -634,7 +716,9 @@ function EventBody({
             meta={
               <>
                 <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
-                {payment && <span className={classes.subline}>{prettifyId(payment)}</span>}
+                {payment && (
+                  <span className={classes.subline}>{prettifyId(payment)}</span>
+                )}
               </>
             }
           />
@@ -644,23 +728,10 @@ function EventBody({
     }
 
     case "SC_PLAYED": {
-      const n = num(p, "scNumber");
       const name = str(p, "scName");
       return (
         <>
-          <Headline
-            title={`Played ${name ?? "strategy card"}`}
-            meta={
-              n !== undefined ? (
-                <span
-                  className={classes.scNum}
-                  style={{ background: scNumberBg(n) }}
-                >
-                  {n}
-                </span>
-              ) : null
-            }
-          />
+          <Headline title={`Played ${name ?? "strategy card"}`} />
           <EventDescription>{eventDescription(p)}</EventDescription>
         </>
       );
@@ -684,7 +755,7 @@ function EventBody({
         category === "SECRET"
           ? "oklch(0.62 0.19 20)"
           : category === "CUSTODIAN"
-          ? "oklch(0.7 0.14 90)"
+            ? "oklch(0.7 0.14 90)"
             : "oklch(0.68 0.15 145)";
       const content = (
         <>
@@ -711,24 +782,22 @@ function EventBody({
     }
 
     case "AGENDA_RESOLVED": {
-      const name = resolveAgendaName(str(p, "agendaId") ?? "");
+      const agendaId = str(p, "agendaId") ?? "";
+      const name =
+        str(p, "agendaName") ??
+        (agendaId && !/^\d+$/.test(agendaId)
+          ? resolveAgendaName(agendaId)
+          : "Agenda");
       const outcome = str(p, "outcome");
-      const votesRaw = p.votes;
-      const summary =
-        votesRaw && typeof votesRaw === "object"
-          ? summarizeVotes(votesRaw as Record<string, string>)
-          : "";
       return (
         <>
           <Headline
             title={name}
             meta={<TypeBadge label="Agenda" hue="oklch(0.68 0.16 60)" />}
           />
-          <div className={classes.subline}>
-            {outcome && <span>→ {prettifyId(outcome)}</span>}
-            {summary && <span>· {summary}</span>}
-          </div>
-          <EventDescription>{eventDescription(p)}</EventDescription>
+          <EventDescription>
+            {outcome ? `Vote resolved: ${prettifyId(outcome)}` : undefined}
+          </EventDescription>
         </>
       );
     }
@@ -792,8 +861,14 @@ function EventRow({
         )}
       </div>
       <div className={classes.content}>{body}</div>
-      <Tooltip label={formatAbsoluteTime(event.timestamp)} withArrow openDelay={300}>
-        <span className={classes.time}>{formatRelativeTime(event.timestamp, now)}</span>
+      <Tooltip
+        label={formatAbsoluteTime(event.timestamp)}
+        withArrow
+        openDelay={300}
+      >
+        <span className={classes.time}>
+          {formatRelativeTime(event.timestamp, now)}
+        </span>
       </Tooltip>
     </div>
   );
@@ -830,7 +905,14 @@ function GameEndedRow({ event }: { event: GameEvent }) {
       <span className={classes.trophy}>
         <IconTrophy size={20} stroke={2} />
       </span>
-      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          flexWrap: "wrap",
+        }}
+      >
         {winners.map((w) => (
           <CircularFactionIcon key={w} faction={w} size={22} />
         ))}
@@ -860,7 +942,7 @@ export function GameEventPanel() {
   // Drop TURN rows that aren't "passed" (rhythm markers only), keep the rest.
   const { visibleEvents, hasHidden } = useMemo(() => {
     const kept = (data ?? []).filter(
-      (e) => e.archetype !== "TURN" || e.payload?.passed === true
+      (e) => e.archetype !== "TURN" || e.payload?.passed === true,
     );
     return {
       visibleEvents: showAll ? kept : kept.slice(-MAX_VISIBLE),
@@ -895,12 +977,15 @@ export function GameEventPanel() {
 
   const systemName = useMemo<SystemNameResolver>(
     () => (position) => resolveSystemName(position, positionToSystemId),
-    [positionToSystemId]
+    [positionToSystemId],
   );
 
   if (isLoading) {
     return (
-      <div className={classes.stateBox} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <div
+        className={classes.stateBox}
+        style={{ display: "flex", gap: 8, alignItems: "center" }}
+      >
         <Loader size="xs" color="gray" />
         <Text size="sm" c="dimmed">
           Loading events…
@@ -955,14 +1040,14 @@ export function GameEventPanel() {
                 <SectionDividerRow key={event.seq} label={label} />
               ) : null;
             }
-              return (
-                <EventRow
-                  key={event.seq}
-                  event={event}
-                  now={now}
-                  systemName={systemName}
-                />
-              );
+            return (
+              <EventRow
+                key={event.seq}
+                event={event}
+                now={now}
+                systemName={systemName}
+              />
+            );
           })}
         </div>
       ))}

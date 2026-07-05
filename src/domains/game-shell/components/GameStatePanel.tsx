@@ -1,5 +1,14 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Group, Stack, Text, Divider } from "@mantine/core";
+import {
+  Collapse,
+  Divider,
+  Group,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
+import { IconChevronDown } from "@tabler/icons-react";
 import { useGameState } from "@/hooks/useGameState";
 import { useGameData } from "@/hooks/useGameContext";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -28,11 +37,11 @@ const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
   action: { label: "Action Phase", accent: "green" },
   "status.scoring": { label: "Status Phase · Scoring", accent: "yellow" },
   "status.homework": { label: "Status Phase · Homework", accent: "yellow" },
-  "agenda.readyToFlip": { label: "Agenda Phase · Ready", accent: "orange" },
-  "agenda.whens": { label: "Agenda Phase · Whens", accent: "orange" },
-  "agenda.afters": { label: "Agenda Phase · Afters", accent: "orange" },
-  "agenda.voting": { label: "Agenda Phase · Voting", accent: "orange" },
-  "agenda.resolving": { label: "Agenda Phase · Resolving", accent: "orange" },
+  "agenda.readyToFlip": { label: "Agenda Phase · Ready", accent: "blue" },
+  "agenda.whens": { label: "Agenda Phase · Whens", accent: "blue" },
+  "agenda.afters": { label: "Agenda Phase · Afters", accent: "blue" },
+  "agenda.voting": { label: "Agenda Phase · Voting", accent: "blue" },
+  "agenda.resolving": { label: "Agenda Phase · Resolving", accent: "blue" },
   finished: { label: "Game Over", accent: "red" },
 } as const;
 
@@ -118,7 +127,7 @@ function cleanDisplayName(value?: string | null): string | null {
 
 function getPlayerDisplayName(
   player: GameStatePlayer | undefined,
-  fallback: string
+  fallback: string,
 ): string {
   return (
     cleanDisplayName(player?.displayName) ??
@@ -147,6 +156,51 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
         {cfg.label}
       </Text>
     </Chip>
+  );
+}
+
+function PanelHeader({
+  phase,
+  isCollapsible,
+  isOpen,
+  controlsId,
+  onToggle,
+}: {
+  phase: GamePhase;
+  isCollapsible: boolean;
+  isOpen: boolean;
+  controlsId: string;
+  onToggle: () => void;
+}) {
+  if (!isCollapsible) {
+    return <PhaseBadge phase={phase} />;
+  }
+
+  return (
+    <UnstyledButton
+      aria-controls={controlsId}
+      aria-expanded={isOpen}
+      onClick={onToggle}
+      style={{
+        borderRadius: 6,
+        display: "block",
+        width: "100%",
+      }}
+    >
+      <Group align="center" justify="space-between" wrap="nowrap" gap="xs">
+        <PhaseBadge phase={phase} />
+        <IconChevronDown
+          aria-hidden="true"
+          size={16}
+          style={{
+            color: "var(--mantine-color-gray-4)",
+            flex: "0 0 auto",
+            transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)",
+            transition: "transform 140ms ease",
+          }}
+        />
+      </Group>
+    </UnstyledButton>
   );
 }
 
@@ -200,6 +254,10 @@ function AgendaRow({
   const outcomeSummary = outcomeEntries
     .map(([k, v]) => `${titleCaseWords(k)} ${v}`)
     .join(" · ");
+  const resolvedOutcome = agenda?.resolvedOutcome?.trim();
+  const outcomeStatus = resolvedOutcome
+    ? `Vote resolved: ${titleCaseWords(resolvedOutcome)}`
+    : outcomeSummary;
 
   const showVoterHint =
     phase === "agenda.voting" &&
@@ -212,9 +270,9 @@ function AgendaRow({
       ? null
       : getPlayerDisplayName(
           playerData.find((p) => p.color === activePlayer),
-          activePlayer
+          activePlayer,
         );
-  const votes =
+  const activePlayerStartVotes =
     activePlayer !== null && agenda !== null
       ? agenda.startVoteCounts[activePlayer]
       : undefined;
@@ -223,7 +281,7 @@ function AgendaRow({
   return (
     <Stack gap="xs">
       <Stack gap={4}>
-        <Text size="xs" c="orange.2" fw={700}>
+        <Text size="xs" c="gray.3" fw={700}>
           Agenda
         </Text>
         {displayName ? (
@@ -231,7 +289,7 @@ function AgendaRow({
             {displayName}
           </Text>
         ) : (
-          <Text size="sm" c="orange.2" fw={700} lh={1.25}>
+          <Text size="sm" c="blue.2" fw={700} lh={1.25}>
             Current agenda unavailable
           </Text>
         )}
@@ -251,15 +309,6 @@ function AgendaRow({
           </Text>
         )}
       </Stack>
-
-      {phase === "agenda.voting" && activePlayerName && (
-        <Text size="xs" c="gray.3">
-          Current voter:{" "}
-          <Text span size="xs" c="gray.1" fw={700}>
-            {activePlayerName}
-          </Text>
-        </Text>
-      )}
 
       {phase === "agenda.voting" && votingPlayers.length > 0 && (
         <Stack gap={4}>
@@ -314,6 +363,9 @@ function AgendaRow({
             <tbody>
               {votingPlayers.map((player) => {
                 const isCurrent = player.color === activePlayer;
+                const castVotes = agenda?.castVoteCounts?.[player.color] ?? 0;
+                const startVotes =
+                  agenda?.startVoteCounts?.[player.color] ?? "?";
                 return (
                   <tr
                     key={player.color}
@@ -370,7 +422,7 @@ function AgendaRow({
                         color: "var(--mantine-color-gray-2)",
                       }}
                     >
-                      {player.influence ?? "?"}
+                      {castVotes}
                     </td>
                     <td
                       style={{
@@ -381,7 +433,7 @@ function AgendaRow({
                         color: "var(--mantine-color-gray-4)",
                       }}
                     >
-                      {player.totInfluence ?? "?"}
+                      {startVotes}
                     </td>
                   </tr>
                 );
@@ -391,15 +443,16 @@ function AgendaRow({
         </Stack>
       )}
 
-      {outcomeSummary && (
+      {outcomeStatus && (
         <Text size="xs" c="gray.3">
-          {outcomeSummary}
+          {outcomeStatus}
         </Text>
       )}
 
-      {showVoterHint && votes !== undefined && (
-        <Text size="xs" c="orange.3">
-          {activePlayerName} has {votes} vote{votes !== 1 ? "s" : ""} to cast
+      {showVoterHint && activePlayerStartVotes !== undefined && (
+        <Text size="xs" c="blue.3">
+          {activePlayerName} has {activePlayerStartVotes} vote
+          {activePlayerStartVotes !== 1 ? "s" : ""} to cast
         </Text>
       )}
     </Stack>
@@ -480,6 +533,9 @@ function GameStatePanelContent({
   const { phase } = gameState;
   const cfg = PHASE_CONFIGS[phase];
   const panelAccent = PANEL_ACCENT[cfg.accent] ?? "none";
+  const isCollapsible = phaseGroup(phase) === "agenda";
+  const [isOpen, setIsOpen] = useState(true);
+  const detailsId = "game-state-panel-details";
 
   if (phase === "finished" && gameState.winner) {
     return (
@@ -495,37 +551,51 @@ function GameStatePanelContent({
   return (
     <Panel variant="subtle" accent={panelAccent}>
       <Stack gap="xs">
-        <PhaseBadge phase={phase} />
+        <PanelHeader
+          phase={phase}
+          isCollapsible={isCollapsible}
+          isOpen={isOpen}
+          controlsId={detailsId}
+          onToggle={() => setIsOpen((opened) => !opened)}
+        />
 
-        {gameState.activePlayer && (
-          <ActivePlayerRow
-            activePlayer={gameState.activePlayer}
-            phase={phase}
-            playerData={playerData}
-          />
-        )}
+        <Collapse
+          in={!isCollapsible || isOpen}
+          id={detailsId}
+          transitionDuration={160}
+        >
+          <Stack gap="xs">
+            {gameState.activePlayer && (
+              <ActivePlayerRow
+                activePlayer={gameState.activePlayer}
+                phase={phase}
+                playerData={playerData}
+              />
+            )}
 
-        {phaseGroup(phase) === "agenda" && (
-          <>
-            <Divider c="gray.7" opacity={0.4} />
-            <AgendaRow
-              agenda={gameState.agenda}
-              phase={phase}
-              activePlayer={gameState.activePlayer}
-              playerData={playerData}
-            />
-          </>
-        )}
+            {phaseGroup(phase) === "agenda" && (
+              <>
+                <Divider c="gray.7" opacity={0.4} />
+                <AgendaRow
+                  agenda={gameState.agenda}
+                  phase={phase}
+                  activePlayer={gameState.activePlayer}
+                  playerData={playerData}
+                />
+              </>
+            )}
 
-        {gameState.activeCombat && (
-          <>
-            <Divider c="gray.7" opacity={0.4} />
-            <CombatRow
-              combat={gameState.activeCombat}
-              playerData={playerData}
-            />
-          </>
-        )}
+            {gameState.activeCombat && (
+              <>
+                <Divider c="gray.7" opacity={0.4} />
+                <CombatRow
+                  combat={gameState.activeCombat}
+                  playerData={playerData}
+                />
+              </>
+            )}
+          </Stack>
+        </Collapse>
       </Stack>
     </Panel>
   );

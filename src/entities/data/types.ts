@@ -345,6 +345,7 @@ export type GameEventArchetype =
   | "SC_PLAYED"
   | "SC_PICKED"
   | "OBJECTIVE_SCORED"
+  | "STATUS_SCORING"
   | "AGENDA_RESOLVED"
   | "TRANSACTION"
   | "PRODUCTION"
@@ -376,6 +377,12 @@ export type GameSubEvent =
       leaderId: string;
     }
   | { type: "TECH_EXHAUSTED"; faction: string; techId: string }
+  | {
+      type: "OBJECTIVE_SCORED";
+      faction: string;
+      objectiveId: string;
+      category: "PUBLIC" | "SECRET" | "CUSTODIAN" | (string & {});
+    }
   | {
       type: "PRODUCTION";
       tile: string | null;
@@ -412,7 +419,9 @@ export type GamePhase =
 export type GameStateAgenda = {
   id: string;
   startVoteCounts: Record<string, number>;
+  castVoteCounts: Record<string, number>;
   outcomeVoteCounts: Record<string, number>;
+  resolvedOutcome: string | null;
 };
 
 export type GameStateCombat = {
