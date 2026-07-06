@@ -153,7 +153,7 @@ export function PlayerStatsArea({
                   className={styles.zeroTokenImage}
                 />
               )}
-              {playerData.scs.map((sc: number) => {
+              {playerData.scs.map((sc: number, index: number) => {
                 const isExhausted = playerData.exhaustedSCs?.includes(sc);
                 return (
                   <Text
@@ -170,6 +170,10 @@ export function PlayerStatsArea({
                             SC_COLORS[sc as keyof typeof SC_COLORS]
                           ]
                     }
+                    style={{
+                      right: `${24 - index * 36}px`,
+                      fontSize: `${!playerData.hasZeroToken ? 64 : 48 - ((playerData.scs.length - 1) * 1)}px`,
+                  }}
                   >
                     {sc}
                   </Text>
