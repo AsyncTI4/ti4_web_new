@@ -20,6 +20,7 @@ import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCa
 import { RelicCard } from "@/domains/player/components/Relic";
 import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
 import { TechCard } from "@/domains/player/components/Tech";
+import { BreakthroughCard } from "@/domains/player/components/Breakthrough/BreakthroughCard";
 import {
   formatAbsoluteTime,
   formatRelativeTime,
@@ -48,7 +49,7 @@ const CARD_BADGES: Record<string, { label: string; hue: string }> = {
   CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.64 0.18 330)" },
   CARD_PLAY_RELIC: { label: "Relic Exhausted", hue: "oklch(0.7 0.14 90)" },
   CARD_PLAY_TECH_EXHAUST: { label: "Tech", hue: "oklch(0.66 0.15 150)" },
-  CARD_PLAY_BREAKTHROUGH: { label: "BT", hue: "oklch(0.64 0.17 330)" },
+  CARD_PLAY_BREAKTHROUGH: { label: "Breakthrough", hue: "oklch(0.64 0.17 330)" },
   CARD_PLAY_ABILITY: { label: "Ability", hue: "oklch(0.6 0.02 260)" },
 };
 
@@ -184,7 +185,7 @@ function genericCount(detail: string): { label: string; count: number } {
   return { label: match[1], count: Number(match[2]) };
 }
 
-function formatTransactionItem(item: TransactionItem): string {
+function formatTransactionItem(item: TransactionItem): string | null {
   const { type, detail } = item;
 
   switch (type) {
@@ -199,7 +200,8 @@ function formatTransactionItem(item: TransactionItem): string {
         : resolveCardName("CARD_PLAY_ACTION_CARD", detail);
     }
     case "PNs": {
-      const { count } = genericCount(detail);
+      const { label, count } = genericCount(detail);
+      if (label !== "generic") return pluralize(1, "promissory note");
       return pluralize(count, "promissory note");
     }
     case "SOs": {
@@ -226,7 +228,7 @@ function formatTransactionItem(item: TransactionItem): string {
     case "action":
       return `${prettifyId(detail)} action`;
     case "details":
-      return detail.replace(/fin777/g, " ");
+      return null;
     default:
       return prettifyId(detail || type);
   }
@@ -245,6 +247,7 @@ function transactionSides(
   const bySender = new Map<string, string[]>();
   for (const item of parsed) {
     const formatted = formatTransactionItem(item);
+    if (!formatted) continue;
     const existing = bySender.get(item.sender) ?? [];
     existing.push(formatted);
     bySender.set(item.sender, existing);
@@ -370,9 +373,11 @@ function ProductionSummary({
 function SubEventLine({
   sub,
   systemName,
+  actorFaction,
 }: {
   sub: GameSubEvent;
   systemName: SystemNameResolver;
+  actorFaction?: string | null;
 }) {
   switch (sub.type) {
     case "COMBAT":
@@ -381,8 +386,12 @@ function SubEventLine({
           <span className={classes.combat}>
             <IconSwords size={11} stroke={2} />
             {sub.kind === "space"
-              ? `Space combat${sub.tile ? ` in ${systemName(sub.tile)}` : ""}`
-              : `Ground combat${sub.planet ? ` on ${resolvePlanetName(sub.planet)}` : ""}`}
+              ? sub.tile
+                ? systemName(sub.tile)
+                : "Combat"
+              : sub.planet
+                ? resolvePlanetName(sub.planet)
+                : "Combat"}
           </span>
           {sub.vsFaction && (
             <>
@@ -393,12 +402,15 @@ function SubEventLine({
         </div>
       );
 
-    case "CONTROL_ESTABLISHED":
+    case "CONTROL_ESTABLISHED": {
+      const controllingFaction = sub.faction ?? actorFaction;
       return (
         <div className={classes.subEventLine}>
+          {controllingFaction && <SubFaction faction={controllingFaction} />}
           <span>Took control of {resolvePlanetName(sub.planet)}</span>
         </div>
       );
+    }
 
     case "ACTION_CARD_PLAYED": {
       const name =
@@ -548,7 +560,11 @@ function EventBody({
       );
     }
 
-    if (event.archetype === "CARD_PLAY_AGENT" && cardId) {
+    if (
+      (event.archetype === "CARD_PLAY_AGENT" ||
+        event.archetype === "CARD_PLAY_HERO") &&
+      cardId
+    ) {
       return (
         <EventPopover details={<LeaderDetailsCard leaderId={cardId} />}>
           {content}
@@ -567,6 +583,14 @@ function EventBody({
     if (event.archetype === "CARD_PLAY_TECH_EXHAUST" && cardId) {
       return (
         <EventPopover details={<TechCard techId={cardId} />}>
+          {content}
+        </EventPopover>
+      );
+    }
+
+    if (event.archetype === "CARD_PLAY_BREAKTHROUGH" && cardId) {
+      return (
+        <EventPopover details={<BreakthroughCard breakthroughId={cardId} />}>
           {content}
         </EventPopover>
       );
@@ -606,6 +630,7 @@ function EventBody({
                   key={`${sub.type}-${index}`}
                   sub={sub}
                   systemName={systemName}
+                  actorFaction={event.faction}
                 />
               ))}
             </div>
@@ -652,6 +677,7 @@ function EventBody({
                   key={`${sub.type}-${index}`}
                   sub={sub}
                   systemName={systemName}
+                  actorFaction={event.faction}
                 />
               ))}
             </div>
@@ -1012,15 +1038,6 @@ export function GameEventPanel() {
 
   return (
     <div className={classes.root}>
-      {hasHidden && (
-        <button
-          type="button"
-          className={classes.showEarlier}
-          onClick={() => setShowAll(true)}
-        >
-          Show earlier events
-        </button>
-      )}
       {grouped.map(({ round, events }) => (
         <div key={round}>
           <div className={classes.roundHeader}>
@@ -1051,6 +1068,15 @@ export function GameEventPanel() {
           })}
         </div>
       ))}
+      {hasHidden && (
+        <button
+          type="button"
+          className={classes.showEarlier}
+          onClick={() => setShowAll(true)}
+        >
+          Show earlier events
+        </button>
+      )}
     </div>
   );
 }

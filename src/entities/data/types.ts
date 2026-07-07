@@ -325,6 +325,7 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
+  limitedWhispersMode?: boolean;
   gameState?: GameState;
   /** Increments whenever new game events are available; used to invalidate the events query without polling. */
   eventSequence?: number;
@@ -363,7 +364,7 @@ export type GameSubEvent =
       planet: string | null;
       vsFaction: string;
     }
-  | { type: "CONTROL_ESTABLISHED"; planet: string }
+  | { type: "CONTROL_ESTABLISHED"; planet: string; faction?: string }
   | {
       type: "ACTION_CARD_PLAYED";
       faction: string;

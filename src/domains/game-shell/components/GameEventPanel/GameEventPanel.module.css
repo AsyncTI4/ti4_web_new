@@ -1,4 +1,7 @@
 .root {
+  --event-accent: var(--map-tab-active-border, rgba(59, 130, 246, 0.72));
+  --event-accent-soft: color-mix(in oklab, var(--event-accent) 18%, transparent);
+  --event-accent-line: color-mix(in oklab, var(--event-accent) 34%, transparent);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -7,7 +10,7 @@
 /* Round grouping ------------------------------------------------------- */
 .roundHeader {
   position: sticky;
-  top: -12px;
+  top: 37px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -16,9 +19,10 @@
   padding: 5px 12px;
   background: linear-gradient(
     180deg,
-    rgba(9, 15, 26, 0.96) 0%,
-    rgba(9, 15, 26, 0.78) 100%
+    color-mix(in oklab, var(--event-accent) 12%, rgba(9, 15, 26, 0.96)) 0%,
+    rgba(9, 15, 26, 0.82) 100%
   );
+  border-bottom: 1px solid var(--event-accent-line);
   backdrop-filter: blur(6px);
 }
 .roundHeader:first-child {
@@ -29,7 +33,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mantine-color-gray-4);
+  color: color-mix(in oklab, var(--event-accent) 45%, var(--mantine-color-gray-3));
   white-space: nowrap;
 }
 .roundRule {
@@ -37,7 +41,7 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(148, 163, 184, 0.28),
+    var(--event-accent-line),
     rgba(148, 163, 184, 0)
   );
 }
@@ -51,9 +55,14 @@
   padding: 5px 4px;
   border-radius: 6px;
   border-left: 2px solid transparent;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.row:hover {
+  background: var(--event-accent-soft);
+  border-left-color: var(--event-accent-line);
 }
 .row + .row {
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  border-top: 1px solid color-mix(in oklab, var(--event-accent) 12%, rgba(148, 163, 184, 0.08));
 }
 .transactionRow {
   border-left-color: transparent;
@@ -98,7 +107,7 @@
   transition: background 0.12s ease, color 0.12s ease;
 }
 .cardEventButton:hover {
-  background: rgba(96, 165, 250, 0.08);
+  background: transparent;
 }
 .cardEventButton:hover .primary {
   color: var(--mantine-color-blue-2);
@@ -175,7 +184,7 @@
   margin-top: 4px;
   margin-left: 2px;
   padding-left: 9px;
-  border-left: 1px solid rgba(148, 163, 184, 0.18);
+  border-left: 1px solid var(--event-accent-line);
 }
 .subEventLine {
   display: flex;
@@ -222,7 +231,7 @@
   transition: background 0.12s ease, color 0.12s ease;
 }
 .subEventButton:hover {
-  background: rgba(96, 165, 250, 0.08);
+  background: transparent;
 }
 .subEventButton:hover .subCardName {
   color: var(--mantine-color-blue-2);
@@ -261,7 +270,7 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(148, 163, 184, 0.16),
+    color-mix(in oklab, var(--event-accent) 22%, rgba(148, 163, 184, 0.16)),
     rgba(148, 163, 184, 0)
   );
 }
@@ -303,8 +312,8 @@
   font-size: 10px;
   font-weight: 600;
   color: var(--mantine-color-gray-2);
-  background: rgba(148, 163, 184, 0.12);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: color-mix(in oklab, var(--event-accent) 16%, rgba(148, 163, 184, 0.1));
+  border: 1px solid color-mix(in oklab, var(--event-accent) 35%, rgba(148, 163, 184, 0.18));
   white-space: nowrap;
 }
 .scNum {
@@ -362,7 +371,7 @@
 }
 
 .transactionArrow {
-  color: var(--mantine-color-gray-5);
+  color: color-mix(in oklab, var(--event-accent) 54%, var(--mantine-color-gray-5));
   display: inline-flex;
   align-items: center;
 }
@@ -372,7 +381,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--mantine-color-gray-5);
+  color: color-mix(in oklab, var(--event-accent) 54%, var(--mantine-color-gray-5));
 }
 .transactionGrid {
   display: grid;
@@ -422,6 +431,6 @@
   transition: background 0.12s ease, color 0.12s ease;
 }
 .showEarlier:hover {
-  background: rgba(148, 163, 184, 0.16);
+  background: color-mix(in oklab, var(--event-accent) 20%, rgba(148, 163, 184, 0.12));
   color: var(--mantine-color-gray-2);
 }

@@ -78,6 +78,7 @@ export type GameData = {
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
+  limitedWhispersMode?: boolean;
 };
 
 export type GameDataState = {
