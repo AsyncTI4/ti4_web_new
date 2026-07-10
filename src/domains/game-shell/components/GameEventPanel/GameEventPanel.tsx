@@ -12,6 +12,7 @@ import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
 import { useGameData } from "@/hooks/useGameContext";
+import { useMapStatePreview } from "@/hooks/useGameContext";
 import type { GameEvent, GameSubEvent } from "@/entities/data/types";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
@@ -49,7 +50,10 @@ const CARD_BADGES: Record<string, { label: string; hue: string }> = {
   CARD_PLAY_HERO: { label: "Hero", hue: "oklch(0.64 0.18 330)" },
   CARD_PLAY_RELIC: { label: "Relic Exhausted", hue: "oklch(0.7 0.14 90)" },
   CARD_PLAY_TECH_EXHAUST: { label: "Tech", hue: "oklch(0.66 0.15 150)" },
-  CARD_PLAY_BREAKTHROUGH: { label: "Breakthrough", hue: "oklch(0.64 0.17 330)" },
+  CARD_PLAY_BREAKTHROUGH: {
+    label: "Breakthrough",
+    hue: "oklch(0.64 0.17 330)",
+  },
   CARD_PLAY_ABILITY: { label: "Ability", hue: "oklch(0.6 0.02 260)" },
 };
 
@@ -956,6 +960,7 @@ export function GameEventPanel() {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid ?? "";
   const gameData = useGameData();
+  const setMapStatePreview = useMapStatePreview();
   const { data, isLoading, isError } = useGameEvents(gameId);
   const [showAll, setShowAll] = useState(false);
   const [now, setNow] = useState(() => Date.now());
@@ -964,6 +969,11 @@ export function GameEventPanel() {
     const id = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    setMapStatePreview(null);
+    return () => setMapStatePreview(null);
+  }, [gameId, setMapStatePreview]);
 
   // Drop TURN rows that aren't "passed" (rhythm markers only), keep the rest.
   const { visibleEvents, hasHidden } = useMemo(() => {
@@ -975,6 +985,20 @@ export function GameEventPanel() {
       hasHidden: !showAll && kept.length > MAX_VISIBLE,
     };
   }, [data, showAll]);
+
+  // Snapshots are sparse: an event without one has the same map as the most
+  // recent earlier event that does. Build this from the complete event list so
+  // a snapshot still carries into the visible window when earlier rows are
+  // hidden behind "Show earlier events".
+  const historicalMapStateBySeq = useMemo(() => {
+    const result = new Map<number, string>();
+    let latestMapState: string | undefined;
+    for (const event of [...(data ?? [])].sort((a, b) => a.seq - b.seq)) {
+      if (event.mapState) latestMapState = event.mapState;
+      if (latestMapState) result.set(event.seq, latestMapState);
+    }
+    return result;
+  }, [data]);
 
   // Group by round, newest round first, newest event first within a round.
   const grouped = useMemo(() => {
@@ -1045,25 +1069,36 @@ export function GameEventPanel() {
             <span className={classes.roundRule} />
           </div>
           {events.map((event) => {
+            const historicalMapState = historicalMapStateBySeq.get(event.seq);
+            let row: React.ReactNode;
             if (event.archetype === "GAME_ENDED") {
-              return <GameEndedRow key={event.seq} event={event} />;
-            }
-            if (
+              row = <GameEndedRow event={event} />;
+            } else if (
               event.archetype === "PHASE_STARTED" ||
               event.archetype === "ROUND_STARTED"
             ) {
               const label = sectionDividerLabel(event);
-              return label ? (
-                <SectionDividerRow key={event.seq} label={label} />
-              ) : null;
+              row = label ? <SectionDividerRow label={label} /> : null;
+            } else {
+              row = (
+                <EventRow event={event} now={now} systemName={systemName} />
+              );
             }
+
+            if (!row) return null;
             return (
-              <EventRow
+              <div
                 key={event.seq}
-                event={event}
-                now={now}
-                systemName={systemName}
-              />
+                onMouseEnter={() => {
+                  if (historicalMapState)
+                    setMapStatePreview(historicalMapState);
+                }}
+                onMouseLeave={() => {
+                  if (historicalMapState) setMapStatePreview(null);
+                }}
+              >
+                {row}
+              </div>
             );
           })}
         </div>

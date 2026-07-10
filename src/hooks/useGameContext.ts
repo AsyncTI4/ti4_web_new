@@ -45,3 +45,8 @@ export function useColorOverrides(): {
     clearColorOverride: contextValue?.clearColorOverride ?? (() => {}),
   };
 }
+
+export function useMapStatePreview(): (mapState: string | null) => void {
+  const contextValue = useContext(EnhancedDataContext);
+  return contextValue?.setMapStatePreview ?? (() => {});
+}

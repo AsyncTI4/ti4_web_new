@@ -33,6 +33,7 @@ export type GameContext = {
   colorOverrides: Record<string, string>;
   setColorOverride: (faction: string, colorAlias: string | null) => void;
   clearColorOverride: (faction: string) => void;
+  setMapStatePreview: (mapState: string | null) => void;
 };
 
 export type GameData = {
@@ -78,7 +79,6 @@ export type GameData = {
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
-  limitedWhispersMode?: boolean;
 };
 
 export type GameDataState = {
@@ -122,7 +122,7 @@ export type Tile = {
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;
 
 export type TilePlanet = {
-  controlledBy: string | undefined;
+  controlledBy: string | null | undefined;
   commodities: number | null;
   planetaryShield: boolean;
   tokens: string[];
@@ -131,8 +131,8 @@ export type TilePlanet = {
   unitsByFaction: Record<string, EntityData[]>;
   techSpecialties: string[];
   exhausted: boolean;
-  resources?: number;
-  influence?: number;
+  resources?: number | null;
+  influence?: number | null;
 };
 
 export type EnrichedTab = {

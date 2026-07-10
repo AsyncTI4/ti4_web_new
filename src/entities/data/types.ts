@@ -132,14 +132,15 @@ export type FactionUnits = {
 };
 
 export type PlanetEntityData = {
-  controlledBy: string;
+  controlledBy: string | null;
   entities: {
     [factionName: string]: EntityData[];
   };
   commodities: number | null;
   planetaryShield: boolean;
-  resources: number;
-  influence: number;
+  exhausted?: boolean;
+  resources: number | null;
+  influence: number | null;
 };
 
 type PlanetData = {
@@ -325,7 +326,6 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
-  limitedWhispersMode?: boolean;
   gameState?: GameState;
   /** Increments whenever new game events are available; used to invalidate the events query without polling. */
   eventSequence?: number;
@@ -400,6 +400,7 @@ export type GameEvent = {
   faction: string | null;
   timestamp: number;
   payload: Record<string, unknown>;
+  mapState?: string | null;
 };
 
 export type GamePhase =

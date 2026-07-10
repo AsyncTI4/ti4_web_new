@@ -325,7 +325,6 @@ export function buildGameContext(
     expeditions: data.expeditions,
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,
-    limitedWhispersMode: data.limitedWhispersMode,
   };
 
   endBuildGameContextMeasure({

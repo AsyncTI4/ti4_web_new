@@ -5,6 +5,7 @@ import { useMovementStore } from "@/utils/movementStore";
 import { applyDisplacementToPlayerData } from "@/utils/displacement";
 import { buildGameContext } from "./utils/buildGameContext";
 import type { GameContext, Props } from "./types";
+import { deserializeCompactMapState } from "@/utils/compactMapState";
 
 export function GameContextProvider({ children, gameId }: Props) {
   const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
@@ -14,12 +15,29 @@ export function GameContextProvider({ children, gameId }: Props) {
   const draft = useMovementStore((s) => s.draft);
 
   const [decalOverrides, setDecalOverrides] = useState<Record<string, string>>(
-    {}
+    {},
   );
 
   const [colorOverrides, setColorOverrides] = useState<Record<string, string>>(
-    {}
+    {},
   );
+
+  const [mapStatePreview, setMapStatePreviewData] = useState<
+    ReturnType<typeof deserializeCompactMapState> | undefined
+  >();
+
+  const setMapStatePreview = useCallback((mapState: string | null) => {
+    if (mapState === null) {
+      setMapStatePreviewData(undefined);
+      return;
+    }
+    try {
+      setMapStatePreviewData(deserializeCompactMapState(mapState));
+    } catch (error) {
+      console.error("Unable to preview compact event map state", error);
+      setMapStatePreviewData(undefined);
+    }
+  }, []);
 
   const setDecalOverride = useCallback(
     (faction: string, decalId: string | null) => {
@@ -32,14 +50,14 @@ export function GameContextProvider({ children, gameId }: Props) {
         return { ...prev, [faction]: decalId };
       });
     },
-    []
+    [],
   );
 
   const clearDecalOverride = useCallback(
     (faction: string) => {
       setDecalOverride(faction, null);
     },
-    [setDecalOverride]
+    [setDecalOverride],
   );
 
   const setColorOverride = useCallback(
@@ -53,20 +71,23 @@ export function GameContextProvider({ children, gameId }: Props) {
         return { ...prev, [faction]: colorAlias };
       });
     },
-    []
+    [],
   );
 
   const clearColorOverride = useCallback(
     (faction: string) => {
       setColorOverride(faction, null);
     },
-    [setColorOverride]
+    [setColorOverride],
   );
 
   const adjustedData = useMemo(() => {
     if (!data) return undefined;
-    return applyDisplacementToPlayerData(data, draft);
-  }, [data, draft]);
+    const displacedData = applyDisplacementToPlayerData(data, draft);
+    return mapStatePreview
+      ? { ...displacedData, tileUnitData: mapStatePreview }
+      : displacedData;
+  }, [data, draft, mapStatePreview]);
 
   const enhancedData = useMemo(() => {
     if (!adjustedData) return undefined;
@@ -88,6 +109,7 @@ export function GameContextProvider({ children, gameId }: Props) {
     colorOverrides,
     setColorOverride,
     clearColorOverride,
+    setMapStatePreview,
   };
 
   return (
@@ -98,7 +120,7 @@ export function GameContextProvider({ children, gameId }: Props) {
 }
 
 export const EnhancedDataContext = createContext<GameContext | undefined>(
-  undefined
+  undefined,
 );
 
 export type {

@@ -315,131 +315,141 @@ function AgendaRow({
           <Text size="xs" c="gray.3" fw={700}>
             Vote counts
           </Text>
-          <table
+          <div
             style={{
               width: "100%",
-              borderCollapse: "collapse",
-              fontSize: 12,
-              color: "var(--mantine-color-gray-2)",
+              boxSizing: "border-box",
+              overflow: "hidden",
+              paddingRight: 8,
             }}
           >
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    padding: "3px 6px",
-                    textAlign: "left",
-                    color: "var(--mantine-color-gray-4)",
-                    fontWeight: 700,
-                    borderBottom: "1px solid var(--mantine-color-dark-4)",
-                  }}
-                >
-                  Player
-                </th>
-                <th
-                  style={{
-                    padding: "3px 6px",
-                    textAlign: "right",
-                    color: "var(--mantine-color-gray-4)",
-                    fontWeight: 700,
-                    borderBottom: "1px solid var(--mantine-color-dark-4)",
-                  }}
-                >
-                  Votes
-                </th>
-                <th
-                  style={{
-                    padding: "3px 6px",
-                    textAlign: "right",
-                    color: "var(--mantine-color-gray-4)",
-                    fontWeight: 700,
-                    borderBottom: "1px solid var(--mantine-color-dark-4)",
-                  }}
-                >
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {votingPlayers.map((player) => {
-                const isCurrent = player.color === activePlayer;
-                const castVotes = agenda?.castVoteCounts?.[player.color] ?? 0;
-                const startVotes =
-                  agenda?.startVoteCounts?.[player.color] ?? "?";
-                return (
-                  <tr
-                    key={player.color}
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: 12,
+                color: "var(--mantine-color-gray-2)",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th
                     style={{
-                      background: isCurrent
-                        ? "rgba(255, 255, 255, 0.06)"
-                        : "transparent",
+                      padding: "3px 6px",
+                      textAlign: "left",
+                      color: "var(--mantine-color-gray-4)",
+                      fontWeight: 700,
+                      borderBottom: "1px solid var(--mantine-color-dark-4)",
                     }}
                   >
-                    <td
+                    Player
+                  </th>
+                  <th
+                    style={{
+                      padding: "3px 6px",
+                      textAlign: "right",
+                      color: "var(--mantine-color-gray-4)",
+                      fontWeight: 700,
+                      borderBottom: "1px solid var(--mantine-color-dark-4)",
+                    }}
+                  >
+                    Votes
+                  </th>
+                  <th
+                    style={{
+                      padding: "3px 6px",
+                      textAlign: "right",
+                      color: "var(--mantine-color-gray-4)",
+                      fontWeight: 700,
+                      borderBottom: "1px solid var(--mantine-color-dark-4)",
+                    }}
+                  >
+                    Total
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {votingPlayers.map((player) => {
+                  const isCurrent = player.color === activePlayer;
+                  const castVotes =
+                    agenda?.castVoteCounts?.[player.color] ?? 0;
+                  const startVotes =
+                    agenda?.startVoteCounts?.[player.color] ?? "?";
+                  return (
+                    <tr
+                      key={player.color}
                       style={{
-                        padding: "3px 6px",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                        fontWeight: isCurrent ? 700 : 500,
-                        color: isCurrent
-                          ? "var(--mantine-color-gray-1)"
-                          : "var(--mantine-color-gray-3)",
+                        background: isCurrent
+                          ? "rgba(255, 255, 255, 0.06)"
+                          : "transparent",
                       }}
                     >
-                      <span
+                      <td
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          minWidth: 0,
+                          padding: "3px 6px",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                          fontWeight: isCurrent ? 700 : 500,
+                          color: isCurrent
+                            ? "var(--mantine-color-gray-1)"
+                            : "var(--mantine-color-gray-3)",
                         }}
                       >
-                        {player.faction && (
-                          <CircularFactionIcon
-                            faction={player.faction}
-                            size={18}
-                            factionImageOverride={player.factionImage}
-                            factionImageTypeOverride={player.factionImageType}
-                          />
-                        )}
                         <span
                           style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
                             minWidth: 0,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
                           }}
                         >
-                          {getPlayerDisplayName(player, player.color)}
+                          {player.faction && (
+                            <CircularFactionIcon
+                              faction={player.faction}
+                              size={18}
+                              factionImageOverride={player.factionImage}
+                              factionImageTypeOverride={player.factionImageType}
+                            />
+                          )}
+                          <span
+                            style={{
+                              minWidth: 0,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {getPlayerDisplayName(player, player.color)}
+                          </span>
                         </span>
-                      </span>
-                    </td>
-                    <td
-                      style={{
-                        padding: "3px 6px",
-                        textAlign: "right",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                        fontVariantNumeric: "tabular-nums",
-                        color: "var(--mantine-color-gray-2)",
-                      }}
-                    >
-                      {castVotes}
-                    </td>
-                    <td
-                      style={{
-                        padding: "3px 6px",
-                        textAlign: "right",
-                        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                        fontVariantNumeric: "tabular-nums",
-                        color: "var(--mantine-color-gray-4)",
-                      }}
-                    >
-                      {startVotes}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      </td>
+                      <td
+                        style={{
+                          padding: "3px 6px",
+                          textAlign: "right",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                          fontVariantNumeric: "tabular-nums",
+                          color: "var(--mantine-color-gray-2)",
+                        }}
+                      >
+                        {castVotes}
+                      </td>
+                      <td
+                        style={{
+                          padding: "3px 6px",
+                          textAlign: "right",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                          fontVariantNumeric: "tabular-nums",
+                          color: "var(--mantine-color-gray-4)",
+                        }}
+                      >
+                        {startVotes}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </Stack>
       )}
 
