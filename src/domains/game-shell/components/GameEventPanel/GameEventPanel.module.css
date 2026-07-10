@@ -64,6 +64,53 @@
 .row + .row {
   border-top: 1px solid color-mix(in oklab, var(--event-accent) 12%, rgba(148, 163, 184, 0.08));
 }
+.mapChangeEvent {
+  position: relative;
+}
+.mapChangeEvent .row {
+  padding-right: 34px;
+}
+.mapChangeIndicator {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: color-mix(in oklab, var(--event-accent) 38%, white);
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  pointer-events: none;
+  background: color-mix(
+    in oklab,
+    var(--event-accent) 24%,
+    rgba(9, 15, 26, 0.94)
+  );
+  border: 1px solid color-mix(in oklab, var(--event-accent) 58%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 8px color-mix(in oklab, var(--event-accent) 28%, transparent);
+  transform: translateY(-50%);
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+.mapChangeEvent:hover .mapChangeIndicator {
+  color: white;
+  background: color-mix(
+    in oklab,
+    var(--event-accent) 42%,
+    rgba(9, 15, 26, 0.96)
+  );
+  border-color: color-mix(in oklab, var(--event-accent) 82%, white);
+}
 .transactionRow {
   border-left-color: transparent;
 }

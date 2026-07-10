@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef, type RefObject } from "react";
 import { Box, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
@@ -32,12 +32,23 @@ import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
+import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 
 type Props = {
   gameId: string;
 };
 
+function ReplayAutoScroll({
+  mapContainerRef,
+}: {
+  mapContainerRef: RefObject<HTMLDivElement | null>;
+}) {
+  useScrollToReplayHighlight(mapContainerRef);
+  return null;
+}
+
 export function PannableMapView({ gameId }: Props) {
+  const isMobile = isMobileDevice();
   const gameData = useGameData();
   const tilesList = useMemo(
     () => Object.values(gameData?.tiles || {}),
@@ -75,6 +86,7 @@ export function PannableMapView({ gameId }: Props) {
   const mapWidth = unscaledMapWidth * zoom;
   const mapHeight = unscaledMapHeight * zoom;
   const hideZoomControls = shouldHideZoomControls();
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   const movementState = useMovementMode();
   const { draft, targetSystemId, createTileSelectHandler } = movementState;
@@ -96,7 +108,7 @@ export function PannableMapView({ gameId }: Props) {
     handleTileHover,
     handlePathIndexChange,
   } = useDistanceRendering({
-    distanceMode: isMobileDevice() ? false : settings.distanceMode,
+    distanceMode: isMobile ? false : settings.distanceMode,
     tiles: tilesList,
   });
 
@@ -111,7 +123,7 @@ export function PannableMapView({ gameId }: Props) {
 
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
-  const areaStyles = isMobileDevice()
+  const areaStyles = isMobile
     ? {
         width: "1300px",
       }
@@ -126,14 +138,15 @@ export function PannableMapView({ gameId }: Props) {
 
   /* Player cards grow to their content width (no internal scrollbars);
      the surrounding map area provides the horizontal scrolling */
-  const playerAreaStyles = isMobileDevice()
+  const playerAreaStyles = isMobile
     ? { width: "max-content" as const, minWidth: "1300px" }
     : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
-  const showGameStatePanel = !isMobileDevice();
-  const showFloatingMapToolbar = !isMobileDevice();
+  const showGameStatePanel = !isMobile;
+  const showFloatingMapToolbar = !isMobile;
 
   return (
     <Box className={classes.mapContainer}>
+      {!isMobile && <ReplayAutoScroll mapContainerRef={mapContainerRef} />}
       {showGameStatePanel && (
         <Box className={classes.gameStateOverlay}>
           <GameStatePanel />
@@ -161,6 +174,7 @@ export function PannableMapView({ gameId }: Props) {
       )}
 
       <Box
+        ref={mapContainerRef}
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
       >
@@ -219,7 +233,7 @@ export function PannableMapView({ gameId }: Props) {
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={areaStyles}
-            enabled={isMobileDevice()}
+            enabled={isMobile}
           >
             <Stack gap="md">
               {gameData.gameName && (
@@ -252,7 +266,7 @@ export function PannableMapView({ gameId }: Props) {
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={playerAreaStyles}
-            enabled={isMobileDevice()}
+            enabled={isMobile}
           >
             {/* Column stack: width resolves to the widest card so every card
                 shares the same width and data groups align vertically */}
@@ -272,7 +286,7 @@ export function PannableMapView({ gameId }: Props) {
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={scoreSummaryAreaStyles}
-            enabled={isMobileDevice()}
+            enabled={isMobile}
           >
             <PlayerScoreSummary
               playerData={gameData.playerData}

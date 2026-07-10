@@ -5,6 +5,7 @@ import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import { Tile } from "@/app/providers/context/types";
 import { useSettingsStore } from "@/utils/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { useMapReplay } from "@/hooks/useGameContext";
 
 type Props = {
   systemId: string;
@@ -16,12 +17,23 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
     (state) => state.settings.showControlTokens
   );
   const factionColorMap = useFactionColors();
+  const replay = useMapReplay();
   const controlTokens = React.useMemo(() => {
     if (!mapTile?.planets) return [] as React.ReactElement[];
     const planetCoords = getPlanetCoordsBySystemId(systemId);
 
     return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
       if (!planetData.controlledBy) return [];
+      if (
+        replay.active &&
+        replay.controlTokens.some(
+          (token) =>
+            token.kind === "added" &&
+            token.position === mapTile.position &&
+            token.planet === planetId,
+        )
+      )
+        return [];
 
       if (!alwaysShowControlTokens) {
         const planetHasUnits = Object.values(mapTile.entityPlacements).some(
@@ -62,7 +74,7 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
         />,
       ];
     });
-  }, [systemId, mapTile, alwaysShowControlTokens, factionColorMap]);
+  }, [systemId, mapTile, alwaysShowControlTokens, factionColorMap, replay]);
 
   return <>{controlTokens}</>;
 }

@@ -29,6 +29,26 @@
   z-index: var(--z-anomaly-overlay);
 }
 
+.tacticalActivationGlow {
+  position: absolute;
+  inset: 0;
+  width: 345px;
+  height: 299px;
+  z-index: var(--z-tactical-activation);
+  overflow: visible;
+  pointer-events: none;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.95))
+    drop-shadow(0 0 20px rgba(59, 130, 246, 0.72));
+}
+
+.tacticalActivationGlow path {
+  fill: none;
+  stroke: rgba(165, 243, 252, 0.98);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
 /* Interactive states */
 .mapTile.hovered .tile {
   filter: brightness(1.1);

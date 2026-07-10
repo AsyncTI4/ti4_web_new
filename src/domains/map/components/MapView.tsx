@@ -11,6 +11,7 @@ import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useScrollToPlanet } from "@/hooks/useScrollToPlanet";
+import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
@@ -105,6 +106,7 @@ export function MapView({
     mapContainerRef,
     zoom,
   });
+  useScrollToReplayHighlight(mapContainerRef);
 
   useMapKeyboardShortcuts({
     handlers,

@@ -4,12 +4,14 @@ import {
   Box,
   CloseButton,
   Group,
+  Switch,
   Text,
   Tooltip,
   Transition,
 } from "@mantine/core";
 import { IconCards, IconHistory } from "@tabler/icons-react";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
+import { useSettingsStore } from "@/utils/appStore";
 import classes from "./FloatingMapToolbar.module.css";
 
 type FloatingPanel = "events" | "cards";
@@ -36,6 +38,10 @@ export function FloatingMapToolbar({
   cardsPanel,
 }: Props) {
   const [openPanel, setOpenPanel] = useState<FloatingPanel | null>(null);
+  const animateEventPreviews = useSettingsStore(
+    (state) => state.settings.animateEventPreviews,
+  );
+  const updateSettings = useSettingsStore((state) => state.updateSettings);
   const panelId = useId();
 
   const togglePanel = (panel: FloatingPanel) => {
@@ -121,16 +127,35 @@ export function FloatingMapToolbar({
               <Text size="sm" fw={700} c="gray.1">
                 {panels[renderedPanel].title}
               </Text>
-              <CloseButton
-                aria-label="Close panel"
-                size="sm"
-                c="gray.4"
-                onClick={() => setOpenPanel(null)}
-              />
+              <Group gap={8} wrap="nowrap">
+                {renderedPanel === "events" && (
+                  <Switch
+                    size="xs"
+                    label="Animated"
+                    checked={animateEventPreviews}
+                    onChange={(event) =>
+                      updateSettings({
+                        animateEventPreviews: event.currentTarget.checked,
+                      })
+                    }
+                    className={classes.animatedSwitch}
+                  />
+                )}
+                <CloseButton
+                  aria-label="Close panel"
+                  size="sm"
+                  c="gray.4"
+                  onClick={() => setOpenPanel(null)}
+                />
+              </Group>
             </Group>
 
             <Box className={classes.panelBody}>
-              {renderedPanel === "cards" ? cardsPanel : <GameEventPanel />}
+              {renderedPanel === "cards" ? (
+                cardsPanel
+              ) : (
+                <GameEventPanel animated={animateEventPreviews} />
+              )}
             </Box>
           </Box>
         )}

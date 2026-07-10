@@ -36,6 +36,7 @@ const DEFAULT_SETTINGS = {
   showControlLayer: false,
   showControlTokens: true,
   showExhaustedPlanets: true,
+  animateEventPreviews: true,
   themeName: "midnightgraytheme" as const,
   accessibleColors: false,
   mapViewPreference: null as MapViewPreference | null,
@@ -311,6 +312,7 @@ export type Settings = {
   showControlLayer: boolean;
   showControlTokens: boolean;
   showExhaustedPlanets: boolean;
+  animateEventPreviews: boolean;
   themeName:
     | "bluetheme"
     | "midnightbluetheme"

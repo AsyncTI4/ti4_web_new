@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader, Text, Tooltip } from "@mantine/core";
 import {
   IconArrowsLeftRight,
   IconBuildingFactory2,
+  IconMap2,
+  IconPlayerPlayFilled,
   IconSwords,
   IconTargetArrow,
   IconTrophy,
@@ -11,9 +13,14 @@ import {
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useGameEvents } from "@/hooks/useGameEvents";
-import { useGameData } from "@/hooks/useGameContext";
 import { useMapStatePreview } from "@/hooks/useGameContext";
-import type { GameEvent, GameSubEvent } from "@/entities/data/types";
+import { usePlayerData } from "@/hooks/usePlayerData";
+import type {
+  GameEvent,
+  GameSubEvent,
+  PlayerDataResponse,
+} from "@/entities/data/types";
+import type { MapStatePreview } from "@/app/providers/context/types";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
 import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
@@ -38,6 +45,7 @@ import {
 import classes from "./GameEventPanel.module.css";
 
 const MAX_VISIBLE = 150;
+const selectTilePositions = (data: PlayerDataResponse) => data.tilePositions;
 
 // Colored type-badge config per card archetype (distinct hues).
 const CARD_BADGES: Record<string, { label: string; hue: string }> = {
@@ -352,6 +360,17 @@ function unitBreakdown(units: Record<string, number>): string {
     .join(", ");
 }
 
+function retreatUnitBreakdown(
+  units: Record<string, [number, number, number, number]>,
+): string {
+  return Object.entries(units)
+    .map(([id, states]) => {
+      const count = states.reduce((total, value) => total + value, 0);
+      return `${count}× ${resolveUnitName(id)}`;
+    })
+    .join(", ");
+}
+
 function ProductionSummary({
   units,
   cost,
@@ -503,6 +522,23 @@ function SubEventLine({
             {sub.tile ? systemName(sub.tile) : "Production"}
           </span>
           <ProductionSummary units={sub.units} cost={sub.cost} />
+        </div>
+      );
+
+    case "RETREAT":
+      return (
+        <div className={classes.subEventLine}>
+          <SubFaction faction={sub.faction} />
+          <span className={classes.combat}>
+            <IconArrowsLeftRight size={11} stroke={2} />
+            Retreated {retreatUnitBreakdown(sub.units)}
+          </span>
+          <span className={classes.subMuted}>
+            {sub.fromHolder !== "space" && (
+              <>from {resolvePlanetName(sub.fromHolder)} </>
+            )}
+            to {systemName(sub.toTile)}
+          </span>
         </div>
       );
 
@@ -956,14 +992,20 @@ function GameEndedRow({ event }: { event: GameEvent }) {
   );
 }
 
-export function GameEventPanel() {
+export function GameEventPanel({ animated = true }: { animated?: boolean }) {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid ?? "";
-  const gameData = useGameData();
+  const { data: tilePositions } = usePlayerData(gameId, {
+    select: selectTilePositions,
+  });
   const setMapStatePreview = useMapStatePreview();
   const { data, isLoading, isError } = useGameEvents(gameId);
   const [showAll, setShowAll] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const activePreviewRef = useRef<{
+    snapshotSeq: number;
+    replayEventSeq: number | null;
+  }>();
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 60000);
@@ -971,9 +1013,47 @@ export function GameEventPanel() {
   }, []);
 
   useEffect(() => {
+    activePreviewRef.current = undefined;
     setMapStatePreview(null);
-    return () => setMapStatePreview(null);
-  }, [gameId, setMapStatePreview]);
+    return () => {
+      activePreviewRef.current = undefined;
+      setMapStatePreview(null);
+    };
+  }, [gameId, animated, setMapStatePreview]);
+
+  const showMapPreview = (
+    eventSeq: number,
+    frame: {
+      preview: MapStatePreview;
+      snapshotSeq: number;
+      replaysChange: boolean;
+    },
+  ) => {
+    const replayEventSeq = animated && frame.replaysChange ? eventSeq : null;
+    const active = activePreviewRef.current;
+    if (active?.snapshotSeq === frame.snapshotSeq && replayEventSeq === null) {
+      activePreviewRef.current = {
+        snapshotSeq: frame.snapshotSeq,
+        replayEventSeq: null,
+      };
+      return;
+    }
+    if (
+      active?.snapshotSeq === frame.snapshotSeq &&
+      active.replayEventSeq === replayEventSeq
+    )
+      return;
+
+    activePreviewRef.current = {
+      snapshotSeq: frame.snapshotSeq,
+      replayEventSeq,
+    };
+    setMapStatePreview(
+      replayEventSeq === null
+        ? { mapState: frame.preview.mapState }
+        : frame.preview,
+    );
+  };
 
   // Drop TURN rows that aren't "passed" (rhythm markers only), keep the rest.
   const { visibleEvents, hasHidden } = useMemo(() => {
@@ -990,14 +1070,64 @@ export function GameEventPanel() {
   // recent earlier event that does. Build this from the complete event list so
   // a snapshot still carries into the visible window when earlier rows are
   // hidden behind "Show earlier events".
-  const historicalMapStateBySeq = useMemo(() => {
-    const result = new Map<number, string>();
+  const historicalMapTimeline = useMemo(() => {
+    const previews = new Map<
+      number,
+      {
+        preview: MapStatePreview;
+        snapshotSeq: number;
+        replaysChange: boolean;
+      }
+    >();
+    const changedEvents = new Set<number>();
     let latestMapState: string | undefined;
+    let latestSnapshotSeq: number | undefined;
     for (const event of [...(data ?? [])].sort((a, b) => a.seq - b.seq)) {
-      if (event.mapState) latestMapState = event.mapState;
-      if (latestMapState) result.set(event.seq, latestMapState);
+      if (event.mapState) {
+        const previousMapState = latestMapState;
+        const replaysChange =
+          previousMapState !== undefined && event.mapState !== previousMapState;
+        latestMapState = event.mapState;
+        latestSnapshotSeq = event.seq;
+        if (replaysChange) changedEvents.add(event.seq);
+        const subEvents = replaysChange
+          ? parseSubEvents(event.payload?.subEvents)
+          : [];
+        const retreats = subEvents.filter(
+          (sub): sub is Extract<GameSubEvent, { type: "RETREAT" }> =>
+            sub.type === "RETREAT",
+        );
+        const combats = subEvents.filter(
+          (sub): sub is Extract<GameSubEvent, { type: "COMBAT" }> =>
+            sub.type === "COMBAT",
+        );
+        previews.set(event.seq, {
+          preview: replaysChange
+            ? {
+                mapState: latestMapState,
+                previousMapState,
+                movementState: event.movementState,
+                retreats,
+                combats,
+                activeFaction: event.faction,
+                tacticalPosition:
+                  event.archetype === "TACTICAL_ACTION"
+                    ? str(event.payload, "activeSystem")
+                    : undefined,
+              }
+            : { mapState: latestMapState },
+          snapshotSeq: latestSnapshotSeq,
+          replaysChange,
+        });
+      } else if (latestMapState && latestSnapshotSeq !== undefined) {
+        previews.set(event.seq, {
+          preview: { mapState: latestMapState },
+          snapshotSeq: latestSnapshotSeq,
+          replaysChange: false,
+        });
+      }
     }
-    return result;
+    return { previews, changedEvents };
   }, [data]);
 
   // Group by round, newest round first, newest event first within a round.
@@ -1018,12 +1148,12 @@ export function GameEventPanel() {
 
   const positionToSystemId = useMemo(() => {
     const map: Record<string, string> = {};
-    for (const entry of gameData?.tilePositions ?? []) {
+    for (const entry of tilePositions ?? []) {
       const [position, systemId] = entry.split(":");
       if (position && systemId) map[position] = systemId;
     }
     return map;
-  }, [gameData?.tilePositions]);
+  }, [tilePositions]);
 
   const systemName = useMemo<SystemNameResolver>(
     () => (position) => resolveSystemName(position, positionToSystemId),
@@ -1061,7 +1191,13 @@ export function GameEventPanel() {
   }
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      onMouseLeave={() => {
+        activePreviewRef.current = undefined;
+        setMapStatePreview(null);
+      }}
+    >
       {grouped.map(({ round, events }) => (
         <div key={round}>
           <div className={classes.roundHeader}>
@@ -1069,7 +1205,9 @@ export function GameEventPanel() {
             <span className={classes.roundRule} />
           </div>
           {events.map((event) => {
-            const historicalMapState = historicalMapStateBySeq.get(event.seq);
+            const historicalMapFrame = historicalMapTimeline.previews.get(
+              event.seq,
+            );
             let row: React.ReactNode;
             if (event.archetype === "GAME_ENDED") {
               row = <GameEndedRow event={event} />;
@@ -1086,17 +1224,37 @@ export function GameEventPanel() {
             }
 
             if (!row) return null;
+            const hasMapTimeline = historicalMapTimeline.changedEvents.has(
+              event.seq,
+            );
             return (
               <div
                 key={event.seq}
+                className={hasMapTimeline ? classes.mapChangeEvent : undefined}
                 onMouseEnter={() => {
-                  if (historicalMapState)
-                    setMapStatePreview(historicalMapState);
-                }}
-                onMouseLeave={() => {
-                  if (historicalMapState) setMapStatePreview(null);
+                  if (!historicalMapFrame) return;
+                  showMapPreview(event.seq, historicalMapFrame);
                 }}
               >
+                {hasMapTimeline && (
+                  <span
+                    className={classes.mapChangeIndicator}
+                    title={
+                      animated
+                        ? "Hover to replay this map change"
+                        : "Hover to show the map after this event"
+                    }
+                    aria-label={
+                      animated ? "Animated map replay" : "Map state change"
+                    }
+                  >
+                    {animated ? (
+                      <IconPlayerPlayFilled size={9} />
+                    ) : (
+                      <IconMap2 size={10} stroke={2} />
+                    )}
+                  </span>
+                )}
                 {row}
               </div>
             );

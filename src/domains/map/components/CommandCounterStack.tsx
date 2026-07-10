@@ -6,6 +6,7 @@ import { useFactionColors } from "@/hooks/useFactionColors";
 type CommandCounterStackProps = {
   factions: string[];
   style?: React.CSSProperties;
+  hiddenIndices?: Set<number>;
 };
 
 const TILE_OFFSET_X = 10;
@@ -13,6 +14,7 @@ const TILE_OFFSET_Y = 90;
 export const CommandCounterStack = ({
   factions,
   style,
+  hiddenIndices,
 }: CommandCounterStackProps) => {
   const factionColorMap = useFactionColors();
   if (factions.length === 0) return null;
@@ -35,6 +37,7 @@ export const CommandCounterStack = ({
               left: `${offsetX + TILE_OFFSET_X}px`,
               top: `${offsetY + TILE_OFFSET_Y}px`,
               zIndex: zIndex,
+              visibility: hiddenIndices?.has(index) ? "hidden" : undefined,
             }}
           />
         );

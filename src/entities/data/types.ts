@@ -390,6 +390,15 @@ export type GameSubEvent =
       units: Record<string, number> | null;
       cost: number | null;
     }
+  | {
+      type: "RETREAT";
+      faction: string;
+      fromTile: string;
+      fromHolder: string;
+      toTile: string;
+      toHolder: string;
+      units: Record<string, [number, number, number, number]>;
+    }
   | { type: "MANUAL_COMMAND"; user: string | null; command: string };
 
 export type GameEvent = {
@@ -401,6 +410,7 @@ export type GameEvent = {
   timestamp: number;
   payload: Record<string, unknown>;
   mapState?: string | null;
+  movementState?: string | null;
 };
 
 export type GamePhase =

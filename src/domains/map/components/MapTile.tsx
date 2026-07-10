@@ -3,7 +3,7 @@ import { Tile } from "./Tile";
 import classes from "./MapTile.module.css";
 import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData, useMapReplay } from "@/hooks/useGameContext";
 import { UnitImagesLayer } from "./layers/UnitImagesLayer";
 import { ControlTokensLayer } from "./layers/ControlTokensLayer";
 import { PlanetCirclesLayer } from "./layers/PlanetCirclesLayer";
@@ -23,6 +23,11 @@ import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
 import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
+import { HEX_VERTICES } from "@/utils/unitPositioning";
+
+const ACTIVATION_HEX_PATH = `${HEX_VERTICES.map(
+  ({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x} ${y}`,
+).join(" ")} Z`;
 
 type Props = {
   mapTile: TileType;
@@ -75,6 +80,7 @@ export const MapTile = React.memo<Props>(
     isA11ySelected = false,
   }) => {
     const gameData = useGameData();
+    const mapReplay = useMapReplay();
     const [hoveredLocal, setHoveredLocal] = useState(false);
 
     const ringPosition = mapTile.position;
@@ -109,6 +115,11 @@ export const MapTile = React.memo<Props>(
       !!distanceMode && hoveredTilePosition === ringPosition;
 
     const controllingFaction = mapTile.controlledBy;
+    const showSystemHighlight =
+      mapReplay.active &&
+      ((mapReplay.showTacticalActivation &&
+        mapReplay.tacticalTargetPosition === ringPosition) ||
+        mapReplay.changedPositions.has(ringPosition));
 
     return (
       <div
@@ -180,6 +191,7 @@ export const MapTile = React.memo<Props>(
           <Tile
             systemId={systemId}
             className={classes.tile}
+            data-map-tile-visual="true"
             onMouseEnter={() => {
               setHoveredLocal(true);
               if (onTileHover) onTileHover(ringPosition, true);
@@ -196,6 +208,16 @@ export const MapTile = React.memo<Props>(
             height={TILE_HEIGHT}
           />
           <BorderAnomalyLayer mapTile={mapTile} />
+          {showSystemHighlight && (
+            <svg
+              key={`${mapReplay.key}-system-highlight`}
+              className={classes.tacticalActivationGlow}
+              viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
+              aria-hidden="true"
+            >
+              <path d={ACTIVATION_HEX_PATH} />
+            </svg>
+          )}
           <PlanetCirclesLayer
             systemId={systemId}
             mapTile={mapTile}
@@ -234,6 +256,7 @@ export const MapTile = React.memo<Props>(
           />
           <CommandCounterLayer
             systemId={systemId}
+            position={mapTile.position}
             factions={mapTile.commandCounters}
           />
           <div

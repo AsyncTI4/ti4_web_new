@@ -12,7 +12,36 @@ import { useDelayedHover } from "./UnitStack/useDelayedHover";
 import { useDecalPaths } from "./UnitStack/useDecalPaths";
 import { Group, Text } from "@mantine/core";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
+import { useMapFlightAnimation } from "./UnitStack/useMapFlightAnimation";
+import type {
+  MapUnitTransition,
+  StateCounts,
+} from "@/utils/historicalMapTransitions";
 import classes from "./UnitStack.module.css";
+
+const EMPTY_STATES: StateCounts = [0, 0, 0, 0];
+const TRANSITION_CLASS: Record<MapUnitTransition["kind"], string> = {
+  moved: classes.mapTransitionMoved,
+  settled: classes.mapTransitionMoved,
+  retreated: classes.mapTransitionRetreated,
+  removed: classes.mapTransitionRemoved,
+  added: classes.mapTransitionAdded,
+};
+
+function getTransitionClass(transition: MapUnitTransition): string {
+  if (transition.badgeCountChange) return classes.mapTransitionBadgeCount;
+  if (transition.sourceHold) {
+    if (transition.hideAfterMs !== undefined)
+      return classes.mapTransitionSourcePreHold;
+    return transition.appearAtMs !== undefined
+      ? classes.mapTransitionSourceHoldDelayed
+      : classes.mapTransitionSourceHold;
+  }
+  if (transition.residualAsset && transition.kind === "removed")
+    return classes.mapTransitionResidualRemoved;
+  return TRANSITION_CLASS[transition.kind];
+}
 
 interface UnitStackProps {
   stack: EntityStack;
@@ -23,6 +52,12 @@ interface UnitStackProps {
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitSelect?: (stackKey: string, event: React.MouseEvent) => void;
   lawsInPlay?: LawInPlay[];
+  mapTransition?: MapUnitTransition;
+  replayHidden?: boolean;
+  layoutUnitStates?: StateCounts;
+  layoutStateOffsets?: StateCounts;
+  damageAtMs?: number;
+  delayedDamageStates?: StateCounts;
 }
 
 export function UnitStack({
@@ -34,6 +69,12 @@ export function UnitStack({
   onUnitMouseLeave,
   onUnitSelect,
   lawsInPlay,
+  mapTransition,
+  replayHidden = false,
+  layoutUnitStates: staticLayoutUnitStates,
+  layoutStateOffsets: staticLayoutStateOffsets,
+  damageAtMs: staticDamageAtMs,
+  delayedDamageStates: staticDelayedDamageStates,
 }: UnitStackProps) {
   const unitType = stack.entityId;
   const faction = stack.faction;
@@ -41,17 +82,81 @@ export function UnitStack({
   const x = stack.x;
   const y = stack.y;
   const entityType = stack.entityType;
-  const baseZIndex = getUnitZIndex(unitType, 0);
+  const layoutUnitStates =
+    mapTransition?.layoutUnitStates ?? staticLayoutUnitStates;
+  const layoutStateOffsets =
+    mapTransition?.layoutStateOffsets ??
+    staticLayoutStateOffsets ??
+    EMPTY_STATES;
+  const damageAtMs = mapTransition?.damageAtMs ?? staticDamageAtMs;
+  const delayedDamageStates =
+    mapTransition?.delayedDamageStates ??
+    staticDelayedDamageStates ??
+    EMPTY_STATES;
+  // Combat badges are compact summaries and must stay legible above the much
+  // larger rotated ship silhouettes in the transition layer.
+  const baseZIndex =
+    getUnitZIndex(unitType, 0) +
+    (mapTransition && isBadgeUnit(unitType) ? 200 : 0);
+  const isMovingTransition =
+    mapTransition?.kind === "moved" ||
+    mapTransition?.kind === "retreated" ||
+    mapTransition?.kind === "settled";
+  const shouldRotateInFlight =
+    !isBadgeUnit(unitType) &&
+    getGenericUnitDataByAsyncId(unitType)?.isShip === true;
+  const flightRef = useMapFlightAnimation({
+    enabled: isMovingTransition,
+    deltaX: mapTransition ? mapTransition.toX - x : 0,
+    deltaY: mapTransition ? mapTransition.toY - y : 0,
+    rotateToTrajectory: shouldRotateInFlight,
+    delayMs: mapTransition?.delayMs ?? 0,
+    holdFromMs: mapTransition?.holdFromMs,
+    hideAfterMs: mapTransition?.hideAfterMs,
+    startRotationDeg: shouldRotateInFlight
+      ? mapTransition?.startRotationDeg
+      : undefined,
+    holdRotationDeg: shouldRotateInFlight
+      ? mapTransition?.holdRotationDeg
+      : undefined,
+    parkRotationDeg: shouldRotateInFlight
+      ? mapTransition?.parkRotationDeg
+      : undefined,
+    continuation: mapTransition?.continuation
+      ? {
+          deltaX: mapTransition.continuation.toX - x,
+          deltaY: mapTransition.continuation.toY - y,
+          delayMs: mapTransition.continuation.delayMs,
+          startRotationDeg: shouldRotateInFlight
+            ? mapTransition.continuation.startRotationDeg
+            : undefined,
+          parkRotationDeg: shouldRotateInFlight
+            ? mapTransition.continuation.parkRotationDeg
+            : undefined,
+        }
+      : undefined,
+  });
+  const transitionClass = mapTransition
+    ? `${classes.mapTransition} ${getTransitionClass(mapTransition)}`
+    : "";
+  const transitionDelayStyle = mapTransition
+    ? ({
+        "--map-transition-delay": `${mapTransition.delayMs ?? 0}ms`,
+        "--map-appear-delay": `${mapTransition.appearAtMs ?? 0}ms`,
+        "--map-start-rotation": `${mapTransition.startRotationDeg ?? 0}deg`,
+      } as React.CSSProperties)
+    : undefined;
+  const replayVisibilityClass = replayHidden ? classes.mapReplayHidden : "";
   const { handleMouseEnter, handleMouseLeave } = useDelayedHover(
     stackKey,
     onUnitMouseOver,
-    onUnitMouseLeave
+    onUnitMouseLeave,
   );
 
   const { bgDecalPath, decalPath } = useDecalPaths(
     unitType,
     faction,
-    colorAlias
+    colorAlias,
   );
 
   let nonGalvanizedNonSustained = 0;
@@ -71,7 +176,18 @@ export function UnitStack({
     galvanizedSustained = 0;
   }
   const galvanizedCount = galvanizedNonSustained + galvanizedSustained;
-  const galvanizeOffset = galvanizedCount > 1 ? 1 : 0;
+  const effectiveLayoutStates: StateCounts = layoutUnitStates ?? [
+    nonGalvanizedNonSustained,
+    nonGalvanizedSustained,
+    galvanizedNonSustained,
+    galvanizedSustained,
+  ];
+  const layoutCount = effectiveLayoutStates.reduce(
+    (total, value) => total + value,
+    0,
+  );
+  const layoutGalvanizeOffset =
+    effectiveLayoutStates[2] + effectiveLayoutStates[3] > 1 ? 1 : 0;
 
   const showIndividualGalvanized = galvanizedCount === 1 || unitType === "mf";
 
@@ -92,12 +208,14 @@ export function UnitStack({
 
     return (
       <div
+        ref={flightRef}
         key={`${stackKey}-badge-container`}
-        className={classes.badgeContainer}
+        className={`${classes.badgeContainer} ${transitionClass} ${replayVisibilityClass}`}
         style={{
           left: `${x}px`,
           top: `${y}px`,
           zIndex: baseZIndex,
+          ...transitionDelayStyle,
         }}
         {...handlers}
       >
@@ -135,12 +253,12 @@ export function UnitStack({
   let maxOffsetX = 0;
   let maxOffsetY = 0;
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < layoutCount; i++) {
     const { stackOffsetX, stackOffsetY } = calculateUnitArrangement(
       unitType,
       entityType,
       i,
-      count
+      layoutCount,
     );
     maxOffsetX = Math.max(maxOffsetX, Math.abs(stackOffsetX));
     maxOffsetY = Math.max(maxOffsetY, Math.abs(stackOffsetY));
@@ -149,21 +267,25 @@ export function UnitStack({
   // Wrapper needs to be large enough for max offset + half unit size on each side
   // Since wrapper is centered, we need 2x the max offset + unit size
   // If count is 0, use minimum size
-  const WRAPPER_WIDTH = count > 0 ? maxOffsetX * 2 + UNIT_SIZE : UNIT_SIZE;
-  const WRAPPER_HEIGHT = count > 0 ? maxOffsetY * 2 + UNIT_SIZE : UNIT_SIZE;
+  const WRAPPER_WIDTH =
+    layoutCount > 0 ? maxOffsetX * 2 + UNIT_SIZE : UNIT_SIZE;
+  const WRAPPER_HEIGHT =
+    layoutCount > 0 ? maxOffsetY * 2 + UNIT_SIZE : UNIT_SIZE;
 
   type PositionedUnitProps = {
     index: number;
     galvanized: boolean;
     sustained: boolean;
+    delayDamage?: boolean;
   };
   const PositionedUnit = ({
     index,
     galvanized = false,
     sustained = false,
+    delayDamage = false,
   }: PositionedUnitProps) => {
     const { stackOffsetX, stackOffsetY, zIndexOffset } =
-      calculateUnitArrangement(unitType, entityType, index, count);
+      calculateUnitArrangement(unitType, entityType, index, layoutCount);
 
     const unitKey = `${stackKey}-${index}`;
 
@@ -216,6 +338,7 @@ export function UnitStack({
           lawsInPlay={lawsInPlay}
           galvanized={galvanized}
           sustained={sustained}
+          damageMarkerDelayMs={delayDamage ? damageAtMs : undefined}
           x={xPos}
           y={yPos}
           zIndex={baseZIndex + zIndexOffset}
@@ -226,14 +349,16 @@ export function UnitStack({
 
   return (
     <div
+      ref={flightRef}
       {...handlers}
-      className={classes.stackWrapper}
+      className={`${classes.stackWrapper} ${transitionClass} ${replayVisibilityClass}`}
       style={{
         left: `${x}px`,
         top: `${y}px`,
         width: `${WRAPPER_WIDTH}px`,
         height: `${WRAPPER_HEIGHT}px`,
         zIndex: baseZIndex,
+        ...transitionDelayStyle,
       }}
     >
       {galvanizedCount > 1 && !showIndividualGalvanized && (
@@ -253,9 +378,10 @@ export function UnitStack({
         return (
           <PositionedUnit
             key={`${stackKey}-${i}`}
-            index={i}
+            index={layoutStateOffsets[3] + i}
             galvanized={showIndividualGalvanized}
             sustained={true}
+            delayDamage={i >= galvanizedSustained - delayedDamageStates[3]}
           />
         );
       })}
@@ -264,7 +390,7 @@ export function UnitStack({
         return (
           <PositionedUnit
             key={`${stackKey}-${i}`}
-            index={galvanizedSustained + i}
+            index={effectiveLayoutStates[3] + layoutStateOffsets[2] + i}
             galvanized={showIndividualGalvanized}
             sustained={false}
           />
@@ -276,10 +402,15 @@ export function UnitStack({
           <PositionedUnit
             key={`${stackKey}-${i}`}
             index={
-              galvanizedNonSustained + galvanizedSustained + galvanizeOffset + i
+              effectiveLayoutStates[3] +
+              effectiveLayoutStates[2] +
+              layoutGalvanizeOffset +
+              layoutStateOffsets[1] +
+              i
             }
             galvanized={false}
             sustained={true}
+            delayDamage={i >= nonGalvanizedSustained - delayedDamageStates[1]}
           />
         );
       })}
@@ -289,10 +420,11 @@ export function UnitStack({
           <PositionedUnit
             key={`${stackKey}-${i}`}
             index={
-              galvanizedNonSustained +
-              galvanizedSustained +
-              galvanizeOffset +
-              nonGalvanizedSustained +
+              effectiveLayoutStates[3] +
+              effectiveLayoutStates[2] +
+              layoutGalvanizeOffset +
+              effectiveLayoutStates[1] +
+              layoutStateOffsets[0] +
               i
             }
             galvanized={false}

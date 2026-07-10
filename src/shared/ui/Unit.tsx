@@ -35,6 +35,7 @@ type UnitProps = {
   scaleSprite?: boolean;
   /** Show faction-specific tokens like dimensional tear. Defaults to true. */
   showFactionTokens?: boolean;
+  damageMarkerDelayMs?: number;
 };
 
 export function Unit({
@@ -53,6 +54,7 @@ export function Unit({
   className,
   scaleSprite,
   showFactionTokens = true,
+  damageMarkerDelayMs,
 }: UnitProps) {
   const defaultAlt = computeDefaultAlt(alt, faction, colorAlias, unitType);
   const tokenSuffix = computeTokenSuffix(colorAlias);
@@ -61,7 +63,7 @@ export function Unit({
   const fighterOrInfantry = isFighterOrInfantry(unitType);
 
   const isArticlesOfWarActive = lawsInPlay?.some(
-    (law) => law.id === "articles_war"
+    (law) => law.id === "articles_war",
   );
   const isSchematicsActive = lawsInPlay?.some((law) => law.id === "schematics");
   const showArticles = isArticlesOfWarActive && unitType === "mf";
@@ -122,7 +124,11 @@ export function Unit({
         />
       )}
 
-      <DamageMarker show={sustained} alt={defaultAlt} />
+      <DamageMarker
+        show={sustained}
+        alt={defaultAlt}
+        delayMs={damageMarkerDelayMs}
+      />
 
       {galvanized && (
         <GalvanizeMarker

@@ -1,13 +1,21 @@
 import { useContext } from "react";
-import { EnhancedDataContext } from "@/app/providers/context/GameContextProvider";
+import {
+  EnhancedDataContext,
+  GameDataContext,
+  MapStatePreviewDispatchContext,
+  MapReplayContext,
+} from "@/app/providers/context/GameContextProvider";
 import type { buildGameContext } from "@/app/providers/context/utils/buildGameContext";
-import type { GameDataState } from "@/app/providers/context/types";
+import type {
+  GameDataState,
+  MapReplayState,
+  MapStatePreview,
+} from "@/app/providers/context/types";
 
 export function useGameContext():
   | ReturnType<typeof buildGameContext>
   | undefined {
-  const contextValue = useContext(EnhancedDataContext);
-  return contextValue?.data;
+  return useContext(GameDataContext);
 }
 
 export function useGameDataState(): GameDataState | undefined {
@@ -46,7 +54,12 @@ export function useColorOverrides(): {
   };
 }
 
-export function useMapStatePreview(): (mapState: string | null) => void {
-  const contextValue = useContext(EnhancedDataContext);
-  return contextValue?.setMapStatePreview ?? (() => {});
+export function useMapStatePreview(): (
+  preview: MapStatePreview | null,
+) => void {
+  return useContext(MapStatePreviewDispatchContext);
+}
+
+export function useMapReplay(): MapReplayState {
+  return useContext(MapReplayContext);
 }
