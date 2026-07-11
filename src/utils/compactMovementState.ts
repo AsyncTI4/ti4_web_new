@@ -1,4 +1,5 @@
 import type { StateCounts } from "@/utils/historicalMapTransitions";
+import { deserializeCompactMapState } from "@/utils/compactMapState";
 
 export type CompactMovementUnit = {
   colorId: string;
@@ -71,4 +72,67 @@ export function deserializeCompactMovementState(
       };
     }),
   };
+}
+
+function stateCount(states: StateCounts): number {
+  return states.reduce((total, value) => total + value, 0);
+}
+
+/**
+ * A tactical event can be preceded by map snapshots captured while its move is
+ * only partially applied. Find the newest snapshot that can actually supply
+ * every unit declared by the movement payload.
+ */
+export function findMovementBaseline(
+  serializedCandidates: readonly string[],
+  serializedMovement: string,
+  movingFaction: string,
+): string | undefined {
+  let movement: CompactMovementState;
+  try {
+    movement = deserializeCompactMovementState(serializedMovement);
+  } catch {
+    return undefined;
+  }
+
+  for (let index = serializedCandidates.length - 1; index >= 0; index -= 1) {
+    const serializedMap = serializedCandidates[index];
+    try {
+      const map = deserializeCompactMapState(serializedMap);
+      const required = new Map<string, number>();
+
+      for (const source of movement.sources) {
+        for (const unit of source.units) {
+          const faction = unit.ownerFaction ?? movingFaction;
+          const key = `${source.position}\u0000${source.holder}\u0000${faction}\u0000${unit.unitId}`;
+          required.set(
+            key,
+            (required.get(key) ?? 0) + stateCount(unit.states),
+          );
+        }
+      }
+
+      const satisfiesMovement = [...required].every(([key, needed]) => {
+        const [position, holder, faction, unitId] = key.split("\u0000");
+        const tile = map[position];
+        const entities =
+          holder === "space"
+            ? tile?.space[faction]
+            : tile?.planets[holder]?.entities[faction];
+        const available =
+          entities?.find(
+            (entity) =>
+              entity.entityType === "unit" && entity.entityId === unitId,
+          )?.count ?? 0;
+        return available >= needed;
+      });
+
+      if (satisfiesMovement) return serializedMap;
+    } catch {
+      // A malformed historical snapshot should not prevent older valid
+      // snapshots from being considered.
+    }
+  }
+
+  return undefined;
 }

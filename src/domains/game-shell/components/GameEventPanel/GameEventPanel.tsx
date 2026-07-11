@@ -29,6 +29,7 @@ import { RelicCard } from "@/domains/player/components/Relic";
 import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
 import { TechCard } from "@/domains/player/components/Tech";
 import { BreakthroughCard } from "@/domains/player/components/Breakthrough/BreakthroughCard";
+import { findMovementBaseline } from "@/utils/compactMovementState";
 import {
   formatAbsoluteTime,
   formatRelativeTime,
@@ -1080,14 +1081,27 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
       }
     >();
     const changedEvents = new Set<number>();
+    const mapStateHistory: string[] = [];
     let latestMapState: string | undefined;
     let latestSnapshotSeq: number | undefined;
     for (const event of [...(data ?? [])].sort((a, b) => a.seq - b.seq)) {
       if (event.mapState) {
-        const previousMapState = latestMapState;
-        const replaysChange =
+        const previousMapState =
+          event.archetype === "TACTICAL_ACTION" &&
+          event.movementState &&
+          event.faction
+            ? (findMovementBaseline(
+                mapStateHistory,
+                event.movementState,
+                event.faction,
+              ) ?? latestMapState)
+            : latestMapState;
+        const mapChanged =
           previousMapState !== undefined && event.mapState !== previousMapState;
+        const replaysChange =
+          mapChanged && event.archetype !== "TRANSACTION";
         latestMapState = event.mapState;
+        mapStateHistory.push(event.mapState);
         latestSnapshotSeq = event.seq;
         if (replaysChange) changedEvents.add(event.seq);
         const subEvents = replaysChange
