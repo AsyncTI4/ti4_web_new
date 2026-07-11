@@ -1,0 +1,52 @@
+.special-unit-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.special-unit-badge {
+  position: relative;
+  z-index: 4;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 42px;
+  padding: 5px 12px;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+
+  /* Updated */
+    transform: translate(-4px, -27px) rotate(42deg);
+    transform-origin: bottom center;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Optional variants */
+.special-unit-badge--lady {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 80, 170, 0.95),
+    rgba(180, 35, 115, 0.95)
+  );
+}

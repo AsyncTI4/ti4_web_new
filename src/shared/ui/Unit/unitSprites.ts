@@ -100,6 +100,29 @@ const COLORED_SPRITE_UNITS = new Set([
   "ff",
 ]);
 
+export const SPECIAL_UNIT_SPRITES = {
+  lady: {
+    sprite: "fs",
+    label: "LADY",
+  },
+  lord: {
+    sprite: "fs",
+    label: "LORD",
+  },
+} as const;
+
+export const SPECIAL_FACTION_SPRITES = {
+  ghemina: [
+{
+  sprite: "fs",
+    label: "LORD",
+}]
+} as const;
+
+export const SPECIAL_SPRITE_UNITS = new Set(
+  Object.keys(SPECIAL_UNIT_SPRITES)
+);
+
 const SHARED_SPRITE_UNITS = new Set(["plenaryorbital", "tyrantslament"]);
 
 export type UnitSprite = {
@@ -115,11 +138,23 @@ export function getUnitSprite(
     return { color: "shared", unit: unitType };
   }
 
+  const special = SPECIAL_UNIT_SPRITES[unitType as keyof typeof SPECIAL_UNIT_SPRITES];
+
+  if (special) {
+    return {
+      color: colorAlias,
+      unit: special.sprite,
+    };
+  }
+
   if (
     COLORED_SPRITE_COLORS.has(colorAlias) &&
     COLORED_SPRITE_UNITS.has(unitType)
   ) {
-    return { color: colorAlias, unit: unitType };
+    return {
+      color: colorAlias,
+      unit: unitType,
+    };
   }
 
   return undefined;

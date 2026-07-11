@@ -14,6 +14,7 @@ import { PlayerDecalOverlay } from "./Unit/overlays/PlayerDecalOverlay";
 import { LawOverlay } from "./Unit/overlays/LawOverlay";
 import { DamageMarker } from "./Unit/overlays/DamageMarker";
 import { DimensionalTearToken } from "./Unit/overlays/DimensionalTearToken";
+import { SpecialUnitsOverlay } from "./Unit/overlays/SpecialUnitsOverlay";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getUnitSprite } from "./Unit/unitSprites";
 
@@ -106,6 +107,7 @@ export function Unit({
           className={className}
         />
       )}
+      <SpecialUnitsOverlay faction={faction} unitType={unitType} />
       <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
       {showArticles && (
         <LawOverlay
