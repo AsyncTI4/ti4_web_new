@@ -10,6 +10,8 @@ import type { PathResult } from "@/utils/tileDistances";
 import type { Tile } from "@/app/providers/context/types";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import type { MapLayout } from "../mapLayout";
+import { MapUnitTransitionLayer } from "../layers/MapUnitTransitionLayer";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   gameData: GameData | undefined;
@@ -69,6 +71,7 @@ export function MapRenderLayer({
   mapZoom,
 }: Props) {
   if (!gameData) return null;
+  const replayAnimationsEnabled = !isMobileDevice();
 
   const isOnPath = (position: string) =>
     targetSystemId ? true : systemsOnPath.has(position);
@@ -96,6 +99,7 @@ export function MapRenderLayer({
           onTileSelect={onTileSelect}
           onTileHover={onTileHover}
         />
+        {replayAnimationsEnabled && <MapUnitTransitionLayer />}
         <ExpeditionLayer contentSize={contentSize} />
         {showPathVisualization && (
           <PathVisualization

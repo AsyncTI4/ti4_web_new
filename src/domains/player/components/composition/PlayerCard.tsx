@@ -180,6 +180,11 @@ export default function PlayerCard(props: Props) {
           {/* Units + Army Stats */}
           <Flex align="flex-start" justify="flex-start" gap="md" wrap="wrap">
             <Box style={{ flex: 1 }}>{UnitsArea}</Box>
+            {hasCapturedUnits && (
+              <Box>
+                <Nombox capturedUnits={player.nombox} />
+              </Box>
+            )}
             {settings.showPlayerAreaArmyStrength && (
               <Box>
                 <ArmyStats stats={armyStats} />
@@ -236,13 +241,8 @@ export default function PlayerCard(props: Props) {
             plotCards={player.plotCards}
             faction={player.faction}
           />
-        </Grid.Col>
-      </Grid>
-      {hasCapturedUnits && (
-        <Box mt="md">
-          <Nombox capturedUnits={player.nombox} />
-        </Box>
-      )}
+          </Grid.Col>
+        </Grid>
     </PlayerCardBox>
   );
 }

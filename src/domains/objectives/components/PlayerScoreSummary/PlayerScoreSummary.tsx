@@ -139,9 +139,9 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
 
   return (
     <div className={styles.themedContainer}>
-      <Stack gap={10}>
+      <Stack gap={6}>
         {/* Title */}
-        <Caption size="md">Score Breakdown</Caption>
+        <Caption size="sm">Score Breakdown</Caption>
 
         {/* Legend/Rubric */}
         <div className={legendStyles.legendContainer}>
@@ -169,7 +169,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           </div>
           <div className={legendStyles.legendItem}>
             <IconAlertTriangle
-              size={18}
+              size={14}
               color="var(--mantine-color-yellow-6)"
             />
             <Text size="xs" c="dimmed">
@@ -183,7 +183,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           <div className={styles.playerInfoColumn} />
           <div
             className={styles.objectivesGrid}
-            style={{ gridTemplateColumns: `repeat(${gridColumns}, 1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${gridColumns}, 44px)` }}
           >
             {Array.from({ length: gridColumns }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
@@ -260,7 +260,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
               <div
                 className={styles.objectivesGrid}
                 style={{
-                  gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+                  gridTemplateColumns: `repeat(${gridColumns}, 44px)`,
                 }}
               >
                 {breakdown.entries.map((entry, idx) => {
@@ -294,7 +294,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                       state={entry.state}
                       span={entry.pointValue}
                       warningIcon={
-                        entry.losable ? <IconAlertTriangle size={20} /> : null
+                        entry.losable ? <IconAlertTriangle size={13} /> : null
                       }
                       hideLeftBorder={hideLeftBorder}
                       hideRightBorder={hideRightBorder}
@@ -313,11 +313,11 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
 
         {/* Note about potential points */}
         <Text
-          size="sm"
+          size="xs"
           c="gray.6"
           fs="italic"
           className={styles.noteText}
-          mt="sm"
+          mt="xs"
         >
           NOTE: Potential points (not filled) are a heuristic that do not
           account for action cards such as overrule, impersonation, and others.

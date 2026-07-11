@@ -11,6 +11,7 @@ import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useScrollToPlanet } from "@/hooks/useScrollToPlanet";
+import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
@@ -105,6 +106,7 @@ export function MapView({
     mapContainerRef,
     zoom,
   });
+  useScrollToReplayHighlight(mapContainerRef);
 
   useMapKeyboardShortcuts({
     handlers,
@@ -130,6 +132,14 @@ export function MapView({
   const showLeftSidebar = !embedded || embeddedSidebar === "left";
   const showRightSidebar = !embedded || showEmbeddedRightSidebar;
   const embeddedRightSidebarWidth = `max(420px, ${sidebarWidth}%)`;
+  const floatingControlsBaseRightOffset = embedded
+    ? showEmbeddedRightSidebar
+      ? embeddedRightSidebarWidth
+      : "0px"
+    : settings.rightPanelCollapsed
+      ? "0px"
+      : `${sidebarWidth}vw`;
+  const floatingControlsRightOffset = `calc(${floatingControlsBaseRightOffset} + 35px)`;
   const hasAutoSelectedFactionRef = useRef(false);
 
   useEffect(() => {
@@ -181,13 +191,7 @@ export function MapView({
         <div
           className={`${classes.zoomControlsDynamic} ${embedded ? classes.zoomControlsEmbedded : ""}`}
           style={{
-            right: embedded
-              ? showEmbeddedRightSidebar
-                ? `calc(${embeddedRightSidebarWidth} + 35px)`
-                : "35px"
-              : settings.rightPanelCollapsed
-                ? "35px"
-                : `calc(${sidebarWidth}vw + 35px)`,
+            right: floatingControlsRightOffset,
             transition: isDragging ? "none" : "right 0.1s ease",
           }}
         >

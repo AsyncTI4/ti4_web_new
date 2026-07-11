@@ -1,0 +1,126 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-map-unit-transition, 1250);
+  overflow: visible;
+  pointer-events: none;
+  contain: layout style;
+}
+
+.commandTokenPlacement,
+.commandTokenAdded,
+.commandTokenRemoved {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.commandTokenPlacement {
+  opacity: 0;
+  animation: commandTokenPlacement var(--command-duration) ease-out
+    var(--command-delay) forwards;
+}
+
+.commandTokenAdded {
+  opacity: 0;
+  animation: commandTokenAdded var(--command-duration) ease-out
+    var(--command-delay) forwards;
+}
+
+.commandTokenRemoved {
+  opacity: 1;
+  animation: commandTokenRemoved var(--command-duration) ease-out
+    var(--command-delay) forwards;
+}
+
+@keyframes commandTokenPlacement {
+  0% {
+    opacity: 0;
+    transform: translateY(-64px) scale(1.18) rotate(-10deg);
+  }
+  68% {
+    opacity: 1;
+    transform: translateY(5px) scale(0.97) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+@keyframes commandTokenAdded {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes commandTokenRemoved {
+  to {
+    opacity: 0;
+  }
+}
+
+.laserPath {
+  position: absolute;
+  z-index: 10000;
+  height: 2px;
+  overflow: visible;
+  pointer-events: none;
+  transform-origin: left center;
+}
+
+.laserBolt {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 28px;
+  height: 3px;
+  border-radius: 999px;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    white 35%,
+    var(--laser-color) 62%,
+    transparent
+  );
+  box-shadow: 0 0 5px var(--laser-color);
+  will-change: transform, opacity;
+  animation: laserShot var(--laser-duration) linear var(--laser-delay) forwards;
+}
+
+@keyframes laserShot {
+  0% {
+    opacity: 0;
+    transform: translateX(0) scaleX(0.55);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--laser-distance) - 28px)) scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commandTokenPlacement,
+  .commandTokenAdded,
+  .commandTokenRemoved,
+  .laserPath {
+    display: none;
+  }
+}

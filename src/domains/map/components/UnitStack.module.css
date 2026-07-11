@@ -16,6 +16,140 @@
   pointer-events: auto;
 }
 
+.mapTransition {
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.mapReplayHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mapTransitionMoved {
+  opacity: 0;
+}
+
+.mapTransitionRetreated {
+  color: rgba(167, 139, 250, 0.96);
+  opacity: 0;
+  filter: drop-shadow(0 0 7px rgba(167, 139, 250, 0.95));
+}
+
+.mapTransitionRemoved {
+  opacity: 0;
+  color: rgba(251, 146, 120, 0.92);
+  filter: grayscale(0.35) drop-shadow(0 0 6px rgba(251, 146, 120, 0.92));
+  animation:
+    mapUnitAppear 1ms step-end var(--map-appear-delay, 0ms) forwards,
+    mapUnitRemoved 780ms ease-out var(--map-transition-delay, 0ms) forwards;
+}
+
+.mapTransitionAdded {
+  opacity: 0;
+  color: rgba(250, 204, 21, 0.95);
+  filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.95));
+  animation: mapUnitAdded 760ms cubic-bezier(0.2, 0.85, 0.3, 1)
+    var(--map-transition-delay, 0ms) forwards;
+}
+
+.mapTransitionBadgeCount {
+  opacity: 1;
+  animation: mapBadgeCountChange 240ms ease-out var(--map-transition-delay, 0ms)
+    forwards;
+}
+
+.mapTransitionResidualRemoved {
+  opacity: 1;
+  animation: mapResidualRemoved 420ms ease-out var(--map-transition-delay, 0ms)
+    forwards;
+}
+
+.mapTransitionSourcePreHold {
+  opacity: 1;
+  animation: mapSourceRelease 1ms step-end var(--map-transition-delay, 0ms)
+    forwards;
+}
+
+.mapTransitionSourceHold {
+  opacity: 1;
+}
+
+.mapTransitionSourceHoldDelayed {
+  opacity: 0;
+  animation: mapSourceAppear 1ms step-end var(--map-appear-delay, 0ms) forwards;
+}
+
+@keyframes mapUnitAppear {
+  to {
+    opacity: 0.82;
+  }
+}
+
+@keyframes mapUnitRemoved {
+  0% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) rotate(var(--map-start-rotation, 0deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%)
+      rotate(calc(var(--map-start-rotation, 0deg) + 210deg)) scale(0.58);
+  }
+}
+
+@keyframes mapUnitAdded {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.64);
+  }
+  58% {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes mapBadgeCountChange {
+  0%,
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+}
+
+@keyframes mapResidualRemoved {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mapSourceAppear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mapSourceRelease {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapTransition {
+    animation: none;
+    display: none;
+  }
+}
+
 .galvanizeBadgeContainer {
   position: absolute;
   transform: translate(-50%, -110%);
@@ -34,5 +168,3 @@
   left: -8px;
   top: -6px;
 }
-
-

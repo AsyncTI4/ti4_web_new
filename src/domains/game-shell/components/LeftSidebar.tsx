@@ -8,6 +8,7 @@ import { useSettingsStore } from "@/utils/appStore";
 import { useState } from "react";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { useGameData } from "@/hooks/useGameContext";
+import { GameStatePanel } from "./GameStatePanel";
 
 export function LeftSidebar() {
   const gameData = useGameData();
@@ -21,6 +22,7 @@ export function LeftSidebar() {
     >
       {hasData && (
         <Stack p="md" gap="md">
+          <GameStatePanel />
           <Box>
             {/* Game Info */}
             {gameData.playerData[0] && (

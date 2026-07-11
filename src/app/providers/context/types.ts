@@ -9,6 +9,22 @@ import {
   BorderAnomalyInfo,
 } from "@/entities/data/types";
 import { EntityStack } from "@/utils/unitPositioning";
+import type { MapReplayPlan } from "@/utils/historicalMapTransitions";
+import type { GameSubEvent } from "@/entities/data/types";
+
+export type RetreatSubEvent = Extract<GameSubEvent, { type: "RETREAT" }>;
+export type CombatReplayEvent = Extract<GameSubEvent, { type: "COMBAT" }>;
+export type MapReplayState = MapReplayPlan & { active: boolean; key: number };
+
+export type MapStatePreview = {
+  mapState: string;
+  previousMapState?: string;
+  movementState?: string | null;
+  retreats?: RetreatSubEvent[];
+  combats?: CombatReplayEvent[];
+  activeFaction?: string | null;
+  tacticalPosition?: string | null;
+};
 
 export type FactionImageMap = Record<string, { image: string; type: string }>;
 
@@ -33,6 +49,8 @@ export type GameContext = {
   colorOverrides: Record<string, string>;
   setColorOverride: (faction: string, colorAlias: string | null) => void;
   clearColorOverride: (faction: string) => void;
+  setMapStatePreview: (preview: MapStatePreview | null) => void;
+  mapReplay: MapReplayState;
 };
 
 export type GameData = {
@@ -121,7 +139,7 @@ export type Tile = {
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;
 
 export type TilePlanet = {
-  controlledBy: string | undefined;
+  controlledBy: string | null | undefined;
   commodities: number | null;
   planetaryShield: boolean;
   tokens: string[];
@@ -130,8 +148,8 @@ export type TilePlanet = {
   unitsByFaction: Record<string, EntityData[]>;
   techSpecialties: string[];
   exhausted: boolean;
-  resources?: number;
-  influence?: number;
+  resources?: number | null;
+  influence?: number | null;
 };
 
 export type EnrichedTab = {

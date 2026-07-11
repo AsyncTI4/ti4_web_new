@@ -132,14 +132,15 @@ export type FactionUnits = {
 };
 
 export type PlanetEntityData = {
-  controlledBy: string;
+  controlledBy: string | null;
   entities: {
     [factionName: string]: EntityData[];
   };
   commodities: number | null;
   planetaryShield: boolean;
-  resources: number;
-  influence: number;
+  exhausted?: boolean;
+  resources: number | null;
+  influence: number | null;
 };
 
 type PlanetData = {
@@ -325,6 +326,140 @@ export type PlayerDataResponse = {
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
+  gameState?: GameState;
+  /** Increments whenever new game events are available; used to invalidate the events query without polling. */
+  eventSequence?: number;
+};
+
+export type GameEventArchetype =
+  | "TACTICAL_ACTION"
+  | "TURN"
+  | "CARD_PLAY_ACTION_CARD"
+  | "CARD_PLAY_PROMISSORY_NOTE"
+  | "CARD_PLAY_AGENT"
+  | "CARD_PLAY_HERO"
+  | "CARD_PLAY_RELIC"
+  | "CARD_PLAY_TECH_EXHAUST"
+  | "CARD_PLAY_BREAKTHROUGH"
+  | "CARD_PLAY_ABILITY"
+  | "TECH_RESEARCHED"
+  | "SC_PLAYED"
+  | "SC_PICKED"
+  | "OBJECTIVE_SCORED"
+  | "STATUS_SCORING"
+  | "AGENDA_RESOLVED"
+  | "TRANSACTION"
+  | "PRODUCTION"
+  | "MANUAL_COMMAND"
+  | "PHASE_STARTED"
+  | "ROUND_STARTED"
+  | "GAME_ENDED";
+
+/** Structured sub-events embedded in TACTICAL_ACTION payloads (payload.subEvents). */
+export type GameSubEvent =
+  | {
+      type: "COMBAT";
+      kind: "space" | "ground";
+      tile: string | null;
+      planet: string | null;
+      vsFaction: string;
+    }
+  | { type: "CONTROL_ESTABLISHED"; planet: string; faction?: string }
+  | {
+      type: "ACTION_CARD_PLAYED";
+      faction: string;
+      cardId: string;
+      cardName: string;
+    }
+  | {
+      type: "LEADER_PLAYED";
+      faction: string;
+      leaderType: "AGENT" | "HERO";
+      leaderId: string;
+    }
+  | { type: "TECH_EXHAUSTED"; faction: string; techId: string }
+  | {
+      type: "OBJECTIVE_SCORED";
+      faction: string;
+      objectiveId: string;
+      category: "PUBLIC" | "SECRET" | "CUSTODIAN" | (string & {});
+    }
+  | {
+      type: "PRODUCTION";
+      tile: string | null;
+      units: Record<string, number> | null;
+      cost: number | null;
+    }
+  | {
+      type: "RETREAT";
+      faction: string;
+      fromTile: string;
+      fromHolder: string;
+      toTile: string;
+      toHolder: string;
+      units: Record<string, [number, number, number, number]>;
+    }
+  | { type: "MANUAL_COMMAND"; user: string | null; command: string };
+
+export type GameEvent = {
+  seq: number;
+  archetype: GameEventArchetype | (string & {});
+  round: number;
+  phase: string;
+  faction: string | null;
+  timestamp: number;
+  payload: Record<string, unknown>;
+  mapState?: string | null;
+  movementState?: string | null;
+};
+
+export type GamePhase =
+  | "unknown"
+  | "setup.draft"
+  | "setup.players"
+  | "strategy"
+  | "action"
+  | "status.scoring"
+  | "status.homework"
+  | "agenda.readyToFlip"
+  | "agenda.whens"
+  | "agenda.afters"
+  | "agenda.voting"
+  | "agenda.resolving"
+  | "finished";
+
+export type GameStateAgenda = {
+  id: string;
+  startVoteCounts: Record<string, number>;
+  castVoteCounts: Record<string, number>;
+  outcomeVoteCounts: Record<string, number>;
+  resolvedOutcome: string | null;
+};
+
+export type GameStateCombat = {
+  system: string | null;
+  unitHolder: string | null;
+  round: number | null;
+  participantColors: string[];
+};
+
+export type GameState = {
+  phase: GamePhase;
+  activePlayer: string | null;
+  turnStartedAt: number | null;
+  winner: string | null;
+  agenda: GameStateAgenda | null;
+  activeSystem: string | null;
+  activeCombat: GameStateCombat | null;
+};
+
+export type GameStateMessage = {
+  type: "gameState";
+  seq: number;
+  timestamp: number;
+  full: boolean;
+  /** Deep-partial merge patch of the full web-data document (PlayerDataResponse); the whole document when full=true. */
+  patch: unknown;
 };
 
 export type BreakthroughData = {

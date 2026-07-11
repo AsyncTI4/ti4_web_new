@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import type { IMessage } from "@stomp/stompjs";
 import { config } from "../config";
+import type { GameStateMessage } from "@/entities/data/types";
 
 export enum SocketReadyState {
   UNINSTANTIATED = -1,
@@ -10,7 +12,12 @@ export enum SocketReadyState {
   CLOSED = 3,
 }
 
-export function useGameSocket(gameId: string, onRefresh: () => void) {
+export function useGameSocket(
+  gameId: string,
+  onRefresh: () => void,
+  onStateMessage?: (msg: GameStateMessage) => void,
+  onConnect?: () => void
+) {
   const clientRef = useRef<Client | null>(null);
   const [readyState, setReadyState] = useState<SocketReadyState>(
     SocketReadyState.UNINSTANTIATED
@@ -21,6 +28,16 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
   useEffect(() => {
     onRefreshRef.current = onRefresh;
   }, [onRefresh]);
+
+  const onStateMessageRef = useRef(onStateMessage);
+  useEffect(() => {
+    onStateMessageRef.current = onStateMessage;
+  }, [onStateMessage]);
+
+  const onConnectRef = useRef(onConnect);
+  useEffect(() => {
+    onConnectRef.current = onConnect;
+  }, [onConnect]);
 
   useEffect(() => {
     const brokerURL = config.api.websocketUrl;
@@ -36,6 +53,14 @@ export function useGameSocket(gameId: string, onRefresh: () => void) {
       client.subscribe(`/topic/game/${gameId}`, (msg: any) => {
         if (msg.body === "refresh") onRefreshRef.current?.();
       });
+      client.subscribe(`/topic/game/${gameId}/state`, (msg: IMessage) => {
+        try {
+          onStateMessageRef.current?.(JSON.parse(msg.body) as GameStateMessage);
+        } catch (e) {
+          console.error("Bad game state message", e);
+        }
+      });
+      onConnectRef.current?.();
     };
 
     client.onWebSocketClose = () => {

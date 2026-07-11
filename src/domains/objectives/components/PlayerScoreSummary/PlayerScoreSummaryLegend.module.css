@@ -1,22 +1,22 @@
 .legendContainer {
   display: flex;
-  gap: 12px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 11px;
   color: rgba(203, 213, 225, 0.78);
   justify-content: flex-end;
   align-items: center;
-  padding: 3px 4px;
+  padding: 1px 4px;
 }
 
 .legendItem {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   align-items: center;
 }
 
 .legendBox {
-  width: 17px;
-  height: 17px;
+  width: 13px;
+  height: 13px;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px rgba(2, 6, 23, 0.65);
 }
