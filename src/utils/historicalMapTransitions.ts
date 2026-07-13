@@ -7,6 +7,7 @@ import type { EntityStack } from "@/utils/unitPositioning";
 import { findColorData } from "@/entities/lookup/colors";
 import { deserializeCompactMovementState } from "@/utils/compactMovementState";
 import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
+import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
 
 export type MapUnitTransition = {
   kind: "moved" | "removed" | "retreated" | "settled" | "added";
@@ -642,10 +643,12 @@ function syntheticDestination(
 
 function formationDestination(
   source: LocatedStack,
+  approachSource: LocatedStack,
   data: GameData,
   position: string,
   holder: string,
   slot: number,
+  formationKind: "ship" | "infantry" | "ground",
 ): LocatedStack | undefined {
   const tile = data.tiles[position];
   if (!tile) return undefined;
@@ -653,13 +656,13 @@ function formationDestination(
   const midpoints = tile.properties.hexOutline.midpoints ?? [];
   const closest = [...midpoints].sort(
     (a, b) =>
-      (a.x - source.worldX) ** 2 +
-      (a.y - source.worldY) ** 2 -
-      ((b.x - source.worldX) ** 2 + (b.y - source.worldY) ** 2),
+      (a.x - approachSource.worldX) ** 2 +
+      (a.y - approachSource.worldY) ** 2 -
+      ((b.x - approachSource.worldX) ** 2 + (b.y - approachSource.worldY) ** 2),
   )[0];
   const sourceAngle = Math.atan2(
-    source.worldY - center.y,
-    source.worldX - center.x,
+    approachSource.worldY - center.y,
+    approachSource.worldX - center.x,
   );
   const edge = closest ?? {
     x: center.x + Math.cos(sourceAngle) * 145,
@@ -672,20 +675,81 @@ function formationDestination(
   const inwardY = towardCenterY / inwardLength;
   const acrossX = -inwardY;
   const acrossY = inwardX;
-  const column = (slot % 3) - 1;
-  const row = Math.floor(slot / 3);
-  // A loose, staggered hex packing gives rotated capital-ship silhouettes and
-  // badges distinct footprints instead of treating every stack as a point.
-  const formationDepth = 96 + row * 70 - (column === 0 ? 28 : 0);
+  let acrossOffset: number;
+  let depthOffset: number;
+  if (formationKind === "infantry") {
+    // Explicit 3-2-1 triangular blocks keep badges visibly organized instead
+    // of tracing the curved edge of the destination system.
+    const triangle = [
+      { across: -44, depth: 0 },
+      { across: 0, depth: 0 },
+      { across: 44, depth: 0 },
+      { across: -22, depth: 36 },
+      { across: 22, depth: 36 },
+      { across: 0, depth: 72 },
+    ];
+    const block = Math.floor(slot / triangle.length);
+    const point = triangle[slot % triangle.length];
+    acrossOffset = point.across;
+    depthOffset = point.depth + block * 108;
+  } else {
+    const column = (slot % 3) - 1;
+    const row = Math.floor(slot / 3);
+    acrossOffset = column * (formationKind === "ground" ? 50 : 96);
+    depthOffset = row * (formationKind === "ground" ? 46 : 82);
+    if (formationKind === "ship" && column === 0) depthOffset -= 28;
+  }
+  // Ground forces travel as one compact landing party. Ships use a looser,
+  // staggered screen so their rotated silhouettes do not overlap.
+  const formationDepth =
+    (formationKind === "infantry"
+      ? 106
+      : formationKind === "ground"
+        ? 164
+        : 92) + depthOffset;
   return {
     position,
     stack: {
       ...source.stack,
       planetName: holder === "space" ? undefined : holder,
     },
-    worldX: edge.x + inwardX * formationDepth + acrossX * column * 84,
-    worldY: edge.y + inwardY * formationDepth + acrossY * column * 84,
+    worldX: edge.x + inwardX * formationDepth + acrossX * acrossOffset,
+    worldY: edge.y + inwardY * formationDepth + acrossY * acrossOffset,
   };
+}
+
+function isShipUnit(unitId: string): boolean {
+  return getGenericUnitDataByAsyncId(unitId)?.isShip === true;
+}
+
+function formationRadius(stack: EntityStack): number {
+  if (BADGE_UNITS.has(stack.entityId)) return 40;
+  if (stack.entityType !== "unit") return 30;
+  if (stack.entityId === "mf") return 48;
+  return 38 + Math.min(5, Math.max(0, stack.count - 1)) * 7;
+}
+
+type FormationObstacle = { x: number; y: number; radius: number };
+const FORMATION_BUFFER_PX = 34;
+const FORMATION_SEARCH_SLOTS = 18;
+
+function formationOverlap(
+  candidate: LocatedStack,
+  obstacles: FormationObstacle[],
+): number {
+  const candidateRadius = formationRadius(candidate.stack);
+  return obstacles.reduce((total, obstacle) => {
+    const clearance = candidateRadius + obstacle.radius + FORMATION_BUFFER_PX;
+    const overlap = Math.max(
+      0,
+      clearance -
+        Math.hypot(
+          candidate.worldX - obstacle.x,
+          candidate.worldY - obstacle.y,
+        ),
+    );
+    return total + overlap * overlap;
+  }, 0);
 }
 
 function recenterRotatedSplay(
@@ -720,10 +784,34 @@ function resolveFactionForColor(
   const exact = entries.find((entry) => entry.color === colorId);
   if (exact) return exact.faction;
   const color = findColorData(colorId);
-  if (!color) return undefined;
-  return entries.find(
-    (entry) => findColorData(entry.color)?.alias === color.alias,
-  )?.faction;
+  if (color) {
+    const aliased = entries.find(
+      (entry) => findColorData(entry.color)?.alias === color.alias,
+    );
+    if (aliased) return aliased.faction;
+  }
+
+  // Compact movement payloads can use the bot's short color ids even when a
+  // homebrew color is absent from the web client's color catalogue (for
+  // example `cam` for `camouflage`). Resolve a short id only when it uniquely
+  // prefixes one of this game's actual colors, so similarly named colors can
+  // never be silently attributed to the active faction.
+  const normalize = (value: string) =>
+    value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const normalizedId = normalize(colorId);
+  if (normalizedId.length < 3) return undefined;
+  const prefixFactions = new Set(
+    entries
+      .filter(({ color: entryColor }) => {
+        const normalizedColor = normalize(entryColor);
+        return (
+          normalizedColor.startsWith(normalizedId) ||
+          normalizedId.startsWith(normalizedColor)
+        );
+      })
+      .map(({ faction }) => faction),
+  );
+  return prefixFactions.size === 1 ? [...prefixFactions][0] : undefined;
 }
 
 function addTotal(totals: Map<string, number>, key: string, amount: number) {
@@ -926,7 +1014,11 @@ function buildCombatLasers(
   for (const combat of combats) {
     if (!combat.tile || !combat.vsFaction) continue;
     const attackers = movements
-      .filter((movement) => movement.target.position === combat.tile)
+      .filter(
+        (movement) =>
+          movement.target.position === combat.tile &&
+          isShipUnit(movement.target.unitId),
+      )
       .slice(0, 4)
       .map(({ transition }) => ({ x: transition.toX, y: transition.toY }));
     const holder = combat.kind === "ground" ? combat.planet : "space";
@@ -949,8 +1041,14 @@ function buildCombatLasers(
       ).values(),
     ]
       .slice(0, 4)
-      .map((located) => ({ x: located.worldX, y: located.worldY }));
+      .map((located) => ({
+        x: located.worldX,
+        y: located.worldY,
+        isShip: isShipUnit(located.stack.entityId),
+      }));
     if (attackers.length === 0 || defenders.length === 0) continue;
+
+    const defenderShips = defenders.filter((defender) => defender.isShip);
 
     const volleyCount = Math.min(
       8,
@@ -959,10 +1057,18 @@ function buildCombatLasers(
     for (let i = 0; i < volleyCount; i += 1) {
       const attacker = attackers[i % attackers.length];
       const defender = defenders[(i * 3 + 1) % defenders.length];
-      const attackerFires = i % 3 !== 2;
+      // A ground-force sprite is a destination, never a laser emitter. Space
+      // defenders can return fire; bombardment-style ground visuals originate
+      // only from the attacking ships.
+      const attackerFires = combat.kind === "ground" || i % 3 !== 2;
+      const firingDefender =
+        defenderShips.length > 0
+          ? defenderShips[(i * 3 + 1) % defenderShips.length]
+          : undefined;
+      if (!attackerFires && !firingDefender) continue;
       lasers.push({
-        fromX: attackerFires ? attacker.x : defender.x,
-        fromY: attackerFires ? attacker.y : defender.y,
+        fromX: attackerFires ? attacker.x : firingDefender!.x,
+        fromY: attackerFires ? attacker.y : firingDefender!.y,
         toX: attackerFires ? defender.x : attacker.x,
         toY: attackerFires ? defender.y : attacker.y,
         delayMs: movementEnd + 110 + i * 95,
@@ -1003,9 +1109,52 @@ function buildAuthoritativeMapReplay(
   const stagedRotationByDestinationKey = new Map<string, number>();
   const movementArrivals = new Map<string, LocatedStack>();
   const formationSlots = new Map<string, number>();
+  const formationApproaches = new Map<string, LocatedStack>();
   const movement = options.movementState
     ? deserializeCompactMovementState(options.movementState)
     : undefined;
+  // Preserve every already-occupied ship pixel in the destination system. Use
+  // current anchors for surviving ships and previous anchors for casualties,
+  // while excluding current-only members of the incoming fleet.
+  const previousTargetPlacements = allPlacedStacks(previous).filter(
+    ({ position, stack }) =>
+      position === movement?.targetPosition &&
+      (stack.planetName ?? "space") === "space",
+  );
+  const previousTargetPlacementKeys = new Set(
+    previousTargetPlacements.map((located) =>
+      rawLocationKey(locatedLocation(located)),
+    ),
+  );
+  const targetPlacementsByLocation = new Map(
+    previousTargetPlacements.map((located) => [
+      rawLocationKey(locatedLocation(located)),
+      located,
+    ]),
+  );
+  for (const located of allPlacedStacks(current)) {
+    if (
+      located.position !== movement?.targetPosition ||
+      (located.stack.planetName ?? "space") !== "space"
+    )
+      continue;
+    const key = rawLocationKey(locatedLocation(located));
+    // Current-only ships belonging to the mover are the arriving fleet whose
+    // final heat-map anchors should not repel its temporary combat formation.
+    if (
+      located.stack.faction === options.activeFaction &&
+      !previousTargetPlacementKeys.has(key)
+    )
+      continue;
+    targetPlacementsByLocation.set(key, located);
+  }
+  const shipFormationObstacles: FormationObstacle[] = [
+    ...targetPlacementsByLocation.values(),
+  ].map((located) => ({
+    x: located.worldX,
+    y: located.worldY,
+    radius: formationRadius(located.stack),
+  }));
   // Tactical metadata identifies where to look, but never creates a token by
   // itself. The pre-phase exists only when the serialized map snapshots prove
   // that this faction's counter count increased in that system.
@@ -1074,33 +1223,96 @@ function buildAuthoritativeMapReplay(
         const to = finalDestination
           ? locatedLocation(finalDestination)
           : preferredDestination;
-        const combat = (options.combats ?? []).find(
+        const matchingCombat = (options.combats ?? []).find(
           (candidate) =>
             candidate.tile === movement.targetPosition &&
             (to.holder === "space"
               ? candidate.kind === "space"
               : candidate.kind === "ground" && candidate.planet === to.holder),
         );
+        const combat =
+          matchingCombat ??
+          (isShipUnit(unit.unitId)
+            ? (options.combats ?? []).find(
+                (candidate) => candidate.tile === movement.targetPosition,
+              )
+            : undefined);
         const hasCombat = combat !== undefined;
         const movedCount = count(unit.states);
-        const formationKey = `${source.position}\u0000${movement.targetPosition}`;
-        const formationSlot = formationSlots.get(formationKey) ?? 0;
-        formationSlots.set(formationKey, formationSlot + 1);
-        let arrival = hasCombat
-          ? formationDestination(
+        const formationKind = isShipUnit(unit.unitId)
+          ? "ship"
+          : unit.unitId === "gf"
+            ? "infantry"
+            : "ground";
+        const formationKey = [
+          movement.targetPosition,
+          to.holder,
+          faction,
+          formationKind,
+        ].join("\u0000");
+        const approachSource =
+          formationApproaches.get(formationKey) ?? sourceLocated;
+        formationApproaches.set(formationKey, approachSource);
+        let formationSlot = formationSlots.get(formationKey) ?? 0;
+        let arrival: LocatedStack | undefined;
+        if (hasCombat) {
+          if (formationKind === "ship") {
+            let bestCandidate: LocatedStack | undefined;
+            let bestCandidateSlot = formationSlot;
+            let bestOverlap = Number.POSITIVE_INFINITY;
+            for (
+              let candidateSlot = formationSlot;
+              candidateSlot < formationSlot + FORMATION_SEARCH_SLOTS;
+              candidateSlot += 1
+            ) {
+              const candidate = formationDestination(
+                sourceLocated,
+                approachSource,
+                current,
+                movement.targetPosition,
+                to.holder,
+                candidateSlot,
+                formationKind,
+              );
+              if (!candidate) continue;
+              const overlap = formationOverlap(
+                candidate,
+                shipFormationObstacles,
+              );
+              if (overlap < bestOverlap) {
+                bestCandidate = candidate;
+                bestCandidateSlot = candidateSlot;
+                bestOverlap = overlap;
+              }
+              // Slots are ordered nearest-first, so the first clear candidate
+              // is preferable to any more distant clear location.
+              if (overlap === 0) break;
+            }
+            arrival = bestCandidate;
+            formationSlot = bestCandidateSlot + 1;
+          } else {
+            arrival = formationDestination(
               sourceLocated,
+              approachSource,
               current,
               movement.targetPosition,
               to.holder,
               formationSlot,
-            )
-          : (finalDestination ??
+              formationKind,
+            );
+            formationSlot += 1;
+          }
+          formationSlots.set(formationKey, formationSlot);
+        } else {
+          arrival =
+            finalDestination ??
             syntheticDestination(
               sourceLocated,
               current,
               movement.targetPosition,
               to.holder,
-            ));
+            );
+        }
         if (!arrival) continue;
 
         const fromKey = rawLocationKey(from);
@@ -1134,11 +1346,21 @@ function buildAuthoritativeMapReplay(
             facingPoint.y,
           );
         }
+        if (hasCombat && formationKind === "ship") {
+          shipFormationObstacles.push({
+            x: arrival.worldX,
+            y: arrival.worldY,
+            radius: formationRadius(arrival.stack),
+          });
+        }
         addTotal(expectedTotals, fromKey, -movedCount);
         addTotal(expectedTotals, toKey, movedCount);
         locations.set(fromKey, from);
         locations.set(toKey, to);
-        movementArrivals.set(toKey, arrival);
+        // Multiple source stacks can merge into one final stack. Retain the
+        // first landing coordinate so a combat-loss ghost replaces the unit
+        // that is actually consumed, instead of popping in over a later group.
+        if (!movementArrivals.has(toKey)) movementArrivals.set(toKey, arrival);
         const transition: MapUnitTransition = {
           kind: "moved",
           stack: stackWithStates(sourceLocated, unit.states),
@@ -1200,6 +1422,69 @@ function buildAuthoritativeMapReplay(
       ? Math.round(movementEnd + (laserEnd - movementEnd) * 0.55)
       : undefined;
 
+  // Reserve retreating and destroyed arrivals before assigning new sustain
+  // markers. Otherwise a unit can receive delayed damage and then be selected
+  // as the casualty, making layout reconciliation paint a phantom damaged
+  // survivor from the static final stack at the start of the replay.
+  const damageSurvivors = new Map<PlannedMovement, StateCounts>();
+  const damageRetreatBudgets = new Map<string, number>();
+  for (const retreat of options.retreats ?? []) {
+    for (const [unitId, retreatStates] of Object.entries(retreat.units)) {
+      const key = rawLocationKey({
+        position: retreat.fromTile,
+        holder: retreat.fromHolder,
+        faction: retreat.faction,
+        unitId,
+      });
+      addTotal(damageRetreatBudgets, key, count(retreatStates as StateCounts));
+    }
+  }
+  const damageLossBudgets = new Map<string, number>();
+  for (const movement of movements) {
+    if (damageLossBudgets.has(movement.destinationKey)) continue;
+    damageLossBudgets.set(
+      movement.destinationKey,
+      Math.max(
+        0,
+        (expectedTotals.get(movement.destinationKey) ?? 0) -
+          (finalTotals.get(movement.destinationKey) ?? 0),
+      ),
+    );
+  }
+  for (const movement of movements) {
+    const movedStates = states(movement.transition.stack);
+    const movedCount = count(movedStates);
+    const retreating = Math.min(
+      movedCount,
+      damageRetreatBudgets.get(movement.destinationKey) ?? 0,
+    );
+    damageRetreatBudgets.set(
+      movement.destinationKey,
+      Math.max(
+        0,
+        (damageRetreatBudgets.get(movement.destinationKey) ?? 0) - retreating,
+      ),
+    );
+    const dying = Math.min(
+      movedCount - retreating,
+      damageLossBudgets.get(movement.destinationKey) ?? 0,
+    );
+    damageLossBudgets.set(
+      movement.destinationKey,
+      Math.max(
+        0,
+        (damageLossBudgets.get(movement.destinationKey) ?? 0) - dying,
+      ),
+    );
+    damageSurvivors.set(
+      movement,
+      subtractStates(
+        movedStates,
+        statesForCount(movedStates, retreating + dying),
+      ),
+    );
+  }
+
   // Allocate final-state sustain increases back onto the fleets that arrived
   // for this combat. Their sprites are sustained from a layout perspective,
   // but the marker itself remains hidden until the middle of the volley.
@@ -1249,8 +1534,9 @@ function buildAuthoritativeMapReplay(
       const budget = damageBudgets.get(movement.destinationKey);
       if (!budget) continue;
       const transitionStates = states(transition.stack);
-      const normalDamage = Math.min(transitionStates[0], budget[1]);
-      const galvanizedDamage = Math.min(transitionStates[2], budget[3]);
+      const survivingStates = damageSurvivors.get(movement) ?? transitionStates;
+      const normalDamage = Math.min(survivingStates[0], budget[1]);
+      const galvanizedDamage = Math.min(survivingStates[2], budget[3]);
       if (normalDamage + galvanizedDamage === 0) continue;
       transitionStates[0] -= normalDamage;
       transitionStates[1] += normalDamage;
