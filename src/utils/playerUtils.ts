@@ -2,6 +2,20 @@ import { PlayerData } from "@/entities/data/types";
 
 const INVALID_FACTION_VALUES = new Set(["", "null", "neutral"]);
 
+function cleanDisplayName(value?: string | null) {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.toLowerCase() === "null") return null;
+  return trimmed;
+}
+
+export function getPlayerFactionDisplayName(player: PlayerData) {
+  return (
+    cleanDisplayName(player.displayName) ??
+    cleanDisplayName(player.flexibleDisplayName) ??
+    player.faction
+  );
+}
+
 export function hasAssignedFaction(
   player?: PlayerData | null,
 ): player is PlayerData {

@@ -18,6 +18,7 @@ import { useGameContext } from "@/hooks/useGameContext";
 import { useFactionImages } from "@/hooks/useFactionImages";
 import { getFactionImage } from "@/entities/lookup/factions";
 import cx from "clsx";
+import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 type PlayerStatsAreaProps = {
   faction: string;
@@ -139,7 +140,9 @@ export function PlayerStatsArea({
             }}
           />
           <div className={styles.textContainer}>
-            <div className={styles.factionName}>{faction.toUpperCase()}</div>
+            <div className={styles.factionName}>
+              {getPlayerFactionDisplayName(playerData).toUpperCase()}
+            </div>
 
             {playerData.userName && (
               <div className={styles.playerName}>{playerData.userName}</div>

@@ -270,6 +270,7 @@ export default function PlayerCardMobile(props: Props) {
       <PlayerCardHeaderMobile
         userName={player.userName}
         faction={player.faction}
+        factionDisplayName={player.factionDisplayName}
         color={player.color}
         factionImageUrl={factionUrl ?? ""}
         isSpeaker={player.isSpeaker}

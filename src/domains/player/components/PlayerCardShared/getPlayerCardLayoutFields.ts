@@ -1,4 +1,5 @@
 import type { PlayerData } from "@/entities/data/types";
+import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 /**
  * Picks the common set of player fields that multiple PlayerCard variants need
@@ -50,6 +51,7 @@ export function getPlayerCardLayoutFields(playerData: PlayerData) {
   return {
     userName,
     faction,
+    factionDisplayName: getPlayerFactionDisplayName(playerData),
     color,
     tacticalCC,
     fleetCC,

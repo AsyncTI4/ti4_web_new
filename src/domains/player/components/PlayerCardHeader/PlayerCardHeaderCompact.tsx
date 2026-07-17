@@ -14,6 +14,7 @@ import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 type PlayerCardHeaderProps = {
   userName: string;
   faction: string;
+  factionDisplayName: string;
   color: string;
   factionImageUrl: string;
   isSpeaker?: boolean;
@@ -52,6 +53,7 @@ const MOBILE_BREAKTHROUGH_WIDTH = 176;
 export function PlayerCardHeaderCompact({
   userName,
   faction,
+  factionDisplayName,
   color,
   factionImageUrl,
   isSpeaker = false,
@@ -116,7 +118,7 @@ export function PlayerCardHeaderCompact({
             minWidth: 0,
           }}
         >
-          [{faction}]
+          [{factionDisplayName}]
         </Text>
         <Box style={{ flexShrink: 2 }}>
           <PlayerColor color={color} size="sm" />
@@ -136,6 +138,7 @@ export function PlayerCardHeaderCompact({
 export function PlayerCardHeaderFull({
   userName,
   faction,
+  factionDisplayName,
   color,
   factionImageUrl,
   isSpeaker = false,
@@ -184,7 +187,7 @@ export function PlayerCardHeaderFull({
               ff="text"
               style={{ textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)" }}
             >
-              {faction}
+              {factionDisplayName}
             </Text>
             <PlayerColor color={color} size="xs" />
           </Group>
@@ -206,6 +209,7 @@ export function PlayerCardHeaderFull({
 export function PlayerCardHeaderMobile({
   userName,
   faction,
+  factionDisplayName,
   color,
   factionImageUrl,
   isSpeaker = false,
@@ -281,7 +285,7 @@ export function PlayerCardHeaderMobile({
             flex: "0 0 auto",
           }}
         >
-          [{faction}]
+          [{factionDisplayName}]
         </Text>
         <PlayerColor color={color} size="xs" />
         <StatusIndicator passed={passed} active={active} />
