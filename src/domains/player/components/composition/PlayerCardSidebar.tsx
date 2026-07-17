@@ -16,6 +16,7 @@ import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCard
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { Nombox } from "./Nombox";
+import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 type Props = {
   playerData: PlayerData;
@@ -67,6 +68,7 @@ export default function PlayerCardSidebar(props: Props) {
       <PlayerCardHeaderCompact
         userName={userName}
         faction={faction}
+        factionDisplayName={getPlayerFactionDisplayName(playerData)}
         color={color}
         factionImageUrl={factionUrl}
         isSpeaker={isSpeaker}

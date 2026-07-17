@@ -5,6 +5,7 @@ import { PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import classes from "./ObjectiveDetailsCard.module.css";
+import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 type Props = {
   objectiveKey: string;
@@ -113,7 +114,7 @@ export function ObjectiveDetailsCard({
                         tt="uppercase"
                         className={classes.factionName}
                       >
-                        {player.faction}
+                        {getPlayerFactionDisplayName(player)}
                       </Text>
                       <Text size="sm" c="gray.3" className={classes.playerName}>
                         {player.userName.length > 12
