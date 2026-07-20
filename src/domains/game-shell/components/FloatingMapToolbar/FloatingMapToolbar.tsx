@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useId, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   ActionIcon,
   Box,
@@ -99,6 +100,7 @@ export function FloatingMapToolbar({
   );
   const updateSettings = useSettingsStore((state) => state.updateSettings);
   const panelId = useId();
+  const { mapid: gameId } = useParams<{ mapid: string }>();
   const gameData = useGameData();
   const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
   const setViewAsPlayer = useFowViewStore((state) => state.setViewAsPlayer);
@@ -115,11 +117,13 @@ export function FloatingMapToolbar({
 
   // The FoW GM-preview panel/selection is per-game - close it and drop any stale "view as"
   // choice when switching games, rather than carrying it (invisibly, for non-FoW games) into
-  // wherever the player navigates next.
+  // wherever the player navigates next. Keyed on the route param, not gameData: gameData goes
+  // briefly undefined on every viewAsPlayerId change too (it's part of the query key), which
+  // would otherwise reset the panel/selection right as a preview click starts loading.
   useEffect(() => {
     setOpenPanel(null);
     setViewAsPlayer(null);
-  }, [gameData?.gameName, setViewAsPlayer]);
+  }, [gameId, setViewAsPlayer]);
 
   useEffect(() => {
     if (openPanel === "events" && !showEventsButton) setOpenPanel(null);
