@@ -14,7 +14,7 @@ import { IconCards, IconEyeOff, IconHistory } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { useSettingsStore } from "@/utils/appStore";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
 import { useFowViewStore } from "@/utils/fowViewStore";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
 import type { PlayerDataResponse } from "@/entities/data/types";
@@ -103,6 +103,11 @@ export function FloatingMapToolbar({
   const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
   const setViewAsPlayer = useFowViewStore((state) => state.setViewAsPlayer);
   const showFowButton = Boolean(gameData?.isFowMode && gameData?.viewerIsGm);
+  const isTrueGmView = useIsTrueGmView();
+  // The event log has no fogged variant (it's built from full, unfiltered state - see the
+  // backend's /events endpoint), so it's only available to the GM's own real view, never to
+  // participants of a FoW game or while the GM is previewing as a specific player.
+  const showEventsButton = !gameData?.isFowMode || isTrueGmView;
 
   const togglePanel = (panel: FloatingPanel) => {
     setOpenPanel((current) => (current === panel ? null : panel));
@@ -115,6 +120,10 @@ export function FloatingMapToolbar({
     setOpenPanel(null);
     setViewAsPlayer(null);
   }, [gameData?.gameName, setViewAsPlayer]);
+
+  useEffect(() => {
+    if (openPanel === "events" && !showEventsButton) setOpenPanel(null);
+  }, [showEventsButton, openPanel]);
 
   useEffect(() => {
     if (!openPanel) return;
@@ -138,19 +147,21 @@ export function FloatingMapToolbar({
         className={`${classes.toolbar} ${transitionClassName ?? ""}`}
         style={{ right: rightOffset }}
       >
-        <Tooltip label={panels.events.label} position="left" withArrow>
-          <ActionIcon
-            aria-label={panels.events.label}
-            aria-controls={panelId}
-            aria-expanded={openPanel === "events"}
-            radius="xl"
-            variant="subtle"
-            className={`${classes.button} ${openPanel === "events" ? classes.buttonActive : ""}`}
-            onClick={() => togglePanel("events")}
-          >
-            <IconHistory size={22} stroke={1.8} />
-          </ActionIcon>
-        </Tooltip>
+        {showEventsButton && (
+          <Tooltip label={panels.events.label} position="left" withArrow>
+            <ActionIcon
+              aria-label={panels.events.label}
+              aria-controls={panelId}
+              aria-expanded={openPanel === "events"}
+              radius="xl"
+              variant="subtle"
+              className={`${classes.button} ${openPanel === "events" ? classes.buttonActive : ""}`}
+              onClick={() => togglePanel("events")}
+            >
+              <IconHistory size={22} stroke={1.8} />
+            </ActionIcon>
+          </Tooltip>
+        )}
 
         {cardsPanel && (
           <Tooltip label={panels.cards.label} position="left" withArrow>
