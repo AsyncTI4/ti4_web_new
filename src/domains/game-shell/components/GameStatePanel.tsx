@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useGameState } from "@/hooks/useGameState";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
@@ -617,7 +617,9 @@ export function GameStatePanel() {
   const { data: gameState } = useGameState(gameId);
   const gameData = useGameData();
   const playerData = gameData?.playerData ?? [];
+  const isTrueGmView = useIsTrueGmView();
 
+  if (gameData?.hidePlayerInfos && !isTrueGmView) return null;
   if (!gameState || !gameState.phase || gameState.phase === "unknown")
     return null;
 

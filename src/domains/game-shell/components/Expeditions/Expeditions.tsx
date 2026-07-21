@@ -33,15 +33,18 @@ export default function Expeditions({ expeditions }: ExpeditionsProps) {
     <Stack>
       <Text className={styles.sectionTitle}>Expeditions</Text>
       {EXPEDITION_TYPES.map((expType, index) => {
-        if (
-          !expeditions ||
-          !expeditions[expType] ||
-          expeditions[expType].completedBy === null
-        )
-          return <></>;
+        const completedBy = expeditions?.[expType]?.completedBy;
+        if (!completedBy) return <></>;
 
-        const factionName =
-          factionColorMap[expeditions[expType].completedBy].faction;
+        // completedBy is a player COLOR (not faction), so factionColorMap (keyed by faction)
+        // can't be indexed by it directly - search its entries for the matching color instead.
+        // A color with no matching entry means the viewer can't identify that player (the
+        // backend never redacts completedBy itself, only playerData - see ExpeditionTokens.tsx).
+        const factionName = completedBy
+          ? (Object.values(factionColorMap).find(
+              (entry) => entry.color === completedBy
+            )?.faction ?? null)
+          : null;
 
         return (
           <SingleExpedition faction={factionName}>

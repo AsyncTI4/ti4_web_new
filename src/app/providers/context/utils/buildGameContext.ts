@@ -9,10 +9,7 @@ import {
   buildFactionColorMap,
 } from "@/utils/colorOptimization";
 import { buildFactionImageMap } from "@/entities/lookup/factions";
-import {
-  computeAllExhaustedPlanets,
-  getTechSpecialties,
-} from "@/utils/planets";
+import { getTechSpecialties } from "@/utils/planets";
 import {
   computePdsData,
   getTileController,
@@ -138,7 +135,6 @@ export function buildGameContext(
     data,
     factionToColor,
   );
-  const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
   const calculatedTilePositions = data.tilePositions
     ? calculateTilePositions(data.tilePositions, data.ringCount)
     : [];
@@ -189,7 +185,7 @@ export function buildGameContext(
         const { tokens, unitsByFaction, attachments, actionCards } =
           aggregateEntities(planetData.entities);
 
-        const exhausted = allExhaustedPlanets.has(planetName);
+        const exhausted = planetData.exhausted;
         const planetTile: TilePlanet = {
           tokens,
           unitsByFaction,
@@ -217,7 +213,7 @@ export function buildGameContext(
       const { tokens, unitsByFaction, attachments, actionCards } =
         aggregateEntities(planetData.entities);
 
-      const exhausted = allExhaustedPlanets.has(planetName);
+      const exhausted = planetData.exhausted;
       planets[planetName] = {
         tokens,
         unitsByFaction,
@@ -268,6 +264,8 @@ export function buildGameContext(
       controlledBy: getTileController(planets, unitsByFaction),
       borderAnomalies: borderAnomaliesByTile[position],
       hyperlaneMatrix: tileData.hyperlaneMatrix,
+      isGhost: tileData.ghost,
+      fogLabel: tileData.fogLabel,
     };
 
     const endTilePlacementMeasure = startPerformanceSpan("ti4.tilePlacement", {
@@ -326,6 +324,10 @@ export function buildGameContext(
     expeditions: data.expeditions,
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,
+    isFowMode: data.isFowMode,
+    viewingAsPlayerId: data.viewingAsPlayerId,
+    viewerIsGm: data.viewerIsGm,
+    hidePlayerInfos: data.hidePlayerInfos,
   };
 
   endBuildGameContextMeasure({

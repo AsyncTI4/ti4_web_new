@@ -8,7 +8,7 @@ import { ObjectiveChip } from "../ObjectiveChip";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { IconAlertTriangle, IconBook2, IconDiamond } from "@tabler/icons-react";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import cornerBadgeStyles from "./CornerBadgeIcon.module.css";
@@ -118,7 +118,9 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
   const gameData = useGameData();
   const playerScoreBreakdowns = gameData?.playerScoreBreakdowns;
   const vpsToWin = gameData?.vpsToWin ?? 10;
+  const isTrueGmView = useIsTrueGmView();
 
+  if (gameData?.hidePlayerInfos && !isTrueGmView) return null;
   if (!playerData || !objectives) return null;
 
   const sortedPlayers = [...playerData].sort((a, b) => {

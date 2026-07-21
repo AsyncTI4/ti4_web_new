@@ -1,4 +1,3 @@
-import { PlayerDataResponse } from "@/entities/data/types";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 
@@ -12,15 +11,6 @@ export function filterPlanetsByOcean(
   const regularPlanets = planets.filter((id) => !isOceanPlanet(id));
   const oceanPlanets = planets.filter(isOceanPlanet);
   return { regularPlanets, oceanPlanets };
-}
-
-export function computeAllExhaustedPlanets(
-  data: PlayerDataResponse
-): string[] {
-  if (!data.playerData) return [];
-  return data.playerData.flatMap((player) =>
-    player.exhaustedPlanets.filter((planet) => planet)
-  );
 }
 
 export function getTechSpecialties(

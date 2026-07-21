@@ -135,7 +135,9 @@ export const MapTile = React.memo<Props>(
           isDistanceSelected ? classes.distanceSelected : ""
         } ${isDistanceHoverable ? classes.distanceHoverable : ""} ${
           isMovingMode ? classes.movingMode : ""
-        } ${isA11ySelected ? classes.selected : ""}`}
+        } ${isA11ySelected ? classes.selected : ""} ${
+          mapTile.isGhost ? classes.ghostTile : ""
+        }`}
         style={{
           left: embedded ? 0 : `${position.x}px`,
           top: embedded ? 0 : `${position.y}px`,
@@ -278,6 +280,10 @@ export const MapTile = React.memo<Props>(
           >
             {ringPosition}
           </div>
+
+          {mapTile.isGhost && mapTile.fogLabel && (
+            <div className={classes.fogLabel}>{mapTile.fogLabel}</div>
+          )}
 
           {controllingFaction && overlaysEnabled && (
             <>

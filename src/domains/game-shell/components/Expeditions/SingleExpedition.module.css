@@ -1,0 +1,14 @@
+.factionText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.unidentifiedText {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.unidentifiedToken {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(148, 163, 184, 0.55), rgba(71, 85, 105, 0.75));
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}

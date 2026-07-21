@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useGameData } from "@/hooks/useGameContext";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { getColorAlias } from "@/entities/lookup/colors";
@@ -49,26 +50,35 @@ export function ExpeditionTokens({
         const expedition = gameData.expeditions[key];
         if (!expedition || !expedition.completedBy) return null;
 
-        const faction = factionColorMap[expedition.completedBy];
-        if (!faction) return null;
-        const colorAlias = getColorAlias(faction.color);
+        // completedBy is always the real color (the backend never redacts it) - whether we can
+        // identify who it belongs to is derived here from playerData (via factionColorMap,
+        // keyed by faction), which already omits players the viewer can't identify. factionColorMap
+        // is keyed by faction, not color, so search its entries for the matching color.
+        const identified = Object.values(factionColorMap).find(
+          (entry) => entry.color === expedition.completedBy
+        );
 
         const x = expeditionsImageLeft + offsetX;
         const y = expeditionsImageTop + offsetY;
+        const style: CSSProperties = {
+          position: "absolute",
+          left: `${x}px`,
+          top: `${y}px`,
+          transform: "translate(25%, 50%) rotate(90deg)",
+          zIndex: 100,
+        };
 
-        return (
+        return identified ? (
           <ControlToken
             key={key}
-            colorAlias={colorAlias}
-            faction={faction.faction}
-            style={{
-              position: "absolute",
-              left: `${x}px`,
-              top: `${y}px`,
-              transform: "translate(25%, 50%) rotate(90deg)",
-              zIndex: 100,
-            }}
+            colorAlias={getColorAlias(identified.color)}
+            faction={identified.faction}
+            style={style}
           />
+        ) : (
+          // Completed by a player we can't identify: show a generic grey token (same fallback
+          // alias used elsewhere for unknown color) rather than hiding that it was completed.
+          <ControlToken key={key} colorAlias={getColorAlias(undefined)} style={style} />
         );
       })}
     </>

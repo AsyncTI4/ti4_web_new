@@ -3,6 +3,8 @@ import { IconScale } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { LawInPlay } from "@/entities/data/types";
 import { Chip } from "@/shared/ui/primitives/Chip";
+import { UnidentifiedPlayerDot } from "@/shared/ui/UnidentifiedPlayerDot";
+import { resolveFactionIdentity } from "@/utils/fowIdentity";
 import styles from "./CompactLaw.module.css";
 
 type Props = {
@@ -11,6 +13,12 @@ type Props = {
 };
 
 export function CompactLaw({ law, onClick }: Props) {
+  // electedFaction may be a "fow:<color>" sentinel when the viewer can't identify the elected
+  // player - the color is public, so fall back to a colored dot rather than dropping the marker.
+  const elected = law.electedFaction
+    ? resolveFactionIdentity(law.electedFaction)
+    : undefined;
+
   return (
     <Chip accent="purple" onClick={onClick}>
       <Box className={styles.contentContainer}>
@@ -19,9 +27,13 @@ export function CompactLaw({ law, onClick }: Props) {
           {law.name}
         </Text>
 
-        {law.displaysElectedFaction && law.electedFaction && (
+        {law.displaysElectedFaction && elected && (
           <Group gap={2} className={styles.factionIcon}>
-            <CircularFactionIcon faction={law.electedFaction} size={16} />
+            {elected.faction ? (
+              <CircularFactionIcon faction={elected.faction} size={16} />
+            ) : (
+              <UnidentifiedPlayerDot color={elected.rawColor!} size={16} />
+            )}
           </Group>
         )}
       </Box>

@@ -5,6 +5,8 @@ import { LawInPlay } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LawDetailsCard } from "@/domains/player/components/LawDetailsCard";
+import { UnidentifiedPlayerDot } from "@/shared/ui/UnidentifiedPlayerDot";
+import { resolveFactionIdentity } from "@/utils/fowIdentity";
 import styles from "./LawCard.module.css";
 
 type Props = {
@@ -12,7 +14,12 @@ type Props = {
 };
 
 function LawCard({ law }: Props) {
-  const hasFactionIcon = law.displaysElectedFaction && law.electedFaction;
+  // electedFaction may be a "fow:<color>" sentinel when the viewer can't identify the elected
+  // player - the color is public, so fall back to a colored dot rather than dropping the marker.
+  const elected = law.electedFaction
+    ? resolveFactionIdentity(law.electedFaction)
+    : undefined;
+  const hasFactionIcon = law.displaysElectedFaction && elected;
   const [opened, setOpened] = useState(false);
   const toggleOpened = () => setOpened((current) => !current);
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -42,13 +49,20 @@ function LawCard({ law }: Props) {
                 <Text className={styles.mapText}>{law.mapText}</Text>
               )}
             </Box>
-            {hasFactionIcon && (
-              <CircularFactionIcon
-                faction={law.electedFaction!}
-                size={20}
-                className={styles.factionIcon}
-              />
-            )}
+            {hasFactionIcon &&
+              (elected.faction ? (
+                <CircularFactionIcon
+                  faction={elected.faction}
+                  size={20}
+                  className={styles.factionIcon}
+                />
+              ) : (
+                <UnidentifiedPlayerDot
+                  color={elected.rawColor!}
+                  size={20}
+                  className={styles.factionIcon}
+                />
+              ))}
           </Group>
         </Box>
       </SmoothPopover.Target>

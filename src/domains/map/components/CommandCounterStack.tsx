@@ -2,6 +2,7 @@ import React from "react";
 import { CommandCounter } from "./CommandCounter";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useFactionColors } from "@/hooks/useFactionColors";
+import { resolveFactionIdentity } from "@/utils/fowIdentity";
 
 type CommandCounterStackProps = {
   factions: string[];
@@ -21,15 +22,18 @@ export const CommandCounterStack = ({
 
   return (
     <div style={{ position: "relative", ...style }}>
-      {factions.map((faction, index) => {
-        const colorAlias = getColorAlias(factionColorMap?.[faction]?.color);
+      {factions.map((rawFaction, index) => {
+        const { faction, rawColor } = resolveFactionIdentity(rawFaction);
+        const colorAlias = getColorAlias(
+          rawColor ?? factionColorMap?.[faction ?? ""]?.color
+        );
         const offsetX = index * 16;
         const offsetY = index * 16;
         const zIndex = index + 1;
 
         return (
           <CommandCounter
-            key={`command-${faction}-${index}`}
+            key={`command-${rawFaction}-${index}`}
             colorAlias={colorAlias}
             faction={faction}
             style={{

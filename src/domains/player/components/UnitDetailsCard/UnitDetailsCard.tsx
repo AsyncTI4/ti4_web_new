@@ -17,6 +17,9 @@ type Props = {
   playerUnitsOwned?: string[];
   valefarZTargets?: string[];
   allPlayerData?: PlayerData[];
+  /** True when unitId is a generic stand-in for a unit we can't actually identify (FoW) - shows
+   * an "Estimated" cue and hides ability/upgrade info that would otherwise look like fact. */
+  isEstimated?: boolean;
 };
 
 type InheritedAbilities = {
@@ -171,6 +174,7 @@ export function UnitDetailsCard({
   playerUnitsOwned,
   valefarZTargets,
   allPlayerData,
+  isEstimated = false,
 }: Props) {
   const unitData = getUnitData(unitId);
   if (!unitData) {
@@ -237,8 +241,8 @@ export function UnitDetailsCard({
         <DetailsCard.Title
           title={unitData.name}
           icon={<DetailsCard.Icon icon={unitIcon} />}
-          caption={isUpgraded ? "Upgraded" : "Standard"}
-          captionColor="blue"
+          caption={isEstimated ? "Unidentified" : isUpgraded ? "Upgraded" : "Standard"}
+          captionColor={isEstimated ? "yellow" : "blue"}
         />
 
         {/* Stats - Primary visual element */}
@@ -297,8 +301,9 @@ export function UnitDetailsCard({
           </Text>
         )}
 
-        {/* Ability text */}
-        {unitData.ability && (
+        {/* Ability text - hidden for estimated/unidentified units: the real unit may have a
+            different (faction-specific or upgraded) ability than this generic baseline. */}
+        {!isEstimated && unitData.ability && (
           <>
             <Divider color="gray.8" />
             <Box>
@@ -362,8 +367,9 @@ export function UnitDetailsCard({
           </>
         )}
 
-        {/* Unit abilities (AFB, Bombardment, etc.) */}
-        {hasUnitAbilities && (
+        {/* Unit abilities (AFB, Bombardment, etc.) - hidden when estimated, same reasoning as
+            the ability text above (e.g. Sustain Damage/AFB may not apply to the real unit). */}
+        {!isEstimated && hasUnitAbilities && (
           <>
             <Divider color="gray.8" />
             <Box>
@@ -417,8 +423,9 @@ export function UnitDetailsCard({
           </>
         )}
 
-        {/* Upgrade path */}
-        {upgradeInfo && (
+        {/* Upgrade path - hidden when estimated: showing "upgrades to X" implies information
+            about this specific player's tech that we don't actually have. */}
+        {!isEstimated && upgradeInfo && (
           <>
             <Divider color="gray.8" />
             <Box p={8} className={styles.upgradeBox}>

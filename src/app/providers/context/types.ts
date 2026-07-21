@@ -96,11 +96,16 @@ export type GameData = {
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
+  isFowMode?: boolean;
+  viewingAsPlayerId?: PlayerDataResponse["viewingAsPlayerId"];
+  viewerIsGm?: PlayerDataResponse["viewerIsGm"];
+  hidePlayerInfos?: boolean;
 };
 
 export type GameDataState = {
   isLoading: boolean;
   isError: boolean;
+  error?: unknown;
   readyState: SocketReadyState;
   reconnect: () => void;
   isReconnecting: boolean;
@@ -135,6 +140,11 @@ export type Tile = {
   entityPlacements: EntityStack[];
   borderAnomalies?: BorderAnomalyInfo[];
   hyperlaneMatrix?: string | null;
+  /** True if this position is outside current vision and the data above is a remembered
+   * "ghost" snapshot rather than the live tile (see backend WebTileUnitData#markGhostTiles). */
+  isGhost?: boolean;
+  /** Viewer's last-seen label for this position (e.g. "Rnd 4"), set only when isGhost is true. */
+  fogLabel?: string;
 };
 
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;
