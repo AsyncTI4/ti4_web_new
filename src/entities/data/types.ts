@@ -195,6 +195,9 @@ export type TileUnitData = {
   pds: {
     [factionName: string]: { count: number; expected: number };
   } | null;
+  /** Hyperlane connection matrix (6x6 binary rows, "i,j,...;..." format); null if not a hyperlane
+   * tile or no connection data is configured yet. See the bot's CustomHyperlaneService. */
+  hyperlaneMatrix?: string | null;
 };
 
 export type LawInPlay = {

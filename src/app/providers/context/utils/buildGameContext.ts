@@ -267,6 +267,7 @@ export function buildGameContext(
       hasAttachments: hasAttachments(planets),
       controlledBy: getTileController(planets, unitsByFaction),
       borderAnomalies: borderAnomaliesByTile[position],
+      hyperlaneMatrix: tileData.hyperlaneMatrix,
     };
 
     const endTilePlacementMeasure = startPerformanceSpan("ti4.tilePlacement", {

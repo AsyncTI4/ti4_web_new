@@ -24,6 +24,7 @@ import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import { HEX_VERTICES } from "@/utils/unitPositioning";
+import { HyperlaneConnectorLayer } from "./layers/HyperlaneConnectorLayer";
 
 const ACTIVATION_HEX_PATH = `${HEX_VERTICES.map(
   ({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x} ${y}`,
@@ -89,6 +90,10 @@ export const MapTile = React.memo<Props>(
       x: mapTile.properties.x,
       y: mapTile.properties.y,
     };
+    // Only the generic custom hyperlane tile ("hl") needs the connector-line overlay: its
+    // background is blank and lines are composited from per-position matrix data. Static
+    // hyperlane tiles (hl_crossed_0, etc.) have the lines pre-drawn into their tile artwork.
+    const isCustomHyperlaneTile = systemId === "hl";
     const isSelected = useAppStore((state) => state.selectedArea);
     const techSkipsMode = useSettingsStore(
       (state) => state.settings.techSkipsMode
@@ -208,6 +213,9 @@ export const MapTile = React.memo<Props>(
             height={TILE_HEIGHT}
           />
           <BorderAnomalyLayer mapTile={mapTile} />
+          {isCustomHyperlaneTile && (
+            <HyperlaneConnectorLayer matrix={mapTile.hyperlaneMatrix} />
+          )}
           {showSystemHighlight && (
             <svg
               key={`${mapReplay.key}-system-highlight`}

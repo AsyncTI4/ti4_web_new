@@ -134,6 +134,7 @@ export type Tile = {
   commandCounters: string[];
   entityPlacements: EntityStack[];
   borderAnomalies?: BorderAnomalyInfo[];
+  hyperlaneMatrix?: string | null;
 };
 
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;
