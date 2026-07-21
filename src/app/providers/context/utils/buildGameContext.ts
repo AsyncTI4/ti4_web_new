@@ -305,6 +305,7 @@ export function buildGameContext(
     pdsByTile,
     armyRankings,
     playerData: playerDataWithOverrides,
+    allPlayerData: data.playerData ?? [],
     objectives: data.objectives,
     lawsInPlay: data.lawsInPlay,
     strategyCards: data.strategyCards,

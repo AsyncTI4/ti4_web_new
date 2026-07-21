@@ -19,6 +19,7 @@ import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
 import { useFowViewStore } from "@/utils/fowViewStore";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
 import type { PlayerDataResponse } from "@/entities/data/types";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import classes from "./FloatingMapToolbar.module.css";
 
 type FloatingPanel = "events" | "cards" | "fow";
@@ -56,7 +57,12 @@ function FowViewPanel() {
         null,
       ])
     : undefined;
-  const players = fullViewData?.playerData ?? gameData?.playerData ?? [];
+  // gameData.playerData already excludes the neutral (Dicecord) player and other no-faction
+  // placeholders (see filterPlayersWithAssignedFaction) - fullViewData is the raw query cache and
+  // needs the same filter, or the GM could "preview as Neutral", which isn't a real perspective.
+  const players = filterPlayersWithAssignedFaction(
+    fullViewData?.playerData ?? gameData?.playerData ?? []
+  );
 
   return (
     <Group gap={6} wrap="wrap">

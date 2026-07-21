@@ -26,9 +26,11 @@ export function MapUnitDetailsCard({
   mapZoom,
   mapLayout = "panels",
 }: Props) {
-  if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
   const gameData = useGameData();
-  const playerData = gameData?.playerData;
+  // allPlayerData, not playerData: a neutral unit still needs its real color/stats resolved.
+  const playerData = gameData?.allPlayerData;
+
+  if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
 
   // tooltipUnit.faction may be a "fow:<color>" sentinel (see
   // WebTileUnitData#redactUnitIdentities) when the viewer can't identify this player -
@@ -63,6 +65,7 @@ export function MapUnitDetailsCard({
         unitId={unitIdToUse}
         color={activePlayer?.color ?? rawColor}
         isEstimated={!activePlayer}
+        isNeutral={identifiedFaction === "neutral"}
       />
     </MapTooltipPositioner>
   );

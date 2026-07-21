@@ -20,6 +20,8 @@ type Props = {
   /** True when unitId is a generic stand-in for a unit we can't actually identify (FoW) - shows
    * an "Estimated" cue and hides ability/upgrade info that would otherwise look like fact. */
   isEstimated?: boolean;
+  /** True for the neutral (Dicecord) player's units - always public, never a hidden identity. */
+  isNeutral?: boolean;
 };
 
 type InheritedAbilities = {
@@ -175,6 +177,7 @@ export function UnitDetailsCard({
   valefarZTargets,
   allPlayerData,
   isEstimated = false,
+  isNeutral = false,
 }: Props) {
   const unitData = getUnitData(unitId);
   if (!unitData) {
@@ -241,8 +244,16 @@ export function UnitDetailsCard({
         <DetailsCard.Title
           title={unitData.name}
           icon={<DetailsCard.Icon icon={unitIcon} />}
-          caption={isEstimated ? "Unidentified" : isUpgraded ? "Upgraded" : "Standard"}
-          captionColor={isEstimated ? "yellow" : "blue"}
+          caption={
+            isEstimated
+              ? "Unidentified"
+              : isNeutral
+                ? "Neutral"
+                : isUpgraded
+                  ? "Upgraded"
+                  : "Standard"
+          }
+          captionColor={isEstimated ? "yellow" : isNeutral ? "gray" : "blue"}
         />
 
         {/* Stats - Primary visual element */}

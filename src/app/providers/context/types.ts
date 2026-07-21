@@ -77,6 +77,11 @@ export type GameData = {
   armyRankings: Record<string, number>;
 
   playerData: PlayerDataResponse["playerData"];
+  /** Unfiltered playerData, including the neutral (Dicecord) player and other no-faction
+   * placeholders that `playerData` excludes (see filterPlayersWithAssignedFaction) - for
+   * identity/color lookups (e.g. unit tooltips) that need to resolve every real entity on the
+   * board, not just the players shown in ranking/tab UI. */
+  allPlayerData: PlayerDataResponse["playerData"];
   objectives: PlayerDataResponse["objectives"];
   lawsInPlay: PlayerDataResponse["lawsInPlay"];
   strategyCards: PlayerDataResponse["strategyCards"];
