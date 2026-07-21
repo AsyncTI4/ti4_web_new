@@ -34,7 +34,8 @@ export function MapTooltipPositioner({
   style,
   ...rest
 }: MapTooltipPositionerProps) {
-  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
+  const storeZoomLevel = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? storeZoomLevel;
 
   if (!coords) return null;
 

@@ -10,10 +10,9 @@ type Props = {
 };
 
 export function DebtTokens({ debts }: Props) {
+  const factionColorMap = useFactionColors();
   const debtEntries = Object.entries(debts).filter(([, amount]) => amount > 0);
   if (debtEntries.length === 0) return null;
-
-  const factionColorMap = useFactionColors();
 
   return (
     <Panel accent="orange" className={classes.container}>

@@ -57,13 +57,13 @@ export const PathVisualization = ({
   containerMode = "mapArea",
   renderSelectorInPortal = false,
 }: PathVisualizationProps) => {
-  if (!pathResult?.paths.length) return null;
-
+  const pathCount = pathResult?.paths.length ?? 0;
   const validatedPathIndex =
-    activePathIndex >= pathResult.paths.length ? 0 : activePathIndex;
-  const currentPath = pathResult.paths[validatedPathIndex];
+    activePathIndex >= pathCount ? 0 : activePathIndex;
+  const currentPath = pathResult?.paths[validatedPathIndex];
 
-  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
+  const storeZoomLevel = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? storeZoomLevel;
   const settings = useSettingsStore().settings;
   const gameData = useGameData();
   const layoutConfig = getMapLayoutConfig(mapLayout);
@@ -90,18 +90,19 @@ export const PathVisualization = ({
   );
 
   const handlePrevPath = useCallback(() => {
-    const newIndex =
-      activePathIndex === 0 ? pathResult.paths.length - 1 : activePathIndex - 1;
+    const newIndex = activePathIndex === 0 ? pathCount - 1 : activePathIndex - 1;
     onPathIndexChange(newIndex);
-  }, [activePathIndex, pathResult.paths.length, onPathIndexChange]);
+  }, [activePathIndex, pathCount, onPathIndexChange]);
 
   const handleNextPath = useCallback(() => {
-    const newIndex = (activePathIndex + 1) % pathResult.paths.length;
+    const newIndex = (activePathIndex + 1) % pathCount;
     onPathIndexChange(newIndex);
-  }, [activePathIndex, pathResult.paths.length, onPathIndexChange]);
+  }, [activePathIndex, pathCount, onPathIndexChange]);
+
+  if (!pathResult?.paths.length) return null;
 
   // Auto-correct invalid path index
-  if (activePathIndex >= pathResult.paths.length) {
+  if (activePathIndex >= pathCount) {
     onPathIndexChange(0);
   }
 

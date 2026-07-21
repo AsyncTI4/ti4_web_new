@@ -29,6 +29,7 @@ export function FactionControlBorderOverlay({
 }: Props) {
   const factionColorMap = useFactionColors();
   const baseColor = factionColorMap?.[faction]?.color;
+  const clipId = useId();
 
   const closedSides = useMemo(() => {
     if (!openSides || openSides.length === 0) {
@@ -55,7 +56,6 @@ export function FactionControlBorderOverlay({
 
   const normalized = normalizeBorderColor(primary);
   const stroke = `rgba(${normalized.red}, ${normalized.green}, ${normalized.blue}, ${opacity})`;
-  const clipId = useId();
 
   return (
     <svg

@@ -12,11 +12,11 @@ export function MahactEdictTokens({
   edictedFactions,
   style,
 }: MahactEdictTokensProps) {
+  const factionColorMap = useFactionColors();
+
   if (edictedFactions.length === 0) {
     return null;
   }
-
-  const factionColorMap = useFactionColors();
 
   return (
     <Box pos="relative" style={style}>

@@ -23,9 +23,9 @@ export function MapPlanetDetailsCard({
   mapZoom,
   mapLayout = "panels",
 }: Props) {
-  if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
+  const planetTile = usePlanet(tooltipPlanet?.planetId ?? "");
 
-  const planetTile = usePlanet(tooltipPlanet.planetId);
+  if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
 
   return (
     <MapTooltipPositioner

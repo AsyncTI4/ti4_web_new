@@ -39,13 +39,11 @@ export function PlayerStatsArea({
   const factionColorMap = useFactionColors();
   const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
-  if (!enhancedData) return null;
-
   const {
     vpsToWin = 10,
     ringCount = 3,
     tilePositions: gameTilePositions,
-  } = enhancedData;
+  } = enhancedData ?? {};
   const color = factionColorMap[faction]?.color || playerData.color;
 
   const tilePositions = useMemo(() => {
@@ -111,7 +109,7 @@ export function PlayerStatsArea({
     });
   })();
 
-  if (tilePositions.length === 0) return null;
+  if (!enhancedData || tilePositions.length === 0) return null;
 
   return (
     <>
