@@ -42,7 +42,7 @@ function ProgressObjectiveDisplay({
   ownProgress,
   factionProgress,
 }: ProgressObjectiveDisplayProps) {
-  const { ownFaction, ownScored, identified, anonymousScorers } = tier;
+  const { ownFaction, ownScored, identified, anonymousScorerCount } = tier;
 
   return (
     <>
@@ -93,8 +93,8 @@ function ProgressObjectiveDisplay({
       {/* Scored by a player the viewer can't identify: generic token only, no faction icon.
           Always last, and shuffled per-objective (see computeScoreTier), so neither position nor
           ordering can be used to track a hidden player across objective cards. */}
-      {anonymousScorers.map((faction) => (
-        <Badge key={faction} completed>
+      {Array.from({ length: anonymousScorerCount }, (_, i) => (
+        <Badge key={i} completed>
           <AnonymousPlayerToken size={23} />
           <IconCheck size={14} color="var(--mantine-color-gray-5)" />
         </Badge>

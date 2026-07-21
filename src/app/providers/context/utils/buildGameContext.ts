@@ -322,6 +322,7 @@ export function buildGameContext(
     tableTalkJumpLink: data.tableTalkJumpLink,
     actionsJumpLink: data.actionsJumpLink,
     playerScoreBreakdowns: data.scoreBreakdowns,
+    hiddenPlayerVps: data.hiddenPlayerVps,
     expeditions: data.expeditions,
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,

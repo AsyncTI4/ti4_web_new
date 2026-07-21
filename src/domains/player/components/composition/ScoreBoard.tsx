@@ -12,7 +12,7 @@ function ScoreBoard() {
     playerData,
     lawsInPlay,
     vpsToWin = 10,
-    playerScoreBreakdowns,
+    hiddenPlayerVps,
   } = gameData;
 
   return (
@@ -20,7 +20,7 @@ function ScoreBoard() {
       <ScoreTracker
         playerData={playerData}
         vpsToWin={vpsToWin}
-        scoreBreakdowns={playerScoreBreakdowns}
+        hiddenPlayerVps={hiddenPlayerVps}
       />
 
       <Stack gap="xl">

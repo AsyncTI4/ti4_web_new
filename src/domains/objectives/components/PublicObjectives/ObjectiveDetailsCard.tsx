@@ -15,6 +15,7 @@ type Props = {
   playerData: PlayerData[];
   hasRedTape?: boolean;
   scoredFactions?: string[];
+  unidentifiedScorerCount?: number;
   color?: "orange" | "blue" | "gray";
   factionProgress?: Record<string, number>;
   progressThreshold?: number;
@@ -26,6 +27,7 @@ export function ObjectiveDetailsCard({
   playerData,
   hasRedTape,
   scoredFactions = [],
+  unidentifiedScorerCount = 0,
   color = "blue",
   factionProgress = {},
   progressThreshold = 0,
@@ -41,8 +43,8 @@ export function ObjectiveDetailsCard({
 
   const ownFaction = getOwnFaction(playerData, viewerDiscordId);
   const tier = computeScoreTier(
-    objectiveKey,
     scoredFactions,
+    unidentifiedScorerCount,
     playerData,
     ownFaction,
     hideScoreOrder
@@ -175,9 +177,9 @@ export function ObjectiveDetailsCard({
                     </Group>
                   ))}
 
-                  {tier.anonymousScorers.map((faction) => (
+                  {Array.from({ length: tier.anonymousScorerCount }, (_, i) => (
                     <Group
-                      key={faction}
+                      key={i}
                       gap="sm"
                       align="center"
                       wrap="nowrap"

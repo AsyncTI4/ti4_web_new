@@ -8,7 +8,12 @@ import { ObjectiveChip } from "../ObjectiveChip";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { IconAlertTriangle, IconBook2, IconDiamond } from "@tabler/icons-react";
-import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
+import {
+  useGameData,
+  useIsTrueGmView,
+  useHideScoreOrder,
+} from "@/hooks/useGameContext";
+import { byColor } from "@/utils/objectiveScoreTiers";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import cornerBadgeStyles from "./CornerBadgeIcon.module.css";
@@ -119,15 +124,20 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
   const playerScoreBreakdowns = gameData?.playerScoreBreakdowns;
   const vpsToWin = gameData?.vpsToWin ?? 10;
   const isTrueGmView = useIsTrueGmView();
+  const hideScoreOrder = useHideScoreOrder();
 
   if (gameData?.hidePlayerInfos && !isTrueGmView) return null;
   if (!playerData || !objectives) return null;
 
-  const sortedPlayers = [...playerData].sort((a, b) => {
-    const aInit = a.scs[0] || 99;
-    const bInit = b.scs[0] || 99;
-    return aInit - bInit;
-  });
+  // Initiative order is seat order, which is itself hidden information under fog (see
+  // objectiveScoreTiers) - a fogged viewer gets this grid sorted by color instead.
+  const sortedPlayers = hideScoreOrder
+    ? byColor(playerData)
+    : [...playerData].sort((a, b) => {
+        const aInit = a.scs[0] || 99;
+        const bInit = b.scs[0] || 99;
+        return aInit - bInit;
+      });
   const maxPotentialVPs = sortedPlayers.reduce((maxTotal, player) => {
     const breakdown = playerScoreBreakdowns?.[player.faction];
     if (!breakdown) return maxTotal;

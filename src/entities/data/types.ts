@@ -337,6 +337,9 @@ export type PlayerDataResponse = {
   tableTalkJumpLink?: string;
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  /** Score-track totals for players the viewer can't identify, detached from any faction so they
+   * can be placed on the track without revealing who they are. Sorted; empty outside FoW. */
+  hiddenPlayerVps?: number[];
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
   gameState?: GameState;
@@ -668,8 +671,13 @@ export type Objective = {
   name: string;
   pointValue: number;
   revealed: boolean;
+  /** Only scorers the viewer can identify; see unidentifiedScorerCount for the rest. */
   scoredFactions: string[];
   peekingFactions: string[];
+  /** Scorers the viewer can't identify, as a bare count - the backend withholds their factions
+   * entirely rather than sending them for the client to hide (see WebObjectives#redactScorers).
+   * 0 outside FoW. */
+  unidentifiedScorerCount?: number;
   multiScoring: boolean;
   hasRedTape: boolean;
   progressThreshold: number;

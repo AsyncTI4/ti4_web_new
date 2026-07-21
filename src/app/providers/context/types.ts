@@ -98,6 +98,8 @@ export type GameData = {
   tableTalkJumpLink?: PlayerDataResponse["tableTalkJumpLink"];
   actionsJumpLink?: PlayerDataResponse["actionsJumpLink"];
   playerScoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  /** Score-track totals for players the viewer can't identify, with no faction attached. */
+  hiddenPlayerVps?: number[];
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;

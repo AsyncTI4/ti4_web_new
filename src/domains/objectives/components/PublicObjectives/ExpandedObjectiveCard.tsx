@@ -45,8 +45,8 @@ function ExpandedObjectiveCard({
 
   const ownFaction = getOwnFaction(playerData, viewerDiscordId);
   const tier = computeScoreTier(
-    objective.key,
     objective.scoredFactions,
+    objective.unidentifiedScorerCount ?? 0,
     playerData,
     ownFaction,
     hideScoreOrder,
@@ -86,8 +86,8 @@ function ExpandedObjectiveCard({
                 size={24}
               />
             ))}
-          {tier.anonymousScorers.map((faction) => (
-            <AnonymousPlayerToken key={faction} size={24} />
+          {Array.from({ length: tier.anonymousScorerCount }, (_, i) => (
+            <AnonymousPlayerToken key={i} size={24} />
           ))}
         </>
       );
@@ -164,6 +164,7 @@ function ExpandedObjectiveCard({
             playerData={playerData}
             hasRedTape={objective.hasRedTape}
             scoredFactions={objective.scoredFactions}
+            unidentifiedScorerCount={objective.unidentifiedScorerCount ?? 0}
             color={color}
             factionProgress={objective.factionProgress}
             progressThreshold={objective.progressThreshold}

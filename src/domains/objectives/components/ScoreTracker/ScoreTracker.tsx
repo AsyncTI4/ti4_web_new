@@ -1,59 +1,63 @@
 import { Box, Text } from "@mantine/core";
-import { PlayerData, WebScoreBreakdown } from "@/entities/data/types";
+import { PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { useOrderedFactions } from "@/hooks/useOrderedFactions";
-import { isAssignedFactionKey } from "@/utils/playerUtils";
+import { useHideScoreOrder } from "@/hooks/useGameContext";
+import { byColor } from "@/utils/objectiveScoreTiers";
 import { AnonymousPlayerToken } from "@/shared/ui/AnonymousPlayerToken";
 import styles from "./ScoreTracker.module.css";
 
 type Props = {
   playerData: PlayerData[];
   vpsToWin: number;
-  /** Includes entries for players hidden from playerData (FoW) - used to still place a
-   * greyed-out token for them at their (public) score-track position. */
-  scoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  /** Score-track totals for players hidden from playerData (FoW), with no faction attached - used
+   * to still place an anonymous token at their (public) position on the track. */
+  hiddenPlayerVps?: number[];
 };
 
-type TrackEntry = { faction: string; player?: PlayerData };
+type TrackEntry = { key: string; player?: PlayerData };
 
-function ScoreTracker({ playerData, vpsToWin, scoreBreakdowns }: Props) {
+function ScoreTracker({ playerData, vpsToWin, hiddenPlayerVps }: Props) {
   // Create array of score positions 0 to vpsToWin
   const scorePositions = Array.from({ length: vpsToWin + 1 }, (_, i) => i);
 
-  // Get consistently ordered factions
-  const orderedFactions = useOrderedFactions(playerData);
-
-  // Roster of every faction with a score, including ones hidden from playerData by FoW (visible
-  // here only via scoreBreakdowns, with no identifying data beyond their public total VP).
-  // scoreBreakdowns also carries the neutral (Dicecord) player, which playerData deliberately
-  // omits - it isn't a hidden opponent, so it must not become an "unidentified" token here.
-  const playerByFaction = new Map(playerData.map((p) => [p.faction, p]));
-  const rosterFactions = new Set([
-    ...playerData.map((p) => p.faction),
-    ...Object.keys(scoreBreakdowns ?? {}).filter(isAssignedFactionKey),
-  ]);
+  // Seat order is hidden under fog, so a fogged viewer gets color order instead - visible to them
+  // already, and it keeps the track from encoding seating. Normal games keep the usual order.
+  const hideScoreOrder = useHideScoreOrder();
+  const seatOrderedFactions = useOrderedFactions(playerData);
+  const orderedFactions = hideScoreOrder
+    ? byColor(playerData).map((p) => p.faction)
+    : seatOrderedFactions;
 
   // Group factions by their score, maintaining consistent ordering
-  const factionsByScore = Array.from(rosterFactions).reduce(
-    (acc, faction) => {
-      const player = playerByFaction.get(faction);
-      const score = player?.totalVps ?? scoreBreakdowns?.[faction]?.totalVps;
+  const factionsByScore = playerData.reduce(
+    (acc, player) => {
+      const score = player.totalVps;
       if (score === undefined) return acc;
       if (!acc[score]) {
         acc[score] = [];
       }
-      acc[score].push({ faction, player });
+      acc[score].push({ key: player.faction, player });
       return acc;
     },
     {} as Record<number, TrackEntry[]>
   );
 
+  // Hidden players carry no faction at all, so they can only be placed by score. They sort last
+  // within their group (no entry in orderedFactions), keeping identified players in seat order.
+  (hiddenPlayerVps ?? []).forEach((score, i) => {
+    if (!factionsByScore[score]) {
+      factionsByScore[score] = [];
+    }
+    factionsByScore[score].push({ key: `hidden-${i}` });
+  });
+
   // Sort factions within each score group by faction order (unidentified ones last)
   Object.keys(factionsByScore).forEach((scoreKey) => {
     const score = parseInt(scoreKey);
     factionsByScore[score].sort((a, b) => {
-      const rawA = orderedFactions.indexOf(a.faction);
-      const rawB = orderedFactions.indexOf(b.faction);
+      const rawA = a.player ? orderedFactions.indexOf(a.player.faction) : -1;
+      const rawB = b.player ? orderedFactions.indexOf(b.player.faction) : -1;
       const aIndex = rawA === -1 ? orderedFactions.length : rawA;
       const bIndex = rawB === -1 ? orderedFactions.length : rawB;
       return aIndex - bIndex;
@@ -83,13 +87,13 @@ function ScoreTracker({ playerData, vpsToWin, scoreBreakdowns }: Props) {
             {/* Faction control tokens */}
             {playersAtScore.length > 0 && (
               <Box className={styles.factionTokens}>
-                {playersAtScore.map(({ faction, player }) =>
+                {playersAtScore.map(({ key, player }) =>
                   player ? (
-                    <Box key={faction} className={styles.tokenContainer}>
+                    <Box key={key} className={styles.tokenContainer}>
                       <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={32} />
                     </Box>
                   ) : (
-                    <Box key={faction} className={styles.tokenContainer}>
+                    <Box key={key} className={styles.tokenContainer}>
                       <AnonymousPlayerToken size={32} />
                     </Box>
                   )
