@@ -90,9 +90,9 @@ function ProgressObjectiveDisplay({
         );
       })}
 
-      {/* Scored by a player the viewer can't identify: generic token only, no faction icon.
-          Always last, and shuffled per-objective (see computeScoreTier), so neither position nor
-          ordering can be used to track a hidden player across objective cards. */}
+      {/* Scored by players the viewer can't identify: a bare count of generic tokens, always
+          last. They carry no identity at all, so neither position nor ordering can be used to
+          track a hidden player across objective cards. */}
       {Array.from({ length: anonymousScorerCount }, (_, i) => (
         <Badge key={i} completed>
           <AnonymousPlayerToken size={23} />
