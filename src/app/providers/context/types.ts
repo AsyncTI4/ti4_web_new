@@ -77,6 +77,11 @@ export type GameData = {
   armyRankings: Record<string, number>;
 
   playerData: PlayerDataResponse["playerData"];
+  /** Unfiltered playerData, including the neutral (Dicecord) player and other no-faction
+   * placeholders that `playerData` excludes (see filterPlayersWithAssignedFaction) - for
+   * identity/color lookups (e.g. unit tooltips) that need to resolve every real entity on the
+   * board, not just the players shown in ranking/tab UI. */
+  allPlayerData: PlayerDataResponse["playerData"];
   objectives: PlayerDataResponse["objectives"];
   lawsInPlay: PlayerDataResponse["lawsInPlay"];
   strategyCards: PlayerDataResponse["strategyCards"];
@@ -93,14 +98,21 @@ export type GameData = {
   tableTalkJumpLink?: PlayerDataResponse["tableTalkJumpLink"];
   actionsJumpLink?: PlayerDataResponse["actionsJumpLink"];
   playerScoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  /** Score-track totals for players the viewer can't identify, with no faction attached. */
+  hiddenPlayerVps?: number[];
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
+  isFowMode?: boolean;
+  viewingAsPlayerId?: PlayerDataResponse["viewingAsPlayerId"];
+  viewerIsGm?: PlayerDataResponse["viewerIsGm"];
+  hidePlayerInfos?: boolean;
 };
 
 export type GameDataState = {
   isLoading: boolean;
   isError: boolean;
+  error?: unknown;
   readyState: SocketReadyState;
   reconnect: () => void;
   isReconnecting: boolean;
@@ -134,6 +146,12 @@ export type Tile = {
   commandCounters: string[];
   entityPlacements: EntityStack[];
   borderAnomalies?: BorderAnomalyInfo[];
+  hyperlaneMatrix?: string | null;
+  /** True if this position is outside current vision and the data above is a remembered
+   * "ghost" snapshot rather than the live tile (see backend WebTileUnitData#markGhostTiles). */
+  isGhost?: boolean;
+  /** Viewer's last-seen label for this position (e.g. "Rnd 4"), set only when isGhost is true. */
+  fogLabel?: string;
 };
 
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;

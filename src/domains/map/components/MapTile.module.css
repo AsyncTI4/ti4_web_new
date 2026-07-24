@@ -74,6 +74,38 @@
 .distanceHoverable {}
 .movingMode {}
 
+/* Remembered "ghost" tile: matches the greyed-out fog tile on the Discord PNG map -
+   desaturated and darkened rather than hidden, since it's a real (stale) memory of the tile. */
+.ghostTile .tile {
+  filter: grayscale(0.85) brightness(0.55);
+}
+
+/* TileGenerator draws this label and the tile number (.ringPosition below) at the same y (295)
+   and the same font, so this reuses .ringPosition's already-tuned `top` for the same box model/
+   height. `left` is TileGenerator's actual LABEL_POSITION_POINT.x (90) - the text's real left
+   edge, drawn left-to-right from there same as Discord. */
+.fogLabel {
+  position: absolute;
+  top: 270px;
+  left: 90px;
+  white-space: nowrap;
+  color: white;
+  font-family: 'Slider', system-ui, -apple-system, sans-serif;
+  font-weight: bold;
+  font-size: 26px;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black,
+    -2px 0 0 black,
+    2px 0 0 black,
+    0 -2px 0 black,
+    0 2px 0 black;
+  pointer-events: none;
+  z-index: var(--z-ring-position);
+}
+
 /* Focus styles for accessibility */
 .tile:focus {
   outline: 2px solid var(--mantine-color-blue-6);

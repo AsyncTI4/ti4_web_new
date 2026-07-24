@@ -1,7 +1,9 @@
 import { type ReactNode, useEffect, useId, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   ActionIcon,
   Box,
+  Button,
   CloseButton,
   Group,
   Switch,
@@ -9,12 +11,18 @@ import {
   Tooltip,
   Transition,
 } from "@mantine/core";
-import { IconCards, IconHistory } from "@tabler/icons-react";
+import { IconCards, IconEyeOff, IconHistory } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { useSettingsStore } from "@/utils/appStore";
+import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
+import { useFowViewStore } from "@/utils/fowViewStore";
+import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
+import type { PlayerDataResponse } from "@/entities/data/types";
+import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import classes from "./FloatingMapToolbar.module.css";
 
-type FloatingPanel = "events" | "cards";
+type FloatingPanel = "events" | "cards" | "fow";
 
 type Props = {
   rightOffset: string;
@@ -25,12 +33,67 @@ type Props = {
 const panels: Record<FloatingPanel, { title: string; label: string }> = {
   events: { title: "Event Log", label: "Events" },
   cards: { title: "Your Cards", label: "Cards" },
+  fow: { title: "Show Game As", label: "Fog of War" },
 };
 
 const panelTopByType: Record<FloatingPanel, string> = {
   events: "163px",
   cards: "215px",
+  fow: "267px",
 };
+
+function FowViewPanel() {
+  const gameData = useGameData();
+  const queryClient = useQueryClient();
+  const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
+  const setViewAsPlayer = useFowViewStore((state) => state.setViewAsPlayer);
+  // The GM's full (unfiltered) view is cached separately per viewAsPlayerId (see usePlayerData's
+  // query key). Read it directly so the picker always lists every player, even while previewing
+  // someone else's fogged view (whose own playerData only contains players *they* can identify).
+  const fullViewData = gameData?.gameName
+    ? queryClient.getQueryData<PlayerDataResponse>([
+        "playerData",
+        gameData.gameName,
+        null,
+      ])
+    : undefined;
+  // gameData.playerData already excludes the neutral (Dicecord) player and other no-faction
+  // placeholders (see filterPlayersWithAssignedFaction) - fullViewData is the raw query cache and
+  // needs the same filter, or the GM could "preview as Neutral", which isn't a real perspective.
+  const players = filterPlayersWithAssignedFaction(
+    fullViewData?.playerData ?? gameData?.playerData ?? []
+  );
+
+  return (
+    <Group gap={6} wrap="wrap">
+      <Button
+        size="xs"
+        variant={viewAsPlayerId === null ? "filled" : "default"}
+        onClick={() => setViewAsPlayer(null)}
+      >
+        Full (GM)
+      </Button>
+      {players.map((player) => (
+        <Button
+          key={player.discordId}
+          size="xs"
+          variant={viewAsPlayerId === player.discordId ? "filled" : "default"}
+          onClick={() => setViewAsPlayer(player.discordId)}
+          leftSection={
+            <CircularFactionIcon
+              faction={player.faction}
+              size={16}
+              factionImageOverride={player.factionImage}
+              factionImageTypeOverride={player.factionImageType}
+            />
+          }
+        >
+          {player.userName || player.faction}
+        </Button>
+      ))}
+    </Group>
+  );
+}
 
 export function FloatingMapToolbar({
   rightOffset,
@@ -43,10 +106,34 @@ export function FloatingMapToolbar({
   );
   const updateSettings = useSettingsStore((state) => state.updateSettings);
   const panelId = useId();
+  const { mapid: gameId } = useParams<{ mapid: string }>();
+  const gameData = useGameData();
+  const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
+  const setViewAsPlayer = useFowViewStore((state) => state.setViewAsPlayer);
+  const showFowButton = Boolean(gameData?.isFowMode && gameData?.viewerIsGm);
+  const isTrueGmView = useIsTrueGmView();
+  // The event log has no fogged variant (it's built from full, unfiltered state - see the
+  // backend's /events endpoint), so it's only available to the GM's own real view, never to
+  // participants of a FoW game or while the GM is previewing as a specific player.
+  const showEventsButton = !gameData?.isFowMode || isTrueGmView;
 
   const togglePanel = (panel: FloatingPanel) => {
     setOpenPanel((current) => (current === panel ? null : panel));
   };
+
+  // The FoW GM-preview panel/selection is per-game - close it and drop any stale "view as"
+  // choice when switching games, rather than carrying it (invisibly, for non-FoW games) into
+  // wherever the player navigates next. Keyed on the route param, not gameData: gameData goes
+  // briefly undefined on every viewAsPlayerId change too (it's part of the query key), which
+  // would otherwise reset the panel/selection right as a preview click starts loading.
+  useEffect(() => {
+    setOpenPanel(null);
+    setViewAsPlayer(null);
+  }, [gameId, setViewAsPlayer]);
+
+  useEffect(() => {
+    if (openPanel === "events" && !showEventsButton) setOpenPanel(null);
+  }, [showEventsButton, openPanel]);
 
   useEffect(() => {
     if (!openPanel) return;
@@ -70,19 +157,21 @@ export function FloatingMapToolbar({
         className={`${classes.toolbar} ${transitionClassName ?? ""}`}
         style={{ right: rightOffset }}
       >
-        <Tooltip label={panels.events.label} position="left" withArrow>
-          <ActionIcon
-            aria-label={panels.events.label}
-            aria-controls={panelId}
-            aria-expanded={openPanel === "events"}
-            radius="xl"
-            variant="subtle"
-            className={`${classes.button} ${openPanel === "events" ? classes.buttonActive : ""}`}
-            onClick={() => togglePanel("events")}
-          >
-            <IconHistory size={22} stroke={1.8} />
-          </ActionIcon>
-        </Tooltip>
+        {showEventsButton && (
+          <Tooltip label={panels.events.label} position="left" withArrow>
+            <ActionIcon
+              aria-label={panels.events.label}
+              aria-controls={panelId}
+              aria-expanded={openPanel === "events"}
+              radius="xl"
+              variant="subtle"
+              className={`${classes.button} ${openPanel === "events" ? classes.buttonActive : ""}`}
+              onClick={() => togglePanel("events")}
+            >
+              <IconHistory size={22} stroke={1.8} />
+            </ActionIcon>
+          </Tooltip>
+        )}
 
         {cardsPanel && (
           <Tooltip label={panels.cards.label} position="left" withArrow>
@@ -96,6 +185,22 @@ export function FloatingMapToolbar({
               onClick={() => togglePanel("cards")}
             >
               <IconCards size={22} stroke={1.8} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+
+        {showFowButton && (
+          <Tooltip label={panels.fow.label} position="left" withArrow>
+            <ActionIcon
+              aria-label={panels.fow.label}
+              aria-controls={panelId}
+              aria-expanded={openPanel === "fow"}
+              radius="xl"
+              variant="subtle"
+              className={`${classes.button} ${openPanel === "fow" || viewAsPlayerId !== null ? classes.buttonActive : ""}`}
+              onClick={() => togglePanel("fow")}
+            >
+              <IconEyeOff size={22} stroke={1.8} />
             </ActionIcon>
           </Tooltip>
         )}
@@ -153,6 +258,8 @@ export function FloatingMapToolbar({
             <Box className={classes.panelBody}>
               {renderedPanel === "cards" ? (
                 cardsPanel
+              ) : renderedPanel === "fow" ? (
+                <FowViewPanel />
               ) : (
                 <GameEventPanel animated={animateEventPreviews} />
               )}

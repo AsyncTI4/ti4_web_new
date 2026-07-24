@@ -6,6 +6,8 @@ import * as dragscroll from "dragscroll";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "./domains/player/components/composition/ScoreBoard";
 import { UpdateNeededScreen } from "./domains/game-shell/components/chrome/UpdateNeededScreen";
+import { FowAccessScreen } from "./domains/game-shell/components/chrome/FowAccessScreen";
+import type { PlayerDataError } from "./hooks/usePlayerData";
 import { SettingsProvider } from "@/app/providers/context/SettingsContext";
 import { SettingsModal } from "./domains/settings/components/SettingsModal";
 import { KeyboardShortcutsModal } from "./domains/game-shell/components/KeyboardShortcutsModal";
@@ -36,6 +38,17 @@ import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
 
+function isPlayerDataError(error: unknown): error is PlayerDataError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
+    typeof (error as PlayerDataError).status === "number" &&
+    (Boolean((error as PlayerDataError).requiresAuth) ||
+      Boolean((error as PlayerDataError).notParticipant))
+  );
+}
+
 function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const data = useGameContext();
   const gameDataState = useGameDataState();
@@ -56,6 +69,19 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   useEffect(() => {
     dragscroll.reset();
   }, [gameId]);
+
+  const gameDataError = gameDataState?.error;
+  if (!data && isPlayerDataError(gameDataError)) {
+    return (
+      <FowAccessScreen
+        gameId={gameId}
+        error={gameDataError}
+        activeTabs={activeTabs}
+        changeTab={changeTab}
+        removeTab={removeTab}
+      />
+    );
+  }
 
   if (
     data &&

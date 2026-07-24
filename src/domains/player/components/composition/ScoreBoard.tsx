@@ -7,11 +7,21 @@ import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreS
 function ScoreBoard() {
   const gameData = useGameData();
   if (!gameData) return null;
-  const { objectives, playerData, lawsInPlay, vpsToWin = 10 } = gameData;
+  const {
+    objectives,
+    playerData,
+    lawsInPlay,
+    vpsToWin = 10,
+    hiddenPlayerVps,
+  } = gameData;
 
   return (
     <Box p="lg">
-      <ScoreTracker playerData={playerData} vpsToWin={vpsToWin} />
+      <ScoreTracker
+        playerData={playerData}
+        vpsToWin={vpsToWin}
+        hiddenPlayerVps={hiddenPlayerVps}
+      />
 
       <Stack gap="xl">
         <ExpandedPublicObjectives

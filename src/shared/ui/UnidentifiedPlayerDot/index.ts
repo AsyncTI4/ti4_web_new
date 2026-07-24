@@ -1,0 +1,1 @@
+export { UnidentifiedPlayerDot } from "./UnidentifiedPlayerDot";

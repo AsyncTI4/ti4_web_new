@@ -30,11 +30,12 @@ const parseUnitString = (unitString: string) => {
 };
 
 export function Nombox({ capturedUnits, compact = false }: Props) {
+  const factionColorMap = useFactionColors();
+
   // Early return if no captured units
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
     return null;
   }
-  const factionColorMap = useFactionColors();
 
   if (compact) {
     return (

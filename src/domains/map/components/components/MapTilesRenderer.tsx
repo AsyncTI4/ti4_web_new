@@ -5,6 +5,7 @@ import type { PlayerData } from "@/entities/data/types";
 import { computeControlOpenSides } from "@/utils/controlBorders";
 import { useMemo } from "react";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
+import { useGameData, useIsTrueGmView } from "@/hooks/useGameContext";
 
 type Props = {
   tiles: Tile[];
@@ -52,10 +53,13 @@ export function MapTilesRenderer({
     () => computeControlOpenSides(tiles),
     [tiles],
   );
+  const gameData = useGameData();
+  const isTrueGmView = useIsTrueGmView();
 
   return (
     <>
       {!DISABLE_PLAYER_AREA_RENDERING &&
+        (!gameData?.hidePlayerInfos || isTrueGmView) &&
         playerData &&
         statTilePositions &&
         Object.entries(statTilePositions).map(([faction, statTiles]) => {

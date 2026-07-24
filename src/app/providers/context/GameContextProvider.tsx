@@ -61,8 +61,15 @@ type DecodedMapStatePreview = {
 
 export function GameContextProvider({ children, gameId }: Props) {
   const replayAnimationsEnabled = !isMobileDevice();
-  const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
-    usePlayerDataSocket(gameId);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    isReconnecting,
+    readyState,
+    reconnect,
+  } = usePlayerDataSocket(gameId);
   const accessibleColors = useSettingsStore((s) => s.settings.accessibleColors);
   const alwaysShowControlTokens = useSettingsStore(
     (s) => s.settings.showControlTokens,
@@ -356,6 +363,7 @@ export function GameContextProvider({ children, gameId }: Props) {
     dataState: {
       isLoading,
       isError,
+      error,
       isReconnecting,
       readyState,
       reconnect,

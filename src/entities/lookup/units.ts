@@ -65,9 +65,16 @@ export const getGenericUnitDataByAsyncId = (asyncId: string) => {
   if (unitsWithAsyncId.length === 0) return undefined;
   // Prefer base (non-upgraded) entries
   const baseUnits = unitsWithAsyncId.filter((u) => !u.upgradesFromUnitId);
-  // Among base, prefer generic (non-faction) first
-  const genericBase = baseUnits.find((u) => !u.faction);
-  if (genericBase) return genericBase;
+  // Among base, prefer generic (non-faction) entries. Some homebrew variants (e.g.
+  // baldrick_infantry2) share the same asyncId/no-faction shape but lack a real
+  // upgradesFromUnitId or complete stats, so among generic candidates prefer the canonical
+  // base-game entry ("source: base") over those stubs, rather than just the first match.
+  const genericBaseUnits = baseUnits.filter((u) => !u.faction);
+  if (genericBaseUnits.length > 0) {
+    return (
+      genericBaseUnits.find((u) => u.source === "base") ?? genericBaseUnits[0]
+    );
+  }
   if (baseUnits.length > 0) return baseUnits[0];
   // Fallbacks if no base found
   const genericAny = unitsWithAsyncId.find((u) => !u.faction);

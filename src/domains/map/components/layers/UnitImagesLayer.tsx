@@ -11,6 +11,7 @@ import {
 import { Tile } from "@/app/providers/context/types";
 import { mapUnitLocationKey } from "@/utils/historicalMapTransitions";
 import { isBadgeUnit } from "../UnitStack/unitType";
+import { resolveFactionIdentity } from "@/utils/fowIdentity";
 
 type Props = {
   systemId: string;
@@ -49,11 +50,18 @@ export function UnitImagesLayer({
         planetCenter = { x, y };
       }
 
-      // Check for color override, otherwise use faction color
+      // Check for color override, otherwise use faction color. stack.faction may be a
+      // "fow:<color>" sentinel (see WebTileUnitData#redactUnitIdentities) when the viewer
+      // can't identify this player - resolve the real color without exposing the faction.
+      const { faction: identifiedFaction, rawColor } = resolveFactionIdentity(
+        stack.faction,
+      );
       const overrideColorAlias = colorOverrides[stack.faction];
       const colorAlias = overrideColorAlias
         ? overrideColorAlias
-        : getColorAlias(factionColorMap?.[stack.faction]?.color);
+        : getColorAlias(
+            rawColor ?? factionColorMap?.[identifiedFaction ?? ""]?.color,
+          );
       const locationKey = mapReplay.active
         ? mapUnitLocationKey(mapTile.position, stack)
         : "";

@@ -36,14 +36,6 @@ export function ScaledContent({
   innerStyle,
   enabled = true,
 }: ScaledContentProps) {
-  if (!enabled) {
-    return (
-      <Box className={className} style={{ ...style, ...innerStyle }}>
-        {children}
-      </Box>
-    );
-  }
-
   const innerRef = useRef<HTMLDivElement | null>(null);
   const [contentSize, setContentSize] = useState<ContentSize>({
     width: 0,
@@ -119,6 +111,14 @@ export function ScaledContent({
   const mergedInnerStyle: CSSProperties = innerStyle
     ? { ...innerBaseStyle, ...innerStyle }
     : innerBaseStyle;
+
+  if (!enabled) {
+    return (
+      <Box className={className} style={{ ...style, ...innerStyle }}>
+        {children}
+      </Box>
+    );
+  }
 
   return (
     <div className={className} style={outerStyle}>

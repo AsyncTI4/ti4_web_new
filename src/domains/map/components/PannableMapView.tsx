@@ -262,6 +262,7 @@ export function PannableMapView({ gameId }: Props) {
               <ScoreTracker
                 playerData={gameData.playerData}
                 vpsToWin={gameData.vpsToWin || 10}
+                hiddenPlayerVps={gameData.hiddenPlayerVps}
               />
 
               <ExpandedPublicObjectives

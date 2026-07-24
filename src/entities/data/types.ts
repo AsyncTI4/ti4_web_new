@@ -195,6 +195,14 @@ export type TileUnitData = {
   pds: {
     [factionName: string]: { count: number; expected: number };
   } | null;
+  /** Hyperlane connection matrix (6x6 binary rows, "i,j,...;..." format); null if not a hyperlane
+   * tile or no connection data is configured yet. See the bot's CustomHyperlaneService. */
+  hyperlaneMatrix?: string | null;
+  /** True if this position is outside current vision and this is a remembered "ghost" snapshot.
+   * See the bot's WebTileUnitData#markGhostTiles. */
+  ghost?: boolean;
+  /** Viewer's last-seen label for this position (e.g. "Rnd 4"); set only when ghost is true. */
+  fogLabel?: string;
 };
 
 export type LawInPlay = {
@@ -283,9 +291,14 @@ export type ScoreBreakdownEntry = {
 
 export type WebScoreBreakdown = {
   entries: ScoreBreakdownEntry[];
+  /** Total VP - always public (score track position), even for players otherwise redacted. */
+  totalVps?: number;
 };
 
 export type Expedition = {
+  /** Player color; null if incomplete. Always the real color when completed - the backend
+   * doesn't redact this, since identity is derived client-side from whether that color's
+   * player is present in playerData (see ExpeditionTokens.tsx). */
   completedBy: string | null;
 };
 
@@ -324,11 +337,29 @@ export type PlayerDataResponse = {
   tableTalkJumpLink?: string;
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
+  /** Score-track totals for players the viewer can't identify, detached from any faction so they
+   * can be placed on the track without revealing who they are. Sorted; empty outside FoW. */
+  hiddenPlayerVps?: number[];
   borderAnomalies?: BorderAnomalyInfo[];
   isTwilightsFallMode?: boolean;
   gameState?: GameState;
   /** Increments whenever new game events are available; used to invalidate the events query without polling. */
   eventSequence?: number;
+  /** Whether this game has Fog of War enabled. */
+  isFowMode?: boolean;
+  /** FoW HIDE_PLAYER_INFOS option: true when other players' info panels should be hidden. */
+  hidePlayerInfos?: boolean;
+  /**
+   * Set only on a fogged response: the discord ID of the player whose view this is.
+   * Absent when the viewer is the GM/owner seeing the full unfiltered map.
+   */
+  viewingAsPlayerId?: string;
+  /**
+   * Whether the authenticated caller is GM/owner of this game. Derived client-side from the
+   * `X-Viewer-Is-Gm` response header (not part of the JSON body), since it stays true even
+   * while a GM is previewing another player's fogged view via viewingAsPlayerId.
+   */
+  viewerIsGm?: boolean;
 };
 
 export type GameEventArchetype =
@@ -640,8 +671,13 @@ export type Objective = {
   name: string;
   pointValue: number;
   revealed: boolean;
+  /** Only scorers the viewer can identify; see unidentifiedScorerCount for the rest. */
   scoredFactions: string[];
   peekingFactions: string[];
+  /** Scorers the viewer can't identify, as a bare count - the backend withholds their factions
+   * entirely rather than sending them for the client to hide (see WebObjectives#redactScorers).
+   * 0 outside FoW. */
+  unidentifiedScorerCount?: number;
   multiScoring: boolean;
   hasRedTape: boolean;
   progressThreshold: number;

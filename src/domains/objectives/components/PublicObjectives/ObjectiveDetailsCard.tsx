@@ -1,17 +1,21 @@
 import { Stack, Box, Text, Group, Divider, Image } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconQuestionMark } from "@tabler/icons-react";
 import { publicObjectives } from "@/entities/data/publicObjectives";
 import { PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import classes from "./ObjectiveDetailsCard.module.css";
 import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
+import { useViewerDiscordId, useHideScoreOrder } from "@/hooks/useGameContext";
+import { computeScoreTier, getOwnFaction } from "@/utils/objectiveScoreTiers";
+import { AnonymousPlayerToken } from "@/shared/ui/AnonymousPlayerToken";
 
 type Props = {
   objectiveKey: string;
   playerData: PlayerData[];
   hasRedTape?: boolean;
   scoredFactions?: string[];
+  unidentifiedScorerCount?: number;
   color?: "orange" | "blue" | "gray";
   factionProgress?: Record<string, number>;
   progressThreshold?: number;
@@ -23,6 +27,7 @@ export function ObjectiveDetailsCard({
   playerData,
   hasRedTape,
   scoredFactions = [],
+  unidentifiedScorerCount = 0,
   color = "blue",
   factionProgress = {},
   progressThreshold = 0,
@@ -31,26 +36,23 @@ export function ObjectiveDetailsCard({
   const objectiveData = publicObjectives.find(
     (obj) => obj.alias === objectiveKey
   );
+  const viewerDiscordId = useViewerDiscordId();
+  const hideScoreOrder = useHideScoreOrder();
 
   if (!objectiveData) return null;
 
-  // Create a set for fast lookup of scored factions
-  const scoredFactionsSet = new Set(scoredFactions);
+  const ownFaction = getOwnFaction(playerData, viewerDiscordId);
+  const tier = computeScoreTier(
+    scoredFactions,
+    unidentifiedScorerCount,
+    playerData,
+    ownFaction,
+    hideScoreOrder
+  );
+  const ownProgress = ownFaction ? (factionProgress[ownFaction] ?? 0) : 0;
 
-  // Create faction progress data with sorting
-  const factionProgressData = playerData.map((player) => ({
-    player,
-    progress: factionProgress[player.faction] || 0,
-    isScored: scoredFactionsSet.has(player.faction),
-  }));
-
-  // Sort by: scored first, then by highest progress
-  factionProgressData.sort((a, b) => {
-    if (a.isScored && !b.isScored) return -1;
-    if (!a.isScored && b.isScored) return 1;
-    if (a.isScored && b.isScored) return 0; // Keep same order for scored
-    return b.progress - a.progress; // Higher progress first for unscored
-  });
+  // Already in render order - seat order normally, grouped by state in FoW (see computeScoreTier).
+  const identifiedRows = tier.identified;
 
   const mapCardColor = (
     c: Props["color"]
@@ -71,7 +73,7 @@ export function ObjectiveDetailsCard({
   const renderRedTape = () => {
       return (
           <Image src={"/redTape.png"} className={"redTape"} w={48} h={48} />
-      ) 
+      )
     }
 
   return (
@@ -97,7 +99,41 @@ export function ObjectiveDetailsCard({
               title="Faction Progress"
               content={
                 <Stack gap={6}>
-                  {factionProgressData.map(({ player, progress, isScored }) => (
+                  {tier.ownFaction && (
+                    <Group
+                      key={tier.ownFaction}
+                      gap="sm"
+                      align="center"
+                      wrap="nowrap"
+                    >
+                      <Box w={24} className={classes.factionIconBox}>
+                        <CircularFactionIcon faction={tier.ownFaction} size={24} />
+                      </Box>
+                      <Text
+                        size="xs"
+                        c="gray.4"
+                        fw={600}
+                        tt="uppercase"
+                        className={classes.factionName}
+                      >
+                        You
+                      </Text>
+                      <Box w={40} className={classes.progressValueBox} ml="auto">
+                        {tier.ownScored ? (
+                          <IconCheck
+                            size={18}
+                            color="var(--mantine-color-green-5)"
+                          />
+                        ) : (
+                          <Text size="sm" c="gray.4" fw={500}>
+                            {ownProgress}/{progressThreshold}
+                          </Text>
+                        )}
+                      </Box>
+                    </Group>
+                  )}
+
+                  {identifiedRows.map(({ player, scored: isScored }) => (
                     <Group
                       key={player.faction}
                       gap="sm"
@@ -127,11 +163,41 @@ export function ObjectiveDetailsCard({
                             size={18}
                             color="var(--mantine-color-green-5)"
                           />
-                        ) : (
+                        ) : factionProgress[player.faction] !== undefined ? (
                           <Text size="sm" c="gray.4" fw={500}>
-                            {progress}/{progressThreshold}
+                            {factionProgress[player.faction]}/{progressThreshold}
                           </Text>
+                        ) : (
+                          <IconQuestionMark
+                            size={16}
+                            color="var(--mantine-color-gray-5)"
+                          />
                         )}
+                      </Box>
+                    </Group>
+                  ))}
+
+                  {Array.from({ length: tier.anonymousScorerCount }, (_, i) => (
+                    <Group
+                      key={i}
+                      gap="sm"
+                      align="center"
+                      wrap="nowrap"
+                    >
+                      <Box w={24} className={classes.factionIconBox}>
+                        <AnonymousPlayerToken size={24} />
+                      </Box>
+                      <Text
+                        size="sm"
+                        c="gray.5"
+                        fw={500}
+                        fs="italic"
+                        className={classes.playerName}
+                      >
+                        Unidentified player
+                      </Text>
+                      <Box w={40} className={classes.progressValueBox} ml="auto">
+                        <IconCheck size={18} color="var(--mantine-color-gray-5)" />
                       </Box>
                     </Group>
                   ))}

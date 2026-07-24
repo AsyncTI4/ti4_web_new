@@ -8,6 +8,9 @@ type Props = {
   playerData: PlayerData[];
 };
 
+// Not rendered at all for a fogged viewer (see GeneralArea) - the "next" badge below assumes
+// playerData is the whole turn order, which under FoW it isn't (hidden players are excluded), so
+// there's no way to compute it there without leaking who's missing.
 function FactionsInGame({ playerData }: Props) {
   const sortedPlayerData = [...playerData].sort((a, b) => {
     const minScA = a.scs.length > 0 ? Math.min(...a.scs) : Infinity;

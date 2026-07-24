@@ -3,6 +3,9 @@ import { PlayerDataResponse, GameStateMessage } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
 import { useCallback, useRef } from "react";
 import { config } from "@/config";
+import { authenticatedFetch } from "@/domains/auth/api/authenticatedFetch";
+import { getLocalUser } from "@/hooks/useUser";
+import { useFowViewStore } from "@/utils/fowViewStore";
 
 // RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
 export function deepMergePatch<T>(base: T, patch: unknown): T {
@@ -25,9 +28,60 @@ export function deepMergePatch<T>(base: T, patch: unknown): T {
   return result as T;
 }
 
+/** Mirrors useMapImage's MapImageError shape/intent for the same 401/403 cases on a FoW game. */
+export type PlayerDataError = {
+  status: number;
+  message: string;
+  requiresAuth?: boolean;
+  notParticipant?: boolean;
+};
+
 export async function fetchPlayerData(
-  gameId: string
+  gameId: string,
+  viewAsPlayerId?: string | null
 ): Promise<PlayerDataResponse> {
+  const user = getLocalUser();
+  const params = viewAsPlayerId
+    ? `?asPlayer=${encodeURIComponent(viewAsPlayerId)}`
+    : "";
+  const fowUrl = `${config.api.gameDataUrl}/${gameId}/web-data-fow${params}`;
+
+  // Try the FoW-aware endpoint even when logged out: the backend 404s immediately for
+  // non-FoW games regardless of auth, so an anonymous request still reliably tells us
+  // whether this is a FoW game before falling back - and if it is, we get a real 401
+  // instead of a misleading 404 from the plain endpoint below.
+  const fowResponse = user?.token
+    ? await authenticatedFetch(fowUrl)
+    : await fetch(fowUrl);
+
+  if (fowResponse.ok) {
+    const body = (await fowResponse.json()) as PlayerDataResponse;
+    body.viewerIsGm = fowResponse.headers.get("X-Viewer-Is-Gm") === "true";
+    return body;
+  }
+  if (fowResponse.status === 401) {
+    const error: PlayerDataError = {
+      status: 401,
+      message: await fowResponse.text(),
+      requiresAuth: true,
+    };
+    throw error;
+  }
+  if (fowResponse.status === 403) {
+    const error: PlayerDataError = {
+      status: 403,
+      message: await fowResponse.text(),
+      notParticipant: true,
+    };
+    throw error;
+  }
+  if (fowResponse.status !== 404) {
+    throw new Error(
+      `Failed to fetch player data: ${fowResponse.status} ${fowResponse.statusText}`
+    );
+  }
+  // 404 from web-data-fow means this isn't a FoW game; fall through to the plain endpoint.
+
   const response = await fetch(`${config.api.gameDataUrl}/${gameId}/web-data`);
   if (!response.ok) {
     throw new Error(
@@ -41,9 +95,10 @@ export function usePlayerData<TData = PlayerDataResponse>(
   gameId: string,
   options?: { select?: (data: PlayerDataResponse) => TData }
 ) {
-  return useQuery<PlayerDataResponse, Error, TData>({
-    queryKey: ["playerData", gameId],
-    queryFn: () => fetchPlayerData(gameId),
+  const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
+  return useQuery<PlayerDataResponse, Error | PlayerDataError, TData>({
+    queryKey: ["playerData", gameId, viewAsPlayerId],
+    queryFn: () => fetchPlayerData(gameId, viewAsPlayerId),
     retry: false,
     select: options?.select,
   });
@@ -57,11 +112,14 @@ export function usePlayerData<TData = PlayerDataResponse>(
  */
 export function useWebDataPatcher(gameId: string) {
   const queryClient = useQueryClient();
+  const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
   const lastSeqRef = useRef<number | null>(null);
 
   return useCallback(
     (msg: GameStateMessage) => {
-      const key = ["playerData", gameId];
+      // The patch stream only carries diffs for non-FoW games (see WebSocketNotifier),
+      // where viewAsPlayerId is always null, so this key always matches usePlayerData's.
+      const key = ["playerData", gameId, viewAsPlayerId];
       const cached = queryClient.getQueryData<PlayerDataResponse>(key);
 
       if (msg.full) {
@@ -82,13 +140,14 @@ export function useWebDataPatcher(gameId: string) {
       lastSeqRef.current = msg.seq;
       void queryClient.invalidateQueries({ queryKey: key });
     },
-    [gameId, queryClient]
+    [gameId, viewAsPlayerId, queryClient]
   );
 }
 
 export function usePlayerDataSocket(gameId: string) {
-  const { data, isLoading, isError, refetch } = usePlayerData(gameId);
+  const { data, isLoading, isError, error, refetch } = usePlayerData(gameId);
   const queryClient = useQueryClient();
+  const viewAsPlayerId = useFowViewStore((state) => state.viewAsPlayerId);
   const hasConnectedBefore = useRef(false);
   const hasSocketConnectedBefore = useRef(false);
   const onStateMessage = useWebDataPatcher(gameId);
@@ -115,7 +174,7 @@ export function usePlayerDataSocket(gameId: string) {
         return;
       }
       void queryClient.invalidateQueries({
-        queryKey: ["playerData", gameId],
+        queryKey: ["playerData", gameId, viewAsPlayerId],
       });
     }
   );
@@ -124,6 +183,7 @@ export function usePlayerDataSocket(gameId: string) {
     data,
     isLoading,
     isError,
+    error,
     readyState,
     reconnect,
     isReconnecting,

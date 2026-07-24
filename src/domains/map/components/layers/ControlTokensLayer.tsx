@@ -6,6 +6,7 @@ import { Tile } from "@/app/providers/context/types";
 import { useSettingsStore } from "@/utils/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useMapReplay } from "@/hooks/useGameContext";
+import { resolveFactionIdentity } from "@/utils/fowIdentity";
 
 type Props = {
   systemId: string;
@@ -55,15 +56,18 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
         y = tokenPlacement.y;
       }
 
+      const { faction, rawColor } = resolveFactionIdentity(
+        planetData.controlledBy
+      );
       const colorAlias = getColorAlias(
-        factionColorMap?.[planetData.controlledBy]?.color
+        rawColor ?? factionColorMap?.[faction ?? ""]?.color
       );
 
       return [
         <ControlToken
           key={`${systemId}-${planetId}-control`}
           colorAlias={colorAlias}
-          faction={planetData.controlledBy}
+          faction={faction}
           style={{
             position: "absolute",
             left: `${x - 10}px`,

@@ -53,6 +53,7 @@ export function StageObjectivesSection({
                     revealed={objective.revealed}
                     onClick={() => onSelect(objective.key)}
                     scoredFactions={objective.scoredFactions}
+                    unidentifiedScorerCount={objective.unidentifiedScorerCount ?? 0}
                     playerData={playerData}
                     multiScoring={objective.multiScoring}
                     hasRedTape={objective.hasRedTape}
@@ -65,6 +66,7 @@ export function StageObjectivesSection({
                   playerData={playerData}
                   hasRedTape={objective.hasRedTape}
                   scoredFactions={objective.scoredFactions}
+                  unidentifiedScorerCount={objective.unidentifiedScorerCount ?? 0}
                   color={color}
                   factionProgress={objective.factionProgress}
                   progressThreshold={objective.progressThreshold}

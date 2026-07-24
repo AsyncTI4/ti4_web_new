@@ -16,15 +16,23 @@ export function getPlayerFactionDisplayName(player: PlayerData) {
   );
 }
 
+/**
+ * Whether a bare faction key belongs to a real player, as opposed to the neutral (Dicecord)
+ * player or a no-faction placeholder. Use this on faction keys that come from somewhere other
+ * than playerData (score breakdowns, objective scorer lists) so those surfaces agree with the
+ * filtered playerData instead of treating a missing entry as a hidden player.
+ */
+export function isAssignedFactionKey(faction?: string | null): boolean {
+  const factionValue = typeof faction === "string" ? faction.trim() : "";
+  if (!factionValue) return false;
+  return !INVALID_FACTION_VALUES.has(factionValue.toLowerCase());
+}
+
 export function hasAssignedFaction(
   player?: PlayerData | null,
 ): player is PlayerData {
   if (!player) return false;
-  const factionValue =
-    typeof player.faction === "string" ? player.faction.trim() : "";
-
-  if (!factionValue) return false;
-  return !INVALID_FACTION_VALUES.has(factionValue.toLowerCase());
+  return isAssignedFactionKey(player.faction);
 }
 
 export function filterPlayersWithAssignedFaction(playerData: PlayerData[]) {

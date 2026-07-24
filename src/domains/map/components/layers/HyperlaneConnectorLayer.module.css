@@ -1,0 +1,22 @@
+.hyperlaneLayer {
+  position: absolute;
+  inset: 0;
+  width: 345px;
+  height: 299px;
+  pointer-events: none;
+  overflow: visible;
+  z-index: var(--z-anomaly-overlay);
+}
+
+.hyperlaneShape {
+  fill: none;
+  stroke: rgb(80, 200, 255);
+  stroke-width: 4;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(0, 180, 255, 0.75));
+}
+
+circle.hyperlaneShape {
+  fill: none;
+}

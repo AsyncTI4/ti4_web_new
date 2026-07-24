@@ -56,7 +56,6 @@ export function PlanetCirclesLayer({
     };
   }, []);
 
-  if (!mapTile?.planets) return [] as React.ReactElement[];
   const planetCoords = getPlanetCoordsBySystemId(systemId);
 
   // Helper function to create a planet circle element
@@ -154,6 +153,8 @@ export function PlanetCirclesLayer({
     }
     return tokenPlanetMap;
   }, [mapTile.entityPlacements]);
+
+  if (!mapTile.planets) return <></>;
 
   // Regular planets from mapTile.planets
   const regularPlanetCircles = Object.entries(mapTile.planets).flatMap(

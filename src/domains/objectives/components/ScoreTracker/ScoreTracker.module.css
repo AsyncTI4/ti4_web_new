@@ -77,6 +77,7 @@
   justify-content: center;
 }
 
+
 .overflowCount {
   font-size: var(--mantine-font-size-xs);
   color: var(--mantine-color-gray-4);
