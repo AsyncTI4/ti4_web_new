@@ -1,5 +1,7 @@
-import { Button, Group, Text } from "@mantine/core";
+import { Group, Text } from "@mantine/core";
+import cx from "clsx";
 import { useAppStore } from "@/utils/appStore";
+import classes from "./ZoomControls.module.css";
 import {
   IconZoomCancel,
   IconZoomIn,
@@ -54,39 +56,54 @@ function ZoomControls({
   const onZoomScreenSize = onZoomScreenSizeProp ?? storeOnZoomScreenSize;
 
   return (
-    <Group className={zoomClass ?? "zoomContainer"} gap="xs">
-      {!zoomFitToScreen && <Text>{Number(zoom.toFixed(2)) * 100}%</Text>}
-      <Button
+    <Group className={zoomClass ?? "zoomContainer"} gap={6}>
+      {!zoomFitToScreen && (
+        <Text span className={classes.zoomLabel}>
+          {Math.round(zoom * 100)}%
+        </Text>
+      )}
+      <button
+        type="button"
+        aria-label="Zoom in"
+        className={classes.zoomButton}
         onClick={onZoomIn}
-        size="compact-md"
-        color="green"
         disabled={zoom >= 2 || zoomFitToScreen}
       >
-        <IconZoomIn size={18} />
-      </Button>
-      <Button
+        <IconZoomIn size={16} />
+      </button>
+      <button
+        type="button"
+        aria-label="Zoom out"
+        className={classes.zoomButton}
         onClick={onZoomOut}
-        size="compact-md"
-        color="red"
         disabled={zoom <= 0.25 || zoomFitToScreen}
       >
-        <IconZoomOut size={18} />
-      </Button>
-      <Button onClick={onZoomReset} size="compact-md">
-        <IconZoomCancel size={18} />
-      </Button>
+        <IconZoomOut size={16} />
+      </button>
+      <button
+        type="button"
+        aria-label="Reset zoom"
+        className={classes.zoomButton}
+        onClick={onZoomReset}
+      >
+        <IconZoomCancel size={16} />
+      </button>
       {!hideFitToScreen && (
-        <Button
+        <button
+          type="button"
+          aria-label="Fit map to screen"
+          className={cx(
+            classes.zoomButton,
+            zoomFitToScreen && classes.zoomButtonActive,
+          )}
           onClick={onZoomScreenSize}
-          size="compact-md"
-          color={zoomFitToScreen ? "red" : "purple"}
         >
           {zoomFitToScreen ? (
-            <IconScreenShareOff size={18} />
+            <IconScreenShareOff size={16} />
           ) : (
-            <IconScreenShare size={18} />
+            <IconScreenShare size={16} />
           )}
-        </Button>
+        </button>
       )}
     </Group>
   );

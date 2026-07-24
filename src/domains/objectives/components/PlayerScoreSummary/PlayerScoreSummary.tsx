@@ -143,7 +143,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
       className={styles.themedContainer}
       style={{ "--vps-to-win": vpsToWin } as React.CSSProperties}
     >
-      <Stack gap={6}>
+      <Stack gap={10}>
         {/* Title */}
         <Caption size="sm" rule>
           Score Breakdown

@@ -1,0 +1,57 @@
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Indeterminate scanner: theme accent sweeping a hairline track */
+.track {
+  position: relative;
+  width: 150px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(148, 163, 184, 0.16);
+  overflow: hidden;
+}
+
+.sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--map-tab-active-border, rgba(59, 130, 246, 0.85)),
+    transparent
+  );
+  animation: loaderSweep 1.4s ease-in-out infinite;
+}
+
+@keyframes loaderSweep {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.label {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep {
+    animation: none;
+    left: 30%;
+  }
+}

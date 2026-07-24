@@ -1,10 +1,13 @@
+/* Quiet channel links: hairline ghost chips in mono, not filled tabs */
 .discordButton {
-  background: var(--map-tab-active-bg);
-  border: var(--map-tab-active-border);
-  color: rgba(255, 255, 255, 0.9) !important;
+  background: transparent;
+  border: 1px solid var(--panel-hairline-strong);
+  color: rgba(226, 232, 240, 0.75) !important;
+  font-family: var(--mantine-font-family-monospace);
   font-weight: 500;
-  font-size: 13px;
-  border-radius: 6px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  border-radius: 4px;
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;

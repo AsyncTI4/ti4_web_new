@@ -30,7 +30,7 @@
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	gap: 0;
-	height: 40px;
+	height: 44px;
 	background: var(--panel-field-strip);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .numberCell {
-	height: 40px;
+	height: 44px;
 	border-top: 1px solid var(--panel-hairline-strong);
 	border-bottom: 1px solid var(--panel-hairline-strong);
 	border-right: 1px solid var(--panel-hairline-strong);

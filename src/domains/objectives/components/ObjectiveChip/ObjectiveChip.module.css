@@ -46,14 +46,15 @@
   --chip-color-rgb: var(--gd-purple);
 }
 
-/* Base chip */
+/* Base chip: inset tile so the row strip breathes above and below */
 .chip {
   grid-column: span 1;
-  height: 40px;
+  height: 32px;
+  align-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3px;
+  padding: 2px;
   box-sizing: border-box;
   position: relative;
   isolation: isolate;
@@ -66,7 +67,7 @@
 
 /* State: SCORED */
 .scored {
-  background: rgba(var(--chip-color-rgb), 0.3);
+  background: rgba(var(--chip-color-rgb), 0.22);
   border: none;
   border-radius: 0;
   margin: 0;
@@ -80,15 +81,15 @@
 .qualifies {
   background: rgba(2, 6, 23, 0.34);
   background-clip: padding-box;
-  border-top: 2px dashed rgba(var(--chip-color-rgb), 0.78);
-  border-bottom: 2px dashed rgba(var(--chip-color-rgb), 0.78);
-  border-left: 2px dashed rgba(var(--chip-color-rgb), 0.78);
-  border-right: 2px dashed rgba(var(--chip-color-rgb), 0.78);
+  border-top: 1px dashed rgba(var(--chip-color-rgb), 0.8);
+  border-bottom: 1px dashed rgba(var(--chip-color-rgb), 0.8);
+  border-left: 1px dashed rgba(var(--chip-color-rgb), 0.8);
+  border-right: 1px dashed rgba(var(--chip-color-rgb), 0.8);
   border-radius: 0;
   margin: 0;
   box-shadow:
-    inset 0 1px 5px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    inset 0 1px 4px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.14);
 }
 
 .qualifies::after {
@@ -104,29 +105,29 @@
 /* State: POTENTIAL */
 .potential {
   background: rgba(2, 6, 23, 0.28) !important;
-  border-top: 2px dashed rgba(var(--chip-color-rgb), 0.7);
-  border-bottom: 2px dashed rgba(var(--chip-color-rgb), 0.7);
-  border-left: 2px dashed rgba(var(--chip-color-rgb), 0.7);
-  border-right: 2px dashed rgba(var(--chip-color-rgb), 0.7);
+  border-top: 1px dashed rgba(var(--chip-color-rgb), 0.72);
+  border-bottom: 1px dashed rgba(var(--chip-color-rgb), 0.72);
+  border-left: 1px dashed rgba(var(--chip-color-rgb), 0.72);
+  border-right: 1px dashed rgba(var(--chip-color-rgb), 0.72);
   border-radius: 0;
   margin: 0;
   box-shadow:
-    inset 0 1px 5px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.16);
+    inset 0 1px 4px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
 /* State: UNSCORED */
 .unscored {
   background: rgba(15, 23, 42, 0.26);
-  border-top: 2px dashed rgba(107, 114, 128, 0.6);
-  border-bottom: 2px dashed rgba(107, 114, 128, 0.6);
-  border-left: 2px dashed rgba(107, 114, 128, 0.6);
-  border-right: 2px dashed rgba(107, 114, 128, 0.6);
+  border-top: 1px dashed rgba(107, 114, 128, 0.65);
+  border-bottom: 1px dashed rgba(107, 114, 128, 0.65);
+  border-left: 1px dashed rgba(107, 114, 128, 0.65);
+  border-right: 1px dashed rgba(107, 114, 128, 0.65);
   border-radius: 0;
   margin: 0;
   box-shadow:
-    inset 0 1px 5px rgba(0, 0, 0, 0.48),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.14);
+    inset 0 1px 4px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 /* Border hiding for grouped chips */

@@ -1,19 +1,24 @@
 import type { HTMLAttributes } from "react";
-import { useMantineTheme } from "@mantine/core";
-import { Atom } from "react-loading-indicators";
 
 import { MapViewportCenter } from "../MapViewportCenter";
+import classes from "./MapViewportLoader.module.css";
 
 export type MapViewportLoaderProps = HTMLAttributes<HTMLDivElement> & {
   label?: string;
 };
 
-export function MapViewportLoader({ label = "Loading", ...rest }: MapViewportLoaderProps) {
-  const theme = useMantineTheme();
-
+export function MapViewportLoader({
+  label = "Loading",
+  ...rest
+}: MapViewportLoaderProps) {
   return (
     <MapViewportCenter {...rest}>
-      <Atom color={theme.colors.blue[5]} size="large" text={label} />
+      <div className={classes.loader} role="status" aria-label={label}>
+        <div className={classes.track}>
+          <div className={classes.sweep} />
+        </div>
+        <span className={classes.label}>{label}</span>
+      </div>
     </MapViewportCenter>
   );
 }
