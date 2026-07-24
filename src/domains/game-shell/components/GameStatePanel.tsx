@@ -9,11 +9,14 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
+import cx from "clsx";
 import { useGameState } from "@/hooks/useGameState";
 import { useGameData } from "@/hooks/useGameContext";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import { PlayerColorSwatch } from "@/domains/player/components/PlayerColor";
+import styles from "./GameStatePanel.module.css";
 import { agendas } from "@/entities/data/agendas";
 import type {
   GamePhase,
@@ -106,14 +109,15 @@ function phaseGroup(phase: GamePhase): string {
   return "other";
 }
 
+/* Rendered flush against the player name, so leading spaces matter */
 function activePlayerPhrase(phase: GamePhase): string {
   switch (phaseGroup(phase)) {
     case "strategy":
-      return "is picking";
+      return " is picking";
     case "action":
-      return "'s turn";
+      return "’s turn";
     case "agenda":
-      return "is voting";
+      return " is voting";
     default:
       return "";
   }
@@ -151,11 +155,10 @@ function isVoteTablePlayer(player: GameStatePlayer): boolean {
 function PhaseBadge({ phase }: { phase: GamePhase }) {
   const cfg = PHASE_CONFIGS[phase];
   return (
-    <Chip accent={cfg.accent} size="sm">
-      <Text size="xs" fw={700} c="white">
-        {cfg.label}
-      </Text>
-    </Chip>
+    <span className={styles.phaseLabel}>
+      <span className={styles.phaseDot} />
+      {cfg.label}
+    </span>
   );
 }
 
@@ -216,20 +219,14 @@ function ActivePlayerRow({
   const player = playerData.find((p) => p.color === activePlayer);
   const displayName = getPlayerDisplayName(player, activePlayer);
   const phrase = activePlayerPhrase(phase);
-  const accent = colorToChipAccent(activePlayer);
 
   return (
-    <Group gap="xs" align="center" wrap="nowrap">
-      <Chip accent={accent} size="xs">
-        <Text size="xs" fw={700} c="white">
-          {displayName}
-        </Text>
-      </Chip>
-      {phrase && (
-        <Text size="xs" c="gray.3">
-          {phrase}
-        </Text>
-      )}
+    <Group gap={7} align="center" wrap="nowrap">
+      <PlayerColorSwatch color={activePlayer} />
+      <Text span className={styles.turnText}>
+        <span className={styles.turnName}>{displayName}</span>
+        {phrase}
+      </Text>
     </Group>
   );
 }
@@ -315,57 +312,13 @@ function AgendaRow({
           <Text size="xs" c="gray.3" fw={700}>
             Vote counts
           </Text>
-          <div
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              overflow: "hidden",
-              paddingRight: 8,
-            }}
-          >
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: 12,
-                color: "var(--mantine-color-gray-2)",
-              }}
-            >
+          <div className={styles.voteTableWrapper}>
+            <table className={styles.voteTable}>
               <thead>
                 <tr>
-                  <th
-                    style={{
-                      padding: "3px 6px",
-                      textAlign: "left",
-                      color: "var(--mantine-color-gray-4)",
-                      fontWeight: 700,
-                      borderBottom: "1px solid var(--mantine-color-dark-4)",
-                    }}
-                  >
-                    Player
-                  </th>
-                  <th
-                    style={{
-                      padding: "3px 6px",
-                      textAlign: "right",
-                      color: "var(--mantine-color-gray-4)",
-                      fontWeight: 700,
-                      borderBottom: "1px solid var(--mantine-color-dark-4)",
-                    }}
-                  >
-                    Votes
-                  </th>
-                  <th
-                    style={{
-                      padding: "3px 6px",
-                      textAlign: "right",
-                      color: "var(--mantine-color-gray-4)",
-                      fontWeight: 700,
-                      borderBottom: "1px solid var(--mantine-color-dark-4)",
-                    }}
-                  >
-                    Total
-                  </th>
+                  <th>Player</th>
+                  <th>Votes</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -378,30 +331,10 @@ function AgendaRow({
                   return (
                     <tr
                       key={player.color}
-                      style={{
-                        background: isCurrent
-                          ? "rgba(255, 255, 255, 0.06)"
-                          : "transparent",
-                      }}
+                      className={isCurrent ? styles.currentVoterRow : undefined}
                     >
-                      <td
-                        style={{
-                          padding: "3px 6px",
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                          fontWeight: isCurrent ? 700 : 500,
-                          color: isCurrent
-                            ? "var(--mantine-color-gray-1)"
-                            : "var(--mantine-color-gray-3)",
-                        }}
-                      >
-                        <span
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                            minWidth: 0,
-                          }}
-                        >
+                      <td>
+                        <span className={styles.voterName}>
                           {player.faction && (
                             <CircularFactionIcon
                               faction={player.faction}
@@ -410,40 +343,13 @@ function AgendaRow({
                               factionImageTypeOverride={player.factionImageType}
                             />
                           )}
-                          <span
-                            style={{
-                              minWidth: 0,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
+                          <span className={styles.voterNameText}>
                             {getPlayerDisplayName(player, player.color)}
                           </span>
                         </span>
                       </td>
-                      <td
-                        style={{
-                          padding: "3px 6px",
-                          textAlign: "right",
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                          fontVariantNumeric: "tabular-nums",
-                          color: "var(--mantine-color-gray-2)",
-                        }}
-                      >
-                        {castVotes}
-                      </td>
-                      <td
-                        style={{
-                          padding: "3px 6px",
-                          textAlign: "right",
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                          fontVariantNumeric: "tabular-nums",
-                          color: "var(--mantine-color-gray-4)",
-                        }}
-                      >
-                        {startVotes}
-                      </td>
+                      <td>{castVotes}</td>
+                      <td>{startVotes}</td>
                     </tr>
                   );
                 })}
@@ -486,16 +392,17 @@ function CombatRow({
         {parts[0]}
       </Text>
       {combat.participantColors.length > 0 && (
-        <Group gap={4} wrap="wrap">
+        <Group gap="sm" wrap="wrap">
           {combat.participantColors.map((color) => {
             const player = playerData.find((p) => p.color === color);
             const name = getPlayerDisplayName(player, color);
             return (
-              <Chip key={color} accent={colorToChipAccent(color)} size="xs">
-                <Text size="xs" fw={700} c="white">
-                  {name}
+              <Group key={color} gap={6} align="center" wrap="nowrap">
+                <PlayerColorSwatch color={color} />
+                <Text span className={styles.turnText}>
+                  <span className={styles.turnName}>{name}</span>
                 </Text>
-              </Chip>
+              </Group>
             );
           })}
         </Group>
@@ -549,7 +456,7 @@ function GameStatePanelContent({
 
   if (phase === "finished" && gameState.winner) {
     return (
-      <Panel variant="subtle" accent="red">
+      <Panel variant="subtle" className={cx(styles.panel, styles.red)}>
         <Stack gap="xs">
           <PhaseBadge phase={phase} />
           <WinnerBanner winner={gameState.winner} playerData={playerData} />
@@ -559,7 +466,10 @@ function GameStatePanelContent({
   }
 
   return (
-    <Panel variant="subtle" accent={panelAccent}>
+    <Panel
+      variant="subtle"
+      className={cx(styles.panel, panelAccent !== "none" && styles[panelAccent])}
+    >
       <Stack gap="xs">
         <PanelHeader
           phase={phase}

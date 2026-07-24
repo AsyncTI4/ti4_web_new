@@ -1,0 +1,38 @@
+.factionIcon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02);
+}
+
+.playerName {
+  color: var(--mantine-color-white);
+  font-family: var(--mantine-font-family-headings);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.62);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Quiet small-caps faction designation next to the player name */
+.factionName {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(163, 178, 201, 0.85);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.62);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  align-self: center;
+  padding-top: 1px;
+}
+
+.identityGroup {
+  min-width: 0;
+  flex: 1;
+}
+
+.rightGroup {
+  flex-shrink: 0;
+}

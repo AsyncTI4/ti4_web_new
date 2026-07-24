@@ -7,4 +7,34 @@
   --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
   --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
   --map-viewport-height: calc(100vh - 110px);
+
+  /*
+   * Surface language for data panels (objective cards, score tracker, game
+   * state panel, player-card sub-panels). Defaults ARE the default theme;
+   * other themes override the block to carry their identity. Semantic game
+   * colors (stage orange/blue, secret red, relic gold, faction colors) are
+   * deliberately NOT themed — identity lives in the neutral chrome only.
+   */
+  --panel-field-bg: linear-gradient(
+    180deg,
+    rgba(6, 11, 24, 0.92),
+    rgba(2, 6, 23, 0.96)
+  );
+  /* Flat fills: sealed/unrevealed cards, breakdown grid strip, name plates */
+  --panel-field-flat: rgba(2, 6, 23, 0.5);
+  --panel-field-strip: rgba(2, 6, 23, 0.62);
+  --panel-field-soft: rgba(2, 6, 23, 0.42);
+  --panel-cell-bg: rgba(15, 23, 42, 0.14);
+  /* Hairlines: outer frames, strong frames, internal separators, reticle
+     corner brackets */
+  --panel-hairline: rgba(148, 163, 184, 0.14);
+  --panel-hairline-strong: rgba(148, 163, 184, 0.22);
+  --panel-separator: rgba(148, 163, 184, 0.1);
+  --panel-bracket: rgba(226, 232, 240, 0.14);
+  /* Corner rounding of data panels (softer themes may round more) */
+  --panel-radius: 3px;
+  /* Optional identity layer painted above the field (scanlines, blooms, ...) */
+  --panel-texture: none;
+  /* Full-card ambience inside player card boxes */
+  --player-card-inner-glow: none;
 }

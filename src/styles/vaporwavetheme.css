@@ -169,5 +169,22 @@
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(255, 0, 170, 0.06);
     --unit-details-inherited-border: rgba(255, 0, 170, 0.15);
+
+    /* Surface language — funky: sunset-grape fields behind CRT scanlines,
+       magenta hairlines against cyan brackets, hard arcade corners */
+    --panel-field-bg: linear-gradient(160deg, rgba(var(--vw-panel-strong-rgb), 0.94), rgba(var(--vw-panel-soft-rgb), 0.96));
+    --panel-field-flat: rgba(16, 10, 32, 0.55);
+    --panel-field-strip: rgba(16, 10, 32, 0.66);
+    --panel-field-soft: rgba(16, 10, 32, 0.46);
+    --panel-cell-bg: rgba(var(--vw-pink-rgb), 0.05);
+    --panel-hairline: rgba(var(--vw-pink-rgb), 0.2);
+    --panel-hairline-strong: rgba(var(--vw-cyan-rgb), 0.26);
+    --panel-separator: rgba(var(--vw-pink-rgb), 0.14);
+    --panel-bracket: rgba(var(--vw-cyan-rgb), 0.38);
+    --panel-radius: 2px;
+    --panel-texture: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px);
+    --player-card-inner-glow:
+      radial-gradient(ellipse at center, rgba(var(--vw-pink-rgb), 0.035) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 30%, rgba(var(--vw-cyan-rgb), 0.028) 0%, transparent 50%);
 }
 

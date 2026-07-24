@@ -106,8 +106,11 @@
 }
 
 .tabsTab {
-  font-size: 13px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   padding: 8px 16px;
   color: rgba(255, 255, 255, 0.7);
   transition: all 0.2s ease;

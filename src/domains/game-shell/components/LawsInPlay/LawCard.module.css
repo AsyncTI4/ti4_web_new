@@ -54,7 +54,7 @@
 .lawTitle {
   overflow: hidden;
   color: var(--mantine-color-white);
-  font-family: var(--mantine-font-family-heading);
+  font-family: var(--mantine-font-family-headings);
   font-size: 12px;
   font-weight: 800;
   line-height: 1.15;

@@ -10,6 +10,7 @@ import { Breakthrough } from "../Breakthrough/Breakthrough";
 import breakthroughStyles from "../Breakthrough/Breakthrough.module.css";
 import type { BreakthroughData } from "@/entities/data/types";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import styles from "./PlayerCardHeaderCompact.module.css";
 
 type PlayerCardHeaderProps = {
   userName: string;
@@ -47,6 +48,24 @@ function StrategyCards({
   );
 }
 
+function PlayerIdentity({
+  userName,
+  factionDisplayName,
+  color,
+}: Pick<PlayerCardHeaderProps, "userName" | "factionDisplayName" | "color">) {
+  return (
+    <>
+      <Text span size="sm" className={styles.playerName} flex="0 1 auto">
+        {userName}
+      </Text>
+      <Text span className={styles.factionName} flex="0 0 auto">
+        {factionDisplayName}
+      </Text>
+      <PlayerColor color={color} size="xs" />
+    </>
+  );
+}
+
 const MOBILE_IDENTITY_WIDTH = 354;
 const MOBILE_BREAKTHROUGH_WIDTH = 176;
 
@@ -73,60 +92,24 @@ export function PlayerCardHeaderCompact({
       justify="space-between"
       style={{ minWidth: 0 }}
     >
-      <Group gap={4} style={{ minWidth: 0, flex: 1 }}>
+      <Group gap={6} wrap="nowrap" className={styles.identityGroup}>
         <Image
           {...lowPriorityImageProps}
           src={factionImageUrl}
           alt={faction}
           w={24}
           h={24}
-          style={{
-            filter:
-              "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
-            flexShrink: 0,
-          }}
+          className={styles.factionIcon}
         />
-        <Text
-          span
-          c="white"
-          size="sm"
-          ff="heading"
-          style={{
-            textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            flexShrink: 0,
-            minWidth: 0,
-          }}
-        >
-          {userName}
-        </Text>
-        <Text
-          size="xs"
-          span
-          ml={4}
-          opacity={0.9}
-          c="white"
-          ff="heading"
-          style={{
-            textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)",
-            flexShrink: 1,
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            minWidth: 0,
-          }}
-        >
-          [{factionDisplayName}]
-        </Text>
-        <Box style={{ flexShrink: 2 }}>
-          <PlayerColor color={color} size="sm" />
-        </Box>
+        <PlayerIdentity
+          userName={userName}
+          factionDisplayName={factionDisplayName}
+          color={color}
+        />
         <StatusIndicator passed={passed} active={active} />
       </Group>
 
-      <Group gap={8} style={{ flexShrink: 0 }}>
+      <Group gap={8} className={styles.rightGroup}>
         {isSpeaker && <SpeakerToken isVisible />}
         {isTyrant && <TyrantToken isVisible />}
         <StrategyCards scs={scs} exhaustedSCs={exhaustedSCs} />
@@ -159,34 +142,17 @@ export function PlayerCardHeaderFull({
           alt={faction}
           w={32}
           h={32}
-          style={{
-            filter:
-              "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55)) brightness(1.02)",
-          }}
+          className={styles.factionIcon}
         />
         <Stack gap={0}>
-          <Group>
-            <Text
-              span
-              c="white"
-              size="lg"
-              ff="heading"
-              style={{ textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)" }}
-            >
+          <Group gap={8} wrap="nowrap">
+            <Text span size="lg" className={styles.playerName}>
               {userName}
             </Text>
             <StatusIndicator passed={passed} active={active} />
           </Group>
-          <Group gap={8}>
-            <Text
-              size="sm"
-              span
-              ml={4}
-              opacity={0.9}
-              c="white"
-              ff="text"
-              style={{ textShadow: "0 1px 1px rgba(0, 0, 0, 0.62)" }}
-            >
+          <Group gap={8} wrap="nowrap">
+            <Text span className={styles.factionName}>
               {factionDisplayName}
             </Text>
             <PlayerColor color={color} size="xs" />
@@ -237,16 +203,13 @@ export function PlayerCardHeaderMobile({
       style={{ width: "100%", minWidth: 0 }}
     >
       <Group
-        gap={4}
+        gap={6}
         align="center"
         wrap="nowrap"
-        style={{
-          width: MOBILE_IDENTITY_WIDTH,
-          minWidth: MOBILE_IDENTITY_WIDTH,
-          maxWidth: MOBILE_IDENTITY_WIDTH,
-          overflow: "hidden",
-          flexShrink: 0,
-        }}
+        w={MOBILE_IDENTITY_WIDTH}
+        miw={MOBILE_IDENTITY_WIDTH}
+        maw={MOBILE_IDENTITY_WIDTH}
+        style={{ overflow: "hidden", flexShrink: 0 }}
       >
         <Image
           {...lowPriorityImageProps}
@@ -254,51 +217,21 @@ export function PlayerCardHeaderMobile({
           alt={faction}
           w={24}
           h={24}
-          style={{ flexShrink: 0 }}
+          className={styles.factionIcon}
         />
-        <Text
-          span
-          c="white"
-          size="sm"
-          ff="heading"
-          style={{
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            minWidth: 0,
-            flex: "0 1 auto",
-          }}
-        >
-          {userName}
-        </Text>
-        <Text
-          size="xs"
-          span
-          opacity={0.9}
-          c="white"
-          ff="heading"
-          style={{
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            minWidth: "max-content",
-            flex: "0 0 auto",
-          }}
-        >
-          [{factionDisplayName}]
-        </Text>
-        <PlayerColor color={color} size="xs" />
+        <PlayerIdentity
+          userName={userName}
+          factionDisplayName={factionDisplayName}
+          color={color}
+        />
         <StatusIndicator passed={passed} active={active} />
       </Group>
 
       <Box
-        style={{
-          width: MOBILE_BREAKTHROUGH_WIDTH,
-          minWidth: MOBILE_BREAKTHROUGH_WIDTH,
-          maxWidth: MOBILE_BREAKTHROUGH_WIDTH,
-          flexShrink: 0,
-          overflow: "visible",
-        }}
+        w={MOBILE_BREAKTHROUGH_WIDTH}
+        miw={MOBILE_BREAKTHROUGH_WIDTH}
+        maw={MOBILE_BREAKTHROUGH_WIDTH}
+        style={{ flexShrink: 0, overflow: "visible" }}
       >
         {breakthrough?.breakthroughId && (
           <Breakthrough
@@ -323,7 +256,7 @@ export function PlayerCardHeaderMobile({
         align="center"
         wrap="nowrap"
         ml="auto"
-        style={{ flexShrink: 0 }}
+        className={styles.rightGroup}
       >
         {isSpeaker && <SpeakerToken isVisible />}
         {isTyrant && <TyrantToken isVisible />}

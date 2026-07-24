@@ -1,7 +1,6 @@
 import { Box, Text, Group, Stack, Image } from "@mantine/core";
 import type { KeyboardEvent } from "react";
 import { Shimmer } from "@/domains/player/components/Shimmer";
-import { getGradientClasses } from "@/domains/player/components/gradientClasses";
 import { Objective, PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { publicObjectives } from "@/entities/data/publicObjectives";
@@ -79,7 +78,7 @@ function ExpandedObjectiveCard({
     <Shimmer
       color={color}
       p="xs"
-      className={`${getGradientClasses(color).border} ${getGradientClasses(color).backgroundStrong} ${getGradientClasses(color).leftBorder} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
+      className={`${styles.objectiveCard} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
     >
       <Group className={styles.mainRow}>
         {objective.hasRedTape && (

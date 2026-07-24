@@ -30,23 +30,23 @@
 	grid-template-columns: repeat(10, 1fr);
 	gap: 0;
 	height: 40px;
-	background: rgba(2, 6, 23, 0.62);
+	background: var(--panel-field-strip);
 }
 
 .numberCell {
 	height: 40px;
-	border-top: 1px solid rgba(148, 163, 184, 0.22);
-	border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-	border-right: 1px solid rgba(148, 163, 184, 0.18);
+	border-top: 1px solid var(--panel-hairline-strong);
+	border-bottom: 1px solid var(--panel-hairline-strong);
+	border-right: 1px solid var(--panel-hairline-strong);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
-	background: rgba(15, 23, 42, 0.14);
+	background: var(--panel-cell-bg);
 }
 
 .numberCell:first-child {
-	border-left: 1px solid rgba(148, 163, 184, 0.18);
+	border-left: 1px solid var(--panel-hairline-strong);
 }
 
 .playerNameText {
@@ -79,7 +79,7 @@
 }
 
 .nameBody {
-	background: rgba(2, 6, 23, 0.42);
+	background: var(--panel-field-soft);
 	border-top: 1px solid rgba(148, 163, 184, 0.06);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.28);
 }

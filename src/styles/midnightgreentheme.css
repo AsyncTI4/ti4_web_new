@@ -138,6 +138,23 @@
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(45, 100, 55, 0.08);
     --unit-details-inherited-border: rgba(45, 100, 55, 0.2);
+
+    /* Surface language — foresty: mossy fields, lichen hairlines, and
+       dappled canopy light falling across the panels */
+    --panel-field-bg: linear-gradient(180deg, rgba(10, 17, 8, 0.94), rgba(4, 8, 3, 0.97));
+    --panel-field-flat: rgba(6, 12, 4, 0.52);
+    --panel-field-strip: rgba(6, 12, 4, 0.64);
+    --panel-field-soft: rgba(6, 12, 4, 0.46);
+    --panel-cell-bg: rgba(25, 38, 20, 0.22);
+    --panel-hairline: rgba(122, 139, 108, 0.24);
+    --panel-hairline-strong: rgba(122, 139, 108, 0.34);
+    --panel-separator: rgba(122, 139, 108, 0.15);
+    --panel-bracket: rgba(163, 190, 140, 0.24);
+    --panel-radius: 4px;
+    --panel-texture:
+      radial-gradient(60% 90% at 18% 0%, rgba(88, 138, 66, 0.055), transparent 55%),
+      radial-gradient(50% 80% at 85% 100%, rgba(126, 152, 64, 0.04), transparent 55%);
+    --player-card-inner-glow: radial-gradient(85% 70% at 30% 0%, rgba(88, 138, 66, 0.045), transparent 60%);
 }
 
 

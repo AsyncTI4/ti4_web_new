@@ -1,21 +1,63 @@
-import { Text } from "@mantine/core";
 import { lighten } from "@mantine/core";
-import { getPrimaryColorCSS } from "@/entities/lookup/colors";
+import cx from "clsx";
+import {
+  findColorData,
+  getColorValues,
+  getPrimaryColorCSS,
+} from "@/entities/lookup/colors";
+import styles from "./PlayerColor.module.css";
 
 type PlayerColorProps = {
   color: string;
-  size?: string;
-  weight?: number;
-  style?: React.CSSProperties;
+  size?: "xs" | "sm";
 };
 
+/* Split player colors (e.g. vapourwave) render as a hard diagonal */
+function getSwatchBackground(color: string) {
+  const primary = getPrimaryColorCSS(color);
+  const colorData = findColorData(color);
+  const secondaryValues = getColorValues(
+    colorData?.secondaryColorRef,
+    colorData?.secondaryColor,
+  );
+
+  if (!secondaryValues) return primary;
+
+  const { red, green, blue } = secondaryValues;
+  return `linear-gradient(135deg, ${primary} 0 50%, rgb(${red}, ${green}, ${blue}) 50% 100%)`;
+}
+
+/* Standalone pip for contexts that pair the swatch with their own text */
+export function PlayerColorSwatch({ color }: { color: string }) {
+  return (
+    <span
+      className={styles.root}
+      title={color}
+      style={
+        {
+          "--player-swatch-bg": getSwatchBackground(color),
+        } as React.CSSProperties
+      }
+    >
+      <span className={styles.swatch} />
+    </span>
+  );
+}
+
 export function PlayerColor({ color, size = "sm" }: PlayerColorProps) {
-  const primaryColor = getPrimaryColorCSS(color);
-  const lightenedColor = lighten(primaryColor, 0.4); // Lighten by 40%
+  const swatchBackground = getSwatchBackground(color);
+  const labelColor = lighten(getPrimaryColorCSS(color), 0.45);
 
   return (
-    <Text span fs="italic" size={size} ff="heading" c={lightenedColor}>
-      ({color})
-    </Text>
+    <span
+      className={cx(styles.root, size === "sm" && styles.sm)}
+      title={color}
+      style={{ "--player-swatch-bg": swatchBackground } as React.CSSProperties}
+    >
+      <span className={styles.swatch} />
+      <span className={styles.label} style={{ color: labelColor }}>
+        {color}
+      </span>
+    </span>
   );
 }

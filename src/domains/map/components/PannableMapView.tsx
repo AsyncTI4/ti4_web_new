@@ -33,6 +33,7 @@ import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
+import Caption from "@/shared/ui/Caption/Caption";
 
 type Props = {
   gameId: string;
@@ -123,14 +124,12 @@ export function PannableMapView({ gameId }: Props) {
 
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
+  const contentWidth = isMobile ? "1300px" : "2150px";
+  const contentPadding = isMobile ? undefined : "0 16px";
+
   const areaStyles = isMobile
-    ? {
-        width: "1300px",
-      }
-    : {
-        minWidth: "2150px",
-        padding: "0 16px",
-      };
+    ? { width: contentWidth }
+    : { minWidth: contentWidth, padding: contentPadding };
   const scoreSummaryAreaStyles = {
     ...areaStyles,
     marginTop: "8px",
@@ -138,9 +137,11 @@ export function PannableMapView({ gameId }: Props) {
 
   /* Player cards grow to their content width (no internal scrollbars);
      the surrounding map area provides the horizontal scrolling */
-  const playerAreaStyles = isMobile
-    ? { width: "max-content" as const, minWidth: "1300px" }
-    : { width: "max-content" as const, minWidth: "2150px", padding: "0 16px" };
+  const playerAreaStyles = {
+    width: "max-content" as const,
+    minWidth: contentWidth,
+    padding: contentPadding,
+  };
   const showGameStatePanel = !isMobile;
   const showFloatingMapToolbar = !isMobile;
 
@@ -238,13 +239,11 @@ export function PannableMapView({ gameId }: Props) {
             <Stack gap="md">
               {gameData.gameName && (
                 <Box>
-                  <Text size="lg" c="gray.1" fw={600}>
+                  <Text size="lg" c="gray.1" fw={600} ff="heading">
                     {gameData.gameName}
-                    {gameData.gameCustomName && ` - ${gameData.gameCustomName}`}
+                    {gameData.gameCustomName && ` — ${gameData.gameCustomName}`}
                   </Text>
-                  <Text size="md" c="gray.3">
-                    Round {gameData.gameRound}
-                  </Text>
+                  <Caption size="sm">Round {gameData.gameRound}</Caption>
                 </Box>
               )}
 

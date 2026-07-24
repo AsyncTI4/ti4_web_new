@@ -1,10 +1,54 @@
-/* Harmonize with Chip/Shimmer gradient system via global utilities */
-.orange { }
-.blue { }
-.gray { }
+/* Stage color rides a thin left rail + fading tint; the field stays dark so
+   scored/progress badges carry the signal. Doubled class beats the global
+   gradient utilities without !important. */
+.objectiveCard.objectiveCard {
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--panel-hairline);
+  border-left: 3px solid rgba(var(--stage-rgb), 0.58);
+  background:
+    var(--panel-texture),
+    linear-gradient(
+      90deg,
+      rgba(var(--stage-rgb), 0.09) 0%,
+      rgba(var(--stage-rgb), 0.025) 38%,
+      transparent 64%
+    ),
+    var(--panel-field-bg);
+}
 
-.unrevealed {
-  opacity: 0.6;
+.orange {
+  --stage-rgb: var(--gd-orange);
+}
+
+.blue {
+  --stage-rgb: var(--gd-blue);
+}
+
+/* One-off objectives (custodian, relics, ...) read as brass medallions */
+.gray {
+  --stage-rgb: 201, 168, 92;
+}
+
+/* Sealed directive: hairline dashed frame, label centered, no rail */
+.objectiveCard.objectiveCard.unrevealed {
+  border: 1px dashed rgba(var(--stage-rgb), 0.26);
+  background: var(--panel-field-flat);
+}
+
+.unrevealed .mainRow {
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+}
+
+.unrevealed .objectiveTitle {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: rgba(148, 163, 184, 0.5);
+  margin-bottom: 0;
 }
 
 .redTape {
@@ -94,7 +138,7 @@
 .objectiveTitle {
   font-size: 13px;
   font-weight: 700;
-  font-family: var(--mantine-font-family-heading);
+  font-family: var(--mantine-font-family-headings);
   line-height: 1.2;
   margin-bottom: 2px;
 }

@@ -130,6 +130,21 @@
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(168, 85, 247, 0.06);
     --unit-details-inherited-border: rgba(168, 85, 247, 0.15);
+
+    /* Surface language — soothing: deep indigo fields, soft lavender
+       hairlines, rounded corners, and a gentle bloom from above */
+    --panel-field-bg: linear-gradient(180deg, rgba(21, 15, 36, 0.92), rgba(12, 8, 22, 0.96));
+    --panel-field-flat: rgba(14, 10, 26, 0.5);
+    --panel-field-strip: rgba(14, 10, 26, 0.62);
+    --panel-field-soft: rgba(14, 10, 26, 0.44);
+    --panel-cell-bg: rgba(34, 16, 46, 0.18);
+    --panel-hairline: rgba(196, 181, 253, 0.13);
+    --panel-hairline-strong: rgba(196, 181, 253, 0.2);
+    --panel-separator: rgba(196, 181, 253, 0.09);
+    --panel-bracket: rgba(216, 180, 254, 0.18);
+    --panel-radius: 6px;
+    --panel-texture: radial-gradient(130% 90% at 50% 0%, rgba(168, 85, 247, 0.05), transparent 55%);
+    --player-card-inner-glow: radial-gradient(85% 70% at 50% 15%, rgba(168, 85, 247, 0.04), transparent 65%);
 }
 
 

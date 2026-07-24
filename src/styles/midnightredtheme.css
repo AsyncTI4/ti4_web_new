@@ -158,4 +158,19 @@
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(239, 68, 68, 0.06);
     --unit-details-inherited-border: rgba(239, 68, 68, 0.15);
+
+    /* Surface language — dark electric: void-black fields, red-charged
+       hairlines, a hot top edge, and sharp corners */
+    --panel-field-bg: linear-gradient(180deg, rgba(12, 2, 3, 0.95), rgba(1, 0, 0, 0.98));
+    --panel-field-flat: rgba(9, 1, 2, 0.55);
+    --panel-field-strip: rgba(12, 2, 3, 0.66);
+    --panel-field-soft: rgba(12, 2, 3, 0.46);
+    --panel-cell-bg: rgba(45, 10, 12, 0.18);
+    --panel-hairline: rgba(239, 68, 68, 0.17);
+    --panel-hairline-strong: rgba(239, 68, 68, 0.28);
+    --panel-separator: rgba(239, 68, 68, 0.12);
+    --panel-bracket: rgba(248, 113, 113, 0.32);
+    --panel-radius: 2px;
+    --panel-texture: linear-gradient(180deg, rgba(239, 68, 68, 0.055), transparent 30%);
+    --player-card-inner-glow: radial-gradient(90% 55% at 50% 0%, rgba(239, 68, 68, 0.045), transparent 60%);
 }

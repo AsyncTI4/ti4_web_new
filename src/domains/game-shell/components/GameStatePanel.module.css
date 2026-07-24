@@ -1,0 +1,140 @@
+/* Phase color rides a left rail on a dark field, matching the objective
+   cards; the phase label reads as a small-caps status line with a live dot */
+.panel.panel {
+  --accent-rgb: var(--gd-gray);
+  border: 1px solid var(--panel-hairline);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: var(--panel-radius);
+  background:
+    var(--panel-texture),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.08), transparent 55%),
+    var(--panel-field-bg);
+}
+
+.panel.green {
+  --accent-rgb: var(--gd-green);
+}
+
+.panel.blue {
+  --accent-rgb: var(--gd-blue);
+}
+
+.panel.yellow {
+  --accent-rgb: var(--gd-yellow);
+}
+
+.panel.orange {
+  --accent-rgb: var(--gd-orange);
+}
+
+.panel.red {
+  --accent-rgb: var(--gd-red);
+}
+
+.phaseLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 0;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+
+.phaseDot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.9);
+  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.55);
+}
+
+.turnText {
+  color: var(--mantine-color-gray-4);
+  font-size: var(--mantine-font-size-xs);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.turnName {
+  color: var(--mantine-color-white);
+  font-weight: 700;
+}
+
+.voteTableWrapper {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-right: 8px;
+}
+
+.voteTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  color: var(--mantine-color-gray-2);
+}
+
+.voteTable th {
+  padding: 3px 6px;
+  text-align: right;
+  color: var(--mantine-color-gray-4);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+}
+
+.voteTable th:first-child {
+  text-align: left;
+}
+
+.voteTable td {
+  padding: 3px 6px;
+  text-align: right;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-gray-2);
+}
+
+.voteTable td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: var(--mantine-color-gray-3);
+}
+
+.voteTable td:last-child {
+  color: var(--mantine-color-gray-4);
+}
+
+.currentVoterRow {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.currentVoterRow td:first-child {
+  font-weight: 700;
+  color: var(--mantine-color-gray-1);
+}
+
+.voterName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.voterNameText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
