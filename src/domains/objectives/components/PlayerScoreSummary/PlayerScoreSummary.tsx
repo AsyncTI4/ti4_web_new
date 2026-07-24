@@ -136,12 +136,18 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     return Math.max(maxTotal, total);
   }, 0);
   const gridColumns = Math.max(vpsToWin, maxPotentialVPs);
+  const leadingVPs = Math.max(...sortedPlayers.map((p) => p.totalVps), 0);
 
   return (
-    <div className={styles.themedContainer}>
+    <div
+      className={styles.themedContainer}
+      style={{ "--vps-to-win": vpsToWin } as React.CSSProperties}
+    >
       <Stack gap={6}>
         {/* Title */}
-        <Caption size="sm">Score Breakdown</Caption>
+        <Caption size="sm" rule>
+          Score Breakdown
+        </Caption>
 
         {/* Legend/Rubric */}
         <div className={legendStyles.legendContainer}>
@@ -191,8 +197,10 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                   <Text
                     ff="heading"
                     size="sm"
-                    c="dimmed"
-                    style={{ opacity: 0.7 }}
+                    className={cx(
+                      styles.numberText,
+                      num === vpsToWin && styles.winningNumberText,
+                    )}
                   >
                     {num}
                   </Text>
@@ -220,8 +228,16 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
             player.factionImageType,
           );
 
+          const isLeader = totalVPs === leadingVPs && totalVPs > 0;
+
           return (
-            <div key={player.faction} className={styles.rowContainer}>
+            <div
+              key={player.faction}
+              className={cx(
+                styles.rowContainer,
+                isLeader && styles.leaderRow,
+              )}
+            >
               <div className={cx(styles.nameBody, styles.playerInfoColumn)}>
                 <Image
                   {...lowPriorityImageProps}

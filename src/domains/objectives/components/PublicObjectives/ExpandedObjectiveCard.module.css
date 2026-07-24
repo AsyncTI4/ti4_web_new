@@ -29,7 +29,8 @@
   --stage-rgb: 201, 168, 92;
 }
 
-/* Sealed directive: hairline dashed frame, label centered, no rail */
+/* Sealed directive: a slim slot rather than a full card — revealed intel
+   dominates the board, the unknown just holds its place */
 .objectiveCard.objectiveCard.unrevealed {
   border: 1px dashed rgba(var(--stage-rgb), 0.26);
   background: var(--panel-field-flat);
@@ -38,16 +39,16 @@
 .unrevealed .mainRow {
   align-items: center;
   justify-content: center;
-  min-height: 38px;
+  min-height: 16px;
 }
 
 .unrevealed .objectiveTitle {
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: 0.24em;
-  text-indent: 0.24em;
-  color: rgba(148, 163, 184, 0.5);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: rgba(148, 163, 184, 0.45);
   margin-bottom: 0;
 }
 

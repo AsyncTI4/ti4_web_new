@@ -26,11 +26,47 @@
 }
 
 .objectivesGrid {
+	position: relative;
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	gap: 0;
 	height: 40px;
 	background: var(--panel-field-strip);
+}
+
+/* Victory meridian: a gold finish line at the winning VP column, running
+   through the number track and every player row */
+.objectivesGrid::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: calc(var(--vps-to-win, 10) * 44px - 1px);
+	width: 1px;
+	pointer-events: none;
+	z-index: 2000;
+	background: linear-gradient(180deg, rgba(250, 204, 21, 0.45), rgba(234, 179, 8, 0.28));
+	box-shadow: 0 0 6px rgba(234, 179, 8, 0.35);
+}
+
+.numberText {
+	color: var(--mantine-color-dimmed);
+	opacity: 0.7;
+}
+
+.winningNumberText {
+	color: rgba(250, 204, 21, 0.85);
+	opacity: 1;
+}
+
+/* Current leader: gold tick on the name plate, gold running total */
+.leaderRow .nameBody {
+	border-left: 2px solid rgba(234, 179, 8, 0.6);
+	padding-left: 8px;
+}
+
+.leaderRow .vp {
+	color: rgba(250, 204, 21, 0.92);
 }
 
 .numberCell {

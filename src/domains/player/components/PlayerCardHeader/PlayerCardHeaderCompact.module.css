@@ -36,3 +36,17 @@
 .rightGroup {
   flex-shrink: 0;
 }
+
+/* Plate connector: hairline tying the identity cluster to the SC chips */
+.headerRule {
+  flex: 1;
+  align-self: center;
+  height: 1px;
+  min-width: 16px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--panel-hairline-strong) 60%,
+    var(--panel-hairline-strong)
+  );
+}

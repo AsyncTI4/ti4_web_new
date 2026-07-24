@@ -2,13 +2,28 @@
    cards; the phase label reads as a small-caps status line with a live dot */
 .panel.panel {
   --accent-rgb: var(--gd-gray);
+  position: relative;
   border: 1px solid var(--panel-hairline);
-  border-left: 3px solid rgba(var(--accent-rgb), 0.55);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.6);
   border-radius: var(--panel-radius);
   background:
     var(--panel-texture),
-    linear-gradient(90deg, rgba(var(--accent-rgb), 0.08), transparent 55%),
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.11), transparent 58%),
     var(--panel-field-bg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Reticle corner accent, echoing the player-card panel brackets */
+.panel.panel::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  pointer-events: none;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.6);
+  border-right: 1px solid rgba(var(--accent-rgb), 0.6);
 }
 
 .panel.green {
@@ -32,7 +47,9 @@
 }
 
 .phaseLabel {
-  display: inline-flex;
+  display: flex;
+  flex: 1;
+  min-width: 0;
   align-items: center;
   gap: 7px;
   padding: 2px 0;
@@ -42,8 +59,23 @@
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--mantine-color-gray-1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    0 0 10px rgba(var(--accent-rgb), 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
+}
+
+/* Fading accent rule carrying the label across the panel */
+.phaseRule {
+  flex: 1;
+  height: 1px;
+  min-width: 12px;
+  margin-left: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-rgb), 0.45),
+    transparent
+  );
 }
 
 .phaseDot {
@@ -51,8 +83,29 @@
   height: 7px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: rgba(var(--accent-rgb), 0.9);
+  background: rgba(var(--accent-rgb), 0.95);
   box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.55);
+  animation: phaseDotPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes phaseDotPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phaseDot {
+    animation: none;
+  }
+}
+
+:global(.mobile) .phaseDot {
+  animation: none;
 }
 
 .turnText {

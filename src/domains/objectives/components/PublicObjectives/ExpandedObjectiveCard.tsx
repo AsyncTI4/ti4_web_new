@@ -77,7 +77,7 @@ function ExpandedObjectiveCard({
   const cardContent = (
     <Shimmer
       color={color}
-      p="xs"
+      p={objective.revealed ? "xs" : "6px 10px"}
       className={`${styles.objectiveCard} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
     >
       <Group className={styles.mainRow}>

@@ -8,23 +8,37 @@ type Props = Omit<TextProps, "size"> & {
   children: React.ReactNode;
   size?: CaptionSize;
   uppercase?: boolean;
+  /** Extend a fading hairline after the label, schematic-callout style */
+  rule?: boolean;
 };
 
 export function Caption({
   children,
   size = "xs",
   uppercase = true,
+  rule = false,
   className,
   ...textProps
 }: Props) {
-  return (
+  const label = (
     <Text
       c="gray.4"
       className={cx(styles.caption, styles[size], className)}
       {...textProps}
     >
-      {uppercase ? String(children).toUpperCase() : children}
+      {uppercase && typeof children === "string"
+        ? children.toUpperCase()
+        : children}
     </Text>
+  );
+
+  if (!rule) return label;
+
+  return (
+    <span className={styles.ruleRow}>
+      {label}
+      <span className={styles.rule} />
+    </span>
   );
 }
 

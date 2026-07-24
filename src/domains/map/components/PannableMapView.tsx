@@ -1,5 +1,5 @@
 import { useMemo, useRef, type RefObject } from "react";
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Group, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
@@ -33,7 +33,6 @@ import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
-import Caption from "@/shared/ui/Caption/Caption";
 
 type Props = {
   gameId: string;
@@ -237,15 +236,27 @@ export function PannableMapView({ gameId }: Props) {
             enabled={isMobile}
           >
             <Stack gap="md">
-              {gameData.gameName && (
-                <Box>
-                  <Text size="lg" c="gray.1" fw={600} ff="heading">
+              <Group
+                align="baseline"
+                gap={12}
+                wrap="nowrap"
+                className={classes.hudTitle}
+              >
+                <Text span className={classes.hudRoundLabel}>
+                  Round
+                </Text>
+                <Text span className={classes.hudRoundNumeral}>
+                  {String(gameData.gameRound ?? 1).padStart(2, "0")}
+                </Text>
+                {gameData.gameName && (
+                  <Text span className={classes.hudGameName}>
                     {gameData.gameName}
-                    {gameData.gameCustomName && ` — ${gameData.gameCustomName}`}
+                    {gameData.gameCustomName &&
+                      ` — ${gameData.gameCustomName}`}
                   </Text>
-                  <Caption size="sm">Round {gameData.gameRound}</Caption>
-                </Box>
-              )}
+                )}
+                <span className={classes.hudRule} />
+              </Group>
 
               <ScoreTracker
                 playerData={gameData.playerData}

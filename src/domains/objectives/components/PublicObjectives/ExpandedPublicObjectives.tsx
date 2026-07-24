@@ -112,7 +112,11 @@ function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: P
 
         {lawsInPlay.length > 0 && (
           <Box>
-            <Caption size="sm" className={`${styles.stageTitle} ${styles.lawsTitle}`}>
+            <Caption
+              size="sm"
+              rule
+              className={`${styles.stageTitle} ${styles.lawsTitle}`}
+            >
               Laws in Play
             </Caption>
             <SimpleGrid cols={{ base: 2, sm: 3 }} spacing="xs">

@@ -3,6 +3,23 @@
   letter-spacing: 0.4px;
 }
 
+.ruleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--panel-hairline-strong),
+    transparent
+  );
+}
+
 .xs {
   font-size: 9px;
   font-weight: 600;

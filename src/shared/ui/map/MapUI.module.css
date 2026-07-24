@@ -87,6 +87,53 @@
   position: relative;
 }
 
+/* HUD title for the below-map dashboard: ROUND 05 ───────── game name */
+.hudTitle {
+  min-width: 0;
+}
+
+.hudRoundLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.hudRoundNumeral {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.hudGameName {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.hudRule {
+  flex: 1;
+  align-self: center;
+  height: 1px;
+  min-width: 40px;
+  background: linear-gradient(
+    90deg,
+    var(--panel-hairline-strong),
+    transparent
+  );
+}
+
 .mainBackground {
   background: var(--main-bg);
   min-height: calc(100vh - 60px);

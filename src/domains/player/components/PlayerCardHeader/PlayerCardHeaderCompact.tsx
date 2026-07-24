@@ -251,11 +251,12 @@ export function PlayerCardHeaderMobile({
 
       {rightSection}
 
+      <Box className={styles.headerRule} />
+
       <Group
         gap="xs"
         align="center"
         wrap="nowrap"
-        ml="auto"
         className={styles.rightGroup}
       >
         {isSpeaker && <SpeakerToken isVisible />}

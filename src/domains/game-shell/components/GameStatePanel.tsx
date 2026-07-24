@@ -158,6 +158,7 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
     <span className={styles.phaseLabel}>
       <span className={styles.phaseDot} />
       {cfg.label}
+      <span className={styles.phaseRule} />
     </span>
   );
 }
