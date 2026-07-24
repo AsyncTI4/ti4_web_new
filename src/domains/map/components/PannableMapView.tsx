@@ -33,6 +33,7 @@ import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
+import Caption from "@/shared/ui/Caption/Caption";
 
 type Props = {
   gameId: string;
@@ -281,6 +282,9 @@ export function PannableMapView({ gameId }: Props) {
             {/* Column stack: width resolves to the widest card so every card
                 shares the same width and data groups align vertically */}
             <Stack gap={4} style={{ width: "max-content", minWidth: "100%" }}>
+              <Caption size="sm" rule mt={4}>
+                Player Areas
+              </Caption>
               {filterPlayersWithAssignedFaction(gameData?.playerData || []).map(
                 (player) => (
                   <Box key={player.color}>

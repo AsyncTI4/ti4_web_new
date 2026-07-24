@@ -37,7 +37,11 @@
     --secret-tab-hover-border: 1px solid rgba(239, 68, 68, 0.45);
 
     /** Map **/
-    --main-bg: #000;
+    /* Diagonal ember wash over the void */
+    --main-bg:
+      linear-gradient(160deg, rgba(239, 68, 68, 0.05) 0%, transparent 42%),
+      radial-gradient(80% 60% at 88% 110%, rgba(153, 27, 27, 0.05), transparent 60%),
+      #000;
     --map-tabs-bg: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
     --map-tabs-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 

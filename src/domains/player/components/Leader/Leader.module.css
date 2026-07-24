@@ -75,11 +75,13 @@
   color: var(--mantine-color-gray-4);
 }
 
+/* Role designation in quiet small caps, echoing the faction labels */
 .leaderType {
-  font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
-  opacity: 0.8;
-  text-transform: capitalize;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  opacity: 0.85;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

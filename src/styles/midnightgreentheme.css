@@ -30,7 +30,11 @@
     --secret-tab-hover-border: 1px solid rgba(105, 125, 95, 0.9);
 
     /** Map **/
-    --main-bg: #040603;
+    /* Dappled canopy light drifting in from the corners */
+    --main-bg:
+      radial-gradient(110% 75% at 18% -10%, rgba(74, 122, 60, 0.06), transparent 55%),
+      radial-gradient(90% 60% at 90% 110%, rgba(96, 128, 52, 0.045), transparent 60%),
+      #040603;
     --map-tabs-bg: linear-gradient(180deg, rgba(8, 14, 6, 0.96) 0%, rgba(20, 28, 18, 0.92) 100%);
     --map-tabs-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
     --map-tab-border: 1px solid rgba(95, 115, 85, 0.9);

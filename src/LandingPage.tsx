@@ -94,6 +94,12 @@ export default function LandingPage() {
               <Box className="heroDockLayout">
                 <Box className="heroDockContent">
                   <Stack gap="md" className="fadeInUp">
+                    <Box>
+                      <span className="heroTag">
+                        Play-by-Discord · Twilight Imperium 4E
+                      </span>
+                      <div className="heroDivider" />
+                    </Box>
                     <Title
                       order={1}
                       className="gradient-text space-title"
@@ -136,6 +142,11 @@ export default function LandingPage() {
                     >
                       Join our Discord
                     </Button>
+                    <div className="heroTicks fadeInUp delay-3">
+                      <span className="heroTick">Free to play</span>
+                      <span className="heroTick">Bot-managed rules</span>
+                      <span className="heroTick">Live web maps</span>
+                    </div>
                   </Stack>
                 </Box>
 
@@ -143,7 +154,7 @@ export default function LandingPage() {
                   <div className="heroGameEmbedFrameWrap">
                     <iframe
                       className="heroGameEmbedFrame"
-                      src="/embed/pbd19460/map-only"
+                      src="/embed/pbd19460/map-only?sidebar=none"
                       title="PBD19460 Map Only"
                       loading="lazy"
                     />
@@ -208,6 +219,10 @@ export default function LandingPage() {
               className="howItWorksCornerArtRight"
             />
             <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
+              <div className="sectionKicker">
+                <span className="sectionKickerNum">01</span>
+                Gameplay
+              </div>
               <Title
                 order={2}
                 ta="center"
@@ -309,6 +324,10 @@ export default function LandingPage() {
             className="enhancedSection sectionVariant2"
           >
             <Container size={1400} style={{ position: "relative", zIndex: 1 }}>
+              <div className="sectionKicker">
+                <span className="sectionKickerNum">02</span>
+                Live Operations
+              </div>
               <Title
                 order={2}
                 ta="center"
@@ -368,6 +387,10 @@ export default function LandingPage() {
           {/* COMMUNITY */}
           <Box pt={100} pb={100} className="enhancedSection sectionVariant3">
             <Container size={1600} style={{ position: "relative", zIndex: 1 }}>
+              <div className="sectionKicker">
+                <span className="sectionKickerNum">03</span>
+                Community
+              </div>
               <Title
                 order={2}
                 ta="center"

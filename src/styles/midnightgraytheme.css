@@ -26,7 +26,10 @@
     --secret-tab-hover-bg:  linear-gradient(135deg, rgba(8, 8, 8, 0.25) 0%, rgba(24, 24, 24, 0.88) 100%);
     --secret-tab-hover-border: 1px solid rgba(160, 160, 160, 0.35);
 
-    --main-bg: #0a0a0a;
+    /* Very subtle overhead sheen; barely-there on purpose */
+    --main-bg:
+      radial-gradient(120% 80% at 50% -10%, rgba(148, 163, 184, 0.05), transparent 55%),
+      #0a0a0a;
     --map-tabs-bg: linear-gradient(180deg, #080808, #161616 100%);
 
     --map-tab-border: 1px solid rgba(160, 160, 160, 0.35);

@@ -30,7 +30,7 @@ import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 type Props = {
   gameId: string;
   embedded?: boolean;
-  embeddedSidebar?: "left" | "right";
+  embeddedSidebar?: "left" | "right" | "none";
 };
 
 export function MapView({

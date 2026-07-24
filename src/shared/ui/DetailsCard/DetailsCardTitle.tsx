@@ -1,4 +1,5 @@
 import { Group, Stack, Text } from "@mantine/core";
+import classes from "./DetailsCard.module.css";
 
 type Props = {
   title: string;
@@ -19,10 +20,10 @@ function DetailsCardTitle({
     <Group gap="md" align="center">
       {icon && icon}
       <Stack gap={4} flex={1}>
-        <Text size="lg" fw={700} c="white" lh={1.2}>
+        <Text size="lg" fw={700} c="white" lh={1.2} className={classes.cardTitle}>
           {title}
         </Text>
-        <Text size="sm" c="gray.3" fw={500} fs="italic">
+        <Text span className={classes.cardSubtitle}>
           {subtitle}
         </Text>
         {caption && (

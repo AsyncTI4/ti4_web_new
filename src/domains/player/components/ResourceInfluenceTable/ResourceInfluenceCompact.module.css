@@ -12,12 +12,19 @@
   font-family: var(--mantine-font-family-monospace);
 }
 
+/* Hairline seam between the optimal and total ledgers */
+.column + .column {
+  padding-left: var(--mantine-spacing-md);
+  border-left: 1px solid var(--panel-hairline);
+}
+
 .caption {
   grid-column: 1 / -1;
   margin-block: 2px;
   color: var(--mantine-color-gray-5);
   font-size: 10px;
   font-weight: 600;
+  letter-spacing: 0.09em;
   line-height: 1.1;
   text-transform: uppercase;
 }

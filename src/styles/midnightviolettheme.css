@@ -30,7 +30,11 @@
     --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
 
     /** Map **/
-    --main-bg: #0f0a16;
+    /* Soft nebula bloom, soothing by design */
+    --main-bg:
+      radial-gradient(120% 80% at 50% -10%, rgba(147, 51, 234, 0.055), transparent 55%),
+      radial-gradient(90% 70% at 82% 110%, rgba(126, 34, 206, 0.04), transparent 60%),
+      #0f0a16;
     --map-tabs-bg: linear-gradient(180deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);

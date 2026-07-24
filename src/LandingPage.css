@@ -95,18 +95,83 @@ h6 {
 
 .heroTag {
   font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--landing-accent-warm);
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .heroDivider {
-  width: 60px;
+  width: 88px;
   height: 1px;
+  margin-top: 10px;
   background: linear-gradient(90deg, var(--landing-accent-warm), transparent);
-  opacity: 0.4;
+  opacity: 0.45;
+}
+
+/* Small-caps feature ticks with swatch pips, echoing the game UI */
+.heroTicks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 10px;
+}
+
+.heroTick {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--landing-text-tertiary);
+  white-space: nowrap;
+}
+
+.heroTick::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: rgba(186, 160, 110, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+/* Numbered schematic kickers introducing each section */
+.sectionKicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--landing-text-tertiary);
+}
+
+.sectionKicker::before,
+.sectionKicker::after {
+  content: '';
+  width: 72px;
+  height: 1px;
+}
+
+.sectionKicker::before {
+  background: linear-gradient(90deg, transparent, var(--landing-border-medium));
+}
+
+.sectionKicker::after {
+  background: linear-gradient(90deg, var(--landing-border-medium), transparent);
+}
+
+.sectionKickerNum {
+  color: var(--landing-accent-warm);
+  opacity: 0.85;
 }
 
 /* ============================================
@@ -184,10 +249,10 @@ h6 {
    ============================================ */
 .heroDockLayout {
   display: grid;
-  grid-template-columns: minmax(260px, 20%) minmax(0, 80%);
-  align-items: stretch;
-  gap: 18px;
-  min-height: 78vh;
+  grid-template-columns: minmax(320px, 36%) minmax(0, 64%);
+  align-items: center;
+  gap: 28px;
+  min-height: 66vh;
   width: 100%;
 }
 
@@ -206,7 +271,8 @@ h6 {
 .heroGameEmbedFrameWrap {
   position: relative;
   width: 100%;
-  min-height: 68vh;
+  min-height: 54vh;
+  max-height: 62vh;
   border-radius: 0;
   background: var(--landing-bg-secondary);
   border: 1px solid var(--landing-border-medium);
@@ -227,7 +293,7 @@ h6 {
 .heroGameEmbedFrame {
   width: 100%;
   height: 100%;
-  min-height: 68vh;
+  min-height: 54vh;
   border: 0;
   display: block;
 }
@@ -262,7 +328,7 @@ h6 {
 
 @media (max-width: 1200px) {
   .heroDockLayout {
-    grid-template-columns: minmax(250px, 25%) minmax(0, 75%);
+    grid-template-columns: minmax(250px, 38%) minmax(0, 62%);
   }
 }
 
@@ -279,7 +345,7 @@ h6 {
 
   .heroGameEmbedFrameWrap,
   .heroGameEmbedFrame {
-    min-height: 60vh;
+    min-height: 48vh;
   }
 }
 
@@ -504,10 +570,17 @@ h6 {
   gap: 16px;
 }
 
+/* Game cards borrow the game UI panel language: dark field, hairline frame,
+   reticle corner that arms on hover */
 .gameCard {
-  background: rgba(var(--landing-rgb-secondary), 0.7);
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--landing-rgb-secondary), 0.85) 0%,
+    rgba(var(--landing-rgb-primary), 0.95) 100%
+  );
   border: 1px solid var(--landing-border-subtle);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -515,24 +588,47 @@ h6 {
   transition: all 0.2s ease;
 }
 
+.gameCard::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid var(--landing-accent-warm);
+  border-right: 1px solid var(--landing-accent-warm);
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
 .gameCard:hover {
-  background: rgba(var(--landing-rgb-tertiary), 0.85);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--landing-rgb-tertiary), 0.9) 0%,
+    rgba(var(--landing-rgb-secondary), 0.95) 100%
+  );
   border-color: var(--landing-border-medium);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.gameCard:hover::after {
+  opacity: 0.85;
 }
 
 .gameCardTitle {
   font-family: 'Space Mono', monospace;
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .gameCardMeta {
   font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .gameCardFactions {

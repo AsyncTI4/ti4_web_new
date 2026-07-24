@@ -27,14 +27,14 @@
 
 .decalItem {
   aspect-ratio: 1;
-  border: 2px solid var(--mantine-color-dark-4);
+  border: 2px solid var(--panel-hairline-strong);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--mantine-color-dark-7);
+  background: var(--panel-field-bg);
   overflow: hidden;
 }
 
@@ -46,7 +46,7 @@
 
 .decalItem.selected {
   border-color: var(--mantine-color-blue-5);
-  background: var(--mantine-color-dark-6);
+  background: var(--panel-field-flat);
   box-shadow: 0 0 0 2px var(--mantine-color-blue-5);
 }
 
@@ -59,11 +59,11 @@
 
 .colorItem {
   aspect-ratio: 1;
-  border: 2px solid var(--mantine-color-dark-4);
+  border: 2px solid var(--panel-hairline-strong);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: var(--mantine-color-dark-7);
+  background: var(--panel-field-bg);
   display: flex;
   align-items: flex-end;
   justify-content: center;

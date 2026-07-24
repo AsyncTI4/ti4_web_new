@@ -8,12 +8,26 @@
 }
 
 .sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 12px;
   font-weight: 700;
   color: var(--mantine-color-gray-5);
   margin-bottom: var(--mantine-spacing-sm);
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.sectionTitle::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--panel-hairline-strong),
+    transparent
+  );
 }
 
 .colorGrid,
@@ -56,16 +70,24 @@
   gap: 8px;
 }
 
+/* Dark field with a type-colored rail and fading tint, matching the
+   objective card language */
 .techItem {
-  --tech-bg-alpha: 0.08;
-  --tech-border-alpha: 0.24;
   --tech-accent-alpha: 0.7;
   position: relative;
   min-width: 0;
   padding: 8px 10px 8px 12px;
-  border-radius: 6px;
-  background: rgba(var(--gradient-color), var(--tech-bg-alpha));
-  border: 1px solid rgba(var(--gradient-color), var(--tech-border-alpha));
+  border-radius: var(--panel-radius);
+  background:
+    var(--panel-texture),
+    linear-gradient(
+      90deg,
+      rgba(var(--gradient-color), 0.09) 0%,
+      rgba(var(--gradient-color), 0.025) 45%,
+      transparent 70%
+    ),
+    var(--panel-field-bg);
+  border: 1px solid var(--panel-hairline);
   overflow: hidden;
 }
 

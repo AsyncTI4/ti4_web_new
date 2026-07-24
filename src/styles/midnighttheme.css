@@ -30,7 +30,9 @@
     --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.35);
 
     /** Map **/
-    --main-bg: #060a13;
+    --main-bg:
+      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.05), transparent 55%),
+      #060a13;
     --map-tabs-bg: linear-gradient(180deg, rgba(2, 6, 23, 0.97) 0%, rgba(10, 17, 31, 0.94) 100%);
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.35);

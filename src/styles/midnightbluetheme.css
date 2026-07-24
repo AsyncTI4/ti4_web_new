@@ -15,7 +15,10 @@
     --secret-tab-hover-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.225) 0%, rgba(20, 29, 45, 0.84) 100%);
     --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
 
-    --main-bg: #0a111e;
+    --main-bg:
+      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.06), transparent 55%),
+      radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.04), transparent 60%),
+      #0a111e;
     --map-tabs-bg: #101628;
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);

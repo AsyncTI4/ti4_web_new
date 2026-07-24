@@ -1,0 +1,45 @@
+/*
+ * Unified overlay chrome. Every Mantine Modal, Drawer, and Tooltip is wired
+ * to these classes through the theme's `components` config in main.tsx, so
+ * all floating surfaces share the details-card surface of the active theme.
+ */
+
+.overlay-modal-content {
+  background: var(--details-card-bg);
+  border: var(--details-card-border);
+  border-radius: 8px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.overlay-modal-header {
+  background: var(--details-card-bg);
+  border-bottom: 1px solid var(--panel-hairline);
+}
+
+.overlay-modal-title {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.overlay-drawer-content {
+  background: var(--details-card-bg);
+  border-left: var(--details-card-border);
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.55);
+}
+
+.overlay-tooltip {
+  background: var(--details-card-bg);
+  border: var(--details-card-border);
+  border-radius: 4px;
+  padding: 5px 10px;
+  color: var(--mantine-color-gray-2);
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}

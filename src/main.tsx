@@ -2,6 +2,7 @@ import "@mantine/core/styles.css";
 import "./styles/fonts.css";
 import "./styles/gradients.css";
 import "./styles/theme.css";
+import "./styles/overlays.css";
 import "./styles/mobile.css";
 import "./utils/zIndexVariables.css";
 
@@ -17,8 +18,11 @@ import GamesPage from "./GamesPage";
 import {
   createTheme,
   darken,
+  Drawer,
   MantineProvider,
   MantineColorsTuple,
+  Modal,
+  Tooltip,
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage, { loginLoader } from "./LoginPage";
@@ -139,6 +143,33 @@ const theme = createTheme({
     xl5: "160em", // 2560px - custom
     xl6: "180em", // 2880px - custom
     xl7: "200em", // 3200px - custom
+  },
+  /* Every floating surface shares the themed details-card chrome
+     (see styles/overlays.css) */
+  components: {
+    Modal: Modal.extend({
+      defaultProps: {
+        overlayProps: { backgroundOpacity: 0.6, blur: 3 },
+      },
+      classNames: {
+        content: "overlay-modal-content",
+        header: "overlay-modal-header",
+        title: "overlay-modal-title",
+      },
+    }),
+    Drawer: Drawer.extend({
+      defaultProps: {
+        overlayProps: { backgroundOpacity: 0.6, blur: 3 },
+      },
+      classNames: {
+        content: "overlay-drawer-content",
+        header: "overlay-modal-header",
+        title: "overlay-modal-title",
+      },
+    }),
+    Tooltip: Tooltip.extend({
+      classNames: { tooltip: "overlay-tooltip" },
+    }),
   },
 });
 

@@ -204,9 +204,10 @@
   grid-template-rows: repeat(3, 52px);
   grid-auto-flow: column;
   gap: 1px;
-  background: rgba(148, 163, 184, 0.25);
+  padding: 1px;
+  background: var(--panel-hairline-strong);
   width: max-content;
-  border-radius: 2px;
+  border-radius: var(--panel-radius);
   overflow: hidden;
 }
 
@@ -221,7 +222,7 @@
   padding: 5px 5px 4px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
-    rgb(13, 17, 28);
+    var(--panel-field-bg);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     inset 0 -1px 0 rgba(0, 0, 0, 0.22);
@@ -242,7 +243,7 @@
       rgba(var(--gd-blue), 0.22) 0%,
       rgba(var(--gd-blue), 0.17) 100%
     ),
-    linear-gradient(rgb(13, 17, 28), rgb(13, 17, 28));
+    var(--panel-field-bg);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.055),
     inset 0 0 0 1px rgba(var(--gd-blue), 0.16),
@@ -256,7 +257,7 @@
       rgba(var(--gd-blue), 0.28) 0%,
       rgba(var(--gd-blue), 0.21) 100%
     ),
-    linear-gradient(rgb(13, 17, 28), rgb(13, 17, 28));
+    var(--panel-field-bg);
 }
 
 .denseCellDimmed {
