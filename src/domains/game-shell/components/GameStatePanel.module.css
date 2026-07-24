@@ -98,8 +98,35 @@
   }
 }
 
+/* Red theme: the dot arms itself — a double-blink heartbeat, then holds */
+:global(.theme-midnightredtheme) .phaseDot {
+  animation: phaseDotArmed 3.4s ease-out infinite;
+}
+
+@keyframes phaseDotArmed {
+  0%,
+  22%,
+  100% {
+    opacity: 0.9;
+    box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
+  }
+  4% {
+    opacity: 1;
+    box-shadow: 0 0 13px rgba(var(--accent-rgb), 1);
+  }
+  8% {
+    opacity: 0.92;
+    box-shadow: 0 0 5px rgba(var(--accent-rgb), 0.45);
+  }
+  12% {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.95);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .phaseDot {
+  .phaseDot,
+  :global(.theme-midnightredtheme) .phaseDot {
     animation: none;
   }
 }

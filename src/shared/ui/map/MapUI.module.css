@@ -134,6 +134,103 @@
   );
 }
 
+/* ————— Theme personality (theme classes never apply on mobile) ————— */
+
+/* Vaporwave: the ROUND numeral reads through a CRT — constant chromatic
+   fringe, with a two-frame tracking glitch every ~11 seconds */
+:global(.theme-vaporwavetheme) .hudRoundNumeral {
+  text-shadow:
+    -1.5px 0 rgba(255, 0, 170, 0.6),
+    1.5px 0 rgba(0, 240, 255, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.7);
+  animation: vwNumeralGlitch 11s steps(1, end) infinite;
+}
+
+@keyframes vwNumeralGlitch {
+  0%,
+  96%,
+  100% {
+    transform: none;
+    text-shadow:
+      -1.5px 0 rgba(255, 0, 170, 0.6),
+      1.5px 0 rgba(0, 240, 255, 0.6),
+      0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  96.6% {
+    transform: translateX(1.5px);
+    text-shadow:
+      -4px 0 rgba(255, 0, 170, 0.85),
+      4px 0 rgba(0, 240, 255, 0.85),
+      0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  97.2% {
+    transform: translateX(-1px);
+    text-shadow:
+      3px 0 rgba(255, 0, 170, 0.8),
+      -3px 0 rgba(0, 240, 255, 0.8),
+      0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  97.8% {
+    transform: none;
+    text-shadow:
+      -1.5px 0 rgba(255, 0, 170, 0.6),
+      1.5px 0 rgba(0, 240, 255, 0.6),
+      0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Green: the canopy light drifts across the page, slow as an afternoon */
+:global(.theme-midnightgreentheme) .mainBackground {
+  background-size:
+    220% 220%,
+    200% 200%,
+    auto;
+  animation: canopyDrift 75s ease-in-out infinite alternate;
+}
+
+@keyframes canopyDrift {
+  from {
+    background-position:
+      0% 0%,
+      100% 100%;
+  }
+  to {
+    background-position:
+      24% 14%,
+      74% 80%;
+  }
+}
+
+/* Violet: the nebula bloom breathes sideways like an aurora, slower still */
+:global(.theme-midnightviolettheme) .mainBackground {
+  background-size:
+    240% 200%,
+    220% 200%,
+    auto;
+  animation: auroraDrift 90s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDrift {
+  from {
+    background-position:
+      30% 0%,
+      72% 100%;
+  }
+  to {
+    background-position:
+      58% 8%,
+      42% 86%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.theme-vaporwavetheme) .hudRoundNumeral,
+  :global(.theme-midnightgreentheme) .mainBackground,
+  :global(.theme-midnightviolettheme) .mainBackground {
+    animation: none;
+  }
+}
+
 .mainBackground {
   background: var(--main-bg);
   min-height: calc(100vh - 60px);

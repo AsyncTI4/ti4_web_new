@@ -156,8 +156,9 @@
     --panel-bracket: rgba(163, 190, 140, 0.24);
     --panel-radius: 4px;
     --panel-texture:
-      radial-gradient(60% 90% at 18% 0%, rgba(88, 138, 66, 0.055), transparent 55%),
-      radial-gradient(50% 80% at 85% 100%, rgba(126, 152, 64, 0.04), transparent 55%);
+      linear-gradient(115deg, rgba(140, 168, 76, 0.055) 0%, transparent 34%),
+      radial-gradient(60% 90% at 18% 0%, rgba(88, 138, 66, 0.07), transparent 55%),
+      radial-gradient(50% 80% at 85% 100%, rgba(126, 152, 64, 0.05), transparent 55%);
     --player-card-inner-glow: radial-gradient(85% 70% at 30% 0%, rgba(88, 138, 66, 0.045), transparent 60%);
 }
 

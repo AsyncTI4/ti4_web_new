@@ -51,7 +51,12 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [activeTab, setActiveTab] = useState("map");
 
-  useDocumentTitle(`${gameId} - Async TI`);
+  const activePlayerName = data?.playerData?.find((p) => p.active)?.userName;
+  useDocumentTitle(
+    activePlayerName
+      ? `⏳ ${activePlayerName} · ${gameId} - Async TI`
+      : `${gameId} - Async TI`,
+  );
 
   useEffect(() => {
     dragscroll.reset();

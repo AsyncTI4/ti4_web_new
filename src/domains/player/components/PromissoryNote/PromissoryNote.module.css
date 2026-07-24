@@ -32,7 +32,8 @@
     linear-gradient(180deg, rgba(7, 32, 40, 0.96) 0%, rgba(3, 16, 22, 0.97) 100%);
 }
 
-/* Folded dog-ear sitting under the corner cut */
+/* Folded dog-ear sitting under the corner cut; the fold deepens on hover
+   as if a thumb is lifting the page */
 .pnChip.pnChip::after {
   content: "";
   position: absolute;
@@ -47,8 +48,24 @@
     rgba(var(--gd-cyan), 0.62) 0%,
     rgba(var(--gd-cyan), 0.22) 100%
   );
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    filter 0.2s ease;
 }
 
 .pnChip.pnChip:hover {
   --pn-edge-a: 0.56;
+}
+
+.pnChip.pnChip:hover::after {
+  width: 14px;
+  height: 14px;
+  filter: brightness(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pnChip.pnChip::after {
+    transition: none;
+  }
 }

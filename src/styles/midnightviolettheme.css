@@ -147,7 +147,13 @@
     --panel-separator: rgba(196, 181, 253, 0.09);
     --panel-bracket: rgba(216, 180, 254, 0.18);
     --panel-radius: 6px;
-    --panel-texture: radial-gradient(130% 90% at 50% 0%, rgba(168, 85, 247, 0.05), transparent 55%);
+    /* Observatory glass: faint stars caught in each panel + the bloom */
+    --panel-texture:
+      radial-gradient(1.5px 1.5px at 15% 25%, rgba(226, 200, 255, 0.17), transparent 100%),
+      radial-gradient(1px 1px at 72% 68%, rgba(196, 181, 253, 0.13), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 18%, rgba(216, 180, 254, 0.15), transparent 100%),
+      radial-gradient(1px 1px at 38% 82%, rgba(196, 181, 253, 0.11), transparent 100%),
+      radial-gradient(130% 90% at 50% 0%, rgba(168, 85, 247, 0.05), transparent 55%);
     --player-card-inner-glow: radial-gradient(85% 70% at 50% 15%, rgba(168, 85, 247, 0.04), transparent 65%);
 }
 

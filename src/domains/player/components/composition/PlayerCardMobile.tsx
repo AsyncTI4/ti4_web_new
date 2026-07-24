@@ -266,6 +266,7 @@ export default function PlayerCardMobile(props: Props) {
       faction={player.faction}
       showFactionBackground={false}
       subtleBorder
+      isActive={player.active}
     >
       <PlayerCardHeaderMobile
         userName={player.userName}

@@ -5,7 +5,7 @@
  */
 
 .overlay-modal-content {
-  background: var(--details-card-bg);
+  background: var(--panel-texture), var(--details-card-bg);
   border: var(--details-card-border);
   border-radius: 8px;
   box-shadow:
@@ -29,7 +29,7 @@
 }
 
 .overlay-drawer-content {
-  background: var(--details-card-bg);
+  background: var(--panel-texture), var(--details-card-bg);
   border-left: var(--details-card-border);
   box-shadow: -16px 0 48px rgba(0, 0, 0, 0.55);
 }

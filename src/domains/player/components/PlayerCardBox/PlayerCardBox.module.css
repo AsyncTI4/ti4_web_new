@@ -4,6 +4,38 @@
   height: 100%;
 }
 
+/* The active player's card breathes in their faction color (desktop only) */
+.activeCard {
+  animation: activeCardBreath 4.5s ease-in-out infinite;
+}
+
+@keyframes activeCardBreath {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px var(--active-glow-weak),
+      0 0 14px var(--active-glow-weak);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px var(--active-glow),
+      0 0 26px var(--active-glow-weak),
+      0 0 10px var(--active-glow);
+  }
+}
+
+:global(.mobile) .activeCard,
+:global(.theme-mobile) .activeCard {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activeCard {
+    animation: none;
+    box-shadow: 0 0 0 1px var(--active-glow-weak);
+  }
+}
+
 /* Subtle-border variant: no edge bars, so no breathing room needed for them */
 .edgeBar {
   position: absolute;

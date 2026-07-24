@@ -95,6 +95,41 @@
   --relic-edge-a: 0.38;
 }
 
+/* Gold glint sweeping the artifact once per hover (parent clip-path keeps it
+   inside the octagon). No transition at rest, so the return snap is unseen. */
+.relicCard.relicCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transform: translateX(-130%) skewX(-18deg);
+  background: linear-gradient(
+    100deg,
+    transparent 32%,
+    rgba(255, 226, 130, 0.22) 46%,
+    rgba(255, 245, 200, 0.34) 50%,
+    rgba(255, 226, 130, 0.22) 54%,
+    transparent 68%
+  );
+}
+
+.relicCard.relicCard:hover::after {
+  transform: translateX(130%) skewX(-18deg);
+  transition: transform 0.65s ease-out;
+}
+
+.exhausted.exhausted::after,
+:global(.mobile) .relicCard.relicCard::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relicCard.relicCard::after {
+    content: none;
+  }
+}
+
 /* Frontier "fake" relics read as inert gray artifacts */
 .fake.fake {
   --relic-rgb: 148, 163, 184;

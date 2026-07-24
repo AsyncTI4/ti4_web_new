@@ -3,7 +3,7 @@
 .card {
   --dc-accent: 148, 163, 184;
   position: relative;
-  background: var(--details-card-bg);
+  background: var(--panel-texture), var(--details-card-bg);
   border: var(--details-card-border);
   border-radius: 8px;
   box-shadow:

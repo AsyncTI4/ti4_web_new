@@ -16,9 +16,9 @@
     --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
 
     --main-bg:
-      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.06), transparent 55%),
-      radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.04), transparent 60%),
-      #0a111e;
+      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.07), transparent 55%),
+      radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.05), transparent 60%),
+      #060b14;
     --map-tabs-bg: #101628;
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);
@@ -75,4 +75,24 @@
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
     --unit-details-inherited-border: rgba(139, 92, 246, 0.15);
+
+    /* Surface language — navigation console: deep navy instrument fields
+       ruled with a faint chart grid, steel-cyan hairlines, holo brackets,
+       hard corners. Reads like plotting a course on a star chart. */
+    --panel-field-bg: linear-gradient(180deg, rgba(15, 29, 55, 0.96), rgba(6, 13, 27, 0.98));
+    --panel-field-flat: rgba(9, 18, 36, 0.6);
+    --panel-field-strip: rgba(9, 18, 36, 0.7);
+    --panel-field-soft: rgba(9, 18, 36, 0.5);
+    --panel-cell-bg: rgba(37, 76, 140, 0.16);
+    --panel-hairline: rgba(122, 166, 224, 0.22);
+    --panel-hairline-strong: rgba(122, 166, 224, 0.35);
+    --panel-separator: rgba(122, 166, 224, 0.14);
+    --panel-bracket: rgba(140, 200, 255, 0.48);
+    --panel-radius: 2px;
+    /* Chart grid + a cyan datum wedge pinning each panel's top-left corner */
+    --panel-texture:
+      linear-gradient(135deg, rgba(125, 190, 255, 0.3) 0, rgba(125, 190, 255, 0.3) 7px, transparent 7.5px),
+      repeating-linear-gradient(0deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px),
+      repeating-linear-gradient(90deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px);
+    --player-card-inner-glow: radial-gradient(90% 60% at 50% 0%, rgba(59, 130, 246, 0.04), transparent 60%);
 }

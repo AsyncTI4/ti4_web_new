@@ -14,6 +14,8 @@ type Props = {
   paperProps?: PaperProps;
   /** Skip the gradient edge bars and use a single subtle 1px border */
   subtleBorder?: boolean;
+  /** Breathing faction-colored glow while this player holds the turn */
+  isActive?: boolean;
 };
 
 export function PlayerCardBox({
@@ -23,11 +25,26 @@ export function PlayerCardBox({
   showFactionBackground = true,
   paperProps = {},
   subtleBorder = false,
+  isActive = false,
 }: Props) {
   const { style: paperStyle, ...restPaperProps } = paperProps;
 
   return (
-    <Box className={cx(styles.wrapper, subtleBorder && styles.wrapperTight)}>
+    <Box
+      className={cx(
+        styles.wrapper,
+        subtleBorder && styles.wrapperTight,
+        isActive && styles.activeCard,
+      )}
+      style={
+        isActive
+          ? ({
+              "--active-glow": getPrimaryColorWithOpacity(color, 0.4),
+              "--active-glow-weak": getPrimaryColorWithOpacity(color, 0.14),
+            } as React.CSSProperties)
+          : undefined
+      }
+    >
       {!subtleBorder && (
         <>
           <Box
