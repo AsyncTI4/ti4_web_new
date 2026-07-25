@@ -124,7 +124,7 @@ export function FloatingMapToolbar({
               wrap="nowrap"
               className={classes.panelHeader}
             >
-              <Text size="sm" fw={700} c="gray.1">
+              <Text className={classes.panelTitle}>
                 {panels[renderedPanel].title}
               </Text>
               <Group gap={8} wrap="nowrap">

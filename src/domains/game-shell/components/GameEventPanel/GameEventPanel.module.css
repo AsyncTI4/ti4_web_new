@@ -17,23 +17,24 @@
   gap: 8px;
   margin: 10px -12px 4px;
   padding: 5px 12px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--event-accent) 12%, rgba(9, 15, 26, 0.96)) 0%,
-    rgba(9, 15, 26, 0.82) 100%
-  );
-  border-bottom: 1px solid var(--event-accent-line);
+  /* Round bands are rails: hatched chrome with an engraved label, themed rather
+     than hardcoded navy. */
+  background: var(--rail-hatch), var(--rail-bg), var(--panel-field-bg);
+  border-bottom: 1px solid var(--rail-border);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px);
 }
 .roundHeader:first-child {
   margin-top: -4px;
 }
 .roundLabel {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--event-accent) 45%, var(--mantine-color-gray-3));
+  color: var(--rail-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
   white-space: nowrap;
 }
 .roundRule {
@@ -41,7 +42,7 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    var(--event-accent-line),
+    var(--panel-hairline-strong),
     rgba(148, 163, 184, 0)
   );
 }
@@ -52,17 +53,21 @@
   grid-template-columns: 22px 1fr auto;
   align-items: start;
   column-gap: 8px;
-  padding: 5px 4px;
-  border-radius: 6px;
-  border-left: 2px solid transparent;
-  transition: background 0.12s ease, border-color 0.12s ease;
+  padding: 5px 6px;
+  border-radius: var(--panel-radius);
+  transition: background 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Hover lights the row's own surface. It used to grow a 2px left stripe, which
+   is the one shape the system bans — and growing it on hover made every row a
+   moving target. */
 .row:hover {
-  background: var(--event-accent-soft);
-  border-left-color: var(--event-accent-line);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 0 0 1px var(--panel-hairline);
 }
 .row + .row {
-  border-top: 1px solid color-mix(in oklab, var(--event-accent) 12%, rgba(148, 163, 184, 0.08));
+  border-top: 1px solid var(--panel-separator);
 }
 .mapChangeEvent {
   position: relative;
@@ -88,14 +93,10 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   pointer-events: none;
-  background: color-mix(
-    in oklab,
-    var(--event-accent) 24%,
-    rgba(9, 15, 26, 0.94)
-  );
-  border: 1px solid color-mix(in oklab, var(--event-accent) 58%, transparent);
+  background: color-mix(in oklab, var(--event-accent) 20%, var(--socket-bg));
+  border: 1px solid color-mix(in oklab, var(--event-accent) 48%, transparent);
   border-radius: 999px;
-  box-shadow: 0 0 8px color-mix(in oklab, var(--event-accent) 28%, transparent);
+  box-shadow: var(--machined-bevel);
   transform: translateY(-50%);
   transition:
     background 0.12s ease,
@@ -104,12 +105,8 @@
 }
 .mapChangeEvent:hover .mapChangeIndicator {
   color: white;
-  background: color-mix(
-    in oklab,
-    var(--event-accent) 42%,
-    rgba(9, 15, 26, 0.96)
-  );
-  border-color: color-mix(in oklab, var(--event-accent) 82%, white);
+  background: color-mix(in oklab, var(--event-accent) 40%, var(--socket-bg));
+  border-color: color-mix(in oklab, var(--event-accent) 76%, white);
 }
 .transactionRow {
   border-left-color: transparent;
@@ -464,18 +461,25 @@
 .stateBox {
   padding: 6px 2px;
 }
+/* Squared to the panel radius: a 999px capsule is the one shape the rest of the
+   log no longer uses. */
 .showEarlier {
   align-self: center;
   margin: 4px 0 8px;
   padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--mantine-color-gray-4);
-  background: rgba(148, 163, 184, 0.08);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 999px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-5);
+  background: var(--trough-bg);
+  border: 1px solid var(--panel-hairline);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--trough-inset);
   cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease;
+  transition: background 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.12s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .showEarlier:hover {
   background: color-mix(in oklab, var(--event-accent) 20%, rgba(148, 163, 184, 0.12));

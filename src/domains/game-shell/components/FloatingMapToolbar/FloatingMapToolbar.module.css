@@ -34,6 +34,13 @@
   box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.22), 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 
+/*
+ * Floating panel plate. This one genuinely floats above the board, so it keeps a
+ * real drop shadow — but it gets the squared corners and machined bevel the rest
+ * of the system uses instead of a 10px web radius. No cut corner here: the plate
+ * is a scroll container, and a chamfer would clip the scrollbar at exactly the
+ * corner it occupies.
+ */
 .panel {
   position: fixed;
   top: 266px;
@@ -44,30 +51,99 @@
   z-index: var(--z-floating-panel);
   color: var(--mantine-color-gray-1);
   background: var(--left-sidebar-bg, var(--sidebar-bg));
-  border: var(--sidebar-border);
-  border-radius: 10px;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
+  border: 1px solid var(--panel-hairline-strong);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--machined-bevel), 0 12px 34px rgba(0, 0, 0, 0.42);
   backdrop-filter: blur(var(--sidebar-blur, 8px));
 }
 
+/* The header is a rail: recessed, hatched, with the title engraved into it. */
 .panelHeader {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 10px 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border-bottom: 1px solid var(--sidebar-border);
+  padding: 5px 10px;
+  background: var(--rail-hatch), var(--rail-bg);
+  border-bottom: 1px solid var(--rail-border);
   backdrop-filter: blur(var(--sidebar-blur, 8px));
+}
+
+.panelTitle {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rail-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
 }
 
 .panelBody {
   padding: 12px;
 }
 
+/*
+ * The animate toggle was a saturated blue Mantine switch — the loudest, most
+ * generic-SaaS element on the map. Now a recessed trough with a machined thumb;
+ * the accent appears only when the toggle is on, which is the one moment the
+ * colour carries information.
+ */
 .animatedSwitch {
-  --switch-height: 14px;
-  color: var(--mantine-color-gray-4);
-  font-size: 10px;
+  font-size: 9px;
+}
+
+.animatedSwitch :global(.mantine-Switch-label) {
+  padding-left: 6px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-6);
+}
+
+.animatedSwitch :global(.mantine-Switch-track) {
+  background: var(--trough-bg);
+  border: 1px solid var(--panel-hairline);
+  box-shadow: var(--trough-inset);
+  transition: background 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animatedSwitch :global(.mantine-Switch-thumb) {
+  background: linear-gradient(180deg, #d7dade 0%, #a8adb4 100%);
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*
+ * "On" reads as lit, not as coloured: the track lifts to a light graphite and the
+ * thumb brightens. This toggle is a display preference, not game state, so it has
+ * no claim on a signal colour at all — and keeping blue off it leaves the blue
+ * focus ring unambiguous as focus.
+ */
+.animatedSwitch :global(.mantine-Switch-input:checked + .mantine-Switch-track) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--panel-hairline-strong);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.animatedSwitch
+  :global(.mantine-Switch-input:checked + .mantine-Switch-track .mantine-Switch-thumb) {
+  background: linear-gradient(180deg, #ffffff 0%, #cfd4da 100%);
+}
+
+.animatedSwitch :global(.mantine-Switch-input:focus-visible + .mantine-Switch-track) {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animatedSwitch :global(.mantine-Switch-track) {
+    transition: none;
+  }
 }
 
 .noTransition {

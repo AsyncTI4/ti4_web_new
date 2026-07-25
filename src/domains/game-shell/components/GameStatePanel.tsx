@@ -12,7 +12,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import cx from "clsx";
 import { useGameState } from "@/hooks/useGameState";
 import { useGameData } from "@/hooks/useGameContext";
-import { Panel } from "@/shared/ui/primitives/Panel";
+import { Module } from "@/shared/ui/primitives/Module/Module";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerColorSwatch } from "@/domains/player/components/PlayerColor";
@@ -48,7 +48,6 @@ const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
   finished: { label: "Game Over", accent: "red" },
 } as const;
 
-type PanelAccentValue = "red" | "green" | "blue" | "yellow" | "orange" | "none";
 type GameStatePlayer = {
   color: string;
   displayName?: string | null;
@@ -61,17 +60,16 @@ type GameStatePlayer = {
   totInfluence?: number | null;
 };
 
-const PANEL_ACCENT: Record<ColorKey, PanelAccentValue> = {
-  gray: "none",
-  grey: "none",
-  blue: "blue",
-  green: "green",
-  yellow: "yellow",
-  orange: "orange",
-  red: "red",
-  cyan: "none",
-  teal: "none",
-  purple: "none",
+/* The phase colour as an RGB triplet, so the plate keys its frame, rail edge
+   and status dot to it without washing the whole field in the colour. */
+const PHASE_ACCENT_RGB: Partial<Record<ColorKey, string>> = {
+  gray: "var(--gd-gray)",
+  grey: "var(--gd-gray)",
+  blue: "var(--gd-blue)",
+  green: "var(--gd-green)",
+  yellow: "var(--gd-yellow)",
+  orange: "var(--gd-orange)",
+  red: "var(--gd-red)",
 };
 
 // ---------------------------------------------------------------------------
@@ -158,52 +156,32 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
     <span className={styles.phaseLabel}>
       <span className={styles.phaseDot} />
       {cfg.label}
-      <span className={styles.phaseRule} />
     </span>
   );
 }
 
-function PanelHeader({
-  phase,
-  isCollapsible,
+function CollapseToggle({
   isOpen,
   controlsId,
   onToggle,
 }: {
-  phase: GamePhase;
-  isCollapsible: boolean;
   isOpen: boolean;
   controlsId: string;
   onToggle: () => void;
 }) {
-  if (!isCollapsible) {
-    return <PhaseBadge phase={phase} />;
-  }
-
   return (
     <UnstyledButton
       aria-controls={controlsId}
       aria-expanded={isOpen}
+      aria-label={isOpen ? "Collapse agenda details" : "Expand agenda details"}
       onClick={onToggle}
-      style={{
-        borderRadius: 6,
-        display: "block",
-        width: "100%",
-      }}
+      className={styles.collapseToggle}
     >
-      <Group align="center" justify="space-between" wrap="nowrap" gap="xs">
-        <PhaseBadge phase={phase} />
-        <IconChevronDown
-          aria-hidden="true"
-          size={16}
-          style={{
-            color: "var(--mantine-color-gray-4)",
-            flex: "0 0 auto",
-            transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)",
-            transition: "transform 140ms ease",
-          }}
-        />
-      </Group>
+      <IconChevronDown
+        aria-hidden="true"
+        size={13}
+        className={cx(styles.chevron, !isOpen && styles.chevronClosed)}
+      />
     </UnstyledButton>
   );
 }
@@ -450,36 +428,40 @@ function GameStatePanelContent({
 }) {
   const { phase } = gameState;
   const cfg = PHASE_CONFIGS[phase];
-  const panelAccent = PANEL_ACCENT[cfg.accent] ?? "none";
   const isCollapsible = phaseGroup(phase) === "agenda";
   const [isOpen, setIsOpen] = useState(true);
   const detailsId = "game-state-panel-details";
 
   if (phase === "finished" && gameState.winner) {
     return (
-      <Panel variant="subtle" className={cx(styles.panel, styles.red)}>
-        <Stack gap="xs">
-          <PhaseBadge phase={phase} />
-          <WinnerBanner winner={gameState.winner} playerData={playerData} />
-        </Stack>
-      </Panel>
+      <Module
+        accentRgb={PHASE_ACCENT_RGB.red}
+        label={<PhaseBadge phase={phase} />}
+        density="compact"
+        className={styles.panel}
+      >
+        <WinnerBanner winner={gameState.winner} playerData={playerData} />
+      </Module>
     );
   }
 
   return (
-    <Panel
-      variant="subtle"
-      className={cx(styles.panel, panelAccent !== "none" && styles[panelAccent])}
+    <Module
+      accentRgb={PHASE_ACCENT_RGB[cfg.accent] ?? "var(--gd-gray)"}
+      label={<PhaseBadge phase={phase} />}
+      meta={
+        isCollapsible ? (
+          <CollapseToggle
+            isOpen={isOpen}
+            controlsId={detailsId}
+            onToggle={() => setIsOpen((opened) => !opened)}
+          />
+        ) : undefined
+      }
+      density="compact"
+      className={styles.panel}
     >
       <Stack gap="xs">
-        <PanelHeader
-          phase={phase}
-          isCollapsible={isCollapsible}
-          isOpen={isOpen}
-          controlsId={detailsId}
-          onToggle={() => setIsOpen((opened) => !opened)}
-        />
-
         <Collapse
           in={!isCollapsible || isOpen}
           id={detailsId}
@@ -518,7 +500,7 @@ function GameStatePanelContent({
           </Stack>
         </Collapse>
       </Stack>
-    </Panel>
+    </Module>
   );
 }
 

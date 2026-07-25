@@ -1,91 +1,81 @@
-/* Phase color is carried by the full accent hairline and the fading tint,
-   matching the objective cards; the phase label reads as a small-caps status
-   line with a live dot. The tint alone is the signal — a thick left rail was
-   reinforcing it with the one shape the design system bans outright. */
-.panel.panel {
-  --accent-rgb: var(--gd-gray);
-  position: relative;
-  border: 1px solid rgba(var(--accent-rgb), 0.34);
-  border-radius: var(--panel-radius);
-  background:
-    var(--panel-texture),
-    linear-gradient(90deg, rgba(var(--accent-rgb), 0.11), transparent 58%),
-    var(--panel-field-bg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+/*
+ * Game state plate.
+ *
+ * The panel used to wash its whole field in the phase colour, ring itself in an
+ * accent border, and put a 10px glow behind the label — so "ACTION PHASE" read
+ * as a green-lit box rather than an instrument reporting a phase. It now sits on
+ * the shared Module plate: neutral graphite field, machined bevel, cut corner,
+ * with the phase colour confined to the rail edge, the status dot and the
+ * graduation ticks. Chrome stays neutral; the colour is the signal.
+ */
+.panel {
+  min-width: 260px;
+  max-width: 420px;
 }
 
-/* Reticle corner accent, echoing the player-card panel brackets */
-.panel.panel::after {
-  content: "";
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  width: 9px;
-  height: 9px;
-  pointer-events: none;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.6);
-  border-right: 1px solid rgba(var(--accent-rgb), 0.6);
+.collapseToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  color: var(--mantine-color-gray-5);
 }
 
-.panel.green {
-  --accent-rgb: var(--gd-green);
+.collapseToggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--mantine-color-gray-2);
 }
 
-.panel.blue {
-  --accent-rgb: var(--gd-blue);
+.collapseToggle:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 1px;
 }
 
-.panel.yellow {
-  --accent-rgb: var(--gd-yellow);
+.chevron {
+  display: block;
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.panel.orange {
-  --accent-rgb: var(--gd-orange);
+.chevronClosed {
+  transform: rotate(-90deg);
 }
 
-.panel.red {
-  --accent-rgb: var(--gd-red);
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
 }
 
+/* Engraved, matching the module rails: a pixel of light under the glyphs, not a
+   coloured bloom behind them. */
 .phaseLabel {
   display: flex;
-  flex: 1;
   min-width: 0;
   align-items: center;
   gap: 7px;
-  padding: 2px 0;
   font-family: var(--mantine-font-family-headings);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--mantine-color-gray-1);
-  text-shadow:
-    0 0 10px rgba(var(--accent-rgb), 0.4),
-    0 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
   white-space: nowrap;
 }
 
-/* Fading accent rule carrying the label across the panel */
-.phaseRule {
-  flex: 1;
-  height: 1px;
-  min-width: 12px;
-  margin-left: 3px;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--accent-rgb), 0.45),
-    transparent
-  );
-}
-
+/* The one place the phase colour goes bright. A 6px dot that breathes reports a
+   live phase; the old version also lit the label and the whole field. */
 .phaseDot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: rgba(var(--accent-rgb), 0.95);
-  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.55);
+  background: rgb(var(--accent-rgb));
+  box-shadow:
+    0 0 5px rgba(var(--accent-rgb), 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
   animation: phaseDotPulse 3.2s ease-in-out infinite;
 }
 
