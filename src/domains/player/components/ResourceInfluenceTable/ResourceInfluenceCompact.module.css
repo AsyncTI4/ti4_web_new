@@ -1,7 +1,20 @@
+/*
+ * The economics ledger is seated in a recessed panel rather than floating on the
+ * module floor. Its internals were already disciplined — mono numerals, ch-based
+ * column widths, a hairline seam between the two ledgers — but with no surface
+ * under them the numbers read as loose text next to the planet strips.
+ */
 .compact {
   display: flex;
   align-items: flex-start;
-  gap: var(--mantine-spacing-lg);
+  gap: var(--mantine-spacing-md);
+  /* Fills the row when the section stretches, so the ledger's floor lines up
+     with the bottom of the planet cards beside it. */
+  height: 100%;
+  padding: 4px 8px 6px;
+  border-radius: var(--panel-radius);
+  background: var(--trough-bg);
+  box-shadow: var(--trough-inset), inset 0 0 0 1px var(--socket-border);
 }
 
 .column {
@@ -18,15 +31,18 @@
   border-left: 1px solid var(--panel-hairline);
 }
 
+/* Engraved, like the module rails: a single pixel of light under dark text reads
+   as stamped into the plate rather than printed on it. */
 .caption {
   grid-column: 1 / -1;
   margin-block: 2px;
-  color: var(--mantine-color-gray-5);
-  font-size: 10px;
-  font-weight: 600;
+  color: var(--mantine-color-gray-6);
+  font-size: 9px;
+  font-weight: 700;
   letter-spacing: 0.09em;
   line-height: 1.1;
   text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
 }
 
 .statRow {

@@ -37,4 +37,60 @@
   --panel-texture: none;
   /* Full-card ambience inside player card boxes */
   --player-card-inner-glow: none;
+
+  /*
+   * Machined chrome. The player area is an instrument deck: modules are milled
+   * plates with a cut corner, a recessed label rail, and a light/shade bevel
+   * that reads as material thickness rather than a drawn border. Data panels
+   * are NOT flat — they are shallow. Depth here is measured in one pixel of
+   * top light and one pixel of bottom shade, never in drop shadow, which stays
+   * reserved for surfaces that genuinely float (see overlays.css).
+   */
+
+  /* Bevel: one pixel of top light, one of bottom shade. The whole trick. */
+  --machined-bevel-light: rgba(255, 255, 255, 0.055);
+  --machined-bevel-shade: rgba(0, 0, 0, 0.34);
+  --machined-bevel: inset 0 1px 0 var(--machined-bevel-light),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+
+  /* Size of the cut corner on modules and cells. Echoes the map's hex plates
+     and the strategy card notch. Softer themes may reduce it toward 0. */
+  --machined-chamfer: 9px;
+  --machined-chamfer-sm: 6px;
+
+  /* Label rail: recessed strip along a module's top edge where the section
+     name is seated, instead of floating above the content. */
+  --rail-bg: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.36) 0%,
+    rgba(0, 0, 0, 0.16) 100%
+  );
+  --rail-border: rgba(148, 163, 184, 0.16);
+  --rail-ink: rgba(173, 181, 189, 0.92);
+  /* Fine diagonal hatch, painted on chrome only — never behind data. */
+  --rail-hatch: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.028) 0 1px,
+    transparent 1px 5px
+  );
+
+  /* Sockets: empty capacity. Pressed into the plate, not dashed onto it. */
+  --socket-bg: rgba(0, 0, 0, 0.28);
+  --socket-border: rgba(148, 163, 184, 0.09);
+  --socket-inset: inset 0 1px 2px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.022);
+  --socket-tick: rgba(148, 163, 184, 0.2);
+
+  /* Troughs: recessed channels that seat numeric readouts and unit counts. The
+     lower light line is what sells the recess — without a bottom highlight a
+     dark band just reads as a different fill. */
+  --trough-bg: rgba(0, 0, 0, 0.34);
+  --trough-inset: inset 0 2px 3px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+
+  /* Illuminated state: an upgraded/active bay reads as lit from within, which
+     is a material change, not a halo bolted on the outside. */
+  --bay-lit-tint: rgba(59, 130, 246, 0.16);
+  --bay-lit-edge: rgba(96, 165, 250, 0.34);
+  --bay-lit-light: rgba(255, 255, 255, 0.085);
 }

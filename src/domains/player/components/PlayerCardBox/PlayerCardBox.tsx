@@ -60,13 +60,21 @@ export function PlayerCardBox({
       <Paper
         p="sm"
         radius="md"
-        className={styles.paper}
+        className={cx(styles.paper, subtleBorder && styles.paperPanel)}
         {...restPaperProps}
         style={{
-          border: `1px solid ${getPrimaryColorWithOpacity(color, subtleBorder ? 0.25 : 0.3)}`,
+          border: subtleBorder
+            ? "1px solid var(--panel-hairline-strong)"
+            : `1px solid ${getPrimaryColorWithOpacity(color, 0.3)}`,
           ...paperStyle,
         }}
       >
+        {subtleBorder && (
+          <Box
+            className={styles.colorBand}
+            style={{ background: getPrimaryColorWithOpacity(color, 0.85) }}
+          />
+        )}
         <Box className={styles.content}>{children}</Box>
         <Box className={styles.innerGlow} />
         <Box className={styles.factionClip}>

@@ -1,57 +1,29 @@
-import { Box, Group } from "@mantine/core";
+import classes from "./PhantomTech.module.css";
 
 type Props = {
   techType: string;
 };
 
-export function PhantomTech({}: Props) {
+const TREE_COLOR: Record<string, string> = {
+  PROPULSION: "var(--gd-blue)",
+  CYBERNETIC: "var(--gd-yellow)",
+  BIOTIC: "var(--gd-green)",
+  WARFARE: "var(--gd-red)",
+};
+
+const treeVar = (techType: string) =>
+  ({ "--gradient-color": TREE_COLOR[techType] }) as unknown as React.CSSProperties;
+
+/** An unresearched tech slot: a socket milled into the plate, keyed to its tree. */
+export function PhantomTech({ techType }: Props) {
   return (
-    <Box
-      py={1}
-      px="xs"
-      style={{
-        borderRadius: "1px",
-        border: "1px dashed rgba(156, 163, 175, 0.6)",
-        position: "relative",
-        overflow: "hidden",
-        opacity: 0.3,
-        height: "26.5px", // Fixed height to match Tech component
-        display: "flex",
-        alignItems: "center",
-      }}
+    <div
+      className={classes.socket}
+      style={treeVar(techType)}
+      aria-hidden="true"
     >
-      <Box
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: "2px",
-          background: "rgba(156, 163, 175, 0.3)",
-        }}
-      />
-      <Group
-        gap={4}
-        style={{ position: "relative", minWidth: 0, height: "100%" }}
-      >
-        <Box
-          style={{
-            width: "14px",
-            height: "14px",
-            borderRadius: "2px",
-            border: "1px dashed rgba(156, 163, 175, 0.4)",
-            flexShrink: 0,
-          }}
-        />
-        <Box
-          style={{
-            flex: 1,
-            height: "6px",
-            borderRadius: "2px",
-            border: "1px dashed rgba(156, 163, 175, 0.4)",
-          }}
-        />
-      </Group>
-    </Box>
+      <span className={classes.iconSeat} />
+      <span className={classes.nameRule} />
+    </div>
   );
 }

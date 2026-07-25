@@ -1,0 +1,62 @@
+/*
+ * Empty tech capacity, drawn as a socket milled into the plate rather than a
+ * dashed outline sketched on top of it. Dashed borders read as unfinished
+ * layout; a recessed seat reads as a slot waiting for a card, which is what an
+ * unresearched tech actually is.
+ */
+
+.socket {
+  position: relative;
+  height: 26.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 6px 0 5px;
+  border-radius: 1px;
+  background: var(--socket-bg);
+  /* The ring is what makes it read as a defined empty seat rather than a ruled
+     line: the slot has walls, it is just not filled. */
+  box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);
+  overflow: hidden;
+}
+
+/* A keyed tab in the socket wall, tinted to the tech tree. Inset vertically so
+   a stack of empty slots doesn't fuse into one long stray vertical line. */
+.socket::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 2px;
+  background: rgba(var(--gradient-color, 148, 163, 184), 0.34);
+}
+
+/* Seat for the tech icon: a square depression with a centre graduation tick. */
+.iconSeat {
+  position: relative;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 1px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 0 1px var(--socket-border);
+}
+
+.iconSeat::after {
+  content: "";
+  position: absolute;
+  inset: 50% 3px auto;
+  height: 1px;
+  background: var(--socket-tick);
+}
+
+/* Where the tech name would begin: one short graduation tick, not a full-width
+   rule. A rule spanning the column reads as ruled paper; a tick reads as a
+   registration mark on an empty seat. */
+.nameRule {
+  flex-shrink: 0;
+  width: 16px;
+  height: 1px;
+  background: var(--socket-tick);
+}

@@ -1,0 +1,225 @@
+/*
+ * Module — the organizing plate of the player area.
+ *
+ * Structure is two nested clipped layers rather than a CSS border, because a
+ * border cannot follow a chamfered corner: the outer layer IS the hairline
+ * frame and the inner layer is the field, inset by 1px. Same technique as
+ * StrategyCard, kept deliberately consistent.
+ */
+
+.module {
+  --module-chamfer: var(--machined-chamfer);
+  --module-frame: var(--panel-hairline-strong);
+  position: relative;
+  padding: 1px;
+  background: var(--module-frame);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--module-chamfer)),
+    calc(100% - var(--module-chamfer)) 100%,
+    0 100%
+  );
+}
+
+/* Chamfer the top-right instead, for modules that sit under a header */
+.chamferTopRight {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--module-chamfer)) 0,
+    100% var(--module-chamfer),
+    100% 100%,
+    0 100%
+  );
+}
+
+.chamferNone {
+  clip-path: none;
+  border-radius: var(--panel-radius);
+}
+
+.sm {
+  --module-chamfer: var(--machined-chamfer-sm);
+}
+
+/* Stretch to the row's height and let the body absorb the slack, so a band of
+   side-by-side modules keeps its rails on one line and its floors on another.
+   The root must NOT take height:100% — a percentage against an auto-height flex
+   container collapses back to content height and defeats the stretch. */
+.fill {
+  align-self: stretch;
+}
+
+.fill .inner {
+  height: 100%;
+}
+
+.fill .inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.fill .body {
+  flex: 1;
+  min-height: 0;
+}
+
+.inner {
+  position: relative;
+  background: var(--panel-texture), var(--panel-field-bg);
+  box-shadow: var(--machined-bevel);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--module-chamfer)),
+    calc(100% - var(--module-chamfer)) 100%,
+    0 100%
+  );
+}
+
+.chamferTopRight .inner {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--module-chamfer)) 0,
+    100% var(--module-chamfer),
+    100% 100%,
+    0 100%
+  );
+}
+
+.chamferNone .inner {
+  clip-path: none;
+  border-radius: calc(var(--panel-radius) - 1px);
+}
+
+/* An accented module keys its frame and rail to a signal or player color.
+   The tint stays under 0.3 alpha on the frame only; the field never colors. */
+.accented {
+  --module-frame: linear-gradient(
+    180deg,
+    rgba(var(--accent-rgb), 0.34) 0%,
+    rgba(var(--accent-rgb), 0.14) 100%
+  );
+}
+
+/* ---------- Label rail ---------- */
+
+.rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 17px;
+  padding: 2px 7px;
+  background: var(--rail-hatch), var(--rail-bg);
+  border-bottom: 1px solid var(--rail-border);
+}
+
+.accented .rail {
+  border-bottom-color: rgba(var(--accent-rgb), 0.26);
+}
+
+/* Engraved rather than printed: one pixel of light below the glyphs reads as
+   text stamped into the plate. It is the cheapest material cue in the system. */
+.railLabel {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rail-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+
+.accented .railLabel {
+  color: rgba(var(--accent-rgb), 0.92);
+}
+
+.railMeta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(134, 142, 150, 0.95);
+  white-space: nowrap;
+}
+
+/*
+ * Bezel ticks: four short graduation marks at the rail's trailing edge, the way
+ * a physical instrument bezel is scored. Purely material — carries no data, so
+ * it is drawn from a gradient and costs nothing. This is the "texture" the
+ * paneling needs; it lives on chrome and never over a value.
+ */
+.railTicks {
+  flex-shrink: 0;
+  width: 15px;
+  height: 7px;
+  margin-left: auto;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.34) 0 1px,
+    transparent 1px 5px
+  );
+  opacity: 0.75;
+}
+
+.railMeta + .railTicks {
+  margin-left: 0;
+}
+
+.accented .railTicks {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(var(--accent-rgb), 0.42) 0 1px,
+    transparent 1px 5px
+  );
+}
+
+/* ---------- Body ---------- */
+
+.body {
+  padding: 6px 7px;
+}
+
+.bodyCompact {
+  padding: 4px 5px;
+}
+
+.bodyFlush {
+  padding: 0;
+}
+
+/* ---------- Reticle corner brackets ---------- */
+
+.bracket {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--panel-bracket);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bracketTopLeft {
+  top: 3px;
+  left: 3px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.bracketBottomLeft {
+  bottom: 3px;
+  left: 3px;
+  border-right: none;
+  border-top: none;
+}
+
+.accented .bracket {
+  border-color: rgba(var(--accent-rgb), 0.3);
+}

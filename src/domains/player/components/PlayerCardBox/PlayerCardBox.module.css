@@ -66,6 +66,33 @@
   box-shadow: var(--player-card-box-shadow);
 }
 
+/*
+ * The card is a panel and the modules inside it are subpanels. The bevel gives
+ * the ground the same milled edge the plates have, so the whole player area
+ * reads as one enclosure rather than parts scattered on a black field.
+ */
+.paperPanel {
+  box-shadow: var(--machined-bevel), var(--player-card-box-shadow, none);
+}
+
+/*
+ * Player identity key. A full colored border around the card shouts, and with
+ * eight cards stacked it turns the column into a stack of highlighter outlines.
+ * A short band notched into the top edge identifies the player just as fast and
+ * lets the card keep the neutral chrome everything else uses.
+ */
+.colorBand {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  width: 36px;
+  height: 3px;
+  z-index: 2;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  pointer-events: none;
+}
+
 .clipInner {
   position: relative;
   overflow: hidden;

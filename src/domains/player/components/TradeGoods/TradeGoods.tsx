@@ -8,7 +8,13 @@ type Props = {
 
 export function TradeGoods({ tg }: Props) {
   return (
-    <Chip accent="yellow" leftIconSrc="/tg.png" leftIconSize={18} py={4}>
+    <Chip
+      accent="yellow"
+      leftIconSrc="/tg.png"
+      leftIconSize={18}
+      py={4}
+      className={classes.chip}
+    >
       <Text
         ff="monospace"
         fw={800}

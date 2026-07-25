@@ -1,8 +1,7 @@
-import { Box, Image, Group, Text, Flex, Stack } from "@mantine/core";
-import { ReactNode } from "react";
+import { Box, Image, Text } from "@mantine/core";
+import { ReactNode, type KeyboardEventHandler } from "react";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { Chip } from "@/shared/ui/primitives/Chip";
 import cx from "clsx";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
@@ -22,6 +21,10 @@ type BaseCardProps = {
   upgradeFactions?: string[];
 };
 
+/**
+ * A unit bay: a milled pocket holding the sprite, with the reinforcement count
+ * seated in a recessed trough along the bottom edge.
+ */
 export function BaseCard({
   children,
   onClick,
@@ -42,43 +45,57 @@ export function BaseCard({
     !locked &&
     reinforcements !== undefined &&
     totalCapacity !== undefined;
+  const clickable = onClick !== undefined && !locked;
+
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+    if (!clickable) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    onClick?.();
+  };
 
   return (
-    <Chip
-      accent="blue"
+    <Box
       className={cx(
-        styles.unitCardShape,
-        isUpgraded ? styles.upgraded : styles.standard,
+        styles.bay,
+        isUpgraded && styles.lit,
         enableAnimations && styles.animated,
         locked && styles.locked,
         compact && styles.compactCard,
-        className,
+        className
       )}
-      onClick={onClick}
-      px={0}
-      py={0}
+      onClick={clickable ? onClick : undefined}
+      onKeyDown={handleKeyDown}
+      role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
     >
-      {isUpgraded && (
-        <>
-          <Box className={styles.glassySheen} />
-          <Box className={styles.innerGlow} />
-        </>
-      )}
-      <Stack gap={0} align="center" w="100%">
-        {!upgradeFactions?.length && (
-          <FactionBadge faction={faction} show={isFaction && !!faction} />
+      <div className={styles.bayInner}>
+        <div className={styles.bayField}>
+          {!upgradeFactions?.length && (
+            <FactionBadge faction={faction} show={isFaction && !!faction} />
+          )}
+          <UpgradeFactionBadges factions={upgradeFactions} />
+          {children}
+        </div>
+        {!compact && locked && lockedLabel && (
+          <div className={styles.trough}>
+            <Text className={styles.lockedText}>{lockedLabel}</Text>
+          </div>
         )}
-        <UpgradeFactionBadges factions={upgradeFactions} />
-        <Flex className={styles.imageContainer}>{children}</Flex>
-        {!compact && locked && <LockedLabel label={lockedLabel} />}
         {showReinforcements && (
-          <ReinforcementsDisplay
-            reinforcements={reinforcements!}
-            totalCapacity={totalCapacity!}
-          />
+          <div className={styles.trough}>
+            <Text
+              className={
+                reinforcements === 0 ? styles.countTextZero : styles.countText
+              }
+            >
+              {reinforcements}
+            </Text>
+            <Text className={styles.maxCountText}>/{totalCapacity}</Text>
+          </div>
         )}
-      </Stack>
-    </Chip>
+      </div>
+    </Box>
   );
 }
 
@@ -105,7 +122,7 @@ function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
         <Box
           key={faction}
           className={styles.upgradeFactionBadge}
-          style={{ right: index * 20 }}
+          style={{ right: index * 16 }}
         >
           <Image
             {...lowPriorityImageProps}
@@ -115,44 +132,5 @@ function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
         </Box>
       ))}
     </Box>
-  );
-}
-
-function LockedLabel({ label }: { label: string }) {
-  return (
-    <div className={styles.infoStack}>
-      <Group className={styles.mainGroup}>
-        <Text className={styles.lockedText}>{label}</Text>
-      </Group>
-    </div>
-  );
-}
-
-function ReinforcementsDisplay({
-  reinforcements,
-  totalCapacity,
-}: {
-  reinforcements: number;
-  totalCapacity: number;
-}) {
-  return (
-    <div className={styles.infoStack}>
-      <Group
-        className={cx(
-          styles.mainGroup,
-          styles.reinforcementGroup,
-          styles.countGroup,
-        )}
-      >
-        <Text
-          className={
-            reinforcements === 0 ? styles.countTextZero : styles.countText
-          }
-        >
-          {reinforcements}
-        </Text>
-        <Text className={styles.maxCountText}>/{totalCapacity}</Text>
-      </Group>
-    </div>
   );
 }

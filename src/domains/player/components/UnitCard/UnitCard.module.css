@@ -1,116 +1,210 @@
+/*
+ * Unit bays.
+ *
+ * A unit is a slot in a reinforcement rack, so it is drawn as a bay: a milled
+ * pocket holding the sprite, with the count seated in a recessed trough along
+ * the bottom edge. The cut corner and the trough are what make it read as
+ * hardware instead of a rounded web card; the depth is a one-pixel bevel, not
+ * a drop shadow.
+ */
 
-
-
-/* Rounded token shape — units feel like coins/tokens */
-.unitCardShape {
-  border-radius: 10px;
+.bay {
+  --bay-chamfer: var(--machined-chamfer-sm);
+  --bay-frame: var(--panel-hairline);
+  position: relative;
+  padding: 1px;
+  background: var(--bay-frame);
+  cursor: pointer;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--bay-chamfer)),
+    calc(100% - var(--bay-chamfer)) 100%,
+    0 100%
+  );
 }
 
+.bayInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: var(--machined-bevel);
+  background: var(--panel-field-bg);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--bay-chamfer)),
+    calc(100% - var(--bay-chamfer)) 100%,
+    0 100%
+  );
+}
+
+/* The sprite sits in a lit pocket: a soft vignette centred slightly high, so
+   the silhouette reads against the field without needing a glow. */
+.bayField {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 3px 4px 2px;
+  background: radial-gradient(
+    72% 58% at 50% 36%,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 72%
+  );
+}
+
+.compactCard .bayField {
+  min-height: 28px;
+}
+
+/* Count trough: recessed channel along the bottom edge. */
+.trough {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 4px 3px;
+  background: var(--trough-bg);
+  border-top: 1px solid var(--panel-separator);
+  box-shadow: var(--trough-inset);
+  font-family: var(--mantine-font-family-monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Illuminated bay: an upgraded unit is lit from within. The frame takes the
+   accent, the field gains a tint and a brighter top light. No outer halo. */
+.lit {
+  --bay-frame: var(--bay-lit-edge);
+}
+
+.lit .bayInner {
+  background: linear-gradient(
+      180deg,
+      var(--bay-lit-tint) 0%,
+      rgba(59, 130, 246, 0.07) 100%
+    ),
+    var(--panel-field-bg);
+  box-shadow:
+    inset 0 1px 0 var(--bay-lit-light),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.lit .bayField {
+  background: radial-gradient(
+    72% 58% at 50% 36%,
+    rgba(147, 197, 253, 0.13) 0%,
+    transparent 74%
+  );
+}
+
+.lit .trough {
+  border-top-color: rgba(96, 165, 250, 0.2);
+}
+
+/* Interaction: the frame brightens and the top light rises. Nothing moves,
+   because a 12-cell rack that jitters on hover is noise, not feedback. */
+.animated .bayInner,
 .animated {
-  transition: all 0.2s ease;
+  transition: background 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animated:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25), 0 0 6px rgba(255, 255, 255, 0.08);
+  --bay-frame: var(--panel-hairline-strong);
 }
 
-.upgraded {
-  background: rgba(59, 130, 246, 0.28) !important;
-  border: 1px solid rgba(59, 130, 246, 0.8) !important;
-  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.45), 0 10px 26px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+.animated:hover .bayInner {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
-.animated.upgraded:hover {
-  background: rgba(59, 130, 246, 0.22) !important;
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35), 0 0 10px rgba(147, 197, 253, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+.animated.lit:hover {
+  --bay-frame: rgba(96, 165, 250, 0.52);
 }
 
-.standard {
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+.animated.lit:hover .bayInner {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
-.animated.standard:hover {
-  background: rgba(15, 23, 42, 0.68);
-  box-shadow: 0 3px 12px rgba(107, 114, 128, 0.18), 0 0 6px rgba(156, 163, 175, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+.bay:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 1px;
 }
 
+/*
+ * An unavailable unit is empty capacity, so it uses the same socket language as
+ * an unresearched tech: pressed in, desaturated, no trough.
+ */
 .locked {
-  filter: grayscale(1) brightness(0.8);
+  --bay-frame: var(--socket-border);
   cursor: default;
 }
 
-.animated.locked:hover {
-  transform: none;
-  box-shadow: none;
+.locked .bayInner {
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset);
 }
 
-.compactCard {
-  min-height: unset;
-  padding-bottom: 2px;
+.locked .bayField {
+  background: none;
+  filter: grayscale(1) brightness(0.72);
 }
 
-.glassySheen {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.08) 100%);
-}
-
-.innerGlow {
-  background: radial-gradient(80% 60% at 50% 40%, rgba(147, 197, 253, 0.18) 0%, transparent 70%);
-}
-
-.glassySheen,
-.innerGlow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
+/* ---------- Badges ---------- */
 
 .factionBadge {
   position: absolute;
   top: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.55);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
 .factionIcon {
-  width: 20px;
-  height: 20px;
+  width: 13px;
+  height: 13px;
+  margin: -3px -3px 0 0;
 }
 
 .upgradeFactionBadgesContainer {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: 1px;
+  right: 1px;
   z-index: 2;
 }
 
 .upgradeFactionBadge {
   position: absolute;
   top: 0;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.95) 0%, rgba(124, 58, 237, 0.95) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  padding: 2px;
-  box-shadow:
-    0 0 8px rgba(168, 85, 247, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(2, 6, 23, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.28);
 }
 
 .upgradeFactionIcon {
-  width: 16px;
-  height: 16px;
+  width: 11px;
+  height: 11px;
   display: block;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
 }
 
-.imageContainer {
-  justify-content: center;
-  align-items: center;
-  min-height: 34px;
-}
+/* ---------- Sprites ---------- */
 
 .unitImage {
   height: 26px;
@@ -123,7 +217,7 @@
 .unitImage,
 .unitImageCompact {
   width: auto;
-  padding-top: 2px;
+  display: block;
 }
 
 .unitImage:global(.unit-sprite),
@@ -139,29 +233,10 @@
   height: 24px !important;
 }
 
-.infoStack {
-  gap: 4px;
-  align-items: center;
-}
-
-.mainGroup {
-  gap: 4px;
-  justify-content: center;
-  align-items: baseline;
-}
-
-.reinforcementGroup {
-  gap: 2px;
-  align-items: baseline;
-}
-
-.countGroup {
-  gap: 2px;
-  align-items: baseline;
-}
+/* ---------- Numerals ---------- */
 
 .countText {
-  color: white;
+  color: var(--mantine-color-gray-1);
 }
 
 .countTextZero {
@@ -171,34 +246,39 @@
 .countText,
 .countTextZero {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-variant-numeric: tabular-nums;
 }
 
 .maxCountText {
-  color: var(--mantine-color-gray-5);
+  color: var(--mantine-color-gray-6);
   font-weight: 500;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-variant-numeric: tabular-nums;
 }
 
 .lockedText {
-  color: var(--mantine-color-gray-5);
+  color: var(--mantine-color-gray-6);
   font-weight: 600;
-  font-size: 10px;
+  font-size: 9px;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.08em;
 }
 
 .popoverDropdown {
   padding: 0;
 }
 
-/* Condensed "tic-tac-toe" units grid: 3 fixed rows flowing into columns,
-   hairline dividers drawn by the container background showing through gaps */
+/* ---------- Condensed rack ----------
+ *
+ * The tic-tac-toe grid used in sidebars. Same bay language at a smaller scale:
+ * the container background shows through 1px gaps to draw the rack's seams, so
+ * the cells share one continuous frame instead of each carrying its own border.
+ */
+
 .denseGrid {
   display: grid;
   grid-template-rows: repeat(3, 52px);
@@ -207,62 +287,115 @@
   padding: 1px;
   background: var(--panel-hairline-strong);
   width: max-content;
-  border-radius: var(--panel-radius);
-  overflow: hidden;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--machined-chamfer-sm)),
+    calc(100% - var(--machined-chamfer-sm)) 100%,
+    0 100%
+  );
 }
 
 .denseCell {
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  min-width: 46px;
+  height: 100%;
+  background: var(--panel-field-bg);
+  box-shadow: var(--machined-bevel);
+  cursor: pointer;
+  transition: box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Lit pocket the sprite sits in, matching the standard bay's vignette. */
+.denseCellField {
+  display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  min-width: 46px;
-  padding: 5px 5px 4px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
-    var(--panel-field-bg);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.045),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
-  cursor: pointer;
+  padding: 5px 5px 3px;
+  background: radial-gradient(
+    74% 62% at 50% 38%,
+    rgba(255, 255, 255, 0.055) 0%,
+    transparent 74%
+  );
+}
+
+/* The count sits in a recessed channel along the cell's bottom edge, so the
+   rack reads as hardware with seated readouts rather than text under a picture. */
+.denseTrough {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 3px 3px;
+  background: var(--trough-bg);
+  border-top: 1px solid var(--panel-separator);
+  box-shadow: var(--trough-inset);
 }
 
 .denseCell:hover {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 42%),
-    rgb(24, 32, 52);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
-/* Upgraded units: blue-tinted cell instead of an overlay bar */
+.denseCell:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: -2px;
+}
+
+/* An upgraded unit's bay is lit from within: the field takes the tint and a
+   brighter top light, the trough edge picks up the accent. No outer halo. */
 .denseCellUpgraded {
-  background:
-    linear-gradient(
+  background: linear-gradient(
       180deg,
-      rgba(var(--gd-blue), 0.22) 0%,
-      rgba(var(--gd-blue), 0.17) 100%
+      var(--bay-lit-tint) 0%,
+      rgba(59, 130, 246, 0.08) 100%
     ),
     var(--panel-field-bg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    inset 0 0 0 1px rgba(var(--gd-blue), 0.16),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--bay-lit-light),
+    inset 0 0 0 1px rgba(96, 165, 250, 0.16),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.denseCellUpgraded .denseCellField {
+  background: radial-gradient(
+    74% 62% at 50% 38%,
+    rgba(147, 197, 253, 0.14) 0%,
+    transparent 76%
+  );
+}
+
+.denseCellUpgraded .denseTrough {
+  border-top-color: rgba(96, 165, 250, 0.2);
 }
 
 .denseCellUpgraded:hover {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(var(--gd-blue), 0.28) 0%,
-      rgba(var(--gd-blue), 0.21) 100%
-    ),
-    var(--panel-field-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 0 0 1px rgba(96, 165, 250, 0.26),
+    inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
+/* Unavailable to this faction: empty capacity, so it uses the socket language
+   shared with unresearched tech. */
 .denseCellDimmed {
-  opacity: 0.35;
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset);
   cursor: default;
+}
+
+.denseCellDimmed .denseCellField {
+  background: none;
+}
+
+.denseCellDimmed .denseUnitImage {
+  filter: grayscale(1) brightness(0.72);
+  opacity: 0.55;
 }
 
 .denseUnitImage {
@@ -289,6 +422,7 @@
 
 .denseCellCount {
   font-family: var(--mantine-font-family-monospace);
+  font-variant-numeric: tabular-nums;
 }
 
 .denseCellCount.countText,
@@ -299,7 +433,7 @@
 .denseCellCount[data-total]::after {
   content: "/" attr(data-total);
   font-size: 9px;
-  color: var(--mantine-color-gray-5);
+  color: var(--mantine-color-gray-6);
   font-weight: 500;
   margin-left: 1px;
 }
@@ -310,21 +444,22 @@
 
 .denseFactionBadge {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 0;
+  right: 0;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
+  width: 15px;
+  height: 15px;
   background: rgba(0, 0, 0, 0.55);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
 .denseFactionIcon {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
+  margin: -2px -2px 0 0;
 }
 
 .denseUpgradeFactionBadgesContainer {
@@ -343,15 +478,20 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(2, 6, 23, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.26);
 }
 
 .denseUpgradeFactionIcon {
   display: block;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
 }
 
-.denseCell {
-  height: 100%;
+@media (prefers-reduced-motion: reduce) {
+  .animated,
+  .animated .bayInner,
+  .denseCell {
+    transition: none;
+  }
 }

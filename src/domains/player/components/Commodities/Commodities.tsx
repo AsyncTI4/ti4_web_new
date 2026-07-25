@@ -14,6 +14,7 @@ export function Commodities({ commodities, commoditiesTotal }: Props) {
       leftIconSrc="/comms.png"
       leftIconSize={18}
       py={6}
+      className={classes.chip}
     >
       <Group gap={2} align="baseline" ff="monospace">
         <Text fw={800} fz={18} lh={1} c="white" className={classes.value}>

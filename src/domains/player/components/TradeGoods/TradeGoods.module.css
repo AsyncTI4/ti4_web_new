@@ -1,3 +1,14 @@
+/*
+ * Stores plate. A pill is the most web-looking shape in the player area, so
+ * trade goods are squared to the panel radius and given the machined bevel —
+ * the chip reads as a plate seated on the deck rather than a tag laid on it.
+ */
+.chip {
+  border-radius: var(--panel-radius);
+  box-shadow: var(--machined-bevel);
+}
+
 .value {
+  font-variant-numeric: tabular-nums;
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
 }

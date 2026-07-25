@@ -44,30 +44,42 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
         dimmed && styles.denseCellDimmed
       )}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (!onClick) return;
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onClick();
+      }}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
     >
       {!upgradeFactions?.length && faction && (
         <FactionBadge faction={faction} className={styles.denseFactionBadge} />
       )}
       <UpgradeFactionBadges factions={upgradeFactions} />
-      {image}
+      <span className={styles.denseCellField}>{image}</span>
       {reinforcements !== undefined && (
-        <Text
-          fz={10}
-          lh={1}
-          fw={700}
-          className={cx(
-            styles.denseCellCount,
-            reinforcements === 0 ? styles.countTextZero : styles.countText,
-          )}
-          data-total={totalCapacity}
-        >
-          {reinforcements}
-        </Text>
+        <span className={styles.denseTrough}>
+          <Text
+            fz={10}
+            lh={1}
+            fw={700}
+            className={cx(
+              styles.denseCellCount,
+              reinforcements === 0 ? styles.countTextZero : styles.countText,
+            )}
+            data-total={totalCapacity}
+          >
+            {reinforcements}
+          </Text>
+        </span>
       )}
       {label && (
-        <Text fz={8} lh={1} c="gray.5" tt="uppercase">
-          {label}
-        </Text>
+        <span className={styles.denseTrough}>
+          <Text fz={8} lh={1} c="gray.6" tt="uppercase">
+            {label}
+          </Text>
+        </span>
       )}
     </Box>
   );

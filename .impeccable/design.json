@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-25T21:04:08.018699+00:00",
+  "title": "Design System: AsyncTI4",
+  "extensions": {
+    "colorMeta": {
+      "deep-space": {
+        "role": "neutral",
+        "displayName": "Deep Space",
+        "canonical": "#060a13",
+        "tonalRamp": [
+          "#010309",
+          "#020617",
+          "#060a13",
+          "#0a111f",
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569"
+        ]
+      },
+      "deep-space-surface": {
+        "role": "neutral",
+        "displayName": "Deep Space Surface",
+        "canonical": "#020617",
+        "tonalRamp": [
+          "#010309",
+          "#020617",
+          "#060a13",
+          "#0a111f",
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569"
+        ]
+      },
+      "deep-space-raised": {
+        "role": "neutral",
+        "displayName": "Deep Space Raised",
+        "canonical": "#0a111f",
+        "tonalRamp": [
+          "#020617",
+          "#060a13",
+          "#0a111f",
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#64748b"
+        ]
+      },
+      "hull-slate": {
+        "role": "secondary",
+        "displayName": "Hull Slate",
+        "canonical": "#94a3b8",
+        "tonalRamp": [
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#64748b",
+          "#94a3b8",
+          "#cbd5e1",
+          "#e2e8f0"
+        ]
+      },
+      "accent-blue": {
+        "role": "primary",
+        "displayName": "Tactical Blue",
+        "canonical": "#3b82f6",
+        "tonalRamp": [
+          "#1e3a8a",
+          "#1e40af",
+          "#1d4ed8",
+          "#2563eb",
+          "#3b82f6",
+          "#60a5fa",
+          "#93c5fd",
+          "#bfdbfe"
+        ]
+      },
+      "accent-blue-deep": {
+        "role": "primary",
+        "displayName": "Tactical Blue Deep",
+        "canonical": "#2563eb",
+        "tonalRamp": [
+          "#1e3a8a",
+          "#1e40af",
+          "#1d4ed8",
+          "#2563eb",
+          "#3b82f6",
+          "#60a5fa",
+          "#93c5fd",
+          "#bfdbfe"
+        ]
+      },
+      "accent-blue-light": {
+        "role": "primary",
+        "displayName": "Tactical Blue Light",
+        "canonical": "#93c5fd",
+        "tonalRamp": [
+          "#1e3a8a",
+          "#1e40af",
+          "#1d4ed8",
+          "#2563eb",
+          "#3b82f6",
+          "#60a5fa",
+          "#93c5fd",
+          "#bfdbfe"
+        ]
+      },
+      "ink-bright": {
+        "role": "neutral",
+        "displayName": "Ink Bright",
+        "canonical": "#f1f3f5",
+        "tonalRamp": [
+          "#212529",
+          "#343a40",
+          "#495057",
+          "#868e96",
+          "#adb5bd",
+          "#ced4da",
+          "#dee2e6",
+          "#f1f3f5"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#adb5bd",
+        "tonalRamp": [
+          "#212529",
+          "#343a40",
+          "#495057",
+          "#868e96",
+          "#adb5bd",
+          "#ced4da",
+          "#dee2e6",
+          "#f1f3f5"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "#868e96",
+        "tonalRamp": [
+          "#212529",
+          "#343a40",
+          "#495057",
+          "#868e96",
+          "#adb5bd",
+          "#ced4da",
+          "#dee2e6",
+          "#f1f3f5"
+        ]
+      },
+      "signal-red": {
+        "role": "tertiary",
+        "displayName": "Signal Red",
+        "canonical": "#ef4444",
+        "tonalRamp": [
+          "#7f1d1d",
+          "#991b1b",
+          "#b91c1c",
+          "#dc2626",
+          "#ef4444",
+          "#f87171",
+          "#fca5a5",
+          "#fecaca"
+        ]
+      },
+      "signal-green": {
+        "role": "tertiary",
+        "displayName": "Signal Green",
+        "canonical": "#22c55e",
+        "tonalRamp": [
+          "#14532d",
+          "#166534",
+          "#15803d",
+          "#16a34a",
+          "#22c55e",
+          "#4ade80",
+          "#86efac",
+          "#bbf7d0"
+        ]
+      },
+      "signal-cyan": {
+        "role": "tertiary",
+        "displayName": "Signal Cyan",
+        "canonical": "#06b6d4",
+        "tonalRamp": [
+          "#164e63",
+          "#155e75",
+          "#0e7490",
+          "#0891b2",
+          "#06b6d4",
+          "#22d3ee",
+          "#67e8f9",
+          "#a5f3fc"
+        ]
+      },
+      "signal-orange": {
+        "role": "tertiary",
+        "displayName": "Signal Orange",
+        "canonical": "#f97316",
+        "tonalRamp": [
+          "#7c2d12",
+          "#9a3412",
+          "#c2410c",
+          "#ea580c",
+          "#f97316",
+          "#fb923c",
+          "#fdba74",
+          "#fed7aa"
+        ]
+      },
+      "signal-yellow": {
+        "role": "tertiary",
+        "displayName": "Signal Yellow",
+        "canonical": "#eab308",
+        "tonalRamp": [
+          "#713f12",
+          "#854d0e",
+          "#a16207",
+          "#ca8a04",
+          "#eab308",
+          "#facc15",
+          "#fde047",
+          "#fef08a"
+        ]
+      },
+      "signal-teal": {
+        "role": "tertiary",
+        "displayName": "Signal Teal",
+        "canonical": "#14b8a6",
+        "tonalRamp": [
+          "#134e4a",
+          "#115e59",
+          "#0f766e",
+          "#0d9488",
+          "#14b8a6",
+          "#2dd4bf",
+          "#5eead4",
+          "#99f6e4"
+        ]
+      },
+      "signal-purple": {
+        "role": "tertiary",
+        "displayName": "Signal Purple",
+        "canonical": "#9333ea",
+        "tonalRamp": [
+          "#581c87",
+          "#6b21a8",
+          "#7e22ce",
+          "#9333ea",
+          "#a855f7",
+          "#c084fc",
+          "#d8b4fe",
+          "#e9d5ff"
+        ]
+      },
+      "rank-gold": {
+        "role": "tertiary",
+        "displayName": "Rank Gold",
+        "canonical": "#ffd700",
+        "tonalRamp": [
+          "#4d4000",
+          "#6b5900",
+          "#8f7700",
+          "#b39400",
+          "#d6b100",
+          "#ffd700",
+          "#ffe555",
+          "#fff2aa"
+        ]
+      },
+      "rank-silver": {
+        "role": "tertiary",
+        "displayName": "Rank Silver",
+        "canonical": "#c0c0c0",
+        "tonalRamp": [
+          "#3a3a3a",
+          "#525252",
+          "#6b6b6b",
+          "#858585",
+          "#a3a3a3",
+          "#c0c0c0",
+          "#d9d9d9",
+          "#ededed"
+        ]
+      },
+      "rank-bronze": {
+        "role": "tertiary",
+        "displayName": "Rank Bronze",
+        "canonical": "#cd7f32",
+        "tonalRamp": [
+          "#3d2610",
+          "#54341a",
+          "#6f4622",
+          "#8c592a",
+          "#ab6c2d",
+          "#cd7f32",
+          "#dfa268",
+          "#eec49b"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Landing page hero only. 70px desktop, 50px below the md breakpoint. Never appears in product surfaces."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page and section titles in the dashboard and games list."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel and modal titles. Uppercase with 0.09em tracking, naming a container — never a section kicker."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose in modals, changelogs and descriptions. Capped at 65-75ch."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Every numeral a player compares to another numeral: scores, resources, influence, counts, distances."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels inside panels, surface watermarks, badge text. Uppercase, 700 weight."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "In-map unit counts and token annotations, where the tile bounds legibility."
+      }
+    },
+    "shadows": [
+      {
+        "name": "machined-bevel",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.055), inset 0 -1px 0 rgba(0,0,0,0.34)",
+        "purpose": "On every plate, bay and stores chip. One pixel of top light over one of bottom shade — the system's entire sense of material thickness."
+      },
+      {
+        "name": "socket-inset",
+        "value": "inset 0 1px 2px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.022), inset 0 0 0 1px rgba(148,163,184,0.09)",
+        "purpose": "Empty capacity: an unresearched tech, a unit unavailable to the faction, a sealed secret. Pressed in, with walls."
+      },
+      {
+        "name": "trough-inset",
+        "value": "inset 0 2px 3px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)",
+        "purpose": "Recessed channel seating a numeric readout. The bottom highlight is what sells the recess."
+      },
+      {
+        "name": "modal-lift",
+        "value": "0 24px 64px rgba(0,0,0,0.6), 0 6px 20px rgba(0,0,0,0.45)",
+        "purpose": "Modal content. The deepest lift in the system."
+      },
+      {
+        "name": "drawer-lift",
+        "value": "-16px 0 48px rgba(0,0,0,0.55)",
+        "purpose": "Side drawers, cast inward from the screen edge."
+      },
+      {
+        "name": "dropdown-lift",
+        "value": "0 10px 40px rgba(0,0,0,0.5)",
+        "purpose": "Header menus and dropdown panels."
+      },
+      {
+        "name": "tooltip-lift",
+        "value": "0 8px 24px rgba(0,0,0,0.5)",
+        "purpose": "Tooltips and hover cards."
+      },
+      {
+        "name": "control-lift",
+        "value": "0 2px 8px rgba(0,0,0,0.3)",
+        "purpose": "Small floating controls at rest, such as panel toggles."
+      },
+      {
+        "name": "control-lift-hover",
+        "value": "0 4px 12px rgba(0,0,0,0.4)",
+        "purpose": "The same controls on hover."
+      },
+      {
+        "name": "state-glow-green",
+        "value": "0 0 8px rgba(34,197,94,0.6), 0 0 4px rgba(34,197,94,0.4)",
+        "purpose": "Active-player indicator. Glow reports state and is never applied to a surface at rest."
+      },
+      {
+        "name": "state-glow-blue",
+        "value": "0 0 8px rgba(59,130,246,0.35)",
+        "purpose": "At-threshold progress badges."
+      },
+      {
+        "name": "bay-lit",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.085) over rgba(59,130,246,0.16) tint",
+        "purpose": "An upgraded unit bay lit from within: tint plus a brighter top light, no outer halo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-instant",
+        "value": "0.12s",
+        "purpose": "Immediate feedback on small controls."
+      },
+      {
+        "name": "duration-default",
+        "value": "0.2s",
+        "purpose": "The system default. Tabs, hovers, most state transitions."
+      },
+      {
+        "name": "duration-chrome",
+        "value": "0.3s",
+        "purpose": "Larger chrome movement such as panel toggles and sidebar collapse."
+      },
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Preferred easing for state changes. Decisive arrival, no overshoot."
+      },
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Neutral easing for symmetric transitions."
+      },
+      {
+        "name": "ease-soft",
+        "value": "cubic-bezier(0.2, 0.85, 0.3, 1)",
+        "purpose": "Gentler arrival for larger surfaces."
+      },
+      {
+        "name": "pulse-active-player",
+        "value": "2s ease-in-out infinite",
+        "purpose": "The only permitted continuous animation on a control: it reports an ongoing condition."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "36em"
+      },
+      {
+        "name": "sm",
+        "value": "48em"
+      },
+      {
+        "name": "md",
+        "value": "62em"
+      },
+      {
+        "name": "lg",
+        "value": "75em"
+      },
+      {
+        "name": "xl",
+        "value": "88em"
+      },
+      {
+        "name": "xl2",
+        "value": "100em"
+      },
+      {
+        "name": "xl3",
+        "value": "120em"
+      },
+      {
+        "name": "xl4",
+        "value": "140em"
+      },
+      {
+        "name": "xl5",
+        "value": "160em"
+      },
+      {
+        "name": "xl6",
+        "value": "180em"
+      },
+      {
+        "name": "xl7",
+        "value": "200em"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Surface",
+      "kind": "card",
+      "refersTo": "surface",
+      "description": "The signature primitive: a translucent panel over the map, framed by four reticle corner brackets with an optional grid pattern and uppercase watermark.",
+      "html": "<div class=\"ds-surface\"><div class=\"ds-surface-pattern\"></div><span class=\"ds-surface-corner ds-surface-corner-tl\"></span><span class=\"ds-surface-corner ds-surface-corner-tr\"></span><span class=\"ds-surface-corner ds-surface-corner-bl\"></span><span class=\"ds-surface-corner ds-surface-corner-br\"></span><div class=\"ds-surface-body\"><div class=\"ds-surface-row\"><span class=\"ds-surface-key\">Resources</span><span class=\"ds-surface-val\">14</span></div><div class=\"ds-surface-row\"><span class=\"ds-surface-key\">Influence</span><span class=\"ds-surface-val\">09</span></div></div><span class=\"ds-surface-label\">Fleet</span></div>",
+      "css": ".ds-surface { position: relative; overflow: hidden; min-width: 220px; padding: 12px; border-radius: 8px; background: linear-gradient(135deg, rgba(2,6,23,0.97) 0%, rgba(10,17,31,0.94) 100%); border: 1px solid rgba(148,163,184,0.28); } .ds-surface-pattern { position: absolute; inset: 0; pointer-events: none; opacity: 0.5; background-image: linear-gradient(rgba(148,163,184,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.03) 1px, transparent 1px); background-size: 20px 20px; } .ds-surface-corner { position: absolute; width: 20px; height: 20px; border: 2px solid rgba(59,130,246,0.18); pointer-events: none; } .ds-surface-corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; border-radius: 4px 0 0 0; } .ds-surface-corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; border-radius: 0 4px 0 0; } .ds-surface-corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; border-radius: 0 0 0 4px; } .ds-surface-corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; border-radius: 0 0 4px 0; } .ds-surface-body { position: relative; padding: 14px 18px 26px; display: flex; flex-direction: column; gap: 6px; } .ds-surface-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; } .ds-surface-key { font-family: Slider, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #868e96; } .ds-surface-val { font-family: 'Space Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; color: #f1f3f5; } .ds-surface-label { position: absolute; bottom: 15px; right: 20px; font-family: Slider, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(148,163,184,0.35); pointer-events: none; }"
+    },
+    {
+      "name": "Data Panel Field",
+      "kind": "card",
+      "refersTo": "panel-field",
+      "description": "The flat data container: 3px radius, vertical tonal gradient, hairline frame, no drop shadow. Internal rows separate with the 10% separator hairline.",
+      "html": "<div class=\"ds-panel\"><div class=\"ds-panel-title\">Laws in Play</div><div class=\"ds-panel-row\"><span>Anti-Intellectual Revolution</span><span class=\"ds-panel-num\">R3</span></div><div class=\"ds-panel-row\"><span>Fleet Regulations</span><span class=\"ds-panel-num\">R5</span></div></div>",
+      "css": ".ds-panel { min-width: 260px; border-radius: 3px; background: linear-gradient(180deg, rgba(6,11,24,0.92), rgba(2,6,23,0.96)); border: 1px solid rgba(148,163,184,0.14); } .ds-panel-title { padding: 8px 10px; font-family: Slider, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #adb5bd; border-bottom: 1px solid rgba(148,163,184,0.14); } .ds-panel-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 10px; font-family: var(--mantine-font-family, system-ui), sans-serif; font-size: 12px; color: #adb5bd; } .ds-panel-row + .ds-panel-row { border-top: 1px solid rgba(148,163,184,0.1); } .ds-panel-num { font-family: 'Space Mono', ui-monospace, monospace; font-size: 11px; color: #868e96; }"
+    },
+    {
+      "name": "Faction Tab Strip",
+      "kind": "nav",
+      "refersTo": "faction-tab",
+      "description": "44x36px tabs butted edge-to-edge into one machined strip; only the outer corners round. Pinned takes a blue gradient; the active player carries a pulsing green dot.",
+      "html": "<div class=\"ds-tabstrip\"><button class=\"ds-tab\">HAC</button><button class=\"ds-tab ds-tab-pinned\">SOL<span class=\"ds-tab-dot\"></span></button><button class=\"ds-tab\">LET</button><button class=\"ds-tab\">JOL</button></div>",
+      "css": ".ds-tabstrip { display: flex; padding: 8px 12px; background: linear-gradient(135deg, rgba(2,6,23,1) 0%, rgba(10,17,31,1) 100%); } .ds-tab { position: relative; width: 44px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(148,163,184,0.25); border-radius: 0; background: linear-gradient(135deg, rgba(2,6,23,0.97) 0%, rgba(10,17,31,0.94) 100%); color: #adb5bd; font-family: Slider, system-ui, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; overflow: hidden; transition: background 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s cubic-bezier(0.16,1,0.3,1); } .ds-tab:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; } .ds-tab:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; } .ds-tab + .ds-tab { border-left: none; } .ds-tab:hover { background: rgba(12,19,34,0.88); border-color: rgba(59,130,246,0.65); color: #f1f3f5; } .ds-tab:focus-visible { outline: 2px solid #3b82f6; outline-offset: 1px; z-index: 1; } .ds-tab-pinned { background: linear-gradient(135deg, rgba(59,130,246,0.45) 0%, rgba(30,64,175,0.35) 50%, rgba(2,6,23,0.94) 100%); color: #f1f3f5; box-shadow: 0 4px 14px rgba(59,130,246,0.25), inset 0 1px 0 rgba(255,255,255,0.12); } .ds-tab-dot { position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, rgba(34,197,94,0.9) 0%, rgba(22,163,74,1) 100%); box-shadow: 0 0 8px rgba(34,197,94,0.6), 0 0 4px rgba(34,197,94,0.4), inset 0 1px 0 rgba(255,255,255,0.3); animation: ds-pulse 2s ease-in-out infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } } @media (prefers-reduced-motion: reduce) { .ds-tab-dot { animation: none; opacity: 1; } }"
+    },
+    {
+      "name": "Header Tab",
+      "kind": "nav",
+      "refersTo": "header-tab",
+      "description": "Top-bar navigation chip. 4px radius, translucent Deep Space with a Tactical Blue hairline; hover and active fill with Tactical Blue Deep.",
+      "html": "<div class=\"ds-headernav\"><button class=\"ds-headertab ds-headertab-active\">Map</button><button class=\"ds-headertab\">Objectives</button><button class=\"ds-headertab\">Log</button></div>",
+      "css": ".ds-headernav { display: flex; gap: 6px; padding: 8px 12px; background: linear-gradient(90deg, rgba(2,6,23,0.97) 0%, rgba(10,17,31,0.94) 100%); border-bottom: 1px solid rgba(59,130,246,0.22); } .ds-headertab { padding: 4px 10px; border-radius: 4px; background: rgba(2,6,23,0.55); border: 1px solid rgba(59,130,246,0.4); color: #adb5bd; font-family: Slider, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s cubic-bezier(0.16,1,0.3,1), color 0.2s cubic-bezier(0.16,1,0.3,1); } .ds-headertab:hover { background: rgba(37,99,235,0.38); border-color: rgba(59,130,246,0.6); color: #f1f3f5; } .ds-headertab:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; } .ds-headertab-active { background: rgba(37,99,235,0.4); border-color: rgba(59,130,246,0.7); color: #f1f3f5; }"
+    },
+    {
+      "name": "Panel Toggle",
+      "kind": "button",
+      "refersTo": "panel-toggle",
+      "description": "36x36px floating control with a half-capsule shape pointing at the panel it opens. Hover is a small material shift, never a lift-and-bounce.",
+      "html": "<button class=\"ds-toggle\" aria-label=\"Collapse left panel\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m15 18-6-6 6-6\"/></svg></button>",
+      "css": ".ds-toggle { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 0 50% 50% 0; background: linear-gradient(135deg, rgba(14,24,40,0.95) 0%, rgba(30,41,59,0.9) 100%); border: 1px solid #2c2e33; color: #dee2e6; cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: background 0.3s cubic-bezier(0.16,1,0.3,1), transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-toggle svg { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); } .ds-toggle:hover { background: linear-gradient(135deg, rgba(14,24,40,1) 0%, rgba(30,41,59,0.95) 100%); transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.4); color: #f1f3f5; } .ds-toggle:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; } .ds-toggle:active { transform: scale(1); } @media (prefers-reduced-motion: reduce) { .ds-toggle { transition: background 0.3s, box-shadow 0.3s; } .ds-toggle:hover { transform: none; } }"
+    },
+    {
+      "name": "Signal Chip",
+      "kind": "chip",
+      "refersTo": "faction-tab-pinned",
+      "description": "Category and status chip driven by the signal vocabulary: background at 4-10% alpha, border at 16-30%, and a state glow only when a threshold is met.",
+      "html": "<div class=\"ds-chiprow\"><span class=\"ds-chip ds-chip-orange\">Stage I</span><span class=\"ds-chip ds-chip-red\">Secret</span><span class=\"ds-chip ds-chip-purple\">Law</span><span class=\"ds-chip ds-chip-blue ds-chip-threshold\">3 / 3</span></div>",
+      "css": ".ds-chiprow { display: flex; flex-wrap: wrap; gap: 6px; } .ds-chip { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 4px; font-family: Slider, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: rgba(var(--ds-signal), 0.09); border: 1px solid rgba(var(--ds-signal), 0.26); color: rgb(var(--ds-signal)); } .ds-chip-red { --ds-signal: 239, 68, 68; } .ds-chip-green { --ds-signal: 34, 197, 94; } .ds-chip-blue { --ds-signal: 59, 130, 246; } .ds-chip-orange { --ds-signal: 249, 115, 22; } .ds-chip-yellow { --ds-signal: 234, 179, 8; } .ds-chip-purple { --ds-signal: 147, 51, 234; } .ds-chip-threshold { font-family: 'Space Mono', ui-monospace, monospace; letter-spacing: normal; background: rgba(var(--ds-signal), 0.2); border-color: rgba(var(--ds-signal), 0.5); box-shadow: 0 0 8px rgba(var(--ds-signal), 0.35); color: #f1f3f5; }"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "custom",
+      "refersTo": "overlay-tooltip",
+      "description": "Wired globally through the Mantine theme so all seven themes share one overlay chrome. 4px radius, 12px text, tooltip-lift shadow.",
+      "html": "<div class=\"ds-tooltip\">Dreadnought II &middot; 5 &middot; Sustain Damage</div>",
+      "css": ".ds-tooltip { display: inline-block; padding: 5px 10px; border-radius: 4px; background: linear-gradient(135deg, rgb(2,6,23) 0%, rgb(10,17,31) 100%); border: 1px solid rgba(148,163,184,0.28); color: #e9ecef; font-family: var(--mantine-font-family, system-ui), sans-serif; font-size: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Header search and text entry. Deep Space at 86% with a Tactical Blue hairline; focus steps the border toward full accent and adds a visible ring.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Game ID or player\" />",
+      "css": ".ds-input { width: 220px; padding: 5px 10px; border-radius: 4px; background: rgba(2,6,23,0.86); border: 1px solid rgba(59,130,246,0.45); color: #f1f3f5; font-family: var(--mantine-font-family, system-ui), sans-serif; font-size: 12px; transition: border-color 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1); } .ds-input::placeholder { color: #868e96; } .ds-input:hover { border-color: rgba(59,130,246,0.6); } .ds-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tactical Readout",
+    "overview": "This system is an instrument reporting a battlefield. The galaxy map is the subject; everything else is calibration. Hairlines, bracket corners, monospace numerals and 9-11px uppercase labels are the marks on the instrument's face — they exist to frame and index data, never to dress it. A player opens a game to find out what changed, and the interface's whole job is to let them read the board and get out.\n\nDensity is the operating condition, not a compromise. Type runs from 9px to 14px across most of the product, panels sit at 2-12px padding, and gaps step in 2px increments. That only works because the discipline is absolute: a fixed px scale, one radius vocabulary, one hairline alpha vocabulary, and semantic game colors that never shift meaning. The system fails by becoming undisciplined, not by becoming boring.\n\nIdentity lives in a seven-theme layer (midnighttheme and its blue / gray / red / violet / green siblings, plus vaporwavetheme) built entirely on top of a shared semantic token contract in themeSharedTokens.css. Themes may reinterpret surfaces, borders, ambience and texture. They may never reinterpret what a color means. This system explicitly rejects the generic SaaS dashboard, the neon cyberpunk cliché, the cluttered fan-wiki, and anything over-animated or floaty that delays reading the board.",
+    "keyCharacteristics": [
+      "Hueless graphite ground in the default theme (midnightgraytheme); a near-black blue field in the midnight themes",
+      "Milled plates: a cut corner plus one pixel of top light and bottom shade, never a drop shadow on data",
+      "A three-step depth order — card ground, module field, socket/trough",
+      "Fixed px type scale, 9-18px in product surfaces; monospace for all numerals",
+      "Tight radii (2-4px on data, 8px on overlays); hairline borders at 10-35% alpha",
+      "Nine-color semantic signal vocabulary, fixed across all seven themes",
+      "Reticle corner brackets and chamfered corners as the signature framing devices",
+      "0.2s transitions as the default; state-reporting motion only"
+    ],
+    "rules": [
+      {
+        "name": "The Fixed Meaning Rule",
+        "body": "Stage orange, secret red, relic gold, law purple and faction colors mean the same thing in every one of the seven themes. Themes override surfaces, borders, shadows and texture. A theme that redefines a signal color is a bug, not a variant.",
+        "section": "colors"
+      },
+      {
+        "name": "The Alpha Ladder Rule",
+        "body": "Hull Slate appears at 10% (separator), 14% (frame), 22% (strong frame), 28% (border) or 35% (map-tab edge). Never invent a sixth value. Reach for the ladder step above or below instead.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Floor Rule",
+        "body": "#868e96 (Mantine gray-6) is the darkest text color allowed on Deep Space, at 5.95:1. gray-7 (#495057) measures 2.47:1 and is forbidden for any text at any size.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Scale Rule",
+        "body": "Product typography is fixed px, never clamp(). A panel that shrinks with the viewport makes a dense readout unreadable at exactly the moment it matters. Fluid type is permitted on the landing page hero and nowhere else.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Numeral Rule",
+        "body": "Every number a player compares to another number is set in mono. Scores, resource and influence values, unit counts, and VP totals. Proportional numerals in a comparison column are always wrong.",
+        "section": "typography"
+      },
+      {
+        "name": "The Named Container Rule",
+        "body": "Uppercase tracked text names a container (panel, modal, surface). It never introduces a section as a kicker above a heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Reduced Motion Rule",
+        "body": "Every @keyframes needs a @media (prefers-reduced-motion: reduce) alternative — a crossfade or an instant state. This is currently satisfied in about 12 files and missing from several that define keyframes; treat closing that gap as part of any change touching animation.",
+        "section": "components"
+      },
+      {
+        "name": "The Milled Data Rule",
+        "body": "Data panels get a one-pixel bevel and a cut corner, never a drop shadow. Shadow is reserved for modals, drawers, dropdowns, tooltips and floating controls. 'Flat' and 'no drop shadow' are not the same instruction: flat panels read as parts scattered on a void.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Three-Step Rule",
+        "body": "Ground is lighter than field; field is lighter than socket. If a plate is darker than the surface it sits on, the hierarchy is inverted and the panel reads as a hole.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glow-Is-State Rule",
+        "body": "Glow reports a condition — this player is active, this objective is at threshold, this unit is upgraded. A glow on a surface at rest is the neon cyberpunk anti-reference.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Empty-Is-A-Socket Rule",
+        "body": "Empty capacity is drawn as a recessed socket with walls and a registration tick. Never a dashed outline: dashed reads as unfinished layout, not as an empty slot.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do define new visual values as semantic tokens in themeSharedTokens.css and override them per theme. A hardcoded color in a component breaks six of the seven themes.",
+      "Do use the Hull Slate alpha ladder (10 / 14 / 22 / 28 / 35%) for every hairline, frame and separator.",
+      "Do set every comparable numeral in mono (Space Mono or --mantine-font-family-monospace).",
+      "Do use var(--z-*) from zIndexVariables.css for any stacking above local sibling ordering. The scale is semantic and grouped (map 0-999, map overlays 1000-1999, map UI 2000-2999, modals 3000-3999, tooltips 4000-4999).",
+      "Do keep product type on the fixed px scale (9 / 10 / 11 / 12 / 13 / 14 / 18px).",
+      "Do style overlays by extending overlays.css, so every theme inherits the change.",
+      "Do ship all seven states on interactive components: default, hover, focus, active, disabled, loading, error.",
+      "Do pair color-coded status with an icon, shape or label, so faction and signal colors are never the only carrier of meaning.",
+      "Do give every @keyframes a prefers-reduced-motion alternative.",
+      "Do give plates a one-pixel bevel and a cut corner, and reserve drop shadow for modals, drawers, dropdowns, tooltips and floating controls.",
+      "Do keep the ground -> field -> socket depth order intact: the card is lighter than the modules inside it, which are lighter than their troughs.",
+      "Do group with Module rather than inventing another container. It owns the frame, chamfer, bevel and optional rail.",
+      "Do draw empty capacity as a recessed socket with walls and a registration tick."
+    ],
+    "donts": [
+      "Don't build anything that reads as a generic SaaS dashboard — rounded cards on light gray, hero stat tiles with a big number and a small label, an indigo accent. PRODUCT.md names this first for a reason.",
+      "Don't reach for the neon cyberpunk cliché: gradient text, glow on resting surfaces, glass panels used decoratively. background-clip: text on a gradient is banned outright; it currently appears in LandingPage.css:200 and UnitBadge.module.css:34,40 and should be replaced with a solid color, with emphasis carried by weight or size.",
+      "Don't use border-left or border-right greater than 1px as a colored accent stripe. This is the system's most widespread violation — GameStatePanel.module.css:7, LawCard.module.css:7, ExpandedObjectiveCard.module.css:7, PlayerScoreSummary.module.css:64, SecretModal.module.css:41,46,51, DashboardPage.css:86, DashboardPage.module.css:274, and the .gradient-left-border utility in gradients.css:31. Replace with a full hairline border, a background tint from the .gradient-{color} utility, or a leading icon.",
+      "Don't write raw z-index values above local sibling ordering (0-10). Six outliers need migrating to the scale: z-index: 10000 in MapUnitTransitionLayer.module.css:75, 2000 in PlayerScoreSummary.module.css:47, 1000 in ScrollMap.css:22, 995 in CommodityIndicator.module.css:4, 100 in SecretHand.module.css:61, 99 in ProductionIndicator.module.css:5.",
+      "Don't use gray-7 (#495057) or darker for text on Deep Space. It measures 2.47:1.",
+      "Don't let Slider fall back to a serif. font-family: Slider, \"Times New Roman\", serif appears in six places; the fallback should be a sans or system stack, or the display face degrades into something the system never intended.",
+      "Don't use clamp() for product typography. Fixed px only outside the landing hero.",
+      "Don't animate a panel's entrance. Motion reports that state changed; it does not announce that a panel exists.",
+      "Don't redefine a signal color in a theme file. Themes own surfaces, borders, shadows and texture. Nothing else.",
+      "Don't reach for a modal first. In a surface this dense, inline disclosure and side panels almost always beat interrupting the board.",
+      "Don't nest cards. A module inside a module inside a card is the cluttered fan-wiki failure. Subdivide one plate with hairlines and troughs instead of stacking frames.",
+      "Don't draw empty slots as dashed outlines. Dashed reads as unfinished layout; empty capacity is a socket.",
+      "Don't put a colored border around a player's card, and don't let a status overlay cover a value a player scans for.",
+      "Don't leave a theme inheriting the shared navy chrome when its identity is hueless. midnightgraytheme is the default theme and overrides the whole machined-chrome block to zero chroma; any new theme owes the same."
+    ]
+  }
+}

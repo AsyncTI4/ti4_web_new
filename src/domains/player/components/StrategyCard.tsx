@@ -1,5 +1,4 @@
 import { Box, Text } from "@mantine/core";
-import { IconX } from "@tabler/icons-react";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
@@ -56,7 +55,11 @@ export function StrategyCard({ initiative, tradeGoods, isExhausted = false}: Pro
   return (
     <SmoothPopover opened={opened} onChange={setOpened} position="bottom">
       <SmoothPopover.Target>
-        <Chip accent={color} className={classes.card} onClick={toggle}>
+        <Chip
+          accent={color}
+          className={cx(classes.card, isExhausted && classes.exhausted)}
+          onClick={toggle}
+        >
           <Box
             className={cx(
               classes.number,
@@ -66,31 +69,20 @@ export function StrategyCard({ initiative, tradeGoods, isExhausted = false}: Pro
             <Text ff="heading" className={classes.numberText}>
               {initiative}
             </Text>
-            {isExhausted && (
-              <span className={classes.exhaustedIcon}>
-                <IconX
-                  size={22}
-                  stroke={3}
-                  color="var(--mantine-color-red-6)"
-                />
-              </span>
-            )}
-              {/* Trade Goods */}
           </Box>
           <Text ff="heading" className={classes.name}>
             {strategyCard?.name || SC_NAMES[initiative]}
           </Text>
-            {tradeGoods > 0 && (
-              <span className={classes.tradeGoodsContainer}>
-                <img
+          {tradeGoods > 0 && (
+            <span className={classes.tradeGoodsContainer}>
+              <img
                 src={cdnImage("/player_area/pa_cardbacks_tradegoods.png")}
                 className={classes.tradeGoodsImage}
+                alt=""
               />
-              <Text size="16px" fw={600} c="white" ff="heading">
-                  {tradeGoods}
-                </Text>
-              </span>
-            )}
+              <span className={classes.tradeGoodsCount}>{tradeGoods}</span>
+            </span>
+          )}
         </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

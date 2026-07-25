@@ -1,4 +1,4 @@
-import { Group, Box, Stack } from "@mantine/core";
+import { Group, Box } from "@mantine/core";
 import type { ReactNode } from "react";
 import {
   getTechGridMobileColumnCount,
@@ -10,7 +10,7 @@ import { ArmyStats } from "@/domains/player/components";
 import { Nombox } from "./Nombox";
 import { useGameData } from "@/hooks/useGameContext";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
-import { Panel } from "@/shared/ui/primitives/Panel";
+import { Module } from "@/shared/ui/primitives/Module/Module";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import styles from "./PlayerCardMobile.module.css";
 import cx from "clsx";
@@ -37,17 +37,32 @@ type Props = {
   playerData: PlayerData;
 };
 
+/**
+ * One compartment of the telemetry band. Deliberately unlabelled: the contents
+ * of each group are self-evident to a player who knows the game, and the band's
+ * fixed left-to-right order means position already identifies the compartment.
+ * Character comes from the plate itself — cut corner, bevel, reticle brackets.
+ */
 function Section({
   className,
+  brackets,
+  density = "compact",
   children,
 }: {
   className?: string;
+  brackets?: boolean;
+  density?: "compact" | "flush";
   children: ReactNode;
 }) {
   return (
-    <Panel className={cx(styles.scadaPanel, styles.section, className)}>
+    <Module
+      brackets={brackets}
+      density={density}
+      fill
+      className={cx(styles.section, className)}
+    >
       {children}
-    </Panel>
+    </Module>
   );
 }
 
@@ -298,22 +313,28 @@ export default function PlayerCardMobile(props: Props) {
       {/* Single horizontal band: sections in fixed order with capped rows,
           so the same data group lands at a similar position on every card */}
       <Box className={styles.strip}>
-        <Section className={styles.statusSection}>
-          <Stack gap={4} align="center" w="100%">
-            <Group gap={4} align="flex-start" wrap="nowrap">
+        <Section
+          brackets
+          density="flush"
+          className={styles.statusSection}
+        >
+          <Box className={styles.logistics}>
+            <Box className={styles.logisticsTop}>
               <PlayerEconomyStack
                 tg={player.tg}
                 commodities={player.commodities}
                 commoditiesTotal={player.commoditiesTotal}
                 debtTokens={player.debtTokens}
               />
-              <PlayerCardCounts
-                pnCount={player.pnCount}
-                acCount={player.acCount}
-              />
-            </Group>
+              <Box className={styles.logisticsHand}>
+                <PlayerCardCounts
+                  pnCount={player.pnCount}
+                  acCount={player.acCount}
+                />
+              </Box>
+            </Box>
             {settings.showPlayerAreaCommandTokens && (
-              <Box className={styles.ccRow} pt="xs">
+              <Box className={styles.ccRow}>
                 <CCPool
                   tacticalCC={player.tacticalCC}
                   fleetCC={player.fleetCC}
@@ -323,8 +344,10 @@ export default function PlayerCardMobile(props: Props) {
                 />
               </Box>
             )}
-            <FragmentsPool fragments={player.fragments} />
-          </Stack>
+            <Box className={styles.fragmentRow}>
+              <FragmentsPool fragments={player.fragments} />
+            </Box>
+          </Box>
         </Section>
 
         <Section className={styles.leadersSection}>
@@ -369,6 +392,7 @@ export default function PlayerCardMobile(props: Props) {
             gap={4}
             economyGap={6}
             wrap="nowrap"
+            align="stretch"
             showTotalSpend={settings.showPlayerAreaTotalSpend}
           >
             <PlanetsArea
