@@ -1,5 +1,7 @@
-import type { StateCounts } from "@/utils/historicalMapTransitions";
+import type { FactionColorMap } from "@/app/providers/context/types";
+import { findColorData } from "@/entities/lookup/colors";
 import { deserializeCompactMapState } from "@/utils/compactMapState";
+import type { StateCounts } from "@/utils/mapReplay/types";
 
 export type CompactMovementUnit = {
   colorId: string;
@@ -19,6 +21,43 @@ export type CompactMovementState = {
   targetHolder: string;
   sources: CompactMovementSource[];
 };
+
+export function resolveCompactMovementFaction(
+  unit: CompactMovementUnit,
+  factionColors: FactionColorMap,
+): string | undefined {
+  if (unit.ownerFaction) return unit.ownerFaction;
+
+  const entries = Object.values(factionColors);
+  const exact = entries.find((entry) => entry.color === unit.colorId);
+  if (exact) return exact.faction;
+
+  const color = findColorData(unit.colorId);
+  if (color) {
+    const aliased = entries.find(
+      (entry) => findColorData(entry.color)?.alias === color.alias,
+    );
+    if (aliased) return aliased.faction;
+  }
+
+  const normalize = (value: string) =>
+    value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const normalizedId = normalize(unit.colorId);
+  if (normalizedId.length < 3) return undefined;
+
+  const prefixFactions = new Set(
+    entries
+      .filter(({ color: entryColor }) => {
+        const normalizedColor = normalize(entryColor);
+        return (
+          normalizedColor.startsWith(normalizedId) ||
+          normalizedId.startsWith(normalizedColor)
+        );
+      })
+      .map(({ faction }) => faction),
+  );
+  return prefixFactions.size === 1 ? [...prefixFactions][0] : undefined;
+}
 
 function array(value: unknown, label: string): unknown[] {
   if (!Array.isArray(value)) throw new Error(`Invalid movement ${label}`);

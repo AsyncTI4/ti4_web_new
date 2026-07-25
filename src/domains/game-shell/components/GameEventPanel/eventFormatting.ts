@@ -1,7 +1,7 @@
 import { actionCards } from "@/entities/data/actionCards";
 import { promissoryNotes } from "@/entities/data/promissoryNotes";
 import { relics } from "@/entities/data/relics";
-import { techs } from "@/entities/data/techs";
+import { techs } from "@/entities/data/tech";
 import { breakthroughs } from "@/entities/data/breakthroughs";
 import { abilities } from "@/entities/data/abilities";
 import { leaders } from "@/entities/data/leaders";

@@ -1,90 +1,48 @@
-import type {
-  CombatReplayEvent,
-  GameData,
-  RetreatSubEvent,
-} from "@/app/providers/context/types";
-import type { EntityStack } from "@/utils/unitPositioning";
-import { findColorData } from "@/entities/lookup/colors";
-import { deserializeCompactMovementState } from "@/utils/compactMovementState";
+import type { GameData } from "@/app/providers/context/types";
 import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
-import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
+import type {
+  AuthoritativeTransitionOptions,
+  LocatedStack,
+  MapCombatLaser,
+  MapCommandTokenPlacement,
+  MapControlTokenTransition,
+  MapReplayPlan,
+  MapUnitTransition,
+  StateCounts,
+} from "@/utils/mapReplay/types";
+import {
+  allPlacedStacks,
+  allUnitStacks,
+  createReplayInventory,
+  mapUnitLocationKey,
+  stackAtWorld,
+  unitStates as states,
+} from "@/utils/mapReplay/unitState";
+import {
+  allocateMovementOutcomes,
+  applyMovementDamage,
+  buildStationaryDamage,
+} from "@/utils/mapReplay/movementOutcomes";
+import {
+  buildCombatLasers,
+  buildSourceHoldPlan,
+  planMovements,
+} from "@/utils/mapReplay/movementPlanning";
+import {
+  planRetreats,
+  reconcileInventory,
+  sequenceMovements,
+} from "@/utils/mapReplay/transitionPlanning";
 
-export type MapUnitTransition = {
-  kind: "moved" | "removed" | "retreated" | "settled" | "added";
-  stack: EntityStack;
-  toX: number;
-  toY: number;
-  locationKey: string;
-  delayMs?: number;
-  layoutUnitStates?: StateCounts;
-  layoutStateOffsets?: StateCounts;
-  appearAtMs?: number;
-  holdFromMs?: number;
-  hideAfterMs?: number;
-  startRotationDeg?: number;
-  holdRotationDeg?: number;
-  parkRotationDeg?: number;
-  damageAtMs?: number;
-  delayedDamageStates?: StateCounts;
-  badgeCountChange?: boolean;
-  residualAsset?: boolean;
-  sourceHold?: boolean;
-  continuation?: {
-    toX: number;
-    toY: number;
-    delayMs: number;
-    startRotationDeg?: number;
-    parkRotationDeg?: number;
-  };
-};
-
-export type MapCombatLaser = {
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-  delayMs: number;
-  durationMs: number;
-  color: "attacker" | "defender";
-};
-
-export type MapCommandTokenPlacement = {
-  kind: "activation" | "added" | "removed";
-  position: string;
-  faction: string;
-  index: number;
-  x: number;
-  y: number;
-  delayMs: number;
-  durationMs: number;
-};
-
-export type MapControlTokenTransition = {
-  kind: "added" | "removed";
-  position: string;
-  planet: string;
-  faction: string;
-  x: number;
-  y: number;
-  delayMs: number;
-  durationMs: number;
-};
-
-export type MapReplayPlan = {
-  transitions: MapUnitTransition[];
-  lasers: MapCombatLaser[];
-  commandTokens: MapCommandTokenPlacement[];
-  controlTokens: MapControlTokenTransition[];
-  arrivalLocations: Set<string>;
-  baseUnitStates: Map<string, StateCounts>;
-  delayedDamage: Map<string, { damageAtMs: number; states: StateCounts }>;
-  finalRevealLocations: Set<string>;
-  tacticalTargetPosition?: string;
-  focusPosition?: string;
-  showTacticalActivation: boolean;
-  changedPositions: Set<string>;
-  durationMs: number;
-};
+export type {
+  MapCombatLaser,
+  MapCommandTokenPlacement,
+  MapControlTokenTransition,
+  MapReplayPlan,
+  MapUnitTransition,
+  StateCounts,
+} from "@/utils/mapReplay/types";
+export { mapUnitLocationKey };
 
 const MAP_CHANGE_HIGHLIGHT_DURATION_MS = 1100;
 
@@ -120,8 +78,6 @@ function flightDuration(deltaX: number, deltaY: number): number {
   const distance = Math.hypot(deltaX, deltaY);
   return Math.min(1500, Math.max(780, 650 + distance * 0.35));
 }
-
-export type StateCounts = [number, number, number, number];
 
 function finalizeReplayPlan({
   transitions,
@@ -177,70 +133,6 @@ function finalizeReplayPlan({
       ...commandTokens.map((token) => token.delayMs + token.durationMs),
       ...controlTokens.map((token) => token.delayMs + token.durationMs),
     ),
-  };
-}
-type LocatedStack = {
-  position: string;
-  stack: EntityStack;
-  worldX: number;
-  worldY: number;
-};
-
-function states(stack: EntityStack): StateCounts {
-  if (stack.unitStates) return [...stack.unitStates];
-  const sustained = stack.sustained ?? 0;
-  return [stack.count - sustained, sustained, 0, 0];
-}
-
-export function mapUnitLocationKey(
-  position: string,
-  stack: EntityStack,
-): string {
-  return `${position}\u0000${stack.planetName ?? "space"}\u0000${stack.faction}\u0000${stack.entityType}\u0000${stack.entityId}`;
-}
-
-function count(states: StateCounts): number {
-  return states.reduce((total, value) => total + value, 0);
-}
-
-function allPlacedStacks(data: GameData): LocatedStack[] {
-  return Object.entries(data.tiles)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .flatMap(([position, tile]) =>
-      tile.entityPlacements.map((stack) => ({
-        position,
-        stack,
-        worldX: tile.properties.x + stack.x,
-        worldY: tile.properties.y + stack.y,
-      })),
-    );
-}
-
-function allUnitStacks(data: GameData): LocatedStack[] {
-  return allPlacedStacks(data).filter(
-    ({ stack }) => stack.entityType === "unit",
-  );
-}
-
-function stackWithStates(
-  located: LocatedStack,
-  unitStates: StateCounts,
-): EntityStack {
-  return {
-    ...located.stack,
-    x: located.worldX,
-    y: located.worldY,
-    count: count(unitStates),
-    sustained: unitStates[1] + unitStates[3],
-    unitStates,
-  };
-}
-
-function stackAtWorld(located: LocatedStack): EntityStack {
-  return {
-    ...located.stack,
-    x: located.worldX,
-    y: located.worldY,
   };
 }
 
@@ -303,31 +195,10 @@ function residualAssetTransitions(
   return transitions;
 }
 
-type UnitLocation = {
-  position: string;
-  holder: string;
-  faction: string;
-  unitId: string;
-};
-
-type AuthoritativeTransitionOptions = {
-  movementState?: string | null;
-  retreats?: RetreatSubEvent[];
-  combats?: CombatReplayEvent[];
-  activeFaction?: string | null;
-  tacticalPosition?: string | null;
-  alwaysShowControlTokens?: boolean;
-  changedPositions?: Set<string>;
-};
-
-const GROUND_DESTINATION_UNITS = new Set(["gf", "mf", "pd", "sd"]);
-const BADGE_UNITS = new Set(["ff", "gf"]);
-const NATIVE_NORTHWEST_ANGLE = -135;
 const COMMAND_TOKEN_DURATION = 560;
 const COMMAND_TOKEN_OFFSET_X = 10;
 const COMMAND_TOKEN_OFFSET_Y = 90;
 const COMMAND_TOKEN_STACK_OFFSET = 16;
-const VISUAL_HANDOFF_OVERLAP_MS = 50;
 
 function compareSystemPositions(a: string, b: string): number {
   const aIsNumber = /^\d+$/.test(a);
@@ -375,18 +246,6 @@ function commandTokenCoordinates(
       COMMAND_TOKEN_OFFSET_Y +
       index * COMMAND_TOKEN_STACK_OFFSET,
   };
-}
-
-function rotationToward(
-  fromX: number,
-  fromY: number,
-  toX: number,
-  toY: number,
-): number {
-  return (
-    (Math.atan2(toY - fromY, toX - fromX) * 180) / Math.PI -
-    NATIVE_NORTHWEST_ANGLE
-  );
 }
 
 function commandTokenPlacements(
@@ -563,281 +422,6 @@ function residualControlTokenTransitions(
   return transitions;
 }
 
-function combatFacingPoint(
-  combat: CombatReplayEvent,
-  previousStacks: LocatedStack[],
-  currentStacks: LocatedStack[],
-  fallback: { x: number; y: number },
-): { x: number; y: number } {
-  const holder = combat.kind === "ground" ? combat.planet : "space";
-  const isDefender = (located: LocatedStack) => {
-    const location = locatedLocation(located);
-    return (
-      location.position === combat.tile &&
-      location.holder === holder &&
-      location.faction === combat.vsFaction
-    );
-  };
-  // The pre-event positions best represent where the defenders were when the
-  // engagement began. Fall back to survivors when no pre-event stack exists.
-  const defenders = previousStacks.filter(isDefender);
-  const visibleDefenders =
-    defenders.length > 0 ? defenders : currentStacks.filter(isDefender);
-  if (visibleDefenders.length === 0) return fallback;
-  return {
-    x:
-      visibleDefenders.reduce((total, located) => total + located.worldX, 0) /
-      visibleDefenders.length,
-    y:
-      visibleDefenders.reduce((total, located) => total + located.worldY, 0) /
-      visibleDefenders.length,
-  };
-}
-
-function rawLocationKey(location: UnitLocation): string {
-  return [
-    location.position,
-    location.holder,
-    location.faction,
-    location.unitId,
-  ].join("\u0000");
-}
-
-function locatedLocation(located: LocatedStack): UnitLocation {
-  return {
-    position: located.position,
-    holder: located.stack.planetName ?? "space",
-    faction: located.stack.faction,
-    unitId: located.stack.entityId,
-  };
-}
-
-function findLocated(
-  stacks: LocatedStack[],
-  location: UnitLocation,
-): LocatedStack | undefined {
-  return stacks.find(
-    (candidate) =>
-      rawLocationKey(locatedLocation(candidate)) === rawLocationKey(location),
-  );
-}
-
-function syntheticDestination(
-  source: LocatedStack,
-  data: GameData,
-  position: string,
-  holder: string,
-): LocatedStack | undefined {
-  const tile = data.tiles[position];
-  if (!tile) return undefined;
-  return {
-    position,
-    stack: {
-      ...source.stack,
-      planetName: holder === "space" ? undefined : holder,
-    },
-    worldX: tile.properties.x + source.stack.x,
-    worldY: tile.properties.y + source.stack.y,
-  };
-}
-
-function formationDestination(
-  source: LocatedStack,
-  approachSource: LocatedStack,
-  data: GameData,
-  position: string,
-  holder: string,
-  slot: number,
-  formationKind: "ship" | "infantry" | "ground",
-): LocatedStack | undefined {
-  const tile = data.tiles[position];
-  if (!tile) return undefined;
-  const center = tile.properties;
-  const midpoints = tile.properties.hexOutline.midpoints ?? [];
-  const closest = [...midpoints].sort(
-    (a, b) =>
-      (a.x - approachSource.worldX) ** 2 +
-      (a.y - approachSource.worldY) ** 2 -
-      ((b.x - approachSource.worldX) ** 2 + (b.y - approachSource.worldY) ** 2),
-  )[0];
-  const sourceAngle = Math.atan2(
-    approachSource.worldY - center.y,
-    approachSource.worldX - center.x,
-  );
-  const edge = closest ?? {
-    x: center.x + Math.cos(sourceAngle) * 145,
-    y: center.y + Math.sin(sourceAngle) * 145,
-  };
-  const towardCenterX = center.x - edge.x;
-  const towardCenterY = center.y - edge.y;
-  const inwardLength = Math.hypot(towardCenterX, towardCenterY) || 1;
-  const inwardX = towardCenterX / inwardLength;
-  const inwardY = towardCenterY / inwardLength;
-  const acrossX = -inwardY;
-  const acrossY = inwardX;
-  let acrossOffset: number;
-  let depthOffset: number;
-  if (formationKind === "infantry") {
-    // Explicit 3-2-1 triangular blocks keep badges visibly organized instead
-    // of tracing the curved edge of the destination system.
-    const triangle = [
-      { across: -44, depth: 0 },
-      { across: 0, depth: 0 },
-      { across: 44, depth: 0 },
-      { across: -22, depth: 36 },
-      { across: 22, depth: 36 },
-      { across: 0, depth: 72 },
-    ];
-    const block = Math.floor(slot / triangle.length);
-    const point = triangle[slot % triangle.length];
-    acrossOffset = point.across;
-    depthOffset = point.depth + block * 108;
-  } else {
-    const column = (slot % 3) - 1;
-    const row = Math.floor(slot / 3);
-    acrossOffset = column * (formationKind === "ground" ? 50 : 96);
-    depthOffset = row * (formationKind === "ground" ? 46 : 82);
-    if (formationKind === "ship" && column === 0) depthOffset -= 28;
-  }
-  // Ground forces travel as one compact landing party. Ships use a looser,
-  // staggered screen so their rotated silhouettes do not overlap.
-  const formationDepth =
-    (formationKind === "infantry"
-      ? 106
-      : formationKind === "ground"
-        ? 164
-        : 92) + depthOffset;
-  return {
-    position,
-    stack: {
-      ...source.stack,
-      planetName: holder === "space" ? undefined : holder,
-    },
-    worldX: edge.x + inwardX * formationDepth + acrossX * acrossOffset,
-    worldY: edge.y + inwardY * formationDepth + acrossY * acrossOffset,
-  };
-}
-
-function isShipUnit(unitId: string): boolean {
-  return getGenericUnitDataByAsyncId(unitId)?.isShip === true;
-}
-
-function formationRadius(stack: EntityStack): number {
-  if (BADGE_UNITS.has(stack.entityId)) return 40;
-  if (stack.entityType !== "unit") return 30;
-  if (stack.entityId === "mf") return 48;
-  return 38 + Math.min(5, Math.max(0, stack.count - 1)) * 7;
-}
-
-type FormationObstacle = { x: number; y: number; radius: number };
-const FORMATION_BUFFER_PX = 34;
-const FORMATION_SEARCH_SLOTS = 18;
-
-function formationOverlap(
-  candidate: LocatedStack,
-  obstacles: FormationObstacle[],
-): number {
-  const candidateRadius = formationRadius(candidate.stack);
-  return obstacles.reduce((total, obstacle) => {
-    const clearance = candidateRadius + obstacle.radius + FORMATION_BUFFER_PX;
-    const overlap = Math.max(
-      0,
-      clearance -
-        Math.hypot(
-          candidate.worldX - obstacle.x,
-          candidate.worldY - obstacle.y,
-        ),
-    );
-    return total + overlap * overlap;
-  }, 0);
-}
-
-function recenterRotatedSplay(
-  located: LocatedStack,
-  unitId: string,
-  unitCount: number,
-  rotationDeg: number,
-): LocatedStack {
-  if (BADGE_UNITS.has(unitId) || unitCount <= 1) return located;
-  // Non-badge stacks splay each additional unit 10px left and 10px down.
-  // Rotate that visual centroid with the wrapper, then offset the anchor so
-  // the rotated artwork remains centered on its assigned formation slot.
-  const centroidX = -((unitCount - 1) * 10) / 2;
-  const centroidY = ((unitCount - 1) * 10) / 2;
-  const radians = (rotationDeg * Math.PI) / 180;
-  const rotatedCentroidX =
-    centroidX * Math.cos(radians) - centroidY * Math.sin(radians);
-  const rotatedCentroidY =
-    centroidX * Math.sin(radians) + centroidY * Math.cos(radians);
-  return {
-    ...located,
-    worldX: located.worldX - rotatedCentroidX,
-    worldY: located.worldY - rotatedCentroidY,
-  };
-}
-
-function resolveFactionForColor(
-  data: GameData,
-  colorId: string,
-): string | undefined {
-  const entries = Object.values(data.originalFactionColorMap);
-  const exact = entries.find((entry) => entry.color === colorId);
-  if (exact) return exact.faction;
-  const color = findColorData(colorId);
-  if (color) {
-    const aliased = entries.find(
-      (entry) => findColorData(entry.color)?.alias === color.alias,
-    );
-    if (aliased) return aliased.faction;
-  }
-
-  // Compact movement payloads can use the bot's short color ids even when a
-  // homebrew color is absent from the web client's color catalogue (for
-  // example `cam` for `camouflage`). Resolve a short id only when it uniquely
-  // prefixes one of this game's actual colors, so similarly named colors can
-  // never be silently attributed to the active faction.
-  const normalize = (value: string) =>
-    value.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const normalizedId = normalize(colorId);
-  if (normalizedId.length < 3) return undefined;
-  const prefixFactions = new Set(
-    entries
-      .filter(({ color: entryColor }) => {
-        const normalizedColor = normalize(entryColor);
-        return (
-          normalizedColor.startsWith(normalizedId) ||
-          normalizedId.startsWith(normalizedColor)
-        );
-      })
-      .map(({ faction }) => faction),
-  );
-  return prefixFactions.size === 1 ? [...prefixFactions][0] : undefined;
-}
-
-function addTotal(totals: Map<string, number>, key: string, amount: number) {
-  totals.set(key, Math.max(0, (totals.get(key) ?? 0) + amount));
-}
-
-function statesForCount(source: StateCounts, requested: number): StateCounts {
-  let remaining = requested;
-  const selected: StateCounts = [0, 0, 0, 0];
-  for (let i = 0; i < source.length && remaining > 0; i += 1) {
-    selected[i] = Math.min(source[i], remaining);
-    remaining -= selected[i];
-  }
-  selected[0] += remaining;
-  return selected;
-}
-
-function subtractStates(
-  source: StateCounts,
-  removed: StateCounts,
-): StateCounts {
-  return source.map((value, index) =>
-    Math.max(0, value - removed[index]),
-  ) as StateCounts;
-}
-
 function assignReplayLayout(
   transitions: MapUnitTransition[],
 ): Map<string, StateCounts> {
@@ -875,212 +459,6 @@ function assignReplayLayout(
   return baseUnitStates;
 }
 
-type PlannedMovement = {
-  transition: MapUnitTransition;
-  source: UnitLocation;
-  sourceKey: string;
-  destinationKey: string;
-  target: UnitLocation;
-  finalDestination?: LocatedStack;
-  arrival: LocatedStack;
-  staged: boolean;
-};
-
-function sourceAreaKey(position: string, holder: string): string {
-  return `${position}\u0000${holder}`;
-}
-
-function addStates(target: StateCounts, added: StateCounts): void {
-  for (let i = 0; i < target.length; i += 1) target[i] += added[i];
-}
-
-/**
- * The map snapshot already contains post-event heat-map coordinates. Keep the
- * source system on its pre-event coordinates for the full replay. React swaps
- * to the final heat-map layout in one commit after every animation completes.
- */
-function buildSourceHoldPlan(
-  movements: PlannedMovement[],
-  previousStacks: LocatedStack[],
-  currentStacks: LocatedStack[],
-  movementStart: number,
-): {
-  transitions: MapUnitTransition[];
-  finalRevealLocations: Set<string>;
-} {
-  const affectedAreas = new Set(
-    movements.map(({ source }) =>
-      sourceAreaKey(source.position, source.holder),
-    ),
-  );
-  const movedBySource = new Map<string, StateCounts>();
-  for (const movement of movements) {
-    const moved = movedBySource.get(movement.sourceKey) ?? [0, 0, 0, 0];
-    addStates(moved, states(movement.transition.stack));
-    movedBySource.set(movement.sourceKey, moved);
-  }
-
-  const currentByLocation = new Map(
-    currentStacks.map((located) => [
-      rawLocationKey(locatedLocation(located)),
-      located,
-    ]),
-  );
-  const transitions: MapUnitTransition[] = [];
-  const finalRevealLocations = new Set<string>();
-
-  for (const before of previousStacks) {
-    const location = locatedLocation(before);
-    if (!affectedAreas.has(sourceAreaKey(location.position, location.holder)))
-      continue;
-
-    const locationKey = rawLocationKey(location);
-    const movedStates = movedBySource.get(locationKey);
-    const after = currentByLocation.get(locationKey);
-
-    if (movedStates) {
-      const beforeStates = states(before.stack);
-      const leftoverStates = subtractStates(beforeStates, movedStates);
-
-      // During command-token placement, one copy of the original stack paints
-      // the exact pre-event frame. Keep it for a few frames after launch so the
-      // browser can promote the flight layer without exposing a compositor gap.
-      if (movementStart > 0) {
-        const releaseAtMs = movementStart + VISUAL_HANDOFF_OVERLAP_MS;
-        transitions.push({
-          kind: "removed",
-          stack: stackWithStates(before, beforeStates),
-          toX: before.worldX,
-          toY: before.worldY,
-          locationKey: mapUnitLocationKey(before.position, before.stack),
-          layoutUnitStates: beforeStates,
-          delayMs: releaseAtMs,
-          hideAfterMs: releaseAtMs,
-          sourceHold: true,
-        });
-      }
-
-      if (count(leftoverStates) > 0) {
-        transitions.push({
-          kind: "removed",
-          stack: stackWithStates(before, leftoverStates),
-          toX: before.worldX,
-          toY: before.worldY,
-          locationKey: mapUnitLocationKey(before.position, before.stack),
-          layoutUnitStates: beforeStates,
-          layoutStateOffsets: movedStates,
-          appearAtMs: movementStart > 0 ? movementStart : undefined,
-          sourceHold: true,
-        });
-        if (after) {
-          finalRevealLocations.add(
-            mapUnitLocationKey(after.position, after.stack),
-          );
-        }
-      }
-      continue;
-    }
-
-    // Other stacks can be reflowed when the departing stack changes the source
-    // heat map. Hold only those whose anchor actually moved.
-    if (
-      !after ||
-      (before.worldX === after.worldX && before.worldY === after.worldY)
-    )
-      continue;
-    transitions.push({
-      kind: "removed",
-      stack: stackAtWorld(before),
-      toX: before.worldX,
-      toY: before.worldY,
-      locationKey: mapUnitLocationKey(before.position, before.stack),
-      layoutUnitStates: states(before.stack),
-      sourceHold: true,
-    });
-    finalRevealLocations.add(mapUnitLocationKey(after.position, after.stack));
-  }
-
-  return { transitions, finalRevealLocations };
-}
-
-function buildCombatLasers(
-  combats: CombatReplayEvent[],
-  movements: PlannedMovement[],
-  previousStacks: LocatedStack[],
-  currentStacks: LocatedStack[],
-  movementEnd: number,
-): MapCombatLaser[] {
-  const lasers: MapCombatLaser[] = [];
-  for (const combat of combats) {
-    if (!combat.tile || !combat.vsFaction) continue;
-    const attackers = movements
-      .filter(
-        (movement) =>
-          movement.target.position === combat.tile &&
-          isShipUnit(movement.target.unitId),
-      )
-      .slice(0, 4)
-      .map(({ transition }) => ({ x: transition.toX, y: transition.toY }));
-    const holder = combat.kind === "ground" ? combat.planet : "space";
-    const defenderCandidates = [...previousStacks, ...currentStacks].filter(
-      (located) => {
-        const location = locatedLocation(located);
-        return (
-          location.position === combat.tile &&
-          location.holder === holder &&
-          location.faction === combat.vsFaction
-        );
-      },
-    );
-    const defenders = [
-      ...new Map(
-        defenderCandidates.map((located) => [
-          rawLocationKey(locatedLocation(located)),
-          located,
-        ]),
-      ).values(),
-    ]
-      .slice(0, 4)
-      .map((located) => ({
-        x: located.worldX,
-        y: located.worldY,
-        isShip: isShipUnit(located.stack.entityId),
-      }));
-    if (attackers.length === 0 || defenders.length === 0) continue;
-
-    const defenderShips = defenders.filter((defender) => defender.isShip);
-
-    const volleyCount = Math.min(
-      8,
-      Math.max(4, attackers.length + defenders.length),
-    );
-    for (let i = 0; i < volleyCount; i += 1) {
-      const attacker = attackers[i % attackers.length];
-      const defender = defenders[(i * 3 + 1) % defenders.length];
-      // A ground-force sprite is a destination, never a laser emitter. Space
-      // defenders can return fire; bombardment-style ground visuals originate
-      // only from the attacking ships.
-      const attackerFires = combat.kind === "ground" || i % 3 !== 2;
-      const firingDefender =
-        defenderShips.length > 0
-          ? defenderShips[(i * 3 + 1) % defenderShips.length]
-          : undefined;
-      if (!attackerFires && !firingDefender) continue;
-      lasers.push({
-        fromX: attackerFires ? attacker.x : firingDefender!.x,
-        fromY: attackerFires ? attacker.y : firingDefender!.y,
-        toX: attackerFires ? defender.x : attacker.x,
-        toY: attackerFires ? defender.y : attacker.y,
-        delayMs: movementEnd + 110 + i * 95,
-        durationMs: 210,
-        color: attackerFires ? "attacker" : "defender",
-      });
-    }
-    if (lasers.length >= 12) break;
-  }
-  return lasers.slice(0, 12);
-}
-
 function buildAuthoritativeMapReplay(
   previous: GameData,
   current: GameData,
@@ -1088,73 +466,11 @@ function buildAuthoritativeMapReplay(
 ): MapReplayPlan {
   const previousStacks = allUnitStacks(previous);
   const currentStacks = allUnitStacks(current);
-  const expectedTotals = new Map<string, number>();
-  const finalTotals = new Map<string, number>();
-  const locations = new Map<string, UnitLocation>();
+  const { expectedTotals, finalTotals, locations } = createReplayInventory(
+    previousStacks,
+    currentStacks,
+  );
 
-  for (const located of previousStacks) {
-    const location = locatedLocation(located);
-    const key = rawLocationKey(location);
-    expectedTotals.set(key, count(states(located.stack)));
-    locations.set(key, location);
-  }
-  for (const located of currentStacks) {
-    const location = locatedLocation(located);
-    const key = rawLocationKey(location);
-    finalTotals.set(key, count(states(located.stack)));
-    locations.set(key, location);
-  }
-
-  const movements: PlannedMovement[] = [];
-  const stagedRotationByDestinationKey = new Map<string, number>();
-  const movementArrivals = new Map<string, LocatedStack>();
-  const formationSlots = new Map<string, number>();
-  const formationApproaches = new Map<string, LocatedStack>();
-  const movement = options.movementState
-    ? deserializeCompactMovementState(options.movementState)
-    : undefined;
-  // Preserve every already-occupied ship pixel in the destination system. Use
-  // current anchors for surviving ships and previous anchors for casualties,
-  // while excluding current-only members of the incoming fleet.
-  const previousTargetPlacements = allPlacedStacks(previous).filter(
-    ({ position, stack }) =>
-      position === movement?.targetPosition &&
-      (stack.planetName ?? "space") === "space",
-  );
-  const previousTargetPlacementKeys = new Set(
-    previousTargetPlacements.map((located) =>
-      rawLocationKey(locatedLocation(located)),
-    ),
-  );
-  const targetPlacementsByLocation = new Map(
-    previousTargetPlacements.map((located) => [
-      rawLocationKey(locatedLocation(located)),
-      located,
-    ]),
-  );
-  for (const located of allPlacedStacks(current)) {
-    if (
-      located.position !== movement?.targetPosition ||
-      (located.stack.planetName ?? "space") !== "space"
-    )
-      continue;
-    const key = rawLocationKey(locatedLocation(located));
-    // Current-only ships belonging to the mover are the arriving fleet whose
-    // final heat-map anchors should not repel its temporary combat formation.
-    if (
-      located.stack.faction === options.activeFaction &&
-      !previousTargetPlacementKeys.has(key)
-    )
-      continue;
-    targetPlacementsByLocation.set(key, located);
-  }
-  const shipFormationObstacles: FormationObstacle[] = [
-    ...targetPlacementsByLocation.values(),
-  ].map((located) => ({
-    x: located.worldX,
-    y: located.worldY,
-    radius: formationRadius(located.stack),
-  }));
   // Tactical metadata identifies where to look, but never creates a token by
   // itself. The pre-phase exists only when the serialized map snapshots prove
   // that this faction's counter count increased in that system.
@@ -1173,226 +489,20 @@ function buildAuthoritativeMapReplay(
       (token) => token.delayMs + token.durationMs + 80,
     ),
   );
-  if (movement) {
-    for (const source of movement.sources) {
-      for (const unit of source.units) {
-        const faction =
-          unit.ownerFaction ?? resolveFactionForColor(previous, unit.colorId);
-        if (!faction || count(unit.states) === 0) continue;
-        const from: UnitLocation = {
-          position: source.position,
-          holder: source.holder,
-          faction,
-          unitId: unit.unitId,
-        };
-        const retreatsFromTarget = (options.retreats ?? []).some(
-          (retreat) =>
-            retreat.faction === faction &&
-            retreat.fromTile === movement.targetPosition &&
-            retreat.fromHolder === movement.targetHolder &&
-            retreat.units[unit.unitId] !== undefined,
-        );
-        const groundCombat = (options.combats ?? []).find(
-          (combat) =>
-            combat.kind === "ground" &&
-            combat.tile === movement.targetPosition &&
-            combat.planet,
-        );
-        const preferredHolder =
-          !retreatsFromTarget &&
-          groundCombat?.planet &&
-          GROUND_DESTINATION_UNITS.has(unit.unitId)
-            ? groundCombat.planet
-            : movement.targetHolder;
-        const preferredDestination: UnitLocation = {
-          position: movement.targetPosition,
-          holder: preferredHolder,
-          faction,
-          unitId: unit.unitId,
-        };
-        const sourceLocated = findLocated(previousStacks, from);
-        if (!sourceLocated) continue;
-        const finalDestination =
-          findLocated(currentStacks, preferredDestination) ??
-          currentStacks.find(
-            (candidate) =>
-              candidate.position === movement.targetPosition &&
-              candidate.stack.faction === faction &&
-              candidate.stack.entityId === unit.unitId,
-          );
-        const to = finalDestination
-          ? locatedLocation(finalDestination)
-          : preferredDestination;
-        const matchingCombat = (options.combats ?? []).find(
-          (candidate) =>
-            candidate.tile === movement.targetPosition &&
-            (to.holder === "space"
-              ? candidate.kind === "space"
-              : candidate.kind === "ground" && candidate.planet === to.holder),
-        );
-        const combat =
-          matchingCombat ??
-          (isShipUnit(unit.unitId)
-            ? (options.combats ?? []).find(
-                (candidate) => candidate.tile === movement.targetPosition,
-              )
-            : undefined);
-        const hasCombat = combat !== undefined;
-        const movedCount = count(unit.states);
-        const formationKind = isShipUnit(unit.unitId)
-          ? "ship"
-          : unit.unitId === "gf"
-            ? "infantry"
-            : "ground";
-        const formationKey = [
-          movement.targetPosition,
-          to.holder,
-          faction,
-          formationKind,
-        ].join("\u0000");
-        const approachSource =
-          formationApproaches.get(formationKey) ?? sourceLocated;
-        formationApproaches.set(formationKey, approachSource);
-        let formationSlot = formationSlots.get(formationKey) ?? 0;
-        let arrival: LocatedStack | undefined;
-        if (hasCombat) {
-          if (formationKind === "ship") {
-            let bestCandidate: LocatedStack | undefined;
-            let bestCandidateSlot = formationSlot;
-            let bestOverlap = Number.POSITIVE_INFINITY;
-            for (
-              let candidateSlot = formationSlot;
-              candidateSlot < formationSlot + FORMATION_SEARCH_SLOTS;
-              candidateSlot += 1
-            ) {
-              const candidate = formationDestination(
-                sourceLocated,
-                approachSource,
-                current,
-                movement.targetPosition,
-                to.holder,
-                candidateSlot,
-                formationKind,
-              );
-              if (!candidate) continue;
-              const overlap = formationOverlap(
-                candidate,
-                shipFormationObstacles,
-              );
-              if (overlap < bestOverlap) {
-                bestCandidate = candidate;
-                bestCandidateSlot = candidateSlot;
-                bestOverlap = overlap;
-              }
-              // Slots are ordered nearest-first, so the first clear candidate
-              // is preferable to any more distant clear location.
-              if (overlap === 0) break;
-            }
-            arrival = bestCandidate;
-            formationSlot = bestCandidateSlot + 1;
-          } else {
-            arrival = formationDestination(
-              sourceLocated,
-              approachSource,
-              current,
-              movement.targetPosition,
-              to.holder,
-              formationSlot,
-              formationKind,
-            );
-            formationSlot += 1;
-          }
-          formationSlots.set(formationKey, formationSlot);
-        } else {
-          arrival =
-            finalDestination ??
-            syntheticDestination(
-              sourceLocated,
-              current,
-              movement.targetPosition,
-              to.holder,
-            );
-        }
-        if (!arrival) continue;
-
-        const fromKey = rawLocationKey(from);
-        const toKey = rawLocationKey(to);
-        const facingPoint = combat
-          ? combatFacingPoint(
-              combat,
-              previousStacks,
-              currentStacks,
-              current.tiles[movement.targetPosition].properties,
-            )
-          : undefined;
-        let combatRotation: number | undefined;
-        if (facingPoint) {
-          combatRotation = rotationToward(
-            arrival.worldX,
-            arrival.worldY,
-            facingPoint.x,
-            facingPoint.y,
-          );
-          arrival = recenterRotatedSplay(
-            arrival,
-            unit.unitId,
-            movedCount,
-            combatRotation,
-          );
-          combatRotation = rotationToward(
-            arrival.worldX,
-            arrival.worldY,
-            facingPoint.x,
-            facingPoint.y,
-          );
-        }
-        if (hasCombat && formationKind === "ship") {
-          shipFormationObstacles.push({
-            x: arrival.worldX,
-            y: arrival.worldY,
-            radius: formationRadius(arrival.stack),
-          });
-        }
-        addTotal(expectedTotals, fromKey, -movedCount);
-        addTotal(expectedTotals, toKey, movedCount);
-        locations.set(fromKey, from);
-        locations.set(toKey, to);
-        // Multiple source stacks can merge into one final stack. Retain the
-        // first landing coordinate so a combat-loss ghost replaces the unit
-        // that is actually consumed, instead of popping in over a later group.
-        if (!movementArrivals.has(toKey)) movementArrivals.set(toKey, arrival);
-        const transition: MapUnitTransition = {
-          kind: "moved",
-          stack: stackWithStates(sourceLocated, unit.states),
-          toX: arrival.worldX,
-          toY: arrival.worldY,
-          locationKey: mapUnitLocationKey(
-            (finalDestination ?? arrival).position,
-            (finalDestination ?? arrival).stack,
-          ),
-          layoutUnitStates: finalDestination
-            ? states(finalDestination.stack)
-            : unit.states,
-          delayMs: movementStart,
-          parkRotationDeg: combatRotation,
-        };
-        movements.push({
-          transition,
-          source: from,
-          sourceKey: fromKey,
-          destinationKey: toKey,
-          target: to,
-          finalDestination,
-          arrival,
-          staged: hasCombat,
-        });
-        if (hasCombat) {
-          if (combatRotation !== undefined)
-            stagedRotationByDestinationKey.set(toKey, combatRotation);
-        }
-      }
-    }
-  }
+  const inventory = { expectedTotals, finalTotals, locations };
+  const {
+    movements,
+    movementArrivals,
+    stagedRotations: stagedRotationByDestinationKey,
+  } = planMovements({
+    previous,
+    current,
+    options,
+    previousStacks,
+    currentStacks,
+    inventory,
+    movementStart,
+  });
 
   const movementTransitions = movements.map(({ transition }) => transition);
 
@@ -1422,271 +532,50 @@ function buildAuthoritativeMapReplay(
       ? Math.round(movementEnd + (laserEnd - movementEnd) * 0.55)
       : undefined;
 
-  // Reserve retreating and destroyed arrivals before assigning new sustain
-  // markers. Otherwise a unit can receive delayed damage and then be selected
-  // as the casualty, making layout reconciliation paint a phantom damaged
-  // survivor from the static final stack at the start of the replay.
-  const damageSurvivors = new Map<PlannedMovement, StateCounts>();
-  const damageRetreatBudgets = new Map<string, number>();
-  for (const retreat of options.retreats ?? []) {
-    for (const [unitId, retreatStates] of Object.entries(retreat.units)) {
-      const key = rawLocationKey({
-        position: retreat.fromTile,
-        holder: retreat.fromHolder,
-        faction: retreat.faction,
-        unitId,
-      });
-      addTotal(damageRetreatBudgets, key, count(retreatStates as StateCounts));
-    }
-  }
-  const damageLossBudgets = new Map<string, number>();
-  for (const movement of movements) {
-    if (damageLossBudgets.has(movement.destinationKey)) continue;
-    damageLossBudgets.set(
-      movement.destinationKey,
-      Math.max(
-        0,
-        (expectedTotals.get(movement.destinationKey) ?? 0) -
-          (finalTotals.get(movement.destinationKey) ?? 0),
-      ),
-    );
-  }
-  for (const movement of movements) {
-    const movedStates = states(movement.transition.stack);
-    const movedCount = count(movedStates);
-    const retreating = Math.min(
-      movedCount,
-      damageRetreatBudgets.get(movement.destinationKey) ?? 0,
-    );
-    damageRetreatBudgets.set(
-      movement.destinationKey,
-      Math.max(
-        0,
-        (damageRetreatBudgets.get(movement.destinationKey) ?? 0) - retreating,
-      ),
-    );
-    const dying = Math.min(
-      movedCount - retreating,
-      damageLossBudgets.get(movement.destinationKey) ?? 0,
-    );
-    damageLossBudgets.set(
-      movement.destinationKey,
-      Math.max(
-        0,
-        (damageLossBudgets.get(movement.destinationKey) ?? 0) - dying,
-      ),
-    );
-    damageSurvivors.set(
-      movement,
-      subtractStates(
-        movedStates,
-        statesForCount(movedStates, retreating + dying),
-      ),
-    );
-  }
+  const retreatPhase = planRetreats({
+    retreats: options.retreats ?? [],
+    current,
+    previousStacks,
+    currentStacks,
+    movementArrivals,
+    stagedRotations: stagedRotationByDestinationKey,
+    inventory,
+    movementEnd,
+  });
+  const reconciliation = reconcileInventory({
+    inventory,
+    movementArrivals,
+    previousStacks,
+    currentStacks,
+    stagedRotations: stagedRotationByDestinationKey,
+    movementEnd,
+  });
+  const {
+    transitions: retreatTransitions,
+    transitionsBySource: retreatTransitionsBySource,
+    stagedTransitions: stagedRetreatTransitions,
+    totalsBySource: retreatTotalsBySource,
+  } = retreatPhase;
+  const {
+    removedTransitions,
+    stagedRemovedTransitions,
+    lossCounts,
+    increasedBadgeTransitions,
+    addedTransitions,
+  } = reconciliation;
 
-  // Allocate final-state sustain increases back onto the fleets that arrived
-  // for this combat. Their sprites are sustained from a layout perspective,
-  // but the marker itself remains hidden until the middle of the volley.
-  if (damageAtMs !== undefined) {
-    const damageBudgets = new Map<string, StateCounts>();
-    for (const movement of movements) {
-      if (!movement.staged) continue;
-      const key = rawLocationKey(movement.target);
-      if (damageBudgets.has(key)) continue;
-      const retreatStates = options.retreats?.find(
-        (retreat) =>
-          retreat.faction === movement.target.faction &&
-          retreat.fromTile === movement.target.position &&
-          retreat.fromHolder === movement.target.holder,
-      )?.units[movement.target.unitId] as StateCounts | undefined;
-      const finalStates = movement.finalDestination
-        ? states(movement.finalDestination.stack)
-        : undefined;
-      const afterStates = retreatStates ?? finalStates;
-      if (!afterStates) continue;
-      const before = findLocated(previousStacks, movement.target);
-      const arrivalStates = movements
-        .filter((candidate) => candidate.destinationKey === key)
-        .reduce<StateCounts>(
-          (total, candidate) => {
-            const candidateStates = states(candidate.transition.stack);
-            for (let i = 0; i < 4; i += 1) total[i] += candidateStates[i];
-            return total;
-          },
-          [0, 0, 0, 0],
-        );
-      const beforeStates = retreatStates
-        ? ([0, 0, 0, 0] as StateCounts)
-        : before
-          ? states(before.stack)
-          : ([0, 0, 0, 0] as StateCounts);
-      damageBudgets.set(key, [
-        0,
-        Math.max(0, afterStates[1] - beforeStates[1] - arrivalStates[1]),
-        0,
-        Math.max(0, afterStates[3] - beforeStates[3] - arrivalStates[3]),
-      ]);
-    }
-    for (const movement of movements) {
-      if (!movement.staged) continue;
-      const { transition } = movement;
-      const budget = damageBudgets.get(movement.destinationKey);
-      if (!budget) continue;
-      const transitionStates = states(transition.stack);
-      const survivingStates = damageSurvivors.get(movement) ?? transitionStates;
-      const normalDamage = Math.min(survivingStates[0], budget[1]);
-      const galvanizedDamage = Math.min(survivingStates[2], budget[3]);
-      if (normalDamage + galvanizedDamage === 0) continue;
-      transitionStates[0] -= normalDamage;
-      transitionStates[1] += normalDamage;
-      transitionStates[2] -= galvanizedDamage;
-      transitionStates[3] += galvanizedDamage;
-      budget[1] -= normalDamage;
-      budget[3] -= galvanizedDamage;
-      transition.stack = {
-        ...transition.stack,
-        sustained: transitionStates[1] + transitionStates[3],
-        unitStates: transitionStates,
-      };
-      transition.damageAtMs = damageAtMs;
-      transition.delayedDamageStates = [0, normalDamage, 0, galvanizedDamage];
-    }
-  }
-  const retreatTransitions: MapUnitTransition[] = [];
-  const retreatTransitionsBySource = new Map<string, MapUnitTransition[]>();
-  const stagedRetreatTransitions = new Set<MapUnitTransition>();
-  const retreatTotalsBySource = new Map<string, number>();
-  for (const retreat of options.retreats ?? []) {
-    for (const [unitId, retreatStates] of Object.entries(retreat.units)) {
-      const unitStates = retreatStates as StateCounts;
-      if (count(unitStates) === 0) continue;
-      const from: UnitLocation = {
-        position: retreat.fromTile,
-        holder: retreat.fromHolder,
-        faction: retreat.faction,
-        unitId,
-      };
-      const to: UnitLocation = {
-        position: retreat.toTile,
-        holder: retreat.toHolder,
-        faction: retreat.faction,
-        unitId,
-      };
-      const fromKey = rawLocationKey(from);
-      const toKey = rawLocationKey(to);
-      const sourceLocated =
-        movementArrivals.get(fromKey) ??
-        findLocated(previousStacks, from) ??
-        findLocated(currentStacks, from);
-      if (!sourceLocated) continue;
-      const finalRetreatDestination = findLocated(currentStacks, to);
-      const destinationLocated =
-        finalRetreatDestination ??
-        syntheticDestination(sourceLocated, current, to.position, to.holder);
-      if (!destinationLocated) continue;
-
-      const retreatCount = count(unitStates);
-      addTotal(expectedTotals, fromKey, -retreatCount);
-      addTotal(expectedTotals, toKey, retreatCount);
-      locations.set(fromKey, from);
-      locations.set(toKey, to);
-      addTotal(retreatTotalsBySource, fromKey, retreatCount);
-      const combatRotation = stagedRotationByDestinationKey.get(fromKey);
-      const retreatTransition: MapUnitTransition = {
-        kind: "retreated",
-        stack: stackWithStates(sourceLocated, unitStates),
-        toX: destinationLocated.worldX,
-        toY: destinationLocated.worldY,
-        locationKey: mapUnitLocationKey(
-          destinationLocated.position,
-          destinationLocated.stack,
-        ),
-        layoutUnitStates: finalRetreatDestination
-          ? states(finalRetreatDestination.stack)
-          : unitStates,
-        holdFromMs: movementArrivals.has(fromKey) ? movementEnd : 0,
-        startRotationDeg: combatRotation,
-        holdRotationDeg: combatRotation,
-      };
-      retreatTransitions.push(retreatTransition);
-      const sourceRetreats = retreatTransitionsBySource.get(fromKey) ?? [];
-      sourceRetreats.push(retreatTransition);
-      retreatTransitionsBySource.set(fromKey, sourceRetreats);
-      if (stagedRotationByDestinationKey.has(fromKey))
-        stagedRetreatTransitions.add(retreatTransition);
-    }
-  }
-
-  const removedTransitions: MapUnitTransition[] = [];
-  const stagedRemovedTransitions = new Set<MapUnitTransition>();
-  const lossCounts = new Map<string, number>();
-  const increasedBadgeTransitions: MapUnitTransition[] = [];
-  const addedTransitions: MapUnitTransition[] = [];
-  for (const [key, location] of locations) {
-    const expected = expectedTotals.get(key) ?? 0;
-    const final = finalTotals.get(key) ?? 0;
-    if (expected > final) {
-      const located =
-        movementArrivals.get(key) ??
-        findLocated(previousStacks, location) ??
-        findLocated(currentStacks, location);
-      if (!located) continue;
-      lossCounts.set(key, expected - final);
-      const isBadge = BADGE_UNITS.has(location.unitId);
-      const isStaged = stagedRotationByDestinationKey.has(key);
-      // A moved badge already hands its full count to the surviving settlement
-      // badge. Rendering the numerical loss as another badge produces the
-      // misleading "3 plus a spinning 1" composition.
-      if (isBadge && isStaged) continue;
-      const removedStates = isBadge
-        ? states(located.stack)
-        : statesForCount(states(located.stack), expected - final);
-      const removedTransition: MapUnitTransition = {
-        kind: "removed",
-        stack: stackWithStates(located, removedStates),
-        toX: located.worldX,
-        toY: located.worldY,
-        locationKey: mapUnitLocationKey(located.position, located.stack),
-        appearAtMs: movementArrivals.has(key) ? movementEnd : 0,
-        startRotationDeg: stagedRotationByDestinationKey.get(key),
-        badgeCountChange: isBadge,
-      };
-      removedTransitions.push(removedTransition);
-      if (stagedRotationByDestinationKey.has(key))
-        stagedRemovedTransitions.add(removedTransition);
-    } else if (final > expected) {
-      const located = findLocated(currentStacks, location);
-      if (!located) continue;
-      const before = findLocated(previousStacks, location);
-      if (BADGE_UNITS.has(location.unitId) && before) {
-        // Fighter and infantry stacks are one composite badge. Preserve the
-        // complete prior badge until the final count is ready; animating only
-        // the numerical increase would hide the stack and briefly show "1".
-        increasedBadgeTransitions.push({
-          kind: "removed",
-          stack: stackWithStates(located, states(before.stack)),
-          toX: located.worldX,
-          toY: located.worldY,
-          locationKey: mapUnitLocationKey(located.position, located.stack),
-          badgeCountChange: true,
-        });
-        continue;
-      }
-      const addedStates = statesForCount(
-        states(located.stack),
-        final - expected,
-      );
-      addedTransitions.push({
-        kind: "added",
-        stack: stackWithStates(located, addedStates),
-        toX: located.worldX,
-        toY: located.worldY,
-        locationKey: mapUnitLocationKey(located.position, located.stack),
-        layoutUnitStates: states(located.stack),
-      });
-    }
-  }
+  const movementOutcomes = allocateMovementOutcomes(
+    movements,
+    retreatTotalsBySource,
+    lossCounts,
+  );
+  applyMovementDamage({
+    movements,
+    outcomes: movementOutcomes,
+    previousStacks,
+    retreats: options.retreats ?? [],
+    damageAtMs,
+  });
 
   const deathDelay = laserEnd + (lossCounts.size > 0 ? 100 : 0);
   for (const transition of removedTransitions) {
@@ -1709,135 +598,18 @@ function buildAuthoritativeMapReplay(
   for (const transition of increasedBadgeTransitions)
     transition.delayMs = placementDelay;
 
-  const retreatBudgets = new Map(retreatTotalsBySource);
-  const lossBudgets = new Map(lossCounts);
-  const settleTransitions: MapUnitTransition[] = [];
-  const sequencedMovementTransitions: MapUnitTransition[] = [];
-  const mergedRetreatTransitions = new Set<MapUnitTransition>();
-  for (const movement of movements) {
-    const {
-      transition,
-      destinationKey: destination,
-      finalDestination,
-    } = movement;
-
-    const movedStates = states(transition.stack);
-    const movedCount = count(movedStates);
-    const retreating = Math.min(
-      movedCount,
-      retreatBudgets.get(destination) ?? 0,
-    );
-    retreatBudgets.set(
-      destination,
-      Math.max(0, (retreatBudgets.get(destination) ?? 0) - retreating),
-    );
-    const dying = Math.min(
-      movedCount - retreating,
-      lossBudgets.get(destination) ?? 0,
-    );
-    lossBudgets.set(
-      destination,
-      Math.max(0, (lossBudgets.get(destination) ?? 0) - dying),
-    );
-    const outgoingStates = statesForCount(movedStates, retreating + dying);
-    const survivingStates = subtractStates(movedStates, outgoingStates);
-    const fullStackRetreat =
-      movement.staged &&
-      retreating === movedCount &&
-      dying === 0 &&
-      movements.filter((candidate) => candidate.destinationKey === destination)
-        .length === 1
-        ? retreatTransitionsBySource.get(destination)?.[0]
-        : undefined;
-    if (fullStackRetreat) {
-      const retreatStates = states(fullStackRetreat.stack);
-      mergedRetreatTransitions.add(fullStackRetreat);
-      sequencedMovementTransitions.push({
-        ...transition,
-        stack: {
-          ...transition.stack,
-          count: count(retreatStates),
-          sustained: retreatStates[1] + retreatStates[3],
-          unitStates: retreatStates,
-        },
-        locationKey: fullStackRetreat.locationKey,
-        layoutUnitStates: fullStackRetreat.layoutUnitStates,
-        continuation: {
-          toX: fullStackRetreat.toX,
-          toY: fullStackRetreat.toY,
-          delayMs: placementDelay,
-          startRotationDeg: transition.parkRotationDeg,
-          parkRotationDeg: 0,
-        },
-      });
-      continue;
-    }
-    if (movement.staged && count(outgoingStates) === 0 && finalDestination) {
-      sequencedMovementTransitions.push({
-        ...transition,
-        continuation: {
-          toX: finalDestination.worldX,
-          toY: finalDestination.worldY,
-          delayMs: placementDelay,
-          startRotationDeg: transition.parkRotationDeg,
-          parkRotationDeg: 0,
-        },
-      });
-      continue;
-    }
-    if (movement.staged) {
-      sequencedMovementTransitions.push({
-        ...transition,
-        // Successor death/retreat/settlement ghosts are already painted at
-        // deathDelay. Keep this source ghost for a few extra frames so the
-        // browser never exposes a one-frame gap during the handoff.
-        hideAfterMs: deathDelay + VISUAL_HANDOFF_OVERLAP_MS,
-      });
-    } else if (count(outgoingStates) > 0) {
-      sequencedMovementTransitions.push({
-        ...transition,
-        stack: {
-          ...transition.stack,
-          count: count(outgoingStates),
-          sustained: outgoingStates[1] + outgoingStates[3],
-          unitStates: outgoingStates,
-        },
-        hideAfterMs: movementEnd,
-      });
-      if (count(survivingStates) > 0) {
-        sequencedMovementTransitions.push({
-          ...transition,
-          stack: {
-            ...transition.stack,
-            count: count(survivingStates),
-            sustained: survivingStates[1] + survivingStates[3],
-            unitStates: survivingStates,
-          },
-        });
-      }
-    } else {
-      sequencedMovementTransitions.push(transition);
-    }
-
-    if (!movement.staged || count(survivingStates) === 0 || !finalDestination)
-      continue;
-
-    settleTransitions.push({
-      kind: "settled",
-      stack: stackWithStates(movement.arrival, survivingStates),
-      toX: finalDestination.worldX,
-      toY: finalDestination.worldY,
-      locationKey: mapUnitLocationKey(
-        finalDestination.position,
-        finalDestination.stack,
-      ),
-      layoutUnitStates: states(finalDestination.stack),
-      holdFromMs: deathDelay,
-      delayMs: placementDelay,
-      startRotationDeg: transition.parkRotationDeg,
-      holdRotationDeg: transition.parkRotationDeg,
-    });
-  }
+  const {
+    movementTransitions: sequencedMovementTransitions,
+    settleTransitions,
+    mergedRetreatTransitions,
+  } = sequenceMovements({
+    movements,
+    outcomes: movementOutcomes,
+    retreatTransitionsBySource,
+    movementEnd,
+    deathDelay,
+    placementDelay,
+  });
 
   const placementEnd = Math.max(
     combatEnd,
@@ -1892,32 +664,12 @@ function buildAuthoritativeMapReplay(
     options.alwaysShowControlTokens ?? true,
   );
   const baseUnitStates = assignReplayLayout(transitions);
-  const delayedDamage = new Map<
-    string,
-    { damageAtMs: number; states: StateCounts }
-  >();
-  if (damageAtMs !== undefined) {
-    for (const currentLocated of currentStacks) {
-      const location = locatedLocation(currentLocated);
-      const key = rawLocationKey(location);
-      if (stagedRotationByDestinationKey.has(key)) continue;
-      const previousLocated = findLocated(previousStacks, location);
-      if (!previousLocated) continue;
-      const before = states(previousLocated.stack);
-      const after = states(currentLocated.stack);
-      const delayedStates: StateCounts = [
-        0,
-        Math.max(0, after[1] - before[1]),
-        0,
-        Math.max(0, after[3] - before[3]),
-      ];
-      if (delayedStates[1] + delayedStates[3] === 0) continue;
-      delayedDamage.set(
-        mapUnitLocationKey(currentLocated.position, currentLocated.stack),
-        { damageAtMs, states: delayedStates },
-      );
-    }
-  }
+  const delayedDamage = buildStationaryDamage({
+    currentStacks,
+    previousStacks,
+    stagedDestinations: new Set(stagedRotationByDestinationKey.keys()),
+    damageAtMs,
+  });
   return finalizeReplayPlan({
     transitions,
     lasers: combatLasers,
