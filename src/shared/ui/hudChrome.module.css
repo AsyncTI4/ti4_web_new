@@ -1,0 +1,70 @@
+/*
+ * HUD deck buttons.
+ *
+ * The header's two actions were a saturated Discord-blue filled button and a
+ * cyan outlined one — the loudest things on a graphite deck, and neither in the
+ * system's palette. Both are now plates: quiet at rest, lit on hover, with the
+ * accent confined to a hairline and the glyph. Login keeps the Discord blue,
+ * because that is brand recognition doing real work; it just stops shouting.
+ */
+.hudButton {
+  height: 28px;
+  padding: 0 11px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-4);
+  background: var(--socket-bg);
+  border: 1px solid var(--panel-hairline);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--socket-inset);
+  transition:
+    color 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hudButton:hover {
+  color: var(--mantine-color-gray-1);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--panel-hairline-strong);
+  box-shadow: var(--machined-bevel);
+}
+
+.hudButton:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 2px;
+}
+
+/* Discord: the brand hue lives on the frame and the glyph, not the fill. */
+.hudButtonDiscord {
+  color: rgba(179, 196, 255, 0.95);
+  border-color: rgba(88, 101, 242, 0.55);
+  background: linear-gradient(
+      180deg,
+      rgba(88, 101, 242, 0.18) 0%,
+      rgba(88, 101, 242, 0.08) 100%
+    ),
+    var(--socket-bg);
+  box-shadow: var(--machined-bevel);
+}
+
+.hudButtonDiscord:hover {
+  color: #ffffff;
+  border-color: rgba(88, 101, 242, 0.85);
+  background: linear-gradient(
+      180deg,
+      rgba(88, 101, 242, 0.3) 0%,
+      rgba(88, 101, 242, 0.16) 100%
+    ),
+    var(--socket-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hudButton {
+    transition: none;
+  }
+}

@@ -24,29 +24,49 @@
   flex-shrink: 0;
 }
 
+/*
+ * Open-game plates. A game id is an identifier, so it is set in mono, and the
+ * plate follows the HUD deck: socket at rest, lit when it is the game on screen.
+ */
 .tab {
-  background: var(--header-tab-bg);
-  border: var(--header-tab-border);
-  color: rgba(255, 255, 255, 0.85) !important;
-  font-weight: 500;
-  font-size: 13px;
-  padding: 8px 12px;
-  margin: 2px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  cursor: pointer;
   position: relative;
+  margin: 0;
+  padding: 6px 11px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--mantine-color-gray-5) !important;
+  background: var(--socket-bg);
+  border: 1px solid var(--panel-hairline);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--socket-inset);
+  cursor: pointer;
+  transition:
+    color 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tab:hover {
-  background: var(--header-tab-hover-bg);
-  border-color: var(--header-tab-hover-border);
+  color: var(--mantine-color-gray-2) !important;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--panel-hairline-strong);
+  box-shadow: var(--machined-bevel);
 }
 
 .tab[data-active="true"] {
-  background: var(--header-tab-active-bg);
-  border-color: var(--header-tab-active-border);
-  color: rgba(255, 255, 255, 1) !important;
+  color: var(--mantine-color-gray-0) !important;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--panel-hairline-strong);
+  box-shadow: var(--machined-bevel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
 }
 
 .tabText {

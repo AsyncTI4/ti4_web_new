@@ -1,5 +1,6 @@
 import { Button } from "@mantine/core";
 import { SiteHeader } from "./SiteHeader";
+import hud from "./hudChrome.module.css";
 
 export type MapHeaderSwitchProps = {
   gameId: string;
@@ -20,7 +21,13 @@ export function MapHeaderSwitch({
 }: MapHeaderSwitchProps) {
   return (
     <SiteHeader currentMapId={gameId}>
-      <Button variant="light" size="xs" color="cyan" onClick={onButtonClick} visibleFrom={hideOnMobile ? "sm" : undefined}>
+      <Button
+        variant="default"
+        size="xs"
+        className={hud.hudButton}
+        onClick={onButtonClick}
+        visibleFrom={hideOnMobile ? "sm" : undefined}
+      >
         {buttonLabel}
       </Button>
     </SiteHeader>

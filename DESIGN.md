@@ -248,12 +248,14 @@ Glow is not elevation at all; it belongs exclusively to state.
 
 **The Glow-Is-State Rule.** Glow reports a condition — this player is active, this objective is at threshold, this unit is upgraded. A glow on a surface at rest is the neon cyberpunk anti-reference.
 
+**The Cheap Corner Rule.** A plate's cut corner is painted as a small gradient triangle in `--plate-ground`, never carved with `clip-path`. `clip-path` on a large element forces an uncomposited repaint every frame; with ~60 plates on screen it measured **39.9ms per frame (25fps)** while scrolling, against **12.5ms (80fps)** without. Only plates floating over arbitrary content — where no single ground colour exists to paint in — may clip, and there should never be more than a handful of those on screen at once (`Module`'s `overContent` prop). Every theme must declare `--plate-ground` to match its `--player-card-box-bg`, or the notch shows as a visible wedge.
+
 **The Empty-Is-A-Socket Rule.** Empty capacity — an unresearched tech, a unit unavailable to a faction, a sealed secret — is drawn as a recessed socket with walls. Never a dashed outline: dashed reads as unfinished layout, not as an empty slot.
 
 ### Machined Vocabulary
 
 - **Bevel** (`--machined-bevel`): `inset 0 1px 0` light over `inset 0 -1px 0` shade. On every plate, bay and stores chip. The whole trick.
-- **Chamfer** (`--machined-chamfer` 9px, `--machined-chamfer-sm` 6px): the cut corner shared by modules, unit bays, strategy cards and the condensed rack. Cut, never rounded.
+- **Chamfer** (`--machined-chamfer` 9px, `--machined-chamfer-sm` 6px): the cut corner shared by modules, unit bays, strategy cards and the condensed rack. Cut, never rounded. **Painted, not clipped** — see the Cheap Corner Rule below.
 - **Rail** (`--rail-bg`, `--rail-hatch`, `--rail-border`): a recessed strip along a plate's top edge. Carries a section name where one is needed, a fine diagonal hatch, and graduation ticks. Texture lives here — on chrome, never behind a value.
 - **Socket** (`--socket-bg`, `--socket-border`, `--socket-inset`, `--socket-tick`): empty capacity, pressed in, with walls and a registration tick.
 - **Trough** (`--trough-bg`, `--trough-inset`): a recessed channel seating a numeric readout. The bottom highlight is what sells the recess; without it a dark band just reads as a different fill.
@@ -290,6 +292,15 @@ A slot in a reinforcement rack: a milled pocket holding the sprite over a soft v
 Hover brightens the frame and raises the top light; nothing moves. A twelve-cell rack that lifts on hover is noise, not feedback.
 
 The condensed rack (`denseGrid`) shares the language at smaller scale, with 1px gaps letting the container background through so the cells share one continuous frame instead of each carrying a border.
+
+### Top HUD deck
+
+The header and the view-tab row are two halves of one console deck that the map sits behind, the way an RTS floats its chrome over the battlefield. Both take the same hatched chrome the module rails use, and the deck closes with a lit lower lip plus a downward shadow, so the map reads as being *under* the HUD rather than merely next to it. The map keeps its black field and is the one surface allowed to be visually loud — it is the subject.
+
+- **View tabs** are plates, not browser tabs: a socket at rest, a lit plate when selected, with a seated accent bar along the selected tab's floor. That bar is the only chroma in the strip.
+- **Map tools** are bays in one rack — a single recessed block whose 1px seams show the container through, built exactly like the condensed unit grid. Engaged state is a **lit bay** with the tool's hue confined to a thin edge and the glyph; the previous per-tool `filled` variants in cyan, blue and orange made the row read as a random tray of app icons in three accent colours.
+- **Header actions** are plates too. Discord login keeps the brand blue on its frame and glyph, because that is brand recognition doing real work, but it no longer arrives as a saturated fill.
+- **Open-game chips** are set in mono, because a game id is an identifier.
 
 ### Player identity
 

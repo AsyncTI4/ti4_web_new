@@ -1,4 +1,6 @@
-import { Box, Button, Group, ActionIcon } from "@mantine/core";
+import { Box, Button, Group, ActionIcon, UnstyledButton } from "@mantine/core";
+import cx from "clsx";
+import type { ReactNode } from "react";
 import {
   IconRuler2,
   IconKeyboard,
@@ -27,6 +29,45 @@ type ControlButtonsProps = {
   onTryDecalsClick?: () => void;
 };
 
+type ToolAccent = "cyan" | "blue" | "orange";
+
+const ACCENT_CLASS: Record<ToolAccent, string> = {
+  cyan: classes.accentCyan,
+  blue: classes.accentBlue,
+  orange: classes.accentOrange,
+};
+
+/** One bay in the map-tool rack. Engaged state reads as lit, not filled. */
+function ToolButton({
+  active = false,
+  accent = "cyan",
+  label,
+  onClick,
+  children,
+}: {
+  active?: boolean;
+  accent?: ToolAccent;
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <UnstyledButton
+      className={cx(
+        classes.toolButton,
+        ACCENT_CLASS[accent],
+        active && classes.toolButtonActive
+      )}
+      onClick={onClick}
+      aria-pressed={active}
+      aria-label={label}
+      title={label}
+    >
+      {children}
+    </UnstyledButton>
+  );
+}
+
 function SettingsButton({
   handlers,
 }: {
@@ -54,108 +95,90 @@ function ControlButtons({
   showDistanceButton = true,
   onTryDecalsClick,
 }: ControlButtonsProps) {
+  const showPds = !!game?.tilesWithPds && game.tilesWithPds.size > 0;
+
   return (
-    <>
-      <Button
-        variant={settings.planetTypesMode ? "filled" : "light"}
-        size="sm"
-        color={settings.planetTypesMode ? "cyan" : "gray"}
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
+    <Box className={classes.toolRack}>
+      <ToolButton
+        active={settings.planetTypesMode}
+        label="Planet types"
         onClick={handlers.togglePlanetTypesMode}
       >
         <img
           src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
-          alt="Planet Types"
+          alt=""
           height={16}
+          className={classes.toolIcon}
         />
-      </Button>
+      </ToolButton>
 
-      <Button
-        variant={settings.techSkipsMode ? "filled" : "light"}
-        size="sm"
-        color={settings.techSkipsMode ? "cyan" : "gray"}
-        h={36}
-        px={8}
+      <ToolButton
+        active={settings.techSkipsMode}
+        label="Tech skips"
         onClick={handlers.toggleTechSkipsMode}
       >
-        <img src="/green.png" alt="Tech Skips" height={16} />
-        <img
-          src="/yellow.png"
-          alt="Tech Skips"
-          height={16}
-          style={{ marginLeft: "-4px" }}
-        />
-        <img
-          src="/red.png"
-          alt="Tech Skips"
-          height={16}
-          style={{ marginLeft: "-4px" }}
-        />
-        <img
-          src="/blue.png"
-          alt="Tech Skips"
-          height={16}
-          style={{
-            marginLeft: "-4px",
-          }}
-        />
-      </Button>
+        {["/green.png", "/yellow.png", "/red.png", "/blue.png"].map(
+          (src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              height={16}
+              className={classes.toolIcon}
+              style={index > 0 ? { marginLeft: -4 } : undefined}
+            />
+          )
+        )}
+      </ToolButton>
 
-      <Button
-        variant={settings.attachmentsMode ? "filled" : "light"}
-        size="sm"
-        color={settings.attachmentsMode ? "cyan" : "gray"}
-        style={{ height: "36px", minWidth: "36px" }}
-        px={8}
+      <ToolButton
+        active={settings.attachmentsMode}
+        label="Attachments"
         onClick={handlers.toggleAttachmentsMode}
       >
         <IconLinkPlus size={16} />
-      </Button>
+      </ToolButton>
 
       {showDistanceButton && (
-        <Button
-          variant={settings.distanceMode ? "filled" : "light"}
-          size="sm"
-          color={settings.distanceMode ? "orange" : "gray"}
-          px={8}
+        <ToolButton
+          active={settings.distanceMode}
+          accent="orange"
+          label="Distance ruler"
           onClick={handlers.toggleDistanceMode}
         >
           <IconRuler2 size={16} />
-        </Button>
+        </ToolButton>
       )}
 
-      {game?.tilesWithPds && game.tilesWithPds.size > 0 && (
-        <Button
-          variant={settings.showPDSLayer ? "filled" : "light"}
-          size="sm"
-          color={settings.showPDSLayer ? "blue" : "gray"}
-          px={8}
+      {showPds && (
+        <ToolButton
+          active={settings.showPDSLayer}
+          accent="blue"
+          label="PDS coverage"
           onClick={handlers.togglePdsMode}
         >
-          <img src={cdnImage("/units/gry_pd.webp")} alt="PDS" height={22} />
-        </Button>
+          <img
+            src={cdnImage("/units/gry_pd.webp")}
+            alt=""
+            height={20}
+            className={classes.toolIcon}
+          />
+        </ToolButton>
       )}
 
       {showDistanceButton && (
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          h={36}
-          w={36}
-          px={8}
+        <ToolButton
+          label="Keyboard shortcuts"
           onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
         >
           <IconKeyboard size={16} />
-        </Button>
+        </ToolButton>
       )}
 
-      <Button
-        variant={settings.overlaysEnabled ? "filled" : "light"}
-        size="sm"
-        color={settings.overlaysEnabled ? "blue" : "gray"}
-        px={8}
+      <ToolButton
+        active={settings.overlaysEnabled}
+        accent="blue"
+        label="Control overlays"
         onClick={handlers.toggleOverlays}
       >
         <svg
@@ -164,30 +187,24 @@ function ControlButtons({
           viewBox="0 0 16 18"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
-            fill="#3b82f6"
-            stroke="#3b82f6"
+            fill="currentColor"
+            stroke="currentColor"
             strokeWidth="1.5"
             strokeLinejoin="miter"
           />
         </svg>
-      </Button>
+      </ToolButton>
 
       {onTryDecalsClick && (
-        <Button
-          variant="light"
-          size="sm"
-          color="gray"
-          px={8}
-          onClick={onTryDecalsClick}
-          title="Try Unit Decals"
-        >
+        <ToolButton label="Try unit decals" onClick={onTryDecalsClick}>
           <IconSticker size={16} />
-        </Button>
+        </ToolButton>
       )}
-    </>
+    </Box>
   );
 }
 

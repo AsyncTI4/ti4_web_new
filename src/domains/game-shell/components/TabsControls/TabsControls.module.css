@@ -1,3 +1,102 @@
+/*
+ * Tool rack.
+ *
+ * The map tools were eight separate Mantine Buttons with per-tool `filled`
+ * variants in cyan, blue and orange, so the row read as a random tray of app
+ * icons in three different accent colours. They are now bays in one rack: a
+ * single recessed block whose 1px seams show the container through, exactly how
+ * the condensed unit grid is built. Active state is a LIT bay, with the tool's
+ * own hue confined to a thin edge and the icon — not a saturated fill.
+ */
+.toolRack {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  padding: 1px;
+  background: var(--panel-hairline-strong);
+  border-radius: var(--panel-radius);
+}
+
+.toolButton {
+  --tool-accent: var(--gd-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  color: var(--mantine-color-gray-4);
+  background: var(--panel-field-bg);
+  box-shadow: var(--machined-bevel);
+  cursor: pointer;
+  transition:
+    background 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toolRack > .toolButton:first-child {
+  border-top-left-radius: calc(var(--panel-radius) - 1px);
+  border-bottom-left-radius: calc(var(--panel-radius) - 1px);
+}
+
+.toolRack > .toolButton:last-child {
+  border-top-right-radius: calc(var(--panel-radius) - 1px);
+  border-bottom-right-radius: calc(var(--panel-radius) - 1px);
+}
+
+.toolButton:hover {
+  color: var(--mantine-color-gray-1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.toolButton:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* Lit bay: the tool is engaged. Brightness carries the state, the hue only
+   identifies which tool it is. */
+.toolButtonActive {
+  color: var(--mantine-color-gray-0);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--tool-accent), 0.2) 0%,
+      rgba(var(--tool-accent), 0.1) 100%
+    ),
+    var(--panel-field-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(var(--tool-accent), 0.4),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.toolButtonActive:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(var(--tool-accent), 0.55),
+    inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.accentCyan { --tool-accent: var(--gd-cyan); }
+.accentBlue { --tool-accent: var(--gd-blue); }
+.accentOrange { --tool-accent: var(--gd-orange); }
+
+.toolIcon {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toolButton {
+    transition: none;
+  }
+}
+
 /* Quiet channel links: hairline ghost chips in mono, not filled tabs */
 .discordButton {
   background: transparent;
@@ -20,12 +119,13 @@
 }
 
 .settingsButton {
-  border: 1px solid rgba(148, 163, 184, 0.62);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--panel-hairline-strong);
+  box-shadow: var(--machined-bevel);
 }
 
 .settingsButton:hover {
-  border-color: rgba(203, 213, 225, 0.82);
+  border-color: rgba(203, 213, 225, 0.5);
 }
 
 /* Vaporwave theme styling */
