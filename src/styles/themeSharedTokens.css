@@ -58,6 +58,16 @@
   --machined-chamfer: 9px;
   --machined-chamfer-sm: 6px;
 
+  /*
+   * The surface a plate sits on. Large plates paint their cut corner with a
+   * small gradient triangle in this colour rather than clipping themselves:
+   * clip-path on a big element forces an uncomposited repaint on every frame,
+   * and with ~60 plates on screen that measured at 26ms per frame — a 25fps
+   * scroll. Painting a 9px triangle costs nothing. Themes whose player-card
+   * ground differs must override this to match.
+   */
+  --plate-ground: #121214;
+
   /* Label rail: recessed strip along a module's top edge where the section
      name is seated, instead of floating above the content. */
   --rail-bg: linear-gradient(

@@ -1,10 +1,11 @@
 /*
  * Module — the organizing plate of the player area.
  *
- * Structure is two nested clipped layers rather than a CSS border, because a
- * border cannot follow a chamfered corner: the outer layer IS the hairline
- * frame and the inner layer is the field, inset by 1px. Same technique as
- * StrategyCard, kept deliberately consistent.
+ * The cut corner is PAINTED, not clipped. clip-path on an element this size
+ * forces an uncomposited repaint every frame; with roughly sixty plates on
+ * screen that measured at 26ms per frame, turning a scroll into 25fps. The notch
+ * is now a 9px gradient triangle in the ground colour, plus a 1px diagonal
+ * hairline, layered over the corner — visually the same plate, no repaint cost.
  */
 
 .module {
@@ -13,6 +14,57 @@
   position: relative;
   padding: 1px;
   background: var(--module-frame);
+}
+
+.sm {
+  --module-chamfer: var(--machined-chamfer-sm);
+}
+
+/* The painted notch. `to bottom right` fills the outer half of the corner box
+   with the ground colour and lays the frame hairline along the diagonal. */
+.module::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--module-chamfer);
+  height: var(--module-chamfer);
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom right,
+    transparent 0 calc(50% - 0.5px),
+    var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
+    var(--plate-ground) calc(50% + 0.5px) 100%
+  );
+}
+
+.chamferTopRight::after {
+  top: 0;
+  bottom: auto;
+  background: linear-gradient(
+    to top right,
+    transparent 0 calc(50% - 0.5px),
+    var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
+    var(--plate-ground) calc(50% + 0.5px) 100%
+  );
+}
+
+.chamferNone {
+  border-radius: var(--panel-radius);
+}
+
+.chamferNone::after {
+  content: none;
+}
+
+/*
+ * Plates floating over arbitrary content — the map, with its nebulae — have no
+ * single ground colour to paint a notch in, so they clip instead. There is only
+ * ever a handful of these on screen, so the repaint cost is irrelevant; it is
+ * sixty clipped plates in a scrolling column that is not.
+ */
+.clipNotch {
   clip-path: polygon(
     0 0,
     100% 0,
@@ -22,24 +74,8 @@
   );
 }
 
-/* Chamfer the top-right instead, for modules that sit under a header */
-.chamferTopRight {
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--module-chamfer)) 0,
-    100% var(--module-chamfer),
-    100% 100%,
-    0 100%
-  );
-}
-
-.chamferNone {
-  clip-path: none;
-  border-radius: var(--panel-radius);
-}
-
-.sm {
-  --module-chamfer: var(--machined-chamfer-sm);
+.clipNotch::after {
+  content: none;
 }
 
 /* Stretch to the row's height and let the body absorb the slack, so a band of
@@ -52,9 +88,6 @@
 
 .fill .inner {
   height: 100%;
-}
-
-.fill .inner {
   display: flex;
   flex-direction: column;
 }
@@ -68,38 +101,18 @@
   position: relative;
   background: var(--panel-texture), var(--panel-field-bg);
   box-shadow: var(--machined-bevel);
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--module-chamfer)),
-    calc(100% - var(--module-chamfer)) 100%,
-    0 100%
-  );
-}
-
-.chamferTopRight .inner {
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--module-chamfer)) 0,
-    100% var(--module-chamfer),
-    100% 100%,
-    0 100%
-  );
 }
 
 .chamferNone .inner {
-  clip-path: none;
   border-radius: calc(var(--panel-radius) - 1px);
 }
 
-/* An accented module keys its frame and rail to a signal or player color.
-   The tint stays under 0.3 alpha on the frame only; the field never colors. */
+/* An accented module keys its frame and rail to a signal or player color. The
+   tint stays under 0.3 alpha on the frame only; the field never colors.
+   The frame is a flat colour rather than a gradient so the painted notch can
+   reuse it for the diagonal hairline. */
 .accented {
-  --module-frame: linear-gradient(
-    180deg,
-    rgba(var(--accent-rgb), 0.34) 0%,
-    rgba(var(--accent-rgb), 0.14) 100%
-  );
+  --module-frame: rgba(var(--accent-rgb), 0.3);
 }
 
 /* ---------- Label rail ---------- */

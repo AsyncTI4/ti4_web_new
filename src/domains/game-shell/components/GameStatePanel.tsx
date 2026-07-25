@@ -438,6 +438,7 @@ function GameStatePanelContent({
         accentRgb={PHASE_ACCENT_RGB.red}
         label={<PhaseBadge phase={phase} />}
         density="compact"
+        overContent
         className={styles.panel}
       >
         <WinnerBanner winner={gameState.winner} playerData={playerData} />
@@ -459,6 +460,7 @@ function GameStatePanelContent({
         ) : undefined
       }
       density="compact"
+      overContent
       className={styles.panel}
     >
       <Stack gap="xs">

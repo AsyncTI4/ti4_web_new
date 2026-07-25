@@ -97,4 +97,8 @@
       repeating-linear-gradient(0deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px),
       repeating-linear-gradient(90deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px);
     --player-card-inner-glow: radial-gradient(90% 60% at 50% 0%, rgba(59, 130, 246, 0.04), transparent 60%);
+
+    /* Ground a plate's painted corner notch is cut into; must match this
+       theme's --player-card-box-bg or the notch shows as a visible wedge. */
+    --plate-ground: #131c34;
 }

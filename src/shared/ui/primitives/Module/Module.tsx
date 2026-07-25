@@ -24,6 +24,12 @@ type Props = Omit<BoxProps, "children" | "style"> & {
   small?: boolean;
   /** Stretch to the row height and let the body absorb the slack. */
   fill?: boolean;
+  /**
+   * Set for plates that float over arbitrary content (the map) rather than a
+   * card ground. Cuts the corner with clip-path instead of painting it, since
+   * there is no single ground colour to paint in.
+   */
+  overContent?: boolean;
   children: ReactNode;
 };
 
@@ -53,6 +59,7 @@ export function Module({
   density = "default",
   small = false,
   fill = false,
+  overContent = false,
   className,
   style,
   children,
@@ -69,6 +76,7 @@ export function Module({
         chamfer === "none" && classes.chamferNone,
         small && classes.sm,
         fill && classes.fill,
+        overContent && classes.clipNotch,
         accentRgb && classes.accented,
         className
       )}

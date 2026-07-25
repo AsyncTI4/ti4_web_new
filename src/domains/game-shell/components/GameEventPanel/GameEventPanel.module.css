@@ -22,7 +22,6 @@
   background: var(--rail-hatch), var(--rail-bg), var(--panel-field-bg);
   border-bottom: 1px solid var(--rail-border);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(6px);
 }
 .roundHeader:first-child {
   margin-top: -4px;

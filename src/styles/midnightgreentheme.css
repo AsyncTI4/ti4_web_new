@@ -160,6 +160,10 @@
       radial-gradient(60% 90% at 18% 0%, rgba(88, 138, 66, 0.07), transparent 55%),
       radial-gradient(50% 80% at 85% 100%, rgba(126, 152, 64, 0.05), transparent 55%);
     --player-card-inner-glow: radial-gradient(85% 70% at 30% 0%, rgba(88, 138, 66, 0.045), transparent 60%);
+
+    /* Ground a plate's painted corner notch is cut into; must match this
+       theme's --player-card-box-bg or the notch shows as a visible wedge. */
+    --plate-ground: #0b1209;
 }
 
 
