@@ -28,9 +28,17 @@
   background: rgba(var(--gradient-color), 0.07);
 }
 
+/* Formerly a 3px left rail. The colored accent now runs as a full hairline
+   plus a fading wash, which carries the same category signal without the
+   side-stripe shape the design system bans. */
 .gradient-left-border {
-  background: rgba(var(--gradient-color), 0.1);
-  border-left: 3px solid rgba(var(--gradient-color), 0.24);
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--gradient-color), 0.14) 0%,
+    rgba(var(--gradient-color), 0.05) 55%,
+    rgba(var(--gradient-color), 0.03) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(var(--gradient-color), 0.24);
 }
 
 .gradient-shadow {

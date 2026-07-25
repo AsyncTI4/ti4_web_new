@@ -1,8 +1,32 @@
-/* Leader card styles */
+/*
+ * Leader dossier row.
+ *
+ * Previously a 20px capsule with the portrait bled outside its container and
+ * given its own 20px left rounding, which clipped the character art into a blob
+ * and left a hard seam where it met the name field. Inside a deck of chamfered
+ * plates, a capsule is the odd shape out.
+ *
+ * Now: a squared plate with a cut corner, and the portrait seated in an inset
+ * well with a hairline wall between it and the text — the same seat/field
+ * relationship the unit bays and sockets use.
+ */
 
-/* Pill shape — leaders are characters/people, softer organic shape */
-.pill {
-  border-radius: 20px;
+.plate {
+  --leader-chamfer: var(--machined-chamfer-sm);
+  border-radius: 0;
+  box-shadow: var(--machined-bevel);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--leader-chamfer)),
+    calc(100% - var(--leader-chamfer)) 100%,
+    0 100%
+  );
+  /* The portrait fills the plate's full height, so the chip's own padding has to
+     go; the text side re-establishes it. */
+  --chip-inner-padding: 0;
+  --chip-inner-min-height: 34px;
+  --chip-inner-gap: 0;
 }
 
 /* Layout components */
@@ -14,17 +38,18 @@
 }
 
 .leaderGroup {
-  align-items: center;
+  align-items: stretch;
   flex-wrap: nowrap;
   min-width: 0;
   width: 100%;
+  gap: 0;
 }
 
 /* Online status indicator */
 .onlineDot {
   position: absolute;
-  top: 2px;
-  left: 28px;
+  top: 3px;
+  right: 4px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -32,43 +57,64 @@
   box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
 }
 
-/* Leader image */
+/*
+ * Portrait well: an inset seat with a hairline wall on its trailing edge. The
+ * art fills it with object-fit rather than being oversized and offset, so no
+ * corner of the face is cut away.
+ */
 .leaderImageContainer {
-  width: 35px;
-  height: 35px;
   position: relative;
   flex: 0 0 auto;
+  width: 38px;
+  align-self: stretch;
+  min-height: 34px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+  border-right: 1px solid var(--panel-separator);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .leaderImage {
-  width: 40px;
-  height: 47px;
-  position: absolute;
-  top: -6px;
-  left: -5px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  width: 100%;
+  height: 100%;
+  display: block;
   object-fit: cover;
-  object-position: center;
+  object-position: center 22%;
+}
+
+/* A single hairline of top light across the portrait, so the well shares the
+   plate's bevel instead of reading as a hole punched in it. */
+.leaderImageContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--machined-bevel-light);
+  pointer-events: none;
 }
 
 .textContainer {
   min-width: 0;
   flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 3px 8px 3px 7px;
 }
 
 .leaderName {
-  font-size: var(--mantine-font-size-sm);
+  font-size: 13px;
   font-weight: 700;
+  line-height: 1.15;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-
 .leaderNameActive {
-  color: var(--mantine-color-white);
+  color: var(--mantine-color-gray-0);
 }
 
 .leaderNameInactive {
@@ -80,32 +126,35 @@
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.11em;
+  line-height: 1.1;
   text-transform: uppercase;
-  opacity: 0.85;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-
 .leaderTypeActive {
-  color: var(--mantine-color-green-3);
+  color: var(--mantine-color-green-4);
 }
 
 .leaderTypeInactive {
-  color: var(--mantine-color-gray-5);
+  color: var(--mantine-color-gray-6);
 }
 
-/* Lock icon */
+/*
+ * Locked: seated in the plate's trailing edge rather than floating off the
+ * corner, where it used to overlap whatever sat above the row.
+ */
 .lockIcon {
   position: absolute;
-  top: -8px;
-  right: -2px;
-  background: var(--mantine-color-gray-7);
-  padding: 4px;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
   display: flex;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
+  padding: 2px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 0 0 1px var(--socket-border);
 }

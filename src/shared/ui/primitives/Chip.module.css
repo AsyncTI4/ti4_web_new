@@ -178,9 +178,12 @@
     background-size: contain;
 }
 
+/* Ellipsis, not clip: a hard cut lands mid-glyph, so "Destroy Heretical Works"
+   truncated to "Destroy Heretical Wo|" reads as a rendering fault rather than as
+   a name that continues. The ellipsis is the affordance that says "hover me". */
 .textContainer {
     overflow: hidden;
-    text-overflow: clip;
+    text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
     flex: 1;

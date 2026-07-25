@@ -59,9 +59,16 @@
 	opacity: 1;
 }
 
-/* Current leader: gold tick on the name plate, gold running total */
+/* Current leader: the name plate takes a gold hairline and a faint gold wash
+   rather than a left tick, so the marker is the plate itself. */
 .leaderRow .nameBody {
-	border-left: 2px solid rgba(234, 179, 8, 0.6);
+	box-shadow: inset 0 0 0 1px rgba(234, 179, 8, 0.42);
+	background-image: linear-gradient(
+		90deg,
+		rgba(234, 179, 8, 0.1) 0%,
+		rgba(234, 179, 8, 0.02) 60%,
+		transparent 100%
+	);
 	padding-left: 8px;
 }
 

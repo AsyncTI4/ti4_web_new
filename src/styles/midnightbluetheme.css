@@ -3,7 +3,9 @@
     --surface-border: 1px solid #313947;
     --surface-corner-accent: 2px solid #313947;
 
-    --player-card-box-bg: #101828;
+    /* A step above --panel-field-bg so the modules inside read as recessed
+       subpanels rather than sitting flush with the card. */
+    --player-card-box-bg: linear-gradient(180deg, #16203a 0%, #111a2e 100%);
 
     --sidebar-bg: #0a111e;
     --left-sidebar-bg: rgb(10 17 30 / 91%);

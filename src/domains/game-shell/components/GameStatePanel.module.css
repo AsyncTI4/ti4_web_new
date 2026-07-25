@@ -1,10 +1,11 @@
-/* Phase color rides a left rail on a dark field, matching the objective
-   cards; the phase label reads as a small-caps status line with a live dot */
+/* Phase color is carried by the full accent hairline and the fading tint,
+   matching the objective cards; the phase label reads as a small-caps status
+   line with a live dot. The tint alone is the signal — a thick left rail was
+   reinforcing it with the one shape the design system bans outright. */
 .panel.panel {
   --accent-rgb: var(--gd-gray);
   position: relative;
-  border: 1px solid var(--panel-hairline);
-  border-left: 3px solid rgba(var(--accent-rgb), 0.6);
+  border: 1px solid rgba(var(--accent-rgb), 0.34);
   border-radius: var(--panel-radius);
   background:
     var(--panel-texture),

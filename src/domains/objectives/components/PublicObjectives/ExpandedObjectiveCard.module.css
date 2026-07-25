@@ -3,8 +3,7 @@
    gradient utilities without !important. */
 .objectiveCard.objectiveCard {
   border-radius: var(--panel-radius);
-  border: 1px solid var(--panel-hairline);
-  border-left: 3px solid rgba(var(--stage-rgb), 0.58);
+  border: 1px solid rgba(var(--stage-rgb), 0.34);
   background:
     var(--panel-texture),
     linear-gradient(

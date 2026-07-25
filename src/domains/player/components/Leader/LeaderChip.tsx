@@ -42,7 +42,7 @@ export function LeaderChip(props: LeaderChipProps) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip accent={accentColor} onClick={toggle} className={styles.pill}>
+        <Chip accent={accentColor} onClick={toggle} className={styles.plate}>
           <Box className={styles.leaderWrapper}>
             <Group gap={6} className={styles.leaderGroup}>
               {showLeaderImage && (
@@ -64,7 +64,7 @@ export function LeaderChip(props: LeaderChipProps) {
             {active && <Box className={styles.onlineDot} />}
             {locked && (
               <Box className={styles.lockIcon}>
-                <IconLock size={16} color="white" stroke={2.5} />
+                <IconLock size={12} color="var(--mantine-color-gray-3)" stroke={2.5} />
               </Box>
             )}
           </Box>

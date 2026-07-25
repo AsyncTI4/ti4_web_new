@@ -18,8 +18,11 @@
     --faction-tab-active-shadow: 0 2px 12px rgba(172, 28, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     --faction-tab-pinned-shadow: 0 4px 16px rgba(172, 28, 38, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
-    /* PlayerCard.tsx */
-    --player-card-box-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    /* PlayerCard.tsx
+       A pure-black ground sat DARKER than the panel field on top of it, which
+       inverts the ground -> field -> socket order and makes the modules read as
+       holes. Lifted to a dark ember graphite so the card encloses its plates. */
+    --player-card-box-bg: linear-gradient(135deg, rgba(20, 8, 9, 1) 0%, rgba(13, 4, 5, 1) 100%);
     --player-card-box-shadow: 0 14px 56px rgba(172, 28, 38, 0.22), 0 8px 32px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
     /** Sidebar **/

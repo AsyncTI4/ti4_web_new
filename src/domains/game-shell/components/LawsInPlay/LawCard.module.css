@@ -3,8 +3,9 @@
   overflow: hidden;
   min-width: 0;
   padding: 6px 8px;
-  border: 1px solid rgba(168, 85, 247, 0.24);
-  border-left: 3px solid rgba(168, 85, 247, 0.55);
+  /* Law purple carried by a full hairline plus the fading tint below, rather
+     than a thick left rail. */
+  border: 1px solid rgba(168, 85, 247, 0.36);
   border-radius: 3px;
   background:
     linear-gradient(90deg, rgba(168, 85, 247, 0.10), rgba(168, 85, 247, 0.025) 48%),

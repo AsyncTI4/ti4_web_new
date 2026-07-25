@@ -143,7 +143,15 @@ export function Chip({
           </Box>
         )}
         {title && (
-          <Text size={textSize} fw={700} c="white" className={classes.textContainer}>
+          <Text
+            size={textSize}
+            fw={700}
+            c="white"
+            className={classes.textContainer}
+            /* Native tooltip so a name the plate is too narrow to show can still
+               be read without opening the details popover. */
+            title={title}
+          >
             {title}
           </Text>
         )}

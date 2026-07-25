@@ -24,7 +24,9 @@
     --faction-tab-pinned-shadow: 0 4px 14px rgba(var(--vw-cyan-rgb), 0.35), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.12);
 
     /* PlayerCard.tsx */
-    --player-card-box-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 1) 0%, rgba(var(--vw-panel-soft-rgb), 1) 100%);
+    /* Lifted a step above --panel-field-bg; at equal values the plates sat
+       flush with the ground and the card lost its enclosure. */
+    --player-card-box-bg: linear-gradient(135deg, rgba(34, 18, 52, 1) 0%, rgba(18, 26, 56, 1) 100%);
     --player-card-box-shadow: 0 12px 48px rgba(var(--vw-pink-rgb), 0.15), 0 6px 28px rgba(var(--vw-cyan-rgb), 0.12), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.08);
 
     /** Sidebar **/
