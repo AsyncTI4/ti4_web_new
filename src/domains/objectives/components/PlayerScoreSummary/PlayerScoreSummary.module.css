@@ -1,9 +1,12 @@
+/*
+ * A section of the bottom HUD deck, not a card resting on it. The border and
+ * inner padding put its heading 11px further in than the four headings above it.
+ */
 .themedContainer {
-	background: var(--player-card-box-bg);
-	box-shadow: var(--player-card-box-shadow);
-	border: var(--card-details-item-border, 1px solid rgba(148, 163, 184, 0.16));
-	border-radius: var(--mantine-radius-md);
-	padding: var(--mantine-spacing-xs);
+	background: none;
+	border: none;
+	box-shadow: none;
+	padding: 0;
 	overflow: hidden;
 	width: fit-content;
 	max-width: 100%;

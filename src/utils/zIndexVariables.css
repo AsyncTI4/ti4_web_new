@@ -36,6 +36,8 @@
   --z-tactical-activation: 1240;
   --z-map-unit-transition: 1250;
   --z-interactive-overlay: 1300;
+  /* HUD deck edges: above every map overlay, below the map UI chrome */
+  --z-hud-deck: 1900;
 
   /* MAP UI - Left sidebar, faction tab bar, scrollbar, controls (2000-2999) */
   --z-left-sidebar: 2000;

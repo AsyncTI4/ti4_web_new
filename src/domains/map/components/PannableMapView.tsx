@@ -125,22 +125,19 @@ export function PannableMapView({ gameId }: Props) {
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
   const contentWidth = isMobile ? "1300px" : "2150px";
-  const contentPadding = isMobile ? undefined : "0 16px";
 
+  /* Horizontal padding now belongs to the bottom deck's sections, so every
+     block inside it lines up on one margin instead of setting its own. */
   const areaStyles = isMobile
     ? { width: contentWidth }
-    : { minWidth: contentWidth, padding: contentPadding };
-  const scoreSummaryAreaStyles = {
-    ...areaStyles,
-    marginTop: "8px",
-  };
+    : { minWidth: contentWidth };
+  const scoreSummaryAreaStyles = areaStyles;
 
   /* Player cards grow to their content width (no internal scrollbars);
      the surrounding map area provides the horizontal scrolling */
   const playerAreaStyles = {
     width: "max-content" as const,
     minWidth: contentWidth,
-    padding: contentPadding,
   };
   const showGameStatePanel = !isMobile;
   const showFloatingMapToolbar = !isMobile;
@@ -179,6 +176,12 @@ export function PannableMapView({ gameId }: Props) {
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
       >
+        {/* Top deck's lower edge, pinned to the top of the board viewport */}
+        <Box
+          className={`${classes.hudOrnament} ${classes.hudOrnamentTop}`}
+          aria-hidden="true"
+        />
+
         {!hideZoomControls && (
           <div
             className={classes.zoomControlsDynamic}
@@ -230,11 +233,19 @@ export function PannableMapView({ gameId }: Props) {
           </>
         )}
 
+        {/* ---- Bottom HUD deck ---------------------------------------- */}
+        <Box className={classes.bottomHud}>
+          <Box
+            className={`${classes.hudOrnament} ${classes.hudOrnamentBottom}`}
+            aria-hidden="true"
+          />
+          <Box className={classes.bottomHudBody}>
         {gameData && (
           <ScaledContent
             zoom={computePanelsZoom()}
             innerStyle={areaStyles}
             enabled={isMobile}
+            className={classes.hudSection}
           >
             <Stack gap="md">
               <Group
@@ -278,6 +289,7 @@ export function PannableMapView({ gameId }: Props) {
             zoom={computePanelsZoom()}
             innerStyle={playerAreaStyles}
             enabled={isMobile}
+            className={classes.hudSection}
           >
             {/* Column stack: width resolves to the widest card so every card
                 shares the same width and data groups align vertically */}
@@ -301,6 +313,7 @@ export function PannableMapView({ gameId }: Props) {
             zoom={computePanelsZoom()}
             innerStyle={scoreSummaryAreaStyles}
             enabled={isMobile}
+            className={classes.hudSection}
           >
             <PlayerScoreSummary
               playerData={gameData.playerData}
@@ -308,7 +321,9 @@ export function PannableMapView({ gameId }: Props) {
             />
           </ScaledContent>
         )}
-        <div style={{ height: "50px", width: "100%" }} />
+          </Box>
+        </Box>
+        {/* ---- end bottom HUD deck ------------------------------------ */}
 
         <ReconnectButton gameDataState={gameDataState} />
       </Box>

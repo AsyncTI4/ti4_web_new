@@ -46,11 +46,15 @@
 }
 
 /* Themed container to match PlayerCard background/opacity behavior */
+/*
+ * Objectives are a section of the bottom HUD deck, not a card sitting on it. The
+ * bordered panel and its inner padding pushed the Stage I and Laws headings
+ * further in than the Player Areas heading beside them, which is what made the
+ * three sections read as unrelated blocks at three different indents.
+ */
 .themedContainer {
-  background: var(--player-card-box-bg);
-  box-shadow: var(--player-card-box-shadow);
-  border: var(--card-details-item-border, 1px solid rgba(148, 163, 184, 0.16));
-  border-radius: var(--mantine-radius-md);
-  padding: var(--mantine-spacing-sm);
-  overflow: hidden;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }

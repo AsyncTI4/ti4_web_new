@@ -293,9 +293,14 @@ Hover brightens the frame and raises the top light; nothing moves. A twelve-cell
 
 The condensed rack (`denseGrid`) shares the language at smaller scale, with 1px gaps letting the container background through so the cells share one continuous frame instead of each carrying a border.
 
-### Top HUD deck
+### HUD decks
 
-The header and the view-tab row are two halves of one console deck that the map sits behind, the way an RTS floats its chrome over the battlefield. Both take the same hatched chrome the module rails use, and the deck closes with a lit lower lip plus a downward shadow, so the map reads as being *under* the HUD rather than merely next to it. The map keeps its black field and is the one surface allowed to be visually loud — it is the subject.
+The board is **set into a console**: a deck above it and a deck below, each closing with the same graduated bezel band facing the board. The map keeps its black field and is the one surface allowed to be visually loud — it is the subject, sandwiched between two pieces of chrome.
+
+- **The bezel band** is 14px of machined edge: full-height panel seams every 160px, half-height graduations every 32px rising from the board-facing edge, over an embossed sheen. Minor marks are deliberately shorter than major ones — a strip of identical evenly-spaced ticks reads as a measuring rule, not as an instrument bezel. The top band is `position: sticky` at the map viewport's top, so the console edge stays present while the board scrolls beneath it.
+- **Chrome is brushed, not hatched.** `--rail-sheen` is a vertical light-to-dark sweep, which is what a bezel does under an overhead source. It replaced a diagonal crosshatch that read as fabric texture.
+- **One indent for the whole bottom deck.** Every section inside it — round line, score track, objectives, laws, player areas, score breakdown — shares one left margin. Two of those sections previously wrapped themselves in their own bordered panel with inner padding, which put their headings further in than their neighbours and made the deck read as a pile of unrelated blocks.
+- The band is drawn entirely from gradients: no raster assets, one element per deck. The ornate painted-metal look of a real RTS bezel needs actual artwork; faking it in CSS gets a cheap imitation, so it isn't attempted here.
 
 - **View tabs** are plates, not browser tabs: a socket at rest, a lit plate when selected, with a seated accent bar along the selected tab's floor. That bar is the only chroma in the strip.
 - **Map tools** are bays in one rack — a single recessed block whose 1px seams show the container through, built exactly like the condensed unit grid. Engaged state is a **lit bay** with the tool's hue confined to a thin edge and the glyph; the previous per-tool `filled` variants in cyan, blue and orange made the row read as a random tray of app icons in three accent colours.

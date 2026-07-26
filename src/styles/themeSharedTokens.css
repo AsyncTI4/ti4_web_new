@@ -77,12 +77,35 @@
   );
   --rail-border: rgba(148, 163, 184, 0.16);
   --rail-ink: rgba(173, 181, 189, 0.92);
-  /* Fine diagonal hatch, painted on chrome only — never behind data. */
-  --rail-hatch: repeating-linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.028) 0 1px,
-    transparent 1px 5px
+  /*
+   * Brushed sheen on chrome. Was a diagonal crosshatch, which read as a fabric
+   * texture rather than machined metal; a vertical light-to-dark sweep is what a
+   * bezel actually does under an overhead source.
+   */
+  --rail-sheen: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045) 0%,
+    rgba(255, 255, 255, 0.012) 45%,
+    rgba(0, 0, 0, 0.12) 100%
   );
+
+  /*
+   * HUD bezel. The top and bottom decks are the console the map is set into, so
+   * each closes with a scored ornament band facing the board — segment marks
+   * every 20px with a longer graduation every fifth, the way a real instrument
+   * bezel is machined. Drawn entirely from gradients: no raster assets, no
+   * per-element cost.
+   */
+  --hud-bezel: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.015) 38%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+  --hud-ornament-tick: rgba(148, 163, 184, 0.26);
+  --hud-ornament-major: rgba(148, 163, 184, 0.52);
+  --hud-edge-light: rgba(226, 232, 240, 0.22);
+  --hud-edge-accent: rgba(59, 130, 246, 0.3);
 
   /* Sockets: empty capacity. Pressed into the plate, not dashed onto it. */
   --socket-bg: rgba(0, 0, 0, 0.28);

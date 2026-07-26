@@ -63,7 +63,7 @@
   top: 0;
   z-index: 1;
   padding: 5px 10px;
-  background: var(--rail-hatch), var(--rail-bg), var(--left-sidebar-bg, var(--sidebar-bg));
+  background: var(--rail-sheen), var(--rail-bg), var(--left-sidebar-bg, var(--sidebar-bg));
   border-bottom: 1px solid var(--rail-border);
 }
 

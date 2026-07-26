@@ -124,7 +124,7 @@
   gap: 8px;
   min-height: 17px;
   padding: 2px 7px;
-  background: var(--rail-hatch), var(--rail-bg);
+  background: var(--rail-sheen), var(--rail-bg);
   border-bottom: 1px solid var(--rail-border);
 }
 

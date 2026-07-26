@@ -28,11 +28,13 @@
   --stage-rgb: 201, 168, 92;
 }
 
-/* Sealed directive: a slim slot rather than a full card — revealed intel
-   dominates the board, the unknown just holds its place */
+/* Sealed directive: a slim socket rather than a full card — revealed intel
+   dominates the board, the unknown just holds its place. A socket, not a dashed
+   outline: dashed reads as unfinished layout everywhere else in the system. */
 .objectiveCard.objectiveCard.unrevealed {
-  border: 1px dashed rgba(var(--stage-rgb), 0.26);
-  background: var(--panel-field-flat);
+  border: 1px solid rgba(var(--stage-rgb), 0.16);
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset);
 }
 
 .unrevealed .mainRow {
