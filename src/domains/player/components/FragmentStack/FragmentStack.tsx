@@ -1,4 +1,4 @@
-import { Group, Image } from "@mantine/core";
+import { Image } from "@mantine/core";
 import cx from "clsx";
 import { cdnImage } from "@/entities/data/cdnImage";
 import styles from "./FragmentStack.module.css";
@@ -11,22 +11,44 @@ type Props = {
   type: FragmentType;
 };
 
+/** Three of a kind buys a relic. */
+const RELIC_EXCHANGE_COUNT = 3;
+
+const FRAGMENT_LABELS: Record<FragmentType, string> = {
+  crf: "cultural",
+  hrf: "hazardous",
+  irf: "industrial",
+  urf: "frontier",
+};
+
 export function FragmentStack({ count, type }: Props) {
   const fragmentSrc = getFragmentSrc(type);
 
   if (count === 0) return null;
 
+  const relicReady = count >= RELIC_EXCHANGE_COUNT;
+  const kind = FRAGMENT_LABELS[type];
+
   return (
-    <Group gap={0}>
+    <div
+      className={cx(styles.stack, relicReady && styles.ready)}
+      title={
+        relicReady
+          ? `${count} ${kind} fragments — enough to purge for a relic`
+          : `${count} ${kind} fragment${count === 1 ? "" : "s"}`
+      }
+    >
       {Array.from({ length: count }, (_, index) => (
         <Image
           {...lowPriorityImageProps}
           key={index}
           src={fragmentSrc}
+          alt=""
           className={cx(styles.fragment, index > 0 && styles.stacked)}
         />
       ))}
-    </Group>
+      {relicReady && <span className={styles.readyCount}>{count}</span>}
+    </div>
   );
 }
 

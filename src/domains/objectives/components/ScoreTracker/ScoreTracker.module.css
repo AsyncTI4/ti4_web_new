@@ -46,6 +46,45 @@
   box-shadow: inset 0 0 0 1px rgba(234, 179, 8, 0.3);
 }
 
+/*
+ * Final approach.
+ *
+ * Someone sitting one point below the target is the single most consequential
+ * state in a game of Twilight Imperium, and the track said nothing about it — the
+ * only marked square was the finish line. When, and only when, the penultimate
+ * square is occupied, it lights as a threat: an ochre floor rising toward the
+ * victory square beside it, and a hairline that ties the two together.
+ *
+ * Conditional by design. An always-on marker is decoration; a marker that appears
+ * exactly when the table should be nervous is information.
+ */
+.brinkScore {
+  background: linear-gradient(
+    0deg,
+    rgba(234, 179, 8, 0.1) 0%,
+    rgba(234, 179, 8, 0.02) 70%,
+    transparent 100%
+  );
+  box-shadow: inset 0 -2px 0 rgba(234, 179, 8, 0.4);
+}
+
+.brinkScore .scoreNumber {
+  color: rgba(250, 204, 21, 0.85);
+}
+
+/* A short graduation on the shared edge, reading as the last notch before the
+   finish line. */
+.brinkScore::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: 0;
+  width: 1px;
+  height: 14px;
+  background: rgba(234, 179, 8, 0.55);
+  pointer-events: none;
+}
+
 .scoreNumber {
   position: absolute;
   top: 4px;

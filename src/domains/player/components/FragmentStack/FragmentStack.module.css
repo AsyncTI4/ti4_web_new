@@ -7,3 +7,50 @@
 .stacked {
   margin-left: -10px;
 }
+
+/*
+ * Relic-ready.
+ *
+ * Three fragments of a kind buy a relic, and a player scanning their own salvage
+ * wants to know they have three without counting crystals. The stack seats itself
+ * in a relic-gold cradle the moment it can be spent — nothing at one or two,
+ * unmissable at three. Information first: the delight is that the interface
+ * already knows the rule the player knows.
+ */
+.stack {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 2px 3px;
+  border-radius: var(--panel-radius);
+}
+
+.ready {
+  background: linear-gradient(
+      180deg,
+      rgba(255, 215, 0, 0.14) 0%,
+      rgba(255, 215, 0, 0.05) 100%
+    ),
+    var(--trough-bg);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 215, 0, 0.34),
+    var(--trough-inset);
+}
+
+/* A stamped count on the cradle, so three-of-a-kind stays legible when the
+   crystals overlap. Mono, because it is a quantity being compared. */
+.readyCount {
+  position: absolute;
+  right: 1px;
+  bottom: 0;
+  padding: 0 2px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.62);
+  color: var(--army-rank-first-color);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

@@ -1,0 +1,38 @@
+/*
+ * Empty holding slots — no scored secrets, no promissory notes in play.
+ *
+ * Drawn as sockets rather than dashed outlines, so an empty slot reads as a seat
+ * waiting for a card, the same language unresearched tech and unavailable units
+ * already use. Dashed borders read as unfinished layout.
+ */
+.socket {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 3px 7px;
+  border-radius: var(--panel-radius);
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);
+}
+
+.icon {
+  flex-shrink: 0;
+  opacity: 0.32;
+  filter: grayscale(1);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}

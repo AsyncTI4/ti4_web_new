@@ -44,13 +44,23 @@ function ScoreTracker({ playerData, vpsToWin }: Props) {
       {scorePositions.map((score, index) => {
         const playersAtScore = factionsByScore[score] || [];
         const isWinningScore = score === vpsToWin;
+        /* Only meaningful while someone is actually standing there. */
+        const isOnTheBrink =
+          score === vpsToWin - 1 && playersAtScore.length > 0;
         const isFirstSquare = index === 0;
         const isLastSquare = index === scorePositions.length - 1;
 
         return (
           <Box
             key={score}
-            className={`${styles.scoreSquare} ${isWinningScore ? styles.winningScore : ""} ${isFirstSquare ? styles.firstSquare : ""} ${isLastSquare ? styles.lastSquare : ""}`}
+            className={`${styles.scoreSquare} ${isWinningScore ? styles.winningScore : ""} ${isOnTheBrink ? styles.brinkScore : ""} ${isFirstSquare ? styles.firstSquare : ""} ${isLastSquare ? styles.lastSquare : ""}`}
+            title={
+              isOnTheBrink
+                ? `One point from victory: ${playersAtScore
+                    .map((p) => p.faction)
+                    .join(", ")}`
+                : undefined
+            }
           >
             {/* Score number */}
             <Text

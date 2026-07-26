@@ -634,3 +634,28 @@
   width: 100%;
   padding-inline: 16px;
 }
+
+/*
+ * The victory track is a gauge you read at a glance, so it belongs to the screen
+ * rather than to the scrollable content. Stretched to the deck's full width it
+ * ran thousands of pixels wide, which put the finish line off-screen and made the
+ * squares meaninglessly large. Scoped to the deck so the Objectives tab's copy of
+ * the tracker keeps its own sizing.
+ *
+ * Sticky at the left edge so it stays legible while the board is panned sideways.
+ */
+.hudScoreTrack {
+  position: sticky;
+  left: 16px;
+  width: calc(100vw - 32px);
+  max-width: 100%;
+}
+
+/* Mobile scales this subtree, and viewport units inside a scaled container
+   resolve against the unscaled viewport, so leave the flow width alone there. */
+@media (max-width: 48em) {
+  .hudScoreTrack {
+    position: static;
+    width: 100%;
+  }
+}

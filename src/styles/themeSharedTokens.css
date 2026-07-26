@@ -95,7 +95,8 @@
    * There is deliberately no ornament band — see DESIGN.md.
    */
   --hud-edge-light: rgba(226, 232, 240, 0.22);
-  --hud-edge-accent: rgba(59, 130, 246, 0.3);
+  /* Themes override this — it is the one piece of chroma where deck meets map. */
+  --hud-edge-accent: rgba(196, 196, 202, 0.3);
 
   /*
    * The bottom deck's console field. Sits a step DARKER than

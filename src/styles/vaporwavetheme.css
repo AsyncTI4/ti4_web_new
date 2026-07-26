@@ -196,5 +196,9 @@
     /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
        cards read as plates raised onto the deck. */
     --hud-deck-ground: #0a0b20;
+
+    /* The line the board sits on. Themed, because it is the one piece of chroma
+       where the deck meets the map. */
+    --hud-edge-accent: rgba(255, 0, 170, 0.4);
 }
 

@@ -303,6 +303,16 @@ The board is **set into a console**: chrome above it, chrome below, the board it
 - **One indent for the whole bottom deck.** Every section inside it — round line, score track, objectives, laws, player areas, score breakdown — shares one left margin. Two of those sections previously wrapped themselves in their own bordered panel with inner padding, which put their headings further in than their neighbours and made the deck read as a pile of unrelated blocks.
 - **The board gets clearance.** 20px between the lowest tiles and the deck's lip, so hexes never appear to tuck under the chrome.
 
+### Delight moments
+
+This is a product surface, so delight lives at **moments**, never spread across pages, and every moment has to carry information a player wants. Three exist:
+
+- **Relic-ready salvage.** Three fragments of a kind buy a relic, so a stack seats itself in a relic-gold cradle with a stamped count the moment it reaches three. Nothing at one or two. The pleasure is that the interface already knows the rule the player knows.
+- **Final approach.** A player one point below the target is the most consequential state in a game of Twilight Imperium, and the victory track used to mark only the finish line. The penultimate square lights as a threat — **when, and only when, it is occupied**. An always-on marker would be decoration; one that appears exactly when the table should be nervous is information.
+- **A console signpost.** This audience reads source, so the easter egg is a useful pointer to where the board and player areas render, not a joke or a recruiting pitch.
+
+None of the three animates, and none is a glow for its own sake. A moment that fires on every visit stops being a moment.
+
 ### Player identity
 
 A player's card is keyed by a short color band notched into the top edge, not a colored border. Eight stacked cards with colored outlines turn the column into a stack of highlighter marks; the band identifies just as fast and lets the card keep the neutral chrome everything else uses.

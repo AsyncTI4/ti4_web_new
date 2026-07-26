@@ -173,6 +173,26 @@ const theme = createTheme({
   },
 });
 
+/*
+ * A note for anyone who opens the console. This audience is unusually likely to
+ * read the source, so the easter egg is a genuinely useful signpost rather than a
+ * joke or a recruiting pitch — the reward for curiosity is knowing where to look.
+ */
+function printConsoleSignature() {
+  if (typeof console === "undefined") return;
+  console.log(
+    "%cASYNC TI4%c  fan project for Twilight Imperium\u2122 \u00b7 play-by-Discord",
+    "font-weight:700;letter-spacing:0.12em;color:#e2e8f0;background:#0b0b0c;padding:3px 7px;border-radius:2px",
+    "color:#868e96"
+  );
+  console.log(
+    "%cPoking around? The board renders from src/domains/map, player areas from src/domains/player, and the whole visual system is documented in DESIGN.md.",
+    "color:#6b7280"
+  );
+}
+
+printConsoleSignature();
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
