@@ -1,0 +1,51 @@
+/*
+ * A generic empty holding slot.
+ *
+ * The objectives compartment is a fixed grid that mixes secrets, relics and
+ * promissory notes, so its empty slots can't be keyed to a card type the way an
+ * unresearched tech socket is keyed to its tree. This is deliberately the plain
+ * form: the socket ring, a seat where the card's icon would sit, and one
+ * registration tick where its name would start. Grey, because an empty slot in
+ * this grid stands for no particular thing.
+ */
+.socket {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  /* Matches a relic or promissory note row exactly, and the tech sockets in the
+     rack beside it, so every empty seat on the card shares one row rhythm. */
+  height: 28px;
+  padding: 0 7px;
+  border-radius: var(--panel-radius);
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);
+}
+
+/* Seat for the card icon: a square depression with a centre graduation tick,
+   the same seat the tech sockets use. */
+.iconSeat {
+  position: relative;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 1px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 0 1px var(--socket-border);
+}
+
+.iconSeat::after {
+  content: "";
+  position: absolute;
+  inset: 50% 3px auto;
+  height: 1px;
+  background: var(--socket-tick);
+}
+
+/* Where the card's name would begin — a tick, not a rule spanning the slot. A
+   full-width rule reads as ruled paper. */
+.nameRule {
+  flex-shrink: 0;
+  width: 18px;
+  height: 1px;
+  background: var(--socket-tick);
+}

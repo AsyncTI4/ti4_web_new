@@ -1,5 +1,6 @@
 import { cdnImage } from "@/entities/data/cdnImage";
 import { IconTrophy } from "@tabler/icons-react";
+import cx from "clsx";
 import type { CSSProperties } from "react";
 import classes from "./ArmyStats.module.css";
 
@@ -19,11 +20,28 @@ type Props = {
 
 type Metric = "resources" | "health" | "combat";
 
-function formatOneDecimal(value: number): string {
-  if (value === undefined || value === null || Number.isNaN(Number(value))) {
-    return "0.0";
-  }
-  return Number(value).toFixed(1);
+/** Rows carry only an icon, so the metric's name lives in the tooltip. */
+const METRIC_LABEL: Record<Metric, string> = {
+  resources: "Resource value",
+  health: "Hit points",
+  combat: "Combat strength",
+};
+
+function toTenths(value: number): { whole: string; fraction: string } {
+  const safe = Number.isFinite(Number(value)) ? Number(value) : 0;
+  const [whole, fraction] = safe.toFixed(1).split(".");
+  return { whole, fraction: `.${fraction}` };
+}
+
+function Figure({ value, className }: { value: number; className?: string }) {
+  const { whole, fraction } = toTenths(value);
+
+  return (
+    <span className={cx(classes.number, className)}>
+      {whole}
+      <span className={classes.fraction}>{fraction}</span>
+    </span>
+  );
 }
 
 function MetricRow({
@@ -37,53 +55,32 @@ function MetricRow({
 }) {
   return (
     <>
-      <span className={`${classes.metricIcon} ${classes[metric]}`} />
-      <span className={classes.number}>{formatOneDecimal(ground)}</span>
-      <span className={classes.number}>{formatOneDecimal(space)}</span>
+      <span
+        className={cx(classes.gutter, classes.metricIcon, classes[metric])}
+        role="img"
+        aria-label={METRIC_LABEL[metric]}
+        title={METRIC_LABEL[metric]}
+      />
+      <Figure value={ground} />
+      <Figure value={space} className={classes.space} />
     </>
   );
 }
 
-const RANK_CONFIG = {
-  1: {
-    color: "var(--army-rank-first-color)",
-    bg: "rgba(255, 215, 0, 0.12)",
-    border: "rgba(255, 215, 0, 0.3)",
-  },
-  2: {
-    color: "var(--army-rank-second-color)",
-    bg: "rgba(192, 192, 192, 0.12)",
-    border: "rgba(192, 192, 192, 0.3)",
-  },
-  3: {
-    color: "var(--army-rank-third-color)",
-    bg: "rgba(205, 127, 50, 0.12)",
-    border: "rgba(205, 127, 50, 0.3)",
-  },
-  default: {
-    color: "rgba(180, 180, 180, 0.9)",
-    bg: "rgba(20, 20, 20, 0.4)",
-    border: "rgba(80, 80, 80, 0.3)",
-  },
-} as const;
+const RANK_CLASS: Record<number, string> = {
+  1: classes.rankFirst,
+  2: classes.rankSecond,
+  3: classes.rankThird,
+};
 
 function RankBadge({ rank }: { rank: number }) {
-  const config =
-    rank <= 3 ? RANK_CONFIG[rank as 1 | 2 | 3] : RANK_CONFIG.default;
-
   return (
     <div
-      className={classes.rankBadge}
-      style={{
-        background: config.bg,
-        border: `1px solid ${config.border}`,
-        boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.05)",
-      }}
+      className={cx(classes.rankBadge, RANK_CLASS[rank] ?? classes.rankOther)}
+      title={`Rank ${rank} by army strength`}
     >
-      <IconTrophy size={12} style={{ color: config.color }} />
-      <span className={classes.rankText} style={{ color: config.color }}>
-        {rank}
-      </span>
+      <IconTrophy size={12} />
+      <span className={classes.rankText}>{rank}</span>
     </div>
   );
 }
@@ -91,7 +88,7 @@ function RankBadge({ rank }: { rank: number }) {
 export function ArmyStats({ stats, rank }: Props) {
   return (
     <div
-      className={rank ? classes.withRankFooter : undefined}
+      className={cx(classes.root, rank && classes.rootWithRank)}
       style={
         {
           "--army-res-icon": `url("${cdnImage("/player_area/pa_resources.png")}")`,
@@ -100,10 +97,10 @@ export function ArmyStats({ stats, rank }: Props) {
         } as CSSProperties
       }
     >
-      <div className={classes.grid}>
-        <span />
-        <span className={classes.caption}>GROUND</span>
-        <span className={classes.caption}>SPACE</span>
+      <div className={classes.ledger}>
+        <span className={classes.gutter} />
+        <span className={classes.caption}>Ground</span>
+        <span className={cx(classes.caption, classes.space)}>Space</span>
         <MetricRow
           metric="resources"
           ground={stats.groundArmyRes}

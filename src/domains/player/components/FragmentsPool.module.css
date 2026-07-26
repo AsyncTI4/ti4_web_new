@@ -1,0 +1,26 @@
+/*
+ * An empty salvage shelf still occupies its row. The stores and hand above it are
+ * centred in whatever height the compartment has, so a shelf that collapses on
+ * some cards and not others moves those readouts card to card — the alignment the
+ * band is built on. Saying "no fragments" quietly holds the line and answers the
+ * question at the same time — quietly being the point: it is the absence of a
+ * holding, so it sits a full step below every other label on the card.
+ */
+.empty {
+  /* Fills the shelf: as a plain flex item the group was only as wide as its own
+     label, so centring inside it had nothing to centre against. */
+  flex: 1;
+  width: 100%;
+}
+
+.emptyLabel {
+  /* A full step below the card's quietest label. dark-3, not gray-6: this is the
+     absence of a holding, and it should be findable without ever being read. */
+  color: var(--mantine-color-dark-3);
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
+  line-height: 1;
+  text-transform: uppercase;
+}

@@ -1,0 +1,88 @@
+/*
+ * Stores gauge — trade goods and commodities.
+ *
+ * These were the last chips in the player area: an accent-tinted rounded plate
+ * with a big number sitting on it. A chip is how this card draws a *named card* —
+ * a tech, a relic, a leader, a promissory note. A quantity is not a card, and
+ * dressing one as a card is why these stopped fitting.
+ *
+ * They are readouts now, built the same way as the army ledger and the command
+ * trough: a recessed socket, the sprite seated in a keyed gutter behind a hairline
+ * wall, and the figure in mono tabular against the right edge. The accent keys the
+ * seat, its wall and the socket's ring — enough that the store is identifiable at
+ * a glance across a stack of six cards — while the field itself stays neutral, so
+ * it reads as a keyed instrument rather than a coloured tag.
+ */
+
+.gauge {
+  display: flex;
+  align-items: stretch;
+  min-width: 72px;
+  /* The column has height to spare, and a readout this dense reads better with
+     air above and below the figure than packed to its cap height. */
+  min-height: 32px;
+  border-radius: var(--panel-radius);
+  background: var(--socket-bg);
+  box-shadow:
+    var(--socket-inset),
+    inset 0 0 0 1px rgba(var(--gauge-accent), 0.24);
+  overflow: hidden;
+}
+
+/* The keyed seat: the same gutter-and-wall the army readout uses for its metric
+   icons, tinted just enough to say which store this is. */
+.gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--gauge-accent), 0.34) 0%,
+    rgba(var(--gauge-accent), 0.18) 100%
+  );
+  border-right: 1px solid rgba(var(--gauge-accent), 0.4);
+}
+
+.icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
+}
+
+.readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+  padding: 7px;
+  font-family: var(--mantine-font-family-monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+.value {
+  color: var(--mantine-color-gray-0);
+  font-size: 18px;
+  font-weight: var(--weight-rail);
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* The ceiling, not the reading — held back exactly as the economics ledger holds
+   back its totals. */
+.capacity {
+  color: var(--mantine-color-gray-5);
+  font-size: 11px;
+  font-weight: var(--weight-data);
+  line-height: 1;
+}
+
+/* Empty stores read as empty rather than as a zero shouting for attention. */
+.value[data-empty="true"] {
+  color: var(--mantine-color-gray-6);
+  text-shadow: none;
+}

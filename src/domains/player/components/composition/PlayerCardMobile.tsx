@@ -2,6 +2,7 @@ import { Group, Box } from "@mantine/core";
 import type { ReactNode } from "react";
 import {
   getTechGridMobileColumnCount,
+  getTechGridMobileRowCount,
   TechGridMobile,
 } from "@/domains/player/components/Tech/TechGridMobile";
 import { PlayerData, type PlotCard } from "@/entities/data/types";
@@ -30,8 +31,11 @@ import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
 import { UnscoredSecret } from "@/domains/player/components/ScoredSecret/UnscoredSecret";
 import { Relic } from "@/domains/player/components/Relic";
 import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
+import { PhantomSlot } from "@/domains/player/components/PhantomSlot/PhantomSlot";
+import { chunkInto } from "@/domains/player/components/Tech/TechGridShared";
 import { getPlayerCardTechData } from "@/domains/player/components/PlayerCardShared/playerCardTechUtils";
 import { useSettingsStore } from "@/utils/appStore";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   playerData: PlayerData;
@@ -74,30 +78,71 @@ type ObjectivesGridProps = {
   relics: string[];
   exhaustedRelics?: string[];
   minColumns?: number;
+  /** Rack depth imposed from outside, so sibling racks share a row count. */
+  minRows?: number;
 };
+
+type ObjectiveCounts = Omit<
+  ObjectivesGridProps,
+  "exhaustedRelics" | "minColumns" | "minRows"
+>;
 
 const OBJECTIVE_COLUMN_WIDTH = 170;
 const OBJECTIVE_GRID_GAP = 4;
 const OBJECTIVES_PER_COLUMN = 6;
 
-function getObjectiveColumnCount({
+/*
+ * The shallowest a rack is ever drawn. Cards whose holdings and tech both fit in
+ * three or four rows left the band looking thin next to their neighbours, so the
+ * racks always show at least five seats. This governs empty seats only — packing,
+ * ordering and column counts are untouched.
+ */
+const MIN_RACK_ROWS = 5;
+
+/** Secrets go in their own column; relics and notes share the ones after it. */
+function countObjectiveItems({
   secretsScored,
   knownUnscoredSecrets,
   soCount,
   promissoryNotes,
   relics,
-}: Omit<ObjectivesGridProps, "exhaustedRelics" | "minColumns">): number {
+}: ObjectiveCounts): { secretCount: number; otherCount: number } {
   const knownUnscoredCount = Object.keys(knownUnscoredSecrets ?? {}).length;
-  const secretCount =
-    Object.keys(secretsScored).length +
-    knownUnscoredCount +
-    Math.max((soCount ?? 0) - knownUnscoredCount, 0);
-  const otherCount = relics.length + promissoryNotes.length;
-  const totalCount = secretCount + otherCount;
 
-  if (totalCount <= OBJECTIVES_PER_COLUMN) return 1;
+  return {
+    secretCount:
+      Object.keys(secretsScored).length +
+      knownUnscoredCount +
+      Math.max((soCount ?? 0) - knownUnscoredCount, 0),
+    otherCount: relics.length + promissoryNotes.length,
+  };
+}
+
+function getObjectiveColumnCount(counts: ObjectiveCounts): number {
+  const { secretCount, otherCount } = countObjectiveItems(counts);
+
+  if (secretCount + otherCount <= OBJECTIVES_PER_COLUMN) return 1;
 
   return 1 + Math.ceil(otherCount / OBJECTIVES_PER_COLUMN);
+}
+
+/**
+ * How deep this player's holdings rack is — the fullest column. Read by the card
+ * so the tech rack beside it can be padded to the same depth.
+ */
+function getObjectiveRowCount(counts: ObjectiveCounts): number {
+  const { secretCount, otherCount } = countObjectiveItems(counts);
+  const totalCount = secretCount + otherCount;
+
+  if (totalCount <= OBJECTIVES_PER_COLUMN) return totalCount;
+
+  const lastOtherColumn = otherCount % OBJECTIVES_PER_COLUMN;
+  const fullOtherColumns = otherCount >= OBJECTIVES_PER_COLUMN;
+
+  return Math.max(
+    secretCount,
+    fullOtherColumns ? OBJECTIVES_PER_COLUMN : lastOtherColumn
+  );
 }
 
 function ObjectivesGrid({
@@ -108,6 +153,7 @@ function ObjectivesGrid({
   relics,
   exhaustedRelics,
   minColumns = 1,
+  minRows = 0,
 }: ObjectivesGridProps) {
   const knownUnscoredIds = Object.keys(knownUnscoredSecrets ?? {});
   const hiddenSecretCount = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
@@ -149,27 +195,43 @@ function ObjectivesGrid({
   const minWidth =
     minColumns * OBJECTIVE_COLUMN_WIDTH + (minColumns - 1) * OBJECTIVE_GRID_GAP;
 
-  if (allItems.length <= OBJECTIVES_PER_COLUMN) {
-    return (
-      <Box className={styles.objectivesGrid} style={{ minWidth }}>
-        {allItems}
-      </Box>
-    );
-  }
+  /*
+   * The compartment is a rack: secrets in the first column, relics and notes in
+   * the ones after it, capped at six per column. Splitting is unchanged — only
+   * the leftover seats are now drawn, so a player holding two cards reads as two
+   * cards in a rack rather than as a panel that failed to fill.
+   *
+   * The rack is as deep as its fullest column, or as deep as the tech rack
+   * beside it (minRows) — the two share a floor so the compartments line up.
+   * Nothing pads to a fixed six: that would add a row nobody's holdings need and
+   * push the whole player plate taller than its content.
+   *
+   * Touch devices get no empty seats: they steady a wide desktop band, and on a
+   * phone they would be elements paying for nothing.
+   */
+  const itemColumns =
+    allItems.length <= OBJECTIVES_PER_COLUMN
+      ? [allItems]
+      : [secretItems, ...chunkInto(otherItems, OBJECTIVES_PER_COLUMN)];
 
-  const otherColumns = [];
-  for (let start = 0; start < otherItems.length; start += OBJECTIVES_PER_COLUMN) {
-    otherColumns.push(otherItems.slice(start, start + OBJECTIVES_PER_COLUMN));
-  }
+  const columnCount = Math.max(minColumns, itemColumns.length);
+  const rowCount = isMobileDevice()
+    ? 0
+    : itemColumns.reduce((max, column) => Math.max(max, column.length), minRows);
 
   return (
     <Box className={styles.objectivesGridSplit} style={{ minWidth }}>
-      <Box className={styles.objectivesColumn}>{secretItems}</Box>
-      {otherColumns.map((columnItems, index) => (
-        <Box className={styles.objectivesColumn} key={`other-column-${index}`}>
-          {columnItems}
-        </Box>
-      ))}
+      {Array.from({ length: columnCount }, (_, columnIndex) => {
+        const columnItems = itemColumns[columnIndex] ?? [];
+        return (
+          <Box className={styles.objectivesColumn} key={`column-${columnIndex}`}>
+            {columnItems}
+            {Array.from({ length: rowCount - columnItems.length }, (_, index) => (
+              <PhantomSlot key={`phantom-${columnIndex}-${index}`} />
+            ))}
+          </Box>
+        );
+      })}
     </Box>
   );
 }
@@ -200,8 +262,14 @@ function PlanetsArea({
   showReinforcements = true,
 }: PlanetsAreaProps) {
   return (
-    <Group gap={4} wrap="nowrap" align="flex-start">
-      <Group gap={4} wrap="nowrap" align="flex-start">
+    /*
+     * Planet cards are a fixed size — the art and the two economy figures don't
+     * survive being stretched — so when the compartment is taller than they are
+     * they sit centred in it. The slack splits above and below instead of
+     * pooling under the row.
+     */
+    <Group gap={4} wrap="nowrap" align="center" mih="100%">
+      <Group gap={4} wrap="nowrap" align="center">
         <PlayerCardPlanetsArea
           planets={planets}
           exhaustedPlanetAbilities={exhaustedPlanetAbilities}
@@ -275,6 +343,25 @@ export default function PlayerCardMobile(props: Props) {
     })
   );
 
+  /*
+   * The holdings rack and the tech rack sit side by side and are the same row
+   * pitch, so they share one depth: whichever needs more rows sets it and the
+   * other pads out with empty seats. Column counts stay game-wide (cards line up
+   * horizontally); depth stays per-card, so a card is never taller than its own
+   * fullest rack.
+   */
+  const rackRows = Math.max(
+    MIN_RACK_ROWS,
+    getObjectiveRowCount({
+      secretsScored: player.secretsScored,
+      knownUnscoredSecrets: player.knownUnscoredSecrets,
+      soCount: player.soCount,
+      promissoryNotes,
+      relics: player.relics,
+    }),
+    getTechGridMobileRowCount(filteredTechs, techColumns)
+  );
+
   return (
     <PlayerCardBox
       color={player.color}
@@ -336,7 +423,7 @@ export default function PlayerCardMobile(props: Props) {
             {/* Salvage above, command readout docked to the plate's floor. */}
             <Box className={styles.logisticsFloor}>
               <Box className={styles.fragmentRow}>
-                <FragmentsPool fragments={player.fragments} />
+                <FragmentsPool fragments={player.fragments} reserveSpace />
               </Box>
               {settings.showPlayerAreaCommandTokens && (
                 <Box className={styles.ccRow}>
@@ -366,6 +453,7 @@ export default function PlayerCardMobile(props: Props) {
             relics={player.relics}
             exhaustedRelics={player.exhaustedRelics}
             minColumns={objectiveColumns}
+            minRows={rackRows}
           />
         </Section>
 
@@ -374,6 +462,7 @@ export default function PlayerCardMobile(props: Props) {
             techs={filteredTechs}
             exhaustedTechs={props.playerData.exhaustedTechs}
             minColumns={techColumns}
+            minRows={rackRows}
             breakthrough={props.playerData.breakthrough}
           />
         </Section>

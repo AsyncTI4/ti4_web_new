@@ -195,36 +195,32 @@ export default function PlayerCard(props: Props) {
         </Grid.Col>
         <FadedDivider orientation="horizontal" />
         <Grid.Col span={12}>
-          <Group gap="md" align="flex-start">
-            <PlayerEconomyStack
-              tg={player.tg}
-              commodities={player.commodities}
-              commoditiesTotal={player.commoditiesTotal}
-              debtTokens={player.debtTokens}
-            >
-              <Box hiddenFrom="sm">
+          {/* Economics ledger and planet holdings are two different reads, so
+              they get two rows. Sharing one row squeezed the planet strips into
+              the right-hand remainder and left the ledger row half empty. */}
+          <Stack gap={6}>
+            <Group gap="md" align="flex-start">
+              <PlayerEconomyStack
+                tg={player.tg}
+                commodities={player.commodities}
+                commoditiesTotal={player.commoditiesTotal}
+                debtTokens={player.debtTokens}
+              >
+                <Box hiddenFrom="sm">
+                  <ResourceInfluenceCompact
+                    planetEconomics={planetEconomics}
+                    showTotalSpend={settings.showPlayerAreaTotalSpend}
+                  />
+                </Box>
+              </PlayerEconomyStack>
+
+              <Flex visibleFrom="sm" miw={90}>
                 <ResourceInfluenceCompact
                   planetEconomics={planetEconomics}
                   showTotalSpend={settings.showPlayerAreaTotalSpend}
                 />
-              </Box>
-            </PlayerEconomyStack>
+              </Flex>
 
-            <Flex visibleFrom="sm" miw={90}>
-              <ResourceInfluenceCompact
-                planetEconomics={planetEconomics}
-                showTotalSpend={settings.showPlayerAreaTotalSpend}
-              />
-            </Flex>
-
-            <Group gap={4} wrap="wrap" align="flex-start" flex={1}>
-              <Box style={{ flex: 1, minWidth: 0 }}>
-                <PlayerCardPlanetsArea
-                  planets={player.planets}
-                  exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
-                  exhaustedPlanets={player.exhaustedPlanets}
-                />
-              </Box>
               {settings.showPlayerAreaReinforcements && (
                 <ReinforcementTokensGroup
                   breachTokensReinf={player.breachTokensReinf}
@@ -235,7 +231,15 @@ export default function PlayerCard(props: Props) {
                 />
               )}
             </Group>
-          </Group>
+
+            <Box>
+              <PlayerCardPlanetsArea
+                planets={player.planets}
+                exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
+                exhaustedPlanets={player.exhaustedPlanets}
+              />
+            </Box>
+          </Stack>
         </Grid.Col>
         <Grid.Col span={12}>
           <PlotCardsSection

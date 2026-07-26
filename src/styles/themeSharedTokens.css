@@ -1,5 +1,11 @@
 :root {
   /* Shared across all themes */
+  /* Medal colours as triplets, so a rank's fill, edge and text can all be mixed
+     from one value. The rgba() forms below are the same colours, kept for the
+     places that only need the ink. */
+  --army-rank-first-rgb: 255, 215, 0;
+  --army-rank-second-rgb: 192, 192, 192;
+  --army-rank-third-rgb: 205, 127, 50;
   --army-rank-first-color: rgba(255, 215, 0, 0.95);
   --army-rank-first-glow: rgba(255, 215, 0, 0.4);
   --army-rank-second-color: rgba(192, 192, 192, 0.9);

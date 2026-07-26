@@ -103,6 +103,7 @@
   box-shadow: var(--machined-bevel);
 }
 
+
 .chamferNone .inner {
   border-radius: calc(var(--panel-radius) - 1px);
 }

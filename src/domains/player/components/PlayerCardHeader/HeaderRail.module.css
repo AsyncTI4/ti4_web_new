@@ -1,0 +1,65 @@
+/*
+ * The player card's header rail.
+ *
+ * Breakthrough, neighbours, abilities, promissory notes and faction techs are
+ * five different kinds of thing, and they were separated by three different gaps
+ * — 2px inside a group, 10px between the header's own children, 16px between the
+ * ability groups — plus whatever slack a fixed-width slot happened to leave over.
+ * Five kinds of thing, no consistent way of saying where one ends.
+ *
+ * One rule now: peers sit 3px apart, and groups are divided by a hairline seam
+ * with equal air on either side. Same construction as the command trough's three
+ * gauges and the view-tab rack — a segmented rail, where the seam says what
+ * belongs with what and the rhythm no longer depends on how long a chip's name
+ * happens to be.
+ *
+ * Shared by the header and by the abilities strip it hosts, so both sides of the
+ * rail measure from the same values.
+ */
+
+.rail {
+  --rail-group-gap: 3px;
+  --rail-seam-air: 12px;
+}
+
+.railGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--rail-group-gap);
+  min-width: 0;
+}
+
+/*
+ * A slot holding a single chip: the chip takes the slot's whole fixed width, so
+ * the breakthrough plate is the same size on every card in the band regardless
+ * of how long its name is. Without this the flex row sizes it to its text and
+ * the column stops being a column.
+ */
+/*
+ * The identity block is words, not chips: name, faction, colour, status. Chip
+ * peers want 3px; running text at 3px reads as one crushed string, so this group
+ * sets its own measure.
+ */
+.railIdentity {
+  --rail-group-gap: 8px;
+}
+
+.railFill > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * The seam runs the rail's full height rather than the group's, so a group of
+ * short chips and a group of tall ones are divided by the same line.
+ */
+.railGroup + .railGroup {
+  align-self: stretch;
+  margin-left: var(--rail-seam-air);
+  padding-left: var(--rail-seam-air);
+  /* --panel-hairline, not --panel-separator: a separator's alpha is tuned for
+     dividing rows inside a plate, and against the card ground at this scale it
+     disappeared. The seam has to be legible to be doing its job. */
+  border-left: 1px solid var(--panel-hairline);
+}

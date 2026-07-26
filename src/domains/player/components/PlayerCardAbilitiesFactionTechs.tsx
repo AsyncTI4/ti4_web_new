@@ -7,6 +7,7 @@ import { PromissoryNote } from "./PromissoryNote";
 import Caption from "@/shared/ui/Caption/Caption";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
 import type { BreakthroughData } from "@/entities/data/types";
+import rail from "./PlayerCardHeader/HeaderRail.module.css";
 
 type PlayerCardAbilitiesFactionTechsProps = {
   abilities?: string[];
@@ -14,7 +15,6 @@ type PlayerCardAbilitiesFactionTechsProps = {
   customPromissoryNotes?: string[];
   gap?: number | string;
   breakthrough?: BreakthroughData;
-  className?: string;
   showFactionAbilities?: boolean;
   showBreakthrough?: boolean;
 };
@@ -30,22 +30,26 @@ function useBreakthroughValues(breakthrough?: BreakthroughData) {
   };
 }
 
+/*
+ * Renders straight into the header rail — no wrapper of its own, so abilities,
+ * promissory notes and faction techs are siblings of the breakthrough and
+ * neighbour groups and get divided by the same hairline seam. The spacing lives
+ * in HeaderRail.module.css; nothing here sets its own.
+ */
 export function PlayerCardAbilitiesFactionTechsMobile({
   abilities = [],
   notResearchedFactionTechs = [],
   customPromissoryNotes = [],
-  gap = 2,
   breakthrough,
-  className,
   showFactionAbilities = true,
   showBreakthrough = true,
 }: PlayerCardAbilitiesFactionTechsProps) {
   const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
 
   return (
-    <Group gap="md" wrap="wrap" align="center" className={className}>
+    <>
       {showBreakthrough && breakthrough?.breakthroughId && (
-        <Group gap={gap}>
+        <div className={rail.railGroup}>
           <Breakthrough
             breakthroughId={breakthrough.breakthroughId}
             exhausted={breakthrough.exhausted}
@@ -53,26 +57,26 @@ export function PlayerCardAbilitiesFactionTechsMobile({
             unlocked={breakthrough.unlocked ?? false}
             strong={false}
           />
-        </Group>
+        </div>
       )}
       {showFactionAbilities && abilities.length > 0 && (
-        <Group gap={gap}>
+        <div className={rail.railGroup}>
           {abilities.map((abilityId, index) => {
             const abilityData = getAbility(abilityId);
             if (!abilityData) return null;
             return <Ability id={abilityId} key={index} strong={false} />;
           })}
-        </Group>
+        </div>
       )}
       {showFactionAbilities && customPromissoryNotes.length > 0 && (
-        <Group gap={gap}>
+        <div className={rail.railGroup}>
           {customPromissoryNotes.map((pnId) => (
             <PromissoryNote promissoryNoteId={pnId} key={pnId} />
           ))}
-        </Group>
+        </div>
       )}
       {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
-        <Group gap={gap}>
+        <div className={rail.railGroup}>
           {notResearchedFactionTechs.map((techId) => (
             <Tech
               techId={techId}
@@ -81,9 +85,9 @@ export function PlayerCardAbilitiesFactionTechsMobile({
               breakthroughUnlocked={breakthroughUnlocked}
             />
           ))}
-        </Group>
+        </div>
       )}
-    </Group>
+    </>
   );
 }
 

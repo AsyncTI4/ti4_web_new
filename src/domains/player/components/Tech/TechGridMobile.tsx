@@ -5,13 +5,17 @@ import {
   buildTechElementsForType,
   chunkInto,
 } from "./TechGridShared";
+import { PhantomTech } from "./PhantomTech";
 import type { BreakthroughData } from "@/entities/data/types";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
   minSlotsPerColor?: number;
   minColumns?: number;
+  /** Rack depth imposed from outside, so sibling racks share a row count. */
+  minRows?: number;
   breakthrough?: BreakthroughData;
 };
 
@@ -97,10 +101,42 @@ export function getTechGridMobileColumnCount(techs: string[] = []): number {
   return getMinimumTechColumnCount(techGroups);
 }
 
+function packIntoColumns(
+  groups: ReactNode[][],
+  columnCount: number
+): ReactNode[][] {
+  const chunks = packTechGroupsIntoColumns(groups, columnCount);
+  return Array.from({ length: columnCount }, (_, idx) => chunks[idx] ?? []);
+}
+
+/**
+ * How deep this player's tech rack is once packed — the fullest column. Read by
+ * the card so the objectives rack beside it can be padded to the same depth.
+ * Uses the same packing as the render, so the answer can't drift from it.
+ */
+export function getTechGridMobileRowCount(
+  techs: string[] = [],
+  minColumns = 1
+): number {
+  const techGroups = techCategories.map((techType) =>
+    buildTechElementsForType(techType, techs)
+  );
+  const columnCount = Math.max(
+    minColumns,
+    getMinimumTechColumnCount(techGroups)
+  );
+
+  return packIntoColumns(techGroups, columnCount).reduce(
+    (max, column) => Math.max(max, column.length),
+    0
+  );
+}
+
 export function TechGridMobile({
   techs = [],
   exhaustedTechs = [],
   minColumns = 1,
+  minRows = 0,
   breakthrough,
 }: Props) {
   const techGroups = techCategories.map((techType) =>
@@ -118,24 +154,43 @@ export function TechGridMobile({
     minColumns,
     getMinimumTechColumnCount(techGroups)
   );
-  const chunks = packTechGroupsIntoColumns(techGroups, columnCount);
+  const columns = packIntoColumns(techGroups, columnCount);
+
+  /*
+   * The packed grid is a rectangle: as many rows as the longest column, or as
+   * many as a sibling rack needs (minRows), whichever is deeper. Short columns
+   * used to just stop, leaving ragged holes that read as a layout bug. Filling
+   * the remainder with empty sockets makes the rack read like an RTS build queue
+   * — fixed capacity, some of it filled — without moving a single researched
+   * tech: padding is appended, packing is untouched.
+   *
+   * Skipped on touch devices: the empty seats are there to steady a wide desktop
+   * band, and on a phone they'd be hundreds of elements paying for nothing.
+   */
+  const rowCount = isMobileDevice()
+    ? 0
+    : columns.reduce((max, column) => Math.max(max, column.length), minRows);
 
   return (
     <Group gap={4} align="flex-start" wrap="nowrap">
-      {Array.from({ length: columnCount }, (_, idx) => chunks[idx] ?? []).map(
-        (chunk, idx) => (
-          <Stack key={`tech-group-${idx}`} gap={4}>
-            {chunk.map((child, i) => (
-              <Box key={i} style={{ width: TECH_COLUMN_WIDTH }}>
-                {child}
-              </Box>
-            ))}
-            {chunk.length === 0 && (
-              <Box style={{ width: TECH_COLUMN_WIDTH }} aria-hidden="true" />
-            )}
-          </Stack>
-        )
-      )}
+      {columns.map((chunk, idx) => (
+        <Stack key={`tech-group-${idx}`} gap={4}>
+          {chunk.map((child, i) => (
+            <Box key={i} style={{ width: TECH_COLUMN_WIDTH }}>
+              {child}
+            </Box>
+          ))}
+          {Array.from({ length: rowCount - chunk.length }, (_, i) => (
+            <Box key={`empty-${i}`} style={{ width: TECH_COLUMN_WIDTH }}>
+              <PhantomTech />
+            </Box>
+          ))}
+          {/* A column with nothing in it still holds its width open. */}
+          {chunk.length === 0 && rowCount === 0 && (
+            <Box style={{ width: TECH_COLUMN_WIDTH }} aria-hidden="true" />
+          )}
+        </Stack>
+      ))}
     </Group>
   );
 }

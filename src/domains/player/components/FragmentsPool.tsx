@@ -1,11 +1,17 @@
 import { Group } from "@mantine/core";
 import { FragmentStack } from "./FragmentStack";
+import classes from "./FragmentsPool.module.css";
 
 type Props = {
   fragments: string[];
+  /**
+   * Hold the shelf open when the player has none, so the readouts above it sit at
+   * the same height on every card in the band.
+   */
+  reserveSpace?: boolean;
 };
 
-export function FragmentsPool({ fragments }: Props) {
+export function FragmentsPool({ fragments, reserveSpace = false }: Props) {
   // Count fragments by type
   const fragmentCounts = {
     cultural: fragments.filter((f: string) => f.startsWith("crf")).length,
@@ -20,7 +26,13 @@ export function FragmentsPool({ fragments }: Props) {
     fragmentCounts.unknown === 0 &&
     fragmentCounts.cultural === 0
   ) {
-    return null;
+    if (!reserveSpace) return null;
+
+    return (
+      <Group gap="xs" p="xs" justify="center" className={classes.empty}>
+        <span className={classes.emptyLabel}>No fragments</span>
+      </Group>
+    );
   }
 
   return (

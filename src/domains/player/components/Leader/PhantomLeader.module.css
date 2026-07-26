@@ -1,0 +1,110 @@
+/*
+ * An empty leader slot.
+ *
+ * Every faction fields one agent, one commander and one hero, so a card showing
+ * two dossiers is a card with a leader missing — usually a hero already spent
+ * and purged. Leaving the row out made the compartment look ragged and hid the
+ * fact; the slot is now always drawn, and drawn as a recessed dossier: the same
+ * plate silhouette and portrait well as a filled leader, milled into the plate
+ * instead of seated on it.
+ */
+.plate {
+  --leader-chamfer: var(--machined-chamfer-sm);
+  --phantom-portrait-width: 38px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  /* Textless floor: a dossier with no portrait is a 34px chip field inside a 1px
+     border. */
+  min-height: 36px;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--leader-chamfer)),
+    calc(100% - var(--leader-chamfer)) 100%,
+    0 100%
+  );
+}
+
+/*
+ * A filled dossier is as tall as its portrait: the art is 120 x 153 and fills a
+ * 38px-wide well, with the plate's 1px border above and below. Deriving the
+ * empty slot from the same geometry keeps it level with the dossiers it stands
+ * among — a 36px slot next to 50px ones read as a different component. Kept in
+ * step with .leaderImageContainer in Leader.module.css.
+ */
+.plateWithPortrait {
+  min-height: calc(var(--phantom-portrait-width) * 153 / 120 + 2px);
+}
+
+/*
+ * The portrait well, empty. Same 38px seat and hairline wall as a filled
+ * dossier, with a registration mark where the face would be — the mark a
+ * darkroom leaves on an unexposed frame.
+ */
+.well {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--phantom-portrait-width);
+  background: rgba(0, 0, 0, 0.34);
+  border-right: 1px solid var(--panel-separator);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.well::before,
+.well::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--socket-tick);
+}
+
+.well::before {
+  width: 9px;
+  height: 1px;
+  transform: translate(-50%, -50%);
+}
+
+.well::after {
+  width: 1px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 auto;
+  padding: 3px 8px 3px 7px;
+}
+
+/* Where the leader's name would sit. One tick on the name's baseline, aligned
+   with the 13px line it stands in for. */
+.nameRule {
+  width: 44px;
+  height: 1px;
+  background: var(--socket-tick);
+}
+
+/*
+ * The role still gets named. It is the one piece of information an empty slot
+ * genuinely carries: this faction has a hero, and it is not on the table.
+ */
+.role {
+  color: var(--mantine-color-gray-6);
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-rail);
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}

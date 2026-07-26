@@ -254,7 +254,10 @@
   justify-content: flex-start !important;
   padding-left: 16px !important;
   align-items: center !important;
-  gap: 8px;
+  /* No gap: the view tabs butt against each other and share seams (see
+     .tabsTab), so the strip reads as one segmented control rather than four
+     loose buttons. The tool rack that follows carries its own left padding. */
+  gap: 0;
 }
 
 .tabsList::before {
@@ -281,7 +284,7 @@
   color: var(--mantine-color-gray-5);
   cursor: pointer;
   border: 1px solid var(--panel-hairline);
-  border-radius: var(--panel-radius);
+  border-radius: 0;
   background: var(--socket-bg);
   box-shadow: var(--socket-inset);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -290,6 +293,34 @@
     background 120ms cubic-bezier(0.16, 1, 0.3, 1),
     border-color 120ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * Shared seams. Pulling each tab 1px onto its neighbour collapses the two
+ * hairline borders into one, the same 1px seam the map-tool rack uses, so the
+ * four plates read as one milled strip with the outer corners rounded.
+ */
+.tabsTab + .tabsTab {
+  margin-left: -1px;
+}
+
+.tabsTab:first-of-type {
+  border-top-left-radius: var(--panel-radius);
+  border-bottom-left-radius: var(--panel-radius);
+}
+
+.tabsTab:last-of-type {
+  border-top-right-radius: var(--panel-radius);
+  border-bottom-right-radius: var(--panel-radius);
+  /* Break between the view rack and the tool rack that follows it. */
+  margin-right: 10px;
+}
+
+/* Raised so a hovered or selected plate owns both of its seams instead of
+   having one overpainted by the neighbour it shares with. */
+.tabsTab:hover,
+.tabsTab[data-active="true"] {
+  z-index: 1;
 }
 
 .tabsTab:hover {

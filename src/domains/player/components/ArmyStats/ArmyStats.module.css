@@ -1,37 +1,90 @@
-.withRankFooter {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-width: max-content;
-}
+/*
+ * Army readout.
+ *
+ * Six figures in two columns — the same shape as the economics ledger beside it,
+ * but drawn as six loose cells on a faint wash, which is why it read as a block
+ * of digits rather than a comparison. It now uses that ledger's own vocabulary:
+ * one recessed trough, an engraved caption rail, a keyed gutter for the metric
+ * icons, and a hairline seam between ground and space. Same footprint — a couple
+ * of pixels shorter, in fact. Structure does the work size would otherwise have
+ * to do.
+ */
 
-.grid {
-  display: grid;
-  grid-template-columns: 20px max-content max-content;
-  gap: 2px 6px;
-  align-items: center;
+.root {
   width: max-content;
 }
 
-.grid > span {
-  min-height: 22px;
+.rootWithRank {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
+/*
+ * With a rank footer pinned to the floor, the trough takes the slack rather than
+ * leaving a dead band between the figures and the badge — the same way the unit
+ * rack fills its compartment.
+ */
+.rootWithRank .ledger {
+  flex: 1;
+}
+
+.ledger {
+  display: grid;
+  /* Icon gutter, then the two figure columns. */
+  grid-template-columns: 22px auto auto;
+  /* The caption rail stays tight to the top; the three metric rows share any
+     height beyond their natural 22px. At natural size 1fr resolves to that
+     content height, so the default readout is unchanged. */
+  grid-template-rows: min-content repeat(3, 1fr);
+  gap: 0;
+  /* Cells fill their tracks so the gutter wall and the ground/space seam stay
+     continuous when the trough is taller than its natural height. Each cell
+     centres its own contents. */
+  align-items: stretch;
+  width: max-content;
+  padding: 3px;
+  border-radius: var(--panel-radius);
+  background: var(--trough-bg);
+  box-shadow: var(--trough-inset), inset 0 0 0 1px var(--socket-border);
+}
+
+/*
+ * Engraved, like every other rail label in the band: one pixel of light under
+ * dark text reads as stamped into the plate. These were 12px gray-4 — the
+ * loudest thing in the box, competing with the figures they label.
+ */
 .caption {
-  color: var(--mantine-color-gray-4);
-  font-family: var(--mantine-font-family-monospace);
-  font-size: var(--mantine-font-size-xs);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 1px 7px 3px;
+  color: var(--mantine-color-gray-6);
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
   font-weight: var(--weight-rail);
-  line-height: 1;
-  text-align: center;
+  letter-spacing: var(--track-rail);
+  line-height: 1.1;
+  text-align: right;
   text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+/*
+ * The icon gutter is one continuous channel rather than three floating sprites:
+ * rows meet with no gap so the wall runs the full height of the trough, and the
+ * corner cell carries it up past the captions.
+ */
+.gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  background: rgba(0, 0, 0, 0.22);
+  border-right: 1px solid var(--panel-hairline);
 }
 
 .metricIcon {
-  width: 20px;
-  min-height: 22px;
-  border-radius: 2px 0 0 2px;
-  background-color: rgba(148, 163, 184, 0.035);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 16px 16px;
@@ -51,10 +104,12 @@
 }
 
 .number {
-  min-width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 42px;
   min-height: 22px;
-  padding-block: 3px;
-  background: rgba(148, 163, 184, 0.035);
+  padding: 3px 7px;
   color: var(--mantine-color-gray-1);
   font-family: var(--mantine-font-family-monospace);
   font-size: var(--mantine-font-size-sm);
@@ -62,27 +117,68 @@
   line-height: 1;
   letter-spacing: 0;
   text-align: right;
+  /* Tabular: these are columns of figures compared down as well as across, and
+     proportional digits let the decimal points wander. */
+  font-variant-numeric: tabular-nums;
 }
 
-.number:nth-child(3n) {
-  border-radius: 0 2px 2px 0;
+/* The seam between ground and space. One hairline makes the two columns read as
+   two readings; ruling every row as well would make it a spreadsheet. */
+.space {
+  border-left: 1px solid var(--panel-hairline);
 }
 
+/*
+ * The tenth is precision, not magnitude. Holding it a step back lets the grid be
+ * scanned by its integers first, which is how these actually get read — "thirty
+ * against eleven", not "thirty point zero against eleven point zero".
+ */
+.fraction {
+  color: var(--mantine-color-gray-5);
+  font-size: 11px;
+}
+
+/*
+ * Rank sits on the trough's floor as a footer keyed to its medal colour. Gold,
+ * silver and bronze mean the same thing in every theme, so they come from the
+ * shared signal tokens rather than from the theme's surfaces.
+ */
 .rankBadge {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
   margin-top: auto;
-  padding: 3px 6px;
-  border-radius: 0 0 2px 2px;
-  border-left: 0 !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
+  padding: 3px 7px;
+  border-top: 1px solid rgba(var(--rank-rgb), 0.28);
+  border-radius: 0 0 var(--panel-radius) var(--panel-radius);
+  background: rgba(var(--rank-rgb), 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: rgb(var(--rank-rgb));
+}
+
+.rankFirst {
+  --rank-rgb: var(--army-rank-first-rgb);
+}
+
+.rankSecond {
+  --rank-rgb: var(--army-rank-second-rgb);
+}
+
+.rankThird {
+  --rank-rgb: var(--army-rank-third-rgb);
+}
+
+/* Fourth place and below is a position, not a medal: neutral, and quiet. */
+.rankOther {
+  --rank-rgb: 148, 163, 184;
+  color: var(--mantine-color-gray-4);
 }
 
 .rankText {
-  font-size: var(--mantine-font-size-xs);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 11px;
   font-weight: var(--weight-rail);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }

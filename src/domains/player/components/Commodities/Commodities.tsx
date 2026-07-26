@@ -1,6 +1,4 @@
-import { Text, Group } from "@mantine/core";
-import { Chip } from "@/shared/ui/primitives/Chip";
-import classes from "./Commodities.module.css";
+import { StoresGauge } from "../StoresGauge/StoresGauge";
 
 type Props = {
   commodities: number;
@@ -9,21 +7,12 @@ type Props = {
 
 export function Commodities({ commodities, commoditiesTotal }: Props) {
   return (
-    <Chip
-      accent="gray"
-      leftIconSrc="/comms.png"
-      leftIconSize={18}
-      py={6}
-      className={classes.chip}
-    >
-      <Group gap={2} align="baseline" ff="monospace">
-        <Text fw={800} fz={18} lh={1} c="white" className={classes.value}>
-          {commodities}
-        </Text>
-        <Text fw={400} fz={14} lh={1} c="dimmed" className={classes.total}>
-          /{commoditiesTotal}
-        </Text>
-      </Group>
-    </Chip>
+    <StoresGauge
+      iconSrc="/comms.png"
+      accentRgb="var(--gd-gray)"
+      value={commodities}
+      capacity={commoditiesTotal}
+      label={`${commodities} of ${commoditiesTotal} commodities`}
+    />
   );
 }

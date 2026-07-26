@@ -87,9 +87,17 @@
 .leaderImageContainer {
   position: relative;
   flex: 0 0 auto;
-  width: 38px;
+  --leader-portrait-width: 38px;
+  width: var(--leader-portrait-width);
   align-self: stretch;
-  min-height: 34px;
+  /*
+   * The portrait art is 120 x 153, and the plate's height came from the image's
+   * intrinsic aspect — so a row was 36px tall until its lazily-loaded portrait
+   * decoded and then jumped to 50px, shifting every dossier below it. Reserving
+   * the art's height up front makes the row the same size loaded or not.
+   * PhantomLeader.module.css derives the empty slot from the same figures.
+   */
+  min-height: calc(var(--leader-portrait-width) * 153 / 120);
   overflow: hidden;
   background: rgba(0, 0, 0, 0.35);
   border-right: 1px solid var(--panel-separator);

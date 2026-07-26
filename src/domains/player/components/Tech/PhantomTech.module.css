@@ -7,7 +7,11 @@
 
 .socket {
   position: relative;
-  height: 26.5px;
+  /* Matches a filled tech card exactly: 18px content + 4px padding top and
+     bottom + 1px border each side. The socket draws its ring with an inset
+     shadow rather than a border, so the height is the whole box. A slot that is
+     1.5px short of the card it stands in for breaks the rack's row rhythm. */
+  height: 28px;
   display: flex;
   align-items: center;
   gap: 5px;

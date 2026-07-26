@@ -43,17 +43,6 @@
 
 /* Capped-row column-flow grids: grow horizontally, keep vertical rhythm.
    Uniform column widths give a consistent scan line across cards. */
-.objectivesGrid {
-  display: grid;
-  grid-template-rows: repeat(6, min-content);
-  grid-auto-flow: column;
-  grid-auto-columns: 170px;
-  gap: 4px;
-  align-items: start;
-  min-width: 170px;
-  height: 100%;
-}
-
 .objectivesGridSplit {
   display: flex;
   align-items: flex-start;
@@ -71,7 +60,6 @@
   max-width: 170px;
 }
 
-.objectivesGrid > *,
 .objectivesColumn > * {
   min-width: 0;
   width: 100%;
@@ -89,16 +77,6 @@
     rgba(18, 13, 11, 0.62);
 }
 
-/* Deliberate "empty bay" texture when a player holds nothing in this group */
-.objectivesGrid:empty {
-  background: repeating-linear-gradient(
-    135deg,
-    transparent 0 7px,
-    rgba(148, 163, 184, 0.04) 7px 8px
-  );
-  border-radius: 2px;
-}
-
 /*
  * The logistics compartment holds three unrelated things — stores, hand, and
  * command — which is why it read as clutter. Splitting it into stacked
@@ -111,16 +89,31 @@
   height: 100%;
 }
 
+/*
+ * The upper region takes all the space above the floor and stretches its two
+ * columns into it, so the seam between them runs the region's full height and
+ * lands on the shelf rule below — a T-junction rather than a line trailing off
+ * into empty space. No bottom padding for the same reason: the seam has to reach
+ * the rule to meet it.
+ */
 .logisticsTop {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
+  flex: 1;
   gap: 6px;
-  padding: 5px 6px 6px;
+  padding: 5px 6px 0;
+}
+
+/* Both columns centre in the drop, so the stores and the hand sit on one optical
+   line however tall the region grows. */
+.logisticsTop > * {
+  justify-content: center;
 }
 
 /* Stores and hand are different kinds of number, so a hairline separates them. */
 .logisticsHand {
   display: flex;
+  align-items: center;
   gap: 4px;
   padding-left: 6px;
   border-left: 1px solid var(--panel-separator);
@@ -167,16 +160,23 @@
 
 /* Salvage: a shelf above the command trough. Left-aligned so a relic-ready
    cradle lands in the same place on every card. */
+/*
+ * The salvage shelf holds one row's height at all times.
+ *
+ * A fragment sprite is 72 x 73 drawn at 32px wide in a stack padded 2px, so a
+ * loaded shelf is that tall — but the sprites load lazily, and until they decoded
+ * the row collapsed to its text height and dragged the stores and hand above it
+ * upward. Reserving the height means the compartment reads the same on a card
+ * with fragments, a card without, and a card whose art hasn't arrived yet.
+ */
 .fragmentRow {
   display: flex;
   align-items: center;
-  min-height: 0;
+  /* Sprite height, + the stack's 2px top and bottom, + this row's own 3px/4px
+     padding and 1px rule, because the box is border-box. */
+  min-height: calc(32px * 73 / 72 + 4px + 8px);
   padding: 3px 6px 4px;
   border-top: 1px solid var(--panel-separator);
-}
-
-.fragmentRow:empty {
-  display: none;
 }
 
 /* FragmentsPool brings its own Mantine padding, which double-pads the shelf. */

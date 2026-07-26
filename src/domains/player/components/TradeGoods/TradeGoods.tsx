@@ -1,6 +1,4 @@
-import { Text } from "@mantine/core";
-import { Chip } from "@/shared/ui/primitives/Chip";
-import classes from "./TradeGoods.module.css";
+import { StoresGauge } from "../StoresGauge/StoresGauge";
 
 type Props = {
   tg: number;
@@ -8,23 +6,11 @@ type Props = {
 
 export function TradeGoods({ tg }: Props) {
   return (
-    <Chip
-      accent="yellow"
-      leftIconSrc="/tg.png"
-      leftIconSize={18}
-      py={4}
-      className={classes.chip}
-    >
-      <Text
-        ff="monospace"
-        fw={800}
-        fz={18}
-        lh={1}
-        c="white"
-        className={classes.value}
-      >
-        {tg}
-      </Text>
-    </Chip>
+    <StoresGauge
+      iconSrc="/tg.png"
+      accentRgb="var(--gd-yellow)"
+      value={tg}
+      label={`${tg} trade goods`}
+    />
   );
 }

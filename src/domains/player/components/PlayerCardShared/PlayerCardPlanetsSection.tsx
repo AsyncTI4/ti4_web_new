@@ -25,9 +25,21 @@ export function PlayerCardPlanetsSection({
   align = "flex-start",
   children,
 }: PlayerCardPlanetsSectionProps) {
+  const stretch = align === "stretch";
+
   return (
-    <Group align={align} gap={gap} wrap={wrap}>
-      <Box mr={economyGap} style={align === "stretch" ? { display: "flex" } : undefined}>
+    /*
+     * When stretching, the row claims its container's full height so the ledger
+     * extends with the compartment rather than stopping at the height of the
+     * planet cards and leaving a dead band beneath both.
+     */
+    <Group
+      align={align}
+      gap={gap}
+      wrap={wrap}
+      mih={stretch ? "100%" : undefined}
+    >
+      <Box mr={economyGap} style={stretch ? { display: "flex" } : undefined}>
         <ResourceInfluenceCompact
           planetEconomics={planetEconomics}
           showTotalSpend={showTotalSpend}

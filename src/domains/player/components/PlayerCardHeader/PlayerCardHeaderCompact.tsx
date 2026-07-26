@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Group, Text, Box, Image, Stack } from "@mantine/core";
+import cx from "clsx";
 import { PlayerColor } from "../PlayerColor";
 import { StatusIndicator } from "../StatusIndicator";
 import { SpeakerToken } from "../SpeakerToken";
@@ -11,6 +12,7 @@ import breakthroughStyles from "../Breakthrough/Breakthrough.module.css";
 import type { BreakthroughData } from "@/entities/data/types";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 import styles from "./PlayerCardHeaderCompact.module.css";
+import rail from "./HeaderRail.module.css";
 
 type PlayerCardHeaderProps = {
   userName: string;
@@ -67,7 +69,9 @@ function PlayerIdentity({
 }
 
 const MOBILE_IDENTITY_WIDTH = 354;
-const MOBILE_BREAKTHROUGH_WIDTH = 176;
+/* Widened from 176: the longest breakthrough names were being truncated to an
+   ellipsis inside the slot, and the slot exists precisely so they don't have to be. */
+const MOBILE_BREAKTHROUGH_WIDTH = 194;
 
 export function PlayerCardHeaderCompact({
   userName,
@@ -196,10 +200,11 @@ export function PlayerCardHeaderMobile({
 }) {
   return (
     <Group
-      gap="xs"
+      gap={0}
       px={4}
       align="center"
       wrap="nowrap"
+      className={rail.rail}
       style={{ width: "100%", minWidth: 0 }}
     >
       <Group
@@ -209,6 +214,7 @@ export function PlayerCardHeaderMobile({
         w={MOBILE_IDENTITY_WIDTH}
         miw={MOBILE_IDENTITY_WIDTH}
         maw={MOBILE_IDENTITY_WIDTH}
+        className={cx(rail.railGroup, rail.railIdentity)}
         style={{ overflow: "hidden", flexShrink: 0 }}
       >
         <Image
@@ -227,10 +233,14 @@ export function PlayerCardHeaderMobile({
         <StatusIndicator passed={passed} active={active} />
       </Group>
 
+      {/* Fixed-width slot: the breakthrough column starts at the same x on every
+          card in the stack, filled or not, so the rail's seams line up down the
+          band. */}
       <Box
         w={MOBILE_BREAKTHROUGH_WIDTH}
         miw={MOBILE_BREAKTHROUGH_WIDTH}
         maw={MOBILE_BREAKTHROUGH_WIDTH}
+        className={cx(rail.railGroup, rail.railFill)}
         style={{ flexShrink: 0, overflow: "visible" }}
       >
         {breakthrough?.breakthroughId && (
@@ -246,9 +256,13 @@ export function PlayerCardHeaderMobile({
       </Box>
 
       {showNeighbors && neighbors.length > 0 && (
-        <Neighbors neighbors={neighbors} />
+        <div className={rail.railGroup}>
+          <Neighbors neighbors={neighbors} />
+        </div>
       )}
 
+      {/* Emits its own rail groups, so abilities, notes and faction techs are
+          divided by the same seam as everything else on the rail. */}
       {rightSection}
 
       <Box className={styles.headerRule} />
