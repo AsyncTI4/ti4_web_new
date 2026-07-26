@@ -1,4 +1,5 @@
 import { Title, Text, Box, Grid, Group } from "@mantine/core";
+import type { ReactNode } from "react";
 import classes from "./KeyboardShortcutsModal.module.css";
 import { AppModal } from "@/shared/ui/AppModal";
 
@@ -7,35 +8,50 @@ type KeyboardShortcutsModalProps = {
   onClose: () => void;
 };
 
+/* A section rail: engraved label carried across the column by a fading rule. */
+function SectionTitle({ children }: { children: ReactNode }) {
+  return (
+    <Box className={classes.sectionTitle}>
+      {children}
+      <span className={classes.sectionRule} aria-hidden="true" />
+    </Box>
+  );
+}
+
+function Keycap({ children }: { children: ReactNode }) {
+  return <kbd className={classes.key}>{children}</kbd>;
+}
+
 type ShortcutItemProps = {
   keys: string | string[];
   description: string;
+  /** True when the keys are a contiguous run rather than alternatives. */
+  range?: boolean;
 };
 
-function ShortcutItem({ keys, description }: ShortcutItemProps) {
+function ShortcutItem({ keys, description, range = false }: ShortcutItemProps) {
   const keyArray = Array.isArray(keys) ? keys : [keys];
 
   return (
-    <Group justify="space-between" gap="md" className={classes.shortcutItem}>
-      <Text size="sm" className={classes.description}>
-        {description}
-      </Text>
-      <Group gap="xs">
+    <Group
+      justify="space-between"
+      wrap="nowrap"
+      align="center"
+      className={classes.shortcutItem}
+    >
+      <Text className={classes.description}>{description}</Text>
+      <Box className={range ? classes.keyRange : classes.keyContainer}>
         {keyArray.map((key, index) => (
-          <Box key={index} className={classes.keyContainer}>
-            {index > 0 && (
-              <Text size="xs" c="dimmed" mx="xs">
-                or
-              </Text>
+          <Box key={key} className={classes.keyContainer}>
+            {!range && index > 0 && (
+              <span className={classes.alt} aria-hidden="true">
+                /
+              </span>
             )}
-            <Box className={classes.key}>
-              <Text size="sm" fw={600}>
-                {key}
-              </Text>
-            </Box>
+            <Keycap>{key}</Keycap>
           </Box>
         ))}
-      </Group>
+      </Box>
     </Group>
   );
 }
@@ -59,9 +75,7 @@ export function KeyboardShortcutsModal({
       <Box className={classes.content}>
         <Grid>
           <Grid.Col span={6}>
-            <Title order={4} size="sm" mb="md" c="dimmed">
-              Navigation & Display
-            </Title>
+            <SectionTitle>Navigation &amp; Display</SectionTitle>
             <Box className={classes.section}>
               <ShortcutItem
                 keys="h"
@@ -79,13 +93,12 @@ export function KeyboardShortcutsModal({
           </Grid.Col>
 
           <Grid.Col span={6}>
-            <Title order={4} size="sm" mb="md" c="dimmed">
-              Right Sidebar Selection
-            </Title>
+            <SectionTitle>Right Sidebar Selection</SectionTitle>
             <Box className={classes.section}>
               <ShortcutItem
                 keys={["1", "2", "3", "4", "5", "6", "7", "8"]}
-                description="Select faction (1st, 2nd, etc.)"
+                description="Select faction by seat order"
+                range
               />
               <ShortcutItem keys="T" description="Toggle tech tab" />
               <ShortcutItem keys="H" description="Toggle hand tab" />
@@ -94,10 +107,10 @@ export function KeyboardShortcutsModal({
           </Grid.Col>
         </Grid>
 
-        <Box mt="xl" p="md" className={classes.note}>
-          <Text size="xs" c="dimmed" ta="center">
-            Shortcuts are disabled when typing in input fields. Press the same
-            key again to deselect.
+        <Box mt="lg" className={classes.note}>
+          <Text className={classes.noteText}>
+            Press the same key again to deselect. Shortcuts are disabled while
+            you are typing in an input.
           </Text>
         </Box>
       </Box>

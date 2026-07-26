@@ -1,50 +1,123 @@
+/*
+ * Shortcuts reference.
+ *
+ * Was a loose two-column list: 55px of vertical rhythm per row, 14px descriptions,
+ * headings in the display face at sentence case, and the eight faction keys strung
+ * together with seven "or"s. It read as a settings page rather than a reference
+ * card you scan once and close.
+ *
+ * Now a dense reference: engraved section rails, rows on the system's spacing
+ * scale, and keycaps that read as actual keys — squared, top-lit, bottom-shaded.
+ */
 .content {
   font-family: var(--mantine-font-family);
+}
+
+/* Section rail: engraved label with a fading rule carrying it across the column,
+   matching the deck's section headings. */
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rail-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
+  white-space: nowrap;
+}
+
+.sectionRule {
+  flex: 1;
+  height: 1px;
+  min-width: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--panel-hairline-strong),
+    rgba(148, 163, 184, 0)
+  );
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
 .shortcutItem {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--panel-hairline);
+  gap: 12px;
+  min-height: 26px;
+  padding: 3px 0;
 }
 
-.shortcutItem:last-child {
-  border-bottom: none;
+.shortcutItem + .shortcutItem {
+  border-top: 1px solid var(--panel-separator);
 }
 
 .description {
   flex: 1;
-  color: var(--mantine-color-gray-1);
+  min-width: 0;
+  font-size: 13px;
+  color: var(--mantine-color-gray-2);
 }
 
 .keyContainer {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
-/* Keycaps read as instrument keys: themed field, mono glyphs */
+/* Keycaps: a key is a physical thing, so it gets the bevel — lit along the top,
+   shaded along the bottom, seated on the panel field. */
 .key {
-  background: var(--panel-field-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 21px;
+  padding: 2px 6px;
   border: 1px solid var(--panel-hairline-strong);
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  min-width: 2rem;
-  text-align: center;
-  font-family: var(--mantine-font-family-monospace);
-  font-size: 12px;
+  border-radius: var(--panel-radius);
+  background: var(--panel-field-bg);
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.35),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
   color: var(--mantine-color-gray-0);
 }
 
+/* Alternative keys for the same action. A dim slash is quieter than the word
+   "or" repeated down the column. */
+.alt {
+  font-size: 10px;
+  color: var(--mantine-color-gray-6);
+  user-select: none;
+}
+
+/* A contiguous run of keys — the faction selectors — is a range, not a list of
+   alternatives, so the keys butt together with no separator at all. */
+.keyRange {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .note {
-  background: var(--panel-field-flat);
+  padding: 7px 10px;
   border-radius: var(--panel-radius);
-  border: 1px solid var(--panel-hairline);
+  background: var(--socket-bg);
+  box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);
+}
+
+.noteText {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mantine-color-gray-5);
 }

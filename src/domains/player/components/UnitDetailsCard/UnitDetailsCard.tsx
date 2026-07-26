@@ -302,7 +302,7 @@ export function UnitDetailsCard({
           <>
             <Divider color="gray.8" />
             <Box>
-              <Text size="xs" fw={500} c="gray.5" mb={4}>Ability</Text>
+              <Text c="gray.5" mb={5} className={styles.sectionTitle}>Ability</Text>
               <Text size="sm" c="gray.3" className={styles.abilityText}>{unitData.ability}</Text>
             </Box>
           </>
@@ -367,7 +367,7 @@ export function UnitDetailsCard({
           <>
             <Divider color="gray.8" />
             <Box>
-              <Text size="xs" fw={500} c="gray.5" mb={4}>Unit Abilities</Text>
+              <Text c="gray.5" mb={5} className={styles.sectionTitle}>Unit Abilities</Text>
               <Stack gap={4}>
                 {(unitData.afbHitsOn || inheritedAbilities?.afbHitsOn) && (
                   <Group gap={6}>

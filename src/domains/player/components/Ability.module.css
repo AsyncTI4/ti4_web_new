@@ -1,0 +1,43 @@
+/*
+ * Faction ability chip.
+ *
+ * Was a purple pill with a 2px accent side-stripe and a generic sparkles icon —
+ * the stripe is the one shape the system bans, and the icon said "magic" rather
+ * than "this faction can do something the others cannot".
+ *
+ * Now a keyed plate: squared to the panel radius, a purple hairline frame, an
+ * engraved label, and a hex sigil built from the game's own geometry. The hexagon
+ * is the unit of the board, and an ability is a power seated inside one.
+ */
+.chip {
+  border-radius: var(--panel-radius);
+  border-color: rgba(var(--gd-purple), 0.34);
+  box-shadow: var(--machined-bevel);
+  --chip-inner-gap: 6px;
+}
+
+.chip:hover {
+  border-color: rgba(var(--gd-purple), 0.55);
+  background: linear-gradient(
+      180deg,
+      rgba(var(--gd-purple), 0.16) 0%,
+      rgba(var(--gd-purple), 0.07) 100%
+    ),
+    var(--panel-field-bg);
+}
+
+.label {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
+}
+
+/* The sigil: a hex cell with a lit core. Drawn at 15px so it reads at chip scale
+   without crowding the name. */
+.sigil {
+  display: block;
+  flex-shrink: 0;
+  color: rgba(196, 181, 253, 0.92);
+}

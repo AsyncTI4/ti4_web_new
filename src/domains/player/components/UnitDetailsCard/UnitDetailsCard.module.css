@@ -14,18 +14,35 @@
   padding: 2px;
 }
 
+/*
+ * Unit stats as seated readouts, not metric tiles.
+ *
+ * These were four rounded grey boxes with a small label over a large proportional
+ * numeral — the hero-metric pattern, and the numerals were not mono, so cost and
+ * combat could not be compared column to column. Now each stat sits in a recessed
+ * trough with an engraved label and a tabular numeral, which is how every other
+ * number in the app is presented.
+ */
 .statBox {
   flex: 1;
-  background: var(--unit-details-stat-bg);
-  border-radius: 4px;
+  border-radius: var(--panel-radius);
+  background: var(--trough-bg);
+  box-shadow: var(--trough-inset), inset 0 0 0 1px var(--socket-border);
 }
 
 .statLabel {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .statValue {
   line-height: 1;
+  font-family: var(--mantine-font-family-monospace);
+  font-variant-numeric: tabular-nums;
 }
 
 .modifierAttribution {
@@ -34,7 +51,12 @@
 }
 
 .sectionTitle {
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .abilityText {
