@@ -90,22 +90,21 @@
   );
 
   /*
-   * HUD bezel. The top and bottom decks are the console the map is set into, so
-   * each closes with a scored ornament band facing the board — segment marks
-   * every 20px with a longer graduation every fifth, the way a real instrument
-   * bezel is machined. Drawn entirely from gradients: no raster assets, no
-   * per-element cost.
+   * HUD deck edges. The top and bottom decks are the console the board is set
+   * into; each closes with a lit lip and an accent hairline facing the board.
+   * There is deliberately no ornament band — see DESIGN.md.
    */
-  --hud-bezel: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(255, 255, 255, 0.015) 38%,
-    rgba(0, 0, 0, 0.28) 100%
-  );
-  --hud-ornament-tick: rgba(148, 163, 184, 0.26);
-  --hud-ornament-major: rgba(148, 163, 184, 0.52);
   --hud-edge-light: rgba(226, 232, 240, 0.22);
   --hud-edge-accent: rgba(59, 130, 246, 0.3);
+
+  /*
+   * The bottom deck's console field. Sits a step DARKER than
+   * --player-card-box-bg so the cards read as plates raised onto the deck, and
+   * darker than the board so the board stays the bright thing in the middle.
+   * Per-theme rather than one flat black wash, so each theme tunes its own
+   * board-to-deck contrast instead of inheriting a value tuned for graphite.
+   */
+  --hud-deck-ground: #0b0b0c;
 
   /* Sockets: empty capacity. Pressed into the plate, not dashed onto it. */
   --socket-bg: rgba(0, 0, 0, 0.28);

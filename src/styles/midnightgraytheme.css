@@ -17,8 +17,7 @@
        ground sits a step ABOVE the module field rather than at pitch black. At
        rgba(8,8,8) the ground was darker than the plates sitting on it, which is
        what made the player area read as loose panels floating on a void. */
-    --player-card-box-bg: linear-gradient(180deg, #15151700 0%, #0f0f1100 100%),
-      linear-gradient(180deg, #151517 0%, #101012 100%);
+    --player-card-box-bg: linear-gradient(180deg, #151517 0%, #101012 100%);
 
     --sidebar-bg: #0a0a0a;
     --left-sidebar-bg: rgb(10 10 10 / 92%);
@@ -143,5 +142,9 @@
     --socket-bg: rgba(0, 0, 0, 0.3);
     --socket-border: rgba(190, 190, 196, 0.09);
     --socket-tick: rgba(190, 190, 196, 0.2);
+
+    /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
+       cards read as plates raised onto the deck. */
+    --hud-deck-ground: #0b0b0c;
 }
 

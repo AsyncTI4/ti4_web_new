@@ -159,6 +159,10 @@
     /* Ground a plate's painted corner notch is cut into; must match this
        theme's --player-card-box-bg or the notch shows as a visible wedge. */
     --plate-ground: #180d24;
+
+    /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
+       cards read as plates raised onto the deck. */
+    --hud-deck-ground: #0d0715;
 }
 
 

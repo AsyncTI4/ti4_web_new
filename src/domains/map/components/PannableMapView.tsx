@@ -176,12 +176,6 @@ export function PannableMapView({ gameId }: Props) {
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
       >
-        {/* Top deck's lower edge, pinned to the top of the board viewport */}
-        <Box
-          className={`${classes.hudOrnament} ${classes.hudOrnamentTop}`}
-          aria-hidden="true"
-        />
-
         {!hideZoomControls && (
           <div
             className={classes.zoomControlsDynamic}
@@ -235,10 +229,6 @@ export function PannableMapView({ gameId }: Props) {
 
         {/* ---- Bottom HUD deck ---------------------------------------- */}
         <Box className={classes.bottomHud}>
-          <Box
-            className={`${classes.hudOrnament} ${classes.hudOrnamentBottom}`}
-            aria-hidden="true"
-          />
           <Box className={classes.bottomHudBody}>
         {gameData && (
           <ScaledContent

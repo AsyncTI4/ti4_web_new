@@ -295,17 +295,13 @@ The condensed rack (`denseGrid`) shares the language at smaller scale, with 1px 
 
 ### HUD decks
 
-The board is **set into a console**: a deck above it and a deck below, each closing with the same graduated bezel band facing the board. The map keeps its black field and is the one surface allowed to be visually loud — it is the subject, sandwiched between two pieces of chrome.
+The board is **set into a console**: chrome above it, chrome below, the board itself keeping its black field as the one surface allowed to be visually loud. It is the subject, sandwiched between two pieces of HUD.
 
-- **The bezel band** is 14px of machined edge: full-height panel seams every 160px, half-height graduations every 32px rising from the board-facing edge, over an embossed sheen. Minor marks are deliberately shorter than major ones — a strip of identical evenly-spaced ticks reads as a measuring rule, not as an instrument bezel. The top band is `position: sticky` at the map viewport's top, so the console edge stays present while the board scrolls beneath it.
+- **The separation is an edge, not an ornament.** Each deck closes with a lit lip (`--hud-edge-light`), an accent hairline facing the board (`--hud-edge-accent`), and shadow cast toward it. Two attempts at a machined graduation band — segment ticks, then a major/minor graduated bezel — both read as a **measuring rule** rather than instrument plating. A clean edge beats badly-faked ornament, so the band was removed. Real painted-metal bezel ornamentation needs raster artwork; the spec for it is a follow-up, not something to approximate in gradients.
 - **Chrome is brushed, not hatched.** `--rail-sheen` is a vertical light-to-dark sweep, which is what a bezel does under an overhead source. It replaced a diagonal crosshatch that read as fabric texture.
+- **The bottom deck has its own ground.** `--hud-deck-ground` is per-theme and sits a step *darker* than `--player-card-box-bg`, so the player cards read as plates raised onto the deck and the board stays the brightest thing between them. The deck's sheen is a fixed 120px band at its lip, never a full-height gradient — the deck can run several thousand pixels tall, and a stretched gradient would brighten its far end.
 - **One indent for the whole bottom deck.** Every section inside it — round line, score track, objectives, laws, player areas, score breakdown — shares one left margin. Two of those sections previously wrapped themselves in their own bordered panel with inner padding, which put their headings further in than their neighbours and made the deck read as a pile of unrelated blocks.
-- The band is drawn entirely from gradients: no raster assets, one element per deck. The ornate painted-metal look of a real RTS bezel needs actual artwork; faking it in CSS gets a cheap imitation, so it isn't attempted here.
-
-- **View tabs** are plates, not browser tabs: a socket at rest, a lit plate when selected, with a seated accent bar along the selected tab's floor. That bar is the only chroma in the strip.
-- **Map tools** are bays in one rack — a single recessed block whose 1px seams show the container through, built exactly like the condensed unit grid. Engaged state is a **lit bay** with the tool's hue confined to a thin edge and the glyph; the previous per-tool `filled` variants in cyan, blue and orange made the row read as a random tray of app icons in three accent colours.
-- **Header actions** are plates too. Discord login keeps the brand blue on its frame and glyph, because that is brand recognition doing real work, but it no longer arrives as a saturated fill.
-- **Open-game chips** are set in mono, because a game id is an identifier.
+- **The board gets clearance.** 20px between the lowest tiles and the deck's lip, so hexes never appear to tuck under the chrome.
 
 ### Player identity
 

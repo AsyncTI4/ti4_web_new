@@ -573,92 +573,6 @@
  * so it costs one element per deck and needs no raster assets.
  * ========================================================================= */
 
-.hudOrnament {
-  position: relative;
-  height: 14px;
-  flex: 0 0 auto;
-  /*
-   * Graduated bezel, not a ruler. Three layers: full-height panel seams every
-   * 160px, half-height graduations every 32px rising from the board-facing edge,
-   * and an embossed sheen. Minor marks are deliberately shorter than major ones
-   * — a strip of identical evenly-spaced ticks reads as a measuring rule, which
-   * is what the first attempt looked like.
-   */
-  background:
-    repeating-linear-gradient(
-        90deg,
-        transparent 0 158px,
-        var(--hud-ornament-major) 158px 159px,
-        rgba(255, 255, 255, 0.07) 159px 160px
-      )
-      top left / 100% 100% repeat-x,
-    repeating-linear-gradient(
-        90deg,
-        var(--hud-ornament-tick) 0 1px,
-        transparent 1px 32px
-      )
-      bottom left / 100% 5px repeat-x,
-    var(--hud-bezel);
-}
-
-/*
- * The band belongs to the top deck, so its graduations hang from the lit lower
- * lip. It sticks to the top of the map viewport, which is what makes the board
- * read as being set *into* a console rather than merely starting below one.
- */
-.hudOrnamentTop {
-  position: sticky;
-  top: 0;
-  z-index: var(--z-hud-deck);
-  background:
-    repeating-linear-gradient(
-        90deg,
-        transparent 0 158px,
-        var(--hud-ornament-major) 158px 159px,
-        rgba(255, 255, 255, 0.07) 159px 160px
-      )
-      top left / 100% 100% repeat-x,
-    repeating-linear-gradient(
-        90deg,
-        var(--hud-ornament-tick) 0 1px,
-        transparent 1px 32px
-      )
-      bottom left / 100% 5px repeat-x,
-    var(--hud-bezel);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    inset 0 -1px 0 var(--hud-edge-accent),
-    0 7px 18px rgba(0, 0, 0, 0.6);
-}
-
-/* Mirrored for the bottom deck: bezel flipped, graduations dropping from the lip
-   so both bands present the same face to the board. */
-.hudOrnamentBottom {
-  background:
-    repeating-linear-gradient(
-        90deg,
-        transparent 0 158px,
-        var(--hud-ornament-major) 158px 159px,
-        rgba(255, 255, 255, 0.07) 159px 160px
-      )
-      top left / 100% 100% repeat-x,
-    repeating-linear-gradient(
-        90deg,
-        var(--hud-ornament-tick) 0 1px,
-        transparent 1px 32px
-      )
-      top left / 100% 5px repeat-x,
-    linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.07) 0%,
-      rgba(255, 255, 255, 0.015) 38%,
-      rgba(0, 0, 0, 0.28) 100%
-    );
-  box-shadow:
-    inset 0 1px 0 var(--hud-edge-accent),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
-}
-
 /*
  * Bottom deck. Everything below the board — round line, score track, objectives,
  * laws, player areas, score summary — is one console panel rather than a stack
@@ -668,14 +582,22 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  /* Breathing room so the board's lowest tiles clear the deck's lip. */
+  margin-top: 20px;
+  /* Separation without ornament: a lit lip, an accent hairline facing the board,
+     and shadow cast upward. Two attempts at a machined graduation band both read
+     as a measuring rule, so the edge is left clean rather than decorated badly. */
+  border-top: 1px solid var(--hud-edge-accent);
   /* A fixed-height sheen at the deck's lip over a darkened console field. The
      sheen must not stretch: as a full-height gradient it would brighten the
      bottom of a deck that can run several thousand pixels tall. The field sits
      darker than the map so the cards read as plates raised onto it. */
   background:
     var(--rail-sheen) top center / 100% 120px no-repeat,
-    rgba(0, 0, 0, 0.3);
-  box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.6);
+    var(--hud-deck-ground);
+  box-shadow:
+    inset 0 1px 0 var(--hud-edge-light),
+    0 -10px 26px rgba(0, 0, 0, 0.66);
 }
 
 .bottomHudBody {
