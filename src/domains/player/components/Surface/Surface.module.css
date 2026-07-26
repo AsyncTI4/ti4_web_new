@@ -11,7 +11,7 @@
 
 .label {
   font-size: var(--mantine-font-size-xs);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   position: absolute;
   bottom: 15px;
   right: 20px;
@@ -106,5 +106,5 @@
 
 :global(.theme-vaporwavetheme) .label {
   text-shadow: 0 0 6px rgba(255, 0, 170, 0.35), 0 0 10px rgba(0, 240, 255, 0.25);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--track-label);
 }

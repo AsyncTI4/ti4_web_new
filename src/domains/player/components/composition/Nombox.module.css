@@ -8,10 +8,10 @@
 
 .factionName {
   color: var(--mantine-color-red-2);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   font-size: var(--mantine-font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--track-label);
 }
 
 .unitsRow {
@@ -36,7 +36,7 @@
 
 .countBadge {
   color: var(--mantine-color-red-2);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: var(--mantine-font-size-xs);
   font-family: var(--mantine-font-family-monospace);
   margin-left: 2px;
@@ -65,10 +65,10 @@
 }
 
 .compactFactionName {
-  font-weight: 600;
+  font-weight: var(--weight-title);
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: var(--track-label);
   line-height: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -147,9 +147,9 @@
   color: var(--mantine-color-red-3);
   font-size: 10px;
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   line-height: 1;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--track-rail);
   text-align: left;
   text-transform: uppercase;
 }
@@ -182,7 +182,7 @@
 .compactCountBadge {
   color: var(--mantine-color-red-2);
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
 }
 
 .factionName,

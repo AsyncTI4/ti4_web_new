@@ -86,7 +86,7 @@
 .planetName {
   font-size: var(--mantine-font-size-xs);
   color: white;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   writing-mode: vertical-rl;
   text-orientation: sideways;
   white-space: nowrap;

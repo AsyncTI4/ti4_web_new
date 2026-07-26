@@ -57,7 +57,7 @@
   color: var(--mantine-color-white);
   font-family: var(--mantine-font-family-headings);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   line-height: 1.15;
   text-overflow: ellipsis;
   text-transform: uppercase;
@@ -68,7 +68,7 @@
   overflow: hidden;
   color: rgba(226, 232, 240, 0.72);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: var(--weight-data);
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -145,7 +145,9 @@ export function Chip({
         {title && (
           <Text
             size={textSize}
-            fw={700}
+            /* Semibold, not bold. Set here rather than in CSS because Mantine's
+               fw prop emits an inline style that overrides the class. */
+            fw={600}
             c="white"
             className={classes.textContainer}
             /* Native tooltip so a name the plate is too narrow to show can still
@@ -156,7 +158,7 @@ export function Chip({
           </Text>
         )}
         {title && revealFullTitleOnHover && (
-          <Text size={textSize} fw={700} c="white" className={classes.fullTitle}>
+          <Text size={textSize} fw={600} c="white" className={classes.fullTitle}>
             {title}
           </Text>
         )}

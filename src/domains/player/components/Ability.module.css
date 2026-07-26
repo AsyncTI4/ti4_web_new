@@ -29,15 +29,18 @@
 .label {
   font-family: var(--mantine-font-family-headings);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-body);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
 }
 
-/* The sigil: a hex cell with a lit core. Drawn at 15px so it reads at chip scale
-   without crowding the name. */
+/* The sigil: a hex cell with a lit core, sized to sit on the label's optical
+   centre rather than filling the slot. The hexagon's flat top and bottom mean it
+   needs a hair less height than a circular icon to look vertically centred. */
 .sigil {
   display: block;
   flex-shrink: 0;
+  width: 14px;
+  height: 15px;
   color: rgba(196, 181, 253, 0.92);
 }

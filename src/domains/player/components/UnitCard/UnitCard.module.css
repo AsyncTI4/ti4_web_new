@@ -184,24 +184,23 @@
 
 /* ---------- Badges ---------- */
 
+/* A faction mark you cannot identify is not doing its job, so the glyph is sized
+   to be read. No diagonal: the cut corner earned nothing here — the bay already
+   has one, and a second diagonal inside it was noise. */
 .factionBadge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1px;
+  right: 1px;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.55);
-  clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
 .factionIcon {
-  width: 13px;
-  height: 13px;
-  margin: -3px -3px 0 0;
+  width: 17px;
+  height: 17px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
 }
 
 .upgradeFactionBadgesContainer {
@@ -271,7 +270,7 @@
 
 .countText,
 .countTextZero {
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 13px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -279,7 +278,7 @@
 
 .maxCountText {
   color: var(--mantine-color-gray-6);
-  font-weight: 500;
+  font-weight: var(--weight-data);
   font-size: 10px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -287,11 +286,11 @@
 
 .lockedText {
   color: var(--mantine-color-gray-6);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   font-size: 9px;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--track-rail);
 }
 
 .popoverDropdown {
@@ -482,7 +481,7 @@
   content: "/" attr(data-total);
   font-size: 9px;
   color: var(--mantine-color-gray-6);
-  font-weight: 500;
+  font-weight: var(--weight-data);
   margin-left: 1px;
 }
 
@@ -492,22 +491,18 @@
 
 .denseFactionBadge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1px;
+  right: 1px;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 15px;
-  height: 15px;
-  background: rgba(0, 0, 0, 0.55);
-  clip-path: polygon(100% 0, 100% 100%, 0 0);
 }
 
 .denseFactionIcon {
-  width: 10px;
-  height: 10px;
-  margin: -2px -2px 0 0;
+  width: 14px;
+  height: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
 }
 
 .denseUpgradeFactionBadgesContainer {

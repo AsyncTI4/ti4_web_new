@@ -23,8 +23,8 @@
 }
 
 .playerName {
-  font-family: Slider, "Times New Roman", serif;
-  letter-spacing: 0.04em;
+  font-family: var(--font-display);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
 }
@@ -54,7 +54,7 @@
 
 .heroStatValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 14px;
   color: var(--mantine-color-gray-2);
 }
@@ -63,7 +63,7 @@
   font-size: 10px;
   color: var(--mantine-color-gray-5);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--track-label);
 }
 
 .heroStatDot {
@@ -180,9 +180,9 @@
 }
 
 .techName {
-  font-family: Slider, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 13px;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
   color: var(--mantine-color-gray-1);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
@@ -201,7 +201,7 @@
 
 .techPercent {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 15px;
   line-height: 1;
   color: rgb(var(--tech-color));
@@ -238,8 +238,8 @@
 /* Tier label — optional small type indicator */
 .techTierLabel {
   font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: rgba(var(--tech-color), 0.7);
   margin-top: 3px;
@@ -308,8 +308,8 @@
 }
 
 .gameTitle {
-  font-family: Slider, "Times New Roman", serif;
-  letter-spacing: 0.02em;
+  font-family: var(--font-display);
+  letter-spacing: var(--track-body);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 

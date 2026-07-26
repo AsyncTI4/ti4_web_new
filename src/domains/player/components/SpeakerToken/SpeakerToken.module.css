@@ -15,7 +15,7 @@
 
 .label {
   color: rgb(248, 203, 203);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--track-label);
   line-height: 1;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.62);
 }

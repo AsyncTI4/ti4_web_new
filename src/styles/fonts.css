@@ -1,9 +1,20 @@
+/*
+ * Slider — the display face, self-hosted. The @font-face family name must be a
+ * literal string; it is the definition the --font-display token points at, so it
+ * can never itself be a var().
+ */
 @font-face {
-  font-family: 'Slider';
-  src: url('/font/slider.woff2') format('woff2'),
-       url('/font/Slider.woff') format('woff');
-  font-weight: normal;
+  font-family: "Slider";
+  src:
+    url("/font/slider.woff2") format("woff2"),
+    url("/font/Slider.woff") format("woff");
+  /*
+   * Slider ships a single weight. Declaring the full range tells the browser the
+   * face covers every weight it may be asked for, which suppresses synthetic
+   * bolding — faux-bold smears a squared display face badly at the 9-14px sizes
+   * this interface uses it at. Display hierarchy comes from size and tracking.
+   */
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
-

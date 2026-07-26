@@ -69,7 +69,7 @@
 
 .compactName {
   color: rgb(237, 224, 213);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
   line-height: 1;
   text-transform: uppercase;
 }

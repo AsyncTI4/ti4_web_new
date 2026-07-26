@@ -83,6 +83,6 @@
 }
 
 .monoValue {
-  font-family: var(--mantine-font-family-monospace, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  font-family: var(--font-data);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }

@@ -1,15 +1,15 @@
 .sectionTitle {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   color: var(--mantine-color-gray-5);
   margin-bottom: var(--mantine-spacing-xs);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: var(--track-rail);
 }
 
 .emptyText {
   color: var(--mantine-color-gray-5);
   font-size: var(--mantine-font-size-sm);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   text-transform: lowercase;
 }

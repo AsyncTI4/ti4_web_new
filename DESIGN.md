@@ -28,44 +28,50 @@ colors:
   rank-bronze: "#cd7f32"
 typography:
   display:
-    fontFamily: "Slider, sans-serif"
-    fontSize: "70px"
+    fontFamily: "var(--font-display)"
+    fontSize: "3.25rem"
     fontWeight: 400
     lineHeight: 1.05
     letterSpacing: "-0.01em"
-  headline:
-    fontFamily: "Slider, sans-serif"
-    fontSize: "18px"
+  heading:
+    fontFamily: "var(--font-display)"
+    fontSize: "1.125rem"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "0.02em"
   title:
-    fontFamily: "Slider, sans-serif"
-    fontSize: "14px"
+    fontFamily: "var(--font-display)"
+    fontSize: "0.875rem"
     fontWeight: 600
-    lineHeight: 1.3
+    lineHeight: 1.2
     letterSpacing: "0.09em"
   body:
-    fontFamily: "var(--mantine-font-family)"
-    fontSize: "13px"
+    fontFamily: "var(--font-text)"
+    fontSize: "0.8125rem"
     fontWeight: 400
     lineHeight: 1.5
-    letterSpacing: "normal"
+    letterSpacing: "0.01em"
   data:
-    fontFamily: "'Space Mono', var(--mantine-font-family-monospace)"
-    fontSize: "12px"
+    fontFamily: "var(--font-data)"
+    fontSize: "0.75rem"
     fontWeight: 500
-    lineHeight: 1.2
+    lineHeight: 1
     letterSpacing: "normal"
+  meta:
+    fontFamily: "var(--font-text)"
+    fontSize: "0.6875rem"
+    fontWeight: 400
+    lineHeight: 1.2
+    letterSpacing: "0.01em"
   label:
-    fontFamily: "Slider, sans-serif"
-    fontSize: "10px"
+    fontFamily: "var(--font-display)"
+    fontSize: "0.625rem"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "0.06em"
   micro:
-    fontFamily: "'Space Mono', var(--mantine-font-family-monospace)"
-    fontSize: "9px"
+    fontFamily: "var(--font-data)"
+    fontSize: "0.5625rem"
     fontWeight: 500
     lineHeight: 1.1
     letterSpacing: "0.02em"
@@ -202,29 +208,46 @@ The signal vocabulary. Defined once as RGB triplets in `gradients.css` (`--gd-*`
 
 ## 3. Typography
 
-**Display Font:** Slider (self-hosted woff2, `font-display: swap`)
-**Body Font:** Mantine system stack (`--mantine-font-family`)
-**Data / Mono Font:** Space Mono, falling back to `--mantine-font-family-monospace`
+**Display Font:** Slider (self-hosted woff2, `font-display: swap`) — `--font-display`
+**Text Font:** IBM Plex Sans — `--font-text`
+**Data Font:** IBM Plex Mono — `--font-data`
 
-**Character:** Slider is a squared, slightly technical face that reads as console signage rather than a sci-fi costume — it carries every heading, tab label and panel title. Space Mono handles every numeral, because tabular data in a proportional face is the fastest way to make a dense readout feel amateurish. The pairing works on a genuine contrast axis (squared display against a neutral system sans against a mono), never two similar sans faces.
+**Character:** Three families and only three. Slider is a squared, technical face that reads as console signage rather than sci-fi costume; it carries display, headings, panel titles and every uppercase label. IBM Plex Sans carries UI text: engineered rather than neutral, and it holds its counters at the 12–13px this interface actually runs at. IBM Plex Mono carries every numeral. Text and data share one superfamily so they sit together, while Slider contrasts against both on proportion **and** personality — a squared display face against an engineered text face is a real contrast axis, unlike two grotesques competing.
+
+**What this replaced.** The UI ran on Mantine's default system stack, which is the single reason the interface read as generic; numerals were split across Space Mono, the system monospace and a hand-rolled SF Mono stack, so the same quantity looked different in three places; Geist Sans had leaked onto the landing page as a fourth voice; and `Slider, "Times New Roman", serif` appeared six times, so a failed display font fell back to a **serif**.
 
 ### Hierarchy
 
-- **Display** (400, 70px desktop / 50px below `md`, 1.05): The landing page hero only. Does not appear in product surfaces.
-- **Headline** (600, 18px, 1.2): Page and section titles in the dashboard and games list.
-- **Title** (600, 14px, 0.09em, uppercase): Panel and modal titles. The uppercase-plus-tracking treatment is reserved for *chrome that names a container* — it is a structural signal, not an eyebrow.
-- **Body** (400, 13px, 1.5): Prose in modals, changelogs and descriptions. Cap prose at 65–75ch; data tables may run denser.
-- **Data** (500, 12px, mono): All numerals — scores, resources, influence, counts, distances.
-- **Label** (700, 10px, 0.06em, uppercase): Field labels inside panels, surface watermarks, badge text.
-- **Micro** (500, 9px, mono): In-map unit counts and token annotations, where legibility is bounded by the tile.
+Every step is a **named role**, declared in `styles/typography.css`. Six near-identical sizes chosen ad hoc is what makes hierarchy muddy — not the sizes themselves. Sizes are `rem` so they honour the reader's browser setting; the dense 9–12px band is deliberate for a data surface.
+
+- **Display** (`--text-display`, 52px, Slider): the landing hero only. Never in product surfaces.
+- **Heading** (`--text-heading`, 18px, Slider 600): page and section headings.
+- **Title** (`--text-title`, 14px, Slider 600, `--track-rail`): panel and modal titles, uppercase.
+- **Body** (`--text-body`, 13px, Plex Sans, 1.5): prose — card text, objective and law descriptions, tooltips. Cap prose at 65–75ch.
+- **Data** (`--text-data`, 12px, Plex Mono 500): every comparable numeral. Also the size of every chip label — tech, relics, promissory notes, abilities and secrets all sit here, in Plex Sans 600.
+- **Meta** (`--text-meta`, 11px): timestamps, ratios, captions.
+- **Label** (`--text-label`, 10px, Slider 700, `--track-label`): field labels, badge text, uppercase.
+- **Micro** (`--text-micro`, 9px, Plex Mono): in-map unit counts and rail labels, bounded by the tile they sit on.
+
+### Weights, tracking, leading
+
+Four weight roles and no more: `--weight-regular` 400, `--weight-data` 500, `--weight-title` 600, `--weight-rail` 700. 700 next to 800 next to 900 is not distinguishable at 10px, and having all three is how a system loses its voice.
+
+Three tracking roles, all in `em` so they scale with the size: `--track-rail` 0.09em, `--track-label` 0.06em, `--track-body` 0.01em. Tracking used to be split across `px` and `em` in 28 distinct values, which meant the same nominal tracking meant different things at 9px and 18px.
+
+`--lh-flush` 1 is for single-line numerals **only**; anything that can wrap takes `--lh-body` 1.5. Light text on a dark field loses perceived weight, so body prose takes the open track and steps up a weight rather than sitting at regular.
 
 ### Named Rules
 
-**The Fixed Scale Rule.** Product typography is fixed px, never `clamp()`. A panel that shrinks with the viewport makes a dense readout unreadable at exactly the moment it matters. Fluid type is permitted on the landing page hero and nowhere else.
+**The Fixed Meaning Rule.** Stage orange, secret red, relic gold, law purple and faction colors mean the same thing in every one of the seven themes. Themes override surfaces, borders, shadows and texture. A theme that redefines a signal color is a bug, not a variant.
 
-**The Mono Numeral Rule.** Every number a player compares to another number is set in mono. Scores, resource and influence values, unit counts, and VP totals. Proportional numerals in a comparison column are always wrong.
+**The Mono-Is-Numerals Rule.** Mono is for quantities a player compares, never for names. Tech names, planet names and ability labels were set in a monospace face; a name in mono costs real legibility and says nothing. If it isn't a number, it belongs in `--font-text`.
+
+**The One-Chip-Size Rule.** Every chip label — tech, relic, promissory note, ability, secret — is `--text-data` at `--weight-title`. Mantine's `fw` prop emits an inline style that beats a CSS class, so chip weight has to be set at the component, not in CSS. Bold plus a text-shadow at 12px turns Plex Sans to mush; semibold with a light shadow does not.
 
 **The Named Container Rule.** Uppercase tracked text names a container (panel, modal, surface). It never introduces a section as a kicker above a heading.
+
+**The Ladder-Is-Not-The-Roles Rule.** Mantine's `fontSizes` ladder keeps its original values (xs 12 / sm 14 / md 16 / lg 18 / xl 20). It is **not** remapped onto the semantic roles: `xs` is used in 139 places as the chip and body size, and folding it onto the 10px label role shrank every chip label in the app. The roles are for CSS modules; the ladder is for component props.
 
 ## 4. Elevation
 

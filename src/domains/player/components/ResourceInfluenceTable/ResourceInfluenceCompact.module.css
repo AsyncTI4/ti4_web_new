@@ -38,8 +38,8 @@
   margin-block: 2px;
   color: var(--mantine-color-gray-6);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   line-height: 1.1;
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
@@ -94,7 +94,7 @@
 .current {
   grid-column: 2;
   font-size: var(--mantine-font-size-lg);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
 }
 
 .current::after {
@@ -104,14 +104,14 @@
   margin-left: 4px;
   color: var(--mantine-color-gray-5);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
+  font-weight: var(--weight-data);
 }
 
 .total {
   grid-column: 3;
   color: var(--mantine-color-gray-5);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 500;
+  font-weight: var(--weight-data);
 }
 
 .resource .current,

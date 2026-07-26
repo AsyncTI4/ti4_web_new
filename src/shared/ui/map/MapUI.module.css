@@ -53,7 +53,7 @@
   margin: 0 0 1rem 0;
   color: var(--mantine-color-gray-1);
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: var(--weight-title);
 }
 
 /* Zoom controls positioning */
@@ -100,7 +100,7 @@
 
 .hudRoundLabel {
   font-size: 10px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.7);
@@ -110,7 +110,7 @@
 .hudRoundNumeral {
   font-family: var(--mantine-font-family-headings);
   font-size: 30px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   line-height: 1;
   color: var(--mantine-color-gray-1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -118,8 +118,8 @@
 
 .hudGameName {
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.8);
   white-space: nowrap;
@@ -275,8 +275,8 @@
   padding: 7px 15px;
   font-family: var(--mantine-font-family-headings);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--mantine-color-gray-5);
   cursor: pointer;
@@ -531,9 +531,9 @@
 
 .movementBannerTitle {
   color: var(--movement-banner-title-color);
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   font-size: 18px;
-  letter-spacing: 0.2px;
+  letter-spacing: var(--track-label);
 }
 
 .movementBannerTitle,

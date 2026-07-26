@@ -46,7 +46,7 @@
 .unrevealed .objectiveTitle {
   text-align: center;
   font-size: 9px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   letter-spacing: 0.3em;
   text-indent: 0.3em;
   color: rgba(148, 163, 184, 0.45);
@@ -120,7 +120,7 @@
 
 .vpText {
   font-size: var(--mantine-font-size-md);
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   line-height: 1;
 }
@@ -139,7 +139,7 @@
 
 .objectiveTitle {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-family: var(--mantine-font-family-headings);
   line-height: 1.2;
   margin-bottom: 2px;
@@ -195,6 +195,6 @@
 .progressBadgeText {
   font-size: 10px;
   color: var(--mantine-color-gray-3);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   line-height: 1;
 }

@@ -57,8 +57,8 @@
   gap: 7px;
   font-family: var(--mantine-font-family-headings);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--mantine-color-gray-1);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -137,7 +137,7 @@
 
 .turnName {
   color: var(--mantine-color-white);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
 }
 
 .voteTableWrapper {
@@ -158,9 +158,9 @@
   padding: 3px 6px;
   text-align: right;
   color: var(--mantine-color-gray-4);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   font-size: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   border-bottom: 1px solid var(--mantine-color-dark-4);
 }
@@ -179,7 +179,7 @@
 
 .voteTable td:first-child {
   text-align: left;
-  font-weight: 500;
+  font-weight: var(--weight-data);
   color: var(--mantine-color-gray-3);
 }
 
@@ -192,7 +192,7 @@
 }
 
 .currentVoterRow td:first-child {
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   color: var(--mantine-color-gray-1);
 }
 

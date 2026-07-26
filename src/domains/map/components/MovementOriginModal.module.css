@@ -34,7 +34,7 @@
   margin-bottom: 4px;
 }
 
-.areaCaption { letter-spacing: 0.04em; }
+.areaCaption { letter-spacing: var(--track-label); }
 
 .factionBlock {
   padding: 6px;

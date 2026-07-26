@@ -21,16 +21,16 @@
 
 .number {
   color: rgba(255, 255, 255, 0.98);
-  font-weight: 900;
+  font-weight: var(--weight-rail);
   font-size: 12px;
   margin-bottom: 0;
 }
 
 .label {
   color: rgba(255, 255, 255, 0.9);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 7px;
-  letter-spacing: 0.3px;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
 
@@ -50,9 +50,9 @@
 
 .imperialNumber {
   color: rgba(255, 255, 255, 0.98);
-  font-weight: 900;
+  font-weight: var(--weight-rail);
   font-size: 14px;
-  font-family: 'Slider', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-display);
   line-height: 1;
 }
 

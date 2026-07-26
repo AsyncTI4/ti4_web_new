@@ -21,7 +21,7 @@
   transform: translate(-50%, -50%);
   color: white;
   font-size: 28px;
-  font-weight: bold;
+  font-weight: var(--weight-rail);
   text-shadow: 1px 1px 1px black;
   pointer-events: none;
 }

@@ -21,8 +21,8 @@
 
 .label {
   font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;

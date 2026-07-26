@@ -90,8 +90,8 @@
   top: 270px;
   left: 215px;
   color: white;
-  font-family: 'Slider', system-ui, -apple-system, sans-serif;
-  font-weight: bold;
+  font-family: var(--font-display);
+  font-weight: var(--weight-rail);
   font-size: 26px;
   text-shadow:
     -1px -1px 0 black,

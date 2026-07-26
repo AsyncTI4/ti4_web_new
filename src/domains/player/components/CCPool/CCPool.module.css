@@ -9,7 +9,7 @@
   color: var(--mantine-color-dimmed);
   opacity: 0.85;
   font-family: var(--mantine-font-family);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--track-label);
 }
 
 

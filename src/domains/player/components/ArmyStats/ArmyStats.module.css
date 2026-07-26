@@ -21,7 +21,7 @@
   color: var(--mantine-color-gray-4);
   font-family: var(--mantine-font-family-monospace);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1;
   text-align: center;
   text-transform: uppercase;
@@ -58,7 +58,7 @@
   color: var(--mantine-color-gray-1);
   font-family: var(--mantine-font-family-monospace);
   font-size: var(--mantine-font-size-sm);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1;
   letter-spacing: 0;
   text-align: right;
@@ -83,6 +83,6 @@
 
 .rankText {
   font-size: var(--mantine-font-size-xs);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1;
 }

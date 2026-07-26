@@ -29,7 +29,7 @@
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: var(--weight-rail);
   text-align: center;
   white-space: nowrap;
   z-index: 2;

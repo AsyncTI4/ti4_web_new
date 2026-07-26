@@ -1,0 +1,84 @@
+/*
+ * Type system.
+ *
+ * Three families, and only three. Slider carries display (self-hosted); IBM Plex
+ * Sans carries every piece of UI text; IBM Plex Mono carries every numeral. Text
+ * and data share one superfamily so they sit together, and Slider contrasts with
+ * both on proportion and personality — a squared display face against an
+ * engineered text face, which is a real contrast axis rather than two grotesques
+ * competing.
+ *
+ * What this replaced: the UI ran on Mantine's default system stack, which is the
+ * single reason the interface read as generic, and numerals were split across
+ * Space Mono, the system monospace and a hand-rolled SF Mono stack, so the same
+ * quantity looked different in three places. Geist Sans had also leaked onto the
+ * landing page as a fourth voice.
+ *
+ * Sizes are rem so they honour the reader's browser setting. The dense 9-12px band
+ * is deliberate for a data surface, but every step in it is a NAMED ROLE — six
+ * near-identical sizes chosen ad hoc is what makes hierarchy muddy, not the sizes
+ * themselves.
+ */
+
+:root {
+  /* ---- Families ------------------------------------------------------- */
+  --font-display: "Slider", "IBM Plex Sans", system-ui, sans-serif;
+  --font-text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- Size roles (rem; 16px base) ------------------------------------ */
+  /* In-map annotations and unit counts, bounded by the tile they sit on */
+  --text-micro: 0.5625rem; /* 9  */
+  /* Field labels, rail names, badge text — always uppercase + tracked */
+  --text-label: 0.625rem; /*  10 */
+  /* Secondary metadata: timestamps, ratios, captions */
+  --text-meta: 0.6875rem; /* 11 */
+  /* Every comparable numeral */
+  --text-data: 0.75rem; /*    12 */
+  /* Prose: card text, objective and law descriptions, tooltips */
+  --text-body: 0.8125rem; /*  13 */
+  /* Names and panel titles */
+  --text-title: 0.875rem; /*  14 */
+  /* Section and page headings inside the product */
+  --text-heading: 1.125rem; /* 18 */
+  /* Landing hero only */
+  --text-display: 3.25rem; /*  52 */
+
+  /* ---- Weights -------------------------------------------------------- */
+  /* Four roles, no more. 700 vs 800 vs 900 are not distinguishable at 10px,
+     and having all three is how a system loses its voice. */
+  --weight-regular: 400;
+  --weight-data: 500;
+  --weight-title: 600;
+  --weight-rail: 700;
+
+  /* ---- Tracking (em only, so it scales with the size) ----------------- */
+  /* Capitals sit too close at default spacing; small uppercase needs the most */
+  --track-rail: 0.09em;
+  --track-label: 0.06em;
+  --track-body: 0.01em;
+  --track-display: -0.01em;
+
+  /* ---- Line heights --------------------------------------------------- */
+  /* Flush is for single-line numerals only. Anything that can wrap needs body. */
+  --lh-flush: 1;
+  --lh-tight: 1.2;
+  --lh-body: 1.5;
+}
+
+/* Light text on a dark field loses perceived weight, so body prose gets a
+   fractionally open track and the medium weight rather than regular. */
+body {
+  font-family: var(--font-text);
+  font-kerning: normal;
+  letter-spacing: var(--track-body);
+}
+
+/*
+ * Every numeral in a mono face aligns in a column. 19 files used a mono family but
+ * only 12 asked for tabular figures, so ratios drifted against each other.
+ */
+:where([style*="monospace"], .mono),
+:where(code, kbd, samp, pre) {
+  font-variant-numeric: tabular-nums;
+}

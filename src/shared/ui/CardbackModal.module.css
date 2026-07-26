@@ -10,7 +10,7 @@
 
 .title {
   color: white;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   text-shadow: var(--map-tab-text-shadow);
 }
 

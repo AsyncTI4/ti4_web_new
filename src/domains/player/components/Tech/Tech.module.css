@@ -209,7 +209,7 @@
   justify-content: center;
   color: white;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1;
   background-image: none;
 }
@@ -223,7 +223,9 @@
 /* Tech name text */
 .techName {
   color: var(--mantine-color-white);
-  font-weight: 800;
+  /* Semibold, not bold: Plex Sans bold at 12px with a shadow loses its counters */
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-body);
   flex: 1;
   min-width: 0;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);

@@ -111,9 +111,9 @@
   border: 1px solid var(--panel-hairline-strong);
   color: rgba(226, 232, 240, 0.75) !important;
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 500;
+  font-weight: var(--weight-data);
   font-size: 12px;
-  letter-spacing: 0.03em;
+  letter-spacing: var(--track-body);
   border-radius: 4px;
   transition: all 0.2s ease;
   cursor: pointer;

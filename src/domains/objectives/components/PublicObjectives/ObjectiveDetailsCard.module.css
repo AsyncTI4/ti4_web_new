@@ -4,7 +4,7 @@
 
 .factionName {
   width: 70px;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--track-label);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

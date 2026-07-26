@@ -50,8 +50,8 @@
 .sectionTitle {
   font-family: var(--mantine-font-family-headings);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
 }
@@ -126,14 +126,14 @@
 
 .cardTitle {
   font-family: var(--mantine-font-family-headings);
-  letter-spacing: 0.015em;
+  letter-spacing: var(--track-body);
 }
 
 .cardSubtitle {
   font-family: var(--mantine-font-family-headings);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: rgba(163, 178, 201, 0.85);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);

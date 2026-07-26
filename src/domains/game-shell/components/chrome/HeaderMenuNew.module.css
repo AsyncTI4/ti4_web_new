@@ -34,8 +34,8 @@
   padding: 6px 11px;
   font-family: var(--mantine-font-family-monospace);
   font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-weight: var(--weight-data);
+  letter-spacing: var(--track-body);
   color: var(--mantine-color-gray-5) !important;
   background: var(--socket-bg);
   border: 1px solid var(--panel-hairline);
@@ -104,7 +104,7 @@
   color: rgba(148, 163, 184, 0.65) !important;
   border: 1px solid rgba(148, 163, 184, 0.28) !important;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   line-height: 1;
   padding: 2px 6px !important;
   min-width: 20px;
@@ -246,7 +246,7 @@
   gap: 5px;
   padding: 6px 9px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: var(--weight-data);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;

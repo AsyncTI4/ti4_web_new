@@ -127,7 +127,7 @@
 
 .leaderName {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1.15;
   overflow: hidden;
   white-space: nowrap;
@@ -146,8 +146,8 @@
 /* Role designation in quiet small caps, echoing the faction labels */
 .leaderType {
   font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.11em;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-rail);
   line-height: 1.1;
   text-transform: uppercase;
   overflow: hidden;

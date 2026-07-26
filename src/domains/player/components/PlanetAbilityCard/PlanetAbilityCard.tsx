@@ -42,7 +42,7 @@ export function PlanetAbilityCard({
           <Stack className={styles.bottomStack}>
             <LegendaryIcon key="legendary" />
             <div style={{ flex: 1 }} />
-            <Text className={styles.planetName} ff="monospace">
+            <Text className={styles.planetName}>
               Ability
             </Text>
           </Stack>

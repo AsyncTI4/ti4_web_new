@@ -117,9 +117,9 @@
 
 /* ─── Badge Name ─── */
 .badgeName {
-  font-family: Slider, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 14px;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
   color: var(--mantine-color-gray-1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
@@ -138,7 +138,7 @@
 
 .metricValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 18px;
   line-height: 1;
   color: rgb(var(--badge-color));
@@ -177,8 +177,8 @@
   align-items: center;
   gap: 3px;
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
 }

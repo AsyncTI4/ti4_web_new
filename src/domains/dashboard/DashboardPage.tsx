@@ -322,7 +322,7 @@ export default function DashboardPage() {
               {agg.ready && (
                 <>
                   <div className={classes.deckHeader}>
-                    <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
+                    <Title order={4} c="gray.2" style={{ fontFamily: "var(--font-display)", letterSpacing: "0.02em" }}>
                       ANALYTICS
                     </Title>
                     <div>
@@ -354,7 +354,7 @@ export default function DashboardPage() {
               )}
 
               <div className={classes.deckHeader}>
-                <Title order={4} c="gray.2" style={{ fontFamily: "Slider, serif", letterSpacing: "0.02em" }}>
+                <Title order={4} c="gray.2" style={{ fontFamily: "var(--font-display)", letterSpacing: "0.02em" }}>
                   GAME DECK
                 </Title>
                 <Text c="gray.6" size="xs">

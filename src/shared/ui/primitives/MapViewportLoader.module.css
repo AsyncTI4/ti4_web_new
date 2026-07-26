@@ -41,7 +41,7 @@
 .label {
   font-family: var(--mantine-font-family-monospace);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: var(--weight-data);
   letter-spacing: 0.2em;
   text-indent: 0.2em;
   text-transform: uppercase;

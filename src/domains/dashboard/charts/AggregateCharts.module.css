@@ -29,9 +29,9 @@
   padding: 3px 6px;
   text-align: left;
   color: var(--mantine-color-gray-5);
-  font-weight: 600;
+  font-weight: var(--weight-title);
   font-size: 10px;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
   white-space: nowrap;
@@ -54,9 +54,9 @@
 }
 
 .dataTable td.label {
-  font-family: Slider, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 11px;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
   color: var(--mantine-color-gray-3);
 }
 
@@ -84,7 +84,7 @@
 
 .kpiBlockValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 1.35rem;
   line-height: 1.1;
   color: var(--mantine-color-gray-1);
@@ -132,7 +132,7 @@
 
 .speakerBucketRate {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 1.25rem;
   line-height: 1;
   color: rgb(var(--bucket-color));
@@ -148,7 +148,7 @@
 
 .speakerDeltaValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 1rem;
   line-height: 1;
 }
@@ -186,7 +186,7 @@
 
 .combatStatValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 1rem;
   line-height: 1.1;
   color: var(--mantine-color-gray-1);
@@ -216,7 +216,7 @@
 
 .economyValue {
   font-family: var(--mantine-font-family-monospace);
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   font-size: 1.1rem;
   line-height: 1.1;
   color: var(--mantine-color-gray-1);

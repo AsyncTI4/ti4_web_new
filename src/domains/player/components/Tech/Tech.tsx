@@ -5,7 +5,6 @@ import { TechCard } from "./TechCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useState } from "react";
 import { getTechData } from "@/entities/lookup/tech";
-import { isMobileDevice } from "@/utils/isTouchDevice";
 import cx from "clsx";
 import type { CSSProperties } from "react";
 
@@ -20,7 +19,6 @@ type Props = {
 export function Tech({
   techId,
   isExhausted = false,
-  mobile = false,
   synergy,
   breakthroughUnlocked = false,
 }: Props) {
@@ -90,8 +88,12 @@ export function Tech({
           >
             <Text
               className={styles.techName}
-              ff={mobile ? "text" : "monospace"}
-              fz={isMobileDevice() ? 14 : "xs"}
+              /* A tech name is a name, not a quantity. Mono is reserved for
+                 numerals; setting names in it costs real legibility at 12px. */
+              ff="text"
+              /* 12px everywhere: the same size secrets, relics and abilities use.
+                 The old mobile bump to 14 made tech the odd one out. */
+              fz="xs"
             >
               {techData.name}
             </Text>

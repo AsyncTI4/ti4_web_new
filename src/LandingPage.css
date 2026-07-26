@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+/* Fonts are loaded once in index.html — Slider, IBM Plex Sans, IBM Plex Mono.
+   This file used to pull Geist Sans and Space Mono as a fourth and fifth voice
+   that existed only on the landing page. */
 
 body,
 h1,
@@ -7,18 +9,18 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-text);
 }
 
 .space-title {
-  font-family: 'Slider', 'Geist Sans', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-weight: var(--weight-rail);
   letter-spacing: -0.03em;
   line-height: 1.1;
 }
 
 .mono {
-  font-family: 'Space Mono', 'SF Mono', monospace;
+  font-family: var(--font-data);
 }
 
 /* ============================================
@@ -94,7 +96,7 @@ h6 {
 }
 
 .heroTag {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -122,9 +124,9 @@ h6 {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 11px;
-  letter-spacing: 0.09em;
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--landing-text-tertiary);
   white-space: nowrap;
@@ -146,9 +148,9 @@ h6 {
   justify-content: center;
   gap: 14px;
   margin-bottom: 18px;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--landing-text-tertiary);
@@ -417,20 +419,20 @@ h6 {
 }
 
 .statValue {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 34px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   color: var(--landing-text-primary);
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .statLabel {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   color: var(--landing-text-tertiary);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   margin-top: 8px;
 }
@@ -617,17 +619,17 @@ h6 {
 }
 
 .gameCardTitle {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
 
 .gameCardMeta {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-data);
   font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
 }
 

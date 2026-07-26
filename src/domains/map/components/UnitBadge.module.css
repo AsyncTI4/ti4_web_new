@@ -23,8 +23,8 @@
 
 .unitCount {
   font-size: 24px;
-  font-weight: 800;
-  font-family: "Slider", sans-serif;
+  font-weight: var(--weight-rail);
+  font-family: var(--font-display);
   text-align: center;
   color: white;
   line-height: 1;

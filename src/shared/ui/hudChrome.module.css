@@ -12,8 +12,8 @@
   padding: 0 11px;
   font-family: var(--mantine-font-family-headings);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--mantine-color-gray-4);
   background: var(--socket-bg);

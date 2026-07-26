@@ -156,7 +156,14 @@
     z-index: 2;
 }
 
+/* Centre whatever sits in the left slot. The box is a fixed square but its
+   contents rarely match it exactly — an SVG sigil or an icon smaller than the
+   slot was pinned to the top-left corner and read as misaligned against the
+   label's optical centre. */
 .leftSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: var(--chip-left-icon-size, var(--chip-left-section-size));
     height: var(--chip-left-icon-size, var(--chip-left-section-size));
     max-width: var(--chip-left-icon-size, var(--chip-left-section-size));
@@ -181,13 +188,24 @@
 /* Ellipsis, not clip: a hard cut lands mid-glyph, so "Destroy Heretical Works"
    truncated to "Destroy Heretical Wo|" reads as a rendering fault rather than as
    a name that continues. The ellipsis is the affordance that says "hover me". */
+/*
+ * Chip labels — tech names, relics, promissory notes, abilities.
+ *
+ * These are the densest text in the app and they were set at the heaviest weight
+ * with a drop shadow. IBM Plex Sans has a smaller x-height than the system UI
+ * faces, so bold-plus-shadow at chip size turned into mush. Semibold reads
+ * cleaner at 12px, and the shadow only needs to lift the text off the tint
+ * behind it, not outline it. A hair of tracking compensates for light-on-dark.
+ */
 .textContainer {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
     flex: 1;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+    font-weight: var(--weight-title);
+    letter-spacing: var(--track-body);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 

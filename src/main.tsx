@@ -128,8 +128,39 @@ const theme = createTheme({
     tomato: tomatoBg,
     blueGray: myColor,
   },
+  /*
+   * Type roles come from styles/typography.css so CSS modules and Mantine props
+   * cannot drift apart. Slider carries display, IBM Plex Sans every piece of UI
+   * text, IBM Plex Mono every numeral.
+   */
+  fontFamily: "var(--font-text)",
+  fontFamilyMonospace: "var(--font-data)",
   headings: {
-    fontFamily: "Slider, sans-serif",
+    fontFamily: "var(--font-display)",
+    fontWeight: "600",
+  },
+  /*
+   * Mantine's ladder keeps its original values, expressed in rem so it honours the
+   * reader's browser setting. It is NOT remapped onto the semantic roles: `xs` is
+   * used in 139 places as the chip/body size, and folding it onto the 10px label
+   * role shrank every chip label in the app — the semantic roles are for CSS
+   * modules, this ladder is for component props.
+   */
+  fontSizes: {
+    xs: "0.75rem", /*    12 */
+    sm: "0.875rem", /*   14 */
+    md: "1rem", /*       16 */
+    lg: "1.125rem", /*   18 */
+    xl: "1.25rem", /*    20 */
+  },
+  lineHeights: {
+    /* xs is the uppercase label role — single line, tight. sm upward can wrap, so
+       it takes body leading; light text on a dark field needs the extra air. */
+    xs: "var(--lh-tight)",
+    sm: "var(--lh-body)",
+    md: "var(--lh-body)",
+    lg: "var(--lh-body)",
+    xl: "var(--lh-body)",
   },
   breakpoints: {
     xs: "36em", // 576px

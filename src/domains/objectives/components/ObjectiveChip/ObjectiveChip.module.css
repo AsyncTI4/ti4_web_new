@@ -189,7 +189,7 @@
   bottom: 0;
   right: 2px;
   font-size: 9px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   color: rgba(255, 255, 255, 1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.8);
 }

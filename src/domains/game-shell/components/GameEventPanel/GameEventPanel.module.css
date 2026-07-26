@@ -29,8 +29,8 @@
 .roundLabel {
   font-family: var(--mantine-font-family-headings);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--rail-ink);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -87,9 +87,9 @@
   padding: 0;
   color: color-mix(in oklab, var(--event-accent) 38%, white);
   font-size: 8px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   line-height: 1;
-  letter-spacing: 0.07em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   pointer-events: none;
   background: color-mix(in oklab, var(--event-accent) 20%, var(--socket-bg));
@@ -185,7 +185,7 @@
   font-size: 13px;
   line-height: 1.25;
   color: var(--mantine-color-gray-1);
-  font-weight: 500;
+  font-weight: var(--weight-data);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -243,7 +243,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   color: var(--mantine-color-gray-3);
   white-space: nowrap;
 }
@@ -252,7 +252,7 @@
 }
 .subCardName {
   color: var(--mantine-color-gray-2);
-  font-weight: 500;
+  font-weight: var(--weight-data);
 }
 .subEventButton {
   display: inline-flex;
@@ -284,8 +284,7 @@
   outline-offset: 1px;
 }
 .mono {
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
-    monospace;
+  font-family: var(--font-data);
   font-size: 10.5px;
   line-height: 1.4;
   color: var(--mantine-color-gray-5);
@@ -302,8 +301,8 @@
 }
 .sectionDividerLabel {
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--mantine-color-gray-6);
   white-space: nowrap;
@@ -334,8 +333,8 @@
   padding: 0 6px;
   border-radius: 4px;
   font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   border: 1px solid color-mix(in oklab, var(--badge-hue) 55%, transparent);
   color: color-mix(in oklab, var(--badge-hue) 82%, white);
@@ -353,7 +352,7 @@
   padding: 0 6px;
   border-radius: 4px;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: var(--weight-title);
   color: var(--mantine-color-gray-2);
   background: color-mix(in oklab, var(--event-accent) 16%, rgba(148, 163, 184, 0.1));
   border: 1px solid color-mix(in oklab, var(--event-accent) 35%, rgba(148, 163, 184, 0.18));
@@ -368,7 +367,7 @@
   padding: 0 4px;
   border-radius: 4px;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   color: white;
   flex-shrink: 0;
 }
@@ -385,7 +384,7 @@
   font-size: 12px;
   font-style: normal;
   color: var(--mantine-color-gray-3);
-  font-weight: 600;
+  font-weight: var(--weight-title);
 }
 
 .gameEnded {
@@ -404,9 +403,9 @@
 }
 .gameEndedText {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   color: var(--mantine-color-yellow-2);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
 }
 .trophy {
   color: var(--mantine-color-yellow-4);
@@ -439,7 +438,7 @@
 .transactionSender {
   margin-bottom: 2px;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   line-height: 1.2;
   color: var(--mantine-color-gray-3);
   white-space: nowrap;
@@ -468,8 +467,8 @@
   padding: 4px 12px;
   font-family: var(--mantine-font-family-headings);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-rail);
   text-transform: uppercase;
   color: var(--mantine-color-gray-5);
   background: var(--trough-bg);

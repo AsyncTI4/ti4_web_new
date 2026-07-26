@@ -16,5 +16,5 @@
 .label {
   color: var(--mantine-color-gray-5);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-body);
 }

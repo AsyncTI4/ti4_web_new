@@ -12,11 +12,11 @@
   align-items: center;
   gap: 10px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: var(--weight-rail);
   color: var(--mantine-color-gray-5);
   margin-bottom: var(--mantine-spacing-sm);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: var(--track-rail);
 }
 
 .sectionTitle::after {
@@ -55,9 +55,9 @@
   margin-bottom: 8px;
   color: rgba(226, 232, 240, 0.92);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--track-label);
 }
 
 .colorIcon {
@@ -126,7 +126,7 @@
 .techName {
   color: white;
   font-size: var(--mantine-font-size-sm);
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   line-height: 1.2;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
@@ -149,7 +149,7 @@
   margin-top: 6px;
   color: rgba(255, 255, 255, 0.9);
   font-size: var(--mantine-font-size-xs);
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   line-height: 1.4;
   white-space: pre-line;
 }

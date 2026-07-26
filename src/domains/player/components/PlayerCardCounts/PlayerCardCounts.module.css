@@ -16,7 +16,7 @@
 
 .countText {
   color: var(--mantine-color-white);
-  font-weight: 800;
+  font-weight: var(--weight-rail);
   font-size: 18px;
   line-height: 1;
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);

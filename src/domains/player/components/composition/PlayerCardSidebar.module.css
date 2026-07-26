@@ -23,8 +23,8 @@
 
 .sectionLabel {
   font-size: var(--mantine-font-size-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--mantine-color-gray-4);
   margin: 6px 0 4px 2px;
