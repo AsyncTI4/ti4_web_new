@@ -638,32 +638,30 @@
 /*
  * Screen-width deck sections.
  *
- * Some sections are things you read at a glance rather than pan across: the
- * victory track is a gauge, and the objectives board is a comparison. Stretched to
- * the deck's full width they ran thousands of pixels across — the finish line
- * ended up off-screen and Stage II sat far to the right of Stage I, which defeats
- * the point of putting them side by side.
+ * Some sections are read at a glance rather than panned across: the victory track
+ * is a gauge, and the objectives board is a comparison. Stretched to the deck's
+ * full width they ran thousands of pixels across — the finish line ended up
+ * off-screen and Stage II sat far to the right of Stage I, which defeats the point
+ * of putting them side by side.
  *
- * These belong to the screen. Sticky at the left edge so they stay legible while
- * the board is panned sideways. Scoped to the deck, so the Objectives tab's own
- * copies of these components keep their sizing.
+ * Sized to the screen but NOT pinned to it: panning right moves them with
+ * everything else. Sticky kept them nailed to the viewport edge while the board
+ * slid underneath, which made the deck feel like two surfaces moving at different
+ * speeds.
+ *
+ * Scoped to the deck so the Objectives tab's own copies keep their sizing.
  */
 .hudFitScreen {
-  position: sticky;
-  left: 16px;
   width: calc(100vw - 32px);
   max-width: 100%;
 }
 
 /*
- * Mobile pans instead of sticking, and it scales this subtree — viewport units
- * inside a scaled container resolve against the unscaled viewport, so both the
- * sticky and the vw width are wrong there. Keyed off the .mobile body class the
- * app already sets from isMobileDevice(), not a width breakpoint: a narrow
- * desktop window is still a desktop and should still dock these sections.
+ * Mobile scales this subtree, and viewport units inside a scaled container resolve
+ * against the unscaled viewport. Keyed off the .mobile body class the app already
+ * sets from isMobileDevice(), not a width breakpoint.
  */
 :global(.mobile) .hudFitScreen,
 :global(.theme-mobile) .hudFitScreen {
-  position: static;
   width: 100%;
 }
