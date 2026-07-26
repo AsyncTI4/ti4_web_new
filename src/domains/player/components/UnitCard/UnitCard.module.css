@@ -112,23 +112,49 @@
     box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/*
+ * Hover is carried by the FIELD, not by the frame. A bright accent ring made the
+ * border the whole event and left the bay itself looking untouched; lifting the
+ * fill reads as the bay illuminating, which is what the rest of the system does
+ * for state. Neutral light, no accent — the accent means "upgraded" here.
+ */
 .animated:hover {
   --bay-frame: var(--panel-hairline-strong);
 }
 
 .animated:hover .bayInner {
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.11) 0%,
+      rgba(255, 255, 255, 0.055) 100%
+    ),
+    var(--panel-field-bg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
+.animated:hover .bayField {
+  background: radial-gradient(
+    72% 58% at 50% 36%,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 72%
+  );
+}
+
 .animated.lit:hover {
-  --bay-frame: rgba(96, 165, 250, 0.52);
+  --bay-frame: rgba(96, 165, 250, 0.5);
 }
 
 .animated.lit:hover .bayInner {
+  background: linear-gradient(
+      180deg,
+      rgba(96, 165, 250, 0.28) 0%,
+      rgba(59, 130, 246, 0.14) 100%
+    ),
+    var(--panel-field-bg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.17),
     inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
@@ -336,10 +362,25 @@
   box-shadow: var(--trough-inset);
 }
 
+/* Same at rack scale: the cell's fill lifts, no ring, no movement. */
 .denseCell:hover {
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.11) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    ),
+    var(--panel-field-bg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -1px 0 var(--machined-bevel-shade);
+}
+
+.denseCell:hover .denseCellField {
+  background: radial-gradient(
+    74% 62% at 50% 38%,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 74%
+  );
 }
 
 .denseCell:focus-visible {
@@ -375,15 +416,22 @@
 }
 
 .denseCellUpgraded:hover {
+  background: linear-gradient(
+      180deg,
+      rgba(96, 165, 250, 0.28) 0%,
+      rgba(59, 130, 246, 0.14) 100%
+    ),
+    var(--panel-field-bg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.13),
-    inset 0 0 0 1px rgba(96, 165, 250, 0.26),
+    inset 0 0 0 1px rgba(96, 165, 250, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.17),
     inset 0 -1px 0 var(--machined-bevel-shade);
 }
 
 /* Unavailable to this faction: empty capacity, so it uses the socket language
    shared with unresearched tech. */
-.denseCellDimmed {
+.denseCellDimmed,
+.denseCellDimmed:hover {
   background: var(--socket-bg);
   box-shadow: var(--socket-inset);
   cursor: default;

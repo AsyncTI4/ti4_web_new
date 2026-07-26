@@ -135,8 +135,9 @@ export function PannableMapView({ gameId }: Props) {
 
   /* Player cards grow to their content width (no internal scrollbars);
      the surrounding map area provides the horizontal scrolling */
+  /* No width:max-content here — the deck stretches every section to one shared
+     width, and the inner Stack already makes the cards equal to the widest. */
   const playerAreaStyles = {
-    width: "max-content" as const,
     minWidth: contentWidth,
   };
   const showGameStatePanel = !isMobile;

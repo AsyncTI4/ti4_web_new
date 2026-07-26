@@ -5,7 +5,7 @@
 
     /* A step above --panel-field-bg so the modules inside read as recessed
        subpanels rather than sitting flush with the card. */
-    --player-card-box-bg: linear-gradient(180deg, #16203a 0%, #111a2e 100%);
+    --player-card-box-bg: linear-gradient(180deg, #141c30 0%, #0f1526 100%);
 
     --sidebar-bg: #0a111e;
     --left-sidebar-bg: rgb(10 17 30 / 91%);
@@ -18,16 +18,16 @@
     --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
 
     --main-bg:
-      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.07), transparent 55%),
-      radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.05), transparent 60%),
+      radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.045), transparent 55%),
+      radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.03), transparent 60%),
       #060b14;
     --map-tabs-bg: #101628;
 
     --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);
     --map-tab-hover-bg: #101628;
-    --map-tab-hover-border: #3168C5;
+    --map-tab-hover-border: #3a5580;
 
-    --map-tab-active-bg: #192E54;
+    --map-tab-active-bg: #17263f;
     --map-tab-active-border: #3168C5;
 
 
@@ -78,31 +78,36 @@
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
     --unit-details-inherited-border: rgba(139, 92, 246, 0.15);
 
-    /* Surface language — navigation console: deep navy instrument fields
-       ruled with a faint chart grid, steel-cyan hairlines, holo brackets,
-       hard corners. Reads like plotting a course on a star chart. */
-    --panel-field-bg: linear-gradient(180deg, rgba(15, 29, 55, 0.96), rgba(6, 13, 27, 0.98));
-    --panel-field-flat: rgba(9, 18, 36, 0.6);
-    --panel-field-strip: rgba(9, 18, 36, 0.7);
-    --panel-field-soft: rgba(9, 18, 36, 0.5);
-    --panel-cell-bg: rgba(37, 76, 140, 0.16);
-    --panel-hairline: rgba(122, 166, 224, 0.22);
-    --panel-hairline-strong: rgba(122, 166, 224, 0.35);
-    --panel-separator: rgba(122, 166, 224, 0.14);
-    --panel-bracket: rgba(140, 200, 255, 0.48);
+    /* Surface language — navigation console: deep navy instrument fields ruled
+       with a faint chart grid, hard corners. Reads like plotting a course on a
+       star chart.
+
+       Deliberately muted navy, not electric blue. The hairlines were steel-cyan
+       at 0.22-0.35 alpha and the brackets rgba(140,200,255,0.48), which made the
+       chrome itself the loudest thing in the theme and swamped the signal colours
+       it is supposed to frame. Keep chroma out of the hairline vocabulary. */
+    --panel-field-bg: linear-gradient(180deg, rgba(14, 24, 42, 0.96), rgba(6, 11, 21, 0.98));
+    --panel-field-flat: rgba(8, 14, 28, 0.6);
+    --panel-field-strip: rgba(8, 14, 28, 0.7);
+    --panel-field-soft: rgba(8, 14, 28, 0.5);
+    --panel-cell-bg: rgba(40, 60, 92, 0.16);
+    --panel-hairline: rgba(150, 170, 196, 0.2);
+    --panel-hairline-strong: rgba(150, 170, 196, 0.3);
+    --panel-separator: rgba(150, 170, 196, 0.12);
+    --panel-bracket: rgba(158, 184, 214, 0.3);
     --panel-radius: 2px;
     /* Chart grid + a cyan datum wedge pinning each panel's top-left corner */
     --panel-texture:
-      linear-gradient(135deg, rgba(125, 190, 255, 0.3) 0, rgba(125, 190, 255, 0.3) 7px, transparent 7.5px),
-      repeating-linear-gradient(0deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px),
-      repeating-linear-gradient(90deg, rgba(120, 170, 255, 0.028) 0 1px, transparent 1px 14px);
-    --player-card-inner-glow: radial-gradient(90% 60% at 50% 0%, rgba(59, 130, 246, 0.04), transparent 60%);
+      linear-gradient(135deg, rgba(150, 185, 220, 0.18) 0, rgba(150, 185, 220, 0.18) 7px, transparent 7.5px),
+      repeating-linear-gradient(0deg, rgba(150, 175, 205, 0.02) 0 1px, transparent 1px 14px),
+      repeating-linear-gradient(90deg, rgba(150, 175, 205, 0.02) 0 1px, transparent 1px 14px);
+    --player-card-inner-glow: radial-gradient(90% 60% at 50% 0%, rgba(59, 130, 246, 0.028), transparent 60%);
 
     /* Ground a plate's painted corner notch is cut into; must match this
        theme's --player-card-box-bg or the notch shows as a visible wedge. */
-    --plate-ground: #131c34;
+    --plate-ground: #121a2c;
 
     /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
        cards read as plates raised onto the deck. */
-    --hud-deck-ground: #0a1020;
+    --hud-deck-ground: #090e1a;
 }

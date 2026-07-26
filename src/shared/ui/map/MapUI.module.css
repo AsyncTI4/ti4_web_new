@@ -582,8 +582,20 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  /* Breathing room so the board's lowest tiles clear the deck's lip. */
-  margin-top: 20px;
+  /*
+   * The deck lives in a horizontally scrolling area, so it must size to its
+   * widest child rather than to the viewport. As a plain block it measured
+   * 1500px against 2576px of content, which cut the console field off mid-scroll
+   * and left the right-hand modules sitting on bare background.
+   */
+  width: max-content;
+  min-width: 100%;
+  /*
+   * Breathing room so the board's lowest tiles clear the deck's lip. 45px, not
+   * 25: the map's overlay layer overflows its wrapper by ~20px, so a 20px margin
+   * measured 0px of actual clearance and the hexes sat right on the lip.
+   */
+  margin-top: 45px;
   /* Separation without ornament: a lit lip, an accent hairline facing the board,
      and shadow cast upward. Two attempts at a machined graduation band both read
      as a measuring rule, so the edge is left clean rather than decorated badly. */
@@ -603,13 +615,22 @@
 .bottomHudBody {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 18px;
   padding: 14px 0 24px;
+  width: 100%;
 }
 
-/* One indent for every section in the deck. The objectives block used to carry
-   its own bordered panel and inner padding, so its headings sat further in than
-   the Laws and Player Areas headings beside it. */
+/*
+ * One indent and one width for every section in the deck. Sections stretch to the
+ * deck's width so the round line, score track, objectives, player areas and score
+ * breakdown all end on the same right edge — previously they measured 2150, 2576
+ * and 2150, so the right side of the deck looked ragged.
+ *
+ * box-sizing keeps the indent inside the shared width rather than adding to it.
+ */
 .hudSection {
+  box-sizing: border-box;
+  width: 100%;
   padding-inline: 16px;
 }

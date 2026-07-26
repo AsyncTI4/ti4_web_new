@@ -29,6 +29,28 @@
   --chip-inner-gap: 0;
 }
 
+/*
+ * Hover: quiet. The plate's fill lifts by a few percent and the name brightens —
+ * nothing more. A dossier already carries a state-coloured border, so an accent
+ * ring on top of it read as an alarm rather than as a cursor.
+ */
+.plate:hover {
+  background: var(--panel-hairline-strong);
+}
+
+.plate:hover .textContainer {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.plate:hover .leaderName {
+  color: var(--mantine-color-gray-0);
+}
+
+.plate:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 1px;
+}
+
 /* Layout components */
 .leaderWrapper {
   position: relative;
