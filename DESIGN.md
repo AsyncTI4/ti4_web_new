@@ -229,6 +229,15 @@ Every step is a **named role**, declared in `styles/typography.css`. Six near-id
 - **Label** (`--text-label`, 10px, Slider 700, `--track-label`): field labels, badge text, uppercase.
 - **Micro** (`--text-micro`, 9px, Plex Mono): in-map unit counts and rail labels, bounded by the tile they sit on.
 
+### Outside the ramp, on purpose
+
+Two families of type sit outside the UI scale and should not be dragged onto it:
+
+- **Map-canvas glyphs.** Tile numbers, faction plate numerals, production and commodity indicators and the VP readouts on the board are painted into a zoomable canvas that renders at ~40% by default. They are sized to the hex, not to the interface, which is why they run 22–64px in source. Forcing them onto the UI ramp would break the board's scale.
+- **The landing page.** A brand surface with its own register, including the one place fluid `clamp()` display type is allowed.
+
+One further accepted exception: `styles/fonts.css` declares `font-family: "Slider"` as a literal string. An `@font-face` family name cannot be a `var()` — it *is* the definition `--font-display` points at. A type scan will flag it; it is correct.
+
 ### Weights, tracking, leading
 
 Four weight roles and no more: `--weight-regular` 400, `--weight-data` 500, `--weight-title` 600, `--weight-rail` 700. 700 next to 800 next to 900 is not distinguishable at 10px, and having all three is how a system loses its voice.
