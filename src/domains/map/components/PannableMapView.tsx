@@ -261,18 +261,20 @@ export function PannableMapView({ gameId }: Props) {
                 <span className={classes.hudRule} />
               </Group>
 
-              <Box className={classes.hudScoreTrack}>
+              <Box className={classes.hudFitScreen}>
                 <ScoreTracker
                   playerData={gameData.playerData}
                   vpsToWin={gameData.vpsToWin || 10}
                 />
               </Box>
 
-              <ExpandedPublicObjectives
-                objectives={gameData.objectives}
-                playerData={gameData.playerData}
-                lawsInPlay={gameData.lawsInPlay}
-              />
+              <Box className={classes.hudFitScreen}>
+                <ExpandedPublicObjectives
+                  objectives={gameData.objectives}
+                  playerData={gameData.playerData}
+                  lawsInPlay={gameData.lawsInPlay}
+                />
+              </Box>
             </Stack>
           </ScaledContent>
         )}

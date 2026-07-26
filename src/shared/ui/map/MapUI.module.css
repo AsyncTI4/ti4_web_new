@@ -636,26 +636,34 @@
 }
 
 /*
- * The victory track is a gauge you read at a glance, so it belongs to the screen
- * rather than to the scrollable content. Stretched to the deck's full width it
- * ran thousands of pixels wide, which put the finish line off-screen and made the
- * squares meaninglessly large. Scoped to the deck so the Objectives tab's copy of
- * the tracker keeps its own sizing.
+ * Screen-width deck sections.
  *
- * Sticky at the left edge so it stays legible while the board is panned sideways.
+ * Some sections are things you read at a glance rather than pan across: the
+ * victory track is a gauge, and the objectives board is a comparison. Stretched to
+ * the deck's full width they ran thousands of pixels across — the finish line
+ * ended up off-screen and Stage II sat far to the right of Stage I, which defeats
+ * the point of putting them side by side.
+ *
+ * These belong to the screen. Sticky at the left edge so they stay legible while
+ * the board is panned sideways. Scoped to the deck, so the Objectives tab's own
+ * copies of these components keep their sizing.
  */
-.hudScoreTrack {
+.hudFitScreen {
   position: sticky;
   left: 16px;
   width: calc(100vw - 32px);
   max-width: 100%;
 }
 
-/* Mobile scales this subtree, and viewport units inside a scaled container
-   resolve against the unscaled viewport, so leave the flow width alone there. */
-@media (max-width: 48em) {
-  .hudScoreTrack {
-    position: static;
-    width: 100%;
-  }
+/*
+ * Mobile pans instead of sticking, and it scales this subtree — viewport units
+ * inside a scaled container resolve against the unscaled viewport, so both the
+ * sticky and the vw width are wrong there. Keyed off the .mobile body class the
+ * app already sets from isMobileDevice(), not a width breakpoint: a narrow
+ * desktop window is still a desktop and should still dock these sections.
+ */
+:global(.mobile) .hudFitScreen,
+:global(.theme-mobile) .hudFitScreen {
+  position: static;
+  width: 100%;
 }

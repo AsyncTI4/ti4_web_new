@@ -126,27 +126,52 @@
   border-left: 1px solid var(--panel-separator);
 }
 
-/* TAC/FLT/STR: one trough, three evenly spaced columns, so the values line up
-   card to card down the stack. Pushed to the compartment floor so the readout
-   forms the plate's base line instead of leaving a void beneath it. */
-.ccRow {
+/*
+ * The compartment floor: salvage sits directly above the command readout, and the
+ * pair is pinned to the bottom of the plate. Command tokens are the number a
+ * player checks first, so it holds the same base line on every card in the stack
+ * regardless of how much sits above it.
+ */
+.logisticsFloor {
   margin-top: auto;
-  padding: 4px 7px 5px;
+}
+
+/* TAC/FLT/STR: one trough, three equal columns divided by hairlines, so the
+   values line up card to card and read as three gauges rather than a sentence. */
+.ccRow {
+  padding: 4px 0 5px;
   background: var(--trough-bg);
   border-top: 1px solid var(--panel-hairline-strong);
   box-shadow: var(--trough-inset);
 }
 
 .ccRow > div {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   font-variant-numeric: tabular-nums;
 }
 
-/* Salvage sits below the command trough, on the compartment floor. */
+/* Each stat gets its own bay in the trough. */
+.ccRow > div > * {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 4px;
+}
+
+.ccRow > div > * + * {
+  border-left: 1px solid var(--panel-separator);
+}
+
+/* Salvage: a shelf above the command trough. Left-aligned so a relic-ready
+   cradle lands in the same place on every card. */
 .fragmentRow {
-  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  padding: 3px 6px 4px;
   border-top: 1px solid var(--panel-separator);
 }
 
@@ -154,13 +179,14 @@
   display: none;
 }
 
+/* FragmentsPool brings its own Mantine padding, which double-pads the shelf. */
+.fragmentRow > div {
+  padding: 0 !important;
+  gap: 5px;
+}
+
 /*
  * Each compartment in the band is a Module, so the frame, cut corner, bevel and
  * label rail all come from the shared primitive. The band's coherence is the
- * point: one plate language repeated across every group, with the section name
- * seated in its rail instead of floating above the content.
+ * point: one plate language repeated across every group.
  */
-/* The status compartment's three stacked readouts share one column axis. */
-.ccRow {
-  width: 100%;
-}

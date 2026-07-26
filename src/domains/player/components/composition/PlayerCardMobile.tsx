@@ -333,19 +333,22 @@ export default function PlayerCardMobile(props: Props) {
                 />
               </Box>
             </Box>
-            {settings.showPlayerAreaCommandTokens && (
-              <Box className={styles.ccRow}>
-                <CCPool
-                  tacticalCC={player.tacticalCC}
-                  fleetCC={player.fleetCC}
-                  strategicCC={player.strategicCC}
-                  mahactEdict={mahactEdict}
-                  layout="horizontal"
-                />
+            {/* Salvage above, command readout docked to the plate's floor. */}
+            <Box className={styles.logisticsFloor}>
+              <Box className={styles.fragmentRow}>
+                <FragmentsPool fragments={player.fragments} />
               </Box>
-            )}
-            <Box className={styles.fragmentRow}>
-              <FragmentsPool fragments={player.fragments} />
+              {settings.showPlayerAreaCommandTokens && (
+                <Box className={styles.ccRow}>
+                  <CCPool
+                    tacticalCC={player.tacticalCC}
+                    fleetCC={player.fleetCC}
+                    strategicCC={player.strategicCC}
+                    mahactEdict={mahactEdict}
+                    layout="horizontal"
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
         </Section>
