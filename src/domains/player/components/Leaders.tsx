@@ -1,6 +1,7 @@
 import { Group, Stack, SimpleGrid } from "@mantine/core";
 import { Leader } from "./Leader";
 import { CompactLeader } from "./Leader/CompactLeader";
+import compactStyles from "./Leader/CompactLeader.module.css";
 import { PhantomLeader } from "./Leader/PhantomLeader";
 import { showLeader } from "./Leader/showLeader";
 import { getLeaderById } from "@/entities/lookup/leaders";
@@ -19,7 +20,13 @@ type Props = {
 
 export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
   return (
-    <SimpleGrid cols={3} spacing={6} verticalSpacing={6} px={2}>
+    <SimpleGrid
+      className={compactStyles.grid}
+      cols={3}
+      spacing={6}
+      verticalSpacing={6}
+      px={2}
+    >
       {leaders.map((leader, index) => (
         <CompactLeader
           key={`compact-${leader.id}-${index}`}

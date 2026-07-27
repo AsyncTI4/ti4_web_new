@@ -5,12 +5,28 @@
  * 18px-rounded thumbnail.
  */
 
+/*
+ * The tile's height now follows its width, so the width needs a ceiling. 72px is
+ * where three rows of tiles plus their 6px gutters still fit the 175px the
+ * player card reserves for leaders; past it a wide sidebar would buy bigger
+ * portraits with the card's height. The grid holds three across.
+ */
+.grid,
+.compact {
+  --leader-tile-max: 72px;
+}
+
+.grid {
+  max-width: calc(var(--leader-tile-max) * 3 + 12px);
+}
+
 .compact {
   --leader-chamfer: var(--machined-chamfer-sm);
   display: inline-flex;
   align-items: stretch;
   flex: 1 1 33.333%;
   min-width: 0;
+  max-width: var(--leader-tile-max);
   padding: 1px;
   box-sizing: border-box;
   cursor: pointer;
@@ -46,12 +62,21 @@
   outline-offset: 1px;
 }
 
+/*
+ * Portrait well. The art is a 120 x ~155 bust, and a fixed 34px height cropped
+ * it to a band across the eyes — the tile was the right size but the face inside
+ * it was enlarged past recognition. Landscape 4:3 stays a wide tile while
+ * showing head and shoulders instead of a slice; the well deliberately doesn't
+ * match the art's own aspect, it just crops less. Deriving the height from the
+ * width also reserves the row before the lazily-loaded art decodes, so nothing
+ * shifts underneath it.
+ */
 .imageFrame {
   flex: 1 1 auto;
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 34px;
+  aspect-ratio: 4 / 3;
   background: rgba(0, 0, 0, 0.35);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
   clip-path: polygon(
