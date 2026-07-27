@@ -1,0 +1,19 @@
+import { useEffect } from "react";
+import * as dragscroll from "dragscroll";
+
+/**
+ * Wires the calling component's `.dragscroll` element for drag-to-pan.
+ *
+ * dragscroll binds by scanning the document for `.dragscroll` at window load and
+ * on every `reset()`, so an element that appears after the last scan is never
+ * wired and the board silently stops panning. Both of the map's scrollers appear
+ * late: the map view mounts only once game data has landed, and the tab strip
+ * runs with `keepMounted={false}`, so returning to the board builds a new node
+ * every time. Announcing the scroller from the component that owns it is the
+ * only place that knows when it exists.
+ */
+export function useDragScroll() {
+  useEffect(() => {
+    dragscroll.reset();
+  }, []);
+}

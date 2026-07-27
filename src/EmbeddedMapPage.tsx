@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import * as dragscroll from "dragscroll";
 import { GameContextProvider } from "@/app/providers/context/GameContextProvider";
 import { MapView } from "@/domains/map/components/MapView";
 import { useSettingsStore } from "@/utils/appStore";
@@ -14,10 +13,6 @@ export default function EmbeddedMapPage() {
     searchParams.get("sidebar") === "none" ? "none" : "right";
   const themeName = useSettingsStore((state) => state.settings.themeName);
   const updateSettings = useSettingsStore((state) => state.updateSettings);
-
-  useEffect(() => {
-    dragscroll.reset();
-  }, [gameId]);
 
   useEffect(() => {
     updateSettings({ leftPanelCollapsed: true, rightPanelCollapsed: false });

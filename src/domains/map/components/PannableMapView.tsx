@@ -3,6 +3,7 @@ import { Box, Group, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
+import { useDragScroll } from "@/hooks/useDragScroll";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
@@ -72,6 +73,9 @@ export function PannableMapView({ gameId }: Props) {
     [gameData?.tiles],
   );
   const gameDataState = useGameDataState();
+
+  useDragScroll();
+
   const {
     selectedArea,
     tooltipUnit,

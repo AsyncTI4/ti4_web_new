@@ -2,7 +2,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { AppShell, Box, Tabs, SimpleGrid } from "@mantine/core";
 import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
-import * as dragscroll from "dragscroll";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "./domains/player/components/composition/ScoreBoard";
 import { UpdateNeededScreen } from "./domains/game-shell/components/chrome/UpdateNeededScreen";
@@ -77,10 +76,6 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
       ? `⏳ ${activePlayerName} · ${gameId} - Async TI`
       : `${gameId} - Async TI`,
   );
-
-  useEffect(() => {
-    dragscroll.reset();
-  }, [gameId]);
 
   if (
     data &&

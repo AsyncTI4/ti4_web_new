@@ -7,6 +7,7 @@ import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";
 import { PanelToggleButton } from "@/domains/game-shell/components/PanelToggleButton";
 import { RightSidebar } from "@/domains/game-shell/components/RightSidebar";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
+import { useDragScroll } from "@/hooks/useDragScroll";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
 import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
@@ -40,6 +41,8 @@ export function MapView({
 }: Props) {
   const gameData = useGameData();
   const gameDataState = useGameDataState();
+
+  useDragScroll();
 
   const {
     selectedArea,
