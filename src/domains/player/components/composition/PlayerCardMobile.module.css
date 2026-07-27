@@ -65,16 +65,17 @@
   width: 100%;
 }
 
-.plotPanel {
-  display: flex;
-  align-items: stretch;
-  min-height: 28px;
-  padding: 3px;
-  border: 1px solid rgba(191, 71, 0, 0.16);
-  border-radius: 2px;
-  background:
-    linear-gradient(90deg, rgba(191, 71, 0, 0.06), rgba(191, 71, 0, 0.02)),
-    rgba(18, 13, 11, 0.62);
+/*
+ * Plots get a compartment, not a panel-inside-a-panel.
+ *
+ * This used to be a hand-rolled Box with its own blood-orange border and fill,
+ * nested inside the planets compartment — a card in a card, in a hardcoded
+ * colour no theme could reach. It is a Section like every other compartment
+ * now, so the frame, chamfer and bevel come from Module and the width anchor is
+ * all that is left to declare.
+ */
+.plotsSection {
+  min-width: 124px;
 }
 
 /*

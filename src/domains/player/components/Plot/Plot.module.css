@@ -1,75 +1,116 @@
+/*
+ * Plot cards (Firmament / Obsidian).
+ *
+ * These used to be painted in a hardcoded blood orange — seven literal
+ * rgba(191, 71, 0, …) values plus two literal inks — which meant they answered
+ * to no theme at all. Against graphite they were the only orange object on
+ * screen; against the ember themes they were an orange block sitting in warm
+ * ash. Six `!important`s were fighting the Chip primitive to keep it that way.
+ *
+ * The chrome is neutral now and comes from the panel tokens, so a plot looks
+ * like it belongs in all seven themes. The colour in a plot is the faction
+ * icons it carries, which is the system's rule everywhere else: neutral chrome,
+ * the content is the signal.
+ */
+
 .plotCard {
   position: relative;
-  transition: all 0.2s ease-in-out;
-  /* Reduce background opacity while keeping border */
-  background: rgba(191, 71, 0, 0.055) !important;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
-
-.plotCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: var(--mantine-spacing-sm);
-  right: var(--mantine-spacing-sm);
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(239, 68, 68, 0) 0%,
-    rgba(239, 68, 68, 0.34) 50%,
-    rgba(239, 68, 68, 0) 100%
-  );
-  border-radius: 1px;
-}
-
 
 .plotCard:hover {
-  filter: brightness(1.04);
-}
-
-.plotCard:hover::before {
-  background: linear-gradient(
-    90deg,
-    rgba(239, 68, 68, 0) 0%,
-    rgba(239, 68, 68, 0.48) 50%,
-    rgba(239, 68, 68, 0) 100%
-  );
+  border-color: var(--panel-hairline-strong);
 }
 
 .plotCardCompact {
   --chip-inner-min-height: 22px;
   --chip-inner-padding: 3px 7px;
   min-width: 108px;
-  border-color: rgba(191, 71, 0, 0.28) !important;
-  border-radius: 2px !important;
-  background: rgba(191, 71, 0, 0.09) !important;
-  box-shadow: none !important;
-}
-
-.plotCardCompact::before {
-  display: none;
-}
-
-.plotCardCompact:hover {
-  border-color: rgba(191, 71, 0, 0.42) !important;
-  background: rgba(191, 71, 0, 0.13) !important;
 }
 
 .compactContent {
   width: 100%;
 }
 
-.compactFactions {
+/*
+ * Four claim seats, always four.
+ *
+ * The seats used to render only when a plot already had claimants, so an
+ * unclaimed plot was a bare line of text and the compartment had no consistent
+ * shape. Showing the empty ones costs nothing and says what a plot IS: a scheme
+ * factions stake tokens on. A fixed row of four is a silhouette nothing else in
+ * the player area has.
+ */
+.compactSeats {
   min-height: 13px;
 }
 
+.tokenSeatSm {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--socket-bg);
+  border: 1px solid var(--socket-border);
+  box-shadow: var(--socket-inset);
+}
+
+/*
+ * An unrevealed plot name is redacted, not spelled "Hidden".
+ *
+ * Reading a column of plots, the eye wants to know which ones are cracked open;
+ * a bar answers that faster than a word, and it says the name exists and is
+ * being withheld rather than that there is nothing there. Neutral ink, because
+ * the redaction language in secret objectives is red and red means secrets.
+ */
+.redaction {
+  display: block;
+  width: 46px;
+  height: 8px;
+  border-radius: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--panel-hairline-strong) 0 9px,
+    var(--panel-separator) 9px 12px
+  );
+}
+
+/* The plot's number is the thing a player matches against the board, so it is
+   mono like every other comparable value and it leads. */
 .compactId {
-  color: rgb(235, 178, 138);
-  line-height: 1;
+  font-family: var(--font-data);
+  color: var(--mantine-color-gray-4);
+  line-height: var(--lh-flush);
 }
 
 .compactName {
-  color: rgb(237, 224, 213);
+  color: var(--mantine-color-gray-2);
   letter-spacing: var(--track-body);
-  line-height: 1;
+  line-height: var(--lh-flush);
   text-transform: uppercase;
+}
+
+/*
+ * A control-token seat.
+ *
+ * Previously a 1.5px dashed circle with an inline rgba fill, which breaks the
+ * Empty-Is-A-Socket rule twice over: dashed reads as unfinished layout rather
+ * than as capacity, and an inline colour cannot be themed. It is a round socket
+ * now, with the same walls and pressed-in shading every other empty seat in the
+ * player area uses.
+ */
+.tokenSeat {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--socket-bg);
+  border: 1px solid var(--socket-border);
+  box-shadow: var(--socket-inset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plotCard {
+    transition: none;
+  }
 }

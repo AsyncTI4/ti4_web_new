@@ -48,15 +48,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
             display="flex"
             style={{ flexShrink: 0 }}
           >
-            <Box
-              w={15}
-              h={15}
-              style={{
-                borderRadius: "50%",
-                border: "1.5px dashed rgba(255, 255, 255, 0.3)",
-                background: "rgba(255, 255, 255, 0.05)",
-              }}
-            />
+            <Box className={styles.tokenSeat} />
           </Box>
         );
       }
@@ -65,33 +57,45 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
     return slots;
   };
 
+  /*
+   * The claim seats are what makes a plot a plot. Nothing else in the player
+   * area is a fixed row of four, so the silhouette identifies the compartment
+   * before any label does — and the count is real information: how many
+   * factions have already signed on to this scheme.
+   */
+  const renderCompactSeats = (): ReactElement[] =>
+    Array.from({ length: MAX_PLOT_SLOTS }, (_, i) => {
+      const claimant = plotCard.factions[i];
+      return claimant ? (
+        <CircularFactionIcon key={`claim-${i}`} faction={claimant} size={13} />
+      ) : (
+        <Box key={`claim-${i}`} className={styles.tokenSeatSm} />
+      );
+    });
+
   const chipContent = compact ? (
-    <Stack gap={2} align="center" className={styles.compactContent}>
+    <Stack gap={3} align="center" className={styles.compactContent}>
       <Group gap={5} wrap="nowrap" align="center" justify="center">
-        <Text
-          size="xs"
-          fw={700}
-          ff="mono"
-          c="orange.2"
-          className={styles.compactId}
-        >
+        <Text size="xs" fw={700} className={styles.compactId}>
           #{plotCard.identifier}
         </Text>
-        <Text size="xs" fw={700} className={styles.compactName}>
-          {isRevealed ? displayName : "Hidden"}
-        </Text>
+        {isRevealed ? (
+          <Text size="xs" fw={700} className={styles.compactName}>
+            {displayName}
+          </Text>
+        ) : (
+          /* Redacted rather than the word "Hidden": a column of plots then
+             shows at a glance which ones have been cracked open. */
+          <span
+            className={styles.redaction}
+            role="img"
+            aria-label="Name not yet revealed"
+          />
+        )}
       </Group>
-      {plotCard.factions.length > 0 && (
-        <Group gap={2} wrap="nowrap" className={styles.compactFactions}>
-          {plotCard.factions.map((faction, index) => (
-            <CircularFactionIcon
-              faction={faction}
-              key={`${faction}-${index}`}
-              size={13}
-            />
-          ))}
-        </Group>
-      )}
+      <Group gap={3} wrap="nowrap" className={styles.compactSeats}>
+        {renderCompactSeats()}
+      </Group>
     </Stack>
   ) : (
     <Stack gap={2} align="center">
@@ -116,7 +120,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
           </Text>
           <Text
             size="xs"
-            ff="monospace"
+            ff="mono"
             ta="center"
             style={{ letterSpacing: "0.3px", opacity: 0.7 }}
           >
@@ -128,7 +132,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
           <Text
             size="md"
             fw={700}
-            ff="monospace"
+            ff="mono"
             ta="center"
             c="white"
             style={{
@@ -143,11 +147,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
             size="xs"
             ta="center"
             c="dimmed"
-            style={{
-              letterSpacing: "0.2px",
-              opacity: 0.8,
-              fontStyle: "italic",
-            }}
+            style={{ letterSpacing: "0.2px", opacity: 0.8 }}
           >
             Hidden Plot
           </Text>
@@ -162,7 +162,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
         <Box miw={compact ? undefined : 60}>
           <Chip
             className={compact ? styles.plotCardCompact : styles.plotCard}
-            accent="bloodOrange"
+            accent="gray"
             onClick={toggle}
             strong={!compact}
             px="xs"
@@ -188,7 +188,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
               }
             />
             {!isRevealed && (
-              <Text size="sm" c="dimmed" style={{ fontStyle: "italic" }}>
+              <Text size="sm" c="dimmed">
                 This plot card has not been revealed yet. The plot name will be
                 shown when the Firmament player becomes the Obsidian.
               </Text>

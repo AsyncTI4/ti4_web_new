@@ -5,7 +5,7 @@ import {
   getTechGridMobileRowCount,
   TechGridMobile,
 } from "@/domains/player/components/Tech/TechGridMobile";
-import { PlayerData, type PlotCard } from "@/entities/data/types";
+import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ArmyStats } from "@/domains/player/components";
 import { Nombox } from "./Nombox";
@@ -240,7 +240,6 @@ type PlanetsAreaProps = {
   planets: string[];
   exhaustedPlanetAbilities?: string[];
   exhaustedPlanets?: string[];
-  plotCards?: PlotCard[] | null;
   faction: string;
   breachTokensReinf?: number;
   sleeperTokensReinf?: number;
@@ -253,8 +252,6 @@ function PlanetsArea({
   planets,
   exhaustedPlanetAbilities = [],
   exhaustedPlanets,
-  plotCards,
-  faction,
   breachTokensReinf,
   sleeperTokensReinf,
   ghostWormholesReinf,
@@ -286,16 +283,6 @@ function PlanetsArea({
           />
         )}
       </Group>
-      {Array.isArray(plotCards) && plotCards.length > 0 && (
-        <Box className={styles.plotPanel}>
-          <PlotCardsList
-            plotCards={plotCards}
-            faction={faction}
-            keyPrefix="mobile-plot"
-            compact
-          />
-        </Box>
-      )}
     </Group>
   );
 }
@@ -491,8 +478,6 @@ export default function PlayerCardMobile(props: Props) {
               planets={player.planets}
               exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
               exhaustedPlanets={player.exhaustedPlanets}
-              plotCards={player.plotCards}
-              faction={player.faction}
               breachTokensReinf={player.breachTokensReinf}
               sleeperTokensReinf={player.sleeperTokensReinf}
               ghostWormholesReinf={player.ghostWormholesReinf}
@@ -501,6 +486,21 @@ export default function PlayerCardMobile(props: Props) {
             />
           </PlayerCardPlanetsSection>
         </Section>
+
+        {/* Plots are their own mechanic, not a property of planets. They used to
+            sit inside the planets row as a horizontal sibling of the planet
+            cards, which stretched that compartment and left them wedged against
+            the last planet with no seat of their own. */}
+        {Array.isArray(player.plotCards) && player.plotCards.length > 0 && (
+          <Section className={styles.plotsSection}>
+            <PlotCardsList
+              plotCards={player.plotCards}
+              faction={player.faction}
+              keyPrefix="mobile-plot"
+              compact
+            />
+          </Section>
+        )}
 
         {settings.showPlayerAreaArmyStrength && (
           <Section className={styles.armySection}>
