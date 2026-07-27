@@ -24,6 +24,7 @@ import {
   type MapReplayPlan,
 } from "@/utils/historicalMapTransitions";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { storeFactionImagesForGame } from "@/utils/factionImageCache";
 
 const MAX_CACHED_MAP_PREVIEWS = 16;
 const EMPTY_MAP_REPLAY_PLAN: MapReplayPlan = {
@@ -211,6 +212,11 @@ export function GameContextProvider({ children, gameId }: Props) {
     if (!displacedData) return undefined;
     return buildGameContext(displacedData, accessibleColors, decalOverrides);
   }, [displacedData, accessibleColors, decalOverrides]);
+
+  useEffect(() => {
+    if (!liveEnhancedData) return;
+    storeFactionImagesForGame(gameId, liveEnhancedData.factionImageMap);
+  }, [gameId, liveEnhancedData]);
 
   // Preview states are immutable and identified by their deterministic compact
   // string. Reusing their built contexts avoids repeating tile enrichment and

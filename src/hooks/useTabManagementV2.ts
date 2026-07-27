@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
 import { usePersistentGameTabs } from "./usePersistentGameTabs";
 import { EnrichedTab } from "@/app/providers/context/types";
+import { useFactionImageCache } from "./useFactionImageCache";
+import { useGameData } from "./useGameContext";
 
 type PlayerGame = {
   gameId: string;
@@ -43,6 +46,9 @@ function usePlayerGames() {
 export function useTabManagementV2() {
   const { activeTabs, changeTab, removeTab } = usePersistentGameTabs();
   const { data: playerGamesData } = usePlayerGames();
+  const currentGameId = useParams<{ mapid?: string }>().mapid;
+  const liveFactionImages = useGameData()?.factionImageMap;
+  const factionImageCache = useFactionImageCache();
 
   const enrichedTabs: EnrichedTab[] = useMemo(() => {
     const playerGames = playerGamesData ?? [];
@@ -55,19 +61,35 @@ export function useTabManagementV2() {
       .map((tabId) => {
         const gameData = playerGames.find((game) => game.gameId === tabId);
         const isManaged = !!gameData;
+        const faction =
+          gameData?.faction === "null" ? null : gameData?.faction || null;
+        const imageData = faction
+          ? (tabId === currentGameId
+              ? liveFactionImages?.[faction]
+              : undefined) ??
+            factionImageCache.games[tabId]?.factionImages[faction]
+          : undefined;
+
         return {
           id: tabId,
-          faction:
-            gameData?.faction === "null" ? null : gameData?.faction || null,
+          faction,
           factionColor:
             gameData?.color === "null" ? null : gameData?.color || null,
-          factionImage: null,
-          factionImageType: null,
+          // Empty strings are an explicit default-image override. Nullish values
+          // would fall through to the currently viewed game's faction map.
+          factionImage: imageData?.image ?? "",
+          factionImageType: imageData?.type ?? "",
           isManaged,
         };
       })
       .sort((a, b) => a.id.localeCompare(b.id));
-  }, [activeTabs, playerGamesData]);
+  }, [
+    activeTabs,
+    currentGameId,
+    factionImageCache,
+    liveFactionImages,
+    playerGamesData,
+  ]);
 
   return { activeTabs: enrichedTabs, changeTab, removeTab };
 }
