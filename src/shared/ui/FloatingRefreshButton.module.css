@@ -1,0 +1,12 @@
+/*
+ * The reconnect prompt only has to say where it is: centred at the top of the
+ * board, above the map's controls. Its plate, type and hue come from
+ * `hudChrome.module.css`, the same place the header and deck actions get theirs.
+ */
+.floating {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-reconnect-prompt);
+}

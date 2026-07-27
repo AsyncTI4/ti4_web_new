@@ -51,6 +51,9 @@
   --z-floating-toolbar: 2350;
   --z-movement-banner: 2400;
   --z-movement-box: 2400;
+  /* Above every map control, because it is what the player must act on when the
+     socket drops — but still under the modals. */
+  --z-reconnect-prompt: 2420;
 
   /* MODALS - Settings, shortcuts, movement modals, popovers (3000-3999) */
   --z-settings-modal: 3000;

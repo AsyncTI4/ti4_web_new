@@ -1,11 +1,14 @@
 /*
- * HUD deck buttons.
+ * HUD buttons.
  *
  * The header's two actions were a saturated Discord-blue filled button and a
  * cyan outlined one — the loudest things on a graphite deck, and neither in the
  * system's palette. Both are now plates: quiet at rest, lit on hover, with the
  * accent confined to a hairline and the glyph. Login keeps the Discord blue,
  * because that is brand recognition doing real work; it just stops shouting.
+ *
+ * The hue variants live here rather than beside their components so they always
+ * follow `.hudButton` in source order and win their overrides outright.
  */
 .hudButton {
   height: 28px;
@@ -61,6 +64,37 @@
       rgba(88, 101, 242, 0.16) 100%
     ),
     var(--socket-bg);
+}
+
+/*
+ * Alert: the same plate, carrying a warning. Signal Red sits on the frame and
+ * the glyph, never the fill — a filled red button over the board reads as a
+ * destructive action rather than as a state the player should fix. It also keeps
+ * a real drop shadow, because the one control wearing this floats above the map
+ * instead of sitting in a deck.
+ */
+.hudButtonAlert {
+  color: rgba(254, 205, 205, 0.95);
+  border-color: rgba(var(--gd-red), 0.5);
+  background: linear-gradient(
+      180deg,
+      rgba(var(--gd-red), 0.17) 0%,
+      rgba(var(--gd-red), 0.07) 100%
+    ),
+    var(--socket-bg);
+  box-shadow: var(--machined-bevel), 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+.hudButtonAlert:hover {
+  color: #ffffff;
+  border-color: rgba(var(--gd-red), 0.8);
+  background: linear-gradient(
+      180deg,
+      rgba(var(--gd-red), 0.28) 0%,
+      rgba(var(--gd-red), 0.14) 100%
+    ),
+    var(--socket-bg);
+  box-shadow: var(--machined-bevel), 0 10px 26px rgba(0, 0, 0, 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
