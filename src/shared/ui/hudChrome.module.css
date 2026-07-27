@@ -30,11 +30,30 @@
     box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hudButton:hover {
+/*
+ * The guards are what make this rule land. Mantine's own hover
+ * (`.root:hover:where(:not([data-loading], :disabled, [data-disabled]))`) sets
+ * background-color and color at the same specificity as a bare `.hudButton:hover`,
+ * so which one wins depends on where the bundler happens to put the stylesheets.
+ * Matching its guards outweighs it outright, and they say the right thing anyway:
+ * a button that cannot be pressed should not light up under the cursor.
+ */
+.hudButton:hover:not([data-loading]):not(:disabled) {
   color: var(--mantine-color-gray-1);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
   border-color: var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel);
+}
+
+/* Mantine's disabled fill is a flat dark-6 panel that reads as a different
+   component. A hud plate goes quiet instead: same plate, dimmer ink. */
+.hudButton:disabled,
+.hudButton[data-disabled] {
+  color: var(--mantine-color-gray-6);
+  background: var(--socket-bg);
+  border-color: var(--panel-hairline);
+  box-shadow: var(--socket-inset);
+  cursor: default;
 }
 
 .hudButton:focus-visible {
@@ -67,38 +86,45 @@
 }
 
 /*
- * Alert: the same plate, carrying a warning. Signal Red sits on the frame and
- * the glyph, never the fill — a filled red button over the board reads as a
- * destructive action rather than as a state the player should fix. It also keeps
- * a real drop shadow, because the one control wearing this floats above the map
- * instead of sitting in a deck.
+ * Floating: the same plate, over the board instead of in a deck. The only thing
+ * it adds is a real drop shadow — DESIGN.md reserves those for surfaces that
+ * genuinely float — and a hover that lifts rather than just brightening, since
+ * there is no deck around it to read the change against.
  */
-.hudButtonAlert {
-  color: rgba(254, 205, 205, 0.95);
-  border-color: rgba(var(--gd-red), 0.5);
-  background: linear-gradient(
-      180deg,
-      rgba(var(--gd-red), 0.17) 0%,
-      rgba(var(--gd-red), 0.07) 100%
-    ),
-    var(--socket-bg);
-  box-shadow: var(--machined-bevel), 0 8px 22px rgba(0, 0, 0, 0.45);
+.hudButtonFloating {
+  /* Opaque, and per-theme: the same chrome surface the floating map panel uses.
+     A recessed socket fill lets the board read through a control that has to be
+     legible the moment it appears. */
+  background: var(--left-sidebar-bg, var(--sidebar-bg));
+  border-color: var(--panel-hairline-strong);
+  box-shadow: var(--machined-bevel), 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
-.hudButtonAlert:hover {
-  color: #ffffff;
-  border-color: rgba(var(--gd-red), 0.8);
-  background: linear-gradient(
-      180deg,
-      rgba(var(--gd-red), 0.28) 0%,
-      rgba(var(--gd-red), 0.14) 100%
-    ),
-    var(--socket-bg);
-  box-shadow: var(--machined-bevel), 0 10px 26px rgba(0, 0, 0, 0.5);
+.hudButtonFloating:hover:not([data-loading]):not(:disabled) {
+  box-shadow: var(--machined-bevel), 0 9px 24px rgba(0, 0, 0, 0.58);
+}
+
+/* The glyph turns while the socket is being retried. Mantine's own loading state
+   slides the label out of the plate behind a blurred wash, which in a 28px button
+   reads as the control breaking; this reports the same thing without moving
+   anything. */
+.hudButtonSpin {
+  animation: hudButtonSpin 900ms linear infinite;
+}
+
+@keyframes hudButtonSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hudButton {
     transition: none;
+  }
+
+  /* The dimmed plate still reports that the retry is in flight. */
+  .hudButtonSpin {
+    animation: none;
   }
 }

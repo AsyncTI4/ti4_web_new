@@ -391,9 +391,12 @@ export function PannableMapView({ gameId }: Props) {
           </Box>
         </Box>
         {/* ---- end bottom HUD deck ------------------------------------ */}
-
-        <ReconnectButton gameDataState={gameDataState} />
       </Box>
+
+      {/* Outside the scroller on purpose: dragscroll pans on any mousedown that
+          reaches the map area, so a control inside it lurches the board out from
+          under the cursor on the way to being clicked. */}
+      <ReconnectButton gameDataState={gameDataState} />
 
       <MovementLayerPortal
         gameId={gameId}

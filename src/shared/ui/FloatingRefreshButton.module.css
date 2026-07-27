@@ -1,12 +1,25 @@
 /*
- * The reconnect prompt only has to say where it is: centred at the top of the
- * board, above the map's controls. Its plate, type and hue come from
- * `hudChrome.module.css`, the same place the header and deck actions get theirs.
+ * The prompt's plate, type and hover come from `hudChrome.module.css`, the same
+ * place the header and deck actions get theirs. All that is left here is where it
+ * sits: centred at the top of the board, above the map's controls.
+ *
+ * The centring is a flex anchor rather than `translateX(-50%)` on the button
+ * itself, because Mantine's Button sets `transform: none` on several of its own
+ * states — a button that centres itself with a transform teleports half its width
+ * sideways the moment one of them applies.
  */
-.floating {
+.anchor {
   position: fixed;
   top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
   z-index: var(--z-reconnect-prompt);
+  /* The anchor spans the board; only the plate itself should take the cursor. */
+  pointer-events: none;
+}
+
+.anchor > * {
+  pointer-events: auto;
 }

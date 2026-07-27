@@ -17,25 +17,39 @@ type FloatingRefreshButtonProps = {
 
 /**
  * The prompt shown when the game socket drops. It was the last filled,
- * pill-radiused, brand-blue button in the product — a web control floating over
- * a machined board. It is now the deck's own plate wearing the alert hue, which
- * is how the rest of the system says "act on this".
+ * pill-radiused, brand-blue button in the product — a web control floating over a
+ * machined board — and it is now the same plate as every other action.
+ *
+ * `loading` deliberately does not become Mantine's `loading` prop: that slides the
+ * label out of the plate behind a blurred wash, which at 28px reads as the button
+ * breaking rather than as work in flight. The glyph turns instead, and the plate
+ * goes quiet because it is genuinely not pressable until the attempt resolves.
  */
 export function FloatingRefreshButton({
   label = "Refresh",
+  loading = false,
+  disabled = false,
   style,
-  ...buttonProps
+  onClick,
 }: FloatingRefreshButtonProps) {
   return (
-    <Button
-      variant="default"
-      size="xs"
-      className={cx(hud.hudButton, hud.hudButtonAlert, classes.floating)}
-      leftSection={<IconRefresh size={13} />}
-      style={style}
-      {...buttonProps}
-    >
-      {label}
-    </Button>
+    <div className={classes.anchor}>
+      <Button
+        variant="default"
+        size="xs"
+        className={cx(hud.hudButton, hud.hudButtonFloating)}
+        leftSection={
+          <IconRefresh
+            size={13}
+            className={loading ? hud.hudButtonSpin : undefined}
+          />
+        }
+        disabled={disabled || loading}
+        onClick={onClick}
+        style={style}
+      >
+        {label}
+      </Button>
+    </div>
   );
 }
