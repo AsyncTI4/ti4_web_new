@@ -75,3 +75,88 @@
   line-height: var(--lh-flush);
   color: var(--mantine-color-gray-4);
 }
+
+/* ---- Expanded sheet (hover) -------------------------------------------
+ * Table-esque without being a table: a three-column grid so the icons, the
+ * names and the amounts each hold their own column, with hairline rules between
+ * rows instead of borders around cells. The amounts are mono and tabular so they
+ * stack into one file the eye can add up, which is the whole reason to expand
+ * the ledger at all.
+ */
+.sheet {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * Each row owns its own three columns rather than inheriting the sheet's with
+ * `subgrid`. The columns still line up because the first is a fixed 20px icon
+ * and the last is a fixed-min trough, and it means the sheet does not collapse
+ * into a vertical stack anywhere subgrid is unsupported.
+ */
+.sheetRow {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  column-gap: 10px;
+  padding: 5px 0;
+}
+
+.sheetRow + .sheetRow {
+  border-top: 1px solid var(--panel-separator);
+}
+
+.sheetIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+.sheetWho {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.sheetName {
+  font-size: var(--text-body);
+  font-weight: var(--weight-title);
+  line-height: var(--lh-tight);
+  color: var(--mantine-color-gray-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sheetMeta {
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  line-height: var(--lh-flush);
+  color: var(--mantine-color-gray-5);
+}
+
+/* Seated in a trough, the way every other numeric readout on the card is. */
+.sheetAmount {
+  min-width: 26px;
+  padding: 2px 6px;
+  border-radius: var(--panel-radius);
+  background: var(--trough-bg);
+  box-shadow: var(--trough-inset);
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: var(--weight-data);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-flush);
+  text-align: right;
+  color: var(--mantine-color-gray-1);
+}
+
+.ledger:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 2px;
+  border-radius: var(--panel-radius);
+}
