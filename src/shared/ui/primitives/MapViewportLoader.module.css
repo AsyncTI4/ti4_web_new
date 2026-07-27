@@ -1,3 +1,11 @@
+/*
+ * The compact loader: a scanner sweeping a hairline track.
+ *
+ * Used where a surface is waiting but there is no board to draw — the games
+ * list, the legacy image view, the secondary tabs. The map field's own wait is
+ * MapSurveyLoader, and both draw from the survey tokens so the app scans in one
+ * language rather than in slate-on-blue here and theme accent there.
+ */
 .loader {
   display: flex;
   flex-direction: column;
@@ -5,13 +13,13 @@
   gap: 14px;
 }
 
-/* Indeterminate scanner: theme accent sweeping a hairline track */
+/* Indeterminate scanner: the theme's survey accent sweeping a hairline track */
 .track {
   position: relative;
   width: 150px;
   height: 2px;
   border-radius: 1px;
-  background: rgba(148, 163, 184, 0.16);
+  background: var(--survey-line);
   overflow: hidden;
 }
 
@@ -23,7 +31,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--map-tab-active-border, rgba(59, 130, 246, 0.85)),
+    var(--survey-lit),
     transparent
   );
   animation: loaderSweep 1.4s ease-in-out infinite;
@@ -39,13 +47,13 @@
 }
 
 .label {
-  font-family: var(--mantine-font-family-monospace);
-  font-size: 11px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
   font-weight: var(--weight-data);
   letter-spacing: 0.2em;
   text-indent: 0.2em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.7);
+  color: var(--mantine-color-gray-5);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 

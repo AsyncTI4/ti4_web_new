@@ -1,0 +1,311 @@
+/*
+ * The map field while a game's state is in flight.
+ *
+ * There is nothing honest to skeleton yet — tile count, player count and deck
+ * heights are all unknown until the payload lands — so instead of guessing at
+ * the board's contents this draws the one thing every board shares: its shape,
+ * with Mecatol in the middle. Reticle brackets frame it and a sweep runs outward
+ * through the rings to report that the fetch is live.
+ *
+ * No panel and no shadow. Drawn straight onto the map field, it reads as an
+ * instrument marking out where the board will be; wrapped in a card it would be
+ * a plate floating on a void, which is the failure the player area already had.
+ */
+.instrument {
+  position: relative;
+  box-sizing: border-box;
+  /* 332px of lattice plus the bracket gutters, and never wider than a phone. */
+  width: min(380px, calc(100vw - 24px));
+  /* The bottom gutter has to clear the brackets' vertical arms, or a long game
+     id and the elapsed readout run into them. */
+  padding: 24px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---- Reticle brackets ---------------------------------------------------
+ * The system's signature framing device, in the same construction Surface
+ * uses: 20x20, inset 8px, one rounded outer corner. Same token, so a theme
+ * that retunes its corner accent retunes this too.
+ */
+.bracket {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: var(--surface-corner-accent);
+  pointer-events: none;
+}
+
+.bracketTopLeft {
+  top: 8px;
+  left: 8px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 4px 0 0 0;
+}
+
+.bracketTopRight {
+  top: 8px;
+  right: 8px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 4px 0 0;
+}
+
+.bracketBottomLeft {
+  bottom: 8px;
+  left: 8px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 4px;
+}
+
+.bracketBottomRight {
+  bottom: 8px;
+  right: 8px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 4px 0;
+}
+
+/* ---- Lattice ----------------------------------------------------------- */
+
+.field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.lattice {
+  display: block;
+  width: 100%;
+  height: auto;
+  shape-rendering: geometricPrecision;
+}
+
+/*
+ * The resting lattice is always painted, so the geometry is there on the first
+ * frame whether or not the sweep ever runs — a headless render, a hidden tab or
+ * a reduced-motion reader all still get the instrument, just without the scan.
+ */
+.latticeBase polygon {
+  fill: none;
+  stroke: var(--survey-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/*
+ * One animated node per ring rather than one per hex: thirty-seven independently
+ * animated strokes is thirty-seven paint invalidations a frame, and the ring is
+ * the unit the sweep actually moves in.
+ */
+.latticeSweep {
+  opacity: 0;
+  animation: surveySweep 2000ms linear infinite;
+  will-change: opacity;
+}
+
+/*
+ * Half a pixel heavier than the resting lattice. Brightness alone was not enough
+ * at 1px on a near-black field — the wave read as a bloom over the whole board
+ * rather than as a line moving through it.
+ */
+.latticeSweep polygon {
+  fill: var(--survey-lit);
+  fill-opacity: 0.06;
+  stroke: var(--survey-lit);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/*
+ * A flash as the sweep arrives, a short tail, then quiet: a sonar ping rather
+ * than a pulsing glow. The decay has to finish faster than the wave crosses the
+ * board (4 rings x 200ms) or every ring is lit at once and the direction is lost.
+ */
+@keyframes surveySweep {
+  0%,
+  3% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  16% {
+    opacity: 0.34;
+  }
+  26%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/*
+ * Mecatol Rex. The one system whose position is known before any data arrives,
+ * so it is the one hex that stays lit — the interface already knowing what the
+ * player knows.
+ */
+.core {
+  fill: none;
+  stroke: var(--survey-lit);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+  animation: surveyCore 4200ms ease-in-out infinite;
+}
+
+@keyframes surveyCore {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+/* Ambient light at galactic centre, breathing with the core. State, not
+   decoration: it is on while the link is live and off when it fails. */
+.bloom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--survey-lit) 0%, transparent 68%);
+  opacity: 0.16;
+  pointer-events: none;
+  animation: surveyBloom 4200ms ease-in-out infinite;
+}
+
+@keyframes surveyBloom {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.24;
+  }
+}
+
+/* ---- Readout -----------------------------------------------------------
+ * Built the same way the deck's round line is built — a tracked label, a fading
+ * hairline, then mono values — because this readout is what that line replaces.
+ */
+.readout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gameId {
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: var(--weight-data);
+  line-height: var(--lh-flush);
+  color: var(--mantine-color-gray-5);
+}
+
+/* Elapsed time is noise on a fast load and reassurance on a slow one, so it
+   only fades in once the load has stopped feeling instant. */
+.elapsed {
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: var(--weight-data);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-flush);
+  color: var(--mantine-color-gray-6);
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.elapsed[data-shown="true"] {
+  opacity: 1;
+}
+
+.note {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--text-meta);
+  line-height: var(--lh-body);
+  color: var(--mantine-color-gray-5);
+}
+
+.retry {
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* ---- Failure -----------------------------------------------------------
+ * The same instrument, gone cold. A separate error screen would throw away the
+ * one thing the player already recognises.
+ *
+ * The lattice does NOT turn red. Thirty-seven red hairlines is a board-wide
+ * alarm for what is one dead request, and red spread over a whole surface stops
+ * carrying meaning. It dims instead — the signal is gone — and red is spent
+ * where it says something: the frame, Mecatol, and the headline.
+ */
+.failed .latticeBase polygon {
+  opacity: 0.4;
+}
+
+.failed .core {
+  stroke: rgba(var(--gd-red), 0.55);
+  animation: none;
+  opacity: 0.85;
+}
+
+.failed .bloom {
+  animation: none;
+  opacity: 0.07;
+  background: radial-gradient(circle, rgb(var(--gd-red)) 0%, transparent 68%);
+}
+
+.failed .bracket {
+  border-color: rgba(var(--gd-red), 0.42);
+}
+
+/* ---- Bounds ----------------------------------------------------------- */
+
+/* A short landscape viewport has no room for a 366px lattice above a readout. */
+@media (max-height: 660px) {
+  .instrument {
+    width: min(300px, calc(100vw - 24px));
+    padding: 20px 22px 28px;
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The lattice and Mecatol stay; only the motion goes. */
+  .latticeSweep {
+    display: none;
+  }
+
+  .core,
+  .bloom {
+    animation: none;
+  }
+
+  .core {
+    opacity: 0.85;
+  }
+
+  .bloom {
+    opacity: 0.16;
+  }
+
+  .elapsed {
+    transition: none;
+  }
+}

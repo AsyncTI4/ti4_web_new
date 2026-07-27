@@ -292,6 +292,7 @@ Glow is not elevation at all; it belongs exclusively to state.
 - **Socket** (`--socket-bg`, `--socket-border`, `--socket-inset`, `--socket-tick`): empty capacity, pressed in, with walls and a registration tick.
 - **Trough** (`--trough-bg`, `--trough-inset`): a recessed channel seating a numeric readout. The bottom highlight is what sells the recess; without it a dark band just reads as a different fill.
 - **Lit bay** (`--bay-lit-tint`, `--bay-lit-edge`, `--bay-lit-light`): an upgraded or active bay lit from within — tint plus a brighter top light, no outer halo.
+- **Survey line** (`--survey-line`, `--survey-lit`): the two strokes of the survey lattice. `--survey-line` is the resting geometry and inherits `--panel-hairline-strong`, so no theme restates it; `--survey-lit` is the sweep passing and **is** themed — a lighter tint of that theme's own accent, for the same reason `--hud-edge-accent` is themed. Both lay marks directly onto the board's field.
 
 ### Shadow Vocabulary
 
@@ -334,6 +335,20 @@ The board is **set into a console**: chrome above it, chrome below, the board it
 - **The bottom deck has its own ground.** `--hud-deck-ground` is per-theme and sits a step *darker* than `--player-card-box-bg`, so the player cards read as plates raised onto the deck and the board stays the brightest thing between them. The deck's sheen is a fixed 120px band at its lip, never a full-height gradient — the deck can run several thousand pixels tall, and a stretched gradient would brighten its far end.
 - **One indent for the whole bottom deck.** Every section inside it — round line, score track, objectives, laws, player areas, score breakdown — shares one left margin. Two of those sections previously wrapped themselves in their own bordered panel with inner padding, which put their headings further in than their neighbours and made the deck read as a pile of unrelated blocks.
 - **The board gets clearance.** 20px between the lowest tiles and the deck's lip, so hexes never appear to tuck under the chrome.
+
+### Survey lattice (`shared/ui/primitives/MapSurveyLoader`)
+
+The map field before its game state arrives. Nothing about the board is knowable yet — tile count, player count and deck heights all come with the payload — so this does not skeleton the board's contents. It draws the board's **geometry**: 37 hairline hexes in three rings, the standard six-player galaxy, framed by the system's reticle brackets, with a sweep running outward from the centre ring by ring. Mecatol Rex, the one system whose position is fixed before any data lands, stays lit.
+
+- **No panel, no shadow.** Brackets and lattice sit straight on the map field. In a card it would be a plate floating on a void, which is the exact failure the empty player area used to have.
+- **The board and both HUD decks mount only over real data.** During load the map tab renders nothing but this. Deck chrome, a 40% zoom readout and a floating Events button calibrated to an empty field were the artifacts this replaced.
+- **The readout is the deck's round line.** Same construction — `Caption size="sm" rule` over mono values — because that line is literally what replaces it.
+- **Escalation, not a progress bar.** Silent under 2.5s; elapsed seconds fade in past that; past 12s a sentence explains the wait. Nothing fakes progress it cannot measure.
+- **Failure is the same instrument, gone cold.** The sweep stops and the lattice dims. It does **not** turn red — 37 red hairlines is a board-wide alarm for one dead request, and red spread over a whole surface stops meaning anything. Red is spent on the frame, Mecatol and the headline, alongside the HTTP-specific reason and a retry.
+- **One animated node per ring, not per hex.** Thirty-seven independently animated strokes is thirty-seven paint invalidations a frame; the ring is the unit the sweep moves in anyway. The resting lattice is always painted, so a headless render or a reduced-motion reader still gets the instrument.
+- **No arrival animation.** The board appears the instant it is ready. `keepMounted={false}` on the tabs would replay any entrance on every tab return, which is the over-animated anti-reference.
+
+The compact sibling (`MapViewportLoader`, a sweeping hairline track) covers surfaces with no board to draw: the games list, the legacy image view, the secondary tabs. Both draw from the survey tokens so the app scans in one language.
 
 ### Delight moments
 

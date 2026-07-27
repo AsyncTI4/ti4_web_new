@@ -101,6 +101,10 @@ export type GameData = {
 export type GameDataState = {
   isLoading: boolean;
   isError: boolean;
+  /** The failed web-data fetch, for surfaces that report why the link is down. */
+  error: Error | null;
+  /** Retries the web-data fetch. Distinct from reconnect(), which is the socket. */
+  refetch: () => void;
   readyState: SocketReadyState;
   reconnect: () => void;
   isReconnecting: boolean;

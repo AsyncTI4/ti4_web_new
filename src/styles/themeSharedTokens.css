@@ -113,6 +113,21 @@
    */
   --hud-deck-ground: #0b0b0c;
 
+  /*
+   * Survey lattice. Until a game's state arrives there is no board to draw, so
+   * the map field draws the board's *geometry* instead: hairline hexes with a
+   * sweep running outward from Mecatol. Two values, because a scan needs a
+   * resting line and a lit one.
+   *
+   * The resting line is structure and comes straight out of the hairline
+   * vocabulary, so no theme has to restate it. The lit line is the sweep
+   * passing, and it is themed for exactly the reason --hud-edge-accent is:
+   * it lays chroma directly onto the board's own field. Each theme sets a
+   * lighter tint of its own accent rather than a new hue.
+   */
+  --survey-line: var(--panel-hairline-strong);
+  --survey-lit: rgba(212, 212, 218, 0.78);
+
   /* Sockets: empty capacity. Pressed into the plate, not dashed onto it. */
   --socket-bg: rgba(0, 0, 0, 0.28);
   --socket-border: rgba(148, 163, 184, 0.09);

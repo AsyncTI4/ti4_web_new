@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { AppShell, Box, Tabs, SimpleGrid } from "@mantine/core";
 import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
@@ -21,6 +21,8 @@ import { useTabManagementV2 } from "./hooks/useTabManagementV2";
 import GeneralArea from "./domains/game-shell/components/GeneralArea";
 import { PannableMapView } from "./domains/map/components/PannableMapView";
 import { MapView } from "./domains/map/components/MapView";
+import { MapLoadingState } from "./domains/map/components/MapLoadingState";
+import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import { MapViewSelectionModal } from "./domains/game-shell/components/MapViewSelectionModal";
 import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
@@ -35,6 +37,24 @@ import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
 // Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
+
+type TabContentProps = {
+  gameId: string;
+  ready: boolean;
+  isError: boolean;
+  children: ReactNode;
+};
+
+/**
+ * Every tab reads the same web-data document, so they all wait and fail the same
+ * way. Without this they rendered an empty panel for both, which is why a slow
+ * load and a dead game looked identical.
+ */
+function TabContent({ gameId, ready, isError, children }: TabContentProps) {
+  if (ready) return <>{children}</>;
+  if (isError) return <PlayerDataErrorAlert gameId={gameId} />;
+  return <MapViewportLoader label="Acquiring game state" />;
+}
 
 function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const data = useGameContext();
@@ -126,9 +146,14 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               />
             </Tabs.List>
 
-            {/* Map Tab */}
+            {/* Map Tab
+                The board, both HUD decks and the floating controls only mount
+                over real data — chrome calibrated to nothing is the artifact
+                this replaces. */}
             <Tabs.Panel value="map" h="calc(100% - 40px)">
-              {pannable ? (
+              {!data ? (
+                <MapLoadingState gameId={gameId} />
+              ) : pannable ? (
                 <PannableMapView gameId={gameId} />
               ) : (
                 <MapView gameId={gameId} />
@@ -140,18 +165,20 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               value="players"
               className={classes.playersTabContent}
             >
-              {!DISABLE_PLAYER_AREA_RENDERING && isError && (
-                <PlayerDataErrorAlert gameId={gameId} mb="md" />
-              )}
-
-              {!DISABLE_PLAYER_AREA_RENDERING && data?.playerData && (
-                <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                  {filterPlayersWithAssignedFaction(data.playerData).map(
-                    (player) => (
+              {!DISABLE_PLAYER_AREA_RENDERING && (
+                <TabContent
+                  gameId={gameId}
+                  ready={!!data?.playerData}
+                  isError={isError}
+                >
+                  <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
+                    {filterPlayersWithAssignedFaction(
+                      data?.playerData ?? [],
+                    ).map((player) => (
                       <PlayerCard key={player.color} playerData={player} />
-                    ),
-                  )}
-                </SimpleGrid>
+                    ))}
+                  </SimpleGrid>
+                </TabContent>
               )}
             </TabPanelSection>
 
@@ -159,14 +186,18 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               value="objectives"
               className={classes.playersTabContent}
             >
-              {data && <ScoreBoard />}
+              <TabContent gameId={gameId} ready={!!data} isError={isError}>
+                <ScoreBoard />
+              </TabContent>
             </TabPanelSection>
 
             <TabPanelSection
               value="general"
               className={classes.playersTabContent}
             >
-              {data && <GeneralArea />}
+              <TabContent gameId={gameId} ready={!!data} isError={isError}>
+                <GeneralArea />
+              </TabContent>
             </TabPanelSection>
           </Tabs>
         </Box>

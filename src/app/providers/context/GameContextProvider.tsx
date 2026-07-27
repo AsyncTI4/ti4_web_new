@@ -61,8 +61,21 @@ type DecodedMapStatePreview = {
 
 export function GameContextProvider({ children, gameId }: Props) {
   const replayAnimationsEnabled = !isMobileDevice();
-  const { data, isLoading, isError, isReconnecting, readyState, reconnect } =
-    usePlayerDataSocket(gameId);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isReconnecting,
+    readyState,
+    reconnect,
+  } = usePlayerDataSocket(gameId);
+
+  /* Consumers just want "try again"; the query's promise is not theirs to await. */
+  const retryGameData = useCallback(() => {
+    void refetch();
+  }, [refetch]);
   const accessibleColors = useSettingsStore((s) => s.settings.accessibleColors);
   const alwaysShowControlTokens = useSettingsStore(
     (s) => s.settings.showControlTokens,
@@ -356,6 +369,8 @@ export function GameContextProvider({ children, gameId }: Props) {
     dataState: {
       isLoading,
       isError,
+      error: error ?? null,
+      refetch: retryGameData,
       isReconnecting,
       readyState,
       reconnect,

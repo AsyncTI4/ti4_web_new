@@ -200,5 +200,9 @@
     /* The line the board sits on. Themed, because it is the one piece of chroma
        where the deck meets the map. */
     --hud-edge-accent: rgba(255, 0, 170, 0.4);
+
+    /* The sweep passing over the survey lattice while game state is in
+       flight. A lighter tint of this theme's own accent, never a new hue. */
+    --survey-lit: rgba(255, 92, 205, 0.88);
 }
 

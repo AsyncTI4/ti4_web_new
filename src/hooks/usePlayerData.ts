@@ -25,14 +25,26 @@ export function deepMergePatch<T>(base: T, patch: unknown): T {
   return result as T;
 }
 
+/**
+ * Carries the HTTP status through to the UI. A missing game and a busy bot need
+ * different sentences, and a plain Error threw that distinction away.
+ */
+export class GameDataFetchError extends Error {
+  readonly status: number;
+
+  constructor(status: number, statusText: string) {
+    super(`Failed to fetch player data: ${status} ${statusText}`);
+    this.name = "GameDataFetchError";
+    this.status = status;
+  }
+}
+
 export async function fetchPlayerData(
   gameId: string
 ): Promise<PlayerDataResponse> {
   const response = await fetch(`${config.api.gameDataUrl}/${gameId}/web-data`);
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch player data: ${response.status} ${response.statusText}`
-    );
+    throw new GameDataFetchError(response.status, response.statusText);
   }
   return response.json() as Promise<PlayerDataResponse>;
 }
@@ -87,7 +99,7 @@ export function useWebDataPatcher(gameId: string) {
 }
 
 export function usePlayerDataSocket(gameId: string) {
-  const { data, isLoading, isError, refetch } = usePlayerData(gameId);
+  const { data, isLoading, isError, error, refetch } = usePlayerData(gameId);
   const queryClient = useQueryClient();
   const hasConnectedBefore = useRef(false);
   const hasSocketConnectedBefore = useRef(false);
@@ -124,6 +136,8 @@ export function usePlayerDataSocket(gameId: string) {
     data,
     isLoading,
     isError,
+    error,
+    refetch,
     readyState,
     reconnect,
     isReconnecting,
