@@ -166,23 +166,139 @@
     --unit-details-inherited-bg: rgba(172, 28, 38, 0.06);
     --unit-details-inherited-border: rgba(172, 28, 38, 0.15);
 
-    /* Surface language — dark electric: void-black fields, red-charged
-       hairlines, a hot top edge, and sharp corners */
+    /*
+     * Surface language — the forge.
+     *
+     * This theme used to put its chroma in the LINES: every hairline, separator
+     * and panel floor was a saturated red at 0.28-0.42. Two problems. A player
+     * area is mostly hairlines, so the whole deck read as one red wash; and red
+     * is a signal colour here — secrets, warnings, destructive state — which
+     * stops meaning anything once every frame in the product is already red.
+     *
+     * The chroma moved from the lines into the MATERIAL. Hairlines drop to a
+     * warm ash that still reads red-cast at a glance but no longer competes
+     * with a secret-objective chip two rows away, and the machined vocabulary
+     * below — which this theme previously left at the generic white-and-black
+     * defaults — now carries the heat instead. Same identity, told by the metal
+     * rather than by the outlines.
+     */
     --panel-field-bg: linear-gradient(180deg, rgba(12, 2, 3, 0.95), rgba(1, 0, 0, 0.98));
     --panel-field-flat: rgba(9, 1, 2, 0.55);
     --panel-field-strip: rgba(12, 2, 3, 0.66);
     --panel-field-soft: rgba(12, 2, 3, 0.46);
-    --panel-cell-bg: rgba(45, 10, 12, 0.18);
-    --panel-hairline: rgba(196, 42, 52, 0.28);
-    --panel-hairline-strong: rgba(206, 52, 62, 0.42);
-    --panel-separator: rgba(196, 42, 52, 0.18);
-    --panel-bracket: rgba(226, 116, 116, 0.48);
+    --panel-cell-bg: rgba(58, 26, 26, 0.16);
+    /* Warm ash, not signal red. Chroma roughly halved, alpha eased. */
+    --panel-hairline: rgba(198, 126, 124, 0.22);
+    --panel-hairline-strong: rgba(212, 146, 142, 0.30);
+    --panel-separator: rgba(198, 126, 124, 0.15);
+    --panel-bracket: rgba(232, 162, 156, 0.42);
     --panel-radius: 2px;
-    /* Heat above, ember line along the floor of every panel */
+    /* Heat still rises off the top edge; the floor line is an ember cooling in
+       the seam now rather than a drawn red rule at full strength. */
     --panel-texture:
-      linear-gradient(180deg, rgba(196, 42, 52, 0.07), transparent 30%),
-      linear-gradient(0deg, rgba(206, 52, 62, 0.4) 0 1px, transparent 1px);
-    --player-card-inner-glow: radial-gradient(90% 55% at 50% 0%, rgba(172, 28, 38, 0.045), transparent 60%);
+      linear-gradient(180deg, rgba(196, 42, 52, 0.055), transparent 34%),
+      linear-gradient(0deg, rgba(206, 66, 62, 0.22) 0 1px, transparent 1px);
+    /*
+     * The card is a bolted armour plate.
+     *
+     * This is the theme's identity mark and the only real ornament in it. Every
+     * other theme's player card is an enclosure; this one is a plate someone
+     * fastened down — four countersunk rivets at the corners, a brushed grain
+     * running off-axis across the face, and the heat still coming off the top
+     * edge. All of it rides the --player-card-inner-glow hook that already
+     * existed, so no component changes and no new elements: one background on
+     * one layer per card, sitting behind the content.
+     *
+     * Each rivet is two stops — a crown offset up-left of a seated ring — which
+     * is what turns a flat dot into a dome. Four per card, not four per module:
+     * sixty domed rivets on screen is a texture, four is a fastening.
+     */
+    --player-card-inner-glow:
+      radial-gradient(circle 1.9px at calc(7px - 1px) calc(7px - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
+      radial-gradient(circle 5px at 7px 7px, rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
+      radial-gradient(circle 1.9px at calc(calc(100% - 7px) - 1px) calc(7px - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
+      radial-gradient(circle 5px at calc(100% - 7px) 7px, rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
+      radial-gradient(circle 1.9px at calc(7px - 1px) calc(calc(100% - 7px) - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
+      radial-gradient(circle 5px at 7px calc(100% - 7px), rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
+      radial-gradient(circle 1.9px at calc(calc(100% - 7px) - 1px) calc(calc(100% - 7px) - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
+      radial-gradient(circle 5px at calc(100% - 7px) calc(100% - 7px), rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
+      repeating-linear-gradient(112deg, rgba(255, 196, 160, 0.026) 0 1px, transparent 1px 5px),
+      radial-gradient(90% 55% at 50% 0%, rgba(172, 28, 38, 0.05), transparent 60%);
+
+    /*
+     * Machined vocabulary — tempered, not painted.
+     *
+     * Steel that has been through heat carries an oxide scale: straw around
+     * 200C, bronze by 250. So the light on a plate's top edge is not white here,
+     * it is straw, and the shade under it is warm rather than neutral. One token
+     * and every plate, bay and stores chip in the theme changes material.
+     */
+    --machined-bevel-light: rgba(255, 214, 170, 0.075);
+    --machined-bevel-shade: rgba(26, 6, 7, 0.40);
+
+    /*
+     * The cut corner came off the mill hot.
+     *
+     * The chamfer is the one edge on a plate that was actually *cut* — the rest
+     * are just where the plate ends — so it is the one edge entitled to show a
+     * heat-affected zone. A 3.5px oxide band runs straw into bronze along the
+     * inside of the diagonal and stops dead at the frame hairline. It is the
+     * theme's signature and it appears on every module, unit bay, strategy card
+     * and condensed rack cell without a single new element.
+     */
+    --machined-temper-br: linear-gradient(
+      to bottom right,
+      transparent 0 calc(50% - 4px),
+      rgba(255, 186, 130, 0.14) calc(50% - 4px) calc(50% - 2.2px),
+      rgba(206, 92, 58, 0.12) calc(50% - 2.2px) calc(50% - 0.5px),
+      transparent calc(50% - 0.5px)
+    );
+    --machined-temper-tr: linear-gradient(
+      to top right,
+      transparent 0 calc(50% - 4px),
+      rgba(255, 186, 130, 0.14) calc(50% - 4px) calc(50% - 2.2px),
+      rgba(206, 92, 58, 0.12) calc(50% - 2.2px) calc(50% - 0.5px),
+      transparent calc(50% - 0.5px)
+    );
+
+    /*
+     * The socket is a cinder bed.
+     *
+     * Empty capacity is the single most common surface in a player area — an
+     * unresearched tech, a unit a faction cannot build, a sealed secret — so it
+     * is the right place to spend the theme's one real ornament. Instead of a
+     * flat black hole, the pocket holds a faint ember at its floor, the way a
+     * crucible does after the pour. Nothing moves; it is just still hot.
+     */
+    --socket-bg:
+      radial-gradient(150% 108% at 50% 103%, rgba(200, 52, 42, 0.26), transparent 56%),
+      rgba(0, 0, 0, 0.34);
+    --socket-border: rgba(198, 126, 124, 0.11);
+    --socket-inset:
+      inset 0 1px 2px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 168, 132, 0.07);
+    --socket-tick: rgba(226, 150, 140, 0.24);
+
+    /* A trough seats a numeral in a channel; here the channel has heat pooled
+       along its floor, which is also the highlight that sells the recess. */
+    --trough-bg:
+      linear-gradient(0deg, rgba(150, 34, 32, 0.16), transparent 58%),
+      rgba(0, 0, 0, 0.40);
+    --trough-inset:
+      inset 0 2px 3px rgba(0, 0, 0, 0.58),
+      inset 0 -1px 0 rgba(255, 158, 122, 0.10);
+
+    /* Mill finish: the rail is a scored strip, not a smooth one. 3px scoring at
+       under 2% contrast — felt rather than seen, and only on chrome. */
+    --rail-bg:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 190, 150, 0.016) 0 1px,
+        transparent 1px 3px
+      ),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.44) 0%, rgba(28, 8, 8, 0.20) 100%);
+    --rail-border: rgba(198, 126, 124, 0.17);
+    --rail-ink: rgba(226, 186, 178, 0.92);
 
     /* Ground a plate's painted corner notch is cut into; must match this
        theme's --player-card-box-bg or the notch shows as a visible wedge. */

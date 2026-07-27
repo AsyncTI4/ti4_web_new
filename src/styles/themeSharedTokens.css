@@ -81,6 +81,11 @@
   --machined-chamfer: 9px;
   --machined-chamfer-sm: 6px;
 
+  /* Optional oxide bloom laid just inside the cut diagonal, one value per
+     chamfer direction. A theme opts in; `none` leaves the notch untouched. */
+  --machined-temper-br: none;
+  --machined-temper-tr: none;
+
   /*
    * The surface a plate sits on. Large plates paint their cut corner with a
    * small gradient triangle in this colour rather than clipping themselves:

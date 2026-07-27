@@ -31,23 +31,29 @@
   height: var(--module-chamfer);
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom right,
-    transparent 0 calc(50% - 0.5px),
-    var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
-    var(--plate-ground) calc(50% + 0.5px) 100%
-  );
+  /* --machined-temper-* is a theme hook layered just inside the cut diagonal.
+     `none` for every theme that does not opt in, so the notch is unchanged. */
+  background:
+    var(--machined-temper-br, none),
+    linear-gradient(
+      to bottom right,
+      transparent 0 calc(50% - 0.5px),
+      var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
+      var(--plate-ground) calc(50% + 0.5px) 100%
+    );
 }
 
 .chamferTopRight::after {
   top: 0;
   bottom: auto;
-  background: linear-gradient(
-    to top right,
-    transparent 0 calc(50% - 0.5px),
-    var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
-    var(--plate-ground) calc(50% + 0.5px) 100%
-  );
+  background:
+    var(--machined-temper-tr, none),
+    linear-gradient(
+      to top right,
+      transparent 0 calc(50% - 0.5px),
+      var(--module-frame) calc(50% - 0.5px) calc(50% + 0.5px),
+      var(--plate-ground) calc(50% + 0.5px) 100%
+    );
 }
 
 .chamferNone {
