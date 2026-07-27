@@ -110,7 +110,7 @@
 }
 
 .note {
-  padding: 7px 10px;
+  padding: 8px 10px;
   border-radius: var(--panel-radius);
   background: var(--socket-bg);
   box-shadow: var(--socket-inset), inset 0 0 0 1px var(--socket-border);

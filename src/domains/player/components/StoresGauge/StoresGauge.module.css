@@ -59,7 +59,7 @@
   gap: 1px;
   flex: 1;
   min-width: 0;
-  padding: 7px;
+  padding: 8px;
   font-family: var(--mantine-font-family-monospace);
   font-variant-numeric: tabular-nums;
 }

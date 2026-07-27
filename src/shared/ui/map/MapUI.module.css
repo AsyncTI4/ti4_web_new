@@ -574,7 +574,7 @@
   width: 100%;
   z-index: var(--z-movement-banner);
   height: 64px;
-  padding: 0 22px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   border-bottom: var(--movement-banner-border);
@@ -672,7 +672,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 18px;
+  gap: 20px;
   padding: 14px 0 24px;
   width: 100%;
 }

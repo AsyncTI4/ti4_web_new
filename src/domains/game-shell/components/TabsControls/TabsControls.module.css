@@ -25,7 +25,7 @@
   gap: 0;
   min-width: 34px;
   height: 34px;
-  padding: 0 7px;
+  padding: 0 8px;
   color: var(--mantine-color-gray-4);
   background: var(--panel-field-bg);
   box-shadow: var(--machined-bevel);

@@ -21,7 +21,7 @@
   padding: 24px 24px 32px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 /* ---- Reticle brackets ---------------------------------------------------
@@ -281,7 +281,7 @@
 @media (max-height: 660px) {
   .instrument {
     width: min(300px, calc(100vw - 24px));
-    padding: 20px 22px 28px;
+    padding: 20px 24px 28px;
     gap: 14px;
   }
 }

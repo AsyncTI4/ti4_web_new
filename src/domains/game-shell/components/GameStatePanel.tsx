@@ -231,7 +231,7 @@ function ActivePlayerRow({
   const phrase = activePlayerPhrase(phase);
 
   return (
-    <Group gap={7} align="center" wrap="nowrap">
+    <Group gap={8} align="center" wrap="nowrap">
       <PlayerColorSwatch color={activePlayer} />
       <Text span className={styles.turnText}>
         <span className={styles.turnName}>{displayName}</span>
