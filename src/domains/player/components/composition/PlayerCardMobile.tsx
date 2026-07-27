@@ -22,6 +22,7 @@ import { PlayerEconomyStack } from "@/domains/player/components/PlayerCardShared
 import { PlayerCardCounts } from "@/domains/player/components/PlayerCardCounts";
 import { CCPool } from "@/domains/player/components/CCPool";
 import { FragmentsPool } from "@/domains/player/components/FragmentsPool";
+import { DebtTokens } from "@/domains/player/components/DebtTokens";
 import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCardShared/PlayerCardPlanetsSection";
 import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCardShared/getPlayerCardLayoutFields";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
@@ -394,11 +395,13 @@ export default function PlayerCardMobile(props: Props) {
         >
           <Box className={styles.logistics}>
             <Box className={styles.logisticsTop}>
+              {/* Debt is not part of the stores stack here — it moved down to
+                  the salvage shelf, which has width to spare and vertical room
+                  the stores column does not. */}
               <PlayerEconomyStack
                 tg={player.tg}
                 commodities={player.commodities}
                 commoditiesTotal={player.commoditiesTotal}
-                debtTokens={player.debtTokens}
               />
               <Box className={styles.logisticsHand}>
                 <PlayerCardCounts
@@ -411,6 +414,9 @@ export default function PlayerCardMobile(props: Props) {
             <Box className={styles.logisticsFloor}>
               <Box className={styles.fragmentRow}>
                 <FragmentsPool fragments={player.fragments} reserveSpace />
+                {player.debtTokens && (
+                  <DebtTokens debts={player.debtTokens} compact />
+                )}
               </Box>
               {settings.showPlayerAreaCommandTokens && (
                 <Box className={styles.ccRow}>

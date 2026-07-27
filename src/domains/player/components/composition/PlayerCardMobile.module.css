@@ -170,9 +170,19 @@
  * upward. Reserving the height means the compartment reads the same on a card
  * with fragments, a card without, and a card whose art hasn't arrived yet.
  */
+/*
+ * The salvage shelf, shared with the debt ledger.
+ *
+ * Debt used to stack under commodities in the column above, where five creditors
+ * at ~90px each forced this compartment from its 148px base out to 444px. The
+ * shelf already had a full row of unused width — an empty pool is a centred "NO
+ * FRAGMENTS" in 440px of nothing — so the two share it: fragments take what they
+ * need and the ledger takes the ~70px it needs at the trailing edge.
+ */
 .fragmentRow {
   display: flex;
   align-items: center;
+  gap: 6px;
   /* Sprite height, + the stack's 2px top and bottom, + this row's own 3px/4px
      padding and 1px rule, because the box is border-box. */
   min-height: calc(32px * 73 / 72 + 4px + 8px);
@@ -180,8 +190,9 @@
   border-top: 1px solid var(--panel-separator);
 }
 
-/* FragmentsPool brings its own Mantine padding, which double-pads the shelf. */
-.fragmentRow > div {
+/* FragmentsPool brings its own Mantine padding, which double-pads the shelf.
+   Scoped to the pool so it cannot reach into the ledger beside it. */
+.fragmentRow > div:first-child {
   padding: 0 !important;
   gap: 5px;
 }

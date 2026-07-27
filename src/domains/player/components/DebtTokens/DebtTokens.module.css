@@ -1,3 +1,13 @@
+/*
+ * Debt owed to other players.
+ *
+ * The panel used to be accented orange, which is Stage I objectives in the signal
+ * vocabulary, and it set the ×N counts in orange-3 at 12px — louder than the
+ * trade-goods figure directly above them, which is the actual primary value in
+ * that compartment. Debt is not in the signal vocabulary, so the chrome is
+ * neutral and the creditors' own colours do the identifying, the same way a
+ * player is keyed by their colour band everywhere else on the card.
+ */
 .container {
   padding: 4px 8px;
 }
@@ -7,8 +17,61 @@
 }
 
 .amount {
-  font-size: var(--mantine-font-size-xs);
-  color: var(--mantine-color-orange-3);
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-gray-5);
+}
+
+/* ---- Ledger (compact) --------------------------------------------------
+ * One cell per creditor: colour pip over the amount owed. Stacking the two puts
+ * a cell's width at the wider of a 9px pip and a two-digit numeral — about 11px —
+ * so five creditors cost ~67px where the full form needed ~450px. The amount
+ * getting its own line is what keeps it legible at 9px instead of crushed
+ * against the pip.
+ */
+.ledger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex-shrink: 0;
+  align-self: center;
+  padding-left: 8px;
+  border-left: 1px solid var(--panel-separator);
+}
+
+.ledgerLabel {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
   font-weight: var(--weight-rail);
-  font-family: var(--mantine-font-family-monospace);
+  letter-spacing: var(--track-rail);
+  line-height: var(--lh-flush);
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-5);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.cells {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 9px;
+}
+
+.cellAmount {
+  font-family: var(--font-data);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-data);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-flush);
+  color: var(--mantine-color-gray-4);
 }
