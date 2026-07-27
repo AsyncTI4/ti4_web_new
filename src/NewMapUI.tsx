@@ -112,7 +112,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
           <Tabs
             value={activeTab}
             onChange={(value) => setActiveTab(value || "map")}
-            h={{ base: "100vh", sm: "calc(100vh - 68px)" }}
+            h={{ base: "100vh", sm: "calc(100vh - var(--app-header-height))" }}
             keepMounted={false}
           >
             <Tabs.List className={classes.tabsList}>
@@ -150,7 +150,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                 The board, both HUD decks and the floating controls only mount
                 over real data — chrome calibrated to nothing is the artifact
                 this replaces. */}
-            <Tabs.Panel value="map" h="calc(100% - 40px)">
+            <Tabs.Panel value="map" h="calc(100% - var(--map-tabs-height))">
               {!data ? (
                 <MapLoadingState gameId={gameId} />
               ) : pannable ? (

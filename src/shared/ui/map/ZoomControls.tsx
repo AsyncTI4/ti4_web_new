@@ -8,6 +8,7 @@ import {
   IconZoomOut,
   IconScreenShare,
   IconScreenShareOff,
+  IconFocusCentered,
 } from "@tabler/icons-react";
 
 type Props = {
@@ -20,6 +21,13 @@ type Props = {
   onZoomReset?: () => void;
   onZoomScreenSize?: () => void;
   hideFitToScreen?: boolean;
+  /*
+   * Fit the board to the viewport and recentre it. Distinct from the legacy
+   * `onZoomScreenSize` toggle above, which only flips a persisted boolean that
+   * the image view reads — in the pannable map it computes nothing, which is why
+   * that control is hidden here rather than reused.
+   */
+  onFitBoard?: () => void;
 };
 
 function ZoomControls({
@@ -31,6 +39,7 @@ function ZoomControls({
   onZoomReset: onZoomResetProp,
   onZoomScreenSize: onZoomScreenSizeProp,
   hideFitToScreen = false,
+  onFitBoard,
 }: Props) {
   // Store values (used by new MapView)
   const storeZoom = useAppStore((state) => state.zoomLevel);
@@ -88,6 +97,17 @@ function ZoomControls({
       >
         <IconZoomCancel size={16} />
       </button>
+      {onFitBoard && (
+        <button
+          type="button"
+          aria-label="Fit board to screen"
+          title="Fit board to screen"
+          className={classes.zoomButton}
+          onClick={onFitBoard}
+        >
+          <IconFocusCentered size={16} />
+        </button>
+      )}
       {!hideFitToScreen && (
         <button
           type="button"

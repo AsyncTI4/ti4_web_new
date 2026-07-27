@@ -12,7 +12,24 @@
   --army-rank-third-color: rgba(205, 127, 50, 0.85);
   --unit-details-stat-bg: rgba(255, 255, 255, 0.03);
   --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
-  --map-viewport-height: calc(100vh - 110px);
+  /*
+   * The console stack above the board, as one derivation instead of six.
+   *
+   * These were previously six independently-guessed literals: 68px in
+   * NewMapUI's Tabs, 40px in its map panel, 110px here, 110px again on the left
+   * sidebar, 125px on the zoom rail and 163px on the floating toolbar. The tab
+   * strip actually measures 54, not 40, so the map area resolved 6px taller than
+   * the viewport at every size and the board ran under the chrome with no
+   * scroll position that could reach it.
+   *
+   * --app-header-height must match APP_HEADER_HEIGHT in shared/ui/AppHeader.tsx,
+   * which is what AppShell is given. --map-tabs-height is asserted on .tabsList
+   * rather than measured, so the value below is the contract, not a guess.
+   */
+  --app-header-height: 60px;
+  --map-tabs-height: 54px;
+  --map-viewport-top: calc(var(--app-header-height) + var(--map-tabs-height));
+  --map-viewport-height: calc(100vh - var(--map-viewport-top));
 
   /*
    * Surface language for data panels (objective cards, score tracker, game

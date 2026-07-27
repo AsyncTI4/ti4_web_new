@@ -160,6 +160,36 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
   );
 }
 
+const PANEL_OPEN_KEY = "ti4_game_state_panel_open";
+
+/**
+ * Whether the plate is expanded, remembered across games and reloads.
+ *
+ * The panel floats over the board's top-left corner at every scroll position —
+ * in a large agenda vote it covered 18% of the map — so leaving it open has to
+ * be the player's choice rather than the only option.
+ */
+function useGameStatePanelOpen(): [boolean, (next: boolean) => void] {
+  const [isOpen, setIsOpen] = useState(() => {
+    try {
+      return localStorage.getItem(PANEL_OPEN_KEY) !== "false";
+    } catch {
+      return true;
+    }
+  });
+
+  const set = (next: boolean) => {
+    setIsOpen(next);
+    try {
+      localStorage.setItem(PANEL_OPEN_KEY, String(next));
+    } catch {
+      /* private mode: the panel just reopens next visit */
+    }
+  };
+
+  return [isOpen, set];
+}
+
 function CollapseToggle({
   isOpen,
   controlsId,
@@ -173,7 +203,8 @@ function CollapseToggle({
     <UnstyledButton
       aria-controls={controlsId}
       aria-expanded={isOpen}
-      aria-label={isOpen ? "Collapse agenda details" : "Expand agenda details"}
+      aria-label={isOpen ? "Collapse game state" : "Expand game state"}
+      title={isOpen ? "Collapse game state" : "Expand game state"}
       onClick={onToggle}
       className={styles.collapseToggle}
     >
@@ -428,8 +459,7 @@ function GameStatePanelContent({
 }) {
   const { phase } = gameState;
   const cfg = PHASE_CONFIGS[phase];
-  const isCollapsible = phaseGroup(phase) === "agenda";
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useGameStatePanelOpen();
   const detailsId = "game-state-panel-details";
 
   if (phase === "finished" && gameState.winner) {
@@ -437,11 +467,22 @@ function GameStatePanelContent({
       <Module
         accentRgb={PHASE_ACCENT_RGB.red}
         label={<PhaseBadge phase={phase} />}
+        meta={
+          <CollapseToggle
+            isOpen={isOpen}
+            controlsId={detailsId}
+            onToggle={() => setIsOpen(!isOpen)}
+          />
+        }
         density="compact"
         overContent
         className={styles.panel}
       >
-        <WinnerBanner winner={gameState.winner} playerData={playerData} />
+        {/* A finished game is the most static message on the board and the least
+            worth holding its strongest corner, so it collapses like the rest. */}
+        <Collapse in={isOpen} id={detailsId} transitionDuration={160}>
+          <WinnerBanner winner={gameState.winner} playerData={playerData} />
+        </Collapse>
       </Module>
     );
   }
@@ -451,24 +492,20 @@ function GameStatePanelContent({
       accentRgb={PHASE_ACCENT_RGB[cfg.accent] ?? "var(--gd-gray)"}
       label={<PhaseBadge phase={phase} />}
       meta={
-        isCollapsible ? (
-          <CollapseToggle
-            isOpen={isOpen}
-            controlsId={detailsId}
-            onToggle={() => setIsOpen((opened) => !opened)}
-          />
-        ) : undefined
+        <CollapseToggle
+          isOpen={isOpen}
+          controlsId={detailsId}
+          onToggle={() => setIsOpen(!isOpen)}
+        />
       }
       density="compact"
       overContent
       className={styles.panel}
     >
       <Stack gap="xs">
-        <Collapse
-          in={!isCollapsible || isOpen}
-          id={detailsId}
-          transitionDuration={160}
-        >
+        {/* Collapsed, the plate keeps its rail — phase stays readable, which is
+            the one thing worth holding that corner of the board for. */}
+        <Collapse in={isOpen} id={detailsId} transitionDuration={160}>
           <Stack gap="xs">
             {gameState.activePlayer && (
               <ActivePlayerRow

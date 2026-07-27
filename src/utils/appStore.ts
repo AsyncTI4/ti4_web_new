@@ -143,6 +143,8 @@ type AppStore = {
   handleZoomIn: () => void;
   handleZoomOut: () => void;
   handleZoomReset: () => void;
+  /** Snaps zoom to the largest ladder step that fits `contentWidth` into `viewportWidth`. */
+  handleZoomFitToWidth: (contentWidth: number, viewportWidth: number) => number;
   handleZoomScreenSize: () => void;
 };
 
@@ -286,6 +288,30 @@ export const useAppStore = create<AppStore>((set) => {
         zoomLevel: zoomLevels[resetIndex],
         zoomFitToScreen: false,
       }));
+    },
+    /*
+     * Largest ladder step whose scaled content still fits the given width.
+     *
+     * Snapped to the ladder rather than taking the raw ratio: zoom in/out step by
+     * index, so an off-ladder value would make the next press jump to whatever
+     * index happened to be current. Distinct from handleZoomScreenSize, which is
+     * a persisted boolean the legacy image view reads and which computes nothing.
+     */
+    handleZoomFitToWidth: (contentWidth: number, viewportWidth: number) => {
+      if (contentWidth <= 0 || viewportWidth <= 0) return zoomLevels[zoomIndex];
+      const target = viewportWidth / contentWidth;
+      let fitIndex = 0;
+      for (let i = 0; i < zoomLevels.length; i++) {
+        if (zoomLevels[i] <= target) fitIndex = i;
+      }
+      changeZoomIndex(fitIndex);
+      changeZoomFitToScreen(false);
+      set((state) => ({
+        ...state,
+        zoomLevel: zoomLevels[fitIndex],
+        zoomFitToScreen: false,
+      }));
+      return zoomLevels[fitIndex];
     },
     handleZoomScreenSize: () => {
       changeZoomFitToScreen(!zoomFitToScreen);

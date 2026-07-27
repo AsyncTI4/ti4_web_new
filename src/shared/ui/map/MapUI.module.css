@@ -19,7 +19,7 @@
 .leftSidebarOverlay {
   position: fixed;
   left: 20px;
-  top: 110px;
+  top: var(--map-viewport-top);
   width: 300px;
   max-height: var(--map-viewport-height);
   height: auto;
@@ -39,12 +39,26 @@
   opacity: 0;
 }
 
+/*
+ * The game-state plate floats over the board's top-left corner, which is the
+ * strongest position on the page, so it has to stay small and stay escapable.
+ *
+ * It sizes to its content rather than to a flat 300px: the old fixed width
+ * overrode the panel's own 420px allowance, which sheared the last digit off
+ * every two-digit total in the agenda vote table. And it is bounded, because
+ * the agenda variant runs past 1200px in a large game and used to overflow the
+ * map area entirely with no way to scroll it.
+ */
 .gameStateOverlay {
   position: absolute;
   left: 16px;
   top: 16px;
-  width: 300px;
-  max-width: calc(100vw - 32px);
+  width: max-content;
+  min-width: 260px;
+  max-width: min(420px, calc(100vw - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   z-index: var(--z-game-state-overlay);
 }
 
@@ -59,7 +73,8 @@
 /* Zoom controls positioning */
 .zoomControlsDynamic {
   position: fixed;
-  top: 125px;
+  /* Seated 11px below the deck's lower lip, derived rather than restated. */
+  top: calc(var(--map-viewport-top) + 11px);
   z-index: var(--z-zoom-controls);
 }
 
@@ -244,6 +259,11 @@
 
 .tabsList {
   position: relative;
+  /* Asserted, not measured. Everything below the header derives its offset from
+     --map-tabs-height, so the strip has to be exactly that tall or the map area
+     drifts against the chrome. All four tabs are single-line by construction. */
+  height: var(--map-tabs-height);
+  box-sizing: border-box;
   background: var(--rail-sheen), var(--map-tabs-bg);
   /* The deck's lower lip: a lit edge, then shadow falling onto the map. */
   box-shadow:
@@ -622,11 +642,16 @@
   width: max-content;
   min-width: 100%;
   /*
-   * Breathing room so the board's lowest tiles clear the deck's lip. 45px, not
-   * 25: the map's overlay layer overflows its wrapper by ~20px, so a 20px margin
-   * measured 0px of actual clearance and the hexes sat right on the lip.
+   * Breathing room so the board's lowest tiles clear the deck's lip.
+   *
+   * The overlay layer's bleed past the board wrapper was assumed to be ~20px and
+   * a flat 45px was budgeted for it. Measured, the bleed is 200 unscaled units —
+   * 80px at the default 40% zoom — so 45px was 35px of *overlap*: the bottom row
+   * of plates sat under the deck rather than clear of it. The bleed scales with
+   * zoom, so the deck is handed the scaled figure and adds the 20px of clearance
+   * DESIGN.md specifies. Fallback covers the default zoom.
    */
-  margin-top: 45px;
+  margin-top: calc(var(--board-bleed-bottom, 80px) + 20px);
   /* Separation without ornament: a lit lip, an accent hairline facing the board,
      and shadow cast upward. Two attempts at a machined graduation band both read
      as a measuring rule, so the edge is left clean rather than decorated badly. */

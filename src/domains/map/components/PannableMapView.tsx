@@ -1,4 +1,4 @@
-import { useMemo, useRef, type RefObject } from "react";
+import { useMemo, useRef, type CSSProperties, type RefObject } from "react";
 import { Box, Group, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
@@ -39,6 +39,22 @@ type Props = {
   gameId: string;
 };
 
+/*
+ * How far the map's overlay layer paints outside the board wrapper, in unscaled
+ * map units. Faction borders, control tokens and the stat plates all sit beyond
+ * the tile grid, and the wrapper is sized to the grid.
+ *
+ * Measured, not estimated: 550 / 580 / 200 / 183, identical at 30, 40, 50 and
+ * 60% zoom, so the bleed is a constant in map units and scales linearly with the
+ * transform. Left flush against the scroller's corner this put 220px of home
+ * plates above the map area and 232px left of it, with no scroll position that
+ * could reach either — scrollTop and scrollLeft cannot go negative.
+ */
+const BOARD_BLEED = { top: 550, left: 580, bottom: 200, right: 183 } as const;
+
+/** DESIGN.md's stated gap between the board's outermost paint and the chrome. */
+const BOARD_CLEARANCE = 20;
+
 function ReplayAutoScroll({
   mapContainerRef,
 }: {
@@ -76,6 +92,7 @@ export function PannableMapView({ gameId }: Props) {
   const storeZoom = useAppStore((state) => state.zoomLevel);
   const handleZoomIn = useAppStore((state) => state.handleZoomIn);
   const handleZoomOut = useAppStore((state) => state.handleZoomOut);
+  const handleZoomFitToWidth = useAppStore((state) => state.handleZoomFitToWidth);
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
 
@@ -88,6 +105,38 @@ export function PannableMapView({ gameId }: Props) {
   const mapHeight = unscaledMapHeight * zoom;
   const hideZoomControls = shouldHideZoomControls();
   const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  /* The board's painted extent, including the overlay bleed the wrapper excludes. */
+  const paintedBoardWidth =
+    contentSize.width +
+    mapLayout.mapWidthExtra +
+    BOARD_BLEED.left +
+    BOARD_BLEED.right;
+
+  /*
+   * Fit the board to the viewport and put it back under the player's eyes.
+   *
+   * Zoom snaps to the existing ladder rather than taking the raw ratio: the +/-
+   * buttons step by index, so an off-ladder value would make the next press jump.
+   * Centring runs on the next frame because the fit changes the scroller's
+   * content width first.
+   */
+  const handleFitBoard = () => {
+    const area = mapContainerRef.current;
+    if (!area) return;
+    const fitZoom = handleZoomFitToWidth(
+      paintedBoardWidth,
+      area.clientWidth - BOARD_CLEARANCE * 2,
+    );
+    requestAnimationFrame(() => {
+      const boardCentre = BOARD_CLEARANCE + (paintedBoardWidth * fitZoom) / 2;
+      area.scrollTo({
+        left: Math.max(0, boardCentre - area.clientWidth / 2),
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  };
 
   const movementState = useMovementMode();
   const { draft, targetSystemId, createTileSelectHandler } = movementState;
@@ -182,7 +231,11 @@ export function PannableMapView({ gameId }: Props) {
             className={classes.zoomControlsDynamic}
             style={{ right: "35px" }}
           >
-            <ZoomControls zoomClass="" hideFitToScreen />
+            <ZoomControls
+              zoomClass=""
+              hideFitToScreen
+              onFitBoard={handleFitBoard}
+            />
           </div>
         )}
 
@@ -198,8 +251,16 @@ export function PannableMapView({ gameId }: Props) {
               layoutHeightOverride={mapHeight}
               widthOverride={unscaledMapWidth}
               heightOverride={unscaledMapHeight}
+              /* Reserve the overlay bleed so the board's outermost paint lands
+                 inside the scroller instead of behind the chrome. The margins go
+                 on the wrapper, which is also the positioning context for the
+                 unit and planet detail cards, so board and tooltips shift
+                 together and no coordinate math changes.
+                 marginLeft was `auto`, which resolved to 0 the moment the wrapper
+                 grew wider than the map area — i.e. always. */
               styleOverrides={{
-                marginLeft: "auto",
+                marginTop: BOARD_BLEED.top * zoom + BOARD_CLEARANCE,
+                marginLeft: BOARD_BLEED.left * zoom + BOARD_CLEARANCE,
                 marginRight: "auto",
               }}
               gameData={gameData}
@@ -229,7 +290,14 @@ export function PannableMapView({ gameId }: Props) {
         )}
 
         {/* ---- Bottom HUD deck ---------------------------------------- */}
-        <Box className={classes.bottomHud}>
+        <Box
+          className={classes.bottomHud}
+          style={
+            {
+              "--board-bleed-bottom": `${BOARD_BLEED.bottom * zoom}px`,
+            } as CSSProperties
+          }
+        >
           <Box className={classes.bottomHudBody}>
         {gameData && (
           <ScaledContent
