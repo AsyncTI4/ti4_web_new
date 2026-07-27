@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { pruneFactionImageCache } from "@/utils/factionImageCache";
 
 const STORAGE_KEY = "activeTabs";
 
@@ -14,7 +15,7 @@ function readStoredTabs(): string[] {
       return [];
     }
 
-    const parsed = JSON.parse(raw);
+    const parsed = JSON.parse(raw) as unknown;
 
     return Array.isArray(parsed)
       ? parsed.filter((tab): tab is string => isNonEmptyString(tab))
@@ -27,6 +28,7 @@ function readStoredTabs(): string[] {
 
 function persistTabs(tabs: string[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tabs));
+  pruneFactionImageCache(tabs);
 }
 
 export function usePersistentGameTabs() {
@@ -41,6 +43,7 @@ export function usePersistentGameTabs() {
       new Set([...storedTabs, currentGame].filter(isNonEmptyString)),
     );
     setActiveTabs(normalizedTabs);
+    pruneFactionImageCache(normalizedTabs);
   }, [params.mapid]);
 
   useEffect(() => {
