@@ -1,0 +1,43 @@
+/* Capped-row column-flow rack: grows horizontally, keeps vertical rhythm.
+   Uniform column widths give a consistent scan line across cards. */
+.rack {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 170px;
+  height: 100%;
+}
+
+.column {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 4px;
+  width: 170px;
+  min-width: 170px;
+  max-width: 170px;
+}
+
+.column > * {
+  min-width: 0;
+  width: 100%;
+}
+
+/*
+ * Fluid variant for card layouts: the columns split the plate equally, so a
+ * compartment wider than its contents reads as wider seats, never as a rack
+ * parked beside dead field.
+ */
+.rackFluid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+
+.rackFluid .column {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}

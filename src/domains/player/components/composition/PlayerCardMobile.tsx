@@ -11,43 +11,32 @@ import { ArmyStats } from "@/domains/player/components";
 import { Nombox } from "./Nombox";
 import { useGameData } from "@/hooks/useGameContext";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
-import { Module } from "@/shared/ui/primitives/Module/Module";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import styles from "./PlayerCardMobile.module.css";
 import cx from "clsx";
 import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
 import { PlotCardsList } from "@/domains/player/components/PlotCardsList";
 import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
-import { PlayerEconomyStack } from "@/domains/player/components/PlayerCardShared/PlayerEconomyStack";
-import { PlayerCardCounts } from "@/domains/player/components/PlayerCardCounts";
-import { CCPool } from "@/domains/player/components/CCPool";
-import { FragmentsPool } from "@/domains/player/components/FragmentsPool";
-import { DebtTokens } from "@/domains/player/components/DebtTokens";
 import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCardShared/PlayerCardPlanetsSection";
 import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCardShared/getPlayerCardLayoutFields";
+import { Compartment } from "@/domains/player/components/PlayerCardShared/Compartment";
+import { LogisticsPlate } from "@/domains/player/components/PlayerCardShared/LogisticsPlate";
+import {
+  ObjectivesRack,
+  getObjectiveColumnCount,
+  getObjectiveRowCount,
+} from "@/domains/player/components/PlayerCardShared/ObjectivesRack";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
 import { PlayerCardHeaderMobile } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
-import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
-import { UnscoredSecret } from "@/domains/player/components/ScoredSecret/UnscoredSecret";
-import { Relic } from "@/domains/player/components/Relic";
-import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
-import { PhantomSlot } from "@/domains/player/components/PhantomSlot/PhantomSlot";
-import { chunkInto } from "@/domains/player/components/Tech/TechGridShared";
 import { getPlayerCardTechData } from "@/domains/player/components/PlayerCardShared/playerCardTechUtils";
 import { useSettingsStore } from "@/utils/appStore";
-import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {
   playerData: PlayerData;
 };
 
-/**
- * One compartment of the telemetry band. Deliberately unlabelled: the contents
- * of each group are self-evident to a player who knows the game, and the band's
- * fixed left-to-right order means position already identifies the compartment.
- * Character comes from the plate itself — cut corner, bevel, reticle brackets.
- */
+/** One compartment of the telemetry band; layout anchors live in this css. */
 function Section({
   className,
   brackets,
@@ -60,37 +49,15 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <Module
+    <Compartment
       brackets={brackets}
       density={density}
-      fill
       className={cx(styles.section, className)}
     >
       {children}
-    </Module>
+    </Compartment>
   );
 }
-
-type ObjectivesGridProps = {
-  secretsScored: Record<string, number>;
-  knownUnscoredSecrets?: Record<string, number>;
-  soCount?: number;
-  promissoryNotes: string[];
-  relics: string[];
-  exhaustedRelics?: string[];
-  minColumns?: number;
-  /** Rack depth imposed from outside, so sibling racks share a row count. */
-  minRows?: number;
-};
-
-type ObjectiveCounts = Omit<
-  ObjectivesGridProps,
-  "exhaustedRelics" | "minColumns" | "minRows"
->;
-
-const OBJECTIVE_COLUMN_WIDTH = 170;
-const OBJECTIVE_GRID_GAP = 4;
-const OBJECTIVES_PER_COLUMN = 6;
 
 /*
  * The shallowest a rack is ever drawn. Cards whose holdings and tech both fit in
@@ -99,143 +66,6 @@ const OBJECTIVES_PER_COLUMN = 6;
  * ordering and column counts are untouched.
  */
 const MIN_RACK_ROWS = 5;
-
-/** Secrets go in their own column; relics and notes share the ones after it. */
-function countObjectiveItems({
-  secretsScored,
-  knownUnscoredSecrets,
-  soCount,
-  promissoryNotes,
-  relics,
-}: ObjectiveCounts): { secretCount: number; otherCount: number } {
-  const knownUnscoredCount = Object.keys(knownUnscoredSecrets ?? {}).length;
-
-  return {
-    secretCount:
-      Object.keys(secretsScored).length +
-      knownUnscoredCount +
-      Math.max((soCount ?? 0) - knownUnscoredCount, 0),
-    otherCount: relics.length + promissoryNotes.length,
-  };
-}
-
-function getObjectiveColumnCount(counts: ObjectiveCounts): number {
-  const { secretCount, otherCount } = countObjectiveItems(counts);
-
-  if (secretCount + otherCount <= OBJECTIVES_PER_COLUMN) return 1;
-
-  return 1 + Math.ceil(otherCount / OBJECTIVES_PER_COLUMN);
-}
-
-/**
- * How deep this player's holdings rack is — the fullest column. Read by the card
- * so the tech rack beside it can be padded to the same depth.
- */
-function getObjectiveRowCount(counts: ObjectiveCounts): number {
-  const { secretCount, otherCount } = countObjectiveItems(counts);
-  const totalCount = secretCount + otherCount;
-
-  if (totalCount <= OBJECTIVES_PER_COLUMN) return totalCount;
-
-  const lastOtherColumn = otherCount % OBJECTIVES_PER_COLUMN;
-  const fullOtherColumns = otherCount >= OBJECTIVES_PER_COLUMN;
-
-  return Math.max(
-    secretCount,
-    fullOtherColumns ? OBJECTIVES_PER_COLUMN : lastOtherColumn
-  );
-}
-
-function ObjectivesGrid({
-  secretsScored,
-  knownUnscoredSecrets,
-  soCount,
-  promissoryNotes,
-  relics,
-  exhaustedRelics,
-  minColumns = 1,
-  minRows = 0,
-}: ObjectivesGridProps) {
-  const knownUnscoredIds = Object.keys(knownUnscoredSecrets ?? {});
-  const hiddenSecretCount = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
-  const secretItems = [
-    ...Object.keys(secretsScored).map((secretId) => (
-      <ScoredSecret
-        key={`scored-${secretId}`}
-        secretId={secretId}
-        variant="scored"
-      />
-    )),
-    ...knownUnscoredIds.map((secretId) => (
-      <ScoredSecret
-        key={`unscored-${secretId}`}
-        secretId={secretId}
-        variant="unscored"
-      />
-    )),
-    ...Array.from({ length: hiddenSecretCount }, (_, index) => (
-      <UnscoredSecret key={`placeholder-${index}`} />
-    )),
-  ];
-  const otherItems = [
-    ...relics.map((relicId, index) => (
-      <Relic
-        key={`relic-${relicId}-${index}`}
-        relicId={relicId}
-        isExhausted={exhaustedRelics?.includes(relicId) ?? false}
-      />
-    )),
-    ...promissoryNotes.map((promissoryNoteId) => (
-      <PromissoryNote
-        key={`pn-${promissoryNoteId}`}
-        promissoryNoteId={promissoryNoteId}
-      />
-    )),
-  ];
-  const allItems = [...secretItems, ...otherItems];
-  const minWidth =
-    minColumns * OBJECTIVE_COLUMN_WIDTH + (minColumns - 1) * OBJECTIVE_GRID_GAP;
-
-  /*
-   * The compartment is a rack: secrets in the first column, relics and notes in
-   * the ones after it, capped at six per column. Splitting is unchanged — only
-   * the leftover seats are now drawn, so a player holding two cards reads as two
-   * cards in a rack rather than as a panel that failed to fill.
-   *
-   * The rack is as deep as its fullest column, or as deep as the tech rack
-   * beside it (minRows) — the two share a floor so the compartments line up.
-   * Nothing pads to a fixed six: that would add a row nobody's holdings need and
-   * push the whole player plate taller than its content.
-   *
-   * Touch devices get no empty seats: they steady a wide desktop band, and on a
-   * phone they would be elements paying for nothing.
-   */
-  const itemColumns =
-    allItems.length <= OBJECTIVES_PER_COLUMN
-      ? [allItems]
-      : [secretItems, ...chunkInto(otherItems, OBJECTIVES_PER_COLUMN)];
-
-  const columnCount = Math.max(minColumns, itemColumns.length);
-  const rowCount = isMobileDevice()
-    ? 0
-    : itemColumns.reduce((max, column) => Math.max(max, column.length), minRows);
-
-  return (
-    <Box className={styles.objectivesGridSplit} style={{ minWidth }}>
-      {Array.from({ length: columnCount }, (_, columnIndex) => {
-        const columnItems = itemColumns[columnIndex] ?? [];
-        return (
-          <Box className={styles.objectivesColumn} key={`column-${columnIndex}`}>
-            {columnItems}
-            {Array.from({ length: rowCount - columnItems.length }, (_, index) => (
-              <PhantomSlot key={`phantom-${columnIndex}-${index}`} />
-            ))}
-          </Box>
-        );
-      })}
-    </Box>
-  );
-}
 
 type PlanetsAreaProps = {
   planets: string[];
@@ -393,44 +223,20 @@ export default function PlayerCardMobile(props: Props) {
           density="flush"
           className={styles.statusSection}
         >
-          <Box className={styles.logistics}>
-            <Box className={styles.logisticsTop}>
-              {/* Debt is not part of the stores stack here — it moved down to
-                  the salvage shelf, which has width to spare and vertical room
-                  the stores column does not. */}
-              <PlayerEconomyStack
-                tg={player.tg}
-                commodities={player.commodities}
-                commoditiesTotal={player.commoditiesTotal}
-              />
-              <Box className={styles.logisticsHand}>
-                <PlayerCardCounts
-                  pnCount={player.pnCount}
-                  acCount={player.acCount}
-                />
-              </Box>
-            </Box>
-            {/* Salvage above, command readout docked to the plate's floor. */}
-            <Box className={styles.logisticsFloor}>
-              <Box className={styles.fragmentRow}>
-                <FragmentsPool fragments={player.fragments} reserveSpace />
-                {player.debtTokens && (
-                  <DebtTokens debts={player.debtTokens} compact />
-                )}
-              </Box>
-              {settings.showPlayerAreaCommandTokens && (
-                <Box className={styles.ccRow}>
-                  <CCPool
-                    tacticalCC={player.tacticalCC}
-                    fleetCC={player.fleetCC}
-                    strategicCC={player.strategicCC}
-                    mahactEdict={mahactEdict}
-                    layout="horizontal"
-                  />
-                </Box>
-              )}
-            </Box>
-          </Box>
+          <LogisticsPlate
+            tg={player.tg}
+            commodities={player.commodities}
+            commoditiesTotal={player.commoditiesTotal}
+            pnCount={player.pnCount}
+            acCount={player.acCount}
+            fragments={player.fragments}
+            debtTokens={player.debtTokens}
+            tacticalCC={player.tacticalCC}
+            fleetCC={player.fleetCC}
+            strategicCC={player.strategicCC}
+            mahactEdict={mahactEdict}
+            showCommandTokens={settings.showPlayerAreaCommandTokens}
+          />
         </Section>
 
         <Section className={styles.leadersSection}>
@@ -438,7 +244,7 @@ export default function PlayerCardMobile(props: Props) {
         </Section>
 
         <Section>
-          <ObjectivesGrid
+          <ObjectivesRack
             secretsScored={player.secretsScored}
             knownUnscoredSecrets={player.knownUnscoredSecrets}
             soCount={player.soCount}

@@ -1,0 +1,177 @@
+/*
+ * The expanded player dossier: the pannable band's compartments, reflowed
+ * into rows. The band scrolls sideways and never wraps; this deck cannot
+ * scroll, so its rows wrap — and every compartment that can pick up slack
+ * grows to fill its row, so a wrapped state still reads as a deliberate
+ * arrangement rather than plates parked beside dead space.
+ *
+ * Hosted by the Player tab's card grid and the Panels-view sidebar. Both vary
+ * continuously in width (the tab with the viewport, the sidebar with its drag
+ * handle), so the breakpoints are container queries, not media queries.
+ */
+
+/* The deck is the container the compartment rows measure themselves against. */
+.deck {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: stretch;
+}
+
+/* Fixed-width anchor, same as the band; the racks beside it absorb the slack. */
+.statusSection {
+  flex: 0 0 auto;
+  min-width: 148px;
+}
+
+/* Fluid rack: grows to fill whatever the row deals it. */
+.holdingsSection {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.leadersSection {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.techSection,
+.planetsSection,
+.plotsSection {
+  width: 100%;
+}
+
+.unitsSection {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.nomboxSection {
+  flex: 0 1 auto;
+}
+
+.armySection {
+  flex: 0 0 auto;
+}
+
+/* One column per tech color. Fluid tracks, so the rack fills the plate at any
+   card width instead of pinning columns to a px measure the row can't honour. */
+.techRack {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.planetsFlow {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * The faction loadout: the deck's first plate, one bay per chip group —
+ * breakthrough, faction techs, promissory notes, abilities.
+ *
+ * The band's header rail keeps these groups on one seam-divided line, which a
+ * card is too narrow to honour; wrapped rail groups tumbled into ragged rows.
+ * Here the plate is a lattice instead: 1px gaps let a hairline ground show
+ * between bays — the condensed unit rack's construction — so the seams draw
+ * themselves around any wrap pattern. Bays grow to fill their row, and chips
+ * wrap *inside* their bay, so a group is never split across rows.
+ */
+.loadoutSection {
+  width: 100%;
+}
+
+.loadoutRail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  height: 100%;
+  background: var(--panel-hairline);
+}
+
+.loadoutGroup {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  gap: 3px;
+  padding: 4px 7px 6px;
+  background: var(--panel-field-strip);
+}
+
+/* An odd trailing bay takes the whole row, so the lattice never shows an
+   empty cell when a player is missing one of the four groups. */
+.loadoutGroup:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* The bay's name, engraved in the same label voice as a Module rail. It takes
+   the bay's full first line so the chips cluster beneath it. */
+.loadoutGroupLabel {
+  flex-basis: 100%;
+  margin-bottom: 1px;
+  font-family: var(--mantine-font-family-headings);
+  font-size: 9px;
+  font-weight: var(--weight-rail);
+  line-height: 1;
+  letter-spacing: var(--track-rail);
+  text-transform: uppercase;
+  color: var(--rail-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/*
+ * Narrow decks (three-across tab grid, mid-width sidebar): the command trio
+ * can't share a row, so the holdings rack drops to its own full-width row —
+ * its fluid columns widen to fill it — and the status plate stretches beside
+ * the leaders instead.
+ */
+@container (max-width: 649px) {
+  .statusSection {
+    flex: 1 1 148px;
+  }
+
+  .holdingsSection {
+    flex-basis: 100%;
+    order: 4;
+  }
+
+  .techRack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+ * Very narrow decks (a sidebar dragged tight): status and leaders can't share
+ * a row either, so each plate takes its own and grows into it — the leader
+ * tiles hold their size and the plate's slack reads as field, not as a hole
+ * beside a stranded plate.
+ */
+@container (max-width: 429px) {
+  .statusSection,
+  .leadersSection {
+    flex: 1 1 100%;
+  }
+}
+
+/* The loadout holds its 2x2 shape well past the other tiers — a bay's chips
+   wrap internally, so only a truly tight panel forces one bay per row. */
+@container (max-width: 299px) {
+  .loadoutRail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .loadoutGroup:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

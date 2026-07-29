@@ -1,0 +1,115 @@
+/*
+ * The logistics compartment holds three unrelated things — stores, hand, and
+ * command — which is why it read as clutter. Splitting it into stacked
+ * sub-compartments divided by hairlines gives each one a seat, and the command
+ * and salvage readouts sit in recessed troughs spanning the full plate.
+ */
+.logistics {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/*
+ * The upper region takes all the space above the floor and stretches its two
+ * columns into it, so the seam between them runs the region's full height and
+ * lands on the shelf rule below — a T-junction rather than a line trailing off
+ * into empty space. No bottom padding for the same reason: the seam has to reach
+ * the rule to meet it.
+ */
+.logisticsTop {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex: 1;
+  gap: 6px;
+  padding: 5px 6px 0;
+}
+
+/* Both columns centre in the drop, so the stores and the hand sit on one optical
+   line however tall the region grows. */
+.logisticsTop > * {
+  justify-content: center;
+}
+
+/* Stores and hand are different kinds of number, so a hairline separates them. */
+.logisticsHand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 6px;
+  border-left: 1px solid var(--panel-separator);
+}
+
+/*
+ * The compartment floor: salvage sits directly above the command readout, and the
+ * pair is pinned to the bottom of the plate. Command tokens are the number a
+ * player checks first, so it holds the same base line on every card in the stack
+ * regardless of how much sits above it.
+ */
+.logisticsFloor {
+  margin-top: auto;
+}
+
+/* TAC/FLT/STR: one trough, three equal columns divided by hairlines, so the
+   values line up card to card and read as three gauges rather than a sentence. */
+.ccRow {
+  padding: 4px 0 5px;
+  background: var(--trough-bg);
+  border-top: 1px solid var(--panel-hairline-strong);
+  box-shadow: var(--trough-inset);
+}
+
+.ccRow > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Each stat gets its own bay in the trough. */
+.ccRow > div > * {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 4px;
+}
+
+.ccRow > div > * + * {
+  border-left: 1px solid var(--panel-separator);
+}
+
+/*
+ * The salvage shelf, shared with the debt ledger.
+ *
+ * It holds one row's height at all times: a fragment sprite is 72 x 73 drawn at
+ * 32px wide in a stack padded 2px, and the sprites load lazily — until they
+ * decoded, the row used to collapse to its text height and drag the stores and
+ * hand above it upward. Reserving the height means the compartment reads the
+ * same on a card with fragments, a card without, and a card whose art hasn't
+ * arrived yet.
+ *
+ * Debt used to stack under commodities in the column above, where five creditors
+ * at ~90px each forced the compartment far past its base width. The shelf
+ * already had a full row of unused width — an empty pool is a centred "NO
+ * FRAGMENTS" in a field of nothing — so the two share it: fragments take what
+ * they need and the ledger takes the ~70px it needs at the trailing edge.
+ */
+.fragmentRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* Sprite height, + the stack's 2px top and bottom, + this row's own 3px/4px
+     padding and 1px rule, because the box is border-box. */
+  min-height: calc(32px * 73 / 72 + 4px + 8px);
+  padding: 3px 6px 4px;
+  border-top: 1px solid var(--panel-separator);
+}
+
+/* FragmentsPool brings its own Mantine padding, which double-pads the shelf.
+   Scoped to the pool so it cannot reach into the ledger beside it. */
+.fragmentRow > div:first-child {
+  padding: 0 !important;
+  gap: 5px;
+}

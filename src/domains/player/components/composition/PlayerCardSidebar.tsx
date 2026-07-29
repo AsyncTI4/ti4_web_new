@@ -1,192 +1,49 @@
-import { Stack, Box, SimpleGrid } from "@mantine/core";
-import softStyles from "./PlayerCardSidebar.module.css";
-import { DynamicTechGrid } from "@/domains/player/components/Tech/DynamicTechGrid";
-import { ScoredSecrets } from "@/domains/player/components/ScoredSecrets";
 import { PlayerData } from "@/entities/data/types";
-import { Leaders } from "@/domains/player/components/Leaders";
+import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
+import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCardShared/getPlayerCardLayoutFields";
+import { PlayerCardDeck } from "@/domains/player/components/PlayerCardShared/PlayerCardDeck";
 import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
 import { PlayerCardHeaderCompact } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
-import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
-import { PlayerCardRelicsPromissoryArea } from "@/domains/player/components/PlayerCardRelicsPromissoryArea";
-import { PlayerCardAbilitiesFactionTechs } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
-import { PlotCardsSection } from "@/domains/player/components/PlotCardsSection";
-import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
-import { PlayerCardLogisticsRow } from "@/domains/player/components/PlayerCardShared/PlayerCardLogisticsRow";
-import { PlayerCardPlanetsSection } from "@/domains/player/components/PlayerCardShared/PlayerCardPlanetsSection";
-import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
-import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
-import { Nombox } from "./Nombox";
-import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 type Props = {
   playerData: PlayerData;
 };
 
+/**
+ * The Panels-view sidebar dossier: the compact header over the same
+ * compartment deck as the Player tab. The sidebar's width rides a drag
+ * handle, and the deck's container queries reflow the compartments to
+ * whatever width it lands on.
+ */
 export default function PlayerCardSidebar(props: Props) {
-  const playerData = props.playerData;
-  const {
-    userName,
-    faction,
-    color,
-    tacticalCC,
-    fleetCC,
-    strategicCC,
-    fragments,
-    isSpeaker,
-    isTyrant,
-    nombox,
-    relics,
-    planets,
-    secretsScored,
-    knownUnscoredSecrets,
-    leaders,
-    abilities,
-    plotCards,
-    customPromissoryNotes,
-    breachTokensReinf,
-    galvanizeTokensReinf,
-    sleeperTokensReinf,
-    ghostWormholesReinf,
-  } = playerData;
-
-  const {
-    factionImageUrl: factionUrl,
-    planetEconomics,
-    filteredTechs,
-    allNotResearchedFactionTechs,
-    promissoryNotes,
-    mahactEdict,
-  } = usePlayerCardComputedData(playerData);
-
-  const scs = playerData.scs || [];
-  const exhaustedPlanetAbilities = playerData.exhaustedPlanetAbilities || [];
-  const exhaustedPlanets = playerData.exhaustedPlanets || [];
-  const hasCapturedUnits = nombox && Object.keys(nombox).length > 0;
+  const player = getPlayerCardLayoutFields(props.playerData);
+  const { factionImageUrl: factionUrl } = usePlayerCardComputedData(
+    props.playerData
+  );
 
   return (
-    <PlayerCardBox color={color} faction={faction}>
+    <PlayerCardBox
+      color={player.color}
+      faction={player.faction}
+      showFactionBackground={false}
+      subtleBorder
+      isActive={player.active}
+    >
       <PlayerCardHeaderCompact
-        userName={userName}
-        faction={faction}
-        factionDisplayName={getPlayerFactionDisplayName(playerData)}
-        color={color}
-        factionImageUrl={factionUrl}
-        isSpeaker={isSpeaker}
-        isTyrant={isTyrant}
-        scs={scs}
-        exhaustedSCs={playerData.exhaustedSCs}
-        passed={playerData.passed}
-        active={playerData.active}
+        userName={player.userName}
+        faction={player.faction}
+        factionDisplayName={player.factionDisplayName}
+        color={player.color}
+        factionImageUrl={factionUrl ?? ""}
+        isSpeaker={player.isSpeaker}
+        isTyrant={player.isTyrant}
+        scs={player.scs}
+        exhaustedSCs={player.exhaustedSCs}
+        passed={player.passed}
+        active={player.active}
       />
 
-      <PlayerCardAbilitiesFactionTechs
-        abilities={abilities}
-        notResearchedFactionTechs={allNotResearchedFactionTechs}
-        customPromissoryNotes={customPromissoryNotes}
-        breakthrough={playerData.breakthrough}
-      />
-
-      <Stack gap={0}>
-        <SimpleGrid cols={2} spacing="xs">
-          <Stack gap="sm">
-            <PlayerCardLogisticsRow
-              counts={{
-                pnCount: props.playerData.pnCount || 0,
-                acCount: props.playerData.acCount || 0,
-                tg: props.playerData.tg,
-                commodities: props.playerData.commodities,
-                commoditiesTotal: props.playerData.commoditiesTotal,
-                debtTokens: props.playerData.debtTokens,
-              }}
-              commandCounters={{
-                tacticalCC,
-                fleetCC,
-                strategicCC,
-                mahactEdict,
-              }}
-              fragments={fragments}
-              groupProps={{ gap: 4 }}
-            />
-            <ScoredSecrets
-              secretsScored={secretsScored}
-              unscoredSecrets={props.playerData.soCount || 0}
-              knownUnscoredSecrets={knownUnscoredSecrets}
-            />
-          </Stack>
-
-          <Stack gap={2}>
-            <Box mb={2}>
-              <Leaders leaders={leaders} faction={faction} />
-            </Box>
-          </Stack>
-        </SimpleGrid>
-
-        <Box mt="xs">
-          <PlayerCardRelicsPromissoryArea
-            relics={relics}
-            promissoryNotes={promissoryNotes}
-            exhaustedRelics={playerData.exhaustedRelics}
-          />
-        </Box>
-
-        <Box className={softStyles.softDivider} mt="xs" />
-
-        <Box p="md" className={softStyles.sectionBlock}>
-          <Stack gap="xs">
-            <DynamicTechGrid
-              techs={filteredTechs}
-              exhaustedTechs={props.playerData.exhaustedTechs}
-              breakthrough={props.playerData.breakthrough}
-            />
-          </Stack>
-        </Box>
-        {/* Resources and Planets Section */}
-        <Stack gap="xs">
-          <Box className={softStyles.softDividerTight} />
-
-          <PlayerCardPlanetsSection
-            planetEconomics={planetEconomics}
-            gap={8}
-          >
-            <Box style={{ flex: 1, minWidth: 0 }}>
-              <PlayerCardPlanetsArea
-                planets={planets}
-                exhaustedPlanetAbilities={exhaustedPlanetAbilities}
-                exhaustedPlanets={exhaustedPlanets}
-                gap={0}
-              />
-            </Box>
-            <ReinforcementTokensGroup
-              breachTokensReinf={breachTokensReinf}
-              sleeperTokensReinf={sleeperTokensReinf}
-              ghostWormholesReinf={ghostWormholesReinf}
-              galvanizeTokensReinf={galvanizeTokensReinf}
-              ml="xs"
-            />
-          </PlayerCardPlanetsSection>
-          <Box className={softStyles.softDividerTight} />
-        </Stack>
-        <Box p="md" className={softStyles.sectionBlock}>
-          <PlayerCardUnitsArea
-            playerData={playerData}
-            color={color}
-            faction={faction}
-            cols={6}
-          />
-        </Box>
-        <PlotCardsSection
-          plotCards={plotCards}
-          faction={faction}
-          layout="vertical"
-        />
-        <Box className={softStyles.softDividerTight} />
-
-        {hasCapturedUnits && (
-          <Box mt="md">
-            <Nombox capturedUnits={nombox} />
-          </Box>
-        )}
-      </Stack>
+      <PlayerCardDeck playerData={props.playerData} />
     </PlayerCardBox>
   );
 }

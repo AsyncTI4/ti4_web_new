@@ -1,10 +1,8 @@
-import { Group, Box, Stack } from "@mantine/core";
 import { getAbility } from "@/entities/lookup/abilities";
 import { Ability } from "./Ability";
 import { Tech } from "./Tech";
 import { Breakthrough } from "./Breakthrough/Breakthrough";
 import { PromissoryNote } from "./PromissoryNote";
-import Caption from "@/shared/ui/Caption/Caption";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
 import type { BreakthroughData } from "@/entities/data/types";
 import rail from "./PlayerCardHeader/HeaderRail.module.css";
@@ -13,10 +11,21 @@ type PlayerCardAbilitiesFactionTechsProps = {
   abilities?: string[];
   notResearchedFactionTechs?: string[];
   customPromissoryNotes?: string[];
-  gap?: number | string;
   breakthrough?: BreakthroughData;
   showFactionAbilities?: boolean;
   showBreakthrough?: boolean;
+  /**
+   * Container class for each chip group. Defaults to the header rail's seam
+   * grammar; the expanded card passes its own bay class so the same groups can
+   * seat into a lattice instead of a one-line rail.
+   */
+  groupClassName?: string;
+  /**
+   * When set, each bay opens with its name in this class. The band's rail
+   * stays unlabelled — position identifies its compartments — but the card's
+   * lattice reflows with width, so the bays carry their own names.
+   */
+  groupLabelClassName?: string;
 };
 
 function useBreakthroughValues(breakthrough?: BreakthroughData) {
@@ -43,13 +52,21 @@ export function PlayerCardAbilitiesFactionTechsMobile({
   breakthrough,
   showFactionAbilities = true,
   showBreakthrough = true,
+  groupClassName,
+  groupLabelClassName,
 }: PlayerCardAbilitiesFactionTechsProps) {
   const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
+  const groupClass = groupClassName ?? rail.railGroup;
+  const bayLabel = (label: string) =>
+    groupLabelClassName ? (
+      <span className={groupLabelClassName}>{label}</span>
+    ) : null;
 
   return (
     <>
       {showBreakthrough && breakthrough?.breakthroughId && (
-        <div className={rail.railGroup}>
+        <div className={groupClass}>
+          {bayLabel("Breakthrough")}
           <Breakthrough
             breakthroughId={breakthrough.breakthroughId}
             exhausted={breakthrough.exhausted}
@@ -59,24 +76,9 @@ export function PlayerCardAbilitiesFactionTechsMobile({
           />
         </div>
       )}
-      {showFactionAbilities && abilities.length > 0 && (
-        <div className={rail.railGroup}>
-          {abilities.map((abilityId, index) => {
-            const abilityData = getAbility(abilityId);
-            if (!abilityData) return null;
-            return <Ability id={abilityId} key={index} strong={false} />;
-          })}
-        </div>
-      )}
-      {showFactionAbilities && customPromissoryNotes.length > 0 && (
-        <div className={rail.railGroup}>
-          {customPromissoryNotes.map((pnId) => (
-            <PromissoryNote promissoryNoteId={pnId} key={pnId} />
-          ))}
-        </div>
-      )}
       {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
-        <div className={rail.railGroup}>
+        <div className={groupClass}>
+          {bayLabel("Faction Techs")}
           {notResearchedFactionTechs.map((techId) => (
             <Tech
               techId={techId}
@@ -87,90 +89,24 @@ export function PlayerCardAbilitiesFactionTechsMobile({
           ))}
         </div>
       )}
-    </>
-  );
-}
-
-export function PlayerCardAbilitiesFactionTechs({
-  abilities = [],
-  notResearchedFactionTechs = [],
-  customPromissoryNotes = [],
-  gap = 2,
-  breakthrough,
-  showFactionAbilities = true,
-}: PlayerCardAbilitiesFactionTechsProps) {
-  const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
-
-  return (
-    <Group wrap="wrap" gap="xs" mb="md" mt="xs" align="flex-start">
-      {breakthrough?.breakthroughId && (
-        <Stack gap={4}>
-          <Caption size="xs">Breakthrough</Caption>
-          <Breakthrough
-            breakthroughId={breakthrough.breakthroughId}
-            exhausted={breakthrough.exhausted}
-            tradeGoodsStored={breakthrough.tradeGoodsStored}
-            unlocked={breakthrough.unlocked ?? false}
-          />
-        </Stack>
+      {showFactionAbilities && customPromissoryNotes.length > 0 && (
+        <div className={groupClass}>
+          {bayLabel("Promissory Notes")}
+          {customPromissoryNotes.map((pnId) => (
+            <PromissoryNote promissoryNoteId={pnId} key={pnId} />
+          ))}
+        </div>
       )}
       {showFactionAbilities && abilities.length > 0 && (
-        <Stack gap={4}>
-          <Caption size="xs">Abilities</Caption>
-          <Group gap={gap}>
-            {abilities.map((abilityId, index) => {
-              const abilityData = getAbility(abilityId);
-              if (!abilityData) {
-                console.log("Could not find ability", abilityId);
-                return null;
-              }
-              return (
-                <Box
-                  key={index}
-                  style={{
-                    flexShrink: 1,
-                    minWidth: 0,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Ability id={abilityId} />
-                </Box>
-              );
-            })}
-          </Group>
-        </Stack>
+        <div className={groupClass}>
+          {bayLabel("Abilities")}
+          {abilities.map((abilityId, index) => {
+            const abilityData = getAbility(abilityId);
+            if (!abilityData) return null;
+            return <Ability id={abilityId} key={index} strong={false} />;
+          })}
+        </div>
       )}
-      {showFactionAbilities && customPromissoryNotes.length > 0 && (
-        <Stack gap={4}>
-          <Caption size="xs">Promissory Notes</Caption>
-          <Group gap={gap}>
-            {customPromissoryNotes.map((pnId) => (
-              <PromissoryNote promissoryNoteId={pnId} key={pnId} />
-            ))}
-          </Group>
-        </Stack>
-      )}
-      {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
-        <Stack gap={4}>
-          <Caption size="xs">Faction Techs</Caption>
-          <Group gap={gap} style={{ flexShrink: 1 }}>
-            {notResearchedFactionTechs.map((techId, index) => (
-              <Box
-                key={index}
-                style={{
-                  filter: "grayscale(0.5)",
-                }}
-              >
-                <Tech
-                  techId={techId}
-                  synergy={synergy}
-                  breakthroughUnlocked={breakthroughUnlocked}
-                />
-              </Box>
-            ))}
-          </Group>
-        </Stack>
-      )}
-    </Group>
+    </>
   );
 }
