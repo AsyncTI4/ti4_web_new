@@ -40,19 +40,6 @@ type Props = {
   gameId: string;
 };
 
-/*
- * How far the map's overlay layer paints outside the board wrapper, in unscaled
- * map units. Faction borders, control tokens and the stat plates all sit beyond
- * the tile grid, and the wrapper is sized to the grid.
- *
- * Measured, not estimated: 550 / 580 / 200 / 183, identical at 30, 40, 50 and
- * 60% zoom, so the bleed is a constant in map units and scales linearly with the
- * transform. Left flush against the scroller's corner this put 220px of home
- * plates above the map area and 232px left of it, with no scroll position that
- * could reach either — scrollTop and scrollLeft cannot go negative.
- */
-const BOARD_BLEED = { top: 550, left: 580, bottom: 200, right: 183 } as const;
-
 /** DESIGN.md's stated gap between the board's outermost paint and the chrome. */
 const BOARD_CLEARANCE = 20;
 
@@ -107,15 +94,18 @@ export function PannableMapView({ gameId }: Props) {
   const unscaledMapHeight = contentSize.height;
   const mapWidth = unscaledMapWidth * zoom;
   const mapHeight = unscaledMapHeight * zoom;
+  const scaledBleed = {
+    top: contentSize.bleed.top * zoom,
+    right: contentSize.bleed.right * zoom,
+    bottom: contentSize.bleed.bottom * zoom,
+    left: contentSize.bleed.left * zoom,
+  };
   const hideZoomControls = shouldHideZoomControls();
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   /* The board's painted extent, including the overlay bleed the wrapper excludes. */
   const paintedBoardWidth =
-    contentSize.width +
-    mapLayout.mapWidthExtra +
-    BOARD_BLEED.left +
-    BOARD_BLEED.right;
+    unscaledMapWidth + contentSize.bleed.left + contentSize.bleed.right;
 
   /*
    * Fit the board to the viewport and put it back under the player's eyes.
@@ -255,16 +245,22 @@ export function PannableMapView({ gameId }: Props) {
               layoutHeightOverride={mapHeight}
               widthOverride={unscaledMapWidth}
               heightOverride={unscaledMapHeight}
-              /* Reserve the overlay bleed so the board's outermost paint lands
-                 inside the scroller instead of behind the chrome. The margins go
-                 on the wrapper, which is also the positioning context for the
-                 unit and planet detail cards, so board and tooltips shift
-                 together and no coordinate math changes.
-                 marginLeft was `auto`, which resolved to 0 the moment the wrapper
-                 grew wider than the map area — i.e. always. */
+              /*
+               * Reserve only the overflow this game's coordinates can paint.
+               * Stat tiles can live outside the regular tile grid, but most maps
+               * have no top/left overflow at all; a fixed worst-case reserve grew
+               * into hundreds of empty pixels at larger zoom levels.
+               *
+               * When the complete painted width fits, centre it. Otherwise keep
+               * its left edge reachable with the standard board clearance.
+               */
               styleOverrides={{
-                marginTop: BOARD_BLEED.top * zoom + BOARD_CLEARANCE,
-                marginLeft: BOARD_BLEED.left * zoom + BOARD_CLEARANCE,
+                marginTop: scaledBleed.top + BOARD_CLEARANCE,
+                marginLeft: `max(${
+                  scaledBleed.left + BOARD_CLEARANCE
+                }px, calc((100% - ${mapWidth}px + ${scaledBleed.left}px - ${
+                  scaledBleed.right
+                }px) / 2))`,
                 marginRight: "auto",
               }}
               gameData={gameData}
@@ -298,7 +294,7 @@ export function PannableMapView({ gameId }: Props) {
           className={classes.bottomHud}
           style={
             {
-              "--board-bleed-bottom": `${BOARD_BLEED.bottom * zoom}px`,
+              "--board-bleed-bottom": `${scaledBleed.bottom}px`,
             } as CSSProperties
           }
         >
