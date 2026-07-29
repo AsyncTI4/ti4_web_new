@@ -1,22 +1,23 @@
 import { getTokenData } from "@/entities/lookup/tokens";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import {
   HEX_GRID_SIZE,
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
   HEX_VERTICES,
   DEFAULT_PLANET_RADIUS,
-  SPACE_HEAT_CONFIG,
 } from "./constants";
 import {
   parsePlanetsFromCoords,
   getInitialHeatSourcesForSystem,
 } from "./coordinateUtils";
-import { calculatePlanetHeat } from "./heatMap";
 import { processPlanetEntities } from "./planetPlacement";
 import { placeSpaceEntities } from "./spacePlacement";
 import { EntityStack } from "./types";
 import { PrePlacementTile } from "@/app/providers/context/types";
+import {
+  calculateCornerOffset,
+  findBestHexagonCorner,
+} from "./placementHelpers";
 
 export const getAllEntityPlacementsForTile = (
   systemId: string,
@@ -67,66 +68,15 @@ export const getAllEntityPlacementsForTile = (
 
 export const findOptimalProductionIconCorner = (
   systemId: string
-): { x: number; y: number } | null => {
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
-  const planets = Object.entries(planetCoords).map(([planetId, coordStr]) => {
-    const [x, y] = coordStr.split(",").map(Number);
-    return {
-      name: planetId,
-      x,
-      y,
-      radius: DEFAULT_PLANET_RADIUS,
-    };
-  });
-
-  const hexagonCorners = [
-    { vertex: HEX_VERTICES[0], position: "top-left" },
-    { vertex: HEX_VERTICES[1], position: "top-right" },
-  ];
-
-  let lowestHeat = Infinity;
-  let bestCorner: {
-    vertex: { x: number; y: number };
-    position: string;
-  } | null = null;
-
-  for (const corner of hexagonCorners) {
-    const heat = calculatePlanetHeat(
-      corner.vertex.x,
-      corner.vertex.y,
-      planets,
-      SPACE_HEAT_CONFIG.planetDecayRate,
-      SPACE_HEAT_CONFIG.maxHeat
-    );
-
-    if (heat < lowestHeat) {
-      lowestHeat = heat;
-      bestCorner = corner;
-    }
-  }
-
-  if (!bestCorner) {
-    bestCorner = { vertex: { x: 86.25, y: 0 }, position: "top-left" };
-  }
-
-  const IMAGE_SIZE = 48;
-  let offsetX = 0;
-  let offsetY = 0;
-
-  switch (bestCorner.position) {
-    case "top-left":
-      offsetX = -10;
-      offsetY = 0;
-      break;
-    case "top-right":
-      offsetX = -IMAGE_SIZE + 10;
-      offsetY = 0;
-      break;
-  }
+): { x: number; y: number } => {
+  const { vertex, position } = findBestHexagonCorner(
+    parsePlanetsFromCoords(systemId)
+  );
+  const { offsetX, offsetY } = calculateCornerOffset(position);
 
   return {
-    x: bestCorner.vertex.x + offsetX,
-    y: bestCorner.vertex.y + offsetY,
+    x: vertex.x + offsetX,
+    y: vertex.y + offsetY,
   };
 };
 

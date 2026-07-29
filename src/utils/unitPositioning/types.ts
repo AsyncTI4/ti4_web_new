@@ -51,6 +51,7 @@ export type UpdateCostMapOptions = {
   rimSquares?: { row: number; col: number }[];
   heatSources?: HeatSource[];
   currentFaction?: string;
+  rimClearance: number;
 };
 
 export type PlaceEntitiesOptions = {

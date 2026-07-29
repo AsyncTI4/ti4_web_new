@@ -55,6 +55,7 @@ export const placeEntitiesWithCostMap = ({
       heatSources: heatSources,
       currentFaction: stack.faction,
       heatConfig,
+      rimClearance: heatConfig.rimClearance[stack.entityType],
     });
     const optimalResult = findOptimalSquareGreedy(currentCostMap, gridSize);
     if (!optimalResult) {
@@ -94,6 +95,7 @@ export const placeEntitiesWithCostMap = ({
     heatSources: heatSources,
     currentFaction: undefined,
     heatConfig,
+    rimClearance: 0,
   });
 
   endPlacementMeasure({

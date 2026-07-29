@@ -2,8 +2,7 @@ import { EntityData } from "@/entities/data/types";
 import { gridToPixel } from "./coordinateUtils";
 import { EntityStack, EntityStackBase, HeatSource } from "./types";
 import { calculatePlanetHeat } from "./heatMap";
-import { FIGHTER_OFFSET_COLUMNS, SPACE_HEAT_CONFIG } from "./constants";
-import { HEX_VERTICES } from "./constants";
+import { HEX_VERTICES, SPACE_HEAT_CONFIG } from "./constants";
 
 export type GridDimensions = {
   gridSize: number;
@@ -83,12 +82,17 @@ export const tokenToEntityStack = (
   };
 };
 
+type ProductionCornerPosition = "top-left" | "top-right";
+
 export const findBestHexagonCorner = (
   planets: Array<{ name: string; x: number; y: number; radius: number }>
-): { vertex: { x: number; y: number }; position: string } => {
+): {
+  vertex: { x: number; y: number };
+  position: ProductionCornerPosition;
+} => {
   const hexagonCorners = [
-    { vertex: HEX_VERTICES[0], position: "top-left" },
-    { vertex: HEX_VERTICES[1], position: "top-right" },
+    { vertex: HEX_VERTICES[0], position: "top-left" as const },
+    { vertex: HEX_VERTICES[1], position: "top-right" as const },
   ];
 
   let lowestHeat = Infinity;
@@ -113,64 +117,32 @@ export const findBestHexagonCorner = (
 };
 
 export const calculateCornerOffset = (
-  position: string,
+  position: ProductionCornerPosition,
   imageSize: number = 48
 ): { offsetX: number; offsetY: number } => {
-  switch (position) {
-    case "top-left":
-      return { offsetX: -10, offsetY: 0 };
-    case "top-right":
-      return { offsetX: -imageSize + 10, offsetY: 0 };
-    default:
-      return { offsetX: 0, offsetY: 0 };
-  }
+  const offsetX = position === "top-left" ? -10 : -imageSize + 10;
+  return { offsetX, offsetY: 0 };
 };
 
-export const findNonRimSquare = (
+export const findEdgeSquare = (
   costMap: number[][],
   rimSquares: { row: number; col: number }[],
   gridSize: number,
-  position: "rightmost" | "leftmost"
-): { row: number; col: number } | null => {
-  const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
-
-  const colRange =
-    position === "rightmost"
-      ? Array.from({ length: gridSize }, (_, i) => gridSize - 1 - i)
-      : Array.from({ length: gridSize }, (_, i) => i);
-
-  for (const col of colRange) {
-    for (let row = 0; row < gridSize; row++) {
-      if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
-        const offsetCol =
-          position === "rightmost"
-            ? col - FIGHTER_OFFSET_COLUMNS
-            : col + FIGHTER_OFFSET_COLUMNS;
-        return { row, col: offsetCol };
-      }
-    }
-  }
-
-  return null;
-};
-
-export const findNonRimSquareWithoutOffset = (
-  costMap: number[][],
-  rimSquares: { row: number; col: number }[],
-  gridSize: number,
-  position: "rightmost" | "leftmost"
+  position: "rightmost" | "leftmost",
+  inwardOffsetColumns = 0
 ): Square | null => {
   const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
+  const step = position === "rightmost" ? -1 : 1;
+  const end = position === "rightmost" ? -1 : gridSize;
 
-  const colRange =
-    position === "rightmost"
-      ? Array.from({ length: gridSize }, (_, i) => gridSize - 1 - i)
-      : Array.from({ length: gridSize }, (_, i) => i);
-
-  for (const col of colRange) {
+  for (
+    let col = position === "rightmost" ? gridSize - 1 : 0;
+    col !== end;
+    col += step
+  ) {
     for (let row = 0; row < gridSize; row++) {
       if (costMap[row][col] !== -1 && !rimSet.has(`${row},${col}`)) {
-        return { row, col };
+        return { row, col: col + step * inwardOffsetColumns };
       }
     }
   }

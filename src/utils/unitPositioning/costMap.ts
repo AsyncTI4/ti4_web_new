@@ -14,9 +14,9 @@ export const initializeGroundCostMap = (
   planetY: number,
   planetRadius: number
 ): { costMap: number[][]; rimSquares: { row: number; col: number }[] } => {
-  const costMap: number[][] = Array(gridSize)
-    .fill(null)
-    .map(() => Array(gridSize).fill(-1));
+  const costMap = Array.from({ length: gridSize }, () =>
+    Array<number>(gridSize).fill(-1)
+  );
 
   const rimSquares: { row: number; col: number }[] = [];
 
@@ -68,9 +68,9 @@ export const initializeSpaceCostMap = (
   squareHeight: number,
   hexagonVertices: HexagonVertex[]
 ): { costMap: number[][]; rimSquares: { row: number; col: number }[] } => {
-  const costMap: number[][] = Array(gridSize)
-    .fill(null)
-    .map(() => Array(gridSize).fill(0));
+  const costMap = Array.from({ length: gridSize }, () =>
+    Array<number>(gridSize).fill(0)
+  );
 
   const rimSquares: { row: number; col: number }[] = [];
 

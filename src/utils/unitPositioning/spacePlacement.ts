@@ -1,5 +1,9 @@
 import { EntityData, FactionUnits } from "@/entities/data/types";
-import { SPACE_HEAT_CONFIG, DEFAULT_PLANET_RADIUS } from "./constants";
+import {
+  SPACE_HEAT_CONFIG,
+  DEFAULT_PLANET_RADIUS,
+  FIGHTER_OFFSET_COLUMNS,
+} from "./constants";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { placeEntitiesWithCostMap } from "./placement";
@@ -11,10 +15,9 @@ import {
   createHeatSourceFromCoords,
   createPlacementFromSquare,
   tokenToEntityStack,
-  findNonRimSquare,
+  findEdgeSquare,
   findBestHexagonCorner,
   calculateCornerOffset,
-  findNonRimSquareWithoutOffset,
 } from "./placementHelpers";
 
 type FighterStack = {
@@ -47,7 +50,13 @@ const placeFighterAt = (
   rimSquares: { row: number; col: number }[],
   grid: GridDimensions
 ): { placement: EntityStack; heatSource: HeatSource } | null => {
-  const square = findNonRimSquare(costMap, rimSquares, grid.gridSize, position);
+  const square = findEdgeSquare(
+    costMap,
+    rimSquares,
+    grid.gridSize,
+    position,
+    FIGHTER_OFFSET_COLUMNS
+  );
   if (!square) return null;
 
   const stackSize = getEntityStackSize(
@@ -159,7 +168,7 @@ const preplaceCommandCounterHeatSource = (
 ): HeatSource | null => {
   if (!hasCommandCounters) return null;
 
-  const square = findNonRimSquareWithoutOffset(
+  const square = findEdgeSquare(
     costMap,
     rimSquares,
     grid.gridSize,

@@ -1,5 +1,6 @@
 export const SPLAY_OFFSET_X = 10;
 export const SPLAY_OFFSET_Y = 10;
+export const DEFAULT_PLANET_RADIUS = 60;
 
 export const SPACE_HEAT_CONFIG = {
   maxHeat: 2000,
@@ -11,6 +12,13 @@ export const SPACE_HEAT_CONFIG = {
   factionRepulsionHeat: 600,
   factionDecayRate: 0.02,
   stackSizeMultiplier: 0.15,
+  rimClearance: {
+    unit: 0,
+    // Tokens paint around their anchor; keep that footprint inside one system.
+    token: DEFAULT_PLANET_RADIUS,
+    attachment: 0,
+    actioncard: 0,
+  },
 } as const;
 
 export const GROUND_HEAT_CONFIG = {
@@ -23,6 +31,12 @@ export const GROUND_HEAT_CONFIG = {
   factionRepulsionHeat: 500,
   factionDecayRate: 0.03,
   stackSizeMultiplier: 0.15,
+  rimClearance: {
+    unit: 0,
+    token: 0,
+    attachment: 0,
+    actioncard: 0,
+  },
 } as const;
 
 export const MAX_HEAT = SPACE_HEAT_CONFIG.maxHeat;
@@ -33,7 +47,6 @@ export const HEX_GRID_SIZE = 30;
 export const HEX_SQUARE_WIDTH = HEX_GRID_WIDTH / HEX_GRID_SIZE;
 export const HEX_SQUARE_HEIGHT = HEX_GRID_HEIGHT / HEX_GRID_SIZE;
 
-export const DEFAULT_PLANET_RADIUS = 60;
 export const STATS_HEAT_OFFSET = 15;
 export const STATS_HEAT_STACK_SIZE = 0.1;
 export const FIGHTER_OFFSET_COLUMNS = 2;

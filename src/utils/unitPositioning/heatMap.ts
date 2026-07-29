@@ -18,16 +18,14 @@ export const calculatePlanetHeat = (
   return totalHeat;
 };
 
-export const calculateRimHeat = (
+const calculateRimDistance = (
   squareX: number,
   squareY: number,
   rimSquares: { row: number; col: number }[],
   squareWidth: number,
-  squareHeight: number,
-  decayRate: number,
-  rimMaxHeat: number
+  squareHeight: number
 ): number => {
-  if (rimSquares.length === 0) return 0;
+  if (rimSquares.length === 0) return Infinity;
 
   let minRimDistance = Infinity;
   for (const rimSquare of rimSquares) {
@@ -40,8 +38,16 @@ export const calculateRimHeat = (
     minRimDistance = Math.min(minRimDistance, distance);
   }
 
-  return minRimDistance < Infinity
-    ? rimMaxHeat * Math.exp(-decayRate * minRimDistance)
+  return minRimDistance;
+};
+
+const calculateRimHeat = (
+  rimDistance: number,
+  decayRate: number,
+  rimMaxHeat: number
+): number => {
+  return rimDistance < Infinity
+    ? rimMaxHeat * Math.exp(-decayRate * rimDistance)
     : 0;
 };
 
@@ -97,6 +103,7 @@ export const updateCostMap = ({
   rimSquares = [],
   heatSources = [],
   currentFaction,
+  rimClearance,
 }: UpdateCostMapOptions): number[][] => {
   const costMap = existingCostMap.map((row) => [...row]);
   const hasHeatSources =
@@ -112,6 +119,17 @@ export const updateCostMap = ({
       if (costMap[row][col] === -1) continue;
       const squareX = col * squareWidth + squareWidth / 2;
       const squareY = row * squareHeight + squareHeight / 2;
+      const rimDistance = calculateRimDistance(
+        squareX,
+        squareY,
+        rimSquares,
+        squareWidth,
+        squareHeight
+      );
+      if (rimDistance < rimClearance) {
+        costMap[row][col] = -1;
+        continue;
+      }
       const planetHeat = calculatePlanetHeat(
         squareX,
         squareY,
@@ -120,11 +138,7 @@ export const updateCostMap = ({
         heatConfig.maxHeat
       );
       const rimHeat = calculateRimHeat(
-        squareX,
-        squareY,
-        rimSquares,
-        squareWidth,
-        squareHeight,
+        rimDistance,
         heatConfig.rimDecayRate,
         heatConfig.rimMaxHeat
       );

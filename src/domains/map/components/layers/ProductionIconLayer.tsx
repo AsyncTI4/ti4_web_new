@@ -9,8 +9,9 @@ type Props = {
 
 export function ProductionIconLayer({ systemId, highestProduction }: Props) {
   const icon = React.useMemo(() => {
+    if (highestProduction <= 0) return null;
+
     const optimalCorner = findOptimalProductionIconCorner(systemId);
-    if (!optimalCorner || highestProduction <= 0) return null;
 
     return (
       <ProductionIndicator

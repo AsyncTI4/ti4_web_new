@@ -38,7 +38,8 @@ const buildPriorityMap = (): { [key: string]: number } => {
   return map;
 };
 
-type QueueItem = EntityData & {
+type QueueItem = {
+  entity: EntityData;
   priority: number;
 };
 
@@ -54,7 +55,7 @@ const buildFactionQueues = (
       if (entity.count > 0) {
         const priority = priorityMap[entity.entityId] ?? 999;
         factionQueues[faction].push({
-          ...entity,
+          entity,
           priority,
         });
       }
@@ -91,7 +92,7 @@ const interleaveQueues = (
       if (factionQueues[faction].length > 0) {
         const queueItem = factionQueues[faction].shift()!;
         sortedStacks.push({
-          ...queueItem,
+          ...queueItem.entity,
           faction,
         });
       }
