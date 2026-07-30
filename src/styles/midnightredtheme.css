@@ -31,14 +31,6 @@
     --sidebar-border: 1px solid rgba(172, 28, 38, 0.22);
     --sidebar-blur: 8px;
 
-    /** Secret Hand Popup Tab (Right Sidebar) **/
-    --secret-tab-bg:  linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    --secret-tab-header-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    --secret-tab-header-border: 1px solid rgba(255, 255, 255, 0.16);
-
-    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(172, 28, 38, 0.26) 0%, rgba(106, 16, 24, 0.16) 100%);
-    --secret-tab-hover-border: 1px solid rgba(172, 28, 38, 0.45);
-
     /** Map **/
     /* Diagonal ember wash over the void */
     --main-bg:

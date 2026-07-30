@@ -84,13 +84,21 @@ rounded:
   lg: "8px"
   pill: "999px"
 spacing:
+  seam: "1px"
   hair: "2px"
+  hair-plus: "3px"
   xs: "4px"
+  xs-plus: "5px"
   sm: "6px"
   md: "8px"
   lg: "10px"
   xl: "12px"
-  xxl: "16px"
+  xxl: "14px"
+  xxxl: "16px"
+  section-sm: "20px"
+  section: "24px"
+  section-lg: "28px"
+  section-xl: "32px"
 components:
   surface:
     backgroundColor: "{colors.deep-space-surface}"
@@ -148,7 +156,7 @@ components:
 
 This system is an instrument reporting a battlefield. The galaxy map is the subject; everything else is calibration. Hairlines, bracket corners, monospace numerals and 9–11px uppercase labels are the marks on the instrument's face — they exist to frame and index data, never to dress it. A player opens a game to find out what changed, and the interface's whole job is to let them read the board and get out.
 
-Density is the operating condition, not a compromise. Type runs from 9px to 14px across most of the product, panels sit at 2–12px padding, and gaps step in 2px increments. That only works because the discipline is absolute: a fixed px scale, one radius vocabulary, one hairline alpha vocabulary, and semantic game colors that never shift meaning. **The system fails by becoming undisciplined, not by becoming boring.**
+Density is the operating condition, not a compromise. Type runs from 9px to 14px across most of the product and panels sit at 1–12px padding. That only works because the discipline is absolute: a fixed px type scale, a three-band spacing scale, one radius vocabulary, one hairline alpha vocabulary, and semantic game colors that never shift meaning. **The system fails by becoming undisciplined, not by becoming boring.**
 
 Identity lives in a seven-theme layer (`midnighttheme` and its blue / gray / red / violet / green siblings, plus `vaporwavetheme`) built entirely on top of a shared semantic token contract in `themeSharedTokens.css`. Themes may reinterpret surfaces, borders, ambience and texture. They may never reinterpret what a color *means*. This system explicitly rejects the **generic SaaS dashboard** (rounded cards on light gray, stat tiles, indigo accent), the **neon cyberpunk cliché** (gradient text, glow everywhere, decorative glass), the **cluttered fan-wiki** (dense but undesigned), and anything **over-animated or floaty** that delays reading the board.
 
@@ -258,7 +266,31 @@ Three tracking roles, all in `em` so they scale with the size: `--track-rail` 0.
 
 **The Ladder-Is-Not-The-Roles Rule.** Mantine's `fontSizes` ladder keeps its original values (xs 12 / sm 14 / md 16 / lg 18 / xl 20). It is **not** remapped onto the semantic roles: `xs` is used in 139 places as the chip and body size, and folding it onto the 10px label role shrank every chip label in the app. The roles are for CSS modules; the ladder is for component props.
 
-## 4. Elevation
+## 4. Spacing
+
+**Three bands, because one step size cannot serve a 9px chip label and a deck section.**
+
+| Band | Steps | What lives here |
+|---|---|---|
+| **Seam** | 1 · 2 · 3 · 4 · 5 · 6 | Inside a plate: chip padding, cell gutters, rack seams, the 1px gaps that let a container ground show between cells |
+| **Component** | 6 · 8 · 10 · 12 · 14 · 16 | Panel padding, gaps between controls, module bodies |
+| **Section** | 16 · 20 · 24 · 28 · 32 | Deck sections, page indents, the space between blocks that are not related |
+
+The seam band steps by **1px**, and that is deliberate rather than a failure of discipline. At 9–13px type a single pixel is a visible unit: 1, 3 and 5 are used 25, 41 and 28 times across the product — 3px is more common than 12px and twice as common as 16px. A scale that admitted 6 but not 5 would be describing a system this codebase does not have. Above 6px the eye stops resolving single pixels, so the component band steps by 2 and the section band by 4.
+
+Anything above 32px is page composition, not the component scale, and is out of scope here — the landing page (a brand surface with its own register, as with type) and one-off positional offsets like a hero's `padding-top` are not measured against these bands.
+
+### Named Rules
+
+**The Outer-Box Rule.** *The scale governs the outer box, not the padding box.* An element carrying 1px of edge treatment — a `border`, an `inset 0 0 0 1px` ring, or a parent frame layer inset by 1px — takes **`step − 1`** as padding so its outer edge still lands on the scale. This is why `7px` and `11px` are everywhere and are correct: `.tabsTab` is `padding: 7px 15px` inside a 1px border, which is 8 and 16 on the outside; `.hudButton` is `0 11px` inside a 1px border, which is 12; `Module`'s `.body` is `6px 7px` inside the frame layer's 1px, which is 8. Read a padding value together with its edge, never alone.
+
+**The Mirror Rule.** An empty socket or phantom placeholder takes the *same* padding as the real element it stands in for, borrowed value and all, so the two align in a column. `PhantomSlot`, `ScoredSecret`'s placeholder and `ArmyStats`' unbordered `.number` all carry `7px` because their bordered neighbours do. Correcting one of a mirrored pair to the nominal step is how a rack goes visibly ragged.
+
+**The Optical Exception.** A sub-pixel nudge that corrects letterform or glyph whitespace (`margin-left: 1.2px` on `PlanetCard`'s icon stack) is an optical adjustment, not spacing. It is exempt, and it should be commented at the site so the next reader does not "fix" it.
+
+**What is still off-scale.** `7 / 9 / 11 / 15` **without** a 1px edge to justify them, and `18 / 22 / 30 / 34` anywhere. These are the values to reach for the nearest step on sight.
+
+## 5. Elevation
 
 Depth is split by function: **milled data, lifted overlays.** Data panels are not flat — they are *shallow*. Each plate carries one pixel of top light and one pixel of bottom shade (`--machined-bevel`), which reads as material thickness, plus a cut corner (`--machined-chamfer`) that catches a brighter wedge along the bevel. What data panels never carry is a **drop shadow**: that is reserved for surfaces which genuinely float above the board.
 
@@ -292,6 +324,7 @@ Glow is not elevation at all; it belongs exclusively to state.
 - **Socket** (`--socket-bg`, `--socket-border`, `--socket-inset`, `--socket-tick`): empty capacity, pressed in, with walls and a registration tick.
 - **Trough** (`--trough-bg`, `--trough-inset`): a recessed channel seating a numeric readout. The bottom highlight is what sells the recess; without it a dark band just reads as a different fill.
 - **Lit bay** (`--bay-lit-tint`, `--bay-lit-edge`, `--bay-lit-light`): an upgraded or active bay lit from within — tint plus a brighter top light, no outer halo.
+- **Temper** (`--machined-temper-br`, `--machined-temper-tr`): an optional oxide bloom laid just inside the chamfer's cut diagonal, one value per direction. `none` by default, so a theme opts in and every other theme's notch is byte-identical. The chamfer is the only edge on a plate that was actually *cut* — the rest are just where the plate ends — so it is the only edge entitled to show a heat-affected zone. `midnightredtheme` is the one theme that opts in.
 - **Survey line** (`--survey-line`, `--survey-lit`): the two strokes of the survey lattice. `--survey-line` is the resting geometry and inherits `--panel-hairline-strong`, so no theme restates it; `--survey-lit` is the sweep passing and **is** themed — a lighter tint of that theme's own accent, for the same reason `--hud-edge-accent` is themed. Both lay marks directly onto the board's field.
 
 ### Shadow Vocabulary
@@ -304,7 +337,7 @@ Glow is not elevation at all; it belongs exclusively to state.
 - **State glow** (`0 0 8px` / `0 0 4px` of a signal color at 35–60%): Active-player indicator, at-threshold badges. **Never applied to a surface.**
 - **Inset top light** (`inset 0 1px 0 rgba(255,255,255,0.08)`): A single hairline of top light that gives tabs and badges material edge.
 
-## 5. Components
+## 6. Components
 
 **Component philosophy: machined and deliberate.** Every edge should feel cut rather than drawn — squared tabs, bracket corners, hairline seams, sharp alignment. Precision is the dominant tactile quality; hover is a small material shift, never a lift-and-bounce.
 
@@ -422,7 +455,7 @@ Default transition is **0.2s** (dominant across the system), with 0.12s for imme
 
 **The Reduced Motion Rule.** Every `@keyframes` needs a `@media (prefers-reduced-motion: reduce)` alternative — a crossfade or an instant state. This is currently satisfied in about 12 files and missing from several that define keyframes; treat closing that gap as part of any change touching animation.
 
-## 6. Do's and Don'ts
+## 7. Do's and Don'ts
 
 ### Do:
 - **Do** define new visual values as semantic tokens in `themeSharedTokens.css` and override them per theme. A hardcoded color in a component breaks six of the seven themes.

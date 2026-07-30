@@ -1,12 +1,11 @@
 import { Box, Center } from "@mantine/core";
 import { FactionTabBar } from "@/domains/game-shell/components/navigation/FactionTabBar";
 import { PlayerCardDisplay } from "./PlayerCardDisplay";
-import { SecretHand } from "./SecretHand";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
-import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
+import { useSecretHandAccess } from "@/hooks/useSecretHandAccess";
 
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;
@@ -15,7 +14,7 @@ type RightSidebarProps = {
   selectedArea: AreaType;
   activeArea: AreaType;
   selectedFaction: string | null;
-  activeUnit: any;
+  hasActiveUnit: boolean;
   onAreaSelect: (area: AreaType) => void;
   onAreaMouseEnter: (area: AreaType) => void;
   onAreaMouseLeave: () => void;
@@ -29,7 +28,7 @@ export function RightSidebar({
   selectedArea,
   activeArea,
   selectedFaction,
-  activeUnit,
+  hasActiveUnit,
   onAreaSelect,
   onAreaMouseEnter,
   onAreaMouseLeave,
@@ -40,31 +39,15 @@ export function RightSidebar({
   const loadingState = useGameDataState();
   const isError = !!loadingState?.isError;
 
-  const {
-    canViewSecretHand,
-    userDiscordId,
-    handData,
-    isHandLoading,
-    handError,
-    isSecretHandCollapsed,
-    toggleSecretHandCollapsed,
-  } = useSecretHandPanel({ gameId, playerData });
+  const { userDiscordId } = useSecretHandAccess(playerData);
   const userPlayer = playerData?.find(
     (p) => p.discordId === userDiscordId,
   );
 
-  // Determine the effective active area - default to user's faction if they're in the game
-  const effectiveActiveArea = (() => {
-    if (activeArea || selectedArea) return activeArea || selectedArea;
-    if (userPlayer) {
-      return {
-        type: "faction" as const,
-        faction: userPlayer.faction,
-        coords: { x: 0, y: 0 },
-      };
-    }
-    return null;
-  })();
+  const hoveredFaction =
+    activeArea?.type === "faction" ? activeArea.faction : null;
+  const effectiveFaction =
+    hoveredFaction ?? selectedFaction ?? userPlayer?.faction ?? null;
 
   return (
     <Box
@@ -100,7 +83,7 @@ export function RightSidebar({
           {playerData && (
             <PlayerCardDisplay
               playerData={playerData}
-              activeArea={effectiveActiveArea}
+              activeFaction={effectiveFaction}
             />
           )}
 
@@ -108,8 +91,8 @@ export function RightSidebar({
 
           {playerData &&
             !selectedFaction &&
-            !activeUnit &&
-            !effectiveActiveArea && (
+            !hasActiveUnit &&
+            !effectiveFaction && (
               <Center h="200px" className={classes.hoverInstructions}>
                 <Box>
                   <div>Hover over a unit</div>
@@ -123,22 +106,6 @@ export function RightSidebar({
             )}
         </Box>
       </Box>
-
-      {/* Secret Hand Pane - Bottom - Only show if user is authenticated */}
-      {canViewSecretHand && (
-        <Box style={{ flexShrink: 0 }}>
-          <SecretHand
-            isCollapsed={isSecretHandCollapsed}
-            onToggle={toggleSecretHandCollapsed}
-            handData={handData}
-            isLoading={isHandLoading}
-            error={handError}
-            playerData={playerData}
-            activeArea={effectiveActiveArea}
-            userDiscordId={userDiscordId ?? undefined}
-          />
-        </Box>
-      )}
     </Box>
   );
 }

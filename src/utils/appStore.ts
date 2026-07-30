@@ -140,6 +140,11 @@ type AppStore = {
   setHoveredPlanetId: (planetId: string | null) => void;
   setScrollToPlanetId: (planetId: string | null) => void;
 
+  /** The system whose dossier modal is open, or null when closed. */
+  systemDossier: { position: string; systemId: string } | null;
+  openSystemDossier: (position: string, systemId: string) => void;
+  closeSystemDossier: () => void;
+
   handleZoomIn: () => void;
   handleZoomOut: () => void;
   handleZoomReset: () => void;
@@ -200,6 +205,18 @@ export const useAppStore = create<AppStore>((set) => {
       planetId: "",
       coords: { x: 0, y: 0 },
     },
+
+    systemDossier: null,
+    openSystemDossier: (position: string, systemId: string) =>
+      set((state) => ({
+        ...state,
+        systemDossier: { position, systemId },
+      })),
+    closeSystemDossier: () =>
+      set((state) => ({
+        ...state,
+        systemDossier: null,
+      })),
 
     setHoveredTile: (id: string) =>
       set((state) => ({

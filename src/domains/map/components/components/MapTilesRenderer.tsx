@@ -3,7 +3,7 @@ import { PlayerStatsArea } from "@/domains/map/components/PlayerStatsArea";
 import { Tile } from "@/app/providers/context/types";
 import type { PlayerData } from "@/entities/data/types";
 import { computeControlOpenSides } from "@/utils/controlBorders";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
 type Props = {
@@ -30,7 +30,7 @@ type Props = {
   onTileHover: (position: string, isHovered: boolean) => void;
 };
 
-export function MapTilesRenderer({
+export const MapTilesRenderer = memo(function MapTilesRenderer({
   tiles,
   playerData,
   statTilePositions,
@@ -95,4 +95,4 @@ export function MapTilesRenderer({
       })}
     </>
   );
-}
+});

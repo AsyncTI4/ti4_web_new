@@ -8,7 +8,7 @@ import { UnitImagesLayer } from "./layers/UnitImagesLayer";
 import { ControlTokensLayer } from "./layers/ControlTokensLayer";
 import { PlanetCirclesLayer } from "./layers/PlanetCirclesLayer";
 import { CommodityIndicatorsLayer } from "./layers/CommodityIndicatorsLayer";
-import { ProductionIconLayer } from "./layers/ProductionIconLayer";
+import { SystemIndicatorsLayer } from "./layers/SystemIndicatorsLayer";
 import { CommandCounterLayer } from "./layers/CommandCounterLayer";
 import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
@@ -23,6 +23,9 @@ import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
 import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
+import { SystemHexTarget } from "./SystemHexTarget";
+import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { HEX_VERTICES } from "@/utils/unitPositioning";
 
 const ACTIVATION_HEX_PATH = `${HEX_VERTICES.map(
@@ -107,6 +110,25 @@ export const MapTile = React.memo<Props>(
     );
     const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
+    const openSystemDossier = useAppStore((state) => state.openSystemDossier);
+
+    /* The dossier owns the hex outside the modes that already own it;
+       hyperlanes have nothing to report, and touch devices keep the map
+       gesture-only. Hover feedback is pure CSS so the tile never re-renders
+       under a moving cursor; the static-data lookup is memoized off the
+       render path. */
+    const isHyperlane = React.useMemo(
+      () => !!getTileById(mapTile.systemId)?.isHyperlane,
+      [mapTile.systemId]
+    );
+    const dossierEligible =
+      !embedded &&
+      !distanceMode &&
+      !isMovingMode &&
+      !isMobileDevice() &&
+      !isHyperlane;
+    const handleDossierOpen = () =>
+      openSystemDossier(mapTile.position, mapTile.systemId);
 
     const isDistanceSelected =
       distanceMode && selectedTiles?.includes(ringPosition);
@@ -187,20 +209,18 @@ export const MapTile = React.memo<Props>(
           onTileSelect ? () => onTileSelect(ringPosition, systemId) : undefined
         }
       >
-        <div className={classes.tileContainer}>
+        <div
+          className={`${classes.tileContainer} ${
+            dossierEligible ? classes.dossierEligible : ""
+          }`}
+        >
           <Tile
             systemId={systemId}
             className={classes.tile}
             data-map-tile-visual="true"
-            onMouseEnter={() => {
-              setHoveredLocal(true);
-              if (onTileHover) onTileHover(ringPosition, true);
-            }}
-            onMouseLeave={() => {
-              setHoveredLocal(false);
-              if (onTileHover) onTileHover(ringPosition, false);
-            }}
           />
+
+          {dossierEligible && <SystemHexTarget onOpen={handleDossierOpen} />}
 
           <AnomalyOverlay
             show={mapTile.hasAnomaly}
@@ -224,6 +244,7 @@ export const MapTile = React.memo<Props>(
             position={position}
             onPlanetMouseEnter={onPlanetMouseEnter}
             onPlanetMouseLeave={onPlanetMouseLeave}
+            onPlanetClick={dossierEligible ? handleDossierOpen : undefined}
           />
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
           <WormholeBlockedLayer systemId={systemId} mapTile={mapTile} />
@@ -250,9 +271,11 @@ export const MapTile = React.memo<Props>(
             <PlanetTraitIconsLayer systemId={systemId} mapTile={mapTile} />
           )}
           <CommodityIndicatorsLayer systemId={systemId} mapTile={mapTile} />
-          <ProductionIconLayer
+          <SystemIndicatorsLayer
             systemId={systemId}
             highestProduction={mapTile.highestProduction}
+            largestCapacity={mapTile.largestCapacity}
+            hasBorderAnomaly={Boolean(mapTile.borderAnomalies?.length)}
           />
           <CommandCounterLayer
             systemId={systemId}

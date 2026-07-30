@@ -7,6 +7,7 @@ import ScoreBoard from "./domains/player/components/composition/ScoreBoard";
 import { UpdateNeededScreen } from "./domains/game-shell/components/chrome/UpdateNeededScreen";
 import { SettingsProvider } from "@/app/providers/context/SettingsContext";
 import { SettingsModal } from "./domains/settings/components/SettingsModal";
+import { SystemDossierModal } from "./domains/map/components/SystemDossier/SystemDossierModal";
 import { KeyboardShortcutsModal } from "./domains/game-shell/components/KeyboardShortcutsModal";
 import { GameContextProvider } from "@/app/providers/context/GameContextProvider";
 import { useSettingsStore } from "./utils/appStore";
@@ -202,6 +203,8 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
         opened={settings.settingsModalOpened}
         onClose={() => handlers.setSettingsModalOpened(false)}
       />
+
+      <SystemDossierModal />
 
       <KeyboardShortcutsModal
         opened={settings.keyboardShortcutsModalOpened}

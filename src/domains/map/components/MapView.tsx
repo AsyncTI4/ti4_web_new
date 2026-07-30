@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Box } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import classes from "@/shared/ui/map/MapUI.module.css";
@@ -27,12 +27,16 @@ import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
 import { getMapLayoutConfig } from "./mapLayout";
 import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
+import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 
 type Props = {
   gameId: string;
   embedded?: boolean;
   embeddedSidebar?: "left" | "right" | "none";
 };
+
+// Clears the 36px right-panel toggle at 165px with the toolbar's 8px gap.
+const PANELS_TOOLBAR_TOP = 209;
 
 export function MapView({
   gameId,
@@ -96,6 +100,14 @@ export function MapView({
   const selectedTileList = useMemo(
     () => Array.from(selectedTiles),
     [selectedTiles]
+  );
+  const isMovementOrigin = useCallback(
+    (position: string) => !!draft.origins?.[position],
+    [draft.origins],
+  );
+  const handleMapTileSelect = useMemo(
+    () => createTileSelectHandler(handleTileSelect),
+    [createTileSelectHandler, handleTileSelect],
   );
 
   const mapLayout = getMapLayoutConfig("panels");
@@ -218,8 +230,8 @@ export function MapView({
           showPathVisualization={!draft.targetPositionId}
           onPathIndexChange={handlePathIndexChange}
           isMovingMode={!!draft.targetPositionId}
-          isOrigin={(position) => !!draft.origins?.[position]}
-          onTileSelect={createTileSelectHandler(handleTileSelect)}
+          isOrigin={isMovementOrigin}
+          onTileSelect={handleMapTileSelect}
           onTileHover={handleTileHover}
           onUnitMouseOver={handleUnitMouseEnter}
           onUnitMouseLeave={handleUnitMouseLeave}
@@ -236,6 +248,15 @@ export function MapView({
           reaches the map area, so a control inside it lurches the board out from
           under the cursor on the way to being clicked. */}
       <ReconnectButton gameDataState={gameDataState} />
+
+      {!embedded && (
+        <FloatingMapToolbar
+          gameId={gameId}
+          rightOffset={floatingControlsRightOffset}
+          topOffset={PANELS_TOOLBAR_TOP}
+          isDragging={isDragging}
+        />
+      )}
 
       {!embedded && <DragHandle onMouseDown={handleSidebarMouseDown} />}
 
@@ -269,7 +290,7 @@ export function MapView({
             selectedArea={selectedArea}
             activeArea={activeArea}
             selectedFaction={selectedFaction}
-            activeUnit={activeUnit}
+            hasActiveUnit={activeUnit !== null}
             onAreaSelect={handleAreaSelect}
             onAreaMouseEnter={handleAreaMouseEnter}
             onAreaMouseLeave={handleAreaMouseLeave}

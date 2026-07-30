@@ -2,6 +2,20 @@
   position: relative;
 }
 
+/*
+ * A tile whose hex opens the system dossier. One inherited cursor for the
+ * whole container, so the pointer never flickers as it crosses units, planet
+ * circles and empty space; the hover wash is pure CSS on the container's
+ * :hover, so a moving cursor re-renders nothing.
+ */
+.dossierEligible {
+  cursor: pointer;
+}
+
+.dossierEligible:hover :global(.system-hex-target) {
+  opacity: 1;
+}
+
 .mapTile,
 .tile,
 .interactiveOverlay {
@@ -13,7 +27,13 @@
 }
 
 .tile {
-  pointer-events: auto;
+  /*
+   * Tile PNGs are rectangular even though the visible systems are hexes.
+   * Their transparent corners overlap neighboring systems and used to steal
+   * the pointer back and forth while it crossed a hex edge. Interactive
+   * layers own hit testing; the bitmap is presentation only.
+   */
+  pointer-events: none;
 }
 
 .anomalyOverlay,

@@ -23,13 +23,6 @@
     --left-sidebar-bg: rgb(10 10 10 / 92%);
     --sidebar-border: 1px solid rgba(160, 160, 160, 0.25);
 
-    --secret-tab-bg:  linear-gradient(135deg, rgba(8, 8, 8, 0.97) 0%, rgba(24, 24, 24, 0.94) 100%);
-    --secret-tab-header-bg: linear-gradient(135deg, rgba(8, 8, 8, 0.88) 0%, rgba(24, 24, 24, 0.82) 100%);
-    --secret-tab-header-border: 1px solid rgba(160, 160, 160, 0.28);
-
-    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(8, 8, 8, 0.25) 0%, rgba(24, 24, 24, 0.88) 100%);
-    --secret-tab-hover-border: 1px solid rgba(160, 160, 160, 0.35);
-
     /* Very subtle overhead sheen; barely-there on purpose */
     --main-bg:
       radial-gradient(120% 80% at 50% -10%, rgba(148, 163, 184, 0.05), transparent 55%),
@@ -155,4 +148,3 @@
        flight. A lighter tint of this theme's own accent, never a new hue. */
     --survey-lit: rgba(216, 216, 222, 0.8);
 }
-

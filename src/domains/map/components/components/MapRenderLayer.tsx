@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import type { CSSProperties } from "react";
+import { useCallback, type CSSProperties } from "react";
 import { ExpeditionLayer } from "@/domains/map/components/ExpeditionLayer";
 import { MapTilesRenderer } from "./MapTilesRenderer";
 import { PathVisualization } from "@/shared/ui/map/PathVisualization";
@@ -70,13 +70,19 @@ export function MapRenderLayer({
   mapPadding,
   mapZoom,
 }: Props) {
+  const isOnPath = useCallback(
+    (position: string) =>
+      targetSystemId ? true : systemsOnPath.has(position),
+    [systemsOnPath, targetSystemId],
+  );
+  const isTargetSelected = useCallback(
+    (systemId: string) =>
+      targetSystemId ? systemId === targetSystemId : false,
+    [targetSystemId],
+  );
+
   if (!gameData) return null;
   const replayAnimationsEnabled = !isMobileDevice();
-
-  const isOnPath = (position: string) =>
-    targetSystemId ? true : systemsOnPath.has(position);
-  const isTargetSelected = (systemId: string) =>
-    targetSystemId ? systemId === targetSystemId : false;
 
   return (
     <>

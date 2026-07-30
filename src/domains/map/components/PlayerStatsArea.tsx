@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Group, Stack, Text } from "@mantine/core";
 import {
   calculateTilePositions,
@@ -26,7 +26,7 @@ type PlayerStatsAreaProps = {
   statTilePositions: string[];
 };
 
-export function PlayerStatsArea({
+export const PlayerStatsArea = memo(function PlayerStatsArea({
   faction,
   playerData,
   statTilePositions,
@@ -88,9 +88,9 @@ export function PlayerStatsArea({
       : undefined; // no tint for normal state
 
   // Handle hexagons calculation callback
-  const handleHexagonsCalculated = (newHexagons: HexagonData[]) => {
+  const handleHexagonsCalculated = useCallback((newHexagons: HexagonData[]) => {
     setHexagons(newHexagons);
-  };
+  }, []);
 
   // Get first, second, and third hexagon positions for HTML overlays
   const firstHex = hexagons[0];
@@ -169,9 +169,7 @@ export function PlayerStatsArea({
                     c={
                       isExhausted
                         ? "gray.5"
-                        : SC_NUMBER_COLORS[
-                            SC_COLORS[sc as keyof typeof SC_COLORS]
-                          ]
+                        : SC_NUMBER_COLORS[SC_COLORS[sc]]
                     }
                     style={{
                       right: `${24 - index * 36}px`,
@@ -349,4 +347,4 @@ export function PlayerStatsArea({
       )}
     </>
   );
-}
+});

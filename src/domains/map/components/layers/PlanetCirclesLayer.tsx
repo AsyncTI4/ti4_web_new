@@ -6,12 +6,19 @@ import { Tile } from "@/app/providers/context/types";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
 import { getTokenData } from "@/entities/lookup/tokens";
 
+const DEFAULT_PLANET_RADIUS = 60;
+const TOKEN_PLANET_RADIUS = 45;
+const REGULAR_PLANET_Z_INDEX = 52;
+const TOKEN_PLANET_Z_INDEX = 54;
+
 type Props = {
   systemId: string;
   mapTile: Tile;
   position: { x: number; y: number };
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
+  /** Planet circles sit above the hex target, so they forward the click. */
+  onPlanetClick?: () => void;
 };
 
 export function PlanetCirclesLayer({
@@ -20,11 +27,15 @@ export function PlanetCirclesLayer({
   position,
   onPlanetMouseEnter,
   onPlanetMouseLeave,
+  onPlanetClick,
 }: Props) {
   const showExhaustedPlanets = useSettingsStore(
     (state) => state.settings.showExhaustedPlanets
   );
-  const hoveredPlanetId = useAppStore((state) => state.hoveredPlanetId);
+  const hoveredPlanetId = useAppStore((state) => {
+    const planetId = state.hoveredPlanetId;
+    return planetId && mapTile.planets[planetId] ? planetId : null;
+  });
   const hoverTimeoutRef = React.useRef<Record<string, number>>({});
 
   const handlePlanetMouseEnter = React.useCallback(
@@ -65,7 +76,7 @@ export function PlanetCirclesLayer({
     x: number,
     y: number,
     isExhausted: boolean,
-    keySuffix: string = ""
+    isTokenPlanet = false,
   ) => {
     const planet = getPlanetById(planetId);
     if (!planet) return null;
@@ -73,10 +84,12 @@ export function PlanetCirclesLayer({
     const isLegendary =
       planet?.legendaryAbilityName || planet?.legendaryAbilityText;
     const isMecatolRex = planetId === "mr" || planetId === "mrte";
-    let radius = 60;
+    let radius = isTokenPlanet ? TOKEN_PLANET_RADIUS : DEFAULT_PLANET_RADIUS;
     let circleOffsetX = 0;
-    let circleOffsetY = 0;
-    if (isMecatolRex) radius = 120;
+    let circleOffsetY = isTokenPlanet ? -10 : 0;
+    if (isTokenPlanet) {
+      if (planetId === "avernus") circleOffsetX = 10;
+    } else if (isMecatolRex) radius = 120;
     else if (
       planetId === "mallice" ||
       planetId === "lockedmallice" ||
@@ -85,11 +98,6 @@ export function PlanetCirclesLayer({
       planetId === "ordinian"
     ) {
       radius = 60;
-    } else if (planetId === "avernus") {
-      radius = 62;
-      // needs to be offset to account for the image having the 'avernus' text in the bottom
-      circleOffsetX = 10;
-      circleOffsetY = -10;
     } else if (planetId === "industrex") {
       radius = 55;
     } else if (planetId === "emelpar") {
@@ -115,7 +123,7 @@ export function PlanetCirclesLayer({
 
     return (
       <div
-        key={`${systemId}-${planetId}${keySuffix}-circle`}
+        key={`${systemId}-${planetId}${isTokenPlanet ? "-token" : ""}-circle`}
         className={cx(classes.planetCircle, isHighlighted && classes.highlighted)}
         style={{
           position: "absolute",
@@ -123,11 +131,14 @@ export function PlanetCirclesLayer({
           top: `${y + circleOffsetY}px`,
           width: `${diameter}px`,
           height: `${diameter}px`,
-          zIndex: 52,
+          zIndex: isTokenPlanet
+            ? TOKEN_PLANET_Z_INDEX
+            : REGULAR_PLANET_Z_INDEX,
           ...exhaustedBackdropFilter,
         }}
         onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
         onMouseLeave={() => handlePlanetMouseLeave(planetId)}
+        onClick={onPlanetClick}
       />
     );
   };
@@ -176,7 +187,7 @@ export function PlanetCirclesLayer({
         tokenPlanet.x,
         tokenPlanet.y,
         planetTileData?.exhausted || false,
-        "-token"
+        true,
       );
       return circle ? [circle] : [];
     }

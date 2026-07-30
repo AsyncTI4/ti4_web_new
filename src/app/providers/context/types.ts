@@ -5,6 +5,7 @@ import { SocketReadyState } from "@/hooks/useGameSocket";
 import {
   PlayerDataResponse,
   WebScoreBreakdown,
+  CapacityUsage,
   EntityData,
   BorderAnomalyInfo,
 } from "@/entities/data/types";
@@ -135,6 +136,7 @@ export type Tile = {
     };
   };
   highestProduction: number;
+  largestCapacity?: CapacityUsage;
   commandCounters: string[];
   entityPlacements: EntityStack[];
   borderAnomalies?: BorderAnomalyInfo[];

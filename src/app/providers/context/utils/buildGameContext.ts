@@ -9,6 +9,7 @@ import {
   buildFactionColorMap,
 } from "@/utils/colorOptimization";
 import { buildFactionImageMap } from "@/entities/lookup/factions";
+import { lookupUnit } from "@/entities/lookup/units";
 import {
   computeAllExhaustedPlanets,
   getTechSpecialties,
@@ -31,6 +32,7 @@ import {
 } from "@/utils/hexagonUtils";
 import {
   PlayerDataResponse,
+  CapacityUsage,
   EntityData,
   BorderAnomalyInfo,
 } from "@/entities/data/types";
@@ -76,6 +78,48 @@ function aggregateEntities(data: Record<string, EntityData[]>) {
     actionCards: allActionCards,
     unitsByFaction: allUnitsByFaction,
   };
+}
+
+function getLargestCapacity(
+  capacities: CapacityUsage[],
+): CapacityUsage | undefined {
+  return capacities.reduce<CapacityUsage | undefined>(
+    (largest, capacity) =>
+      !largest || capacity.total > largest.total ? capacity : largest,
+    undefined,
+  );
+}
+
+function calculateLargestCapacity(
+  unitsByFaction: Record<string, EntityData[]>,
+  players: PlayerDataResponse["playerData"],
+): CapacityUsage | undefined {
+  const capacityByFaction = Object.entries(unitsByFaction).flatMap(
+    ([faction, entities]) => {
+      const player = players.find((candidate) => candidate.faction === faction);
+      if (!player) return [];
+
+      const capacity = entities.reduce<CapacityUsage>(
+        (total, entity) => {
+          const unit = lookupUnit(entity.entityId, faction, player);
+          const usesCapacity =
+            unit?.baseType === "fighter" || unit?.isGroundForce === true;
+          return {
+            total: total.total + (unit?.capacityValue ?? 0) * entity.count,
+            used:
+              total.used +
+              (usesCapacity ? (unit.capacityUsed ?? 0) * entity.count : 0),
+            ignored: total.ignored,
+          };
+        },
+        { total: 0, used: 0, ignored: 0 },
+      );
+
+      return capacity.total > 0 ? [capacity] : [];
+    },
+  );
+
+  return getLargestCapacity(capacityByFaction);
 }
 
 export function buildGameContext(
@@ -263,6 +307,9 @@ export function buildGameContext(
       planets,
       commandCounters: tileData.ccs ?? [],
       highestProduction: Math.max(...Object.values(tileData.production)),
+      largestCapacity:
+        getLargestCapacity(Object.values(tileData.capacity ?? {})) ??
+        calculateLargestCapacity(unitsByFaction, playerData),
       hasTechSkips: hasTechSkips(planets),
       hasAttachments: hasAttachments(planets),
       controlledBy: getTileController(planets, unitsByFaction),

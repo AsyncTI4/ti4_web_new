@@ -14,14 +14,17 @@ import { processPlanetEntities } from "./planetPlacement";
 import { placeSpaceEntities } from "./spacePlacement";
 import { EntityStack } from "./types";
 import { PrePlacementTile } from "@/app/providers/context/types";
-import {
-  calculateCornerOffset,
-  findBestHexagonCorner,
-} from "./placementHelpers";
+import { calculateSystemIndicatorLayout } from "./placementHelpers";
+import { getTileById } from "@/domains/map/model/mapgen/systems";
+
+export const hasCrowdedSystemRim = (
+  systemId: string,
+  hasBorderAnomaly = false,
+) => hasBorderAnomaly || getTileById(systemId)?.tileBack === "fracture";
 
 export const getAllEntityPlacementsForTile = (
   systemId: string,
-  tile: PrePlacementTile
+  tile: PrePlacementTile,
 ): EntityStack[] => {
   const planets = parsePlanetsFromCoords(tile.systemId);
   const initialHeatSources = getInitialHeatSourcesForSystem(systemId);
@@ -39,6 +42,11 @@ export const getAllEntityPlacementsForTile = (
     commandCounters: tile.commandCounters || [],
     systemId,
     highestProduction,
+    largestCapacity: tile.largestCapacity,
+    hasCrowdedRim: hasCrowdedSystemRim(
+      systemId,
+      Boolean(tile.borderAnomalies?.length),
+    ),
   });
 
   spaceEntityPlacements.forEach((entity) => {
@@ -66,19 +74,14 @@ export const getAllEntityPlacementsForTile = (
   return [...spaceEntityPlacements, ...planetEntityPlacements];
 };
 
-export const findOptimalProductionIconCorner = (
-  systemId: string
-): { x: number; y: number } => {
-  const { vertex, position } = findBestHexagonCorner(
-    parsePlanetsFromCoords(systemId)
+export const findSystemIndicatorLayout = (
+  systemId: string,
+  hasBorderAnomaly = false,
+) =>
+  calculateSystemIndicatorLayout(
+    parsePlanetsFromCoords(systemId),
+    hasCrowdedSystemRim(systemId, hasBorderAnomaly),
   );
-  const { offsetX, offsetY } = calculateCornerOffset(position);
-
-  return {
-    x: vertex.x + offsetX,
-    y: vertex.y + offsetY,
-  };
-};
 
 // Re-export commonly used types and constants
 export type {

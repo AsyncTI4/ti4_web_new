@@ -22,13 +22,6 @@
     --left-sidebar-bg: rgb(6 12 4 / 91%);
     --sidebar-border: 1px solid rgba(95, 115, 85, 0.75);
 
-    /** Secret Hand Popup Tab (Right Sidebar) **/
-    --secret-tab-bg: linear-gradient(135deg, rgba(6, 12, 4, 0.96) 0%, rgba(15, 20, 12, 0.92) 100%);
-    --secret-tab-header-bg: linear-gradient(135deg, rgba(14, 22, 12, 0.84) 0%, rgba(25, 34, 20, 0.76) 100%);
-    --secret-tab-header-border: 1px solid rgba(95, 115, 85, 0.75);
-    --secret-tab-hover-bg: linear-gradient(135deg, rgba(36, 50, 30, 0.4) 0%, rgba(56, 85, 50, 0.8) 100%);
-    --secret-tab-hover-border: 1px solid rgba(105, 125, 95, 0.9);
-
     /** Map **/
     /* Dappled canopy light drifting in from the corners */
     --main-bg:
@@ -177,5 +170,4 @@
        flight. A lighter tint of this theme's own accent, never a new hue. */
     --survey-lit: rgba(94, 232, 145, 0.82);
 }
-
 

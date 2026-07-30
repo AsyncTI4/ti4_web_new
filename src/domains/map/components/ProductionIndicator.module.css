@@ -1,7 +1,5 @@
 .productionContainer {
   position: absolute;
-  width: 48px;
-  height: 48px;
   z-index: 99;
   pointer-events: none;
   display: flex;
@@ -10,8 +8,8 @@
 }
 
 .productionIcon {
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: 100%;
 }
 
 .productionValue {

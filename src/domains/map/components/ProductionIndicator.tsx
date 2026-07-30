@@ -1,4 +1,5 @@
 import { cdnImage } from "@/entities/data/cdnImage";
+import { PRODUCTION_INDICATOR_SIZE } from "@/utils/unitPositioning/constants";
 import classes from "./ProductionIndicator.module.css";
 
 type Props = {
@@ -14,6 +15,8 @@ export const ProductionIndicator = ({ x, y, productionValue }: Props) => {
       style={{
         left: `${x}px`,
         top: `${y}px`,
+        width: `${PRODUCTION_INDICATOR_SIZE}px`,
+        height: `${PRODUCTION_INDICATOR_SIZE}px`,
       }}
     >
       <img

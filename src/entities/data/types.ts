@@ -181,6 +181,12 @@ export type CapturedUnitsData = {
   [factionColor: string]: string[];
 };
 
+export type CapacityUsage = {
+  total: number;
+  used: number;
+  ignored: number;
+};
+
 export type TileUnitData = {
   space: {
     [factionName: string]: EntityData[];
@@ -190,7 +196,7 @@ export type TileUnitData = {
   anomaly: boolean;
   production: { [factionColor: string]: number };
   capacity?: {
-    [factionColor: string]: { total: number; used: number; ignored: number };
+    [factionColor: string]: CapacityUsage;
   };
   pds: {
     [factionName: string]: { count: number; expected: number };

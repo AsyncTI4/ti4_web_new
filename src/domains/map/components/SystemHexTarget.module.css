@@ -1,0 +1,32 @@
+/*
+ * The wash is pre-painted and hidden behind element opacity: toggling opacity
+ * is compositor work, where animating the path's fill/stroke repainted a
+ * 345x299 vector on every tile the cursor crossed.
+ */
+.target {
+  position: absolute;
+  inset: 0;
+  width: 345px;
+  height: 299px;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+
+/* Only the painted hex is a target — the svg itself stays inert so the
+   bounding-box corners never steal a neighboring tile's events. Opacity does
+   not affect hit testing, so the invisible path still receives the click.
+   Faint by design: an invitation, not a highlight — selection uses 0.25+. */
+.hex {
+  pointer-events: all;
+  fill: rgba(var(--gd-blue), 0.1);
+  stroke: rgba(var(--gd-blue), 0.5);
+  stroke-width: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .target {
+    transition: none;
+  }
+}

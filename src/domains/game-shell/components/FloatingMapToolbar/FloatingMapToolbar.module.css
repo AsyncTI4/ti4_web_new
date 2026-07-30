@@ -1,6 +1,5 @@
 .toolbar {
   position: fixed;
-  top: 163px;
   display: flex;
   flex-direction: column;
   gap: 8px;

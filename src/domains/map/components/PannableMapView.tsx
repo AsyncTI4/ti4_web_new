@@ -1,4 +1,10 @@
-import { useMemo, useRef, type CSSProperties, type RefObject } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  type CSSProperties,
+  type RefObject,
+} from "react";
 import { Box, Group, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
@@ -18,7 +24,6 @@ import {
 } from "@/utils/zoom";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import PlayerCardMobile from "@/domains/player/components/composition/PlayerCardMobile";
-import { SecretHand } from "@/domains/game-shell/components/SecretHand";
 import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
@@ -31,7 +36,6 @@ import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { MovementLayerPortal } from "./components/MovementLayerPortal";
-import { useSecretHandPanel } from "@/hooks/useSecretHandPanel";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 import Caption from "@/shared/ui/Caption/Caption";
@@ -135,14 +139,6 @@ export function PannableMapView({ gameId }: Props) {
   const movementState = useMovementMode();
   const { draft, targetSystemId, createTileSelectHandler } = movementState;
   const {
-    canViewSecretHand,
-    userDiscordId,
-    handData,
-    isHandLoading,
-    handError,
-  } = useSecretHandPanel({ gameId, playerData: gameData?.playerData });
-
-  const {
     selectedTiles,
     pathResult,
     hoveredTile,
@@ -155,6 +151,14 @@ export function PannableMapView({ gameId }: Props) {
     distanceMode: isMobile ? false : settings.distanceMode,
     tiles: tilesList,
   });
+  const isMovementOrigin = useCallback(
+    (position: string) => !!draft.origins?.[position],
+    [draft.origins],
+  );
+  const handleMapTileSelect = useMemo(
+    () => createTileSelectHandler(handleTileSelect),
+    [createTileSelectHandler, handleTileSelect],
+  );
 
   useMapKeyboardShortcuts({
     handlers,
@@ -195,24 +199,7 @@ export function PannableMapView({ gameId }: Props) {
         </Box>
       )}
       {showFloatingMapToolbar && (
-        <FloatingMapToolbar
-          rightOffset="35px"
-          cardsPanel={
-            !DISABLE_PLAYER_AREA_RENDERING && canViewSecretHand ? (
-              <SecretHand
-                isCollapsed={false}
-                onToggle={() => {}}
-                hideHeader
-                handData={handData}
-                isLoading={isHandLoading}
-                error={handError}
-                playerData={gameData?.playerData}
-                activeArea={null}
-                userDiscordId={userDiscordId ?? undefined}
-              />
-            ) : undefined
-          }
-        />
+        <FloatingMapToolbar gameId={gameId} rightOffset="35px" />
       )}
 
       <Box
@@ -274,8 +261,8 @@ export function PannableMapView({ gameId }: Props) {
               showPathVisualization={!draft.targetPositionId}
               onPathIndexChange={handlePathIndexChange}
               isMovingMode={!!draft.targetPositionId}
-              isOrigin={(position) => !!draft.origins?.[position]}
-              onTileSelect={createTileSelectHandler(handleTileSelect)}
+              isOrigin={isMovementOrigin}
+              onTileSelect={handleMapTileSelect}
               onTileHover={handleTileHover}
               onUnitMouseOver={handleUnitMouseEnter}
               onUnitMouseLeave={handleUnitMouseLeave}

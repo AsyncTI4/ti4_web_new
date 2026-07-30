@@ -49,7 +49,7 @@ export function useTabsAndTooltips() {
 
       hoverTimeoutRef.current = newTimeout;
     },
-    [selectedArea]
+    []
   );
 
   const handleMouseLeave = useCallback(() => {

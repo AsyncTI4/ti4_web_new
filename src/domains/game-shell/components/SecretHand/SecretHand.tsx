@@ -1,6 +1,5 @@
-import { Box, Text, Stack, SimpleGrid, Image, Group } from "@mantine/core";
+import { Box, Text, Stack, SimpleGrid } from "@mantine/core";
 import { useState } from "react";
-import { IconChevronUp, IconChevronDown } from "@tabler/icons-react";
 import { ActionCard } from "@/domains/player/components/ActionCard";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
 import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
@@ -9,92 +8,22 @@ import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDet
 import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
 import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCard";
 import { PlayerHandData } from "@/shared/types/playerHand";
-import { PlayerData } from "@/entities/data/types";
-import { getFactionImage } from "@/entities/lookup/factions";
 import classes from "./SecretHand.module.css";
 
 type Props = {
-  isCollapsed: boolean;
-  onToggle: () => void;
-  hideHeader?: boolean;
   handData?: PlayerHandData;
   isLoading?: boolean;
   error?: Error | null;
-  playerData?: PlayerData[];
-  activeArea?: any;
-  userDiscordId?: string;
 };
 
-export function SecretHand({
-  isCollapsed,
-  onToggle,
-  hideHeader = false,
-  handData,
-  isLoading,
-  error,
-  playerData,
-  activeArea,
-  userDiscordId,
-}: Props) {
+export function SecretHand({ handData, isLoading, error }: Props) {
   const [selectedCard, setSelectedCard] = useState<{
     type: "action" | "secret" | "promissory";
     id: string;
   } | null>(null);
 
-  // Determine if we're viewing the user's own faction
-  const currentFaction =
-    activeArea?.type === "faction" ? activeArea.faction : null;
-  const currentPlayer = playerData?.find((p) => p.faction === currentFaction);
-  const isViewingOwnFaction =
-    currentPlayer && userDiscordId && currentPlayer.discordId === userDiscordId;
-  const imageUrl = currentPlayer !== undefined ? getFactionImage(
-    currentPlayer.faction,
-    currentPlayer.factionImage,
-    currentPlayer.factionImageType
-  ) : null;
-
-  // Get title and icon for the header
-  const headerTitle = isViewingOwnFaction ? "Your Hand" : "Hand";
-  const headerIcon =
-    isViewingOwnFaction && currentPlayer ? (
-      <Image
-        src={imageUrl}
-        alt={currentPlayer.faction}
-        w={16}
-        h={16}
-      />
-    ) : null;
-
-  if (isCollapsed && !hideHeader) {
-    return (
-      <Box className={classes.collapsedContainer}>
-        <Box className={classes.collapsedHeader} onClick={onToggle}>
-          <Group gap="xs" align="center">
-            {headerIcon}
-            <Text size="sm" fw={600} c="white">
-              {headerTitle}
-            </Text>
-          </Group>
-          <IconChevronUp size={14} color="var(--mantine-color-gray-5)" />
-        </Box>
-      </Box>
-    );
-  }
-
   return (
     <Box className={classes.container}>
-      {!hideHeader && (
-        <Box className={classes.header} onClick={onToggle}>
-          <Group gap="xs" align="center">
-            {headerIcon}
-            <Text size="sm" fw={600} c="white">
-              {headerTitle}
-            </Text>
-          </Group>
-          <IconChevronDown size={14} color="var(--mantine-color-gray-5)" />
-        </Box>
-      )}
-
       <Box className={classes.content}>
         {isLoading && (
           <Text size="sm" c="gray.5" ta="center" py="md">

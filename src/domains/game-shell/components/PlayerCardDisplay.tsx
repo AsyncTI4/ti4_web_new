@@ -1,42 +1,34 @@
 import { Box } from "@mantine/core";
+import { memo } from "react";
 import PlayerCardSidebar from "@/domains/player/components/composition/PlayerCardSidebar";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { PlayerData } from "@/entities/data/types";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 
-type ActiveArea =
-  | {
-      type: "faction";
-      faction: string;
-      unitId?: string;
-      coords: { x: number; y: number };
-    }
-  | null;
-
 type PlayerCardDisplayProps = {
   playerData: PlayerData[];
-  activeArea: ActiveArea;
+  activeFaction: string | null;
 };
 
-export function PlayerCardDisplay({
+export const PlayerCardDisplay = memo(function PlayerCardDisplay({
   playerData,
-  activeArea,
+  activeFaction,
 }: PlayerCardDisplayProps) {
   const players = filterPlayersWithAssignedFaction(playerData);
-  if (activeArea?.type === "faction") {
+  if (activeFaction) {
     const playerToShow = players.find(
-      (player) => player.faction === activeArea.faction
+      (player) => player.faction === activeFaction
     );
     if (!playerToShow) return null;
 
     return (
       <Box className={classes.playerCardsContainer}>
         <Box className={classes.playerCard}>
-          <PlayerCardSidebar playerData={playerToShow} />
+          <PlayerCardSidebar key={activeFaction} playerData={playerToShow} />
         </Box>
       </Box>
     );
   }
 
   return null;
-}
+});

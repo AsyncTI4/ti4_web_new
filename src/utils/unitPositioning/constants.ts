@@ -50,6 +50,12 @@ export const HEX_SQUARE_HEIGHT = HEX_GRID_HEIGHT / HEX_GRID_SIZE;
 export const STATS_HEAT_OFFSET = 15;
 export const STATS_HEAT_STACK_SIZE = 0.1;
 export const FIGHTER_OFFSET_COLUMNS = 2;
+export const PRODUCTION_INDICATOR_SIZE = 48;
+export const CAPACITY_INDICATOR_WIDTH = 44;
+export const CAPACITY_INDICATOR_HEIGHT = 52;
+export const CROWDED_RIM_INDICATOR_INSET = 14;
+export const INDICATOR_DIAGONAL_OFFSET_X = 24;
+export const INDICATOR_VERTICAL_OFFSET_Y = 50;
 
 export const HEX_VERTICES = [
   { x: 86.25, y: 0 },

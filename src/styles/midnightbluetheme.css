@@ -11,12 +11,6 @@
     --left-sidebar-bg: rgb(10 17 30 / 91%);
     --sidebar-border: 1px solid rgba(148, 163, 184, 0.225);
 
-    --secret-tab-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.96) 0%, rgba(20, 29, 45, 0.92) 100%);
-    --secret-tab-header-bg: linear-gradient(135deg, rgba(8, 14, 33, 0.84) 0%, rgba(20, 29, 45, 0.76) 100%);
-    --secret-tab-header-border: 1px solid rgba(148, 163, 184, 0.24);
-    --secret-tab-hover-bg:  linear-gradient(135deg, rgba(8, 14, 33, 0.225) 0%, rgba(20, 29, 45, 0.84) 100%);
-    --secret-tab-hover-border: 1px solid rgba(148, 163, 184, 0.325);
-
     --main-bg:
       radial-gradient(120% 80% at 50% -10%, rgba(59, 130, 246, 0.045), transparent 55%),
       radial-gradient(90% 60% at 85% 110%, rgba(37, 99, 235, 0.03), transparent 60%),
