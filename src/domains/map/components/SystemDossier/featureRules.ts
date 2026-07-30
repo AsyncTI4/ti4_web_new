@@ -74,6 +74,11 @@ const TOKEN_RULES: Record<
     rule: "A tear leading into the Fracture. This system is adjacent to every egress system inside the Fracture — but never to another ingress.",
     imagePath: "token_ingress.png",
   },
+  egress: {
+    name: "Egress",
+    rule: "A tear leading out of the Fracture. This system is adjacent to every ingress system inside the Fracture — but never to another egress.",
+    imagePath: "token_egress.png",
+  },
   custodian: {
     name: "Custodians",
     rule: "The Custodians still hold Mecatol Rex. A player must spend 6 influence to commit ground forces here; doing so removes the token and scores a victory point.",
@@ -151,6 +156,9 @@ export function getSystemFeatures(
   }
   if (tileData?.isGravityRift) {
     features.push({ id: "gravityRift", kind: "anomaly", ...ANOMALY_RULES.gravityRift });
+  }
+    if (tileData?.hasEgress) {
+    features.push({ id: "egress", kind: "token", ...TOKEN_RULES.egress });
   }
 
   for (const wormholeType of wormholesOnTile(tile)) {
