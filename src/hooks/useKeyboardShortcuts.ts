@@ -1,22 +1,23 @@
 import { useEffect } from "react";
 import { useGameData } from "@/hooks/useGameContext";
+import type { AreaType } from "@/hooks/useTabsAndTooltips";
+import type { Settings } from "@/utils/appStore";
 
 export interface KeyboardShortcutsProps {
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
   toggleAttachmentsMode: () => void;
   togglePlanetTypesMode: () => void;
-  toggleDistanceMode: () => void;
   togglePdsMode: () => void;
   toggleLeftPanelCollapsed: () => void;
   toggleRightPanelCollapsed: () => void;
   isLeftPanelCollapsed: boolean;
   isRightPanelCollapsed: boolean;
-  updateSettings: (updates: any) => void;
+  updateSettings: (updates: Partial<Settings>) => void;
   handleZoomIn: () => void;
   handleZoomOut: () => void;
-  onAreaSelect: (area: any) => void;
-  selectedArea: any;
+  onAreaSelect: (area: AreaType) => void;
+  selectedArea: AreaType;
 }
 
 export function useKeyboardShortcuts({
@@ -24,7 +25,6 @@ export function useKeyboardShortcuts({
   toggleTechSkipsMode,
   toggleAttachmentsMode,
   togglePlanetTypesMode,
-  toggleDistanceMode,
   togglePdsMode,
   toggleLeftPanelCollapsed,
   toggleRightPanelCollapsed,
@@ -101,11 +101,6 @@ export function useKeyboardShortcuts({
         case "-":
           event.preventDefault();
           handleZoomOut();
-          break;
-
-        case "u":
-          event.preventDefault();
-          toggleDistanceMode();
           break;
 
         case "t":
@@ -185,7 +180,6 @@ export function useKeyboardShortcuts({
     toggleOverlays,
     toggleTechSkipsMode,
     togglePlanetTypesMode,
-    toggleDistanceMode,
     togglePdsMode,
     toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed,

@@ -8,8 +8,6 @@ import {
 } from "react";
 import { useSettingsStore } from "@/utils/appStore";
 import { usePlayerDataSocket } from "@/hooks/usePlayerData";
-import { useMovementStore } from "@/utils/movementStore";
-import { applyDisplacementToPlayerData } from "@/utils/displacement";
 import { buildGameContext } from "./utils/buildGameContext";
 import type {
   GameContext,
@@ -81,8 +79,6 @@ export function GameContextProvider({ children, gameId }: Props) {
   const alwaysShowControlTokens = useSettingsStore(
     (s) => s.settings.showControlTokens,
   );
-
-  const draft = useMovementStore((s) => s.draft);
 
   const [decalOverrides, setDecalOverrides] = useState<Record<string, string>>(
     {},
@@ -203,15 +199,10 @@ export function GameContextProvider({ children, gameId }: Props) {
   // Keep the live map independently memoized while a historical preview is
   // active. Leaving an event row can then swap back to this already-built
   // context instead of rebuilding every tile and unit placement synchronously.
-  const displacedData = useMemo(() => {
-    if (!data) return undefined;
-    return applyDisplacementToPlayerData(data, draft);
-  }, [data, draft]);
-
   const liveEnhancedData = useMemo(() => {
-    if (!displacedData) return undefined;
-    return buildGameContext(displacedData, accessibleColors, decalOverrides);
-  }, [displacedData, accessibleColors, decalOverrides]);
+    if (!data) return undefined;
+    return buildGameContext(data, accessibleColors, decalOverrides);
+  }, [data, accessibleColors, decalOverrides]);
 
   useEffect(() => {
     if (!liveEnhancedData) return;
@@ -223,7 +214,7 @@ export function GameContextProvider({ children, gameId }: Props) {
   // unit placement work when the pointer returns to a previously viewed frame.
   const previewContextCache = useMemo(
     () => new Map<string, ReturnType<typeof buildGameContext>>(),
-    [displacedData, accessibleColors, decalOverrides],
+    [data, accessibleColors, decalOverrides],
   );
 
   const getPreviewContext = useCallback(
@@ -237,10 +228,10 @@ export function GameContextProvider({ children, gameId }: Props) {
         previewContextCache.set(serialized, cached);
         return cached;
       }
-      if (!displacedData) return undefined;
+      if (!data) return undefined;
 
       const context = buildGameContext(
-        { ...displacedData, tileUnitData },
+        { ...data, tileUnitData },
         accessibleColors,
         decalOverrides,
       );
@@ -252,7 +243,7 @@ export function GameContextProvider({ children, gameId }: Props) {
       return context;
     },
     [
-      displacedData,
+      data,
       accessibleColors,
       decalOverrides,
       previewContextCache,
@@ -429,4 +420,3 @@ export type {
 } from "./types";
 
 export { buildGameContext } from "./utils/buildGameContext";
-export { hasTechSkips } from "@/utils/tileDistances";

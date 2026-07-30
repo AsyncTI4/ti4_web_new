@@ -2,7 +2,6 @@ import { Box, Button, Group, ActionIcon, UnstyledButton } from "@mantine/core";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import {
-  IconRuler2,
   IconKeyboard,
   IconSettings,
   IconHash,
@@ -25,16 +24,15 @@ type ControlButtonsProps = {
   settings: SettingsStore["settings"];
   handlers: SettingsStore["handlers"];
   game: ReturnType<typeof useGameData>;
-  showDistanceButton?: boolean;
+  showKeyboardButton?: boolean;
   onTryDecalsClick?: () => void;
 };
 
-type ToolAccent = "cyan" | "blue" | "orange";
+type ToolAccent = "cyan" | "blue";
 
 const ACCENT_CLASS: Record<ToolAccent, string> = {
   cyan: classes.accentCyan,
   blue: classes.accentBlue,
-  orange: classes.accentOrange,
 };
 
 /** One bay in the map-tool rack. Engaged state reads as lit, not filled. */
@@ -92,7 +90,7 @@ function ControlButtons({
   settings,
   handlers,
   game,
-  showDistanceButton = true,
+  showKeyboardButton = true,
   onTryDecalsClick,
 }: ControlButtonsProps) {
   const showPds = !!game?.tilesWithPds && game.tilesWithPds.size > 0;
@@ -139,17 +137,6 @@ function ControlButtons({
         <IconLinkPlus size={16} />
       </ToolButton>
 
-      {showDistanceButton && (
-        <ToolButton
-          active={settings.distanceMode}
-          accent="orange"
-          label="Distance ruler"
-          onClick={handlers.toggleDistanceMode}
-        >
-          <IconRuler2 size={16} />
-        </ToolButton>
-      )}
-
       {showPds && (
         <ToolButton
           active={settings.showPDSLayer}
@@ -166,7 +153,7 @@ function ControlButtons({
         </ToolButton>
       )}
 
-      {showDistanceButton && (
+      {showKeyboardButton && (
         <ToolButton
           label="Keyboard shortcuts"
           onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
@@ -365,7 +352,7 @@ function MobileTabsControls({
           settings={settings}
           handlers={handlers}
           game={game}
-          showDistanceButton={false}
+          showKeyboardButton={false}
           onTryDecalsClick={onTryDecalsClick}
         />
         <div style={{ flex: 1 }} />

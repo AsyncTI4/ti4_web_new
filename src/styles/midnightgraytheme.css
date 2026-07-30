@@ -90,12 +90,6 @@
     --details-card-bg: linear-gradient(135deg, rgb(8, 8, 8) 0%, rgb(24, 24, 24) 100%);
     --details-card-border: 1px solid rgba(200, 200, 200, 0.28);
 
-    --movement-banner-bg: linear-gradient(135deg, rgb(8, 8, 8) 0%, rgb(24, 24, 24) 100%);
-    --movement-banner-border: 2px solid rgba(200, 200, 200, 0.7);
-    --movement-banner-glow: rgba(200, 200, 200, 0.6);
-    --movement-banner-title-color: rgba(255, 255, 255, 0.98);
-    --movement-banner-accent-color: rgba(220, 220, 220, 0.98);
-
     --resource-divider-color: rgba(160, 160, 160, 0.35);
 
     --upgrade-card-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.08) 0%, rgba(115, 115, 115, 0.05) 100%);

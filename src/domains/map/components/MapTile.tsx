@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Tile } from "./Tile";
 import classes from "./MapTile.module.css";
-import { TileSelectedOverlay } from "./TileSelectedOverlay";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
 import { useGameData, useMapReplay } from "@/hooks/useGameContext";
 import { UnitImagesLayer } from "./layers/UnitImagesLayer";
@@ -15,7 +14,6 @@ import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLaye
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
-import { hasAttachments, hasTechSkips } from "@/utils/tileDistances";
 import { Tile as TileType } from "@/app/providers/context/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
 import { AttachmentsLayer } from "./layers/AttachmentsLayer";
@@ -36,9 +34,6 @@ type Props = {
   mapTile: TileType;
   style?: React.CSSProperties;
   className?: string;
-  onTileSelect?: (position: string, systemId: string) => void;
-  onTileHover?: (position: string, isHovered: boolean) => void;
-  hoveredTilePosition?: string | null;
   onUnitMouseOver?: (
     faction: string,
     unitId: string,
@@ -49,13 +44,7 @@ type Props = {
   onUnitSelect?: (faction: string) => void;
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
-  selectedTiles?: string[];
   controlOpenSides?: number[];
-  tileDistance?: number | null;
-  isOnPath?: boolean; // Whether this tile is on any of the calculated paths
-  isTargetSelected?: boolean;
-  isMovingMode?: boolean; // Movement mode active globally
-  isOrigin?: boolean; // This tile is an origin in displacement draft
   embedded?: boolean; // Render as self-contained preview without map offsets
   isA11ySelected?: boolean; // Accessibility selection highlight
 };
@@ -65,26 +54,17 @@ export const MapTile = React.memo<Props>(
     mapTile,
     style,
     className,
-    onTileSelect,
-    onTileHover,
-    hoveredTilePosition,
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
     onPlanetMouseEnter,
     onPlanetMouseLeave,
-    selectedTiles,
     controlOpenSides,
-    isOnPath = true, // Default to true so tiles aren't dimmed unless explicitly marked
-    isTargetSelected = false,
-    isMovingMode = false,
-    isOrigin = false,
     embedded = false,
     isA11ySelected = false,
   }) => {
     const gameData = useGameData();
     const mapReplay = useMapReplay();
-    const [hoveredLocal, setHoveredLocal] = useState(false);
 
     const ringPosition = mapTile.position;
     const systemId = mapTile.systemId;
@@ -95,9 +75,6 @@ export const MapTile = React.memo<Props>(
     const isSelected = useAppStore((state) => state.selectedArea);
     const techSkipsMode = useSettingsStore(
       (state) => state.settings.techSkipsMode
-    );
-    const distanceMode = useSettingsStore(
-      (state) => state.settings.distanceMode
     );
     const overlaysEnabled = useSettingsStore(
       (state) => state.settings.overlaysEnabled
@@ -112,8 +89,7 @@ export const MapTile = React.memo<Props>(
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
     const openSystemDossier = useAppStore((state) => state.openSystemDossier);
 
-    /* The dossier owns the hex outside the modes that already own it;
-       hyperlanes have nothing to report, and touch devices keep the map
+    /* Hyperlanes have nothing to report, and touch devices keep the map
        gesture-only. Hover feedback is pure CSS so the tile never re-renders
        under a moving cursor; the static-data lookup is memoized off the
        render path. */
@@ -123,18 +99,10 @@ export const MapTile = React.memo<Props>(
     );
     const dossierEligible =
       !embedded &&
-      !distanceMode &&
-      !isMovingMode &&
       !isMobileDevice() &&
       !isHyperlane;
     const handleDossierOpen = () =>
       openSystemDossier(mapTile.position, mapTile.systemId);
-
-    const isDistanceSelected =
-      distanceMode && selectedTiles?.includes(ringPosition);
-    const isDistanceHoverable = distanceMode && !isDistanceSelected;
-    const isHoveredForDistance =
-      !!distanceMode && hoveredTilePosition === ringPosition;
 
     const controllingFaction = mapTile.controlledBy;
     const showSystemHighlight =
@@ -149,10 +117,8 @@ export const MapTile = React.memo<Props>(
         className={`${classes.mapTile} ${className || ""} ${
           isSelected ? classes.selected : ""
         } ${isHovered ? classes.hovered : ""} ${
-          isDistanceSelected ? classes.distanceSelected : ""
-        } ${isDistanceHoverable ? classes.distanceHoverable : ""} ${
-          isMovingMode ? classes.movingMode : ""
-        } ${isA11ySelected ? classes.selected : ""}`}
+          isA11ySelected ? classes.selected : ""
+        }`}
         style={{
           left: embedded ? 0 : `${position.x}px`,
           top: embedded ? 0 : `${position.y}px`,
@@ -160,19 +126,19 @@ export const MapTile = React.memo<Props>(
           opacity: (() => {
             // If both tech skips and attachments modes are enabled, require both conditions
             if (techSkipsMode && attachmentsMode) {
-              const hasTech = hasTechSkips(mapTile.planets ?? {});
-              const hasAttach = hasAttachments(mapTile.planets ?? {});
+              const hasTech = mapTile.hasTechSkips;
+              const hasAttach = mapTile.hasAttachments;
               return (hasTech && hasAttach) ? 1.0 : 0.2;
             }
 
             // Tech skips mode takes priority (when attachments mode is off)
             if (techSkipsMode) {
-              return hasTechSkips(mapTile.planets ?? {}) ? 1.0 : 0.2;
+              return mapTile.hasTechSkips ? 1.0 : 0.2;
             }
 
             // Attachments mode (when tech skips mode is off)
             if (attachmentsMode) {
-              return hasAttachments(mapTile.planets ?? {}) ? 1.0 : 0.2;
+              return mapTile.hasAttachments ? 1.0 : 0.2;
             }
 
             if (planetTypesMode) {
@@ -186,16 +152,6 @@ export const MapTile = React.memo<Props>(
                 : 0.2;
             }
 
-            // Distance mode with two selected tiles - dim tiles not on any path
-            if (
-              distanceMode &&
-              selectedTiles &&
-              selectedTiles.length === 2 &&
-              !isOnPath
-            ) {
-              return 0.2;
-            }
-
             // Overlay mode - dim tiles without any controller/border
             if (overlaysEnabled && !controllingFaction) {
               return 0.7;
@@ -205,9 +161,6 @@ export const MapTile = React.memo<Props>(
           })(),
           ...style,
         }}
-        onClick={
-          onTileSelect ? () => onTileSelect(ringPosition, systemId) : undefined
-        }
       >
         <div
           className={`${classes.tileContainer} ${
@@ -282,15 +235,7 @@ export const MapTile = React.memo<Props>(
             position={mapTile.position}
             factions={mapTile.commandCounters}
           />
-          <div
-            className={`${classes.ringPosition} ${
-              isOrigin
-                ? classes.ringPositionOrange
-                : isTargetSelected
-                  ? classes.ringPositionBlue
-                  : ""
-            }`}
-          >
+          <div className={classes.ringPosition}>
             {ringPosition}
           </div>
 
@@ -315,34 +260,6 @@ export const MapTile = React.memo<Props>(
             />
           )}
 
-          {isMovingMode || !!distanceMode ? (
-            <div
-              className={classes.interactiveOverlay}
-              style={{ width: TILE_WIDTH, height: TILE_HEIGHT }}
-              onMouseEnter={() => {
-                setHoveredLocal(true);
-                if (onTileHover) onTileHover(ringPosition, true);
-              }}
-              onMouseLeave={() => {
-                setHoveredLocal(false);
-                if (onTileHover) onTileHover(ringPosition, false);
-              }}
-            >
-              <TileSelectedOverlay
-                isSelected={!!isDistanceSelected || !!isTargetSelected}
-                isHovered={isHoveredForDistance || hoveredLocal}
-                isDistanceMode
-                variant={isOrigin ? "origin" : "blue"}
-                alwaysVisible={!!isOrigin}
-              />
-            </div>
-          ) : (
-            <TileSelectedOverlay
-              isSelected={!!isDistanceSelected || !!isTargetSelected}
-              isHovered={isHoveredForDistance || hoveredLocal}
-              isDistanceMode={!!distanceMode || !!isTargetSelected}
-            />
-          )}
         </div>
       </div>
     );

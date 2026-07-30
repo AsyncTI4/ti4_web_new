@@ -1,6 +1,7 @@
 import React from "react";
 import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import { Tile } from "@/app/providers/context/types";
+import { PlanetOwnerBadge } from "./PlanetOwnerBadge";
 
 type Props = {
   systemId: string;
@@ -33,7 +34,7 @@ export function TechSkipIconsLayer({ systemId, mapTile }: Props) {
 
       const [x, y] = coords.split(",").map(Number);
 
-      return planetData.techSpecialties
+      const markers = planetData.techSpecialties
         .map((specialty, index) => {
           const iconPath = TECH_SPECIALTY_TO_ICON[specialty.toUpperCase()];
           if (!iconPath) return null;
@@ -55,6 +56,20 @@ export function TechSkipIconsLayer({ systemId, mapTile }: Props) {
           );
         })
         .filter(Boolean);
+
+      if (markers.length === 0) return [];
+
+      return [
+        ...markers,
+        planetData.controlledBy && (
+          <PlanetOwnerBadge
+            key={`${systemId}-${planetId}-owner`}
+            faction={planetData.controlledBy}
+            x={x}
+            y={y}
+          />
+        ),
+      ];
     });
   }, [systemId, mapTile, planetCoords]);
 

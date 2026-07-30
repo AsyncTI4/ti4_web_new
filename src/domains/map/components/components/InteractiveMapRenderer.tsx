@@ -1,6 +1,5 @@
 import { Profiler, type CSSProperties, type ProfilerOnRenderCallback } from "react";
 import type { GameData, Tile } from "@/app/providers/context/types";
-import type { PathResult } from "@/utils/tileDistances";
 import { recordPerformanceMeasure } from "@/utils/performanceMarks";
 import { MapRenderLayer } from "./MapRenderLayer";
 import {
@@ -51,18 +50,6 @@ export type InteractiveMapRendererProps = {
   styleOverrides?: CSSProperties;
   gameData: GameData | undefined;
   tilesList: Tile[];
-  hoveredTilePosition: string | null;
-  selectedTiles: string[];
-  systemsOnPath: Set<string>;
-  targetSystemId?: string | null;
-  pathResult: PathResult | null;
-  activePathIndex: number;
-  showPathVisualization: boolean;
-  onPathIndexChange: (index: number) => void;
-  isMovingMode: boolean;
-  isOrigin: (position: string) => boolean;
-  onTileSelect: (position: string, systemId: string) => void;
-  onTileHover: (position: string, isHovered: boolean) => void;
   onUnitMouseOver: (
     faction: string,
     unitId: string,
@@ -90,18 +77,6 @@ export function InteractiveMapRenderer({
   styleOverrides,
   gameData,
   tilesList,
-  hoveredTilePosition,
-  selectedTiles,
-  systemsOnPath,
-  targetSystemId,
-  pathResult,
-  activePathIndex,
-  showPathVisualization,
-  onPathIndexChange,
-  isMovingMode,
-  isOrigin,
-  onTileSelect,
-  onTileHover,
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
@@ -127,18 +102,6 @@ export function InteractiveMapRenderer({
       tilesList={tilesList}
       contentSize={contentSize}
       tileContainerStyle={tileContainerStyle}
-      hoveredTilePosition={hoveredTilePosition}
-      selectedTiles={selectedTiles}
-      systemsOnPath={systemsOnPath}
-      targetSystemId={targetSystemId}
-      pathResult={pathResult}
-      activePathIndex={activePathIndex}
-      showPathVisualization={showPathVisualization}
-      onPathIndexChange={onPathIndexChange}
-      isMovingMode={isMovingMode}
-      isOrigin={isOrigin}
-      onTileSelect={onTileSelect}
-      onTileHover={onTileHover}
       onUnitMouseOver={onUnitMouseOver}
       onUnitMouseLeave={onUnitMouseLeave}
       onUnitSelect={onUnitSelect}

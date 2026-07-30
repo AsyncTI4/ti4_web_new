@@ -5,7 +5,6 @@ import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "./domains/player/components/composition/ScoreBoard";
 import { UpdateNeededScreen } from "./domains/game-shell/components/chrome/UpdateNeededScreen";
-import { SettingsProvider } from "@/app/providers/context/SettingsContext";
 import { SettingsModal } from "./domains/settings/components/SettingsModal";
 import { SystemDossierModal } from "./domains/map/components/SystemDossier/SystemDossierModal";
 import { KeyboardShortcutsModal } from "./domains/game-shell/components/KeyboardShortcutsModal";
@@ -288,7 +287,7 @@ export function NewMapUI({ pannable, onShowOldUI }: Props) {
   }, [themeName]);
 
   return (
-    <SettingsProvider>
+    <>
       <GameContextProvider gameId={gameId}>
         <div
           className={isMobileDevice() ? "theme-mobile" : `theme-${themeName}`}
@@ -306,7 +305,7 @@ export function NewMapUI({ pannable, onShowOldUI }: Props) {
           onSelect={handleMapViewSelect}
         />
       )}
-    </SettingsProvider>
+    </>
   );
 }
 

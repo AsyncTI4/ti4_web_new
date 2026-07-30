@@ -7,7 +7,7 @@ import styles from "./SystemDossier.module.css";
 
 /**
  * Host for the system dossier. Mounted once above the map views; opens when a
- * hex is clicked (outside ruler and movement modes) and reads everything else
+ * hex is clicked and reads everything else
  * from game context. Escape and the backdrop close it, per Mantine defaults.
  */
 export function SystemDossierModal() {

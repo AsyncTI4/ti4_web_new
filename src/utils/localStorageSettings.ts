@@ -6,11 +6,18 @@ export function loadJsonSettings<T extends Record<string, unknown>>(
     const stored = localStorage.getItem(key);
     if (!stored) return defaults;
 
-    const parsed = JSON.parse(stored);
-    return {
-      ...defaults,
-      ...parsed,
-    } as T;
+    const parsed = JSON.parse(stored) as unknown;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return defaults;
+    }
+
+    const storedSettings = parsed as Record<string, unknown>;
+    return Object.fromEntries(
+      Object.entries(defaults).map(([key, defaultValue]) => [
+        key,
+        Object.hasOwn(storedSettings, key) ? storedSettings[key] : defaultValue,
+      ]),
+    ) as T;
   } catch (error) {
     console.warn("Failed to load settings from localStorage:", error);
     return defaults;

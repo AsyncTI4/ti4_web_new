@@ -93,7 +93,6 @@
 
 .accentCyan { --tool-accent: var(--gd-cyan); }
 .accentBlue { --tool-accent: var(--gd-blue); }
-.accentOrange { --tool-accent: var(--gd-orange); }
 
 .toolIcon {
   display: block;

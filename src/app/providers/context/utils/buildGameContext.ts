@@ -19,7 +19,7 @@ import {
   getTileController,
   hasTechSkips,
   hasAttachments,
-} from "@/utils/tileDistances";
+} from "@/utils/tileData";
 import {
   calculateArmyRankings,
   filterPlayersWithAssignedFaction,

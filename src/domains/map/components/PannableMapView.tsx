@@ -1,5 +1,4 @@
 import {
-  useCallback,
   useMemo,
   useRef,
   type CSSProperties,
@@ -8,7 +7,6 @@ import {
 import { Box, Group, Stack, Text } from "@mantine/core";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
-import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
@@ -27,7 +25,6 @@ import PlayerCardMobile from "@/domains/player/components/composition/PlayerCard
 import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
-import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { ScaledContent } from "@/shared/ui/ScaledContent";
@@ -35,10 +32,10 @@ import { getMapLayoutConfig } from "./mapLayout";
 import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
-import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 import Caption from "@/shared/ui/Caption/Caption";
+import { TryUnitDecalsSidebar } from "./TryUnitDecalsSidebar";
 
 type Props = {
   gameId: string;
@@ -136,30 +133,6 @@ export function PannableMapView({ gameId }: Props) {
     });
   };
 
-  const movementState = useMovementMode();
-  const { draft, targetSystemId, createTileSelectHandler } = movementState;
-  const {
-    selectedTiles,
-    pathResult,
-    hoveredTile,
-    systemsOnPath,
-    activePathIndex,
-    handleTileSelect,
-    handleTileHover,
-    handlePathIndexChange,
-  } = useDistanceRendering({
-    distanceMode: isMobile ? false : settings.distanceMode,
-    tiles: tilesList,
-  });
-  const isMovementOrigin = useCallback(
-    (position: string) => !!draft.origins?.[position],
-    [draft.origins],
-  );
-  const handleMapTileSelect = useMemo(
-    () => createTileSelectHandler(handleTileSelect),
-    [createTileSelectHandler, handleTileSelect],
-  );
-
   useMapKeyboardShortcuts({
     handlers,
     settings,
@@ -252,18 +225,6 @@ export function PannableMapView({ gameId }: Props) {
               }}
               gameData={gameData}
               tilesList={tilesList}
-              hoveredTilePosition={hoveredTile}
-              selectedTiles={selectedTiles}
-              systemsOnPath={systemsOnPath}
-              targetSystemId={targetSystemId}
-              pathResult={pathResult}
-              activePathIndex={activePathIndex}
-              showPathVisualization={!draft.targetPositionId}
-              onPathIndexChange={handlePathIndexChange}
-              isMovingMode={!!draft.targetPositionId}
-              isOrigin={isMovementOrigin}
-              onTileSelect={handleMapTileSelect}
-              onTileHover={handleTileHover}
               onUnitMouseOver={handleUnitMouseEnter}
               onUnitMouseLeave={handleUnitMouseLeave}
               onUnitSelect={handleMouseDown}
@@ -381,12 +342,9 @@ export function PannableMapView({ gameId }: Props) {
           under the cursor on the way to being clicked. */}
       <ReconnectButton gameDataState={gameDataState} />
 
-      <MovementLayerPortal
-        gameId={gameId}
-        tiles={tilesList}
-        movementState={movementState}
-        tryDecalsOpened={tryDecalsOpened}
-        setTryDecalsOpened={setTryDecalsOpened}
+      <TryUnitDecalsSidebar
+        opened={tryDecalsOpened}
+        onClose={() => setTryDecalsOpened(false)}
       />
     </Box>
   );

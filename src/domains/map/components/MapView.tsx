@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Box } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import classes from "@/shared/ui/map/MapUI.module.css";
@@ -9,7 +9,6 @@ import { RightSidebar } from "@/domains/game-shell/components/RightSidebar";
 import { InteractiveMapRenderer } from "./components/InteractiveMapRenderer";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import { useSidebarDragHandle } from "@/hooks/useSidebarDragHandle";
-import { useDistanceRendering } from "@/hooks/useDistanceRendering";
 import { useMapScrollPosition } from "@/hooks/useMapScrollPosition";
 import { useScrollToPlanet } from "@/hooks/useScrollToPlanet";
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
@@ -17,7 +16,6 @@ import { useTabsAndTooltips } from "@/hooks/useTabsAndTooltips";
 import { useGameData, useGameDataState } from "@/hooks/useGameContext";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import ZoomControls from "@/shared/ui/map/ZoomControls";
-import { useMovementMode } from "./hooks/useMovementMode";
 import { useMapTooltips } from "./hooks/useMapTooltips";
 import { ReconnectButton } from "./components/ReconnectButton";
 import { useMapContentSize } from "./hooks/useMapContentSize";
@@ -25,9 +23,9 @@ import { useTryDecalsToggle } from "./hooks/useTryDecalsToggle";
 import { useTilesList } from "@/hooks/useTilesList";
 import { useMapKeyboardShortcuts } from "./hooks/useMapKeyboardShortcuts";
 import { getMapLayoutConfig } from "./mapLayout";
-import { MovementLayerPortal } from "./components/MovementLayerPortal";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
+import { TryUnitDecalsSidebar } from "./TryUnitDecalsSidebar";
 
 type Props = {
   gameId: string;
@@ -80,35 +78,6 @@ export function MapView({
   const handlers = useSettingsStore((state) => state.handlers);
 
   const tilesList = useTilesList(gameData?.tiles);
-
-  const movementState = useMovementMode();
-  const { draft, targetSystemId, createTileSelectHandler } = movementState;
-
-  const {
-    selectedTiles,
-    pathResult,
-    hoveredTile,
-    systemsOnPath,
-    activePathIndex,
-    handleTileSelect,
-    handleTileHover,
-    handlePathIndexChange,
-  } = useDistanceRendering({
-    distanceMode: settings.distanceMode,
-    tiles: tilesList,
-  });
-  const selectedTileList = useMemo(
-    () => Array.from(selectedTiles),
-    [selectedTiles]
-  );
-  const isMovementOrigin = useCallback(
-    (position: string) => !!draft.origins?.[position],
-    [draft.origins],
-  );
-  const handleMapTileSelect = useMemo(
-    () => createTileSelectHandler(handleTileSelect),
-    [createTileSelectHandler, handleTileSelect],
-  );
 
   const mapLayout = getMapLayoutConfig("panels");
   const { mapContainerRef } = useMapScrollPosition({
@@ -221,18 +190,6 @@ export function MapView({
           contentSize={contentSize}
           gameData={gameData}
           tilesList={tilesList}
-          hoveredTilePosition={hoveredTile}
-          selectedTiles={selectedTileList}
-          systemsOnPath={systemsOnPath}
-          targetSystemId={targetSystemId}
-          pathResult={pathResult}
-          activePathIndex={activePathIndex}
-          showPathVisualization={!draft.targetPositionId}
-          onPathIndexChange={handlePathIndexChange}
-          isMovingMode={!!draft.targetPositionId}
-          isOrigin={isMovementOrigin}
-          onTileSelect={handleMapTileSelect}
-          onTileHover={handleTileHover}
           onUnitMouseOver={handleUnitMouseEnter}
           onUnitMouseLeave={handleUnitMouseLeave}
           onUnitSelect={handleMouseDown}
@@ -275,13 +232,7 @@ export function MapView({
       )}
 
       {showRightSidebar && (
-        <MovementLayerPortal
-          gameId={gameId}
-          tiles={tilesList}
-          movementState={movementState}
-          tryDecalsOpened={tryDecalsOpened}
-          setTryDecalsOpened={setTryDecalsOpened}
-        >
+        <>
           <RightSidebar
             isRightPanelCollapsed={
               embedded ? false : settings.rightPanelCollapsed
@@ -297,7 +248,11 @@ export function MapView({
             gameId={gameId}
             embeddedWidth={showEmbeddedRightSidebar ? embeddedRightSidebarWidth : undefined}
           />
-        </MovementLayerPortal>
+          <TryUnitDecalsSidebar
+            opened={tryDecalsOpened}
+            onClose={() => setTryDecalsOpened(false)}
+          />
+        </>
       )}
     </Box>
   );

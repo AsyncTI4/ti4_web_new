@@ -8,7 +8,6 @@ type ShortcutHandlers = Pick<
   | "toggleTechSkipsMode"
   | "toggleAttachmentsMode"
   | "togglePlanetTypesMode"
-  | "toggleDistanceMode"
   | "togglePdsMode"
   | "toggleLeftPanelCollapsed"
   | "toggleRightPanelCollapsed"
@@ -42,7 +41,6 @@ export function useMapKeyboardShortcuts({
     toggleTechSkipsMode: handlers.toggleTechSkipsMode,
     toggleAttachmentsMode: handlers.toggleAttachmentsMode,
     togglePlanetTypesMode: handlers.togglePlanetTypesMode,
-    toggleDistanceMode: handlers.toggleDistanceMode,
     togglePdsMode: handlers.togglePdsMode,
     toggleLeftPanelCollapsed: handlers.toggleLeftPanelCollapsed,
     toggleRightPanelCollapsed: handlers.toggleRightPanelCollapsed,

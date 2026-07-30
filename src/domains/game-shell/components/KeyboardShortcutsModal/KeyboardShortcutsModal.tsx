@@ -85,7 +85,6 @@ export function KeyboardShortcutsModal({
               <ShortcutItem keys="r" description="Toggle right sidebar" />
               <ShortcutItem keys={["+", "="]} description="Zoom in" />
               <ShortcutItem keys="-" description="Zoom out" />
-              <ShortcutItem keys="u" description="Toggle ruler/distance mode" />
               <ShortcutItem keys="t" description="Toggle tech skip rendering" />
               <ShortcutItem keys="a" description="Toggle attachments mode" />
               <ShortcutItem keys="o" description="Toggle overlays" />

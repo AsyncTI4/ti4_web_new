@@ -32,7 +32,6 @@ const DEFAULT_SETTINGS = {
   techSkipsMode: false,
   attachmentsMode: false,
   showPDSLayer: false,
-  distanceMode: false,
   showControlLayer: false,
   showControlTokens: true,
   showExhaustedPlanets: true,
@@ -351,7 +350,6 @@ export type Settings = {
   techSkipsMode: boolean;
   attachmentsMode: boolean;
   showPDSLayer: boolean;
-  distanceMode: boolean;
   showControlLayer: boolean;
   showControlTokens: boolean;
   showExhaustedPlanets: boolean;
@@ -390,7 +388,6 @@ type SettingsHandlers = {
   toggleTechSkipsMode: () => void;
   toggleAttachmentsMode: () => void;
   togglePdsMode: () => void;
-  toggleDistanceMode: () => void;
   toggleShowControlLayer: () => void;
   toggleAlwaysShowControlTokens: () => void;
   toggleShowExhaustedPlanets: () => void;
@@ -413,7 +410,6 @@ export type SettingsStore = {
   toggleAttachmentsMode: () => void;
   toggleTechSkipsMode: () => void;
   toggleShowPDSLayer: () => void;
-  toggleDistanceMode: () => void;
   toggleShowControlLayer: () => void;
   toggleAlwaysShowControlTokens: () => void;
   toggleShowExhaustedPlanets: () => void;
@@ -523,16 +519,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       return { ...state, settings: newSettings };
     });
 
-  const toggleDistanceMode = () =>
-    set((state) => {
-      const newSettings = {
-        ...state.settings,
-        distanceMode: !state.settings.distanceMode,
-      };
-      saveSettingsToStorage(newSettings as Settings);
-      return { ...state, settings: newSettings };
-    });
-
   const toggleShowControlLayer = () =>
     set((state) => {
       const newSettings = {
@@ -618,7 +604,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       toggleTechSkipsMode,
       toggleAttachmentsMode,
       togglePdsMode: toggleShowPDSLayer,
-      toggleDistanceMode,
       toggleShowControlLayer,
       toggleAlwaysShowControlTokens,
       toggleShowExhaustedPlanets,
@@ -638,7 +623,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
     toggleTechSkipsMode,
     toggleAttachmentsMode,
     toggleShowPDSLayer,
-    toggleDistanceMode,
     toggleShowControlLayer,
     toggleAlwaysShowControlTokens,
     toggleShowExhaustedPlanets,

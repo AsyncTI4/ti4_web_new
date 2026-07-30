@@ -46,13 +46,6 @@
     --details-card-bg: #0A111E;
     --details-card-border: 1px solid #162D56;
 
-    /* Movement Banner */
-    --movement-banner-bg: linear-gradient(135deg, rgba(8, 14, 33, 1) 0%, rgba(20, 29, 45, 1) 100%);
-    --movement-banner-border: 2px solid rgba(59, 130, 246, 0.7);
-    --movement-banner-glow: rgba(59, 130, 246, 0.6);
-    --movement-banner-title-color: rgba(255, 255, 255, 0.96);
-    --movement-banner-accent-color: rgba(147, 197, 253, 0.98);
-
     /* Resource/Influence Display */
     --resource-divider-color: rgba(49, 57, 71, 0.6);
 

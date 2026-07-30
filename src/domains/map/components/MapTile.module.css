@@ -17,8 +17,7 @@
 }
 
 .mapTile,
-.tile,
-.interactiveOverlay {
+.tile {
   position: absolute;
 }
 
@@ -90,19 +89,11 @@
 /* Export standalone classes so TS can reference classes.selected, classes.hovered, etc. */
 .selected {}
 .hovered {}
-.distanceSelected {}
-.distanceHoverable {}
-.movingMode {}
 
 /* Focus styles for accessibility */
 .tile:focus {
   outline: 2px solid var(--mantine-color-blue-6);
   outline-offset: 2px;
-}
-
-/* Movement mode makes tiles clearly interactive */
-.movingMode .tile {
-  cursor: pointer;
 }
 
 .ringPosition {
@@ -124,14 +115,6 @@
     0 2px 0 black;
   pointer-events: none;
   z-index: var(--z-ring-position);
-}
-
-.ringPositionBlue {
-  color: var(--mantine-color-blue-5);
-}
-
-.ringPositionOrange {
-  color: var(--mantine-color-orange-5);
 }
 
 .controlBorderOverlay {
@@ -172,12 +155,3 @@
 }
 
 .highlighted {}
-
-/* Overlay that sits above all tile content when in movement mode */
-.interactiveOverlay {
-  top: 0;
-  left: 0;
-  z-index: var(--z-interactive-overlay);
-  pointer-events: auto;
-  cursor: pointer;
-}

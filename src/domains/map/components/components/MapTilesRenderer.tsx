@@ -10,12 +10,6 @@ type Props = {
   tiles: Tile[];
   playerData: PlayerData[] | undefined;
   statTilePositions: Record<string, string[]> | undefined;
-  isMovingMode: boolean;
-  isOrigin: (position: string) => boolean;
-  selectedTiles: string[];
-  isOnPath: (position: string) => boolean;
-  isTargetSelected: (systemId: string) => boolean;
-  hoveredTilePosition: string | null;
   onUnitMouseOver: (
     faction: string,
     unitId: string,
@@ -26,27 +20,17 @@ type Props = {
   onUnitSelect: (faction: string) => void;
   onPlanetMouseEnter: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave: () => void;
-  onTileSelect: (position: string, systemId: string) => void;
-  onTileHover: (position: string, isHovered: boolean) => void;
 };
 
 export const MapTilesRenderer = memo(function MapTilesRenderer({
   tiles,
   playerData,
   statTilePositions,
-  isMovingMode,
-  isOrigin,
-  selectedTiles,
-  isOnPath,
-  isTargetSelected,
-  hoveredTilePosition,
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
   onPlanetMouseEnter,
   onPlanetMouseLeave,
-  onTileSelect,
-  onTileHover,
 }: Props) {
   const controlOpenSides = useMemo(
     () => computeControlOpenSides(tiles),
@@ -77,19 +61,11 @@ export const MapTilesRenderer = memo(function MapTilesRenderer({
             key={`${tile.position}-${index}`}
             mapTile={tile}
             controlOpenSides={controlOpenSides[tile.position]}
-            isMovingMode={isMovingMode}
-            isOrigin={isOrigin(tile.position)}
-            selectedTiles={selectedTiles}
-            isOnPath={isOnPath(tile.position)}
-            isTargetSelected={isTargetSelected(tile.systemId)}
-            hoveredTilePosition={hoveredTilePosition}
             onUnitMouseOver={onUnitMouseOver}
             onUnitMouseLeave={onUnitMouseLeave}
             onUnitSelect={onUnitSelect}
             onPlanetMouseEnter={onPlanetMouseEnter}
             onPlanetMouseLeave={onPlanetMouseLeave}
-            onTileSelect={onTileSelect}
-            onTileHover={onTileHover}
           />
         );
       })}

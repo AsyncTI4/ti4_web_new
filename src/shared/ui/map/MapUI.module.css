@@ -556,65 +556,6 @@
 }
 
 
-/* Movement banner - MUCH more prominent and theme-colored */
-.movementBanner,
-.movementBox {
-  background: var(--movement-banner-bg);
-  box-shadow:
-    0 14px 32px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.25) inset,
-    0 0 22px 2px color-mix(in srgb, var(--movement-banner-glow) 60%, transparent);
-  animation: movement-banner-pulse 3.6s ease-in-out infinite;
-}
-
-.movementBanner {
-  position: fixed;
-  top: 60px;
-  inset-inline: 0;
-  width: 100%;
-  z-index: var(--z-movement-banner);
-  height: 64px;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  border-bottom: var(--movement-banner-border);
-}
-
-.movementBannerTitle {
-  color: var(--movement-banner-title-color);
-  font-weight: var(--weight-rail);
-  font-size: 18px;
-  letter-spacing: var(--track-label);
-}
-
-.movementBannerTitle,
-.movementBannerTargetName {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 12px rgba(0, 0, 0, 0.35);
-}
-
-.movementBannerTargetName {
-  color: var(--movement-banner-accent-color);
-  text-shadow:
-    0 0 10px color-mix(in srgb, var(--movement-banner-glow) 65%, transparent),
-    0 1px 2px rgba(0, 0, 0, 0.75);
-}
-
-/* Compact movement box pinned to bottom-left */
-.movementBox {
-  position: fixed;
-  left: 16px;
-  bottom: 16px;
-  z-index: var(--z-movement-box);
-  width: 360px;
-  max-width: calc(100vw - 32px);
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  border: var(--movement-banner-border);
-  border-radius: var(--mantine-radius-md);
-}
-
-
 /* =========================================================================
  * HUD decks
  *

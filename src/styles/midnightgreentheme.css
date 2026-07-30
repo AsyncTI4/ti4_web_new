@@ -98,13 +98,6 @@
     --details-card-bg: linear-gradient(135deg, rgb(3, 6, 2) 0%, rgb(20, 28, 18) 100%);
     --details-card-border: 1px solid rgba(105, 125, 95, 0.95);
 
-    /* Movement Banner */
-    --movement-banner-bg: linear-gradient(135deg, rgba(3, 6, 2, 1) 0%, rgba(10, 15, 6, 1) 100%);
-    --movement-banner-border: 2px solid rgba(45, 100, 55, 0.9);
-    --movement-banner-glow: rgba(45, 100, 55, 0.8);
-    --movement-banner-title-color: rgba(255, 255, 255, 0.96);
-    --movement-banner-accent-color: rgba(100, 160, 115, 0.98);
-
     /* Resource/Influence Display */
     --resource-divider-color: rgba(60, 75, 52, 0.8);
 
@@ -170,4 +163,3 @@
        flight. A lighter tint of this theme's own accent, never a new hue. */
     --survey-lit: rgba(94, 232, 145, 0.82);
 }
-
