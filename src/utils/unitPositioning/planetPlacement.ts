@@ -1,14 +1,12 @@
 import { FactionUnits } from "@/entities/data/types";
 import {
   GROUND_HEAT_CONFIG,
+  GROUND_PLANET_NAME_HEAT_STRENGTH,
   DEFAULT_PLANET_RADIUS,
   HEX_GRID_SIZE,
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
-  STATS_HEAT_OFFSET,
-  STATS_HEAT_STACK_SIZE,
 } from "./constants";
-import { getResourcesLocationAngle } from "./coordinateUtils";
 import { initializeGroundCostMap } from "./costMap";
 import { placeEntitiesWithCostMap } from "./placement";
 import {
@@ -20,8 +18,8 @@ import {
 } from "./types";
 import {
   GridDimensions,
-  createHeatSourceFromCoords,
   createHeatSourceFromPlacement,
+  createPlanetInfoHeatSources,
   createPlacementFromCoords,
   tokenToEntityStack,
 } from "./placementHelpers";
@@ -84,18 +82,6 @@ const placeAttachmentsAndCreateHeatSources = (
   return { placements, heatSources };
 };
 
-const createStatsHeatSource = (planet: Planet): HeatSource | null => {
-  if (!planet.resourcesLocation) return null;
-
-  const statsHeatDistance = planet.radius + STATS_HEAT_OFFSET;
-  const statsAngle = getResourcesLocationAngle(planet.resourcesLocation);
-
-  const statsX = planet.x + statsHeatDistance * Math.cos(statsAngle);
-  const statsY = planet.y + statsHeatDistance * Math.sin(statsAngle);
-
-  return createHeatSourceFromCoords(statsX, statsY, STATS_HEAT_STACK_SIZE);
-};
-
 export const placeGroundEntities = ({
   gridSize,
   squareWidth,
@@ -140,10 +126,11 @@ const placeGroundEntitiesForPlanet = (
     return { entityPlacements: [], finalCostMap: [] };
   }
 
-  const statsHeatSource = createStatsHeatSource(planet);
-  const allHeatSources = statsHeatSource
-    ? [...attachmentHeatSources, statsHeatSource]
-    : attachmentHeatSources;
+  const planetInfoHeatSources = createPlanetInfoHeatSources(
+    planet,
+    GROUND_PLANET_NAME_HEAT_STRENGTH,
+  );
+  const allHeatSources = [...attachmentHeatSources, ...planetInfoHeatSources];
 
   const { entityPlacements, finalCostMap } = placeGroundEntities({
     gridSize: GRID_CONFIG.gridSize,

@@ -1,5 +1,9 @@
 import { CapacityUsage, EntityData, FactionUnits } from "@/entities/data/types";
-import { SPACE_HEAT_CONFIG, FIGHTER_OFFSET_COLUMNS } from "./constants";
+import {
+  SPACE_HEAT_CONFIG,
+  FIGHTER_OFFSET_COLUMNS,
+  SPACE_PLANET_NAME_HEAT_STRENGTH,
+} from "./constants";
 import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { updateCostMap } from "./heatMap";
@@ -8,6 +12,7 @@ import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
 import { parsePlanetsFromCoords } from "./coordinateUtils";
 import {
   calculateSystemIndicatorLayout,
+  createPlanetInfoHeatSources,
   GridDimensions,
   createHeatSourceFromSquare,
   createHeatSourceFromCoords,
@@ -255,8 +260,12 @@ export const placeSpaceEntities = ({
     heatSource: thundersEdgeHeatSource,
   } = preplaceThundersEdge(tokens, grid);
 
+  const planetInfoHeatSources = planets.flatMap((planet) =>
+    createPlanetInfoHeatSources(planet, SPACE_PLANET_NAME_HEAT_STRENGTH),
+  );
   const fixedHeatSources = [
     ...initialHeatSources,
+    ...planetInfoHeatSources,
     ...(commandCounterHeatSource ? [commandCounterHeatSource] : []),
     ...indicatorHeatSources,
     ...(thundersEdgeHeatSource ? [thundersEdgeHeatSource] : []),
@@ -270,7 +279,7 @@ export const placeSpaceEntities = ({
     heatConfig: SPACE_HEAT_CONFIG,
     repellantPlanets: [],
     rimSquares: [],
-    heatSources: indicatorHeatSources,
+    heatSources: [...indicatorHeatSources, ...planetInfoHeatSources],
     currentFaction: undefined,
     rimClearance: 0,
   });

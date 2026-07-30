@@ -20,6 +20,8 @@ export type HeatSource = {
   y: number;
   faction?: string;
   stackSize: number;
+  strength?: number;
+  clearance?: number;
 };
 
 export type EntityStackBase = EntityData & {

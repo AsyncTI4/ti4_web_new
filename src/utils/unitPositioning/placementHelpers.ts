@@ -1,6 +1,6 @@
 import { EntityData } from "@/entities/data/types";
-import { gridToPixel } from "./coordinateUtils";
-import { EntityStack, EntityStackBase, HeatSource } from "./types";
+import { getResourcesLocationAngle, gridToPixel } from "./coordinateUtils";
+import { EntityStack, EntityStackBase, HeatSource, Planet } from "./types";
 import { calculatePlanetHeat } from "./heatMap";
 import {
   CAPACITY_INDICATOR_HEIGHT,
@@ -9,6 +9,10 @@ import {
   HEX_VERTICES,
   INDICATOR_DIAGONAL_OFFSET_X,
   INDICATOR_VERTICAL_OFFSET_Y,
+  PLANET_INFO_HEAT_OFFSET,
+  PLANET_INFO_HEAT_STACK_SIZE,
+  PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
+  PLANET_NAME_HEAT_INSET,
   PRODUCTION_INDICATOR_SIZE,
   SPACE_HEAT_CONFIG,
 } from "./constants";
@@ -20,6 +24,13 @@ export type GridDimensions = {
 };
 
 export type Square = { row: number; col: number };
+
+const NAME_VERTICAL_DIRECTION = {
+  TopLeft: -1,
+  TopRight: -1,
+  BottomLeft: 1,
+  BottomRight: 1,
+} as const;
 
 export const createHeatSourceFromSquare = (
   square: Square,
@@ -38,6 +49,44 @@ export const createHeatSourceFromCoords = (
   faction?: string,
 ): HeatSource => {
   return { x, y, stackSize, ...(faction && { faction }) };
+};
+
+export const createPlanetInfoHeatSources = (
+  planet: Planet,
+  nameHeatStrength: number,
+): HeatSource[] => {
+  if (!planet.resourcesLocation) return [];
+
+  const heatDistance = planet.radius + PLANET_INFO_HEAT_OFFSET;
+  const statsAngle = getResourcesLocationAngle(planet.resourcesLocation);
+  const nameDirection = NAME_VERTICAL_DIRECTION[planet.resourcesLocation];
+  const nameY = planet.y + heatDistance * nameDirection;
+  const nameInsetY = nameY - PLANET_NAME_HEAT_INSET * nameDirection;
+  const nameXOffsets = [
+    -PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
+    0,
+    PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
+  ];
+
+  return [
+    createHeatSourceFromCoords(
+      planet.x + heatDistance * Math.cos(statsAngle),
+      planet.y + heatDistance * Math.sin(statsAngle),
+      PLANET_INFO_HEAT_STACK_SIZE,
+    ),
+    ...[nameY, nameInsetY].flatMap((y) =>
+      nameXOffsets.map((xOffset) =>
+        ({
+          ...createHeatSourceFromCoords(
+            planet.x + xOffset,
+            y,
+            PLANET_INFO_HEAT_STACK_SIZE,
+          ),
+          strength: nameHeatStrength,
+        }),
+      ),
+    ),
+  ];
 };
 
 export const createPlacementFromSquare = (

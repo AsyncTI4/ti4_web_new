@@ -1,5 +1,8 @@
 import { EntityData, FactionUnits } from "@/entities/data/types";
-import { entityIdPriority } from "./constants";
+import {
+  entityIdPriority,
+  GROUND_INFANTRY_BADGE_CLEARANCE,
+} from "./constants";
 import { gridToPixel } from "./coordinateUtils";
 import { EntityStackBase, HeatSource } from "./types";
 
@@ -27,6 +30,8 @@ export const createHeatSource = (
     y,
     faction: stack.faction,
     stackSize: getEntityStackSize(stack.entityId, stack.count),
+    clearance:
+      stack.entityId === "gf" ? GROUND_INFANTRY_BADGE_CLEARANCE : undefined,
   };
 };
 

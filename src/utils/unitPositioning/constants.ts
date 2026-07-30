@@ -29,7 +29,7 @@ export const GROUND_HEAT_CONFIG = {
   unitHeat: 500,
   unitDecayRate: 0.08,
   factionRepulsionHeat: 500,
-  factionDecayRate: 0.03,
+  factionDecayRate: 0.08,
   stackSizeMultiplier: 0.15,
   rimClearance: {
     unit: 0,
@@ -47,8 +47,13 @@ export const HEX_GRID_SIZE = 30;
 export const HEX_SQUARE_WIDTH = HEX_GRID_WIDTH / HEX_GRID_SIZE;
 export const HEX_SQUARE_HEIGHT = HEX_GRID_HEIGHT / HEX_GRID_SIZE;
 
-export const STATS_HEAT_OFFSET = 15;
-export const STATS_HEAT_STACK_SIZE = 0.1;
+export const PLANET_INFO_HEAT_OFFSET = 15;
+export const PLANET_INFO_HEAT_STACK_SIZE = 0.1;
+export const PLANET_NAME_HEAT_HORIZONTAL_OFFSET = 45;
+export const PLANET_NAME_HEAT_INSET = 45;
+export const GROUND_PLANET_NAME_HEAT_STRENGTH = 0.45;
+export const SPACE_PLANET_NAME_HEAT_STRENGTH = 0.15;
+export const GROUND_INFANTRY_BADGE_CLEARANCE = 24;
 export const FIGHTER_OFFSET_COLUMNS = 2;
 export const PRODUCTION_INDICATOR_SIZE = 48;
 export const CAPACITY_INDICATOR_WIDTH = 44;

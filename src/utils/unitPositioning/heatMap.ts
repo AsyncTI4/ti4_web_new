@@ -67,11 +67,10 @@ export const calculateUnitHeat = (
 
   let totalHeat = 0;
   for (const unitSource of heatSources) {
-    const distance = calculateDistance(
-      squareX,
-      squareY,
-      unitSource.x,
-      unitSource.y
+    const distance = Math.max(
+      0,
+      calculateDistance(squareX, squareY, unitSource.x, unitSource.y) -
+        (unitSource.clearance ?? 0)
     );
 
     const stackHeatMultiplier = 1 + stackSizeMultiplier * unitSource.stackSize;
@@ -79,15 +78,16 @@ export const calculateUnitHeat = (
     const isOpposingFaction =
       hasMultipleFactions &&
       currentFaction &&
+      unitSource.faction !== undefined &&
       unitSource.faction !== currentFaction;
 
-    const heat = isOpposingFaction
+    const baseHeat = isOpposingFaction
       ? factionRepulsionHeat *
         stackHeatMultiplier *
         Math.exp(-factionDecayRate * distance)
       : unitHeat * stackHeatMultiplier * Math.exp(-entityDecayRate * distance);
 
-    totalHeat += heat;
+    totalHeat += baseHeat * (unitSource.strength ?? 1);
   }
   return totalHeat;
 };

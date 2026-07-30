@@ -92,16 +92,51 @@
  * there is no deck around it to read the change against.
  */
 .hudButtonFloating {
-  /* Opaque, and per-theme: the same chrome surface the floating map panel uses.
-     A recessed socket fill lets the board read through a control that has to be
-     legible the moment it appears. */
-  background: var(--left-sidebar-bg, var(--sidebar-bg));
-  border-color: var(--panel-hairline-strong);
-  box-shadow: var(--machined-bevel), 0 6px 18px rgba(0, 0, 0, 0.5);
+  color: rgb(219, 234, 254);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--gd-blue), 0.32),
+      rgba(var(--gd-blue), 0.16)
+    ),
+    var(--left-sidebar-bg, var(--sidebar-bg));
+  border-color: rgba(var(--gd-blue), 0.72);
+  box-shadow:
+    var(--machined-bevel),
+    0 0 0 1px rgba(var(--gd-blue), 0.12),
+    0 7px 20px rgba(0, 0, 0, 0.56);
 }
 
 .hudButtonFloating:hover:not([data-loading]):not(:disabled) {
-  box-shadow: var(--machined-bevel), 0 9px 24px rgba(0, 0, 0, 0.58);
+  color: #ffffff;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--gd-blue), 0.46),
+      rgba(var(--gd-blue), 0.24)
+    ),
+    var(--left-sidebar-bg, var(--sidebar-bg));
+  border-color: rgba(var(--gd-blue), 0.95);
+  box-shadow:
+    var(--machined-bevel),
+    0 0 0 1px rgba(var(--gd-blue), 0.2),
+    0 10px 26px rgba(0, 0, 0, 0.62);
+}
+
+.hudButtonFloating:disabled,
+.hudButtonFloating[data-disabled] {
+  color: rgba(219, 234, 254, 0.58);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--gd-blue), 0.16),
+      rgba(var(--gd-blue), 0.08)
+    ),
+    var(--left-sidebar-bg, var(--sidebar-bg));
+  border-color: rgba(var(--gd-blue), 0.36);
+  box-shadow:
+    var(--machined-bevel),
+    0 5px 15px rgba(0, 0, 0, 0.46);
 }
 
 /* The glyph turns while the socket is being retried. Mantine's own loading state

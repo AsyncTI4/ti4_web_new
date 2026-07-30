@@ -20,9 +20,13 @@ export const planets: Planet[] = [
       "[0.0.0]",
       "06_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "0.0.0",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 5,
     influence: 0,
@@ -41,9 +45,13 @@ export const planets: Planet[] = [
     tileId: "m21",
     name: "99-Omega",
     aliases: ["99-omega", "99omega", "omega99", "o99", "99o"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "99omega",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -87,9 +95,13 @@ export const planets: Planet[] = [
     tileId: "d29",
     name: "Abyssus",
     aliases: ["abyssus"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "abyssus",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 4,
     influence: 2,
@@ -106,9 +118,13 @@ export const planets: Planet[] = [
     tileId: "38",
     name: "Abyz",
     aliases: ["abyz", "abiz", "abz", "38_1"],
-    positionInTile: {
-      x: 136.0,
-      y: 91.0,
+    planetLayout: {
+      unitHolderName: "abyz",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 91.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -128,9 +144,13 @@ export const planets: Planet[] = [
     tileId: "69",
     name: "Accoen",
     aliases: ["accoen", "acoen", "accen", "accon", "acn", "69_1", "acc"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "accoen",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -165,10 +185,6 @@ export const planets: Planet[] = [
       "vuilwrath",
       "54_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
-    },
     resources: 4,
     influence: 0,
     factionHomeworld: "cabal",
@@ -194,9 +210,13 @@ export const planets: Planet[] = [
     tileId: "er50",
     name: "Adrian",
     aliases: ["adrian"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "adrian",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -210,9 +230,13 @@ export const planets: Planet[] = [
     tileId: "as05",
     name: "Aeva",
     aliases: ["aeva"],
-    positionInTile: {
-      x: 228.0,
-      y: 222.0,
+    planetLayout: {
+      unitHolderName: "aeva",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 228.0,
+        y: 222.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -229,9 +253,13 @@ export const planets: Planet[] = [
     tileId: "s16",
     name: "Agnar Vath",
     aliases: ["agnarvath", "agnar"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "agnarvath",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -262,9 +290,13 @@ export const planets: Planet[] = [
     tileId: "er57",
     name: "Akhassi",
     aliases: ["akhassi"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "akhassi",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -279,9 +311,13 @@ export const planets: Planet[] = [
     tileId: "er82",
     name: "Ako.4.0.m",
     aliases: ["ako40m", "ako.4.0.m"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "ako40m",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -298,9 +334,13 @@ export const planets: Planet[] = [
     tileId: "as04",
     name: "Akredrite",
     aliases: ["akredrite"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "akredrite",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -317,9 +357,13 @@ export const planets: Planet[] = [
     tileId: "s07",
     name: "Albraedaan",
     aliases: ["albredaan", "aldebraa", "alderaan", "quannclone", "albraedaan"],
-    positionInTile: {
-      x: 147.0,
-      y: 211.0,
+    planetLayout: {
+      unitHolderName: "albredaan",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 147.0,
+        y: 211.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -336,9 +380,13 @@ export const planets: Planet[] = [
     tileId: "d23",
     name: "Aldra",
     aliases: ["aldra"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "aldra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -351,9 +399,13 @@ export const planets: Planet[] = [
     tileId: "d06",
     name: "Alesna",
     aliases: ["alesna"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "alesna",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -382,9 +434,13 @@ export const planets: Planet[] = [
       "alio prima",
       "71_2",
     ],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "alioprima",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -403,9 +459,13 @@ export const planets: Planet[] = [
     tileId: "c08",
     name: "Alpert",
     aliases: ["alpert", "alprt"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "alpert",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -423,9 +483,13 @@ export const planets: Planet[] = [
     tileId: "m01",
     name: "Altor",
     aliases: ["altor", "alt"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "altor",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -463,9 +527,13 @@ export const planets: Planet[] = [
     name: "Andok Xull",
     shortName: "And. Xull",
     aliases: ["andokxull", "andok", "axull", "m03", "m3"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "andokxull",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -482,9 +550,13 @@ export const planets: Planet[] = [
     tileId: "61",
     name: "Ang",
     aliases: ["ang", "ag", "61_1"],
-    positionInTile: {
-      x: 172.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "ang",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 148.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -504,9 +576,13 @@ export const planets: Planet[] = [
     tileId: "m32",
     name: "Apis",
     aliases: ["apis", "bees", "bee"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "apis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -523,9 +599,13 @@ export const planets: Planet[] = [
     tileId: "ar1",
     name: "Arachia",
     aliases: ["arachia"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "arachia",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -542,9 +622,13 @@ export const planets: Planet[] = [
     tileId: "er121",
     name: "Aranndan",
     aliases: ["aranndan"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "aranndan",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -558,9 +642,13 @@ export const planets: Planet[] = [
     tileId: "er121b",
     name: "Aranndanb",
     aliases: ["aranndanb"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "aranndanb",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -574,9 +662,13 @@ export const planets: Planet[] = [
     tileId: "d08",
     name: "Arche",
     aliases: ["arche"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "arche",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -606,9 +698,13 @@ export const planets: Planet[] = [
       "archon fail",
       "59_1",
     ],
-    positionInTile: {
-      x: 168.0,
-      y: 152.0,
+    planetLayout: {
+      unitHolderName: "archonfail",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 168.0,
+        y: 152.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -638,9 +734,13 @@ export const planets: Planet[] = [
       "archon ren",
       "14_1",
     ],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "archonren",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -662,9 +762,13 @@ export const planets: Planet[] = [
     shortName: "Archon Ren",
     shrinkNamePNAttach: true,
     aliases: ["archonrenk", "archonrenkeleres", "archonren_keleres"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "archonrenk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -694,9 +798,13 @@ export const planets: Planet[] = [
       "archon tau",
       "14_2",
     ],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "archontau",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -717,9 +825,13 @@ export const planets: Planet[] = [
     shortName: "Archon Tau",
     shrinkNamePNAttach: true,
     aliases: ["archontauk", "archontaukeleres", "archontau_keleres"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "archontauk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -750,9 +862,13 @@ export const planets: Planet[] = [
       "archon vail",
       "59_1",
     ],
-    positionInTile: {
-      x: 168.0,
-      y: 152.0,
+    planetLayout: {
+      unitHolderName: "archonvail",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 168.0,
+        y: 152.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -778,9 +894,13 @@ export const planets: Planet[] = [
       "arc prime",
       "10_1",
     ],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "arcprime",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 4,
     influence: 0,
@@ -807,9 +927,13 @@ export const planets: Planet[] = [
       "nmd",
       "53_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "arcturus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 4,
     influence: 4,
@@ -829,9 +953,13 @@ export const planets: Planet[] = [
     tileId: "er87",
     name: "Argenum",
     aliases: ["argenum", "arg"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "argenum",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -848,9 +976,13 @@ export const planets: Planet[] = [
     tileId: "37",
     name: "Arinam",
     aliases: ["arinam", "arnm", "arinm", "ari", "37_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "arinam",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -869,9 +1001,13 @@ export const planets: Planet[] = [
     tileId: "36",
     name: "Arnor",
     aliases: ["arnor", "arnr", "arno", "36_1"],
-    positionInTile: {
-      x: 138.0,
-      y: 91.0,
+    planetLayout: {
+      unitHolderName: "arnor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 138.0,
+        y: 91.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -891,9 +1027,13 @@ export const planets: Planet[] = [
     tileId: "16",
     name: "Arretze",
     aliases: ["arretze", "aretze", "arrtze", "artze", "atz", "16_2"],
-    positionInTile: {
-      x: 209.0,
-      y: 80.0,
+    planetLayout: {
+      unitHolderName: "arretze",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 209.0,
+        y: 80.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -938,9 +1078,13 @@ export const planets: Planet[] = [
     tileId: "mp01",
     name: "Astrea",
     aliases: ["astrea"],
-    positionInTile: {
-      x: 225.0,
-      y: 205.0,
+    planetLayout: {
+      unitHolderName: "astrea",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 225.0,
+        y: 205.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -954,9 +1098,13 @@ export const planets: Planet[] = [
     tileId: "64",
     name: "Atlas",
     aliases: ["atlas", "atls", "64_1"],
-    positionInTile: {
-      x: 135.0,
-      y: 90.0,
+    planetLayout: {
+      unitHolderName: "atlas",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 90.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -980,7 +1128,7 @@ export const planets: Planet[] = [
     planetTypes: ["SPACESTATION"],
     planetLayout: {
       unitHolderName: "atropos",
-      resourcesLocation: "BottomRight",
+      resourcesLocation: "BottomLeft",
       centerPosition: {
         x: 100.0,
         y: 80.0,
@@ -993,9 +1141,13 @@ export const planets: Planet[] = [
     tileId: "d16",
     name: "Auldane",
     aliases: ["auldane"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "auldane",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -1012,9 +1164,13 @@ export const planets: Planet[] = [
     tileId: "m23",
     name: "Auriya",
     aliases: ["auriya", "auriga", "gold"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "auriya",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -1031,9 +1187,13 @@ export const planets: Planet[] = [
     tileId: "58",
     name: "Avar",
     aliases: ["avar", "avr", "ava", "58_3"],
-    positionInTile: {
-      x: 224.0,
-      y: 224.0,
+    planetLayout: {
+      unitHolderName: "avar",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 224.0,
+        y: 224.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -1053,9 +1213,13 @@ export const planets: Planet[] = [
     name: "Avar Keleres",
     shortName: "Avar",
     aliases: ["avark", "avarkeleres", "avar_keleres"],
-    positionInTile: {
-      x: 224.0,
-      y: 224.0,
+    planetLayout: {
+      unitHolderName: "avark",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 224.0,
+        y: 224.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -1096,9 +1260,13 @@ export const planets: Planet[] = [
     tileId: "d10",
     name: "Avicenna",
     aliases: ["avicenna"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "avicenna",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 4,
     influence: 0,
@@ -1115,9 +1283,13 @@ export const planets: Planet[] = [
     tileId: "d27",
     name: "Axis",
     aliases: ["Axis", "Shipwrights", "[Axis]", "axis"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "axis",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 5,
     influence: 0,
@@ -1134,9 +1306,13 @@ export const planets: Planet[] = [
     tileId: "d05",
     name: "Aysis' Rest",
     aliases: ["aysisrest", "aysis'rest"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "aysisrest",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 4,
     influence: 3,
@@ -1153,9 +1329,13 @@ export const planets: Planet[] = [
     tileId: "d06",
     name: "Azle",
     aliases: ["azle"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "azle",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -1172,9 +1352,13 @@ export const planets: Planet[] = [
     tileId: "71",
     name: "Bakal",
     aliases: ["bakal", "bkl", "bakl", "bkal", "ba'kal", "71_1", "bak"],
-    positionInTile: {
-      x: 136.0,
-      y: 90.0,
+    planetLayout: {
+      unitHolderName: "bakal",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 90.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -1191,9 +1375,13 @@ export const planets: Planet[] = [
     tileId: "d23",
     name: "Beata",
     aliases: ["beata"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "beata",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -1210,9 +1398,13 @@ export const planets: Planet[] = [
     tileId: "er124",
     name: "Behjan",
     aliases: ["behjan"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "behjan",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -1245,9 +1437,13 @@ export const planets: Planet[] = [
     tileId: "s17",
     name: "Belsung IX",
     aliases: ["belsungix", "belsung"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "belsungix",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -1259,9 +1455,13 @@ export const planets: Planet[] = [
     tileId: "d07",
     name: "Benc",
     aliases: ["benc"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "benc",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -1278,9 +1478,13 @@ export const planets: Planet[] = [
     tileId: "c02",
     name: "Bentham",
     aliases: ["bentham", "bentam", "bentahm"],
-    positionInTile: {
-      x: 205.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "bentham",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 205.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -1297,9 +1501,13 @@ export const planets: Planet[] = [
     tileId: "35",
     name: "Bereg",
     aliases: ["bereg", "brg", "berg", "bere", "35_1"],
-    positionInTile: {
-      x: 138.0,
-      y: 90.0,
+    planetLayout: {
+      unitHolderName: "bereg",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 138.0,
+        y: 90.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -1319,9 +1527,13 @@ export const planets: Planet[] = [
     tileId: "d17",
     name: "Biaheo",
     aliases: ["biaheo", "blaheo", "bia"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "biaheo",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -1338,9 +1550,13 @@ export const planets: Planet[] = [
     tileId: "m09",
     name: "Bion",
     aliases: ["bi", "bion"],
-    positionInTile: {
-      x: 140.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "bion",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 140.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -1357,9 +1573,13 @@ export const planets: Planet[] = [
     tileId: "d33",
     name: "Bohl-Dhur",
     aliases: ["bohldhur", "bohl-dhur"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "bohldhur",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -1376,9 +1596,13 @@ export const planets: Planet[] = [
     tileId: "sig01",
     name: "Bozgarbia",
     aliases: ["bozgarbia"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "bozgarbia",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -1400,9 +1624,13 @@ export const planets: Planet[] = [
     tileId: "s23",
     name: "Brakke",
     aliases: ["brakke"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "brakke",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -1414,9 +1642,13 @@ export const planets: Planet[] = [
     tileId: "er56",
     name: "Breakpoint",
     aliases: ["breakpoint"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "breakpoint",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -1430,10 +1662,6 @@ export const planets: Planet[] = [
     tileId: "cpti20cottus",
     name: "Briareus",
     aliases: ["briareus"],
-    positionInTile: {
-      x: 221,
-      y: 229,
-    },
     resources: 0,
     influence: 2,
     factionHomeworld: null,
@@ -1456,9 +1684,13 @@ export const planets: Planet[] = [
     tileId: "s21",
     name: "Briis Theta",
     aliases: ["briistheta", "briis"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "briistheta",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -1470,9 +1702,13 @@ export const planets: Planet[] = [
     tileId: "er89",
     name: "Brilenci",
     aliases: ["bri", "brilenci"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "brilenci",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -1489,9 +1725,13 @@ export const planets: Planet[] = [
     tileId: "d24",
     name: "Brthkul",
     aliases: ["brthkul"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "brthkul",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -1508,9 +1748,13 @@ export const planets: Planet[] = [
     tileId: "m28",
     name: "Bunker",
     aliases: ["bunker"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "bunker",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -1528,9 +1772,13 @@ export const planets: Planet[] = [
     tileId: "er117",
     name: "Cahgaris",
     aliases: ["cahgaris"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "cahgaris",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -1552,7 +1800,7 @@ export const planets: Planet[] = [
       "At the end of your turn, you may exhaust this card to move up to 3 ground forces from the main galaxy onto Campe and Typhon, place any other player's units into coexistence. Units on Campe are also on Typhon.",
     planetLayout: {
       unitHolderName: "campe",
-      resourcesLocation: "TopLeft",
+      resourcesLocation: "BottomLeft",
       centerPosition: {
         x: 135.0,
         y: 85.0,
@@ -1565,9 +1813,13 @@ export const planets: Planet[] = [
     tileId: "er115",
     name: "Cantris",
     aliases: ["cantris"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "cantris",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 4,
     influence: 4,
@@ -1602,9 +1854,13 @@ export const planets: Planet[] = [
     tileId: "er84",
     name: "Casibann",
     aliases: ["casibann"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "casibann",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -1630,9 +1886,13 @@ export const planets: Planet[] = [
       "ceadri",
       "73_1",
     ],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "cealdri",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -1652,9 +1912,13 @@ export const planets: Planet[] = [
     tileId: "34",
     name: "Centauri",
     aliases: ["centauri", "cntri", "centari", "cent", "centaur", "34_1"],
-    positionInTile: {
-      x: 139.0,
-      y: 89.0,
+    planetLayout: {
+      unitHolderName: "centauri",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 139.0,
+        y: 89.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -1673,9 +1937,13 @@ export const planets: Planet[] = [
     tileId: "er109",
     name: "Cerberus",
     aliases: ["cerberus"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "cerberus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -1712,9 +1980,13 @@ export const planets: Planet[] = [
     tileId: "er90",
     name: "Char",
     aliases: ["char"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "char",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -1731,9 +2003,13 @@ export const planets: Planet[] = [
     tileId: "d19",
     name: "Chrion",
     aliases: ["chrion"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "chrion",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -1755,7 +2031,7 @@ export const planets: Planet[] = [
     planetTypes: ["SPACESTATION"],
     planetLayout: {
       unitHolderName: "clotho",
-      resourcesLocation: "BottomRight",
+      resourcesLocation: "BottomLeft",
       centerPosition: {
         x: 200.0,
         y: 210.0,
@@ -1787,9 +2063,13 @@ export const planets: Planet[] = [
     tileId: "67",
     name: "Cormund",
     aliases: ["cormund", "cormnd", "cormond", "crmnd", "67_1", "cor"],
-    positionInTile: {
-      x: 134.0,
-      y: 129.0,
+    planetLayout: {
+      unitHolderName: "cormund",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 129.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -1808,9 +2088,13 @@ export const planets: Planet[] = [
     tileId: "33",
     name: "Corneeq",
     aliases: ["corneeq", "corneq", "cnq", "cornik", "cnk", "33_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "corneeq",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -1828,10 +2112,6 @@ export const planets: Planet[] = [
     tileId: "cpti20cottus",
     name: "Cottus",
     aliases: ["cottus"],
-    positionInTile: {
-      x: 214,
-      y: 89,
-    },
     resources: 1,
     influence: 0,
     factionHomeworld: null,
@@ -1913,9 +2193,13 @@ export const planets: Planet[] = [
       "ghost_hs",
       "51_1",
     ],
-    positionInTile: {
-      x: 206.0,
-      y: 161.0,
+    planetLayout: {
+      unitHolderName: "creuss",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 206.0,
+        y: 161.0,
+      },
     },
     resources: 4,
     influence: 2,
@@ -1935,9 +2219,13 @@ export const planets: Planet[] = [
     tileId: "s02",
     name: "Crisp E",
     aliases: ["crispe", "crisp_e", "crisp", "cris", "crispy"],
-    positionInTile: {
-      x: 135.0,
-      y: 95.0,
+    planetLayout: {
+      unitHolderName: "crispe",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 95.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -2053,9 +2341,13 @@ export const planets: Planet[] = [
     tileId: "s18",
     name: "Cycada VII",
     aliases: ["cycadavii", "cycada"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "cycadavii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -2068,9 +2360,13 @@ export const planets: Planet[] = [
     tileId: "d30",
     name: "Cymiae",
     aliases: ["cymiae"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "cymiae",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -2087,9 +2383,13 @@ export const planets: Planet[] = [
     tileId: "m09",
     name: "Cyon",
     aliases: ["cy", "cyon"],
-    positionInTile: {
-      x: 220.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "cyon",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 220.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -2106,9 +2406,13 @@ export const planets: Planet[] = [
     tileId: "d13",
     name: "Cyrra",
     aliases: ["cyrra"],
-    positionInTile: {
-      x: 231.0,
-      y: 228.0,
+    planetLayout: {
+      unitHolderName: "cyrra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 228.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -2135,9 +2439,13 @@ export const planets: Planet[] = [
       "32_1",
       "dal",
     ],
-    positionInTile: {
-      x: 137.0,
-      y: 90.0,
+    planetLayout: {
+      unitHolderName: "dalbootha",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 90.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -2170,9 +2478,13 @@ export const planets: Planet[] = [
       "darin",
       "03_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "darien",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 4,
@@ -2192,9 +2504,13 @@ export const planets: Planet[] = [
     name: "Death's Gate",
     shortName: "D. Gate",
     aliases: ["death", "dgate", "deathsgate", "death'sgate"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "deathsgate",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -2219,9 +2535,13 @@ export const planets: Planet[] = [
       "debrea",
       "deb",
     ],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "debrbrae",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -2238,9 +2558,13 @@ export const planets: Planet[] = [
     tileId: "d18",
     name: "Delmor",
     aliases: ["delmor"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "delmor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -2257,9 +2581,13 @@ export const planets: Planet[] = [
     tileId: "d19",
     name: "Demis",
     aliases: ["demis"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "demis",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -2276,9 +2604,13 @@ export const planets: Planet[] = [
     tileId: "c07",
     name: "Desmond",
     aliases: ["desmond", "desmnd", "demsond"],
-    positionInTile: {
-      x: 190.0,
-      y: 170.0,
+    planetLayout: {
+      unitHolderName: "desmond",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 190.0,
+        y: 170.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -2296,9 +2628,13 @@ export const planets: Planet[] = [
     tileId: "d114",
     name: "Detic",
     aliases: ["detic", "deti"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "detic",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -2315,9 +2651,13 @@ export const planets: Planet[] = [
     tileId: "d21",
     name: "Discordia",
     aliases: ["discordia", "disc"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "discordia",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -2334,9 +2674,13 @@ export const planets: Planet[] = [
     tileId: "er91",
     name: "Dognui",
     aliases: ["dognui"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "dognui",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -2353,9 +2697,13 @@ export const planets: Planet[] = [
     tileId: "d104",
     name: "Domna",
     aliases: ["domna", "dom"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "domna",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -2373,9 +2721,13 @@ export const planets: Planet[] = [
     tileId: "d111",
     name: "Dorvak",
     aliases: ["dorvak", "dorv", "dor", "dorvok"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "dorvok",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -2392,9 +2744,13 @@ export const planets: Planet[] = [
     tileId: "d20",
     name: "Drah",
     aliases: ["drah"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "drah",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -2411,9 +2767,13 @@ export const planets: Planet[] = [
     tileId: "br3",
     name: "Drakkol",
     aliases: ["drakkol"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "drakkol",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -2431,9 +2791,13 @@ export const planets: Planet[] = [
     tileId: "s26",
     name: "Drak Mor II",
     aliases: ["drakmorii", "drak2", "d2"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "drakmorii",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -2445,9 +2809,13 @@ export const planets: Planet[] = [
     tileId: "s26",
     name: "Drak Mor VI",
     aliases: ["drakmorvi", "drak4", "d4"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "drakmorvi",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -2459,9 +2827,13 @@ export const planets: Planet[] = [
     tileId: "ba8",
     name: "Dralius",
     aliases: ["dralius"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "dralius",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -2479,9 +2851,13 @@ export const planets: Planet[] = [
     tileId: "s09",
     name: "Drobna",
     aliases: ["drobna", "vorhalclone"],
-    positionInTile: {
-      x: 168.0,
-      y: 145.0,
+    planetLayout: {
+      unitHolderName: "drobna",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 168.0,
+        y: 145.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -2498,9 +2874,13 @@ export const planets: Planet[] = [
     tileId: "09",
     name: "Druaa",
     aliases: ["druaa", "drua", "dru", "9_2"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "druaa",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -2520,9 +2900,13 @@ export const planets: Planet[] = [
     tileId: "s20",
     name: "Dryptaar",
     aliases: ["dryptaar"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "dryptaar",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -2535,9 +2919,13 @@ export const planets: Planet[] = [
     tileId: "br6",
     name: "Dryun",
     aliases: ["dryun"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "dryun",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -2555,9 +2943,13 @@ export const planets: Planet[] = [
     tileId: "er55",
     name: "Dwuuit",
     aliases: ["dwuuit"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "dwuuit",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -2571,9 +2963,13 @@ export const planets: Planet[] = [
     tileId: "as03",
     name: "Eccon V",
     aliases: ["ecconv"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "ecconv",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -2590,9 +2986,13 @@ export const planets: Planet[] = [
     tileId: "d101",
     name: "Echo",
     aliases: ["echo", "ech"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "echo",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -2610,9 +3010,13 @@ export const planets: Planet[] = [
     tileId: "d03",
     name: "Edyn",
     aliases: ["edyn"],
-    positionInTile: {
-      x: 93.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "edyn",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 93.0,
+        y: 140.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -2629,9 +3033,13 @@ export const planets: Planet[] = [
     tileId: "d03",
     name: "Ekko",
     aliases: ["ekko"],
-    positionInTile: {
-      x: 215.0,
-      y: 84.0,
+    planetLayout: {
+      unitHolderName: "ekko",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 215.0,
+        y: 84.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -2648,9 +3056,13 @@ export const planets: Planet[] = [
     tileId: "c06",
     name: "Eko",
     aliases: ["eko", "eok"],
-    positionInTile: {
-      x: 205.0,
-      y: 120.0,
+    planetLayout: {
+      unitHolderName: "eko",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 205.0,
+        y: 120.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -2668,9 +3080,13 @@ export const planets: Planet[] = [
     name: "Elan's Rest",
     shortName: "E.'s Rest",
     aliases: ["elansrest", "elan'srest", "elan"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "elan",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -2687,9 +3103,13 @@ export const planets: Planet[] = [
     tileId: "d25",
     name: "Ellas",
     aliases: ["ellas"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "ellas",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -2724,9 +3144,13 @@ export const planets: Planet[] = [
     tileId: "er10",
     name: "Elok Nu",
     aliases: ["eloknu"],
-    positionInTile: {
-      x: 225.0,
-      y: 205.0,
+    planetLayout: {
+      unitHolderName: "eloknu",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 225.0,
+        y: 205.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -2740,9 +3164,13 @@ export const planets: Planet[] = [
     tileId: "er10",
     name: "Elok Phi",
     aliases: ["elokphi"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "elokphi",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -2766,9 +3194,13 @@ export const planets: Planet[] = [
       "elisium",
       "55_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "elysium",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -2813,9 +3245,13 @@ export const planets: Planet[] = [
     tileId: "d17",
     name: "Empero",
     aliases: ["empero"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "empero",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -2853,9 +3289,13 @@ export const planets: Planet[] = [
     tileId: "er61",
     name: "Erissiha",
     aliases: ["erissiha"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "erissiha",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -2869,9 +3309,13 @@ export const planets: Planet[] = [
     tileId: "er20",
     name: "Erodius",
     aliases: ["erodius", "erod"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "erodius",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -2888,9 +3332,13 @@ export const planets: Planet[] = [
     tileId: "er02",
     name: "Eshonia",
     aliases: ["eshonia"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "eshonia",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -2907,9 +3355,13 @@ export const planets: Planet[] = [
     tileId: "c11",
     name: "Ethan",
     aliases: ["ethan", "etan", "ethn"],
-    positionInTile: {
-      x: 275.0,
-      y: 155.0,
+    planetLayout: {
+      unitHolderName: "ethan",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 275.0,
+        y: 155.0,
+      },
     },
     resources: 6,
     influence: 0,
@@ -2926,9 +3378,13 @@ export const planets: Planet[] = [
     tileId: "d107",
     name: "Etir V",
     aliases: ["etir", "etirv", "etir5", "ev", "e5"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "etirv",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 4,
     influence: 0,
@@ -2945,9 +3401,13 @@ export const planets: Planet[] = [
     tileId: "as02",
     name: "Etyr",
     aliases: ["etyr"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "etyr",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -2965,9 +3425,13 @@ export const planets: Planet[] = [
     tileId: "68",
     name: "Everra",
     aliases: ["everra", "evera", "everr", "evra", "68_1", "eve"],
-    positionInTile: {
-      x: 141.0,
-      y: 127.0,
+    planetLayout: {
+      unitHolderName: "everra",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 141.0,
+        y: 127.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -2986,9 +3450,13 @@ export const planets: Planet[] = [
     tileId: "s24",
     name: "Evita XL",
     aliases: ["evitaxl", "evita"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "evitaxl",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -3000,9 +3468,13 @@ export const planets: Planet[] = [
     tileId: "d109",
     name: "Fakrenn",
     aliases: ["fakrenn", "fakren", "faqren", "faqrenn"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "fakrenn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -3045,9 +3517,13 @@ export const planets: Planet[] = [
     tileId: "er86",
     name: "Ferrust",
     aliases: ["ferro", "ferrust"],
-    positionInTile: {
-      x: 220.0,
-      y: 235.0,
+    planetLayout: {
+      unitHolderName: "ferrust",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 220.0,
+        y: 235.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3064,9 +3540,13 @@ export const planets: Planet[] = [
     tileId: "s10",
     name: "Foak'n",
     aliases: ["foakn", "foak'n", "fucking", "fuckin", "fuck"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "foakn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -3083,9 +3563,13 @@ export const planets: Planet[] = [
     tileId: "38",
     name: "Fria",
     aliases: ["fria", "fra", "frya", "fri", "38_2", "fira"],
-    positionInTile: {
-      x: 202.0,
-      y: 208.0,
+    planetLayout: {
+      unitHolderName: "fria",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 208.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3104,9 +3588,13 @@ export const planets: Planet[] = [
     tileId: "s06",
     name: "Frincham",
     aliases: ["frincham"],
-    positionInTile: {
-      x: 213.0,
-      y: 212.0,
+    planetLayout: {
+      unitHolderName: "frincham",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 213.0,
+        y: 212.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3123,9 +3611,13 @@ export const planets: Planet[] = [
     tileId: "er92",
     name: "Fyrain",
     aliases: ["fyrain", "fy"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "fyrain",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -3142,9 +3634,13 @@ export const planets: Planet[] = [
     tileId: "m07",
     name: "Gaea",
     aliases: ["gaea", "gae", "gaia", "gay"],
-    positionInTile: {
-      x: 180.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "gaea",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 180.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -3161,9 +3657,13 @@ export const planets: Planet[] = [
     tileId: "as05",
     name: "Gaia",
     aliases: ["gaia"],
-    positionInTile: {
-      x: 209.0,
-      y: 80.0,
+    planetLayout: {
+      unitHolderName: "gaia",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 209.0,
+        y: 80.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -3204,9 +3704,13 @@ export const planets: Planet[] = [
     tileId: "d12",
     name: "Gen",
     aliases: ["gen"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "gen",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3223,9 +3727,13 @@ export const planets: Planet[] = [
     tileId: "as05",
     name: "Gensis",
     aliases: ["gensis"],
-    positionInTile: {
-      x: 87.0,
-      y: 136.0,
+    planetLayout: {
+      unitHolderName: "gensis",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 87.0,
+        y: 136.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -3242,9 +3750,13 @@ export const planets: Planet[] = [
     tileId: "d08",
     name: "Gghurn Theta",
     aliases: ["gghurntheta"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "gghurntheta",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -3261,9 +3773,13 @@ export const planets: Planet[] = [
     tileId: "er124",
     name: "Ghanis",
     aliases: ["ghanis"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "ghanis",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3294,9 +3810,13 @@ export const planets: Planet[] = [
     tileId: "s06",
     name: "Golga",
     aliases: ["golga"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "golga",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -3313,9 +3833,13 @@ export const planets: Planet[] = [
     tileId: "34",
     name: "Gral",
     aliases: ["gral", "grl", "34_2"],
-    positionInTile: {
-      x: 204.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "gral",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 204.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -3343,9 +3867,13 @@ export const planets: Planet[] = [
       "cruise_missile",
       "cruisemissile",
     ],
-    positionInTile: {
-      x: 148.0,
-      y: 213.0,
+    planetLayout: {
+      unitHolderName: "groosemihsal",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 148.0,
+        y: 213.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -3371,9 +3899,13 @@ export const planets: Planet[] = [
     tileId: "s24",
     name: "Gryphon III",
     aliases: ["gryphoniii", "gryphon"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "gryphoniii",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -3385,9 +3917,13 @@ export const planets: Planet[] = [
     tileId: "er51",
     name: "Grywon",
     aliases: ["grywon"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "grywon",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -3401,9 +3937,13 @@ export const planets: Planet[] = [
     tileId: "er51b",
     name: "Grywonb",
     aliases: ["grywonb"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "grywonb",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -3417,9 +3957,13 @@ export const planets: Planet[] = [
     tileId: "d113",
     name: "Gwiyun",
     aliases: ["gwyiun", "gwiyun", "gwiun"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "gwiyun",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -3436,10 +3980,6 @@ export const planets: Planet[] = [
     tileId: "cpti20cottus",
     name: "Gyges",
     aliases: ["gyges"],
-    positionInTile: {
-      x: 83.0,
-      y: 139.0,
-    },
     resources: 1,
     influence: 0,
     factionHomeworld: null,
@@ -3463,9 +4003,13 @@ export const planets: Planet[] = [
     tileId: "d07",
     name: "Hau",
     aliases: ["hau"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "hau",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -3482,9 +4026,13 @@ export const planets: Planet[] = [
     tileId: "er03",
     name: "Hell's Maw",
     aliases: ["hellsmaw", "hell'smaw", "hell", "maw"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "hellsmaw",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -3527,9 +4075,13 @@ export const planets: Planet[] = [
       "hct",
       "16_1",
     ],
-    positionInTile: {
-      x: 87.0,
-      y: 136.0,
+    planetLayout: {
+      unitHolderName: "hercant",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 87.0,
+        y: 136.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -3548,9 +4100,13 @@ export const planets: Planet[] = [
     tileId: "er112",
     name: "Hersey",
     aliases: ["hersey"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "hersey",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 0,
     influence: 5,
@@ -3565,9 +4121,13 @@ export const planets: Planet[] = [
     tileId: "er62",
     name: "Heska",
     aliases: ["heska"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "heska",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3582,9 +4142,13 @@ export const planets: Planet[] = [
     tileId: "er64",
     name: "Hevahold",
     aliases: ["hevahold"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "hevahold",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3598,9 +4162,13 @@ export const planets: Planet[] = [
     tileId: "er64b",
     name: "Hevaholdb",
     aliases: ["hevaholdb"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "hevaholdb",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -3614,9 +4182,13 @@ export const planets: Planet[] = [
     tileId: "ba3",
     name: "Hexara II",
     aliases: ["hexaraii"],
-    positionInTile: {
-      x: 209.0,
-      y: 80.0,
+    planetLayout: {
+      unitHolderName: "hexaraii",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 209.0,
+        y: 80.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -3646,9 +4218,13 @@ export const planets: Planet[] = [
       "hex51_1",
       "creuss(hexagon)",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 116.0,
+    planetLayout: {
+      unitHolderName: "hexcreuss",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 116.0,
+      },
     },
     resources: 4,
     influence: 2,
@@ -3675,9 +4251,13 @@ export const planets: Planet[] = [
       "hex82a_1",
       "lockedmallice(hexagon)",
     ],
-    positionInTile: {
-      x: 204.0,
-      y: 116.0,
+    planetLayout: {
+      unitHolderName: "hexlockedmallice",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 204.0,
+        y: 116.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -3708,9 +4288,13 @@ export const planets: Planet[] = [
       "hex82b_1",
       "mallice(hexagon)",
     ],
-    positionInTile: {
-      x: 204.0,
-      y: 116.0,
+    planetLayout: {
+      unitHolderName: "hexmallice",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 204.0,
+        y: 116.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -3747,9 +4331,13 @@ export const planets: Planet[] = [
       "hope's",
       "hop's",
     ],
-    positionInTile: {
-      x: 169.0,
-      y: 151.0,
+    planetLayout: {
+      unitHolderName: "hopesend",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 169.0,
+        y: 151.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -3771,9 +4359,13 @@ export const planets: Planet[] = [
     tileId: "c05",
     name: "Horace",
     aliases: ["horace", "whorace", "whoreass"],
-    positionInTile: {
-      x: 120.0,
-      y: 120.0,
+    planetLayout: {
+      unitHolderName: "horace",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 120.0,
+        y: 120.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -3808,9 +4400,13 @@ export const planets: Planet[] = [
     tileId: "s14",
     name: "Hospoona",
     aliases: ["hospoona", "tispoona", "tispoon", "spoon"],
-    positionInTile: {
-      x: 225.0,
-      y: 220.0,
+    planetLayout: {
+      unitHolderName: "hospoona",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 225.0,
+        y: 220.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -3827,9 +4423,13 @@ export const planets: Planet[] = [
     tileId: "er122",
     name: "Hr'an Cus",
     aliases: ["hrancus", "hr'ancus"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "hrancus",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -3843,9 +4443,13 @@ export const planets: Planet[] = [
     tileId: "d02",
     name: "Hulgade",
     aliases: ["hulgade"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "hulgade",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -3862,9 +4466,13 @@ export const planets: Planet[] = [
     tileId: "er86",
     name: "Hurigati",
     aliases: ["huri", "hurigati"],
-    positionInTile: {
-      x: 210.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "hurigati",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -3881,9 +4489,13 @@ export const planets: Planet[] = [
     tileId: "d13",
     name: "Idyn",
     aliases: ["idyn"],
-    positionInTile: {
-      x: 93.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "idyn",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 93.0,
+        y: 140.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -3919,9 +4531,13 @@ export const planets: Planet[] = [
     tileId: "er52",
     name: "Ikrus III",
     aliases: ["ikrusiii"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "ikrusiii",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -3965,9 +4581,13 @@ export const planets: Planet[] = [
     tileId: "er22",
     name: "Il Voshu",
     aliases: ["ilvoshu", "ilvosh", "iv"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "ilvoshu",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -3984,9 +4604,13 @@ export const planets: Planet[] = [
     tileId: "d105",
     name: "Inan",
     aliases: ["inan"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "inan",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -4027,9 +4651,13 @@ export const planets: Planet[] = [
     tileId: "s19",
     name: "Iota 8217",
     aliases: ["iota8217", "iota"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "iota8217",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -4051,9 +4679,13 @@ export const planets: Planet[] = [
       "mhact",
       "52_1",
     ],
-    positionInTile: {
-      x: 171.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "ixth",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 171.0,
+        y: 130.0,
+      },
     },
     resources: 3,
     influence: 5,
@@ -4072,9 +4704,13 @@ export const planets: Planet[] = [
     tileId: "er94",
     name: "Iynntani",
     aliases: ["iynn", "iynntani"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "iynn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -4091,9 +4727,13 @@ export const planets: Planet[] = [
     tileId: "s25",
     name: "Jaferra",
     aliases: ["jaferra"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "jaferra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4105,9 +4745,13 @@ export const planets: Planet[] = [
     tileId: "c09",
     name: "Jarrah",
     aliases: ["jarrah", "jarra", "jara", "jarah"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "jarrah",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -4143,9 +4787,13 @@ export const planets: Planet[] = [
       "69_2",
       "jeol",
     ],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "jeolir",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -4164,9 +4812,13 @@ export const planets: Planet[] = [
     tileId: "12",
     name: "Jol",
     aliases: ["jol", "12_2"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "jol",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -4186,9 +4838,13 @@ export const planets: Planet[] = [
     tileId: "01",
     name: "Jord",
     aliases: ["jord", "sol", "solhs", "earth", "sol_hs", "01_1"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "jord",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 2,
@@ -4208,9 +4864,13 @@ export const planets: Planet[] = [
     tileId: "16",
     name: "Kamdorn",
     aliases: ["kamdorn", "kmdrn", "kmdorn", "kamdrn", "kdn", "16_3"],
-    positionInTile: {
-      x: 228.0,
-      y: 222.0,
+    planetLayout: {
+      unitHolderName: "kamdorn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 228.0,
+        y: 222.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -4229,9 +4889,13 @@ export const planets: Planet[] = [
     tileId: "er122",
     name: "Kan'His",
     aliases: ["kan'his", "kanhis"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "kanhis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -4245,9 +4909,13 @@ export const planets: Planet[] = [
     tileId: "er83",
     name: "Kelgate",
     aliases: ["kelgate"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "kelgate",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -4264,9 +4932,13 @@ export const planets: Planet[] = [
     tileId: "ar1",
     name: "keqo",
     aliases: ["keqo"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "keqo",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -4284,9 +4956,13 @@ export const planets: Planet[] = [
     tileId: "er07",
     name: "Khjan",
     aliases: ["khjan", "kh", "jan"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "khjan",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4303,9 +4979,13 @@ export const planets: Planet[] = [
     tileId: "br6",
     name: "Khodd",
     aliases: ["khodd"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "khodd",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 4,
@@ -4322,9 +5002,13 @@ export const planets: Planet[] = [
     tileId: "d02",
     name: "Kjalengard",
     aliases: ["kjalengard", "kjal"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "kjalengard",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -4341,9 +5025,13 @@ export const planets: Planet[] = [
     tileId: "er05",
     name: "Kkita Ul'in",
     aliases: ["kkita", "kk", "kkitaulin", "kkitaul'in"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "kkita",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -4378,9 +5066,13 @@ export const planets: Planet[] = [
     tileId: "70",
     name: "Kraag",
     aliases: ["kraag", "krag", "kraa", "krg", "70_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "kraag",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4399,9 +5091,13 @@ export const planets: Planet[] = [
     tileId: "ba2",
     name: "Krax",
     aliases: ["krax"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "krax",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -4419,9 +5115,13 @@ export const planets: Planet[] = [
     tileId: "er65",
     name: "Kris",
     aliases: ["kris"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "kris",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -4436,9 +5136,13 @@ export const planets: Planet[] = [
     tileId: "d13",
     name: "Kroll",
     aliases: ["kroll"],
-    positionInTile: {
-      x: 215.0,
-      y: 84.0,
+    planetLayout: {
+      unitHolderName: "kroll",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 215.0,
+        y: 84.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -4455,9 +5159,13 @@ export const planets: Planet[] = [
     tileId: "qulane",
     name: "Kull",
     aliases: ["kull"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "kull",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4474,9 +5182,13 @@ export const planets: Planet[] = [
     tileId: "c10",
     name: "Kwon",
     aliases: ["kwon", "kown", "know", "wonk"],
-    positionInTile: {
-      x: 130.0,
-      y: 215.0,
+    planetLayout: {
+      unitHolderName: "kwon",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 130.0,
+        y: 215.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -4494,9 +5206,13 @@ export const planets: Planet[] = [
     tileId: "d18",
     name: "Kyd",
     aliases: ["kyd"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "kyd",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -4513,9 +5229,13 @@ export const planets: Planet[] = [
     tileId: "d14",
     name: "Kyr",
     aliases: ["kyrr", "kyr"],
-    positionInTile: {
-      x: 93.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "kyr",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 93.0,
+        y: 140.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -4532,9 +5252,13 @@ export const planets: Planet[] = [
     tileId: "er95",
     name: "Kytos",
     aliases: ["kytos"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "kytos",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4553,7 +5277,7 @@ export const planets: Planet[] = [
     planetTypes: ["SPACESTATION"],
     planetLayout: {
       unitHolderName: "lachesis",
-      resourcesLocation: "BottomRight",
+      resourcesLocation: "TopLeft",
       centerPosition: {
         x: 250.0,
         y: 110.0,
@@ -4566,9 +5290,13 @@ export const planets: Planet[] = [
     tileId: "c04",
     name: "Lapidus",
     aliases: ["lapidus", "lapids", "lapudis"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "lapidus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -4585,9 +5313,13 @@ export const planets: Planet[] = [
     tileId: "d115",
     name: "Larred",
     aliases: ["larred", "lared", "lareed"],
-    positionInTile: {
-      x: 80.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "larred",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 80.0,
+        y: 140.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -4604,9 +5336,13 @@ export const planets: Planet[] = [
     tileId: "d09",
     name: "Last Stop",
     aliases: ["laststop"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "laststop",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -4623,9 +5359,13 @@ export const planets: Planet[] = [
     tileId: "31",
     name: "Lazar",
     aliases: ["lazar", "lzr", "laza", "31_1"],
-    positionInTile: {
-      x: 136.0,
-      y: 91.0,
+    planetLayout: {
+      unitHolderName: "lazar",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 91.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -4680,9 +5420,13 @@ export const planets: Planet[] = [
     tileId: "er92",
     name: "Leonelli",
     aliases: ["leo", "leonelli"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "leonelli",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4735,9 +5479,13 @@ export const planets: Planet[] = [
     tileId: "er107",
     name: "Limbo",
     aliases: ["limbo"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "limbo",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -4752,9 +5500,13 @@ export const planets: Planet[] = [
     tileId: "ba1",
     name: "Lirastra",
     aliases: ["lirastra"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "lirastra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -4780,9 +5532,13 @@ export const planets: Planet[] = [
       "lirta iv",
       "35_2",
     ],
-    positionInTile: {
-      x: 205.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "lirtaiv",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 205.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -4802,9 +5558,13 @@ export const planets: Planet[] = [
     tileId: "72",
     name: "Lisis",
     aliases: ["lisis", "lis", "72_1"],
-    positionInTile: {
-      x: 134.0,
-      y: 87.0,
+    planetLayout: {
+      unitHolderName: "lisis",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 87.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -4832,9 +5592,13 @@ export const planets: Planet[] = [
       "lisis ii",
       "11_1",
     ],
-    positionInTile: {
-      x: 136.0,
-      y: 81.0,
+    planetLayout: {
+      unitHolderName: "lisisii",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 81.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -4853,9 +5617,13 @@ export const planets: Planet[] = [
     tileId: "fin2",
     name: "Lecatol Lex",
     aliases: ["lex", "lecatol", "lecatollex", "lechatol"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "ll",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 6,
@@ -4872,9 +5640,13 @@ export const planets: Planet[] = [
     tileId: "d114",
     name: "Lliot",
     aliases: ["lliot", "liot"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "lliot",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -4891,9 +5663,13 @@ export const planets: Planet[] = [
     tileId: "c03",
     name: "Lloyd",
     aliases: ["lloyd", "loyd"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "lloyd",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 0,
@@ -4910,9 +5686,13 @@ export const planets: Planet[] = [
     tileId: "c02",
     name: "Locke",
     aliases: ["locke", "lcke"],
-    positionInTile: {
-      x: 135.0,
-      y: 95.0,
+    planetLayout: {
+      unitHolderName: "locke",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 95.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -4929,9 +5709,13 @@ export const planets: Planet[] = [
     tileId: "82a",
     name: "Locked Mallice",
     aliases: ["lockedmallice", "locked_mallice"],
-    positionInTile: {
-      x: 236.0,
-      y: 156.0,
+    planetLayout: {
+      unitHolderName: "lockedmallice",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 236.0,
+        y: 156.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -4949,9 +5733,13 @@ export const planets: Planet[] = [
     tileId: "26",
     name: "Lodor",
     aliases: ["lodor", "lodo", "ldr", "26_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "lodor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -4970,9 +5758,13 @@ export const planets: Planet[] = [
     tileId: "d110",
     name: "Lodran",
     aliases: ["lodran", "lordan", "lod", "ran"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "lodran",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -5015,9 +5807,13 @@ export const planets: Planet[] = [
     tileId: "36",
     name: "Lor",
     aliases: ["lor", "lr", "36_2"],
-    positionInTile: {
-      x: 203.0,
-      y: 208.0,
+    planetLayout: {
+      unitHolderName: "lor",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 203.0,
+        y: 208.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -5036,9 +5832,13 @@ export const planets: Planet[] = [
     tileId: "d16",
     name: "Louk",
     aliases: ["louk"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "louk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -5055,9 +5855,13 @@ export const planets: Planet[] = [
     tileId: "ba6",
     name: "Luna",
     aliases: ["luna"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "luna",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -5075,9 +5879,13 @@ export const planets: Planet[] = [
     tileId: "er126",
     name: "Lunerus",
     aliases: ["lunerus"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "lunerus",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -5092,9 +5900,13 @@ export const planets: Planet[] = [
     tileId: "er108",
     name: "Lust",
     aliases: ["lust"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "lust",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -5136,9 +5948,13 @@ export const planets: Planet[] = [
     tileId: "09",
     name: "Maaluuk",
     aliases: ["maaluuk", "maluk", "maaluk", "maluuk", "mlk", "09_1"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "maaluuk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -5157,9 +5973,13 @@ export const planets: Planet[] = [
     tileId: "br4",
     name: "Magna",
     aliases: ["magna", "atokera"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "magna",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 4,
@@ -5177,9 +5997,13 @@ export const planets: Planet[] = [
     tileId: "sig03",
     name: "Magrathea",
     aliases: ["magrathea"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "magrathea",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 0,
@@ -5201,9 +6025,13 @@ export const planets: Planet[] = [
     tileId: "er114",
     name: "Malbolge",
     aliases: ["malbolge"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "malbolge",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -5230,9 +6058,13 @@ export const planets: Planet[] = [
       "82_1",
       "82b_1",
     ],
-    positionInTile: {
-      x: 236.0,
-      y: 156.0,
+    planetLayout: {
+      unitHolderName: "mallice",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 236.0,
+        y: 156.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -5255,9 +6087,13 @@ export const planets: Planet[] = [
     tileId: "d116",
     name: "Mandle",
     aliases: ["mandle", "mandel", "madnle", "madnel"],
-    positionInTile: {
-      x: 80.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "mandle",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 80.0,
+        y: 140.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -5274,9 +6110,13 @@ export const planets: Planet[] = [
     tileId: "er127",
     name: "Maon-Lor",
     aliases: ["maon-lor"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "maonlor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -5301,9 +6141,13 @@ export const planets: Planet[] = [
       "machinegun",
       "mg",
     ],
-    positionInTile: {
-      x: 148.0,
-      y: 212.0,
+    planetLayout: {
+      unitHolderName: "marshengurn",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 148.0,
+        y: 212.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -5320,9 +6164,13 @@ export const planets: Planet[] = [
     tileId: "er63",
     name: "Mayris",
     aliases: ["mayris"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "mayris",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -5336,9 +6184,13 @@ export const planets: Planet[] = [
     tileId: "er96",
     name: "Mecantor",
     aliases: ["mecantor"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "mecantor",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -5352,9 +6204,13 @@ export const planets: Planet[] = [
     tileId: "as04",
     name: "Meccna",
     aliases: ["meccna"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "meccna",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -5372,9 +6228,13 @@ export const planets: Planet[] = [
     tileId: "37",
     name: "Meer",
     aliases: ["meer", "mir", "mer", "37_2"],
-    positionInTile: {
-      x: 201.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "meer",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 201.0,
+        y: 207.0,
+      },
     },
     resources: 0,
     influence: 4,
@@ -5403,9 +6263,13 @@ export const planets: Planet[] = [
       "mehar xull",
       "24_1",
     ],
-    positionInTile: {
-      x: 172.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "meharxull",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -5424,9 +6288,13 @@ export const planets: Planet[] = [
     tileId: "er53",
     name: "Meko II",
     aliases: ["mekoii"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "mekoii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -5441,9 +6309,13 @@ export const planets: Planet[] = [
     tileId: "30",
     name: "Mellon",
     aliases: ["mellon", "melon", "mello", "30_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "mellon",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -5463,9 +6335,13 @@ export const planets: Planet[] = [
     tileId: "er86",
     name: "Meranna",
     aliases: ["mera", "meranna", "anna"],
-    positionInTile: {
-      x: 80.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "meranna",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 80.0,
+        y: 140.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -5482,9 +6358,13 @@ export const planets: Planet[] = [
     tileId: "er97",
     name: "Merjae",
     aliases: ["merjae"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "merjae",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -5499,9 +6379,13 @@ export const planets: Planet[] = [
     tileId: "s01",
     name: "Meth",
     aliases: ["meth", "met", "meht"],
-    positionInTile: {
-      x: 210.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "meth",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 210.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -5558,9 +6442,13 @@ export const planets: Planet[] = [
     tileId: "er98",
     name: "Migyro",
     aliases: ["migyro"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "migyro",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -5574,9 +6462,13 @@ export const planets: Planet[] = [
     tileId: "qulane",
     name: "Minaluk",
     aliases: ["minaluk"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "minaluk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -5638,9 +6530,13 @@ export const planets: Planet[] = [
       "moll primus",
       "02_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "mollprimus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -5662,9 +6558,13 @@ export const planets: Planet[] = [
     shrinkNamePNAttach: true,
     shortNamePNAttach: "Moll Prim's",
     aliases: ["mollprimusk", "mollprimuskeleres", "mollprimus_keleres"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "mollprimusk",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -5681,9 +6581,13 @@ export const planets: Planet[] = [
     tileId: "d112",
     name: "Moln",
     aliases: ["moln"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "moln",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -5712,9 +6616,13 @@ export const planets: Planet[] = [
       "mordai ii",
       "08_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "mordaiii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 0,
@@ -5733,9 +6641,13 @@ export const planets: Planet[] = [
     tileId: "er99",
     name: "Mornn",
     aliases: ["mornn"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "mornn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -5749,9 +6661,13 @@ export const planets: Planet[] = [
     tileId: "er98",
     name: "Mor Rock",
     aliases: ["morrock"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "morrock",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -5778,9 +6694,13 @@ export const planets: Planet[] = [
       "mecatol rex",
       "18_1",
     ],
-    positionInTile: {
-      x: 171.0,
-      y: 149.0,
+    planetLayout: {
+      unitHolderName: "mr",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 171.0,
+        y: 149.0,
+      },
     },
     resources: 1,
     influence: 6,
@@ -5836,9 +6756,13 @@ export const planets: Planet[] = [
       "muaa",
       "04_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "muaat",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 1,
@@ -5857,9 +6781,13 @@ export const planets: Planet[] = [
     tileId: "er49",
     name: "Myrwater",
     aliases: ["myrwater"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "myrwater",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -5881,9 +6809,13 @@ export const planets: Planet[] = [
     tileId: "57",
     name: "Naazir",
     aliases: ["naazir", "nazir", "naaz", "naz", "57_1"],
-    positionInTile: {
-      x: 134.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "naazir",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -5903,9 +6835,13 @@ export const planets: Planet[] = [
     tileId: "d115",
     name: "Nairb",
     aliases: ["nairb", "niarb", "nirab", "nair"],
-    positionInTile: {
-      x: 220.0,
-      y: 235.0,
+    planetLayout: {
+      unitHolderName: "nairb",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 220.0,
+        y: 235.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -5922,9 +6858,13 @@ export const planets: Planet[] = [
     tileId: "12",
     name: "Nar",
     aliases: ["nar", "12_1"],
-    positionInTile: {
-      x: 134.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "nar",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -5955,9 +6895,13 @@ export const planets: Planet[] = [
       "arbo",
       "05_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "nestphar",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -6022,9 +6966,13 @@ export const planets: Planet[] = [
       "new albion",
       "27_1",
     ],
-    positionInTile: {
-      x: 135.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "newalbion",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 88.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -6044,9 +6992,13 @@ export const planets: Planet[] = [
     tileId: "er100",
     name: "Nix",
     aliases: ["nix"],
-    positionInTile: {
-      x: 80.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "nix",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 80.0,
+        y: 140.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -6069,9 +7021,13 @@ export const planets: Planet[] = [
     tileId: "fin1",
     name: "Necatol Nex",
     aliases: ["nex", "necatol", "necatolnex", "nechatol"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "nn",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 6,
@@ -6088,9 +7044,13 @@ export const planets: Planet[] = [
     tileId: "d04",
     name: "Nokk",
     aliases: ["nokk", "nok"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "nokk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -6107,9 +7067,13 @@ export const planets: Planet[] = [
     tileId: "er100",
     name: "Nokturn",
     aliases: ["nok", "nokturn"],
-    positionInTile: {
-      x: 210.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "nokturn",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -6132,9 +7096,13 @@ export const planets: Planet[] = [
     tileId: "er102",
     name: "Norrk",
     aliases: ["norrk"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "norrk",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6148,9 +7116,13 @@ export const planets: Planet[] = [
     tileId: "d26",
     name: "Norvus",
     aliases: ["norvus"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "norvus",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6252,9 +7224,13 @@ export const planets: Planet[] = [
     tileId: "d24",
     name: "Ogdun",
     aliases: ["ogdun"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "ogdun",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -6271,9 +7247,13 @@ export const planets: Planet[] = [
     tileId: "d03",
     name: "Okke",
     aliases: ["okke"],
-    positionInTile: {
-      x: 231.0,
-      y: 228.0,
+    planetLayout: {
+      unitHolderName: "okke",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 228.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -6328,9 +7308,13 @@ export const planets: Planet[] = [
     tileId: "s10",
     name: "Ooglee",
     aliases: ["ooglee", "ugly", "oogle", "oglee", "ogle"],
-    positionInTile: {
-      x: 210.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "ooglee",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 210.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -6347,9 +7331,13 @@ export const planets: Planet[] = [
     tileId: "d15",
     name: "Orad",
     aliases: ["orad"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "orad",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -6366,9 +7354,13 @@ export const planets: Planet[] = [
     tileId: "er60",
     name: "Orchard",
     aliases: ["orchard"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "orchard",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -6393,7 +7385,7 @@ export const planets: Planet[] = [
       "A shard of a greater whole, a part of a grand effort.",
     planetLayout: {
       unitHolderName: "ordinian",
-      resourcesLocation: "TopLeft",
+      resourcesLocation: "BottomLeft",
       centerPosition: {
         x: 135.0,
         y: 85.0,
@@ -6408,9 +7400,13 @@ export const planets: Planet[] = [
     shortNamePNAttach: "Ordinian",
     shrinkNamePNAttach: true,
     aliases: ["ordinianc4"],
-    positionInTile: {
-      x: 171.0,
-      y: 149.0,
+    planetLayout: {
+      unitHolderName: "ordinianc4",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 171.0,
+        y: 149.0,
+      },
     },
     resources: 0,
     influence: 0,
@@ -6430,9 +7426,13 @@ export const planets: Planet[] = [
     tileId: "m17",
     name: "Origin",
     aliases: ["origin", "m17"],
-    positionInTile: {
-      x: 160.0,
-      y: 160.0,
+    planetLayout: {
+      unitHolderName: "origin",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 160.0,
+        y: 160.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -6450,9 +7450,13 @@ export const planets: Planet[] = [
     tileId: "d14",
     name: "Pax",
     aliases: ["pax"],
-    positionInTile: {
-      x: 215.0,
-      y: 84.0,
+    planetLayout: {
+      unitHolderName: "pax",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 215.0,
+        y: 84.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6480,9 +7484,13 @@ export const planets: Planet[] = [
       "60_1",
       "peri",
     ],
-    positionInTile: {
-      x: 168.0,
-      y: 152.0,
+    planetLayout: {
+      unitHolderName: "perimeter",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 168.0,
+        y: 152.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6502,9 +7510,13 @@ export const planets: Planet[] = [
     tileId: "er103",
     name: "Perpetual",
     aliases: ["perpetual"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "perpetual",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -6518,9 +7530,13 @@ export const planets: Planet[] = [
     tileId: "s08",
     name: "Phaeton",
     aliases: ["phaeton", "phaton", "pheton", "cormundclone"],
-    positionInTile: {
-      x: 210.0,
-      y: 95.0,
+    planetLayout: {
+      unitHolderName: "phaeton",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 95.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -6567,9 +7583,13 @@ export const planets: Planet[] = [
     tileId: "br2",
     name: "Phar",
     aliases: ["phar", "pharadn"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "phar",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -6605,9 +7625,13 @@ export const planets: Planet[] = [
     tileId: "er116",
     name: "Phylo",
     aliases: ["phylo"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "phylo",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -6621,9 +7645,13 @@ export const planets: Planet[] = [
     tileId: "er116b",
     name: "Phylob",
     aliases: ["phylob"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "phylob",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -6637,9 +7665,13 @@ export const planets: Planet[] = [
     tileId: "er110",
     name: "Plutus",
     aliases: ["plutus"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "plutus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -6654,9 +7686,13 @@ export const planets: Planet[] = [
     tileId: "d15",
     name: "Poh",
     aliases: ["poh"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "poh",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -6673,9 +7709,13 @@ export const planets: Planet[] = [
     tileId: "65",
     name: "Primor",
     aliases: ["primor", "prmr", "primr", "prmor", "prim", "65_1"],
-    positionInTile: {
-      x: 172.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "primor",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 148.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6697,9 +7737,13 @@ export const planets: Planet[] = [
     tileId: "d31",
     name: "Prind",
     aliases: ["prind"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "prind",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -6716,9 +7760,13 @@ export const planets: Planet[] = [
     tileId: "d103",
     name: "Prism",
     aliases: ["prism", "pris"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "prism",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -6736,9 +7784,13 @@ export const planets: Planet[] = [
     tileId: "er95",
     name: "Prymis",
     aliases: ["prymis", "primis"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "prymis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6752,9 +7804,13 @@ export const planets: Planet[] = [
     tileId: "d115",
     name: "Qaak",
     aliases: ["qaak", "qak"],
-    positionInTile: {
-      x: 210.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "qaak",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -6771,9 +7827,13 @@ export const planets: Planet[] = [
     tileId: "br3",
     name: "Qhet",
     aliases: ["qhet"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "qhet",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -6790,9 +7850,13 @@ export const planets: Planet[] = [
     tileId: "25",
     name: "Quann",
     aliases: ["quann", "qua", "quan", "25_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "quann",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6822,9 +7886,13 @@ export const planets: Planet[] = [
       "qucen'n",
       "29_1",
     ],
-    positionInTile: {
-      x: 136.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "qucenn",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 88.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6844,9 +7912,13 @@ export const planets: Planet[] = [
     tileId: "13",
     name: "Quinarra",
     aliases: ["quinarra", "quinara", "qinarra", "qinara", "13_2"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "quinarra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -6865,9 +7937,13 @@ export const planets: Planet[] = [
     tileId: "er63",
     name: "Quwon",
     aliases: ["quwon"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "quwon",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -6881,9 +7957,13 @@ export const planets: Planet[] = [
     tileId: "11",
     name: "Ragh",
     aliases: ["ragh", "rag", "11_2"],
-    positionInTile: {
-      x: 222.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "ragh",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 222.0,
+        y: 200.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -6902,9 +7982,13 @@ export const planets: Planet[] = [
     tileId: "29",
     name: "Rarron",
     aliases: ["rarron", "rrn", "raron", "29_2"],
-    positionInTile: {
-      x: 202.0,
-      y: 206.0,
+    planetLayout: {
+      unitHolderName: "rarron",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 206.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -6923,9 +8007,13 @@ export const planets: Planet[] = [
     tileId: "er08",
     name: "Rayon V",
     aliases: ["rayon", "rayonv", "rayon5"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "rayonv",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -6942,9 +8030,13 @@ export const planets: Planet[] = [
     tileId: "d116",
     name: "Regnem",
     aliases: ["regnem", "rengem", "regem", "regen"],
-    positionInTile: {
-      x: 220.0,
-      y: 235.0,
+    planetLayout: {
+      unitHolderName: "regnem",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 220.0,
+        y: 235.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -6961,9 +8053,13 @@ export const planets: Planet[] = [
     tileId: "br5",
     name: "Reil",
     aliases: ["reil"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "reil",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -6981,9 +8077,13 @@ export const planets: Planet[] = [
     tileId: "er61",
     name: "Renhult",
     aliases: ["renhult"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "renhult",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7032,9 +8132,13 @@ export const planets: Planet[] = [
     tileId: "33",
     name: "Resculon",
     aliases: ["resculon", "rscln", "resculn", "rescolun", "33_2"],
-    positionInTile: {
-      x: 203.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "resculon",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 203.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -7060,9 +8164,13 @@ export const planets: Planet[] = [
       "retillin",
       "15_1",
     ],
-    positionInTile: {
-      x: 130.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "retillion",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 130.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -7088,7 +8196,7 @@ export const planets: Planet[] = [
     planetTypes: ["FACTION", "SPACESTATION"],
     planetLayout: {
       unitHolderName: "revelation",
-      resourcesLocation: "TopLeft",
+      resourcesLocation: "BottomRight",
       centerPosition: {
         x: 225.0,
         y: 205.0,
@@ -7101,9 +8209,13 @@ export const planets: Planet[] = [
     tileId: "rexmec",
     name: "Rexatol Mec",
     aliases: ["rexatolmec", "rexmec", "rm"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "rexatolmec",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 6,
@@ -7126,9 +8238,13 @@ export const planets: Planet[] = [
     tileId: "d01",
     name: "Rhune",
     aliases: ["rhune"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "rhune",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -7145,9 +8261,13 @@ export const planets: Planet[] = [
     tileId: "er58",
     name: "Rhyah",
     aliases: ["rhyah"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "rhyah",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -7161,9 +8281,13 @@ export const planets: Planet[] = [
     tileId: "er01",
     name: "Rial Archon",
     aliases: ["rialarchon", "rial"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "rialarchon",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -7178,10 +8302,6 @@ export const planets: Planet[] = [
     tileId: "76",
     name: "Rigel I",
     aliases: ["rigeli", "rigel1", "r1", "rigel i", "76_3", "ri"],
-    positionInTile: {
-      x: 221.0,
-      y: 229.0,
-    },
     resources: 0,
     influence: 1,
     factionHomeworld: null,
@@ -7208,10 +8328,6 @@ export const planets: Planet[] = [
     tileId: "76",
     name: "Rigel II",
     aliases: ["rigelii", "rigel2", "r2", "rigel ii", "76_2", "rii"],
-    positionInTile: {
-      x: 214.0,
-      y: 89.0,
-    },
     resources: 1,
     influence: 2,
     factionHomeworld: null,
@@ -7238,10 +8354,6 @@ export const planets: Planet[] = [
     tileId: "76",
     name: "Rigel III",
     aliases: ["rigeliii", "rigel3", "r3", "rigel iii", "76_1", "riii"],
-    positionInTile: {
-      x: 83.0,
-      y: 139.0,
-    },
     resources: 1,
     influence: 1,
     factionHomeworld: null,
@@ -7268,9 +8380,13 @@ export const planets: Planet[] = [
     tileId: "57",
     name: "Rokha",
     aliases: ["rokha", "roka", "rokh", "rok", "rohka", "roh", "57_2"],
-    positionInTile: {
-      x: 226.0,
-      y: 201.0,
+    planetLayout: {
+      unitHolderName: "rokha",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 201.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7290,9 +8406,13 @@ export const planets: Planet[] = [
     tileId: "er101",
     name: "Ryl Fang",
     aliases: ["rylfang"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "rylfang",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -7306,9 +8426,13 @@ export const planets: Planet[] = [
     tileId: "d112",
     name: "Rysaa",
     aliases: ["rysaa", "rysa", "ryssa"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "rysaa",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7325,9 +8449,13 @@ export const planets: Planet[] = [
     tileId: "31",
     name: "Sakulag",
     aliases: ["sakulag", "skg", "saku", "sakula", "31_2"],
-    positionInTile: {
-      x: 203.0,
-      y: 208.0,
+    planetLayout: {
+      unitHolderName: "sakulag",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 203.0,
+        y: 208.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -7347,9 +8475,13 @@ export const planets: Planet[] = [
     tileId: "d113",
     name: "Salin",
     aliases: ["salin"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "salin",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7366,9 +8498,13 @@ export const planets: Planet[] = [
     tileId: "d22",
     name: "Sanctuary",
     aliases: ["sanctuary", "sanc", "olradin", "mice", "oldradin"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "sanctuary",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -7385,9 +8521,13 @@ export const planets: Planet[] = [
     tileId: "d110",
     name: "San-Vit",
     aliases: ["sanvit", "san", "vit", "san-vit"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "sanvit",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -7404,9 +8544,13 @@ export const planets: Planet[] = [
     tileId: "23",
     name: "Saudor",
     aliases: ["saudor", "sau", "saud", "saudr", "23_1"],
-    positionInTile: {
-      x: 172.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "saudor",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 148.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -7442,9 +8586,13 @@ export const planets: Planet[] = [
       "beaker",
       "sciencebitch",
     ],
-    positionInTile: {
-      x: 168.0,
-      y: 146.0,
+    planetLayout: {
+      unitHolderName: "sayensbeach",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 168.0,
+        y: 146.0,
+      },
     },
     resources: 1,
     influence: 4,
@@ -7461,9 +8609,13 @@ export const planets: Planet[] = [
     tileId: "er48",
     name: "Sehnn",
     aliases: ["sehnn"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "sehnn",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7477,9 +8629,13 @@ export const planets: Planet[] = [
     tileId: "er06",
     name: "Selen Tu",
     aliases: ["selentu"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "selen",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -7504,9 +8660,13 @@ export const planets: Planet[] = [
       "sem",
       "sem-lor",
     ],
-    positionInTile: {
-      x: 169.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "semlore",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 169.0,
+        y: 148.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -7525,9 +8685,13 @@ export const planets: Planet[] = [
     tileId: "er120",
     name: "Sentuim",
     aliases: ["sentuim"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "sentuim",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -7541,9 +8705,13 @@ export const planets: Planet[] = [
     tileId: "15",
     name: "Shalloq",
     aliases: ["shalloq", "shaloq", "shallok", "shalok", "15_2"],
-    positionInTile: {
-      x: 223.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "shalloq",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 223.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7563,9 +8731,13 @@ export const planets: Planet[] = [
     tileId: "m05",
     name: "Shanh",
     aliases: ["shan", "shanh", "m5", "m05"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "shanh",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -7582,9 +8754,13 @@ export const planets: Planet[] = [
     tileId: "er65",
     name: "Shigonas",
     aliases: ["shigonas"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "shigonas",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -7598,9 +8774,13 @@ export const planets: Planet[] = [
     tileId: "d32",
     name: "Shi-Halaum",
     aliases: ["shihalaum", "shi-halaum"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "shihalaum",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 4,
     influence: 0,
@@ -7617,9 +8797,13 @@ export const planets: Planet[] = [
     tileId: "er07",
     name: "Shul",
     aliases: ["shul"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "shul",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -7636,9 +8820,13 @@ export const planets: Planet[] = [
     tileId: "d116",
     name: "Sierpen",
     aliases: ["sierpen", "sirepen", "sier", "pen", "serpen"],
-    positionInTile: {
-      x: 210.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "sierpen",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -7655,9 +8843,13 @@ export const planets: Planet[] = [
     tileId: "er93",
     name: "Sigilus",
     aliases: ["sigilus", "sig", "sigi"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "sigilus",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 4,
@@ -7674,9 +8866,13 @@ export const planets: Planet[] = [
     tileId: "70",
     name: "Siig",
     aliases: ["siig", "sig", "70_2"],
-    positionInTile: {
-      x: 201.0,
-      y: 206.0,
+    planetLayout: {
+      unitHolderName: "siig",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 201.0,
+        y: 206.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -7695,9 +8891,13 @@ export const planets: Planet[] = [
     tileId: "d100",
     name: "Silence",
     aliases: ["silence"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "silence",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -7715,9 +8915,13 @@ export const planets: Planet[] = [
     tileId: "er126",
     name: "Sokaris",
     aliases: ["sokaris"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "sokaris",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -7731,9 +8935,13 @@ export const planets: Planet[] = [
     tileId: "er06",
     name: "Solin Uo",
     aliases: ["solinuo"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "solin",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -7747,9 +8955,13 @@ export const planets: Planet[] = [
     tileId: "d05",
     name: "Solitude",
     aliases: ["solitude"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "solitude",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -7766,9 +8978,13 @@ export const planets: Planet[] = [
     tileId: "s14",
     name: "Somna",
     aliases: ["somna", "somno"],
-    positionInTile: {
-      x: 210.0,
-      y: 80.0,
+    planetLayout: {
+      unitHolderName: "somna",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 80.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -7785,9 +9001,13 @@ export const planets: Planet[] = [
     tileId: "27",
     name: "Starpoint",
     aliases: ["starpoint", "sp", "starpoin", "27_2"],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "starpoint",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -7806,9 +9026,13 @@ export const planets: Planet[] = [
     tileId: "er85",
     name: "Station 309",
     aliases: ["station309"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "station309",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -7822,9 +9046,13 @@ export const planets: Planet[] = [
     tileId: "br5",
     name: "Strang",
     aliases: ["strang", "strange"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "strang",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -7841,9 +9069,13 @@ export const planets: Planet[] = [
     tileId: "er111",
     name: "Stygain",
     aliases: ["stygain"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "stygain",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -7882,9 +9114,13 @@ export const planets: Planet[] = [
     tileId: "er04",
     name: "Su'Prima",
     aliases: ["su", "suprima", "su'prima", "prima", "sup"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "suprima",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -7901,9 +9137,13 @@ export const planets: Planet[] = [
     tileId: "d34",
     name: "Susuros",
     aliases: ["susuros"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "susuros",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 4,
     influence: 4,
@@ -7920,9 +9160,13 @@ export const planets: Planet[] = [
     tileId: "s25",
     name: "Suul Mogg",
     aliases: ["suulmogg", "suul"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "suulmogg",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7934,9 +9178,13 @@ export const planets: Planet[] = [
     tileId: "d105",
     name: "Swog",
     aliases: ["swog"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "swog",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -7953,9 +9201,13 @@ export const planets: Planet[] = [
     tileId: "er101",
     name: "Syvian",
     aliases: ["syvian"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "syvian",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -7970,9 +9222,13 @@ export const planets: Planet[] = [
     tileId: "er58",
     name: "Taal'Dorn",
     aliases: ["taal'dorn", "taaldorn"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "taaldorn",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -7987,9 +9243,13 @@ export const planets: Planet[] = [
     tileId: "ba3",
     name: "Tala9",
     aliases: ["tala9"],
-    positionInTile: {
-      x: 228.0,
-      y: 222.0,
+    planetLayout: {
+      unitHolderName: "tala9",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 228.0,
+        y: 222.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -8072,9 +9332,13 @@ export const planets: Planet[] = [
       "tar'mann",
       "22_1",
     ],
-    positionInTile: {
-      x: 172.0,
-      y: 152.0,
+    planetLayout: {
+      unitHolderName: "tarmann",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 152.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8092,9 +9356,13 @@ export const planets: Planet[] = [
     tileId: "d102",
     name: "Tarrock",
     aliases: ["tarrock", "tar", "tarr"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "tarrock",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -8112,9 +9380,13 @@ export const planets: Planet[] = [
     tileId: "s02",
     name: "Tchi Gunn",
     aliases: ["tchigunn", "tchi_gunn", "tchi", "gunn", "chicken"],
-    positionInTile: {
-      x: 212.0,
-      y: 213.0,
+    planetLayout: {
+      unitHolderName: "tchigunn",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 212.0,
+        y: 213.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8132,9 +9404,13 @@ export const planets: Planet[] = [
     tileId: "er50",
     name: "Telahas",
     aliases: ["telahas"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "telahas",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -8172,9 +9448,13 @@ export const planets: Planet[] = [
     tileId: "28",
     name: "Tequ'ran",
     aliases: ["tequran", "tequ", "tqn", "tequ'ran", "28_1"],
-    positionInTile: {
-      x: 137.0,
-      y: 88.0,
+    planetLayout: {
+      unitHolderName: "tequran",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 137.0,
+        y: 88.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -8193,9 +9473,13 @@ export const planets: Planet[] = [
     tileId: "s14",
     name: "Tera",
     aliases: ["tera", "terterro"],
-    positionInTile: {
-      x: 90.0,
-      y: 140.0,
+    planetLayout: {
+      unitHolderName: "tera",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 90.0,
+        y: 140.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -8212,9 +9496,13 @@ export const planets: Planet[] = [
     tileId: "ba6",
     name: "Terra Novus",
     aliases: ["terranovus"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "terranovus",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -8231,9 +9519,13 @@ export const planets: Planet[] = [
     tileId: "er54",
     name: "Tethn'Sekus",
     aliases: ["tethn'sekus", "tethnsekus"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "tethnsekus",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8247,9 +9539,13 @@ export const planets: Planet[] = [
     tileId: "er54",
     name: "Tethn'Tirs",
     aliases: ["tethn'tirs", "tethntirs"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "tethntirs",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -8263,9 +9559,13 @@ export const planets: Planet[] = [
     tileId: "ba7",
     name: "Thar",
     aliases: ["thar"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "thar",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8293,9 +9593,13 @@ export const planets: Planet[] = [
       "empy_hs",
       "56_1",
     ],
-    positionInTile: {
-      x: 173.0,
-      y: 135.0,
+    planetLayout: {
+      unitHolderName: "thedark",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 173.0,
+        y: 135.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -8315,9 +9619,13 @@ export const planets: Planet[] = [
     tileId: "er104",
     name: "Thenphase",
     aliases: ["thenphase"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "thenphase",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -8351,9 +9659,13 @@ export const planets: Planet[] = [
     tileId: "21",
     name: "Thibah",
     aliases: ["thibah", "thiba", "thibh", "tibah", "tiba", "21_1"],
-    positionInTile: {
-      x: 172.0,
-      y: 148.0,
+    planetLayout: {
+      unitHolderName: "thibah",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 172.0,
+        y: 148.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8372,9 +9684,13 @@ export const planets: Planet[] = [
     tileId: "s01",
     name: "Thigel",
     aliases: ["thigel", "thig", "thi"],
-    positionInTile: {
-      x: 135.0,
-      y: 95.0,
+    planetLayout: {
+      unitHolderName: "thigel",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 95.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -8419,9 +9735,13 @@ export const planets: Planet[] = [
     tileId: "as01",
     name: "Thyolcian",
     aliases: ["thyolcian"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "thyolcian",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 4,
     influence: 2,
@@ -8477,9 +9797,13 @@ export const planets: Planet[] = [
     tileId: "er52",
     name: "Tir",
     aliases: ["tir"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "tir",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -8493,9 +9817,13 @@ export const planets: Planet[] = [
     tileId: "28",
     name: "Torkan",
     aliases: ["torkan", "tork", "tkn", "28_2"],
-    positionInTile: {
-      x: 203.0,
-      y: 208.0,
+    planetLayout: {
+      unitHolderName: "torkan",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 203.0,
+        y: 208.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -8514,9 +9842,13 @@ export const planets: Planet[] = [
     tileId: "m02",
     name: "Tralloc",
     aliases: ["tralloc", "m02", "m2"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "tralloc",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -8533,9 +9865,13 @@ export const planets: Planet[] = [
     tileId: "13",
     name: "Tren'lak",
     aliases: ["trenlak", "trnlk", "tren'lak", "13_1"],
-    positionInTile: {
-      x: 130.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "trenlak",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 130.0,
+        y: 86.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -8561,9 +9897,13 @@ export const planets: Planet[] = [
     tileId: "s23",
     name: "Trisrodh",
     aliases: ["trisrodh"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "trisrodh",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -8575,9 +9915,13 @@ export const planets: Planet[] = [
     tileId: "s22",
     name: "Trith Chek",
     aliases: ["trithchek", "trithc", "tc"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "trithchek",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -8589,9 +9933,13 @@ export const planets: Planet[] = [
     tileId: "s22",
     name: "Trith Tao",
     aliases: ["trithtao", "tritht", "tt"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "trithtao",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -8604,9 +9952,13 @@ export const planets: Planet[] = [
     tileId: "d106",
     name: "Troac",
     aliases: ["troac", "troak", "tro"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "troac",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 4,
@@ -8623,9 +9975,13 @@ export const planets: Planet[] = [
     tileId: "d20",
     name: "Trykk",
     aliases: ["trykk"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "trykk",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -8668,7 +10024,7 @@ export const planets: Planet[] = [
       "When you pass, you may move up to 3 ground forces on Campe and Typhon to planets you control in the main galaxy, place any other player's units into coexistence. Units on Typhon are also on Campe.",
     planetLayout: {
       unitHolderName: "typhon",
-      resourcesLocation: "TopLeft",
+      resourcesLocation: "BottomLeft",
       centerPosition: {
         x: 200.0,
         y: 210.0,
@@ -8681,9 +10037,13 @@ export const planets: Planet[] = [
     tileId: "as03",
     name: "Tyria Prime",
     aliases: ["tyriaprime"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "tyriaprime",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -8701,9 +10061,13 @@ export const planets: Planet[] = [
     tileId: "er09",
     name: "Ulon Gamma",
     aliases: ["ulong", "gamma", "ulongamma"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "ugamma",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -8720,9 +10084,13 @@ export const planets: Planet[] = [
     tileId: "er55",
     name: "Uhott",
     aliases: ["uhott"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "uhott",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 0,
     influence: 3,
@@ -8736,9 +10104,13 @@ export const planets: Planet[] = [
     tileId: "br1",
     name: "Uikos",
     aliases: ["uikos", "uiko", "uik"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "uikos",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8756,9 +10128,13 @@ export const planets: Planet[] = [
     tileId: "er118",
     name: "Ultimur",
     aliases: ["ultimur"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "ultimur",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -8772,9 +10148,13 @@ export const planets: Planet[] = [
     tileId: "er118b",
     name: "Ultimurb",
     aliases: ["ultimurb"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "ultimurb",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -8788,9 +10168,13 @@ export const planets: Planet[] = [
     tileId: "er09",
     name: "Ulon Rho",
     aliases: ["ulonr", "rho", "ulonrho"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "urho",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8807,9 +10191,13 @@ export const planets: Planet[] = [
     tileId: "d26",
     name: "Vadarian",
     aliases: ["vadarian"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "vadarian",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 3,
     influence: 0,
@@ -8826,9 +10214,13 @@ export const planets: Planet[] = [
     tileId: "ba5",
     name: "Vael Thuun",
     aliases: ["vaelthuun"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "vaelthuun",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -8846,9 +10238,13 @@ export const planets: Planet[] = [
     tileId: "58",
     name: "Valk",
     aliases: ["valk", "vlk", "vulk", "val", "58_1"],
-    positionInTile: {
-      x: 86.0,
-      y: 138.0,
+    planetLayout: {
+      unitHolderName: "valk",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 86.0,
+        y: 138.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -8868,9 +10264,13 @@ export const planets: Planet[] = [
     name: "Valk Keleres",
     shortName: "Valk",
     aliases: ["valkk", "valkkeleres", "valk_keleres"],
-    positionInTile: {
-      x: 86.0,
-      y: 138.0,
+    planetLayout: {
+      unitHolderName: "valkk",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 86.0,
+        y: 138.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -8887,9 +10287,13 @@ export const planets: Planet[] = [
     tileId: "d28",
     name: "Vaylar",
     aliases: ["vaylar"],
-    positionInTile: {
-      x: 177.0,
-      y: 131.0,
+    planetLayout: {
+      unitHolderName: "vaylar",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 177.0,
+        y: 131.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -8914,9 +10318,13 @@ export const planets: Planet[] = [
       "vefut ii",
       "20_1",
     ],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "vefutii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -8949,9 +10357,13 @@ export const planets: Planet[] = [
       "vega major",
       "74_1",
     ],
-    positionInTile: {
-      x: 134.0,
-      y: 91.0,
+    planetLayout: {
+      unitHolderName: "vegamajor",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 91.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -8983,9 +10395,13 @@ export const planets: Planet[] = [
       "vega minor",
       "74_2",
     ],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "vegaminor",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -9005,9 +10421,13 @@ export const planets: Planet[] = [
     tileId: "ba4",
     name: "Velarune",
     aliases: ["velarune"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "velarune",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -9025,9 +10445,13 @@ export const planets: Planet[] = [
     tileId: "72",
     name: "Velnor",
     aliases: ["velnor", "vlnr", "velnr", "vlnor", "72_2"],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "velnor",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -9046,9 +10470,13 @@ export const planets: Planet[] = [
     tileId: "er59",
     name: "Venhalo",
     aliases: ["venhalo"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "venhalo",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -9062,9 +10490,13 @@ export const planets: Planet[] = [
     tileId: "er105",
     name: "Vent",
     aliases: ["vent"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "vent",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -9079,9 +10511,13 @@ export const planets: Planet[] = [
     tileId: "er88",
     name: "Verdis",
     aliases: ["verdis", "verd"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "verdis",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -9098,9 +10534,13 @@ export const planets: Planet[] = [
     tileId: "er87",
     name: "Vernium",
     aliases: ["vernium", "vern", "ver"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "vernium",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -9117,9 +10557,13 @@ export const planets: Planet[] = [
     tileId: "m32",
     name: "Vespa",
     aliases: ["vespa", "wasp", "wasps"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "vespa",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 1,
     influence: 3,
@@ -9136,9 +10580,13 @@ export const planets: Planet[] = [
     tileId: "d14",
     name: "Vess",
     aliases: ["vess"],
-    positionInTile: {
-      x: 231.0,
-      y: 228.0,
+    planetLayout: {
+      unitHolderName: "vess",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 228.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -9155,9 +10603,13 @@ export const planets: Planet[] = [
     tileId: "er125",
     name: "Veyhrune",
     aliases: ["veyhrune"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "veyhrune",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 2,
     influence: 2,
@@ -9172,9 +10624,13 @@ export const planets: Planet[] = [
     tileId: "mp01",
     name: "Vigilum",
     aliases: ["vigilum"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "vigilum",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -9188,9 +10644,13 @@ export const planets: Planet[] = [
     tileId: "er100",
     name: "Viliguard",
     aliases: ["vili", "viliguard"],
-    positionInTile: {
-      x: 220.0,
-      y: 235.0,
+    planetLayout: {
+      unitHolderName: "viliguard",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 220.0,
+        y: 235.0,
+      },
     },
     resources: 1,
     influence: 0,
@@ -9213,9 +10673,13 @@ export const planets: Planet[] = [
     tileId: "er113",
     name: "Violence",
     aliases: ["violence"],
-    positionInTile: {
-      x: 170.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "violence",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 130.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -9230,9 +10694,13 @@ export const planets: Planet[] = [
     tileId: "d108",
     name: "Vioss",
     aliases: ["vioss", "vios", "voss"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "vioss",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -9267,9 +10735,13 @@ export const planets: Planet[] = [
     tileId: "er120",
     name: "Volgan",
     aliases: ["volgan"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "volgan",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -9283,9 +10755,13 @@ export const planets: Planet[] = [
     tileId: "er59",
     name: "Volra",
     aliases: ["volra"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "volra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -9299,9 +10775,13 @@ export const planets: Planet[] = [
     tileId: "63",
     name: "Vorhal",
     aliases: ["vorhal", "vrhal", "vrhl", "vorhl", "63_1", "vor"],
-    positionInTile: {
-      x: 170.0,
-      y: 151.0,
+    planetLayout: {
+      unitHolderName: "vorhal",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 151.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -9320,9 +10800,13 @@ export const planets: Planet[] = [
     tileId: "as02",
     name: "Voyd",
     aliases: ["voyd"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "voyd",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -9339,9 +10823,13 @@ export const planets: Planet[] = [
     tileId: "ba1",
     name: "Vraxil",
     aliases: ["vraxil"],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "vraxil",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -9359,9 +10847,13 @@ export const planets: Planet[] = [
     tileId: "er106",
     name: "Vygar II",
     aliases: ["vygarii"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "vygarii",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -9375,9 +10867,13 @@ export const planets: Planet[] = [
     tileId: "er123",
     name: "Vylanua",
     aliases: ["vylanua"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "vylanua",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -9392,9 +10888,13 @@ export const planets: Planet[] = [
     tileId: "ba3",
     name: "Vysera III",
     aliases: ["vyseraiii"],
-    positionInTile: {
-      x: 87.0,
-      y: 136.0,
+    planetLayout: {
+      unitHolderName: "vyseraiii",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 87.0,
+        y: 136.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -9411,9 +10911,13 @@ export const planets: Planet[] = [
     tileId: "19",
     name: "Wellon",
     aliases: ["wellon", "welon", "welo", "19_1"],
-    positionInTile: {
-      x: 170.0,
-      y: 151.0,
+    planetLayout: {
+      unitHolderName: "wellon",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 151.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -9432,9 +10936,13 @@ export const planets: Planet[] = [
     tileId: "c01",
     name: "widmore",
     aliases: ["widmore", "weedmore", "wildmore"],
-    positionInTile: {
-      x: 170.0,
-      y: 150.0,
+    planetLayout: {
+      unitHolderName: "widmore",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 150.0,
+      },
     },
     resources: 3,
     influence: 2,
@@ -9451,9 +10959,13 @@ export const planets: Planet[] = [
     tileId: "07",
     name: "Winnu",
     aliases: ["winnu", "winnuhs", "winnu_hs", "winu", "winn", "07_1"],
-    positionInTile: {
-      x: 170.0,
-      y: 128.0,
+    planetLayout: {
+      unitHolderName: "winnu",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 170.0,
+        y: 128.0,
+      },
     },
     resources: 3,
     influence: 4,
@@ -9482,9 +10994,13 @@ export const planets: Planet[] = [
       "wren terra",
       "10_2",
     ],
-    positionInTile: {
-      x: 226.0,
-      y: 200.0,
+    planetLayout: {
+      unitHolderName: "wrenterra",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 226.0,
+        y: 200.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -9504,9 +11020,13 @@ export const planets: Planet[] = [
     tileId: "ba7",
     name: "Xan",
     aliases: ["xan"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "xan",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 4,
@@ -9523,9 +11043,13 @@ export const planets: Planet[] = [
     tileId: "73",
     name: "Xanhact",
     aliases: ["xanhact", "xnhct", "xnhact", "xanhct", "xct", "73_2"],
-    positionInTile: {
-      x: 204.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "xanhact",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 204.0,
+        y: 207.0,
+      },
     },
     resources: 0,
     influence: 1,
@@ -9545,9 +11069,13 @@ export const planets: Planet[] = [
     tileId: "ba5",
     name: "Xelvorr",
     aliases: ["xelvorr"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "xelvorr",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 3,
     influence: 1,
@@ -9564,9 +11092,13 @@ export const planets: Planet[] = [
     tileId: "32",
     name: "Xxehan",
     aliases: ["xxehan", "xx", "xehan", "xxhan", "32_2"],
-    positionInTile: {
-      x: 202.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "xxehan",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 202.0,
+        y: 207.0,
+      },
     },
     resources: 1,
     influence: 1,
@@ -9585,9 +11117,13 @@ export const planets: Planet[] = [
     tileId: "er23",
     name: "Xyon",
     aliases: ["xyon", "xyo", "xy"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "xyon",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -9604,9 +11140,13 @@ export const planets: Planet[] = [
     tileId: "58",
     name: "Ylir",
     aliases: ["ylir", "ylr", "ylyr", "yli", "yur", "58_2"],
-    positionInTile: {
-      x: 210.0,
-      y: 81.0,
+    planetLayout: {
+      unitHolderName: "ylir",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 81.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -9626,9 +11166,13 @@ export const planets: Planet[] = [
     name: "Ylir Keleres",
     shortName: "Ylir",
     aliases: ["ylirk", "ylirkeleres", "ylir_keleres"],
-    positionInTile: {
-      x: 210.0,
-      y: 81.0,
+    planetLayout: {
+      unitHolderName: "ylirk",
+      resourcesLocation: "TopRight",
+      centerPosition: {
+        x: 210.0,
+        y: 81.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -9645,9 +11189,13 @@ export const planets: Planet[] = [
     tileId: "er106",
     name: "Yncranti",
     aliases: ["yncranti"],
-    positionInTile: {
-      x: 200.0,
-      y: 210.0,
+    planetLayout: {
+      unitHolderName: "yncranti",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 200.0,
+        y: 210.0,
+      },
     },
     resources: 1,
     influence: 2,
@@ -9661,9 +11209,13 @@ export const planets: Planet[] = [
     tileId: "er24",
     name: "Ynnis",
     aliases: ["ynnis"],
-    positionInTile: {
-      x: 135.0,
-      y: 130.0,
+    planetLayout: {
+      unitHolderName: "ynnis",
+      resourcesLocation: "BottomLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 130.0,
+      },
     },
     resources: 2,
     influence: 3,
@@ -9680,9 +11232,13 @@ export const planets: Planet[] = [
     tileId: "d04",
     name: "Zarr",
     aliases: ["zarr", "zar"],
-    positionInTile: {
-      x: 136.0,
-      y: 94.0,
+    planetLayout: {
+      unitHolderName: "zarr",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 136.0,
+        y: 94.0,
+      },
     },
     resources: 2,
     influence: 1,
@@ -9699,9 +11255,13 @@ export const planets: Planet[] = [
     tileId: "d12",
     name: "Zelian",
     aliases: ["zelian"],
-    positionInTile: {
-      x: 231.0,
-      y: 207.0,
+    planetLayout: {
+      unitHolderName: "zelian",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 231.0,
+        y: 207.0,
+      },
     },
     resources: 3,
     influence: 3,
@@ -9718,9 +11278,13 @@ export const planets: Planet[] = [
     tileId: "ba8",
     name: "Zephyrax",
     aliases: ["zephyrax"],
-    positionInTile: {
-      x: 134.0,
-      y: 86.0,
+    planetLayout: {
+      unitHolderName: "zephyrax",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 134.0,
+        y: 86.0,
+      },
     },
     resources: 2,
     influence: 0,
@@ -9737,9 +11301,13 @@ export const planets: Planet[] = [
     tileId: "er48",
     name: "Zhgen",
     aliases: ["zhgen"],
-    positionInTile: {
-      x: 135.0,
-      y: 85.0,
+    planetLayout: {
+      unitHolderName: "zhgen",
+      resourcesLocation: "TopLeft",
+      centerPosition: {
+        x: 135.0,
+        y: 85.0,
+      },
     },
     resources: 0,
     influence: 2,
@@ -9753,9 +11321,13 @@ export const planets: Planet[] = [
     tileId: "30",
     name: "Zohbat",
     aliases: ["zohbat", "zbt", "zobat", "30_2", "zohabt"],
-    positionInTile: {
-      x: 205.0,
-      y: 217.0,
+    planetLayout: {
+      unitHolderName: "zohbat",
+      resourcesLocation: "BottomRight",
+      centerPosition: {
+        x: 205.0,
+        y: 217.0,
+      },
     },
     resources: 3,
     influence: 1,
