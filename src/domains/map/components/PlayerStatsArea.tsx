@@ -244,6 +244,7 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
         playerData &&
         (playerData.tacticalCC > 0 ||
           playerData.fleetCC > 0 ||
+          hasArmadaBonus ||
           (playerData.mahactEdict?.length && playerData.mahactEdict.length > 0) ||
           playerData.strategicCC > 0) && (
           <div
