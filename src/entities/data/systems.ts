@@ -15267,6 +15267,7 @@ export const systems: TileData[] = [
       "fracture2",
       "egressleft"
     ],
+    "hasEgress": true,
     "imagePath": "fracture2.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
@@ -15318,6 +15319,7 @@ export const systems: TileData[] = [
       "fracture6",
       "egressright"
     ],
+    "hasEgress": true,
     "imagePath": "fracture6.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
