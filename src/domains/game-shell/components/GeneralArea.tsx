@@ -40,7 +40,7 @@ function GeneralArea() {
           </Box>
         </Flex>
       </Surface>
-      <GeneralTechCatalog />
+      <GeneralTechCatalog technologyDeck={cardPool.technologyDeck}/>
     </Stack>
   );
 }

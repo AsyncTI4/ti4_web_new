@@ -7,6 +7,10 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import type { Tech } from "@/entities/data/types";
 import styles from "./GeneralTechCatalog.module.css";
 
+type GeneralTechCatalogProps = {
+  technologyDeck?: string[];
+};
+
 type TechColor = "blue" | "green" | "red" | "yellow" | "white";
 
 type TechGroup = {
@@ -16,7 +20,7 @@ type TechGroup = {
   aliases: string[];
 };
 
-const COLORED_TECH_GROUPS: TechGroup[] = [
+const DEFAULT_COLORED_TECH_GROUPS: TechGroup[] = [
   {
     label: "Propulsion",
     color: "blue",
@@ -43,7 +47,7 @@ const COLORED_TECH_GROUPS: TechGroup[] = [
   },
 ];
 
-const UNIT_TECH_ALIASES = [
+const DEFAULT_UNIT_TECH_ALIASES = [
   "ff2",
   "inf2",
   "dd2",
@@ -63,8 +67,10 @@ const REQUIREMENT_ICON_MAP: Record<string, string> = {
 };
 
 function byTierThenName(a: Tech, b: Tech) {
-  return getTechTier(a.requirements) - getTechTier(b.requirements)
-    || a.name.localeCompare(b.name);
+  return (
+    getTechTier(a.requirements) - getTechTier(b.requirements) ||
+    a.name.localeCompare(b.name)
+  );
 }
 
 function resolveTechs(aliases: string[]) {
@@ -74,7 +80,11 @@ function resolveTechs(aliases: string[]) {
     .sort(byTierThenName);
 }
 
-function HeaderRequirementIcons({ requirements }: { requirements?: string }) {
+function HeaderRequirementIcons({
+  requirements,
+}: {
+  requirements?: string;
+}) {
   if (!requirements) return null;
 
   const icons = requirements
@@ -103,12 +113,19 @@ function getUnitUpgradeImageSrc(tech: Tech) {
 
   const requiredTechId = tech.baseUpgrade || tech.alias;
   const unitData = getGenericUnitDataByRequiredTechId(requiredTechId);
+
   if (!unitData?.asyncId) return undefined;
 
   return cdnImage(`/units/${getColorAlias(undefined)}_${unitData.asyncId}.png`);
 }
 
-function TechItem({ tech, color }: { tech: Tech; color: TechColor }) {
+function TechItem({
+  tech,
+  color,
+}: {
+  tech: Tech;
+  color: TechColor;
+}) {
   const unitImageSrc = getUnitUpgradeImageSrc(tech);
 
   return (
@@ -122,10 +139,13 @@ function TechItem({ tech, color }: { tech: Tech; color: TechColor }) {
               className={styles.unitUpgradeIcon}
             />
           )}
+
           <Text className={styles.techName}>{tech.name}</Text>
         </Box>
+
         <HeaderRequirementIcons requirements={tech.requirements} />
       </Box>
+
       <Text className={styles.techText}>
         {tech.text || "No description available."}
       </Text>
@@ -133,20 +153,123 @@ function TechItem({ tech, color }: { tech: Tech; color: TechColor }) {
   );
 }
 
-function ColoredTechSection() {
+function getTechColor(tech: Tech): string {
+  const colors: Record<string, string> = {
+    UNITUPGRADE: "unit",
+    PROPULSION: "blue",
+    BIOTIC: "green",
+    WARFARE: "red",
+    CYBERNETIC: "yellow",
+  };
+
+  return tech.types.map((type) => colors[type]).find(Boolean) ?? "other";
+}
+
+function getColoredTechGroups(technologyDeck: string[]): TechGroup[] {
+  const grouped: Record<TechColor, string[]> = {
+    blue: [],
+    green: [],
+    red: [],
+    yellow: [],
+    white: [],
+  };
+
+  for (const alias of technologyDeck) {
+    const tech = getTechData(alias);
+
+    if (!tech || tech.faction) continue;
+
+    const category = getTechColor(tech);
+
+    if (
+      category === "blue" ||
+      category === "green" ||
+      category === "red" ||
+      category === "yellow"
+    ) {
+      grouped[category].push(alias);
+    }
+  }
+
+  if (
+    grouped.blue.length < 1 &&
+    grouped.green.length < 1 &&
+    grouped.red.length < 1 &&
+    grouped.yellow.length < 1
+  ) {
+    return DEFAULT_COLORED_TECH_GROUPS;
+  } else {
+    return [
+      {
+        label: "Propulsion",
+        color: "blue",
+        icon: "/blue.png",
+        aliases: grouped.blue,
+      },
+      {
+        label: "Biotic",
+        color: "green",
+        icon: "/green.png",
+        aliases: grouped.green,
+      },
+      {
+        label: "Warfare",
+        color: "red",
+        icon: "/red.png",
+        aliases: grouped.red,
+      },
+      {
+        label: "Cybernetic",
+        color: "yellow",
+        icon: "/yellow.png",
+        aliases: grouped.yellow,
+      },
+    ];
+  }
+}
+
+function getUnitTechAliases(technologyDeck: string[]): string[] {
+  const units = technologyDeck.filter((alias) => {
+    const techData = getTechData(alias);
+
+    return (
+      !techData?.faction &&
+      techData?.types?.includes("UNITUPGRADE")
+    );
+  });
+
+  return units.length > 0 ? units : DEFAULT_UNIT_TECH_ALIASES;
+}
+
+function ColoredTechSection({
+  groups,
+}: {
+  groups: TechGroup[];
+}) {
   return (
     <Box className={styles.section}>
       <Text className={styles.sectionTitle}>Generic Technology</Text>
+
       <Box className={styles.colorGrid}>
-        {COLORED_TECH_GROUPS.map((group) => (
+        {groups.map((group) => (
           <Box key={group.label} className={styles.colorColumn}>
             <Box className={styles.colorHeading}>
-              <Image src={group.icon} alt="" className={styles.colorIcon} />
+              <Image
+                src={group.icon}
+                alt=""
+                className={styles.colorIcon}
+              />
+
               <span>{group.label}</span>
             </Box>
+
             <Box className={styles.techList}>
               {resolveTechs(group.aliases).map((tech) => (
-                <TechItem key={tech.alias} tech={tech} color={group.color} />
+                <TechItem
+                  key={tech.alias}
+                  tech={tech}
+                  color={group.color}
+                />
               ))}
             </Box>
           </Box>
@@ -156,24 +279,47 @@ function ColoredTechSection() {
   );
 }
 
-function UnitTechSection() {
+function UnitTechSection({
+  aliases,
+}: {
+  aliases: string[];
+}) {
   return (
     <Box className={styles.section}>
       <Text className={styles.sectionTitle}>Unit Upgrade Technology</Text>
+
       <Box className={styles.unitGrid}>
-        {resolveTechs(UNIT_TECH_ALIASES).map((tech) => (
-          <TechItem key={tech.alias} tech={tech} color="white" />
+        {resolveTechs(aliases).map((tech) => (
+          <TechItem
+            key={tech.alias}
+            tech={tech}
+            color="white"
+          />
         ))}
       </Box>
     </Box>
   );
 }
 
-export function GeneralTechCatalog() {
+export function GeneralTechCatalog({
+  technologyDeck = undefined,
+}: GeneralTechCatalogProps) {
+  if (!technologyDeck) {
+    return (
+      <Box className={styles.catalog}>
+        <ColoredTechSection groups={DEFAULT_COLORED_TECH_GROUPS} />
+        <UnitTechSection aliases={DEFAULT_UNIT_TECH_ALIASES} />
+      </Box>
+    );
+  }
+
+  const coloredGroups = getColoredTechGroups(technologyDeck);
+  const unitAliases = getUnitTechAliases(technologyDeck);
+
   return (
     <Box className={styles.catalog}>
-      <ColoredTechSection />
-      <UnitTechSection />
+      <ColoredTechSection groups={coloredGroups} />
+      <UnitTechSection aliases={unitAliases} />
     </Box>
   );
 }
