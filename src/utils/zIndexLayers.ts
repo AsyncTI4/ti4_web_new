@@ -16,7 +16,7 @@ export const Z_INDEX_LAYERS = {
     THUNDERS_EDGE: 53, // Thunder's Edge token - renders below other tokens
 
     // Regular units
-    GF: 100, // Ground Forces
+    GF: 125, // Ground Forces render above mech artwork
     FF: 110, // Fighters
     MF: 120, // Mechs
     SD: 130, // Space Docks

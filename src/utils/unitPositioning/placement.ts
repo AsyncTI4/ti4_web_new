@@ -1,7 +1,6 @@
 import { gridToPixel } from "./coordinateUtils";
-import { findOptimalSquareGreedy } from "./costMap";
 import { createSortedEntityStacks, createHeatSource } from "./entitySorting";
-import { updateCostMap } from "./heatMap";
+import { createCostMapAccumulator } from "./heatMap";
 import { PlaceEntitiesOptions, EntityStack, HeatSource } from "./types";
 import { startPerformanceSpan } from "@/utils/performanceMarks";
 
@@ -20,6 +19,18 @@ export const placeEntitiesWithCostMap = ({
   const heatSources: HeatSource[] = [...initialHeatSources];
   const entityPlacements: EntityStack[] = [];
   const sortedStacks = createSortedEntityStacks(factionEntities, controller);
+  const costMaps = createCostMapAccumulator({
+    gridSize,
+    squareWidth,
+    squareHeight,
+    factionEntities,
+    existingCostMap: initialCostMap,
+    heatConfig,
+    repellantPlanets,
+    rimSquares,
+    currentFactions: sortedStacks.map(({ faction }) => faction),
+    initialHeatSources,
+  });
   const endPlacementMeasure = startPerformanceSpan(
     "ti4.placeEntitiesWithCostMap",
     {
@@ -29,7 +40,7 @@ export const placeEntitiesWithCostMap = ({
       repellantPlanetCount: repellantPlanets.length,
       rimSquareCount: rimSquares.length,
       controller,
-    }
+    },
   );
 
   for (const [stackIndex, stack] of sortedStacks.entries()) {
@@ -42,22 +53,12 @@ export const placeEntitiesWithCostMap = ({
         faction: stack.faction,
         count: stack.count,
         heatSourceCount: heatSources.length,
-      }
+      },
     );
-    const currentCostMap = updateCostMap({
-      gridSize,
-      squareWidth,
-      squareHeight,
-      repellantPlanets,
-      factionEntities,
-      existingCostMap: initialCostMap,
-      rimSquares,
-      heatSources: heatSources,
-      currentFaction: stack.faction,
-      heatConfig,
-      rimClearance: heatConfig.rimClearance[stack.entityType],
-    });
-    const optimalResult = findOptimalSquareGreedy(currentCostMap, gridSize);
+    const optimalResult = costMaps.findOptimalSquare(
+      stack.faction,
+      heatConfig.rimClearance[stack.entityType],
+    );
     if (!optimalResult) {
       endStackMeasure({ placed: false });
       continue;
@@ -66,7 +67,7 @@ export const placeEntitiesWithCostMap = ({
     const { x, y } = gridToPixel(
       optimalResult.square,
       squareWidth,
-      squareHeight
+      squareHeight,
     );
 
     entityPlacements.push({
@@ -75,28 +76,21 @@ export const placeEntitiesWithCostMap = ({
       y,
     });
 
-    heatSources.push(
-      createHeatSource(optimalResult, stack, squareWidth, squareHeight)
+    const heatSource = createHeatSource(
+      optimalResult,
+      stack,
+      squareWidth,
+      squareHeight,
     );
+    heatSources.push(heatSource);
+    costMaps.addHeatSource(heatSource);
     endStackMeasure({
       placed: true,
       finalHeatSourceCount: heatSources.length,
     });
   }
 
-  const finalCostMap = updateCostMap({
-    gridSize,
-    squareWidth,
-    squareHeight,
-    repellantPlanets,
-    factionEntities,
-    existingCostMap: initialCostMap,
-    rimSquares,
-    heatSources: heatSources,
-    currentFaction: undefined,
-    heatConfig,
-    rimClearance: 0,
-  });
+  const finalCostMap = costMaps.createCostMap();
 
   endPlacementMeasure({
     placementCount: entityPlacements.length,

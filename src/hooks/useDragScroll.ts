@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import * as dragscroll from "dragscroll";
 
+const PAN_IDLE_MS = 120;
+const PANNING_CLASS = "dragscroll-panning";
+
 /**
  * Wires the calling component's `.dragscroll` element for drag-to-pan.
  *
@@ -15,5 +18,39 @@ import * as dragscroll from "dragscroll";
 export function useDragScroll() {
   useEffect(() => {
     dragscroll.reset();
+
+    const scrollers = Array.from(
+      document.querySelectorAll<HTMLElement>(".dragscroll"),
+    );
+    const idleTimers = new Map<HTMLElement, number>();
+
+    const handleScroll = (event: Event) => {
+      const scroller = event.currentTarget as HTMLElement;
+      scroller.classList.add(PANNING_CLASS);
+
+      const idleTimer = idleTimers.get(scroller);
+      if (idleTimer !== undefined) window.clearTimeout(idleTimer);
+      idleTimers.set(
+        scroller,
+        window.setTimeout(() => {
+          scroller.classList.remove(PANNING_CLASS);
+          idleTimers.delete(scroller);
+        }, PAN_IDLE_MS),
+      );
+    };
+
+    for (const scroller of scrollers) {
+      scroller.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
+    return () => {
+      for (const scroller of scrollers) {
+        scroller.removeEventListener("scroll", handleScroll);
+        scroller.classList.remove(PANNING_CLASS);
+      }
+      for (const idleTimer of idleTimers.values()) {
+        window.clearTimeout(idleTimer);
+      }
+    };
   }, []);
 }

@@ -9,10 +9,10 @@ import {
   HEX_VERTICES,
   INDICATOR_DIAGONAL_OFFSET_X,
   INDICATOR_VERTICAL_OFFSET_Y,
-  PLANET_INFO_HEAT_OFFSET,
+  PLANET_INFO_OFFSET,
   PLANET_INFO_HEAT_STACK_SIZE,
-  PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
-  PLANET_NAME_HEAT_INSET,
+  PLANET_NAME_HALF_WIDTH,
+  PLANET_NAME_INSET,
   PRODUCTION_INDICATOR_SIZE,
   SPACE_HEAT_CONFIG,
 } from "./constants";
@@ -57,16 +57,12 @@ export const createPlanetInfoHeatSources = (
 ): HeatSource[] => {
   if (!planet.resourcesLocation) return [];
 
-  const heatDistance = planet.radius + PLANET_INFO_HEAT_OFFSET;
+  const heatDistance = planet.radius + PLANET_INFO_OFFSET;
   const statsAngle = getResourcesLocationAngle(planet.resourcesLocation);
   const nameDirection = NAME_VERTICAL_DIRECTION[planet.resourcesLocation];
   const nameY = planet.y + heatDistance * nameDirection;
-  const nameInsetY = nameY - PLANET_NAME_HEAT_INSET * nameDirection;
-  const nameXOffsets = [
-    -PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
-    0,
-    PLANET_NAME_HEAT_HORIZONTAL_OFFSET,
-  ];
+  const nameInsetY = nameY - PLANET_NAME_INSET * nameDirection;
+  const nameXOffsets = [-PLANET_NAME_HALF_WIDTH, 0, PLANET_NAME_HALF_WIDTH];
 
   return [
     createHeatSourceFromCoords(
@@ -75,16 +71,14 @@ export const createPlanetInfoHeatSources = (
       PLANET_INFO_HEAT_STACK_SIZE,
     ),
     ...[nameY, nameInsetY].flatMap((y) =>
-      nameXOffsets.map((xOffset) =>
-        ({
-          ...createHeatSourceFromCoords(
-            planet.x + xOffset,
-            y,
-            PLANET_INFO_HEAT_STACK_SIZE,
-          ),
-          strength: nameHeatStrength,
-        }),
-      ),
+      nameXOffsets.map((xOffset) => ({
+        ...createHeatSourceFromCoords(
+          planet.x + xOffset,
+          y,
+          PLANET_INFO_HEAT_STACK_SIZE,
+        ),
+        strength: nameHeatStrength,
+      })),
     ),
   ];
 };

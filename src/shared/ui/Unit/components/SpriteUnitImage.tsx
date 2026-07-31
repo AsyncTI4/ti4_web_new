@@ -11,7 +11,7 @@ type SpriteUnitImageProps = {
 };
 
 export function SpriteUnitImage(
-  props: SpriteUnitImageProps
+  props: SpriteUnitImageProps,
 ): React.ReactElement {
   const { sprite, alt, className, scaled } = props;
 
@@ -19,12 +19,13 @@ export function SpriteUnitImage(
     <div
       role="img"
       aria-label={alt}
+      style={scaled ? undefined : { width: sprite.width, height: sprite.height }}
       className={cx(
         "unit-sprite",
         scaled && "unit-sprite--scaled",
         `unit-sprite--${sprite.color}`,
         `unit-sprite--${sprite.unit}`,
-        className
+        className,
       )}
     />
   );

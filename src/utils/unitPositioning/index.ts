@@ -10,7 +10,7 @@ import {
   parsePlanetsFromCoords,
   getInitialHeatSourcesForSystem,
 } from "./coordinateUtils";
-import { processPlanetEntities } from "./planetPlacement";
+import { placePlanetEntitiesForTile } from "./planetPlacement";
 import { placeSpaceEntities } from "./spacePlacement";
 import { EntityStack } from "./types";
 import { PrePlacementTile } from "@/app/providers/context/types";
@@ -63,13 +63,10 @@ export const getAllEntityPlacementsForTile = (
     }
   });
 
-  const planetEntityPlacements = planets
-    .filter((planet) => tile.planets[planet.name] !== undefined)
-    .map((planet) => {
-      const planetEntityData = tile.planets[planet.name];
-      return processPlanetEntities(planet, planetEntityData).entityPlacements;
-    })
-    .flat();
+  const planetEntityPlacements = placePlanetEntitiesForTile(
+    planets,
+    tile.planets,
+  );
 
   return [...spaceEntityPlacements, ...planetEntityPlacements];
 };
@@ -93,10 +90,7 @@ export type {
 } from "./types";
 
 export {
-  SPLAY_OFFSET_X,
-  SPLAY_OFFSET_Y,
   SPACE_HEAT_CONFIG,
-  GROUND_HEAT_CONFIG,
   MAX_HEAT,
   HEX_GRID_WIDTH,
   HEX_GRID_HEIGHT,
@@ -109,6 +103,11 @@ export {
   entityZStackPriority,
 } from "./constants";
 
-export { initializeGroundCostMap, initializeSpaceCostMap } from "./costMap";
-export { processPlanetEntities } from "./planetPlacement";
+export {
+  SPLAY_OFFSET_X,
+  SPLAY_OFFSET_Y,
+} from "@/entities/renderedStackGeometry";
+
+export { initializeSpaceCostMap } from "./costMap";
+export { placePlanetEntitiesForTile } from "./planetPlacement";
 export { placeSpaceEntities } from "./spacePlacement";

@@ -1,8 +1,5 @@
 import { EntityData, FactionUnits } from "@/entities/data/types";
-import {
-  entityIdPriority,
-  GROUND_INFANTRY_BADGE_CLEARANCE,
-} from "./constants";
+import { entityIdPriority, INFANTRY_BADGE_CLEARANCE } from "./constants";
 import { gridToPixel } from "./coordinateUtils";
 import { EntityStackBase, HeatSource } from "./types";
 
@@ -22,7 +19,7 @@ export const createHeatSource = (
   optimalResult: { square: { row: number; col: number }; cost: number },
   stack: EntityStackBase,
   squareWidth: number,
-  squareHeight: number
+  squareHeight: number,
 ): HeatSource => {
   const { x, y } = gridToPixel(optimalResult.square, squareWidth, squareHeight);
   return {
@@ -30,18 +27,19 @@ export const createHeatSource = (
     y,
     faction: stack.faction,
     stackSize: getEntityStackSize(stack.entityId, stack.count),
-    clearance:
-      stack.entityId === "gf" ? GROUND_INFANTRY_BADGE_CLEARANCE : undefined,
+    clearance: stack.entityId === "gf" ? INFANTRY_BADGE_CLEARANCE : undefined,
   };
 };
 
-const buildPriorityMap = (): { [key: string]: number } => {
+const buildPriorityMap = (): Readonly<Record<string, number>> => {
   const map: { [key: string]: number } = {};
   entityIdPriority.forEach((entityId, index) => {
     map[entityId] = index;
   });
   return map;
 };
+
+const PRIORITY_BY_ENTITY_ID = buildPriorityMap();
 
 type QueueItem = {
   entity: EntityData;
@@ -50,7 +48,6 @@ type QueueItem = {
 
 const buildFactionQueues = (
   factionEntities: FactionUnits,
-  priorityMap: { [key: string]: number }
 ): { [faction: string]: QueueItem[] } => {
   const factionQueues: { [faction: string]: QueueItem[] } = {};
 
@@ -58,7 +55,7 @@ const buildFactionQueues = (
     factionQueues[faction] = [];
     entities.forEach((entity) => {
       if (entity.count > 0) {
-        const priority = priorityMap[entity.entityId] ?? 999;
+        const priority = PRIORITY_BY_ENTITY_ID[entity.entityId] ?? 999;
         factionQueues[faction].push({
           entity,
           priority,
@@ -73,7 +70,7 @@ const buildFactionQueues = (
 
 const interleaveQueues = (
   factionQueues: { [faction: string]: QueueItem[] },
-  controller?: string
+  controller?: string,
 ): EntityStackBase[] => {
   const sortedStacks: EntityStackBase[] = [];
   const factionNames = Object.keys(factionQueues);
@@ -92,15 +89,26 @@ const interleaveQueues = (
     orderedFactions.push(...factionNames);
   }
 
-  while (orderedFactions.some((faction) => factionQueues[faction].length > 0)) {
+  const indexes = Object.fromEntries(
+    orderedFactions.map((faction) => [faction, 0]),
+  );
+  let remaining = orderedFactions.reduce(
+    (total, faction) => total + factionQueues[faction].length,
+    0,
+  );
+
+  while (remaining > 0) {
     for (const faction of orderedFactions) {
-      if (factionQueues[faction].length > 0) {
-        const queueItem = factionQueues[faction].shift()!;
-        sortedStacks.push({
-          ...queueItem.entity,
-          faction,
-        });
-      }
+      const index = indexes[faction];
+      const queueItem = factionQueues[faction][index];
+      if (!queueItem) continue;
+
+      indexes[faction] = index + 1;
+      remaining--;
+      sortedStacks.push({
+        ...queueItem.entity,
+        faction,
+      });
     }
   }
 
@@ -109,9 +117,8 @@ const interleaveQueues = (
 
 export const createSortedEntityStacks = (
   factionEntities: FactionUnits,
-  controller?: string
+  controller?: string,
 ): EntityStackBase[] => {
-  const priorityMap = buildPriorityMap();
-  const factionQueues = buildFactionQueues(factionEntities, priorityMap);
+  const factionQueues = buildFactionQueues(factionEntities);
   return interleaveQueues(factionQueues, controller);
 };

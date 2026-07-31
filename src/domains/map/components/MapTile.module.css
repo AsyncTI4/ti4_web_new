@@ -16,6 +16,15 @@
   opacity: 1;
 }
 
+/* The board moves beneath the pointer during a pan. Do not repeatedly
+   composite the full-tile dossier wash as each hex crosses the cursor. */
+:global(.dragscroll-panning)
+  .dossierEligible:hover
+  :global(.system-hex-target) {
+  opacity: 0;
+  transition: none;
+}
+
 .mapTile,
 .tile {
   position: absolute;

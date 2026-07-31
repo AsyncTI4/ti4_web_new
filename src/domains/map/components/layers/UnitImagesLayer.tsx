@@ -1,7 +1,6 @@
 import React from "react";
 import { UnitStack } from "../UnitStack";
 import { getColorAlias } from "@/entities/lookup/colors";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import {
   useColorOverrides,
@@ -40,15 +39,7 @@ export function UnitImagesLayer({
   const mapReplay = useMapReplay();
 
   const unitImages = React.useMemo(() => {
-    const planetCoords = getPlanetCoordsBySystemId(systemId);
-
     return Object.entries(mapTile.entityPlacements).flatMap(([key, stack]) => {
-      let planetCenter: { x: number; y: number } | undefined;
-      if (stack.planetName && planetCoords[stack.planetName]) {
-        const [x, y] = planetCoords[stack.planetName].split(",").map(Number);
-        planetCenter = { x, y };
-      }
-
       // Check for color override, otherwise use faction color
       const overrideColorAlias = colorOverrides[stack.faction];
       const colorAlias = overrideColorAlias
@@ -93,7 +84,6 @@ export function UnitImagesLayer({
           stack={renderedStack}
           colorAlias={colorAlias}
           stackKey={key}
-          planetCenter={planetCenter}
           lawsInPlay={lawsInPlay}
           layoutUnitStates={usesSlottedReplay ? finalUnitStates : undefined}
           damageAtMs={delayedDamage?.damageAtMs}

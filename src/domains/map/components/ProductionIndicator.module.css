@@ -1,6 +1,6 @@
 .productionContainer {
   position: absolute;
-  z-index: 99;
+  z-index: var(--z-system-indicator);
   pointer-events: none;
   display: flex;
   align-items: center;

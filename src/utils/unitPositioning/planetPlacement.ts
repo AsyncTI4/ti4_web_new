@@ -1,39 +1,23 @@
-import { FactionUnits } from "@/entities/data/types";
+import type { TilePlanet } from "@/app/providers/context/types";
+import { DEFAULT_PLANET_RADIUS } from "./constants";
 import {
-  GROUND_HEAT_CONFIG,
-  GROUND_PLANET_NAME_HEAT_STRENGTH,
-  DEFAULT_PLANET_RADIUS,
-  HEX_GRID_SIZE,
-  HEX_SQUARE_WIDTH,
-  HEX_SQUARE_HEIGHT,
-} from "./constants";
-import { initializeGroundCostMap } from "./costMap";
-import { placeEntitiesWithCostMap } from "./placement";
+  placeGroundEntityGroupsForTile,
+  type GroundPlanetRequest,
+} from "./groundGroupPlacement";
 import {
-  Planet,
-  EntityStackBase,
-  EntityStack,
-  HeatSource,
-  PlaceGroundEntitiesOptions,
-} from "./types";
-import {
-  GridDimensions,
-  createHeatSourceFromPlacement,
-  createPlanetInfoHeatSources,
   createPlacementFromCoords,
   tokenToEntityStack,
 } from "./placementHelpers";
-import { TilePlanet } from "@/app/providers/context/types";
+import type { EntityStack, EntityStackBase, Planet } from "./types";
 
-const GRID_CONFIG: GridDimensions = {
-  gridSize: HEX_GRID_SIZE,
-  squareWidth: HEX_SQUARE_WIDTH,
-  squareHeight: HEX_SQUARE_HEIGHT,
+type PreparedPlanet = {
+  fixedPlacements: EntityStack[];
+  groundRequest: GroundPlanetRequest;
 };
 
 const calculateAttachmentAngle = (
   index: number,
-  totalAttachments: number
+  totalAttachments: number,
 ): number => {
   const ATTACHMENT_ANGLE_STEP = 0.5;
   const startAngle = (-ATTACHMENT_ANGLE_STEP * (totalAttachments - 1)) / 2;
@@ -44,7 +28,7 @@ export const placeAttachmentsOnRim = (
   planetX: number,
   planetY: number,
   planetRadius: number,
-  attachmentEntities: EntityStackBase[]
+  attachmentEntities: EntityStackBase[],
 ): EntityStack[] => {
   if (attachmentEntities.length === 0) return [];
 
@@ -53,168 +37,84 @@ export const placeAttachmentsOnRim = (
       attachmentEntities.length === 1
         ? 0
         : calculateAttachmentAngle(index, attachmentEntities.length);
-    const x = planetX + planetRadius * Math.cos(angle);
-    const y = planetY + planetRadius * Math.sin(angle);
-
-    return createPlacementFromCoords(x, y, attachment);
+    return createPlacementFromCoords(
+      planetX + planetRadius * Math.cos(angle),
+      planetY + planetRadius * Math.sin(angle),
+      attachment,
+    );
   });
 };
 
-const placeAttachmentsAndCreateHeatSources = (
-  planet: Planet,
-  attachmentEntities: EntityStackBase[]
-): { placements: EntityStack[]; heatSources: HeatSource[] } => {
-  if (attachmentEntities.length === 0) {
-    return { placements: [], heatSources: [] };
-  }
+export function placePlanetEntitiesForTile(
+  planets: Planet[],
+  planetDataByName: Record<string, TilePlanet>,
+): EntityStack[] {
+  const preparedPlanets = planets.flatMap((planet) => {
+    const planetData = planetDataByName[planet.name];
+    return planetData ? [preparePlanet(planet, planetData)] : [];
+  });
+  const groundResult = placeGroundEntityGroupsForTile(
+    preparedPlanets.map(({ groundRequest }) => groundRequest),
+    planets,
+  );
 
-  const placements = placeAttachmentsOnRim(
+  return [
+    ...preparedPlanets.flatMap(({ fixedPlacements }) => fixedPlacements),
+    ...groundResult.placements,
+  ];
+}
+
+function preparePlanet(planet: Planet, planetData: TilePlanet): PreparedPlanet {
+  const controller = planetData.controlledBy ?? "neutral";
+  const attachments = planetData.attachments.map((attachment) =>
+    tokenToEntityStack(attachment, controller),
+  );
+  const tokens = planetData.tokens.map((token) =>
+    tokenToEntityStack(token, controller),
+  );
+  const attachmentPlacements = placeAttachmentsOnRim(
     planet.x,
     planet.y,
     DEFAULT_PLANET_RADIUS,
-    attachmentEntities
+    attachments,
   );
+  const centerTokenPlacements = placeCenterTokens(planet, tokens);
+  const fixedPlacements = [
+    ...centerTokenPlacements,
+    ...attachmentPlacements,
+  ].map((placement) => ({ ...placement, planetName: planet.name }));
+  return {
+    fixedPlacements,
+    groundRequest: {
+      planet,
+      factionEntities: planetData.unitsByFaction,
+      fixedPlacements,
+      controller: planetData.controlledBy ?? undefined,
+    },
+  };
+}
 
-  const heatSources = placements.map((attachment) =>
-    createHeatSourceFromPlacement(attachment, attachment.count)
-  );
-
-  return { placements, heatSources };
-};
-
-export const placeGroundEntities = ({
-  gridSize,
-  squareWidth,
-  squareHeight,
-  planetX,
-  planetY,
-  planetRadius,
-  factionEntities,
-  heatSources = [],
-  controller,
-}: PlaceGroundEntitiesOptions) => {
-  const { costMap: initialCostMap, rimSquares } = initializeGroundCostMap(
-    gridSize,
-    squareWidth,
-    squareHeight,
-    planetX,
-    planetY,
-    planetRadius
-  );
-
-  return placeEntitiesWithCostMap({
-    gridSize,
-    squareWidth,
-    squareHeight,
-    initialCostMap,
-    rimSquares,
-    repellantPlanets: [],
-    factionEntities,
-    heatConfig: GROUND_HEAT_CONFIG,
-    initialHeatSources: heatSources,
-    controller,
-  });
-};
-
-const placeGroundEntitiesForPlanet = (
+function placeCenterTokens(
   planet: Planet,
-  filteredPlanetEntities: FactionUnits,
-  attachmentHeatSources: HeatSource[],
-  controller?: string
-): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
-  if (Object.keys(filteredPlanetEntities).length === 0) {
-    return { entityPlacements: [], finalCostMap: [] };
-  }
-
-  const planetInfoHeatSources = createPlanetInfoHeatSources(
-    planet,
-    GROUND_PLANET_NAME_HEAT_STRENGTH,
-  );
-  const allHeatSources = [...attachmentHeatSources, ...planetInfoHeatSources];
-
-  const { entityPlacements, finalCostMap } = placeGroundEntities({
-    gridSize: GRID_CONFIG.gridSize,
-    squareWidth: GRID_CONFIG.squareWidth,
-    squareHeight: GRID_CONFIG.squareHeight,
-    planetX: planet.x,
-    planetY: planet.y,
-    planetRadius: planet.radius,
-    factionEntities: filteredPlanetEntities,
-    heatSources: allHeatSources,
-    controller,
-  });
-
-  return { entityPlacements, finalCostMap };
-};
-
-export const processPlanetEntities = (
-  planet: Planet,
-  planetEntityData: TilePlanet
-): { entityPlacements: EntityStack[]; finalCostMap: number[][] } => {
-  // Step 1: Separate entities by type
-  const attachmentEntities: EntityStackBase[] =
-    planetEntityData.attachments.map((attachment) =>
-      tokenToEntityStack(attachment, planetEntityData.controlledBy ?? "neutral")
-    );
-
-  const tokenEntities: EntityStackBase[] = planetEntityData.tokens.map(
-    (token) =>
-      tokenToEntityStack(token, planetEntityData.controlledBy ?? "neutral")
+  tokens: EntityStackBase[],
+): EntityStack[] {
+  const movableTokens = tokens.filter(
+    ({ entityId }) => entityId !== "dmz_large",
   );
 
-  // Step 2: Place attachments and create heat sources
-  const {
-    placements: attachmentPlacements,
-    heatSources: attachmentHeatSources,
-  } = placeAttachmentsAndCreateHeatSources(planet, attachmentEntities);
-
-  // Step 3: Place center tokens at planet center (with jiggle for multiple)
-  const nonDmzTokens = tokenEntities.filter((t) => t.entityId !== "dmz_large");
-  const centerTokenPlacements: EntityStack[] = tokenEntities.map((token) => {
-    // DMZ always stays centered
-    if (token.entityId === "dmz_large") {
+  return tokens.map((token) => {
+    if (token.entityId === "dmz_large" || movableTokens.length <= 1) {
       return createPlacementFromCoords(planet.x, planet.y, token);
     }
 
-    // Apply jiggle offset when multiple non-DMZ center tokens exist
-    if (nonDmzTokens.length > 1) {
-      const jiggleIndex = nonDmzTokens.findIndex(
-        (t) => t.entityId === token.entityId
-      );
-      const angle = (jiggleIndex * 2 * Math.PI) / nonDmzTokens.length;
-      const jiggleRadius = 30;
-      const offsetX = jiggleRadius * Math.cos(angle);
-      const offsetY = jiggleRadius * Math.sin(angle);
-      return createPlacementFromCoords(
-        planet.x + offsetX,
-        planet.y + offsetY,
-        token
-      );
-    }
-
-    return createPlacementFromCoords(planet.x, planet.y, token);
-  });
-
-  // Step 4: Place ground entities with heat map
-  const { entityPlacements: groundEntityPlacements, finalCostMap } =
-    placeGroundEntitiesForPlanet(
-      planet,
-      planetEntityData.unitsByFaction,
-      attachmentHeatSources,
-      planetEntityData.controlledBy
+    const index = movableTokens.findIndex(
+      ({ entityId }) => entityId === token.entityId,
     );
-
-  // Step 5: Combine all placements and add planet name
-  const allPlacements = [
-    ...centerTokenPlacements,
-    ...attachmentPlacements,
-    ...groundEntityPlacements,
-  ];
-
-  const planetEntitiesWithPlanetName = allPlacements.map((entity) => ({
-    ...entity,
-    planetName: planet.name,
-  }));
-
-  return { entityPlacements: planetEntitiesWithPlanetName, finalCostMap };
-};
+    const angle = (index * 2 * Math.PI) / movableTokens.length;
+    return createPlacementFromCoords(
+      planet.x + 30 * Math.cos(angle),
+      planet.y + 30 * Math.sin(angle),
+      token,
+    );
+  });
+}

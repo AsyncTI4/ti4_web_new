@@ -2,7 +2,6 @@ import React from "react";
 import { Tile } from "../Tile";
 import { UnitStack } from "../UnitStack";
 import {
-  processPlanetEntities,
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
   DEFAULT_PLANET_RADIUS,

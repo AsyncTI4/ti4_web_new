@@ -1,3 +1,8 @@
+import {
+  getUnitSpriteDimensions,
+  type SpriteDimensions,
+} from "@/entities/data/renderedSpriteDimensions";
+
 const COLORED_SPRITE_COLORS = new Set([
   "abr",
   "azr",
@@ -113,49 +118,48 @@ export const SPECIAL_UNIT_SPRITES = {
 
 export const SPECIAL_FACTION_SPRITES = {
   ghemina: [
-{
-  sprite: "fs",
-    label: "LORD",
-}]
+    {
+      sprite: "fs",
+      label: "LORD",
+    },
+  ],
 } as const;
 
-export const SPECIAL_SPRITE_UNITS = new Set(
-  Object.keys(SPECIAL_UNIT_SPRITES)
-);
+export const SPECIAL_SPRITE_UNITS = new Set(Object.keys(SPECIAL_UNIT_SPRITES));
 
 const SHARED_SPRITE_UNITS = new Set(["plenaryorbital", "tyrantslament"]);
 
 export type UnitSprite = {
   color: string;
   unit: string;
-};
+} & SpriteDimensions;
 
 export function getUnitSprite(
   colorAlias: string,
-  unitType: string
+  unitType: string,
 ): UnitSprite | undefined {
   if (SHARED_SPRITE_UNITS.has(unitType)) {
-    return { color: "shared", unit: unitType };
+    return createUnitSprite("shared", unitType);
   }
 
-  const special = SPECIAL_UNIT_SPRITES[unitType as keyof typeof SPECIAL_UNIT_SPRITES];
+  const special =
+    SPECIAL_UNIT_SPRITES[unitType as keyof typeof SPECIAL_UNIT_SPRITES];
 
   if (special) {
-    return {
-      color: colorAlias,
-      unit: special.sprite,
-    };
+    return createUnitSprite(colorAlias, special.sprite);
   }
 
   if (
     COLORED_SPRITE_COLORS.has(colorAlias) &&
     COLORED_SPRITE_UNITS.has(unitType)
   ) {
-    return {
-      color: colorAlias,
-      unit: unitType,
-    };
+    return createUnitSprite(colorAlias, unitType);
   }
 
   return undefined;
+}
+
+function createUnitSprite(color: string, unit: string): UnitSprite | undefined {
+  const dimensions = getUnitSpriteDimensions(unit);
+  return dimensions ? { color, unit, ...dimensions } : undefined;
 }

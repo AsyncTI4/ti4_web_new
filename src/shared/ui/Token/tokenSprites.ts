@@ -1,10 +1,14 @@
 // Static manifest matching TI4_map_generator_bot/scripts/generate-token-sprites.mjs output.
+import { getTokenSpriteDimensions } from "@/entities/data/renderedSpriteDimensions";
+
 export type TokenSpriteKind = "token" | "attachment";
 
 export type TokenSprite = {
   kind: TokenSpriteKind;
   id: string;
   sheetClassName: string;
+  width: number;
+  height: number;
 };
 
 const TOKEN_SPRITE_SHEETS: Record<TokenSpriteKind, Record<string, string>> = {
@@ -208,7 +212,8 @@ export function getTokenSprite(
   id: string
 ): TokenSprite | undefined {
   const sheetClassName = TOKEN_SPRITE_SHEETS[kind][id];
-  if (!sheetClassName) return undefined;
+  const dimensions = getTokenSpriteDimensions(kind, id);
+  if (!sheetClassName || !dimensions) return undefined;
 
-  return { kind, id, sheetClassName };
+  return { kind, id, sheetClassName, ...dimensions };
 }

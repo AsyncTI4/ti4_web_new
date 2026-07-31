@@ -7,7 +7,10 @@ import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/entities/lookup/colors";
 import { LawInPlay } from "@/entities/data/types";
 import { isBadgeUnit } from "./UnitStack/unitType";
-import { calculateUnitArrangement } from "./UnitStack/unitArrangement";
+import {
+  calculateUnitArrangement,
+  getRenderedStackFootprint,
+} from "@/entities/renderedStackGeometry";
 import { useDelayedHover } from "./UnitStack/useDelayedHover";
 import { useDecalPaths } from "./UnitStack/useDecalPaths";
 import { Group, Text } from "@mantine/core";
@@ -47,7 +50,6 @@ interface UnitStackProps {
   stack: EntityStack;
   stackKey: string;
   colorAlias: string;
-  planetCenter?: { x: number; y: number };
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitSelect?: (stackKey: string, event: React.MouseEvent) => void;
@@ -64,7 +66,6 @@ export function UnitStack({
   stackKey,
   stack,
   colorAlias,
-  planetCenter,
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
@@ -205,6 +206,11 @@ export function UnitStack({
   // For fighters and infantry, render as a badge with count instead of individual units
   if (isBadgeUnit(unitType)) {
     const badgeType = unitType as "ff" | "gf";
+    const badgeFootprint = getRenderedStackFootprint({
+      entityId: unitType,
+      entityType,
+      count,
+    });
 
     return (
       <div
@@ -219,7 +225,13 @@ export function UnitStack({
         }}
         {...handlers}
       >
-        <div className={classes.badgeInnerWrapper}>
+        <div
+          className={classes.badgeInnerWrapper}
+          style={{
+            width: `${badgeFootprint.width}px`,
+            height: `${badgeFootprint.height}px`,
+          }}
+        >
           <UnitBadge
             key={`${stackKey}-badge`}
             unitType={badgeType}
@@ -244,33 +256,13 @@ export function UnitStack({
     );
   }
 
-  // Calculate wrapper size to contain all units
-  // Units are positioned absolutely within the wrapper, which is centered at (x, y)
-  // We need to account for both positive and negative offsets
-  const UNIT_SIZE = 60; // Approximate unit image size
-
-  // Calculate max absolute offsets in each direction by iterating through all possible indices
-  let maxOffsetX = 0;
-  let maxOffsetY = 0;
-
-  for (let i = 0; i < layoutCount; i++) {
-    const { stackOffsetX, stackOffsetY } = calculateUnitArrangement(
-      unitType,
-      entityType,
-      i,
-      layoutCount,
-    );
-    maxOffsetX = Math.max(maxOffsetX, Math.abs(stackOffsetX));
-    maxOffsetY = Math.max(maxOffsetY, Math.abs(stackOffsetY));
-  }
-
-  // Wrapper needs to be large enough for max offset + half unit size on each side
-  // Since wrapper is centered, we need 2x the max offset + unit size
-  // If count is 0, use minimum size
-  const WRAPPER_WIDTH =
-    layoutCount > 0 ? maxOffsetX * 2 + UNIT_SIZE : UNIT_SIZE;
-  const WRAPPER_HEIGHT =
-    layoutCount > 0 ? maxOffsetY * 2 + UNIT_SIZE : UNIT_SIZE;
+  const footprint = getRenderedStackFootprint({
+    entityId: unitType,
+    entityType,
+    count: layoutCount,
+  });
+  const wrapperCenterX = (footprint.left + footprint.right) / 2;
+  const wrapperCenterY = (footprint.top + footprint.bottom) / 2;
 
   type PositionedUnitProps = {
     index: number;
@@ -278,7 +270,7 @@ export function UnitStack({
     sustained: boolean;
     delayDamage?: boolean;
   };
-  const PositionedUnit = ({
+  const renderPositionedUnit = ({
     index,
     galvanized = false,
     sustained = false,
@@ -291,25 +283,15 @@ export function UnitStack({
 
     // Position relative to the wrapper's center (wrapper is centered at x, y)
     // Units are positioned absolutely within the wrapper, so we use calc(50% + offset)
-    const xPos = WRAPPER_WIDTH / 2 + stackOffsetX;
-    const yPos = WRAPPER_HEIGHT / 2 + stackOffsetY;
+    const xPos = stackOffsetX - footprint.left;
+    const yPos = stackOffsetY - footprint.top;
 
     if (entityType === "token") {
-      // Convert planetCenter from tile-relative to wrapper-relative coordinates
-      // The wrapper is positioned at (x, y) relative to the tile
-      const wrapperRelativePlanetCenter = planetCenter
-        ? {
-            x: planetCenter.x - x,
-            y: planetCenter.y - y,
-          }
-        : undefined;
-
       return (
         <Token
           key={unitKey}
           tokenId={unitType}
           faction={faction}
-          planetCenter={wrapperRelativePlanetCenter}
           x={xPos}
           y={yPos}
           zIndex={baseZIndex + zIndexOffset}
@@ -353,10 +335,10 @@ export function UnitStack({
       {...handlers}
       className={`${classes.stackWrapper} ${transitionClass} ${replayVisibilityClass}`}
       style={{
-        left: `${x}px`,
-        top: `${y}px`,
-        width: `${WRAPPER_WIDTH}px`,
-        height: `${WRAPPER_HEIGHT}px`,
+        left: `${x + wrapperCenterX}px`,
+        top: `${y + wrapperCenterY}px`,
+        width: `${footprint.width}px`,
+        height: `${footprint.height}px`,
         zIndex: baseZIndex,
         ...transitionDelayStyle,
       }}
@@ -375,62 +357,48 @@ export function UnitStack({
       )}
 
       {Array.from({ length: galvanizedSustained }).map((_, i) => {
-        return (
-          <PositionedUnit
-            key={`${stackKey}-${i}`}
-            index={layoutStateOffsets[3] + i}
-            galvanized={showIndividualGalvanized}
-            sustained={true}
-            delayDamage={i >= galvanizedSustained - delayedDamageStates[3]}
-          />
-        );
+        return renderPositionedUnit({
+          index: layoutStateOffsets[3] + i,
+          galvanized: showIndividualGalvanized,
+          sustained: true,
+          delayDamage: i >= galvanizedSustained - delayedDamageStates[3],
+        });
       })}
 
       {Array.from({ length: galvanizedNonSustained }).map((_, i) => {
-        return (
-          <PositionedUnit
-            key={`${stackKey}-${i}`}
-            index={effectiveLayoutStates[3] + layoutStateOffsets[2] + i}
-            galvanized={showIndividualGalvanized}
-            sustained={false}
-          />
-        );
+        return renderPositionedUnit({
+          index: effectiveLayoutStates[3] + layoutStateOffsets[2] + i,
+          galvanized: showIndividualGalvanized,
+          sustained: false,
+        });
       })}
 
       {Array.from({ length: nonGalvanizedSustained }).map((_, i) => {
-        return (
-          <PositionedUnit
-            key={`${stackKey}-${i}`}
-            index={
-              effectiveLayoutStates[3] +
-              effectiveLayoutStates[2] +
-              layoutGalvanizeOffset +
-              layoutStateOffsets[1] +
-              i
-            }
-            galvanized={false}
-            sustained={true}
-            delayDamage={i >= nonGalvanizedSustained - delayedDamageStates[1]}
-          />
-        );
+        return renderPositionedUnit({
+          index:
+            effectiveLayoutStates[3] +
+            effectiveLayoutStates[2] +
+            layoutGalvanizeOffset +
+            layoutStateOffsets[1] +
+            i,
+          galvanized: false,
+          sustained: true,
+          delayDamage: i >= nonGalvanizedSustained - delayedDamageStates[1],
+        });
       })}
 
       {Array.from({ length: nonGalvanizedNonSustained }).map((_, i) => {
-        return (
-          <PositionedUnit
-            key={`${stackKey}-${i}`}
-            index={
-              effectiveLayoutStates[3] +
-              effectiveLayoutStates[2] +
-              layoutGalvanizeOffset +
-              effectiveLayoutStates[1] +
-              layoutStateOffsets[0] +
-              i
-            }
-            galvanized={false}
-            sustained={false}
-          />
-        );
+        return renderPositionedUnit({
+          index:
+            effectiveLayoutStates[3] +
+            effectiveLayoutStates[2] +
+            layoutGalvanizeOffset +
+            effectiveLayoutStates[1] +
+            layoutStateOffsets[0] +
+            i,
+          galvanized: false,
+          sustained: false,
+        });
       })}
     </div>
   );

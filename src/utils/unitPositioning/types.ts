@@ -5,7 +5,7 @@ import {
   PlanetEntityData,
 } from "@/entities/data/types";
 import { HexagonVertex } from "../hitbox";
-import { SPACE_HEAT_CONFIG, GROUND_HEAT_CONFIG } from "./constants";
+import { SPACE_HEAT_CONFIG } from "./constants";
 
 export type Planet = {
   name: string;
@@ -45,7 +45,7 @@ export type GameState = {
   };
 };
 
-export type HeatConfig = typeof SPACE_HEAT_CONFIG | typeof GROUND_HEAT_CONFIG;
+export type HeatConfig = typeof SPACE_HEAT_CONFIG;
 
 export type UpdateCostMapOptions = {
   gridSize: number;
@@ -88,16 +88,4 @@ export type PlaceSpaceEntitiesOptions = {
   highestProduction?: number;
   largestCapacity?: CapacityUsage;
   hasCrowdedRim?: boolean;
-};
-
-export type PlaceGroundEntitiesOptions = {
-  gridSize: number;
-  squareWidth: number;
-  squareHeight: number;
-  planetX: number;
-  planetY: number;
-  planetRadius: number;
-  factionEntities: FactionUnits;
-  heatSources?: HeatSource[];
-  controller?: string;
 };

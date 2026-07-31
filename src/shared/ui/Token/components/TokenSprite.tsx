@@ -12,6 +12,7 @@ export function TokenSprite({
   sprite,
   alt,
   className,
+  style,
   ...props
 }: TokenSpriteProps): React.ReactElement {
   return (
@@ -19,11 +20,12 @@ export function TokenSprite({
       role="img"
       aria-label={alt}
       {...props}
+      style={{ width: sprite.width, height: sprite.height, ...style }}
       className={cx(
         "token-sprite",
         sprite.sheetClassName,
         `token-sprite--${sprite.kind}-${sanitizeSpriteId(sprite.id)}`,
-        className
+        className,
       )}
     />
   );

@@ -1,6 +1,6 @@
 .capacityContainer {
   position: absolute;
-  z-index: 99;
+  z-index: var(--z-system-indicator);
   pointer-events: none;
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 45%));
 }

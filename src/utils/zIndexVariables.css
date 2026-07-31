@@ -30,6 +30,7 @@
   --z-ws: 200;    /* War Suns */
 
   /* MAP OVERLAYS - Map overlays and PDS overlay (1000-1999) */
+  --z-system-indicator: 1090;
   --z-pds-overlay: 1100;
   --z-tactical-activation: 1240;
   --z-map-unit-transition: 1250;

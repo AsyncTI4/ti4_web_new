@@ -108,6 +108,12 @@
   position: relative;
 }
 
+/* Scrolling moves dozens of tile hit targets beneath a stationary pointer.
+   Ignore them until movement stops so pan frames do not churn hover work. */
+:global(.dragscroll-panning) .tileRenderingContainer {
+  pointer-events: none;
+}
+
 /* HUD title for the below-map dashboard: ROUND 05 ───────── game name */
 .hudTitle {
   min-width: 0;
