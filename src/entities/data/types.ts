@@ -254,6 +254,7 @@ type CardPoolData = {
   agendaDeckSize: number;
   agendaFullDeckSize: number;
   agendaDiscardSize: number;
+  technologyDeck: string[];
 };
 
 export type { CardPoolData };
