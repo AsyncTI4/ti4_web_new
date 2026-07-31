@@ -76,8 +76,8 @@ export function GameContextProvider({ children, gameId }: Props) {
     void refetch();
   }, [refetch]);
   const accessibleColors = useSettingsStore((s) => s.settings.accessibleColors);
-  const alwaysShowControlTokens = useSettingsStore(
-    (s) => s.settings.showControlTokens,
+  const controlTokenDisplayMode = useSettingsStore(
+    (s) => s.settings.controlTokenDisplayMode,
   );
 
   const [decalOverrides, setDecalOverrides] = useState<Record<string, string>>(
@@ -304,7 +304,7 @@ export function GameContextProvider({ children, gameId }: Props) {
         combats: mapStatePreview?.combats,
         activeFaction: mapStatePreview?.activeFaction,
         tacticalPosition: mapStatePreview?.tacticalPosition,
-        alwaysShowControlTokens,
+        controlTokenDisplayMode,
         changedPositions,
       });
     },
@@ -317,7 +317,7 @@ export function GameContextProvider({ children, gameId }: Props) {
       mapStatePreview?.combats,
       mapStatePreview?.activeFaction,
       mapStatePreview?.tacticalPosition,
-      alwaysShowControlTokens,
+      controlTokenDisplayMode,
       changedPositions,
     ],
   );

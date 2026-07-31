@@ -3,6 +3,7 @@ import type {
   RetreatSubEvent,
 } from "@/app/providers/context/types";
 import type { EntityStack } from "@/utils/unitPositioning";
+import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
 
 export type StateCounts = [number, number, number, number];
 
@@ -103,7 +104,7 @@ export type AuthoritativeTransitionOptions = {
   combats?: CombatReplayEvent[];
   activeFaction?: string | null;
   tacticalPosition?: string | null;
-  alwaysShowControlTokens?: boolean;
+  controlTokenDisplayMode?: ControlTokenDisplayMode;
   changedPositions?: Set<string>;
 };
 

@@ -6,6 +6,7 @@ import { Tile } from "@/app/providers/context/types";
 import { useSettingsStore } from "@/utils/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useMapReplay } from "@/hooks/useGameContext";
+import { shouldShowControlToken } from "@/utils/controlTokenDisplay";
 
 type Props = {
   systemId: string;
@@ -13,8 +14,8 @@ type Props = {
 };
 
 export function ControlTokensLayer({ systemId, mapTile }: Props) {
-  const alwaysShowControlTokens = useSettingsStore(
-    (state) => state.settings.showControlTokens
+  const controlTokenDisplayMode = useSettingsStore(
+    (state) => state.settings.controlTokenDisplayMode
   );
   const factionColorMap = useFactionColors();
   const replay = useMapReplay();
@@ -35,13 +36,13 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
       )
         return [];
 
-      if (!alwaysShowControlTokens) {
-        const planetHasUnits = Object.values(mapTile.entityPlacements).some(
-          (placement) =>
-            placement.planetName === planetId && placement.entityType === "unit"
-        );
-        if (planetHasUnits) return [];
-      }
+      if (
+        !shouldShowControlToken(
+          controlTokenDisplayMode,
+          planetData.unitsByFaction,
+        )
+      )
+        return [];
 
       let x: number, y: number;
       if (planetCoords[planetId]) {
@@ -74,7 +75,7 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
         />,
       ];
     });
-  }, [systemId, mapTile, alwaysShowControlTokens, factionColorMap, replay]);
+  }, [systemId, mapTile, controlTokenDisplayMode, factionColorMap, replay]);
 
   return <>{controlTokens}</>;
 }

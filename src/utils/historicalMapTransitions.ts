@@ -33,6 +33,10 @@ import {
   reconcileInventory,
   sequenceMovements,
 } from "@/utils/mapReplay/transitionPlanning";
+import {
+  shouldShowControlToken,
+  type ControlTokenDisplayMode,
+} from "@/utils/controlTokenDisplay";
 
 export type {
   MapCombatLaser,
@@ -365,7 +369,7 @@ function residualControlTokenTransitions(
   previous: GameData,
   current: GameData,
   startMs: number,
-  alwaysShowControlTokens: boolean,
+  controlTokenDisplayMode: ControlTokenDisplayMode,
 ): MapControlTokenTransition[] {
   const transitions: MapControlTokenTransition[] = [];
   const positions = [
@@ -383,15 +387,14 @@ function residualControlTokenTransitions(
       const after = current.tiles[position]?.planets[planet]?.controlledBy;
       if (before === after) continue;
       const delayMs = startMs + transitions.length * 90;
-      const previousHasUnits = previous.tiles[position]?.entityPlacements.some(
-        (placement) =>
-          placement.planetName === planet && placement.entityType === "unit",
-      );
-      const currentHasUnits = current.tiles[position]?.entityPlacements.some(
-        (placement) =>
-          placement.planetName === planet && placement.entityType === "unit",
-      );
-      if (before && (alwaysShowControlTokens || !previousHasUnits)) {
+      const previousGroundPieces =
+        previous.tiles[position]?.planets[planet]?.unitsByFaction ?? {};
+      const currentGroundPieces =
+        current.tiles[position]?.planets[planet]?.unitsByFaction ?? {};
+      if (
+        before &&
+        shouldShowControlToken(controlTokenDisplayMode, previousGroundPieces)
+      ) {
         const coordinates = controlTokenCoordinates(previous, position, planet);
         if (coordinates)
           transitions.push({
@@ -404,7 +407,10 @@ function residualControlTokenTransitions(
             durationMs: 420,
           });
       }
-      if (after && (alwaysShowControlTokens || !currentHasUnits)) {
+      if (
+        after &&
+        shouldShowControlToken(controlTokenDisplayMode, currentGroundPieces)
+      ) {
         const coordinates = controlTokenCoordinates(current, position, planet);
         if (coordinates)
           transitions.push({
@@ -661,7 +667,7 @@ function buildAuthoritativeMapReplay(
     previous,
     current,
     unitReplayEnd + 90,
-    options.alwaysShowControlTokens ?? true,
+    options.controlTokenDisplayMode ?? "ambiguous",
   );
   const baseUnitStates = assignReplayLayout(transitions);
   const delayedDamage = buildStationaryDamage({

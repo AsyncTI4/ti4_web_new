@@ -9,6 +9,7 @@ import {
 import { useSettingsStore } from "@/utils/appStore";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { AppModal } from "@/shared/ui/AppModal";
+import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
 
 type SettingsModalProps = {
   opened: boolean;
@@ -51,13 +52,28 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
                   label="Show Overlays"
                   description="Show ownership color overlays on the map"
                 />
-                <Switch
-                  checked={settings.showControlTokens}
-                  onChange={handlers.toggleAlwaysShowControlTokens}
-                  size="sm"
-                  label="Always Show Control Tokens"
-                  description="When off, control tokens are only shown on planets with no units"
-                />
+                <Stack gap="xs">
+                  <Text size="sm">Control Tokens</Text>
+                  <SegmentedControl
+                    value={settings.controlTokenDisplayMode}
+                    onChange={(value) =>
+                      handlers.updateSettings({
+                        controlTokenDisplayMode:
+                          value as ControlTokenDisplayMode,
+                      })
+                    }
+                    data={[
+                      { label: "Always On", value: "always" },
+                      { label: "On if Ambiguous", value: "ambiguous" },
+                      { label: "Off Unless Empty", value: "empty" },
+                    ]}
+                    fullWidth
+                  />
+                  <Text size="xs" c="dimmed">
+                    Ambiguous planets are empty or contain ground pieces from
+                    more than one faction.
+                  </Text>
+                </Stack>
                 <Switch
                   checked={settings.showExhaustedPlanets}
                   onChange={handlers.toggleShowExhaustedPlanets}

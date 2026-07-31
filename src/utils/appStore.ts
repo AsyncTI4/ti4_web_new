@@ -6,6 +6,7 @@ import {
   setMapViewPreference,
   type MapViewPreference,
 } from "@/utils/mapViewPreference";
+import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
 
 export type TooltipUnit = {
   unitId?: string;
@@ -33,7 +34,7 @@ const DEFAULT_SETTINGS = {
   attachmentsMode: false,
   showPDSLayer: false,
   showControlLayer: false,
-  showControlTokens: true,
+  controlTokenDisplayMode: "ambiguous" as ControlTokenDisplayMode,
   showExhaustedPlanets: true,
   animateEventPreviews: true,
   themeName: "midnightgraytheme" as const,
@@ -49,7 +50,31 @@ const DEFAULT_SETTINGS = {
 };
 
 export function loadSettingsFromStorage(): Settings {
-  return loadJsonSettings<Settings>(STORAGE_KEY, DEFAULT_SETTINGS);
+  const settings = loadJsonSettings<Settings>(STORAGE_KEY, DEFAULT_SETTINGS);
+
+  try {
+    const stored = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) ?? "null",
+    ) as Record<string, unknown> | null;
+    const storedMode = stored?.controlTokenDisplayMode;
+    if (
+      storedMode === "always" ||
+      storedMode === "ambiguous" ||
+      storedMode === "empty"
+    ) {
+      settings.controlTokenDisplayMode = storedMode;
+    } else if (typeof stored?.showControlTokens === "boolean") {
+      settings.controlTokenDisplayMode = stored.showControlTokens
+        ? "always"
+        : "empty";
+    } else {
+      settings.controlTokenDisplayMode = "ambiguous";
+    }
+  } catch {
+    // loadJsonSettings already reports malformed stored settings.
+  }
+
+  return settings;
 }
 
 export function saveSettingsToStorage(settings: Settings) {
@@ -351,7 +376,7 @@ export type Settings = {
   attachmentsMode: boolean;
   showPDSLayer: boolean;
   showControlLayer: boolean;
-  showControlTokens: boolean;
+  controlTokenDisplayMode: ControlTokenDisplayMode;
   showExhaustedPlanets: boolean;
   animateEventPreviews: boolean;
   themeName:
@@ -389,7 +414,6 @@ type SettingsHandlers = {
   toggleAttachmentsMode: () => void;
   togglePdsMode: () => void;
   toggleShowControlLayer: () => void;
-  toggleAlwaysShowControlTokens: () => void;
   toggleShowExhaustedPlanets: () => void;
   setThemeName: (name: Settings["themeName"]) => void;
   toggleAccessibleColors: () => void;
@@ -411,7 +435,6 @@ export type SettingsStore = {
   toggleTechSkipsMode: () => void;
   toggleShowPDSLayer: () => void;
   toggleShowControlLayer: () => void;
-  toggleAlwaysShowControlTokens: () => void;
   toggleShowExhaustedPlanets: () => void;
   setThemeName: (name: Settings["themeName"]) => void;
   toggleAccessibleColors: () => void;
@@ -529,16 +552,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       return { ...state, settings: newSettings };
     });
 
-  const toggleAlwaysShowControlTokens = () =>
-    set((state) => {
-      const newSettings = {
-        ...state.settings,
-        showControlTokens: !state.settings.showControlTokens,
-      };
-      saveSettingsToStorage(newSettings as Settings);
-      return { ...state, settings: newSettings };
-    });
-
   const toggleShowExhaustedPlanets = () =>
     set((state) => {
       const newSettings = {
@@ -605,7 +618,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
       toggleAttachmentsMode,
       togglePdsMode: toggleShowPDSLayer,
       toggleShowControlLayer,
-      toggleAlwaysShowControlTokens,
       toggleShowExhaustedPlanets,
       setThemeName,
       toggleAccessibleColors,
@@ -624,7 +636,6 @@ export const useSettingsStore = create<SettingsStore>((set) => {
     toggleAttachmentsMode,
     toggleShowPDSLayer,
     toggleShowControlLayer,
-    toggleAlwaysShowControlTokens,
     toggleShowExhaustedPlanets,
     setThemeName,
     toggleAccessibleColors,
