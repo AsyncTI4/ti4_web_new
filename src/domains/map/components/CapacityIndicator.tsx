@@ -51,7 +51,9 @@ export function CapacityIndicator({ x, y, capacity }: Props) {
         <span>{capacity.used}</span>
         <span className={classes.divider}>/</span>
         <span>{capacity.total}</span>
-        {capacity.ignored > 0 && <sup>*</sup>}
+        {capacity.ignored > 0 && (
+          <sup className={classes.ignoredCapacity}>*</sup>
+        )}      
       </div>
     </div>
   );

@@ -91,33 +91,43 @@ function getLargestCapacity(
 }
 
 function calculateLargestCapacity(
-  unitsByFaction: Record<string, EntityData[]>,
+  groundUnitsByFaction: Record<string, EntityData[]>,
+  spaceUnitsByFaction: Record<string, EntityData[]>,
   players: PlayerDataResponse["playerData"],
 ): CapacityUsage | undefined {
-  const capacityByFaction = Object.entries(unitsByFaction).flatMap(
-    ([faction, entities]) => {
-      const player = players.find((candidate) => candidate.faction === faction);
-      if (!player) return [];
+  const factions = new Set([
+    ...Object.keys(groundUnitsByFaction),
+    ...Object.keys(spaceUnitsByFaction),
+  ]);
 
-      const capacity = entities.reduce<CapacityUsage>(
-        (total, entity) => {
-          const unit = lookupUnit(entity.entityId, faction, player);
-          const usesCapacity =
-            unit?.baseType === "fighter" || unit?.isGroundForce === true;
-          return {
-            total: total.total + (unit?.capacityValue ?? 0) * entity.count,
-            used:
-              total.used +
-              (usesCapacity ? (unit.capacityUsed ?? 0) * entity.count : 0),
-            ignored: total.ignored,
-          };
-        },
-        { total: 0, used: 0, ignored: 0 },
-      );
+  const capacityByFaction = [...factions].flatMap((faction) => {
+    const player = players.find((candidate) => candidate.faction === faction);
+    if (!player) return [];
 
-      return capacity.total > 0 ? [capacity] : [];
-    },
-  );
+    const groundEntities = groundUnitsByFaction[faction] ?? [];
+    const spaceEntities = spaceUnitsByFaction[faction] ?? [];
+
+    const capacity = [...groundEntities, ...spaceEntities].reduce<CapacityUsage>(
+      (total, entity) => {
+        const unit = lookupUnit(entity.entityId, faction, player);
+        const isGroundUnit = unit?.isGroundForce === true;
+        const capacityValue = (unit?.capacityValue ?? 0) * entity.count;
+
+        return {
+          total: total.total + capacityValue,
+          used:
+            total.used +
+            (!isGroundUnit && unit?.baseType === "fighter"
+              ? (unit.capacityUsed ?? 0) * entity.count
+              : 0),
+          ignored: total.ignored += unit?.baseType === "spacedock" ? capacityValue : 0,
+        };
+      },
+      { total: 0, used: 0, ignored: 0 },
+    );
+
+    return capacity.total > 0 ? [capacity] : [];
+  });
 
   return getLargestCapacity(capacityByFaction);
 }
@@ -254,12 +264,22 @@ export function buildGameContext(
       return;
     }
 
-    const { tokens, unitsByFaction } = aggregateEntities(tileData.space);
+    const { tokens: tokens, unitsByFaction: spaceUnitsByFaction } =
+      aggregateEntities(tileData.space);
+
+    const groundUnitsByFaction: Record<string, EntityData[]> = {};
 
     const planets: Record<string, TilePlanet> = {};
     Object.entries(tileData.planets).forEach(([planetName, planetData]) => {
       const { tokens, unitsByFaction, attachments, actionCards } =
         aggregateEntities(planetData.entities);
+
+      for (const [faction, units] of Object.entries(unitsByFaction)) {
+        groundUnitsByFaction[faction] = [
+          ...(groundUnitsByFaction[faction] ?? []),
+          ...units,
+        ];
+      }
 
       const exhausted = allExhaustedPlanets.has(planetName);
       planets[planetName] = {
@@ -303,23 +323,23 @@ export function buildGameContext(
       position,
       systemId,
       tokens,
-      unitsByFaction,
+      unitsByFaction: spaceUnitsByFaction,
       planets,
       commandCounters: tileData.ccs ?? [],
       highestProduction: Math.max(...Object.values(tileData.production)),
       largestCapacity:
         getLargestCapacity(Object.values(tileData.capacity ?? {})) ??
-        calculateLargestCapacity(unitsByFaction, playerData),
+        calculateLargestCapacity(groundUnitsByFaction, spaceUnitsByFaction, playerData),
       hasTechSkips: hasTechSkips(planets),
       hasAttachments: hasAttachments(planets),
-      controlledBy: getTileController(planets, unitsByFaction),
+      controlledBy: getTileController(planets, spaceUnitsByFaction),
       borderAnomalies: borderAnomaliesByTile[position],
     };
 
     const endTilePlacementMeasure = startPerformanceSpan("ti4.tilePlacement", {
       position,
       systemId,
-      spaceFactionCount: Object.keys(unitsByFaction).length,
+      spaceFactionCount: Object.keys(spaceUnitsByFaction).length,
       planetCount: Object.keys(planets).length,
       tokenCount: tokens.length,
       commandCounterCount: tile.commandCounters.length,

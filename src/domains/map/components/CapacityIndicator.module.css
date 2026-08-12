@@ -26,7 +26,7 @@
   position: absolute;
   right: 0;
   bottom: 1px;
-  width: 42px;
+  width: 52px;
   height: 24px;
   padding: 0 1px;
   border: 1px solid rgb(226 236 245 / 82%);
@@ -66,9 +66,29 @@
 }
 
 .capacityBadge sup {
-  position: relative;
-  top: -0.2em;
-  margin-left: 1px;
   color: rgb(255 210 96);
-  font-size: 9px;
+}
+
+.ignoredCapacity {
+  position: absolute;
+  top: -2px;
+  right: 0px;
+
+  width: auto;
+  height: auto;
+  margin: 0;
+
+  color: rgb(255 210 96);
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: var(--weight-rail);
+  line-height: 1;
+
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;
+
+  z-index: 2;
 }
