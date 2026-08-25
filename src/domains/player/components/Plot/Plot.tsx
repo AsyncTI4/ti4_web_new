@@ -22,7 +22,8 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
   // Only reveal plot names if:
   // 1. plotAlias exists AND
   // 2. faction is "obsidian" (not "firmament")
-  const isRevealed = !!plotCard.plotAlias && faction === "obsidian";
+  const isRevealed = !!plotCard.plotAlias 
+    && (faction === "obsidian" || faction?.startsWith("franken"));
   const displayName = plotCard.plotAlias
     ? plotCard.plotAlias.charAt(0).toUpperCase() + plotCard.plotAlias.slice(1)
     : undefined;
