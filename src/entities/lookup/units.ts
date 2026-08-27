@@ -90,12 +90,21 @@ export const isUnitUpgradedOrWarSun = (unitId: string) => {
 export function lookupUnit(
   asyncId: string,
   faction: string,
-  playerData?: PlayerData
+  playerData?: PlayerData,
+  gameVariant?: string
 ) {
   const ownedUnits = playerData?.unitsOwned;
   const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId);
 
   if (!unitsWithAsyncId) return null;
+
+  if (faction.toLowerCase() === "neutral") {
+    const variant = gameVariant?.toLowerCase() ?? "base";
+    const variantUnits = unitsWithAsyncId.filter(
+      (unit) => !unit.faction && unit.source === variant
+    );
+    return variantUnits.length > 0 ? preferUpgradedUnit(variantUnits) : null;
+  }
 
   // First, if the player owns any unit with this asyncId, prefer that regardless of faction
   if (ownedUnits && ownedUnits.length > 0) {
