@@ -76,7 +76,7 @@ function byTierThenName(a: Tech, b: Tech) {
 function resolveTechs(aliases: string[]) {
   return aliases
     .map((alias) => getTechData(alias))
-    .filter((tech): tech is Tech => Boolean(tech) && !tech.homebrewReplacesID)
+    .filter((tech): tech is Tech => Boolean(tech))
     .sort(byTierThenName);
 }
 
