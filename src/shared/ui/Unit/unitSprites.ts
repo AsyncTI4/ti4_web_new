@@ -114,6 +114,10 @@ export const SPECIAL_UNIT_SPRITES = {
     sprite: "fs",
     label: "LORD",
   },
+  celagrom: {
+    sprite: "fs",
+    label: "CELAGROM",
+  },
 } as const;
 
 export const SPECIAL_FACTION_SPRITES = {
@@ -121,6 +125,12 @@ export const SPECIAL_FACTION_SPRITES = {
     {
       sprite: "fs",
       label: "LORD",
+    },
+  ],
+  celdauri: [
+    {
+      sprite: "fs",
+      label: "CELAGROM",
     },
   ],
 } as const;
