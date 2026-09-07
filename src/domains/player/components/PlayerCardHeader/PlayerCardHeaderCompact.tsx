@@ -6,6 +6,7 @@ import { StatusIndicator } from "../StatusIndicator";
 import { SpeakerToken } from "../SpeakerToken";
 import { TyrantToken } from "../TyrantToken";
 import { StrategyCard } from "../StrategyCard";
+import { NeedsToFollow } from "../NeedsToFollow";
 import { Neighbors } from "../Neighbors";
 import { Breakthrough } from "../Breakthrough/Breakthrough";
 import breakthroughStyles from "../Breakthrough/Breakthrough.module.css";
@@ -24,6 +25,7 @@ type PlayerCardHeaderProps = {
   isTyrant?: boolean;
   scs?: number[];
   exhaustedSCs?: number[];
+  unfollowedSCs?: number[];
   passed?: boolean;
   active?: boolean;
   showNeighbors?: boolean;
@@ -132,6 +134,7 @@ export function PlayerCardHeaderFull({
   isTyrant = false,
   scs = [],
   exhaustedSCs = [],
+  unfollowedSCs = [],
   passed = false,
   active = false,
   neighbors = [],
@@ -162,9 +165,14 @@ export function PlayerCardHeaderFull({
             <PlayerColor color={color} size="xs" />
           </Group>
         </Stack>
-        <Box visibleFrom="sm" ml="xs">
-          {showNeighbors && <Neighbors neighbors={neighbors} />}
-        </Box>
+        <Stack gap={0}>
+          <Box visibleFrom="sm" ml="xs">
+            {unfollowedSCs.length > 0 && <NeedsToFollow values={unfollowedSCs} />}
+          </Box>
+          <Box visibleFrom="sm" ml="xs">
+            {showNeighbors && <Neighbors neighbors={neighbors} />}
+          </Box>
+        </Stack>
       </Group>
 
       <Group gap="xs" align="center">
@@ -187,6 +195,7 @@ export function PlayerCardHeaderMobile({
   scs = [],
   exhaustedSCs = [],
   passed = false,
+  unfollowedSCs = [],
   active = false,
   neighbors = [],
   showNeighbors = true,
@@ -254,6 +263,12 @@ export function PlayerCardHeaderMobile({
           />
         )}
       </Box>
+
+      {unfollowedSCs.length > 0 && (
+        <div className={rail.railGroup}>
+          <NeedsToFollow values={unfollowedSCs} />
+        </div>
+      )}
 
       {showNeighbors && neighbors.length > 0 && (
         <div className={rail.railGroup}>

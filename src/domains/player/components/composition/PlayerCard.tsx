@@ -40,6 +40,7 @@ export default function PlayerCard(props: Props) {
         isTyrant={player.isTyrant}
         scs={player.scs}
         exhaustedSCs={player.exhaustedSCs}
+        unfollowedSCs={player.unfollowedSCs}
         passed={player.passed}
         active={player.active}
         neighbors={player.neighbors}

@@ -14,7 +14,7 @@ const SC_COLORS = {
   5: "teal",
   6: "cyan",
   7: "blue",
-  8: "purple",
+  8: "violet",
 } as const;
 
 export function NeedsToFollow({ values }: Props) {
@@ -29,7 +29,7 @@ export function NeedsToFollow({ values }: Props) {
         {values.map((scNumber, index) => (
           <Text
             key={index}
-            size="lg"
+            size="sm"
             fw={700}
             c={`${SC_COLORS[scNumber as keyof typeof SC_COLORS]}.3`}
             style={{
