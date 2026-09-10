@@ -53,7 +53,7 @@ export function PlayerCardUnitsArea({
           const bestUnit = lookupUnit(asyncId, faction, playerData);
           const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
 
-          if (!bestUnit) {
+          if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
             if (!showUnavailable) return null;
             return (
               <UnitCardUnavailable
@@ -105,7 +105,7 @@ export function PlayerCardUnitsArea({
         const bestUnit = lookupUnit(asyncId, faction, playerData);
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
 
-        if (!bestUnit) {
+        if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
           if (!showUnavailable) return null;
           return (
             <UnitCardUnavailable
