@@ -18,7 +18,10 @@ const UNIT_PRIORITY_ORDER = [
   "gf",
   "sd",
   "pd",
+  "monument",
 ];
+
+const OPTIONAL_UNITS = ["monument"];
 
 type PlayerCardUnitsAreaProps = {
   playerData: PlayerData;
@@ -54,6 +57,7 @@ export function PlayerCardUnitsArea({
           const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
 
           if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
+            if(OPTIONAL_UNITS.includes(asyncId)) return null;
             if (!showUnavailable) return null;
             return (
               <UnitCardUnavailable
@@ -106,6 +110,7 @@ export function PlayerCardUnitsArea({
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
 
         if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
+          if(OPTIONAL_UNITS.includes(asyncId)) return null;
           if (!showUnavailable) return null;
           return (
             <UnitCardUnavailable
