@@ -21,6 +21,7 @@ export type TileData = {
   isSupernova?: boolean;
   isNebula?: boolean;
   isGravityRift?: boolean;
+  isScar?: boolean;
   hasEgress?: boolean;
   imageURL?: string;
   source: string;

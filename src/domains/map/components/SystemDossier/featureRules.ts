@@ -157,6 +157,9 @@ export function getSystemFeatures(
   if (tileData?.isGravityRift) {
     features.push({ id: "gravityRift", kind: "anomaly", ...ANOMALY_RULES.gravityRift });
   }
+  if (tileData?.isScar) {
+    features.push({ id: "entropicScar", kind: "anomaly", ...ANOMALY_RULES.entropicScar });
+  }
   if (tileData?.hasEgress) {
     features.push({ id: "egress", kind: "token", ...TOKEN_RULES.egress });
   }
