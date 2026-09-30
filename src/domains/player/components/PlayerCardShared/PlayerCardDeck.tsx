@@ -176,7 +176,6 @@ export function PlayerCardDeck({ playerData }: Props) {
             playerData={playerData}
             color={player.color}
             faction={player.faction}
-            cols={{ base: 4, xl: 6 }}
             spacing="8px"
             showUnitUpgrades={settings.showPlayerAreaUnitUpgrades}
           />
