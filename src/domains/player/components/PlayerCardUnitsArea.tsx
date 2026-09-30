@@ -27,7 +27,6 @@ type PlayerCardUnitsAreaProps = {
   playerData: PlayerData;
   color: string;
   faction: string;
-  cols?: number | { base?: number; xl?: number };
   spacing?: string;
   showUnavailable?: boolean;
   /** Tight "tic-tac-toe" grid of 2 rows with hairline dividers */
@@ -39,7 +38,6 @@ export function PlayerCardUnitsArea({
   playerData,
   color,
   faction,
-  cols = { base: 4, xl: 6 },
   spacing = "8px",
   showUnavailable = true,
   condensed = false,
@@ -48,6 +46,25 @@ export function PlayerCardUnitsArea({
   const unitCounts = playerData.unitCounts || {};
   const stasisInfantry = playerData.stasisInfantry || 0;
   const ccReinf = playerData.ccReinf;
+
+  const unitCount = UNIT_PRIORITY_ORDER.filter((asyncId) => {
+    const bestUnit = lookupUnit(asyncId, faction, playerData);
+
+    if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
+      return !OPTIONAL_UNITS.includes(asyncId) && showUnavailable;
+    }
+
+    return true;
+  }).length;
+
+  const extraCardCount =
+    (ccReinf !== undefined ? 1 : 0) +
+    (stasisInfantry > 0 ? 1 : 0);
+
+  const totalCardCount = unitCount + extraCardCount;
+
+  const rows = totalCardCount > 7 ? 2 : 1;
+  const cols = Math.ceil(totalCardCount / rows);
 
   if (condensed) {
     return (
@@ -105,7 +122,7 @@ export function PlayerCardUnitsArea({
 
   return (
     <SimpleGrid h="100%" cols={cols} spacing={spacing}>
-      {UNIT_PRIORITY_ORDER.map((asyncId) => {
+        {UNIT_PRIORITY_ORDER.map((asyncId) => {
         const bestUnit = lookupUnit(asyncId, faction, playerData);
         const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
 
