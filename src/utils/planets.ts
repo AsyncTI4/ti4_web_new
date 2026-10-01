@@ -27,8 +27,9 @@ export function getTechSpecialties(
   planetName: string,
   attachments: string[]
 ): string[] {
-  const techSpecialties: string[] =
-    getPlanetData(planetName)?.techSpecialties ?? [];
+  const techSpecialties: string[] = [
+    ...(getPlanetData(planetName)?.techSpecialties ?? []),
+  ];
   if (attachments.length > 0) {
     attachments.forEach((attachment) => {
       const attachmentData = getAttachmentData(attachment);
