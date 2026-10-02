@@ -39,7 +39,7 @@ export function Relic({ relicId, isExhausted = false }: Props) {
         isExhausted && styles.exhaustedIcon,
         isExhausted && styles.exhaustedIconX,
       )}
-      title={relicData.shortName || relicData.name}
+      title={relicData.name}
       dropdownContent={<RelicCard relicId={relicId} />}
     />
   );
