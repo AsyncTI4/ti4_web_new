@@ -24,6 +24,7 @@ export function GamePage({ onShowNewUI }: GamePageProps) {
   useGameSocket(gameId ?? "", () => {
     refetch();
     queryClient.invalidateQueries({ queryKey: ["mapImage", gameId] });
+    void queryClient.invalidateQueries({ queryKey: ["overlays", gameId] });
   });
 
   return (
