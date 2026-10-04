@@ -9,20 +9,24 @@ export type OverlayData = {
   boxXYWH: [number, number, number, number];
 };
 
-async function fetchOverlays(
-  gameId: string,
-): Promise<Record<string, OverlayData>> {
+export type MapOverlayResponse = {
+  overlays: OverlayData[];
+  updatedAtEpochMs: number;
+};
+
+async function fetchOverlays(gameId: string): Promise<OverlayData[]> {
   const apiUrl = `${config.api.gameDataUrl}/${gameId}/overlays`;
   const response = await fetch(apiUrl);
   if (response.status === 404) {
-    return {};
+    return [];
   }
   if (!response.ok) {
     throw new Error(
       `Failed to fetch overlays: ${response.status} ${response.statusText}`,
     );
   }
-  return (await response.json()) as Record<string, OverlayData>;
+  const data = (await response.json()) as MapOverlayResponse;
+  return data.overlays;
 }
 
 export function useOverlayData(gameId?: string) {

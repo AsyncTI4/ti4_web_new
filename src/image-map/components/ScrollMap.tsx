@@ -43,8 +43,6 @@ type OverlayCardContent = {
   text?: string;
 };
 
-type OverlayMap = Record<string, OverlayData>;
-
 export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
   const [imageNaturalWidth, setImageNaturalWidth] = useState<number | undefined>(
     undefined,
@@ -84,7 +82,8 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
         />
       ) : undefined}
 
-      {Object.entries(filteredOverlays).map(([key, overlay]) => {
+      {filteredOverlays.map((overlay, index) => {
+        const key = String(index);
         const dataModel = lookupDataModel(overlay) as Record<string, any> | undefined;
         const { title, text } = getCardContent(dataModel, overlay);
         if (!title && !text) return null;
@@ -244,7 +243,7 @@ const useOverlay = (gameId: string) => {
   };
 };
 
-const filterOverlays = (overlays?: OverlayMap): OverlayMap => overlays ?? {};
+const filterOverlays = (overlays?: OverlayData[]): OverlayData[] => overlays ?? [];
 
 const overlayMaxWidths: Partial<Record<DataModelType, number>> = {
   TechnologyModel: 350,
