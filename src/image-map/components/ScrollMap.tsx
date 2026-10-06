@@ -14,6 +14,8 @@ import { leaders } from "@/entities/data/leaders";
 import { units } from "@/entities/data/units";
 import { techs as technologies } from "@/entities/data/tech";
 import { breakthroughs } from "@/entities/data/breakthroughs";
+import { agendas } from "@/entities/data/agendas";
+import { getStrategyCardById } from "@/entities/lookup/strategyCards";
 import { cdnImage } from "@/entities/data/cdnImage";
 
 import "../styles/ScrollMap.css";
@@ -280,6 +282,10 @@ function lookupDataModel(overlay: OverlayData) {
       return technologies.find((t) => t.alias === dataModelID);
     case "BreakthroughModel":
       return breakthroughs.find((b) => b.alias === dataModelID);
+    case "StrategyCardModel":
+      return getStrategyCardById(dataModelID);
+    case "AgendaModel":
+      return agendas.find((a) => a.alias === dataModelID);
     default:
       return undefined;
   }
