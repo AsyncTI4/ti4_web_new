@@ -1,13 +1,13 @@
 import { Text, Stack } from "@mantine/core";
 import type { PlayerData, Objectives, EntryType, ScoreBreakdownEntry } from "@/entities/data/types";
-import { PlayerColor } from "@/domains/player/components/PlayerColor";
+import { PlayerColor } from "@/shared/ui/PlayerColor/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
 import legendStyles from "./PlayerScoreSummaryLegend.module.css";
 import styxStyles from "./StyxIcon.module.css";
 import { ObjectiveChip } from "../ObjectiveChip";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { IconAlertTriangle, IconBook2, IconDiamond } from "@tabler/icons-react";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import cornerBadgeStyles from "./CornerBadgeIcon.module.css";

@@ -7,14 +7,14 @@ import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import {
   TechSkipIcon,
   type TechType,
-} from "@/domains/player/components/TechSkipIcon";
-import { PlanetTraitIcon } from "@/domains/player/components/PlanetTraitIcon";
-import { mergePlanetTraits, type PlanetTrait } from "@/utils/planetTraits";
+} from "@/shared/ui/TechSkipIcon";
+import { PlanetTraitIcon } from "@/shared/ui/PlanetTraitIcon";
+import { mergePlanetTraits, type PlanetTrait } from "@/entities/game/planetTraits";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
-import { getAttachmentModifiers } from "@/utils/planets";
-import type { TilePlanet } from "@/app/providers/context/types";
+import { getAttachmentModifiers } from "@/entities/game/planets";
+import type { TilePlanet } from "@/entities/game/types";
 import { summarizeZone } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";
 import type { FactionHelpers } from "./useFactionHelpers";

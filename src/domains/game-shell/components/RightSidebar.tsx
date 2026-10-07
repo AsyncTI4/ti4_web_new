@@ -3,9 +3,9 @@ import { FactionTabBar } from "@/domains/game-shell/components/navigation/Factio
 import { PlayerCardDisplay } from "./PlayerCardDisplay";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
 import classes from "@/shared/ui/map/MapUI.module.css";
-import { useGameData, useGameDataState } from "@/hooks/useGameContext";
+import { useGameData, useGameDataState } from "@/state/useGameContext";
 import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
-import { useSecretHandAccess } from "@/hooks/useSecretHandAccess";
+import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
 
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;

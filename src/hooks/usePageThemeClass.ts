@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { THEME_NAMES, useSettingsStore } from "@/utils/appStore";
+import { THEME_NAMES, useSettingsStore } from "@/state/appStore";
 
 const THEME_CLASSES = [
   ...THEME_NAMES.map((name) => `theme-${name}`),

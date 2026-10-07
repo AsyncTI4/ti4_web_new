@@ -1,6 +1,6 @@
 import { Group, Text } from "@mantine/core";
 import cx from "clsx";
-import { useAppStore } from "@/utils/appStore";
+import { useAppStore } from "@/state/appStore";
 import classes from "./ZoomControls.module.css";
 import {
   IconZoomCancel,

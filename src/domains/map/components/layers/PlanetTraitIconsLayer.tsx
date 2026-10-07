@@ -2,10 +2,10 @@ import {
   getPlanetPositionsBySystemId,
   getPlanetData,
 } from "@/entities/lookup/planets";
-import type { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/entities/game/types";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getFactionImage } from "@/entities/lookup/factions";
-import { getPlanetTraitIconSrc, mergePlanetTraits } from "@/utils/planetTraits";
+import { getPlanetTraitIconSrc, mergePlanetTraits } from "@/entities/game/planetTraits";
 
 type Props = {
   systemId: string;

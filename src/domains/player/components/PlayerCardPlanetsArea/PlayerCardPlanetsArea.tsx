@@ -1,6 +1,6 @@
 import { Group, Box } from "@mantine/core";
 import { PlanetCard } from "../PlanetCard";
-import { filterPlanetsByOcean } from "@/utils/planets";
+import { filterPlanetsByOcean } from "@/entities/game/planets";
 
 type Props = {
   planets: string[];

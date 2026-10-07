@@ -1,9 +1,9 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import type { TilePlanet } from "@/app/providers/context/types";
+import type { TilePlanet } from "@/entities/game/types";
 import type { Planet } from "@/entities/data/types";
-import { getPlanetTraitIconSrc, type PlanetTrait } from "@/utils/planetTraits";
-import type { AttachmentModifiers } from "@/utils/planets";
-import { TECH_SKIP_IMAGES, type TechType } from "../TechSkipIcon";
+import { getPlanetTraitIconSrc, type PlanetTrait } from "@/entities/game/planetTraits";
+import type { AttachmentModifiers } from "@/entities/game/planets";
+import { TECH_SKIP_IMAGES, type TechType } from "@/shared/ui/TechSkipIcon";
 
 const VALID_CSS_TYPES = new Set([
   "cultural",

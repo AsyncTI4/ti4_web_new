@@ -2,7 +2,7 @@ import { Stack, Text, Image } from "@mantine/core";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { PlanetAbilityDetailsCard } from "./PlanetAbilityDetailsCard";
+import { PlanetAbilityDetailsCard } from "@/domains/cards/components/PlanetAbilityDetailsCard/PlanetAbilityDetailsCard";
 import styles from "./PlanetAbilityCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 

@@ -8,7 +8,7 @@ import {
   TECH_TYPE_COLOR,
   type TechColor,
 } from "@/entities/lookup/tech";
-import { BreakthroughCard } from "./BreakthroughCard";
+import { BreakthroughCard } from "@/domains/cards/components/BreakthroughCard";
 import { IconLock, IconX } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import cx from "clsx";

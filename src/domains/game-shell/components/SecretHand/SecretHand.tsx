@@ -4,9 +4,9 @@ import { ActionCard } from "@/domains/player/components/ActionCard";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
 import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
-import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
-import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCard";
+import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDetailsCard";
+import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
+import { PromissoryNoteCard } from "@/domains/cards/components/PromissoryNoteCard";
 import { PlayerHandData } from "@/shared/types/playerHand";
 import classes from "./SecretHand.module.css";
 

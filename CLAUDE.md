@@ -18,7 +18,7 @@ Load-bearing rules from those files:
 - Signal colors (stage orange, secret red, relic gold, law purple, faction colors) mean the same thing in every theme. Themes own surfaces, borders, shadows and texture only.
 - Product type is a fixed px scale (9/10/11/12/13/14/18px), never `clamp()`. All comparable numerals are mono.
 - Data panels are flat; shadow is reserved for modals, drawers, dropdowns, tooltips and floating controls. Glow reports state, never decorates a surface.
-- Stack with `var(--z-*)` from `src/utils/zIndexVariables.css` for anything above local sibling ordering.
+- Stack with `var(--z-*)` from `src/styles/zIndexVariables.css` for anything above local sibling ordering.
 - Style overlays by extending `src/styles/overlays.css` so all themes inherit the change.
 
 Anti-references — never build toward these: generic SaaS dashboard, neon cyberpunk cliché (no gradient text, no decorative glass), cluttered fan-wiki, over-animated and floaty. See DESIGN.md's Do's and Don'ts for the specific violations still present in the codebase.

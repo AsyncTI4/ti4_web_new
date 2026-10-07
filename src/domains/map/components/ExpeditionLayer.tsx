@@ -1,6 +1,6 @@
 import { cdnImage } from "@/entities/data/cdnImage";
 import { ExpeditionTokens } from "./ExpeditionTokens";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 
 type Props = {
   contentSize: {

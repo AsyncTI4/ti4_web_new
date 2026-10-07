@@ -1,0 +1,100 @@
+import { useEffect, useRef, useState } from "react";
+import { Client } from "@stomp/stompjs";
+import type { IMessage } from "@stomp/stompjs";
+import { config } from "@/config";
+import type { GameStateMessage } from "@/entities/data/types";
+
+export enum SocketReadyState {
+  UNINSTANTIATED = -1,
+  CONNECTING = 0,
+  OPEN = 1,
+  CLOSING = 2,
+  CLOSED = 3,
+}
+
+export function useGameSocket(
+  gameId: string,
+  onRefresh: () => void,
+  onStateMessage?: (msg: GameStateMessage) => void,
+  onConnect?: () => void
+) {
+  const clientRef = useRef<Client | null>(null);
+  const [readyState, setReadyState] = useState<SocketReadyState>(
+    SocketReadyState.UNINSTANTIATED
+  );
+  const [isReconnecting, setIsReconnecting] = useState(false);
+
+  const onRefreshRef = useRef(onRefresh);
+  useEffect(() => {
+    onRefreshRef.current = onRefresh;
+  }, [onRefresh]);
+
+  const onStateMessageRef = useRef(onStateMessage);
+  useEffect(() => {
+    onStateMessageRef.current = onStateMessage;
+  }, [onStateMessage]);
+
+  const onConnectRef = useRef(onConnect);
+  useEffect(() => {
+    onConnectRef.current = onConnect;
+  }, [onConnect]);
+
+  useEffect(() => {
+    const brokerURL = config.api.websocketUrl;
+    const client = new Client({ brokerURL, reconnectDelay: 0 });
+
+    client.beforeConnect = () => {
+      setReadyState(SocketReadyState.CONNECTING);
+    };
+
+    client.onConnect = () => {
+      setReadyState(SocketReadyState.OPEN);
+      setIsReconnecting(false);
+      client.subscribe(`/topic/game/${gameId}`, (msg: IMessage) => {
+        if (msg.body === "refresh") onRefreshRef.current?.();
+      });
+      client.subscribe(`/topic/game/${gameId}/state`, (msg: IMessage) => {
+        try {
+          onStateMessageRef.current?.(JSON.parse(msg.body) as GameStateMessage);
+        } catch (e) {
+          console.error("Bad game state message", e);
+        }
+      });
+      onConnectRef.current?.();
+    };
+
+    client.onWebSocketClose = () => {
+      setReadyState(SocketReadyState.CLOSED);
+      setIsReconnecting(false);
+    };
+
+    client.onWebSocketError = () => {
+      setReadyState(SocketReadyState.CLOSED);
+      setIsReconnecting(false);
+    };
+
+    clientRef.current = client;
+    client.activate();
+
+    return () => {
+      clientRef.current = null;
+      void client.deactivate();
+    };
+  }, [gameId]);
+
+  const reconnect = () => {
+    const client = clientRef.current;
+    if (!client) return;
+    setIsReconnecting(true);
+    setReadyState(SocketReadyState.CLOSING);
+    client
+      .deactivate()
+      .finally(() => {
+        setReadyState(SocketReadyState.CONNECTING);
+        client.activate();
+      })
+      .catch(() => {});
+  };
+
+  return { readyState, reconnect, isReconnecting };
+}

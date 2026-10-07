@@ -1,7 +1,7 @@
 import { promissoryNotes } from "@/entities/data/promissoryNotes";
 import { indexBy } from "@/entities/lookup/indexBy";
 import type { PromissoryNote } from "@/entities/data/types";
-import type { FactionColorMap } from "@/app/providers/context/types";
+import type { FactionColorMap } from "@/entities/game/types";
 
 const promissoryNotesMap = indexBy(
   promissoryNotes.filter((note) => !note.homebrewReplacesID),

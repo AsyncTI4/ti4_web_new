@@ -1,12 +1,12 @@
 import { Box, Text, Group, Stack, Image } from "@mantine/core";
 import type { KeyboardEvent } from "react";
-import { Shimmer } from "@/domains/player/components/Shimmer";
+import { Shimmer } from "@/shared/ui/Shimmer";
 import { Objective, PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { publicObjectives } from "@/entities/data/publicObjectives";
 import styles from "./ExpandedObjectiveCard.module.css";
 import ProgressObjectiveDisplay from "./ProgressObjectiveDisplay";
-import { ObjectiveDetailsCard } from "./ObjectiveDetailsCard";
+import { ObjectiveDetailsCard } from "@/domains/cards/components/ObjectiveDetailsCard/ObjectiveDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";

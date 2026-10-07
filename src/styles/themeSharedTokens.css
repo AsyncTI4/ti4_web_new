@@ -12,7 +12,7 @@
    * The console stack above the board, as one derivation instead of six.
    *
    * These were previously six independently-guessed literals: 68px in
-   * NewMapUI's Tabs, 40px in its map panel, 110px here, 110px again on the left
+   * GameMapPage's Tabs, 40px in its map panel, 110px here, 110px again on the left
    * sidebar, 125px on the zoom rail and 163px on the floating toolbar. The tab
    * strip actually measures 54, not 40, so the map area resolved 6px taller than
    * the viewport at every size and the board ran under the chrome with no

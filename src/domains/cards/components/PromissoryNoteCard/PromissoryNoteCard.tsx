@@ -1,0 +1,127 @@
+import { Stack, Box, Image, Divider, Text, Group } from "@mantine/core";
+import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
+import { getAllianceCommander } from "@/entities/lookup/leaders";
+import { useFactionColors } from "@/hooks/useFactionColors";
+import { useGameData } from "@/state/useGameContext";
+import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { showLeader } from "@/entities/lookup/showLeader";
+
+type Props = {
+  promissoryNoteId: string;
+};
+
+export function PromissoryNoteCard({ promissoryNoteId }: Props) {
+  const factionColorMap = useFactionColors();
+  const gameData = useGameData();
+  const noteData = getPromissoryNoteData(promissoryNoteId, factionColorMap);
+
+  if (!noteData) return null;
+
+  const displayName = noteData.noteData.shortName || noteData.displayName;
+  const displayText = noteData.noteData.text.replace(
+    /<color>/g,
+    noteData.color || ""
+  );
+
+  const isAlliance =
+    noteData.noteData.alias.includes("_an") ||
+    noteData.noteData.name.toLowerCase() === "alliance";
+
+  // Resolve the actual commander in play for alliance notes. Some variants share a
+  // faction key (for example Ghosts/Red Creuss), so a plain faction match can pick
+  // the wrong leader data.
+  const commander = isAlliance
+    ? getAllianceCommander(
+        noteData.faction,
+        gameData?.playerData.find((player) => player.faction === noteData.faction)
+          ?.leaders
+      )
+    : undefined;
+
+  const noteIcon = (
+    <Box
+      pos="relative"
+      w={60}
+      h={60}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Image src="/pnicon.png" w={40} />
+      {noteData.faction && (
+        <Box
+          pos="absolute"
+          bottom={-4}
+          right={-4}
+          style={{ background: "rgba(0,0,0,0.5)", borderRadius: 4, padding: 2 }}
+        >
+          <FactionIcon faction={noteData.faction} w={18} h={18} />
+        </Box>
+      )}
+    </Box>
+  );
+
+  return (
+    <DetailsCard width={320} color="cyan">
+      <Stack gap="md">
+        <DetailsCard.Title
+          title={displayName}
+          subtitle="Promissory Note"
+          icon={<DetailsCard.Icon icon={noteIcon} />}
+        />
+
+        <Divider c="gray.7" opacity={0.8} />
+
+        {isAlliance && commander && (
+          <>
+            <DetailsCard.Section
+              content={
+                <Stack gap={8}>
+                  <Group gap={10} align="center">
+                    {showLeader(commander.source) && (
+                      <Box
+                        w={36}
+                        h={46}
+                        style={{ overflow: "hidden", borderRadius: 8 }}
+                      >
+                        <Image
+                          src={`/leaders/${commander.id}.webp`}
+                          w={36}
+                          h={46}
+                        />
+                      </Box>
+                    )}
+                    <Stack gap={0} style={{ flex: 1 }}>
+                      <Text size="sm" fw={700} c="white">
+                        {commander.name}
+                      </Text>
+                      <Text size="xs" c="gray.4" fs="italic">
+                        Commander Ability
+                      </Text>
+                    </Stack>
+                  </Group>
+                  <Stack gap={4} style={{ flex: 1 }}>
+                    {commander.abilityWindow && (
+                      <Text size="xs" c="blue.3" fw={600} tt="uppercase">
+                        {commander.abilityWindow}
+                      </Text>
+                    )}
+                    <Text size="sm" c="gray.2" lh={1.5}>
+                      {commander.abilityText}
+                    </Text>
+                  </Stack>
+                </Stack>
+              }
+            />
+            <Divider c="gray.7" opacity={0.8} />
+          </>
+        )}
+
+        <DetailsCard.Section title="Effect" content={displayText} />
+      </Stack>
+    </DetailsCard>
+  );
+}

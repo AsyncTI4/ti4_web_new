@@ -1,4 +1,4 @@
-import { Tile } from "@/app/providers/context/types";
+import { Tile } from "@/entities/game/types";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { PlanetMarkersLayer } from "./PlanetMarkersLayer";

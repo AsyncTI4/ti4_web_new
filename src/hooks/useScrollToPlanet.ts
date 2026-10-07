@@ -1,8 +1,8 @@
 import { useEffect, RefObject } from "react";
-import { useAppStore } from "@/utils/appStore";
-import { useGameContext } from "@/hooks/useGameContext";
+import { useAppStore } from "@/state/appStore";
+import { useGameContext } from "@/state/useGameContext";
 import { getPlanetData, getPlanetLocalPosition } from "@/entities/lookup/planets";
-import { TilePosition } from "@/domains/map/model/mapgen/tilePositioning";
+import { TilePosition } from "@/entities/geometry/tilePositioning";
 import type { Point } from "@/entities/data/types";
 
 type UseScrollToPlanetProps = {

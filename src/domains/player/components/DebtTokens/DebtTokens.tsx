@@ -1,10 +1,10 @@
 import { Group, Text } from "@mantine/core";
-import { SmallControlToken } from "@/domains/map/components/ControlToken";
-import { PlayerColorSwatch } from "@/domains/player/components/PlayerColor";
+import { SmallControlToken } from "@/shared/ui/ControlToken";
+import { PlayerColorSwatch } from "@/shared/ui/PlayerColor/PlayerColor";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

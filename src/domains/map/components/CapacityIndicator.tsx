@@ -3,7 +3,7 @@ import { Unit } from "@/shared/ui/Unit";
 import {
   CAPACITY_INDICATOR_HEIGHT,
   CAPACITY_INDICATOR_WIDTH,
-} from "@/utils/unitPositioning/constants";
+} from "@/entities/positioning/constants";
 import classes from "./CapacityIndicator.module.css";
 
 type Props = {

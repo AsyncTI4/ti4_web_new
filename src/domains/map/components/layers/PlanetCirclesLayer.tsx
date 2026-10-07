@@ -5,10 +5,10 @@ import {
   getPlanetPositionsBySystemId,
   getPlanetData,
 } from "@/entities/lookup/planets";
-import type { Tile } from "@/app/providers/context/types";
-import { useSettingsStore, useAppStore } from "@/utils/appStore";
+import type { Tile } from "@/entities/game/types";
+import { useSettingsStore, useAppStore } from "@/state/appStore";
 import { getTokenData } from "@/entities/lookup/tokens";
-import { DEFAULT_PLANET_RADIUS } from "@/utils/unitPositioning/constants";
+import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning/constants";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 
 const TOKEN_PLANET_RADIUS = 45;

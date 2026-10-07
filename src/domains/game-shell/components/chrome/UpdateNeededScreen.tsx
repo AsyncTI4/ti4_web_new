@@ -1,10 +1,10 @@
 import { AppShell, Center, Stack, Title, Text, Button } from "@mantine/core";
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
-import { HeaderMenuNew } from "./HeaderMenuNew";
+import { HeaderMenu } from "@/domains/tabs/components/HeaderMenu";
 import { Surface } from "@/shared/ui/Surface";
 import classes from "./UpdateNeededScreen.module.css";
 import { APP_HEADER_HEIGHT, AppHeader } from "@/shared/ui/AppHeader";
-import type { EnrichedTab } from "@/app/providers/context/types";
+import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
 
 type UpdateNeededScreenProps = {
   gameId: string;
@@ -26,7 +26,7 @@ export function UpdateNeededScreen({
         groupProps={{ className: classes.headerGroup }}
       >
         <div className={classes.logoDivider} />
-        <HeaderMenuNew
+        <HeaderMenu
           mapId={gameId}
           activeTabs={activeTabs}
           changeTab={changeTab}

@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { Box, type BoxProps } from "@mantine/core";
-import { useAppStore } from "@/utils/appStore";
+import { useAppStore } from "@/state/appStore";
 import { getBrowserZoomScale } from "@/utils/zoom";
 import {
   getMapLayoutConfig,

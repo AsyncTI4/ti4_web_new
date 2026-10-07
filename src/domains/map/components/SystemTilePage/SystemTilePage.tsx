@@ -6,8 +6,8 @@ import {
   HEX_GRID_SIZE,
   HEX_VERTICES,
   placeSpaceEntities,
-} from "@/utils/unitPositioning";
-import { parsePlanetsFromCoords } from "@/utils/unitPositioning/coordinateUtils";
+} from "@/entities/positioning";
+import { parsePlanetsFromCoords } from "@/entities/positioning/coordinateUtils";
 import type { TileUnitData } from "@/entities/data/types";
 import classes from "./SystemTilePage.module.css";
 

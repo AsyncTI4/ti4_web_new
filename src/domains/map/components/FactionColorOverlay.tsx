@@ -1,6 +1,6 @@
-import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
+import { TILE_HEIGHT, TILE_WIDTH } from "@/entities/geometry/tilePositioning";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { generateHexagonPoints } from "@/utils/hexagonUtils";
+import { generateHexagonPoints } from "@/entities/geometry/hexagonUtils";
 import { toRgba } from "@/entities/lookup/colors";
 
 type FactionColorOverlayProps = {

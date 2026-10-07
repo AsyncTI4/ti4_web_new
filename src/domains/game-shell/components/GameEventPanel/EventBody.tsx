@@ -6,13 +6,13 @@ import {
 } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import type { GameEvent } from "@/entities/data/types";
-import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
-import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
-import { PromissoryNoteCard } from "@/domains/player/components/PromissoryNoteCard";
+import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDetailsCard";
+import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
+import { PromissoryNoteCard } from "@/domains/cards/components/PromissoryNoteCard";
 import { RelicCard } from "@/domains/player/components/Relic";
-import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
-import { TechCard } from "@/domains/player/components/Tech";
-import { BreakthroughCard } from "@/domains/player/components/Breakthrough/BreakthroughCard";
+import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
+import { TechCard } from "@/domains/cards/components/TechCard/TechCard";
+import { BreakthroughCard } from "@/domains/cards/components/BreakthroughCard";
 import {
   prettifyId,
   resolveAgendaName,

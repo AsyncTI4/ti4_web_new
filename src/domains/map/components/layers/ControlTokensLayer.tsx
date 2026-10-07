@@ -1,11 +1,11 @@
-import { ControlToken } from "../ControlToken";
+import { ControlToken } from "@/shared/ui/ControlToken";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
-import type { Tile } from "@/app/providers/context/types";
-import { useSettingsStore } from "@/utils/appStore";
+import type { Tile } from "@/entities/game/types";
+import { useSettingsStore } from "@/state/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { useMapReplay } from "@/hooks/useGameContext";
-import { shouldShowControlToken } from "@/utils/controlTokenDisplay";
+import { useMapReplay } from "@/state/useGameContext";
+import { shouldShowControlToken } from "@/entities/game/controlTokenDisplay";
 
 type Props = {
   systemId: string;

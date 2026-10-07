@@ -3,7 +3,7 @@ import { memo } from "react";
 import PlayerCardSidebar from "@/domains/player/components/composition/PlayerCardSidebar";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { PlayerData } from "@/entities/data/types";
-import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
+import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 
 type PlayerCardDisplayProps = {
   playerData: PlayerData[];

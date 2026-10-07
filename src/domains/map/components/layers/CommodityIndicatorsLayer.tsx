@@ -1,6 +1,6 @@
 import { CommodityIndicator } from "../CommodityIndicator";
 import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
-import type { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/entities/game/types";
 
 type Props = {
   systemId: string;

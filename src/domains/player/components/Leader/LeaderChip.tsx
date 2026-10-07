@@ -4,9 +4,9 @@ import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { LeaderDetailsCard } from "../LeaderDetailsCard";
+import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import { getLeaderById } from "@/entities/lookup/leaders";
-import { showLeader } from "./showLeader";
+import { showLeader } from "@/entities/lookup/showLeader";
 import styles from "./Leader.module.css";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 

@@ -1,5 +1,5 @@
 import { getFactionImage } from "@/entities/lookup/factions";
-import { useGameData } from "./useGameContext";
+import { useGameData } from "@/state/useGameContext";
 
 function useFactionImages() {
   const gameData = useGameData();

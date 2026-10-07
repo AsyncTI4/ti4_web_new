@@ -1,4 +1,4 @@
-import { useGameContext } from "@/hooks/useGameContext";
+import { useGameContext } from "@/state/useGameContext";
 import { useEffect, useRef } from "react";
 
 type UseMapScrollPositionProps = {

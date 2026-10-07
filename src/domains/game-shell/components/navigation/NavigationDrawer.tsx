@@ -13,12 +13,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/shared/ui/Logo";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { EditableTabLabel } from "@/shared/ui/EditableTabLabel";
+import { EditableTabLabel } from "@/domains/tabs/components/EditableTabLabel";
 import { generateColorGradient } from "@/entities/lookup/colors";
-import { useTabLabelEditing } from "@/hooks/useTabLabelEditing";
-import { EnrichedTab } from "@/app/providers/context/types";
+import { useTabLabelEditing } from "@/domains/tabs/hooks/useTabLabelEditing";
+import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
 import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/api/auth/useUser";
 
 type NavigationDrawerProps = {
   opened: boolean;

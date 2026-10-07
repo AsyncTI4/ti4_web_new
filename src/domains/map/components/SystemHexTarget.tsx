@@ -3,7 +3,7 @@ import {
   HEX_PATH,
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/tilePositioning";
 import classes from "./SystemHexTarget.module.css";
 
 type Props = {

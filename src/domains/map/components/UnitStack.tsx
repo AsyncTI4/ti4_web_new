@@ -1,7 +1,7 @@
 import { Unit } from "@/shared/ui/Unit";
 import { Token } from "./Token";
 import { Attachment } from "./Attachment";
-import { EntityStack } from "@/utils/unitPositioning";
+import { EntityStack } from "@/entities/positioning";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/entities/lookup/colors";
@@ -10,7 +10,7 @@ import { isBadgeUnit } from "./UnitStack/unitType";
 import {
   calculateUnitArrangement,
   getRenderedStackFootprint,
-} from "@/entities/renderedStackGeometry";
+} from "@/entities/geometry/renderedStackGeometry";
 import { useDelayedHover } from "./UnitStack/useDelayedHover";
 import { useDecalPaths } from "./UnitStack/useDecalPaths";
 import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
@@ -22,8 +22,8 @@ import {
   transitionDelayStyle,
   unitSlots,
 } from "./UnitStack/transition";
-import type { MapUnitTransition, StateCounts } from "@/utils/mapReplay/types";
-import { stateCount, unitStates } from "@/utils/mapReplay/unitState";
+import type { MapUnitTransition, StateCounts } from "@/entities/replay/types";
+import { stateCount, unitStates } from "@/entities/replay/unitState";
 import classes from "./UnitStack.module.css";
 
 const EMPTY_STATES: StateCounts = [0, 0, 0, 0];

@@ -1,5 +1,5 @@
 import { Button, Group, Text, type ButtonProps } from "@mantine/core";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/api/auth/useUser";
 import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import { config } from "@/config";
 import cx from "clsx";

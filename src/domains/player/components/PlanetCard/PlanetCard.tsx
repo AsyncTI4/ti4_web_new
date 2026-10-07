@@ -2,18 +2,18 @@ import { Stack, Box, Text } from "@mantine/core";
 import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { PlanetDetailsCard } from "../PlanetDetailsCard";
+import { PlanetDetailsCard } from "@/domains/cards/components/PlanetDetailsCard";
 import styles from "./PlanetCard.module.css";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { usePlanet } from "@/hooks/usePlanet";
 import type { Planet } from "@/entities/data/types";
-import { useAppStore } from "@/utils/appStore";
+import { useAppStore } from "@/state/appStore";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { mergePlanetTraits } from "@/utils/planetTraits";
+import { mergePlanetTraits } from "@/entities/game/planetTraits";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { getPlanetTileBackground } from "./planetTileBackground";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
-import { getAttachmentModifiers } from "@/utils/planets";
+import { getAttachmentModifiers } from "@/entities/game/planets";
 import {
   calculateFinalValues,
   createIconSources,

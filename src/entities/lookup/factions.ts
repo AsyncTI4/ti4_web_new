@@ -1,5 +1,5 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import type { FactionImageMap } from "@/app/providers/context/types";
+import type { FactionImageMap } from "@/entities/game/types";
 import type { PlayerData } from "@/entities/data/types";
 
 export function getFactionImage(

@@ -8,8 +8,8 @@ import {
   SC_NAMES,
 } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
-import { useGameData } from "@/hooks/useGameContext";
-import { StrategyCardDetailsCard } from "./StrategyCardDetailsCard";
+import { useGameData } from "@/state/useGameContext";
+import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
 import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./StrategyCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";

@@ -1,4 +1,4 @@
-import type { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/entities/game/types";
 
 export function useTilesList(
   tilesMap: Record<string, Tile> | undefined

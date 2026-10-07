@@ -1,6 +1,6 @@
 import { AppModal } from "@/shared/ui/AppModal";
-import { useAppStore } from "@/utils/appStore";
-import { useGameData } from "@/hooks/useGameContext";
+import { useAppStore } from "@/state/appStore";
+import { useGameData } from "@/state/useGameContext";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { SystemDossier } from "./SystemDossier";
 import styles from "./SystemDossier.module.css";

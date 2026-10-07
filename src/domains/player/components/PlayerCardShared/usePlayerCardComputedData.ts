@@ -1,6 +1,6 @@
 import { getFactionImage } from "@/entities/lookup/factions";
 import { partitionGenericTechs } from "@/entities/lookup/tech";
-import { usePlanetEconomics } from "@/hooks/usePlanetEconomics";
+import { usePlanetEconomics } from "@/domains/player/hooks/usePlanetEconomics";
 import type { PlayerData } from "@/entities/data/types";
 
 export function usePlayerCardComputedData(playerData: PlayerData) {

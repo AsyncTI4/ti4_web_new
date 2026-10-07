@@ -1,7 +1,7 @@
 import { Box, Group, Text } from "@mantine/core";
 import styles from "./Tech.module.css";
 import { getFactionImage } from "@/entities/lookup/factions";
-import { TechCard } from "./TechCard";
+import { TechCard } from "@/domains/cards/components/TechCard/TechCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import {

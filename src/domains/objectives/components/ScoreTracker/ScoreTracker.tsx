@@ -2,7 +2,7 @@ import { Box, Text } from "@mantine/core";
 import cx from "clsx";
 import { PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { useOrderedFactions } from "@/hooks/useOrderedFactions";
+import { useOrderedFactions } from "@/domains/objectives/hooks/useOrderedFactions";
 import styles from "./ScoreTracker.module.css";
 
 type Props = {

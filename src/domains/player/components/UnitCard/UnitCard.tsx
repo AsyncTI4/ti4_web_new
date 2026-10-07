@@ -1,6 +1,6 @@
 import { useDisclosure } from "@/hooks/useDisclosure";
 import styles from "./UnitCard.module.css";
-import { UnitDetailsCard } from "../UnitDetailsCard";
+import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { Unit } from "@/shared/ui/Unit";
 import { BaseCard } from "./BaseCard";
@@ -11,7 +11,7 @@ import {
   getUnitData,
   isNekroFlagship,
 } from "@/entities/lookup/units";
-import { useGameContext } from "@/hooks/useGameContext";
+import { useGameContext } from "@/state/useGameContext";
 
 type Props = {
   unitId: string;

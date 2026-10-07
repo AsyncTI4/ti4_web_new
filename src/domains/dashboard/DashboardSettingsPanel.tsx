@@ -19,7 +19,7 @@ import { IconAlertCircle, IconCheck, IconSettings } from "@tabler/icons-react";
 import {
   useDashboardSettings,
   useSaveDashboardSettings,
-} from "@/hooks/useDashboardSettings";
+} from "@/domains/dashboard/hooks/useDashboardSettings";
 import Caption from "@/shared/ui/Caption/Caption";
 import { toEditableSettings } from "./userSettings";
 import {

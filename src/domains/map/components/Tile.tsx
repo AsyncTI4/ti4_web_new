@@ -1,6 +1,6 @@
 import type { ImgHTMLAttributes } from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 import { boardImageLoadingProps } from "@/shared/ui/imageLoading";
 
 type TileProps = ImgHTMLAttributes<HTMLImageElement> & {

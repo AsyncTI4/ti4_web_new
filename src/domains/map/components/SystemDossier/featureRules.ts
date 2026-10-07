@@ -1,6 +1,6 @@
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 import { getTokenData } from "@/entities/lookup/tokens";
-import type { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/entities/game/types";
 
 /**
  * One movement-relevant fact about a system, with the rule that governs it.

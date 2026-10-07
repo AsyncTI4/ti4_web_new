@@ -1,7 +1,7 @@
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { getAbility } from "@/entities/lookup/abilities";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { AbilityDetailsCard } from "./AbilityDetailsCard";
+import { AbilityDetailsCard } from "@/domains/cards/components/AbilityDetailsCard";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import classes from "./Ability.module.css";

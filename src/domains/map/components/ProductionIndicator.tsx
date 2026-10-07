@@ -1,5 +1,5 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import { PRODUCTION_INDICATOR_SIZE } from "@/utils/unitPositioning/constants";
+import { PRODUCTION_INDICATOR_SIZE } from "@/entities/positioning/constants";
 import classes from "./ProductionIndicator.module.css";
 
 type Props = {

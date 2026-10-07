@@ -1,8 +1,8 @@
 import React from "react";
 import { Tile } from "./Tile";
 import classes from "./MapTile.module.css";
-import { useSettingsStore, useAppStore } from "@/utils/appStore";
-import { useGameData, useMapReplay } from "@/hooks/useGameContext";
+import { useSettingsStore, useAppStore } from "@/state/appStore";
+import { useGameData, useMapReplay } from "@/state/useGameContext";
 import { UnitImagesLayer } from "./layers/UnitImagesLayer";
 import { ControlTokensLayer } from "./layers/ControlTokensLayer";
 import { PlanetCirclesLayer } from "./layers/PlanetCirclesLayer";
@@ -17,8 +17,8 @@ import {
   HEX_PATH,
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
-import type { Tile as TileType } from "@/app/providers/context/types";
+} from "@/entities/geometry/tilePositioning";
+import type { Tile as TileType } from "@/entities/game/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
 import { AttachmentsLayer } from "./layers/AttachmentsLayer";
 import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
@@ -26,7 +26,7 @@ import { WormholeBlockedLayer } from "./layers/WormholeBlockedLayer";
 import { FactionColorOverlay } from "./FactionColorOverlay";
 import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import { SystemHexTarget } from "./SystemHexTarget";
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 
 type Props = {

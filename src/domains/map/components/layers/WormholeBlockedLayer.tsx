@@ -1,6 +1,6 @@
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 
 type Props = {
   systemId: string;

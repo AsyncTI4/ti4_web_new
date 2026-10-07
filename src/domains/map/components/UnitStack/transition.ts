@@ -1,4 +1,4 @@
-import type { MapUnitTransition, StateCounts } from "@/utils/mapReplay/types";
+import type { MapUnitTransition, StateCounts } from "@/entities/replay/types";
 import type { useMapFlightAnimation } from "./useMapFlightAnimation";
 import classes from "../UnitStack.module.css";
 

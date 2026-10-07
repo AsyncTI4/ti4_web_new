@@ -1,7 +1,7 @@
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { ChipWithPopover } from "@/shared/ui/primitives/ChipWithPopover";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { PromissoryNoteCard } from "../PromissoryNoteCard";
+import { PromissoryNoteCard } from "@/domains/cards/components/PromissoryNoteCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import styles from "./PromissoryNote.module.css";
 

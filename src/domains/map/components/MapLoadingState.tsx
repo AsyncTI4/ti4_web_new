@@ -1,5 +1,5 @@
-import { useGameDataState } from "@/hooks/useGameContext";
-import { GameDataFetchError } from "@/hooks/usePlayerData";
+import { useGameDataState } from "@/state/useGameContext";
+import { GameDataFetchError } from "@/api/usePlayerData";
 import { MapSurveyLoader } from "@/shared/ui/primitives/MapSurveyLoader";
 
 type Props = {

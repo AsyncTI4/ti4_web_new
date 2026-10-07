@@ -31,6 +31,8 @@ yarn preview
 
 ## Repository Structure
 
+Dependencies point downward: `pages` → `layout` → `domains` → `shared`/`hooks` → `state` → `api` → `entities` → `utils`. `game-shell` composes the other domains; `cards` sits below them.
+
 ```
 ti4_web_new/
 ├── public/                    # Static assets
@@ -40,21 +42,31 @@ ti4_web_new/
 │   ├── planet_attributes/    # Planet trait icons
 │   └── ...                   # Game assets (tokens, icons, etc.)
 ├── src/
-│   ├── components/           # React components
-│   │   ├── Map/             # Map-related components
-│   │   ├── Objectives/      # Objectives and scoring components
-│   │   ├── PlayerArea/      # Player-specific UI components
-│   │   ├── shared/          # Reusable UI components
-│   │   └── ...              # Page-level components
-│   ├── context/             # React context providers
-│   ├── data/                # Game data and static content
-│   ├── hooks/               # Custom React hooks
-│   ├── lookup/              # Data lookup utilities
-│   ├── mapgen/              # Map generation logic
-│   ├── styles/              # Global styles and CSS
-│   ├── types/               # TypeScript type definitions
-│   ├── utils/               # Utility functions
-│   └── main.tsx             # Application entry point
+│   ├── main.tsx             # Entry point and routes
+│   ├── config.ts            # Environment config
+│   ├── pages/               # Route-level pages (landing, games, dashboard, game map, image map)
+│   ├── layout/              # Site chrome shared by pages (PageShell, SiteHeader, GamesBar)
+│   ├── domains/             # Feature areas
+│   │   ├── game-shell/      # In-game shell: layouts, sidebars, panels, event log
+│   │   ├── map/             # Board rendering: tiles, layers, unit stacks, tooltips
+│   │   ├── player/          # Player area cards and composition
+│   │   ├── cards/           # Details cards, card backs and deck modals for every card type
+│   │   ├── objectives/      # Scoring, public objectives, laws in play
+│   │   ├── tabs/            # Game tab bar and tab management
+│   │   ├── dashboard/ auth/ settings/ image-map/
+│   ├── shared/ui/           # Reusable, domain-agnostic UI
+│   ├── hooks/               # Generic hooks
+│   ├── state/               # App settings store and game context provider
+│   ├── api/                 # Fetching, sockets and auth session
+│   ├── entities/            # Pure game model
+│   │   ├── data/            # Static game data
+│   │   ├── lookup/          # Map-backed getters over the data
+│   │   ├── game/            # GameData types and buildGameContext
+│   │   ├── geometry/        # Hex and tile geometry
+│   │   ├── positioning/     # Unit placement on tiles
+│   │   └── replay/          # Map replay planning
+│   ├── styles/              # Global styles, themes, z-index variables
+│   └── utils/               # Generic helpers
 ├── build/                   # Production build output
 ├── dist/                    # Vite build output
 ├── CLAUDE.md               # AI assistant coding guidelines
@@ -84,7 +96,7 @@ The project uses two TypeScript configurations:
 
 ### Adding Types
 
-- Global types can be added to `src/app/providers/context/types.ts`
+- Game model types live in `src/entities/game/types.ts`; static data types in `src/entities/data/types.ts`
 - Component-specific types should be defined in the same file or nearby
 - Third-party library types are automatically included when available
 

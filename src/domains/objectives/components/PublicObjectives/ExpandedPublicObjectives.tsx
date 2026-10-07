@@ -4,7 +4,7 @@ import ExpandedObjectiveCard from "./ExpandedObjectiveCard";
 import { Objective, Objectives, PlayerData, type LawInPlay } from "@/entities/data/types";
 import styles from "./PublicObjectives.module.css";
 import Caption from "@/shared/ui/Caption/Caption";
-import { LawCard } from "@/domains/game-shell/components/LawsInPlay";
+import { LawCard } from "@/domains/objectives/components/LawsInPlay";
 
 type ObjectiveColor = "orange" | "blue" | "gray";
 

@@ -1,7 +1,7 @@
 import { Box, Group, SimpleGrid } from "@mantine/core";
 import { StrategyCard } from "@/domains/player/components/StrategyCard";
 import { StrategyCard as StrategyCardType } from "@/entities/data/types";
-import { GeneralSectionTitle } from "../GeneralSectionTitle";
+import { GeneralSectionTitle } from "@/shared/ui/GeneralSectionTitle/GeneralSectionTitle";
 
 type Props = {
   strategyCards: StrategyCardType[];

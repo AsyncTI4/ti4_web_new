@@ -1,5 +1,5 @@
 import { useKeyboardShortcuts, type KeyboardShortcutsProps } from "@/hooks/useKeyboardShortcuts";
-import type { SettingsStore } from "@/utils/appStore";
+import type { SettingsStore } from "@/state/appStore";
 
 // Centralizes the shared keyboard shortcut wiring used by both map layouts.
 type ShortcutHandlers = Pick<

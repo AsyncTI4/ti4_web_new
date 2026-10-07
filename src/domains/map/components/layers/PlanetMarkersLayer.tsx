@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
-import type { Tile, TilePlanet } from "@/app/providers/context/types";
+import type { Tile, TilePlanet } from "@/entities/game/types";
 import { PlanetOwnerBadge } from "./PlanetOwnerBadge";
 
 type Props = {

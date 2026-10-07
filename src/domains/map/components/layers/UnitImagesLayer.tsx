@@ -1,9 +1,9 @@
 import { UnitStack } from "../UnitStack";
-import { useGameData, useMapReplay } from "@/hooks/useGameContext";
+import { useGameData, useMapReplay } from "@/state/useGameContext";
 import { useResolveColorAlias } from "../hooks/useResolveColorAlias";
-import type { Tile } from "@/app/providers/context/types";
-import { mapUnitLocationKey } from "@/utils/mapReplay/unitState";
-import { stateCount, unitStates } from "@/utils/mapReplay/unitState";
+import type { Tile } from "@/entities/game/types";
+import { mapUnitLocationKey } from "@/entities/replay/unitState";
+import { stateCount, unitStates } from "@/entities/replay/unitState";
 import { isBadgeUnit } from "../UnitStack/unitType";
 
 type Props = {

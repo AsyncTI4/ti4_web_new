@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { flightDuration } from "@/utils/historicalMapTransitions";
+import { flightDuration } from "@/entities/replay/historicalMapTransitions";
 
 type Options = {
   enabled: boolean;

@@ -9,8 +9,8 @@ import {
   IconSticker,
   IconLinkPlus,
 } from "@tabler/icons-react";
-import { useGameData } from "@/hooks/useGameContext";
-import { useSettingsStore } from "@/utils/appStore";
+import { useGameData } from "@/state/useGameContext";
+import { useSettingsStore } from "@/state/appStore";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { ThemeSwatches } from "./ThemeSwatches";

@@ -2,12 +2,12 @@ import { Box, Stack, Text } from "@mantine/core";
 import { CompactObjectives } from "@/domains/player/components/CompactObjectives";
 import { PointTotals } from "@/domains/player/components/PointTotals";
 import { CompactLaw } from "@/domains/player/components/CompactLaw";
-import { LawDetailsCard } from "@/domains/player/components/LawDetailsCard";
+import { LawDetailsCard } from "@/domains/cards/components/LawDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { useSettingsStore } from "@/utils/appStore";
+import { useSettingsStore } from "@/state/appStore";
 import { useState } from "react";
 import classes from "@/shared/ui/map/MapUI.module.css";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { GameStatePanel } from "./GameStatePanel";
 
 export function LeftSidebar() {

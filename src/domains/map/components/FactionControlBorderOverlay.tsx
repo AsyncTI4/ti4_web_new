@@ -4,11 +4,11 @@ import {
   generateHexagonPoints,
   generateHexagonSides,
   HEX_SIDE_TO_TILE_DIRECTION,
-} from "@/utils/hexagonUtils";
-import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/hexagonUtils";
+import { TILE_HEIGHT, TILE_WIDTH } from "@/entities/geometry/tilePositioning";
 import classes from "./MapTile.module.css";
 import { resolvePrimaryRgb, toRgb } from "@/entities/lookup/colors";
-import { normalizeBorderColor } from "@/utils/colorOptimization";
+import { normalizeBorderColor } from "@/entities/game/colorOptimization";
 
 type Props = {
   faction: string;

@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { SettingsStore, useSettingsStore } from "@/utils/appStore";
+import { SettingsStore, useSettingsStore } from "@/state/appStore";
 
 const THEME_SWATCHES: {
   name: SettingsStore["settings"]["themeName"];

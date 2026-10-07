@@ -1,5 +1,5 @@
 import { useEffect, type RefObject } from "react";
-import { useMapReplay } from "@/hooks/useGameContext";
+import { useMapReplay } from "@/state/useGameContext";
 
 const VIEWPORT_MARGIN = 80;
 

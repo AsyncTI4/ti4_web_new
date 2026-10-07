@@ -1,7 +1,7 @@
 import { getPlanetPositionsBySystemId, getPlanetData } from "@/entities/lookup/planets";
 import { cdnImage } from "@/entities/data/cdnImage";
 import styles from "./PlanetaryShieldOverlayLayer.module.css";
-import type { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/entities/game/types";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 
 type Props = {

@@ -9,7 +9,7 @@ import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ArmyStats } from "@/domains/player/components/ArmyStats";
 import { Nombox } from "./Nombox";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import styles from "./PlayerCardMobile.module.css";
@@ -31,7 +31,7 @@ import { ReinforcementTokensGroup } from "@/domains/player/components/Reinforcem
 import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
 import { PlayerCardHeaderMobile } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
 import { partitionGenericTechs } from "@/entities/lookup/tech";
-import { useSettingsStore } from "@/utils/appStore";
+import { useSettingsStore } from "@/state/appStore";
 
 type Props = {
   playerData: PlayerData;

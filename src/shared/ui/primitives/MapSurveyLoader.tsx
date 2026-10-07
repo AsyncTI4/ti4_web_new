@@ -3,7 +3,7 @@ import { Button } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import cx from "clsx";
 
-import { generateHexagonPoints } from "@/utils/hexagonUtils";
+import { generateHexagonPoints } from "@/entities/geometry/hexagonUtils";
 import Caption from "../Caption/Caption";
 import { MapViewportCenter } from "../MapViewportCenter";
 import hud from "../hudChrome.module.css";

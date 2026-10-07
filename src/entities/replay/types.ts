@@ -1,0 +1,130 @@
+import type { MapStatePreview } from "@/entities/game/types";
+import type { EntityStack } from "@/entities/positioning";
+import type { ControlTokenDisplayMode } from "@/entities/game/controlTokenDisplay";
+
+import type { StateCounts } from "@/entities/data/types";
+
+export type { StateCounts };
+
+export type DelayedDamage = { damageAtMs: number; states: StateCounts };
+
+export type MapUnitTransition = {
+  kind: "moved" | "removed" | "retreated" | "settled" | "added";
+  stack: EntityStack;
+  toX: number;
+  toY: number;
+  locationKey: string;
+  delayMs?: number;
+  layoutUnitStates?: StateCounts;
+  layoutStateOffsets?: StateCounts;
+  appearAtMs?: number;
+  holdFromMs?: number;
+  damageAtMs?: number;
+  delayedDamageStates?: StateCounts;
+  startRotationDeg?: number;
+  parkRotationDeg?: number;
+  holdRotationDeg?: number;
+  hideAfterMs?: number;
+  badgeCountChange?: boolean;
+  residualAsset?: boolean;
+  sourceHold?: boolean;
+  continuation?: {
+    toX: number;
+    toY: number;
+    delayMs: number;
+    startRotationDeg?: number;
+    parkRotationDeg?: number;
+  };
+};
+
+export type MapCombatLaser = {
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+  delayMs: number;
+  durationMs: number;
+  color: "attacker" | "defender";
+};
+
+export type MapCommandTokenPlacement = {
+  kind: "activation" | "added" | "removed";
+  position: string;
+  faction: string;
+  index: number;
+  x: number;
+  y: number;
+  delayMs: number;
+  durationMs: number;
+};
+
+export type MapControlTokenTransition = {
+  kind: "added" | "removed";
+  position: string;
+  planet: string;
+  faction: string;
+  x: number;
+  y: number;
+  delayMs: number;
+  durationMs: number;
+};
+
+export type MapReplayPlan = {
+  transitions: MapUnitTransition[];
+  lasers: MapCombatLaser[];
+  commandTokens: MapCommandTokenPlacement[];
+  controlTokens: MapControlTokenTransition[];
+  arrivalLocations: Set<string>;
+  delayedDamage: Map<string, DelayedDamage>;
+  baseUnitStates: Map<string, StateCounts>;
+  finalRevealLocations: Set<string>;
+  tacticalTargetPosition?: string;
+  focusPosition?: string;
+  showTacticalActivation: boolean;
+  changedPositions: Set<string>;
+  durationMs: number;
+};
+
+export type LocatedStack = {
+  position: string;
+  stack: EntityStack;
+  worldX: number;
+  worldY: number;
+};
+
+export type UnitLocation = {
+  position: string;
+  holder: string;
+  faction: string;
+  unitId: string;
+};
+
+/** The replay-relevant parts of a map preview, plus display options. */
+export type AuthoritativeTransitionOptions = Pick<
+  MapStatePreview,
+  | "movementState"
+  | "retreats"
+  | "combats"
+  | "activeFaction"
+  | "tacticalPosition"
+> & {
+  controlTokenDisplayMode?: ControlTokenDisplayMode;
+  changedPositions?: Set<string>;
+};
+
+export type PlannedMovement = {
+  transition: MapUnitTransition;
+  source: UnitLocation;
+  sourceKey: string;
+  destinationKey: string;
+  target: UnitLocation;
+  finalDestination?: LocatedStack;
+  arrival: LocatedStack;
+  staged: boolean;
+};
+
+export type ReplayInventory = {
+  expectedTotals: Map<string, number>;
+  finalTotals: Map<string, number>;
+  locations: Map<string, UnitLocation>;
+};

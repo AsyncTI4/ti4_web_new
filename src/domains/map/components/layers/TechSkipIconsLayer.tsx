@@ -1,4 +1,4 @@
-import { Tile } from "@/app/providers/context/types";
+import { Tile } from "@/entities/game/types";
 import { TECH_TYPE_COLOR } from "@/entities/lookup/tech";
 import { PlanetMarkersLayer } from "./PlanetMarkersLayer";
 

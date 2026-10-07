@@ -1,8 +1,8 @@
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { getColorAlias } from "@/entities/lookup/colors";
 import type { Expeditions } from "@/entities/data/types";
-import { ControlToken } from "./ControlToken";
+import { ControlToken } from "@/shared/ui/ControlToken";
 
 type ExpeditionPosition = {
   key: keyof Expeditions;

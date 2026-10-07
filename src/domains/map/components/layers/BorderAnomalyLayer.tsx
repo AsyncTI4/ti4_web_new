@@ -1,6 +1,6 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import type { Tile } from "@/app/providers/context/types";
-import { HEXAGON_EDGE_MIDPOINTS } from "@/domains/map/model/mapgen/tilePositioning";
+import type { Tile } from "@/entities/game/types";
+import { HEXAGON_EDGE_MIDPOINTS } from "@/entities/geometry/tilePositioning";
 import classes from "./BorderAnomalyLayer.module.css";
 
 type Props = {

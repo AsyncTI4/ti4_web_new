@@ -6,7 +6,7 @@ type TabPanelSectionProps = {
   children: ReactNode;
   /**
    * Height passed directly to Mantine Tabs.Panel. Defaults to the content panel height used
-   * across the NewMapUI tabbed sections.
+   * across the GameMapPage tabbed sections.
    */
   height?: TabsPanelProps["h"];
   /**

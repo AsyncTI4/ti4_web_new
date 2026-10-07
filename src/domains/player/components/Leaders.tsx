@@ -3,7 +3,7 @@ import { LeaderChip } from "./Leader/LeaderChip";
 import { CompactLeader } from "./Leader/CompactLeader";
 import compactStyles from "./Leader/CompactLeader.module.css";
 import { PhantomLeader } from "./Leader/PhantomLeader";
-import { showLeader } from "./Leader/showLeader";
+import { showLeader } from "@/entities/lookup/showLeader";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { Leader as LeaderType } from "@/entities/data/types";
 import { isMobileDevice } from "@/utils/isTouchDevice";

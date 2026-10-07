@@ -2,7 +2,7 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { getTokenImagePath, getTokenData } from "@/entities/lookup/tokens";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
 import { getTokenSprite } from "@/shared/ui/Token/tokenSprites";
-import { getRenderedStackFootprint } from "@/entities/renderedStackGeometry";
+import { getRenderedStackFootprint } from "@/entities/geometry/renderedStackGeometry";
 import { PositionedSprite } from "./PositionedSprite";
 
 type TokenProps = {

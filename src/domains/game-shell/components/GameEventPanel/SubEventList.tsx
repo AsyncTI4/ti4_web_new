@@ -4,10 +4,10 @@ import {
   IconSwords,
 } from "@tabler/icons-react";
 import type { GameSubEvent } from "@/entities/data/types";
-import { ActionCardDetailsCard } from "@/domains/player/components/ActionCardDetailsCard";
-import { LeaderDetailsCard } from "@/domains/player/components/LeaderDetailsCard";
-import { SecretObjectiveCard } from "@/domains/player/components/SecretObjectiveCard";
-import { TechCard } from "@/domains/player/components/Tech";
+import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDetailsCard";
+import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
+import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
+import { TechCard } from "@/domains/cards/components/TechCard/TechCard";
 import {
   resolveCardName,
   resolveObjectiveName,

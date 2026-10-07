@@ -2,11 +2,11 @@ import {
   generateHexagonPoints,
   generateHexagonSides,
   HEX_SIDE_TO_TILE_DIRECTION,
-} from "@/utils/hexagonUtils";
+} from "@/entities/geometry/hexagonUtils";
 import {
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/tilePositioning";
 import styles from "./PlayerStatsArea.module.css";
 
 type HexagonData = {

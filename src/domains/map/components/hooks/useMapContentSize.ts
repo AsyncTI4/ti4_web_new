@@ -1,9 +1,9 @@
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import {
   calculateStatTilePositions,
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/tilePositioning";
 import { useTilesList } from "@/hooks/useTilesList";
 import { getMapLayoutConfig, type MapLayout } from "../mapLayout";
 

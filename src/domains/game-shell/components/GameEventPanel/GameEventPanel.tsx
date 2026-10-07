@@ -8,9 +8,9 @@ import {
   IconTrophy,
 } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { useGameEvents } from "@/hooks/useGameEvents";
-import { useMapStatePreview } from "@/hooks/useGameContext";
-import { usePlayerData } from "@/hooks/usePlayerData";
+import { useGameEvents } from "@/api/useGameEvents";
+import { useMapStatePreview } from "@/state/useGameContext";
+import { usePlayerData } from "@/api/usePlayerData";
 import type { GameEvent, PlayerDataResponse } from "@/entities/data/types";
 import {
   formatAbsoluteTime,

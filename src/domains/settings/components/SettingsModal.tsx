@@ -6,10 +6,10 @@ import {
   SegmentedControl,
   Tabs,
 } from "@mantine/core";
-import { useSettingsStore } from "@/utils/appStore";
+import { useSettingsStore } from "@/state/appStore";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { AppModal } from "@/shared/ui/AppModal";
-import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
+import type { ControlTokenDisplayMode } from "@/entities/game/controlTokenDisplay";
 
 type PlayerAreaToggleKey =
   | "showPlayerAreaCommandTokens"

@@ -3,15 +3,15 @@ import { Module } from "@/shared/ui/primitives/Module/Module";
 import { MapTile } from "../MapTile";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 import {
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/tilePositioning";
 import { getPlanetsByTileId } from "@/entities/lookup/planets";
 import { getColorAlias } from "@/entities/lookup/colors";
-import { useGameData } from "@/hooks/useGameContext";
-import type { GameData, Tile } from "@/app/providers/context/types";
+import { useGameData } from "@/state/useGameContext";
+import type { GameData, Tile } from "@/entities/game/types";
 import { getSystemFeatures } from "./featureRules";
 import { summarizeZone, formatStat } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";

@@ -12,9 +12,9 @@ import {
 import { IconCards, IconHistory } from "@tabler/icons-react";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { SecretHand } from "@/domains/game-shell/components/SecretHand";
-import { usePlayerHand } from "@/hooks/usePlayerHand";
-import { useSecretHandAccess } from "@/hooks/useSecretHandAccess";
-import { useSettingsStore } from "@/utils/appStore";
+import { usePlayerHand } from "@/domains/game-shell/components/SecretHand/usePlayerHand";
+import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
+import { useSettingsStore } from "@/state/appStore";
 import classes from "./FloatingMapToolbar.module.css";
 
 type FloatingPanel = "events" | "cards";

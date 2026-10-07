@@ -4,7 +4,7 @@ import { FactionIcon } from "@/shared/ui/FactionIcon";
 import classes from "./FactionTabBar.module.css";
 import type { AreaType } from "@/hooks/useTabsAndTooltips";
 import type { PlayerData } from "@/entities/data/types";
-import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
+import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 
 type FactionTabBarProps = {
   playerData: PlayerData[];

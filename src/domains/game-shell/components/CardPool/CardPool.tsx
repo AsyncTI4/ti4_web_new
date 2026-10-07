@@ -3,10 +3,10 @@ import { Cardback } from "@/shared/ui/Cardback";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { CardPoolData } from "@/entities/data/types";
 import styles from "./CardPool.module.css";
-import { GeneralSectionTitle } from "../GeneralSectionTitle";
-import { ExplorationCardBack } from "@/domains/objectives/components/ExplorationCardBack";
-import { SecretDeckCardBack } from "@/domains/objectives/components/SecretDeckCardBack";
-import { RelicDeckCardBack } from "@/domains/objectives/components/RelicDeckCardBack";
+import { GeneralSectionTitle } from "@/shared/ui/GeneralSectionTitle/GeneralSectionTitle";
+import { ExplorationCardBack } from "@/domains/cards/components/ExplorationCardBack";
+import { SecretDeckCardBack } from "@/domains/cards/components/SecretDeckCardBack";
+import { RelicDeckCardBack } from "@/domains/cards/components/RelicDeckCardBack";
 
 type Props = {
   cardPool?: CardPoolData;

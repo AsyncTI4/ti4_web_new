@@ -1,5 +1,5 @@
 import { lookupUnit } from "@/entities/lookup/units";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import { getUnitDecalPath } from "@/entities/lookup/decals";
 
 /**

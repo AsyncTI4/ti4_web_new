@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameData } from "@/state/useGameContext";
 import type { AreaType } from "@/hooks/useTabsAndTooltips";
-import type { Settings } from "@/utils/appStore";
+import type { Settings } from "@/state/appStore";
 
 export type KeyboardShortcutsProps = {
   toggleOverlays: () => void;

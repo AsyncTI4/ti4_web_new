@@ -10,11 +10,11 @@ import {
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import cx from "clsx";
-import { useGameState } from "@/hooks/useGameState";
-import { useGameData } from "@/hooks/useGameContext";
+import { useGameState } from "@/api/useGameState";
+import { useGameData } from "@/state/useGameContext";
 import { Module } from "@/shared/ui/primitives/Module/Module";
 import { Chip } from "@/shared/ui/primitives/Chip";
-import { PlayerColorSwatch } from "@/domains/player/components/PlayerColor";
+import { PlayerColorSwatch } from "@/shared/ui/PlayerColor/PlayerColor";
 import type {
   GamePhase,
   GameState,

@@ -1,6 +1,6 @@
 import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 import { ChipWithPopover } from "@/shared/ui/primitives/ChipWithPopover";
-import { SecretObjectiveCard } from "../SecretObjectiveCard";
+import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
 import styles from "./ScoredSecret.module.css";
 import cx from "clsx";
 

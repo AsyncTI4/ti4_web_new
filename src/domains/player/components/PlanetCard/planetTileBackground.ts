@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { getTileById } from "@/domains/map/model/mapgen/systems";
+import { getTileById } from "@/entities/lookup/systems";
 import { cdnImage } from "@/entities/data/cdnImage";
 import type { Planet } from "@/entities/data/types";
 import { getPlanetLocalPosition } from "@/entities/lookup/planets";

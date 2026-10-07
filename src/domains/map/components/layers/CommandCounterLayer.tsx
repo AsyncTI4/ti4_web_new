@@ -1,5 +1,5 @@
 import { CommandCounterStack } from "../CommandCounterStack";
-import { useMapReplay } from "@/hooks/useGameContext";
+import { useMapReplay } from "@/state/useGameContext";
 
 type Props = {
   position: string;

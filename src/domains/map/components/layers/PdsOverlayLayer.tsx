@@ -2,9 +2,9 @@ import { PdsControlToken } from "../PdsControlToken";
 import {
   TILE_HEIGHT,
   TILE_WIDTH,
-} from "@/domains/map/model/mapgen/tilePositioning";
+} from "@/entities/geometry/tilePositioning";
 import { getColorAlias } from "@/entities/lookup/colors";
-import type { GameData } from "@/app/providers/context/types";
+import type { GameData } from "@/entities/game/types";
 import styles from "./PdsOverlayLayer.module.css";
 
 type Props = {

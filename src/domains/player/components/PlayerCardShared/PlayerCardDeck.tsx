@@ -23,8 +23,8 @@ import {
 } from "@/domains/player/components/Tech/TechGridShared";
 import { PhantomTech } from "@/domains/player/components/Tech/PhantomTech";
 import { Nombox } from "@/domains/player/components/composition/Nombox";
-import { useGameData } from "@/hooks/useGameContext";
-import { useSettingsStore } from "@/utils/appStore";
+import { useGameData } from "@/state/useGameContext";
+import { useSettingsStore } from "@/state/appStore";
 import styles from "./PlayerCardDeck.module.css";
 
 type Props = {

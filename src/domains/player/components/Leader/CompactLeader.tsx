@@ -1,6 +1,6 @@
 import { Image } from "@mantine/core";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { LeaderDetailsCard } from "../LeaderDetailsCard";
+import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import styles from "./CompactLeader.module.css";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";

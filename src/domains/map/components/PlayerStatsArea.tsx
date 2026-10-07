@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Group, Stack, Text } from "@mantine/core";
-import { calculateStatTilePositions } from "@/domains/map/model/mapgen/tilePositioning";
-import { determineOpenSides } from "@/utils/tileAdjacency";
+import { calculateStatTilePositions } from "@/entities/geometry/tilePositioning";
+import { determineOpenSides } from "@/entities/game/tileAdjacency";
 import {
   getColorAlias,
   getPrimaryColorWithOpacity,
@@ -16,10 +16,10 @@ import { PlayerStatsHex, buildStatHexagons } from "./PlayerStatsHex";
 import styles from "./PlayerStatsArea.module.css";
 import type { PlayerData } from "@/entities/data/types";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { useGameContext } from "@/hooks/useGameContext";
+import { useGameContext } from "@/state/useGameContext";
 import { useFactionImageUrl } from "@/hooks/useFactionImages";
 import cx from "clsx";
-import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
+import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 
 const ARMADA_IDS = new Set(["armada", "tfarmada"]);
 

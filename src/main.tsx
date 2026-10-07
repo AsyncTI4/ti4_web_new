@@ -4,7 +4,7 @@ import "./styles/gradients.css";
 import "./styles/theme.css";
 import "./styles/overlays.css";
 import "./styles/mobile.css";
-import "./utils/zIndexVariables.css";
+import "./styles/zIndexVariables.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -14,7 +14,7 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import GamesPage from "./GamesPage";
+import GamesPage from "./pages/GamesPage";
 import {
   createTheme,
   darken,
@@ -25,15 +25,15 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import LoginPage, { loginLoader } from "./LoginPage";
-import FrogGamePage from "./image-map/pages/FrogGamePage";
-import LandingPage from "./LandingPage";
-import MapTogglePage from "./MapTogglePage";
+import LoginPage, { loginLoader } from "./pages/LoginPage";
+import FrogGamePage from "./pages/image-map/FrogGamePage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import MapTogglePage from "./pages/MapTogglePage";
 import { SystemTilePage } from "./domains/map/components/SystemTilePage/SystemTilePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
-import DashboardPage from "./domains/dashboard/DashboardPage";
-import DashboardSettingsPage from "./domains/dashboard/DashboardSettingsPage";
-import EmbeddedMapPage from "./EmbeddedMapPage";
+import DashboardPage from "./pages/DashboardPage";
+import DashboardSettingsPage from "./pages/DashboardSettingsPage";
+import EmbeddedMapPage from "./pages/EmbeddedMapPage";
 
 const queryClient = new QueryClient();
 

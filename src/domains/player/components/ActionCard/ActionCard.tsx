@@ -1,10 +1,10 @@
 import { Box, Text } from "@mantine/core";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { Shimmer } from "../Shimmer";
+import { Shimmer } from "@/shared/ui/Shimmer";
 import { getActionCard } from "@/entities/lookup/actionCards";
 import { getGradientClasses } from "@/shared/ui/gradientClasses";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { ActionCardDetailsCard } from "../ActionCardDetailsCard";
+import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDetailsCard";
 import styles from "./ActionCard.module.css";
 
 type Props = {

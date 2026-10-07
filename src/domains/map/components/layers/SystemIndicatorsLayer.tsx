@@ -1,5 +1,5 @@
 import type { CapacityUsage } from "@/entities/data/types";
-import { findSystemIndicatorLayout } from "@/utils/unitPositioning";
+import { findSystemIndicatorLayout } from "@/entities/positioning";
 import { CapacityIndicator } from "../CapacityIndicator";
 import { ProductionIndicator } from "../ProductionIndicator";
 

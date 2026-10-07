@@ -3,7 +3,7 @@ import { StatusBadge } from "@/domains/player/components/StatusBadge";
 import type { PlayerData } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import styles from "./FactionsInGame.module.css";
-import { GeneralSectionTitle } from "../GeneralSectionTitle";
+import { GeneralSectionTitle } from "@/shared/ui/GeneralSectionTitle/GeneralSectionTitle";
 
 type Props = {
   playerData: PlayerData[];

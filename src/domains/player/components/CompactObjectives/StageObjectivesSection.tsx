@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from "@mantine/core";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { CompactObjective } from "../CompactObjective";
-import { ObjectiveDetailsCard } from "@/domains/objectives/components/PublicObjectives/ObjectiveDetailsCard";
+import { ObjectiveDetailsCard } from "@/domains/cards/components/ObjectiveDetailsCard/ObjectiveDetailsCard";
 import type { Objectives, PlayerData } from "@/entities/data/types";
 
 type StageObjective = Objectives["stage1Objectives"][number];

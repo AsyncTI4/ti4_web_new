@@ -1,5 +1,5 @@
 import type { PlayerData } from "@/entities/data/types";
-import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
+import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 
 /**
  * The player fields every PlayerCard variant renders, with list and count

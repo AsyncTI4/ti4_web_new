@@ -1,6 +1,6 @@
 import { getColorAlias } from "@/entities/lookup/colors";
-import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
-import { useGameData } from "@/hooks/useGameContext";
+import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
+import { useGameData } from "@/state/useGameContext";
 import type { PlayerData } from "@/entities/data/types";
 
 export type FactionHelpers = ReturnType<typeof useFactionHelpers>;

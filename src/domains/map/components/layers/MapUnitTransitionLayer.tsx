@@ -1,9 +1,9 @@
 import { UnitStack } from "@/domains/map/components/UnitStack";
-import { useGameData, useMapReplay } from "@/hooks/useGameContext";
+import { useGameData, useMapReplay } from "@/state/useGameContext";
 import { useResolveColorAlias } from "../hooks/useResolveColorAlias";
 import classes from "./MapUnitTransitionLayer.module.css";
 import { CommandCounter } from "@/domains/map/components/CommandCounter";
-import { ControlToken } from "@/domains/map/components/ControlToken";
+import { ControlToken } from "@/shared/ui/ControlToken";
 import type { CSSProperties } from "react";
 
 const TOKEN_KIND_CLASS = {

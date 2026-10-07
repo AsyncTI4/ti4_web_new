@@ -1,6 +1,6 @@
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useFactionColors } from "@/hooks/useFactionColors";
-import { useColorOverrides } from "@/hooks/useGameContext";
+import { useColorOverrides } from "@/state/useGameContext";
 
 /** Resolves a faction's unit color alias, preferring a "try colors" override. */
 export function useResolveColorAlias() {

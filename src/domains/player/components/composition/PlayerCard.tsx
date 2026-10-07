@@ -4,7 +4,7 @@ import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCar
 import { PlayerCardDeck } from "@/domains/player/components/PlayerCardShared/PlayerCardDeck";
 import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
 import { PlayerCardHeaderFull } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
-import { useSettingsStore } from "@/utils/appStore";
+import { useSettingsStore } from "@/state/appStore";
 
 type Props = {
   playerData: PlayerData;

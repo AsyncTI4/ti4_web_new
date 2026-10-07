@@ -1,4 +1,4 @@
-import { DEFAULT_PLANET_RADIUS } from "@/utils/unitPositioning";
+import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning";
 import classes from "./CommodityIndicator.module.css";
 
 type Props = {

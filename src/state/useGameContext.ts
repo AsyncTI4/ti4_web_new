@@ -1,0 +1,56 @@
+import { useContext } from "react";
+import {
+  EnhancedDataContext,
+  GameDataContext,
+  MapStatePreviewDispatchContext,
+  MapReplayContext,
+} from "@/state/GameContextProvider";
+import type { GameData, MapStatePreview } from "@/entities/game/types";
+import type { GameDataState, MapReplayState } from "@/state/gameContextTypes";
+
+export function useGameContext(): GameData | undefined {
+  return useContext(GameDataContext);
+}
+
+export function useGameDataState(): GameDataState | undefined {
+  const contextValue = useContext(EnhancedDataContext);
+  return contextValue?.dataState;
+}
+
+export const useGameData = useGameContext;
+
+export function useDecalOverrides(): {
+  decalOverrides: Record<string, string>;
+  setDecalOverride: (faction: string, decalId: string | null) => void;
+  clearDecalOverride: (faction: string) => void;
+} {
+  const contextValue = useContext(EnhancedDataContext);
+  return {
+    decalOverrides: contextValue?.decalOverrides ?? {},
+    setDecalOverride: contextValue?.setDecalOverride ?? (() => {}),
+    clearDecalOverride: contextValue?.clearDecalOverride ?? (() => {}),
+  };
+}
+
+export function useColorOverrides(): {
+  colorOverrides: Record<string, string>;
+  setColorOverride: (faction: string, colorAlias: string | null) => void;
+  clearColorOverride: (faction: string) => void;
+} {
+  const contextValue = useContext(EnhancedDataContext);
+  return {
+    colorOverrides: contextValue?.colorOverrides ?? {},
+    setColorOverride: contextValue?.setColorOverride ?? (() => {}),
+    clearColorOverride: contextValue?.clearColorOverride ?? (() => {}),
+  };
+}
+
+export function useMapStatePreview(): (
+  preview: MapStatePreview | null,
+) => void {
+  return useContext(MapStatePreviewDispatchContext);
+}
+
+export function useMapReplay(): MapReplayState {
+  return useContext(MapReplayContext);
+}
