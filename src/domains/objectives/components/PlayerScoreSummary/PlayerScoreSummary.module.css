@@ -44,7 +44,7 @@
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: calc(var(--vps-to-win, 10) * 44px - 1px);
+	left: calc(var(--vps-to-win, 10) * var(--score-cell, 44px) - 1px);
 	width: 1px;
 	pointer-events: none;
 	z-index: 2000;
@@ -136,4 +136,47 @@
 
 .vp {
 	color: rgba(226, 232, 240, 0.88);
+}
+
+/* Objectives tab at phone width: the name plate sits above its own track, and
+   the track's columns divide the available width instead of holding 44px. */
+@container scoreboard (max-width: 640px) {
+	.themedContainer {
+		--score-cell: calc(100cqw / var(--score-columns, 10));
+		width: 100%;
+	}
+
+	.rowContainer {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.playerInfoColumn {
+		padding: 4px 8px;
+	}
+
+	.playerInfoColumn:empty {
+		display: none;
+	}
+
+	.objectivesGrid {
+		height: 36px;
+	}
+
+	.numberTrack,
+	.numberCell {
+		height: 24px;
+	}
+
+	.playerNameText.playerNameText {
+		font-size: 14px;
+	}
+
+	.vpText {
+		min-width: 0;
+	}
+
+	.noteText {
+		text-align: left;
+		margin-left: 0;
+	}
 }

@@ -193,3 +193,12 @@
   color: rgba(255, 255, 255, 1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.8);
 }
+
+/* Objectives tab at phone width: the losable marker shrinks with the cell so it
+   stops covering the icon it annotates. */
+@container scoreboard (max-width: 640px) {
+  .warningIcon {
+    width: 15px;
+    height: 15px;
+  }
+}

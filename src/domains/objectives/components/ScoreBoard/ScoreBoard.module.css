@@ -1,3 +1,12 @@
+/*
+ * The objectives tab names itself as a container so its sections can restack for
+ * a phone-width column. The same sections also render in the map's bottom HUD
+ * deck, which is not inside this container and so keeps its desktop layout.
+ */
+.scoreBoard {
+  container: scoreboard / inline-size;
+}
+
 .scoreBoardSurface {
   background: var(--score-board-bg);
 }

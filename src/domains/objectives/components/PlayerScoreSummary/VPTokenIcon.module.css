@@ -70,3 +70,37 @@
 }
 
 
+/* Objectives tab at phone width: tokens shrink with the ~30px track cells. */
+@container scoreboard (max-width: 640px) {
+  .token,
+  .imperialToken {
+    width: 24px;
+    height: 24px;
+  }
+
+  .number {
+    font-size: 10px;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .imperialContainer {
+    gap: 0;
+  }
+
+  .imperialContainer .imperialToken {
+    width: 18px;
+    height: 18px;
+  }
+
+  .imperialContainer .imperialNumber {
+    font-size: 10px;
+  }
+
+  .secretIcon {
+    width: 12px;
+    height: 12px;
+  }
+}
