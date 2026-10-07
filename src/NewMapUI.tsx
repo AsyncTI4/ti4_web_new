@@ -66,6 +66,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
   const settings = useSettingsStore((state) => state.settings);
   const handlers = useSettingsStore((state) => state.handlers);
   const versionSchema = data?.versionSchema;
+  const hasChannelLinks = !!(data?.actionsJumpLink || data?.tableTalkJumpLink);
 
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [activeTab, setActiveTab] = useState("map");
@@ -102,7 +103,10 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
       />
 
       <AppShell.Main>
-        <Box className={classes.mainBackground}>
+        <Box
+          className={classes.mainBackground}
+          mod={{ "channel-links": hasChannelLinks }}
+        >
           {/* Global Tabs */}
           <Tabs
             value={activeTab}
