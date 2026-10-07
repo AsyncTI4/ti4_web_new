@@ -70,6 +70,10 @@
   gap: 4px;
 }
 
+.planetsEconomy {
+  margin-right: 6px;
+}
+
 .planetsFlow {
   flex: 1;
   min-width: 0;
@@ -161,6 +165,25 @@
   .statusSection,
   .leadersSection {
     flex: 1 1 100%;
+  }
+
+  /*
+   * Beside the ledger the planet cards are left a track one card wide, so they
+   * stack into a column several screens tall. The ledger takes its own row and
+   * the cards wrap across the full plate beneath it. A legendary planet and its
+   * ability are one flex item, so the pair always wraps together.
+   */
+  .planetsEconomy,
+  .planetsFlow {
+    flex: 1 1 100%;
+  }
+
+  .planetsEconomy {
+    margin-right: 0;
+  }
+
+  .planetsEconomy > * {
+    flex: 1;
   }
 }
 

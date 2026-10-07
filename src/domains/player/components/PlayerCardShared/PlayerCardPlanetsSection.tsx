@@ -13,6 +13,8 @@ type PlayerCardPlanetsSectionProps = {
   showTotalSpend?: boolean;
   /** "stretch" makes the economics ledger match the planet cards' height. */
   align?: "flex-start" | "stretch";
+  /** Lets the host reseat the economics ledger, e.g. onto its own row. */
+  economyClassName?: string;
   children: ReactNode;
 };
 
@@ -23,6 +25,7 @@ export function PlayerCardPlanetsSection({
   wrap = "wrap",
   showTotalSpend = true,
   align = "flex-start",
+  economyClassName,
   children,
 }: PlayerCardPlanetsSectionProps) {
   const stretch = align === "stretch";
@@ -39,7 +42,11 @@ export function PlayerCardPlanetsSection({
       wrap={wrap}
       mih={stretch ? "100%" : undefined}
     >
-      <Box mr={economyGap} style={stretch ? { display: "flex" } : undefined}>
+      <Box
+        mr={economyGap}
+        className={economyClassName}
+        style={stretch ? { display: "flex" } : undefined}
+      >
         <ResourceInfluenceCompact
           planetEconomics={planetEconomics}
           showTotalSpend={showTotalSpend}
