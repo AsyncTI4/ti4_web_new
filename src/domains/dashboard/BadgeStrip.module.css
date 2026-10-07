@@ -151,12 +151,6 @@
   white-space: nowrap;
 }
 
-.metricThreshold {
-  font-size: 9px;
-  color: var(--mantine-color-gray-6);
-  font-family: var(--mantine-font-family-monospace);
-}
-
 /* ─── Badge Description (thematic flavor) ─── */
 .badgeDesc {
   font-size: 10px;
@@ -246,11 +240,6 @@
     rgba(var(--badge-color), 0.85)
   );
   transition: width 0.5s ease;
-}
-
-/* Glow on the fill when score exceeds threshold */
-.scoreOverflow .scoreFill {
-  box-shadow: 0 0 6px rgba(var(--badge-color), 0.3);
 }
 
 /* ─── Shimmer line at bottom edge (1px accent) ─── */

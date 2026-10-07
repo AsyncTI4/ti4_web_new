@@ -1,4 +1,5 @@
-.badgeContainer {
+.badgeContainer,
+.stackWrapper {
   position: absolute;
   transform: translate(-50%, -50%);
   pointer-events: auto;
@@ -6,12 +7,6 @@
 
 .badgeInnerWrapper {
   position: relative;
-}
-
-.stackWrapper {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
 }
 
 .mapTransition {

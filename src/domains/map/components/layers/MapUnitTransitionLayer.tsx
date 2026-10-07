@@ -1,21 +1,36 @@
 import { UnitStack } from "@/domains/map/components/UnitStack";
-import { getColorAlias } from "@/entities/lookup/colors";
-import { useFactionColors } from "@/hooks/useFactionColors";
-import {
-  useColorOverrides,
-  useGameData,
-  useMapReplay,
-} from "@/hooks/useGameContext";
+import { useGameData, useMapReplay } from "@/hooks/useGameContext";
+import { useResolveColorAlias } from "../hooks/useResolveColorAlias";
 import classes from "./MapUnitTransitionLayer.module.css";
 import { CommandCounter } from "@/domains/map/components/CommandCounter";
 import { ControlToken } from "@/domains/map/components/ControlToken";
+import type { CSSProperties } from "react";
+
+const TOKEN_KIND_CLASS = {
+  activation: classes.commandTokenPlacement,
+  added: classes.commandTokenAdded,
+  removed: classes.commandTokenRemoved,
+};
+
+function tokenTimingStyle(token: {
+  x: number;
+  y: number;
+  delayMs: number;
+  durationMs: number;
+}) {
+  return {
+    left: token.x,
+    top: token.y,
+    "--command-delay": `${token.delayMs}ms`,
+    "--command-duration": `${token.durationMs}ms`,
+  } as CSSProperties;
+}
 
 export function MapUnitTransitionLayer() {
   const mapReplay = useMapReplay();
   const { transitions, lasers } = mapReplay;
-  const factionColorMap = useFactionColors();
   const lawsInPlay = useGameData()?.lawsInPlay;
-  const { colorOverrides } = useColorOverrides();
+  const resolveColorAlias = useResolveColorAlias();
 
   if (
     !mapReplay.active ||
@@ -29,54 +44,24 @@ export function MapUnitTransitionLayer() {
   return (
     <div className={classes.layer} aria-hidden="true">
       {mapReplay.commandTokens.map((token) => {
-        const overrideColorAlias = colorOverrides[token.faction];
-        const colorAlias = overrideColorAlias
-          ? overrideColorAlias
-          : getColorAlias(factionColorMap?.[token.faction]?.color);
+        const colorAlias = resolveColorAlias(token.faction);
         return (
           <div
             key={`${mapReplay.key}-command-${token.position}-${token.faction}-${token.index}`}
-            className={
-              token.kind === "activation"
-                ? classes.commandTokenPlacement
-                : token.kind === "added"
-                  ? classes.commandTokenAdded
-                  : classes.commandTokenRemoved
-            }
-            style={
-              {
-                left: token.x,
-                top: token.y,
-                "--command-delay": `${token.delayMs}ms`,
-                "--command-duration": `${token.durationMs}ms`,
-              } as React.CSSProperties
-            }
+            className={TOKEN_KIND_CLASS[token.kind]}
+            style={tokenTimingStyle(token)}
           >
             <CommandCounter colorAlias={colorAlias} faction={token.faction} />
           </div>
         );
       })}
       {mapReplay.controlTokens.map((token) => {
-        const overrideColorAlias = colorOverrides[token.faction];
-        const colorAlias = overrideColorAlias
-          ? overrideColorAlias
-          : getColorAlias(factionColorMap?.[token.faction]?.color);
+        const colorAlias = resolveColorAlias(token.faction);
         return (
           <div
             key={`${mapReplay.key}-control-${token.position}-${token.planet}-${token.faction}-${token.kind}`}
-            className={
-              token.kind === "added"
-                ? classes.commandTokenAdded
-                : classes.commandTokenRemoved
-            }
-            style={
-              {
-                left: token.x,
-                top: token.y,
-                "--command-delay": `${token.delayMs}ms`,
-                "--command-duration": `${token.durationMs}ms`,
-              } as React.CSSProperties
-            }
+            className={TOKEN_KIND_CLASS[token.kind]}
+            style={tokenTimingStyle(token)}
           >
             <ControlToken
               colorAlias={colorAlias}
@@ -106,7 +91,7 @@ export function MapUnitTransitionLayer() {
                 "--laser-duration": `${laser.durationMs}ms`,
                 "--laser-color":
                   laser.color === "attacker" ? "#67e8f9" : "#fb7185",
-              } as React.CSSProperties
+              } as CSSProperties
             }
           >
             <span className={classes.laserBolt} />
@@ -115,10 +100,7 @@ export function MapUnitTransitionLayer() {
       })}
       {transitions.map((transition, index) => {
         const { stack } = transition;
-        const overrideColorAlias = colorOverrides[stack.faction];
-        const colorAlias = overrideColorAlias
-          ? overrideColorAlias
-          : getColorAlias(factionColorMap?.[stack.faction]?.color);
+        const colorAlias = resolveColorAlias(stack.faction);
 
         return (
           <UnitStack

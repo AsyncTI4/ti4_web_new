@@ -1,6 +1,4 @@
-// Generic card data processor that works with any card type
-
-export type CardDataItem = {
+type CardDataItem = {
   name: string;
   text: string;
   id: string;
@@ -13,9 +11,9 @@ export type ProcessedCardData = {
   text: string;
 };
 
-export type CardSortMode = "percentage" | "alphanumeric";
+type CardSortMode = "percentage" | "alphanumeric";
 
-export type CardSection = {
+type CardSection = {
   title: string;
   count: number;
   items: Array<ProcessedCardData & { percentage?: number }>;
@@ -39,13 +37,12 @@ function compareCards(
     return compareByName(a, b);
   }
 
-  // For percentage-based views, sort by frequency first and then use
-  // an alphanumeric tiebreaker so equal-% buckets render in a stable order.
+  // Alphanumeric tiebreak keeps equal-% buckets in a stable order.
   const countDifference = b.count - a.count;
   return countDifference !== 0 ? countDifference : compareByName(a, b);
 }
 
-// Generic function to process card IDs into grouped data
+/** Groups card IDs by card name. */
 export function processCardData<T extends CardDataItem>(
   cardIds: string[],
   lookupFunction: (id: string) => T | undefined,
@@ -53,17 +50,17 @@ export function processCardData<T extends CardDataItem>(
 ): ProcessedCardData[] {
   const cardMap = new Map<string, { aliases: string[]; text: string }>();
 
-  cardIds?.forEach((cardId) => {
+  cardIds.forEach((cardId) => {
     const card = lookupFunction(cardId);
     if (!card) {
       console.warn(`Card with ID "${cardId}" not found`);
-    } else {
-      const existing = cardMap.get(card.name);
-      cardMap.set(card.name, {
-        aliases: existing ? existing.aliases.concat(card.id) : [card.id],
-        text: card.text,
-      });
+      return;
     }
+    const existing = cardMap.get(card.name);
+    cardMap.set(card.name, {
+      aliases: existing ? existing.aliases.concat(card.id) : [card.id],
+      text: card.text,
+    });
   });
 
   return Array.from(cardMap.entries())
@@ -76,7 +73,7 @@ export function processCardData<T extends CardDataItem>(
     .sort((a, b) => compareCards(a, b, sortMode));
 }
 
-// Helper to create card sections with percentages
+/** Deck section with draw percentages, then the discard section. */
 export function createCardSections(
   deckData: ProcessedCardData[],
   discardData: ProcessedCardData[],
@@ -97,7 +94,7 @@ export function createCardSections(
     {
       title: discardLabel,
       count: discardIds.length,
-      items: discardData, // No percentages for discard
+      items: discardData,
     },
   ];
 }

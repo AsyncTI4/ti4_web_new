@@ -1,7 +1,6 @@
-import React from "react";
 import { CommodityIndicator } from "../CommodityIndicator";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
-import { Tile } from "@/app/providers/context/types";
+import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
+import type { Tile } from "@/app/providers/context/types";
 
 type Props = {
   systemId: string;
@@ -9,16 +8,16 @@ type Props = {
 };
 
 export function CommodityIndicatorsLayer({ systemId, mapTile }: Props) {
-  const commodityIndicators = React.useMemo(() => {
-    if (!mapTile?.planets) return [] as React.ReactElement[];
+  if (!mapTile?.planets) return null;
+  const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-    const planetCoords = getPlanetCoordsBySystemId(systemId);
-
-    return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
+  const commodityIndicators = Object.entries(mapTile.planets).flatMap(
+    ([planetId, planetData]) => {
       const commodityCount = planetData.commodities ?? 0;
       if (commodityCount === 0) return [];
-      if (!planetCoords[planetId]) return [];
-      const [x, y] = planetCoords[planetId].split(",").map(Number);
+      const position = planetPositions[planetId];
+      if (!position) return [];
+      const { x, y } = position;
 
       return [
         <CommodityIndicator
@@ -28,8 +27,8 @@ export function CommodityIndicatorsLayer({ systemId, mapTile }: Props) {
           y={y}
         />,
       ];
-    });
-  }, [systemId, mapTile]);
+    },
+  );
 
   return <>{commodityIndicators}</>;
 }

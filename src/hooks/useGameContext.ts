@@ -5,16 +5,14 @@ import {
   MapStatePreviewDispatchContext,
   MapReplayContext,
 } from "@/app/providers/context/GameContextProvider";
-import type { buildGameContext } from "@/app/providers/context/utils/buildGameContext";
 import type {
+  GameData,
   GameDataState,
   MapReplayState,
   MapStatePreview,
 } from "@/app/providers/context/types";
 
-export function useGameContext():
-  | ReturnType<typeof buildGameContext>
-  | undefined {
+export function useGameContext(): GameData | undefined {
   return useContext(GameDataContext);
 }
 
@@ -23,10 +21,7 @@ export function useGameDataState(): GameDataState | undefined {
   return contextValue?.dataState;
 }
 
-// Simple alias for clarity in components
-export function useGameData(): ReturnType<typeof useGameContext> {
-  return useGameContext();
-}
+export const useGameData = useGameContext;
 
 export function useDecalOverrides(): {
   decalOverrides: Record<string, string>;

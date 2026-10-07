@@ -1,42 +1,50 @@
 import { planets } from "@/entities/data/planets";
-import { Planet } from "@/entities/data/types";
+import { groupBy, indexBy } from "@/entities/lookup/indexBy";
+import type { Planet, Point } from "@/entities/data/types";
 
-const planetsMap = new Map(planets.map((planet) => [planet.id, planet]));
+const planetsMap = indexBy(planets, (planet) => planet.id);
 
-const planetsByTileIdMap = new Map<string, Planet[]>();
-planets.forEach((planet) => {
-  if (planet.tileId) {
-    const existingPlanets = planetsByTileIdMap.get(planet.tileId) || [];
-    planetsByTileIdMap.set(planet.tileId, [...existingPlanets, planet]);
-  }
+const planetsByTileIdMap = groupBy(
+  planets,
+  (planet) => planet.tileId || undefined
+);
+
+/**
+ * A planet's position within its tile: planetLayout.centerPosition when present,
+ * otherwise positionInTile.
+ */
+export const getPlanetLocalPosition = (
+  planet: Planet
+): Point | undefined => {
+  const position = planet.planetLayout?.centerPosition ?? planet.positionInTile;
+  if (!position) return undefined;
+  return { x: position.x, y: position.y };
+};
+
+const planetPositionsBySystemId = new Map<
+  string,
+  Readonly<Record<string, Point>>
+>();
+planetsByTileIdMap.forEach((systemPlanets, systemId) => {
+  const positions: Record<string, Point> = {};
+  systemPlanets.forEach((planet) => {
+    const position = getPlanetLocalPosition(planet);
+    if (position) positions[planet.id] = position;
+  });
+  planetPositionsBySystemId.set(systemId, positions);
 });
 
-export const getPlanetById = (planetId: string): Planet | undefined => {
-  return planetsMap.get(planetId);
-};
+const EMPTY_POSITIONS: Readonly<Record<string, Point>> = {};
 
 export const getPlanetsByTileId = (tileId: string): Planet[] => {
   return planetsByTileIdMap.get(tileId) || [];
 };
 
-export const getPlanetCoordsBySystemId = (
+/** Local (in-tile) positions of every positioned planet in a system, keyed by planet id. */
+export const getPlanetPositionsBySystemId = (
   systemId: string
-): { [key: string]: string } => {
-  const planetCoords: { [key: string]: string } = {};
-
-  const systemPlanets = planetsByTileIdMap.get(systemId) || [];
-  systemPlanets.forEach((planet) => {
-    // Prioritize planetLayout.centerPosition if available, otherwise use positionInTile
-    if (planet.planetLayout?.centerPosition) {
-      planetCoords[planet.id] =
-        `${planet.planetLayout.centerPosition.x},${planet.planetLayout.centerPosition.y}`;
-    } else if (planet.positionInTile) {
-      planetCoords[planet.id] =
-        `${planet.positionInTile.x},${planet.positionInTile.y}`;
-    }
-  });
-
-  return planetCoords;
+): Readonly<Record<string, Point>> => {
+  return planetPositionsBySystemId.get(systemId) ?? EMPTY_POSITIONS;
 };
 
 export const getPlanetData = (planetId: string): Planet | undefined => {

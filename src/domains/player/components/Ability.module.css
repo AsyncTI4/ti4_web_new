@@ -26,14 +26,6 @@
     var(--panel-field-bg);
 }
 
-.label {
-  font-family: var(--mantine-font-family-headings);
-  font-size: 11px;
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--track-body);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
-}
-
 /* The sigil: a hex cell with a lit core, sized to sit on the label's optical
    centre rather than filling the slot. The hexagon's flat top and bottom mean it
    needs a hair less height than a circular icon to look vertically centred. */

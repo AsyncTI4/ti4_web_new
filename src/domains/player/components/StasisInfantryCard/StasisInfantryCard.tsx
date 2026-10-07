@@ -1,4 +1,5 @@
 import { Stack, Box, Group, Text, Flex } from "@mantine/core";
+import cx from "clsx";
 import styles from "./StasisInfantryCard.module.css";
 import { Unit } from "@/shared/ui/Unit";
 import { getColorAlias } from "@/entities/lookup/colors";
@@ -13,7 +14,7 @@ type Props = {
 export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
   const colorAlias = getColorAlias(color);
 
-  if (reviveCount == 0) return <></>;
+  if (reviveCount <= 0) return null;
 
   if (condensed) {
     return (
@@ -33,9 +34,8 @@ export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
   }
 
   return (
-    <Stack className={`${styles.stasisCard} ${styles.cardStack}`}>
-      {/* Enhanced top highlight with green hue */}
-      <Box className={`${styles.highlight} ${styles.topHighlight}`} />
+    <Stack className={cx(styles.stasisCard, styles.cardStack)}>
+      <Box className={cx(styles.highlight, styles.topHighlight)} />
 
       <Box className={styles.glassySheen} />
       <Box className={styles.innerGlow} />

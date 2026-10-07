@@ -71,7 +71,6 @@ const router = createBrowserRouter([
     path: "/embed/:mapid/map-only",
     element: <EmbeddedMapPage />,
   },
-
   {
     path: "/froggame/:discordid/:mapid",
     element: <FrogGamePage />,
@@ -87,28 +86,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Apply global mobile class for mobile devices
-if (typeof window !== "undefined") {
-  const body = document.body;
-  if (isMobileDevice()) {
-    body.classList.add("mobile");
-  } else {
-    body.classList.remove("mobile");
-  }
-}
-
-const tomatoBg: MantineColorsTuple = [
-  darken("#e0dcd8", 0.75),
-  darken("#dcd6d0", 0.75),
-  darken("#d0c8c0", 0.75),
-  darken("#c4bab0", 0.75),
-  darken("#b8aca0", 0.75),
-  darken("#ac9e90", 0.75),
-  darken("#a09080", 0.75),
-  darken("#948270", 0.75),
-  darken("#887460", 0.75),
-  darken("#7c6650", 0.75),
-];
+document.body.classList.toggle("mobile", isMobileDevice());
 
 const myColor: MantineColorsTuple = [
   darken("#edf5ff", 0.5),
@@ -125,7 +103,6 @@ const myColor: MantineColorsTuple = [
 
 const theme = createTheme({
   colors: {
-    tomato: tomatoBg,
     blueGray: myColor,
   },
   /*
@@ -210,7 +187,6 @@ const theme = createTheme({
  * joke or a recruiting pitch — the reward for curiosity is knowing where to look.
  */
 function printConsoleSignature() {
-  if (typeof console === "undefined") return;
   console.log(
     "%cASYNC TI4%c  fan project for Twilight Imperium\u2122 \u00b7 play-by-Discord",
     "font-weight:700;letter-spacing:0.12em;color:#e2e8f0;background:#0b0b0c;padding:3px 7px;border-radius:2px",

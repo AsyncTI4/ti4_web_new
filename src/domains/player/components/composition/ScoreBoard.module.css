@@ -7,9 +7,3 @@
   max-width: 100%;
   margin: 0 auto;
 }
-
-.divider {
-  height: 1px;
-  background: var(--score-board-divider);
-  margin: 12px 0;
-}

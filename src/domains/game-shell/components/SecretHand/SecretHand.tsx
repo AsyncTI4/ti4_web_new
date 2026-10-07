@@ -1,5 +1,5 @@
-import { Box, Text, Stack, SimpleGrid } from "@mantine/core";
-import { useState } from "react";
+import { Box, Text, Stack } from "@mantine/core";
+import { useState, type ReactNode } from "react";
 import { ActionCard } from "@/domains/player/components/ActionCard";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
 import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
@@ -17,10 +17,15 @@ type Props = {
 };
 
 export function SecretHand({ handData, isLoading, error }: Props) {
-  const [selectedCard, setSelectedCard] = useState<{
-    type: "action" | "secret" | "promissory";
-    id: string;
-  } | null>(null);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+  const isEmpty =
+    !handData ||
+    (handData.actionCards.length === 0 &&
+      handData.secretObjectives.length === 0 &&
+      handData.promissoryNotes.length === 0);
+
+  const sectionProps = { selectedCard, onSelect: setSelectedCard };
 
   return (
     <Box className={classes.container}>
@@ -39,153 +44,104 @@ export function SecretHand({ handData, isLoading, error }: Props) {
 
         {!isLoading && !error && handData && (
           <Stack gap="md">
-            {/* Action Cards */}
-            {handData.actionCards.length > 0 && (
-              <Box>
-                <Text size="xs" fw={600} c="gray.3" mb="xs">
-                  Action Cards ({handData.actionCards.length})
-                </Text>
-                <Stack gap={4}>
-                  {handData.actionCards.map((cardId, index) => {
-                    const cardKey = `action-${cardId}-${index}`;
-                    const isSelected =
-                      selectedCard?.type === "action" &&
-                      selectedCard?.id === cardKey;
-
-                    return (
-                      <SmoothPopover
-                        key={cardKey}
-                        opened={isSelected}
-                        onChange={(opened) =>
-                          setSelectedCard(
-                            opened ? { type: "action", id: cardKey } : null
-                          )
-                        }
-                      >
-                        <SmoothPopover.Target>
-                          <div>
-                            <ActionCard
-                              actionCardId={cardId}
-                              onClick={() =>
-                                setSelectedCard({ type: "action", id: cardKey })
-                              }
-                              showDetails={false}
-                            />
-                          </div>
-                        </SmoothPopover.Target>
-                        <SmoothPopover.Dropdown p={0}>
-                          <ActionCardDetailsCard actionCardId={cardId} />
-                        </SmoothPopover.Dropdown>
-                      </SmoothPopover>
-                    );
-                  })}
-                </Stack>
-              </Box>
-            )}
-
-            {/* Secret Objectives */}
-            {handData.secretObjectives.length > 0 && (
-              <Box>
-                <Text size="xs" fw={600} c="gray.3" mb="xs">
-                  Secret Objectives ({handData.secretObjectives.length})
-                </Text>
-                <Stack gap={4}>
-                  {handData.secretObjectives.map((secretId, index) => {
-                    const cardKey = `secret-${secretId}-${index}`;
-                    const isSelected =
-                      selectedCard?.type === "secret" &&
-                      selectedCard?.id === cardKey;
-
-                    return (
-                      <SmoothPopover
-                        key={cardKey}
-                        opened={isSelected}
-                        onChange={(opened) =>
-                          setSelectedCard(
-                            opened ? { type: "secret", id: cardKey } : null
-                          )
-                        }
-                      >
-                        <SmoothPopover.Target>
-                          <div>
-                            <ScoredSecret
-                              secretId={secretId}
-                              variant="unscored"
-                              onClick={() =>
-                                setSelectedCard({ type: "secret", id: cardKey })
-                              }
-                            />
-                          </div>
-                        </SmoothPopover.Target>
-                        <SmoothPopover.Dropdown p={0}>
-                          <SecretObjectiveCard secretId={secretId} />
-                        </SmoothPopover.Dropdown>
-                      </SmoothPopover>
-                    );
-                  })}
-                </Stack>
-              </Box>
-            )}
-
-            {/* Promissory Notes */}
-            {handData.promissoryNotes.length > 0 && (
-              <Box>
-                <Text size="xs" fw={600} c="gray.3" mb="xs">
-                  Promissory Notes ({handData.promissoryNotes.length})
-                </Text>
-                <SimpleGrid cols={1} spacing={4}>
-                  {handData.promissoryNotes.map((noteId, index) => {
-                    const cardKey = `promissory-${noteId}-${index}`;
-                    const isSelected =
-                      selectedCard?.type === "promissory" &&
-                      selectedCard?.id === cardKey;
-
-                    return (
-                      <SmoothPopover
-                        key={cardKey}
-                        opened={isSelected}
-                        onChange={(opened) =>
-                          setSelectedCard(
-                            opened ? { type: "promissory", id: cardKey } : null
-                          )
-                        }
-                      >
-                        <SmoothPopover.Target>
-                          <div>
-                            <PromissoryNote
-                              promissoryNoteId={noteId}
-                              onClick={() =>
-                                setSelectedCard({
-                                  type: "promissory",
-                                  id: cardKey,
-                                })
-                              }
-                            />
-                          </div>
-                        </SmoothPopover.Target>
-                        <SmoothPopover.Dropdown p={0}>
-                          <PromissoryNoteCard promissoryNoteId={noteId} />
-                        </SmoothPopover.Dropdown>
-                      </SmoothPopover>
-                    );
-                  })}
-                </SimpleGrid>
-              </Box>
-            )}
+            <HandSection
+              {...sectionProps}
+              title="Action Cards"
+              keyPrefix="action"
+              ids={handData.actionCards}
+              renderChip={(id, onClick) => (
+                <ActionCard
+                  actionCardId={id}
+                  onClick={onClick}
+                  showDetails={false}
+                />
+              )}
+              renderDetails={(id) => <ActionCardDetailsCard actionCardId={id} />}
+            />
+            <HandSection
+              {...sectionProps}
+              title="Secret Objectives"
+              keyPrefix="secret"
+              ids={handData.secretObjectives}
+              renderChip={(id, onClick) => (
+                <ScoredSecret
+                  secretId={id}
+                  variant="unscored"
+                  onClick={onClick}
+                />
+              )}
+              renderDetails={(id) => <SecretObjectiveCard secretId={id} />}
+            />
+            <HandSection
+              {...sectionProps}
+              title="Promissory Notes"
+              keyPrefix="promissory"
+              ids={handData.promissoryNotes}
+              renderChip={(id, onClick) => (
+                <PromissoryNote promissoryNoteId={id} onClick={onClick} />
+              )}
+              renderDetails={(id) => (
+                <PromissoryNoteCard promissoryNoteId={id} />
+              )}
+            />
           </Stack>
         )}
 
-        {!isLoading &&
-          !error &&
-          (!handData ||
-            (handData.actionCards.length === 0 &&
-              handData.secretObjectives.length === 0 &&
-              handData.promissoryNotes.length === 0)) && (
-            <Text size="sm" c="gray.5" ta="center" py="md">
-              No cards in hand
-            </Text>
-          )}
+        {!isLoading && !error && isEmpty && (
+          <Text size="sm" c="gray.5" ta="center" py="md">
+            No cards in hand
+          </Text>
+        )}
       </Box>
+    </Box>
+  );
+}
+
+type HandSectionProps = {
+  title: string;
+  keyPrefix: string;
+  ids: string[];
+  selectedCard: string | null;
+  onSelect: (cardKey: string | null) => void;
+  renderChip: (id: string, onClick: () => void) => ReactNode;
+  renderDetails: (id: string) => ReactNode;
+};
+
+function HandSection({
+  title,
+  keyPrefix,
+  ids,
+  selectedCard,
+  onSelect,
+  renderChip,
+  renderDetails,
+}: HandSectionProps) {
+  if (ids.length === 0) return null;
+
+  return (
+    <Box>
+      <Text size="xs" fw={600} c="gray.3" mb="xs">
+        {title} ({ids.length})
+      </Text>
+      <Stack gap={4}>
+        {ids.map((id, index) => {
+          const cardKey = `${keyPrefix}-${id}-${index}`;
+          return (
+            <SmoothPopover
+              key={cardKey}
+              opened={selectedCard === cardKey}
+              onChange={(opened) => onSelect(opened ? cardKey : null)}
+            >
+              <SmoothPopover.Target>
+                <div>{renderChip(id, () => onSelect(cardKey))}</div>
+              </SmoothPopover.Target>
+              <SmoothPopover.Dropdown p={0}>
+                {renderDetails(id)}
+              </SmoothPopover.Dropdown>
+            </SmoothPopover>
+          );
+        })}
+      </Stack>
     </Box>
   );
 }

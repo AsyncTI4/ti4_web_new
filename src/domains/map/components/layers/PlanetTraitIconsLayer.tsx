@@ -1,12 +1,11 @@
-import React from "react";
-import { getPlanetCoordsBySystemId, getPlanetById } from "@/entities/lookup/planets";
-import { Tile } from "@/app/providers/context/types";
-import { getAttachmentData } from "@/entities/lookup/attachments";
-import { cdnImage } from "@/entities/data/cdnImage";
 import {
-  getPlanetTraitIconSrc,
-  mergePlanetTraits,
-} from "@/utils/planetTraits";
+  getPlanetPositionsBySystemId,
+  getPlanetData,
+} from "@/entities/lookup/planets";
+import type { Tile } from "@/app/providers/context/types";
+import { getAttachmentData } from "@/entities/lookup/attachments";
+import { getFactionImage } from "@/entities/lookup/factions";
+import { getPlanetTraitIconSrc, mergePlanetTraits } from "@/utils/planetTraits";
 
 type Props = {
   systemId: string;
@@ -14,95 +13,80 @@ type Props = {
 };
 
 export function PlanetTraitIconsLayer({ systemId, mapTile }: Props) {
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
+  if (!mapTile?.planets) return null;
+  const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-  const traitIcons = React.useMemo(() => {
-    if (!mapTile?.planets) return [];
+  const traitIcons = Object.entries(mapTile.planets)
+    .map(([planetId, planetTileData]) => {
+      const planetData = getPlanetData(planetId);
+      if (!planetData) return null;
 
-    return Object.entries(mapTile.planets)
-      .map(([planetId, planetTileData]) => {
-        const planetData = getPlanetById(planetId);
-        if (!planetData) return null;
+      const position = planetPositions[planetId];
+      if (!position) return null;
+      const { x, y } = position;
 
-        const coords = planetCoords[planetId];
-        if (!coords) return null;
-
-        const [x, y] = coords.split(",").map(Number);
-
-        // Handle faction planets
-        if (
-          planetData.planetType === "FACTION" &&
-          planetData.factionHomeworld
-        ) {
-          return (
-            <div
-              key={`${systemId}-${planetId}-faction`}
-              style={{
-                position: "absolute",
-                left: `${x}px`,
-                top: `${y}px`,
-                transform: "translate(-50%, -50%)",
-                zIndex: "var(--z-control-token)",
-              }}
-            >
-              <img
-                src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
-                alt={planetData.factionHomeworld}
-                style={{
-                  width: "80px",
-                }}
-              />
-            </div>
-          );
-        }
-
-        // Resolve final traits (combining planet types and attachment modifiers)
-        const planetTypes =
-          planetData.planetTypes ||
-          (planetData.planetType ? [planetData.planetType] : []);
-
-        const attachmentPlanetTypes =
-          planetTileData.attachments
-            ?.map((attachmentId) => {
-              const attachmentData = getAttachmentData(attachmentId);
-              return attachmentData?.planetTypes || [];
-            })
-            .flat() || [];
-
-        const finalTraits = mergePlanetTraits(
-          planetTypes,
-          attachmentPlanetTypes
-        );
-
-        if (finalTraits.length === 0) return null;
-
-        const iconSrc = getPlanetTraitIconSrc(finalTraits);
-        if (!iconSrc) return null;
-
+      if (planetData.planetType === "FACTION" && planetData.factionHomeworld) {
         return (
           <div
-            key={`${systemId}-${planetId}-trait`}
+            key={`${systemId}-${planetId}-faction`}
             style={{
               position: "absolute",
               left: `${x}px`,
               top: `${y}px`,
               transform: "translate(-50%, -50%)",
-              width: "80px",
               zIndex: "var(--z-control-token)",
             }}
           >
             <img
-              src={iconSrc}
-              alt={finalTraits.join(", ")}
+              src={getFactionImage(planetData.factionHomeworld)}
+              alt={planetData.factionHomeworld}
               style={{
                 width: "80px",
               }}
             />
           </div>
         );
-      })
-      .filter(Boolean);
-  }, [systemId, mapTile, planetCoords]);
+      }
+
+      const planetTypes =
+        planetData.planetTypes ||
+        (planetData.planetType ? [planetData.planetType] : []);
+
+      const attachmentPlanetTypes =
+        planetTileData.attachments?.flatMap(
+          (attachmentId) => getAttachmentData(attachmentId)?.planetTypes || [],
+        ) ?? [];
+
+      const finalTraits = mergePlanetTraits(planetTypes, attachmentPlanetTypes);
+
+      if (finalTraits.length === 0) return null;
+
+      const iconSrc = getPlanetTraitIconSrc(finalTraits);
+      if (!iconSrc) return null;
+
+      return (
+        <div
+          key={`${systemId}-${planetId}-trait`}
+          style={{
+            position: "absolute",
+            left: `${x}px`,
+            top: `${y}px`,
+            transform: "translate(-50%, -50%)",
+            width: "80px",
+            zIndex: "var(--z-control-token)",
+          }}
+        >
+          <img
+            src={iconSrc}
+            alt={finalTraits.join(", ")}
+            style={{
+              width: "80px",
+            }}
+          />
+        </div>
+      );
+    })
+    .filter(Boolean);
 
   return <>{traitIcons}</>;
 }

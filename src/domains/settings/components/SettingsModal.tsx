@@ -11,6 +11,53 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 import { AppModal } from "@/shared/ui/AppModal";
 import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
 
+type PlayerAreaToggleKey =
+  | "showPlayerAreaCommandTokens"
+  | "showPlayerAreaArmyStrength"
+  | "showPlayerAreaUnitUpgrades"
+  | "showPlayerAreaTotalSpend"
+  | "showPlayerAreaReinforcements"
+  | "showPlayerAreaFactionAbilities"
+  | "showPlayerAreaNeighborship";
+
+const PLAYER_AREA_TOGGLES: { key: PlayerAreaToggleKey; label: string; description: string }[] = [
+  {
+    key: "showPlayerAreaCommandTokens",
+    label: "Command Tokens",
+    description: "Show tactical, fleet, and strategy command token counts.",
+  },
+  {
+    key: "showPlayerAreaArmyStrength",
+    label: "Army Strength",
+    description: "Show the ground and space strength summary.",
+  },
+  {
+    key: "showPlayerAreaUnitUpgrades",
+    label: "Unit Upgrades",
+    description: "Show upgraded-unit styling and upgrade faction badges.",
+  },
+  {
+    key: "showPlayerAreaTotalSpend",
+    label: "Total Spend",
+    description: "Show the literal total resource and influence spend column. Optimal spend stays visible.",
+  },
+  {
+    key: "showPlayerAreaReinforcements",
+    label: "Reinforcements",
+    description: "Show faction reinforcement tokens near planet cards, including sleepers, wormholes, breach, and galvanize tokens.",
+  },
+  {
+    key: "showPlayerAreaFactionAbilities",
+    label: "Faction Abilities",
+    description: "Show faction abilities, faction tech, and related custom notes.",
+  },
+  {
+    key: "showPlayerAreaNeighborship",
+    label: "Neighborship",
+    description: "Show neighbor faction icons.",
+  },
+];
+
 type SettingsModalProps = {
   opened: boolean;
   onClose: () => void;
@@ -151,83 +198,18 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
             <Text size="sm" c="dimmed">
               Choose which data groups appear in player area cards.
             </Text>
-            <Switch
-              checked={settings.showPlayerAreaCommandTokens}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaCommandTokens: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Command Tokens"
-              description="Show tactical, fleet, and strategy command token counts."
-            />
-            <Switch
-              checked={settings.showPlayerAreaArmyStrength}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaArmyStrength: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Army Strength"
-              description="Show the ground and space strength summary."
-            />
-            <Switch
-              checked={settings.showPlayerAreaUnitUpgrades}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaUnitUpgrades: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Unit Upgrades"
-              description="Show upgraded-unit styling and upgrade faction badges."
-            />
-            <Switch
-              checked={settings.showPlayerAreaTotalSpend}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaTotalSpend: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Total Spend"
-              description="Show the literal total resource and influence spend column. Optimal spend stays visible."
-            />
-            <Switch
-              checked={settings.showPlayerAreaReinforcements}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaReinforcements: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Reinforcements"
-              description="Show faction reinforcement tokens near planet cards, including sleepers, wormholes, breach, and galvanize tokens."
-            />
-            <Switch
-              checked={settings.showPlayerAreaFactionAbilities}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaFactionAbilities: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Faction Abilities"
-              description="Show faction abilities, faction tech, and related custom notes."
-            />
-            <Switch
-              checked={settings.showPlayerAreaNeighborship}
-              onChange={(event) =>
-                handlers.updateSettings({
-                  showPlayerAreaNeighborship: event.currentTarget.checked,
-                })
-              }
-              size="sm"
-              label="Neighborship"
-              description="Show neighbor faction icons."
-            />
+            {PLAYER_AREA_TOGGLES.map(({ key, label, description }) => (
+              <Switch
+                key={key}
+                checked={settings[key]}
+                onChange={(event) =>
+                  handlers.updateSettings({ [key]: event.currentTarget.checked })
+                }
+                size="sm"
+                label={label}
+                description={description}
+              />
+            ))}
           </Stack>
         </Tabs.Panel>
       </Tabs>

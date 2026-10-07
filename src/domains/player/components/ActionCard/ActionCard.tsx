@@ -2,7 +2,7 @@ import { Box, Text } from "@mantine/core";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { Shimmer } from "../Shimmer";
 import { getActionCard } from "@/entities/lookup/actionCards";
-import { getGradientClasses } from "../gradientClasses";
+import { getGradientClasses } from "@/shared/ui/gradientClasses";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { ActionCardDetailsCard } from "../ActionCardDetailsCard";
 import styles from "./ActionCard.module.css";
@@ -29,12 +29,8 @@ export function ActionCard({
     timingWindow?.toLowerCase() === "action" ? "ACTION" : timingWindow;
 
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-    if (showDetails) {
-      toggle();
-    }
+    onClick?.();
+    if (showDetails) toggle();
   };
 
   const cardContent = (
@@ -61,9 +57,7 @@ export function ActionCard({
     </Box>
   );
 
-  if (!showDetails) {
-    return cardContent;
-  }
+  if (!showDetails) return cardContent;
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>

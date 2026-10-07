@@ -1,24 +1,35 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo } from "react";
 import { Group, Stack, Text } from "@mantine/core";
-import {
-  calculateTilePositions,
-  isFractureInPlay,
-} from "@/domains/map/model/mapgen/tilePositioning";
+import { calculateStatTilePositions } from "@/domains/map/model/mapgen/tilePositioning";
 import { determineOpenSides } from "@/utils/tileAdjacency";
-import { findColorData, getColorValues } from "@/entities/lookup/colors";
+import {
+  getColorAlias,
+  getPrimaryColorWithOpacity,
+} from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { SC_COLORS, SC_NUMBER_COLORS } from "@/entities/data/strategyCardColors";
+import {
+  SC_COLORS,
+  SC_NUMBER_COLORS,
+} from "@/entities/data/strategyCardColors";
 import { CommandTokenStack } from "./CommandTokenStack";
-import { getColorAlias } from "@/entities/lookup/colors";
-import { PlayerStatsHex, HexagonData } from "./PlayerStatsHex";
+import { PlayerStatsHex, buildStatHexagons } from "./PlayerStatsHex";
 import styles from "./PlayerStatsArea.module.css";
-import { PlayerData } from "@/entities/data/types";
+import type { PlayerData } from "@/entities/data/types";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameContext } from "@/hooks/useGameContext";
-import { useFactionImages } from "@/hooks/useFactionImages";
-import { getFactionImage } from "@/entities/lookup/factions";
+import { useFactionImageUrl } from "@/hooks/useFactionImages";
 import cx from "clsx";
 import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
+
+const ARMADA_IDS = new Set(["armada", "tfarmada"]);
+
+function playerHasArmada(playerData: PlayerData): boolean {
+  return [
+    ...(playerData.abilities ?? []),
+    ...(playerData.techs ?? []),
+    ...(playerData.factionTechs ?? []),
+  ].some((id) => ARMADA_IDS.has(id.toLowerCase().replace(/[^a-z0-9]/g, "")));
+}
 
 type PlayerStatsAreaProps = {
   faction: string;
@@ -32,14 +43,10 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
   statTilePositions,
 }: PlayerStatsAreaProps) {
   const enhancedData = useGameContext();
-  const factionImages = useFactionImages();
-  const factionImage = factionImages[faction]?.image;
-  const factionImageType = factionImages[faction]?.type;
-  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
+  const factionUrl = useFactionImageUrl(faction);
   const factionColorMap = useFactionColors();
-  const [hexagons, setHexagons] = useState<HexagonData[]>([]);
 
-  if (!enhancedData) return null;
+  if (!enhancedData || !statTilePositions?.length) return null;
 
   const {
     vpsToWin = 10,
@@ -47,85 +54,44 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
     tilePositions: gameTilePositions,
   } = enhancedData;
   const color = factionColorMap[faction]?.color || playerData.color;
+  const colorAlias = getColorAlias(color);
 
-  const tilePositions = useMemo(() => {
-    if (!statTilePositions || statTilePositions.length === 0) return [];
-    const statTilePositionsArray = statTilePositions.map(
-      (position) => `${position}:stat_${position}`
-    );
-    const fractureYbump =
-      gameTilePositions && isFractureInPlay(gameTilePositions) ? 400 : 0;
-    const positions = calculateTilePositions(
-      statTilePositionsArray,
-      ringCount,
-      fractureYbump
-    );
-    return positions;
-  }, [statTilePositions, ringCount, gameTilePositions]);
+  const tilePositions = calculateStatTilePositions(
+    statTilePositions,
+    ringCount,
+    gameTilePositions,
+  );
+  const { hexagons, svgBounds } = buildStatHexagons(
+    tilePositions,
+    faction,
+    determineOpenSides(statTilePositions),
+  );
+  const borderColor = getPrimaryColorWithOpacity(color, 0.8);
 
-  const openSides = useMemo(() => {
-    return determineOpenSides(statTilePositions);
-  }, [statTilePositions]);
-
-  const borderColor = useMemo(() => {
-    const colorData = findColorData(color);
-    if (!colorData) return "rgba(148, 163, 184, 0.8)"; // fallback
-
-    const primaryColorValues = getColorValues(
-      colorData.primaryColorRef,
-      colorData.primaryColor
-    );
-    if (!primaryColorValues) return "rgba(148, 163, 184, 0.8)"; // fallback
-    const { red, green, blue } = primaryColorValues;
-    return `rgba(${red}, ${green}, ${blue}, 0.8)`;
-  }, [color]);
-
-  // Generate background tint based on player status
   const backgroundTint = playerData.active
-    ? "rgba(34, 197, 94, 0.4)" // green tint for active players
+    ? "rgba(34, 197, 94, 0.4)"
     : playerData.passed
-      ? "rgba(239, 68, 68, 0.4)" // red tint for passed players
-      : undefined; // no tint for normal state
+      ? "rgba(239, 68, 68, 0.4)"
+      : undefined;
 
-  // Handle hexagons calculation callback
-  const handleHexagonsCalculated = useCallback((newHexagons: HexagonData[]) => {
-    setHexagons(newHexagons);
-  }, []);
-
-  // Get first, second, and third hexagon positions for HTML overlays
-  const firstHex = hexagons[0];
-  const secondHex = hexagons[1];
-  const thirdHex = hexagons[2];
+  const [firstHex, secondHex, thirdHex] = hexagons;
 
   const numScoredSecrets = playerData.secretsScored
     ? Object.values(playerData.secretsScored).length
     : 0;
-  const hasArmadaBonus = (() => {
-    const normalize = (id: string) => id.toLowerCase().replace(/[^a-z0-9]/g, "");
-    const abilityIds = playerData.abilities ?? [];
-    const techIds = [...(playerData.techs ?? []), ...(playerData.factionTechs ?? [])];
-
-    return [...abilityIds, ...techIds].some((id) => {
-      const normalized = normalize(id);
-      return normalized === "armada" || normalized === "tfarmada";
-    });
-  })();
-
-  if (tilePositions.length === 0) return null;
+  const hasArmadaBonus = playerHasArmada(playerData);
 
   return (
     <>
       <PlayerStatsHex
-        tilePositions={tilePositions}
+        hexagons={hexagons}
+        svgBounds={svgBounds}
         faction={faction}
-        openSides={openSides}
         borderColor={borderColor}
         backgroundTint={backgroundTint}
-        onHexagonsCalculated={handleHexagonsCalculated}
       />
 
-      {/* HTML overlay for first hexagon player info */}
-      {firstHex && playerData && (
+      {firstHex && (
         <div
           className={styles.playerOverlay}
           style={{
@@ -156,7 +122,7 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                   className={styles.zeroTokenImage}
                 />
               )}
-              {playerData.scs.map((sc: number, index: number) => {
+              {playerData.scs.map((sc, index) => {
                 const isExhausted = playerData.exhaustedSCs?.includes(sc);
                 return (
                   <Text
@@ -164,17 +130,13 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                     className={cx(
                       styles.strategyCard,
                       playerData.hasZeroToken &&
-                        styles.strategyCardWithZeroToken
+                        styles.strategyCardWithZeroToken,
                     )}
-                    c={
-                      isExhausted
-                        ? "gray.5"
-                        : SC_NUMBER_COLORS[SC_COLORS[sc]]
-                    }
+                    c={isExhausted ? "gray.5" : SC_NUMBER_COLORS[SC_COLORS[sc]]}
                     style={{
                       right: `${24 - index * 36}px`,
-                      fontSize: `${!playerData.hasZeroToken ? 64 : 48 - ((playerData.scs.length - 1) * 1)}px`,
-                  }}
+                      fontSize: `${!playerData.hasZeroToken ? 64 : 48 - (playerData.scs.length - 1)}px`,
+                    }}
                   >
                     {sc}
                   </Text>
@@ -182,10 +144,8 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
               })}
             </Group>
 
-            {/* Secret Objectives */}
             {playerData.numScoreableSecrets > 0 && (
               <Group gap={0} justify="center">
-                {/* Render scored secrets */}
                 {Array.from({ length: numScoredSecrets }, (_, index) => (
                   <img
                     key={`scored-${index}`}
@@ -194,7 +154,6 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                   />
                 ))}
 
-                {/* Render unscored secrets in hand */}
                 {Array.from(
                   {
                     length: playerData.numUnscoredSecrets || 0,
@@ -205,17 +164,16 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                       src={cdnImage("/player_area/pa_so-icon_hand.png")}
                       alt="Secret in Hand"
                     />
-                  )
+                  ),
                 )}
 
-                {/* Render empty slots with reduced opacity */}
                 {Array.from(
                   {
                     length: Math.max(
                       0,
                       playerData.numScoreableSecrets -
                         numScoredSecrets -
-                        (playerData.numUnscoredSecrets || 0)
+                        (playerData.numUnscoredSecrets || 0),
                     ),
                   },
                   (_, index) => (
@@ -225,7 +183,7 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                       alt="Empty Secret Slot"
                       style={{ opacity: 0.2 }}
                     />
-                  )
+                  ),
                 )}
               </Group>
             )}
@@ -239,13 +197,11 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
         </div>
       )}
 
-      {/* HTML overlay for second hexagon command counters */}
       {secondHex &&
-        playerData &&
         (playerData.tacticalCC > 0 ||
           playerData.fleetCC > 0 ||
           hasArmadaBonus ||
-          (playerData.mahactEdict?.length && playerData.mahactEdict.length > 0) ||
+          !!playerData.mahactEdict?.length ||
           playerData.strategicCC > 0) && (
           <div
             className={styles.commandCountersOverlay}
@@ -257,13 +213,13 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
             <Stack gap={0}>
               <CommandTokenStack
                 count={playerData.tacticalCC}
-                colorAlias={getColorAlias(color)}
+                colorAlias={colorAlias}
                 faction={faction}
                 type="command"
               />
               <CommandTokenStack
                 count={playerData.fleetCC}
-                colorAlias={getColorAlias(color)}
+                colorAlias={colorAlias}
                 faction={faction}
                 type="fleet"
                 mahactEdict={playerData.mahactEdict}
@@ -271,7 +227,7 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
               />
               <CommandTokenStack
                 count={playerData.strategicCC}
-                colorAlias={getColorAlias(color)}
+                colorAlias={colorAlias}
                 faction={faction}
                 type="command"
               />
@@ -279,8 +235,7 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
           </div>
         )}
 
-      {/* HTML overlay for third hexagon trade goods and commodities */}
-      {thirdHex && playerData && (
+      {thirdHex && (
         <div
           className={styles.tradeGoodsOverlay}
           style={{
@@ -288,7 +243,6 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
             top: thirdHex.cy,
           }}
         >
-          {/* Player Status Text */}
           {(playerData.active || playerData.passed) && (
             <div
               className={`${styles.playerStatusText} ${
@@ -302,7 +256,6 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
           )}
 
           <Group gap="md" align="center" className={styles.tradeGoodsGroup}>
-            {/* Trade Goods */}
             <div className={styles.tradeGoodsContainer}>
               <img
                 src={cdnImage("/player_area/pa_cardbacks_tradegoods.png")}
@@ -313,7 +266,6 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
               </Text>
             </div>
 
-            {/* Commodities */}
             <div className={styles.commoditiesContainer}>
               <img
                 src={cdnImage("/player_area/pa_cardbacks_commodities.png")}
@@ -330,14 +282,12 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
               </Text>
             </div>
           </Group>
-          {/* Speaker Token if applicable */}
           {playerData.isSpeaker && (
             <img
               src={cdnImage("/tokens/token_speaker.png")}
               alt="Speaker Token"
             />
           )}
-          {/* Tyrant Token if applicable */}
           {playerData.isTyrant && (
             <img
               src={cdnImage("/tokens/token_tyrant.png")}

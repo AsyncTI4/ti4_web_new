@@ -47,7 +47,7 @@ export function createReservedBounds(planet: Planet): Bounds[] {
   return [label, stats];
 }
 
-export function createStackBounds(stack: EntityStack): Bounds {
+function createStackBounds(stack: EntityStack): Bounds {
   return createBounds(stack, getRenderedStackFootprint(stack));
 }
 
@@ -134,6 +134,10 @@ export function intersectionArea(first: Bounds, second: Bounds): number {
 
 export function area(value: Bounds | RenderedFootprint): number {
   return (value.right - value.left) * (value.bottom - value.top);
+}
+
+export function addPoints(first: Point, second: Point): Point {
+  return { x: first.x + second.x, y: first.y + second.y };
 }
 
 export function distance(first: Point, second: Point): number {

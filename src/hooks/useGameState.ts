@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import type { PlayerDataResponse } from "@/entities/data/types";
-import { fetchPlayerData } from "./usePlayerData";
+import { usePlayerData } from "./usePlayerData";
 
 /**
  * The game-state slice of the full web-data document. Streamed merge patches
@@ -9,10 +8,7 @@ import { fetchPlayerData } from "./usePlayerData";
  * subscription.
  */
 export function useGameState(gameId: string) {
-  return useQuery({
-    queryKey: ["playerData", gameId],
-    queryFn: () => fetchPlayerData(gameId),
-    retry: false,
+  return usePlayerData(gameId, {
     select: (data: PlayerDataResponse) => data.gameState,
   });
 }

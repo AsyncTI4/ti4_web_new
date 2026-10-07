@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import type { IMessage } from "@stomp/stompjs";
 import { config } from "../config";
@@ -50,7 +50,7 @@ export function useGameSocket(
     client.onConnect = () => {
       setReadyState(SocketReadyState.OPEN);
       setIsReconnecting(false);
-      client.subscribe(`/topic/game/${gameId}`, (msg: any) => {
+      client.subscribe(`/topic/game/${gameId}`, (msg: IMessage) => {
         if (msg.body === "refresh") onRefreshRef.current?.();
       });
       client.subscribe(`/topic/game/${gameId}/state`, (msg: IMessage) => {
@@ -78,15 +78,14 @@ export function useGameSocket(
 
     return () => {
       clientRef.current = null;
-      client.deactivate();
+      void client.deactivate();
     };
   }, [gameId]);
 
-  const reconnect = useCallback(() => {
+  const reconnect = () => {
     const client = clientRef.current;
     if (!client) return;
     setIsReconnecting(true);
-    // Restart the client to force a reconnect cycle
     setReadyState(SocketReadyState.CLOSING);
     client
       .deactivate()
@@ -95,7 +94,7 @@ export function useGameSocket(
         client.activate();
       })
       .catch(() => {});
-  }, []);
+  };
 
   return { readyState, reconnect, isReconnecting };
 }

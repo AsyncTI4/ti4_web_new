@@ -47,7 +47,6 @@ export function StageObjectivesSection({
               <SmoothPopover.Target>
                 <div>
                   <CompactObjective
-                    objectiveKey={objective.key}
                     name={objective.name}
                     color={color}
                     revealed={objective.revealed}

@@ -7,6 +7,7 @@ import { PromissoryNote } from "@/domains/player/components/PromissoryNote";
 import { PhantomSlot } from "@/domains/player/components/PhantomSlot/PhantomSlot";
 import { chunkInto } from "@/domains/player/components/Tech/TechGridShared";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import type { PlayerData } from "@/entities/data/types";
 import styles from "./ObjectivesRack.module.css";
 
 type ObjectivesRackProps = {
@@ -56,12 +57,39 @@ function countObjectiveItems({
   };
 }
 
-export function getObjectiveColumnCount(counts: ObjectiveCounts): number {
+function getObjectiveColumnCount(counts: ObjectiveCounts): number {
   const { secretCount, otherCount } = countObjectiveItems(counts);
 
   if (secretCount + otherCount <= OBJECTIVES_PER_COLUMN) return 1;
 
   return 1 + Math.ceil(otherCount / OBJECTIVES_PER_COLUMN);
+}
+
+/*
+ * The shallowest a rack is ever drawn. Cards whose holdings and tech both fit in
+ * three or four rows left the band looking thin next to their neighbours, so the
+ * racks always show at least five seats. This governs empty seats only — packing,
+ * ordering and column counts are untouched.
+ */
+export const MIN_RACK_ROWS = 5;
+
+/**
+ * Column count shared by every player's rack, so the same rack shows the same
+ * number of seats on every card in the tab, filled or not.
+ */
+export function getGameObjectiveColumnCount(players: PlayerData[]): number {
+  return Math.max(
+    1,
+    ...players.map((player) =>
+      getObjectiveColumnCount({
+        secretsScored: player.secretsScored ?? {},
+        knownUnscoredSecrets: player.knownUnscoredSecrets,
+        soCount: player.soCount,
+        promissoryNotes: player.promissoryNotesInPlayArea ?? [],
+        relics: player.relics ?? [],
+      })
+    )
+  );
 }
 
 /**

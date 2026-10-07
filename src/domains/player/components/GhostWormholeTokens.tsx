@@ -5,13 +5,11 @@ import {
   StackedTokenStrip,
 } from "./StackedTokenStrip";
 
-type GhostWormholeTokensProps = {
+type Props = {
   wormholeIds: string[];
 };
 
-export function GhostWormholeTokens({ wormholeIds }: GhostWormholeTokensProps) {
-  if (!wormholeIds || wormholeIds.length === 0) return null;
-
+export function GhostWormholeTokens({ wormholeIds }: Props) {
   const tokens = wormholeIds.reduce<TokenDescriptor[]>((acc, wormholeId, index) => {
     const tokenPath = getTokenImagePath(wormholeId);
     if (!tokenPath) return acc;

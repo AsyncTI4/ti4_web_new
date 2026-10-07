@@ -10,11 +10,10 @@ type GamesBarProps = {
 export function GamesBar({ currentMapId }: GamesBarProps) {
   const { activeTabs, changeTab, removeTab } = useTabManagementV2();
   const { user } = useUser();
-  const effectiveMapId = currentMapId ?? "";
 
   return (
     <HeaderMenuNew
-      mapId={effectiveMapId}
+      mapId={currentMapId ?? ""}
       activeTabs={activeTabs}
       changeTab={changeTab}
       removeTab={removeTab}
@@ -22,5 +21,3 @@ export function GamesBar({ currentMapId }: GamesBarProps) {
     />
   );
 }
-
-export default GamesBar;

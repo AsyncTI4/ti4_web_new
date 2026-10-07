@@ -119,7 +119,7 @@ function SurveyProgress({ gameId }: { gameId: string }) {
   );
 }
 
-export type MapSurveyLoaderProps = {
+type MapSurveyLoaderProps = {
   gameId: string;
   /** `failed` freezes the sweep and turns the readout over to the error. */
   status?: "surveying" | "failed";
@@ -225,5 +225,3 @@ export function MapSurveyLoader({
     </MapViewportCenter>
   );
 }
-
-export default MapSurveyLoader;

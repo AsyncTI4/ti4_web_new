@@ -1,10 +1,9 @@
 import { MapTile } from "@/domains/map/components/MapTile";
 import { PlayerStatsArea } from "@/domains/map/components/PlayerStatsArea";
-import { Tile } from "@/app/providers/context/types";
+import type { Tile } from "@/app/providers/context/types";
 import type { PlayerData } from "@/entities/data/types";
 import { computeControlOpenSides } from "@/utils/controlBorders";
-import { memo, useMemo } from "react";
-import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
+import { memo } from "react";
 
 type Props = {
   tiles: Tile[];
@@ -32,15 +31,11 @@ export const MapTilesRenderer = memo(function MapTilesRenderer({
   onPlanetMouseEnter,
   onPlanetMouseLeave,
 }: Props) {
-  const controlOpenSides = useMemo(
-    () => computeControlOpenSides(tiles),
-    [tiles],
-  );
+  const controlOpenSides = computeControlOpenSides(tiles);
 
   return (
     <>
-      {!DISABLE_PLAYER_AREA_RENDERING &&
-        playerData &&
+      {playerData &&
         statTilePositions &&
         Object.entries(statTilePositions).map(([faction, statTiles]) => {
           const player = playerData.find((p) => p.faction === faction);
@@ -55,20 +50,18 @@ export const MapTilesRenderer = memo(function MapTilesRenderer({
             />
           );
         })}
-      {tiles.map((tile, index) => {
-        return (
-          <MapTile
-            key={`${tile.position}-${index}`}
-            mapTile={tile}
-            controlOpenSides={controlOpenSides[tile.position]}
-            onUnitMouseOver={onUnitMouseOver}
-            onUnitMouseLeave={onUnitMouseLeave}
-            onUnitSelect={onUnitSelect}
-            onPlanetMouseEnter={onPlanetMouseEnter}
-            onPlanetMouseLeave={onPlanetMouseLeave}
-          />
-        );
-      })}
+      {tiles.map((tile, index) => (
+        <MapTile
+          key={`${tile.position}-${index}`}
+          mapTile={tile}
+          controlOpenSides={controlOpenSides[tile.position]}
+          onUnitMouseOver={onUnitMouseOver}
+          onUnitMouseLeave={onUnitMouseLeave}
+          onUnitSelect={onUnitSelect}
+          onPlanetMouseEnter={onPlanetMouseEnter}
+          onPlanetMouseLeave={onPlanetMouseLeave}
+        />
+      ))}
     </>
   );
 });

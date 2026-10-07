@@ -7,7 +7,7 @@ export const SC_COLORS: Record<number, string> = {
   6: "cyan",
   7: "blue",
   8: "purple",
-} as const;
+};
 
 export const SC_NUMBER_COLORS: Record<string, string> = {
   red: "red.9",
@@ -18,7 +18,7 @@ export const SC_NUMBER_COLORS: Record<string, string> = {
   cyan: "cyan.9",
   blue: "blue.9",
   purple: "violet.9",
-} as const;
+};
 
 export const SC_NAMES: Record<number, string> = {
   1: "LEADERSHIP",

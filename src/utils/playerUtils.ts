@@ -16,7 +16,7 @@ export function getPlayerFactionDisplayName(player: PlayerData) {
   );
 }
 
-export function hasAssignedFaction(
+function hasAssignedFaction(
   player?: PlayerData | null,
 ): player is PlayerData {
   if (!player) return false;

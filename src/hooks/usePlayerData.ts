@@ -1,11 +1,11 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlayerDataResponse, GameStateMessage } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { config } from "@/config";
 
 // RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
-export function deepMergePatch<T>(base: T, patch: unknown): T {
+function deepMergePatch<T>(base: T, patch: unknown): T {
   if (patch === null || typeof patch !== "object" || Array.isArray(patch))
     return patch as T;
   const baseObj =
@@ -39,7 +39,7 @@ export class GameDataFetchError extends Error {
   }
 }
 
-export async function fetchPlayerData(
+async function fetchPlayerData(
   gameId: string
 ): Promise<PlayerDataResponse> {
   const response = await fetch(`${config.api.gameDataUrl}/${gameId}/web-data`);
@@ -67,35 +67,32 @@ export function usePlayerData<TData = PlayerDataResponse>(
  * consumer of that document — player areas, objectives, tiles, the game-state
  * panel — updates from this one stream. Give the handler to useGameSocket.
  */
-export function useWebDataPatcher(gameId: string) {
+function useWebDataPatcher(gameId: string) {
   const queryClient = useQueryClient();
   const lastSeqRef = useRef<number | null>(null);
 
-  return useCallback(
-    (msg: GameStateMessage) => {
-      const key = ["playerData", gameId];
-      const cached = queryClient.getQueryData<PlayerDataResponse>(key);
+  return (msg: GameStateMessage) => {
+    const key = ["playerData", gameId];
+    const cached = queryClient.getQueryData<PlayerDataResponse>(key);
 
-      if (msg.full) {
-        queryClient.setQueryData(key, msg.patch as PlayerDataResponse);
-        lastSeqRef.current = msg.seq;
-        return;
-      }
-      if (
-        cached !== undefined &&
-        lastSeqRef.current !== null &&
-        msg.seq === lastSeqRef.current + 1
-      ) {
-        queryClient.setQueryData(key, deepMergePatch(cached, msg.patch));
-        lastSeqRef.current = msg.seq;
-        return;
-      }
-      // Gap, seq reset, or delta before initial fetch: adopt seq as baseline and resync once.
+    if (msg.full) {
+      queryClient.setQueryData(key, msg.patch as PlayerDataResponse);
       lastSeqRef.current = msg.seq;
-      void queryClient.invalidateQueries({ queryKey: key });
-    },
-    [gameId, queryClient]
-  );
+      return;
+    }
+    if (
+      cached !== undefined &&
+      lastSeqRef.current !== null &&
+      msg.seq === lastSeqRef.current + 1
+    ) {
+      queryClient.setQueryData(key, deepMergePatch(cached, msg.patch));
+      lastSeqRef.current = msg.seq;
+      return;
+    }
+    // Gap, seq reset, or delta before initial fetch: adopt seq as baseline and resync once.
+    lastSeqRef.current = msg.seq;
+    void queryClient.invalidateQueries({ queryKey: key });
+  };
 }
 
 export function usePlayerDataSocket(gameId: string) {
@@ -112,9 +109,6 @@ export function usePlayerDataSocket(gameId: string) {
         hasConnectedBefore.current = true;
         return;
       }
-      console.log(
-        "Game refresh received, refetching player data and player hands..."
-      );
       void refetch();
       void queryClient.invalidateQueries({
         queryKey: ["playerHand", gameId],

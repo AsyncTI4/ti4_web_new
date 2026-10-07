@@ -23,7 +23,10 @@ const UNIT_PRIORITY_ORDER = [
 
 const OPTIONAL_UNITS = ["monument"];
 
-type PlayerCardUnitsAreaProps = {
+/** A rack position: the player's best unit for it, or no unitId when unavailable. */
+type UnitSlot = { asyncId: string; unitId?: string };
+
+type Props = {
   playerData: PlayerData;
   color: string;
   faction: string;
@@ -42,115 +45,42 @@ export function PlayerCardUnitsArea({
   showUnavailable = true,
   condensed = false,
   showUnitUpgrades = true,
-}: PlayerCardUnitsAreaProps) {
+}: Props) {
   const unitCounts = playerData.unitCounts || {};
   const stasisInfantry = playerData.stasisInfantry || 0;
   const ccReinf = playerData.ccReinf;
 
-  const unitCount = UNIT_PRIORITY_ORDER.filter((asyncId) => {
+  const slots = UNIT_PRIORITY_ORDER.flatMap((asyncId): UnitSlot[] => {
     const bestUnit = lookupUnit(asyncId, faction, playerData);
-
-    if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
-      return !OPTIONAL_UNITS.includes(asyncId) && showUnavailable;
+    if (bestUnit && bestUnit.id.toLowerCase() !== "nowarsun") {
+      return [{ asyncId, unitId: bestUnit.id }];
     }
+    if (OPTIONAL_UNITS.includes(asyncId) || !showUnavailable) return [];
+    return [{ asyncId }];
+  });
 
-    return true;
-  }).length;
-
-  const extraCardCount =
-    (ccReinf !== undefined ? 1 : 0) +
-    (stasisInfantry > 0 ? 1 : 0);
-
-  const totalCardCount = unitCount + extraCardCount;
-
-  const rows = totalCardCount > 7 ? 2 : 1;
-  const cols = Math.ceil(totalCardCount / rows);
-
-  if (condensed) {
-    return (
-      <Box className={unitStyles.denseGrid}>
-        {UNIT_PRIORITY_ORDER.map((asyncId) => {
-          const bestUnit = lookupUnit(asyncId, faction, playerData);
-          const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
-
-          if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
-            if(OPTIONAL_UNITS.includes(asyncId)) return null;
-            if (!showUnavailable) return null;
-            return (
-              <UnitCardUnavailable
-                key={`unavailable-${asyncId}`}
-                asyncId={asyncId}
-                color={color}
-                condensed
-              />
-            );
-          }
-
-          return (
-            <UnitCard
-              key={bestUnit.id}
-              unitId={bestUnit.id}
-              color={color}
-              deployedCount={deployedCount}
-              unitCap={unitCounts?.[asyncId]?.unitCap}
-              condensed
-              showUpgradeState={showUnitUpgrades}
-            />
-          );
-        })}
-
-        {ccReinf !== undefined && (
-          <CommandTokenCard
-            color={color}
-            faction={faction}
-            reinforcements={ccReinf}
-            totalCapacity={16}
-            condensed
-          />
-        )}
-
-        {stasisInfantry > 0 && (
-          <StasisInfantryCard
-            reviveCount={stasisInfantry}
-            color={color}
-            condensed
-          />
-        )}
-      </Box>
-    );
-  }
-
-  return (
-    <SimpleGrid h="100%" cols={cols} spacing={spacing}>
-        {UNIT_PRIORITY_ORDER.map((asyncId) => {
-        const bestUnit = lookupUnit(asyncId, faction, playerData);
-        const deployedCount = unitCounts?.[asyncId]?.deployedCount ?? 0;
-
-        if (!bestUnit || bestUnit.id.toLowerCase() === "nowarsun") {
-          if(OPTIONAL_UNITS.includes(asyncId)) return null;
-          if (!showUnavailable) return null;
-          return (
-            <UnitCardUnavailable
-              key={`unavailable-${asyncId}`}
-              asyncId={asyncId}
-              color={color}
-            />
-          );
-        }
-
-        const unitCap = unitCounts?.[asyncId]?.unitCap;
-
-        return (
+  const cards = (
+    <>
+      {slots.map(({ asyncId, unitId }) =>
+        unitId ? (
           <UnitCard
-            key={bestUnit.id}
-            unitId={bestUnit.id}
+            key={unitId}
+            unitId={unitId}
             color={color}
-            deployedCount={deployedCount}
-            unitCap={unitCap}
+            deployedCount={unitCounts[asyncId]?.deployedCount ?? 0}
+            unitCap={unitCounts[asyncId]?.unitCap}
+            condensed={condensed}
             showUpgradeState={showUnitUpgrades}
           />
-        );
-      })}
+        ) : (
+          <UnitCardUnavailable
+            key={`unavailable-${asyncId}`}
+            asyncId={asyncId}
+            color={color}
+            condensed={condensed}
+          />
+        )
+      )}
 
       {ccReinf !== undefined && (
         <CommandTokenCard
@@ -158,12 +88,31 @@ export function PlayerCardUnitsArea({
           faction={faction}
           reinforcements={ccReinf}
           totalCapacity={16}
+          condensed={condensed}
         />
       )}
 
       {stasisInfantry > 0 && (
-        <StasisInfantryCard reviveCount={stasisInfantry} color={color} />
+        <StasisInfantryCard
+          reviveCount={stasisInfantry}
+          color={color}
+          condensed={condensed}
+        />
       )}
+    </>
+  );
+
+  if (condensed) {
+    return <Box className={unitStyles.denseGrid}>{cards}</Box>;
+  }
+
+  const totalCardCount =
+    slots.length + (ccReinf !== undefined ? 1 : 0) + (stasisInfantry > 0 ? 1 : 0);
+  const rows = totalCardCount > 7 ? 2 : 1;
+
+  return (
+    <SimpleGrid h="100%" cols={Math.ceil(totalCardCount / rows)} spacing={spacing}>
+      {cards}
     </SimpleGrid>
   );
 }

@@ -1,5 +1,4 @@
-import React from "react";
-import { CapacityUsage } from "@/entities/data/types";
+import type { CapacityUsage } from "@/entities/data/types";
 import { findSystemIndicatorLayout } from "@/utils/unitPositioning";
 import { CapacityIndicator } from "../CapacityIndicator";
 import { ProductionIndicator } from "../ProductionIndicator";
@@ -17,10 +16,7 @@ export function SystemIndicatorsLayer({
   largestCapacity,
   hasBorderAnomaly,
 }: Props) {
-  const layout = React.useMemo(
-    () => findSystemIndicatorLayout(systemId, hasBorderAnomaly),
-    [hasBorderAnomaly, systemId],
-  );
+  const layout = findSystemIndicatorLayout(systemId, hasBorderAnomaly);
   const hasProduction = highestProduction > 0;
   const capacityPlacement = hasProduction
     ? layout.capacity.withProduction
@@ -30,7 +26,6 @@ export function SystemIndicatorsLayer({
     <>
       {hasProduction && (
         <ProductionIndicator
-          key={`${systemId}-production-icon`}
           x={layout.production.x}
           y={layout.production.y}
           productionValue={highestProduction}

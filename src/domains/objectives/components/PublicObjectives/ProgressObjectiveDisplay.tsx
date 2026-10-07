@@ -2,6 +2,7 @@ import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerData } from "@/entities/data/types";
 import { Text, Group } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
+import cx from "clsx";
 import styles from "./ExpandedObjectiveCard.module.css";
 
 type FactionProgressData = {
@@ -11,12 +12,10 @@ type FactionProgressData = {
   isAtThreshold: boolean;
 };
 
-
 type ProgressObjectiveDisplayProps = {
   factionProgressData: FactionProgressData[];
   progressThreshold: number;
 };
-
 
 function ProgressObjectiveDisplay({
   factionProgressData,
@@ -26,11 +25,11 @@ function ProgressObjectiveDisplay({
     <>
       {factionProgressData.map(
         ({ player, progress, isScored, isAtThreshold }) => {
-          const badgeClass = isScored
-            ? `${styles.factionProgressBadge} ${styles.completed}`
-            : isAtThreshold
-              ? `${styles.factionProgressBadge} ${styles.atThreshold}`
-              : styles.factionProgressBadge;
+          const badgeClass = cx(
+            styles.factionProgressBadge,
+            isScored && styles.completed,
+            !isScored && isAtThreshold && styles.atThreshold
+          );
 
           return (
             <Group key={player.faction} className={badgeClass} gap={4}>

@@ -54,7 +54,6 @@ export const entityIdPriority = [
   "ws",
   "fs",
   "dn",
-  "ff",
   "ca",
   "cv",
   "dd",
@@ -65,21 +64,3 @@ export const entityIdPriority = [
   "pd",
 ];
 
-export const entityZStackPriority = [
-  "gf",
-  "ff",
-  "mf",
-  "sd",
-  "pd",
-  "dd",
-  "cv",
-  "ca",
-  "dn",
-  "fs",
-  "ws",
-  "gledge_core",
-  "sleeper",
-  "custodiavigilia1",
-  "custodiavigilia2",
-  "mirage",
-];

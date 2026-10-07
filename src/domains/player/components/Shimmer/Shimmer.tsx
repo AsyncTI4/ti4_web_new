@@ -1,5 +1,6 @@
 import { Box, BoxProps } from "@mantine/core";
-import { getGradientClasses, ColorKey } from "../gradientClasses";
+import { getGradientClasses, ColorKey } from "@/shared/ui/gradientClasses";
+import cx from "clsx";
 import styles from "./Shimmer.module.css";
 
 type Props = BoxProps & {
@@ -14,16 +15,18 @@ export function Shimmer({
   ...boxProps
 }: Props) {
   const gradientClasses = getGradientClasses(color);
-  const combinedClassName =
-    `${gradientClasses.shimmerContainer} ${styles.shimmerWrapper} ${className || ""}`.trim();
 
   return (
-    <Box className={combinedClassName} {...boxProps}>
-      {/* Subtle diagonal pattern for blue shimmers */}
+    <Box
+      className={cx(
+        gradientClasses.shimmerContainer,
+        styles.shimmerWrapper,
+        className
+      )}
+      {...boxProps}
+    >
       {color === "blue" && (
-        <Box
-          className={`${gradientClasses.pattern} ${styles.diagonalPattern}`}
-        />
+        <Box className={cx(gradientClasses.pattern, styles.diagonalPattern)} />
       )}
 
       {children}

@@ -10,15 +10,11 @@ type Props = {
 export function RelicCard({ relicId }: Props) {
   const relicData = getRelicData(relicId);
 
-  if (!relicData) {
-    console.warn(`Relic with ID "${relicId}" not found`);
-    return null;
-  }
+  if (!relicData) return null;
 
   const isFake = relicData.isFakeRelic ?? false;
-  const cardColor = isFake ? "gray" : "orange";
+  const cardColor = isFake ? "none" : "orange";
   const iconSrc = isFake ? cdnImage("/tokens/token_frontier.webp") : "/relicicon.webp";
-  const renderRelicIcon = () => <Image src={iconSrc} w={50} h={50} />;
 
   return (
     <DetailsCard width={320} color={cardColor}>
@@ -26,7 +22,7 @@ export function RelicCard({ relicId }: Props) {
         <DetailsCard.Title
           title={relicData.name}
           subtitle={isFake ? "Frontier Explore" : "Relic"}
-          icon={<DetailsCard.Icon icon={renderRelicIcon()} />}
+          icon={<DetailsCard.Icon icon={<Image src={iconSrc} w={50} h={50} />} />}
         />
 
         <Divider c="gray.7" opacity={0.8} />
@@ -41,7 +37,6 @@ export function RelicCard({ relicId }: Props) {
 
         <Divider c="gray.7" opacity={0.8} />
 
-        {/* Bespoke flavor text */}
         <Text size="sm" c={isFake ? "gray.3" : "orange.3"} fs="italic" lh={1.5}>
           {relicData.flavourText}
         </Text>

@@ -1,18 +1,19 @@
 import { leaders } from "@/entities/data/leaders";
+import { indexBy } from "@/entities/lookup/indexBy";
 import type { Leader, LeaderData } from "@/entities/data/types";
 
+const leadersMap = indexBy(leaders, (leader) => leader.id);
+
 export function getLeaderById(leaderId: string): LeaderData | undefined {
-  return leaders.find((leader) => leader.id === leaderId);
+  return leadersMap.get(leaderId);
 }
 
-export function getFactionLeader(
+function getFactionLeader(
   faction: string,
   type: LeaderData["type"]
 ): LeaderData | undefined {
-  return leaders.find(
-    (leader) =>
-      leader.id === `${faction}${type}` && !leader.homebrewReplacesID
-  );
+  const leader = getLeaderById(`${faction}${type}`);
+  return leader?.homebrewReplacesID ? undefined : leader;
 }
 
 export function getAllianceCommander(

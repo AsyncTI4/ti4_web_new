@@ -1,4 +1,10 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { Box, type BoxProps } from "@mantine/core";
 import { useAppStore } from "@/utils/appStore";
 import { getBrowserZoomScale } from "@/utils/zoom";
@@ -37,6 +43,7 @@ type MapTooltipPositionerProps = {
   zIndexVar?: string;
   applyBrowserScale?: boolean;
   pointerEvents?: CSSProperties["pointerEvents"];
+  children?: ReactNode;
 } & Omit<BoxProps, "children">;
 
 export function MapTooltipPositioner({
@@ -52,27 +59,20 @@ export function MapTooltipPositioner({
   style,
   ...rest
 }: MapTooltipPositionerProps) {
-  const zoom = mapZoom ?? useAppStore((state) => state.zoomLevel);
+  const storeZoom = useAppStore((state) => state.zoomLevel);
+  const zoom = mapZoom ?? storeZoom;
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [placement, setPlacement] = useState<TooltipPlacement>("top");
 
-  if (!coords) return null;
-
   const resolvedPadding =
     mapPadding ?? getMapLayoutConfig(mapLayout).mapPadding;
-  const { x, y } = mapCoordsToScreen(coords, zoom, resolvedPadding);
-
-  const browserScale = applyBrowserScale ? getBrowserZoomScale() : null;
-  const scale = browserScale ? 1 / browserScale : 1;
-  const transformBase =
-    placement === "top" ? "translate(-50%, -100%)" : "translate(-50%, 0%)";
-  const transform =
-    applyBrowserScale && browserScale != null
-      ? `${transformBase} scale(${scale})`
-      : transformBase;
+  const screen = coords
+    ? mapCoordsToScreen(coords, zoom, resolvedPadding)
+    : null;
+  const screenY = screen?.y ?? null;
 
   useLayoutEffect(() => {
-    if (!boxRef.current) return;
+    if (!boxRef.current || screenY === null) return;
 
     const container = findClippingContainer(boxRef.current);
     if (!container) {
@@ -95,10 +95,21 @@ export function MapTooltipPositioner({
       return;
     }
 
-    const cardMidY = y;
     const containerMidY = containerRect.top + containerRect.height / 2;
-    setPlacement(cardMidY > containerMidY ? "top" : "bottom");
-  }, [coords.x, coords.y, offsetY, y]);
+    setPlacement(screenY > containerMidY ? "top" : "bottom");
+  }, [offsetY, screenY]);
+
+  if (!screen) return null;
+
+  const { x, y } = screen;
+
+  const browserScale = applyBrowserScale ? getBrowserZoomScale() : null;
+  const transformBase =
+    placement === "top" ? "translate(-50%, -100%)" : "translate(-50%, 0%)";
+  const transform =
+    browserScale != null
+      ? `${transformBase} scale(${browserScale ? 1 / browserScale : 1})`
+      : transformBase;
 
   const top = placement === "top" ? `${y - offsetY}px` : `${y + offsetY}px`;
 
@@ -113,11 +124,7 @@ export function MapTooltipPositioner({
         zIndex: zIndexVar,
         pointerEvents,
         transform,
-        ...(applyBrowserScale
-          ? {
-              transformOrigin: "top left",
-            }
-          : {}),
+        transformOrigin: applyBrowserScale ? "top left" : undefined,
         ...style,
       }}
     >

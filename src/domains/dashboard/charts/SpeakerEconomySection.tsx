@@ -16,6 +16,7 @@ type Props = {
 export function SpeakerEconomySection({ impact, economy }: Props) {
   if (!impact && !economy) return null;
   const deltaPositive = impact ? impact.deltaWinRate >= 0 : true;
+  const deltaLabel = impact ? `${deltaPositive ? "+" : ""}${impact.deltaWinRate.toFixed(1)}%` : "";
 
   return (
     <Panel variant="elevated" className={classes.aggregateCard}>
@@ -28,7 +29,7 @@ export function SpeakerEconomySection({ impact, economy }: Props) {
             </Group>
             <Chip accent={deltaPositive ? "green" : "red"} size="xs">
               <Text size="10px" fw={700} c="white">
-                {deltaPositive ? "+" : ""}{impact.deltaWinRate.toFixed(1)}%
+                {deltaLabel}
               </Text>
             </Chip>
           </div>
@@ -51,7 +52,7 @@ export function SpeakerEconomySection({ impact, economy }: Props) {
                   deltaPositive ? classes.deltaPositive : classes.deltaNegative,
                 )}
               >
-                {deltaPositive ? "+" : ""}{impact.deltaWinRate.toFixed(1)}%
+                {deltaLabel}
               </span>
               <Text size="9px" c="gray.6">delta</Text>
             </div>

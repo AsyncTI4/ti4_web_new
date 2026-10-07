@@ -59,7 +59,6 @@ export function RightSidebar({
         overflow: "hidden",
       }}
     >
-      {/* Main Content Pane - Top */}
       <Box
         style={{
           flex: 1,

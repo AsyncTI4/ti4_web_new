@@ -1,66 +1,42 @@
-import React from "react";
-import { cdnImage } from "@/entities/data/cdnImage";
 import {
   getAttachmentData,
   getAttachmentImagePath,
 } from "@/entities/lookup/attachments";
-import { TokenSprite } from "@/shared/ui/Token/components/TokenSprite";
 import { getTokenSprite } from "@/shared/ui/Token/tokenSprites";
+import { PositionedSprite } from "./PositionedSprite";
 
-type AttachmentProps = React.HTMLAttributes<HTMLDivElement> & {
+type AttachmentProps = {
   unitType: string;
   faction?: string;
-  alt?: string;
-  x?: number;
-  y?: number;
-  zIndex?: number;
+  x: number;
+  y: number;
+  zIndex: number;
 };
 
 export const Attachment = ({
   unitType,
   faction,
-  alt,
   x,
   y,
   zIndex,
-  ...imageProps
 }: AttachmentProps) => {
-  // Look up attachment data by ID
-  const attachmentData = getAttachmentData(unitType);
   const imagePath = getAttachmentImagePath(unitType);
-  const sprite = getTokenSprite("attachment", unitType);
-
-  const defaultAlt =
-    alt || `${faction || "attachment"} ${attachmentData?.name || unitType}`;
-
   if (!imagePath) return null;
 
-  const style = {
-    ...imageProps.style,
-    position: "absolute" as const,
-    left: `${x}px`,
-    top: `${y}px`,
-    transform: "translate(-50%, -50%)",
-    zIndex: zIndex,
-  };
-
-  if (sprite) {
-    return (
-      <TokenSprite
-        sprite={sprite}
-        alt={defaultAlt}
-        {...imageProps}
-        style={style}
-      />
-    );
-  }
+  const name = getAttachmentData(unitType)?.name || unitType;
 
   return (
-    <img
-      src={cdnImage(imagePath)}
-      alt={defaultAlt}
-      {...(imageProps as React.ImgHTMLAttributes<HTMLImageElement>)}
-      style={style}
+    <PositionedSprite
+      sprite={getTokenSprite("attachment", unitType)}
+      imagePath={imagePath}
+      alt={`${faction || "attachment"} ${name}`}
+      style={{
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        transform: "translate(-50%, -50%)",
+        zIndex,
+      }}
     />
   );
 };

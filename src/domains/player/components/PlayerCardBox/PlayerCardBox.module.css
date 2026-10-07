@@ -36,42 +36,17 @@
   }
 }
 
-/* Subtle-border variant: no edge bars, so no breathing room needed for them */
-.edgeBar {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  height: 2px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.edgeBarTop {
-  top: 0px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.edgeBarBottom {
-  bottom: 0px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.paper {
-  height: 100%;
-  position: relative;
-  max-width: 100%;
-  background: var(--player-card-box-bg);
-  box-shadow: var(--player-card-box-shadow);
-}
-
 /*
  * The card is a panel and the modules inside it are subpanels. The bevel gives
  * the ground the same milled edge the plates have, so the whole player area
  * reads as one enclosure rather than parts scattered on a black field.
  */
-.paperPanel {
+.paper {
+  height: 100%;
+  position: relative;
+  max-width: 100%;
+  background: var(--player-card-box-bg);
+  border: 1px solid var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel), var(--player-card-box-shadow, none);
 }
 
@@ -93,39 +68,9 @@
   pointer-events: none;
 }
 
-.clipInner {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--mantine-radius-md);
-  height: 100%;
-}
-
 .content {
   position: relative;
   z-index: 1;
-}
-
-.factionClip {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  border-radius: var(--mantine-radius-md);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.factionBackground {
-  position: absolute;
-  bottom: -60px;
-  right: -40px;
-  opacity: 0.035;
-  height: 250px;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
 }
 
 /* Theme ambience layer; themes define --player-card-inner-glow (default none) */

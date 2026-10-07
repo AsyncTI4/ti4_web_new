@@ -1,8 +1,9 @@
-import { Box, Group, Text, Image, Stack } from "@mantine/core";
+import { Box, Group, Stack } from "@mantine/core";
 import { StatusBadge } from "@/domains/player/components/StatusBadge";
-import { PlayerData } from "@/entities/data/types";
-import { getFactionImage } from "@/entities/lookup/factions";
+import type { PlayerData } from "@/entities/data/types";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
 import styles from "./FactionsInGame.module.css";
+import { GeneralSectionTitle } from "../GeneralSectionTitle";
 
 type Props = {
   playerData: PlayerData[];
@@ -25,30 +26,26 @@ function FactionsInGame({ playerData }: Props) {
 
   return (
     <Box>
-      <Text className={styles.sectionTitle}>Factions in Game</Text>
+      <GeneralSectionTitle>Factions in Game</GeneralSectionTitle>
       <Group gap="sm">
         {sortedPlayerData.map((player, index) => {
-          let statusBadge = null;
-          if (player.active) {
-            statusBadge = <StatusBadge status="active" />;
-          } else if (index === nextPlayerIndex) {
-            statusBadge = <StatusBadge status="next" />;
-          }
-          const imageUrl = getFactionImage(
-            player.faction,
-            player.factionImage,
-            player.factionImageType
-          );
+          const status = player.active
+            ? "active"
+            : index === nextPlayerIndex
+              ? "next"
+              : null;
 
           return (
             <Stack key={player.faction} gap="xs" align="center">
-              <Image
-                src={imageUrl}
+              <FactionIcon
+                faction={player.faction}
+                factionImageOverride={player.factionImage}
+                factionImageTypeOverride={player.factionImageType}
                 w={36}
                 h={36}
                 className={styles.factionIcon}
               />
-              {statusBadge}
+              {status && <StatusBadge status={status} />}
             </Stack>
           );
         })}

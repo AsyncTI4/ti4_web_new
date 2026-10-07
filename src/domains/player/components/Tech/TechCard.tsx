@@ -2,67 +2,43 @@ import { Box, Group, Image, Stack, Text } from "@mantine/core";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import styles from "./TechCard.module.css";
-import { getTechData } from "@/entities/lookup/tech";
+import {
+  getTechData,
+  getTechLetter,
+  TECH_PREREQ_ICON,
+  TECH_TYPE_COLOR,
+} from "@/entities/lookup/tech";
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
-
-// Helper function to get tech color from type
-const getTechColor = (techType: string): string => {
-  switch (techType) {
-    case "PROPULSION":
-      return "blue";
-    case "BIOTIC":
-      return "green";
-    case "WARFARE":
-      return "red";
-    case "CYBERNETIC":
-      return "yellow";
-    case "NONE":
-    case "GENERICTF":
-      return "white";
-    default:
-      return "grey";
-  }
-};
 
 type Props = {
   techId: string;
 };
 
+const TECH_TYPE_LABEL: Record<string, string> = {
+  PROPULSION: "Propulsion",
+  BIOTIC: "Biotic",
+  WARFARE: "Warfare",
+  CYBERNETIC: "Cybernetic",
+  UNITUPGRADE: "Unit Upgrade",
+  NONE: "Special",
+  GENERICTF: "Special",
+};
+
 export function TechCard({ techId }: Props) {
   const techData = getTechData(techId);
 
-  if (!techData) {
-    console.warn(`Tech with ID "${techId}" not found`);
-    return null;
-  }
+  if (!techData) return null;
 
-  const color = getTechColor(techData.types[0]);
+  const color = TECH_TYPE_COLOR[techData.types[0]];
   const isFactionTech = !!techData.faction;
   const isUnitUpgrade = techData.types.includes("UNITUPGRADE");
 
-  const detailsCardColor =
-    color === "grey" || color === "white"
-      ? "none"
-      : (color as "blue" | "green" | "red" | "yellow");
+  const techType = techData.types[0];
+  const techLetter = getTechLetter(techData.name);
+  const techIconSrc = color ? `/${color}.png` : undefined;
 
-  const formatType = (type: string) => {
-    if (type === "PROPULSION") return "Propulsion";
-    if (type === "BIOTIC") return "Biotic";
-    if (type === "WARFARE") return "Warfare";
-    if (type === "CYBERNETIC") return "Cybernetic";
-    if (type === "UNITUPGRADE") return "Unit Upgrade";
-    if (type === "NONE" || type === "GENERICTF") return "Special";
-    return type;
-  };
-
-  const techIconSrc =
-    color === "grey" || color === "white"
-      ? undefined
-      : (`/${color}.png` as const);
-
-  // Build unit icon for unit upgrade techs (fallback to neutral color alias)
   const unitIcon = (() => {
     if (!isUnitUpgrade) return undefined;
     const requiredTechId = techData.baseUpgrade || techId;
@@ -73,47 +49,28 @@ export function TechCard({ techId }: Props) {
     return <DetailsCard.Icon icon={<Image src={src} w={28} h={28} />} />;
   })();
 
-  // Map requirements string (e.g., "BBY") to prerequisite icons
-  const requirementIcons = (() => {
-    const req = techData.requirements || "";
-    if (!req) return [] as string[];
-    const ICON_MAP: Record<string, string> = {
-      B: "/blue.png",
-      G: "/green.png",
-      R: "/red.png",
-      Y: "/yellow.png",
-    };
-    return req
-      .split("")
-      .map((c) => ICON_MAP[c])
-      .filter((src): src is string => Boolean(src));
-  })();
+  const requirementIcons = (techData.requirements ?? "")
+    .split("")
+    .map((c) => TECH_PREREQ_ICON[c])
+    .filter((src): src is string => Boolean(src));
 
   return (
     <DetailsCard
       width={320}
-      color={detailsCardColor}
+      color={color ?? "none"}
       className={styles.content}
     >
       <Stack gap="md" h="100%">
         <DetailsCard.Title
           title={techData.name}
-          subtitle={`${formatType(techData.types[0])} Technology`}
+          subtitle={`${TECH_TYPE_LABEL[techType] ?? techType} Technology`}
           icon={
             unitIcon ??
-            (techData.name === "Antimatter" ? (
+            (techLetter ? (
               <DetailsCard.Icon
                 icon={
                   <Text fw={700} fz={28} c="white" style={{ lineHeight: 1 }}>
-                    A
-                  </Text>
-                }
-              />
-            ) : techData.name === "Wavelength" ? (
-              <DetailsCard.Icon
-                icon={
-                  <Text fw={700} fz={28} c="white" style={{ lineHeight: 1 }}>
-                    W
+                    {techLetter}
                   </Text>
                 }
               />

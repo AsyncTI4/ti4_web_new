@@ -1,5 +1,5 @@
 import { Box, Text, type BoxProps } from "@mantine/core";
-import type { ColorKey } from "@/domains/player/components/gradientClasses";
+import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";
 import type { CSSProperties } from "react";
@@ -36,8 +36,17 @@ type Props = Omit<BoxProps, "color" | "onClick"> & {
   revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-  onClick?: React.KeyboardEventHandler<HTMLDivElement>;
+  onClick?: (event: React.SyntheticEvent<HTMLDivElement>) => void;
 };
+
+const HYBRID_ACCENTS = new Set<ChipAccent>([
+  "blueRed",
+  "blueGreen",
+  "blueYellow",
+  "greenRed",
+  "greenYellow",
+  "yellowRed",
+]);
 
 const TEXT_SIZES: Record<ChipSize, string> = {
   xs: "10px",
@@ -67,17 +76,7 @@ export function Chip({
 }: Props) {
   const textSize = TEXT_SIZES[size];
   const clickable = onClick !== undefined;
-  const HYBRID_ACCENTS = [
-    "blueRed",
-    "blueGreen",
-    "blueYellow",
-    "greenRed",
-    "greenYellow",
-    "yellowRed",
-  ] as const;
-  const isHybrid = HYBRID_ACCENTS.includes(
-    accent as (typeof HYBRID_ACCENTS)[number]
-  );
+  const isHybrid = HYBRID_ACCENTS.has(accent);
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!clickable) return;
     if (event.key === "Enter" || event.key === " ") {
@@ -108,7 +107,7 @@ export function Chip({
       tabIndex={clickable ? 0 : undefined}
       className={cx(
         classes.chip,
-        classes[accent ?? "gray"],
+        classes[accent],
         classes[`size_${size}`],
         breakthrough && classes.breakthrough,
         clickable && classes.hover,

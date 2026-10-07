@@ -6,14 +6,14 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
-import { Group, Text } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { IconUsers } from "@tabler/icons-react";
 import type { FavoredFaction } from "../types";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
-import { AXIS_STYLE } from "./chartTheme";
+import { AXIS_STYLE, TOOLTIP_STYLE } from "./chartTheme";
 import classes from "./AggregateCharts.module.css";
 
 echarts.use([BarChart, GridComponent, TooltipComponent, CanvasRenderer]);
@@ -27,12 +27,10 @@ export function FavoredFactionsSection({ factions }: Props) {
   const gamesData = factions.map((f) => f.gamesPlayed);
   const winsData = factions.map((f) => f.wins);
 
-  const option: echarts.EChartsOption = {
+  const option: echarts.EChartsCoreOption = {
     tooltip: {
       trigger: "axis",
-      backgroundColor: "rgba(10,15,28,0.92)",
-      borderColor: "rgba(148,163,184,0.15)",
-      textStyle: { color: "#c0cbd8", fontFamily: "monospace", fontSize: 11 },
+      ...TOOLTIP_STYLE,
     },
     grid: { top: 12, left: 6, right: 6, bottom: 2, containLabel: true },
     xAxis: {

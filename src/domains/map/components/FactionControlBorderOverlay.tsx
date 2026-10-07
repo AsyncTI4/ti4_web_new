@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react";
+import { useId } from "react";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import {
   generateHexagonPoints,
@@ -7,55 +7,38 @@ import {
 } from "@/utils/hexagonUtils";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
 import classes from "./MapTile.module.css";
-import { findColorData, getColorValues } from "@/entities/lookup/colors";
+import { resolvePrimaryRgb, toRgb } from "@/entities/lookup/colors";
 import { normalizeBorderColor } from "@/utils/colorOptimization";
 
 type Props = {
   faction: string;
   openSides?: number[];
-  opacity?: number;
 };
 
-const radius = TILE_WIDTH / 2;
 const centerX = TILE_WIDTH / 2;
 const centerY = TILE_HEIGHT / 2;
+const HEX_POINTS = generateHexagonPoints(centerX, centerY, TILE_WIDTH / 2);
+const HEX_POINTS_STRING = HEX_POINTS.map((point) => `${point.x},${point.y}`).join(" ");
+const HEX_SIDES = generateHexagonSides(HEX_POINTS);
 const BORDER_STROKE_WIDTH = 8;
 const BORDER_INSET = 2.5;
 
-export function FactionControlBorderOverlay({
-  faction,
-  openSides,
-  opacity = 1,
-}: Props) {
+export function FactionControlBorderOverlay({ faction, openSides }: Props) {
   const factionColorMap = useFactionColors();
   const clipId = useId();
   const baseColor = factionColorMap?.[faction]?.color;
 
-  const closedSides = useMemo(() => {
-    if (!openSides || openSides.length === 0) {
-      return [0, 1, 2, 3, 4, 5];
-    }
-    const openSet = new Set(openSides);
-    return [0, 1, 2, 3, 4, 5].filter(
-      (sideIndex) => !openSet.has(HEX_SIDE_TO_TILE_DIRECTION[sideIndex])
-    );
-  }, [openSides]);
+  const openSet = new Set(openSides);
+  const closedSides = [0, 1, 2, 3, 4, 5].filter(
+    (sideIndex) => !openSet.has(HEX_SIDE_TO_TILE_DIRECTION[sideIndex])
+  );
 
   if (!baseColor || closedSides.length === 0) return null;
 
-  const points = generateHexagonPoints(centerX, centerY, radius);
-  const pointsString = points.map((point) => `${point.x},${point.y}`).join(" ");
-  const sides = generateHexagonSides(points);
-
-  const colorData = baseColor ? findColorData(baseColor) : undefined;
-  const primary = colorData
-    ? getColorValues(colorData.primaryColorRef, colorData.primaryColor)
-    : undefined;
-
+  const primary = resolvePrimaryRgb(baseColor);
   if (!primary) return null;
 
-  const normalized = normalizeBorderColor(primary);
-  const stroke = `rgba(${normalized.red}, ${normalized.green}, ${normalized.blue}, ${opacity})`;
+  const stroke = toRgb(normalizeBorderColor(primary));
 
   return (
     <svg
@@ -65,12 +48,12 @@ export function FactionControlBorderOverlay({
     >
       <defs>
         <clipPath id={clipId}>
-          <polygon points={pointsString} />
+          <polygon points={HEX_POINTS_STRING} />
         </clipPath>
       </defs>
       <g clipPath={`url(#${clipId})`}>
         {closedSides.map((sideIndex) => {
-          const side = sides[sideIndex];
+          const side = HEX_SIDES[sideIndex];
           const midX = (side.x1 + side.x2) / 2;
           const midY = (side.y1 + side.y2) / 2;
           const toCenterX = centerX - midX;

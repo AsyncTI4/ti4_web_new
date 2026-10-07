@@ -1,24 +1,20 @@
-import { useCallback, useState, useRef } from "react";
+import { useState, useRef } from "react";
+import type { Point } from "@/entities/data/types";
 
-export type AreaType =
-  | {
-      type: "faction";
-      faction: string;
-      unitId?: string;
-      coords: { x: number; y: number };
-    }
-  | null;
+const TOOLTIP_DELAY_MS = 300;
+
+export type TooltipUnit = {
+  faction: string;
+  unitId?: string;
+  coords: Point;
+};
+
+export type AreaType = ({ type: "faction" } & TooltipUnit) | null;
 
 export function useTabsAndTooltips() {
   const [selectedArea, setSelectedArea] = useState<AreaType>(null);
   const [activeArea, setActiveArea] = useState<AreaType>(null);
-  const [tooltipUnit, setTooltipUnit] = useState<{
-    faction: string;
-    unitId?: string;
-    coords: { x: number; y: number };
-  } | null>(null);
-
-  // Use ref for hover timeout instead of state
+  const [tooltipUnit, setTooltipUnit] = useState<TooltipUnit | null>(null);
   const hoverTimeoutRef = useRef<number | null>(null);
 
   const selectedFaction =
@@ -32,58 +28,43 @@ export function useTabsAndTooltips() {
         }
       : null;
 
-  // Optimized hover handlers - now include unit ID with delay
-  const handleMouseEnter = useCallback(
-    (faction: string, unitId: string, x: number, y: number) => {
-      setActiveArea({ type: "faction", faction, unitId, coords: { x, y } });
+  const clearHoverTimeout = () => {
+    if (!hoverTimeoutRef.current) return;
+    clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = null;
+  };
 
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-
-      // Set a new timeout for 300ms delay for map tooltip
-      const newTimeout = setTimeout(() => {
-        setTooltipUnit({ faction, unitId, coords: { x, y } });
-        hoverTimeoutRef.current = null;
-      }, 300);
-
-      hoverTimeoutRef.current = newTimeout;
-    },
-    []
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    // Clear any pending timeout
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
+  const handleMouseEnter = (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number,
+  ) => {
+    setActiveArea({ type: "faction", faction, unitId, coords: { x, y } });
+    clearHoverTimeout();
+    hoverTimeoutRef.current = window.setTimeout(() => {
+      setTooltipUnit({ faction, unitId, coords: { x, y } });
       hoverTimeoutRef.current = null;
-    }
-    // Immediately clear both states
+    }, TOOLTIP_DELAY_MS);
+  };
+
+  const handleMouseLeave = () => {
+    clearHoverTimeout();
     setActiveArea(null);
     setTooltipUnit(null);
-  }, []);
+  };
 
-  // Add click handler for pinning areas
-  const handleMouseDown = useCallback(
-    (faction: string, x: number = 0, y: number = 0) => {
-      setSelectedArea({ type: "faction", faction, coords: { x, y } });
-    },
-    []
-  );
+  const handleMouseDown = (faction: string, x: number = 0, y: number = 0) => {
+    setSelectedArea({ type: "faction", faction, coords: { x, y } });
+  };
 
-  // Unified area selection handler
-  const handleAreaSelect = useCallback((area: AreaType) => {
+  const handleAreaSelect = (area: AreaType) => {
     setSelectedArea(area);
-    setActiveArea(null); // Clear any hover state
-  }, []);
-
-  const handleAreaMouseEnter = useCallback((area: AreaType) => {
-    setActiveArea(area);
-  }, []);
-
-  const handleAreaMouseLeave = useCallback(() => {
     setActiveArea(null);
-  }, []);
+  };
+
+  const handleAreaMouseEnter = (area: AreaType) => setActiveArea(area);
+  const handleAreaMouseLeave = () => setActiveArea(null);
 
   return {
     selectedArea,
@@ -91,11 +72,9 @@ export function useTabsAndTooltips() {
     selectedFaction,
     activeUnit,
     tooltipUnit,
-
     handleAreaSelect,
     handleAreaMouseEnter,
     handleAreaMouseLeave,
-
     handleMouseEnter,
     handleMouseLeave,
     handleMouseDown,

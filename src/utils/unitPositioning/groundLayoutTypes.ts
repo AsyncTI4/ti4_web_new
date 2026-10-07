@@ -1,11 +1,8 @@
-import type { FactionUnits } from "@/entities/data/types";
+import type { FactionUnits, Point } from "@/entities/data/types";
 import type { RenderedFootprint } from "@/entities/renderedStackGeometry";
 import type { EntityStack, EntityStackBase, Planet } from "./types";
 
-export type Point = {
-  x: number;
-  y: number;
-};
+export type { Point };
 
 export type Bounds = {
   left: number;
@@ -16,7 +13,7 @@ export type Bounds = {
 
 export type GroundGroupKind = "infantry" | "mech" | "structure" | "other";
 
-export type GroundMember = {
+type GroundMember = {
   stack: EntityStackBase;
   offset: Point;
 };

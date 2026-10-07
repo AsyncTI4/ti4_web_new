@@ -5,7 +5,6 @@ import styles from "./CompactObjective.module.css";
 import { Chip } from "@/shared/ui/primitives/Chip";
 
 type Props = {
-  objectiveKey: string;
   name: string;
   color: "orange" | "blue" | "gray";
   revealed?: boolean;
@@ -29,10 +28,9 @@ export function CompactObjective({
   const isClickable = revealed && color !== "gray";
 
   const renderFactionIcons = () => {
-    if (!revealed || !playerData || playerData.length === 0) return null;
+    if (!revealed || playerData.length === 0) return null;
 
     if (multiScoring) {
-      // For multiscoring objectives, show only the scored factions
       return (
         <Group gap={2} className={styles.factionIcons}>
           {scoredFactions.map((faction, index) => (
@@ -44,61 +42,54 @@ export function CompactObjective({
           ))}
         </Group>
       );
-    } else {
-      // For non-multiscoring objectives, show consistent slots for all factions
-      // Sort faction names alphabetically for consistent ordering
-      const sortedFactions = [...playerData]
-        .sort((a, b) => a.faction.localeCompare(b.faction))
-        .map((p) => p.faction);
+    }
 
-      return (
-        <Group gap={2} className={styles.factionIcons}>
-          {sortedFactions.map((faction) => {
-            const hasScored = scoredFactions.includes(faction);
-            return (
+    /* One seat per faction in alphabetical order, so seats line up across objectives. */
+    const sortedFactions = playerData
+      .map((p) => p.faction)
+      .sort((a, b) => a.localeCompare(b));
+
+    return (
+      <Group gap={2} className={styles.factionIcons}>
+        {sortedFactions.map((faction) => (
+          <Box
+            key={faction}
+            style={{
+              width: 20,
+              height: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {scoredFactions.includes(faction) ? (
+              <CircularFactionIcon faction={faction} size={20} />
+            ) : (
               <Box
-                key={faction}
                 style={{
                   width: 20,
                   height: 20,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
-              >
-                {hasScored ? (
-                  <CircularFactionIcon faction={faction} size={20} />
-                ) : (
-                  // Empty slot placeholder
-                  <Box
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: "50%",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
-                    }}
-                  />
-                )}
-              </Box>
-            );
-          })}
-        </Group>
-      );
-    }
+              />
+            )}
+          </Box>
+        ))}
+      </Group>
+    );
   };
-
-  const renderRedTape = () => {
-    return (
-        <Image src={"/redTape.png"} className={"redTape"} w={16} h={16} />
-    ) 
-  }
 
   return (
     <Chip
       accent={color}
-      leftSection={hasRedTape && renderRedTape()}
-      className={`${!revealed ? styles.unrevealed : ""}`}
+      leftSection={
+        hasRedTape && (
+          <Image src="/redTape.png" className="redTape" w={16} h={16} />
+        )
+      }
+      className={revealed ? undefined : styles.unrevealed}
       onClick={isClickable ? onClick : undefined}
       accentLine
       strong

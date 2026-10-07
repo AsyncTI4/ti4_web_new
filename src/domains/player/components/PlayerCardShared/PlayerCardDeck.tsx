@@ -1,7 +1,7 @@
 import { Box, Group, Stack } from "@mantine/core";
 import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
-import { ArmyStats } from "@/domains/player/components";
+import { ArmyStats } from "@/domains/player/components/ArmyStats";
 import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
 import { PlotCardsList } from "@/domains/player/components/PlotCardsList";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
@@ -10,7 +10,11 @@ import { PlayerCardPlanetsSection } from "./PlayerCardPlanetsSection";
 import { getPlayerCardLayoutFields } from "./getPlayerCardLayoutFields";
 import { Compartment } from "./Compartment";
 import { LogisticsPlate } from "./LogisticsPlate";
-import { ObjectivesRack, getObjectiveColumnCount } from "./ObjectivesRack";
+import {
+  MIN_RACK_ROWS,
+  ObjectivesRack,
+  getGameObjectiveColumnCount,
+} from "./ObjectivesRack";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
 import {
@@ -26,9 +30,6 @@ import styles from "./PlayerCardDeck.module.css";
 type Props = {
   playerData: PlayerData;
 };
-
-/** Same floor as the pannable band: a rack never shows fewer than five seats. */
-const MIN_RACK_ROWS = 5;
 
 /** Sockets drawn per tech color, so an unresearched line reads as capacity. */
 const TECH_MIN_SLOTS = 4;
@@ -59,21 +60,8 @@ export function PlayerCardDeck({ playerData }: Props) {
   const hasCapturedUnits =
     player.nombox && Object.keys(player.nombox).length > 0;
 
-  /* Column counts stay game-wide so the same rack shows the same number of
-     seats on every card in the tab, filled or not. */
   const players = (gameData?.playerData ?? []).filter((p) => p.faction);
-  const objectiveColumns = Math.max(
-    1,
-    ...players.map((otherPlayer) =>
-      getObjectiveColumnCount({
-        secretsScored: otherPlayer.secretsScored ?? {},
-        knownUnscoredSecrets: otherPlayer.knownUnscoredSecrets,
-        soCount: otherPlayer.soCount,
-        promissoryNotes: otherPlayer.promissoryNotesInPlayArea ?? [],
-        relics: otherPlayer.relics ?? [],
-      })
-    )
-  );
+  const objectiveColumns = getGameObjectiveColumnCount(players);
 
   /* One column per tech color, fluid width — the researched/socket mix reads
      as a build queue at any card width. */
@@ -83,7 +71,6 @@ export function PlayerCardDeck({ playerData }: Props) {
       filteredTechs,
       playerData.exhaustedTechs ?? [],
       TECH_MIN_SLOTS,
-      false,
       playerData.breakthrough
     )
   );
@@ -183,7 +170,7 @@ export function PlayerCardDeck({ playerData }: Props) {
 
         {hasCapturedUnits && (
           <Compartment className={styles.nomboxSection}>
-            <Nombox capturedUnits={player.nombox} compact />
+            <Nombox capturedUnits={player.nombox} />
           </Compartment>
         )}
 

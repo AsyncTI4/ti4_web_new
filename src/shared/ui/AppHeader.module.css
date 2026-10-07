@@ -1,0 +1,5 @@
+.logoDivider {
+  width: 1px;
+  height: 24px;
+  background: linear-gradient(180deg, transparent 0%, var(--landing-border-medium) 50%, transparent 100%);
+}

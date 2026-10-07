@@ -10,12 +10,10 @@ export function BreakthroughCard({ breakthroughId }: Props) {
   const data = getBreakthroughData(breakthroughId);
   if (!data) return null;
 
-  const subtitle = "Breakthrough";
-
   return (
     <DetailsCard width={320}>
       <Stack gap="md">
-        <DetailsCard.Title title={data.name} subtitle={subtitle} />
+        <DetailsCard.Title title={data.name} subtitle="Breakthrough" />
         <Divider c="gray.7" opacity={0.8} />
         <DetailsCard.Section
           title="Effect"
@@ -33,7 +31,3 @@ export function BreakthroughCard({ breakthroughId }: Props) {
     </DetailsCard>
   );
 }
-
-
-
-

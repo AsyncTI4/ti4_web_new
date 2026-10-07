@@ -21,9 +21,14 @@ const FRAGMENT_LABELS: Record<FragmentType, string> = {
   urf: "frontier",
 };
 
-export function FragmentStack({ count, type }: Props) {
-  const fragmentSrc = getFragmentSrc(type);
+const FRAGMENT_SOURCES: Record<FragmentType, string> = {
+  crf: cdnImage("/player_area/pa_fragment_crf.png"),
+  hrf: cdnImage("/player_area/pa_fragment_hrf.png"),
+  irf: cdnImage("/player_area/pa_fragment_irf.png"),
+  urf: cdnImage("/player_area/pa_fragment_urf.png"),
+};
 
+export function FragmentStack({ count, type }: Props) {
   if (count === 0) return null;
 
   const relicReady = count >= RELIC_EXCHANGE_COUNT;
@@ -42,7 +47,7 @@ export function FragmentStack({ count, type }: Props) {
         <Image
           {...lowPriorityImageProps}
           key={index}
-          src={fragmentSrc}
+          src={FRAGMENT_SOURCES[type]}
           alt=""
           className={cx(styles.fragment, index > 0 && styles.stacked)}
         />
@@ -51,13 +56,3 @@ export function FragmentStack({ count, type }: Props) {
     </div>
   );
 }
-
-const FRAGMENT_SOURCES: Record<FragmentType, string> = {
-  crf: cdnImage("/player_area/pa_fragment_crf.png"),
-  hrf: cdnImage("/player_area/pa_fragment_hrf.png"),
-  irf: cdnImage("/player_area/pa_fragment_irf.png"),
-  urf: cdnImage("/player_area/pa_fragment_urf.png"),
-};
-
-const getFragmentSrc = (type: FragmentType) =>
-  FRAGMENT_SOURCES[type] || FRAGMENT_SOURCES.crf;

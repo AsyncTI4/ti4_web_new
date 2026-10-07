@@ -1,22 +1,22 @@
 import { Box, Text, SimpleGrid } from "@mantine/core";
-import { Cardback } from "@/domains/player/components/Cardback";
+import { Cardback } from "@/shared/ui/Cardback";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { CardPoolData, PlayerData } from "@/entities/data/types";
+import { CardPoolData } from "@/entities/data/types";
 import styles from "./CardPool.module.css";
+import { GeneralSectionTitle } from "../GeneralSectionTitle";
 import { ExplorationCardBack } from "@/domains/objectives/components/ExplorationCardBack";
 import { SecretDeckCardBack } from "@/domains/objectives/components/SecretDeckCardBack";
 import { RelicDeckCardBack } from "@/domains/objectives/components/RelicDeckCardBack";
 
 type Props = {
   cardPool?: CardPoolData;
-  playerData?: PlayerData[];
 };
 
-function CardPool({ cardPool, playerData }: Props) {
+function CardPool({ cardPool }: Props) {
   if (!cardPool) {
     return (
       <Box>
-        <Text className={styles.sectionTitle}>Card Pool</Text>
+        <GeneralSectionTitle>Card Pool</GeneralSectionTitle>
         <Text size="sm" c="dimmed">
           No card pool data available
         </Text>
@@ -26,72 +26,55 @@ function CardPool({ cardPool, playerData }: Props) {
 
   return (
     <Box>
-      <Text className={styles.sectionTitle}>Card Pool</Text>
+      <GeneralSectionTitle>Card Pool</GeneralSectionTitle>
 
       <SimpleGrid cols={4} spacing="lg">
-        {[
-          {
-            src: cdnImage("/player_area/cardback_action.jpg"),
-            alt: "action cards",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.actionCardDeckSize}
-              </Text>
-            ),
-          },
-          {
-            src: cdnImage("/player_area/cardback_agenda.png"),
-            alt: "agenda cards",
-            count: (
-              <Text className={styles.cardCount}>
-                {cardPool.agendaDeckSize}
-              </Text>
-            ),
-          },
-        ].map((cardback, index) => (
-          <Cardback
-            key={index}
-            src={cardback.src}
-            alt={cardback.alt}
-            count={cardback.count}
-            size="lg"
-          />
-        ))}
+        <Cardback
+          src={cdnImage("/player_area/cardback_action.jpg")}
+          alt="action cards"
+          count={
+            <Text className={styles.cardCount}>
+              {cardPool.actionCardDeckSize}
+            </Text>
+          }
+          size="lg"
+        />
+        <Cardback
+          src={cdnImage("/player_area/cardback_agenda.png")}
+          alt="agenda cards"
+          count={
+            <Text className={styles.cardCount}>{cardPool.agendaDeckSize}</Text>
+          }
+          size="lg"
+        />
         <SecretDeckCardBack
           deck={cardPool.secretObjectiveDeck || []}
           discard={cardPool.secretObjectiveDiscard || []}
-          playerData={playerData || []}
         />
         <RelicDeckCardBack
           deck={cardPool.relicDeck || []}
           discard={cardPool.relicDiscard || []}
         />
-        {[
-          <ExplorationCardBack
-            key="explore_cultural"
-            type="Cultural"
-            deck={cardPool.culturalExploreDeck}
-            discard={cardPool.culturalExploreDiscard}
-          ></ExplorationCardBack>,
-          <ExplorationCardBack
-            key="explore_industrial"
-            type="Industrial"
-            deck={cardPool.industrialExploreDeck}
-            discard={cardPool.industrialExploreDiscard}
-          ></ExplorationCardBack>,
-          <ExplorationCardBack
-            key="explore_hazardous"
-            type="Hazardous"
-            deck={cardPool.hazardousExploreDeck}
-            discard={cardPool.hazardousExploreDiscard}
-          ></ExplorationCardBack>,
-          <ExplorationCardBack
-            key="explore_frontier"
-            type="Frontier"
-            deck={cardPool.frontierExploreDeck}
-            discard={cardPool.frontierExploreDiscard}
-          ></ExplorationCardBack>,
-        ]}
+        <ExplorationCardBack
+          type="Cultural"
+          deck={cardPool.culturalExploreDeck}
+          discard={cardPool.culturalExploreDiscard}
+        />
+        <ExplorationCardBack
+          type="Industrial"
+          deck={cardPool.industrialExploreDeck}
+          discard={cardPool.industrialExploreDiscard}
+        />
+        <ExplorationCardBack
+          type="Hazardous"
+          deck={cardPool.hazardousExploreDeck}
+          discard={cardPool.hazardousExploreDiscard}
+        />
+        <ExplorationCardBack
+          type="Frontier"
+          deck={cardPool.frontierExploreDeck}
+          discard={cardPool.frontierExploreDiscard}
+        />
       </SimpleGrid>
     </Box>
   );

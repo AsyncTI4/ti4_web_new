@@ -123,10 +123,6 @@
 }
 
 /* Combobox/Dropdown styling */
-.combobox {
-  width: 100%;
-}
-
 .comboboxInput {
   background: rgba(15, 23, 42, 0.5);
   border: 1px solid rgba(59, 130, 246, 0.3);
@@ -182,12 +178,6 @@
 .closeButton,
 .comboboxInput {
   cursor: pointer;
-}
-
-.closeButton,
-.comboboxInput {
-  display: flex;
-  align-items: center;
 }
 
 .tab,

@@ -1,9 +1,7 @@
-import React from "react";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import { Tile } from "@/app/providers/context/types";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { PlanetOwnerBadge } from "./PlanetOwnerBadge";
+import { PlanetMarkersLayer } from "./PlanetMarkersLayer";
 
 type Props = {
   systemId: string;
@@ -11,25 +9,16 @@ type Props = {
 };
 
 export function AttachmentsLayer({ systemId, mapTile }: Props) {
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
-
-  const attachmentMarkers = React.useMemo(() => {
-    if (!mapTile?.planets) return [];
-
-    return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
-      if (!planetData.attachments || planetData.attachments.length === 0) return [];
-
-      const coords = planetCoords[planetId];
-      if (!coords) return [];
-
-      const [x, y] = coords.split(",").map(Number);
-
-      const markers = planetData.attachments
-        .map((attachmentId, index) => {
+  return (
+    <PlanetMarkersLayer
+      systemId={systemId}
+      mapTile={mapTile}
+      renderMarkers={(planetId, planet, x, y) =>
+        (planet.attachments ?? []).flatMap((attachmentId, index) => {
           const imagePath = getAttachmentImagePath(attachmentId);
-          if (!imagePath) return null;
+          if (!imagePath) return [];
 
-          return (
+          return [
             <img
               key={`${systemId}-${planetId}-attachment-${attachmentId}-${index}`}
               src={cdnImage(imagePath)}
@@ -45,26 +34,10 @@ export function AttachmentsLayer({ systemId, mapTile }: Props) {
                 zIndex: `calc(var(--z-control-token) + ${index})`,
                 filter: "drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))",
               }}
-            />
-          );
+            />,
+          ];
         })
-        .filter(Boolean);
-
-      if (markers.length === 0) return [];
-
-      return [
-        ...markers,
-        planetData.controlledBy && (
-          <PlanetOwnerBadge
-            key={`${systemId}-${planetId}-owner`}
-            faction={planetData.controlledBy}
-            x={x}
-            y={y}
-          />
-        ),
-      ];
-    });
-  }, [systemId, mapTile, planetCoords]);
-
-  return <>{attachmentMarkers}</>;
+      }
+    />
+  );
 }

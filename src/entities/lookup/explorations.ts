@@ -1,11 +1,9 @@
 import { explorations } from "@/entities/data/explorations";
-import { Exploration } from "@/entities/data/types";
+import { indexBy } from "@/entities/lookup/indexBy";
+import type { Exploration } from "@/entities/data/types";
 
-/**
- * Get exploration card data by ID
- */
+const explorationsMap = indexBy(explorations, (card) => card.id);
+
 export function getExploration(explorationId: string): Exploration | undefined {
-  return explorations.find(
-    (explorationCard) => explorationCard.id === explorationId
-  );
+  return explorationsMap.get(explorationId);
 }

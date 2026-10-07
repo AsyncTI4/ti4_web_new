@@ -1,23 +1,19 @@
-import { Box, Image, Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import { ReactNode, type KeyboardEventHandler } from "react";
 import styles from "./UnitCard.module.css";
-import { cdnImage } from "@/entities/data/cdnImage";
 import cx from "clsx";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import { FactionBadge, UpgradeFactionBadges } from "./FactionBadges";
 
-type BaseCardProps = {
+type Props = {
   children: ReactNode;
   onClick?: () => void;
   isUpgraded?: boolean;
   isFaction?: boolean;
   faction?: string;
-  compact?: boolean;
   reinforcements?: number;
   totalCapacity?: number;
-  className?: string;
   enableAnimations?: boolean;
   locked?: boolean;
-  lockedLabel?: string;
   upgradeFactions?: string[];
 };
 
@@ -31,17 +27,13 @@ export function BaseCard({
   isUpgraded = false,
   isFaction = false,
   faction,
-  compact = false,
   reinforcements,
   totalCapacity,
-  className,
   enableAnimations = true,
   locked = false,
-  lockedLabel = "",
   upgradeFactions,
-}: BaseCardProps) {
+}: Props) {
   const showReinforcements =
-    !compact &&
     !locked &&
     reinforcements !== undefined &&
     totalCapacity !== undefined;
@@ -60,9 +52,7 @@ export function BaseCard({
         styles.bay,
         isUpgraded && styles.lit,
         enableAnimations && styles.animated,
-        locked && styles.locked,
-        compact && styles.compactCard,
-        className
+        locked && styles.locked
       )}
       onClick={clickable ? onClick : undefined}
       onKeyDown={handleKeyDown}
@@ -71,17 +61,24 @@ export function BaseCard({
     >
       <div className={styles.bayInner}>
         <div className={styles.bayField}>
-          {!upgradeFactions?.length && (
-            <FactionBadge faction={faction} show={isFaction && !!faction} />
+          {!upgradeFactions?.length && isFaction && faction && (
+            <FactionBadge
+              faction={faction}
+              className={styles.factionBadge}
+              iconClassName={styles.factionIcon}
+            />
           )}
-          <UpgradeFactionBadges factions={upgradeFactions} />
+          <UpgradeFactionBadges
+            factions={upgradeFactions}
+            step={16}
+            classNames={{
+              container: styles.upgradeFactionBadgesContainer,
+              badge: styles.upgradeFactionBadge,
+              icon: styles.upgradeFactionIcon,
+            }}
+          />
           {children}
         </div>
-        {!compact && locked && lockedLabel && (
-          <div className={styles.trough}>
-            <Text className={styles.lockedText}>{lockedLabel}</Text>
-          </div>
-        )}
         {showReinforcements && (
           <div className={styles.trough}>
             <Text
@@ -95,42 +92,6 @@ export function BaseCard({
           </div>
         )}
       </div>
-    </Box>
-  );
-}
-
-function FactionBadge({ faction, show }: { faction?: string; show: boolean }) {
-  if (!show || !faction) return null;
-
-  return (
-    <Box className={styles.factionBadge}>
-      <Image
-        {...lowPriorityImageProps}
-        src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-        className={styles.factionIcon}
-      />
-    </Box>
-  );
-}
-
-function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
-  if (!factions || factions.length === 0) return null;
-
-  return (
-    <Box className={styles.upgradeFactionBadgesContainer}>
-      {factions.map((faction, index) => (
-        <Box
-          key={faction}
-          className={styles.upgradeFactionBadge}
-          style={{ right: index * 16 }}
-        >
-          <Image
-            {...lowPriorityImageProps}
-            src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-            className={styles.upgradeFactionIcon}
-          />
-        </Box>
-      ))}
     </Box>
   );
 }

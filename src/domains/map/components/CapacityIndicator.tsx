@@ -1,4 +1,4 @@
-import { CapacityUsage } from "@/entities/data/types";
+import type { CapacityUsage } from "@/entities/data/types";
 import { Unit } from "@/shared/ui/Unit";
 import {
   CAPACITY_INDICATOR_HEIGHT,
@@ -53,7 +53,7 @@ export function CapacityIndicator({ x, y, capacity }: Props) {
         <span>{capacity.total}</span>
         {capacity.ignored > 0 && (
           <sup className={classes.ignoredCapacity}>*</sup>
-        )}      
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
-import type { TilePlanet } from "@/app/providers/context/types";
 import type {
-  EntityData,
-  PlayerDataResponse,
-  TileUnitData,
-} from "@/entities/data/types";
+  TilePdsEntry,
+  TilePlanet,
+} from "@/app/providers/context/types";
+import type { FactionUnits, PlayerDataResponse } from "@/entities/data/types";
 
 export function getTileController(
   planets: Record<string, TilePlanet>,
-  unitsByFaction: Record<string, EntityData[]>,
+  unitsByFaction: FactionUnits,
 ): string | undefined {
   const uniquePlanetFactions = new Set(
     Object.values(planets).map((planet) => planet.controlledBy),
@@ -15,7 +14,7 @@ export function getTileController(
   const uniqueFactions = new Set(Object.keys(unitsByFaction));
 
   if (uniquePlanetFactions.size === 1) {
-    return uniquePlanetFactions.values().next().value;
+    return uniquePlanetFactions.values().next().value ?? undefined;
   }
   if (uniqueFactions.size === 1) {
     return uniqueFactions.values().next().value;
@@ -25,13 +24,13 @@ export function getTileController(
 
 export function hasTechSkips(planets: Record<string, TilePlanet>): boolean {
   return Object.values(planets).some(
-    (planet) => planet.techSpecialties && planet.techSpecialties.length > 0,
+    (planet) => planet.techSpecialties.length > 0,
   );
 }
 
 export function hasAttachments(planets: Record<string, TilePlanet>): boolean {
   return Object.values(planets).some(
-    (planet) => planet.attachments && planet.attachments.length > 0,
+    (planet) => planet.attachments.length > 0,
   );
 }
 
@@ -40,74 +39,32 @@ export function computePdsData(
   factionToColor: Record<string, string>,
 ) {
   const tilesWithPds = new Set<string>();
-  const dominantPdsFaction: Record<
-    string,
-    { faction: string; color: string; count: number; expected: number }
-  > = {};
-  const pdsByTile: Record<
-    string,
-    { faction: string; color: string; count: number; expected: number }[]
-  > = {};
+  const pdsByTile: Record<string, TilePdsEntry[]> = {};
 
   if (!data.tileUnitData) {
-    return { tilesWithPds, dominantPdsFaction, pdsByTile };
+    return { tilesWithPds, pdsByTile };
   }
 
-  Object.entries(data.tileUnitData).forEach(
-    ([position, tileData]: [string, TileUnitData]) => {
-      if (!(tileData.pds && Object.keys(tileData.pds).length > 0)) return;
+  Object.entries(data.tileUnitData).forEach(([position, tileData]) => {
+    if (!tileData.pds || Object.keys(tileData.pds).length === 0) return;
 
-      tilesWithPds.add(position);
+    tilesWithPds.add(position);
 
-      let highestExpected = -1;
-      let dominantFaction = "";
-      let dominantCount = 0;
-      let dominantExpectedValue = 0;
-      const allForTile: {
-        faction: string;
-        color: string;
-        count: number;
-        expected: number;
-      }[] = [];
+    const allForTile = Object.entries(tileData.pds)
+      .filter(([faction]) => factionToColor[faction])
+      .map(([faction, pdsData]) => ({
+        faction,
+        color: factionToColor[faction],
+        count: pdsData.count,
+        expected: pdsData.expected,
+      }));
+    if (allForTile.length === 0) return;
 
-      Object.entries(tileData.pds).forEach(
-        ([faction, pdsData]: [string, { count: number; expected: number }]) => {
-          if (factionToColor[faction]) {
-            allForTile.push({
-              faction,
-              color: factionToColor[faction],
-              count: pdsData.count,
-              expected: pdsData.expected,
-            });
-          }
-          if (pdsData.expected > highestExpected) {
-            highestExpected = pdsData.expected;
-            dominantFaction = faction;
-            dominantCount = pdsData.count;
-            dominantExpectedValue = pdsData.expected;
-          }
-        },
-      );
+    allForTile.sort((a, b) =>
+      b.expected !== a.expected ? b.expected - a.expected : b.count - a.count,
+    );
+    pdsByTile[position] = allForTile;
+  });
 
-      if (allForTile.length > 0) {
-        allForTile.sort((a, b) =>
-          b.expected !== a.expected
-            ? b.expected - a.expected
-            : b.count - a.count,
-        );
-        pdsByTile[position] = allForTile;
-      }
-
-      if (dominantFaction && factionToColor[dominantFaction]) {
-        dominantPdsFaction[position] = {
-          faction: dominantFaction,
-          color: factionToColor[dominantFaction],
-          count: dominantCount,
-          expected: dominantExpectedValue,
-        };
-      }
-    },
-  );
-
-  return { tilesWithPds, dominantPdsFaction, pdsByTile };
+  return { tilesWithPds, pdsByTile };
 }

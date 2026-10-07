@@ -12,7 +12,9 @@ type Props = {
 };
 
 function LawCard({ law }: Props) {
-  const hasFactionIcon = law.displaysElectedFaction && law.electedFaction;
+  const electedFaction = law.displaysElectedFaction
+    ? law.electedFaction
+    : undefined;
   const [opened, setOpened] = useState(false);
   const toggleOpened = () => setOpened((current) => !current);
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -42,9 +44,9 @@ function LawCard({ law }: Props) {
                 <Text className={styles.mapText}>{law.mapText}</Text>
               )}
             </Box>
-            {hasFactionIcon && (
+            {electedFaction && (
               <CircularFactionIcon
-                faction={law.electedFaction!}
+                faction={electedFaction}
                 size={20}
                 className={styles.factionIcon}
               />

@@ -2,6 +2,7 @@ import type {
   CombatReplayEvent,
   GameData,
 } from "@/app/providers/context/types";
+import type { Point } from "@/entities/data/types";
 import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
 import {
   deserializeCompactMovementState,
@@ -19,17 +20,21 @@ import type {
   UnitLocation,
 } from "./types";
 import {
-  addStates,
+  accumulateStates,
   addTotal,
   allPlacedStacks,
   findLocated,
+  indexByLocation,
+  locatedKey,
   locatedLocation,
   mapUnitLocationKey,
   rawLocationKey,
   stackAtWorld,
+  stackHolder,
   stackWithStates,
   stateCount,
   subtractStates,
+  transitionAt,
   unitStates,
 } from "./unitState";
 
@@ -38,12 +43,41 @@ export const BADGE_UNITS = new Set(["ff", "gf"]);
 const NATIVE_NORTHWEST_ANGLE = -135;
 const FORMATION_BUFFER_PX = 34;
 const FORMATION_SEARCH_SLOTS = 18;
-const VISUAL_HANDOFF_OVERLAP_MS = 50;
+/** Fallback distance from tile center to a hex edge when no midpoints exist. */
+const HEX_EDGE_FALLBACK_RADIUS = 145;
+const MAX_LASER_ENDPOINTS = 4;
+const MAX_COMBAT_LASERS = 12;
+const LASER_LEAD_MS = 110;
+const LASER_STAGGER_MS = 95;
+const LASER_DURATION_MS = 210;
+export const VISUAL_HANDOFF_OVERLAP_MS = 50;
 
 type FormationKind = "ship" | "infantry" | "ground";
 type FormationObstacle = { x: number; y: number; radius: number };
 
-export type MovementPhase = {
+/** Infantry arrive in repeating triangles of six, offset across/into the hex. */
+const INFANTRY_TRIANGLE = [
+  { across: -44, depth: 0 },
+  { across: 0, depth: 0 },
+  { across: 44, depth: 0 },
+  { across: -22, depth: 36 },
+  { across: 22, depth: 36 },
+  { across: 0, depth: 72 },
+];
+const INFANTRY_BLOCK_DEPTH = 108;
+const FORMATION_BASE_DEPTH: Record<FormationKind, number> = {
+  infantry: 106,
+  ground: 164,
+  ship: 92,
+};
+const GRID_SPACING: Record<"ship" | "ground", { across: number; depth: number }> =
+  {
+    ship: { across: 96, depth: 82 },
+    ground: { across: 50, depth: 46 },
+  };
+const SHIP_CENTER_COLUMN_LEAD = 28;
+
+type MovementPhase = {
   movements: PlannedMovement[];
   movementArrivals: Map<string, LocatedStack>;
   stagedRotations: Map<string, number>;
@@ -61,14 +95,9 @@ function rotationToward(
   );
 }
 
-function combatFacingPoint(
-  combat: CombatReplayEvent,
-  previousStacks: LocatedStack[],
-  currentStacks: LocatedStack[],
-  fallback: { x: number; y: number },
-): { x: number; y: number } {
+function isCombatDefender(combat: CombatReplayEvent) {
   const holder = combat.kind === "ground" ? combat.planet : "space";
-  const isDefender = (located: LocatedStack) => {
+  return (located: LocatedStack) => {
     const location = locatedLocation(located);
     return (
       location.position === combat.tile &&
@@ -76,18 +105,38 @@ function combatFacingPoint(
       location.faction === combat.vsFaction
     );
   };
+}
+
+function averagePoint(stacks: LocatedStack[]): Point {
+  return {
+    x:
+      stacks.reduce((total, located) => total + located.worldX, 0) /
+      stacks.length,
+    y:
+      stacks.reduce((total, located) => total + located.worldY, 0) /
+      stacks.length,
+  };
+}
+
+function stackInHolder(source: LocatedStack, holder: string): EntityStack {
+  return {
+    ...source.stack,
+    planetName: holder === "space" ? undefined : holder,
+  };
+}
+
+function combatFacingPoint(
+  combat: CombatReplayEvent,
+  previousStacks: LocatedStack[],
+  currentStacks: LocatedStack[],
+  fallback: Point,
+): Point {
+  const isDefender = isCombatDefender(combat);
   const defenders = previousStacks.filter(isDefender);
   const visibleDefenders =
     defenders.length > 0 ? defenders : currentStacks.filter(isDefender);
   if (visibleDefenders.length === 0) return fallback;
-  return {
-    x:
-      visibleDefenders.reduce((total, located) => total + located.worldX, 0) /
-      visibleDefenders.length,
-    y:
-      visibleDefenders.reduce((total, located) => total + located.worldY, 0) /
-      visibleDefenders.length,
-  };
+  return averagePoint(visibleDefenders);
 }
 
 export function syntheticDestination(
@@ -100,13 +149,40 @@ export function syntheticDestination(
   if (!tile) return undefined;
   return {
     position,
-    stack: {
-      ...source.stack,
-      planetName: holder === "space" ? undefined : holder,
-    },
+    stack: stackInHolder(source, holder),
     worldX: tile.properties.x + source.stack.x,
     worldY: tile.properties.y + source.stack.y,
   };
+}
+
+/** Across/depth offsets of a formation slot, relative to the entry edge. */
+function formationSlotOffset(
+  slot: number,
+  formationKind: FormationKind,
+): { across: number; depth: number } {
+  if (formationKind === "infantry") {
+    const block = Math.floor(slot / INFANTRY_TRIANGLE.length);
+    const point = INFANTRY_TRIANGLE[slot % INFANTRY_TRIANGLE.length];
+    return {
+      across: point.across,
+      depth: point.depth + block * INFANTRY_BLOCK_DEPTH,
+    };
+  }
+  const column = (slot % 3) - 1;
+  const row = Math.floor(slot / 3);
+  const spacing = GRID_SPACING[formationKind];
+  const lead =
+    formationKind === "ship" && column === 0 ? SHIP_CENTER_COLUMN_LEAD : 0;
+  return {
+    across: column * spacing.across,
+    depth: row * spacing.depth - lead,
+  };
+}
+
+function closestPoint(points: Point[], target: LocatedStack): Point | undefined {
+  const distance = (point: Point) =>
+    (point.x - target.worldX) ** 2 + (point.y - target.worldY) ** 2;
+  return [...points].sort((a, b) => distance(a) - distance(b))[0];
 }
 
 function formationDestination(
@@ -121,20 +197,17 @@ function formationDestination(
   const tile = data.tiles[position];
   if (!tile) return undefined;
   const center = tile.properties;
-  const midpoints = tile.properties.hexOutline.midpoints ?? [];
-  const closest = [...midpoints].sort(
-    (a, b) =>
-      (a.x - approachSource.worldX) ** 2 +
-      (a.y - approachSource.worldY) ** 2 -
-      ((b.x - approachSource.worldX) ** 2 + (b.y - approachSource.worldY) ** 2),
-  )[0];
+  const closest = closestPoint(
+    tile.properties.hexOutline.midpoints,
+    approachSource,
+  );
   const sourceAngle = Math.atan2(
     approachSource.worldY - center.y,
     approachSource.worldX - center.x,
   );
   const edge = closest ?? {
-    x: center.x + Math.cos(sourceAngle) * 145,
-    y: center.y + Math.sin(sourceAngle) * 145,
+    x: center.x + Math.cos(sourceAngle) * HEX_EDGE_FALLBACK_RADIUS,
+    y: center.y + Math.sin(sourceAngle) * HEX_EDGE_FALLBACK_RADIUS,
   };
   const towardCenterX = center.x - edge.x;
   const towardCenterY = center.y - edge.y;
@@ -143,42 +216,13 @@ function formationDestination(
   const inwardY = towardCenterY / inwardLength;
   const acrossX = -inwardY;
   const acrossY = inwardX;
-  let acrossOffset: number;
-  let depthOffset: number;
-  if (formationKind === "infantry") {
-    const triangle = [
-      { across: -44, depth: 0 },
-      { across: 0, depth: 0 },
-      { across: 44, depth: 0 },
-      { across: -22, depth: 36 },
-      { across: 22, depth: 36 },
-      { across: 0, depth: 72 },
-    ];
-    const block = Math.floor(slot / triangle.length);
-    const point = triangle[slot % triangle.length];
-    acrossOffset = point.across;
-    depthOffset = point.depth + block * 108;
-  } else {
-    const column = (slot % 3) - 1;
-    const row = Math.floor(slot / 3);
-    acrossOffset = column * (formationKind === "ground" ? 50 : 96);
-    depthOffset = row * (formationKind === "ground" ? 46 : 82);
-    if (formationKind === "ship" && column === 0) depthOffset -= 28;
-  }
-  const formationDepth =
-    (formationKind === "infantry"
-      ? 106
-      : formationKind === "ground"
-        ? 164
-        : 92) + depthOffset;
+  const offset = formationSlotOffset(slot, formationKind);
+  const formationDepth = FORMATION_BASE_DEPTH[formationKind] + offset.depth;
   return {
     position,
-    stack: {
-      ...source.stack,
-      planetName: holder === "space" ? undefined : holder,
-    },
-    worldX: edge.x + inwardX * formationDepth + acrossX * acrossOffset,
-    worldY: edge.y + inwardY * formationDepth + acrossY * acrossOffset,
+    stack: stackInHolder(source, holder),
+    worldX: edge.x + inwardX * formationDepth + acrossX * offset.across,
+    worldY: edge.y + inwardY * formationDepth + acrossY * offset.across,
   };
 }
 
@@ -238,35 +282,26 @@ function formationKind(unitId: string): FormationKind {
   return unitId === "gf" ? "infantry" : "ground";
 }
 
+function isSpaceStackAt(located: LocatedStack, position: string | undefined) {
+  return (
+    located.position === position && stackHolder(located.stack) === "space"
+  );
+}
+
 function initialFormationObstacles(
   previous: GameData,
   current: GameData,
   targetPosition: string | undefined,
   activeFaction: string | null | undefined,
 ): FormationObstacle[] {
-  const previousPlacements = allPlacedStacks(previous).filter(
-    ({ position, stack }) =>
-      position === targetPosition && (stack.planetName ?? "space") === "space",
+  const previousPlacements = allPlacedStacks(previous).filter((located) =>
+    isSpaceStackAt(located, targetPosition),
   );
-  const previousKeys = new Set(
-    previousPlacements.map((located) =>
-      rawLocationKey(locatedLocation(located)),
-    ),
-  );
-  const placementsByLocation = new Map(
-    previousPlacements.map((located) => [
-      rawLocationKey(locatedLocation(located)),
-      located,
-    ]),
-  );
+  const previousKeys = new Set(previousPlacements.map(locatedKey));
+  const placementsByLocation = indexByLocation(previousPlacements);
   for (const located of allPlacedStacks(current)) {
-    if (
-      located.position !== targetPosition ||
-      (located.stack.planetName ?? "space") !== "space"
-    ) {
-      continue;
-    }
-    const key = rawLocationKey(locatedLocation(located));
+    if (!isSpaceStackAt(located, targetPosition)) continue;
+    const key = locatedKey(located);
     if (located.stack.faction === activeFaction && !previousKeys.has(key)) {
       continue;
     }
@@ -345,6 +380,83 @@ function chooseFormationArrival({
   };
 }
 
+type MovementTarget = { targetPosition: string; targetHolder: string };
+
+/** Ground forces head for the contested planet unless they retreat off it. */
+function preferredHolder(
+  target: MovementTarget,
+  options: AuthoritativeTransitionOptions,
+  faction: string,
+  unitId: string,
+): string {
+  const retreatsFromTarget = (options.retreats ?? []).some(
+    (retreat) =>
+      retreat.faction === faction &&
+      retreat.fromTile === target.targetPosition &&
+      retreat.fromHolder === target.targetHolder &&
+      retreat.units[unitId] !== undefined,
+  );
+  const groundCombat = (options.combats ?? []).find(
+    (combat) =>
+      combat.kind === "ground" &&
+      combat.tile === target.targetPosition &&
+      combat.planet,
+  );
+  return !retreatsFromTarget &&
+    groundCombat?.planet &&
+    GROUND_DESTINATION_UNITS.has(unitId)
+    ? groundCombat.planet
+    : target.targetHolder;
+}
+
+/** The combat a unit arriving at `holder` joins; ships join any combat in the system. */
+function combatAtDestination(
+  combats: CombatReplayEvent[],
+  targetPosition: string,
+  holder: string,
+  unitId: string,
+): CombatReplayEvent | undefined {
+  const matchingCombat = combats.find(
+    (candidate) =>
+      candidate.tile === targetPosition &&
+      (holder === "space"
+        ? candidate.kind === "space"
+        : candidate.kind === "ground" && candidate.planet === holder),
+  );
+  if (matchingCombat || !isShipUnit(unitId)) return matchingCombat;
+  return combats.find((candidate) => candidate.tile === targetPosition);
+}
+
+/** Turns a parked stack toward `facingPoint`, recentering its rotated splay. */
+function parkFacing(
+  arrival: LocatedStack,
+  unitId: string,
+  movedCount: number,
+  facingPoint: Point,
+): { arrival: LocatedStack; rotation: number } {
+  const initialRotation = rotationToward(
+    arrival.worldX,
+    arrival.worldY,
+    facingPoint.x,
+    facingPoint.y,
+  );
+  const recentered = recenterRotatedSplay(
+    arrival,
+    unitId,
+    movedCount,
+    initialRotation,
+  );
+  return {
+    arrival: recentered,
+    rotation: rotationToward(
+      recentered.worldX,
+      recentered.worldY,
+      facingPoint.x,
+      facingPoint.y,
+    ),
+  };
+}
+
 export function planMovements({
   previous,
   current,
@@ -380,181 +492,139 @@ export function planMovements({
     return { movements, movementArrivals, stagedRotations };
   }
 
-  for (const source of movement.sources) {
-    for (const unit of source.units) {
-      const faction = resolveCompactMovementFaction(
-        unit,
-        previous.originalFactionColorMap,
-      );
-      if (!faction || stateCount(unit.states) === 0) continue;
-      const from: UnitLocation = {
-        position: source.position,
-        holder: source.holder,
-        faction,
-        unitId: unit.unitId,
-      };
-      const retreatsFromTarget = (options.retreats ?? []).some(
-        (retreat) =>
-          retreat.faction === faction &&
-          retreat.fromTile === movement.targetPosition &&
-          retreat.fromHolder === movement.targetHolder &&
-          retreat.units[unit.unitId] !== undefined,
-      );
-      const groundCombat = (options.combats ?? []).find(
-        (combat) =>
-          combat.kind === "ground" &&
-          combat.tile === movement.targetPosition &&
-          combat.planet,
-      );
-      const preferredHolder =
-        !retreatsFromTarget &&
-        groundCombat?.planet &&
-        GROUND_DESTINATION_UNITS.has(unit.unitId)
-          ? groundCombat.planet
-          : movement.targetHolder;
-      const preferredDestination: UnitLocation = {
-        position: movement.targetPosition,
-        holder: preferredHolder,
-        faction,
-        unitId: unit.unitId,
-      };
-      const sourceLocated = findLocated(previousStacks, from);
-      if (!sourceLocated) continue;
-      const finalDestination =
-        findLocated(currentStacks, preferredDestination) ??
-        currentStacks.find(
-          (candidate) =>
-            candidate.position === movement.targetPosition &&
-            candidate.stack.faction === faction &&
-            candidate.stack.entityId === unit.unitId,
-        );
-      const to = finalDestination
-        ? locatedLocation(finalDestination)
-        : preferredDestination;
-      const matchingCombat = (options.combats ?? []).find(
+  const movedUnits = movement.sources.flatMap((source) =>
+    source.units.map((unit) => ({ source, unit })),
+  );
+  for (const { source, unit } of movedUnits) {
+    const faction = resolveCompactMovementFaction(
+      unit,
+      previous.originalFactionColorMap,
+    );
+    if (!faction || stateCount(unit.states) === 0) continue;
+    const from: UnitLocation = {
+      position: source.position,
+      holder: source.holder,
+      faction,
+      unitId: unit.unitId,
+    };
+    const preferredDestination: UnitLocation = {
+      position: movement.targetPosition,
+      holder: preferredHolder(movement, options, faction, unit.unitId),
+      faction,
+      unitId: unit.unitId,
+    };
+    const sourceLocated = findLocated(previousStacks, from);
+    if (!sourceLocated) continue;
+    const finalDestination =
+      findLocated(currentStacks, preferredDestination) ??
+      currentStacks.find(
         (candidate) =>
-          candidate.tile === movement.targetPosition &&
-          (to.holder === "space"
-            ? candidate.kind === "space"
-            : candidate.kind === "ground" && candidate.planet === to.holder),
+          candidate.position === movement.targetPosition &&
+          candidate.stack.faction === faction &&
+          candidate.stack.entityId === unit.unitId,
       );
-      const combat =
-        matchingCombat ??
-        (isShipUnit(unit.unitId)
-          ? (options.combats ?? []).find(
-              (candidate) => candidate.tile === movement.targetPosition,
-            )
-          : undefined);
-      const kind = formationKind(unit.unitId);
-      const formationKey = [
-        movement.targetPosition,
-        to.holder,
-        faction,
+    const to = finalDestination
+      ? locatedLocation(finalDestination)
+      : preferredDestination;
+    const combat = combatAtDestination(
+      options.combats ?? [],
+      movement.targetPosition,
+      to.holder,
+      unit.unitId,
+    );
+    const kind = formationKind(unit.unitId);
+    const formationKey = [
+      movement.targetPosition,
+      to.holder,
+      faction,
+      kind,
+    ].join("\u0000");
+    const approachSource =
+      formationApproaches.get(formationKey) ?? sourceLocated;
+    formationApproaches.set(formationKey, approachSource);
+    let arrival: LocatedStack | undefined;
+    if (combat) {
+      const placement = chooseFormationArrival({
+        source: sourceLocated,
+        approachSource,
+        current,
+        targetPosition: movement.targetPosition,
+        holder: to.holder,
         kind,
-      ].join("\u0000");
-      const approachSource =
-        formationApproaches.get(formationKey) ?? sourceLocated;
-      formationApproaches.set(formationKey, approachSource);
-      const firstSlot = formationSlots.get(formationKey) ?? 0;
-      let arrival: LocatedStack | undefined;
-      if (combat) {
-        const placement = chooseFormationArrival({
-          source: sourceLocated,
-          approachSource,
-          current,
-          targetPosition: movement.targetPosition,
-          holder: to.holder,
-          kind,
-          firstSlot,
-          obstacles,
-        });
-        arrival = placement.arrival;
-        formationSlots.set(formationKey, placement.nextSlot);
-      } else {
-        arrival =
-          finalDestination ??
-          syntheticDestination(
-            sourceLocated,
-            current,
-            movement.targetPosition,
-            to.holder,
-          );
-      }
-      if (!arrival) continue;
-
-      const movedCount = stateCount(unit.states);
-      const facingPoint = combat
-        ? combatFacingPoint(
-            combat,
-            previousStacks,
-            currentStacks,
-            current.tiles[movement.targetPosition].properties,
-          )
-        : undefined;
-      let combatRotation: number | undefined;
-      if (facingPoint) {
-        combatRotation = rotationToward(
-          arrival.worldX,
-          arrival.worldY,
-          facingPoint.x,
-          facingPoint.y,
-        );
-        arrival = recenterRotatedSplay(
-          arrival,
-          unit.unitId,
-          movedCount,
-          combatRotation,
-        );
-        combatRotation = rotationToward(
-          arrival.worldX,
-          arrival.worldY,
-          facingPoint.x,
-          facingPoint.y,
-        );
-      }
-      if (combat && kind === "ship") {
-        obstacles.push({
-          x: arrival.worldX,
-          y: arrival.worldY,
-          radius: formationRadius(arrival.stack),
-        });
-      }
-
-      const fromKey = rawLocationKey(from);
-      const toKey = rawLocationKey(to);
-      addTotal(inventory.expectedTotals, fromKey, -movedCount);
-      addTotal(inventory.expectedTotals, toKey, movedCount);
-      inventory.locations.set(fromKey, from);
-      inventory.locations.set(toKey, to);
-      if (!movementArrivals.has(toKey)) movementArrivals.set(toKey, arrival);
-      const transition: MapUnitTransition = {
-        kind: "moved",
-        stack: stackWithStates(sourceLocated, unit.states),
-        toX: arrival.worldX,
-        toY: arrival.worldY,
-        locationKey: mapUnitLocationKey(
-          (finalDestination ?? arrival).position,
-          (finalDestination ?? arrival).stack,
-        ),
-        layoutUnitStates: finalDestination
-          ? unitStates(finalDestination.stack)
-          : unit.states,
-        delayMs: movementStart,
-        parkRotationDeg: combatRotation,
-      };
-      movements.push({
-        transition,
-        source: from,
-        sourceKey: fromKey,
-        destinationKey: toKey,
-        target: to,
-        finalDestination,
-        arrival,
-        staged: combat !== undefined,
+        firstSlot: formationSlots.get(formationKey) ?? 0,
+        obstacles,
       });
-      if (combatRotation !== undefined) {
-        stagedRotations.set(toKey, combatRotation);
-      }
+      arrival = placement.arrival;
+      formationSlots.set(formationKey, placement.nextSlot);
+    } else {
+      arrival =
+        finalDestination ??
+        syntheticDestination(
+          sourceLocated,
+          current,
+          movement.targetPosition,
+          to.holder,
+        );
+    }
+    if (!arrival) continue;
+
+    const movedCount = stateCount(unit.states);
+    let combatRotation: number | undefined;
+    if (combat) {
+      const parked = parkFacing(
+        arrival,
+        unit.unitId,
+        movedCount,
+        combatFacingPoint(
+          combat,
+          previousStacks,
+          currentStacks,
+          current.tiles[movement.targetPosition].properties,
+        ),
+      );
+      arrival = parked.arrival;
+      combatRotation = parked.rotation;
+    }
+    if (combat && kind === "ship") {
+      obstacles.push({
+        x: arrival.worldX,
+        y: arrival.worldY,
+        radius: formationRadius(arrival.stack),
+      });
+    }
+
+    const fromKey = rawLocationKey(from);
+    const toKey = rawLocationKey(to);
+    addTotal(inventory.expectedTotals, fromKey, -movedCount);
+    addTotal(inventory.expectedTotals, toKey, movedCount);
+    inventory.locations.set(fromKey, from);
+    inventory.locations.set(toKey, to);
+    if (!movementArrivals.has(toKey)) movementArrivals.set(toKey, arrival);
+    const landing = finalDestination ?? arrival;
+    const transition: MapUnitTransition = {
+      kind: "moved",
+      stack: stackWithStates(sourceLocated, unit.states),
+      toX: arrival.worldX,
+      toY: arrival.worldY,
+      locationKey: mapUnitLocationKey(landing.position, landing.stack),
+      layoutUnitStates: finalDestination
+        ? unitStates(finalDestination.stack)
+        : unit.states,
+      delayMs: movementStart,
+      parkRotationDeg: combatRotation,
+    };
+    movements.push({
+      transition,
+      source: from,
+      sourceKey: fromKey,
+      destinationKey: toKey,
+      target: to,
+      finalDestination,
+      arrival,
+      staged: combat !== undefined,
+    });
+    if (combatRotation !== undefined) {
+      stagedRotations.set(toKey, combatRotation);
     }
   }
 
@@ -581,17 +651,14 @@ export function buildSourceHoldPlan(
   );
   const movedBySource = new Map<string, StateCounts>();
   for (const movement of movements) {
-    const moved = movedBySource.get(movement.sourceKey) ?? [0, 0, 0, 0];
-    addStates(moved, unitStates(movement.transition.stack));
-    movedBySource.set(movement.sourceKey, moved);
+    accumulateStates(
+      movedBySource,
+      movement.sourceKey,
+      unitStates(movement.transition.stack),
+    );
   }
 
-  const currentByLocation = new Map(
-    currentStacks.map((located) => [
-      rawLocationKey(locatedLocation(located)),
-      located,
-    ]),
-  );
+  const currentByLocation = indexByLocation(currentStacks);
   const transitions: MapUnitTransition[] = [];
   const finalRevealLocations = new Set<string>();
 
@@ -610,11 +677,11 @@ export function buildSourceHoldPlan(
       if (movementStart > 0) {
         const releaseAtMs = movementStart + VISUAL_HANDOFF_OVERLAP_MS;
         transitions.push({
-          kind: "removed",
-          stack: stackWithStates(before, beforeStates),
-          toX: before.worldX,
-          toY: before.worldY,
-          locationKey: mapUnitLocationKey(before.position, before.stack),
+          ...transitionAt(
+            "removed",
+            before,
+            stackWithStates(before, beforeStates),
+          ),
           layoutUnitStates: beforeStates,
           delayMs: releaseAtMs,
           hideAfterMs: releaseAtMs,
@@ -623,11 +690,11 @@ export function buildSourceHoldPlan(
       }
       if (stateCount(leftoverStates) > 0) {
         transitions.push({
-          kind: "removed",
-          stack: stackWithStates(before, leftoverStates),
-          toX: before.worldX,
-          toY: before.worldY,
-          locationKey: mapUnitLocationKey(before.position, before.stack),
+          ...transitionAt(
+            "removed",
+            before,
+            stackWithStates(before, leftoverStates),
+          ),
           layoutUnitStates: beforeStates,
           layoutStateOffsets: movedStates,
           appearAtMs: movementStart > 0 ? movementStart : undefined,
@@ -649,11 +716,7 @@ export function buildSourceHoldPlan(
       continue;
     }
     transitions.push({
-      kind: "removed",
-      stack: stackAtWorld(before),
-      toX: before.worldX,
-      toY: before.worldY,
-      locationKey: mapUnitLocationKey(before.position, before.stack),
+      ...transitionAt("removed", before, stackAtWorld(before)),
       layoutUnitStates: unitStates(before.stack),
       sourceHold: true,
     });
@@ -679,28 +742,13 @@ export function buildCombatLasers(
           movement.target.position === combat.tile &&
           isShipUnit(movement.target.unitId),
       )
-      .slice(0, 4)
+      .slice(0, MAX_LASER_ENDPOINTS)
       .map(({ transition }) => ({ x: transition.toX, y: transition.toY }));
-    const holder = combat.kind === "ground" ? combat.planet : "space";
     const defenderCandidates = [...previousStacks, ...currentStacks].filter(
-      (located) => {
-        const location = locatedLocation(located);
-        return (
-          location.position === combat.tile &&
-          location.holder === holder &&
-          location.faction === combat.vsFaction
-        );
-      },
+      isCombatDefender(combat),
     );
-    const defenders = [
-      ...new Map(
-        defenderCandidates.map((located) => [
-          rawLocationKey(locatedLocation(located)),
-          located,
-        ]),
-      ).values(),
-    ]
-      .slice(0, 4)
+    const defenders = [...indexByLocation(defenderCandidates).values()]
+      .slice(0, MAX_LASER_ENDPOINTS)
       .map((located) => ({
         x: located.worldX,
         y: located.worldY,
@@ -720,18 +768,19 @@ export function buildCombatLasers(
         defenderShips.length > 0
           ? defenderShips[(index * 3 + 1) % defenderShips.length]
           : undefined;
-      if (!attackerFires && !firingDefender) continue;
+      const shooter = attackerFires ? attacker : firingDefender;
+      if (!shooter) continue;
       lasers.push({
-        fromX: attackerFires ? attacker.x : firingDefender!.x,
-        fromY: attackerFires ? attacker.y : firingDefender!.y,
+        fromX: shooter.x,
+        fromY: shooter.y,
         toX: attackerFires ? defender.x : attacker.x,
         toY: attackerFires ? defender.y : attacker.y,
-        delayMs: movementEnd + 110 + index * 95,
-        durationMs: 210,
+        delayMs: movementEnd + LASER_LEAD_MS + index * LASER_STAGGER_MS,
+        durationMs: LASER_DURATION_MS,
         color: attackerFires ? "attacker" : "defender",
       });
     }
-    if (lasers.length >= 12) break;
+    if (lasers.length >= MAX_COMBAT_LASERS) break;
   }
-  return lasers.slice(0, 12);
+  return lasers.slice(0, MAX_COMBAT_LASERS);
 }

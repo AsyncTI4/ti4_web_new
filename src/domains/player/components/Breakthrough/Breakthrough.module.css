@@ -20,10 +20,6 @@
   box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.035);
 }
 
-.synergyIcon {
-  /* Styles for the chip icon pseudo-element live below. */
-}
-
 .synergyIcon::before {
   position: relative;
   bottom: 1px;

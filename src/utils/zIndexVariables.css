@@ -55,9 +55,11 @@
   --z-settings-modal: 3000;
   --z-keyboard-shortcuts-modal: 3100;
   --z-header-menu: 3300;
+  --z-app-modal: 3500;
   --z-smooth-popover: 3500;
 
   /* TOOLTIPS/POPOVERS - Hover tooltips, popovers (4000-4999) */
   --z-map-unit-details: 4100;
   --z-map-planet-details: 4100;
+  --z-navigation-drawer: 10000;
 }

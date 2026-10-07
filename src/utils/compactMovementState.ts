@@ -1,22 +1,26 @@
 import type { FactionColorMap } from "@/app/providers/context/types";
 import { findColorData } from "@/entities/lookup/colors";
-import { deserializeCompactMapState } from "@/utils/compactMapState";
-import type { StateCounts } from "@/utils/mapReplay/types";
+import {
+  compactDecoders,
+  deserializeCompactMapState,
+} from "@/utils/compactMapState";
+import type { StateCounts, UnitLocation } from "@/utils/mapReplay/types";
+import { rawLocationKey, stateCount } from "@/utils/mapReplay/unitState";
 
-export type CompactMovementUnit = {
+type CompactMovementUnit = {
   colorId: string;
   unitId: string;
   states: StateCounts;
   ownerFaction?: "neutral";
 };
 
-export type CompactMovementSource = {
+type CompactMovementSource = {
   position: string;
   holder: string;
   units: CompactMovementUnit[];
 };
 
-export type CompactMovementState = {
+type CompactMovementState = {
   targetPosition: string;
   targetHolder: string;
   sources: CompactMovementSource[];
@@ -59,22 +63,7 @@ export function resolveCompactMovementFaction(
   return prefixFactions.size === 1 ? [...prefixFactions][0] : undefined;
 }
 
-function array(value: unknown, label: string): unknown[] {
-  if (!Array.isArray(value)) throw new Error(`Invalid movement ${label}`);
-  return value;
-}
-
-function string(value: unknown, label: string): string {
-  if (typeof value !== "string") throw new Error(`Invalid movement ${label}`);
-  return value;
-}
-
-function count(value: unknown, label: string): number {
-  if (typeof value !== "number" || !Number.isInteger(value) || value < 0) {
-    throw new Error(`Invalid movement ${label}`);
-  }
-  return value;
-}
+const { array, string, count } = compactDecoders("movement");
 
 export function deserializeCompactMovementState(
   serialized: string,
@@ -113,10 +102,6 @@ export function deserializeCompactMovementState(
   };
 }
 
-function stateCount(states: StateCounts): number {
-  return states.reduce((total, value) => total + value, 0);
-}
-
 /**
  * A tactical event can be preceded by map snapshots captured while its move is
  * only partially applied. Find the newest snapshot that can actually supply
@@ -134,44 +119,57 @@ export function findMovementBaseline(
     return undefined;
   }
 
+  const required = new Map<string, RequiredUnits>();
+  for (const source of movement.sources) {
+    for (const unit of source.units) {
+      const location: UnitLocation = {
+        position: source.position,
+        holder: source.holder,
+        faction: unit.ownerFaction ?? movingFaction,
+        unitId: unit.unitId,
+      };
+      const key = rawLocationKey(location);
+      const needed = (required.get(key)?.needed ?? 0) + stateCount(unit.states);
+      required.set(key, { location, needed });
+    }
+  }
+
+  const requiredUnits = [...required.values()];
   for (let index = serializedCandidates.length - 1; index >= 0; index -= 1) {
     const serializedMap = serializedCandidates[index];
-    try {
-      const map = deserializeCompactMapState(serializedMap);
-      const required = new Map<string, number>();
-
-      for (const source of movement.sources) {
-        for (const unit of source.units) {
-          const faction = unit.ownerFaction ?? movingFaction;
-          const key = `${source.position}\u0000${source.holder}\u0000${faction}\u0000${unit.unitId}`;
-          required.set(
-            key,
-            (required.get(key) ?? 0) + stateCount(unit.states),
-          );
-        }
-      }
-
-      const satisfiesMovement = [...required].every(([key, needed]) => {
-        const [position, holder, faction, unitId] = key.split("\u0000");
-        const tile = map[position];
-        const entities =
-          holder === "space"
-            ? tile?.space[faction]
-            : tile?.planets[holder]?.entities[faction];
-        const available =
-          entities?.find(
-            (entity) =>
-              entity.entityType === "unit" && entity.entityId === unitId,
-          )?.count ?? 0;
-        return available >= needed;
-      });
-
-      if (satisfiesMovement) return serializedMap;
-    } catch {
-      // A malformed historical snapshot should not prevent older valid
-      // snapshots from being considered.
+    if (snapshotSuppliesUnits(serializedMap, requiredUnits)) {
+      return serializedMap;
     }
   }
 
   return undefined;
+}
+
+type RequiredUnits = { location: UnitLocation; needed: number };
+
+/** A malformed historical snapshot is skipped so older valid ones are still considered. */
+function snapshotSuppliesUnits(
+  serializedMap: string,
+  required: RequiredUnits[],
+): boolean {
+  let map: ReturnType<typeof deserializeCompactMapState>;
+  try {
+    map = deserializeCompactMapState(serializedMap);
+  } catch {
+    return false;
+  }
+
+  return required.every(({ location, needed }) => {
+    const { position, holder, faction, unitId } = location;
+    const tile = map[position];
+    const entities =
+      holder === "space"
+        ? tile?.space[faction]
+        : tile?.planets[holder]?.entities[faction];
+    const available =
+      entities?.find(
+        (entity) => entity.entityType === "unit" && entity.entityId === unitId,
+      )?.count ?? 0;
+    return available >= needed;
+  });
 }

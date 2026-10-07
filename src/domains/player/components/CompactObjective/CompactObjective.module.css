@@ -1,6 +1,3 @@
-
-
-
 .factionIcons {
   flex-shrink: 0;
   align-items: center;
@@ -17,16 +14,6 @@
 }
 
 .unrevealed:hover {
-  box-shadow: none !important;
-  border-color: rgba(148, 163, 184, 0.2) !important;
-}
-
-/* Disable hover effects and pointer cursor for non-clickable (gray) objectives */
-.nonClickable {
-  cursor: default !important;
-}
-
-.nonClickable:hover {
   box-shadow: none !important;
   border-color: rgba(148, 163, 184, 0.2) !important;
 }

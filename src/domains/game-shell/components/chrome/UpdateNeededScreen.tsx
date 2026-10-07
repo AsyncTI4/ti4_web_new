@@ -1,10 +1,10 @@
 import { AppShell, Center, Stack, Title, Text, Button } from "@mantine/core";
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { HeaderMenuNew } from "./HeaderMenuNew";
-import { Surface } from "@/domains/player/components/Surface";
+import { Surface } from "@/shared/ui/Surface";
 import classes from "./UpdateNeededScreen.module.css";
 import { APP_HEADER_HEIGHT, AppHeader } from "@/shared/ui/AppHeader";
-import {EnrichedTab} from "@/app/providers/context/types.ts";
+import type { EnrichedTab } from "@/app/providers/context/types";
 
 type UpdateNeededScreenProps = {
   gameId: string;

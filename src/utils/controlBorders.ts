@@ -2,7 +2,7 @@ import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
 import type { Tile } from "@/app/providers/context/types";
 import { getHyperlaneActiveSides, isHyperlane } from "@/utils/hyperlaneUtils";
 
-export type ControlOpenSides = Record<string, number[]>;
+type ControlOpenSides = Record<string, number[]>;
 
 export function computeControlOpenSides(tiles: Tile[]): ControlOpenSides {
   const tilesByPosition = new Map(tiles.map((tile) => [tile.position, tile]));

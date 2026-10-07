@@ -1,41 +1,20 @@
-import { Paper, Box, type PaperProps } from "@mantine/core";
-import { generateColorGradient } from "@/entities/lookup/colors";
+import { Paper, Box } from "@mantine/core";
 import { getPrimaryColorWithOpacity } from "@/entities/lookup/colors";
 import "@/styles/theme.css";
 import styles from "./PlayerCardBox.module.css";
-import { FactionIcon } from "@/shared/ui/FactionIcon";
 import cx from "clsx";
 
 type Props = {
   color: string;
-  faction: string;
   children: React.ReactNode;
-  showFactionBackground?: boolean;
-  paperProps?: PaperProps;
-  /** Skip the gradient edge bars and use a single subtle 1px border */
-  subtleBorder?: boolean;
   /** Breathing faction-colored glow while this player holds the turn */
   isActive?: boolean;
 };
 
-export function PlayerCardBox({
-  color,
-  faction,
-  children,
-  showFactionBackground = true,
-  paperProps = {},
-  subtleBorder = false,
-  isActive = false,
-}: Props) {
-  const { style: paperStyle, ...restPaperProps } = paperProps;
-
+export function PlayerCardBox({ color, children, isActive = false }: Props) {
   return (
     <Box
-      className={cx(
-        styles.wrapper,
-        subtleBorder && styles.wrapperTight,
-        isActive && styles.activeCard,
-      )}
+      className={cx(styles.wrapper, isActive && styles.activeCard)}
       style={
         isActive
           ? ({
@@ -45,50 +24,13 @@ export function PlayerCardBox({
           : undefined
       }
     >
-      {!subtleBorder && (
-        <>
-          <Box
-            className={`${styles.edgeBar} ${styles.edgeBarTop}`}
-            style={{ background: generateColorGradient(color, 0.6) }}
-          />
-          <Box
-            className={`${styles.edgeBar} ${styles.edgeBarBottom}`}
-            style={{ background: generateColorGradient(color, 0.6) }}
-          />
-        </>
-      )}
-      <Paper
-        p="sm"
-        radius="md"
-        className={cx(styles.paper, subtleBorder && styles.paperPanel)}
-        {...restPaperProps}
-        style={{
-          border: subtleBorder
-            ? "1px solid var(--panel-hairline-strong)"
-            : `1px solid ${getPrimaryColorWithOpacity(color, 0.3)}`,
-          ...paperStyle,
-        }}
-      >
-        {subtleBorder && (
-          <Box
-            className={styles.colorBand}
-            style={{ background: getPrimaryColorWithOpacity(color, 0.85) }}
-          />
-        )}
+      <Paper p="sm" radius="md" className={styles.paper}>
+        <Box
+          className={styles.colorBand}
+          style={{ background: getPrimaryColorWithOpacity(color, 0.85) }}
+        />
         <Box className={styles.content}>{children}</Box>
         <Box className={styles.innerGlow} />
-        <Box className={styles.factionClip}>
-          {showFactionBackground && (
-            <Box className={styles.factionBackground}>
-              <FactionIcon
-                faction={faction}
-                fw="100%"
-                h="100%"
-                style={{ objectFit: "contain" }}
-              />
-            </Box>
-          )}
-        </Box>
       </Paper>
     </Box>
   );

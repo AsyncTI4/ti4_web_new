@@ -1,5 +1,5 @@
 import { Group, Stack, SimpleGrid } from "@mantine/core";
-import { Leader } from "./Leader";
+import { LeaderChip } from "./Leader/LeaderChip";
 import { CompactLeader } from "./Leader/CompactLeader";
 import compactStyles from "./Leader/CompactLeader.module.css";
 import { PhantomLeader } from "./Leader/PhantomLeader";
@@ -18,7 +18,7 @@ type Props = {
   faction?: string;
 };
 
-export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
+function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
   return (
     <SimpleGrid
       className={compactStyles.grid}
@@ -33,14 +33,13 @@ export function GridCompactLeaders({ leaders }: { leaders: LeaderType[] }) {
           id={leader.id}
           exhausted={leader.exhausted ?? false}
           locked={leader.locked ?? false}
-          active={leader.active ?? false}
         />
       ))}
     </SimpleGrid>
   );
 }
 
-export function RegularLeaders({ leaders, faction }: Props) {
+function RegularLeaders({ leaders, faction }: Props) {
   const isNomad = faction === "nomad";
   const nomadAgentIds = [
     "nomadagentartuno",
@@ -68,14 +67,13 @@ export function RegularLeaders({ leaders, faction }: Props) {
         <Group p={2} gap={6} wrap="nowrap" align="center">
           {nomadAgentIds
             .map((id) => nomadAgents.find((l) => l.id === id))
-            .filter(Boolean)
+            .filter((leader): leader is LeaderType => Boolean(leader))
             .map((leader, index) => (
               <CompactLeader
-                key={`nomad-compact-${leader!.id}-${index}`}
-                id={leader!.id}
-                exhausted={leader!.exhausted ?? false}
-                locked={leader!.locked ?? false}
-                active={leader!.active ?? false}
+                key={`nomad-compact-${leader.id}-${index}`}
+                id={leader.id}
+                exhausted={leader.exhausted ?? false}
+                locked={leader.locked ?? false}
               />
             ))}
         </Group>
@@ -90,11 +88,10 @@ export function RegularLeaders({ leaders, faction }: Props) {
         const filled = otherLeaders.filter((leader) => leader.type === slot);
         if (filled.length > 0) {
           return filled.map((leader, index) => (
-            <Leader
+            <LeaderChip
               key={`${slot}-${leader.id}-${index}`}
               id={leader.id}
               type={slot}
-              tgCount={leader.tgCount ?? 0}
               exhausted={leader.exhausted ?? false}
               locked={leader.locked ?? false}
               active={leader.active ?? false}
@@ -124,11 +121,10 @@ export function RegularLeaders({ leaders, faction }: Props) {
       {otherLeaders
         .filter((leader) => !isLeaderSlot(leader.type))
         .map((leader, index) => (
-          <Leader
+          <LeaderChip
             key={`other-${leader.id}-${index}`}
             id={leader.id}
             type={leader.type as LeaderSlot}
-            tgCount={leader.tgCount ?? 0}
             exhausted={leader.exhausted ?? false}
             locked={leader.locked ?? false}
             active={leader.active ?? false}

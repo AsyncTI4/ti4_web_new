@@ -1,18 +1,16 @@
 import { Stack } from "@mantine/core";
 import { ReactNode, useState } from "react";
-import cx from "clsx";
-import { Cardback } from "@/domains/player/components/Cardback";
+import { Cardback } from "@/shared/ui/Cardback";
 import { AppModal } from "@/shared/ui/AppModal";
 import styles from "./CardbackModal.module.css";
 
-export type CardbackModalProps = {
+type CardbackModalProps = {
   imageSrc: string;
   alt: string;
   title: string;
   count?: string | number | ReactNode;
   size?: "xs" | "sm" | "md" | "lg";
   children: ReactNode;
-  cardClassName?: string;
   modalSize?: string | number;
   cardKey?: string | number;
 };
@@ -24,7 +22,6 @@ export function CardbackModal({
   count = 0,
   size = "lg",
   children,
-  cardClassName,
   modalSize = "xl",
   cardKey,
 }: CardbackModalProps) {
@@ -32,7 +29,7 @@ export function CardbackModal({
 
   return (
     <>
-      <Stack className={cx(cardClassName)} onClick={() => setOpened(true)}>
+      <Stack className={styles.trigger} onClick={() => setOpened(true)}>
         <Cardback
           key={cardKey}
           src={imageSrc}

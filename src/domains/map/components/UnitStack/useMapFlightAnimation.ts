@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
+import { flightDuration } from "@/utils/historicalMapTransitions";
 
 type Options = {
   enabled: boolean;
@@ -28,16 +29,13 @@ const NATIVE_NORTHWEST_ANGLE = -135;
 // time near full speed, but eases cleanly into both ends of the flight.
 const FLIGHT_EASING = "cubic-bezier(0.42, 0.05, 0.2, 1)";
 
+const smoothstep = (progress: number) => progress * progress * (3 - 2 * progress);
+
 function unwrapAngle(previous: number, next: number): number {
   let unwrapped = next;
   while (unwrapped - previous > 180) unwrapped -= 360;
   while (unwrapped - previous < -180) unwrapped += 360;
   return unwrapped;
-}
-
-function flightDuration(deltaX: number, deltaY: number): number {
-  const distance = Math.hypot(deltaX, deltaY);
-  return Math.min(1500, Math.max(780, 650 + distance * 0.35));
 }
 
 function buildFlightKeyframes({
@@ -120,8 +118,7 @@ function buildFlightKeyframes({
     previousTrajectoryRotation = trajectoryRotation;
 
     const departureProgress = Math.min(1, t / 0.18);
-    const easedDeparture =
-      departureProgress * departureProgress * (3 - 2 * departureProgress);
+    const easedDeparture = smoothstep(departureProgress);
     const unwrappedTrajectoryRotation =
       departureProgress < 1
         ? unwrapAngle(startRotationDeg, trajectoryRotation)
@@ -131,8 +128,7 @@ function buildFlightKeyframes({
       (unwrappedTrajectoryRotation - startRotationDeg) * easedDeparture;
 
     const landingProgress = Math.max(0, Math.min(1, (t - 0.78) / 0.22));
-    const easedLanding =
-      landingProgress * landingProgress * (3 - 2 * landingProgress);
+    const easedLanding = smoothstep(landingProgress);
     if (landingProgress > 0 && landingParkedRotation === undefined) {
       landingParkedRotation = unwrapAngle(trajectoryRotation, parkRotationDeg);
     }

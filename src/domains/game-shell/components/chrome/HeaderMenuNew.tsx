@@ -1,24 +1,16 @@
-import {
-  Group,
-  Tabs,
-  Box,
-  useCombobox,
-  Combobox,
-  CheckIcon,
-} from "@mantine/core";
+import { Tabs, Box } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { IconPencil } from "@tabler/icons-react";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
-import classes from "./HeaderMenuNew.module.css";
 import { isMobileDevice } from "@/utils/isTouchDevice";
-import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { generateColorGradient } from "@/entities/lookup/colors";
-import { EnrichedTab } from "@/app/providers/context/types";
+import type { EnrichedTab } from "@/app/providers/context/types";
 import {
   useTabLabelEditing,
   type TabLabelEditingApi,
 } from "@/hooks/useTabLabelEditing";
 import { EditableTabLabel } from "@/shared/ui/EditableTabLabel";
+import { factionTabStyle, TabActions, TabFactionIcon } from "./HeaderTabParts";
+import { TabDropdownView } from "./TabDropdownView";
+import classes from "./HeaderMenuNew.module.css";
 
 type HeaderMenuNewProps = {
   mapId: string;
@@ -28,99 +20,55 @@ type HeaderMenuNewProps = {
   actions?: React.ReactNode;
 };
 
-export function HeaderMenuNew({
-  mapId,
-  activeTabs,
-  changeTab,
-  removeTab,
-  actions,
-}: HeaderMenuNewProps) {
-  const [showDesktopDropdown, setShowDesktopDropdown] = useState(false);
+/**
+ * Switches to the dropdown once the tab strip overflows, remembering the
+ * window width at that moment so widening past it restores the strip.
+ */
+function useTabOverflow(
+  tabsListRef: React.RefObject<HTMLDivElement | null>,
+  activeTabs: EnrichedTab[],
+) {
+  const [overflowing, setOverflowing] = useState(false);
   const [widthThreshold, setWidthThreshold] = useState<number | null>(null);
-
-  const tabsListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkForOverflow = () => {
       if (widthThreshold && window.innerWidth > widthThreshold) {
         setWidthThreshold(null);
-        setShowDesktopDropdown(false);
+        setOverflowing(false);
         return;
       }
 
-      if (!tabsListRef.current) return;
-      const { scrollWidth, clientWidth } = tabsListRef.current;
-
-      // Store the threshold width when switching to dropdown
-      if (scrollWidth > clientWidth && !showDesktopDropdown) {
-        setWidthThreshold(window.innerWidth);
-        setShowDesktopDropdown(true);
-      }
+      const tabsList = tabsListRef.current;
+      if (!tabsList || overflowing) return;
+      if (tabsList.scrollWidth <= tabsList.clientWidth) return;
+      setWidthThreshold(window.innerWidth);
+      setOverflowing(true);
     };
 
     checkForOverflow();
     window.addEventListener("resize", checkForOverflow);
     return () => window.removeEventListener("resize", checkForOverflow);
-  }, [activeTabs, showDesktopDropdown, widthThreshold]);
+  }, [tabsListRef, activeTabs, overflowing, widthThreshold]);
 
-  const tabLabelEditing = useTabLabelEditing();
-
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-  });
-
-  const showDropdown = showDesktopDropdown || isMobileDevice();
-
-  return (
-    <>
-      <div className={classes.tabsContainer}>
-        {!showDropdown ? (
-          <TabView
-            mapId={mapId}
-            activeTabs={activeTabs}
-            changeTab={changeTab}
-            tabsListRef={tabsListRef}
-            tabLabelEditing={tabLabelEditing}
-            removeTab={removeTab}
-          />
-        ) : (
-          <DropdownView
-            mapId={mapId}
-            combobox={combobox}
-            changeTab={changeTab}
-            activeTabs={activeTabs}
-            tabLabelEditing={tabLabelEditing}
-            removeTab={removeTab}
-          />
-        )}
-      </div>
-      {actions}
-      <Box visibleFrom="sm">
-        <DiscordLogin />
-      </Box>
-    </>
-  );
+  return overflowing;
 }
 
-type TabViewProps = {
-  mapId: string;
-  activeTabs: EnrichedTab[];
-  changeTab: (tab: string) => void;
-  tabsListRef: React.RefObject<HTMLDivElement | null>;
-  tabLabelEditing: TabLabelEditingApi;
-  removeTab: (tab: string) => void;
-};
-
-function TabView({
+function TabStripView({
   mapId,
   activeTabs,
   changeTab,
-  tabsListRef,
-  tabLabelEditing,
   removeTab,
-}: TabViewProps) {
-  const { toggleEditing } = tabLabelEditing;
-
+  tabLabelEditing,
+  tabsListRef,
+}: {
+  mapId: string;
+  activeTabs: EnrichedTab[];
+  changeTab: (tab: string) => void;
+  removeTab: (tab: string) => void;
+  tabLabelEditing: TabLabelEditingApi;
+  tabsListRef: React.RefObject<HTMLDivElement | null>;
+}) {
   return (
     <Tabs
       variant="pills"
@@ -134,49 +82,16 @@ function TabView({
             key={tab.id}
             value={tab.id}
             className={classes.tab}
-            style={
-              tab.factionColor
-                ? {
-                    border: `2px solid`,
-                    borderImage: `${generateColorGradient(tab.factionColor, 0.3)} 1`,
-                    boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
-                  }
-                : undefined
-            }
+            style={factionTabStyle(tab.factionColor)}
             leftSection={
-              tab.faction ? (
-                <CircularFactionIcon faction={tab.faction} size={16} factionImageOverride={tab.factionImage} factionImageTypeOverride={tab.factionImageType} />
-              ) : null
+              tab.faction ? <TabFactionIcon tab={tab} size={16} /> : null
             }
             rightSection={
-              <Group gap="xs">
-                <IconPencil
-                  size={14}
-                  className={classes.editIcon}
-                  onClick={(event: React.MouseEvent) =>
-                    toggleEditing(tab.id, event)
-                  }
-                />
-                {!tab.isManaged && (
-                  <div
-                    className={classes.closeButton}
-                    onClick={(event: React.MouseEvent) => {
-                      event.stopPropagation();
-                      removeTab(tab.id);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(event: React.KeyboardEvent) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.stopPropagation();
-                        removeTab(tab.id);
-                      }
-                    }}
-                  >
-                    ×
-                  </div>
-                )}
-              </Group>
+              <TabActions
+                tab={tab}
+                onEdit={(event) => tabLabelEditing.toggleEditing(tab.id, event)}
+                onClose={() => removeTab(tab.id)}
+              />
             }
           >
             <EditableTabLabel
@@ -197,157 +112,37 @@ function TabView({
   );
 }
 
-type DropdownViewProps = {
-  mapId: string;
-  combobox: ReturnType<typeof useCombobox>;
-  changeTab: (tab: string) => void;
-  activeTabs: EnrichedTab[];
-  tabLabelEditing: TabLabelEditingApi;
-  removeTab: (tab: string) => void;
-};
-
-function DropdownView({
+export function HeaderMenuNew({
   mapId,
-  combobox,
-  changeTab,
   activeTabs,
-  tabLabelEditing,
+  changeTab,
   removeTab,
-}: DropdownViewProps) {
-  const { toggleEditing, getDisplayName } = tabLabelEditing;
-
-  const options = activeTabs.map((item) => (
-    <Combobox.Option
-      value={item.id}
-      key={item.id}
-      active={item.id === mapId}
-      className={classes.dropdownOption}
-      style={
-        item.factionColor
-          ? {
-              border: `2px solid`,
-              borderImage: `${generateColorGradient(item.factionColor, 0.3)} 1`,
-              boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
-            }
-          : undefined
-      }
-    >
-      <Group gap="xs" style={{ width: "100%" }}>
-        {item.faction && (
-          <CircularFactionIcon faction={item.faction} size={12} factionImageOverride={item.factionImage} factionImageTypeOverride={item.factionImageType} />
-        )}
-        {item.id === mapId && <CheckIcon size={12} />}
-        <EditableTabLabel
-          tabId={item.id}
-          editingApi={tabLabelEditing}
-          inputProps={{
-            className: classes.tabInput,
-            style: { flex: 1 },
-            onClick: (event) => event.stopPropagation(),
-          }}
-          renderDisplay={(displayName) => (
-            <>
-              <span style={{ flex: 1 }} className={classes.dropdownText}>
-                {displayName}
-              </span>
-              <Group gap="xs">
-                <IconPencil
-                  size={14}
-                  className={classes.editIcon}
-                  onClick={(event: React.MouseEvent) => {
-                    event.preventDefault();
-                    toggleEditing(item.id, event);
-                  }}
-                />
-                {!item.isManaged && (
-                  <div
-                    className={classes.closeButton}
-                    onClick={(event: React.MouseEvent) => {
-                      event.stopPropagation();
-                      removeTab(item.id);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(event: React.KeyboardEvent) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.stopPropagation();
-                        removeTab(item.id);
-                      }
-                    }}
-                  >
-                    ×
-                  </div>
-                )}
-              </Group>
-            </>
-          )}
-        />
-      </Group>
-    </Combobox.Option>
-  ));
+  actions,
+}: HeaderMenuNewProps) {
+  const tabsListRef = useRef<HTMLDivElement>(null);
+  const overflowing = useTabOverflow(tabsListRef, activeTabs);
+  const tabLabelEditing = useTabLabelEditing();
+  const viewProps = {
+    mapId,
+    activeTabs,
+    changeTab,
+    removeTab,
+    tabLabelEditing,
+  };
 
   return (
-    <Combobox
-      store={combobox}
-      onOptionSubmit={(val) => {
-        combobox.closeDropdown();
-        changeTab(val);
-      }}
-      styles={{ dropdown: { zIndex: "var(--z-header-menu)" } }}
-    >
-      <Combobox.Target>
-        {(() => {
-          const currentTab = activeTabs.find((tab) => tab.id === mapId);
-          return (
-            <div
-              className={classes.comboboxInput}
-              onClick={() => combobox.openDropdown()}
-              style={
-                currentTab?.factionColor
-                  ? {
-                      border: `2px solid`,
-                      borderImage: `${generateColorGradient(currentTab.factionColor, 0.3)} 1`,
-                      boxShadow: `inset 0 0 0 1px rgba(100, 116, 139, 0.4)`,
-                    }
-                  : {
-                      border: "1px solid rgba(59, 130, 246, 0.3)",
-                    }
-              }
-            >
-              <Group
-                gap="xs"
-                style={{ width: "100%", justifyContent: "space-between", flexWrap: "nowrap" }}
-              >
-                <Group gap="xs"
-                       style={{ flexWrap: "nowrap" }}>
-                  {currentTab?.faction && (
-                    <CircularFactionIcon
-                      faction={currentTab.faction}
-                      factionImageOverride={currentTab.factionImage}
-                      factionImageTypeOverride={currentTab.factionImageType}
-                      size={16}
-                    />
-                  )}
-                  <span style={{ userSelect: "none" }}>
-                    {getDisplayName(mapId)}
-                  </span>
-                </Group>
-                <Combobox.Chevron />
-              </Group>
-            </div>
-          );
-        })()}
-      </Combobox.Target>
-
-      <Combobox.Dropdown className={classes.dropdown} style={{ minWidth: "220px" }}>
-        <Combobox.Options>
-          {options.length > 0 ? (
-            options
-          ) : (
-            <Combobox.Empty>Nothing found</Combobox.Empty>
-          )}
-        </Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+    <>
+      <div className={classes.tabsContainer}>
+        {overflowing || isMobileDevice() ? (
+          <TabDropdownView {...viewProps} />
+        ) : (
+          <TabStripView {...viewProps} tabsListRef={tabsListRef} />
+        )}
+      </div>
+      {actions}
+      <Box visibleFrom="sm">
+        <DiscordLogin />
+      </Box>
+    </>
   );
 }

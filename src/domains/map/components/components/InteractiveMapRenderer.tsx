@@ -1,11 +1,15 @@
-import { Profiler, type CSSProperties, type ProfilerOnRenderCallback } from "react";
+import {
+  Profiler,
+  type ComponentProps,
+  type CSSProperties,
+  type ProfilerOnRenderCallback,
+} from "react";
 import type { GameData, Tile } from "@/app/providers/context/types";
 import { recordPerformanceMeasure } from "@/utils/performanceMarks";
 import { MapRenderLayer } from "./MapRenderLayer";
 import {
   getMapContainerOffset,
   getMapScaleStyle,
-  type MapLayout,
   type MapLayoutConfig,
 } from "../mapLayout";
 
@@ -37,8 +41,7 @@ const recordInteractiveMapRender: ProfilerOnRenderCallback = (
   );
 };
 
-export type InteractiveMapRendererProps = {
-  layout: MapLayout;
+type InteractiveMapRendererProps = {
   mapLayoutConfig: MapLayoutConfig;
   zoom: number;
   isFirefox: boolean;
@@ -60,12 +63,11 @@ export type InteractiveMapRendererProps = {
   onUnitSelect: (faction: string) => void;
   onPlanetMouseEnter: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave: () => void;
-  tooltipUnit: unknown;
-  tooltipPlanet: unknown;
+  tooltipUnit: ComponentProps<typeof MapRenderLayer>["tooltipUnit"];
+  tooltipPlanet: ComponentProps<typeof MapRenderLayer>["tooltipPlanet"];
 };
 
 export function InteractiveMapRenderer({
-  layout,
   mapLayoutConfig,
   zoom,
   isFirefox,
@@ -85,6 +87,7 @@ export function InteractiveMapRenderer({
   tooltipUnit,
   tooltipPlanet,
 }: InteractiveMapRendererProps) {
+  const { layout } = mapLayoutConfig;
   const hasLayoutOverride =
     typeof layoutWidthOverride === "number" ||
     typeof layoutHeightOverride === "number";

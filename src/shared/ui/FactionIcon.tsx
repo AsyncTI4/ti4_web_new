@@ -1,12 +1,12 @@
 import { Image, ImageProps } from "@mantine/core";
-import { useFactionImages } from "@/hooks/useFactionImages";
-import { getFactionImage } from "@/entities/lookup/factions";
+import { useFactionImageUrl } from "@/hooks/useFactionImages";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
   faction: string;
   factionImageOverride?: string | null;
   factionImageTypeOverride?: string | null;
+  alt?: string;
 } & Omit<ImageProps, "src">;
 
 export function FactionIcon({
@@ -15,11 +15,11 @@ export function FactionIcon({
   factionImageTypeOverride,
   ...imageProps
 }: Props) {
-  const factionImages = useFactionImages();
-  const factionImage = factionImageOverride ?? factionImages[faction]?.image;
-  const factionImageType =
-    factionImageTypeOverride ?? factionImages[faction]?.type;
-  const factionUrl = getFactionImage(faction, factionImage, factionImageType);
+  const factionUrl = useFactionImageUrl(
+    faction,
+    factionImageOverride,
+    factionImageTypeOverride,
+  );
 
   if (!factionUrl) return null;
 

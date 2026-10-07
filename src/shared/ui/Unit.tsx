@@ -1,4 +1,3 @@
-import React from "react";
 import { LawInPlay } from "@/entities/data/types";
 import {
   isFighterOrInfantry,
@@ -7,10 +6,9 @@ import {
   computeTokenSuffix,
   isDimensionalTearSpaceDock,
 } from "./Unit/utils";
-import { BackgroundDecal } from "./Unit/components/BackgroundDecal";
+import { DecalImage } from "./Unit/components/DecalImage";
 import { BaseUnitImage } from "./Unit/components/BaseUnitImage";
 import { SpriteUnitImage } from "./Unit/components/SpriteUnitImage";
-import { PlayerDecalOverlay } from "./Unit/overlays/PlayerDecalOverlay";
 import { LawOverlay } from "./Unit/overlays/LawOverlay";
 import { DamageMarker } from "./Unit/overlays/DamageMarker";
 import { DimensionalTearToken } from "./Unit/overlays/DimensionalTearToken";
@@ -93,7 +91,7 @@ export function Unit({
       }}
     >
       {showDimensionalTear && <DimensionalTearToken />}
-      <BackgroundDecal path={bgDecalPath} />
+      <DecalImage path={bgDecalPath} />
       {sprite ? (
         <SpriteUnitImage
           sprite={sprite}
@@ -110,19 +108,17 @@ export function Unit({
         />
       )}
       <SpecialUnitsOverlay faction={faction} unitType={unitType} />
-      <PlayerDecalOverlay path={decalPath} disabled={fighterOrInfantry} />
+      {!fighterOrInfantry && <DecalImage path={decalPath} />}
       {showArticles && (
         <LawOverlay
           tokenPath={`/tokens/agenda_articles_of_war${tokenSuffix}.png`}
           alt={`${defaultAlt} articles of war`}
-          zIndexDelta={1}
         />
       )}
       {showSchematics && (
         <LawOverlay
           tokenPath={`/tokens/agenda_publicize_weapon_schematics${tokenSuffix}.png`}
           alt={`${defaultAlt} weapon schematics`}
-          zIndexDelta={1}
         />
       )}
 
@@ -143,7 +139,7 @@ export function Unit({
   );
 }
 
-type GalvanizeMarkerProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+type GalvanizeMarkerProps = {
   alt: string;
   zIndex?: number;
   unitType: string;

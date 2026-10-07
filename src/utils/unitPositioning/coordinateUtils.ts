@@ -1,16 +1,17 @@
-import { getPlanetById, getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
+import { getPlanetData, getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
+import type { Point } from "@/entities/data/types";
 import {
   HEX_GRID_WIDTH,
   HEX_GRID_HEIGHT,
   DEFAULT_PLANET_RADIUS,
 } from "./constants";
-import { Planet, HeatSource } from "./types";
+import { GridSquare, Planet, HeatSource } from "./types";
 
 export const gridToPixel = (
-  square: { row: number; col: number },
+  square: GridSquare,
   squareWidth: number,
   squareHeight: number
-): { x: number; y: number } => ({
+): Point => ({
   x: square.col * squareWidth + squareWidth / 2,
   y: square.row * squareHeight + squareHeight / 2,
 });
@@ -44,10 +45,9 @@ export const getResourcesLocationAngle = (
 };
 
 export const parsePlanetsFromCoords = (systemId: string): Planet[] => {
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
-  return Object.entries(planetCoords).map(([planetId, coordStr]) => {
-    const planetData = getPlanetById(planetId);
-    const [x, y] = coordStr.split(",").map(Number);
+  const planetPositions = getPlanetPositionsBySystemId(systemId);
+  return Object.entries(planetPositions).map(([planetId, { x, y }]) => {
+    const planetData = getPlanetData(planetId);
     return {
       name: planetId,
       x,

@@ -1,36 +1,38 @@
 import type { GameData, RetreatSubEvent } from "@/app/providers/context/types";
-import { BADGE_UNITS, syntheticDestination } from "./movementPlanning";
-import type { MovementOutcome } from "./movementOutcomes";
+import {
+  BADGE_UNITS,
+  syntheticDestination,
+  VISUAL_HANDOFF_OVERLAP_MS,
+} from "./movementPlanning";
+import { splitOutgoing, type MovementOutcome } from "./movementOutcomes";
 import type {
   LocatedStack,
   MapUnitTransition,
   PlannedMovement,
   ReplayInventory,
-  StateCounts,
   UnitLocation,
 } from "./types";
 import {
   addTotal,
+  appendToGroup,
   findLocated,
-  mapUnitLocationKey,
   rawLocationKey,
   stackWithStates,
   stateCount,
   statesForCount,
-  subtractStates,
+  transitionAt,
   unitStates,
+  withUnitStates,
 } from "./unitState";
 
-const VISUAL_HANDOFF_OVERLAP_MS = 50;
-
-export type RetreatPhase = {
+type RetreatPhase = {
   transitions: MapUnitTransition[];
   transitionsBySource: Map<string, MapUnitTransition[]>;
   stagedTransitions: Set<MapUnitTransition>;
   totalsBySource: Map<string, number>;
 };
 
-export type InventoryReconciliation = {
+type InventoryReconciliation = {
   removedTransitions: MapUnitTransition[];
   stagedRemovedTransitions: Set<MapUnitTransition>;
   lossCounts: Map<string, number>;
@@ -38,7 +40,7 @@ export type InventoryReconciliation = {
   addedTransitions: MapUnitTransition[];
 };
 
-export type SequencedMovements = {
+type SequencedMovements = {
   movementTransitions: MapUnitTransition[];
   settleTransitions: MapUnitTransition[];
   mergedRetreatTransitions: Set<MapUnitTransition>;
@@ -69,8 +71,7 @@ export function planRetreats({
   const totalsBySource = new Map<string, number>();
 
   for (const retreat of retreats) {
-    for (const [unitId, retreatStates] of Object.entries(retreat.units)) {
-      const states = retreatStates as StateCounts;
+    for (const [unitId, states] of Object.entries(retreat.units)) {
       if (stateCount(states) === 0) continue;
       const from: UnitLocation = {
         position: retreat.fromTile,
@@ -105,14 +106,7 @@ export function planRetreats({
       addTotal(totalsBySource, fromKey, retreatCount);
       const combatRotation = stagedRotations.get(fromKey);
       const transition: MapUnitTransition = {
-        kind: "retreated",
-        stack: stackWithStates(source, states),
-        toX: destination.worldX,
-        toY: destination.worldY,
-        locationKey: mapUnitLocationKey(
-          destination.position,
-          destination.stack,
-        ),
+        ...transitionAt("retreated", destination, stackWithStates(source, states)),
         layoutUnitStates: finalDestination
           ? unitStates(finalDestination.stack)
           : states,
@@ -121,9 +115,7 @@ export function planRetreats({
         holdRotationDeg: combatRotation,
       };
       transitions.push(transition);
-      const sourceTransitions = transitionsBySource.get(fromKey) ?? [];
-      sourceTransitions.push(transition);
-      transitionsBySource.set(fromKey, sourceTransitions);
+      appendToGroup(transitionsBySource, fromKey, transition);
       if (stagedRotations.has(fromKey)) stagedTransitions.add(transition);
     }
   }
@@ -174,11 +166,11 @@ export function reconcileInventory({
         ? unitStates(located.stack)
         : statesForCount(unitStates(located.stack), expected - final);
       const transition: MapUnitTransition = {
-        kind: "removed",
-        stack: stackWithStates(located, removedStates),
-        toX: located.worldX,
-        toY: located.worldY,
-        locationKey: mapUnitLocationKey(located.position, located.stack),
+        ...transitionAt(
+          "removed",
+          located,
+          stackWithStates(located, removedStates),
+        ),
         appearAtMs: movementArrivals.has(key) ? movementEnd : 0,
         startRotationDeg: stagedRotations.get(key),
         badgeCountChange: isBadge,
@@ -194,11 +186,11 @@ export function reconcileInventory({
     const before = findLocated(previousStacks, location);
     if (BADGE_UNITS.has(location.unitId) && before) {
       increasedBadgeTransitions.push({
-        kind: "removed",
-        stack: stackWithStates(located, unitStates(before.stack)),
-        toX: located.worldX,
-        toY: located.worldY,
-        locationKey: mapUnitLocationKey(located.position, located.stack),
+        ...transitionAt(
+          "removed",
+          located,
+          stackWithStates(located, unitStates(before.stack)),
+        ),
         badgeCountChange: true,
       });
       continue;
@@ -208,11 +200,7 @@ export function reconcileInventory({
       final - expected,
     );
     addedTransitions.push({
-      kind: "added",
-      stack: stackWithStates(located, addedStates),
-      toX: located.worldX,
-      toY: located.worldY,
-      locationKey: mapUnitLocationKey(located.position, located.stack),
+      ...transitionAt("added", located, stackWithStates(located, addedStates)),
       layoutUnitStates: unitStates(located.stack),
     });
   }
@@ -246,11 +234,18 @@ export function sequenceMovements({
   const mergedRetreatTransitions = new Set<MapUnitTransition>();
   const movementCountsByDestination = new Map<string, number>();
   for (const movement of movements) {
-    movementCountsByDestination.set(
-      movement.destinationKey,
-      (movementCountsByDestination.get(movement.destinationKey) ?? 0) + 1,
-    );
+    addTotal(movementCountsByDestination, movement.destinationKey, 1);
   }
+  const continueTo = (
+    transition: MapUnitTransition,
+    target: { toX: number; toY: number },
+  ): MapUnitTransition["continuation"] => ({
+    toX: target.toX,
+    toY: target.toY,
+    delayMs: placementDelay,
+    startRotationDeg: transition.parkRotationDeg,
+    parkRotationDeg: 0,
+  });
 
   for (const movement of movements) {
     const {
@@ -260,9 +255,12 @@ export function sequenceMovements({
     } = movement;
     const movedStates = unitStates(transition.stack);
     const movedCount = stateCount(movedStates);
-    const { retreating, dying } = outcomes.get(movement)!;
-    const outgoingStates = statesForCount(movedStates, retreating + dying);
-    const survivingStates = subtractStates(movedStates, outgoingStates);
+    const outcome = outcomes.get(movement)!;
+    const { retreating, dying } = outcome;
+    const { outgoingStates, survivingStates } = splitOutgoing(
+      movedStates,
+      outcome,
+    );
     const fullStackRetreat =
       movement.staged &&
       retreating === movedCount &&
@@ -275,21 +273,10 @@ export function sequenceMovements({
       mergedRetreatTransitions.add(fullStackRetreat);
       movementTransitions.push({
         ...transition,
-        stack: {
-          ...transition.stack,
-          count: stateCount(retreatStates),
-          sustained: retreatStates[1] + retreatStates[3],
-          unitStates: retreatStates,
-        },
+        stack: withUnitStates(transition.stack, retreatStates),
         locationKey: fullStackRetreat.locationKey,
         layoutUnitStates: fullStackRetreat.layoutUnitStates,
-        continuation: {
-          toX: fullStackRetreat.toX,
-          toY: fullStackRetreat.toY,
-          delayMs: placementDelay,
-          startRotationDeg: transition.parkRotationDeg,
-          parkRotationDeg: 0,
-        },
+        continuation: continueTo(transition, fullStackRetreat),
       });
       continue;
     }
@@ -300,13 +287,10 @@ export function sequenceMovements({
     ) {
       movementTransitions.push({
         ...transition,
-        continuation: {
+        continuation: continueTo(transition, {
           toX: finalDestination.worldX,
           toY: finalDestination.worldY,
-          delayMs: placementDelay,
-          startRotationDeg: transition.parkRotationDeg,
-          parkRotationDeg: 0,
-        },
+        }),
       });
       continue;
     }
@@ -318,23 +302,13 @@ export function sequenceMovements({
     } else if (stateCount(outgoingStates) > 0) {
       movementTransitions.push({
         ...transition,
-        stack: {
-          ...transition.stack,
-          count: stateCount(outgoingStates),
-          sustained: outgoingStates[1] + outgoingStates[3],
-          unitStates: outgoingStates,
-        },
+        stack: withUnitStates(transition.stack, outgoingStates),
         hideAfterMs: movementEnd,
       });
       if (stateCount(survivingStates) > 0) {
         movementTransitions.push({
           ...transition,
-          stack: {
-            ...transition.stack,
-            count: stateCount(survivingStates),
-            sustained: survivingStates[1] + survivingStates[3],
-            unitStates: survivingStates,
-          },
+          stack: withUnitStates(transition.stack, survivingStates),
         });
       }
     } else {
@@ -349,13 +323,10 @@ export function sequenceMovements({
       continue;
     }
     settleTransitions.push({
-      kind: "settled",
-      stack: stackWithStates(movement.arrival, survivingStates),
-      toX: finalDestination.worldX,
-      toY: finalDestination.worldY,
-      locationKey: mapUnitLocationKey(
-        finalDestination.position,
-        finalDestination.stack,
+      ...transitionAt(
+        "settled",
+        finalDestination,
+        stackWithStates(movement.arrival, survivingStates),
       ),
       layoutUnitStates: unitStates(finalDestination.stack),
       holdFromMs: deathDelay,

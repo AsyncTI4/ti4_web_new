@@ -42,24 +42,6 @@ const STATE_CLASS_MAP: Record<EntryState, string> = {
   UNSCORED: styles.unscored,
 };
 
-function getChipClasses(
-  span: number,
-  entryType: EntryType,
-  state: EntryState,
-  losable: boolean,
-  hideLeftBorder: boolean,
-  hideRightBorder: boolean
-): string {
-  return cx(
-    span === 2 ? styles.chipWide : styles.chip,
-    ENTRY_TYPE_CLASS_MAP[entryType],
-    STATE_CLASS_MAP[state],
-    losable && styles.losable,
-    hideLeftBorder && styles.hideLeftBorder,
-    hideRightBorder && styles.hideRightBorder
-  );
-}
-
 export function ObjectiveChip({
   icon,
   entryType = "PO_1",
@@ -75,16 +57,22 @@ export function ObjectiveChip({
   zIndex,
 }: ObjectiveChipProps) {
   const isMobile = isMobileDevice();
-  const shouldApplyGrayscale = state === "UNSCORED";
   const showProgress = shouldShowProgress(currentProgress, totalProgress, entryType, state);
 
   const chipContent = (
     <div
-      className={getChipClasses(span, entryType, state, losable, hideLeftBorder, hideRightBorder)}
+      className={cx(
+        span === 2 ? styles.chipWide : styles.chip,
+        ENTRY_TYPE_CLASS_MAP[entryType],
+        STATE_CLASS_MAP[state],
+        losable && styles.losable,
+        hideLeftBorder && styles.hideLeftBorder,
+        hideRightBorder && styles.hideRightBorder
+      )}
       style={zIndex !== undefined ? { zIndex } : undefined}
     >
       {icon && (
-        <div className={cx(styles.iconContainer, shouldApplyGrayscale && styles.grayscale)}>
+        <div className={cx(styles.iconContainer, state === "UNSCORED" && styles.grayscale)}>
           {icon}
         </div>
       )}

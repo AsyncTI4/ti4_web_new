@@ -9,11 +9,11 @@ import {
 import { CanvasRenderer } from "echarts/renderers";
 import { Group, Text } from "@mantine/core";
 import { IconAffiliate } from "@tabler/icons-react";
-import type { FactionTechSynergy, FactionTechSynergyStat } from "../types";
+import type { FactionTechSynergy } from "../types";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
-import { AXIS_STYLE } from "./chartTheme";
+import { AXIS_STYLE, TOOLTIP_STYLE } from "./chartTheme";
 import classes from "./AggregateCharts.module.css";
 
 echarts.use([HeatmapChart, GridComponent, TooltipComponent, VisualMapComponent, CanvasRenderer]);
@@ -23,12 +23,10 @@ const MIN_FACTIONS_PER_TECH = 2;
 const MAX_FACTIONS = 10;
 const MAX_TECHS = 12;
 
-/** Exclude techs from specific packs/prefixes */
 function isExcludedTech(techId: string): boolean {
   return techId.startsWith("tf-");
 }
 
-/** Standard deviation of an array of numbers */
 function stdDev(values: number[]): number {
   if (values.length < 2) return 0;
   const mean = values.reduce((s, v) => s + v, 0) / values.length;
@@ -49,7 +47,6 @@ type FilteredData = {
  * 4. Capped at MAX_FACTIONS and MAX_TECHS
  */
 function filterSynergyData(synergy: FactionTechSynergy): FilteredData {
-  // Step 1: filter factions by minimum games, sort by games desc
   const qualifiedFactions = Object.entries(synergy.byFaction)
     .filter(([, entry]) => entry.games >= MIN_FACTION_GAMES)
     .sort((a, b) => b[1].games - a[1].games)
@@ -58,7 +55,6 @@ function filterSynergyData(synergy: FactionTechSynergy): FilteredData {
 
   if (qualifiedFactions.length === 0) return { factions: [], techs: [] };
 
-  // Step 2: collect all techs across qualified factions, excluding banned ones
   const techFactionCounts = new Map<string, number>();
   const techWinRates = new Map<string, number[]>();
 
@@ -75,7 +71,6 @@ function filterSynergyData(synergy: FactionTechSynergy): FilteredData {
     }
   }
 
-  // Step 3: filter techs that appear in enough factions, rank by variance
   const techScores: { id: string; score: number }[] = [];
   for (const [techId, count] of techFactionCounts) {
     if (count < MIN_FACTIONS_PER_TECH) continue;
@@ -83,7 +78,6 @@ function filterSynergyData(synergy: FactionTechSynergy): FilteredData {
     techScores.push({ id: techId, score: stdDev(rates) });
   }
 
-  // Sort by variance descending — most differentiating techs first
   techScores.sort((a, b) => b.score - a.score);
   const qualifiedTechs = techScores.slice(0, MAX_TECHS).map((t) => t.id);
 
@@ -106,11 +100,9 @@ export function FactionTechSynergySection({ synergy }: Props) {
     }
   }
 
-  const option: echarts.EChartsOption = {
+  const option: echarts.EChartsCoreOption = {
     tooltip: {
-      backgroundColor: "rgba(10,15,28,0.92)",
-      borderColor: "rgba(148,163,184,0.15)",
-      textStyle: { color: "#c0cbd8", fontFamily: "monospace", fontSize: 11 },
+      ...TOOLTIP_STYLE,
       formatter(params: unknown) {
         const p = params as { data: [number, number, number] };
         const [ti, fi, val] = p.data;

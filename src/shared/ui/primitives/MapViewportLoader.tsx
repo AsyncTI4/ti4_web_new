@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "react";
 import { MapViewportCenter } from "../MapViewportCenter";
 import classes from "./MapViewportLoader.module.css";
 
-export type MapViewportLoaderProps = HTMLAttributes<HTMLDivElement> & {
+type MapViewportLoaderProps = HTMLAttributes<HTMLDivElement> & {
   label?: string;
 };
 

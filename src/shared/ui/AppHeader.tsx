@@ -1,6 +1,7 @@
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
 import { AppShell, Group, type GroupProps } from "@mantine/core";
 import Logo from "@/shared/ui/Logo";
+import classes from "./AppHeader.module.css";
 
 const defaultGroupStyle: CSSProperties = {
   flexWrap: "nowrap",
@@ -9,7 +10,7 @@ const defaultGroupStyle: CSSProperties = {
 
 export const APP_HEADER_HEIGHT = 60;
 
-export type AppHeaderProps = ComponentProps<typeof AppShell.Header> & {
+type AppHeaderProps = ComponentProps<typeof AppShell.Header> & {
   children?: ReactNode;
   groupProps?: GroupProps;
   showDivider?: boolean;
@@ -36,7 +37,7 @@ export function AppHeader({
         {...restGroupProps}
       >
         <Logo />
-        {showDivider && <div className="logo-divider" />}
+        {showDivider && <div className={classes.logoDivider} />}
         {children}
       </Group>
     </AppShell.Header>

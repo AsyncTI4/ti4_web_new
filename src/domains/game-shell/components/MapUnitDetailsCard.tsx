@@ -1,16 +1,9 @@
 import { UnitDetailsCard } from "@/domains/player/components/UnitDetailsCard";
 import { lookupUnit } from "@/entities/lookup/units";
 import { useGameData } from "@/hooks/useGameContext";
-import {
-  type MapLayout,
-} from "@/domains/map/components/mapLayout";
+import { type MapLayout } from "@/domains/map/components/mapLayout";
 import { MapTooltipPositioner } from "@/domains/map/components/MapTooltipPositioner";
-
-type TooltipUnit = {
-  unitId?: string;
-  faction: string;
-  coords: { x: number; y: number };
-};
+import type { TooltipUnit } from "@/hooks/useTabsAndTooltips";
 
 type Props = {
   tooltipUnit: TooltipUnit | null;
@@ -25,8 +18,8 @@ export function MapUnitDetailsCard({
   mapZoom,
   mapLayout = "panels",
 }: Props) {
-  if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
   const gameData = useGameData();
+  if (!tooltipUnit || !tooltipUnit.unitId || !tooltipUnit.faction) return null;
   const playerData = gameData?.playerData;
 
   const activePlayer = playerData?.find(

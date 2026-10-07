@@ -17,28 +17,22 @@ export function GamePage({ onShowNewUI }: GamePageProps) {
   );
 
   const gameId = params.mapid;
-  const { data: imageUrl, refetch, isFetching, isError, error } = useMapImage(gameId);
+  const { data: imageUrl, isError, error } = useMapImage(gameId);
 
   const queryClient = useQueryClient();
 
   useGameSocket(gameId ?? "", () => {
-    refetch();
-    queryClient.invalidateQueries({ queryKey: ["mapImage", gameId] });
+    void queryClient.invalidateQueries({ queryKey: ["mapImage", gameId] });
     void queryClient.invalidateQueries({ queryKey: ["overlays", gameId] });
   });
 
   return (
     <MapUI
-      params={params}
+      gameId={gameId ?? ""}
       imageUrl={imageUrl}
-      showRefresh={false}
-      reconnect={() => refetch()}
-      isReconnecting={isFetching}
       isError={isError}
       error={error}
       onShowNewUI={onShowNewUI}
     />
   );
 }
-
-export default GamePage;

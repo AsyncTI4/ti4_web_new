@@ -11,6 +11,8 @@ type CommandCounterStackProps = {
 
 const TILE_OFFSET_X = 10;
 const TILE_OFFSET_Y = 90;
+const STACK_STEP = 16;
+
 export const CommandCounterStack = ({
   factions,
   style,
@@ -23,9 +25,7 @@ export const CommandCounterStack = ({
     <div style={{ position: "relative", ...style }}>
       {factions.map((faction, index) => {
         const colorAlias = getColorAlias(factionColorMap?.[faction]?.color);
-        const offsetX = index * 16;
-        const offsetY = index * 16;
-        const zIndex = index + 1;
+        const offset = index * STACK_STEP;
 
         return (
           <CommandCounter
@@ -34,9 +34,9 @@ export const CommandCounterStack = ({
             faction={faction}
             style={{
               position: "absolute",
-              left: `${offsetX + TILE_OFFSET_X}px`,
-              top: `${offsetY + TILE_OFFSET_Y}px`,
-              zIndex: zIndex,
+              left: `${offset + TILE_OFFSET_X}px`,
+              top: `${offset + TILE_OFFSET_Y}px`,
+              zIndex: index + 1,
               visibility: hiddenIndices?.has(index) ? "hidden" : undefined,
             }}
           />

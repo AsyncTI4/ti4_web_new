@@ -8,7 +8,12 @@ import { initializeSpaceCostMap } from "./costMap";
 import { getEntityStackSize } from "./entitySorting";
 import { updateCostMap } from "./heatMap";
 import { placeEntitiesWithCostMap } from "./placement";
-import { PlaceSpaceEntitiesOptions, EntityStack, HeatSource } from "./types";
+import {
+  PlaceSpaceEntitiesOptions,
+  EntityStack,
+  GridSquare,
+  HeatSource,
+} from "./types";
 import { parsePlanetsFromCoords } from "./coordinateUtils";
 import {
   calculateSystemIndicatorLayout,
@@ -22,6 +27,13 @@ import {
   IndicatorPlacement,
 } from "./placementHelpers";
 
+const FIGHTER_ID = "ff";
+const THUNDERS_EDGE_TOKEN = "thundersedge";
+/** Heat-source stack sizes reserving room around fixed system furniture. */
+const PRODUCTION_INDICATOR_HEAT = 0.5;
+const CAPACITY_INDICATOR_HEAT = 2;
+const COMMAND_COUNTER_HEAT = 0.5;
+
 type FighterStack = {
   faction: string;
   fighterStack: EntityData;
@@ -30,26 +42,19 @@ type FighterStack = {
 const extractFighterStacks = (
   factionEntities: FactionUnits,
 ): FighterStack[] => {
-  const factionsWithFighters: FighterStack[] = [];
-
-  Object.entries(factionEntities).forEach(([faction, entities]) => {
-    const fighterIndex = entities.findIndex((e) => e.entityId === "ff");
-    if (fighterIndex !== -1 && entities[fighterIndex].count > 0) {
-      factionsWithFighters.push({
-        faction,
-        fighterStack: entities[fighterIndex],
-      });
-    }
+  return Object.entries(factionEntities).flatMap(([faction, entities]) => {
+    const fighterStack = entities.find((e) => e.entityId === FIGHTER_ID);
+    return fighterStack && fighterStack.count > 0
+      ? [{ faction, fighterStack }]
+      : [];
   });
-
-  return factionsWithFighters;
 };
 
 const placeFighterAt = (
   fighter: FighterStack,
   position: "rightmost" | "leftmost",
   costMap: number[][],
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
   grid: GridDimensions,
 ): { placement: EntityStack; heatSource: HeatSource } | null => {
   const square = findEdgeSquare(
@@ -86,23 +91,20 @@ const removeFightersFromEntities = (
   factionEntities: FactionUnits,
   placedFighterFactions: string[],
 ): FactionUnits => {
-  const remainingEntities: FactionUnits = {};
-
-  Object.entries(factionEntities).forEach(([faction, entities]) => {
-    if (placedFighterFactions.includes(faction)) {
-      remainingEntities[faction] = entities.filter((e) => e.entityId !== "ff");
-    } else {
-      remainingEntities[faction] = [...entities];
-    }
-  });
-
-  return remainingEntities;
+  return Object.fromEntries(
+    Object.entries(factionEntities).map(([faction, entities]) => [
+      faction,
+      placedFighterFactions.includes(faction)
+        ? entities.filter((e) => e.entityId !== FIGHTER_ID)
+        : [...entities],
+    ]),
+  );
 };
 
-export const preplaceFighters = (
+const preplaceFighters = (
   factionEntities: FactionUnits,
   costMap: number[][],
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
   grid: GridDimensions,
 ): {
   placements: EntityStack[];
@@ -165,15 +167,17 @@ const preplaceSystemIndicatorHeatSources = (
 
   return [
     ...(hasProduction
-      ? [createIndicatorHeatSource(layout.production, 0.5)]
+      ? [createIndicatorHeatSource(layout.production, PRODUCTION_INDICATOR_HEAT)]
       : []),
-    ...(hasCapacity ? [createIndicatorHeatSource(capacityPlacement, 2)] : []),
+    ...(hasCapacity
+      ? [createIndicatorHeatSource(capacityPlacement, CAPACITY_INDICATOR_HEAT)]
+      : []),
   ];
 };
 
 const preplaceCommandCounterHeatSource = (
   costMap: number[][],
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
   grid: GridDimensions,
   hasCommandCounters: boolean,
 ): HeatSource | null => {
@@ -182,7 +186,7 @@ const preplaceCommandCounterHeatSource = (
   const square = findEdgeSquare(costMap, rimSquares, grid.gridSize, "leftmost");
   if (!square) return null;
 
-  return createHeatSourceFromSquare(square, grid, 0.5);
+  return createHeatSourceFromSquare(square, grid, COMMAND_COUNTER_HEAT);
 };
 
 const preplaceThundersEdge = (
@@ -192,24 +196,18 @@ const preplaceThundersEdge = (
   placement: EntityStack | null;
   heatSource: HeatSource | null;
 } => {
-  const thundersEdgeToken = tokens.find((t) => t === "thundersedge");
-  if (!thundersEdgeToken)
-    return {
-      placement: null,
-      heatSource: null,
-    };
+  if (!tokens.includes(THUNDERS_EDGE_TOKEN)) {
+    return { placement: null, heatSource: null };
+  }
 
-  const centerRow = Math.floor(grid.gridSize / 2);
-  const centerCol = Math.floor(grid.gridSize / 2);
-  const square = { row: centerRow, col: centerCol };
-
+  const center = Math.floor(grid.gridSize / 2);
+  const square = { row: center, col: center };
   const entityData: EntityData = {
-    entityId: thundersEdgeToken,
+    entityId: THUNDERS_EDGE_TOKEN,
     entityType: "token",
     count: 1,
   };
-
-  const stackSize = getEntityStackSize(thundersEdgeToken, 1);
+  const stackSize = getEntityStackSize(THUNDERS_EDGE_TOKEN, 1);
 
   return {
     placement: createPlacementFromSquare(square, grid, entityData, "neutral"),
@@ -284,21 +282,18 @@ export const placeSpaceEntities = ({
     rimClearance: 0,
   });
 
-  // Step 3: Pre-place fighters
   const {
     placements: fighterPlacements,
     heatSources: fighterHeatSources,
     remainingEntities,
   } = preplaceFighters(factionEntities, fighterCostMap, rimSquares, grid);
 
-  // Step 4: Combine all heat sources
   const allHeatSources = [...fixedHeatSources, ...fighterHeatSources];
 
   const tokenEntities = tokens
-    .filter((t) => t !== "thundersedge")
+    .filter((t) => t !== THUNDERS_EDGE_TOKEN)
     .map((token) => tokenToEntityStack(token, "neutral"));
 
-  // Step 5: Place entities with heat map
   const { entityPlacements: heatMapPlacements, finalCostMap } =
     placeEntitiesWithCostMap({
       gridSize,
@@ -315,7 +310,6 @@ export const placeSpaceEntities = ({
       initialHeatSources: allHeatSources,
     });
 
-  // Step 6: Combine all placements
   const allPlacements = [
     ...(thundersEdgePlacement ? [thundersEdgePlacement] : []),
     ...fighterPlacements,

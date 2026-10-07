@@ -1,13 +1,3 @@
-/* Shimmer animation keyframes */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
 /* Tech card styles: squared "circuit module" with a chamfer accent
    painted into the bottom-right corner (background layer, not clip) */
 .techCard {
@@ -56,45 +46,11 @@
     );
 }
 
-/* Enhanced styling for tier 3 and faction techs */
-.techCard.enhanced {
-  --tech-bg-alpha: 0.11;
-  --tech-border-alpha: 0.28;
-  box-shadow: none;
-}
-
-.techCard.enhanced::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-      rgba(255, 255, 255, 0.025),
-    transparent
-  );
-  animation: shimmer 6s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-:global(.mobile) .techCard.enhanced::after {
-  animation: none;
-}
-
 .techCard:hover {
   --tech-bg-alpha: 0.10;
   --tech-border-alpha: 0.26;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  /* transform: translateY(-2px); */
 }
-
-.techCard.enhanced:hover {
-  --tech-bg-alpha: 0.13;
-  --tech-border-alpha: 0.34;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
 
 .techCard::before {
   content: '';
@@ -230,7 +186,6 @@
   min-width: 0;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
   padding-right: 16px;
-  /* letter-spacing: -0.05em; */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: clip;

@@ -12,7 +12,6 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 type Props = {
   techs?: string[];
   exhaustedTechs?: string[];
-  minSlotsPerColor?: number;
   minColumns?: number;
   /** Rack depth imposed from outside, so sibling racks share a row count. */
   minRows?: number;
@@ -101,14 +100,6 @@ export function getTechGridMobileColumnCount(techs: string[] = []): number {
   return getMinimumTechColumnCount(techGroups);
 }
 
-function packIntoColumns(
-  groups: ReactNode[][],
-  columnCount: number
-): ReactNode[][] {
-  const chunks = packTechGroupsIntoColumns(groups, columnCount);
-  return Array.from({ length: columnCount }, (_, idx) => chunks[idx] ?? []);
-}
-
 /**
  * How deep this player's tech rack is once packed — the fullest column. Read by
  * the card so the objectives rack beside it can be padded to the same depth.
@@ -126,7 +117,7 @@ export function getTechGridMobileRowCount(
     getMinimumTechColumnCount(techGroups)
   );
 
-  return packIntoColumns(techGroups, columnCount).reduce(
+  return packTechGroupsIntoColumns(techGroups, columnCount).reduce(
     (max, column) => Math.max(max, column.length),
     0
   );
@@ -145,7 +136,6 @@ export function TechGridMobile({
       techs,
       exhaustedTechs,
       undefined,
-      true,
       breakthrough
     )
   );
@@ -154,7 +144,7 @@ export function TechGridMobile({
     minColumns,
     getMinimumTechColumnCount(techGroups)
   );
-  const columns = packIntoColumns(techGroups, columnCount);
+  const columns = packTechGroupsIntoColumns(techGroups, columnCount);
 
   /*
    * The packed grid is a rectangle: as many rows as the longest column, or as

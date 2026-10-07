@@ -1,15 +1,44 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import cx from "clsx";
 import classes from "../MapTile.module.css";
-import { getPlanetCoordsBySystemId, getPlanetById } from "@/entities/lookup/planets";
-import { Tile } from "@/app/providers/context/types";
+import {
+  getPlanetPositionsBySystemId,
+  getPlanetData,
+} from "@/entities/lookup/planets";
+import type { Tile } from "@/app/providers/context/types";
 import { useSettingsStore, useAppStore } from "@/utils/appStore";
 import { getTokenData } from "@/entities/lookup/tokens";
+import { DEFAULT_PLANET_RADIUS } from "@/utils/unitPositioning/constants";
+import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 
-const DEFAULT_PLANET_RADIUS = 60;
 const TOKEN_PLANET_RADIUS = 45;
 const REGULAR_PLANET_Z_INDEX = 52;
 const TOKEN_PLANET_Z_INDEX = 54;
+const HOVER_DELAY_MS = 1000;
+
+type CircleGeometry = { radius: number; offsetX: number; offsetY: number };
+
+function getCircleGeometry(
+  planetId: string,
+  planet: NonNullable<ReturnType<typeof getPlanetData>>,
+  isTokenPlanet: boolean,
+): CircleGeometry {
+  if (isTokenPlanet) {
+    return {
+      radius: TOKEN_PLANET_RADIUS,
+      offsetX: planetId === "avernus" ? 10 : 0,
+      offsetY: -10,
+    };
+  }
+  const geometry = { radius: DEFAULT_PLANET_RADIUS, offsetX: 0, offsetY: 0 };
+  if (planetId === "mr" || planetId === "mrte")
+    return { ...geometry, radius: 120 };
+  if (planetId === "industrex") return { ...geometry, radius: 55 };
+  if (planetId === "emelpar") return { ...geometry, radius: 100, offsetY: -5 };
+  if (isLargeLegendaryPlanet(planetId, planet))
+    return { ...geometry, radius: 100 };
+  return geometry;
+}
 
 type Props = {
   systemId: string;
@@ -30,47 +59,38 @@ export function PlanetCirclesLayer({
   onPlanetClick,
 }: Props) {
   const showExhaustedPlanets = useSettingsStore(
-    (state) => state.settings.showExhaustedPlanets
+    (state) => state.settings.showExhaustedPlanets,
   );
   const hoveredPlanetId = useAppStore((state) => {
     const planetId = state.hoveredPlanetId;
     return planetId && mapTile.planets[planetId] ? planetId : null;
   });
-  const hoverTimeoutRef = React.useRef<Record<string, number>>({});
+  const hoverTimeoutRef = useRef<Record<string, number>>({});
 
-  const handlePlanetMouseEnter = React.useCallback(
-    (planetId: string, x: number, y: number) => {
-      if (!onPlanetMouseEnter) return;
-      hoverTimeoutRef.current[planetId] = setTimeout(() => {
-        const worldX = position.x + x;
-        const worldY = position.y + y;
-        onPlanetMouseEnter(planetId, worldX, worldY);
-      }, 1000);
-    },
-    [onPlanetMouseEnter, position.x, position.y]
-  );
+  const handlePlanetMouseEnter = (planetId: string, x: number, y: number) => {
+    if (!onPlanetMouseEnter) return;
+    hoverTimeoutRef.current[planetId] = setTimeout(() => {
+      onPlanetMouseEnter(planetId, position.x + x, position.y + y);
+    }, HOVER_DELAY_MS);
+  };
 
-  const handlePlanetMouseLeave = React.useCallback(
-    (planetId: string) => {
-      if (hoverTimeoutRef.current[planetId]) {
-        clearTimeout(hoverTimeoutRef.current[planetId]);
-        delete hoverTimeoutRef.current[planetId];
-      }
-      if (onPlanetMouseLeave) onPlanetMouseLeave();
-    },
-    [onPlanetMouseLeave]
-  );
+  const handlePlanetMouseLeave = (planetId: string) => {
+    if (hoverTimeoutRef.current[planetId]) {
+      clearTimeout(hoverTimeoutRef.current[planetId]);
+      delete hoverTimeoutRef.current[planetId];
+    }
+    onPlanetMouseLeave?.();
+  };
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       Object.values(hoverTimeoutRef.current).forEach(clearTimeout);
     };
   }, []);
 
-  if (!mapTile?.planets) return [] as React.ReactElement[];
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
+  if (!mapTile?.planets) return null;
+  const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-  // Helper function to create a planet circle element
   const createPlanetCircle = (
     planetId: string,
     x: number,
@@ -78,63 +98,39 @@ export function PlanetCirclesLayer({
     isExhausted: boolean,
     isTokenPlanet = false,
   ) => {
-    const planet = getPlanetById(planetId);
+    const planet = getPlanetData(planetId);
     if (!planet) return null;
 
-    const isLegendary =
-      planet?.legendaryAbilityName || planet?.legendaryAbilityText;
-    const isMecatolRex = planetId === "mr" || planetId === "mrte";
-    let radius = isTokenPlanet ? TOKEN_PLANET_RADIUS : DEFAULT_PLANET_RADIUS;
-    let circleOffsetX = 0;
-    let circleOffsetY = isTokenPlanet ? -10 : 0;
-    if (isTokenPlanet) {
-      if (planetId === "avernus") circleOffsetX = 10;
-    } else if (isMecatolRex) radius = 120;
-    else if (
-      planetId === "mallice" ||
-      planetId === "lockedmallice" ||
-      planetId === "hexmallice" ||
-      planetId === "hexlockedmallice" ||
-      planetId === "ordinian"
-    ) {
-      radius = 60;
-    } else if (planetId === "industrex") {
-      radius = 55;
-    } else if (planetId === "emelpar") {
-      radius = 100;
-      circleOffsetX = 0;
-      circleOffsetY = -5;
-    } else if (isLegendary) {
-      radius = 100;
-    }
-
+    const { radius, offsetX, offsetY } = getCircleGeometry(
+      planetId,
+      planet,
+      isTokenPlanet,
+    );
     const diameter = radius * 2;
     const isSpaceStation =
       planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
       false;
-    const exhaustedBackdropFilter =
-      isExhausted && showExhaustedPlanets && !isSpaceStation
-        ? {
-            backdropFilter: "brightness(0.7) grayscale(1) blur(0px)" as const,
-          }
-        : {};
-
+    const showExhausted =
+      isExhausted && showExhaustedPlanets && !isSpaceStation;
     const isHighlighted = hoveredPlanetId === planetId;
 
     return (
       <div
         key={`${systemId}-${planetId}${isTokenPlanet ? "-token" : ""}-circle`}
-        className={cx(classes.planetCircle, isHighlighted && classes.highlighted)}
+        className={cx(
+          classes.planetCircle,
+          isHighlighted && classes.highlighted,
+        )}
         style={{
           position: "absolute",
-          left: `${x + circleOffsetX}px`,
-          top: `${y + circleOffsetY}px`,
+          left: `${x + offsetX}px`,
+          top: `${y + offsetY}px`,
           width: `${diameter}px`,
           height: `${diameter}px`,
-          zIndex: isTokenPlanet
-            ? TOKEN_PLANET_Z_INDEX
-            : REGULAR_PLANET_Z_INDEX,
-          ...exhaustedBackdropFilter,
+          zIndex: isTokenPlanet ? TOKEN_PLANET_Z_INDEX : REGULAR_PLANET_Z_INDEX,
+          backdropFilter: showExhausted
+            ? "brightness(0.7) grayscale(1) blur(0px)"
+            : undefined,
         }}
         onMouseEnter={() => handlePlanetMouseEnter(planetId, x, y)}
         onMouseLeave={() => handlePlanetMouseLeave(planetId)}
@@ -143,44 +139,30 @@ export function PlanetCirclesLayer({
     );
   };
 
-  // Build a map of token planets from entityPlacements
-  const tokenPlanets = React.useMemo(() => {
-    const tokenPlanetMap: Record<
-      string,
-      { x: number; y: number; planetName: string }
-    > = {};
-    if (mapTile.entityPlacements) {
-      Object.values(mapTile.entityPlacements).forEach((placement) => {
-        if (placement.entityType === "token") {
-          const tokenData = getTokenData(placement.entityId);
-          if (tokenData?.isPlanet && tokenData.tokenPlanetName) {
-            tokenPlanetMap[tokenData.tokenPlanetName] = {
-              x: placement.x,
-              y: placement.y,
-              planetName: tokenData.tokenPlanetName,
-            };
-          }
-        }
-      });
-    }
-    return tokenPlanetMap;
-  }, [mapTile.entityPlacements]);
+  const tokenPlanets: Record<string, { x: number; y: number }> = {};
+  for (const placement of Object.values(mapTile.entityPlacements ?? {})) {
+    if (placement.entityType !== "token") continue;
+    const tokenData = getTokenData(placement.entityId);
+    if (!tokenData?.isPlanet || !tokenData.tokenPlanetName) continue;
+    tokenPlanets[tokenData.tokenPlanetName] = {
+      x: placement.x,
+      y: placement.y,
+    };
+  }
 
-  // Regular planets from mapTile.planets
   const regularPlanetCircles = Object.entries(mapTile.planets).flatMap(
     ([planetId, planetTile]) => {
-      if (!planetCoords[planetId]) return [];
-      const [x, y] = planetCoords[planetId].split(",").map(Number);
+      const position = planetPositions[planetId];
+      if (!position) return [];
+      const { x, y } = position;
       const circle = createPlanetCircle(planetId, x, y, planetTile.exhausted);
       return circle ? [circle] : [];
-    }
+    },
   );
 
-  // Token planets (like Thunder's Edge)
   const tokenPlanetCircles = Object.entries(tokenPlanets).flatMap(
     ([planetName, tokenPlanet]) => {
-      // Skip if already rendered as a regular planet
-      if (planetCoords[planetName]) return [];
+      if (planetPositions[planetName]) return [];
       const planetTileData = mapTile.planets[planetName];
       const circle = createPlanetCircle(
         planetName,
@@ -190,7 +172,7 @@ export function PlanetCirclesLayer({
         true,
       );
       return circle ? [circle] : [];
-    }
+    },
   );
 
   return <>{[...regularPlanetCircles, ...tokenPlanetCircles]}</>;

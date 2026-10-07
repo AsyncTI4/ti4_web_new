@@ -45,5 +45,3 @@ export function MapLoadingState({ gameId }: Props) {
     />
   );
 }
-
-export default MapLoadingState;

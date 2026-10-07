@@ -1,35 +1,35 @@
-import { actionCards } from "@/entities/data/actionCards";
 import { promissoryNotes } from "@/entities/data/promissoryNotes";
-import { relics } from "@/entities/data/relics";
-import { techs } from "@/entities/data/tech";
-import { breakthroughs } from "@/entities/data/breakthroughs";
-import { abilities } from "@/entities/data/abilities";
-import { leaders } from "@/entities/data/leaders";
 import { agendas } from "@/entities/data/agendas";
 import { publicObjectives } from "@/entities/data/publicObjectives";
-import { secretObjectives } from "@/entities/data/secretObjectives";
 import { planets } from "@/entities/data/planets";
 import { systems } from "@/entities/data/systems";
 import { units } from "@/entities/data/units";
+import { getAbility } from "@/entities/lookup/abilities";
+import { getActionCard } from "@/entities/lookup/actionCards";
+import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
+import { getLeaderById } from "@/entities/lookup/leaders";
+import { getRelicData } from "@/entities/lookup/relics";
+import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
+import { getTechData } from "@/entities/lookup/tech";
 
-// ---------------------------------------------------------------------------
-// Name resolution — resolves raw ids to real display names using client-side
-// lookup data. Kept in one place so it can be upgraded as data coverage grows.
-// A prettifier is the universal fallback.
-// ---------------------------------------------------------------------------
-
+/** Turns a raw id into a readable label; the fallback for every name resolver. */
 export function prettifyId(id: string): string {
   return id
     .replace(/[_-]+/g, " ")
     .trim()
     .split(/\s+/)
-    .map((w) => (w.length <= 2 ? w.toUpperCase() : w[0].toUpperCase() + w.slice(1)))
+    .map((w) =>
+      w.length <= 2 ? w.toUpperCase() : w[0].toUpperCase() + w.slice(1),
+    )
     .join(" ");
 }
 
 type Named = { name?: string };
 
-function indexBy<T extends Named>(rows: T[], key: (row: T) => string): Map<string, T> {
+function indexBy<T extends Named>(
+  rows: T[],
+  key: (row: T) => string,
+): Map<string, T> {
   const map = new Map<string, T>();
   for (const row of rows) {
     const id = key(row);
@@ -38,41 +38,25 @@ function indexBy<T extends Named>(rows: T[], key: (row: T) => string): Map<strin
   return map;
 }
 
-const actionCardsById = indexBy(actionCards, (r) => r.alias);
+/* The promissory lookup in entities/lookup drops homebrew notes, which event
+   ids can still reference, so these three keep their own index. */
 const promissoryById = indexBy(promissoryNotes, (r) => r.alias);
-const relicsById = indexBy(relics, (r) => r.alias);
-const techsById = indexBy(techs, (r) => r.alias);
-const breakthroughsById = indexBy(breakthroughs, (r) => r.alias);
-const abilitiesById = indexBy(abilities, (r) => r.id);
-const leadersById = indexBy(leaders, (r) => r.id);
 const agendasById = indexBy(agendas, (r) => r.alias);
 const publicObjById = indexBy(publicObjectives, (r) => r.alias);
-const secretObjById = indexBy(secretObjectives, (r) => r.alias);
 
-function nameFrom(map: Map<string, Named>, id: string): string {
-  return map.get(id)?.name ?? prettifyId(id);
-}
+const CARD_LOOKUPS: Record<string, (id: string) => Named | undefined> = {
+  CARD_PLAY_ACTION_CARD: getActionCard,
+  CARD_PLAY_PROMISSORY_NOTE: (id) => promissoryById.get(id),
+  CARD_PLAY_RELIC: getRelicData,
+  CARD_PLAY_TECH_EXHAUST: getTechData,
+  CARD_PLAY_BREAKTHROUGH: getBreakthroughData,
+  CARD_PLAY_AGENT: getLeaderById,
+  CARD_PLAY_HERO: getLeaderById,
+  CARD_PLAY_ABILITY: getAbility,
+};
 
 export function resolveCardName(archetype: string, id: string): string {
-  switch (archetype) {
-    case "CARD_PLAY_ACTION_CARD":
-      return nameFrom(actionCardsById, id);
-    case "CARD_PLAY_PROMISSORY_NOTE":
-      return nameFrom(promissoryById, id);
-    case "CARD_PLAY_RELIC":
-      return nameFrom(relicsById, id);
-    case "CARD_PLAY_TECH_EXHAUST":
-      return nameFrom(techsById, id);
-    case "CARD_PLAY_BREAKTHROUGH":
-      return nameFrom(breakthroughsById, id);
-    case "CARD_PLAY_AGENT":
-    case "CARD_PLAY_HERO":
-      return leadersById.get(id)?.name ?? prettifyId(id);
-    case "CARD_PLAY_ABILITY":
-      return abilitiesById.get(id)?.name ?? prettifyId(id);
-    default:
-      return prettifyId(id);
-  }
+  return CARD_LOOKUPS[archetype]?.(id)?.name ?? prettifyId(id);
 }
 
 // Produced-unit keys use async short ids ("ff", "dd"); resolve to the base unit type
@@ -85,7 +69,7 @@ for (const unit of units) {
 }
 
 export function resolveTechName(id: string): string {
-  return nameFrom(techsById, id);
+  return getTechData(id)?.name ?? prettifyId(id);
 }
 
 export function resolveUnitName(id: string): string {
@@ -93,12 +77,14 @@ export function resolveUnitName(id: string): string {
 }
 
 export function resolveAgendaName(id: string): string {
-  return nameFrom(agendasById, id);
+  return agendasById.get(id)?.name ?? prettifyId(id);
 }
 
 export function resolveObjectiveName(id: string): string {
   return (
-    publicObjById.get(id)?.name ?? secretObjById.get(id)?.name ?? prettifyId(id)
+    publicObjById.get(id)?.name ??
+    getSecretObjectiveData(id)?.name ??
+    prettifyId(id)
   );
 }
 
@@ -114,7 +100,7 @@ export function resolvePlanetName(id: string): string {
  */
 export function resolveSystemName(
   position: string,
-  positionToSystemId?: Record<string, string>
+  positionToSystemId?: Record<string, string>,
 ): string {
   const systemId =
     positionToSystemId === undefined ? position : positionToSystemId[position];
@@ -130,23 +116,6 @@ export function resolvePlanetsList(underscored: string): string[] {
     .map((p) => p.trim())
     .filter(Boolean)
     .map(resolvePlanetName);
-}
-
-// ---------------------------------------------------------------------------
-// Vote + transaction parsing (defensive against malformed tokens)
-// ---------------------------------------------------------------------------
-
-export function summarizeVotes(votes: Record<string, string>): string {
-  const parts: string[] = [];
-  for (const [outcome, tokenStr] of Object.entries(votes)) {
-    let total = 0;
-    for (const token of tokenStr.split(";")) {
-      const digits = token.match(/_(\d+)$/);
-      if (digits) total += Number(digits[1]);
-    }
-    if (total > 0) parts.push(`${prettifyId(outcome)} ${total}`);
-  }
-  return parts.join(" — ");
 }
 
 export function formatRelativeTime(timestamp: number, now: number): string {

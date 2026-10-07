@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import ZoomControls from "@/shared/ui/map/ZoomControls";
 import { useAppStore, useSettingsStore } from "@/utils/appStore";
 import { getCssScaleStyle } from "@/utils/zoom";
@@ -25,20 +25,27 @@ type ScrollMapProps = {
   imageUrl?: string;
 };
 
-type DataModelType =
-  | "AbilityModel"
-  | "AgendaModel"
-  | "UnitModel"
-  | "StrategyCardModel"
-  | "LeaderModel"
-  | "FactionModel"
-  | "PublicObjectiveModel"
-  | "SecretObjectiveModel"
-  | "PromissoryNoteModel"
-  | "RelicModel"
-  | "ExploreModel"
-  | "TechnologyModel"
-  | "BreakthroughModel";
+/** The fields overlays read from whichever data model an overlay points at. */
+type OverlayDataModel = Partial<{
+  name: string;
+  text: string;
+  imageURL: string;
+  permanentEffect: string;
+  window: string;
+  windowEffect: string;
+  text1: string;
+  text2: string;
+  type: string;
+  faction: string;
+  baseType: string;
+  ability: string;
+  primaryTexts: string[];
+  secondaryTexts: string[];
+  abilityWindow: string;
+  abilityText: string;
+  unlockCondition: string;
+  factionName: string;
+}>;
 
 type OverlayCardContent = {
   title?: string;
@@ -46,10 +53,10 @@ type OverlayCardContent = {
 };
 
 export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
-  const [imageNaturalWidth, setImageNaturalWidth] = useState<number | undefined>(
-    undefined,
-  );
-  const { filteredOverlays, activeTooltip, handleMouseEnter, handleMouseLeave } =
+  const [imageNaturalWidth, setImageNaturalWidth] = useState<
+    number | undefined
+  >(undefined);
+  const { overlays, activeTooltip, handleMouseEnter, handleMouseLeave } =
     useOverlay(gameId);
 
   const zoom = useAppStore((s) => s.zoomLevel);
@@ -66,55 +73,54 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
   }, []);
 
   const overlayZoom =
-    imageNaturalWidth && containerWidth ? containerWidth / imageNaturalWidth : 1;
+    imageNaturalWidth && containerWidth
+      ? containerWidth / imageNaturalWidth
+      : 1;
 
   return (
     <div style={{ width: "100%", position: "relative" }}>
       {!isMobileDevice() && <ZoomControls />}
 
-      {imageUrl ? (
+      {imageUrl && (
         <img
           alt="map"
           src={imageUrl}
-          onLoad={(event) => setImageNaturalWidth(event.currentTarget.naturalWidth)}
+          onLoad={(event) =>
+            setImageNaturalWidth(event.currentTarget.naturalWidth)
+          }
           style={{
             ...imageScaleStyle,
             ...(zoomFitToScreen ? { width: "100%", height: "100%" } : {}),
           }}
         />
-      ) : undefined}
+      )}
 
-      {filteredOverlays.map((overlay, index) => {
+      {overlays.map((overlay, index) => {
         const key = String(index);
-        const dataModel = lookupDataModel(overlay) as Record<string, any> | undefined;
+        const dataModel = lookupDataModel(overlay);
         const { title, text } = getCardContent(dataModel, overlay);
         if (!title && !text) return null;
 
-        const imageURL = dataModel?.imageURL ? cdnImage(dataModel.imageURL) : undefined;
+        const imageURL = dataModel?.imageURL
+          ? cdnImage(dataModel.imageURL)
+          : undefined;
         const effectiveOverlayZoom = zoomFitToScreen ? overlayZoom : zoom;
 
-        const style: CSSProperties & { border?: string } = {
+        const showBorder =
+          !!dataModel && !BORDERLESS_MODELS.has(overlay.dataModel ?? "");
+        const style: CSSProperties = {
           left: `${(overlay.boxXYWH[0] - 1) * effectiveOverlayZoom}px`,
           top: `${(overlay.boxXYWH[1] - 1) * effectiveOverlayZoom}px`,
           width: `${(overlay.boxXYWH[2] + 2) * effectiveOverlayZoom}px`,
           height: `${(overlay.boxXYWH[3] + 2) * effectiveOverlayZoom}px`,
-          border: `${effectiveOverlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`,
+          border: showBorder
+            ? `${effectiveOverlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`
+            : undefined,
         };
 
-        const deleteBorder = [
-          "FactionModel",
-          "StrategyCardModel",
-          "UnitModel",
-          "ExploreModel",
-        ].includes(overlay.dataModel ?? "");
-
-        if (!dataModel || deleteBorder) {
-          delete style.border;
-        }
-
         const overlayMaxWidth =
-          overlayMaxWidths[(overlay.dataModel as DataModelType) ?? "AbilityModel"] ??
-          250;
+          OVERLAY_MAX_WIDTHS[overlay.dataModel ?? ""] ??
+          DEFAULT_OVERLAY_MAX_WIDTH;
 
         return (
           <div
@@ -137,7 +143,9 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
                 }}
               />
             ) : (
-              <div className={`tooltip ${activeTooltip === key ? "active" : ""}`}>
+              <div
+                className={`tooltip ${activeTooltip === key ? "active" : ""}`}
+              >
                 <h3 className="tooltip-title">{title}</h3>
                 <p className="tooltip-text">{text}</p>
               </div>
@@ -149,8 +157,15 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
   );
 }
 
+const BORDERLESS_MODELS = new Set([
+  "FactionModel",
+  "StrategyCardModel",
+  "UnitModel",
+  "ExploreModel",
+]);
+
 function getCardContent(
-  dataModel: Record<string, any> | undefined,
+  dataModel: OverlayDataModel | undefined,
   overlay: OverlayData,
 ): OverlayCardContent {
   let title: string | undefined;
@@ -204,10 +219,7 @@ function getCardContent(
       if (!dataModel) {
         return { title: overlay.title, text: overlay.text };
       }
-      return {
-        title: dataModel?.name,
-        text: dataModel?.text || "",
-      };
+      return { title: dataModel.name, text: dataModel.text || "" };
     }
   }
 
@@ -215,39 +227,34 @@ function getCardContent(
 }
 
 const useOverlay = (gameId: string) => {
-  const { data: overlays } = useOverlayData(gameId);
-  const filteredOverlays = filterOverlays(overlays);
+  const { data: overlays = [] } = useOverlayData(gameId);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
-  const [tooltipTimer, setTooltipTimer] = useState<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tooltipDelay = isMobileDevice() ? 0 : 600;
 
-  const handleMouseEnter = useCallback(
-    (key: string) => {
-      const timer = setTimeout(() => setActiveTooltip(key), tooltipDelay);
-      setTooltipTimer(timer);
-    },
-    [tooltipDelay],
-  );
+  const handleMouseEnter = (key: string) => {
+    tooltipTimer.current = setTimeout(
+      () => setActiveTooltip(key),
+      tooltipDelay,
+    );
+  };
 
-  const handleMouseLeave = useCallback(() => {
-    if (tooltipTimer) clearTimeout(tooltipTimer);
+  const handleMouseLeave = () => {
+    if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
     setActiveTooltip(null);
-  }, [tooltipTimer]);
+  };
 
   return {
-    filteredOverlays,
+    overlays,
     activeTooltip,
     handleMouseEnter,
     handleMouseLeave,
   };
 };
 
-const filterOverlays = (overlays?: OverlayData[]): OverlayData[] => overlays ?? [];
-
-const overlayMaxWidths: Partial<Record<DataModelType, number>> = {
+const DEFAULT_OVERLAY_MAX_WIDTH = 250;
+const OVERLAY_MAX_WIDTHS: Record<string, number> = {
   TechnologyModel: 350,
   SecretObjectiveModel: 250,
   RelicModel: 250,
@@ -257,36 +264,27 @@ const overlayMaxWidths: Partial<Record<DataModelType, number>> = {
   StrategyCardModel: 350,
 };
 
-function lookupDataModel(overlay: OverlayData) {
-  const { dataModel, dataModelID } = overlay || {};
-  if (!dataModel || !dataModelID) return undefined;
+const DATA_MODEL_LOOKUPS: Record<string, (id: string) => unknown> = {
+  AbilityModel: (id) => abilities.find((a) => a.id === id),
+  PublicObjectiveModel: (id) => publicObjectives.find((o) => o.alias === id),
+  SecretObjectiveModel: (id) => secretObjectives.find((o) => o.alias === id),
+  PromissoryNoteModel: (id) => promissoryNotes.find((p) => p.alias === id),
+  RelicModel: (id) => relics.find((r) => r.alias === id),
+  ExploreModel: (id) => explorations.find((e) => e.id === id),
+  LeaderModel: (id) => leaders.find((l) => l.id === id),
+  UnitModel: (id) => units.find((u) => u.id === id),
+  TechnologyModel: (id) => technologies.find((t) => t.alias === id),
+  BreakthroughModel: (id) => breakthroughs.find((b) => b.alias === id),
+  StrategyCardModel: (id) => getStrategyCardById(id),
+  AgendaModel: (id) => agendas.find((a) => a.alias === id),
+};
 
-  switch (dataModel) {
-    case "AbilityModel":
-      return abilities.find((a) => a.id === dataModelID);
-    case "PublicObjectiveModel":
-      return publicObjectives.find((o) => o.alias === dataModelID);
-    case "SecretObjectiveModel":
-      return secretObjectives.find((o) => o.alias === dataModelID);
-    case "PromissoryNoteModel":
-      return promissoryNotes.find((p) => p.alias === dataModelID);
-    case "RelicModel":
-      return relics.find((r) => r.alias === dataModelID);
-    case "ExploreModel":
-      return explorations.find((e) => e.alias === dataModelID);
-    case "LeaderModel":
-      return leaders.find((l) => l.id === dataModelID);
-    case "UnitModel":
-      return units.find((u) => u.id === dataModelID);
-    case "TechnologyModel":
-      return technologies.find((t) => t.alias === dataModelID);
-    case "BreakthroughModel":
-      return breakthroughs.find((b) => b.alias === dataModelID);
-    case "StrategyCardModel":
-      return getStrategyCardById(dataModelID);
-    case "AgendaModel":
-      return agendas.find((a) => a.alias === dataModelID);
-    default:
-      return undefined;
-  }
+function lookupDataModel({
+  dataModel,
+  dataModelID,
+}: OverlayData): OverlayDataModel | undefined {
+  if (!dataModel || !dataModelID) return undefined;
+  return DATA_MODEL_LOOKUPS[dataModel]?.(dataModelID) as
+    | OverlayDataModel
+    | undefined;
 }

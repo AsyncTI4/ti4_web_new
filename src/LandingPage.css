@@ -1,26 +1,8 @@
-/* Fonts are loaded once in index.html — Slider, IBM Plex Sans, IBM Plex Mono.
-   This file used to pull Geist Sans and Space Mono as a fourth and fifth voice
-   that existed only on the landing page. */
-
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-text);
-}
-
 .space-title {
   font-family: var(--font-display);
   font-weight: var(--weight-rail);
   letter-spacing: -0.03em;
   line-height: 1.1;
-}
-
-.mono {
-  font-family: var(--font-data);
 }
 
 /* ============================================
@@ -37,17 +19,13 @@ h6 {
   --landing-border-medium: rgba(130, 155, 190, 0.22);
   --landing-border-strong: rgba(170, 190, 215, 0.32);
   --landing-text-primary: rgba(215, 225, 240, 0.95);
-  --landing-text-secondary: rgba(195, 208, 228, 0.7);
   --landing-text-tertiary: rgba(170, 185, 210, 0.5);
-  --landing-accent: rgba(180, 195, 218, 0.9);
-  --landing-accent-muted: rgba(140, 160, 192, 0.6);
   --landing-accent-warm: rgba(186, 160, 110, 0.85);
 }
 
-.logo-divider {
-  width: 1px;
-  height: 24px;
-  background: linear-gradient(180deg, transparent 0%, var(--landing-border-medium) 50%, transparent 100%);
+.sectionContainer {
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================
@@ -55,6 +33,8 @@ h6 {
    ============================================ */
 .heroSection {
   position: relative;
+  display: flex;
+  align-items: center;
   overflow: hidden;
   background-color: var(--landing-bg-primary);
   min-height: 85vh;
@@ -300,34 +280,6 @@ h6 {
   display: block;
 }
 
-.mapImageContainer {
-  position: relative;
-  min-height: 500px;
-  padding: var(--mantine-spacing-lg);
-}
-
-.mapImageWrapper {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  border-radius: 12px;
-  background: var(--landing-bg-secondary);
-  border: 1px solid var(--landing-border-medium);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(180, 200, 230, 0.03);
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.mapImageWrapper:hover {
-  border-color: var(--landing-border-strong);
-  box-shadow:
-    0 16px 50px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(180, 200, 230, 0.05);
-  transform: translateY(-4px);
-}
-
 @media (max-width: 1200px) {
   .heroDockLayout {
     grid-template-columns: minmax(250px, 38%) minmax(0, 62%);
@@ -463,11 +415,10 @@ h6 {
   padding-bottom: clamp(320px, 28vw, 520px);
 }
 
-.howItWorksCornerArt {
+.howItWorksCornerArt,
+.howItWorksCornerArtRight {
   position: absolute;
-  left: 0;
   bottom: 0;
-  width: min(43.2vw, 662px);
   max-width: 44%;
   height: auto;
   z-index: 0;
@@ -476,17 +427,14 @@ h6 {
   opacity: 0.9;
 }
 
+.howItWorksCornerArt {
+  left: 0;
+  width: min(43.2vw, 662px);
+}
+
 .howItWorksCornerArtRight {
-  position: absolute;
   right: 0;
-  bottom: 0;
   width: min(30vw, 460px);
-  max-width: 44%;
-  height: auto;
-  z-index: 0;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.9;
 }
 
 .sectionVariant2 {
@@ -653,11 +601,6 @@ h6 {
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-  .mapImageWrapper {
-    max-width: 100%;
-    margin: 0 var(--mantine-spacing-sm);
-  }
-
   .heroSection {
     min-height: 70vh;
   }
@@ -727,16 +670,6 @@ h6 {
 
 .fadeInUp {
   animation: fadeInUp 0.5s ease-out forwards;
-}
-
-.heroSection,
-.mapImageContainer {
-  display: flex;
-  align-items: center;
-}
-
-.mapImageContainer {
-  justify-content: center;
 }
 
 .fadeInUp.delay-1,

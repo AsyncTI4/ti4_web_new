@@ -1,3 +1,7 @@
+.trigger {
+  cursor: pointer;
+}
+
 .content {
   background: var(--details-card-bg);
   border: var(--card-details-item-border);

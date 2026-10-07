@@ -1,7 +1,6 @@
 import { cdnImage } from "@/entities/data/cdnImage";
 import { ExpeditionTokens } from "./ExpeditionTokens";
 import { useGameData } from "@/hooks/useGameContext";
-import { useMemo } from "react";
 
 type Props = {
   contentSize: {
@@ -10,70 +9,25 @@ type Props = {
   };
 };
 
-function useExpeditionVisibility() {
-  const gameData = useGameData();
-
-  const thundersEdgeOnBoard = useMemo(() => {
-    if (!gameData?.mapTiles) return false;
-    return gameData.mapTiles.some((tile) =>
-      tile.planets?.some((planet) => planet.name === "thundersedge")
-    );
-  }, [gameData?.mapTiles]);
-
-  const hasIncompleteExpeditions = useMemo(() => {
-    if (!gameData?.expeditions) return false;
-    return Object.values(gameData.expeditions).some(
-      (expedition) => expedition.completedBy == null
-    );
-  }, [gameData?.expeditions]);
-
-  return {
-    shouldShow: hasIncompleteExpeditions && !thundersEdgeOnBoard,
-    thundersEdgeOnBoard,
-    hasIncompleteExpeditions,
-  };
-}
-
-function calculateExpeditionPosition(
-  contentSize: {
-    width: number;
-    height: number;
-  },
-) {
-  const expeditionsImageLeft = 100;
-  const expeditionsImageTop = contentSize.height - 400;
-  return {
-    left: expeditionsImageLeft,
-    top: expeditionsImageTop,
-  };
-}
-
 export function ExpeditionLayer({ contentSize }: Props) {
   const gameData = useGameData();
-  const visibility = useExpeditionVisibility();
+  const hasIncompleteExpeditions = Object.values(
+    gameData?.expeditions ?? {},
+  ).some((expedition) => expedition.completedBy == null);
 
-  if (!gameData?.expeditions || !visibility.shouldShow) return null;
+  if (!hasIncompleteExpeditions) return null;
 
-  const position = calculateExpeditionPosition(
-    contentSize,
-  );
+  const left = 100;
+  const top = contentSize.height - 400;
 
   return (
     <>
       <img
         src={cdnImage(`/general/Expeditions.png`)}
         alt="Expeditions"
-        style={{
-          position: "absolute",
-          left: `${position.left}px`,
-          top: `${position.top}px`,
-          zIndex: 50,
-        }}
+        style={{ position: "absolute", left, top, zIndex: 50 }}
       />
-      <ExpeditionTokens
-        expeditionsImageLeft={position.left}
-        expeditionsImageTop={position.top}
-      />
+      <ExpeditionTokens expeditionsImageLeft={left} expeditionsImageTop={top} />
     </>
   );
 }

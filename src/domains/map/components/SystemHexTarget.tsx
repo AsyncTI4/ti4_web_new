@@ -1,10 +1,10 @@
 import { useRef } from "react";
-import { HEX_VERTICES } from "@/utils/unitPositioning";
+import {
+  HEX_PATH,
+  TILE_HEIGHT,
+  TILE_WIDTH,
+} from "@/domains/map/model/mapgen/tilePositioning";
 import classes from "./SystemHexTarget.module.css";
-
-const HEX_PATH = `${HEX_VERTICES.map(
-  ({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x} ${y}`
-).join(" ")} Z`;
 
 type Props = {
   onOpen: () => void;
@@ -24,9 +24,9 @@ export function SystemHexTarget({ onOpen }: Props) {
   return (
     <svg
       className={`system-hex-target ${classes.target}`}
-      viewBox="0 0 345 299"
-      width={345}
-      height={299}
+      viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
+      width={TILE_WIDTH}
+      height={TILE_HEIGHT}
       aria-hidden="true"
     >
       <path

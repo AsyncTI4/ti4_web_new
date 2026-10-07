@@ -1,10 +1,11 @@
 import { useGameData } from "@/hooks/useGameContext";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { getColorAlias } from "@/entities/lookup/colors";
+import type { Expeditions } from "@/entities/data/types";
 import { ControlToken } from "./ControlToken";
 
 type ExpeditionPosition = {
-  key: keyof import("@/entities/data/types").Expeditions;
+  key: keyof Expeditions;
   offsetX: number;
   offsetY: number;
 };
@@ -22,12 +23,12 @@ function calculatePosition(angleDegrees: number) {
 }
 
 const EXPEDITION_POSITIONS: ExpeditionPosition[] = [
-  { key: "actionCards", ...calculatePosition(30) }, // 2 o'clock 30
-  { key: "fiveInf", ...calculatePosition(-30) }, // 4 o'clock 210
-  { key: "secret", ...calculatePosition(-90) }, // 6 o'clock 150
-  { key: "techSkip", ...calculatePosition(-150) }, // 8 o'clock 90
-  { key: "tradeGoods", ...calculatePosition(150) }, // 10 o'clock -90
-  { key: "fiveRes", ...calculatePosition(90) }, // 12 o'clock -30
+  { key: "actionCards", ...calculatePosition(30) }, // 2 o'clock
+  { key: "fiveInf", ...calculatePosition(-30) }, // 4 o'clock
+  { key: "secret", ...calculatePosition(-90) }, // 6 o'clock
+  { key: "techSkip", ...calculatePosition(-150) }, // 8 o'clock
+  { key: "tradeGoods", ...calculatePosition(150) }, // 10 o'clock
+  { key: "fiveRes", ...calculatePosition(90) }, // 12 o'clock
 ];
 
 type Props = {
@@ -47,14 +48,11 @@ export function ExpeditionTokens({
     <>
       {EXPEDITION_POSITIONS.map(({ key, offsetX, offsetY }) => {
         const expedition = gameData.expeditions[key];
-        if (!expedition || !expedition.completedBy) return null;
+        if (!expedition?.completedBy) return null;
 
         const faction = factionColorMap[expedition.completedBy];
         if (!faction) return null;
         const colorAlias = getColorAlias(faction.color);
-
-        const x = expeditionsImageLeft + offsetX;
-        const y = expeditionsImageTop + offsetY;
 
         return (
           <ControlToken
@@ -63,8 +61,8 @@ export function ExpeditionTokens({
             faction={faction.faction}
             style={{
               position: "absolute",
-              left: `${x}px`,
-              top: `${y}px`,
+              left: `${expeditionsImageLeft + offsetX}px`,
+              top: `${expeditionsImageTop + offsetY}px`,
               transform: "translate(25%, 50%) rotate(90deg)",
               zIndex: 100,
             }}

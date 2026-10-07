@@ -1,17 +1,7 @@
-import React from "react";
 import { Box, Text } from "@mantine/core";
-import { getColorValues } from "@/entities/lookup/colors";
+import { getColorValues, toRgb } from "@/entities/lookup/colors";
+import type { Color } from "@/entities/data/types";
 import classes from "../TryUnitDecalsSidebar.module.css";
-
-type Color = {
-  alias: string;
-  name?: string;
-  displayName?: string;
-  primaryColor?: string;
-  primaryColorRef?: string;
-  secondaryColor?: string;
-  secondaryColorRef?: string;
-};
 
 type Props = {
   color: Color;
@@ -29,31 +19,18 @@ export function ColorSwatch({ color, isSelected, onClick }: Props) {
     color.secondaryColor
   );
 
-  let backgroundStyle: React.CSSProperties = {};
-  if (primaryColorValues && secondaryColorValues) {
-    // Gradient color
-    const {
-      red: primaryRed,
-      green: primaryGreen,
-      blue: primaryBlue,
-    } = primaryColorValues;
-    const {
-      red: secondaryRed,
-      green: secondaryGreen,
-      blue: secondaryBlue,
-    } = secondaryColorValues;
-    backgroundStyle.background = `linear-gradient(135deg, rgb(${primaryRed}, ${primaryGreen}, ${primaryBlue}) 0%, rgb(${primaryRed}, ${primaryGreen}, ${primaryBlue}) 30%, rgb(${secondaryRed}, ${secondaryGreen}, ${secondaryBlue}) 70%, rgb(${secondaryRed}, ${secondaryGreen}, ${secondaryBlue}) 100%)`;
-  } else if (primaryColorValues) {
-    // Basic color
-    const { red, green, blue } = primaryColorValues;
-    backgroundStyle.background = `rgb(${red}, ${green}, ${blue})`;
-  }
+  const primaryCss = primaryColorValues && toRgb(primaryColorValues);
+  const secondaryCss = secondaryColorValues && toRgb(secondaryColorValues);
+  const background =
+    primaryCss && secondaryCss
+      ? `linear-gradient(135deg, ${primaryCss} 0%, ${primaryCss} 30%, ${secondaryCss} 70%, ${secondaryCss} 100%)`
+      : primaryCss;
 
   return (
     <Box
       className={`${classes.colorItem} ${isSelected ? classes.selected : ""}`}
       onClick={onClick}
-      style={backgroundStyle}
+      style={{ background }}
     >
       <Box className={classes.colorBadge}>
         <Text size="xs" fw={600} c="white">

@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { getRelicData } from "@/entities/lookup/relics";
 import { processCardData, createCardSections } from "@/utils/cardDataProcessor";
 import { CardDetailsModal } from "@/shared/ui/CardDetailsModal";
@@ -8,21 +7,21 @@ type Props = {
   discard: string[];
 };
 
-export function RelicDeckDetailsCard({ deck, discard }: Props) {
-  // Memoized data processing using the generic utility
-  const sections = useMemo(() => {
-    const deckData = processCardData(deck, getRelicData, "alphanumeric");
-    const discardData = processCardData(discard, getRelicData, "alphanumeric");
+function toRelicCard(alias: string) {
+  const relic = getRelicData(alias);
+  if (!relic) return undefined;
+  return { name: relic.name, text: relic.text, id: relic.alias };
+}
 
-    return createCardSections(
-      deckData,
-      discardData,
-      deck,
-      discard,
-      "Deck",
-      "Discard"
-    );
-  }, [deck, discard]);
+export function RelicDeckDetailsCard({ deck, discard }: Props) {
+  const sections = createCardSections(
+    processCardData(deck, toRelicCard, "alphanumeric"),
+    processCardData(discard, toRelicCard, "alphanumeric"),
+    deck,
+    discard,
+    "Deck",
+    "Discard",
+  );
 
   return <CardDetailsModal sections={sections} showCounts={false} />;
 }

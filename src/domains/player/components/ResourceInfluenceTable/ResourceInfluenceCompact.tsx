@@ -30,6 +30,13 @@ type Props = {
 
 type StatColor = "resource" | "influence" | "flex" | "total";
 
+const ROW_CLASS: Record<StatColor, string> = {
+  resource: styles.resource,
+  influence: styles.influence,
+  flex: styles.flex,
+  total: styles.totalRow,
+};
+
 type StatRowProps = {
   kind: StatColor;
   current: number;
@@ -58,25 +65,7 @@ function StatRow({
   totalWidth,
 }: StatRowProps) {
   return (
-    <div className={cx(styles.statRow, styles[kind])}>
-      <span className={styles.current} style={{ minWidth: currentWidth }}>
-        {padNumber(current)}
-      </span>
-      <span className={styles.total} style={{ minWidth: totalWidth }}>
-        {Math.floor(total)}
-      </span>
-    </div>
-  );
-}
-
-function TotalRow({
-  current,
-  total,
-  currentWidth,
-  totalWidth,
-}: Omit<StatRowProps, "kind">) {
-  return (
-    <div className={cx(styles.statRow, styles.totalRow)}>
+    <div className={cx(styles.statRow, ROW_CLASS[kind])}>
       <span className={styles.current} style={{ minWidth: currentWidth }}>
         {padNumber(current)}
       </span>
@@ -167,7 +156,8 @@ function EconomicsColumn({
         <div className={styles.hiddenRow} aria-hidden="true" />
       )}
       {showTotal && (
-        <TotalRow
+        <StatRow
+          kind="total"
           current={
             currentResources +
             currentInfluence +

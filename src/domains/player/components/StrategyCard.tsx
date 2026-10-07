@@ -10,7 +10,7 @@ import {
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/hooks/useGameContext";
 import { StrategyCardDetailsCard } from "./StrategyCardDetailsCard";
-import type { ColorKey } from "./gradientClasses";
+import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./StrategyCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 
@@ -21,7 +21,7 @@ type StrategyCardColor = Extract<
 
 type Props = {
   initiative: number;
-  tradeGoods: number;
+  tradeGoods?: number;
   isExhausted?: boolean;
 };
 
@@ -43,7 +43,11 @@ function getStrategyCardColor(initiative: number): StrategyCardColor {
     : "red";
 }
 
-export function StrategyCard({ initiative, tradeGoods, isExhausted = false}: Props) {
+export function StrategyCard({
+  initiative,
+  tradeGoods = 0,
+  isExhausted = false,
+}: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const gameData = useGameData();
   const strategyCard = getStrategyCardByInitiative(
@@ -86,7 +90,7 @@ export function StrategyCard({ initiative, tradeGoods, isExhausted = false}: Pro
         </Chip>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
-        <StrategyCardDetailsCard initiative={initiative} color={color} tradeGoods={tradeGoods} />
+        <StrategyCardDetailsCard initiative={initiative} color={color} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );

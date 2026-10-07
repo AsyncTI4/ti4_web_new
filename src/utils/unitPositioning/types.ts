@@ -2,10 +2,14 @@ import {
   CapacityUsage,
   EntityData,
   FactionUnits,
-  PlanetEntityData,
 } from "@/entities/data/types";
 import { HexagonVertex } from "../hitbox";
 import { SPACE_HEAT_CONFIG } from "./constants";
+
+export type GridSquare = { row: number; col: number };
+
+/** A candidate grid square and its placement cost. */
+export type SquareCost = { square: GridSquare; cost: number };
 
 export type Planet = {
   name: string;
@@ -34,18 +38,7 @@ export type EntityStack = EntityStackBase & {
   planetName?: string;
 };
 
-export type GameState = {
-  space: {
-    [faction: string]: {
-      [unitType: string]: number;
-    };
-  };
-  planets: {
-    [planetName: string]: PlanetEntityData;
-  };
-};
-
-export type HeatConfig = typeof SPACE_HEAT_CONFIG;
+type HeatConfig = typeof SPACE_HEAT_CONFIG;
 
 export type UpdateCostMapOptions = {
   gridSize: number;
@@ -55,7 +48,7 @@ export type UpdateCostMapOptions = {
   existingCostMap: number[][];
   heatConfig: HeatConfig;
   repellantPlanets?: Planet[];
-  rimSquares?: { row: number; col: number }[];
+  rimSquares?: GridSquare[];
   heatSources?: HeatSource[];
   currentFaction?: string;
   rimClearance: number;
@@ -66,7 +59,7 @@ export type PlaceEntitiesOptions = {
   squareWidth: number;
   squareHeight: number;
   initialCostMap: number[][];
-  rimSquares: { row: number; col: number }[];
+  rimSquares: GridSquare[];
   repellantPlanets: Planet[];
   heatConfig: HeatConfig;
   factionEntities: FactionUnits;

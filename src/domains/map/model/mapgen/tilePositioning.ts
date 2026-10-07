@@ -1,17 +1,16 @@
 import { TILE_COORDINATES } from "@/entities/data/tileCoordinates";
+import { HEX_VERTICES } from "@/utils/unitPositioning/constants";
 
-interface TilePosition {
+type TilePosition = {
   systemId: string;
   ringPosition: string;
   x: number;
   y: number;
-}
+};
 
 // Magic constants from the Java codebase
 const HORIZONTAL_TILE_SPACING = 260;
-// const VERTICAL_TILE_SPACING = 160;
 const SPACE_FOR_TILE_HEIGHT = 300;
-// const SPACE_FOR_TILE_WIDTH = 350;
 export const TILE_HEIGHT = 299;
 export const TILE_WIDTH = 345;
 const EXTRA_X = 300;
@@ -19,6 +18,12 @@ const EXTRA_Y = 300;
 const TILE_PADDING = 100;
 const RING_MAX_COUNT = 8;
 const RING_MIN_COUNT = 3;
+const FRACTURE_Y_BUMP = 400;
+
+/** SVG path tracing the hex outline in tile-local coordinates. */
+export const HEX_PATH = `${HEX_VERTICES.map(
+  ({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x} ${y}`,
+).join(" ")} Z`;
 
 export const HEXAGON_EDGE_MIDPOINTS = [
   {
@@ -47,29 +52,20 @@ export const HEXAGON_EDGE_MIDPOINTS = [
   },
 ];
 
-/**
- * Normalize ring count to valid bounds
- */
 function normalizeRingCount(ringCount: number): number {
   return Math.max(Math.min(ringCount, RING_MAX_COUNT), RING_MIN_COUNT);
 }
 
-/**
- * Check if fracture is in play by verifying all 7 fracture positions exist
- * @param tilePositions Array of strings in format "position:systemId"
- * @returns true if all fracture positions (frac1-frac7) are present
- */
+const FRACTURE_POSITIONS = ["frac1", "frac2", "frac3", "frac4", "frac5", "frac6", "frac7"];
+
+/** True when all seven fracture positions appear in the "position:systemId" entries. */
 function isFractureInPlay(tilePositions: string[]): boolean {
-  const fracturePositions = ["frac1", "frac2", "frac3", "frac4", "frac5", "frac6", "frac7"];
   const positionSet = new Set(
     tilePositions.map((entry) => entry.split(":")[0])
   );
-  return fracturePositions.every((pos) => positionSet.has(pos));
+  return FRACTURE_POSITIONS.every((pos) => positionSet.has(pos));
 }
 
-/**
- * Get base coordinates for a position
- */
 function getBaseCoordinates(position: string): { x: number; y: number } {
   const coords = TILE_COORDINATES[position];
   if (!coords) {
@@ -78,9 +74,6 @@ function getBaseCoordinates(position: string): { x: number; y: number } {
   return { ...coords };
 }
 
-/**
- * Apply ring-based adjustments to coordinates
- */
 function applyRingAdjustments(
   x: number,
   y: number,
@@ -128,9 +121,6 @@ function applyRingAdjustments(
   return { x, y };
 }
 
-/**
- * Apply final padding to coordinates
- */
 function applyFinalPadding(x: number, y: number): { x: number; y: number } {
   return {
     x: x + EXTRA_X - TILE_PADDING,
@@ -138,18 +128,12 @@ function applyFinalPadding(x: number, y: number): { x: number; y: number } {
   };
 }
 
-/**
- * Calculate the final position for a single tile
- */
 function calculateSingleTilePosition(
   position: string,
   ringCount: number = 3,
   fractureYbump: number = 0
 ): { x: number; y: number } {
-  // Step 1: Get base coordinates
   const baseCoords = getBaseCoordinates(position);
-
-  // Step 2: Apply ring-based adjustments
   const adjustedCoords = applyRingAdjustments(
     baseCoords.x,
     baseCoords.y,
@@ -157,32 +141,19 @@ function calculateSingleTilePosition(
     ringCount,
     fractureYbump
   );
-
-  // Step 3: Apply final padding
   return applyFinalPadding(adjustedCoords.x, adjustedCoords.y);
 }
 
 /**
- * Main function: Calculate tile positions from input data
- * @param inputData Array of strings in format "position:systemId"
- * @param ringCount Number of rings in the map (3-8, defaults to 6)
- * @param fractureYbump Optional fracture Y offset. If not provided, will be detected automatically.
- *                       Pass 0 explicitly to skip fracture detection (e.g., for stat tiles).
- * @returns Array of tile position objects
+ * Positions "position:systemId" entries on the board. The fracture Y offset is
+ * detected from the entries unless passed explicitly.
  */
 const calculateTilePositions = (
   inputData: string[],
   ringCount: number = 3,
   fractureYbump?: number
 ): TilePosition[] => {
-  // Detect if fracture is in play and set fractureYbump accordingly
-  // Only auto-detect if fractureYbump wasn't explicitly provided
-  const finalFractureYbump =
-    fractureYbump !== undefined
-      ? fractureYbump
-      : isFractureInPlay(inputData)
-      ? 400
-      : 0;
+  const finalFractureYbump = fractureYbump ?? getFractureYBump(inputData);
 
   return inputData.map((entry) => {
     const [position, systemId] = entry.split(":");
@@ -201,26 +172,30 @@ const calculateTilePositions = (
   });
 };
 
-/**
- * Helper function to get all valid positions
- */
-function getValidPositions(): string[] {
-  return Object.keys(TILE_COORDINATES);
+function getFractureYBump(tilePositions: string[] | undefined): number {
+  return tilePositions && isFractureInPlay(tilePositions) ? FRACTURE_Y_BUMP : 0;
 }
 
 /**
- * Helper function to check if a position is valid
+ * Positions a player's stat tiles, shifted the same way as the map's tiles
+ * when the fracture is in play.
  */
-function isValidPosition(position: string): boolean {
-  return position in TILE_COORDINATES;
+function calculateStatTilePositions(
+  statPositions: string[],
+  ringCount: number | undefined,
+  gameTilePositions: string[] | undefined,
+): TilePosition[] {
+  return calculateTilePositions(
+    statPositions.map((position) => `${position}:stat_${position}`),
+    ringCount,
+    getFractureYBump(gameTilePositions),
+  );
 }
 
 export {
   calculateTilePositions,
   calculateSingleTilePosition,
-  getValidPositions,
-  isValidPosition,
-  normalizeRingCount,
+  calculateStatTilePositions,
   isFractureInPlay,
   type TilePosition,
 };

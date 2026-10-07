@@ -1,11 +1,10 @@
 import { Group, Text, Box } from "@mantine/core";
-import { Caption } from "./Caption";
+import { Caption } from "@/shared/ui/Caption/Caption";
 
 type Props = {
   values: number[];
 };
 
-// Strategy card color mapping
 const SC_COLORS = {
   1: "red",
   2: "orange",

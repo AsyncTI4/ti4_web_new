@@ -2,30 +2,24 @@ import { Group, Box } from "@mantine/core";
 import { PlanetCard } from "../PlanetCard";
 import { filterPlanetsByOcean } from "@/utils/planets";
 
-export type PlayerCardPlanetsAreaProps = {
+type Props = {
   planets: string[];
   exhaustedPlanetAbilities?: string[];
   exhaustedPlanets?: string[];
-  gap?: number | string;
   wrap?: "wrap" | "nowrap";
-  align?: "flex-start" | "flex-end" | "center";
-  className?: string;
 };
 
 export function PlayerCardPlanetsArea({
   planets,
   exhaustedPlanetAbilities = [],
   exhaustedPlanets = [],
-  gap = 4,
   wrap = "wrap",
-  align = "flex-start",
-  className,
-}: PlayerCardPlanetsAreaProps) {
+}: Props) {
   const { regularPlanets, oceanPlanets } = filterPlanetsByOcean(planets);
 
   return (
     <>
-      <Group gap={gap} wrap={wrap} align={align} className={className}>
+      <Group gap={4} wrap={wrap} align="flex-start">
         {regularPlanets.map((planetId, index) => (
           <PlanetCard
             key={index}
@@ -38,7 +32,7 @@ export function PlayerCardPlanetsArea({
       {oceanPlanets.length > 0 && (
         <>
           <Box style={{ marginLeft: "2px" }} />
-          <Group gap={oceanPlanets.length > 0 ? 1 : gap} wrap={wrap} align={align}>
+          <Group gap={1} wrap={wrap} align="flex-start">
             {oceanPlanets.map((planetId, index) => (
               <PlanetCard
                 key={`ocean-${index}`}

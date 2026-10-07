@@ -11,14 +11,12 @@ type Props =
   | { trait?: never; traits: PlanetTrait[]; size?: number };
 
 export function PlanetTraitIcon(props: Props) {
-  const size = ("size" in props && props.size) || 24;
-
-  const traitSources =
-    "traits" in props && props.traits && props.traits.length > 0
-      ? props.traits
-      : "trait" in props && props.trait
-        ? [props.trait]
-        : undefined;
+  const size = props.size || 24;
+  const traitSources = props.traits?.length
+    ? props.traits
+    : props.trait
+      ? [props.trait]
+      : undefined;
 
   const traits = mergePlanetTraits(traitSources);
   if (traits.length === 0) return null;

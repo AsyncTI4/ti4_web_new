@@ -1,48 +1,29 @@
-.nombox {
+.compactNombox {
   position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  min-width: 0;
+  max-width: 128px;
+  padding: 8px 10px !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
-.factionHeader {
-  margin-bottom: var(--mantine-spacing-xs);
-}
-
-.factionName {
-  color: var(--mantine-color-red-2);
-  font-weight: var(--weight-title);
-  font-size: var(--mantine-font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-}
-
-.unitsRow {
-  gap: var(--mantine-spacing-xs);
-}
-
-.unitGroup {
-  gap: 0;
-}
-
-.unitContainer {
-  width: 20px;
-  height: 20px;
-}
-
-.unitImage {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
-}
-
-.countBadge {
-  color: var(--mantine-color-red-2);
-  font-weight: var(--weight-rail);
-  font-size: var(--mantine-font-size-xs);
+.compactTitle {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+  color: var(--mantine-color-red-3);
+  font-size: 10px;
   font-family: var(--mantine-font-family-monospace);
-  margin-left: 2px;
+  font-weight: var(--weight-rail);
+  line-height: 1;
+  letter-spacing: var(--track-rail);
+  text-align: left;
+  text-transform: uppercase;
 }
-
-/* Compact variant for mobile/pannable view */
 
 .compactGrid {
   display: flex;
@@ -60,11 +41,14 @@
 }
 
 .compactFactionHeader {
+  display: flex;
+  align-items: center;
   gap: 4px;
   min-width: 0;
 }
 
 .compactFactionName {
+  color: var(--mantine-color-red-2);
   font-weight: var(--weight-title);
   font-size: 10px;
   text-transform: uppercase;
@@ -82,40 +66,32 @@
 }
 
 .compactUnitsRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
   min-height: 22px;
 }
 
 .compactUnitGroup {
+  display: flex;
+  align-items: center;
   gap: 0;
 }
 
 .compactUnitContainer {
-  width: 18px;
-  height: 18px;
-}
-
-.unitContainer,
-.compactUnitContainer {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 18px;
+  height: 18px;
 }
 
 .compactUnitImage {
   width: 20px;
   height: 20px;
-}
-
-.unitImage,
-.compactUnitImage {
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
-}
-
-.unitImage:global(.unit-sprite) {
-  width: 22px !important;
-  height: 22px !important;
 }
 
 .compactUnitImage:global(.unit-sprite) {
@@ -124,68 +100,10 @@
 }
 
 .compactCountBadge {
+  color: var(--mantine-color-red-2);
+  font-family: var(--mantine-font-family-monospace);
+  font-weight: var(--weight-rail);
   font-size: 10px;
   margin-left: 1px;
   line-height: 1;
-}
-
-.compactNombox {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: max-content;
-  min-width: 0;
-  max-width: 128px;
-  padding: 8px 10px !important;
-}
-
-.compactTitle {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 8px;
-  color: var(--mantine-color-red-3);
-  font-size: 10px;
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: var(--weight-rail);
-  line-height: 1;
-  letter-spacing: var(--track-rail);
-  text-align: left;
-  text-transform: uppercase;
-}
-
-.nombox,
-.compactNombox {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.15);
-}
-
-.nombox {
-  height: 100%;
-}
-
-.unitsRow,
-.compactUnitsRow,
-.unitGroup,
-.compactUnitGroup,
-.compactFactionHeader {
-  display: flex;
-  align-items: center;
-}
-
-.unitsRow,
-.compactUnitsRow {
-  flex-wrap: wrap;
-}
-
-.countBadge,
-.compactCountBadge {
-  color: var(--mantine-color-red-2);
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: var(--weight-rail);
-}
-
-.factionName,
-.compactFactionName {
-  color: var(--mantine-color-red-2);
 }

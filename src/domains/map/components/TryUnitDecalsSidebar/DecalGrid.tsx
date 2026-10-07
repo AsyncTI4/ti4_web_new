@@ -1,33 +1,21 @@
-import React from "react";
 import { Box, SimpleGrid } from "@mantine/core";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { DECAL_IDS } from "@/entities/data/decalIds";
 import classes from "../TryUnitDecalsSidebar.module.css";
 
 type Props = {
-  selectedFaction: string;
-  decalOverrides: Record<string, string>;
-  playerDecalId: string | undefined;
+  activeDecalId: string | null;
   onDecalClick: (decalId: string) => void;
 };
 
-const PREVIEW_UNIT_TYPE = "dn"; // destroyer
-const PREVIEW_COLOR_SUFFIX = "_wht"; // white text
+const PREVIEW_UNIT_TYPE = "dn";
+const PREVIEW_COLOR_SUFFIX = "_wht";
 
-export function DecalGrid({
-  selectedFaction,
-  decalOverrides,
-  playerDecalId,
-  onDecalClick,
-}: Props) {
-  const overrideDecalId = decalOverrides[selectedFaction];
-
+export function DecalGrid({ activeDecalId, onDecalClick }: Props) {
   return (
     <SimpleGrid cols={4} spacing="xs">
       {DECAL_IDS.map((decalId) => {
-        const isSelected =
-          (overrideDecalId !== undefined && overrideDecalId === decalId) ||
-          (overrideDecalId === undefined && playerDecalId === decalId);
+        const isSelected = activeDecalId === decalId;
 
         return (
           <Box

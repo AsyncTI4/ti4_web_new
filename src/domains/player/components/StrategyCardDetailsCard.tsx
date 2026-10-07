@@ -3,16 +3,6 @@ import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/hooks/useGameContext";
 
-type DetailsColor =
-  | "none"
-  | "yellow"
-  | "purple"
-  | "red"
-  | "orange"
-  | "cyan"
-  | "blue"
-  | "green";
-
 type Props = {
   initiative: number;
   color?:
@@ -26,16 +16,24 @@ type Props = {
     | "purple";
 };
 
-function mapDetailsCardColor(color?: Props["color"]): DetailsColor {
-  if (!color) return "none";
-  if (color === "teal") return "cyan";
-  if (
-    ["yellow", "purple", "red", "orange", "cyan", "blue", "green"].includes(
-      color
-    )
-  )
-    return color as DetailsColor;
-  return "none";
+function AbilityLines({ lines, emptyText }: { lines: string[]; emptyText: string }) {
+  if (lines.length === 0) {
+    return (
+      <Text size="sm" c="gray.5" fs="italic">
+        {emptyText}
+      </Text>
+    );
+  }
+
+  return (
+    <Stack gap={6}>
+      {lines.map((line, idx) => (
+        <Text key={idx} size="sm" c="gray.2" lh={1.4}>
+          {line}
+        </Text>
+      ))}
+    </Stack>
+  );
 }
 
 export function StrategyCardDetailsCard({ initiative, color }: Props) {
@@ -46,10 +44,11 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
   );
   if (!sc) return null;
 
-  const detailsCardColor = mapDetailsCardColor(color);
-
   return (
-    <DetailsCard width={320} color={detailsCardColor}>
+    <DetailsCard
+      width={320}
+      color={color === "teal" ? "cyan" : (color ?? "none")}
+    >
       <Stack gap="md">
         <DetailsCard.Title
           title={sc.name}
@@ -63,19 +62,10 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
         <DetailsCard.Section
           title="Primary"
           content={
-            sc.primaryTexts.length > 0 ? (
-              <Stack gap={6}>
-                {sc.primaryTexts.map((line, idx) => (
-                  <Text key={idx} size="sm" c="gray.2" lh={1.4}>
-                    {line}
-                  </Text>
-                ))}
-              </Stack>
-            ) : (
-              <Text size="sm" c="gray.5" fs="italic">
-                No primary ability
-              </Text>
-            )
+            <AbilityLines
+              lines={sc.primaryTexts}
+              emptyText="No primary ability"
+            />
           }
         />
 
@@ -84,19 +74,10 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
         <DetailsCard.Section
           title="Secondary"
           content={
-            sc.secondaryTexts.length > 0 ? (
-              <Stack gap={6}>
-                {sc.secondaryTexts.map((line, idx) => (
-                  <Text key={idx} size="sm" c="gray.2" lh={1.4}>
-                    {line}
-                  </Text>
-                ))}
-              </Stack>
-            ) : (
-              <Text size="sm" c="gray.5" fs="italic">
-                No secondary ability
-              </Text>
-            )
+            <AbilityLines
+              lines={sc.secondaryTexts}
+              emptyText="No secondary ability"
+            />
           }
         />
       </Stack>

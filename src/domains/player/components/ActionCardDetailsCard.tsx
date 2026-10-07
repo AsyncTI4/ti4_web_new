@@ -1,4 +1,4 @@
-import { Stack, Divider, Image, Text } from "@mantine/core";
+import { Stack, Divider, Text } from "@mantine/core";
 import { getActionCard } from "@/entities/lookup/actionCards";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 
@@ -11,7 +11,7 @@ export function ActionCardDetailsCard({ actionCardId }: Props) {
 
   if (!actionCardData) return null;
 
-  const renderActionIcon = () => (
+  const actionIcon = (
     <Text
       size="sm"
       fw={700}
@@ -28,7 +28,7 @@ export function ActionCardDetailsCard({ actionCardId }: Props) {
         <DetailsCard.Title
           title={actionCardData.name}
           subtitle={`${actionCardData.phase} Phase`}
-          icon={<DetailsCard.Icon icon={renderActionIcon()} />}
+          icon={<DetailsCard.Icon icon={actionIcon} />}
           caption="Action Card"
           captionColor="yellow"
         />

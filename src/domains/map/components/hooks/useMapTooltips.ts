@@ -1,9 +1,10 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
+import type { Point } from "@/entities/data/types";
 
-type TooltipPlanet = {
+export type TooltipPlanet = {
   planetId: string;
-  coords: { x: number; y: number };
-} | null;
+  coords: Point;
+};
 
 export function useMapTooltips(
   handleMouseEnter: (
@@ -14,36 +15,31 @@ export function useMapTooltips(
   ) => void,
   handleMouseLeave: () => void
 ) {
-  const [tooltipPlanet, setTooltipPlanet] = useState<TooltipPlanet>(null);
+  const [tooltipPlanet, setTooltipPlanet] = useState<TooltipPlanet | null>(null);
 
-  const handlePlanetMouseEnter = useCallback(
-    (planetId: string, x: number, y: number) => {
-      setTooltipPlanet({ planetId, coords: { x, y } });
-    },
-    []
-  );
+  const handlePlanetMouseEnter = (planetId: string, x: number, y: number) => {
+    setTooltipPlanet({ planetId, coords: { x, y } });
+  };
 
-  const handlePlanetMouseLeave = useCallback(() => {
+  const handlePlanetMouseLeave = () => {
     setTooltipPlanet(null);
-  }, []);
+  };
 
-  const handleUnitMouseEnter = useCallback(
-    (faction: string, unitId: string, x: number, y: number) => {
-      setTooltipPlanet(null);
-      handleMouseEnter(faction, unitId, x, y);
-    },
-    [handleMouseEnter]
-  );
-
-  const handleUnitMouseLeave = useCallback(() => {
-    handleMouseLeave();
-  }, [handleMouseLeave]);
+  const handleUnitMouseEnter = (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number
+  ) => {
+    setTooltipPlanet(null);
+    handleMouseEnter(faction, unitId, x, y);
+  };
 
   return {
     tooltipPlanet,
     handlePlanetMouseEnter,
     handlePlanetMouseLeave,
     handleUnitMouseEnter,
-    handleUnitMouseLeave,
+    handleUnitMouseLeave: handleMouseLeave,
   };
 }

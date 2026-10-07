@@ -1,59 +1,21 @@
-/**
- * Generic algorithm to check if a grid square touches the rim of any arbitrary shape.
- * Uses shape-specific methods passed as parameters to handle different geometric shapes.
- */
-export const touchesShapeRim = (
-  row: number,
-  col: number,
-  gridSize: number,
-  _squareWidth: number,
-  _squareHeight: number,
-  isSquareInShape: (row: number, col: number) => boolean
-): boolean => {
-  // Can't be a rim square if it's not in the shape
-  if (!isSquareInShape(row, col)) return false;
+import type { Point } from "@/entities/data/types";
 
-  // Check all 8 neighboring squares (cardinal and diagonal directions)
-  const directions = [
-    [-1, 0],
-    [1, 0],
-    [0, -1],
-    [0, 1], // cardinal directions
-    [-1, -1],
-    [-1, 1],
-    [1, -1],
-    [1, 1], // diagonal directions
-  ];
+export type HexagonVertex = Point;
 
-  for (const [dr, dc] of directions) {
-    const newRow = row + dr;
-    const newCol = col + dc;
-
-    // Check if neighbor is out of bounds or outside the shape
-    if (
-      newRow < 0 ||
-      newRow >= gridSize ||
-      newCol < 0 ||
-      newCol >= gridSize ||
-      !isSquareInShape(newRow, newCol)
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-};
+const NEIGHBOR_OFFSETS = [
+  [-1, 0],
+  [1, 0],
+  [0, -1],
+  [0, 1],
+  [-1, -1],
+  [-1, 1],
+  [1, -1],
+  [1, 1],
+];
 
 /**
- * Determines if a grid square touches the hexagon rim using neighbor analysis.
- *
- * Algorithm:
- * 1. Examines all 8 neighboring squares (cardinal and diagonal directions)
- * 2. A square touches the rim if any neighbor is either:
- *    - Outside the grid boundaries
- *    - Completely outside the hexagon shape
- * 3. This approach identifies rim squares by finding squares that are inside
- *    the hexagon but adjacent to squares that are outside
+ * A grid square touches the hexagon rim when it is inside the hexagon and any
+ * of its 8 neighbors is off the grid or entirely outside the hexagon.
  */
 export const touchesHexRim = (
   row: number,
@@ -61,247 +23,62 @@ export const touchesHexRim = (
   gridSize: number,
   squareWidth: number,
   squareHeight: number,
-  hexagonVertices: HexagonVertex[]
+  hexagonVertices: HexagonVertex[],
 ): boolean => {
-  return touchesShapeRim(
-    row,
-    col,
-    gridSize,
-    squareWidth,
-    squareHeight,
-    (r: number, c: number) =>
-      !squareOutsideHex(r, c, squareWidth, squareHeight, hexagonVertices)
-  );
+  const isInside = (r: number, c: number) =>
+    !squareOutsideHex(r, c, squareWidth, squareHeight, hexagonVertices);
+
+  if (!isInside(row, col)) return false;
+
+  return NEIGHBOR_OFFSETS.some(([dr, dc]) => {
+    const r = row + dr;
+    const c = col + dc;
+    return r < 0 || r >= gridSize || c < 0 || c >= gridSize || !isInside(r, c);
+  });
 };
 
 /**
- * Determines if a grid square touches the planet circle rim using neighbor analysis.
- * Similar to touchesHexRim but for circular boundaries instead of hexagonal.
- *
- * Algorithm:
- * 1. Examines all 8 neighboring squares (cardinal and diagonal directions)
- * 2. A square touches the rim if it intersects with the circle AND any neighbor either:
- *    - Is outside the grid boundaries
- *    - Doesn't intersect with the circle
- * 3. This identifies rim squares by finding squares that are inside/intersecting
- *    the circle but adjacent to squares that are outside the circle
- */
-export const touchesCircleRim = (
-  row: number,
-  col: number,
-  gridSize: number,
-  squareWidth: number,
-  squareHeight: number,
-  planetX: number,
-  planetY: number,
-  planetRadius: number
-): boolean => {
-  return touchesShapeRim(
-    row,
-    col,
-    gridSize,
-    squareWidth,
-    squareHeight,
-    (r: number, c: number) =>
-      squareIntersectsCircle(
-        r,
-        c,
-        squareWidth,
-        squareHeight,
-        planetX,
-        planetY,
-        planetRadius
-      )
-  );
-};
-
-/**
- * Generic algorithm to check if a grid square intersects with any arbitrary shape.
- * Uses shape-specific methods passed as parameters to handle different geometric shapes.
- */
-export const squareIntersectsShape = (
-  row: number,
-  col: number,
-  squareWidth: number,
-  squareHeight: number,
-  isPointInShape: (x: number, y: number) => boolean,
-  doesLineIntersectShape: (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
-  ) => boolean,
-  shapeCenter?: { x: number; y: number }
-): boolean => {
-  const x = col * squareWidth;
-  const y = row * squareHeight;
-  const x2 = x + squareWidth;
-  const y2 = y + squareHeight;
-
-  // Check if any corner of the square is inside the shape
-  const corners = [
-    { x, y },
-    { x: x2, y },
-    { x: x2, y: y2 },
-    { x, y: y2 },
-  ];
-
-  for (const corner of corners) {
-    if (isPointInShape(corner.x, corner.y)) {
-      return true; // Corner is inside shape
-    }
-  }
-
-  // Check if shape center is inside the square (if center is provided)
-  if (
-    shapeCenter &&
-    shapeCenter.x >= x &&
-    shapeCenter.x <= x2 &&
-    shapeCenter.y >= y &&
-    shapeCenter.y <= y2
-  ) {
-    return true; // Shape center is inside square
-  }
-
-  // Check if any edge of the square intersects with the shape
-  const edges = [
-    [x, y, x2, y], // top edge
-    [x2, y, x2, y2], // right edge
-    [x2, y2, x, y2], // bottom edge
-    [x, y2, x, y], // left edge
-  ];
-
-  for (const edge of edges) {
-    if (doesLineIntersectShape(edge[0], edge[1], edge[2], edge[3])) {
-      return true; // Edge intersects with shape
-    }
-  }
-
-  return false; // No intersection
-};
-
-/**
- * Checks if a grid square intersects with or is inside a circular planet area.
- * A square is considered to intersect if:
- * - Any corner of the square is inside the circle
- * - The circle center is inside the square
- * - Any edge of the square intersects the circle
- */
-export const squareIntersectsCircle = (
-  row: number,
-  col: number,
-  squareWidth: number,
-  squareHeight: number,
-  planetX: number,
-  planetY: number,
-  planetRadius: number
-): boolean => {
-  // Shape-specific point containment function for circle
-  const pointInCircle = (x: number, y: number): boolean => {
-    const dx = x - planetX;
-    const dy = y - planetY;
-    const distanceSquared = dx * dx + dy * dy;
-    return distanceSquared <= planetRadius * planetRadius;
-  };
-
-  // Shape-specific line intersection function for circle
-  const lineIntersectsCircle = (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
-  ): boolean => {
-    const closestPoint = getClosestPointOnLineSegment(
-      planetX,
-      planetY,
-      x1,
-      y1,
-      x2,
-      y2
-    );
-    const dx = closestPoint.x - planetX;
-    const dy = closestPoint.y - planetY;
-    const distanceSquared = dx * dx + dy * dy;
-    return distanceSquared <= planetRadius * planetRadius;
-  };
-
-  // Use generic algorithm with circle-specific methods
-  return squareIntersectsShape(
-    row,
-    col,
-    squareWidth,
-    squareHeight,
-    pointInCircle,
-    lineIntersectsCircle,
-    { x: planetX, y: planetY } // Circle center for additional check
-  );
-};
-
-/**
- * Helper function to find the closest point on a line segment to a given point.
- */
-export const getClosestPointOnLineSegment = (
-  px: number,
-  py: number,
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number
-): { x: number; y: number } => {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-
-  if (dx === 0 && dy === 0) {
-    // Line segment is a point
-    return { x: x1, y: y1 };
-  }
-
-  const lengthSquared = dx * dx + dy * dy;
-  const t = Math.max(
-    0,
-    Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lengthSquared)
-  );
-
-  return {
-    x: x1 + t * dx,
-    y: y1 + t * dy,
-  };
-};
-
-/**
- * Geometric containment algorithm to determine if a grid square is completely outside
- * the hexagon and doesn't touch any hexagon edges.
+ * True when no corner of the grid square is inside the hexagon and no square
+ * edge crosses a hexagon edge.
  */
 export const squareOutsideHex = (
   row: number,
   col: number,
   squareWidth: number,
   squareHeight: number,
-  hexagonVertices: HexagonVertex[]
-): boolean =>
-  !squareIntersectsShape(
-    row,
-    col,
-    squareWidth,
-    squareHeight,
-    (x: number, y: number): boolean => {
-      return isPointInHexagon(x, y, hexagonVertices);
-    },
-    (x1: number, y1: number, x2: number, y2: number): boolean => {
-      return lineIntersectsHexagon(x1, y1, x2, y2, hexagonVertices);
-    }
-    // No shape center provided - hexagon center check not needed
-  );
+  hexagonVertices: HexagonVertex[],
+): boolean => {
+  const x = col * squareWidth;
+  const y = row * squareHeight;
+  const x2 = x + squareWidth;
+  const y2 = y + squareHeight;
 
-/**
- * Ray casting algorithm to determine if a point is inside a polygon (hexagon).
- * Uses the ray casting algorithm which counts intersections of a horizontal ray
- * extending from the point to infinity with the polygon edges.
- */
-export const isPointInHexagon = (
+  const corners: [number, number][] = [
+    [x, y],
+    [x2, y],
+    [x2, y2],
+    [x, y2],
+  ];
+  if (corners.some(([cx, cy]) => isPointInHexagon(cx, cy, hexagonVertices))) {
+    return false;
+  }
+
+  const edges: [number, number, number, number][] = [
+    [x, y, x2, y],
+    [x2, y, x2, y2],
+    [x2, y2, x, y2],
+    [x, y2, x, y],
+  ];
+  return !edges.some(([x1, y1, ex2, ey2]) =>
+    lineIntersectsHexagon(x1, y1, ex2, ey2, hexagonVertices),
+  );
+};
+
+/** Ray casting point-in-polygon test. */
+const isPointInHexagon = (
   x: number,
   y: number,
-  hexagonVertices: HexagonVertex[]
+  hexagonVertices: HexagonVertex[],
 ): boolean => {
   let inside = false;
   for (
@@ -321,16 +98,13 @@ export const isPointInHexagon = (
   return inside;
 };
 
-/**
- * Line segment intersection algorithm to check if a line intersects with any edge of the hexagon.
- * Uses parametric line equations to find intersection points between two line segments.
- */
-export const lineIntersectsHexagon = (
+/** Parametric segment intersection against each hexagon edge. */
+const lineIntersectsHexagon = (
   x1: number,
   y1: number,
   x2: number,
   y2: number,
-  hexagonVertices: HexagonVertex[]
+  hexagonVertices: HexagonVertex[],
 ): boolean => {
   for (let i = 0; i < hexagonVertices.length; i++) {
     const next = (i + 1) % hexagonVertices.length;
@@ -339,21 +113,13 @@ export const lineIntersectsHexagon = (
     const hx2 = hexagonVertices[next].x;
     const hy2 = hexagonVertices[next].y;
 
-    // Check if line segments intersect using parametric equations
     const denom = (x1 - x2) * (hy1 - hy2) - (y1 - y2) * (hx1 - hx2);
-    if (Math.abs(denom) < 1e-10) continue; // Lines are parallel
+    if (Math.abs(denom) < 1e-10) continue;
 
     const t = ((x1 - hx1) * (hy1 - hy2) - (y1 - hy1) * (hx1 - hx2)) / denom;
     const u = -((x1 - x2) * (y1 - hy1) - (y1 - y2) * (x1 - hx1)) / denom;
 
-    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-      return true;
-    }
+    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) return true;
   }
   return false;
 };
-
-export interface HexagonVertex {
-  x: number;
-  y: number;
-}

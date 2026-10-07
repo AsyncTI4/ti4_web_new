@@ -1,5 +1,5 @@
 import { Box, Flex, Stack } from "@mantine/core";
-import { Surface } from "@/domains/player/components/Surface";
+import { Surface } from "@/shared/ui/Surface";
 import { useGameData } from "@/hooks/useGameContext";
 import cx from "clsx";
 import styles from "@/domains/player/components/composition/ScoreBoard.module.css";
@@ -7,7 +7,6 @@ import { FactionsInGame } from "./FactionsInGame";
 import { UnpickedSCs } from "./UnpickedSCs";
 import { CardPool } from "./CardPool";
 import { LawsInPlay } from "./LawsInPlay";
-import Expeditions from "./Expeditions/Expeditions";
 import { GeneralTechCatalog } from "./GeneralTechCatalog";
 
 function GeneralArea() {
@@ -30,10 +29,8 @@ function GeneralArea() {
           <UnpickedSCs strategyCards={strategyCards} />
           <Stack gap={32}>
             <FactionsInGame playerData={playerData} />
-            <CardPool cardPool={cardPool} playerData={playerData} />
+            <CardPool cardPool={cardPool} />
           </Stack>
-
-          {/* <Expeditions expeditions={gameData.expeditions} /> */}
 
           <Box>
             <LawsInPlay laws={lawsInPlay} />

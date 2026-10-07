@@ -1,9 +1,8 @@
-import { useMemo } from "react";
 import { getExploration } from "@/entities/lookup/explorations";
 import { processCardData, createCardSections } from "@/utils/cardDataProcessor";
 import { CardDetailsModal } from "@/shared/ui/CardDetailsModal";
 
-export type ExplorationCardDetailsModalProps = {
+type ExplorationCardDetailsModalProps = {
   deck: string[];
   discard: string[];
   deckLabel?: string;
@@ -16,19 +15,14 @@ export function ExplorationCardDetailsModal({
   deckLabel = "Deck",
   discardLabel = "Discard",
 }: ExplorationCardDetailsModalProps) {
-  const sections = useMemo(() => {
-    const deckData = processCardData(deck, getExploration, "percentage");
-    const discardData = processCardData(discard, getExploration, "alphanumeric");
-
-    return createCardSections(
-      deckData,
-      discardData,
-      deck,
-      discard,
-      deckLabel,
-      discardLabel,
-    );
-  }, [deck, discard, deckLabel, discardLabel]);
+  const sections = createCardSections(
+    processCardData(deck, getExploration, "percentage"),
+    processCardData(discard, getExploration, "alphanumeric"),
+    deck,
+    discard,
+    deckLabel,
+    discardLabel,
+  );
 
   return <CardDetailsModal sections={sections} />;
 }

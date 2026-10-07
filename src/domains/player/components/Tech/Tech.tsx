@@ -1,17 +1,23 @@
 import { Box, Group, Text } from "@mantine/core";
 import styles from "./Tech.module.css";
-import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import { TechCard } from "./TechCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { useState } from "react";
-import { getTechData } from "@/entities/lookup/tech";
+import { useDisclosure } from "@/hooks/useDisclosure";
+import {
+  getTechData,
+  getTechLetter,
+  getTechSynergyPair,
+  getTechTier,
+  TECH_TYPE_COLOR,
+  type TechColor,
+} from "@/entities/lookup/tech";
 import cx from "clsx";
 import type { CSSProperties } from "react";
 
 type Props = {
   techId: string;
   isExhausted?: boolean;
-  mobile?: boolean;
   synergy?: string[];
   breakthroughUnlocked?: boolean;
 };
@@ -22,26 +28,20 @@ export function Tech({
   synergy,
   breakthroughUnlocked = false,
 }: Props) {
-  const [opened, setOpened] = useState(false);
-
-  // Look up tech data
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const techData = getTechData(techId);
 
-  if (!techData) {
-    console.warn(`Tech with ID "${techId}" not found`);
-    return null;
-  }
+  if (!techData) return null;
 
   const color = getTechColor(techData.types[0]);
   const tier = getTechTier(techData.requirements);
   const isFactionTech = !!techData.faction;
-  const isEnhanced = false;
   const synergyClass = breakthroughUnlocked
     ? getSynergyClass(synergy, color)
     : "";
   const techLetter = getTechLetter(techData.name);
-  const techIconSrc = isFactionTech
-    ? cdnImage(`/factions/${techData.faction}.png`)
+  const techIconSrc = techData.faction
+    ? getFactionImage(techData.faction)
     : color === "white" || techLetter
       ? undefined
       : `/${color}.png`;
@@ -54,13 +54,11 @@ export function Tech({
             styles.techCard,
             styles[color],
             isFactionTech && styles.factionTech,
-            isEnhanced && styles.enhanced,
             isExhausted && styles.exhausted,
             synergyClass && styles[synergyClass],
           )}
-          onClick={() => setOpened((o) => !o)}
+          onClick={toggle}
         >
-          {/* Tier indicator dots in top-right */}
           {tier > 0 && (
             <Box className={styles.tierContainer}>
               {[...Array(tier).keys()].map((dotIndex) => (
@@ -88,11 +86,7 @@ export function Tech({
           >
             <Text
               className={styles.techName}
-              /* A tech name is a name, not a quantity. Mono is reserved for
-                 numerals; setting names in it costs real legibility at 12px. */
               ff="text"
-              /* 12px everywhere: the same size secrets, relics and abilities use.
-                 The old mobile bump to 14 made tech the odd one out. */
               fz="xs"
             >
               {techData.name}
@@ -114,61 +108,21 @@ function getTechIconStyle(src: string, size = "14px"): CSSProperties {
   } as CSSProperties;
 }
 
-function getTechLetter(techName: string): string | undefined {
-  if (techName === "Antimatter") return "A";
-  if (techName === "Wavelength") return "W";
-  return undefined;
-}
-
-const getTechColor = (techType: string): string => {
-  switch (techType) {
-    case "PROPULSION":
-      return "blue";
-    case "BIOTIC":
-      return "green";
-    case "WARFARE":
-      return "red";
-    case "CYBERNETIC":
-      return "yellow";
-    case "NONE":
-      return "white";
-    default:
-      return "gray";
-  }
-};
+const getTechColor = (techType: string): string =>
+  TECH_TYPE_COLOR[techType] ?? (techType === "NONE" ? "white" : "gray");
 
 function getSynergyClass(
   synergy: string[] | undefined,
   techColor: string,
 ): string {
-  if (!synergy || synergy.length === 0) return "";
+  if (!synergy) return "";
   const colors = synergy
-    .map((s) => getTechColor(s))
-    .filter((c): c is string => Boolean(c));
+    .map((s) => TECH_TYPE_COLOR[s])
+    .filter((c): c is TechColor => Boolean(c));
 
-  if (colors.length < 2) return "";
+  if (!colors.includes(techColor as TechColor)) return "";
 
-  // Only apply synergy if the tech color matches one of the synergy colors
-  if (!colors.includes(techColor)) return "";
-
-  const pairKey = [...colors].sort().join("-");
-  const synergyClassMap: Record<string, string> = {
-    "blue-green": "synergyBlueGreen",
-    "blue-red": "synergyBlueRed",
-    "blue-yellow": "synergyBlueYellow",
-    "green-red": "synergyGreenRed",
-    "green-yellow": "synergyGreenYellow",
-    "red-yellow": "synergyYellowRed",
-  };
-
-  return synergyClassMap[pairKey] ?? "";
+  const pair = getTechSynergyPair(colors);
+  if (!pair) return "";
+  return `synergy${pair[0].toUpperCase()}${pair.slice(1)}`;
 }
-
-const getTechTier = (requirements?: string): number => {
-  if (!requirements) return 0;
-  const matches = requirements.match(/(.)\1*/g);
-  if (matches && matches.length > 0) {
-    return matches[0].length;
-  }
-  return 0;
-};

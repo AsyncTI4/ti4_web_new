@@ -1,1 +1,0 @@
-export { PlotDetails } from "./PlotDetails";

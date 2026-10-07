@@ -65,10 +65,6 @@
   color: white;
 }
 
-.capacityBadge sup {
-  color: rgb(255 210 96);
-}
-
 .ignoredCapacity {
   position: absolute;
   top: -2px;

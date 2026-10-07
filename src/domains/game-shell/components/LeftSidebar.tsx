@@ -24,7 +24,6 @@ export function LeftSidebar() {
         <Stack p="md" gap="md">
           <GameStatePanel />
           <Box>
-            {/* Game Info */}
             {gameData.playerData[0] && (
               <Stack gap={1} mb="xs">
                 <Text size="md" c="gray.1" ff="heading">

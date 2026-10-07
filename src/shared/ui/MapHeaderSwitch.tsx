@@ -2,7 +2,7 @@ import { Button } from "@mantine/core";
 import { SiteHeader } from "./SiteHeader";
 import hud from "./hudChrome.module.css";
 
-export type MapHeaderSwitchProps = {
+type MapHeaderSwitchProps = {
   gameId: string;
   buttonLabel: string;
   onButtonClick?: () => void;

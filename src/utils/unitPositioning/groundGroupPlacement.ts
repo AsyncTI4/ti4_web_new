@@ -4,6 +4,7 @@ import {
   findPlanetCandidates,
 } from "./groundFormations";
 import {
+  addPoints,
   area,
   centeredFootprint,
   createBounds,
@@ -162,8 +163,7 @@ function comparePlanetLayouts(
 function placeGroupMembers(group: PositionedGroup): EntityStack[] {
   return group.group.members.map(({ stack, offset }) => ({
     ...stack,
-    x: group.point.x + offset.x,
-    y: group.point.y + offset.y,
+    ...addPoints(group.point, offset),
     planetName: group.layout.planet.name,
   }));
 }

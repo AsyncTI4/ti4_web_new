@@ -24,23 +24,17 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   const displayAbilityText =
     (isTwilightsFallMode && leaderData.tfAbilityText) || leaderData.abilityText;
 
-  const renderLeaderIcon = () => {
-    if (showLeader(leaderData.source)) {
-      return (
-        <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
-      );
-    }
-    return <></>;
-  };
+  const leaderIcon = showLeader(leaderData.source) ? (
+    <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
+  ) : null;
 
   return (
     <DetailsCard width={320}>
       <Stack gap="md">
-        {/* Header with image and basic info */}
         <DetailsCard.Title
           title={displayName}
           subtitle={displayTitle}
-          icon={<DetailsCard.Icon icon={renderLeaderIcon()} />}
+          icon={<DetailsCard.Icon icon={leaderIcon} />}
           caption={leaderData.type}
         />
 

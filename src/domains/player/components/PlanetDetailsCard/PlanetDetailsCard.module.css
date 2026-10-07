@@ -1,46 +1,7 @@
-.planetImage {
-  object-fit: cover;
-  object-position: center;
-  border: 2px solid rgba(148, 163, 184, 0.4);
-  border-radius: 50%;
-}
-
 .planetIconContainer {
   border-radius: 50%;
   background: rgba(148, 163, 184, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.title {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.subtitle {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.planetType {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.sectionTitle {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.sectionText {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.resourceValue {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.legendaryCard {
-  border: 1px solid rgba(255, 215, 0, 0.4);
-}
-
-.legendaryTitle {
-  color: #ffd700;
 }

@@ -1,6 +1,6 @@
 import { Stack, Text, Group, Button } from "@mantine/core";
 import { IconLayoutGrid, IconHandMove } from "@tabler/icons-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";
 import { MapViewPreferenceOption } from "./MapViewPreferenceOption";
 import { AppModal } from "@/shared/ui/AppModal";
@@ -10,6 +10,31 @@ type MapViewSelectionModalProps = {
   onClose: () => void;
   onSelect: (preference: MapViewPreference) => void;
 };
+
+const OPTIONS: {
+  value: MapViewPreference;
+  label: string;
+  badge: string;
+  description: string;
+  icon: ReactNode;
+}[] = [
+  {
+    value: "pannable",
+    label: "Pannable",
+    badge: "Recommended / Dense",
+    description:
+      "A full-screen draggable map with everything on one canvas. Best when you want to scan relationships and compare players quickly.",
+    icon: <IconHandMove size={24} />,
+  },
+  {
+    value: "panels",
+    label: "Panels",
+    badge: "More Breathing Room",
+    description:
+      "A separated panel layout with more spacing and clearer focus areas. Better when you want the interface to feel less packed.",
+    icon: <IconLayoutGrid size={24} />,
+  },
+];
 
 export function MapViewSelectionModal({
   opened,
@@ -35,7 +60,6 @@ export function MapViewSelectionModal({
       onClose={handleClose}
       title="Choose Map View"
       size="md"
-      centered
     >
       <Stack gap="lg">
         <Text size="sm" c="dimmed">
@@ -46,33 +70,12 @@ export function MapViewSelectionModal({
         </Text>
 
         <Stack gap="md">
-          {[
-            {
-              value: "pannable" as MapViewPreference,
-              label: "Pannable",
-              badge: "Recommended / Dense",
-              description:
-                "A full-screen draggable map with everything on one canvas. Best when you want to scan relationships and compare players quickly.",
-              icon: <IconHandMove size={24} />,
-            },
-            {
-              value: "panels" as MapViewPreference,
-              label: "Panels",
-              badge: "More Breathing Room",
-              description:
-                "A separated panel layout with more spacing and clearer focus areas. Better when you want the interface to feel less packed.",
-              icon: <IconLayoutGrid size={24} />,
-            },
-          ].map((option) => (
+          {OPTIONS.map((option) => (
             <MapViewPreferenceOption
               key={option.value}
-              icon={option.icon}
-              label={option.label}
-              badge={option.badge}
-              description={option.description}
-              value={option.value}
+              {...option}
               selected={selectedPreference === option.value}
-              onSelect={(value) => setSelectedPreference(value)}
+              onSelect={setSelectedPreference}
             />
           ))}
         </Stack>
@@ -81,10 +84,7 @@ export function MapViewSelectionModal({
           <Button variant="subtle" size="sm" onClick={handleClose}>
             Cancel
           </Button>
-          <Button
-            size="sm"
-            onClick={handleConfirm}
-          >
+          <Button size="sm" onClick={handleConfirm}>
             Confirm
           </Button>
         </Group>

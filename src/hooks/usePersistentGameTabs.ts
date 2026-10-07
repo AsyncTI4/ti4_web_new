@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { pruneFactionImageCache } from "@/utils/factionImageCache";
 
@@ -11,9 +11,7 @@ function isNonEmptyString(value: unknown): value is string {
 function readStoredTabs(): string[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return [];
-    }
+    if (!raw) return [];
 
     const parsed = JSON.parse(raw) as unknown;
 
@@ -51,37 +49,27 @@ export function usePersistentGameTabs() {
     persistTabs(activeTabs);
   }, [activeTabs]);
 
-  const changeTab = useCallback(
-    (tab: string) => {
-      if (!tab || tab === params.mapid) return;
-      navigate(`/game/${tab}`);
-    },
-    [navigate, params.mapid],
-  );
+  const changeTab = (tab: string) => {
+    if (!tab || tab === params.mapid) return;
+    navigate(`/game/${tab}`);
+  };
 
-  const removeTab = useCallback(
-    (tabValue: string) => {
-      setActiveTabs((current) => {
-        const remaining = current.filter((tab) => tab !== tabValue);
-        persistTabs(remaining);
+  const leaveRemovedTab = (remaining: string[]) => {
+    if (remaining.length > 0) {
+      changeTab(remaining[0]);
+      return;
+    }
+    navigate("/");
+  };
 
-        if (params.mapid === tabValue) {
-          if (remaining.length > 0) {
-            changeTab(remaining[0]);
-          } else {
-            navigate("/");
-          }
-        }
-
-        return remaining;
-      });
-    },
-    [changeTab, navigate, params.mapid],
-  );
+  const removeTab = (tabValue: string) => {
+    setActiveTabs((current) => {
+      const remaining = current.filter((tab) => tab !== tabValue);
+      persistTabs(remaining);
+      if (params.mapid === tabValue) leaveRemovedTab(remaining);
+      return remaining;
+    });
+  };
 
   return { activeTabs, changeTab, removeTab };
 }
-
-export type UsePersistentGameTabsReturn = ReturnType<
-  typeof usePersistentGameTabs
->;

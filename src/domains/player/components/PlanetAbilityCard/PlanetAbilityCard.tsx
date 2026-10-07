@@ -1,7 +1,7 @@
 import { Stack, Text, Image } from "@mantine/core";
+import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { getPlanetData } from "@/entities/lookup/planets";
 import { PlanetAbilityDetailsCard } from "./PlanetAbilityDetailsCard";
 import styles from "./PlanetAbilityCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
@@ -24,27 +24,26 @@ export function PlanetAbilityCard({
   joinedRight = false,
 }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
-  const planetData = getPlanetData(planetId);
-
-  if (!planetData) {
-    console.warn(`Planet data not found for ID: ${planetId}`);
-    return null;
-  }
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Stack
           onClick={toggle}
-          className={`${styles.mainStack} ${styles.abilityCard} ${joinedRight ? styles.joinedRight : ""} ${exhausted ? styles.exhausted : ""}`}
+          className={cx(
+            styles.mainStack,
+            styles.abilityCard,
+            joinedRight && styles.joinedRight,
+            exhausted && styles.exhausted
+          )}
         >
-          {/* Exhausted badge removed; exhausted state now uses lower opacity filter */}
           <Stack className={styles.bottomStack}>
-            <LegendaryIcon key="legendary" />
+            <Image
+              src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
+              className={styles.legendaryIcon}
+            />
             <div style={{ flex: 1 }} />
-            <Text className={styles.planetName}>
-              Ability
-            </Text>
+            <Text className={styles.planetName}>Ability</Text>
           </Stack>
         </Stack>
       </SmoothPopover.Target>
@@ -57,14 +56,5 @@ export function PlanetAbilityCard({
         />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
-  );
-}
-
-function LegendaryIcon() {
-  return (
-    <Image
-      src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-      className={styles.legendaryIcon}
-    />
   );
 }

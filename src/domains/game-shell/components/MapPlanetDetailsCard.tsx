@@ -1,14 +1,8 @@
 import { PlanetDetailsCard } from "@/domains/player/components/PlanetDetailsCard";
 import { usePlanet } from "@/hooks/usePlanet";
-import {
-  type MapLayout,
-} from "@/domains/map/components/mapLayout";
+import { type MapLayout } from "@/domains/map/components/mapLayout";
 import { MapTooltipPositioner } from "@/domains/map/components/MapTooltipPositioner";
-
-type TooltipPlanet = {
-  planetId: string;
-  coords: { x: number; y: number };
-};
+import type { TooltipPlanet } from "@/domains/map/components/hooks/useMapTooltips";
 
 type Props = {
   tooltipPlanet: TooltipPlanet | null;
@@ -23,13 +17,11 @@ export function MapPlanetDetailsCard({
   mapZoom,
   mapLayout = "panels",
 }: Props) {
+  const planetTile = usePlanet(tooltipPlanet?.planetId ?? "");
   if (!tooltipPlanet || !tooltipPlanet.planetId) return null;
-
-  const planetTile = usePlanet(tooltipPlanet.planetId);
 
   return (
     <MapTooltipPositioner
-      key="planet-tooltip"
       coords={tooltipPlanet.coords}
       mapPadding={mapPadding}
       mapZoom={mapZoom}

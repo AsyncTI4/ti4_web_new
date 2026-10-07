@@ -235,16 +235,6 @@
   transition: width 0.5s ease;
 }
 
-/* Tier label — optional small type indicator */
-.techTierLabel {
-  font-size: 9px;
-  font-weight: var(--weight-title);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: rgba(var(--tech-color), 0.7);
-  margin-top: 3px;
-}
-
 /* ─── Unit upgrade icon (neutral gray unit image) ─── */
 .techUnitIcon {
   width: 22px;
@@ -340,13 +330,6 @@
   gap: 6px;
 }
 
-.factionRow {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .packRow {
   display: flex;
   gap: 4px;
@@ -384,13 +367,6 @@
   text-align: center;
 }
 
-/* ─── Footer Link ─── */
-.footerLink {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-
 /* ─── Loading State ─── */
 .loadingWrap {
   display: flex;
@@ -401,6 +377,11 @@
 }
 
 /* ─── Color-coded accent on game card left edge ─── */
+.deckTitle {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
 .gameCardAccent {
   position: absolute;
   left: 0;

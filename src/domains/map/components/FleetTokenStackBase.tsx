@@ -1,6 +1,6 @@
 import { Box, Text } from "@mantine/core";
 import { CommandCounter } from "./CommandCounter";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type FleetTokenStackBaseProps = {
   label: ReactNode;
@@ -9,9 +9,11 @@ type FleetTokenStackBaseProps = {
   faction: string;
   counterType?: "command" | "fleet";
   showBlankToken?: boolean;
-  blankTokenColorAlias?: string;
-  renderExtraTokens?: (context: { baseCount: number }) => ReactNode;
+  extraTokens?: ReactNode;
 };
+
+/** Horizontal step between stacked tokens. */
+export const FLEET_TOKEN_STEP = 20;
 
 export function FleetTokenStackBase({
   label,
@@ -20,8 +22,7 @@ export function FleetTokenStackBase({
   faction,
   counterType = "fleet",
   showBlankToken = false,
-  blankTokenColorAlias = "blank",
-  renderExtraTokens,
+  extraTokens,
 }: FleetTokenStackBaseProps) {
   return (
     <Box pos="relative">
@@ -31,7 +32,7 @@ export function FleetTokenStackBase({
       <Box pos="relative" style={{ height: 65 }}>
         {showBlankToken && (
           <CommandCounter
-            colorAlias={blankTokenColorAlias}
+            colorAlias="blank"
             style={{
               position: "absolute",
               left: 0,
@@ -47,14 +48,14 @@ export function FleetTokenStackBase({
             faction={faction}
             style={{
               position: "absolute",
-              left: index * 20,
+              left: index * FLEET_TOKEN_STEP,
               zIndex: index + 1,
             }}
             type={counterType}
           />
         ))}
 
-        {renderExtraTokens?.({ baseCount })}
+        {extraTokens}
       </Box>
     </Box>
   );

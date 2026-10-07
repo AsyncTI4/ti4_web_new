@@ -3,10 +3,8 @@ import styles from "./FadedDivider.module.css";
 
 type Props = {
   orientation?: "vertical" | "horizontal";
-  thickness?: number;
   className?: string;
   style?: React.CSSProperties;
-  mx?: number;
 };
 
 export default function FadedDivider({

@@ -12,7 +12,6 @@ type Props = {
   faction?: string;
   reinforcements: number;
   totalCapacity: number;
-  compact?: boolean;
   condensed?: boolean;
 };
 
@@ -21,11 +20,12 @@ export function CommandTokenCard({
   faction,
   reinforcements,
   totalCapacity,
-  compact,
   condensed,
 }: Props) {
   const colorAlias = getColorAlias(color);
   const factionUrl = useFactionTokenImage(faction);
+  const tokenSrc = cdnImage(`/command_token/command_${colorAlias}.png`);
+  const tokenAlt = `${faction || "command"} command token`;
 
   if (condensed) {
     return (
@@ -34,8 +34,8 @@ export function CommandTokenCard({
           <div className={styles.denseCommandTokenImage}>
             <Image
               {...lowPriorityImageProps}
-              src={cdnImage(`/command_token/command_${colorAlias}.png`)}
-              alt={`${faction || "command"} command token`}
+              src={tokenSrc}
+              alt={tokenAlt}
             />
             {faction && (
               <Image
@@ -64,9 +64,6 @@ export function CommandTokenCard({
   return (
     <div>
       <BaseCard
-        isUpgraded={false}
-        isFaction={false}
-        compact={compact}
         reinforcements={reinforcements}
         totalCapacity={totalCapacity}
         enableAnimations={false}
@@ -74,9 +71,9 @@ export function CommandTokenCard({
         <div style={{ position: "relative" }}>
           <Image
             {...lowPriorityImageProps}
-            src={cdnImage(`/command_token/command_${colorAlias}.png`)}
-            alt={`${faction || "command"} command token`}
-            className={compact ? styles.unitImageCompact : styles.unitImage}
+            src={tokenSrc}
+            alt={tokenAlt}
+            className={styles.unitImage}
           />
           {faction && (
             <Image

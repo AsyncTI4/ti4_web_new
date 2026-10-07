@@ -23,13 +23,7 @@ export default function PlayerCard(props: Props) {
   );
 
   return (
-    <PlayerCardBox
-      color={player.color}
-      faction={player.faction}
-      showFactionBackground={false}
-      subtleBorder
-      isActive={player.active}
-    >
+    <PlayerCardBox color={player.color} isActive={player.active}>
       <PlayerCardHeaderFull
         userName={player.userName}
         faction={player.faction}

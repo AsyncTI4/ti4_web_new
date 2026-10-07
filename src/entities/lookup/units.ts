@@ -1,29 +1,18 @@
 import { units } from "@/entities/data/units";
-import { PlayerData, Unit } from "@/entities/data/types";
+import { groupBy, indexBy } from "@/entities/lookup/indexBy";
+import type { PlayerData, Unit } from "@/entities/data/types";
 
-// Create efficient lookup maps
-const unitsMap = new Map(units.map((unit) => [unit.id, unit]));
+const unitsMap = indexBy(units, (unit) => unit.id);
 
-// For asyncId map, we need to handle multiple units with same asyncId
-// Include ALL units (both generic and faction-specific)
-const unitsAsyncIdMap = new Map<string, Unit[]>();
-units.forEach((unit) => {
-  const existingUnits = unitsAsyncIdMap.get(unit.asyncId) || [];
-  unitsAsyncIdMap.set(unit.asyncId, [...existingUnits, unit]);
-});
+const unitsAsyncIdMap = groupBy(units, (unit) => unit.asyncId);
 
-export const getUnitAsyncId = (unitId: string) => {
-  const unit = unitsMap.get(unitId);
-  return unit?.asyncId;
-};
+const unitsByRequiredTechIdMap = groupBy(
+  units,
+  (unit) => unit.requiredTechId || undefined
+);
 
 export const getUnitData = (unitId: string) => {
   return unitsMap.get(unitId);
-};
-
-export const getUnitDataByAsyncId = (asyncId: string) => {
-  const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId);
-  return unitsWithAsyncId?.[0]; // Return first match for backwards compatibility
 };
 
 export const getOwnedTwilightsFallUnitByAsyncId = (
@@ -41,50 +30,22 @@ export const getOwnedTwilightsFallUnitByAsyncId = (
   );
 };
 
-// Build a map from requiredTechId -> units for quick lookup
-const unitsByRequiredTechIdMap = new Map<string, Unit[]>();
-units.forEach((unit) => {
-  if (!unit.requiredTechId) return;
-  const existing = unitsByRequiredTechIdMap.get(unit.requiredTechId) || [];
-  unitsByRequiredTechIdMap.set(unit.requiredTechId, [...existing, unit]);
-});
-
-// Prefer generic (non-faction) unit for a given requiredTechId
+/** Prefers the generic (non-faction) unit for a given requiredTechId. */
 export const getGenericUnitDataByRequiredTechId = (requiredTechId: string) => {
   const candidates = unitsByRequiredTechIdMap.get(requiredTechId) || [];
-  if (candidates.length === 0) return undefined;
-
-  const nonFaction = candidates.find((u) => !u.faction);
-  if (nonFaction) return nonFaction;
-  return candidates[0];
+  return candidates.find((u) => !u.faction) ?? candidates[0];
 };
 
-// Prefer generic (non-faction) unit data for labels when multiple units share the same asyncId
+/** Prefers base, then generic, unit data for labels when several units share an asyncId. */
 export const getGenericUnitDataByAsyncId = (asyncId: string) => {
   const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId) || [];
   if (unitsWithAsyncId.length === 0) return undefined;
-  // Prefer base (non-upgraded) entries
   const baseUnits = unitsWithAsyncId.filter((u) => !u.upgradesFromUnitId);
-  // Among base, prefer generic (non-faction) first
   const genericBase = baseUnits.find((u) => !u.faction);
   if (genericBase) return genericBase;
   if (baseUnits.length > 0) return baseUnits[0];
-  // Fallbacks if no base found
   const genericAny = unitsWithAsyncId.find((u) => !u.faction);
   return genericAny || unitsWithAsyncId[0];
-};
-
-export const isUnitUpgraded = (unitId: string) => {
-  const unitData = unitsMap.get(unitId);
-  return unitData?.upgradesFromUnitId !== undefined;
-};
-
-export const isUnitUpgradedOrWarSun = (unitId: string) => {
-  const unitData = unitsMap.get(unitId);
-  return (
-    unitData?.upgradesFromUnitId !== undefined ||
-    unitData?.baseType === "warsun"
-  );
 };
 
 export function lookupUnit(
@@ -116,7 +77,6 @@ export function lookupUnit(
     }
   }
 
-  // Try faction-specific units first
   const factionUnits = filterUnitsFromList(
     unitsWithAsyncId,
     faction,
@@ -126,7 +86,6 @@ export function lookupUnit(
     return preferUpgradedUnit(factionUnits);
   }
 
-  // Fall back to generic units
   const genericUnits = filterUnitsFromList(
     unitsWithAsyncId,
     undefined,
@@ -152,11 +111,16 @@ function filterUnitsFromList(
   return unitsList.filter((unit) => {
     if (ownedUnits && !ownedUnits.includes(unit.id)) return false;
 
-    // Check faction match
-    if (faction) {
-      return unit.faction?.toLowerCase() === faction.toLowerCase();
-    } else {
-      return !unit.faction; // Generic units
-    }
+    if (!faction) return !unit.faction;
+    return unit.faction?.toLowerCase() === faction.toLowerCase();
   });
 }
+
+const NEKRO_FLAGSHIP_IDS = new Set([
+  "nekro_flagship",
+  "sigma_nekro_flagship_1",
+  "sigma_nekro_flagship_2",
+]);
+
+export const isNekroFlagship = (unitId: string): boolean =>
+  NEKRO_FLAGSHIP_IDS.has(unitId);

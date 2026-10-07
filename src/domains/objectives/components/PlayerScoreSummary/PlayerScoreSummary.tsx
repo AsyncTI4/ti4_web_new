@@ -1,12 +1,11 @@
-import { Text, Image, Stack } from "@mantine/core";
-import { PlayerData, Objectives, EntryType } from "@/entities/data/types";
+import { Text, Stack } from "@mantine/core";
+import type { PlayerData, Objectives, EntryType, ScoreBreakdownEntry } from "@/entities/data/types";
 import { PlayerColor } from "@/domains/player/components/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
 import legendStyles from "./PlayerScoreSummaryLegend.module.css";
 import styxStyles from "./StyxIcon.module.css";
 import { ObjectiveChip } from "../ObjectiveChip";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getFactionImage } from "@/entities/lookup/factions";
 import { IconAlertTriangle, IconBook2, IconDiamond } from "@tabler/icons-react";
 import { useGameData } from "@/hooks/useGameContext";
 import cx from "clsx";
@@ -17,6 +16,7 @@ import { OBJECTIVE_IMAGE_MAP } from "./objectiveImageMap";
 import { calculateBorderVisibility } from "./borderVisibility";
 import Caption from "@/shared/ui/Caption/Caption";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
 
 type Props = {
   playerData: PlayerData[];
@@ -36,10 +36,24 @@ function StyxIcon() {
   );
 }
 
-function getObjectiveIcon(
-  entryType: EntryType,
-  invertAgenda = false,
-): ReactNode {
+const CORNER_BADGE_ICONS: Partial<Record<EntryType, ReactNode>> = {
+  LATVINIA: <IconBook2 size={12} className={cornerBadgeStyles.bookIcon} />,
+  SHARD: <IconDiamond size={12} className={cornerBadgeStyles.diamondIcon} />,
+};
+
+const INVERTED_ICONS = new Set<EntryType>(["AGENDA", "SFTT"]);
+
+const LEGEND_STATES = [
+  { label: "Scored", className: legendStyles.scored },
+  { label: "Qualifies", className: legendStyles.qualifies },
+  { label: "Potential", className: legendStyles.potential },
+];
+
+function sumPoints(entries: ScoreBreakdownEntry[]) {
+  return entries.reduce((sum, entry) => sum + entry.pointValue, 0);
+}
+
+function getObjectiveIcon(entryType: EntryType): ReactNode {
   if (entryType === "STYX") {
     return <StyxIcon />;
   }
@@ -66,8 +80,9 @@ function getObjectiveIcon(
   }
 
   const imageSrc = OBJECTIVE_IMAGE_MAP[entryType];
+  const cornerBadge = CORNER_BADGE_ICONS[entryType];
 
-  if (entryType === "LATVINIA") {
+  if (cornerBadge) {
     return (
       <div className={cornerBadgeStyles.container}>
         <img
@@ -76,40 +91,17 @@ function getObjectiveIcon(
           alt="Relic"
           className={cornerBadgeStyles.baseImage}
         />
-        <div className={cornerBadgeStyles.badge}>
-          <IconBook2 size={12} className={cornerBadgeStyles.bookIcon} />
-        </div>
+        <div className={cornerBadgeStyles.badge}>{cornerBadge}</div>
       </div>
     );
   }
 
-  if (entryType === "SHARD") {
-    return (
-      <div className={cornerBadgeStyles.container}>
-        <img
-          {...lowPriorityImageProps}
-          src={imageSrc}
-          alt="Relic"
-          className={cornerBadgeStyles.baseImage}
-        />
-        <div className={cornerBadgeStyles.badge}>
-          <IconDiamond size={12} className={cornerBadgeStyles.diamondIcon} />
-        </div>
-      </div>
-    );
-  }
   return (
     <img
       {...lowPriorityImageProps}
       src={imageSrc}
       alt={`${entryType} icon`}
-      style={
-        entryType === "AGENDA" && invertAgenda
-          ? { filter: "invert(100%)" }
-          : entryType === "SFTT"
-            ? { filter: "invert(100%)" }
-            : undefined
-      }
+      style={INVERTED_ICONS.has(entryType) ? { filter: "invert(100%)" } : undefined}
     />
   );
 }
@@ -129,13 +121,10 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
   const maxPotentialVPs = sortedPlayers.reduce((maxTotal, player) => {
     const breakdown = playerScoreBreakdowns?.[player.faction];
     if (!breakdown) return maxTotal;
-    const total = breakdown.entries.reduce(
-      (sum, entry) => sum + entry.pointValue,
-      0,
-    );
-    return Math.max(maxTotal, total);
+    return Math.max(maxTotal, sumPoints(breakdown.entries));
   }, 0);
   const gridColumns = Math.max(vpsToWin, maxPotentialVPs);
+  const gridStyle = { gridTemplateColumns: `repeat(${gridColumns}, 44px)` };
   const leadingVPs = Math.max(...sortedPlayers.map((p) => p.totalVps), 0);
 
   return (
@@ -144,35 +133,19 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
       style={{ "--vps-to-win": vpsToWin } as React.CSSProperties}
     >
       <Stack gap={10}>
-        {/* Title */}
         <Caption size="sm" rule>
           Score Breakdown
         </Caption>
 
-        {/* Legend/Rubric */}
         <div className={legendStyles.legendContainer}>
-          <div className={legendStyles.legendItem}>
-            <div className={cx(legendStyles.legendBox, legendStyles.scored)} />
-            <Text size="xs" c="dimmed">
-              Scored
-            </Text>
-          </div>
-          <div className={legendStyles.legendItem}>
-            <div
-              className={cx(legendStyles.legendBox, legendStyles.qualifies)}
-            />
-            <Text size="xs" c="dimmed">
-              Qualifies
-            </Text>
-          </div>
-          <div className={legendStyles.legendItem}>
-            <div
-              className={cx(legendStyles.legendBox, legendStyles.potential)}
-            />
-            <Text size="xs" c="dimmed">
-              Potential
-            </Text>
-          </div>
+          {LEGEND_STATES.map(({ label, className }) => (
+            <div key={label} className={legendStyles.legendItem}>
+              <div className={cx(legendStyles.legendBox, className)} />
+              <Text size="xs" c="dimmed">
+                {label}
+              </Text>
+            </div>
+          ))}
           <div className={legendStyles.legendItem}>
             <IconAlertTriangle
               size={14}
@@ -187,10 +160,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
         {/* Number track - shown once above all players */}
         <div className={styles.rowContainer}>
           <div className={styles.playerInfoColumn} />
-          <div
-            className={styles.objectivesGrid}
-            style={{ gridTemplateColumns: `repeat(${gridColumns}, 44px)` }}
-          >
+          <div className={styles.objectivesGrid} style={gridStyle}>
             {Array.from({ length: gridColumns }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
                 {num <= vpsToWin ? (
@@ -218,16 +188,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           }
 
           const totalVPs = player.totalVps;
-          const potentialVPs = breakdown.entries.reduce(
-            (sum, entry) => sum + entry.pointValue,
-            0,
-          );
-          const factionImageUrl = getFactionImage(
-            player.faction,
-            player.factionImage,
-            player.factionImageType,
-          );
-
+          const potentialVPs = sumPoints(breakdown.entries);
           const isLeader = totalVPs === leadingVPs && totalVPs > 0;
 
           return (
@@ -239,9 +200,10 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
               )}
             >
               <div className={cx(styles.nameBody, styles.playerInfoColumn)}>
-                <Image
-                  {...lowPriorityImageProps}
-                  src={factionImageUrl}
+                <FactionIcon
+                  faction={player.faction}
+                  factionImageOverride={player.factionImage}
+                  factionImageTypeOverride={player.factionImageType}
                   alt={player.faction}
                   w={24}
                   h={24}
@@ -273,20 +235,12 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                 </Text>
               </div>
 
-              <div
-                className={styles.objectivesGrid}
-                style={{
-                  gridTemplateColumns: `repeat(${gridColumns}, 44px)`,
-                }}
-              >
+              <div className={styles.objectivesGrid} style={gridStyle}>
                 {breakdown.entries.map((entry, idx) => {
                   const { hideLeftBorder, hideRightBorder } =
                     calculateBorderVisibility(idx, breakdown.entries);
 
-                  const icon = getObjectiveIcon(
-                    entry.type,
-                    entry.type === "AGENDA",
-                  );
+                  const icon = getObjectiveIcon(entry.type);
 
                   return (
                     <ObjectiveChip
@@ -327,7 +281,6 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           );
         })}
 
-        {/* Note about potential points */}
         <Text size="xs" c="gray.6" className={styles.noteText} mt="xs">
           Potential points are a heuristic based on above-the-board information
           only — they cannot account for action cards such as Overrule or

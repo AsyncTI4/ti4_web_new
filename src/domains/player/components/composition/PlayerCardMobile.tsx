@@ -1,5 +1,5 @@
 import { Group, Box } from "@mantine/core";
-import type { ReactNode } from "react";
+import type { ComponentProps } from "react";
 import {
   getTechGridMobileColumnCount,
   getTechGridMobileRowCount,
@@ -7,7 +7,7 @@ import {
 } from "@/domains/player/components/Tech/TechGridMobile";
 import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
-import { ArmyStats } from "@/domains/player/components";
+import { ArmyStats } from "@/domains/player/components/ArmyStats";
 import { Nombox } from "./Nombox";
 import { useGameData } from "@/hooks/useGameContext";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
@@ -22,14 +22,15 @@ import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCar
 import { Compartment } from "@/domains/player/components/PlayerCardShared/Compartment";
 import { LogisticsPlate } from "@/domains/player/components/PlayerCardShared/LogisticsPlate";
 import {
+  MIN_RACK_ROWS,
   ObjectivesRack,
-  getObjectiveColumnCount,
+  getGameObjectiveColumnCount,
   getObjectiveRowCount,
 } from "@/domains/player/components/PlayerCardShared/ObjectivesRack";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { PlayerCardBox } from "@/domains/player/components/PlayerCardBox";
 import { PlayerCardHeaderMobile } from "@/domains/player/components/PlayerCardHeader/PlayerCardHeaderCompact";
-import { getPlayerCardTechData } from "@/domains/player/components/PlayerCardShared/playerCardTechUtils";
+import { partitionGenericTechs } from "@/entities/lookup/tech";
 import { useSettingsStore } from "@/utils/appStore";
 
 type Props = {
@@ -37,41 +38,14 @@ type Props = {
 };
 
 /** One compartment of the telemetry band; layout anchors live in this css. */
-function Section({
-  className,
-  brackets,
-  density = "compact",
-  children,
-}: {
-  className?: string;
-  brackets?: boolean;
-  density?: "compact" | "flush";
-  children: ReactNode;
-}) {
-  return (
-    <Compartment
-      brackets={brackets}
-      density={density}
-      className={cx(styles.section, className)}
-    >
-      {children}
-    </Compartment>
-  );
+function Section({ className, ...props }: ComponentProps<typeof Compartment>) {
+  return <Compartment {...props} className={cx(styles.section, className)} />;
 }
-
-/*
- * The shallowest a rack is ever drawn. Cards whose holdings and tech both fit in
- * three or four rows left the band looking thin next to their neighbours, so the
- * racks always show at least five seats. This governs empty seats only — packing,
- * ordering and column counts are untouched.
- */
-const MIN_RACK_ROWS = 5;
 
 type PlanetsAreaProps = {
   planets: string[];
   exhaustedPlanetAbilities?: string[];
   exhaustedPlanets?: string[];
-  faction: string;
   breachTokensReinf?: number;
   sleeperTokensReinf?: number;
   ghostWormholesReinf?: string[];
@@ -97,23 +71,21 @@ function PlanetsArea({
      * pooling under the row.
      */
     <Group gap={4} wrap="nowrap" align="center" mih="100%">
-      <Group gap={4} wrap="nowrap" align="center">
-        <PlayerCardPlanetsArea
-          planets={planets}
-          exhaustedPlanetAbilities={exhaustedPlanetAbilities}
-          exhaustedPlanets={exhaustedPlanets}
-          wrap="nowrap"
+      <PlayerCardPlanetsArea
+        planets={planets}
+        exhaustedPlanetAbilities={exhaustedPlanetAbilities}
+        exhaustedPlanets={exhaustedPlanets}
+        wrap="nowrap"
+      />
+      {showReinforcements && (
+        <ReinforcementTokensGroup
+          breachTokensReinf={breachTokensReinf}
+          sleeperTokensReinf={sleeperTokensReinf}
+          ghostWormholesReinf={ghostWormholesReinf}
+          galvanizeTokensReinf={galvanizeTokensReinf}
+          ml="xs"
         />
-        {showReinforcements && (
-          <ReinforcementTokensGroup
-            breachTokensReinf={breachTokensReinf}
-            sleeperTokensReinf={sleeperTokensReinf}
-            ghostWormholesReinf={ghostWormholesReinf}
-            galvanizeTokensReinf={galvanizeTokensReinf}
-            ml="xs"
-          />
-        )}
-      </Group>
+      )}
     </Group>
   );
 }
@@ -137,28 +109,14 @@ export default function PlayerCardMobile(props: Props) {
   const hasCapturedUnits =
     player.nombox && Object.keys(player.nombox).length > 0;
   const players = (gameData?.playerData ?? []).filter((p) => p.faction);
-  const objectiveColumns = Math.max(
-    1,
-    ...players.map((playerData) =>
-      getObjectiveColumnCount({
-        secretsScored: playerData.secretsScored ?? {},
-        knownUnscoredSecrets: playerData.knownUnscoredSecrets,
-        soCount: playerData.soCount,
-        promissoryNotes: playerData.promissoryNotesInPlayArea ?? [],
-        relics: playerData.relics ?? [],
-      })
-    )
-  );
+  const objectiveColumns = getGameObjectiveColumnCount(players);
   const techColumns = Math.max(
     1,
-    ...players.map((playerData) => {
-      const { filteredTechs } = getPlayerCardTechData({
-        techs: playerData.techs,
-        notResearchedFactionTechs: playerData.notResearchedFactionTechs,
-      });
-
-      return getTechGridMobileColumnCount(filteredTechs);
-    })
+    ...players.map((playerData) =>
+      getTechGridMobileColumnCount(
+        partitionGenericTechs(playerData.techs ?? []).standardTechs
+      )
+    )
   );
 
   /*
@@ -181,13 +139,7 @@ export default function PlayerCardMobile(props: Props) {
   );
 
   return (
-    <PlayerCardBox
-      color={player.color}
-      faction={player.faction}
-      showFactionBackground={false}
-      subtleBorder
-      isActive={player.active}
-    >
+    <PlayerCardBox color={player.color} isActive={player.active}>
       <PlayerCardHeaderMobile
         userName={player.userName}
         faction={player.faction}
@@ -219,11 +171,7 @@ export default function PlayerCardMobile(props: Props) {
       {/* Single horizontal band: sections in fixed order with capped rows,
           so the same data group lands at a similar position on every card */}
       <Box className={styles.strip}>
-        <Section
-          brackets
-          density="flush"
-          className={styles.statusSection}
-        >
+        <Section brackets density="flush" className={styles.statusSection}>
           <LogisticsPlate
             tg={player.tg}
             commodities={player.commodities}
@@ -323,7 +271,7 @@ export default function PlayerCardMobile(props: Props) {
 
         {hasCapturedUnits && (
           <Section>
-            <Nombox capturedUnits={player.nombox} compact />
+            <Nombox capturedUnits={player.nombox} />
           </Section>
         )}
       </Box>

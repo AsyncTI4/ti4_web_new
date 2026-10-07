@@ -1,5 +1,5 @@
 import { Stack, Divider } from "@mantine/core";
-import { getSecretObjectiveData as getSecretData } from "@/entities/lookup/secretObjectives";
+import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { SecretObjectiveIcon } from "@/shared/ui/SecretObjectiveIcon";
 
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export function SecretObjectiveCard({ secretId }: Props) {
-  const secretData = getSecretData(secretId);
+  const secretData = getSecretObjectiveData(secretId);
 
   if (!secretData) return null;
 

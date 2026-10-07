@@ -1,8 +1,8 @@
-import { useRef, useCallback } from "react";
+import { useRef } from "react";
 
-/**
- * Hook that manages delayed hover events with a timeout
- */
+const HOVER_DELAY_MS = 100;
+
+/** Delays the hover callback so sweeping the cursor across stacks doesn't flash tooltips. */
 export function useDelayedHover(
   stackKey: string,
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void,
@@ -10,33 +10,22 @@ export function useDelayedHover(
 ) {
   const hoverTimeoutRef = useRef<number | null>(null);
 
-  const handleMouseEnter = useCallback(
-    (e: React.MouseEvent) => {
-      if (!onUnitMouseOver) return;
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-      hoverTimeoutRef.current = setTimeout(() => {
-        onUnitMouseOver(stackKey, e);
-        hoverTimeoutRef.current = null;
-      }, 100);
-    },
-    [onUnitMouseOver, stackKey]
-  );
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    if (!onUnitMouseOver) return;
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      onUnitMouseOver(stackKey, e);
+      hoverTimeoutRef.current = null;
+    }, HOVER_DELAY_MS);
+  };
 
-  const handleMouseLeave = useCallback(
-    (e: React.MouseEvent) => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = null;
-      }
-      if (onUnitMouseLeave) {
-        onUnitMouseLeave(stackKey, e);
-      }
-    },
-    [onUnitMouseLeave, stackKey]
-  );
+  const handleMouseLeave = (e: React.MouseEvent) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    onUnitMouseLeave?.(stackKey, e);
+  };
 
   return { handleMouseEnter, handleMouseLeave };
 }
-

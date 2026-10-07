@@ -82,10 +82,9 @@ export function NavigationDrawer({
       }
       hiddenFrom="sm"
       size="sm"
-      zIndex={10000}
+      zIndex="var(--z-navigation-drawer)"
     >
       <Stack gap="md">
-        {/* Discord Login */}
         <Box>
           <DiscordLogin />
         </Box>
@@ -128,9 +127,7 @@ export function NavigationDrawer({
         )}
 
         <Stack gap="xs">
-          {MAIN_TAB_CONFIGS.filter(
-            (tab) => tab.includeInDrawer !== false
-          ).map((tab) => {
+          {MAIN_TAB_CONFIGS.map((tab) => {
             const Icon = tab.Icon;
             return (
               <NavLink
@@ -148,12 +145,7 @@ export function NavigationDrawer({
 
         <Stack gap="xs">
           {activeTabs.map((tab) => (
-            <Box
-              key={tab.id}
-              style={{
-                position: "relative",
-              }}
-            >
+            <Box key={tab.id} pos="relative">
               <NavLink
                 label={
                   <EditableTabLabel
@@ -194,7 +186,12 @@ export function NavigationDrawer({
                 onClick={() => handleGameClick(tab.id)}
                 leftSection={
                   tab.faction ? (
-                    <CircularFactionIcon faction={tab.faction} factionImageOverride={tab.factionImage} factionImageTypeOverride={tab.factionImageType} size={16} />
+                    <CircularFactionIcon
+                      faction={tab.faction}
+                      factionImageOverride={tab.factionImage}
+                      factionImageTypeOverride={tab.factionImageType}
+                      size={16}
+                    />
                   ) : null
                 }
                 style={

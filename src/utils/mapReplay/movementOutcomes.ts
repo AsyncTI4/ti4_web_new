@@ -1,6 +1,13 @@
 import type { RetreatSubEvent } from "@/app/providers/context/types";
-import type { LocatedStack, PlannedMovement, StateCounts } from "./types";
+import type {
+  DelayedDamage,
+  LocatedStack,
+  PlannedMovement,
+  StateCounts,
+} from "./types";
 import {
+  accumulateStates,
+  emptyStates,
   findLocated,
   locatedLocation,
   mapUnitLocationKey,
@@ -8,6 +15,7 @@ import {
   stateCount,
   statesForCount,
   subtractStates,
+  sustainedIncrease,
   unitStates,
 } from "./unitState";
 
@@ -15,6 +23,33 @@ export type MovementOutcome = {
   retreating: number;
   dying: number;
 };
+
+/** Takes up to `wanted` from the budget under `key`, returning what was taken. */
+function takeFromBudget(
+  budgets: Map<string, number>,
+  key: string,
+  wanted: number,
+): number {
+  const available = budgets.get(key) ?? 0;
+  const taken = Math.min(wanted, available);
+  budgets.set(key, Math.max(0, available - taken));
+  return taken;
+}
+
+/** The moved units that leave the destination again, then those that remain. */
+export function splitOutgoing(
+  movedStates: StateCounts,
+  outcome: MovementOutcome,
+): { outgoingStates: StateCounts; survivingStates: StateCounts } {
+  const outgoingStates = statesForCount(
+    movedStates,
+    outcome.retreating + outcome.dying,
+  );
+  return {
+    outgoingStates,
+    survivingStates: subtractStates(movedStates, outgoingStates),
+  };
+}
 
 export function allocateMovementOutcomes(
   movements: PlannedMovement[],
@@ -26,29 +61,15 @@ export function allocateMovementOutcomes(
   const outcomes = new Map<PlannedMovement, MovementOutcome>();
 
   for (const movement of movements) {
-    const movedStates = unitStates(movement.transition.stack);
-    const movedCount = stateCount(movedStates);
+    const movedCount = stateCount(unitStates(movement.transition.stack));
     const destination = movement.destinationKey;
-    const retreating = Math.min(
-      movedCount,
-      retreatBudgets.get(destination) ?? 0,
-    );
-    retreatBudgets.set(
+    const retreating = takeFromBudget(retreatBudgets, destination, movedCount);
+    const dying = takeFromBudget(
+      lossBudgets,
       destination,
-      Math.max(0, (retreatBudgets.get(destination) ?? 0) - retreating),
-    );
-    const dying = Math.min(
       movedCount - retreating,
-      lossBudgets.get(destination) ?? 0,
     );
-    lossBudgets.set(
-      destination,
-      Math.max(0, (lossBudgets.get(destination) ?? 0) - dying),
-    );
-    outcomes.set(movement, {
-      retreating,
-      dying,
-    });
+    outcomes.set(movement, { retreating, dying });
   }
 
   return outcomes;
@@ -72,14 +93,11 @@ export function applyMovementDamage({
   const damageBudgets = new Map<string, StateCounts>();
   const arrivalsByDestination = new Map<string, StateCounts>();
   for (const movement of movements) {
-    const arrivals = arrivalsByDestination.get(movement.destinationKey) ?? [
-      0, 0, 0, 0,
-    ];
-    const movementStates = unitStates(movement.transition.stack);
-    for (let index = 0; index < arrivals.length; index += 1) {
-      arrivals[index] += movementStates[index];
-    }
-    arrivalsByDestination.set(movement.destinationKey, arrivals);
+    accumulateStates(
+      arrivalsByDestination,
+      movement.destinationKey,
+      unitStates(movement.transition.stack),
+    );
   }
 
   for (const movement of movements) {
@@ -91,25 +109,20 @@ export function applyMovementDamage({
         retreat.faction === movement.target.faction &&
         retreat.fromTile === movement.target.position &&
         retreat.fromHolder === movement.target.holder,
-    )?.units[movement.target.unitId] as StateCounts | undefined;
+    )?.units[movement.target.unitId];
     const finalStates = movement.finalDestination
       ? unitStates(movement.finalDestination.stack)
       : undefined;
     const afterStates = retreatStates ?? finalStates;
     if (!afterStates) continue;
     const before = findLocated(previousStacks, movement.target);
-    const beforeStates = retreatStates
-      ? ([0, 0, 0, 0] as StateCounts)
-      : before
-        ? unitStates(before.stack)
-        : ([0, 0, 0, 0] as StateCounts);
-    const arrivalStates = arrivalsByDestination.get(key) ?? [0, 0, 0, 0];
-    damageBudgets.set(key, [
-      0,
-      Math.max(0, afterStates[1] - beforeStates[1] - arrivalStates[1]),
-      0,
-      Math.max(0, afterStates[3] - beforeStates[3] - arrivalStates[3]),
-    ]);
+    const beforeStates =
+      !retreatStates && before ? unitStates(before.stack) : emptyStates();
+    const arrivalStates = arrivalsByDestination.get(key) ?? emptyStates();
+    damageBudgets.set(
+      key,
+      sustainedIncrease(afterStates, beforeStates, arrivalStates),
+    );
   }
 
   for (const movement of movements) {
@@ -118,11 +131,7 @@ export function applyMovementDamage({
     const outcome = outcomes.get(movement);
     if (!budget || !outcome) continue;
     const transitionStates = unitStates(movement.transition.stack);
-    const outgoingStates = statesForCount(
-      transitionStates,
-      outcome.retreating + outcome.dying,
-    );
-    const survivingStates = subtractStates(transitionStates, outgoingStates);
+    const { survivingStates } = splitOutgoing(transitionStates, outcome);
     const normalDamage = Math.min(survivingStates[0], budget[1]);
     const galvanizedDamage = Math.min(survivingStates[2], budget[3]);
     if (normalDamage + galvanizedDamage === 0) continue;
@@ -157,11 +166,8 @@ export function buildStationaryDamage({
   previousStacks: LocatedStack[];
   stagedDestinations: ReadonlySet<string>;
   damageAtMs: number | undefined;
-}): Map<string, { damageAtMs: number; states: StateCounts }> {
-  const delayedDamage = new Map<
-    string,
-    { damageAtMs: number; states: StateCounts }
-  >();
+}): Map<string, DelayedDamage> {
+  const delayedDamage = new Map<string, DelayedDamage>();
   if (damageAtMs === undefined) return delayedDamage;
 
   for (const currentLocated of currentStacks) {
@@ -169,14 +175,10 @@ export function buildStationaryDamage({
     if (stagedDestinations.has(rawLocationKey(location))) continue;
     const previousLocated = findLocated(previousStacks, location);
     if (!previousLocated) continue;
-    const before = unitStates(previousLocated.stack);
-    const after = unitStates(currentLocated.stack);
-    const delayedStates: StateCounts = [
-      0,
-      Math.max(0, after[1] - before[1]),
-      0,
-      Math.max(0, after[3] - before[3]),
-    ];
+    const delayedStates = sustainedIncrease(
+      unitStates(currentLocated.stack),
+      unitStates(previousLocated.stack),
+    );
     if (delayedStates[1] + delayedStates[3] === 0) continue;
     delayedDamage.set(
       mapUnitLocationKey(currentLocated.position, currentLocated.stack),

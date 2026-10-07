@@ -1,6 +1,7 @@
 import { SimpleGrid, Group, Text } from "@mantine/core";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerData } from "@/entities/data/types";
+import cx from "clsx";
 import styles from "./PointTotals.module.css";
 
 type Props = {
@@ -9,15 +10,13 @@ type Props = {
 };
 
 export function PointTotals({ playerData, vpsToWin }: Props) {
-  // Sort players by total VPs in descending order
   const sortedPlayers = [...playerData].sort(
     (a, b) => (b.totalVps || 0) - (a.totalVps || 0)
   );
 
-  // Calculate max points for scaling
   const maxPoints = Math.max(...sortedPlayers.map((p) => p.totalVps || 0));
 
-  // Calculate scale factor for each player (0.7 to 1.1 range for more subtle effect)
+  /** Scales each entry between 0.7 and 1.1 of its size by share of the lead. */
   const getScaleFactor = (points: number) => {
     if (maxPoints === 0) return 1;
     const baseScale = 0.7;
@@ -38,7 +37,7 @@ export function PointTotals({ playerData, vpsToWin }: Props) {
             gap={4}
             align="center"
             justify="center"
-            className={`${styles.playerRow} ${isWinning ? styles.winningPlayer : ""}`}
+            className={cx(styles.playerRow, isWinning && styles.winningPlayer)}
             style={{
               transform: `scale(${scaleFactor})`,
               transformOrigin: "center",

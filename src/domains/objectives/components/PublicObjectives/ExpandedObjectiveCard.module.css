@@ -65,74 +65,6 @@
   justify-content: space-between;
 }
 
-.vpIndicator {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  flex-shrink: 0;
-}
-
-.vpIndicator.revealed {
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Orange/Gold variant for Stage I */
-.vpIndicator.revealed.orange {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.1) 100%);
-  border-color: rgba(255, 215, 0, 0.3);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 4px rgba(255, 215, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Blue variant for Stage II */
-.vpIndicator.revealed.blue {
-  background: var(--objective-vp-indicator-revealed-emphasis-bg);
-  border-color: var(--objective-vp-indicator-revealed-emphasis-border);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 4px var(--objective-vp-indicator-revealed-emphasis-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Gray variant for Other */
-.vpIndicator.revealed.gray {
-  background: var(--objective-vp-indicator-revealed-default-bg);
-  border-color: var(--objective-vp-indicator-revealed-default-border);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 6px var(--objective-vp-indicator-revealed-default-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.vpIndicator.hidden {
-  background: var(--objective-vp-indicator-hidden-bg);
-  border-color: var(--objective-vp-indicator-hidden-border);
-}
-
-.vpText {
-  font-size: var(--mantine-font-size-md);
-  font-weight: var(--weight-rail);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  line-height: 1;
-}
-
-.vpText.revealed {
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.vpText.hidden {
-  color: var(--mantine-color-gray-4);
-}
-
 .contentArea {
   flex: 1;
 }
@@ -141,7 +73,7 @@
   font-size: 13px;
   font-weight: var(--weight-rail);
   font-family: var(--mantine-font-family-headings);
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   margin-bottom: 2px;
 }
 
@@ -157,7 +89,7 @@
 .requirementText {
   color: var(--mantine-color-gray-3);
   font-size: 13px;
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 

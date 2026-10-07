@@ -1,6 +1,14 @@
 import { clearLocalUser, getLocalUser } from "@/hooks/useUser";
 import { refreshToken } from "./refreshToken";
 
+function fetchWithToken(url: string, options: RequestInit, token: string) {
+  return fetch(url, {
+    ...options,
+    headers: { ...options.headers, Authorization: `Bearer ${token}` },
+  });
+}
+
+/** Fetches with the stored bearer token, refreshing it and retrying once on a 401. */
 export async function authenticatedFetch(
   url: string,
   options: RequestInit = {}
@@ -11,36 +19,14 @@ export async function authenticatedFetch(
     throw new Error("No authentication token available");
   }
 
-  // Add authorization header
-  const headers = {
-    ...options.headers,
-    Authorization: `Bearer ${user.token}`,
-  };
+  const response = await fetchWithToken(url, options, user.token);
+  if (response.status !== 401 || !user.refreshToken) return response;
 
-  let response = await fetch(url, {
-    ...options,
-    headers,
-  });
-
-  // If we get a 401, try to refresh the token and retry once
-  if (response.status === 401 && user.refreshToken) {
-    const refreshedUser = await refreshToken();
-
-    if (refreshedUser?.token) {
-      // Retry the request with the new token
-      const newHeaders = {
-        ...options.headers,
-        Authorization: `Bearer ${refreshedUser.token}`,
-      };
-
-      response = await fetch(url, {
-        ...options,
-        headers: newHeaders,
-      });
-    } else {
-      clearLocalUser();
-    }
+  const refreshedUser = await refreshToken();
+  if (!refreshedUser?.token) {
+    clearLocalUser();
+    return response;
   }
 
-  return response;
+  return fetchWithToken(url, options, refreshedUser.token);
 }

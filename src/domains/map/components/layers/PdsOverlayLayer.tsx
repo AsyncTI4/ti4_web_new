@@ -1,31 +1,20 @@
 import { PdsControlToken } from "../PdsControlToken";
-import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
+import {
+  TILE_HEIGHT,
+  TILE_WIDTH,
+} from "@/domains/map/model/mapgen/tilePositioning";
 import { getColorAlias } from "@/entities/lookup/colors";
+import type { GameData } from "@/app/providers/context/types";
 import styles from "./PdsOverlayLayer.module.css";
 
 type Props = {
   ringPosition: string;
-  dominantPdsFaction?: Record<
-    string,
-    | { color: string; faction: string; count: number; expected: number }
-    | undefined
-  > | null;
-  pdsByTile?: Record<
-    string,
-    { faction: string; color: string; count: number; expected: number }[]
-  > | null;
+  pdsByTile?: GameData["pdsByTile"] | null;
 };
 
-export function PdsOverlayLayer({
-  ringPosition,
-  dominantPdsFaction,
-  pdsByTile,
-}: Props) {
-  if (!ringPosition || !pdsByTile) return null;
-  const all = pdsByTile[ringPosition];
-  if (!all || all.length === 0) return null;
-
-  const dominant = dominantPdsFaction?.[ringPosition];
+export function PdsOverlayLayer({ ringPosition, pdsByTile }: Props) {
+  const all = pdsByTile?.[ringPosition];
+  if (!all?.length) return null;
 
   return (
     <div
@@ -39,26 +28,20 @@ export function PdsOverlayLayer({
       }}
     >
       <div className={styles.grid}>
-        {all.map((entry) => {
-          return (
-            <div
-              key={`${ringPosition}-${entry.faction}`}
-              className={styles.gridItem}
-            >
-              <PdsControlToken
-                colorAlias={getColorAlias(entry.color)}
-                faction={entry.faction}
-                count={entry.count}
-                expected={entry.expected}
-                style={{
-                  width: 80,
-                  height: 80,
-                }}
-                dominant
-              />
-            </div>
-          );
-        })}
+        {all.map((entry) => (
+          <div
+            key={`${ringPosition}-${entry.faction}`}
+            className={styles.gridItem}
+          >
+            <PdsControlToken
+              colorAlias={getColorAlias(entry.color)}
+              faction={entry.faction}
+              count={entry.count}
+              expected={entry.expected}
+              style={{ width: 80, height: 80 }}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

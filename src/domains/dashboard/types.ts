@@ -38,17 +38,20 @@ export type BadgeAward = {
   tierRuleText: string;
 };
 
+/** Known units get special formatting; the API may send others. */
+export type BadgeUnit = "seconds" | "count" | "ratio" | (string & {});
+
 export type BadgeMetric = {
   label: string;
   value: number;
-  unit: "seconds" | "count" | "ratio" | string;
+  unit: BadgeUnit;
 };
 
 export type BadgeRequirement = {
   label: string;
   current: number;
   target: number;
-  unit: "seconds" | "count" | "ratio" | string;
+  unit: BadgeUnit;
   met: boolean;
 };
 

@@ -4,63 +4,41 @@ import {
   type DashboardSettingsResponse,
   type DashboardSettingsUpdateRequest,
 } from "@/domains/dashboard/userSettings";
-import { getLocalUser } from "./useUser";
-import { DashboardError } from "./useDashboard";
+import { throwResponseError } from "@/utils/fetchJson";
+import { fetchDashboardJson } from "./useDashboard";
 
-async function fetchDashboardSettings(): Promise<DashboardSettingsResponse> {
-  const user = getLocalUser();
-  if (!user?.token) {
-    throw new DashboardError(401, "Unauthorized");
-  }
-
-  const response = await authenticatedFetch(getBotApiUrl("/dashboard/settings"), {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+async function saveDashboardSettings(
+  payload: DashboardSettingsUpdateRequest,
+): Promise<DashboardSettingsResponse> {
+  const response = await authenticatedFetch(
+    getBotApiUrl("/dashboard/settings"),
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     },
-  });
+  );
 
   if (!response.ok) {
-    throw new DashboardError(
-        response.status,
-        response.status === 401
-            ? "Unauthorized"
-            : `Failed to fetch dashboard: ${response.status} ${response.statusText}`,
+    await throwResponseError(
+      response,
+      `Failed to save dashboard settings: ${response.status} ${response.statusText}`,
     );
   }
 
-  const data = (await response.json()) as unknown;
-  return data as DashboardSettingsResponse;
-}
-
-async function saveDashboardSettings(
-  payload: DashboardSettingsUpdateRequest
-): Promise<DashboardSettingsResponse> {
-  const response = await authenticatedFetch(getBotApiUrl("/dashboard/settings"), {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    let body = "";
-    try {
-      body = await response.text();
-    } catch {
-      // ignore
-    }
-    throw new Error(body || `Failed to save dashboard settings: ${response.status} ${response.statusText}`);
-  }
-
-  return response.json();
+  return response.json() as Promise<DashboardSettingsResponse>;
 }
 
 export function useDashboardSettings() {
   return useQuery({
     queryKey: ["dashboard-settings"],
-    queryFn: fetchDashboardSettings,
+    queryFn: () =>
+      fetchDashboardJson<DashboardSettingsResponse>(
+        "/dashboard/settings",
+        "dashboard settings",
+      ),
     retry: false,
   });
 }

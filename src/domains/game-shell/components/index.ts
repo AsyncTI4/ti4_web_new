@@ -1,1 +1,0 @@
-export { MapPlanetDetailsCard } from "./MapPlanetDetailsCard";

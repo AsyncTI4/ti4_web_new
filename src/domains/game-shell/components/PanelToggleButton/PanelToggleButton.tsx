@@ -17,21 +17,8 @@ export function PanelToggleButton({
   style,
   className,
 }: PanelToggleButtonProps) {
-  const getToggleIcon = () => {
-    if (position === "left") {
-      return isCollapsed ? (
-        <IconChevronRight size={16} className={classes.toggleIcon} />
-      ) : (
-        <IconChevronLeft size={16} className={classes.toggleIcon} />
-      );
-    } else {
-      return isCollapsed ? (
-        <IconChevronLeft size={16} className={classes.toggleIcon} />
-      ) : (
-        <IconChevronRight size={16} className={classes.toggleIcon} />
-      );
-    }
-  };
+  const pointsRight = (position === "left") === isCollapsed;
+  const ToggleIcon = pointsRight ? IconChevronRight : IconChevronLeft;
 
   const baseClass =
     position === "left" ? classes.leftPanelToggle : classes.rightPanelToggle;
@@ -42,7 +29,7 @@ export function PanelToggleButton({
       onClick={onClick}
       style={style}
     >
-      {getToggleIcon()}
+      <ToggleIcon size={16} className={classes.toggleIcon} />
     </Box>
   );
 }

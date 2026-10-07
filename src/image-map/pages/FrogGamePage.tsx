@@ -5,7 +5,6 @@ import MapUI from "@/image-map/components/MapUI";
 import { useFrogMap } from "@/image-map/hooks/useFrogMap";
 import { useUser } from "@/hooks/useUser";
 import { DiscordAuthButton } from "@/domains/auth/DiscordLogin";
-
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 function FrogGamePage() {
@@ -24,7 +23,7 @@ function FrogGamePage() {
     return (
       <Center h="100vh">
         <Container size="sm">
-          <Stack align="center" spacing="md">
+          <Stack align="center" gap="md">
             <Text size="xl">You are not the owner of this map</Text>
             <Text size="xl">Please log in with Discord to continue</Text>
             <DiscordAuthButton
@@ -41,15 +40,10 @@ function FrogGamePage() {
 
   return (
     <MapUI
-      params={params}
+      gameId={params.mapid ?? ""}
       imageUrl={imageUrl}
-      reconnect={() => {
-        void frogMap.refetch();
-      }}
-      isReconnecting={frogMap.isFetching}
-      showRefresh={false}
       isError={frogMap.isError}
-      error={frogMap.error as Error | null}
+      error={frogMap.error}
     />
   );
 }

@@ -5,8 +5,8 @@ import {
 } from "@/entities/data/renderedSpriteDimensions";
 import { getTokenData } from "@/entities/lookup/tokens";
 
-export const SPLAY_OFFSET_X = 10;
-export const SPLAY_OFFSET_Y = 10;
+const SPLAY_OFFSET_X = 10;
+const SPLAY_OFFSET_Y = 10;
 
 export type RenderedFootprint = {
   left: number;
@@ -17,7 +17,7 @@ export type RenderedFootprint = {
   height: number;
 };
 
-export type UnitArrangement = {
+type UnitArrangement = {
   stackOffsetX: number;
   stackOffsetY: number;
   zIndexOffset: number;

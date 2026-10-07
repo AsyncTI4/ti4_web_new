@@ -2,10 +2,19 @@ import type { GameData } from "@/app/providers/context/types";
 import type { EntityStack } from "@/utils/unitPositioning";
 import type {
   LocatedStack,
+  MapUnitTransition,
   ReplayInventory,
   StateCounts,
   UnitLocation,
 } from "./types";
+
+export function emptyStates(): StateCounts {
+  return [0, 0, 0, 0];
+}
+
+export function stackHolder(stack: EntityStack): string {
+  return stack.planetName ?? "space";
+}
 
 export function unitStates(stack: EntityStack): StateCounts {
   if (stack.unitStates) return [...stack.unitStates];
@@ -21,7 +30,7 @@ export function mapUnitLocationKey(
   position: string,
   stack: EntityStack,
 ): string {
-  return `${position}\u0000${stack.planetName ?? "space"}\u0000${stack.faction}\u0000${stack.entityType}\u0000${stack.entityId}`;
+  return `${position}\u0000${stackHolder(stack)}\u0000${stack.faction}\u0000${stack.entityType}\u0000${stack.entityId}`;
 }
 
 export function rawLocationKey(location: UnitLocation): string {
@@ -36,10 +45,21 @@ export function rawLocationKey(location: UnitLocation): string {
 export function locatedLocation(located: LocatedStack): UnitLocation {
   return {
     position: located.position,
-    holder: located.stack.planetName ?? "space",
+    holder: stackHolder(located.stack),
     faction: located.stack.faction,
     unitId: located.stack.entityId,
   };
+}
+
+export function locatedKey(located: LocatedStack): string {
+  return rawLocationKey(locatedLocation(located));
+}
+
+/** Indexes stacks by location key; later stacks win on collisions. */
+export function indexByLocation(
+  stacks: LocatedStack[],
+): Map<string, LocatedStack> {
+  return new Map(stacks.map((located) => [locatedKey(located), located]));
 }
 
 export function allPlacedStacks(data: GameData): LocatedStack[] {
@@ -67,22 +87,28 @@ export function findLocated(
 ): LocatedStack | undefined {
   const key = rawLocationKey(location);
   return stacks.find(
-    (candidate) => rawLocationKey(locatedLocation(candidate)) === key,
+    (candidate) => locatedKey(candidate) === key,
   );
+}
+
+/** The stack with its count and damage derived from `states`. */
+export function withUnitStates(
+  stack: EntityStack,
+  states: StateCounts,
+): EntityStack {
+  return {
+    ...stack,
+    count: stateCount(states),
+    sustained: states[1] + states[3],
+    unitStates: states,
+  };
 }
 
 export function stackWithStates(
   located: LocatedStack,
   states: StateCounts,
 ): EntityStack {
-  return {
-    ...located.stack,
-    x: located.worldX,
-    y: located.worldY,
-    count: stateCount(states),
-    sustained: states[1] + states[3],
-    unitStates: states,
-  };
+  return withUnitStates(stackAtWorld(located), states);
 }
 
 export function stackAtWorld(located: LocatedStack): EntityStack {
@@ -98,7 +124,7 @@ export function statesForCount(
   requested: number,
 ): StateCounts {
   let remaining = requested;
-  const selected: StateCounts = [0, 0, 0, 0];
+  const selected = emptyStates();
   for (let index = 0; index < source.length && remaining > 0; index += 1) {
     selected[index] = Math.min(source[index], remaining);
     remaining -= selected[index];
@@ -122,6 +148,55 @@ export function addStates(target: StateCounts, added: StateCounts): void {
   }
 }
 
+/** Adds `added` into the states stored under `key`, creating them if missing. */
+export function accumulateStates(
+  totals: Map<string, StateCounts>,
+  key: string,
+  added: StateCounts,
+): void {
+  const states = totals.get(key) ?? emptyStates();
+  addStates(states, added);
+  totals.set(key, states);
+}
+
+/** Sustained-damage increase (states 1 and 3) of `after` over the sum of `baselines`. */
+export function sustainedIncrease(
+  after: StateCounts,
+  ...baselines: StateCounts[]
+): StateCounts {
+  const increase = (index: number) =>
+    Math.max(
+      0,
+      baselines.reduce((remaining, base) => remaining - base[index], after[index]),
+    );
+  return [0, increase(1), 0, increase(3)];
+}
+
+export function appendToGroup<T>(
+  groups: Map<string, T[]>,
+  key: string,
+  item: T,
+): void {
+  const group = groups.get(key) ?? [];
+  group.push(item);
+  groups.set(key, group);
+}
+
+/** A transition shown in place at `located`, keyed to its map location. */
+export function transitionAt(
+  kind: MapUnitTransition["kind"],
+  located: LocatedStack,
+  stack: EntityStack,
+): Pick<MapUnitTransition, "kind" | "stack" | "toX" | "toY" | "locationKey"> {
+  return {
+    kind,
+    stack,
+    toX: located.worldX,
+    toY: located.worldY,
+    locationKey: mapUnitLocationKey(located.position, located.stack),
+  };
+}
+
 export function addTotal(
   totals: Map<string, number>,
   key: string,
@@ -140,18 +215,16 @@ export function createReplayInventory(
     locations: new Map(),
   };
 
-  for (const located of previousStacks) {
+  const record = (located: LocatedStack, totals: Map<string, number>) => {
     const location = locatedLocation(located);
     const key = rawLocationKey(location);
-    inventory.expectedTotals.set(key, stateCount(unitStates(located.stack)));
+    totals.set(key, stateCount(unitStates(located.stack)));
     inventory.locations.set(key, location);
-  }
-  for (const located of currentStacks) {
-    const location = locatedLocation(located);
-    const key = rawLocationKey(location);
-    inventory.finalTotals.set(key, stateCount(unitStates(located.stack)));
-    inventory.locations.set(key, location);
-  }
+  };
+  previousStacks.forEach((located) =>
+    record(located, inventory.expectedTotals),
+  );
+  currentStacks.forEach((located) => record(located, inventory.finalTotals));
 
   return inventory;
 }

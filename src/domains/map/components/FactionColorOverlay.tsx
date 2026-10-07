@@ -1,15 +1,16 @@
 import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { generateHexagonPoints } from "@/utils/hexagonUtils";
+import { toRgba } from "@/entities/lookup/colors";
 
 type FactionColorOverlayProps = {
-  faction: string; // faction id
+  faction: string;
   opacity?: number;
 };
 
-const radius = TILE_WIDTH / 2; // 172.5px for 345px width
-const centerX = TILE_WIDTH / 2;
-const centerY = TILE_HEIGHT / 2;
+const HEX_POINTS = generateHexagonPoints(TILE_WIDTH / 2, TILE_HEIGHT / 2, TILE_WIDTH / 2)
+  .map((p) => `${p.x},${p.y}`)
+  .join(" ");
 
 export const FactionColorOverlay = ({
   faction,
@@ -20,9 +21,6 @@ export const FactionColorOverlay = ({
 
   if (!optimizedColor) return null;
 
-  const hexPoints = generateHexagonPoints(centerX, centerY, radius);
-  const pointsString = hexPoints.map((p) => `${p.x},${p.y}`).join(" ");
-  const primaryColor = `rgba(${optimizedColor.red}, ${optimizedColor.green}, ${optimizedColor.blue}, ${opacity})`;
 
   return (
     <svg
@@ -37,7 +35,7 @@ export const FactionColorOverlay = ({
       }}
       viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
     >
-      <polygon points={pointsString} fill={primaryColor} />
+      <polygon points={HEX_POINTS} fill={toRgba(optimizedColor, opacity)} />
     </svg>
   );
 };

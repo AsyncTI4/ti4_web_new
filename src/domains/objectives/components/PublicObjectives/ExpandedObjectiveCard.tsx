@@ -15,7 +15,6 @@ type Props = {
   playerData: PlayerData[];
   objective: Objective;
   color: "orange" | "blue" | "gray";
-  custom?: boolean;
   opened?: boolean;
   onToggle?: () => void;
   onOpenChange?: (opened: boolean) => void;
@@ -25,7 +24,6 @@ function ExpandedObjectiveCard({
   objective,
   playerData,
   color,
-  custom = true,
   opened = false,
   onToggle,
   onOpenChange,
@@ -37,16 +35,16 @@ function ExpandedObjectiveCard({
   const shouldShowMobileTooltip =
     isMobile && objective.revealed && Boolean(objectiveData?.text);
 
-  // Create faction progress data with alphabetical sorting for consistency
   const factionProgressData = playerData
-    .map((player) => ({
-      player,
-      progress: objective.factionProgress[player.faction] || 0,
-      isScored: objective.scoredFactions.includes(player.faction),
-      isAtThreshold:
-        (objective.factionProgress[player.faction] || 0) >=
-        objective.progressThreshold,
-    }))
+    .map((player) => {
+      const progress = objective.factionProgress[player.faction] || 0;
+      return {
+        player,
+        progress,
+        isScored: objective.scoredFactions.includes(player.faction),
+        isAtThreshold: progress >= objective.progressThreshold,
+      };
+    })
     .sort((a, b) => a.player.faction.localeCompare(b.player.faction));
 
   const renderProgressDisplay = () => {
@@ -61,17 +59,13 @@ function ExpandedObjectiveCard({
       );
     }
 
-    if (custom) {
-      return objective.scoredFactions.map((faction, index) => (
-        <CircularFactionIcon
-          key={`${faction}-${index}`}
-          faction={faction}
-          size={24}
-        />
-      ));
-    }
-
-    return null;
+    return objective.scoredFactions.map((faction, index) => (
+      <CircularFactionIcon
+        key={`${faction}-${index}`}
+        faction={faction}
+        size={24}
+      />
+    ));
   };
 
   const cardContent = (

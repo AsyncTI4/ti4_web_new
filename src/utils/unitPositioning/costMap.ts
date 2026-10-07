@@ -1,16 +1,17 @@
 import { squareOutsideHex, touchesHexRim, HexagonVertex } from "../hitbox";
+import type { GridSquare, SquareCost } from "./types";
 
 export const initializeSpaceCostMap = (
   gridSize: number,
   squareWidth: number,
   squareHeight: number,
   hexagonVertices: HexagonVertex[],
-): { costMap: number[][]; rimSquares: { row: number; col: number }[] } => {
+): { costMap: number[][]; rimSquares: GridSquare[] } => {
   const costMap = Array.from({ length: gridSize }, () =>
     Array<number>(gridSize).fill(0),
   );
 
-  const rimSquares: { row: number; col: number }[] = [];
+  const rimSquares: GridSquare[] = [];
 
   for (let row = 0; row < gridSize; row++) {
     for (let col = 0; col < gridSize; col++) {
@@ -48,9 +49,9 @@ export const initializeSpaceCostMap = (
 export const findOptimalSquareGreedy = (
   costMap: number[][],
   gridSize: number,
-): { square: { row: number; col: number }; cost: number } | null => {
+): SquareCost | null => {
   let lowestCost = Infinity;
-  let bestSquare: { row: number; col: number } | null = null;
+  let bestSquare: GridSquare | null = null;
 
   for (let row = 0; row < gridSize; row++) {
     for (let col = 0; col < gridSize; col++) {

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBotApiUrl } from "@/domains/auth/api";
+import { fetchJson } from "@/utils/fetchJson";
 
 type CommunityStatsResponse = {
   activeGames: number;
@@ -22,13 +23,7 @@ export function useCommunityStats() {
 
   return useQuery({
     queryKey: ["communityStats"],
-    queryFn: async () => {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch community stats: ${response.status}`);
-      }
-      return (await response.json()) as CommunityStatsResponse;
-    },
+    queryFn: () => fetchJson<CommunityStatsResponse>(apiUrl, "community stats"),
     staleTime: 1000 * 60 * 5,
   });
 }

@@ -1,23 +1,14 @@
-const MAP_VIEW_PREFERENCE_KEY = "ti4_map_view_preference_5";
+import { loadStoredChoice, saveStoredChoice } from "@/utils/localStorageSettings";
 
-export type MapViewPreference = "panels" | "pannable";
+const MAP_VIEW_PREFERENCE_KEY = "ti4_map_view_preference_5";
+const MAP_VIEW_PREFERENCES = ["panels", "pannable"] as const;
+
+export type MapViewPreference = (typeof MAP_VIEW_PREFERENCES)[number];
 
 export function getMapViewPreference(): MapViewPreference | null {
-  try {
-    const stored = localStorage.getItem(MAP_VIEW_PREFERENCE_KEY);
-    if (stored === "panels" || stored === "pannable") {
-      return stored;
-    }
-    return null;
-  } catch {
-    return null;
-  }
+  return loadStoredChoice(MAP_VIEW_PREFERENCE_KEY, MAP_VIEW_PREFERENCES);
 }
 
 export function setMapViewPreference(preference: MapViewPreference): void {
-  try {
-    localStorage.setItem(MAP_VIEW_PREFERENCE_KEY, preference);
-  } catch (error) {
-    console.warn("Failed to save map view preference:", error);
-  }
+  saveStoredChoice(MAP_VIEW_PREFERENCE_KEY, preference, "map view preference");
 }

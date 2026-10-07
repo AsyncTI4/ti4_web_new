@@ -1,5 +1,7 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import { FleetTokenStackBase } from "./FleetTokenStackBase";
+import { FLEET_TOKEN_STEP, FleetTokenStackBase } from "./FleetTokenStackBase";
+
+const ARMADA_BONUS = 2;
 
 type ArmadaFleetTokenStackProps = {
   count: number;
@@ -12,8 +14,7 @@ export function ArmadaFleetTokenStack({
   colorAlias,
   faction,
 }: ArmadaFleetTokenStackProps) {
-  // Armada increases effective fleet capacity by 2.
-  const totalCount = count + 2;
+  const totalCount = count + ARMADA_BONUS;
 
   return (
     <FleetTokenStackBase
@@ -22,39 +23,35 @@ export function ArmadaFleetTokenStack({
       colorAlias={colorAlias}
       faction={faction}
       showBlankToken={count === 0}
-      renderExtraTokens={({ baseCount }) => (
-        <>
-          {Array.from({ length: 2 }).map((_, index) => (
-            <div
-              key={`armada-fleet-token-${index}`}
+      extraTokens={Array.from({ length: ARMADA_BONUS }, (_, index) => (
+        <div
+          key={`armada-fleet-token-${index}`}
+          style={{
+            position: "absolute",
+            left: (count + 1 + index) * FLEET_TOKEN_STEP,
+            zIndex: count + index + 1,
+          }}
+        >
+          <div style={{ position: "relative" }}>
+            <img
+              src={cdnImage(`/command_token/fleet_${colorAlias}.png`)}
+              alt={`${faction} armada fleet token`}
+            />
+            <img
+              src={cdnImage("/command_token/fleet_armada.png")}
+              alt="armada"
               style={{
                 position: "absolute",
-                left: baseCount * 20 + 20 + index * 20,
-                zIndex: baseCount + index + 1,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -30%)",
+                height: "45px",
+                zIndex: 1,
               }}
-            >
-              <div style={{ position: "relative" }}>
-                <img
-                  src={cdnImage(`/command_token/fleet_${colorAlias}.png`)}
-                  alt={`${faction} armada fleet token`}
-                />
-                <img
-                  src={cdnImage("/command_token/fleet_armada.png")}
-                  alt="armada"
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -30%)",
-                    height: "45px",
-                    zIndex: 1,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </>
-      )}
+            />
+          </div>
+        </div>
+      ))}
     />
   );
 }

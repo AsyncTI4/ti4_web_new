@@ -34,7 +34,6 @@ export function CompactObjectives({ objectives, playerData }: Props) {
         onSelect={setSelectedObjective}
       />
 
-      {/* Other Objectives */}
       {objectives.customObjectives.length > 0 && (
         <Box>
           <Text size="sm" fw={600} c="gray.4" mb={4}>
@@ -44,7 +43,6 @@ export function CompactObjectives({ objectives, playerData }: Props) {
             {objectives.customObjectives.map((objective) => (
               <CompactObjective
                 key={objective.key}
-                objectiveKey={objective.key}
                 name={objective.name}
                 color="gray"
                 revealed={objective.revealed}

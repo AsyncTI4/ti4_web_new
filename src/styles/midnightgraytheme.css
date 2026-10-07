@@ -29,20 +29,11 @@
       #0a0a0a;
     --map-tabs-bg: linear-gradient(180deg, #080808, #161616 100%);
 
-    --map-tab-border: 1px solid rgba(160, 160, 160, 0.35);
-    --map-tab-hover-bg: #181818;
-    --map-tab-hover-border: #858585;
-
-    --map-tab-active-bg: #3F3F3F;
     --map-tab-active-border: #A9A9A9;
 
     --header-bg: linear-gradient(90deg, rgba(8, 8, 8) 0%, rgba(24, 24, 24) 100%);
-    --header-border: 1px solid #424242;
 
     --header-tab-bg: linear-gradient(180deg, #080808, #161616 100%);
-    --header-tab-border: 1px solid rgba(200, 200, 200, 0.4);
-    --header-tab-hover-bg: #181818;
-    --header-tab-hover-border: #858585;
 
     --header-tab-active-bg: #3F3F3F;
     --header-tab-active-border: #A9A9A9;
@@ -56,25 +47,6 @@
     --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
     --score-board-bg: linear-gradient(135deg, rgba(8, 8, 8, 0.985) 0%, rgba(24, 24, 24, 0.96) 50%, rgba(8, 8, 8, 0.985) 100%);
-    --score-board-divider: linear-gradient(90deg, transparent 0%, rgba(160, 160, 160, 0.35) 50%, transparent 100%);
-
-    --objective-expanded-border-emphasis: 1px solid rgba(200, 200, 200, 0.18);
-    --objective-expanded-border-default: 1px solid rgba(115, 115, 115, 0.18);
-
-    --objective-vp-indicator-revealed-emphasis-bg: linear-gradient(135deg, rgba(200, 200, 200, 0.18) 0%, rgba(180, 180, 180, 0.12) 100%);
-    --objective-vp-indicator-revealed-emphasis-border: rgba(200, 200, 200, 0.38);
-    --objective-vp-indicator-revealed-emphasis-glow: rgba(200, 200, 200, 0.2);
-
-    --objective-vp-indicator-revealed-default-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.22) 0%, rgba(115, 115, 115, 0.16) 100%);
-    --objective-vp-indicator-revealed-default-border: rgba(160, 160, 160, 0.45);
-    --objective-vp-indicator-revealed-default-glow: rgba(160, 160, 160, 0.25);
-
-    --objective-vp-indicator-hidden-bg: linear-gradient(135deg, rgba(100, 100, 100, 0.18) 0%, rgba(75, 75, 75, 0.12) 100%);
-    --objective-vp-indicator-hidden-border: rgba(100, 100, 100, 0.35);
-
-    --objective-progress-badge-at-threshold-bg: rgba(200, 200, 200, 0.2);
-    --objective-progress-badge-at-threshold-border: 1px solid rgba(200, 200, 200, 0.5);
-    --objective-progress-badge-at-threshold-glow: rgba(200, 200, 200, 0.35);
 
     --card-details-section-title-border: 1px solid rgba(160, 160, 160, 0.28);
 
@@ -91,15 +63,6 @@
     --details-card-border: 1px solid rgba(200, 200, 200, 0.28);
 
     --resource-divider-color: rgba(160, 160, 160, 0.35);
-
-    --upgrade-card-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.08) 0%, rgba(115, 115, 115, 0.05) 100%);
-    --upgrade-card-border: 1px solid rgba(160, 160, 160, 0.25);
-    --upgrade-card-text-color: rgba(209, 213, 219, 0.9);
-    --upgrade-card-icon-color: rgba(156, 163, 175, 0.8);
-
-
-    --player-card-mobile-panel-bg: #111111;
-    --player-card-mobile-panel-border: 1px solid #232323;
 
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
@@ -130,15 +93,5 @@
     --socket-border: rgba(190, 190, 196, 0.09);
     --socket-tick: rgba(190, 190, 196, 0.2);
 
-    /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
-       cards read as plates raised onto the deck. */
-    --hud-deck-ground: #0b0b0c;
-
-    /* The line the board sits on. Themed, because it is the one piece of chroma
-       where the deck meets the map. */
-    --hud-edge-accent: rgba(196, 196, 202, 0.3);
-
-    /* The sweep passing over the survey lattice while game state is in
-       flight. A lighter tint of this theme's own accent, never a new hue. */
     --survey-lit: rgba(216, 216, 222, 0.8);
 }

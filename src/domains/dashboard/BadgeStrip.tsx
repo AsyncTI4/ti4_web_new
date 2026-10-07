@@ -22,7 +22,7 @@ const BADGE_ICONS: Record<string, React.ComponentType<{ size: number }>> = {
 
 function badgeColorClass(key: string) {
   const safe = key.replace(/-/g, "_");
-  return classes[`badge_${safe}` as keyof typeof classes] ?? "";
+  return classes[`badge_${safe}`] ?? "";
 }
 
 function tierClasses(tier: BadgeAward["tier"]) {

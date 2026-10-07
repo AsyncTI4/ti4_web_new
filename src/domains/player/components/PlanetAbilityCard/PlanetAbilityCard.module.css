@@ -60,24 +60,6 @@
   background: rgba(76, 29, 149, 0.16);
 }
 
-.exhaustBadge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.75);
-  color: var(--mantine-color-gray-1);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-  z-index: 2;
-}
-
 .bottomStack {
   flex-grow: 1;
   justify-content: flex-end;

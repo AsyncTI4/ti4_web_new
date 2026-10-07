@@ -7,15 +7,12 @@ import { getColorAlias } from "@/entities/lookup/colors";
 type Props = {
   asyncId: string;
   color?: string;
-  compact?: boolean;
   condensed?: boolean;
-  lockedLabel?: string;
 };
 
 export function UnitCardUnavailable({
   asyncId,
   color,
-  compact,
   condensed,
 }: Props) {
   const colorAlias = getColorAlias(color);
@@ -38,11 +35,11 @@ export function UnitCardUnavailable({
 
   return (
     <div style={{ minWidth: "50px" }}>
-      <BaseCard compact={compact} locked enableAnimations={false}>
+      <BaseCard locked enableAnimations={false}>
         <Unit
           unitType={asyncId}
           colorAlias={colorAlias}
-          className={compact ? styles.unitImageCompact : styles.unitImage}
+          className={styles.unitImage}
           scaleSprite
         />
       </BaseCard>

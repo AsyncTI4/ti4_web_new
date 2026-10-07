@@ -1,4 +1,4 @@
-import { Box, type BoxProps, Tabs, type TabsPanelProps } from "@mantine/core";
+import { Box, Tabs, type TabsPanelProps } from "@mantine/core";
 import type { ReactNode } from "react";
 
 type TabPanelSectionProps = {
@@ -14,10 +14,6 @@ type TabPanelSectionProps = {
    * can keep their existing CSS modules.
    */
   className?: string;
-  /**
-   * Additional props spread into the Box wrapper when extra styling is needed.
-   */
-  boxProps?: BoxProps;
 };
 
 export function TabPanelSection({
@@ -25,15 +21,12 @@ export function TabPanelSection({
   height = "calc(100% - 60px)",
   children,
   className,
-  boxProps,
 }: TabPanelSectionProps) {
   return (
     <Tabs.Panel value={value} h={height}>
-      <Box className={className} {...boxProps}>
+      <Box className={className}>
         {children}
       </Box>
     </Tabs.Panel>
   );
 }
-
-export default TabPanelSection;

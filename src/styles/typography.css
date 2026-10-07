@@ -67,17 +67,14 @@
 }
 
 /* Light text on a dark field loses perceived weight, so body prose gets a
-   fractionally open track and the medium weight rather than regular. */
+   fractionally open track. */
 body {
   font-family: var(--font-text);
   font-kerning: normal;
   letter-spacing: var(--track-body);
 }
 
-/*
- * Every numeral in a mono face aligns in a column. 19 files used a mono family but
- * only 12 asked for tabular figures, so ratios drifted against each other.
- */
+/* Every numeral in a mono face aligns in a column. */
 :where([style*="monospace"], .mono),
 :where(code, kbd, samp, pre) {
   font-variant-numeric: tabular-nums;

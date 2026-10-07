@@ -9,7 +9,6 @@ type Props = {
   id: string;
   exhausted: boolean;
   locked: boolean;
-  active: boolean;
 };
 
 export function CompactLeader({ id, exhausted, locked }: Props) {

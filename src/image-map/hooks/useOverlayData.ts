@@ -9,7 +9,7 @@ export type OverlayData = {
   boxXYWH: [number, number, number, number];
 };
 
-export type MapOverlayResponse = {
+type MapOverlayResponse = {
   overlays: OverlayData[];
   updatedAtEpochMs: number;
 };

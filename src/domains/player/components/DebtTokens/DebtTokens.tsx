@@ -23,11 +23,6 @@ type Props = {
 };
 
 export function DebtTokens({ debts, compact = false }: Props) {
-  /*
-   * Before any early return. This used to sit after one, which made it a
-   * conditional hook — the hook order would desync the moment a player went from
-   * owing something to owing nothing mid-game, which the live socket can do.
-   */
   const factionColorMap = useFactionColors();
   const gameData = useGameData();
   const { opened, setOpened } = useDisclosure(false);

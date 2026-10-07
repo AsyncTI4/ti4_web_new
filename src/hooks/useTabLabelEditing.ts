@@ -3,7 +3,6 @@ import {
   type KeyboardEvent,
   type MouseEvent,
   type RefObject,
-  useCallback,
   useRef,
   useState,
 } from "react";
@@ -29,7 +28,7 @@ function safeSetTabName(tabId: string, value: string): void {
 
 export type TabLabelEditingApi = {
   editingTabId: string | null;
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement | null>;
   getDisplayName: (tabId: string) => string;
   toggleEditing: (tabId: string, event?: MouseEvent) => void;
   handleInputKeyDown: (tabId: string, event: KeyboardEvent<HTMLInputElement>) => void;
@@ -40,48 +39,38 @@ export function useTabLabelEditing(): TabLabelEditingApi {
   const [editingTabId, setEditingTabId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const getDisplayName = useCallback((tabId: string) => {
-    return safeGetTabName(tabId) || tabId;
-  }, []);
+  const getDisplayName = (tabId: string) => safeGetTabName(tabId) || tabId;
 
-  const saveTabName = useCallback((tabId: string, value: string) => {
+  const saveTabName = (tabId: string, value: string) => {
     safeSetTabName(tabId, value);
     setEditingTabId(null);
-  }, []);
+  };
 
-  const toggleEditing = useCallback(
-    (tabId: string, event?: MouseEvent) => {
-      event?.stopPropagation();
-      if (editingTabId === tabId) {
-        if (inputRef.current) {
-          saveTabName(tabId, inputRef.current.value);
-        } else {
-          setEditingTabId(null);
-        }
-      } else {
-        setEditingTabId(tabId);
-      }
-    },
-    [editingTabId, saveTabName],
-  );
+  const toggleEditing = (tabId: string, event?: MouseEvent) => {
+    event?.stopPropagation();
+    if (editingTabId !== tabId) {
+      setEditingTabId(tabId);
+      return;
+    }
+    if (!inputRef.current) {
+      setEditingTabId(null);
+      return;
+    }
+    saveTabName(tabId, inputRef.current.value);
+  };
 
-  const handleInputKeyDown = useCallback(
-    (tabId: string, event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        saveTabName(tabId, event.currentTarget.value);
-      } else if (event.key === "Escape") {
-        saveTabName(tabId, tabId);
-      }
-    },
-    [saveTabName],
-  );
+  const handleInputKeyDown = (
+    tabId: string,
+    event: KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") saveTabName(tabId, event.currentTarget.value);
+    if (event.key === "Escape") saveTabName(tabId, tabId);
+  };
 
-  const handleInputBlur = useCallback(
-    (tabId: string, event: FocusEvent<HTMLInputElement>) => {
-      saveTabName(tabId, event.currentTarget.value);
-    },
-    [saveTabName],
-  );
+  const handleInputBlur = (
+    tabId: string,
+    event: FocusEvent<HTMLInputElement>,
+  ) => saveTabName(tabId, event.currentTarget.value);
 
   return {
     editingTabId,

@@ -1,39 +1,10 @@
-import { useState } from "react";
+import { useState, type ComponentProps, type ReactNode } from "react";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { Chip } from "./Chip";
-import type { ColorKey } from "@/domains/player/components/gradientClasses";
 
-type ChipAccent =
-  | ColorKey
-  | "grey"
-  | "gray"
-  | "deepRed"
-  | "bloodOrange"
-  | "blueRed"
-  | "blueGreen"
-  | "blueYellow"
-  | "greenRed"
-  | "greenYellow"
-  | "yellowRed";
-
-type ChipSize = "xs" | "sm" | "md";
-
-type Props = {
-  title: string;
-  accent?: ChipAccent;
-  leftSection?: React.ReactNode;
-  leftIconSrc?: string;
-  leftIconClassName?: string;
-  leftIconSize?: number | string;
-  ribbon?: boolean;
-  accentLine?: boolean;
-  strong?: boolean;
-  size?: ChipSize;
-  dropdownContent: React.ReactNode;
+type Props = Omit<ComponentProps<typeof Chip>, "onClick"> & {
+  dropdownContent: ReactNode;
   onClick?: () => void;
-  className?: string;
-  px?: number | string;
-  py?: number | string;
 };
 
 /**
@@ -41,21 +12,9 @@ type Props = {
  * Consolidates the common pattern used by PromissoryNote, Relic, ScoredSecret, etc.
  */
 export function ChipWithPopover({
-  title,
-  accent = "gray",
-  leftSection,
-  leftIconSrc,
-  leftIconClassName,
-  leftIconSize,
-  ribbon = false,
-  accentLine = false,
-  strong = false,
-  size = "md",
   dropdownContent,
   onClick,
-  className,
-  px,
-  py,
+  ...chipProps
 }: Props) {
   const [opened, setOpened] = useState(false);
 
@@ -68,22 +27,7 @@ export function ChipWithPopover({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <div>
-          <Chip
-            accent={accent}
-            onClick={handleClick}
-            leftSection={leftSection}
-            leftIconSrc={leftIconSrc}
-            leftIconClassName={leftIconClassName}
-            leftIconSize={leftIconSize}
-            title={title}
-            ribbon={ribbon}
-            accentLine={accentLine}
-            strong={strong}
-            size={size}
-            className={className}
-            px={px}
-            py={py}
-          />
+          <Chip {...chipProps} onClick={handleClick} />
         </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>{dropdownContent}</SmoothPopover.Dropdown>

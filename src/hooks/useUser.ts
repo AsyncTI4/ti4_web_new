@@ -57,7 +57,7 @@ export function ensureLocalUser(): LocalUser {
 }
 
 export function useUser(): { user: LocalUser | null; resetUser: () => void } {
-  const [user, setUser] = useState<LocalUser | null>(getLocalUser());
+  const [user, setUser] = useState<LocalUser | null>(getLocalUser);
 
   useEffect(() => {
     if (user) return;
@@ -81,9 +81,5 @@ export function useUser(): { user: LocalUser | null; resetUser: () => void } {
     };
   }, []);
 
-  const resetUser = () => {
-    clearLocalUser();
-  };
-
-  return { user, resetUser };
+  return { user, resetUser: clearLocalUser };
 }

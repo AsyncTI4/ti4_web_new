@@ -45,6 +45,6 @@ The last two are the sharpest constraints here, because density and atmosphere a
 
 ## Accessibility & Inclusion
 
-No formal conformance level has been set for this project yet — treat this section as open rather than as a standard already adopted. What the code does commit to today is worth preserving and extending: keyboard navigation of the map's hex ring (`useHexRingNavigation`), screen-reader descriptions of tiles (`useTileVoiceOver`), and live-region announcements (`useLiveAnnouncer`).
+No formal conformance level has been set for this project yet — treat this section as open rather than as a standard already adopted. The map has no keyboard navigation, screen-reader tile descriptions or live-region announcements today; earlier unwired prototypes of these were removed.
 
 Two known gaps to resolve when the bar is decided: `prefers-reduced-motion` alternatives are present in roughly 12 files but absent from several others that define keyframes, and contrast has not been verified across all seven themes.

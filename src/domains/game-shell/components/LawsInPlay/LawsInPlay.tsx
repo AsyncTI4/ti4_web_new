@@ -2,6 +2,7 @@ import { Box, Text, SimpleGrid } from "@mantine/core";
 import { LawCard } from "./LawCard";
 import { LawInPlay } from "@/entities/data/types";
 import styles from "./LawsInPlay.module.css";
+import { GeneralSectionTitle } from "../GeneralSectionTitle";
 
 type Props = {
   laws: LawInPlay[];
@@ -11,7 +12,7 @@ function LawsInPlay({ laws }: Props) {
   return (
     <Box>
       <SimpleGrid cols={1} spacing="xs">
-        <Text className={styles.sectionTitle}>Laws in Play</Text>
+        <GeneralSectionTitle>Laws in Play</GeneralSectionTitle>
         {laws.length === 0 ? (
           <Text className={styles.emptyText}>none</Text>
         ) : (

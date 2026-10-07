@@ -47,7 +47,7 @@
   font-size: 20px;
   font-weight: var(--weight-title);
   letter-spacing: 0.02em;
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   color: var(--mantine-color-gray-0);
   text-wrap: balance;
 }
@@ -522,7 +522,7 @@
   font-size: 14px;
   font-weight: var(--weight-title);
   letter-spacing: 0.02em;
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   color: var(--mantine-color-gray-0);
   white-space: nowrap;
   overflow: hidden;

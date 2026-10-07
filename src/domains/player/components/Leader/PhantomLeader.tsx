@@ -1,14 +1,14 @@
 import cx from "clsx";
 import styles from "./PhantomLeader.module.css";
 
-export type PhantomLeaderProps = {
+type Props = {
   type: "agent" | "commander" | "hero";
   /** Whether the dossiers beside this slot carry portraits, which sets the row height. */
   withPortrait?: boolean;
 };
 
 /** A leader slot with nobody in it — most often a hero already spent. */
-export function PhantomLeader({ type, withPortrait = true }: PhantomLeaderProps) {
+export function PhantomLeader({ type, withPortrait = true }: Props) {
   return (
     <div
       className={cx(styles.plate, withPortrait && styles.plateWithPortrait)}

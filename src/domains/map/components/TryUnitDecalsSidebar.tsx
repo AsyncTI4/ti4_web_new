@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Box, ActionIcon, Text, SegmentedControl } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { FactionTabBar } from "@/domains/game-shell/components/navigation/FactionTabBar";
@@ -33,91 +33,50 @@ export function TryUnitDecalsSidebar({ opened, onClose }: Props) {
   const selectedFaction =
     selectedArea?.type === "faction" ? selectedArea.faction : null;
 
+  const selectedPlayer = playerData.find((p) => p.faction === selectedFaction);
+  const playerColor = selectedFaction
+    ? gameData?.factionColorMap?.[selectedFaction]?.color
+    : undefined;
+  const decalOverride = selectedFaction
+    ? decalOverrides[selectedFaction]
+    : undefined;
+  const colorOverride = selectedFaction
+    ? colorOverrides[selectedFaction]
+    : undefined;
+
+  const activeDecalId = decalOverride ?? selectedPlayer?.decalId ?? null;
+  const activeColorAlias =
+    colorOverride ?? (playerColor ? getColorAlias(playerColor) : null);
+  const colorData = activeColorAlias ? findColorData(activeColorAlias) : null;
+  const colorName = colorData?.name || colorData?.displayName || null;
+
+  /** Clicking the active choice clears the override; anything else overrides. */
   const handleDecalClick = (decalId: string) => {
     if (!selectedFaction) return;
-    const currentOverride = decalOverrides[selectedFaction];
-    const playerDecalId = gameData?.playerData.find(
-      (p) => p.faction === selectedFaction
-    )?.decalId;
-
-    // Determine what decal is currently active (override takes precedence)
-    const activeDecalId = currentOverride !== undefined ? currentOverride : playerDecalId;
-
-    if (activeDecalId === decalId) {
-      // If clicking the currently active decal, clear the override (if any)
-      if (currentOverride !== undefined) {
-        setDecalOverride(selectedFaction, null);
-      }
-      // If there's no override and it matches the player's original, do nothing
-    } else {
-      // Set the new override
+    if (activeDecalId !== decalId) {
       setDecalOverride(selectedFaction, decalId);
+      return;
     }
+    if (decalOverride !== undefined) setDecalOverride(selectedFaction, null);
   };
 
   const handleColorClick = (colorAlias: string) => {
     if (!selectedFaction) return;
-    const currentOverride = colorOverrides[selectedFaction];
-    const factionColorMap = gameData?.factionColorMap;
-    const playerColor = factionColorMap?.[selectedFaction]?.color;
-    const playerColorAlias = playerColor ? getColorAlias(playerColor) : null;
-
-    // Determine what color is currently active (override takes precedence)
-    const activeColorAlias = currentOverride !== undefined ? currentOverride : playerColorAlias;
-
-    if (activeColorAlias === colorAlias) {
-      // If clicking the currently active color, clear the override (if any)
-      if (currentOverride !== undefined) {
-        setColorOverride(selectedFaction, null);
-      }
-      // If there's no override and it matches the player's original, do nothing
-    } else {
-      // Set the new override
+    if (activeColorAlias !== colorAlias) {
       setColorOverride(selectedFaction, colorAlias);
+      return;
     }
+    if (colorOverride !== undefined) setColorOverride(selectedFaction, null);
   };
-
-  // Get current active decal and color for the selected faction
-  const getActiveDecal = () => {
-    if (!selectedFaction) return null;
-    const overrideDecalId = decalOverrides[selectedFaction];
-    const playerDecalId = gameData?.playerData.find(
-      (p) => p.faction === selectedFaction
-    )?.decalId;
-    return overrideDecalId !== undefined ? overrideDecalId : playerDecalId || null;
-  };
-
-  const getActiveColor = () => {
-    if (!selectedFaction) return null;
-    const overrideColorAlias = colorOverrides[selectedFaction];
-    const factionColorMap = gameData?.factionColorMap;
-    const playerColor = factionColorMap?.[selectedFaction]?.color;
-    const playerColorAlias = playerColor ? getColorAlias(playerColor) : null;
-    return overrideColorAlias !== undefined ? overrideColorAlias : playerColorAlias;
-  };
-
-  const activeDecalId = getActiveDecal();
-  const activeColorAlias = getActiveColor();
-  const colorData = activeColorAlias ? findColorData(activeColorAlias) : null;
-  const colorName = colorData?.name || colorData?.displayName || null;
-
-  const selectedPlayer = gameData?.playerData.find(
-    (p) => p.faction === selectedFaction
-  );
-  const playerDecalId = selectedPlayer?.decalId;
-  const factionColorMap = gameData?.factionColorMap;
-  const playerColor = selectedFaction
-    ? factionColorMap?.[selectedFaction]?.color
-    : undefined;
-  const playerColorAlias = playerColor ? getColorAlias(playerColor) : null;
 
   return (
     <Box
-      className={`${classes.sidebar} ${opened ? classes.opened : classes.closed}`}
+      className={`${classes.sidebar} ${opened ? classes.opened : ""}`}
     >
       <Box
         display="flex"
-        style={{ alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--mantine-color-dark-4)" }}
+        className={classes.section}
+        style={{ alignItems: "center", justifyContent: "space-between" }}
         p="md"
       >
         <Text size="lg" fw={600} c="gray.0">
@@ -129,7 +88,7 @@ export function TryUnitDecalsSidebar({ opened, onClose }: Props) {
       </Box>
 
       {playerData.length > 0 && (
-        <Box style={{ borderBottom: "1px solid var(--mantine-color-dark-4)" }}>
+        <Box className={classes.section}>
           <FactionTabBar
             playerData={playerData}
             selectedArea={selectedArea}
@@ -145,7 +104,7 @@ export function TryUnitDecalsSidebar({ opened, onClose }: Props) {
         <DiscordCommands colorName={colorName} decalId={activeDecalId} />
       )}
 
-      <Box py="sm" px="md" style={{ borderBottom: "1px solid var(--mantine-color-dark-4)" }}>
+      <Box py="sm" px="md" className={classes.section}>
         <SegmentedControl
           value={mode}
           onChange={(value) => setMode(value as "decals" | "colors")}
@@ -161,16 +120,12 @@ export function TryUnitDecalsSidebar({ opened, onClose }: Props) {
         {selectedFaction ? (
           mode === "decals" ? (
             <DecalGrid
-              selectedFaction={selectedFaction}
-              decalOverrides={decalOverrides}
-              playerDecalId={playerDecalId}
+              activeDecalId={activeDecalId}
               onDecalClick={handleDecalClick}
             />
           ) : (
             <ColorGrid
-              selectedFaction={selectedFaction}
-              colorOverrides={colorOverrides}
-              playerColorAlias={playerColorAlias}
+              activeColorAlias={activeColorAlias}
               onColorClick={handleColorClick}
             />
           )
@@ -181,7 +136,7 @@ export function TryUnitDecalsSidebar({ opened, onClose }: Props) {
             h={200}
           >
             <Text c="dimmed">
-              Select a faction to preview {mode === "decals" ? "decals" : "colors"}
+              Select a faction to preview {mode}
             </Text>
           </Box>
         )}

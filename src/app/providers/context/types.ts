@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
-import { RGBColor } from "@/utils/colorOptimization";
 import { calculateTilePositions } from "@/domains/map/model/mapgen/tilePositioning";
 import { SocketReadyState } from "@/hooks/useGameSocket";
-import {
+import type {
   PlayerDataResponse,
   WebScoreBreakdown,
   CapacityUsage,
-  EntityData,
+  FactionUnits,
   BorderAnomalyInfo,
+  Point,
+  RGBColor,
 } from "@/entities/data/types";
+import type { HexSide } from "@/utils/hexagonUtils";
 import { EntityStack } from "@/utils/unitPositioning";
-import type { MapReplayPlan } from "@/utils/historicalMapTransitions";
+import type { MapReplayPlan } from "@/utils/mapReplay/types";
 import type { GameSubEvent } from "@/entities/data/types";
 
 export type RetreatSubEvent = Extract<GameSubEvent, { type: "RETREAT" }>;
@@ -29,17 +31,14 @@ export type MapStatePreview = {
 
 export type FactionImageMap = Record<string, { image: string; type: string }>;
 
-export type FactionColorMap = {
-  [key: string]: FactionColorData;
-};
-
-export type FactionColorData = {
+type FactionColorData = {
   faction: string;
   color: string;
   optimizedColor: RGBColor;
-  factionImage: string | null;
-  factionImageType: string | null;
 };
+
+/** Keyed by both faction and color. */
+export type FactionColorMap = Record<string, FactionColorData>;
 
 export type GameContext = {
   data: GameData | undefined;
@@ -54,6 +53,13 @@ export type GameContext = {
   mapReplay: MapReplayState;
 };
 
+export type TilePdsEntry = {
+  faction: string;
+  color: string;
+  count: number;
+  expected: number;
+};
+
 export type GameData = {
   tiles: Record<string, Tile>;
   tilePositions: string[];
@@ -61,19 +67,7 @@ export type GameData = {
   originalFactionColorMap: FactionColorMap;
   factionImageMap: FactionImageMap;
   tilesWithPds: Set<string>;
-  dominantPdsFaction: Record<
-    string,
-    {
-      faction: string;
-      color: string;
-      count: number;
-      expected: number;
-    }
-  >;
-  pdsByTile: Record<
-    string,
-    { faction: string; color: string; count: number; expected: number }[]
-  >;
+  pdsByTile: Record<string, TilePdsEntry[]>;
 
   armyRankings: Record<string, number>;
 
@@ -121,7 +115,7 @@ export type Tile = {
   position: string;
   systemId: string;
   tokens: string[];
-  unitsByFaction: Record<string, EntityData[]>;
+  unitsByFaction: FactionUnits;
   planets: Record<string, TilePlanet>;
   hasAnomaly: boolean;
   hasTechSkips: boolean;
@@ -130,9 +124,9 @@ export type Tile = {
     x: number;
     y: number;
     hexOutline: {
-      points: { x: number; y: number }[];
-      sides?: { x1: number; y1: number; x2: number; y2: number }[];
-      midpoints?: { x: number; y: number }[];
+      points: Point[];
+      sides: HexSide[];
+      midpoints: Point[];
     };
   };
   highestProduction: number;
@@ -151,7 +145,7 @@ export type TilePlanet = {
   tokens: string[];
   attachments: string[];
   actionCards: string[];
-  unitsByFaction: Record<string, EntityData[]>;
+  unitsByFaction: FactionUnits;
   techSpecialties: string[];
   exhausted: boolean;
   resources?: number | null;

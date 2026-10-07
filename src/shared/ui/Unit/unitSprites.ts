@@ -129,8 +129,6 @@ export const SPECIAL_FACTION_SPRITES = {
   ],
 } as const;
 
-export const SPECIAL_SPRITE_UNITS = new Set(Object.keys(SPECIAL_UNIT_SPRITES));
-
 const SHARED_SPRITE_UNITS = new Set(["plenaryorbital", "tyrantslament"]);
 
 export type UnitSprite = {

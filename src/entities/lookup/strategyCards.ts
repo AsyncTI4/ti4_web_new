@@ -1,16 +1,12 @@
 import { strategyCards } from "@/entities/data/strategyCards";
-import { StrategyCardDefinition } from "@/entities/data/types";
+import { indexBy } from "@/entities/lookup/indexBy";
+import type { StrategyCardDefinition } from "@/entities/data/types";
 
-const strategyCardsById = new Map<string, StrategyCardDefinition>(
-  strategyCards.map((card) => [card.id, card])
-);
+const strategyCardsById = indexBy(strategyCards, (card) => card.id);
 
-const strategyCardsByInitiative = new Map<number, StrategyCardDefinition>(
-  strategyCards.map((card) => [card.initiative, card])
-);
-
-const strategyCardsByName = new Map<string, StrategyCardDefinition>(
-  strategyCards.map((card) => [card.name.toLowerCase(), card])
+const strategyCardsByInitiative = indexBy(
+  strategyCards,
+  (card) => card.initiative
 );
 
 const defaultStrategyCardIdMap: Record<number, string> = {
@@ -34,10 +30,8 @@ export function getStrategyCardByInitiative(
   initiative: number,
   strategyCardIdMap?: Record<number, string>
 ): StrategyCardDefinition | undefined {
-  if (strategyCardIdMap && strategyCardIdMap[initiative]) {
-    const cardId = strategyCardIdMap[initiative];
-    return getStrategyCardById(cardId);
-  }
+  const mappedCardId = strategyCardIdMap?.[initiative];
+  if (mappedCardId) return getStrategyCardById(mappedCardId);
 
   const defaultCardId = defaultStrategyCardIdMap[initiative];
   if (defaultCardId) {
@@ -47,35 +41,3 @@ export function getStrategyCardByInitiative(
 
   return strategyCardsByInitiative.get(initiative);
 }
-
-export function getStrategyCardByName(
-  name: string
-): StrategyCardDefinition | undefined {
-  return strategyCardsByName.get(name.toLowerCase());
-}
-
-export function getAllStrategyCards(): StrategyCardDefinition[] {
-  return strategyCards;
-}
-
-export const SC_NAMES = {
-  1: "LEADERSHIP",
-  2: "DIPLOMACY",
-  3: "POLITICS",
-  4: "CONSTRUCTION",
-  5: "TRADE",
-  6: "WARFARE",
-  7: "TECHNOLOGY",
-  8: "IMPERIAL",
-};
-
-export const SC_COLORS = {
-  1: "red",
-  2: "orange",
-  3: "yellow",
-  4: "green",
-  5: "teal",
-  6: "cyan",
-  7: "blue",
-  8: "purple",
-};

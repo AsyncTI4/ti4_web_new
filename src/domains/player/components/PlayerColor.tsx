@@ -7,7 +7,7 @@ import {
 } from "@/entities/lookup/colors";
 import styles from "./PlayerColor.module.css";
 
-type PlayerColorProps = {
+type Props = {
   color: string;
   size?: "xs" | "sm";
 };
@@ -44,7 +44,7 @@ export function PlayerColorSwatch({ color }: { color: string }) {
   );
 }
 
-export function PlayerColor({ color, size = "sm" }: PlayerColorProps) {
+export function PlayerColor({ color, size = "sm" }: Props) {
   const swatchBackground = getSwatchBackground(color);
   const labelColor = lighten(getPrimaryColorCSS(color), 0.45);
 

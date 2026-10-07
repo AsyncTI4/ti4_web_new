@@ -1,4 +1,3 @@
-import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
 import { SpriteUnitImage } from "@/shared/ui/Unit/components/SpriteUnitImage";
@@ -6,17 +5,13 @@ import { getUnitSprite } from "@/shared/ui/Unit/unitSprites";
 import classes from "./UnitBadge.module.css";
 import cx from "clsx";
 
-interface UnitBadgeProps {
+type UnitBadgeProps = {
   unitType: "ff" | "gf";
   colorAlias: string;
   textColor: string;
   faction: string;
   count: number;
-  style?: React.CSSProperties;
-  onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseLeave?: (event: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseDown?: (event: React.MouseEvent<HTMLDivElement>) => void;
-}
+};
 
 export function UnitBadge({
   unitType,
@@ -24,27 +19,12 @@ export function UnitBadge({
   textColor,
   faction,
   count,
-  style,
-  onMouseEnter,
-  onMouseLeave,
-  onMouseDown,
 }: UnitBadgeProps) {
-  const baseZIndex = getUnitZIndex(unitType, 0);
-  const mergedStyle = {
-    ...style,
-    zIndex: baseZIndex,
-  };
-
   const isWhiteText = textColor.toLowerCase() === "white";
   const sprite = getUnitSprite(colorAlias, `tkn_${unitType}`);
 
   return (
-    <div
-      style={mergedStyle}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onMouseDown={onMouseDown}
-    >
+    <div style={{ zIndex: getUnitZIndex(unitType, 0) }}>
       <div className={classes.unitBadge}>
         {sprite ? (
           <SpriteUnitImage

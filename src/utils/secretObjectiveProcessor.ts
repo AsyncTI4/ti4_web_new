@@ -1,157 +1,93 @@
-import { PlayerData, SecretObjective } from "@/entities/data/types";
 import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
+import { processCardData, type ProcessedCardData } from "./cardDataProcessor";
 
-export type SecretObjectiveWithPhase = SecretObjective & {
-  phaseColor: "red" | "blue" | "orange";
-};
+type PhaseColor = "red" | "blue" | "orange";
 
-export type ProcessedSecretData = {
-  name: string;
-  aliases: string[];
-  count: number;
-  text: string;
+type ProcessedSecretData = ProcessedCardData & {
   phase: string;
-  phaseColor: "red" | "blue" | "orange";
+  phaseColor: PhaseColor;
 };
 
 export type SecretSection = {
   title: string;
   count: number;
   items: Array<ProcessedSecretData & { percentage?: number }>;
-  phaseColor: "red" | "blue" | "orange";
+  phaseColor: PhaseColor;
 };
 
-// Get phase color based on secret objective phase
-function getPhaseColor(phase: string): "red" | "blue" | "orange" {
-  const normalizedPhase = phase.toLowerCase();
-  switch (normalizedPhase) {
-    case "action":
-      return "red";
-    case "agenda":
-      return "blue";
-    case "status":
-      return "orange";
-    default:
-      return "red"; // Default to red if phase is unknown
-  }
+const PHASE_ORDER = ["ACTION", "AGENDA", "STATUS"];
+
+const PHASE_COLORS: Record<string, PhaseColor> = {
+  action: "red",
+  agenda: "blue",
+  status: "orange",
+};
+
+const getPhaseColor = (phase: string): PhaseColor =>
+  PHASE_COLORS[phase.toLowerCase()] ?? "red";
+
+function toSecretCard(id: string) {
+  const secret = getSecretObjectiveData(id);
+  if (!secret) return undefined;
+  return { name: secret.name, text: secret.text, id: secret.alias };
 }
 
-// Process secret objectives with grouping
+/** Groups secret IDs by name, most common first. */
 export function processSecretObjectives(
   secretIds: string[],
-  _playerData: PlayerData[]
 ): ProcessedSecretData[] {
-  const secretMap = new Map<
-    string,
-    {
-      aliases: string[];
-      text: string;
-      phase: string;
-      phaseColor: "red" | "blue" | "orange";
-    }
-  >();
-
-  secretIds.forEach((secretId) => {
-    const secret = getSecretObjectiveData(secretId);
-    if (!secret) {
-      console.warn(`Secret objective with ID "${secretId}" not found`);
-      return;
-    }
-
-    const phaseColor = getPhaseColor(secret.phase);
-    const existing = secretMap.get(secret.name);
-
-    secretMap.set(secret.name, {
-      aliases: existing
-        ? existing.aliases.concat(secret.alias)
-        : [secret.alias],
-      text: secret.text,
-      phase: secret.phase,
-      phaseColor,
-    });
+  return processCardData(secretIds, toSecretCard, "percentage").map((card) => {
+    const phase = getSecretObjectiveData(card.aliases[0])?.phase ?? "";
+    return { ...card, phase, phaseColor: getPhaseColor(phase) };
   });
-
-  // Convert to array
-  const processedSecrets = Array.from(secretMap.entries()).map(
-    ([name, data]) => ({
-      name,
-      aliases: data.aliases,
-      count: data.aliases.length,
-      text: data.text,
-      phase: data.phase,
-      phaseColor: data.phaseColor,
-    })
-  );
-
-  // Sort by count (most common first) within each phase
-  processedSecrets.sort((a, b) => b.count - a.count);
-
-  return processedSecrets;
 }
 
-// Create sections grouped by phase in the specified order
+function groupByPhase(items: ProcessedSecretData[]) {
+  const byPhase = new Map<string, ProcessedSecretData[]>();
+  for (const item of items) {
+    const phase = item.phase.toUpperCase();
+    byPhase.set(phase, [...(byPhase.get(phase) ?? []), item]);
+  }
+  return PHASE_ORDER.flatMap((phase) => {
+    const phaseItems = byPhase.get(phase);
+    if (!phaseItems?.length) return [];
+    return [
+      {
+        phase,
+        items: phaseItems,
+        count: phaseItems.reduce((sum, item) => sum + item.count, 0),
+        phaseColor: getPhaseColor(phase),
+      },
+    ];
+  });
+}
+
+/** Deck sections (with draw percentages) then discard sections, each in phase order. */
 export function createSecretSections(
   deckData: ProcessedSecretData[],
   discardData: ProcessedSecretData[],
-  deckIds: string[]
+  deckIds: string[],
 ): SecretSection[] {
-  const phaseOrder = ["ACTION", "AGENDA", "STATUS"];
+  const deckSections = groupByPhase(deckData).map(
+    ({ phase, items, count, phaseColor }) => ({
+      title: `${phase} Phase Deck`,
+      count,
+      phaseColor,
+      items: items.map((item) => ({
+        ...item,
+        percentage: (item.count / deckIds.length) * 100,
+      })),
+    }),
+  );
 
-  const sections: SecretSection[] = [];
+  const discardSections = groupByPhase(discardData).map(
+    ({ phase, items, count, phaseColor }) => ({
+      title: `${phase} Phase Discard`,
+      count,
+      phaseColor,
+      items,
+    }),
+  );
 
-  // Group deck data by phase
-  const deckByPhase = new Map<string, ProcessedSecretData[]>();
-  deckData.forEach((item) => {
-    const phase = item.phase.toUpperCase();
-    if (!deckByPhase.has(phase)) {
-      deckByPhase.set(phase, []);
-    }
-    deckByPhase.get(phase)!.push(item);
-  });
-
-  // Create deck sections in specified order
-  phaseOrder.forEach((phase) => {
-    const phaseData = deckByPhase.get(phase) || [];
-    if (phaseData.length > 0) {
-      const phaseColor = getPhaseColor(phase);
-      sections.push({
-        title: `${phase} Phase Deck`,
-        count: phaseData.reduce((sum, item) => sum + item.count, 0),
-        items: phaseData.map((item) => ({
-          ...item,
-          percentage: (item.count / deckIds.length) * 100,
-        })),
-        phaseColor,
-      });
-    }
-  });
-
-  // Add discard section if there are any discarded secrets
-  if (discardData.length > 0) {
-    // Group discard data by phase
-    const discardByPhase = new Map<string, ProcessedSecretData[]>();
-    discardData.forEach((item) => {
-      const phase = item.phase.toUpperCase();
-      if (!discardByPhase.has(phase)) {
-        discardByPhase.set(phase, []);
-      }
-      discardByPhase.get(phase)!.push(item);
-    });
-
-    // Create discard sections in specified order
-    phaseOrder.forEach((phase) => {
-      const phaseData = discardByPhase.get(phase) || [];
-      if (phaseData.length > 0) {
-        const phaseColor = getPhaseColor(phase);
-        sections.push({
-          title: `${phase} Phase Discard`,
-          count: phaseData.reduce((sum, item) => sum + item.count, 0),
-          items: phaseData, // No percentages for discard
-          phaseColor,
-        });
-      }
-    });
-  }
-
-  return sections;
+  return [...deckSections, ...discardSections];
 }

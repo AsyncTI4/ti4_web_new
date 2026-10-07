@@ -118,6 +118,6 @@
 
 .noteText {
   font-size: 11px;
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--mantine-color-gray-5);
 }

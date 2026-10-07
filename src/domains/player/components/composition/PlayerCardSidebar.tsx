@@ -22,13 +22,7 @@ export default function PlayerCardSidebar(props: Props) {
   );
 
   return (
-    <PlayerCardBox
-      color={player.color}
-      faction={player.faction}
-      showFactionBackground={false}
-      subtleBorder
-      isActive={player.active}
-    >
+    <PlayerCardBox color={player.color} isActive={player.active}>
       <PlayerCardHeaderCompact
         userName={player.userName}
         faction={player.faction}

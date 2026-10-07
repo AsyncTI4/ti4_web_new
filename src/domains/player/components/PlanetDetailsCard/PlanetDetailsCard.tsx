@@ -1,12 +1,14 @@
 import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import { PlanetTraitIcon } from "../PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "../TechSkipIcon";
 import classes from "./PlanetDetailsCard.module.css";
-import { getActionCard } from "@/entities/lookup/actionCards";
+import { PlanetActionCardsSection } from "../PlanetAbilityCard/PlanetActionCardsSection";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
+import { getAttachmentModifiers } from "@/utils/planets";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import DetailsCardTitle from "@/shared/ui/DetailsCard/DetailsCardTitle";
 import DetailsCardIcon from "@/shared/ui/DetailsCard/DetailsCardIcon";
@@ -18,49 +20,31 @@ type Props = {
   planetTile?: TilePlanet;
 };
 
+const PLANET_TYPE_LABEL: Record<string, string> = {
+  CULTURAL: "Cultural",
+  HAZARDOUS: "Hazardous",
+  INDUSTRIAL: "Industrial",
+  FACTION: "Faction Homeworld",
+  MR: "Mecatol Rex",
+};
+
 export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   const planetData = getPlanetData(planetId);
   if (!planetData) return null;
 
   const isLegendary = !!planetData.legendaryAbilityText;
-  const actionCardCounts = Object.entries(
-    planetTile?.actionCards?.reduce<Record<string, number>>((acc, alias) => {
-      acc[alias] = (acc[alias] ?? 0) + 1;
-      return acc;
-    }, {}) ?? {}
-  );
-  
   const isFactionPlanet = planetData.planetType === "FACTION";
 
-  // Calculate attachment modifiers
   const attachments = planetTile?.attachments ?? [];
-  const attachmentModifiers = attachments.reduce(
-    (totals, attachmentId) => {
-      const attachmentData = getAttachmentData(attachmentId);
-      if (attachmentData) {
-        return {
-          resources: totals.resources + (attachmentData.resourcesModifier || 0),
-          influence: totals.influence + (attachmentData.influenceModifier || 0),
-          techSpecialties: [
-            ...totals.techSpecialties,
-            ...(attachmentData.techSpeciality || []),
-          ],
-        };
-      }
-      return totals;
-    },
-    { resources: 0, influence: 0, techSpecialties: [] as string[] }
-  );
+  const attachmentModifiers = getAttachmentModifiers(attachments);
 
-  // Get all tech specialties (native + attachment)
   const allTechSpecialties = [
     ...(planetData.techSpecialties || []),
     ...attachmentModifiers.techSpecialties,
   ];
 
-  // Get tech specialty icons
   const techSpecialtyIcons = allTechSpecialties.map(
-    (specialty: string, index) => (
+    (specialty, index) => (
       <TechSkipIcon
         key={`${specialty}-${index}`}
         techType={specialty.toLowerCase() as TechType}
@@ -68,30 +52,11 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
     )
   );
 
-  // Get planet type display name
-  const getPlanetTypeDisplay = (type: string) => {
-    switch (type) {
-      case "CULTURAL":
-        return "Cultural";
-      case "HAZARDOUS":
-        return "Hazardous";
-      case "INDUSTRIAL":
-        return "Industrial";
-      case "FACTION":
-        return "Faction Homeworld";
-      case "MR":
-        return "Mecatol Rex";
-      default:
-        return type;
-    }
-  };
-
-  // Get planet trait icon
   const renderTraitIcon = () => {
     if (isFactionPlanet && planetData.factionHomeworld) {
       return (
         <Image
-          src={cdnImage(`/factions/${planetData.factionHomeworld}.png`)}
+          src={getFactionImage(planetData.factionHomeworld)}
           w={80}
           h={80}
         />
@@ -104,7 +69,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
       ["cultural", "hazardous", "industrial"].includes(traitKey)
     ) {
       return (
-        <Box w={80} h={80} className={` ${classes.planetIconContainer}`}>
+        <Box w={80} h={80} className={classes.planetIconContainer}>
           <PlanetTraitIcon
             trait={traitKey as "cultural" | "hazardous" | "industrial"}
             size={40}
@@ -121,16 +86,17 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   return (
     <DetailsCard width={320}>
       <Stack gap="md">
-        {/* Header with image and basic info */}
         <DetailsCardTitle
           title={planetData.name}
-          subtitle={getPlanetTypeDisplay(planetData.planetType!)}
+          subtitle={
+            PLANET_TYPE_LABEL[planetData.planetType ?? ""] ??
+            planetData.planetType
+          }
           icon={traitIcon ? <DetailsCardIcon icon={traitIcon} /> : undefined}
         />
 
         <Divider c="gray.7" opacity={0.8} />
 
-        {/* Resources and Influence */}
         <Group gap="lg">
           <Group gap="xs">
             <Image src="/pa_resources.png" w={20} h={20} />
@@ -164,7 +130,6 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
           </Group>
         </Group>
 
-        {/* Tech Specialties */}
         {techSpecialtyIcons.length > 0 && (
           <>
             <Divider c="gray.7" opacity={0.8} />
@@ -182,7 +147,6 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
           </>
         )}
 
-        {/* Attachments */}
         {attachments.length > 0 && (
           <>
             <Divider c="purple.6" opacity={0.8} />
@@ -257,7 +221,6 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
           </>
         )}
 
-        {/* Legendary Ability */}
         {isLegendary && (
           <>
             <Divider c="yellow.6" opacity={0.8} />
@@ -279,36 +242,8 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
           </>
         )}
 
-        {actionCardCounts.length > 0 && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <Box>
-              <Text size="sm" c="gray.3" fw={500} mb={4}>
-                Action Cards
-              </Text>
-              {actionCardCounts.map(([alias, count]) => {
-                const card = getActionCard(alias);
-                const cardLabel = card?.name ?? alias;
-                return (
-                  <Group key={alias} gap="xs" align="center">
-                    <Image
-                      src={cdnImage("/player_area/cardback_action.jpg")}
-                      alt={`Action card ${cardLabel}`}
-                      w={18}
-                      h={12}
-                    />
-                    <Text size="sm" c="gray.1" lh={1.5}>
-                      {cardLabel}
-                      {count > 1 ? ` x${count}` : ""}
-                    </Text>
-                  </Group>
-                );
-              })}
-            </Box>
-          </>
-        )}
+        <PlanetActionCardsSection actionCards={planetTile?.actionCards} />
 
-        {/* Flavor Text */}
         {planetData.flavourText && (
           <>
             <Divider c="gray.7" opacity={0.8} />

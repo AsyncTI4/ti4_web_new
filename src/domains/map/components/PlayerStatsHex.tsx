@@ -1,9 +1,12 @@
-import { useMemo, useEffect } from "react";
 import {
   generateHexagonPoints,
   generateHexagonSides,
   HEX_SIDE_TO_TILE_DIRECTION,
 } from "@/utils/hexagonUtils";
+import {
+  TILE_HEIGHT,
+  TILE_WIDTH,
+} from "@/domains/map/model/mapgen/tilePositioning";
 import styles from "./PlayerStatsArea.module.css";
 
 type HexagonData = {
@@ -28,90 +31,80 @@ type SVGBounds = {
   height: number;
 };
 
+const HEX_RADIUS = TILE_WIDTH / 2;
+const HEX_HEIGHT = Math.sqrt(3) * HEX_RADIUS;
+
+/**
+ * Builds the stat-area hexagons and the SVG box that holds them. Side indices
+ * start at East; tile adjacency directions are 0=N, 1=NE, 2=SE, 3=S, 4=SW, 5=NW.
+ */
+export function buildStatHexagons(
+  tilePositions: Array<{ x: number; y: number; systemId: string }>,
+  faction: string,
+  openSides: Record<string, number[]>,
+): { hexagons: HexagonData[]; svgBounds: SVGBounds } {
+  if (tilePositions.length === 0)
+    return { hexagons: [], svgBounds: { x: 0, y: 0, width: 0, height: 0 } };
+
+  const hexagons: HexagonData[] = tilePositions.map((tile, index) => {
+    const position = tile.systemId.replace("stat_", "");
+    const cx = tile.x + TILE_WIDTH / 2;
+    const cy = tile.y + TILE_HEIGHT / 2;
+    const points = generateHexagonPoints(cx, cy, HEX_RADIUS);
+    const sides = generateHexagonSides(points);
+    const tileOpenSides = openSides[position] || [];
+
+    return {
+      id: `${faction}-stat-${index}`,
+      position,
+      cx,
+      cy,
+      points: points.map((p) => `${p.x},${p.y}`).join(" "),
+      sides: sides.map((side, sideIndex) => ({
+        ...side,
+        isOpen: tileOpenSides.includes(HEX_SIDE_TO_TILE_DIRECTION[sideIndex]),
+      })),
+    };
+  });
+
+  const allX = hexagons.flatMap((hex) => [
+    hex.cx - HEX_RADIUS,
+    hex.cx + HEX_RADIUS,
+  ]);
+  const allY = hexagons.flatMap((hex) => [
+    hex.cy - HEX_HEIGHT / 2,
+    hex.cy + HEX_HEIGHT / 2,
+  ]);
+  const minX = Math.min(...allX);
+  const minY = Math.min(...allY);
+
+  return {
+    hexagons,
+    svgBounds: {
+      x: minX,
+      y: minY,
+      width: Math.max(...allX) - minX,
+      height: Math.max(...allY) - minY,
+    },
+  };
+}
+
 type PlayerStatsHexProps = {
-  tilePositions: Array<{ x: number; y: number; systemId: string }>;
+  hexagons: HexagonData[];
+  svgBounds: SVGBounds;
   faction: string;
-  openSides: Record<string, number[]>;
   borderColor: string;
   backgroundTint?: string;
-  onHexagonsCalculated?: (
-    hexagons: HexagonData[],
-    svgBounds: SVGBounds
-  ) => void;
 };
 
 export function PlayerStatsHex({
-  tilePositions,
+  hexagons,
+  svgBounds,
   faction,
-  openSides,
   borderColor,
   backgroundTint,
-  onHexagonsCalculated,
 }: PlayerStatsHexProps) {
-  // Calculate hexagon properties and SVG bounds
-  const { hexagons, svgBounds } = useMemo(() => {
-    if (tilePositions.length === 0)
-      return { hexagons: [], svgBounds: { x: 0, y: 0, width: 0, height: 0 } };
-
-    // Hexagon dimensions to fit in 345x299 box
-    const radius = 172.5; // Width = 345px
-    const height = Math.sqrt(3) * radius; // ~298.7px
-
-    // Map hexagon side indices to tile adjacency directions
-    // Hexagon starts at 0° (East), tile adjacency: 0=N, 1=NE, 2=SE, 3=S, 4=SW, 5=NW
-    const hexagons: HexagonData[] = tilePositions.map((tile, index) => {
-      const position = tile.systemId.replace("stat_", "");
-      const cx = tile.x + 172.5; // Center the hexagon in the 345px width
-      const cy = tile.y + 149.5; // Center the hexagon in the 299px height
-      const points = generateHexagonPoints(cx, cy, radius);
-      const sides = generateHexagonSides(points);
-      const tileOpenSides = openSides[position] || [];
-
-      return {
-        id: `${faction}-stat-${index}`,
-        position,
-        cx,
-        cy,
-        points: points.map((p) => `${p.x},${p.y}`).join(" "),
-        sides: sides.map((side, sideIndex) => ({
-          ...side,
-          isOpen: tileOpenSides.includes(
-            HEX_SIDE_TO_TILE_DIRECTION[sideIndex]
-          ),
-        })),
-      };
-    });
-
-    // Calculate bounding box for all hexagons
-    const allX = hexagons.flatMap((hex) => [hex.cx - radius, hex.cx + radius]);
-    const allY = hexagons.flatMap((hex) => [
-      hex.cy - height / 2,
-      hex.cy + height / 2,
-    ]);
-
-    const minX = Math.min(...allX);
-    const maxX = Math.max(...allX);
-    const minY = Math.min(...allY);
-    const maxY = Math.max(...allY);
-
-    const svgBounds = {
-      x: minX,
-      y: minY,
-      width: maxX - minX,
-      height: maxY - minY,
-    };
-
-    return { hexagons, svgBounds };
-  }, [tilePositions, faction, openSides]);
-
-  // Call the callback with calculated data
-  useEffect(() => {
-    if (onHexagonsCalculated) {
-      onHexagonsCalculated(hexagons, svgBounds);
-    }
-  }, [hexagons, svgBounds, onHexagonsCalculated]);
-
-  if (tilePositions.length === 0) return null;
+  if (hexagons.length === 0) return null;
 
   return (
     <svg
@@ -126,7 +119,6 @@ export function PlayerStatsHex({
       viewBox={`0 0 ${svgBounds.width} ${svgBounds.height}`}
     >
       <defs>
-        {/* Surface gradient matching Surface.tsx */}
         <linearGradient
           id={`surfaceGradient-${faction}`}
           x1="0%"
@@ -138,21 +130,6 @@ export function PlayerStatsHex({
           <stop offset="100%" stopColor="rgba(30, 41, 59, 0.9)" />
         </linearGradient>
 
-        {/* Tinted gradient for active/passed states */}
-        {backgroundTint && (
-          <linearGradient
-            id={`tintedGradient-${faction}`}
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor={backgroundTint} />
-            <stop offset="100%" stopColor={backgroundTint} />
-          </linearGradient>
-        )}
-
-        {/* Elegant drop shadow */}
         <filter
           id={`dropShadow-${faction}`}
           x="-50%"
@@ -177,10 +154,8 @@ export function PlayerStatsHex({
         </filter>
       </defs>
 
-      {/* Render hexagons */}
       {hexagons.map((hex) => (
         <g key={hex.id}>
-          {/* Base filled polygon */}
           <polygon
             points={hex.points}
             fill={`url(#surfaceGradient-${faction})`}
@@ -188,7 +163,6 @@ export function PlayerStatsHex({
             transform={`translate(${-svgBounds.x}, ${-svgBounds.y})`}
           />
 
-          {/* Tinted overlay if backgroundTint is provided */}
           {backgroundTint && (
             <polygon
               points={hex.points}
@@ -198,10 +172,8 @@ export function PlayerStatsHex({
             />
           )}
 
-          {/* Individual border lines for each side */}
           {hex.sides.map((side, sideIndex) => {
-            if (side.isOpen) return null; // Don't render border for open sides
-
+            if (side.isOpen) return null;
             return (
               <line
                 key={`${hex.id}-side-${sideIndex}`}
@@ -220,4 +192,3 @@ export function PlayerStatsHex({
   );
 }
 
-export type { HexagonData, SVGBounds };

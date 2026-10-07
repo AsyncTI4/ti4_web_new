@@ -4,7 +4,26 @@ import type {
   TileUnitData,
 } from "@/entities/data/types";
 
-type JsonArray = unknown[];
+/** Positional-JSON validators that throw `Invalid <context> <label>` on a mismatch. */
+export function compactDecoders(context: string) {
+  const fail = (label: string): never => {
+    throw new Error(`Invalid ${context} ${label}`);
+  };
+  return {
+    array: (value: unknown, label: string): unknown[] =>
+      Array.isArray(value) ? value : fail(label),
+    string: (value: unknown, label: string): string =>
+      typeof value === "string" ? value : fail(label),
+    number: (value: unknown, label: string): number =>
+      typeof value === "number" && Number.isFinite(value) ? value : fail(label),
+    count: (value: unknown, label: string): number =>
+      typeof value === "number" && Number.isInteger(value) && value >= 0
+        ? value
+        : fail(label),
+  };
+}
+
+const { array, string, number } = compactDecoders("compact map");
 
 const ENTITY_TYPES: Record<string, EntityData["entityType"]> = {
   u: "unit",
@@ -12,24 +31,6 @@ const ENTITY_TYPES: Record<string, EntityData["entityType"]> = {
   a: "attachment",
   c: "actioncard",
 };
-
-function array(value: unknown, label: string): JsonArray {
-  if (!Array.isArray(value)) throw new Error(`Invalid compact map ${label}`);
-  return value;
-}
-
-function string(value: unknown, label: string): string {
-  if (typeof value !== "string")
-    throw new Error(`Invalid compact map ${label}`);
-  return value;
-}
-
-function number(value: unknown, label: string): number {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    throw new Error(`Invalid compact map ${label}`);
-  }
-  return value;
-}
 
 function nullableString(value: unknown, label: string): string | null {
   return value === null ? null : string(value, label);

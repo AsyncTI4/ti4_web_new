@@ -3,7 +3,6 @@ import {
   ReactNode,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -28,15 +27,11 @@ const useIsoLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export function ScaledContent({
-  zoom,
-  children,
-  className,
-  style,
-  innerClassName,
-  innerStyle,
   enabled = true,
+  ...props
 }: ScaledContentProps) {
   if (!enabled) {
+    const { className, style, innerStyle, children } = props;
     return (
       <Box className={className} style={{ ...style, ...innerStyle }}>
         {children}
@@ -44,6 +39,17 @@ export function ScaledContent({
     );
   }
 
+  return <ZoomScaledContent {...props} />;
+}
+
+function ZoomScaledContent({
+  zoom,
+  children,
+  className,
+  style,
+  innerClassName,
+  innerStyle,
+}: Omit<ScaledContentProps, "enabled">) {
   const innerRef = useRef<HTMLDivElement | null>(null);
   const [contentSize, setContentSize] = useState<ContentSize>({
     width: 0,
@@ -91,20 +97,12 @@ export function ScaledContent({
     };
   }, []);
 
-  const scaledDimensions = useMemo<ContentSize>(
-    () => ({
-      width: contentSize.width * zoom,
-      height: contentSize.height * zoom,
-    }),
-    [contentSize.height, contentSize.width, zoom]
-  );
-
   const outerStyle: CSSProperties = {
     position: "relative",
     overflow: "hidden",
     ...style,
-    width: Math.ceil(scaledDimensions.width),
-    height: scaledDimensions.height,
+    width: Math.ceil(contentSize.width * zoom),
+    height: contentSize.height * zoom,
   };
 
   const innerBaseStyle: CSSProperties = {

@@ -3,7 +3,7 @@ import { useGameData } from "@/hooks/useGameContext";
 import type { AreaType } from "@/hooks/useTabsAndTooltips";
 import type { Settings } from "@/utils/appStore";
 
-export interface KeyboardShortcutsProps {
+export type KeyboardShortcutsProps = {
   toggleOverlays: () => void;
   toggleTechSkipsMode: () => void;
   toggleAttachmentsMode: () => void;
@@ -18,6 +18,15 @@ export interface KeyboardShortcutsProps {
   handleZoomOut: () => void;
   onAreaSelect: (area: AreaType) => void;
   selectedArea: AreaType;
+};
+
+function isTypingTarget(target: EventTarget | null) {
+  return (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement ||
+    (target instanceof HTMLElement && target.contentEditable === "true")
+  );
 }
 
 export function useKeyboardShortcuts({
@@ -39,139 +48,60 @@ export function useKeyboardShortcuts({
   const enhancedData = useGameData();
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      // Don't trigger shortcuts if user is typing in an input/textarea
+      if (isTypingTarget(event.target)) return;
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      const factionIndex = Number(event.key) - 1;
       if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement ||
-        event.target instanceof HTMLSelectElement ||
-        (event.target as HTMLElement)?.contentEditable === "true"
+        Number.isInteger(factionIndex) &&
+        factionIndex >= 0 &&
+        factionIndex < 8
       ) {
+        event.preventDefault();
+        selectFactionAt(factionIndex);
         return;
       }
 
-      // Don't trigger if any modifier keys are pressed (except Shift for uppercase)
-      if (event.ctrlKey || event.metaKey || event.altKey) {
-        return;
-      }
-
-      switch (event.key) {
-        case "h":
-          event.preventDefault();
-          // Smart toggle: if both panels are open, close both; if both closed, open both; if mixed, force both closed
-          const bothOpen = !isLeftPanelCollapsed && !isRightPanelCollapsed;
-          const bothClosed = isLeftPanelCollapsed && isRightPanelCollapsed;
-
-          if (bothOpen) {
-            // Both are open, close both
-            updateSettings({
-              leftPanelCollapsed: true,
-              rightPanelCollapsed: true,
-            });
-          } else if (bothClosed) {
-            // Both are closed, open both
-            updateSettings({
-              leftPanelCollapsed: false,
-              rightPanelCollapsed: false,
-            });
-          } else {
-            // Mixed state, force both closed
-            updateSettings({
-              leftPanelCollapsed: true,
-              rightPanelCollapsed: true,
-            });
-          }
-          break;
-
-        case "l":
-          event.preventDefault();
-          toggleLeftPanelCollapsed();
-          break;
-
-        case "r":
-          event.preventDefault();
-          toggleRightPanelCollapsed();
-          break;
-
-        case "+":
-        case "=": // Also handle = key since + requires shift
-          event.preventDefault();
-          handleZoomIn();
-          break;
-
-        case "-":
-          event.preventDefault();
-          handleZoomOut();
-          break;
-
-        case "t":
-          event.preventDefault();
-          toggleTechSkipsMode();
-          break;
-
-        case "a":
-          event.preventDefault();
-          toggleAttachmentsMode();
-          break;
-
-        case "y":
-          event.preventDefault();
-          togglePlanetTypesMode();
-          break;
-
-        case "p":
-          event.preventDefault();
-          togglePdsMode();
-          break;
-
-        case "o":
-          event.preventDefault();
-          toggleOverlays();
-          break;
-
-        case "T":
-          // Tech tab removed
-          break;
-
-        case "H":
-          // Hand/components tab removed
-          break;
-
-        case "S":
-          // Strength tab removed
-          break;
-
-        case "1":
-        case "2":
-        case "3":
-        case "4":
-        case "5":
-        case "6":
-        case "7":
-        case "8":
-          event.preventDefault();
-          const factionIndex = parseInt(event.key) - 1;
-          const playerData = enhancedData?.playerData;
-          if (playerData && factionIndex < playerData.length) {
-            const faction = playerData[factionIndex].faction;
-            const isFactionSelected =
-              selectedArea?.type === "faction" &&
-              selectedArea.faction === faction;
-            onAreaSelect(
-              isFactionSelected
-                ? null
-                : {
-                    type: "faction",
-                    faction,
-                    coords: { x: 0, y: 0 },
-                  }
-            );
-          }
-          break;
-
-        default:
-          break;
-      }
+      const action = keyActions[event.key];
+      if (!action) return;
+      event.preventDefault();
+      action();
     }
+
+    function selectFactionAt(index: number) {
+      const faction = enhancedData?.playerData?.[index]?.faction;
+      if (!faction) return;
+      const isFactionSelected =
+        selectedArea?.type === "faction" && selectedArea.faction === faction;
+      onAreaSelect(
+        isFactionSelected
+          ? null
+          : { type: "faction", faction, coords: { x: 0, y: 0 } },
+      );
+    }
+
+    /* "h" closes both panels unless both are already closed, in which case it opens both. */
+    function toggleBothPanels() {
+      const collapse = !(isLeftPanelCollapsed && isRightPanelCollapsed);
+      updateSettings({
+        leftPanelCollapsed: collapse,
+        rightPanelCollapsed: collapse,
+      });
+    }
+
+    const keyActions: Record<string, () => void> = {
+      h: toggleBothPanels,
+      l: toggleLeftPanelCollapsed,
+      r: toggleRightPanelCollapsed,
+      "+": handleZoomIn,
+      "=": handleZoomIn,
+      "-": handleZoomOut,
+      t: toggleTechSkipsMode,
+      a: toggleAttachmentsMode,
+      y: togglePlanetTypesMode,
+      p: togglePdsMode,
+      o: toggleOverlays,
+    };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -179,6 +109,7 @@ export function useKeyboardShortcuts({
     enhancedData?.playerData,
     toggleOverlays,
     toggleTechSkipsMode,
+    toggleAttachmentsMode,
     togglePlanetTypesMode,
     togglePdsMode,
     toggleLeftPanelCollapsed,

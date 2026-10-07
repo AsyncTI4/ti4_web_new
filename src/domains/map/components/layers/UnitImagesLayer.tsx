@@ -1,14 +1,9 @@
-import React from "react";
 import { UnitStack } from "../UnitStack";
-import { getColorAlias } from "@/entities/lookup/colors";
-import { useFactionColors } from "@/hooks/useFactionColors";
-import {
-  useColorOverrides,
-  useGameData,
-  useMapReplay,
-} from "@/hooks/useGameContext";
-import { Tile } from "@/app/providers/context/types";
-import { mapUnitLocationKey } from "@/utils/historicalMapTransitions";
+import { useGameData, useMapReplay } from "@/hooks/useGameContext";
+import { useResolveColorAlias } from "../hooks/useResolveColorAlias";
+import type { Tile } from "@/app/providers/context/types";
+import { mapUnitLocationKey } from "@/utils/mapReplay/unitState";
+import { stateCount, unitStates } from "@/utils/mapReplay/unitState";
 import { isBadgeUnit } from "../UnitStack/unitType";
 
 type Props = {
@@ -33,18 +28,13 @@ export function UnitImagesLayer({
   onUnitMouseLeave,
   onUnitSelect,
 }: Props) {
-  const factionColorMap = useFactionColors();
   const lawsInPlay = useGameData()?.lawsInPlay;
-  const { colorOverrides } = useColorOverrides();
+  const resolveColorAlias = useResolveColorAlias();
   const mapReplay = useMapReplay();
 
-  const unitImages = React.useMemo(() => {
-    return Object.entries(mapTile.entityPlacements).flatMap(([key, stack]) => {
-      // Check for color override, otherwise use faction color
-      const overrideColorAlias = colorOverrides[stack.faction];
-      const colorAlias = overrideColorAlias
-        ? overrideColorAlias
-        : getColorAlias(factionColorMap?.[stack.faction]?.color);
+  const unitImages = Object.entries(mapTile.entityPlacements).map(
+    ([key, stack]) => {
+      const colorAlias = resolveColorAlias(stack.faction);
       const locationKey = mapReplay.active
         ? mapUnitLocationKey(mapTile.position, stack)
         : "";
@@ -55,28 +45,22 @@ export function UnitImagesLayer({
         ? mapReplay.delayedDamage.get(locationKey)
         : undefined;
       const hiddenUntilReplayEnd =
-        mapReplay.active &&
-        mapReplay.finalRevealLocations.has(locationKey);
+        mapReplay.active && mapReplay.finalRevealLocations.has(locationKey);
       const usesSlottedReplay =
         baseUnitStates !== undefined &&
         stack.entityType === "unit" &&
         !isBadgeUnit(stack.entityId);
-      const finalUnitStates = stack.unitStates ?? [
-        stack.count - (stack.sustained ?? 0),
-        stack.sustained ?? 0,
-        0,
-        0,
-      ];
+      const finalUnitStates = unitStates(stack);
       const renderedStack = usesSlottedReplay
         ? {
             ...stack,
-            count: baseUnitStates.reduce((total, value) => total + value, 0),
+            count: stateCount(baseUnitStates),
             sustained: baseUnitStates[1] + baseUnitStates[3],
             unitStates: baseUnitStates,
           }
         : stack;
 
-      return [
+      return (
         <UnitStack
           key={`${systemId}-${key}-stack-${
             hiddenUntilReplayEnd || delayedDamage ? mapReplay.key : "static"
@@ -96,16 +80,13 @@ export function UnitImagesLayer({
           }
           onUnitMouseOver={
             onUnitMouseOver
-              ? () => {
-                  const worldX = position.x + stack.x;
-                  const worldY = position.y + stack.y;
+              ? () =>
                   onUnitMouseOver(
                     stack.faction,
                     stack.entityId,
-                    worldX,
-                    worldY,
-                  );
-                }
+                    position.x + stack.x,
+                    position.y + stack.y,
+                  )
               : undefined
           }
           onUnitMouseLeave={
@@ -114,22 +95,10 @@ export function UnitImagesLayer({
           onUnitSelect={
             onUnitSelect ? () => onUnitSelect(stack.faction) : undefined
           }
-        />,
-      ];
-    });
-  }, [
-    systemId,
-    mapTile,
-    position.x,
-    position.y,
-    factionColorMap,
-    lawsInPlay,
-    colorOverrides,
-    mapReplay,
-    onUnitMouseOver,
-    onUnitMouseLeave,
-    onUnitSelect,
-  ]);
+        />
+      );
+    },
+  );
 
   return <>{unitImages}</>;
 }

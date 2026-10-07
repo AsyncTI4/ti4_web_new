@@ -17,19 +17,9 @@
       #060b14;
     --map-tabs-bg: #101628;
 
-    --map-tab-border: 1px solid rgba(148, 163, 184, 0.325);
-    --map-tab-hover-bg: #101628;
-    --map-tab-hover-border: #3a5580;
-
-    --map-tab-active-bg: #17263f;
     --map-tab-active-border: #3168C5;
 
-
     --header-bg: #0B1324;
-    --header-border: 1px solid #152C52;
-    --header-tab-border: 1px solid #1E3E76;
-    --header-tab-hover-bg: #16316F;
-    --header-tab-hover-border: #326DD4;
 
     --header-tab-active-bg: #18367C;
     --header-tab-active-border: #306CD4;
@@ -48,18 +38,6 @@
 
     /* Resource/Influence Display */
     --resource-divider-color: rgba(49, 57, 71, 0.6);
-
-    /* Unit Upgrade Card */
-    --upgrade-card-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%);
-    --upgrade-card-border: 1px solid rgba(59, 130, 246, 0.25);
-    --upgrade-card-text-color: rgba(147, 197, 253, 0.9);
-    --upgrade-card-icon-color: rgba(96, 165, 250, 0.8);
-
-    /* Army Rankings */
-
-    /* PlayerCardMobile Panel Sections */
-    --player-card-mobile-panel-bg: rgba(59, 130, 246, 0.03);
-    --player-card-mobile-panel-border: 1px solid rgba(59, 130, 246, 0.08);
 
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
@@ -90,19 +68,8 @@
       repeating-linear-gradient(90deg, rgba(150, 175, 205, 0.02) 0 1px, transparent 1px 14px);
     --player-card-inner-glow: radial-gradient(90% 60% at 50% 0%, rgba(59, 130, 246, 0.028), transparent 60%);
 
-    /* Ground a plate's painted corner notch is cut into; must match this
-       theme's --player-card-box-bg or the notch shows as a visible wedge. */
     --plate-ground: #121a2c;
-
-    /* Bottom HUD deck field: a step darker than --player-card-box-bg so the
-       cards read as plates raised onto the deck. */
     --hud-deck-ground: #090e1a;
-
-    /* The line the board sits on. Themed, because it is the one piece of chroma
-       where the deck meets the map. */
     --hud-edge-accent: rgba(126, 156, 198, 0.36);
-
-    /* The sweep passing over the survey lattice while game state is in
-       flight. A lighter tint of this theme's own accent, never a new hue. */
     --survey-lit: rgba(160, 190, 232, 0.82);
 }

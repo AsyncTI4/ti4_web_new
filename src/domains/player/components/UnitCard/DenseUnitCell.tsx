@@ -1,9 +1,8 @@
-import { forwardRef, type ReactNode } from "react";
-import { Box, Image, Text } from "@mantine/core";
+import { forwardRef, type KeyboardEvent, type ReactNode } from "react";
+import { Box, Text } from "@mantine/core";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";
-import { cdnImage } from "@/entities/data/cdnImage";
-import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import { FactionBadge, UpgradeFactionBadges } from "./FactionBadges";
 
 type Props = {
   image: ReactNode;
@@ -44,7 +43,7 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
         dimmed && styles.denseCellDimmed
       )}
       onClick={onClick}
-      onKeyDown={(event) => {
+      onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
         if (!onClick) return;
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
@@ -54,9 +53,21 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
       tabIndex={onClick ? 0 : undefined}
     >
       {!upgradeFactions?.length && faction && (
-        <FactionBadge faction={faction} className={styles.denseFactionBadge} />
+        <FactionBadge
+          faction={faction}
+          className={styles.factionBadge}
+          iconClassName={styles.denseFactionIcon}
+        />
       )}
-      <UpgradeFactionBadges factions={upgradeFactions} />
+      <UpgradeFactionBadges
+        factions={upgradeFactions}
+        step={13}
+        classNames={{
+          container: styles.upgradeFactionBadgesContainer,
+          badge: styles.denseUpgradeFactionBadge,
+          icon: styles.denseUpgradeFactionIcon,
+        }}
+      />
       <span className={styles.denseCellField}>{image}</span>
       {reinforcements !== undefined && (
         <span className={styles.denseTrough}>
@@ -84,43 +95,3 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
     </Box>
   );
 });
-
-function FactionBadge({
-  faction,
-  className,
-}: {
-  faction: string;
-  className: string;
-}) {
-  return (
-    <Box className={className}>
-      <Image
-        {...lowPriorityImageProps}
-        src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-        className={styles.denseFactionIcon}
-      />
-    </Box>
-  );
-}
-
-function UpgradeFactionBadges({ factions }: { factions?: string[] }) {
-  if (!factions || factions.length === 0) return null;
-
-  return (
-    <Box className={styles.denseUpgradeFactionBadgesContainer}>
-      {factions.map((faction, index) => (
-        <Box
-          key={faction}
-          className={styles.denseUpgradeFactionBadge}
-          style={{ right: index * 13 }}
-        >
-          <Image
-            {...lowPriorityImageProps}
-            src={cdnImage(`/factions/${faction.toLowerCase()}.png`)}
-            className={styles.denseUpgradeFactionIcon}
-          />
-        </Box>
-      ))}
-    </Box>
-  );
-}

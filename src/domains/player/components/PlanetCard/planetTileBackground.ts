@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { getTileById } from "@/domains/map/model/mapgen/systems";
 import { cdnImage } from "@/entities/data/cdnImage";
 import type { Planet } from "@/entities/data/types";
+import { getPlanetLocalPosition } from "@/entities/lookup/planets";
 
 const TILE_ART_WIDTH = 345;
 const TILE_ART_HEIGHT = 299;
@@ -11,8 +12,7 @@ export function getPlanetTileBackground(planetData: Planet) {
   if (!planetData.tileId) return null;
 
   const tile = getTileById(planetData.tileId);
-  const center =
-    planetData.planetLayout?.centerPosition ?? planetData.positionInTile;
+  const center = getPlanetLocalPosition(planetData);
 
   if (!tile || !center) return null;
 

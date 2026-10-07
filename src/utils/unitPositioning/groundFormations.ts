@@ -1,4 +1,5 @@
 import {
+  addPoints,
   centerOf,
   createBounds,
   distance,
@@ -39,7 +40,8 @@ const NUDGE_PASSES = MAX_NUDGE / NUDGE_STEP;
 const CANDIDATES_PER_REGION = 2;
 const REGION_INSET = 20;
 const ANCHOR_OFFSETS = createSearchOffsets(ANCHOR_RANGE, ANCHOR_STEP);
-const NUDGE_OFFSETS = createNudgeOffsets();
+/** Every neighboring nudge step, excluding staying put. */
+const NUDGE_OFFSETS = createSearchOffsets(NUDGE_STEP, NUDGE_STEP).slice(1);
 
 export function findPlanetCandidates(
   layout: PlanetLayout,
@@ -56,10 +58,7 @@ export function findPlanetCandidates(
   for (const formation of createFormations(layout.groups)) {
     for (const anchor of anchors) {
       const groups = formation.positions.map(({ group, offset }) =>
-        positionGroup(layout, group, {
-          x: anchor.x + offset.x,
-          y: anchor.y + offset.y,
-        }),
+        positionGroup(layout, group, addPoints(anchor, offset)),
       );
       keepRegionalCandidate(
         candidatesByRegion,
@@ -149,7 +148,7 @@ function createRowPatterns(groupCount: number): number[][] {
   const add = (rows: number[]) => patterns.set(rows.join("-"), rows);
 
   add([groupCount]);
-  add(Array.from({ length: groupCount }, () => 1));
+  add(singleFileRows(groupCount));
 
   for (let columns = 2; columns <= Math.min(3, groupCount - 1); columns++) {
     const rows: number[] = [];
@@ -223,10 +222,7 @@ function packRows(
 }
 
 function staggerColumn(groups: GroundGroup[], direction: -1 | 1): Formation {
-  const positions = packRows(
-    groups,
-    Array.from({ length: groups.length }, () => 1),
-  );
+  const positions = packRows(groups, singleFileRows(groups.length));
   const centerIndex = (positions.length - 1) / 2;
 
   return {
@@ -241,11 +237,12 @@ function staggerColumn(groups: GroundGroup[], direction: -1 | 1): Formation {
   };
 }
 
+function singleFileRows(groupCount: number): number[] {
+  return Array.from({ length: groupCount }, () => 1);
+}
+
 function createAnchorPoints(planet: Planet): Point[] {
-  return ANCHOR_OFFSETS.map((offset) => ({
-    x: planet.x + offset.x,
-    y: planet.y + offset.y,
-  }));
+  return ANCHOR_OFFSETS.map((offset) => addPoints(planet, offset));
 }
 
 function positionGroup(
@@ -312,42 +309,53 @@ function nudgeCandidate(
   reservedBounds: Bounds[],
 ): LayoutCandidate {
   let current = candidate;
+  const formationBalance = candidate.score.formationBalance;
 
   for (let pass = 0; pass < NUDGE_PASSES; pass++) {
     for (let index = 0; index < current.groups.length; index++) {
-      let best = current;
-
-      for (const offset of NUDGE_OFFSETS) {
-        const group = current.groups[index];
-        const point = {
-          x: group.point.x + offset.x,
-          y: group.point.y + offset.y,
-        };
-        if (distance(point, group.idealPoint) > MAX_NUDGE) continue;
-
-        const groups = current.groups.map((item, groupIndex) =>
-          groupIndex === index
-            ? {
-                ...item,
-                point,
-                bounds: createBounds(point, item.group.footprint),
-              }
-            : item,
-        );
-        const moved = createCandidate(
-          groups,
-          fixedBounds,
-          reservedBounds,
-          candidate.score.formationBalance,
-        );
-        if (compareLayoutScores(moved.score, best.score) < 0) best = moved;
-      }
-
-      current = best;
+      current = bestNudgeOfGroup(
+        current,
+        index,
+        fixedBounds,
+        reservedBounds,
+        formationBalance,
+      );
     }
   }
 
   return current;
+}
+
+/** The best candidate from nudging one group a single step, or `current` if none improves. */
+function bestNudgeOfGroup(
+  current: LayoutCandidate,
+  index: number,
+  fixedBounds: Bounds[],
+  reservedBounds: Bounds[],
+  formationBalance: number,
+): LayoutCandidate {
+  const group = current.groups[index];
+  let best = current;
+
+  for (const offset of NUDGE_OFFSETS) {
+    const point = addPoints(group.point, offset);
+    if (distance(point, group.idealPoint) > MAX_NUDGE) continue;
+
+    const groups = current.groups.map((item, groupIndex) =>
+      groupIndex === index
+        ? { ...item, point, bounds: createBounds(point, item.group.footprint) }
+        : item,
+    );
+    const moved = createCandidate(
+      groups,
+      fixedBounds,
+      reservedBounds,
+      formationBalance,
+    );
+    if (compareLayoutScores(moved.score, best.score) < 0) best = moved;
+  }
+
+  return best;
 }
 
 function flattenCandidates(
@@ -374,16 +382,6 @@ function createSearchOffsets(range: number, step: number): Point[] {
   const offsets: Point[] = [{ x: 0, y: 0 }];
   for (let y = -range; y <= range; y += step) {
     for (let x = -range; x <= range; x += step) {
-      if (x !== 0 || y !== 0) offsets.push({ x, y });
-    }
-  }
-  return offsets;
-}
-
-function createNudgeOffsets(): Point[] {
-  const offsets: Point[] = [];
-  for (let y = -NUDGE_STEP; y <= NUDGE_STEP; y += NUDGE_STEP) {
-    for (let x = -NUDGE_STEP; x <= NUDGE_STEP; x += NUDGE_STEP) {
       if (x !== 0 || y !== 0) offsets.push({ x, y });
     }
   }

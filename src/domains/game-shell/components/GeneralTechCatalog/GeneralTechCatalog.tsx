@@ -1,6 +1,11 @@
 import { Box, Image, Text } from "@mantine/core";
 import cx from "clsx";
-import { getTechData, getTechTier } from "@/entities/lookup/tech";
+import {
+  getTechData,
+  getTechTier,
+  TECH_PREREQ_ICON,
+  TECH_TYPE_COLOR,
+} from "@/entities/lookup/tech";
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
@@ -59,13 +64,6 @@ const DEFAULT_UNIT_TECH_ALIASES = [
   "ws",
 ];
 
-const REQUIREMENT_ICON_MAP: Record<string, string> = {
-  B: "/blue.png",
-  G: "/green.png",
-  R: "/red.png",
-  Y: "/yellow.png",
-};
-
 function byTierThenName(a: Tech, b: Tech) {
   return (
     getTechTier(a.requirements) - getTechTier(b.requirements) ||
@@ -89,7 +87,7 @@ function HeaderRequirementIcons({
 
   const icons = requirements
     .split("")
-    .map((requirement) => REQUIREMENT_ICON_MAP[requirement])
+    .map((requirement) => TECH_PREREQ_ICON[requirement])
     .filter((icon): icon is string => Boolean(icon));
 
   if (icons.length === 0) return null;
@@ -154,78 +152,31 @@ function TechItem({
 }
 
 function getTechColor(tech: Tech): string {
-  const colors: Record<string, string> = {
-    UNITUPGRADE: "unit",
-    PROPULSION: "blue",
-    BIOTIC: "green",
-    WARFARE: "red",
-    CYBERNETIC: "yellow",
-  };
-
-  return tech.types.map((type) => colors[type]).find(Boolean) ?? "other";
+  return (
+    tech.types
+      .map((type) => (type === "UNITUPGRADE" ? "unit" : TECH_TYPE_COLOR[type]))
+      .find(Boolean) ?? "other"
+  );
 }
 
 function getColoredTechGroups(technologyDeck: string[]): TechGroup[] {
-  const grouped: Record<TechColor, string[]> = {
-    blue: [],
-    green: [],
-    red: [],
-    yellow: [],
-    white: [],
-  };
+  const grouped = new Map<string, string[]>(
+    DEFAULT_COLORED_TECH_GROUPS.map((group) => [group.color, []])
+  );
 
   for (const alias of technologyDeck) {
     const tech = getTechData(alias);
-
     if (!tech || tech.faction) continue;
-
-    const category = getTechColor(tech);
-
-    if (
-      category === "blue" ||
-      category === "green" ||
-      category === "red" ||
-      category === "yellow"
-    ) {
-      grouped[category].push(alias);
-    }
+    grouped.get(getTechColor(tech))?.push(alias);
   }
 
-  if (
-    grouped.blue.length < 1 &&
-    grouped.green.length < 1 &&
-    grouped.red.length < 1 &&
-    grouped.yellow.length < 1
-  ) {
-    return DEFAULT_COLORED_TECH_GROUPS;
-  } else {
-    return [
-      {
-        label: "Propulsion",
-        color: "blue",
-        icon: "/blue.png",
-        aliases: grouped.blue,
-      },
-      {
-        label: "Biotic",
-        color: "green",
-        icon: "/green.png",
-        aliases: grouped.green,
-      },
-      {
-        label: "Warfare",
-        color: "red",
-        icon: "/red.png",
-        aliases: grouped.red,
-      },
-      {
-        label: "Cybernetic",
-        color: "yellow",
-        icon: "/yellow.png",
-        aliases: grouped.yellow,
-      },
-    ];
-  }
+  const hasDeckTechs = [...grouped.values()].some((aliases) => aliases.length > 0);
+  if (!hasDeckTechs) return DEFAULT_COLORED_TECH_GROUPS;
+
+  return DEFAULT_COLORED_TECH_GROUPS.map((group) => ({
+    ...group,
+    aliases: grouped.get(group.color) ?? [],
+  }));
 }
 
 function getUnitTechAliases(technologyDeck: string[]): string[] {
@@ -302,24 +253,12 @@ function UnitTechSection({
 }
 
 export function GeneralTechCatalog({
-  technologyDeck = undefined,
+  technologyDeck = [],
 }: GeneralTechCatalogProps) {
-  if (!technologyDeck) {
-    return (
-      <Box className={styles.catalog}>
-        <ColoredTechSection groups={DEFAULT_COLORED_TECH_GROUPS} />
-        <UnitTechSection aliases={DEFAULT_UNIT_TECH_ALIASES} />
-      </Box>
-    );
-  }
-
-  const coloredGroups = getColoredTechGroups(technologyDeck);
-  const unitAliases = getUnitTechAliases(technologyDeck);
-
   return (
     <Box className={styles.catalog}>
-      <ColoredTechSection groups={coloredGroups} />
-      <UnitTechSection aliases={unitAliases} />
+      <ColoredTechSection groups={getColoredTechGroups(technologyDeck)} />
+      <UnitTechSection aliases={getUnitTechAliases(technologyDeck)} />
     </Box>
   );
 }

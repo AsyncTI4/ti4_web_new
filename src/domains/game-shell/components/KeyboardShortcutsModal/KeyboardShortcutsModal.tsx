@@ -70,7 +70,6 @@ export function KeyboardShortcutsModal({
         </Title>
       }
       size="lg"
-      centered
     >
       <Box className={classes.content}>
         <Grid>

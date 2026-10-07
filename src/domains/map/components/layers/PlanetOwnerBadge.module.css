@@ -1,0 +1,23 @@
+.badge {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border: 3px solid rgba(255, 255, 255, 0.86);
+  border-radius: 50%;
+  background: rgba(8, 12, 20, 0.9);
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.78),
+    0 0 0 1px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  z-index: calc(var(--z-control-token) + 20);
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.75));
+}

@@ -1,5 +1,6 @@
-import React from "react";
+import type { CSSProperties } from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getFactionImage } from "@/entities/lookup/factions";
 import styles from "./PdsControlToken.module.css";
 
 type PdsControlTokenProps = {
@@ -7,9 +8,7 @@ type PdsControlTokenProps = {
   faction: string;
   count: number;
   expected: number;
-  style?: React.CSSProperties;
-  compact?: boolean;
-  dominant?: boolean;
+  style?: CSSProperties;
 };
 
 export const PdsControlToken = ({
@@ -18,16 +17,10 @@ export const PdsControlToken = ({
   count,
   expected,
   style,
-  compact = false,
-  dominant = false,
 }: PdsControlTokenProps) => {
   return (
     <div style={style}>
-      <div
-        className={`${styles.container} ${compact ? styles.compact : ""} ${
-          dominant ? styles.dominant : ""
-        }`}
-      >
+      <div className={styles.container}>
         <img
           src={cdnImage(`/command_token/control_${colorAlias}.png`)}
           alt={`${faction} control token`}
@@ -35,7 +28,7 @@ export const PdsControlToken = ({
         />
         {faction && (
           <img
-            src={cdnImage(`/factions/${faction}.png`)}
+            src={getFactionImage(faction)}
             alt={`${faction} faction`}
             className={styles.factionIcon}
           />

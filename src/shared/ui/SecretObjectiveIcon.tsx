@@ -1,7 +1,7 @@
 import { Image, type ImageProps } from "@mantine/core";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
-export type SecretObjectiveIconProps = Omit<ImageProps, "src"> & {
+type SecretObjectiveIconProps = Omit<ImageProps, "src"> & {
   size?: number;
 };
 

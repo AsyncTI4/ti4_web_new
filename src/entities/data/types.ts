@@ -1,3 +1,10 @@
+export type Point = { x: number; y: number };
+
+export type RGBColor = { red: number; green: number; blue: number };
+
+/** Unit counts by state: [healthy, damaged, galvanized, galvanized + damaged]. */
+export type StateCounts = [number, number, number, number];
+
 export type Breakthrough = {
   alias: string;
   name: string;
@@ -7,15 +14,25 @@ export type Breakthrough = {
   text: string;
   source: string;
 };
+type PlanetType =
+  | "FACTION"
+  | "CULTURAL"
+  | "INDUSTRIAL"
+  | "HAZARDOUS"
+  | "NONE"
+  | "MR"
+  | "SPACESTATION"
+  | "FAKE";
+
 export type TileData = {
   id: string;
   name?: string | null;
-  aliases?: string[];
+  aliases?: string[] | null;
   imagePath: string;
   planets?: string[];
   shipPositionsType?: string | null;
-  spaceTokenLocations?: Array<{ x: number; y: number }>;
-  wormholes?: string[] | null;
+  spaceTokenLocations?: Point[] | null;
+  wormholes?: (string | null)[] | null;
   isHyperlane?: boolean;
   isAsteroidField?: boolean;
   isSupernova?: boolean;
@@ -33,7 +50,7 @@ export type EntityData = {
   entityId: string;
   entityType: "unit" | "token" | "attachment" | "actioncard";
   count: number;
-  unitStates?: [number, number, number, number];
+  unitStates?: StateCounts;
   sustained?: number | null;
 };
 
@@ -93,6 +110,9 @@ export type Token = {
   isAnomaly?: boolean;
   isRift?: boolean;
   isNebula?: boolean;
+  isScar?: boolean;
+  isNova?: boolean;
+  isAsteroids?: boolean;
   tokenPlanetName?: string;
   isPlanet?: boolean;
   scale?: number;
@@ -135,9 +155,7 @@ export type FactionUnits = {
 
 export type PlanetEntityData = {
   controlledBy: string | null;
-  entities: {
-    [factionName: string]: EntityData[];
-  };
+  entities: FactionUnits;
   commodities: number | null;
   planetaryShield: boolean;
   exhausted?: boolean;
@@ -190,9 +208,7 @@ export type CapacityUsage = {
 };
 
 export type TileUnitData = {
-  space: {
-    [factionName: string]: EntityData[];
-  };
+  space: FactionUnits;
   planets: PlanetData;
   ccs: string[];
   anomaly: boolean;
@@ -232,7 +248,7 @@ export type StrategyCard = {
   pickedByFaction: string | null;
 };
 
-type CardPoolData = {
+export type CardPoolData = {
   secretObjectiveDeckSize: number;
   secretObjectiveFullDeckSize: number;
   secretObjectiveDeck: string[];
@@ -258,8 +274,6 @@ type CardPoolData = {
   agendaDiscardSize: number;
   technologyDeck: string[];
 };
-
-export type { CardPoolData };
 
 export type EntryType =
   | "PO_1"
@@ -294,7 +308,7 @@ export type WebScoreBreakdown = {
   entries: ScoreBreakdownEntry[];
 };
 
-export type Expedition = {
+type Expedition = {
   completedBy: string | null;
 };
 
@@ -340,7 +354,7 @@ export type PlayerDataResponse = {
   eventSequence?: number;
 };
 
-export type GameEventArchetype =
+type GameEventArchetype =
   | "TACTICAL_ACTION"
   | "TURN"
   | "CARD_PLAY_ACTION_CARD"
@@ -406,7 +420,7 @@ export type GameSubEvent =
       fromHolder: string;
       toTile: string;
       toHolder: string;
-      units: Record<string, [number, number, number, number]>;
+      units: Record<string, StateCounts>;
     }
   | { type: "MANUAL_COMMAND"; user: string | null; command: string };
 
@@ -476,13 +490,6 @@ export type BreakthroughData = {
   unlocked: boolean;
   exhausted: boolean;
   tradeGoodsStored: number;
-};
-
-export type PlotCardInfo = {
-  identifier: number;
-  name: string;
-  text: string;
-  source: string;
 };
 
 export type PlotCard = {
@@ -609,18 +616,12 @@ export type Planet = {
   shortNamePNAttach?: string | null;
   shrinkNamePNAttach?: boolean | null;
   aliases: string[];
-  positionInTile?: { x: number; y: number } | null;
+  positionInTile?: Point | null;
   resources: number;
   influence: number;
   factionHomeworld?: string | null;
-  planetType?:
-    | "FACTION"
-    | "CULTURAL"
-    | "INDUSTRIAL"
-    | "HAZARDOUS"
-    | "NONE"
-    | "MR";
-  planetTypes?: ("CULTURAL" | "INDUSTRIAL" | "HAZARDOUS")[];
+  planetType?: PlanetType;
+  planetTypes?: PlanetType[];
   cardImagePath?: string | null;
   techSpecialties?: string[] | null;
   legendaryAbilityName?: string | null;
@@ -629,10 +630,7 @@ export type Planet = {
   planetLayout?: {
     unitHolderName: string;
     resourcesLocation: "TopRight" | "BottomLeft" | "TopLeft" | "BottomRight";
-    centerPosition: {
-      x: number;
-      y: number;
-    };
+    centerPosition: Point;
     extraIcons?: number | null;
     planetRadius?: number | null;
   };
@@ -686,13 +684,13 @@ export type Agenda = {
     | "project_pi"
     | "sigma"
     | "omega_phase"
-    | "riftset";
+    | "riftset"
+    | "blue_reverie"
+    | "twilights_fall";
   forEmoji?: string;
   againstEmoji?: string;
   mapText?: string;
 };
-
-export type Agendas = Agenda[];
 
 export type Ability = {
   id: string;
@@ -721,7 +719,7 @@ export type PromissoryNote = {
   homebrewReplacesID?: string;
 };
 
-export type SecretObjective = {
+type ObjectiveDefinition = {
   alias: string;
   name: string;
   phase: string;
@@ -731,15 +729,9 @@ export type SecretObjective = {
   homebrewReplacesID?: string;
 };
 
-export type PublicObjective = {
-  alias: string;
-  name: string;
-  phase: string;
-  text: string;
-  points: number;
-  source: string;
-  homebrewReplacesID?: string;
-};
+export type SecretObjective = ObjectiveDefinition;
+
+export type PublicObjective = ObjectiveDefinition;
 
 export type Color = {
   alias: string;
@@ -747,16 +739,8 @@ export type Color = {
   displayName?: string;
   aliases: string[];
   textColor: string;
-  primaryColor?: {
-    red: number;
-    green: number;
-    blue: number;
-  };
-  secondaryColor?: {
-    red: number;
-    green: number;
-    blue: number;
-  };
+  primaryColor?: RGBColor;
+  secondaryColor?: RGBColor;
   primaryColorRef?: string;
   secondaryColorRef?: string;
   hue?: string;

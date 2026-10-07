@@ -5,13 +5,11 @@ import { Group } from "@mantine/core";
 import cx from "clsx";
 import classes from "@/domains/game-shell/components/chrome/HeaderMenuNew.module.css";
 
-export type DashboardLinksProps = {
-    hideOnMobile?: boolean;
+type DashboardLinksProps = {
+  hideOnMobile?: boolean;
 };
 
-export function DashboardLinks({
-    hideOnMobile
-}: DashboardLinksProps) {
+export function DashboardLinks({ hideOnMobile }: DashboardLinksProps) {
   const { pathname } = useLocation();
 
   return (

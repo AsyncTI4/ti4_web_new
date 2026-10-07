@@ -1,11 +1,10 @@
 import { Box } from "@mantine/core";
-import type { CSSProperties } from "react";
+import type { ComponentProps, CSSProperties } from "react";
 import { ExpeditionLayer } from "@/domains/map/components/ExpeditionLayer";
 import { MapTilesRenderer } from "./MapTilesRenderer";
 import { MapUnitDetailsCard } from "@/domains/game-shell/components/MapUnitDetailsCard";
 import { MapPlanetDetailsCard } from "@/domains/game-shell/components/MapPlanetDetailsCard";
-import type { GameData } from "@/app/providers/context/types";
-import type { Tile } from "@/app/providers/context/types";
+import type { GameData, Tile } from "@/app/providers/context/types";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import type { MapLayout } from "../mapLayout";
 import { MapUnitTransitionLayer } from "../layers/MapUnitTransitionLayer";
@@ -21,8 +20,8 @@ type Props = {
   onUnitSelect: (faction: string) => void;
   onPlanetMouseEnter: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave: () => void;
-  tooltipUnit: unknown;
-  tooltipPlanet: unknown;
+  tooltipUnit: ComponentProps<typeof MapUnitDetailsCard>["tooltipUnit"];
+  tooltipPlanet: ComponentProps<typeof MapPlanetDetailsCard>["tooltipPlanet"];
   mapLayout: MapLayout;
   mapPadding: number;
   mapZoom: number;

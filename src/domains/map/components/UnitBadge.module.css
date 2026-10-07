@@ -37,6 +37,4 @@
 
 .unitCount.whiteText {
   background: black;
-  -webkit-background-clip: text;
-  -webkit-text-stroke: 4px transparent;
 }

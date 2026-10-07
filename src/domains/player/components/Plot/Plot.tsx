@@ -19,44 +19,33 @@ const MAX_PLOT_SLOTS = 4;
 export function Plot({ plotCard, faction, compact = false }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
 
-  // Only reveal plot names if:
-  // 1. plotAlias exists AND
-  // 2. faction is "obsidian" (not "firmament")
-  const isRevealed = !!plotCard.plotAlias 
-    && (faction === "obsidian" || faction?.startsWith("franken"));
+  /* Plot names are hidden while the faction is still Firmament; Obsidian (and
+     franken builds) see them. */
+  const isRevealed =
+    !!plotCard.plotAlias &&
+    (faction === "obsidian" || faction?.startsWith("franken"));
   const displayName = plotCard.plotAlias
     ? plotCard.plotAlias.charAt(0).toUpperCase() + plotCard.plotAlias.slice(1)
     : undefined;
 
-  const renderFactionSlots = (): ReactElement[] => {
-    const slots: ReactElement[] = [];
-    const filledSlots = plotCard.factions.length;
-
-    for (let i = 0; i < MAX_PLOT_SLOTS; i++) {
-      if (i < filledSlots) {
-        const faction = plotCard.factions[i];
-        slots.push(
-          <Box key={`faction-${i}`} display="flex" style={{ flexShrink: 0 }}>
-            <CircularFactionIcon faction={faction} size={18} />
-          </Box>
-        );
-      } else {
-        slots.push(
-          <Box
-            key={`empty-${i}`}
-            w={18}
-            h={18}
-            display="flex"
-            style={{ flexShrink: 0 }}
-          >
-            <Box className={styles.tokenSeat} />
-          </Box>
-        );
-      }
-    }
-
-    return slots;
-  };
+  const renderFactionSlots = (): ReactElement[] =>
+    Array.from({ length: MAX_PLOT_SLOTS }, (_, i) =>
+      i < plotCard.factions.length ? (
+        <Box key={`faction-${i}`} display="flex" style={{ flexShrink: 0 }}>
+          <CircularFactionIcon faction={plotCard.factions[i]} size={18} />
+        </Box>
+      ) : (
+        <Box
+          key={`empty-${i}`}
+          w={18}
+          h={18}
+          display="flex"
+          style={{ flexShrink: 0 }}
+        >
+          <Box className={styles.tokenSeat} />
+        </Box>
+      )
+    );
 
   /*
    * The claim seats are what makes a plot a plot. Nothing else in the player
@@ -182,11 +171,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
                   ? `${displayName} (Plot #${plotCard.identifier})`
                   : `Hidden Plot Card #${plotCard.identifier}`
               }
-              subtitle={
-                isRevealed
-                  ? `Plot Card #${plotCard.identifier}`
-                  : `Plot Card #${plotCard.identifier}`
-              }
+              subtitle={`Plot Card #${plotCard.identifier}`}
             />
             {!isRevealed && (
               <Text size="sm" c="dimmed">
@@ -200,7 +185,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
                   Control Tokens:
                 </Text>
                 <Stack gap={8}>
-                  {plotCard.factions.map((faction: string, index: number) => (
+                  {plotCard.factions.map((faction, index) => (
                     <Group key={index} gap="xs">
                       <CircularFactionIcon faction={faction} size={20} />
                       <Text size="sm">{faction}</Text>

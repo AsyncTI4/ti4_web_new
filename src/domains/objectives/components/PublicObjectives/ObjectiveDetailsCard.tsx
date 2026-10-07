@@ -7,12 +7,17 @@ import { DetailsCard } from "@/shared/ui/DetailsCard";
 import classes from "./ObjectiveDetailsCard.module.css";
 import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
+type ObjectiveColor = "orange" | "blue" | "gray";
+
+const CARD_COLORS = { orange: "orange", blue: "blue", gray: "none" } as const;
+const CAPTION_COLORS = { orange: "orange", blue: "blue", gray: "yellow" } as const;
+
 type Props = {
   objectiveKey: string;
   playerData: PlayerData[];
   hasRedTape?: boolean;
   scoredFactions?: string[];
-  color?: "orange" | "blue" | "gray";
+  color?: ObjectiveColor;
   factionProgress?: Record<string, number>;
   progressThreshold?: number;
   showFactionProgress?: boolean;
@@ -34,55 +39,30 @@ export function ObjectiveDetailsCard({
 
   if (!objectiveData) return null;
 
-  // Create a set for fast lookup of scored factions
   const scoredFactionsSet = new Set(scoredFactions);
 
-  // Create faction progress data with sorting
   const factionProgressData = playerData.map((player) => ({
     player,
     progress: factionProgress[player.faction] || 0,
     isScored: scoredFactionsSet.has(player.faction),
   }));
 
-  // Sort by: scored first, then by highest progress
+  // Scored first, then unscored by highest progress
   factionProgressData.sort((a, b) => {
-    if (a.isScored && !b.isScored) return -1;
-    if (!a.isScored && b.isScored) return 1;
-    if (a.isScored && b.isScored) return 0; // Keep same order for scored
-    return b.progress - a.progress; // Higher progress first for unscored
+    if (a.isScored !== b.isScored) return a.isScored ? -1 : 1;
+    if (a.isScored) return 0;
+    return b.progress - a.progress;
   });
 
-  const mapCardColor = (
-    c: Props["color"]
-  ): "none" | "yellow" | "purple" | "red" | "orange" | "blue" | "green" => {
-    if (c === "orange") return "orange";
-    if (c === "blue") return "blue";
-    return "none";
-  };
-
-  const mapCaptionColor = (
-    c: Props["color"]
-  ): "blue" | "yellow" | "red" | "orange" => {
-    if (c === "orange") return "orange";
-    if (c === "blue") return "blue";
-    return "yellow";
-  };
-
-  const renderRedTape = () => {
-      return (
-          <Image src={"/redTape.png"} className={"redTape"} w={48} h={48} />
-      ) 
-    }
-
   return (
-    <DetailsCard width={320} color={mapCardColor(color)}>
+    <DetailsCard width={320} color={CARD_COLORS[color]}>
       <Stack gap="md">
         <DetailsCard.Title
           title={objectiveData.name}
-          icon={hasRedTape && renderRedTape()}
+          icon={hasRedTape && <Image src="/redTape.png" w={48} h={48} />}
           subtitle={`${objectiveData.phase} Phase`}
           caption={`${objectiveData.points} VP`}
-          captionColor={mapCaptionColor(color)}
+          captionColor={CAPTION_COLORS[color]}
         />
 
         <Divider c="gray.7" opacity={0.8} />

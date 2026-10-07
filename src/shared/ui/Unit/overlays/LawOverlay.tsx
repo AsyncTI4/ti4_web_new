@@ -1,14 +1,11 @@
-import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 
 type LawOverlayProps = {
   tokenPath: string;
   alt: string;
-  zIndexDelta: number;
 };
 
-export function LawOverlay(props: LawOverlayProps): React.ReactElement {
-  const { tokenPath, alt } = props;
+export function LawOverlay({ tokenPath, alt }: LawOverlayProps) {
   return (
     <img
       src={cdnImage(tokenPath)}
@@ -21,6 +18,3 @@ export function LawOverlay(props: LawOverlayProps): React.ReactElement {
     />
   );
 }
-
-
-

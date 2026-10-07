@@ -15,7 +15,7 @@ function Logo() {
       className="logo"
       onClick={() => navigate("/")}
       style={{ cursor: "pointer" }}
-      h={ 25 }
+      h={25}
       p={{ base: 0, sm: 4 }}
       w="auto"
       fit="contain"

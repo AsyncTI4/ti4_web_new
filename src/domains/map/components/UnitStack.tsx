@@ -5,7 +5,7 @@ import { EntityStack } from "@/utils/unitPositioning";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/entities/lookup/colors";
-import { LawInPlay } from "@/entities/data/types";
+import type { LawInPlay } from "@/entities/data/types";
 import { isBadgeUnit } from "./UnitStack/unitType";
 import {
   calculateUnitArrangement,
@@ -13,40 +13,22 @@ import {
 } from "@/entities/renderedStackGeometry";
 import { useDelayedHover } from "./UnitStack/useDelayedHover";
 import { useDecalPaths } from "./UnitStack/useDecalPaths";
-import { Group, Text } from "@mantine/core";
-import { cdnImage } from "@/entities/data/cdnImage";
 import { getGenericUnitDataByAsyncId } from "@/entities/lookup/units";
 import { useMapFlightAnimation } from "./UnitStack/useMapFlightAnimation";
-import type {
-  MapUnitTransition,
-  StateCounts,
-} from "@/utils/historicalMapTransitions";
+import { GalvanizeBadge } from "./UnitStack/GalvanizeBadge";
+import {
+  flightOptions,
+  transitionClassName,
+  transitionDelayStyle,
+  unitSlots,
+} from "./UnitStack/transition";
+import type { MapUnitTransition, StateCounts } from "@/utils/mapReplay/types";
+import { stateCount, unitStates } from "@/utils/mapReplay/unitState";
 import classes from "./UnitStack.module.css";
 
 const EMPTY_STATES: StateCounts = [0, 0, 0, 0];
-const TRANSITION_CLASS: Record<MapUnitTransition["kind"], string> = {
-  moved: classes.mapTransitionMoved,
-  settled: classes.mapTransitionMoved,
-  retreated: classes.mapTransitionRetreated,
-  removed: classes.mapTransitionRemoved,
-  added: classes.mapTransitionAdded,
-};
 
-function getTransitionClass(transition: MapUnitTransition): string {
-  if (transition.badgeCountChange) return classes.mapTransitionBadgeCount;
-  if (transition.sourceHold) {
-    if (transition.hideAfterMs !== undefined)
-      return classes.mapTransitionSourcePreHold;
-    return transition.appearAtMs !== undefined
-      ? classes.mapTransitionSourceHoldDelayed
-      : classes.mapTransitionSourceHold;
-  }
-  if (transition.residualAsset && transition.kind === "removed")
-    return classes.mapTransitionResidualRemoved;
-  return TRANSITION_CLASS[transition.kind];
-}
-
-interface UnitStackProps {
+type UnitStackProps = {
   stack: EntityStack;
   stackKey: string;
   colorAlias: string;
@@ -60,7 +42,7 @@ interface UnitStackProps {
   layoutStateOffsets?: StateCounts;
   damageAtMs?: number;
   delayedDamageStates?: StateCounts;
-}
+};
 
 export function UnitStack({
   stackKey,
@@ -72,140 +54,48 @@ export function UnitStack({
   lawsInPlay,
   mapTransition,
   replayHidden = false,
-  layoutUnitStates: staticLayoutUnitStates,
-  layoutStateOffsets: staticLayoutStateOffsets,
-  damageAtMs: staticDamageAtMs,
-  delayedDamageStates: staticDelayedDamageStates,
+  layoutUnitStates,
+  layoutStateOffsets,
+  damageAtMs,
+  delayedDamageStates,
 }: UnitStackProps) {
-  const unitType = stack.entityId;
-  const faction = stack.faction;
-  const count = stack.count;
-  const x = stack.x;
-  const y = stack.y;
-  const entityType = stack.entityType;
-  const layoutUnitStates =
-    mapTransition?.layoutUnitStates ?? staticLayoutUnitStates;
-  const layoutStateOffsets =
-    mapTransition?.layoutStateOffsets ??
-    staticLayoutStateOffsets ??
-    EMPTY_STATES;
-  const damageAtMs = mapTransition?.damageAtMs ?? staticDamageAtMs;
-  const delayedDamageStates =
-    mapTransition?.delayedDamageStates ??
-    staticDelayedDamageStates ??
-    EMPTY_STATES;
-  // Combat badges are compact summaries and must stay legible above the much
-  // larger rotated ship silhouettes in the transition layer.
+  const { entityId: unitType, faction, count, x, y, entityType } = stack;
+  const isBadge = isBadgeUnit(unitType);
+  /* Combat badges are compact summaries and must stay legible above the much
+     larger rotated ship silhouettes in the transition layer. */
   const baseZIndex =
-    getUnitZIndex(unitType, 0) +
-    (mapTransition && isBadgeUnit(unitType) ? 200 : 0);
-  const isMovingTransition =
-    mapTransition?.kind === "moved" ||
-    mapTransition?.kind === "retreated" ||
-    mapTransition?.kind === "settled";
-  const shouldRotateInFlight =
-    !isBadgeUnit(unitType) &&
-    getGenericUnitDataByAsyncId(unitType)?.isShip === true;
-  const flightRef = useMapFlightAnimation({
-    enabled: isMovingTransition,
-    deltaX: mapTransition ? mapTransition.toX - x : 0,
-    deltaY: mapTransition ? mapTransition.toY - y : 0,
-    rotateToTrajectory: shouldRotateInFlight,
-    delayMs: mapTransition?.delayMs ?? 0,
-    holdFromMs: mapTransition?.holdFromMs,
-    hideAfterMs: mapTransition?.hideAfterMs,
-    startRotationDeg: shouldRotateInFlight
-      ? mapTransition?.startRotationDeg
-      : undefined,
-    holdRotationDeg: shouldRotateInFlight
-      ? mapTransition?.holdRotationDeg
-      : undefined,
-    parkRotationDeg: shouldRotateInFlight
-      ? mapTransition?.parkRotationDeg
-      : undefined,
-    continuation: mapTransition?.continuation
-      ? {
-          deltaX: mapTransition.continuation.toX - x,
-          deltaY: mapTransition.continuation.toY - y,
-          delayMs: mapTransition.continuation.delayMs,
-          startRotationDeg: shouldRotateInFlight
-            ? mapTransition.continuation.startRotationDeg
-            : undefined,
-          parkRotationDeg: shouldRotateInFlight
-            ? mapTransition.continuation.parkRotationDeg
-            : undefined,
-        }
-      : undefined,
-  });
-  const transitionClass = mapTransition
-    ? `${classes.mapTransition} ${getTransitionClass(mapTransition)}`
-    : "";
-  const transitionDelayStyle = mapTransition
-    ? ({
-        "--map-transition-delay": `${mapTransition.delayMs ?? 0}ms`,
-        "--map-appear-delay": `${mapTransition.appearAtMs ?? 0}ms`,
-        "--map-start-rotation": `${mapTransition.startRotationDeg ?? 0}deg`,
-      } as React.CSSProperties)
-    : undefined;
-  const replayVisibilityClass = replayHidden ? classes.mapReplayHidden : "";
+    getUnitZIndex(unitType, 0) + (mapTransition && isBadge ? 200 : 0);
+  const rotateInFlight =
+    !isBadge && getGenericUnitDataByAsyncId(unitType)?.isShip === true;
+  const flightRef = useMapFlightAnimation(
+    flightOptions(mapTransition, x, y, rotateInFlight),
+  );
+  const wrapperClass = `${transitionClassName(mapTransition)} ${replayHidden ? classes.mapReplayHidden : ""}`;
+  const delayStyle = transitionDelayStyle(mapTransition);
   const { handleMouseEnter, handleMouseLeave } = useDelayedHover(
     stackKey,
     onUnitMouseOver,
     onUnitMouseLeave,
   );
-
   const { bgDecalPath, decalPath } = useDecalPaths(
     unitType,
     faction,
     colorAlias,
   );
 
-  let nonGalvanizedNonSustained = 0;
-  let nonGalvanizedSustained = 0;
-  let galvanizedNonSustained = 0;
-  let galvanizedSustained = 0;
-
-  if (!!stack.unitStates) {
-    nonGalvanizedNonSustained = stack.unitStates[0];
-    nonGalvanizedSustained = stack.unitStates[1];
-    galvanizedNonSustained = stack.unitStates[2];
-    galvanizedSustained = stack.unitStates[3];
-  } else {
-    nonGalvanizedNonSustained = stack.count - (stack.sustained || 0);
-    nonGalvanizedSustained = stack.sustained || 0;
-    galvanizedNonSustained = 0;
-    galvanizedSustained = 0;
-  }
-  const galvanizedCount = galvanizedNonSustained + galvanizedSustained;
-  const effectiveLayoutStates: StateCounts = layoutUnitStates ?? [
-    nonGalvanizedNonSustained,
-    nonGalvanizedSustained,
-    galvanizedNonSustained,
-    galvanizedSustained,
-  ];
-  const layoutCount = effectiveLayoutStates.reduce(
-    (total, value) => total + value,
-    0,
-  );
-  const layoutGalvanizeOffset =
-    effectiveLayoutStates[2] + effectiveLayoutStates[3] > 1 ? 1 : 0;
-
-  const showIndividualGalvanized = galvanizedCount === 1 || unitType === "mf";
-
+  const states = unitStates(stack);
+  const galvanizedCount = states[2] + states[3];
+  const isUnit = entityType === "unit";
   const handlers = {
-    onMouseEnter:
-      entityType === "unit" && onUnitMouseOver ? handleMouseEnter : undefined,
-    onMouseLeave:
-      entityType === "unit" && onUnitMouseLeave ? handleMouseLeave : undefined,
+    onMouseEnter: isUnit && onUnitMouseOver ? handleMouseEnter : undefined,
+    onMouseLeave: isUnit && onUnitMouseLeave ? handleMouseLeave : undefined,
     onMouseDown:
-      entityType === "unit" && onUnitSelect
+      isUnit && onUnitSelect
         ? (e: React.MouseEvent) => onUnitSelect(stackKey, e)
         : undefined,
   };
 
-  // For fighters and infantry, render as a badge with count instead of individual units
-  if (isBadgeUnit(unitType)) {
-    const badgeType = unitType as "ff" | "gf";
+  if (isBadge) {
     const badgeFootprint = getRenderedStackFootprint({
       entityId: unitType,
       entityType,
@@ -215,13 +105,12 @@ export function UnitStack({
     return (
       <div
         ref={flightRef}
-        key={`${stackKey}-badge-container`}
-        className={`${classes.badgeContainer} ${transitionClass} ${replayVisibilityClass}`}
+        className={`${classes.badgeContainer} ${wrapperClass}`}
         style={{
           left: `${x}px`,
           top: `${y}px`,
           zIndex: baseZIndex,
-          ...transitionDelayStyle,
+          ...delayStyle,
         }}
         {...handlers}
       >
@@ -233,8 +122,7 @@ export function UnitStack({
           }}
         >
           <UnitBadge
-            key={`${stackKey}-badge`}
-            unitType={badgeType}
+            unitType={unitType}
             colorAlias={colorAlias}
             faction={faction}
             count={count}
@@ -242,13 +130,8 @@ export function UnitStack({
           />
           {galvanizedCount > 0 && (
             <GalvanizeBadge
-              key={`${stackKey}-galvanized`}
               count={galvanizedCount}
-              style={{
-                top: "5%",
-                left: "100%",
-                zIndex: baseZIndex + 100,
-              }}
+              style={{ top: "5%", left: "100%", zIndex: baseZIndex + 100 }}
             />
           )}
         </div>
@@ -256,172 +139,102 @@ export function UnitStack({
     );
   }
 
+  const transitionLayout = mapTransition?.layoutUnitStates ?? layoutUnitStates;
+  const layoutStates = transitionLayout ?? states;
+  const layoutCount = stateCount(layoutStates);
+  const showIndividualGalvanized = galvanizedCount === 1 || unitType === "mf";
+  const slots = unitSlots({
+    states,
+    layoutStates,
+    layoutOffsets:
+      mapTransition?.layoutStateOffsets ?? layoutStateOffsets ?? EMPTY_STATES,
+    delayedDamage:
+      mapTransition?.delayedDamageStates ?? delayedDamageStates ?? EMPTY_STATES,
+    showIndividualGalvanized,
+  });
+  const damageDelayMs = mapTransition?.damageAtMs ?? damageAtMs;
   const footprint = getRenderedStackFootprint({
     entityId: unitType,
     entityType,
     count: layoutCount,
   });
-  const wrapperCenterX = (footprint.left + footprint.right) / 2;
-  const wrapperCenterY = (footprint.top + footprint.bottom) / 2;
-
-  type PositionedUnitProps = {
-    index: number;
-    galvanized: boolean;
-    sustained: boolean;
-    delayDamage?: boolean;
-  };
-  const renderPositionedUnit = ({
-    index,
-    galvanized = false,
-    sustained = false,
-    delayDamage = false,
-  }: PositionedUnitProps) => {
-    const { stackOffsetX, stackOffsetY, zIndexOffset } =
-      calculateUnitArrangement(unitType, entityType, index, layoutCount);
-
-    const unitKey = `${stackKey}-${index}`;
-
-    // Position relative to the wrapper's center (wrapper is centered at x, y)
-    // Units are positioned absolutely within the wrapper, so we use calc(50% + offset)
-    const xPos = stackOffsetX - footprint.left;
-    const yPos = stackOffsetY - footprint.top;
-
-    if (entityType === "token") {
-      return (
-        <Token
-          key={unitKey}
-          tokenId={unitType}
-          faction={faction}
-          x={xPos}
-          y={yPos}
-          zIndex={baseZIndex + zIndexOffset}
-        />
-      );
-    } else if (entityType === "attachment") {
-      return (
-        <Attachment
-          key={unitKey}
-          unitType={unitType}
-          faction={faction}
-          x={xPos}
-          y={yPos}
-          zIndex={baseZIndex}
-        />
-      );
-    } else {
-      return (
-        <Unit
-          key={unitKey}
-          unitType={unitType}
-          colorAlias={colorAlias}
-          faction={faction}
-          bgDecalPath={bgDecalPath}
-          decalPath={decalPath || undefined}
-          lawsInPlay={lawsInPlay}
-          galvanized={galvanized}
-          sustained={sustained}
-          damageMarkerDelayMs={delayDamage ? damageAtMs : undefined}
-          x={xPos}
-          y={yPos}
-          zIndex={baseZIndex + zIndexOffset}
-        />
-      );
-    }
-  };
 
   return (
     <div
       ref={flightRef}
       {...handlers}
-      className={`${classes.stackWrapper} ${transitionClass} ${replayVisibilityClass}`}
+      className={`${classes.stackWrapper} ${wrapperClass}`}
       style={{
-        left: `${x + wrapperCenterX}px`,
-        top: `${y + wrapperCenterY}px`,
+        left: `${x + (footprint.left + footprint.right) / 2}px`,
+        top: `${y + (footprint.top + footprint.bottom) / 2}px`,
         width: `${footprint.width}px`,
         height: `${footprint.height}px`,
         zIndex: baseZIndex,
-        ...transitionDelayStyle,
+        ...delayStyle,
       }}
     >
       {galvanizedCount > 1 && !showIndividualGalvanized && (
         <GalvanizeBadge
-          key={`${stackKey}-galvanized`}
           count={galvanizedCount}
           className={classes.galvanizeBadgeContainer}
-          style={{
-            left: "50%",
-            top: "45%",
-            zIndex: baseZIndex + 100,
-          }}
+          style={{ left: "50%", top: "45%", zIndex: baseZIndex + 100 }}
         />
       )}
 
-      {Array.from({ length: galvanizedSustained }).map((_, i) => {
-        return renderPositionedUnit({
-          index: layoutStateOffsets[3] + i,
-          galvanized: showIndividualGalvanized,
-          sustained: true,
-          delayDamage: i >= galvanizedSustained - delayedDamageStates[3],
-        });
-      })}
+      {slots.map((slot) => {
+        const { stackOffsetX, stackOffsetY, zIndexOffset } =
+          calculateUnitArrangement(
+            unitType,
+            entityType,
+            slot.index,
+            layoutCount,
+          );
+        const unitKey = `${stackKey}-${slot.index}`;
+        const xPos = stackOffsetX - footprint.left;
+        const yPos = stackOffsetY - footprint.top;
 
-      {Array.from({ length: galvanizedNonSustained }).map((_, i) => {
-        return renderPositionedUnit({
-          index: effectiveLayoutStates[3] + layoutStateOffsets[2] + i,
-          galvanized: showIndividualGalvanized,
-          sustained: false,
-        });
-      })}
-
-      {Array.from({ length: nonGalvanizedSustained }).map((_, i) => {
-        return renderPositionedUnit({
-          index:
-            effectiveLayoutStates[3] +
-            effectiveLayoutStates[2] +
-            layoutGalvanizeOffset +
-            layoutStateOffsets[1] +
-            i,
-          galvanized: false,
-          sustained: true,
-          delayDamage: i >= nonGalvanizedSustained - delayedDamageStates[1],
-        });
-      })}
-
-      {Array.from({ length: nonGalvanizedNonSustained }).map((_, i) => {
-        return renderPositionedUnit({
-          index:
-            effectiveLayoutStates[3] +
-            effectiveLayoutStates[2] +
-            layoutGalvanizeOffset +
-            effectiveLayoutStates[1] +
-            layoutStateOffsets[0] +
-            i,
-          galvanized: false,
-          sustained: false,
-        });
+        if (entityType === "token") {
+          return (
+            <Token
+              key={unitKey}
+              tokenId={unitType}
+              faction={faction}
+              x={xPos}
+              y={yPos}
+              zIndex={baseZIndex + zIndexOffset}
+            />
+          );
+        }
+        if (entityType === "attachment") {
+          return (
+            <Attachment
+              key={unitKey}
+              unitType={unitType}
+              faction={faction}
+              x={xPos}
+              y={yPos}
+              zIndex={baseZIndex}
+            />
+          );
+        }
+        return (
+          <Unit
+            key={unitKey}
+            unitType={unitType}
+            colorAlias={colorAlias}
+            faction={faction}
+            bgDecalPath={bgDecalPath}
+            decalPath={decalPath || undefined}
+            lawsInPlay={lawsInPlay}
+            galvanized={slot.galvanized}
+            sustained={slot.sustained}
+            damageMarkerDelayMs={slot.delayDamage ? damageDelayMs : undefined}
+            x={xPos}
+            y={yPos}
+            zIndex={baseZIndex + zIndexOffset}
+          />
+        );
       })}
     </div>
-  );
-}
-
-type GalvanizeBadgeProps = {
-  count: number;
-  style?: React.CSSProperties;
-  className?: string;
-};
-function GalvanizeBadge({ count, style, className }: GalvanizeBadgeProps) {
-  return (
-    <Group w="45px" h="20px" gap="xs" className={className} style={style}>
-      <div className={classes.galvanizeBadgeInner}>
-        <img
-          src={cdnImage("/extra/marker_galvanize.png")}
-          alt="Galvanize"
-          className={classes.galvanizeBadgeImage}
-        />
-        <Text inline pl="22px" fz="18px" fw={600} c="white" ff="'SLIDER'">
-          {count}
-        </Text>
-      </div>
-    </Group>
   );
 }

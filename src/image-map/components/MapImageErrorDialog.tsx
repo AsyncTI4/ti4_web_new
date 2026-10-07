@@ -78,12 +78,12 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
               The server did not provide a map image for game {gameId}. You can
               request a refresh to generate a new image.
             </Text>
-            {refreshMutation.isError ? (
+            {refreshMutation.isError && (
               <Text c={theme.colors.red[5]} mb="sm">
                 {refreshMutation.error?.message ||
                   "Failed to request refresh. Please try again."}
               </Text>
-            ) : undefined}
+            )}
             {!refreshMutation.isSuccess ? (
               <Group justify="center">
                 <Button
@@ -111,5 +111,3 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
     </MapViewportCenter>
   );
 }
-
-export default MapImageErrorDialog;

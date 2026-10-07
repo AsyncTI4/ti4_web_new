@@ -12,7 +12,7 @@ type Props = {
 };
 
 const accentVar = (accentRgb: string) =>
-  ({ "--gauge-accent": accentRgb }) as unknown as React.CSSProperties;
+  ({ "--gauge-accent": accentRgb }) as React.CSSProperties;
 
 /** One seated readout of a stored resource. */
 export function StoresGauge({

@@ -2,7 +2,7 @@ import { Badge, Button, Group, Stack, Text } from "@mantine/core";
 import type { ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";
 
-export type MapViewPreferenceOptionProps = {
+type MapViewPreferenceOptionProps = {
   icon: ReactNode;
   label: string;
   badge?: string;

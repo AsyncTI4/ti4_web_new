@@ -1,6 +1,6 @@
-interface InfluenceIconProps {
+type InfluenceIconProps = {
   size?: number;
-}
+};
 
 export default function InfluenceIcon({ size = 24 }: InfluenceIconProps) {
   return (

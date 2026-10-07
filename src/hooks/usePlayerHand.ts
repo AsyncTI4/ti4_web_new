@@ -1,26 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlayerHandData } from "@/shared/types/playerHand";
 import { authenticatedFetch, getBotApiUrl } from "@/domains/auth/api";
+import { fetchJson } from "@/utils/fetchJson";
 import { useSecretHandAccess } from "./useSecretHandAccess";
 
-const fetchPlayerHand = async (gameId: string): Promise<PlayerHandData> => {
-  const apiUrl = getBotApiUrl(`/game/${gameId}/hand`);
-
-  const response = await authenticatedFetch(apiUrl, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+const fetchPlayerHand = (gameId: string) =>
+  fetchJson<PlayerHandData>(
+    getBotApiUrl(`/game/${gameId}/hand`),
+    "player hand",
+    {
+      fetcher: authenticatedFetch,
     },
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch player hand: ${response.status} ${response.statusText}`
-    );
-  }
-
-  return response.json();
-};
+  );
 
 export const usePlayerHand = (gameId: string) => {
   const { userId, canViewSecretHand } = useSecretHandAccess();

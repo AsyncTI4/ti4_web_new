@@ -2,9 +2,10 @@ import {
   clearLocalUser,
   getLocalUser,
   setLocalUser,
-  LocalUser,
+  type LocalUser,
 } from "@/hooks/useUser";
 import { getBotApiUrl } from "./botApiUrl";
+import { toLocalUser, type LoginResponse } from "./loginResponse";
 
 let inFlightRefresh: Promise<LocalUser | null> | null = null;
 
@@ -46,17 +47,7 @@ async function performRefresh(): Promise<LocalUser | null> {
       throw new Error("Token refresh failed");
     }
 
-    const data = await response.json();
-
-    const updatedUser: LocalUser = {
-      id: data.user_id,
-      name: data.discord_name,
-      token: data.bearer_token,
-      refreshToken: data.refresh_token,
-      discord_id: data.discord_id,
-      expiresIn: data.expires_in,
-      authenticated: true,
-    };
+    const updatedUser = toLocalUser((await response.json()) as LoginResponse);
 
     setLocalUser(updatedUser);
     return updatedUser;

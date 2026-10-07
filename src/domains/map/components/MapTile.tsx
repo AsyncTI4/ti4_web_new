@@ -13,8 +13,12 @@ import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
-import { TILE_HEIGHT, TILE_WIDTH } from "@/domains/map/model/mapgen/tilePositioning";
-import { Tile as TileType } from "@/app/providers/context/types";
+import {
+  HEX_PATH,
+  TILE_HEIGHT,
+  TILE_WIDTH,
+} from "@/domains/map/model/mapgen/tilePositioning";
+import type { Tile as TileType } from "@/app/providers/context/types";
 import { TechSkipIconsLayer } from "./layers/TechSkipIconsLayer";
 import { AttachmentsLayer } from "./layers/AttachmentsLayer";
 import { PlanetTraitIconsLayer } from "./layers/PlanetTraitIconsLayer";
@@ -24,16 +28,9 @@ import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import { SystemHexTarget } from "./SystemHexTarget";
 import { getTileById } from "@/domains/map/model/mapgen/systems";
 import { isMobileDevice } from "@/utils/isTouchDevice";
-import { HEX_VERTICES } from "@/utils/unitPositioning";
-
-const ACTIVATION_HEX_PATH = `${HEX_VERTICES.map(
-  ({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x} ${y}`,
-).join(" ")} Z`;
 
 type Props = {
   mapTile: TileType;
-  style?: React.CSSProperties;
-  className?: string;
   onUnitMouseOver?: (
     faction: string,
     unitId: string,
@@ -45,15 +42,13 @@ type Props = {
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
   controlOpenSides?: number[];
-  embedded?: boolean; // Render as self-contained preview without map offsets
-  isA11ySelected?: boolean; // Accessibility selection highlight
+  /** Render as a self-contained preview without map offsets. */
+  embedded?: boolean;
 };
 
 export const MapTile = React.memo<Props>(
   ({
     mapTile,
-    style,
-    className,
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
@@ -61,7 +56,6 @@ export const MapTile = React.memo<Props>(
     onPlanetMouseLeave,
     controlOpenSides,
     embedded = false,
-    isA11ySelected = false,
   }) => {
     const gameData = useGameData();
     const mapReplay = useMapReplay();
@@ -72,7 +66,6 @@ export const MapTile = React.memo<Props>(
       x: mapTile.properties.x,
       y: mapTile.properties.y,
     };
-    const isSelected = useAppStore((state) => state.selectedArea);
     const techSkipsMode = useSettingsStore(
       (state) => state.settings.techSkipsMode
     );
@@ -85,26 +78,34 @@ export const MapTile = React.memo<Props>(
     const attachmentsMode = useSettingsStore(
       (state) => state.settings.attachmentsMode
     );
-    const isHovered = useAppStore((state) => state.hoveredTile);
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
     const openSystemDossier = useAppStore((state) => state.openSystemDossier);
 
     /* Hyperlanes have nothing to report, and touch devices keep the map
        gesture-only. Hover feedback is pure CSS so the tile never re-renders
-       under a moving cursor; the static-data lookup is memoized off the
-       render path. */
-    const isHyperlane = React.useMemo(
-      () => !!getTileById(mapTile.systemId)?.isHyperlane,
-      [mapTile.systemId]
-    );
-    const dossierEligible =
-      !embedded &&
-      !isMobileDevice() &&
-      !isHyperlane;
+       under a moving cursor. */
+    const isHyperlane = !!getTileById(mapTile.systemId)?.isHyperlane;
+    const dossierEligible = !embedded && !isMobileDevice() && !isHyperlane;
     const handleDossierOpen = () =>
       openSystemDossier(mapTile.position, mapTile.systemId);
 
     const controllingFaction = mapTile.controlledBy;
+
+    const getTileOpacity = () => {
+      if (techSkipsMode && attachmentsMode) {
+        return mapTile.hasTechSkips && mapTile.hasAttachments ? 1 : 0.2;
+      }
+      if (techSkipsMode) return mapTile.hasTechSkips ? 1 : 0.2;
+      if (attachmentsMode) return mapTile.hasAttachments ? 1 : 0.2;
+      if (planetTypesMode) {
+        return Object.values(mapTile.planets).length > 0 ? 1 : 0.2;
+      }
+      if (pdsMode && gameData?.tilesWithPds) {
+        return gameData.tilesWithPds.has(ringPosition) ? 1 : 0.2;
+      }
+      if (overlaysEnabled && !controllingFaction) return 0.7;
+      return 1;
+    };
     const showSystemHighlight =
       mapReplay.active &&
       ((mapReplay.showTacticalActivation &&
@@ -114,52 +115,12 @@ export const MapTile = React.memo<Props>(
     return (
       <div
         id={`tile-${ringPosition}`}
-        className={`${classes.mapTile} ${className || ""} ${
-          isSelected ? classes.selected : ""
-        } ${isHovered ? classes.hovered : ""} ${
-          isA11ySelected ? classes.selected : ""
-        }`}
+        className={classes.mapTile}
         style={{
           left: embedded ? 0 : `${position.x}px`,
           top: embedded ? 0 : `${position.y}px`,
           position: embedded ? "relative" : undefined,
-          opacity: (() => {
-            // If both tech skips and attachments modes are enabled, require both conditions
-            if (techSkipsMode && attachmentsMode) {
-              const hasTech = mapTile.hasTechSkips;
-              const hasAttach = mapTile.hasAttachments;
-              return (hasTech && hasAttach) ? 1.0 : 0.2;
-            }
-
-            // Tech skips mode takes priority (when attachments mode is off)
-            if (techSkipsMode) {
-              return mapTile.hasTechSkips ? 1.0 : 0.2;
-            }
-
-            // Attachments mode (when tech skips mode is off)
-            if (attachmentsMode) {
-              return mapTile.hasAttachments ? 1.0 : 0.2;
-            }
-
-            if (planetTypesMode) {
-              return Object.values(mapTile.planets).length > 0 ? 1.0 : 0.2;
-            }
-
-            // PDS mode - dim tiles that don't have PDS
-            if (pdsMode && gameData!.tilesWithPds) {
-              return ringPosition && gameData!.tilesWithPds.has(ringPosition)
-                ? 1.0
-                : 0.2;
-            }
-
-            // Overlay mode - dim tiles without any controller/border
-            if (overlaysEnabled && !controllingFaction) {
-              return 0.7;
-            }
-
-            return 1;
-          })(),
-          ...style,
+          opacity: getTileOpacity(),
         }}
       >
         <div
@@ -188,7 +149,7 @@ export const MapTile = React.memo<Props>(
               viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
               aria-hidden="true"
             >
-              <path d={ACTIVATION_HEX_PATH} />
+              <path d={HEX_PATH} />
             </svg>
           )}
           <PlanetCirclesLayer
@@ -200,7 +161,7 @@ export const MapTile = React.memo<Props>(
             onPlanetClick={dossierEligible ? handleDossierOpen : undefined}
           />
           <PlanetaryShieldOverlayLayer systemId={systemId} mapTile={mapTile} />
-          <WormholeBlockedLayer systemId={systemId} mapTile={mapTile} />
+          <WormholeBlockedLayer systemId={systemId} />
           {!techSkipsMode && !planetTypesMode && !attachmentsMode && (
             <>
               <ControlTokensLayer systemId={systemId} mapTile={mapTile} />
@@ -231,13 +192,10 @@ export const MapTile = React.memo<Props>(
             hasBorderAnomaly={Boolean(mapTile.borderAnomalies?.length)}
           />
           <CommandCounterLayer
-            systemId={systemId}
             position={mapTile.position}
             factions={mapTile.commandCounters}
           />
-          <div className={classes.ringPosition}>
-            {ringPosition}
-          </div>
+          <div className={classes.ringPosition}>{ringPosition}</div>
 
           {controllingFaction && overlaysEnabled && (
             <>
@@ -255,11 +213,9 @@ export const MapTile = React.memo<Props>(
           {pdsMode && (
             <PdsOverlayLayer
               ringPosition={ringPosition}
-              dominantPdsFaction={gameData?.dominantPdsFaction}
               pdsByTile={gameData?.pdsByTile}
             />
           )}
-
         </div>
       </div>
     );

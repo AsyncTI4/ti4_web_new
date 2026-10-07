@@ -3,22 +3,6 @@
   border-radius: var(--mantine-radius-sm);
 }
 
-.topShimmer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-}
-
-.bottomShimmer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-}
-
 .diagonalPattern {
   position: absolute;
   top: 0;

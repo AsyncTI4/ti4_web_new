@@ -1,13 +1,13 @@
-import React from "react";
+import type { ImgHTMLAttributes } from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTileById } from "@/domains/map/model/mapgen/systems";
 import { boardImageLoadingProps } from "@/shared/ui/imageLoading";
 
-interface TileProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+type TileProps = ImgHTMLAttributes<HTMLImageElement> & {
   systemId: string;
-}
+};
 
-export const Tile: React.FC<TileProps> = ({ systemId, alt, ...imgProps }) => {
+export const Tile = ({ systemId, alt, ...imgProps }: TileProps) => {
   const tile = getTileById(systemId);
 
   if (!tile) return null;

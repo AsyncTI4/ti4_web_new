@@ -1,4 +1,1 @@
-export {
-  PlayerCardPlanetsArea,
-  type PlayerCardPlanetsAreaProps,
-} from "./PlayerCardPlanetsArea";
+export { PlayerCardPlanetsArea } from "./PlayerCardPlanetsArea";

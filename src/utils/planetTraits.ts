@@ -2,12 +2,12 @@ import { cdnImage } from "@/entities/data/cdnImage";
 
 export type PlanetTrait = "cultural" | "hazardous" | "industrial";
 
-const VALID_TRAITS = new Set<PlanetTrait>(["cultural", "hazardous", "industrial"]);
+const VALID_TRAITS: PlanetTrait[] = ["cultural", "hazardous", "industrial"];
 
 function normalizeTrait(value?: string | null): PlanetTrait | null {
   if (!value) return null;
-  const normalized = value.toLowerCase() as PlanetTrait;
-  return VALID_TRAITS.has(normalized) ? normalized : null;
+  const normalized = value.toLowerCase();
+  return VALID_TRAITS.find((trait) => trait === normalized) ?? null;
 }
 
 export function mergePlanetTraits(

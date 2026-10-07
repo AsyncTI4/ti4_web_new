@@ -1,11 +1,11 @@
 import { Stack, Box, Image, Divider, Text, Group } from "@mantine/core";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { getAllianceCommander } from "@/entities/lookup/leaders";
-import { cdnImage } from "@/entities/data/cdnImage";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameData } from "@/hooks/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { showLeader } from "@/domains/player/components/Leader/showLeader";
 
 type Props = {
   promissoryNoteId: string;
@@ -18,14 +18,12 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
 
   if (!noteData) return null;
 
-  // Use noteData directly; no intermediate displayData object
   const displayName = noteData.noteData.shortName || noteData.displayName;
   const displayText = noteData.noteData.text.replace(
     /<color>/g,
     noteData.color || ""
   );
 
-  // Determine if this is an Alliance PN
   const isAlliance =
     noteData.noteData.alias.includes("_an") ||
     noteData.noteData.name.toLowerCase() === "alliance";
@@ -41,7 +39,7 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
       )
     : undefined;
 
-  const renderIcon = () => (
+  const noteIcon = (
     <Box
       pos="relative"
       w={60}
@@ -72,7 +70,7 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
         <DetailsCard.Title
           title={displayName}
           subtitle="Promissory Note"
-          icon={<DetailsCard.Icon icon={renderIcon()} />}
+          icon={<DetailsCard.Icon icon={noteIcon} />}
         />
 
         <Divider c="gray.7" opacity={0.8} />
@@ -83,8 +81,7 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
               content={
                 <Stack gap={8}>
                   <Group gap={10} align="center">
-                    {(commander.source === "base" ||
-                      commander.source === "pok") && (
+                    {showLeader(commander.source) && (
                       <Box
                         w={36}
                         h={46}
@@ -128,5 +125,3 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
     </DetailsCard>
   );
 }
-
-// Function is now imported from lookup/promissoryNotes

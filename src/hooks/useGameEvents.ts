@@ -2,17 +2,14 @@ import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { config } from "@/config";
 import type { GameEvent, PlayerDataResponse } from "@/entities/data/types";
+import { fetchJson } from "@/utils/fetchJson";
 import { usePlayerData } from "./usePlayerData";
 
-async function fetchGameEvents(gameId: string): Promise<GameEvent[]> {
-  const response = await fetch(`${config.api.gameDataUrl}/${gameId}/events`);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch game events: ${response.status} ${response.statusText}`
-    );
-  }
-  return response.json() as Promise<GameEvent[]>;
-}
+const fetchGameEvents = (gameId: string) =>
+  fetchJson<GameEvent[]>(
+    `${config.api.gameDataUrl}/${gameId}/events`,
+    "game events",
+  );
 
 /**
  * Fetches the game event log and keeps it fresh without polling: the full

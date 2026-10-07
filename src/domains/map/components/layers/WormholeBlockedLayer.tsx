@@ -1,6 +1,6 @@
 import { useGameData } from "@/hooks/useGameContext";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { systems } from "@/entities/data/systems";
+import { getTileById } from "@/domains/map/model/mapgen/systems";
 
 type Props = {
   systemId: string;
@@ -14,7 +14,7 @@ export function WormholeBlockedLayer({ systemId }: Props) {
     (law) => law.id === "travel_ban" || law.id === "absol_travelban"
   );
   if (!travelBanActive) return null;
-  const systemData = systems.find((s) => s.id === systemId);
+  const systemData = getTileById(systemId);
   if (!systemData) return null;
 
   const hasAlpha = systemData.wormholes?.includes("ALPHA") || false;
@@ -48,7 +48,7 @@ export function WormholeBlockedLayer({ systemId }: Props) {
             left: `${coord.x}px`,
             top: `${coord.y}px`,
             pointerEvents: "none",
-            zIndex: 2, // Above base tile, below units
+            zIndex: 2,
           }}
         />
       ))}
@@ -56,100 +56,59 @@ export function WormholeBlockedLayer({ systemId }: Props) {
   );
 }
 
+type Point = { x: number; y: number };
+
+/** Per-tile wormhole art positions, ported from TileGenerator.java drawOnWormhole. */
+const TILE_WORMHOLE_POSITIONS: Record<string, { alpha?: Point; beta?: Point }> = {
+  "82b": { alpha: { x: 95, y: 249 }, beta: { x: 169, y: 273 } }, // wormhole nexus
+  c02: { alpha: { x: 37, y: 158 }, beta: { x: 223, y: 62 } }, // Locke/Bentham
+  c10: { alpha: { x: 182, y: 22 }, beta: { x: 259, y: 241 } }, // Kwon
+  c11: { alpha: { x: 54, y: 138 }, beta: { x: 159, y: 275 } }, // Ethan
+  d119: { beta: { x: 94, y: 170 } }, // beta/nebula
+  d123: { alpha: { x: 22, y: 110 }, beta: { x: 190, y: 206 } }, // alpha/beta/supernova
+  er19: { alpha: { x: 60, y: 44 }, beta: { x: 192, y: 184 } }, // alpha/beta/rift
+  er119: { alpha: { x: 60, y: 44 }, beta: { x: 192, y: 184 } }, // alpha/beta/nebula
+  er94: { beta: { x: 157, y: 165 } }, // Iynntani
+  er95: { alpha: { x: 60, y: 155 }, beta: { x: 215, y: 61 } }, // Kytos/Prymis
+  m05: { alpha: { x: 185, y: 180 } }, // Shanh
+  m32: { beta: { x: 49, y: 147 } }, // Vespa/Apis
+};
+
+/** Fallback positions by ship-position layout, from ShipPositionModel.java getWormholeLocation. */
+const SHIP_POSITION_WORMHOLE: Record<string, Point> = {
+  TYPE05: { x: 162, y: 166 }, // planet and wormhole
+  TYPE07: { x: 172, y: 32 }, // 1 planet bottom left
+  TYPE08: { x: 132, y: 110 }, // empty and wormhole
+  TYPE13: { x: 139, y: 186 }, // Eko
+  TYPE14: { x: 152, y: 124 }, // Horace
+};
+
 function getWormholeCoordinates(
   tileId: string,
   shipPositionsType: string | null | undefined,
   hasAlpha: boolean,
   hasBeta: boolean,
-  offset: number = 0
-): Array<{ x: number; y: number; type: "alpha" | "beta" }> {
-  const coords: Array<{ x: number; y: number; type: "alpha" | "beta" }> = [];
+  offset: number,
+): Point[] {
+  const shift = (point: Point) => ({ x: offset + point.x, y: offset + point.y });
+  const tilePositions = TILE_WORMHOLE_POSITIONS[tileId];
 
-  // Coordinates ported from TileGenerator.java drawOnWormhole
-  switch (tileId) {
-    case "82b": // wormhole nexus
-      if (hasAlpha)
-        coords.push({ x: offset + 95, y: offset + 249, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 169, y: offset + 273, type: "beta" });
-      break;
-    case "c02": // Locke/Bentham
-      if (hasAlpha)
-        coords.push({ x: offset + 37, y: offset + 158, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 223, y: offset + 62, type: "beta" });
-      break;
-    case "c10": // Kwon
-      if (hasAlpha)
-        coords.push({ x: offset + 182, y: offset + 22, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 259, y: offset + 241, type: "beta" });
-      break;
-    case "c11": // Ethan
-      if (hasAlpha)
-        coords.push({ x: offset + 54, y: offset + 138, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 159, y: offset + 275, type: "beta" });
-      break;
-    case "d119": // beta/nebula
-      if (hasBeta)
-        coords.push({ x: offset + 94, y: offset + 170, type: "beta" });
-      break;
-    case "d123": // alpha/beta/supernova
-      if (hasAlpha)
-        coords.push({ x: offset + 22, y: offset + 110, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 190, y: offset + 206, type: "beta" });
-      break;
-    case "er19": // alpha/beta/rift
-    case "er119": // alpha/beta/nebula
-      if (hasAlpha)
-        coords.push({ x: offset + 60, y: offset + 44, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 192, y: offset + 184, type: "beta" });
-      break;
-    case "er94": // Iynntani
-      if (hasBeta)
-        coords.push({ x: offset + 157, y: offset + 165, type: "beta" });
-      break;
-    case "er95": // Kytos/Prymis
-      if (hasAlpha)
-        coords.push({ x: offset + 60, y: offset + 155, type: "alpha" });
-      if (hasBeta)
-        coords.push({ x: offset + 215, y: offset + 61, type: "beta" });
-      break;
-    case "m05": // Shanh
-      if (hasAlpha)
-        coords.push({ x: offset + 185, y: offset + 180, type: "alpha" });
-      break;
-    case "m32": // Vespa/Apis
-      if (hasBeta)
-        coords.push({ x: offset + 49, y: offset + 147, type: "beta" });
-      break;
-    default: {
-      // Logic based on ShipPositionModel.java getWormholeLocation
-      let x = offset + 86;
-      let y = 260;
-
-      if (shipPositionsType) {
-        const locations: Record<string, { x: number; y: number }> = {
-          TYPE05: { x: 162, y: 166 }, // planet and wormhole
-          TYPE07: { x: 172, y: 32 }, // 1 planet bottom left
-          TYPE08: { x: 132, y: 110 }, // empty and wormhole
-          TYPE13: { x: 139, y: 186 }, // Eko
-          TYPE14: { x: 152, y: 124 }, // Horace
-        };
-
-        if (locations[shipPositionsType]) {
-          x = offset + locations[shipPositionsType].x;
-          y = offset + locations[shipPositionsType].y;
-        }
-      }
-
-      if (hasAlpha) coords.push({ x, y, type: "alpha" });
-      if (hasBeta) coords.push({ x, y, type: "beta" });
-      break;
-    }
+  if (tilePositions) {
+    return [
+      hasAlpha && tilePositions.alpha,
+      hasBeta && tilePositions.beta,
+    ]
+      .filter((point): point is Point => !!point)
+      .map(shift);
   }
-  return coords;
+
+  const layoutPosition = shipPositionsType
+    ? SHIP_POSITION_WORMHOLE[shipPositionsType]
+    : undefined;
+  const point = layoutPosition
+    ? shift(layoutPosition)
+    : { x: offset + 86, y: 260 };
+  return [hasAlpha && point, hasBeta && point].filter(
+    (p): p is Point => !!p,
+  );
 }

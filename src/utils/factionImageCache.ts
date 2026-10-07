@@ -4,12 +4,12 @@ const STORAGE_KEY = "factionImageCache";
 const CACHE_VERSION = 1;
 const MAX_CACHE_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
-export type CachedGameFactionImages = {
+type CachedGameFactionImages = {
   factionImages: FactionImageMap;
   updatedAt: number;
 };
 
-export type FactionImageCache = {
+type FactionImageCache = {
   version: typeof CACHE_VERSION;
   games: Record<string, CachedGameFactionImages>;
 };
@@ -64,6 +64,7 @@ function parseCache(value: unknown): FactionImageCache {
     if (
       gameId.length === 0 ||
       !isRecord(gameData) ||
+      typeof gameData.updatedAt !== "number" ||
       !Number.isFinite(gameData.updatedAt)
     ) {
       return cachedGames;
@@ -71,7 +72,7 @@ function parseCache(value: unknown): FactionImageCache {
 
     cachedGames[gameId] = {
       factionImages: parseFactionImages(gameData.factionImages),
-      updatedAt: gameData.updatedAt as number,
+      updatedAt: gameData.updatedAt,
     };
     return cachedGames;
   }, {});

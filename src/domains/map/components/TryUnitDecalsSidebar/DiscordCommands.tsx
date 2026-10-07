@@ -1,63 +1,43 @@
-import React from "react";
 import { Box, Stack, Text, Code, ActionIcon, Group } from "@mantine/core";
 import { IconCopy } from "@tabler/icons-react";
+import classes from "../TryUnitDecalsSidebar.module.css";
 
 type Props = {
   colorName: string | null;
   decalId: string | null;
 };
 
-export function DiscordCommands({ colorName, decalId }: Props) {
-  const handleCopyCommand = (command: string) => {
-    navigator.clipboard.writeText(command);
-  };
-
+function CommandRow({ command }: { command: string }) {
   return (
-    <Box
-      py="sm"
-      px="md"
-      style={{
-        borderBottom: "1px solid var(--mantine-color-dark-4)",
-        background: "var(--mantine-color-dark-7)",
-      }}
-    >
+    <Group gap="xs" wrap="nowrap">
+      <Code style={{ flex: 1, fontSize: 11 }} p="xs" bg="dark.8">
+        {command}
+      </Code>
+      <ActionIcon
+        size="sm"
+        variant="subtle"
+        onClick={() => void navigator.clipboard.writeText(command)}
+      >
+        <IconCopy size={14} />
+      </ActionIcon>
+    </Group>
+  );
+}
+
+export function DiscordCommands({ colorName, decalId }: Props) {
+  return (
+    <Box py="sm" px="md" className={classes.commands}>
       <Text size="sm" fw={600} mb="xs" c="gray.3">
         Discord Commands
       </Text>
       <Stack gap="xs">
         {colorName && (
-          <Group gap="xs" wrap="nowrap">
-            <Code style={{ flex: 1, fontSize: 11 }} p="xs" bg="dark.8">
-              /player change_color color: {colorName}
-            </Code>
-            <ActionIcon
-              size="sm"
-              variant="subtle"
-              onClick={() =>
-                handleCopyCommand(`/player change_color color: ${colorName}`)
-              }
-            >
-              <IconCopy size={14} />
-            </ActionIcon>
-          </Group>
+          <CommandRow command={`/player change_color color: ${colorName}`} />
         )}
         {decalId && (
-          <Group gap="xs" wrap="nowrap">
-            <Code style={{ flex: 1, fontSize: 11 }} p="xs" bg="dark.8">
-              /player change_unit_decal decal_set: {decalId}
-            </Code>
-            <ActionIcon
-              size="sm"
-              variant="subtle"
-              onClick={() =>
-                handleCopyCommand(
-                  `/player change_unit_decal decal_set: ${decalId}`
-                )
-              }
-            >
-              <IconCopy size={14} />
-            </ActionIcon>
-          </Group>
+          <CommandRow
+            command={`/player change_unit_decal decal_set: ${decalId}`}
+          />
         )}
         {!colorName && !decalId && (
           <Text size="xs" c="dimmed">
@@ -68,4 +48,3 @@ export function DiscordCommands({ colorName, decalId }: Props) {
     </Box>
   );
 }
-

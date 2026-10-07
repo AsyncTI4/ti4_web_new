@@ -1,78 +1,51 @@
-import React from "react";
+import { Fragment } from "react";
 import { Box, SimpleGrid, Text } from "@mantine/core";
 import { colors } from "@/entities/data/colors";
-import { getColorAlias } from "@/entities/lookup/colors";
 import { ColorSwatch } from "./ColorSwatch";
-import classes from "../TryUnitDecalsSidebar.module.css";
 
 type Props = {
-  selectedFaction: string;
-  colorOverrides: Record<string, string>;
-  playerColorAlias: string | null;
+  activeColorAlias: string | null;
   onColorClick: (colorAlias: string) => void;
 };
 
-export function ColorGrid({
-  selectedFaction,
-  colorOverrides,
-  playerColorAlias,
-  onColorClick,
-}: Props) {
-  const overrideColorAlias = colorOverrides[selectedFaction];
+const hasSecondary = (color: (typeof colors)[number]) =>
+  !!(color.secondaryColor || color.secondaryColorRef);
 
-  const basicColors = colors.filter(
-    (color) =>
-      !color.secondaryColor &&
-      !color.secondaryColorRef &&
-      color.primaryColor
-  );
+const COLOR_SECTIONS = [
+  {
+    title: "Basic Colors",
+    colors: colors.filter((c) => c.primaryColor && !hasSecondary(c)),
+  },
+  {
+    title: "Gradient Colors",
+    colors: colors.filter((c) => c.primaryColor && hasSecondary(c)),
+  },
+];
 
-  const gradientColors = colors.filter(
-    (color) =>
-      (color.secondaryColor || color.secondaryColorRef) &&
-      color.primaryColor
-  );
-
-  const getIsSelected = (colorAlias: string) => {
-    return (
-      (overrideColorAlias !== undefined &&
-        overrideColorAlias === colorAlias) ||
-      (overrideColorAlias === undefined && playerColorAlias === colorAlias)
-    );
-  };
-
+export function ColorGrid({ activeColorAlias, onColorClick }: Props) {
   return (
     <Box>
-      {/* Basic Colors Section */}
-      <Text size="sm" fw={600} mb="xs" mt="xs" c="gray.3">
-        Basic Colors
-      </Text>
-      <SimpleGrid cols={6} spacing="xs" mb="md">
-        {basicColors.map((color) => (
-          <ColorSwatch
-            key={color.alias}
-            color={color}
-            isSelected={getIsSelected(color.alias)}
-            onClick={() => onColorClick(color.alias)}
-          />
-        ))}
-      </SimpleGrid>
-
-      {/* Gradient Colors Section */}
-      <Text size="sm" fw={600} mb="xs" mt="xs" c="gray.3">
-        Gradient Colors
-      </Text>
-      <SimpleGrid cols={6} spacing="xs">
-        {gradientColors.map((color) => (
-          <ColorSwatch
-            key={color.alias}
-            color={color}
-            isSelected={getIsSelected(color.alias)}
-            onClick={() => onColorClick(color.alias)}
-          />
-        ))}
-      </SimpleGrid>
+      {COLOR_SECTIONS.map((section, index) => (
+        <Fragment key={section.title}>
+          <Text size="sm" fw={600} mb="xs" mt="xs" c="gray.3">
+            {section.title}
+          </Text>
+          <SimpleGrid
+            cols={6}
+            spacing="xs"
+            mb={index < COLOR_SECTIONS.length - 1 ? "md" : undefined}
+          >
+            {section.colors.map((color) => (
+              <ColorSwatch
+                key={color.alias}
+                color={color}
+                isSelected={activeColorAlias === color.alias}
+                onClick={() => onColorClick(color.alias)}
+              />
+            ))}
+          </SimpleGrid>
+        </Fragment>
+      ))}
     </Box>
   );
 }
-

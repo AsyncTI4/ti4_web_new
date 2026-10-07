@@ -1,8 +1,7 @@
-import React from "react";
 import { ControlToken } from "../ControlToken";
 import { getColorAlias } from "@/entities/lookup/colors";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
-import { Tile } from "@/app/providers/context/types";
+import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
+import type { Tile } from "@/app/providers/context/types";
 import { useSettingsStore } from "@/utils/appStore";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useMapReplay } from "@/hooks/useGameContext";
@@ -15,15 +14,15 @@ type Props = {
 
 export function ControlTokensLayer({ systemId, mapTile }: Props) {
   const controlTokenDisplayMode = useSettingsStore(
-    (state) => state.settings.controlTokenDisplayMode
+    (state) => state.settings.controlTokenDisplayMode,
   );
   const factionColorMap = useFactionColors();
   const replay = useMapReplay();
-  const controlTokens = React.useMemo(() => {
-    if (!mapTile?.planets) return [] as React.ReactElement[];
-    const planetCoords = getPlanetCoordsBySystemId(systemId);
+  if (!mapTile?.planets) return null;
+  const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-    return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
+  const controlTokens = Object.entries(mapTile.planets).flatMap(
+    ([planetId, planetData]) => {
       if (!planetData.controlledBy) return [];
       if (
         replay.active &&
@@ -44,20 +43,16 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
       )
         return [];
 
-      let x: number, y: number;
-      if (planetCoords[planetId]) {
-        [x, y] = planetCoords[planetId].split(",").map(Number);
-      } else {
-        const tokenPlacement = Object.values(mapTile.entityPlacements).find(
-          (placement) => placement.entityId === planetId
+      const position =
+        planetPositions[planetId] ??
+        Object.values(mapTile.entityPlacements).find(
+          (placement) => placement.entityId === planetId,
         );
-        if (!tokenPlacement) return [];
-        x = tokenPlacement.x;
-        y = tokenPlacement.y;
-      }
+      if (!position) return [];
+      const { x, y } = position;
 
       const colorAlias = getColorAlias(
-        factionColorMap?.[planetData.controlledBy]?.color
+        factionColorMap?.[planetData.controlledBy]?.color,
       );
 
       return [
@@ -74,8 +69,8 @@ export function ControlTokensLayer({ systemId, mapTile }: Props) {
           }}
         />,
       ];
-    });
-  }, [systemId, mapTile, controlTokenDisplayMode, factionColorMap, replay]);
+    },
+  );
 
   return <>{controlTokens}</>;
 }

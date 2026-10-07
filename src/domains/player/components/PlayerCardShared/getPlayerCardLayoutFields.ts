@@ -2,95 +2,27 @@ import type { PlayerData } from "@/entities/data/types";
 import { getPlayerFactionDisplayName } from "@/utils/playerUtils";
 
 /**
- * Picks the common set of player fields that multiple PlayerCard variants need
- * to render. Centralizing this prevents each card from repeating the same
- * destructuring logic.
+ * The player fields every PlayerCard variant renders, with list and count
+ * defaults filled in and the faction display name resolved.
  */
 export function getPlayerCardLayoutFields(playerData: PlayerData) {
   const {
-    userName,
-    faction,
-    color,
-    tacticalCC,
-    fleetCC,
-    strategicCC,
-    fragments,
-    isSpeaker,
-    isTyrant,
-    relics,
-    planets,
-    secretsScored,
-    knownUnscoredSecrets,
-    leaders,
     scs = [],
-    exhaustedSCs,
     unfollowedSCs = [],
-    passed,
-    active,
     neighbors = [],
-    tg,
-    commodities,
-    commoditiesTotal,
     soCount = 0,
     pnCount = 0,
     acCount = 0,
-    debtTokens,
-    exhaustedRelics,
-    nombox,
-    exhaustedPlanetAbilities,
-    exhaustedPlanets,
-    factionTechs,
-    abilities,
-    plotCards,
-    customPromissoryNotes,
-    breachTokensReinf,
-    galvanizeTokensReinf,
-    sleeperTokensReinf,
-    ghostWormholesReinf,
   } = playerData;
 
   return {
-    userName,
-    faction,
+    ...playerData,
     factionDisplayName: getPlayerFactionDisplayName(playerData),
-    color,
-    tacticalCC,
-    fleetCC,
-    strategicCC,
-    fragments,
-    isSpeaker,
-    isTyrant,
-    relics,
-    planets,
-    secretsScored,
-    knownUnscoredSecrets,
-    leaders,
     scs,
-    exhaustedSCs,
     unfollowedSCs,
-    passed,
-    active,
     neighbors,
-    tg,
-    commodities,
-    commoditiesTotal,
     soCount,
     pnCount,
     acCount,
-    debtTokens,
-    exhaustedRelics,
-    nombox,
-    exhaustedPlanetAbilities,
-    exhaustedPlanets,
-    factionTechs,
-    abilities,
-    plotCards,
-    customPromissoryNotes,
-    breachTokensReinf,
-    galvanizeTokensReinf,
-    sleeperTokensReinf,
-    ghostWormholesReinf,
   };
 }
-
-export type PlayerCardLayoutFields = ReturnType<typeof getPlayerCardLayoutFields>;

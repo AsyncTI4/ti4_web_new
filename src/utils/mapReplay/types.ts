@@ -1,11 +1,12 @@
-import type {
-  CombatReplayEvent,
-  RetreatSubEvent,
-} from "@/app/providers/context/types";
+import type { MapStatePreview } from "@/app/providers/context/types";
 import type { EntityStack } from "@/utils/unitPositioning";
 import type { ControlTokenDisplayMode } from "@/utils/controlTokenDisplay";
 
-export type StateCounts = [number, number, number, number];
+import type { StateCounts } from "@/entities/data/types";
+
+export type { StateCounts };
+
+export type DelayedDamage = { damageAtMs: number; states: StateCounts };
 
 export type MapUnitTransition = {
   kind: "moved" | "removed" | "retreated" | "settled" | "added";
@@ -74,7 +75,7 @@ export type MapReplayPlan = {
   commandTokens: MapCommandTokenPlacement[];
   controlTokens: MapControlTokenTransition[];
   arrivalLocations: Set<string>;
-  delayedDamage: Map<string, { damageAtMs: number; states: StateCounts }>;
+  delayedDamage: Map<string, DelayedDamage>;
   baseUnitStates: Map<string, StateCounts>;
   finalRevealLocations: Set<string>;
   tacticalTargetPosition?: string;
@@ -98,12 +99,15 @@ export type UnitLocation = {
   unitId: string;
 };
 
-export type AuthoritativeTransitionOptions = {
-  movementState?: string | null;
-  retreats?: RetreatSubEvent[];
-  combats?: CombatReplayEvent[];
-  activeFaction?: string | null;
-  tacticalPosition?: string | null;
+/** The replay-relevant parts of a map preview, plus display options. */
+export type AuthoritativeTransitionOptions = Pick<
+  MapStatePreview,
+  | "movementState"
+  | "retreats"
+  | "combats"
+  | "activeFaction"
+  | "tacticalPosition"
+> & {
   controlTokenDisplayMode?: ControlTokenDisplayMode;
   changedPositions?: Set<string>;
 };

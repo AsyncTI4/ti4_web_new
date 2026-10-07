@@ -1,15 +1,9 @@
+import { TECH_TYPE_COLOR } from "@/entities/lookup/tech";
 import classes from "./PhantomTech.module.css";
 
 type Props = {
   /** Tech tree to key the slot to. Omit for an unkeyed, grey slot. */
   techType?: string;
-};
-
-const TREE_COLOR: Record<string, string> = {
-  PROPULSION: "var(--gd-blue)",
-  CYBERNETIC: "var(--gd-yellow)",
-  BIOTIC: "var(--gd-green)",
-  WARFARE: "var(--gd-red)",
 };
 
 /*
@@ -20,8 +14,8 @@ const TREE_COLOR: Record<string, string> = {
  */
 const treeVar = (techType?: string) =>
   ({
-    "--gradient-color": (techType && TREE_COLOR[techType]) || "var(--gd-gray)",
-  }) as unknown as React.CSSProperties;
+    "--gradient-color": `var(--gd-${(techType && TECH_TYPE_COLOR[techType]) || "gray"})`,
+  }) as React.CSSProperties;
 
 /** An unresearched tech slot: a socket milled into the plate, keyed to its tree. */
 export function PhantomTech({ techType }: Props) {

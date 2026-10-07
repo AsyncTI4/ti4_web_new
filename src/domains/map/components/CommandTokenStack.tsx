@@ -1,5 +1,4 @@
-import { Box, Text } from "@mantine/core";
-import { CommandCounter } from "./CommandCounter";
+import { FleetTokenStackBase } from "./FleetTokenStackBase";
 import { ArmadaFleetTokenStack } from "./ArmadaFleetTokenStack";
 import { MahactFleetTokenStack } from "./MahactFleetTokenStack";
 
@@ -20,7 +19,6 @@ export function CommandTokenStack({
   mahactEdict = [],
   hasArmadaBonus = false,
 }: CommandTokenStackProps) {
-  // Use specialized components for fleet tokens
   if (type === "fleet") {
     if (hasArmadaBonus) {
       return (
@@ -44,37 +42,14 @@ export function CommandTokenStack({
     }
   }
 
-  // Default behavior for command tokens and regular fleet tokens
   return (
-    <Box pos="relative">
-      <Text ff="heading" pos="absolute" left={0} top={0} fz={24} c="white">
-        {count}
-      </Text>
-      <Box pos="relative" style={{ height: 65 }}>
-        {count === 0 && (
-          <CommandCounter
-            colorAlias="blank"
-            style={{
-              position: "absolute",
-              left: 0,
-              zIndex: 1,
-            }}
-          />
-        )}
-        {Array.from({ length: count }).map((_, index) => (
-          <CommandCounter
-            key={`${type}-cc-${index}`}
-            colorAlias={colorAlias}
-            faction={faction}
-            style={{
-              position: "absolute",
-              left: index * 20,
-              zIndex: index + 1,
-            }}
-            type={type}
-          />
-        ))}
-      </Box>
-    </Box>
+    <FleetTokenStackBase
+      label={count}
+      baseCount={count}
+      colorAlias={colorAlias}
+      faction={faction}
+      counterType={type}
+      showBlankToken={count === 0}
+    />
   );
 }

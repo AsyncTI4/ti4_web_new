@@ -10,17 +10,21 @@ import { showLeader } from "./showLeader";
 import styles from "./Leader.module.css";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
-export type LeaderChipProps = {
+type Props = {
   id: string;
   type: "agent" | "commander" | "hero";
-  tgCount: number;
   exhausted: boolean;
   locked: boolean;
   active: boolean;
 };
 
-export function LeaderChip(props: LeaderChipProps) {
-  const { id, type, exhausted, locked, active } = props;
+export function LeaderChip({
+  id,
+  type,
+  exhausted,
+  locked,
+  active,
+}: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const leaderData = getLeaderById(id);
   if (!leaderData) return null;

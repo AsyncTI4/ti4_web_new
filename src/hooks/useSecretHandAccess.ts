@@ -2,10 +2,7 @@ import type { PlayerData } from "@/entities/data/types";
 import { useUser } from "./useUser";
 import { useGameData } from "./useGameContext";
 
-/**
- * Centralizes the logic for determining if the current user can view secret-hand data.
- * Also exposes commonly needed identifiers for downstream components.
- */
+/** Whether the current user can view secret-hand data, plus the user's ids. */
 export function useSecretHandAccess(playerDataOverride?: PlayerData[] | null) {
   const { user } = useUser();
   const gameData = useGameData();
@@ -19,11 +16,5 @@ export function useSecretHandAccess(playerDataOverride?: PlayerData[] | null) {
   );
   const canViewSecretHand = isUserAuthenticated && isInGame;
 
-  return {
-    userId,
-    userDiscordId,
-    isUserAuthenticated,
-    isInGame,
-    canViewSecretHand,
-  };
+  return { userId, userDiscordId, canViewSecretHand };
 }

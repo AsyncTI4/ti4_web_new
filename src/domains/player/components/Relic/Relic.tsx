@@ -13,10 +13,7 @@ type Props = {
 export function Relic({ relicId, isExhausted = false }: Props) {
   const relicData = getRelicData(relicId);
 
-  if (!relicData) {
-    console.warn(`Relic with ID "${relicId}" not found`);
-    return null;
-  }
+  if (!relicData) return null;
 
   const isFake = relicData.isFakeRelic ?? false;
   const accentColor = isFake ? "grey" : isExhausted ? "bloodOrange" : "yellow";
@@ -34,7 +31,6 @@ export function Relic({ relicId, isExhausted = false }: Props) {
       }
       leftIconSize={18}
       leftIconClassName={cx(
-        styles.icon,
         !isFake && styles.relicIconShadow,
         isExhausted && styles.exhaustedIcon,
         isExhausted && styles.exhaustedIconX,

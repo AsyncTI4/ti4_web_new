@@ -3,10 +3,15 @@ import { Box } from "@mantine/core";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
-import type { ColorKey } from "@/domains/player/components/gradientClasses";
-import { BreakthroughCard } from "./BreakthroughCard.tsx";
+import {
+  getTechSynergyPair,
+  TECH_TYPE_COLOR,
+  type TechColor,
+} from "@/entities/lookup/tech";
+import { BreakthroughCard } from "./BreakthroughCard";
 import { IconLock, IconX } from "@tabler/icons-react";
-import { cdnImage } from "@/entities/data/cdnImage.ts";
+import { cdnImage } from "@/entities/data/cdnImage";
+import cx from "clsx";
 import styles from "./Breakthrough.module.css";
 
 type Props = {
@@ -19,36 +24,13 @@ type Props = {
   chipClassName?: string;
 };
 
-const synergyToColor: Record<string, ColorKey> = {
-  BIOTIC: "green",
-  PROPULSION: "blue",
-  CYBERNETIC: "yellow",
-  WARFARE: "red",
-};
-
 function getAccentFromSynergy(synergy: string[] | undefined) {
-  if (!synergy || synergy.length === 0) return "gray" as const;
-  const colors = synergy
-    .map((s) => synergyToColor[s])
-    .filter((c): c is ColorKey => Boolean(c));
+  const colors = (synergy ?? [])
+    .map((s) => TECH_TYPE_COLOR[s])
+    .filter((c): c is TechColor => Boolean(c));
 
   if (colors.length < 2) return colors[0] ?? ("gray" as const);
-
-  const [a, b] = colors;
-  if ((a === "blue" && b === "red") || (a === "red" && b === "blue"))
-    return "blueRed" as const;
-  if ((a === "blue" && b === "green") || (a === "green" && b === "blue"))
-    return "blueGreen" as const;
-  if ((a === "blue" && b === "yellow") || (a === "yellow" && b === "blue"))
-    return "blueYellow" as const;
-  if ((a === "green" && b === "red") || (a === "red" && b === "green"))
-    return "greenRed" as const;
-  if ((a === "green" && b === "yellow") || (a === "yellow" && b === "green"))
-    return "greenYellow" as const;
-  if ((a === "yellow" && b === "red") || (a === "red" && b === "yellow"))
-    return "yellowRed" as const;
-
-  return "gray" as const;
+  return getTechSynergyPair(colors.slice(0, 2)) ?? ("gray" as const);
 }
 
 export function Breakthrough({
@@ -72,7 +54,12 @@ export function Breakthrough({
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
         <Box
-          className={`${styles.container} ${exhausted ? styles.exhausted : ""} ${!unlocked ? styles.locked : ""} ${className ?? ""}`}
+          className={cx(
+            styles.container,
+            exhausted && styles.exhausted,
+            !unlocked && styles.locked,
+            className
+          )}
         >
           <Chip
             accent={accent}
@@ -83,16 +70,19 @@ export function Breakthrough({
             py={4}
             strong={strong}
             accentLine={exhausted}
-            className={`${exhausted ? styles.exhaustedChip : ""} ${chipClassName ?? ""}`}
+            className={cx(exhausted && styles.exhaustedChip, chipClassName)}
             leftIconSrc={cdnImage("/general/synergy.png")}
             leftIconSize="22px"
-            leftIconClassName={`${styles.synergyIcon} ${exhausted ? styles.exhaustedIcon : ""}`}
+            leftIconClassName={cx(
+              styles.synergyIcon,
+              exhausted && styles.exhaustedIcon
+            )}
           >
-            {tradeGoodsStored && tradeGoodsStored > 0 ? (
+            {(tradeGoodsStored ?? 0) > 0 && (
               <Box className={styles.tradeGoodsText}>
                 +{tradeGoodsStored} TG
               </Box>
-            ) : null}
+            )}
           </Chip>
           {!unlocked && (
             <Box className={styles.lockIcon}>

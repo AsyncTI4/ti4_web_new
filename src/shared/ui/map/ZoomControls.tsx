@@ -13,56 +13,29 @@ import {
 
 type Props = {
   zoomClass?: string;
-  // Back-compat props for legacy MapUI/ScrollMap
-  zoom?: number;
-  zoomFitToScreen?: boolean;
-  onZoomIn?: () => void;
-  onZoomOut?: () => void;
-  onZoomReset?: () => void;
-  onZoomScreenSize?: () => void;
   hideFitToScreen?: boolean;
   /*
-   * Fit the board to the viewport and recentre it. Distinct from the legacy
-   * `onZoomScreenSize` toggle above, which only flips a persisted boolean that
+   * Fit the board to the viewport and recentre it. Distinct from the store's
+   * `handleZoomScreenSize` toggle, which only flips a persisted boolean that
    * the image view reads — in the pannable map it computes nothing, which is why
-   * that control is hidden here rather than reused.
+   * that control is hidden there rather than reused.
    */
   onFitBoard?: () => void;
 };
 
 function ZoomControls({
   zoomClass,
-  zoom: zoomProp,
-  zoomFitToScreen: zoomFitToScreenProp,
-  onZoomIn: onZoomInProp,
-  onZoomOut: onZoomOutProp,
-  onZoomReset: onZoomResetProp,
-  onZoomScreenSize: onZoomScreenSizeProp,
   hideFitToScreen = false,
   onFitBoard,
 }: Props) {
-  // Store values (used by new MapView)
-  const storeZoom = useAppStore((state) => state.zoomLevel);
+  const zoom = useAppStore((state) => state.zoomLevel);
   const storeZoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
-  const storeOnZoomIn = useAppStore((state) => state.handleZoomIn);
-  const storeOnZoomOut = useAppStore((state) => state.handleZoomOut);
-  const storeOnZoomReset = useAppStore((state) => state.handleZoomReset);
-  const storeOnZoomScreenSize = useAppStore(
-    (state) => state.handleZoomScreenSize
-  );
+  const onZoomIn = useAppStore((state) => state.handleZoomIn);
+  const onZoomOut = useAppStore((state) => state.handleZoomOut);
+  const onZoomReset = useAppStore((state) => state.handleZoomReset);
+  const onZoomScreenSize = useAppStore((state) => state.handleZoomScreenSize);
 
-  // Prefer explicit props when provided (legacy), otherwise fall back to store
-  const zoom = typeof zoomProp === "number" ? zoomProp : storeZoom;
-  // When hidden, treat fit-to-screen as off for control rendering
-  const zoomFitToScreen = hideFitToScreen
-    ? false
-    : typeof zoomFitToScreenProp === "boolean"
-      ? zoomFitToScreenProp
-      : storeZoomFitToScreen;
-  const onZoomIn = onZoomInProp ?? storeOnZoomIn;
-  const onZoomOut = onZoomOutProp ?? storeOnZoomOut;
-  const onZoomReset = onZoomResetProp ?? storeOnZoomReset;
-  const onZoomScreenSize = onZoomScreenSizeProp ?? storeOnZoomScreenSize;
+  const zoomFitToScreen = !hideFitToScreen && storeZoomFitToScreen;
 
   return (
     <Group className={zoomClass ?? "zoomContainer"} gap={6}>

@@ -1,127 +1,65 @@
-import React from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTokenImagePath, getTokenData } from "@/entities/lookup/tokens";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
-import { TokenSprite } from "@/shared/ui/Token/components/TokenSprite";
 import { getTokenSprite } from "@/shared/ui/Token/tokenSprites";
 import { getRenderedStackFootprint } from "@/entities/renderedStackGeometry";
+import { PositionedSprite } from "./PositionedSprite";
 
-interface TokenProps extends React.HTMLAttributes<HTMLDivElement> {
+type TokenProps = {
   tokenId: string;
-  colorAlias?: string;
   faction?: string;
-  alt?: string;
-  x?: number;
-  y?: number;
-  zIndex?: number;
-}
+  x: number;
+  y: number;
+  zIndex: number;
+};
 
-export const Token = ({
-  tokenId,
-  faction,
-  alt,
-  x,
-  y,
-  zIndex,
-  ...imageProps
-}: TokenProps) => {
-  // Short-circuit render DMZToken for token_dmz_large.png
-  // to fix some DMZ token positioning issues
-  if (tokenId === "dmz_large") {
-    return (
-      <DMZToken tokenId={tokenId} faction={faction} alt={alt} x={x} y={y} />
-    );
-  }
-
+export const Token = ({ tokenId, faction, x, y, zIndex }: TokenProps) => {
+  const alt = `${faction || "token"} ${tokenId}`;
   const tokenImagePath = getTokenImagePath(tokenId);
-  const attachmentImagePath = tokenImagePath
-    ? null
-    : getAttachmentImagePath(tokenId);
-  const imagePath = tokenImagePath || attachmentImagePath;
-  const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
-  const tokenData = getTokenData(tokenId);
-  const scale = tokenData?.scale || 1;
-  const sprite = tokenImagePath
-    ? getTokenSprite("token", tokenId)
-    : getTokenSprite("attachment", tokenId);
-
-  const existingStyle = imageProps.style || {};
-  const transform = [
-    "translate(-50%, -50%)",
-    scale !== 1 ? `scale(${scale})` : undefined,
-    existingStyle.transform,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
+  const imagePath = tokenImagePath || getAttachmentImagePath(tokenId);
   if (!imagePath) return null;
 
-  const style = {
-    ...existingStyle,
-    position: "absolute" as const,
-    left: `${x}px`,
-    top: `${y}px`,
-    transform,
-    zIndex: zIndex,
-  };
-
-  if (sprite) {
+  /* The large DMZ token renders at its footprint size to keep it in place. */
+  if (tokenId === "dmz_large") {
+    const footprint = getRenderedStackFootprint({
+      entityId: tokenId,
+      entityType: "token",
+      count: 1,
+    });
     return (
-      <TokenSprite
-        sprite={sprite}
-        alt={defaultAlt}
-        {...imageProps}
-        style={style}
+      <img
+        src={cdnImage(imagePath)}
+        alt={alt}
+        style={{
+          width: `${footprint.width}px`,
+          height: `${footprint.height}px`,
+          position: "absolute",
+          left: `${x}px`,
+          top: `${y}px`,
+          transform: "translate(-50%, -50%)",
+          zIndex: 1000,
+        }}
       />
     );
   }
 
+  const scale = getTokenData(tokenId)?.scale || 1;
+
   return (
-    <img
-      src={cdnImage(imagePath)}
-      alt={defaultAlt}
-      {...(imageProps as React.ImgHTMLAttributes<HTMLImageElement>)}
-      style={style}
-    />
-  );
-};
-
-const DMZToken = ({
-  tokenId,
-  faction,
-  alt,
-  x,
-  y,
-  ...imageProps
-}: TokenProps) => {
-  const defaultAlt = alt || `${faction || "token"} ${tokenId}`;
-  const existingStyle = imageProps.style || {};
-  const footprint = getRenderedStackFootprint({
-    entityId: tokenId,
-    entityType: "token",
-    count: 1,
-  });
-  const dmzStyles = {
-    ...existingStyle,
-    width: `${footprint.width}px`,
-    height: `${footprint.height}px`,
-    position: "absolute" as const,
-    left: `${x}px`,
-    top: `${y}px`,
-    transform: "translate(-50%, -50%)",
-    zIndex: 1000,
-  };
-
-  const imagePath =
-    getTokenImagePath(tokenId) || getAttachmentImagePath(tokenId);
-
-  if (!imagePath) return null;
-  return (
-    <img
-      src={cdnImage(imagePath)}
-      alt={defaultAlt}
-      {...(imageProps as React.ImgHTMLAttributes<HTMLImageElement>)}
-      style={dmzStyles}
+    <PositionedSprite
+      sprite={getTokenSprite(tokenImagePath ? "token" : "attachment", tokenId)}
+      imagePath={imagePath}
+      alt={alt}
+      style={{
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        transform:
+          scale !== 1
+            ? `translate(-50%, -50%) scale(${scale})`
+            : "translate(-50%, -50%)",
+        zIndex,
+      }}
     />
   );
 };

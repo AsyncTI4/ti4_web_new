@@ -30,7 +30,7 @@ export function StackedTokenStrip({
   maxWidth = DEFAULT_MAX_WIDTH,
   height = DEFAULT_HEIGHT,
 }: StackedTokenStripProps) {
-  if (!tokens || tokens.length === 0) return null;
+  if (tokens.length === 0) return null;
 
   const stripWidth = Math.min(tokens.length * horizontalSpacing, maxWidth);
 
@@ -44,7 +44,7 @@ export function StackedTokenStrip({
     >
       {tokens.map((token, index) => (
         <img
-          key={token.key ?? index}
+          key={token.key}
           src={token.src}
           alt={token.alt}
           style={{

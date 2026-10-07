@@ -1,9 +1,9 @@
 // Auto-generated file - Do not edit manually
 // Generated from src/main/resources/data/attachments/*.json files
 
-import { Attachment } from "./types";
+import { AttachmentData } from "./types";
 
-export const attachments: Attachment[] = [
+export const attachments: AttachmentData[] = [
   {
     id: "arcane_citadel",
     name: "Arcane Citadel",

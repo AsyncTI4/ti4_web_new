@@ -11,21 +11,15 @@ type Props = {
   reserveSpace?: boolean;
 };
 
-export function FragmentsPool({ fragments, reserveSpace = false }: Props) {
-  // Count fragments by type
-  const fragmentCounts = {
-    cultural: fragments.filter((f: string) => f.startsWith("crf")).length,
-    hazardous: fragments.filter((f: string) => f.startsWith("hrf")).length,
-    industrial: fragments.filter((f: string) => f.startsWith("irf")).length,
-    unknown: fragments.filter((f: string) => f.startsWith("urf")).length,
-  };
+const FRAGMENT_TYPES = ["crf", "hrf", "irf", "urf"] as const;
 
-  if (
-    fragmentCounts.hazardous === 0 &&
-    fragmentCounts.industrial === 0 &&
-    fragmentCounts.unknown === 0 &&
-    fragmentCounts.cultural === 0
-  ) {
+export function FragmentsPool({ fragments, reserveSpace = false }: Props) {
+  const fragmentCounts = FRAGMENT_TYPES.map((type) => ({
+    type,
+    count: fragments.filter((f) => f.startsWith(type)).length,
+  }));
+
+  if (fragmentCounts.every(({ count }) => count === 0)) {
     if (!reserveSpace) return null;
 
     return (
@@ -37,10 +31,9 @@ export function FragmentsPool({ fragments, reserveSpace = false }: Props) {
 
   return (
     <Group gap="xs" p="xs">
-      <FragmentStack count={fragmentCounts.cultural} type="crf" />
-      <FragmentStack count={fragmentCounts.hazardous} type="hrf" />
-      <FragmentStack count={fragmentCounts.industrial} type="irf" />
-      <FragmentStack count={fragmentCounts.unknown} type="urf" />
+      {fragmentCounts.map(({ type, count }) => (
+        <FragmentStack key={type} count={count} type={type} />
+      ))}
     </Group>
   );
 }

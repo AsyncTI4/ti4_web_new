@@ -1,2 +1,0 @@
-export { PlayerCardHeaderCompact } from "./PlayerCardHeaderCompact";
-

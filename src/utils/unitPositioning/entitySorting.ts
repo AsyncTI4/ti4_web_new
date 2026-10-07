@@ -1,7 +1,7 @@
 import { EntityData, FactionUnits } from "@/entities/data/types";
 import { entityIdPriority, INFANTRY_BADGE_CLEARANCE } from "./constants";
 import { gridToPixel } from "./coordinateUtils";
-import { EntityStackBase, HeatSource } from "./types";
+import { EntityStackBase, HeatSource, SquareCost } from "./types";
 
 export const getEntityStackSize = (entityId: string, count: number): number => {
   if (
@@ -16,7 +16,7 @@ export const getEntityStackSize = (entityId: string, count: number): number => {
 };
 
 export const createHeatSource = (
-  optimalResult: { square: { row: number; col: number }; cost: number },
+  optimalResult: SquareCost,
   stack: EntityStackBase,
   squareWidth: number,
   squareHeight: number,

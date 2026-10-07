@@ -17,7 +17,7 @@ import { PrePlacementTile } from "@/app/providers/context/types";
 import { calculateSystemIndicatorLayout } from "./placementHelpers";
 import { getTileById } from "@/domains/map/model/mapgen/systems";
 
-export const hasCrowdedSystemRim = (
+const hasCrowdedSystemRim = (
   systemId: string,
   hasBorderAnomaly = false,
 ) => hasBorderAnomaly || getTileById(systemId)?.tileBack === "fracture";
@@ -80,34 +80,15 @@ export const findSystemIndicatorLayout = (
     hasCrowdedSystemRim(systemId, hasBorderAnomaly),
   );
 
-// Re-export commonly used types and constants
-export type {
-  Planet,
-  HeatSource,
-  EntityStackBase,
-  EntityStack,
-  GameState,
-} from "./types";
+export type { EntityStack } from "./types";
 
 export {
-  SPACE_HEAT_CONFIG,
   MAX_HEAT,
-  HEX_GRID_WIDTH,
-  HEX_GRID_HEIGHT,
   HEX_GRID_SIZE,
   HEX_SQUARE_WIDTH,
   HEX_SQUARE_HEIGHT,
   DEFAULT_PLANET_RADIUS,
   HEX_VERTICES,
-  entityIdPriority,
-  entityZStackPriority,
 } from "./constants";
 
-export {
-  SPLAY_OFFSET_X,
-  SPLAY_OFFSET_Y,
-} from "@/entities/renderedStackGeometry";
-
-export { initializeSpaceCostMap } from "./costMap";
-export { placePlanetEntitiesForTile } from "./planetPlacement";
 export { placeSpaceEntities } from "./spacePlacement";

@@ -7,21 +7,6 @@
   color: var(--mantine-color-gray-0);
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.header h1 {
-  color: var(--mantine-color-blue-4);
-  margin-bottom: 0.5rem;
-}
-
-.header p {
-  color: var(--mantine-color-gray-4);
-  font-size: 1.1rem;
-}
-
 .tileContainer {
   display: flex;
   justify-content: center;
@@ -35,8 +20,6 @@
 
 .systemTileDisplay {
   position: relative;
-  width: 345px;
-  height: 299px;
   transform: scale(1.2);
 }
 
@@ -52,6 +35,9 @@
 }
 
 .costMapSquare {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: opacity 0.2s ease;
 }

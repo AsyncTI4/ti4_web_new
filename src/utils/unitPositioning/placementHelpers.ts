@@ -1,6 +1,12 @@
-import { EntityData } from "@/entities/data/types";
+import type { EntityData, Point } from "@/entities/data/types";
 import { getResourcesLocationAngle, gridToPixel } from "./coordinateUtils";
-import { EntityStack, EntityStackBase, HeatSource, Planet } from "./types";
+import {
+  EntityStack,
+  EntityStackBase,
+  GridSquare,
+  HeatSource,
+  Planet,
+} from "./types";
 import { calculatePlanetHeat } from "./heatMap";
 import {
   CAPACITY_INDICATOR_HEIGHT,
@@ -23,7 +29,6 @@ export type GridDimensions = {
   squareHeight: number;
 };
 
-export type Square = { row: number; col: number };
 
 const NAME_VERTICAL_DIRECTION = {
   TopLeft: -1,
@@ -33,7 +38,7 @@ const NAME_VERTICAL_DIRECTION = {
 } as const;
 
 export const createHeatSourceFromSquare = (
-  square: Square,
+  square: GridSquare,
   grid: GridDimensions,
   stackSize: number,
   faction?: string,
@@ -84,7 +89,7 @@ export const createPlanetInfoHeatSources = (
 };
 
 export const createPlacementFromSquare = (
-  square: Square,
+  square: GridSquare,
   grid: GridDimensions,
   entityData: EntityData,
   faction: string,
@@ -110,18 +115,6 @@ export const createPlacementFromCoords = (
   };
 };
 
-export const createHeatSourceFromPlacement = (
-  placement: EntityStack,
-  stackSize: number,
-): HeatSource => {
-  return {
-    x: placement.x,
-    y: placement.y,
-    stackSize,
-    ...(placement.faction && { faction: placement.faction }),
-  };
-};
-
 export const tokenToEntityStack = (
   token: string,
   faction: string,
@@ -143,7 +136,7 @@ export type IndicatorPlacement = {
   height: number;
 };
 
-export type SystemIndicatorLayout = {
+type SystemIndicatorLayout = {
   production: IndicatorPlacement;
   capacity: {
     solo: IndicatorPlacement;
@@ -151,10 +144,10 @@ export type SystemIndicatorLayout = {
   };
 };
 
-export const findBestHexagonCorner = (
-  planets: Array<{ name: string; x: number; y: number; radius: number }>,
+const findBestHexagonCorner = (
+  planets: Planet[],
 ): {
-  vertex: { x: number; y: number };
+  vertex: Point;
   position: ProductionCornerPosition;
 } => {
   const hexagonCorners = [
@@ -183,7 +176,7 @@ export const findBestHexagonCorner = (
   return bestCorner;
 };
 
-export const calculateCornerOffset = (
+const calculateCornerOffset = (
   position: ProductionCornerPosition,
   imageSize = PRODUCTION_INDICATOR_SIZE,
 ): { offsetX: number; offsetY: number } => {
@@ -192,7 +185,7 @@ export const calculateCornerOffset = (
 };
 
 export const calculateSystemIndicatorLayout = (
-  planets: Array<{ name: string; x: number; y: number; radius: number }>,
+  planets: Planet[],
   hasCrowdedRim = false,
 ): SystemIndicatorLayout => {
   const { vertex, position } = findBestHexagonCorner(planets);
@@ -236,11 +229,11 @@ export const calculateSystemIndicatorLayout = (
 
 export const findEdgeSquare = (
   costMap: number[][],
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
   gridSize: number,
   position: "rightmost" | "leftmost",
   inwardOffsetColumns = 0,
-): Square | null => {
+): GridSquare | null => {
   const rimSet = new Set(rimSquares.map((sq) => `${sq.row},${sq.col}`));
   const step = position === "rightmost" ? -1 : 1;
   const end = position === "rightmost" ? -1 : gridSize;
@@ -250,7 +243,7 @@ export const findEdgeSquare = (
     col !== end;
     col += step
   ) {
-    let bestSquare: Square | null = null;
+    let bestSquare: GridSquare | null = null;
 
     for (let row = 0; row < gridSize; row++) {
       if (costMap[row][col] === -1 || rimSet.has(`${row},${col}`)) continue;

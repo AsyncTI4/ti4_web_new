@@ -1,6 +1,5 @@
-import { Box, Image, Group, Text } from "@mantine/core";
-import { Surface } from "@/domains/player/components/Surface";
-import { cdnImage } from "@/entities/data/cdnImage";
+import { Box, Text } from "@mantine/core";
+import { Surface } from "@/shared/ui/Surface";
 import { units } from "@/entities/data/units";
 import { CapturedUnitsData } from "@/entities/data/types";
 import styles from "./Nombox.module.css";
@@ -10,143 +9,67 @@ import { Unit } from "@/shared/ui/Unit";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 
 type Props = {
-  capturedUnits: CapturedUnitsData;
-  compact?: boolean;
+  capturedUnits?: CapturedUnitsData;
 };
 
-// Parse unit string like "dread,3" or "carrier,4"
+/** Parses a captured-unit entry like "dread,3" or "carrier,4". */
 const parseUnitString = (unitString: string) => {
   const [unitType, countStr] = unitString.split(",");
   const count = parseInt(countStr, 10);
-
-  // Find unit by baseType or name match
   const unit = units.find((u) => u.baseType === unitType);
 
   return {
     unitType,
     count,
-    asyncId: unit?.asyncId || unitType.substring(0, 2), // fallback to first 2 chars
+    asyncId: unit?.asyncId || unitType.substring(0, 2),
   };
 };
 
-export function Nombox({ capturedUnits, compact = false }: Props) {
-  // Early return if no captured units
+export function Nombox({ capturedUnits }: Props) {
+  const factionColorMap = useFactionColors();
+
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
     return null;
   }
-  const factionColorMap = useFactionColors();
-
-  if (compact) {
-    return (
-      <Surface
-        className={styles.compactNombox}
-        p="xs"
-      >
-        <Text className={styles.compactTitle}>CAPTURED</Text>
-        <Box className={styles.compactGrid}>
-          {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-            const playerColor = factionColorMap?.[factionName]?.color;
-            const colorAlias = getColorAlias(playerColor);
-            return (
-              <Box key={factionName} className={styles.compactFaction}>
-                <Box className={styles.compactFactionHeader}>
-                  <FactionIcon
-                    faction={factionName}
-                    className={styles.compactFactionIcon}
-                  />
-                  <Text className={styles.compactFactionName}>
-                    {factionName}
-                  </Text>
-                </Box>
-                <Box className={styles.compactUnitsRow}>
-                  {unitStrings.map((unitString, index) => {
-                    const { count, asyncId } = parseUnitString(unitString);
-                    return (
-                      <Box
-                        key={index}
-                        className={styles.compactUnitGroup}
-                      >
-                        <Box className={styles.compactUnitContainer}>
-                          <Unit
-                            unitType={asyncId}
-                            colorAlias={colorAlias}
-                            faction={factionName}
-                            className={styles.compactUnitImage}
-                            scaleSprite
-                          />
-                        </Box>
-                        <Text className={styles.compactCountBadge}>
-                          ×{count}
-                        </Text>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            );
-          })}
-        </Box>
-      </Surface>
-    );
-  }
 
   return (
-    <Surface
-      className={styles.nombox}
-      p="md"
-      label="CAPTURED"
-      labelColor="red.3"
-    >
-      <Group
-        gap="lg"
-        pos="relative"
-        style={{
-          zIndex: 1,
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-        }}
-      >
+    <Surface className={styles.compactNombox} p="xs">
+      <Text className={styles.compactTitle}>CAPTURED</Text>
+      <Box className={styles.compactGrid}>
         {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-          const playerColor = factionColorMap?.[factionName]?.color;
-          const colorAlias = getColorAlias(playerColor);
+          const colorAlias = getColorAlias(factionColorMap?.[factionName]?.color);
           return (
-            <Box key={factionName}>
-              <Group gap={2} className={styles.factionHeader}>
-                <Image
-                  src={cdnImage(`/factions/${factionName.toLowerCase()}.png`)}
-                  w={20}
-                  h={20}
+            <Box key={factionName} className={styles.compactFaction}>
+              <Box className={styles.compactFactionHeader}>
+                <FactionIcon
+                  faction={factionName}
+                  className={styles.compactFactionIcon}
                 />
-                <Text className={styles.factionName}>{factionName}</Text>
-              </Group>
-              <Group gap="xs" className={styles.unitsRow}>
+                <Text className={styles.compactFactionName}>{factionName}</Text>
+              </Box>
+              <Box className={styles.compactUnitsRow}>
                 {unitStrings.map((unitString, index) => {
                   const { count, asyncId } = parseUnitString(unitString);
                   return (
-                    <Group
-                      key={index}
-                      gap={0}
-                      pos="relative"
-                      className={styles.unitGroup}
-                    >
-                      <Box className={styles.unitContainer}>
+                    <Box key={index} className={styles.compactUnitGroup}>
+                      <Box className={styles.compactUnitContainer}>
                         <Unit
                           unitType={asyncId}
                           colorAlias={colorAlias}
                           faction={factionName}
-                          className={styles.unitImage}
+                          className={styles.compactUnitImage}
                           scaleSprite
                         />
                       </Box>
-                      <Text className={styles.countBadge}>×{count}</Text>
-                    </Group>
+                      <Text className={styles.compactCountBadge}>×{count}</Text>
+                    </Box>
                   );
                 })}
-              </Group>
+              </Box>
             </Box>
           );
         })}
-      </Group>
+      </Box>
     </Surface>
   );
 }

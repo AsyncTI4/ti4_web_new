@@ -1,7 +1,9 @@
 import type { GameData } from "@/app/providers/context/types";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
+import type { Point } from "@/entities/data/types";
+import { getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
 import type {
   AuthoritativeTransitionOptions,
+  DelayedDamage,
   LocatedStack,
   MapCombatLaser,
   MapCommandTokenPlacement,
@@ -11,11 +13,16 @@ import type {
   StateCounts,
 } from "@/utils/mapReplay/types";
 import {
+  addStates,
+  addTotal,
   allPlacedStacks,
   allUnitStacks,
+  appendToGroup,
   createReplayInventory,
+  emptyStates,
   mapUnitLocationKey,
   stackAtWorld,
+  subtractStates,
   unitStates as states,
 } from "@/utils/mapReplay/unitState";
 import {
@@ -38,17 +45,31 @@ import {
   type ControlTokenDisplayMode,
 } from "@/utils/controlTokenDisplay";
 
-export type {
-  MapCombatLaser,
-  MapCommandTokenPlacement,
-  MapControlTokenTransition,
-  MapReplayPlan,
-  MapUnitTransition,
-  StateCounts,
-} from "@/utils/mapReplay/types";
-export { mapUnitLocationKey };
 
 const MAP_CHANGE_HIGHLIGHT_DURATION_MS = 1100;
+/** Gap between consecutive staggered replay items. */
+const STAGGER_MS = 90;
+/** Delay before an added piece appears where one was just removed. */
+const REPLACE_DELAY_MS = 260;
+/** Pause between replay phases (combat, placement, deaths). */
+const PHASE_GAP_MS = 100;
+const TOKEN_ADDED_DURATION_MS = 520;
+const TOKEN_REMOVED_DURATION_MS = 420;
+/** Pause after the activation token lands before units start moving. */
+const ACTIVATION_SETTLE_MS = 80;
+const DEATH_DURATION_MS = 240;
+/** Share of the laser volley elapsed before damage markers appear. */
+const DAMAGE_LASER_FRACTION = 0.55;
+
+type TimedEvent = { delayMs: number; durationMs: number };
+
+function timedEventEnd(event: TimedEvent): number {
+  return event.delayMs + event.durationMs;
+}
+
+function sortedUnion(a: Iterable<string>, b: Iterable<string>): string[] {
+  return [...new Set([...a, ...b])].sort();
+}
 
 function mapUnitTransitionDuration(transition: MapUnitTransition): number {
   if (transition.badgeCountChange) return 240;
@@ -78,7 +99,8 @@ function mapUnitTransitionEnd(transition: MapUnitTransition): number {
     : firstEnd;
 }
 
-function flightDuration(deltaX: number, deltaY: number): number {
+/** Shared with the map flight animation so replay timing matches what is drawn. */
+export function flightDuration(deltaX: number, deltaY: number): number {
   const distance = Math.hypot(deltaX, deltaY);
   return Math.min(1500, Math.max(780, 650 + distance * 0.35));
 }
@@ -88,10 +110,7 @@ function finalizeReplayPlan({
   lasers,
   commandTokens = [],
   controlTokens = [],
-  delayedDamage = new Map<
-    string,
-    { damageAtMs: number; states: StateCounts }
-  >(),
+  delayedDamage = new Map<string, DelayedDamage>(),
   baseUnitStates = new Map<string, StateCounts>(),
   finalRevealLocations = new Set<string>(),
   tacticalTargetPosition,
@@ -103,7 +122,7 @@ function finalizeReplayPlan({
   lasers: MapCombatLaser[];
   commandTokens?: MapCommandTokenPlacement[];
   controlTokens?: MapControlTokenTransition[];
-  delayedDamage?: Map<string, { damageAtMs: number; states: StateCounts }>;
+  delayedDamage?: Map<string, DelayedDamage>;
   baseUnitStates?: Map<string, StateCounts>;
   finalRevealLocations?: Set<string>;
   tacticalTargetPosition?: string;
@@ -133,11 +152,25 @@ function finalizeReplayPlan({
       0,
       changedPositions.size > 0 ? MAP_CHANGE_HIGHLIGHT_DURATION_MS : 0,
       ...transitions.map(mapUnitTransitionEnd),
-      ...lasers.map((laser) => laser.delayMs + laser.durationMs),
-      ...commandTokens.map((token) => token.delayMs + token.durationMs),
-      ...controlTokens.map((token) => token.delayMs + token.durationMs),
+      ...lasers.map(timedEventEnd),
+      ...commandTokens.map(timedEventEnd),
+      ...controlTokens.map(timedEventEnd),
     ),
   };
+}
+
+function residualAssetsByKey(data: GameData): Map<string, LocatedStack> {
+  return new Map(
+    allPlacedStacks(data)
+      .filter(
+        ({ stack }) =>
+          stack.entityType === "token" || stack.entityType === "attachment",
+      )
+      .map((located) => [
+        mapUnitLocationKey(located.position, located.stack),
+        located,
+      ]),
+  );
 }
 
 function residualAssetTransitions(
@@ -145,33 +178,15 @@ function residualAssetTransitions(
   current: GameData,
   startMs: number,
 ): MapUnitTransition[] {
-  const isResidualAsset = ({ stack }: LocatedStack) =>
-    stack.entityType === "token" || stack.entityType === "attachment";
-  const previousAssets = new Map(
-    allPlacedStacks(previous)
-      .filter(isResidualAsset)
-      .map((located) => [
-        mapUnitLocationKey(located.position, located.stack),
-        located,
-      ]),
-  );
-  const currentAssets = new Map(
-    allPlacedStacks(current)
-      .filter(isResidualAsset)
-      .map((located) => [
-        mapUnitLocationKey(located.position, located.stack),
-        located,
-      ]),
-  );
+  const previousAssets = residualAssetsByKey(previous);
+  const currentAssets = residualAssetsByKey(current);
   const transitions: MapUnitTransition[] = [];
   let changeIndex = 0;
-  for (const key of [
-    ...new Set([...previousAssets.keys(), ...currentAssets.keys()]),
-  ].sort()) {
+  for (const key of sortedUnion(previousAssets.keys(), currentAssets.keys())) {
     const before = previousAssets.get(key);
     const after = currentAssets.get(key);
     if (before?.stack.count === after?.stack.count) continue;
-    const delayMs = startMs + changeIndex * 90;
+    const delayMs = startMs + changeIndex * STAGGER_MS;
     if (before) {
       transitions.push({
         kind: "removed",
@@ -190,7 +205,7 @@ function residualAssetTransitions(
         toX: after.worldX,
         toY: after.worldY,
         locationKey: key,
-        delayMs: delayMs + (before ? 260 : 0),
+        delayMs: delayMs + (before ? REPLACE_DELAY_MS : 0),
         residualAsset: true,
       });
     }
@@ -230,16 +245,30 @@ function chooseReplayFocusPosition(
   );
 }
 
-function valueCounts(values: string[]): Map<string, number> {
-  const counts = new Map<string, number>();
-  for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
-  return counts;
+function commandTokenKey(position: string, faction: string, index: number) {
+  return `${position}\u0000${faction}\u0000${index}`;
+}
+
+/** Indices of `values` left over after pairing each with an equal value in `counterpart`. */
+function unmatchedIndices(values: string[], counterpart: string[]): number[] {
+  const remaining = new Map<string, number>();
+  for (const value of counterpart) addTotal(remaining, value, 1);
+  const unmatched: number[] = [];
+  values.forEach((value, index) => {
+    const count = remaining.get(value) ?? 0;
+    if (count > 0) {
+      remaining.set(value, count - 1);
+      return;
+    }
+    unmatched.push(index);
+  });
+  return unmatched;
 }
 
 function commandTokenCoordinates(
   tile: GameData["tiles"][string],
   index: number,
-): { x: number; y: number } {
+): Point {
   return {
     x:
       tile.properties.x +
@@ -276,7 +305,7 @@ function commandTokenPlacements(
       faction,
       index,
       ...commandTokenCoordinates(tile, index),
-      delayMs: additions.length * 90,
+      delayMs: additions.length * STAGGER_MS,
       durationMs: COMMAND_TOKEN_DURATION,
     });
   });
@@ -290,56 +319,49 @@ function residualCommandTokenTransitions(
   activations: MapCommandTokenPlacement[],
 ): MapCommandTokenPlacement[] {
   const activationKeys = new Set(
-    activations.map(
-      (token) => `${token.position}\u0000${token.faction}\u0000${token.index}`,
+    activations.map((token) =>
+      commandTokenKey(token.position, token.faction, token.index),
     ),
   );
   const transitions: MapCommandTokenPlacement[] = [];
-  const positions = [
-    ...new Set([...Object.keys(previous.tiles), ...Object.keys(current.tiles)]),
-  ].sort();
+  const pushToken = (
+    kind: "added" | "removed",
+    position: string,
+    tile: GameData["tiles"][string],
+    faction: string,
+    index: number,
+  ) =>
+    transitions.push({
+      kind,
+      position,
+      faction,
+      index,
+      ...commandTokenCoordinates(tile, index),
+      delayMs: startMs + transitions.length * STAGGER_MS,
+      durationMs:
+        kind === "added" ? TOKEN_ADDED_DURATION_MS : TOKEN_REMOVED_DURATION_MS,
+    });
+  const positions = sortedUnion(
+    Object.keys(previous.tiles),
+    Object.keys(current.tiles),
+  );
   for (const position of positions) {
-    const before = previous.tiles[position]?.commandCounters ?? [];
-    const after = current.tiles[position]?.commandCounters ?? [];
-    const remainingBefore = valueCounts(before);
-    const remainingAfter = valueCounts(after);
-    const currentTile = current.tiles[position];
-    after.forEach((faction, index) => {
-      const countBefore = remainingBefore.get(faction) ?? 0;
-      if (countBefore > 0) {
-        remainingBefore.set(faction, countBefore - 1);
-        return;
-      }
-      const key = `${position}\u0000${faction}\u0000${index}`;
-      if (!currentTile || activationKeys.has(key)) return;
-      transitions.push({
-        kind: "added",
-        position,
-        faction,
-        index,
-        ...commandTokenCoordinates(currentTile, index),
-        delayMs: startMs + transitions.length * 90,
-        durationMs: 520,
-      });
-    });
     const previousTile = previous.tiles[position];
-    before.forEach((faction, index) => {
-      const countAfter = remainingAfter.get(faction) ?? 0;
-      if (countAfter > 0) {
-        remainingAfter.set(faction, countAfter - 1);
-        return;
+    const currentTile = current.tiles[position];
+    const before = previousTile?.commandCounters ?? [];
+    const after = currentTile?.commandCounters ?? [];
+    for (const index of unmatchedIndices(after, before)) {
+      const faction = after[index];
+      if (!currentTile) continue;
+      if (activationKeys.has(commandTokenKey(position, faction, index))) {
+        continue;
       }
-      if (!previousTile) return;
-      transitions.push({
-        kind: "removed",
-        position,
-        faction,
-        index,
-        ...commandTokenCoordinates(previousTile, index),
-        delayMs: startMs + transitions.length * 90,
-        durationMs: 420,
-      });
-    });
+      pushToken("added", position, currentTile, faction, index);
+    }
+    if (!previousTile) continue;
+    for (const index of unmatchedIndices(before, after)) {
+      pushToken("removed", position, previousTile, before[index], index);
+    }
   }
   return transitions;
 }
@@ -348,21 +370,32 @@ function controlTokenCoordinates(
   data: GameData,
   position: string,
   planet: string,
-): { x: number; y: number } | undefined {
+): Point | undefined {
   const tile = data.tiles[position];
   if (!tile) return undefined;
-  const coordinate = getPlanetCoordsBySystemId(tile.systemId)[planet];
-  const placement = coordinate
-    ? undefined
-    : tile.entityPlacements.find(({ entityId }) => entityId === planet);
-  const [localX, localY] = coordinate
-    ? coordinate.split(",").map(Number)
-    : [placement?.x, placement?.y];
-  if (!Number.isFinite(localX) || !Number.isFinite(localY)) return undefined;
+  const local =
+    getPlanetPositionsBySystemId(tile.systemId)[planet] ??
+    tile.entityPlacements.find(({ entityId }) => entityId === planet);
+  if (!local || !Number.isFinite(local.x) || !Number.isFinite(local.y))
+    return undefined;
   return {
-    x: tile.properties.x + localX - 10,
-    y: tile.properties.y + localY + 15,
+    x: tile.properties.x + local.x - 10,
+    y: tile.properties.y + local.y + 15,
   };
+}
+
+function controlTokenTransition(
+  data: GameData,
+  position: string,
+  planet: string,
+  timing: Pick<
+    MapControlTokenTransition,
+    "kind" | "faction" | "delayMs" | "durationMs"
+  >,
+): MapControlTokenTransition | undefined {
+  const coordinates = controlTokenCoordinates(data, position, planet);
+  if (!coordinates) return undefined;
+  return { position, planet, ...timing, ...coordinates };
 }
 
 function residualControlTokenTransitions(
@@ -372,58 +405,50 @@ function residualControlTokenTransitions(
   controlTokenDisplayMode: ControlTokenDisplayMode,
 ): MapControlTokenTransition[] {
   const transitions: MapControlTokenTransition[] = [];
-  const positions = [
-    ...new Set([...Object.keys(previous.tiles), ...Object.keys(current.tiles)]),
-  ].sort();
-  for (const position of positions) {
-    const planetIds = [
-      ...new Set([
-        ...Object.keys(previous.tiles[position]?.planets ?? {}),
-        ...Object.keys(current.tiles[position]?.planets ?? {}),
-      ]),
-    ].sort();
-    for (const planet of planetIds) {
-      const before = previous.tiles[position]?.planets[planet]?.controlledBy;
-      const after = current.tiles[position]?.planets[planet]?.controlledBy;
-      if (before === after) continue;
-      const delayMs = startMs + transitions.length * 90;
-      const previousGroundPieces =
-        previous.tiles[position]?.planets[planet]?.unitsByFaction ?? {};
-      const currentGroundPieces =
-        current.tiles[position]?.planets[planet]?.unitsByFaction ?? {};
-      if (
-        before &&
-        shouldShowControlToken(controlTokenDisplayMode, previousGroundPieces)
-      ) {
-        const coordinates = controlTokenCoordinates(previous, position, planet);
-        if (coordinates)
-          transitions.push({
+  const planetChanges = sortedUnion(
+    Object.keys(previous.tiles),
+    Object.keys(current.tiles),
+  ).flatMap((position) =>
+    sortedUnion(
+      Object.keys(previous.tiles[position]?.planets ?? {}),
+      Object.keys(current.tiles[position]?.planets ?? {}),
+    ).map((planet) => ({
+      position,
+      planet,
+      before: previous.tiles[position]?.planets[planet],
+      after: current.tiles[position]?.planets[planet],
+    })),
+  );
+  for (const { position, planet, before, after } of planetChanges) {
+    const beforeOwner = before?.controlledBy;
+    const afterOwner = after?.controlledBy;
+    if (beforeOwner === afterOwner) continue;
+    const delayMs = startMs + transitions.length * STAGGER_MS;
+    const removed =
+      beforeOwner &&
+      shouldShowControlToken(
+        controlTokenDisplayMode,
+        before?.unitsByFaction ?? {},
+      )
+        ? controlTokenTransition(previous, position, planet, {
             kind: "removed",
-            position,
-            planet,
-            faction: before,
-            ...coordinates,
+            faction: beforeOwner,
             delayMs,
-            durationMs: 420,
-          });
-      }
-      if (
-        after &&
-        shouldShowControlToken(controlTokenDisplayMode, currentGroundPieces)
-      ) {
-        const coordinates = controlTokenCoordinates(current, position, planet);
-        if (coordinates)
-          transitions.push({
+            durationMs: TOKEN_REMOVED_DURATION_MS,
+          })
+        : undefined;
+    const added =
+      afterOwner &&
+      shouldShowControlToken(controlTokenDisplayMode, after?.unitsByFaction ?? {})
+        ? controlTokenTransition(current, position, planet, {
             kind: "added",
-            position,
-            planet,
-            faction: after,
-            ...coordinates,
-            delayMs: delayMs + (before ? 260 : 0),
-            durationMs: 520,
-          });
-      }
-    }
+            faction: afterOwner,
+            delayMs: delayMs + (beforeOwner ? REPLACE_DELAY_MS : 0),
+            durationMs: TOKEN_ADDED_DURATION_MS,
+          })
+        : undefined;
+    if (removed) transitions.push(removed);
+    if (added) transitions.push(added);
   }
   return transitions;
 }
@@ -435,31 +460,25 @@ function assignReplayLayout(
   const arrivalsByLocation = new Map<string, MapUnitTransition[]>();
   for (const transition of transitions) {
     if (transition.kind === "removed") continue;
-    const arrivals = arrivalsByLocation.get(transition.locationKey) ?? [];
-    arrivals.push(transition);
-    arrivalsByLocation.set(transition.locationKey, arrivals);
+    appendToGroup(arrivalsByLocation, transition.locationKey, transition);
   }
   for (const arrivals of arrivalsByLocation.values()) {
-    const finalStates = arrivals[0].layoutUnitStates ?? [0, 0, 0, 0];
-    const arrivingStates: StateCounts = [0, 0, 0, 0];
+    const finalStates = arrivals[0].layoutUnitStates ?? emptyStates();
+    const arrivingStates = emptyStates();
     for (const arrival of arrivals) {
       if (arrival.hideAfterMs !== undefined) continue;
-      const arrivalStates = states(arrival.stack);
-      for (let i = 0; i < 4; i += 1) arrivingStates[i] += arrivalStates[i];
+      addStates(arrivingStates, states(arrival.stack));
     }
-    const baseStates = finalStates.map((value, i) =>
-      Math.max(0, value - arrivingStates[i]),
-    ) as StateCounts;
+    const baseStates = subtractStates(finalStates, arrivingStates);
     baseUnitStates.set(arrivals[0].locationKey, baseStates);
     const offsets: StateCounts = [...baseStates];
     for (const arrival of arrivals) {
       if (arrival.hideAfterMs !== undefined) {
-        arrival.layoutStateOffsets = [0, 0, 0, 0];
+        arrival.layoutStateOffsets = emptyStates();
         continue;
       }
       arrival.layoutStateOffsets = [...offsets];
-      const arrivalStates = states(arrival.stack);
-      for (let i = 0; i < 4; i += 1) offsets[i] += arrivalStates[i];
+      addStates(offsets, states(arrival.stack));
     }
   }
   return baseUnitStates;
@@ -472,10 +491,7 @@ function buildAuthoritativeMapReplay(
 ): MapReplayPlan {
   const previousStacks = allUnitStacks(previous);
   const currentStacks = allUnitStacks(current);
-  const { expectedTotals, finalTotals, locations } = createReplayInventory(
-    previousStacks,
-    currentStacks,
-  );
+  const inventory = createReplayInventory(previousStacks, currentStacks);
 
   // Tactical metadata identifies where to look, but never creates a token by
   // itself. The pre-phase exists only when the serialized map snapshots prove
@@ -492,10 +508,9 @@ function buildAuthoritativeMapReplay(
   const movementStart = Math.max(
     0,
     ...activationCommandTokens.map(
-      (token) => token.delayMs + token.durationMs + 80,
+      (token) => timedEventEnd(token) + ACTIVATION_SETTLE_MS,
     ),
   );
-  const inventory = { expectedTotals, finalTotals, locations };
   const {
     movements,
     movementArrivals,
@@ -529,13 +544,12 @@ function buildAuthoritativeMapReplay(
     currentStacks,
     movementEnd,
   );
-  const laserEnd = Math.max(
-    movementEnd,
-    ...combatLasers.map((laser) => laser.delayMs + laser.durationMs),
-  );
+  const laserEnd = Math.max(movementEnd, ...combatLasers.map(timedEventEnd));
   const damageAtMs =
     combatLasers.length > 0
-      ? Math.round(movementEnd + (laserEnd - movementEnd) * 0.55)
+      ? Math.round(
+          movementEnd + (laserEnd - movementEnd) * DAMAGE_LASER_FRACTION,
+        )
       : undefined;
 
   const retreatPhase = planRetreats({
@@ -583,7 +597,7 @@ function buildAuthoritativeMapReplay(
     damageAtMs,
   });
 
-  const deathDelay = laserEnd + (lossCounts.size > 0 ? 100 : 0);
+  const deathDelay = laserEnd + (lossCounts.size > 0 ? PHASE_GAP_MS : 0);
   for (const transition of removedTransitions) {
     transition.delayMs = deathDelay;
     if (stagedRemovedTransitions.has(transition))
@@ -591,12 +605,14 @@ function buildAuthoritativeMapReplay(
   }
   const combatEnd = Math.max(
     laserEnd,
-    lossCounts.size > 0 ? deathDelay + 240 : 0,
+    lossCounts.size > 0 ? deathDelay + DEATH_DURATION_MS : 0,
     ...removedTransitions.map(mapUnitTransitionEnd),
   );
   const placementDelay =
     combatEnd +
-    (retreatTransitions.length > 0 || movementTransitions.length > 0 ? 100 : 0);
+    (retreatTransitions.length > 0 || movementTransitions.length > 0
+      ? PHASE_GAP_MS
+      : 0);
   for (const transition of retreatTransitions)
     transition.delayMs = placementDelay;
   for (const transition of stagedRetreatTransitions)
@@ -617,19 +633,19 @@ function buildAuthoritativeMapReplay(
     placementDelay,
   });
 
+  const unmergedRetreatTransitions = retreatTransitions.filter(
+    (transition) => !mergedRetreatTransitions.has(transition),
+  );
   const placementEnd = Math.max(
     combatEnd,
     ...sequencedMovementTransitions.map(mapUnitTransitionEnd),
-    ...[
-      ...retreatTransitions.filter(
-        (transition) => !mergedRetreatTransitions.has(transition),
-      ),
-      ...settleTransitions,
-    ].map(mapUnitTransitionEnd),
+    ...[...unmergedRetreatTransitions, ...settleTransitions].map(
+      mapUnitTransitionEnd,
+    ),
   );
   addedTransitions.forEach((transition, index) => {
     transition.delayMs =
-      placementEnd + (placementEnd > 0 ? 90 : 0) + index * 90;
+      placementEnd + (placementEnd > 0 ? STAGGER_MS : 0) + index * STAGGER_MS;
   });
 
   const unitTransitions = [
@@ -637,36 +653,33 @@ function buildAuthoritativeMapReplay(
     ...sequencedMovementTransitions,
     ...removedTransitions,
     ...increasedBadgeTransitions,
-    ...retreatTransitions.filter(
-      (transition) => !mergedRetreatTransitions.has(transition),
-    ),
+    ...unmergedRetreatTransitions,
     ...settleTransitions,
     ...addedTransitions,
   ];
   const unitReplayEnd = Math.max(
     movementStart,
     ...unitTransitions.map(mapUnitTransitionEnd),
-    ...combatLasers.map((laser) => laser.delayMs + laser.durationMs),
+    ...combatLasers.map(timedEventEnd),
   );
-  const residualTransitions = residualAssetTransitions(
-    previous,
-    current,
-    unitReplayEnd + 90,
-  );
-  const transitions = [...unitTransitions, ...residualTransitions];
+  const residualStart = unitReplayEnd + STAGGER_MS;
+  const transitions = [
+    ...unitTransitions,
+    ...residualAssetTransitions(previous, current, residualStart),
+  ];
   const commandTokens = [
     ...activationCommandTokens,
     ...residualCommandTokenTransitions(
       previous,
       current,
-      unitReplayEnd + 90,
+      residualStart,
       activationCommandTokens,
     ),
   ];
   const controlTokens = residualControlTokenTransitions(
     previous,
     current,
-    unitReplayEnd + 90,
+    residualStart,
     options.controlTokenDisplayMode ?? "ambiguous",
   );
   const baseUnitStates = assignReplayLayout(transitions);

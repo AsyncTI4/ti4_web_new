@@ -1,13 +1,12 @@
-import { getAbility } from "@/entities/lookup/abilities";
 import { Ability } from "./Ability";
 import { Tech } from "./Tech";
 import { Breakthrough } from "./Breakthrough/Breakthrough";
 import { PromissoryNote } from "./PromissoryNote";
-import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
+import { getBreakthroughSynergy } from "./Tech/TechGridShared";
 import type { BreakthroughData } from "@/entities/data/types";
 import rail from "./PlayerCardHeader/HeaderRail.module.css";
 
-type PlayerCardAbilitiesFactionTechsProps = {
+type Props = {
   abilities?: string[];
   notResearchedFactionTechs?: string[];
   customPromissoryNotes?: string[];
@@ -28,17 +27,6 @@ type PlayerCardAbilitiesFactionTechsProps = {
   groupLabelClassName?: string;
 };
 
-function useBreakthroughValues(breakthrough?: BreakthroughData) {
-  const breakthroughData = breakthrough?.breakthroughId
-    ? getBreakthroughData(breakthrough.breakthroughId)
-    : undefined;
-
-  return {
-    synergy: breakthroughData?.synergy,
-    breakthroughUnlocked: breakthrough?.unlocked ?? false,
-  };
-}
-
 /*
  * Renders straight into the header rail — no wrapper of its own, so abilities,
  * promissory notes and faction techs are siblings of the breakthrough and
@@ -54,8 +42,8 @@ export function PlayerCardAbilitiesFactionTechsMobile({
   showBreakthrough = true,
   groupClassName,
   groupLabelClassName,
-}: PlayerCardAbilitiesFactionTechsProps) {
-  const { synergy, breakthroughUnlocked } = useBreakthroughValues(breakthrough);
+}: Props) {
+  const { synergy, breakthroughUnlocked } = getBreakthroughSynergy(breakthrough);
   const groupClass = groupClassName ?? rail.railGroup;
   const bayLabel = (label: string) =>
     groupLabelClassName ? (
@@ -100,11 +88,9 @@ export function PlayerCardAbilitiesFactionTechsMobile({
       {showFactionAbilities && abilities.length > 0 && (
         <div className={groupClass}>
           {bayLabel("Abilities")}
-          {abilities.map((abilityId, index) => {
-            const abilityData = getAbility(abilityId);
-            if (!abilityData) return null;
-            return <Ability id={abilityId} key={index} strong={false} />;
-          })}
+          {abilities.map((abilityId, index) => (
+            <Ability id={abilityId} key={index} strong={false} />
+          ))}
         </div>
       )}
     </>

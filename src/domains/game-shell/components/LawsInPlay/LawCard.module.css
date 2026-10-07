@@ -69,7 +69,7 @@
   color: rgba(226, 232, 240, 0.72);
   font-size: 12px;
   font-weight: var(--weight-data);
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

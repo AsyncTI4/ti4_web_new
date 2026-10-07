@@ -5,7 +5,7 @@ import { getTechData, getTechTier } from "@/entities/lookup/tech";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
 import type { BreakthroughData } from "@/entities/data/types";
 
-export type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
+type TechCategory = "PROPULSION" | "CYBERNETIC" | "BIOTIC" | "WARFARE";
 
 export const techCategories: TechCategory[] = [
   "PROPULSION",
@@ -14,12 +14,23 @@ export const techCategories: TechCategory[] = [
   "WARFARE",
 ];
 
+/** The breakthrough's synergy colors, and whether they currently apply. */
+export function getBreakthroughSynergy(breakthrough?: BreakthroughData) {
+  const breakthroughData = breakthrough?.breakthroughId
+    ? getBreakthroughData(breakthrough.breakthroughId)
+    : undefined;
+
+  return {
+    synergy: breakthroughData?.synergy,
+    breakthroughUnlocked: breakthrough?.unlocked ?? false,
+  };
+}
+
 export function buildTechElementsForType(
   techType: string,
   techIds: string[] = [],
   exhaustedTechs: string[] = [],
   minSlotsPerColor?: number,
-  mobile?: boolean,
   breakthrough?: BreakthroughData
 ): ReactNode[] {
   const filteredTechs = techIds.filter((techId) => {
@@ -35,18 +46,13 @@ export function buildTechElementsForType(
     return tierA - tierB;
   });
 
-  const breakthroughData = breakthrough?.breakthroughId
-    ? getBreakthroughData(breakthrough.breakthroughId)
-    : undefined;
-  const synergy = breakthroughData?.synergy;
-  const breakthroughUnlocked = breakthrough?.unlocked ?? false;
+  const { synergy, breakthroughUnlocked } = getBreakthroughSynergy(breakthrough);
 
   const techElements: ReactNode[] = sortedTechs.map((techId, index) => (
     <Tech
       key={`tech-${techId}-${index}`}
       techId={techId}
       isExhausted={exhaustedTechs.includes(techId)}
-      mobile={mobile}
       synergy={synergy}
       breakthroughUnlocked={breakthroughUnlocked}
     />
@@ -56,33 +62,17 @@ export function buildTechElementsForType(
     return techElements;
   }
 
-  const placeholders: ReactNode[] = [];
-  for (let i = techElements.length; i < minSlotsPerColor; i++) {
-    placeholders.push(
-      <PhantomTech key={`phantom-${techType}-${i}`} techType={techType} />
-    );
-  }
+  const placeholders = Array.from(
+    { length: minSlotsPerColor - techElements.length },
+    (_, i) => (
+      <PhantomTech
+        key={`phantom-${techType}-${techElements.length + i}`}
+        techType={techType}
+      />
+    )
+  );
 
   return [...techElements, ...placeholders];
-}
-
-export function buildCategoriesWithTechs(
-  techIds: string[] = [],
-  exhaustedTechs: string[] = [],
-  minSlotsPerColor?: number,
-  breakthrough?: BreakthroughData
-): { type: TechCategory; techs: ReactNode[] }[] {
-  return techCategories.map((techType) => ({
-    type: techType,
-    techs: buildTechElementsForType(
-      techType,
-      techIds,
-      exhaustedTechs,
-      minSlotsPerColor,
-      false,
-      breakthrough
-    ),
-  }));
 }
 
 export function chunkInto<T>(items: T[], size: number): T[][] {

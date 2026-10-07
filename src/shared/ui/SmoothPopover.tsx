@@ -17,7 +17,6 @@ function SmoothPopoverBase({
   position = "top",
   withArrow = true,
   shadow = "xl",
-  positionDependencies,
   ...props
 }: SmoothPopoverProps) {
   return (
@@ -39,8 +38,7 @@ function SmoothPopoverBase({
           border: "none",
         },
       }}
-      // Hardcoded to match --z-smooth-popover; see src/utils/zIndexVariables.css
-      zIndex={3500}
+      zIndex="var(--z-smooth-popover)"
       {...props}
     >
       {children}
@@ -68,7 +66,6 @@ function SmoothPopoverDropdown({
   );
 }
 
-// Attach the sub-components
 export const SmoothPopover = Object.assign(SmoothPopoverBase, {
   Target: Popover.Target,
   Dropdown: SmoothPopoverDropdown,

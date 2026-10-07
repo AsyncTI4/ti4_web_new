@@ -7,20 +7,22 @@ type StatItem = {
   suffix?: string;
 };
 
+type StatSize = "sm" | "md" | "lg";
+
 type Props = {
   items: StatItem[];
   layout?: "horizontal" | "vertical";
   gap?: number;
-  size?: "sm" | "md" | "lg";
+  size?: StatSize;
 };
 
-const VALUE_SIZES: Record<string, string> = {
+const VALUE_SIZES: Record<StatSize, string> = {
   sm: "md",
   md: "lg",
   lg: "xl",
 };
 
-const LABEL_SIZES: Record<string, string> = {
+const LABEL_SIZES: Record<StatSize, string> = {
   sm: "9px",
   md: "xs",
   lg: "sm",
@@ -62,44 +64,5 @@ export function StatGroup({
         </Group>
       ))}
     </Container>
-  );
-}
-
-type SingleStatProps = {
-  value: number | string;
-  label: string;
-  suffix?: string;
-  size?: "sm" | "md" | "lg";
-};
-
-/**
- * SingleStat - A single labeled statistic.
- */
-export function SingleStat({
-  value,
-  label,
-  suffix,
-  size = "md",
-}: SingleStatProps) {
-  return (
-    <Group gap={6} ff="mono" fw={500}>
-      <Text
-        size={VALUE_SIZES[size]}
-        c="white"
-        lh={1.1}
-        className={classes.value}
-      >
-        {value}
-        {suffix}
-      </Text>
-      <Text
-        size={LABEL_SIZES[size]}
-        lh={1.1}
-        fw={400}
-        className={classes.label}
-      >
-        {label}
-      </Text>
-    </Group>
   );
 }

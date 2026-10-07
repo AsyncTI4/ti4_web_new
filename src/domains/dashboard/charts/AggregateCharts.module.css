@@ -68,29 +68,6 @@
   background: rgba(148, 163, 184, 0.03);
 }
 
-/* ─── KPI Row (Economy) ─── */
-.kpiRow {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.kpiBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 80px;
-}
-
-.kpiBlockValue {
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: var(--weight-rail);
-  font-size: 1.35rem;
-  line-height: 1.1;
-  color: var(--mantine-color-gray-1);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
 /* ─── Speaker Comparison ─── */
 .speakerComparison {
   display: grid;
@@ -159,43 +136,6 @@
 
 .deltaNegative {
   color: rgb(var(--gd-red));
-}
-
-/* ─── Combat Stat Grid ─── */
-.combatStatGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-}
-
-@media (max-width: 640px) {
-  .combatStatGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.combatStatItem {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 6px;
-  border-radius: var(--mantine-radius-sm);
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-}
-
-.combatStatValue {
-  font-family: var(--mantine-font-family-monospace);
-  font-weight: var(--weight-rail);
-  font-size: 1rem;
-  line-height: 1.1;
-  color: var(--mantine-color-gray-1);
-}
-
-.combatStatAvg {
-  font-family: var(--mantine-font-family-monospace);
-  font-size: 9px;
-  color: var(--mantine-color-teal-4);
 }
 
 /* ─── Economy (compact inline) ─── */

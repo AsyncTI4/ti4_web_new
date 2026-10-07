@@ -29,19 +29,13 @@ function CardItem({
   return (
     <div className={styles.cardItem}>
       <Stack gap="xs">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+        <div className={styles.cardHeader}>
+          <div className={styles.cardNameRow}>
             <Text className={styles.cardName}>{name}</Text>
             {showCount && <div className={styles.copyBadge}>{count}</div>}
           </div>
           {percentage !== undefined && (
-            <div className={styles.percentage}>{percentage?.toFixed(2)}%</div>
+            <div className={styles.percentage}>{percentage.toFixed(2)}%</div>
           )}
         </div>
         <Text className={styles.cardText}>{text}</Text>
@@ -56,8 +50,6 @@ function CardSection({
   items,
   showCounts,
 }: CardSectionData & { showCounts: boolean }) {
-  if (items.length === 0) return null;
-
   return (
     <Box>
       <Text className={styles.sectionTitle}>{title} ({count})</Text>

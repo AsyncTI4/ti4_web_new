@@ -18,7 +18,7 @@ function DetailsCardTitle({
 }: Props) {
   return (
     <Group gap="md" align="center">
-      {icon && icon}
+      {icon}
       <Stack gap={4} flex={1}>
         <Text size="lg" fw={700} c="white" lh={1.2} className={classes.cardTitle}>
           {title}

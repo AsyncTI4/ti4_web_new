@@ -1,5 +1,11 @@
 import { gridToPixel, calculateDistance } from "./coordinateUtils";
-import { Planet, HeatSource, UpdateCostMapOptions } from "./types";
+import {
+  GridSquare,
+  HeatSource,
+  Planet,
+  SquareCost,
+  UpdateCostMapOptions,
+} from "./types";
 
 type CostMapAccumulatorOptions = Omit<
   UpdateCostMapOptions,
@@ -9,14 +15,16 @@ type CostMapAccumulatorOptions = Omit<
   initialHeatSources: HeatSource[];
 };
 
-export type CostMapAccumulator = {
+type CostMapAccumulator = {
   addHeatSource: (source: HeatSource) => void;
   findOptimalSquare: (
     currentFaction: string,
     rimClearance: number,
-  ) => { square: { row: number; col: number }; cost: number } | null;
+  ) => SquareCost | null;
   createCostMap: () => number[][];
 };
+
+type HeatConfig = UpdateCostMapOptions["heatConfig"];
 
 type GridGeometry = {
   validCells: Uint8Array;
@@ -48,7 +56,7 @@ export const calculatePlanetHeat = (
 const calculateRimDistance = (
   squareX: number,
   squareY: number,
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
   squareWidth: number,
   squareHeight: number,
 ): number => {
@@ -78,29 +86,40 @@ const calculateRimHeat = (
     : 0;
 };
 
-export const calculateUnitHeat = (
+/** Distance from a square to a heat source's clearance edge, never negative. */
+const sourceDistance = (
+  squareX: number,
+  squareY: number,
+  source: HeatSource,
+): number =>
+  Math.max(
+    0,
+    calculateDistance(squareX, squareY, source.x, source.y) -
+      (source.clearance ?? 0),
+  );
+
+const stackHeatMultiplier = (
+  heatConfig: HeatConfig,
+  source: HeatSource,
+): number => 1 + heatConfig.stackSizeMultiplier * source.stackSize;
+
+const heatToCost = (totalHeat: number): number =>
+  totalHeat < 1 ? 0 : Math.round(totalHeat);
+
+const calculateUnitHeat = (
   squareX: number,
   squareY: number,
   heatSources: HeatSource[],
   hasMultipleFactions: boolean,
   currentFaction: string | undefined,
-  entityDecayRate: number,
-  factionDecayRate: number,
-  unitHeat: number,
-  factionRepulsionHeat: number,
-  stackSizeMultiplier: number,
+  heatConfig: HeatConfig,
 ): number => {
   if (heatSources.length === 0) return 0;
 
   let totalHeat = 0;
   for (const unitSource of heatSources) {
-    const distance = Math.max(
-      0,
-      calculateDistance(squareX, squareY, unitSource.x, unitSource.y) -
-        (unitSource.clearance ?? 0),
-    );
-
-    const stackHeatMultiplier = 1 + stackSizeMultiplier * unitSource.stackSize;
+    const distance = sourceDistance(squareX, squareY, unitSource);
+    const stackMultiplier = stackHeatMultiplier(heatConfig, unitSource);
 
     const isOpposingFaction =
       hasMultipleFactions &&
@@ -109,10 +128,12 @@ export const calculateUnitHeat = (
       unitSource.faction !== currentFaction;
 
     const baseHeat = isOpposingFaction
-      ? factionRepulsionHeat *
-        stackHeatMultiplier *
-        Math.exp(-factionDecayRate * distance)
-      : unitHeat * stackHeatMultiplier * Math.exp(-entityDecayRate * distance);
+      ? heatConfig.factionRepulsionHeat *
+        stackMultiplier *
+        Math.exp(-heatConfig.factionDecayRate * distance)
+      : heatConfig.unitHeat *
+        stackMultiplier *
+        Math.exp(-heatConfig.unitDecayRate * distance);
 
     totalHeat += baseHeat * (unitSource.strength ?? 1);
   }
@@ -175,15 +196,10 @@ export const updateCostMap = ({
         heatSources,
         hasMultipleFactions,
         currentFaction,
-        heatConfig.unitDecayRate,
-        heatConfig.factionDecayRate,
-        heatConfig.unitHeat,
-        heatConfig.factionRepulsionHeat,
-        heatConfig.stackSizeMultiplier,
+        heatConfig,
       );
 
-      const totalHeat = planetHeat + rimHeat + unitHeat;
-      costMap[row][col] = totalHeat < 1 ? 0 : Math.round(totalHeat);
+      costMap[row][col] = heatToCost(planetHeat + rimHeat + unitHeat);
     }
   }
 
@@ -240,31 +256,22 @@ export function createCostMapAccumulator({
   }
 
   const addHeatSource = (source: HeatSource) => {
-    const stackHeatMultiplier =
-      1 + heatConfig.stackSizeMultiplier * source.stackSize;
+    const stackMultiplier = stackHeatMultiplier(heatConfig, source);
     const strength = source.strength ?? 1;
     const hasOpponentHeat = hasMultipleFactions && source.faction !== undefined;
 
     for (let index = 0; index < cellCount; index++) {
       if (validCells[index] === 0) continue;
 
-      const distance = Math.max(
-        0,
-        calculateDistance(
-          squareXs[index],
-          squareYs[index],
-          source.x,
-          source.y,
-        ) - (source.clearance ?? 0),
-      );
+      const distance = sourceDistance(squareXs[index], squareYs[index], source);
       const unitHeat =
         heatConfig.unitHeat *
-        stackHeatMultiplier *
+        stackMultiplier *
         Math.exp(-heatConfig.unitDecayRate * distance) *
         strength;
       const opponentHeat = hasOpponentHeat
         ? heatConfig.factionRepulsionHeat *
-          stackHeatMultiplier *
+          stackMultiplier *
           Math.exp(-heatConfig.factionDecayRate * distance) *
           strength
         : unitHeat;
@@ -292,8 +299,7 @@ export function createCostMapAccumulator({
       return -1;
     }
 
-    const totalHeat = staticHeat[index] + unitHeat[index];
-    return totalHeat < 1 ? 0 : Math.round(totalHeat);
+    return heatToCost(staticHeat[index] + unitHeat[index]);
   };
 
   return {
@@ -301,7 +307,7 @@ export function createCostMapAccumulator({
     findOptimalSquare(currentFaction, rimClearance) {
       const unitHeat = factionUnitHeat.get(currentFaction)!;
       let lowestCost = Infinity;
-      let bestSquare: { row: number; col: number } | null = null;
+      let bestSquare: GridSquare | null = null;
 
       for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
@@ -329,7 +335,7 @@ function getGridGeometry(
   squareWidth: number,
   squareHeight: number,
   existingCostMap: number[][],
-  rimSquares: { row: number; col: number }[],
+  rimSquares: GridSquare[],
 ): GridGeometry {
   const key = [
     gridSize,

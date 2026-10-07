@@ -23,19 +23,22 @@ import { MapView } from "./domains/map/components/MapView";
 import { MapLoadingState } from "./domains/map/components/MapLoadingState";
 import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import { MapViewSelectionModal } from "./domains/game-shell/components/MapViewSelectionModal";
-import { type MapViewPreference } from "./utils/mapViewPreference";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import { NavigationDrawer } from "./domains/game-shell/components/navigation/NavigationDrawer";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
+import { usePageThemeClass } from "./hooks/usePageThemeClass";
 import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
 import { filterPlayersWithAssignedFaction } from "@/utils/playerUtils";
 import { MAIN_TAB_CONFIGS } from "./domains/game-shell/components/mainTabs";
 import { TabPanelSection } from "./domains/game-shell/components/TabPanelSection";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
-import { DISABLE_PLAYER_AREA_RENDERING } from "@/utils/renderDebugFlags";
 
-// Magic constant for required version schema
 const REQUIRED_VERSION_SCHEMA = 5;
+
+type ContentProps = {
+  pannable: boolean;
+  onShowOldUI?: () => void;
+};
 
 type TabContentProps = {
   gameId: string;
@@ -55,10 +58,10 @@ function TabContent({ gameId, ready, isError, children }: TabContentProps) {
   return <MapViewportLoader label="Acquiring game state" />;
 }
 
-function NewMapUIContent({ pannable, onShowOldUI }: Props) {
+function NewMapUIContent({ pannable, onShowOldUI }: ContentProps) {
   const data = useGameContext();
   const gameDataState = useGameDataState();
-  const isError = gameDataState?.isError || false;
+  const isError = !!gameDataState?.isError;
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
 
@@ -99,7 +102,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
         gameId={gameId}
         buttonLabel="OLD UI"
         onButtonClick={onShowOldUI}
-        hideOnMobile={true}
+        hideOnMobile
       />
 
       <AppShell.Main>
@@ -107,7 +110,6 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
           className={classes.mainBackground}
           mod={{ "channel-links": hasChannelLinks }}
         >
-          {/* Global Tabs */}
           <Tabs
             value={activeTab}
             onChange={(value) => setActiveTab(value || "map")}
@@ -127,9 +129,7 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
                     value={tab.value}
                     className={classes.tabsTab}
                     leftSection={<Icon size={16} />}
-                    {...(tab.visibleFrom
-                      ? { visibleFrom: tab.visibleFrom }
-                      : {})}
+                    visibleFrom={tab.visibleFrom}
                   >
                     {tab.label}
                   </Tabs.Tab>
@@ -137,11 +137,9 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               })}
               <TabsControls
                 onMenuClick={() => setDrawerOpened(true)}
-                onTryDecalsClick={() => {
-                  // This will be handled by MapView/PannableMapView
-                  // We'll use a custom event to toggle the sidebar
-                  window.dispatchEvent(new CustomEvent("toggleTryDecals"));
-                }}
+                onTryDecalsClick={() =>
+                  window.dispatchEvent(new CustomEvent("toggleTryDecals"))
+                }
               />
             </Tabs.List>
 
@@ -159,26 +157,23 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
               )}
             </Tabs.Panel>
 
-            {/* Player Areas Tab */}
             <TabPanelSection
               value="players"
               className={classes.playersTabContent}
             >
-              {!DISABLE_PLAYER_AREA_RENDERING && (
-                <TabContent
-                  gameId={gameId}
-                  ready={!!data?.playerData}
-                  isError={isError}
-                >
-                  <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                    {filterPlayersWithAssignedFaction(
-                      data?.playerData ?? [],
-                    ).map((player) => (
-                      <PlayerCard key={player.color} playerData={player} />
-                    ))}
-                  </SimpleGrid>
-                </TabContent>
-              )}
+              <TabContent
+                gameId={gameId}
+                ready={!!data?.playerData}
+                isError={isError}
+              >
+                <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
+                  {filterPlayersWithAssignedFaction(
+                    data?.playerData ?? [],
+                  ).map((player) => (
+                    <PlayerCard key={player.color} playerData={player} />
+                  ))}
+                </SimpleGrid>
+              </TabContent>
             </TabPanelSection>
 
             <TabPanelSection
@@ -214,7 +209,6 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
         onClose={() => handlers.setKeyboardShortcutsModalOpened(false)}
       />
 
-      {/* Navigation Drawer for base breakpoint */}
       <NavigationDrawer
         opened={drawerOpened}
         onClose={() => setDrawerOpened(false)}
@@ -231,14 +225,13 @@ function NewMapUIContent({ pannable, onShowOldUI }: Props) {
 }
 
 type Props = {
-  pannable?: boolean;
   onShowOldUI?: () => void;
 };
 
-export function NewMapUI({ pannable, onShowOldUI }: Props) {
+function NewMapUI({ onShowOldUI }: Props) {
   const params = useParams<{ mapid: string }>();
   const gameId = params.mapid!;
-  const themeName = useSettingsStore((state) => state.settings.themeName);
+  const themeClassName = usePageThemeClass({ mobile: isMobileDevice() });
   const mapViewPreference = useSettingsStore(
     (state) => state.settings.mapViewPreference,
   );
@@ -251,51 +244,18 @@ export function NewMapUI({ pannable, onShowOldUI }: Props) {
       setShowSelectionModal(false);
       return;
     }
-    if (!pannable && !mapViewPreference) {
+    if (!mapViewPreference) {
       setShowSelectionModal(true);
     }
-  }, [pannable, mapViewPreference]);
+  }, [mapViewPreference]);
 
-  const handleMapViewSelect = (preference: MapViewPreference) => {
-    handlers.setMapViewPreference(preference);
-  };
-
-  const effectivePannable = isMobileDevice()
-    ? true
-    : pannable || mapViewPreference !== "panels";
-
-  useEffect(() => {
-    const themeClasses = [
-      "theme-bluetheme",
-      "theme-midnightbluetheme",
-      "theme-midnighttheme",
-      "theme-midnightgraytheme",
-      "theme-midnightredtheme",
-      "theme-sunsettheme",
-      "theme-magmatheme",
-      "theme-vaporwavetheme",
-      "theme-midnightviolettheme",
-      "theme-midnightgreentheme",
-      "theme-slatetheme",
-      "theme-mobile",
-    ];
-    const body = document.body;
-    themeClasses.forEach((cls) => body.classList.remove(cls));
-    const selectedClass = isMobileDevice()
-      ? "theme-mobile"
-      : `theme-${themeName}`;
-    body.classList.add(selectedClass);
-    return () => {
-      themeClasses.forEach((cls) => body.classList.remove(cls));
-    };
-  }, [themeName]);
+  const effectivePannable =
+    isMobileDevice() || mapViewPreference !== "panels";
 
   return (
     <>
       <GameContextProvider gameId={gameId}>
-        <div
-          className={isMobileDevice() ? "theme-mobile" : `theme-${themeName}`}
-        >
+        <div className={themeClassName}>
           <NewMapUIContent
             pannable={effectivePannable}
             onShowOldUI={onShowOldUI}
@@ -306,7 +266,7 @@ export function NewMapUI({ pannable, onShowOldUI }: Props) {
         <MapViewSelectionModal
           opened={showSelectionModal}
           onClose={() => setShowSelectionModal(false)}
-          onSelect={handleMapViewSelect}
+          onSelect={handlers.setMapViewPreference}
         />
       )}
     </>

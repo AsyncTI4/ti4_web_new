@@ -82,27 +82,6 @@
   top: 24px;
 }
 
-/* Details-style modal content hook for summary modal */
-.detailsModalContent {
-  background: var(--details-card-bg);
-  border: var(--details-card-border);
-  border-radius: 12px;
-}
-
-.detailsModalHeader {
-  background: var(--header-tab-bg);
-  border-bottom: var(--card-details-section-title-border);
-}
-
-.detailsModalTitle {
-  color: white;
-  text-shadow: var(--map-tab-text-shadow);
-}
-
-.detailsModalBody {
-  padding-top: 2px;
-}
-
 /* Tile rendering container */
 .tileRenderingContainer {
   position: relative;
@@ -412,11 +391,6 @@
   overflow: auto;
 }
 
-/* When user is performing a two-finger gesture, let the page receive it */
-:global(.mobile.pinch-zooming) .mapArea {
-  pointer-events: none;
-}
-
 .sidebar {
   overflow: scroll;
   background: var(--sidebar-bg);
@@ -618,8 +592,7 @@
    */
   margin-top: calc(var(--board-bleed-bottom, 80px) + 20px);
   /* Separation without ornament: a lit lip, an accent hairline facing the board,
-     and shadow cast upward. Two attempts at a machined graduation band both read
-     as a measuring rule, so the edge is left clean rather than decorated badly. */
+     and shadow cast upward. */
   border-top: 1px solid var(--hud-edge-accent);
   /* A fixed-height sheen at the deck's lip over a darkened console field. The
      sheen must not stretch: as a full-height gradient it would brighten the

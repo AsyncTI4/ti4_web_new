@@ -1,18 +1,21 @@
 import { useEffect, RefObject } from "react";
 import { useAppStore } from "@/utils/appStore";
 import { useGameContext } from "@/hooks/useGameContext";
-import { getPlanetById } from "@/entities/lookup/planets";
+import { getPlanetData, getPlanetLocalPosition } from "@/entities/lookup/planets";
 import { TilePosition } from "@/domains/map/model/mapgen/tilePositioning";
+import type { Point } from "@/entities/data/types";
 
 type UseScrollToPlanetProps = {
-  mapContainerRef: RefObject<HTMLDivElement>;
+  mapContainerRef: RefObject<HTMLDivElement | null>;
   zoom: number;
 };
 
+const VIEWPORT_MARGIN = 100;
+const TILE_CENTER_OFFSET = { x: 172, y: 150 };
+
 /**
- * Hook that scrolls the map to bring a clicked planet into view.
- * Watches the scrollToPlanetId from the app store and scrolls smoothly
- * to center the planet if it's outside the visible viewport.
+ * Smoothly centers the planet named by the store's scrollToPlanetId when it
+ * sits outside the visible viewport, then clears the request.
  */
 export function useScrollToPlanet({
   mapContainerRef,
@@ -37,78 +40,51 @@ export function useScrollToPlanet({
     const container = mapContainerRef.current;
     const { x: planetX, y: planetY } = planetPosition;
 
-    // Account for zoom when calculating screen position
     const scaledX = planetX * zoom;
     const scaledY = planetY * zoom;
 
-    // Calculate the current visible bounds
     const visibleLeft = container.scrollLeft;
     const visibleTop = container.scrollTop;
     const visibleRight = visibleLeft + container.clientWidth;
     const visibleBottom = visibleTop + container.clientHeight;
 
-    // Add margin so we scroll before the planet is right at the edge
-    const margin = 100;
-
     const isVisible =
-      scaledX > visibleLeft + margin &&
-      scaledX < visibleRight - margin &&
-      scaledY > visibleTop + margin &&
-      scaledY < visibleBottom - margin;
+      scaledX > visibleLeft + VIEWPORT_MARGIN &&
+      scaledX < visibleRight - VIEWPORT_MARGIN &&
+      scaledY > visibleTop + VIEWPORT_MARGIN &&
+      scaledY < visibleBottom - VIEWPORT_MARGIN;
 
-    // Clear the scroll target after processing (allows re-clicking same planet)
+    // Clearing lets the same planet be requested again.
     setScrollToPlanetId(null);
 
     if (isVisible) return;
 
-    // Calculate scroll position to center the planet
-    const targetScrollLeft = scaledX - container.clientWidth / 2;
-    const targetScrollTop = scaledY - container.clientHeight / 2;
-
     container.scrollTo({
-      left: targetScrollLeft,
-      top: targetScrollTop,
+      left: scaledX - container.clientWidth / 2,
+      top: scaledY - container.clientHeight / 2,
       behavior: "smooth",
     });
   }, [scrollToPlanetId, mapContainerRef, tilePositions, zoom, setScrollToPlanetId]);
 }
 
-/**
- * Calculate the world position of a planet (tile position + planet offset within tile)
- */
+/** Map position of a planet: its tile's position plus its in-tile offset. */
 function getPlanetWorldPosition(
   planetId: string,
   tilePositions: TilePosition[]
-): { x: number; y: number } | null {
-  const planet = getPlanetById(planetId);
+): Point | null {
+  const planet = getPlanetData(planetId);
   if (!planet) return null;
 
-  // Get the system/tile ID this planet belongs to
   const systemId = planet.tileId;
   if (!systemId) return null;
 
-  // Find the tile position for this system
   const tilePosition = tilePositions.find((tp) => tp.systemId === systemId);
   if (!tilePosition) return null;
 
-  // Get the planet's position within the tile
-  let planetOffsetX = 0;
-  let planetOffsetY = 0;
-
-  if (planet.planetLayout?.centerPosition) {
-    planetOffsetX = planet.planetLayout.centerPosition.x;
-    planetOffsetY = planet.planetLayout.centerPosition.y;
-  } else if (planet.positionInTile) {
-    planetOffsetX = planet.positionInTile.x;
-    planetOffsetY = planet.positionInTile.y;
-  } else {
-    // Default to tile center if no position info
-    planetOffsetX = 172; // TILE_WIDTH / 2
-    planetOffsetY = 150; // TILE_HEIGHT / 2
-  }
+  const offset = getPlanetLocalPosition(planet) ?? TILE_CENTER_OFFSET;
 
   return {
-    x: tilePosition.x + planetOffsetX,
-    y: tilePosition.y + planetOffsetY,
+    x: tilePosition.x + offset.x,
+    y: tilePosition.y + offset.y,
   };
 }

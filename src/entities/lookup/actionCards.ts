@@ -1,5 +1,6 @@
 import { actionCards } from "@/entities/data/actionCards";
+import { indexBy } from "@/entities/lookup/indexBy";
 
-export const getActionCard = (alias: string) => {
-  return actionCards.find((card) => card.alias === alias);
-};
+const actionCardsMap = indexBy(actionCards, (card) => card.alias);
+
+export const getActionCard = (alias: string) => actionCardsMap.get(alias);

@@ -6,26 +6,17 @@ type Props = {
   sections: SecretSection[];
 };
 
-type SecretItemProps = {
-  name: string;
-  count: number; // Still needed for spreading props
-  text: string;
-  percentage?: number; // Still needed for spreading props
-  phase: string;
-  phaseColor: "red" | "blue" | "orange";
-};
+type SecretItemProps = SecretSection["items"][number];
 
 function SecretItem({ name, text, phase, phaseColor }: SecretItemProps) {
   return (
     <Box className={`${styles.secretItem} ${styles[phaseColor]}`}>
       <Stack gap="xs">
-        <Group justify="space-between" align="center">
-          <Group gap="xs" align="center">
-            <Text className={styles.secretName}>{name}</Text>
-            <Text className={`${styles.phaseText} ${styles[phaseColor]}`}>
-              {phase}
-            </Text>
-          </Group>
+        <Group gap="xs" align="center">
+          <Text className={styles.secretName}>{name}</Text>
+          <Text className={`${styles.phaseText} ${styles[phaseColor]}`}>
+            {phase}
+          </Text>
         </Group>
         <Text className={styles.secretText}>{text}</Text>
       </Stack>
@@ -34,8 +25,6 @@ function SecretItem({ name, text, phase, phaseColor }: SecretItemProps) {
 }
 
 function SecretSection({ title, count, items, phaseColor }: SecretSection) {
-  if (items.length === 0) return null;
-
   return (
     <Stack gap="xs">
       <Text className={`${styles.sectionTitle} ${styles[phaseColor]}`}>

@@ -11,20 +11,47 @@ import { usePlayerDataSocket } from "@/hooks/usePlayerData";
 import { buildGameContext } from "./utils/buildGameContext";
 import type {
   GameContext,
+  GameData,
   MapStatePreview,
   Props,
   CombatReplayEvent,
   RetreatSubEvent,
 } from "./types";
+import type { TileUnitData } from "@/entities/data/types";
 import { deserializeCompactMapState } from "@/utils/compactMapState";
-import {
-  buildMapReplayPlan,
-  type MapReplayPlan,
-} from "@/utils/historicalMapTransitions";
+import { buildMapReplayPlan } from "@/utils/historicalMapTransitions";
+import type { MapReplayPlan } from "@/utils/mapReplay/types";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { storeFactionImagesForGame } from "@/utils/factionImageCache";
 
 const MAX_CACHED_MAP_PREVIEWS = 16;
+
+/* Map insertion order doubles as recency: a hit is re-inserted at the end. */
+function lruGet<V>(cache: Map<string, V>, key: string): V | undefined {
+  const cached = cache.get(key);
+  if (cached === undefined) return undefined;
+  cache.delete(key);
+  cache.set(key, cached);
+  return cached;
+}
+
+function lruSet<V>(cache: Map<string, V>, key: string, value: V) {
+  cache.set(key, value);
+  if (cache.size <= MAX_CACHED_MAP_PREVIEWS) return;
+  const oldest = cache.keys().next().value;
+  if (oldest !== undefined) cache.delete(oldest);
+}
+
+function withOverride(
+  prev: Record<string, string>,
+  faction: string,
+  value: string | null,
+): Record<string, string> {
+  if (value !== null) return { ...prev, [faction]: value };
+  const updated = { ...prev };
+  delete updated[faction];
+  return updated;
+}
 const EMPTY_MAP_REPLAY_PLAN: MapReplayPlan = {
   transitions: [],
   lasers: [],
@@ -44,19 +71,35 @@ const EMPTY_MAP_REPLAY_STATE = {
   key: 0,
 };
 
-type DecodedMapStatePreview = {
-  mapState: string;
-  previousMapState?: string;
-  current: ReturnType<typeof deserializeCompactMapState>;
-  previous?: ReturnType<typeof deserializeCompactMapState>;
-  movementState?: string | null;
+type DecodedMapState = Record<string, TileUnitData>;
+
+type DecodedMapStatePreview = Omit<MapStatePreview, "retreats" | "combats"> & {
+  current: DecodedMapState;
+  previous?: DecodedMapState;
   retreats: RetreatSubEvent[];
   combats: CombatReplayEvent[];
-  activeFaction?: string | null;
-  tacticalPosition?: string | null;
   replayKey: number;
   replayActive: boolean;
 };
+
+/** Board positions whose serialized contents differ between two map states. */
+function changedMapPositions(
+  previous: DecodedMapState,
+  current: DecodedMapState,
+): Set<string> {
+  const positions = new Set([
+    ...Object.keys(previous),
+    ...Object.keys(current),
+  ]);
+  return new Set(
+    [...positions].filter(
+      (position) =>
+        position !== "special" &&
+        JSON.stringify(previous[position]) !==
+          JSON.stringify(current[position]),
+    ),
+  );
+}
 
 export function GameContextProvider({ children, gameId }: Props) {
   const replayAnimationsEnabled = !isMobileDevice();
@@ -90,9 +133,7 @@ export function GameContextProvider({ children, gameId }: Props) {
 
   const [mapStatePreview, setMapStatePreviewData] =
     useState<DecodedMapStatePreview>();
-  const decodedMapStateCache = useRef(
-    new Map<string, ReturnType<typeof deserializeCompactMapState>>(),
-  );
+  const decodedMapStateCache = useRef(new Map<string, DecodedMapState>());
   const nextReplayKey = useRef(0);
   const stopMapReplay = useCallback(
     () =>
@@ -103,19 +144,11 @@ export function GameContextProvider({ children, gameId }: Props) {
   );
 
   const decodeMapState = useCallback((serialized: string) => {
-    const cached = decodedMapStateCache.current.get(serialized);
-    if (cached) {
-      decodedMapStateCache.current.delete(serialized);
-      decodedMapStateCache.current.set(serialized, cached);
-      return cached;
-    }
+    const cached = lruGet(decodedMapStateCache.current, serialized);
+    if (cached) return cached;
 
     const decoded = deserializeCompactMapState(serialized);
-    decodedMapStateCache.current.set(serialized, decoded);
-    if (decodedMapStateCache.current.size > MAX_CACHED_MAP_PREVIEWS) {
-      const oldest = decodedMapStateCache.current.keys().next().value;
-      if (oldest !== undefined) decodedMapStateCache.current.delete(oldest);
-    }
+    lruSet(decodedMapStateCache.current, serialized, decoded);
     return decoded;
   }, []);
 
@@ -128,17 +161,13 @@ export function GameContextProvider({ children, gameId }: Props) {
       }
       try {
         setMapStatePreviewData({
-          mapState: preview.mapState,
-          previousMapState: preview.previousMapState,
+          ...preview,
           current: decodeMapState(preview.mapState),
           previous: preview.previousMapState
             ? decodeMapState(preview.previousMapState)
             : undefined,
-          movementState: preview.movementState,
           retreats: preview.retreats ?? [],
           combats: preview.combats ?? [],
-          activeFaction: preview.activeFaction,
-          tacticalPosition: preview.tacticalPosition,
           replayKey: (nextReplayKey.current += 1),
           replayActive: Boolean(preview.previousMapState),
         });
@@ -156,14 +185,7 @@ export function GameContextProvider({ children, gameId }: Props) {
 
   const setDecalOverride = useCallback(
     (faction: string, decalId: string | null) => {
-      setDecalOverrides((prev) => {
-        if (decalId === null) {
-          const updated = { ...prev };
-          delete updated[faction];
-          return updated;
-        }
-        return { ...prev, [faction]: decalId };
-      });
+      setDecalOverrides((prev) => withOverride(prev, faction, decalId));
     },
     [],
   );
@@ -177,14 +199,7 @@ export function GameContextProvider({ children, gameId }: Props) {
 
   const setColorOverride = useCallback(
     (faction: string, colorAlias: string | null) => {
-      setColorOverrides((prev) => {
-        if (colorAlias === null) {
-          const updated = { ...prev };
-          delete updated[faction];
-          return updated;
-        }
-        return { ...prev, [faction]: colorAlias };
-      });
+      setColorOverrides((prev) => withOverride(prev, faction, colorAlias));
     },
     [],
   );
@@ -213,21 +228,17 @@ export function GameContextProvider({ children, gameId }: Props) {
   // string. Reusing their built contexts avoids repeating tile enrichment and
   // unit placement work when the pointer returns to a previously viewed frame.
   const previewContextCache = useMemo(
-    () => new Map<string, ReturnType<typeof buildGameContext>>(),
+    () => new Map<string, GameData>(),
     [data, accessibleColors, decalOverrides],
   );
 
   const getPreviewContext = useCallback(
     (
       serialized: string,
-      tileUnitData: ReturnType<typeof deserializeCompactMapState>,
+      tileUnitData: DecodedMapState,
     ) => {
-      const cached = previewContextCache.get(serialized);
-      if (cached) {
-        previewContextCache.delete(serialized);
-        previewContextCache.set(serialized, cached);
-        return cached;
-      }
+      const cached = lruGet(previewContextCache, serialized);
+      if (cached) return cached;
       if (!data) return undefined;
 
       const context = buildGameContext(
@@ -235,19 +246,10 @@ export function GameContextProvider({ children, gameId }: Props) {
         accessibleColors,
         decalOverrides,
       );
-      previewContextCache.set(serialized, context);
-      if (previewContextCache.size > MAX_CACHED_MAP_PREVIEWS) {
-        const oldest = previewContextCache.keys().next().value;
-        if (oldest !== undefined) previewContextCache.delete(oldest);
-      }
+      lruSet(previewContextCache, serialized, context);
       return context;
     },
-    [
-      data,
-      accessibleColors,
-      decalOverrides,
-      previewContextCache,
-    ],
+    [data, accessibleColors, decalOverrides, previewContextCache],
   );
 
   const previewEnhancedData = useMemo(() => {
@@ -277,50 +279,36 @@ export function GameContextProvider({ children, gameId }: Props) {
     const current = mapStatePreview?.current;
     const previous = mapStatePreview?.previous;
     if (!current || !previous) return new Set<string>();
-    const positions = new Set([
-      ...Object.keys(previous),
-      ...Object.keys(current),
-    ]);
-    return new Set(
-      [...positions].filter(
-        (position) =>
-          position !== "special" &&
-          JSON.stringify(previous[position]) !==
-            JSON.stringify(current[position]),
-      ),
-    );
+    return changedMapPositions(previous, current);
   }, [
     replayAnimationsEnabled,
     mapStatePreview?.current,
     mapStatePreview?.previous,
   ]);
 
-  const mapReplayPlan = useMemo(
-    () => {
-      if (!replayAnimationsEnabled) return EMPTY_MAP_REPLAY_PLAN;
-      return buildMapReplayPlan(previousEnhancedData, enhancedData, {
-        movementState: mapStatePreview?.movementState,
-        retreats: mapStatePreview?.retreats,
-        combats: mapStatePreview?.combats,
-        activeFaction: mapStatePreview?.activeFaction,
-        tacticalPosition: mapStatePreview?.tacticalPosition,
-        controlTokenDisplayMode,
-        changedPositions,
-      });
-    },
-    [
-      replayAnimationsEnabled,
-      previousEnhancedData,
-      enhancedData,
-      mapStatePreview?.movementState,
-      mapStatePreview?.retreats,
-      mapStatePreview?.combats,
-      mapStatePreview?.activeFaction,
-      mapStatePreview?.tacticalPosition,
+  const mapReplayPlan = useMemo(() => {
+    if (!replayAnimationsEnabled) return EMPTY_MAP_REPLAY_PLAN;
+    return buildMapReplayPlan(previousEnhancedData, enhancedData, {
+      movementState: mapStatePreview?.movementState,
+      retreats: mapStatePreview?.retreats,
+      combats: mapStatePreview?.combats,
+      activeFaction: mapStatePreview?.activeFaction,
+      tacticalPosition: mapStatePreview?.tacticalPosition,
       controlTokenDisplayMode,
       changedPositions,
-    ],
-  );
+    });
+  }, [
+    replayAnimationsEnabled,
+    previousEnhancedData,
+    enhancedData,
+    mapStatePreview?.movementState,
+    mapStatePreview?.retreats,
+    mapStatePreview?.combats,
+    mapStatePreview?.activeFaction,
+    mapStatePreview?.tacticalPosition,
+    controlTokenDisplayMode,
+    changedPositions,
+  ]);
 
   useEffect(() => {
     if (!replayAnimationsEnabled) return;
@@ -408,15 +396,3 @@ export const GameDataContext = createContext<GameContext["data"]>(undefined);
 export const MapReplayContext = createContext<GameContext["mapReplay"]>(
   EMPTY_MAP_REPLAY_STATE,
 );
-
-export type {
-  FactionImageMap,
-  FactionColorMap,
-  FactionColorData,
-  GameData,
-  Tile,
-  PrePlacementTile,
-  TilePlanet,
-} from "./types";
-
-export { buildGameContext } from "./utils/buildGameContext";

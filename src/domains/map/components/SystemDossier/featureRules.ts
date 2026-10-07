@@ -11,9 +11,8 @@ import type { Tile } from "@/app/providers/context/types";
  * (ingress / entropic scar), and the async homebrew borders — the homebrew
  * summaries are best-effort and flagged for audit in the PR.
  */
-export type SystemFeature = {
+type SystemFeature = {
   id: string;
-  kind: "anomaly" | "wormhole" | "token" | "border";
   name: string;
   /** Token sprite under /tokens/, when the feature has one. */
   imagePath?: string;
@@ -102,6 +101,22 @@ const BORDER_RULES: Record<string, { name: string; rule: string }> = {
   },
 };
 
+/** System-data flags paired with the anomaly each one marks. */
+const SYSTEM_ANOMALY_FLAGS = [
+  ["isAsteroidField", "asteroidField"],
+  ["isNebula", "nebula"],
+  ["isSupernova", "supernova"],
+  ["isGravityRift", "gravityRift"],
+  ["isScar", "entropicScar"],
+] as const;
+
+/** Token-data flags that turn a token into an anomaly, in precedence order. */
+const TOKEN_ANOMALY_FLAGS = [
+  ["isScar", "entropicScar"],
+  ["isRift", "gravityRift"],
+  ["isNebula", "nebula"],
+] as const;
+
 /** Hex sides in tile-direction order, for naming a border anomaly's edge. */
 const EDGE_NAMES = ["N", "NE", "SE", "S", "SW", "NW"];
 
@@ -114,9 +129,11 @@ function titleCaseFromId(id: string): string {
 
 function wormholesOnTile(tile: Tile): string[] {
   const tileData = getTileById(tile.systemId);
-  const printed = tileData?.wormholes ?? [];
+  const printed = (tileData?.wormholes ?? []).filter(
+    (w): w is string => w !== null,
+  );
   const fromTokens = tile.tokens.flatMap(
-    (tokenId) => getTokenData(tokenId)?.wormholes ?? []
+    (tokenId) => getTokenData(tokenId)?.wormholes ?? [],
   );
 
   return [...new Set([...printed, ...fromTokens].map((w) => w.toUpperCase()))];
@@ -126,13 +143,13 @@ function wormholesOnTile(tile: Tile): string[] {
 function linkedPositions(
   wormholeType: string,
   ownPosition: string,
-  allTiles: Record<string, Tile>
+  allTiles: Record<string, Tile>,
 ): string[] {
   return Object.values(allTiles)
     .filter(
       (tile) =>
         tile.position !== ownPosition &&
-        wormholesOnTile(tile).includes(wormholeType)
+        wormholesOnTile(tile).includes(wormholeType),
     )
     .map((tile) => tile.position)
     .sort();
@@ -140,28 +157,18 @@ function linkedPositions(
 
 export function getSystemFeatures(
   tile: Tile,
-  allTiles: Record<string, Tile>
+  allTiles: Record<string, Tile>,
 ): SystemFeature[] {
   const tileData = getTileById(tile.systemId);
   const features: SystemFeature[] = [];
 
-  if (tileData?.isAsteroidField) {
-    features.push({ id: "asteroidField", kind: "anomaly", ...ANOMALY_RULES.asteroidField });
-  }
-  if (tileData?.isNebula) {
-    features.push({ id: "nebula", kind: "anomaly", ...ANOMALY_RULES.nebula });
-  }
-  if (tileData?.isSupernova) {
-    features.push({ id: "supernova", kind: "anomaly", ...ANOMALY_RULES.supernova });
-  }
-  if (tileData?.isGravityRift) {
-    features.push({ id: "gravityRift", kind: "anomaly", ...ANOMALY_RULES.gravityRift });
-  }
-  if (tileData?.isScar) {
-    features.push({ id: "entropicScar", kind: "anomaly", ...ANOMALY_RULES.entropicScar });
+  for (const [flag, anomalyId] of SYSTEM_ANOMALY_FLAGS) {
+    if (tileData?.[flag]) {
+      features.push({ id: anomalyId, ...ANOMALY_RULES[anomalyId] });
+    }
   }
   if (tileData?.hasEgress) {
-    features.push({ id: "egress", kind: "token", ...TOKEN_RULES.egress });
+    features.push({ id: "egress", ...TOKEN_RULES.egress });
   }
 
   for (const wormholeType of wormholesOnTile(tile)) {
@@ -169,7 +176,6 @@ export function getSystemFeatures(
     const links = linkedPositions(wormholeType, tile.position, allTiles);
     features.push({
       id: `wormhole-${wormholeType}`,
-      kind: "wormhole",
       glyph,
       name: `${glyph.length === 1 ? wormholeType.charAt(0) + wormholeType.slice(1).toLowerCase() : glyph} Wormhole`,
       rule: "Systems that contain matching wormholes are adjacent to each other for all purposes, including movement and neighboring effects.",
@@ -185,30 +191,14 @@ export function getSystemFeatures(
     // Wormhole tokens already surfaced above; skip their token entry.
     if (tokenData?.wormholes?.length) continue;
 
-    if (tokenData?.isScar) {
+    const tokenAnomaly = TOKEN_ANOMALY_FLAGS.find(
+      ([flag]) => tokenData?.[flag],
+    );
+    if (tokenData && tokenAnomaly) {
       features.push({
         id: tokenId,
-        kind: "anomaly",
         imagePath: tokenData.imagePath,
-        ...ANOMALY_RULES.entropicScar,
-      });
-      continue;
-    }
-    if (tokenData?.isRift) {
-      features.push({
-        id: tokenId,
-        kind: "anomaly",
-        imagePath: tokenData.imagePath,
-        ...ANOMALY_RULES.gravityRift,
-      });
-      continue;
-    }
-    if (tokenData?.isNebula) {
-      features.push({
-        id: tokenId,
-        kind: "anomaly",
-        imagePath: tokenData.imagePath,
-        ...ANOMALY_RULES.nebula,
+        ...ANOMALY_RULES[tokenAnomaly[1]],
       });
       continue;
     }
@@ -217,7 +207,6 @@ export function getSystemFeatures(
     if (known) {
       features.push({
         id: tokenId,
-        kind: "token",
         name: known.name,
         rule: known.rule,
         imagePath: known.imagePath ?? tokenData?.imagePath,
@@ -230,7 +219,6 @@ export function getSystemFeatures(
     if (tokenData) {
       features.push({
         id: tokenId,
-        kind: "token",
         name: titleCaseFromId(tokenId),
         rule: "",
         imagePath: tokenData.imagePath,
@@ -239,11 +227,10 @@ export function getSystemFeatures(
   }
 
   for (const border of tile.borderAnomalies ?? []) {
-    const known = BORDER_RULES[border.type?.toLowerCase?.() ?? ""];
+    const known = BORDER_RULES[border.type.toLowerCase()];
     features.push({
       id: `border-${border.type}-${border.direction}`,
-      kind: "border",
-      name: known?.name ?? titleCaseFromId(String(border.type)),
+      name: known?.name ?? titleCaseFromId(border.type),
       rule:
         known?.rule ??
         "A border anomaly on this edge alters adjacency with the neighboring system.",

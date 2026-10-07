@@ -1,48 +1,26 @@
-import React from "react";
-import { getPlanetCoordsBySystemId } from "@/entities/lookup/planets";
 import { Tile } from "@/app/providers/context/types";
-import { PlanetOwnerBadge } from "./PlanetOwnerBadge";
+import { TECH_TYPE_COLOR } from "@/entities/lookup/tech";
+import { PlanetMarkersLayer } from "./PlanetMarkersLayer";
 
 type Props = {
   systemId: string;
   mapTile: Tile;
 };
 
-const TECH_SPECIALTY_TO_ICON: Record<string, string> = {
-  BIOTIC: "/green.png",
-  PROPULSION: "/blue.png",
-  CYBERNETIC: "/yellow.png",
-  WARFARE: "/red.png",
-};
-
 export function TechSkipIconsLayer({ systemId, mapTile }: Props) {
-  const planetCoords = getPlanetCoordsBySystemId(systemId);
+  return (
+    <PlanetMarkersLayer
+      systemId={systemId}
+      mapTile={mapTile}
+      renderMarkers={(planetId, planet, x, y) =>
+        (planet.techSpecialties ?? []).flatMap((specialty, index) => {
+          const color = TECH_TYPE_COLOR[specialty.toUpperCase()];
+          if (!color) return [];
 
-  const techSkipIcons = React.useMemo(() => {
-    if (!mapTile?.planets) return [];
-
-    return Object.entries(mapTile.planets).flatMap(([planetId, planetData]) => {
-      if (
-        !planetData.techSpecialties ||
-        planetData.techSpecialties.length === 0
-      ) {
-        return [];
-      }
-
-      const coords = planetCoords[planetId];
-      if (!coords) return [];
-
-      const [x, y] = coords.split(",").map(Number);
-
-      const markers = planetData.techSpecialties
-        .map((specialty, index) => {
-          const iconPath = TECH_SPECIALTY_TO_ICON[specialty.toUpperCase()];
-          if (!iconPath) return null;
-
-          return (
+          return [
             <img
               key={`${systemId}-${planetId}-${specialty}-${index}`}
-              src={iconPath}
+              src={`/${color}.png`}
               alt={specialty}
               style={{
                 position: "absolute",
@@ -52,26 +30,10 @@ export function TechSkipIconsLayer({ systemId, mapTile }: Props) {
                 width: "70px",
                 zIndex: "var(--z-control-token)",
               }}
-            />
-          );
+            />,
+          ];
         })
-        .filter(Boolean);
-
-      if (markers.length === 0) return [];
-
-      return [
-        ...markers,
-        planetData.controlledBy && (
-          <PlanetOwnerBadge
-            key={`${systemId}-${planetId}-owner`}
-            faction={planetData.controlledBy}
-            x={x}
-            y={y}
-          />
-        ),
-      ];
-    });
-  }, [systemId, mapTile, planetCoords]);
-
-  return <>{techSkipIcons}</>;
+      }
+    />
+  );
 }

@@ -1,7 +1,7 @@
-import { Box, Group, SimpleGrid, Text } from "@mantine/core";
+import { Box, Group, SimpleGrid } from "@mantine/core";
 import { StrategyCard } from "@/domains/player/components/StrategyCard";
 import { StrategyCard as StrategyCardType } from "@/entities/data/types";
-import styles from "./UnpickedSCs.module.css";
+import { GeneralSectionTitle } from "../GeneralSectionTitle";
 
 type Props = {
   strategyCards: StrategyCardType[];
@@ -14,7 +14,7 @@ function UnpickedSCs({ strategyCards }: Props) {
 
   return (
     <Box>
-      <Text className={styles.sectionTitle}>Unpicked SCs</Text>
+      <GeneralSectionTitle>Unpicked SCs</GeneralSectionTitle>
       <Group gap="md" wrap="wrap">
         <SimpleGrid cols={1} spacing="xs">
           {unpickedCards.map((card, index) => (

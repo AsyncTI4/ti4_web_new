@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Box } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import classes from "@/shared/ui/map/MapUI.module.css";
@@ -101,11 +101,8 @@ export function MapView({
     selectedArea,
   });
 
-  const showLeftPanelToggle = useMemo(() => {
-    if (!gameData) return false;
-    if (gameData.objectives) return true;
-    return !!(gameData.lawsInPlay && gameData.lawsInPlay.length > 0);
-  }, [gameData]);
+  const showLeftPanelToggle =
+    !!gameData?.objectives || !!gameData?.lawsInPlay?.length;
 
   const contentSize = useMapContentSize("panels");
 
@@ -134,7 +131,7 @@ export function MapView({
     if (!embedded || hasAutoSelectedFactionRef.current || selectedArea) {
       return;
     }
-    const players = filterPlayersWithAssignedFaction(gameData?.playerData || []);
+    const players = filterPlayersWithAssignedFaction(gameData?.playerData ?? []);
     const firstFaction = players[0]?.faction;
     if (!firstFaction) return;
 
@@ -148,7 +145,6 @@ export function MapView({
 
   return (
     <Box className={classes.mapContainer}>
-      {/* Map Container - Full Width */}
       <Box
         ref={mapContainerRef}
         className={`dragscroll ${classes.mapArea}`}
@@ -183,7 +179,6 @@ export function MapView({
         </div>
 
         <InteractiveMapRenderer
-          layout="panels"
           mapLayoutConfig={mapLayout}
           zoom={zoom}
           isFirefox={settings.isFirefox}
@@ -198,7 +193,6 @@ export function MapView({
           tooltipUnit={tooltipUnit}
           tooltipPlanet={tooltipPlanet}
         />
-
       </Box>
 
       {/* Outside the scroller on purpose: dragscroll pans on any mousedown that

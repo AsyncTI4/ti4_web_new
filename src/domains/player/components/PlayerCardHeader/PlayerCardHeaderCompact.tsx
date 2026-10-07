@@ -15,7 +15,7 @@ import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 import styles from "./PlayerCardHeaderCompact.module.css";
 import rail from "./HeaderRail.module.css";
 
-type PlayerCardHeaderProps = {
+type Props = {
   userName: string;
   faction: string;
   factionDisplayName: string;
@@ -28,19 +28,25 @@ type PlayerCardHeaderProps = {
   unfollowedSCs?: number[];
   passed?: boolean;
   active?: boolean;
+  neighbors?: string[];
   showNeighbors?: boolean;
   breakthrough?: BreakthroughData;
 };
 
-function StrategyCards({
+/** Speaker and tyrant markers followed by the player's strategy cards. */
+function HeaderTokens({
+  isSpeaker = false,
+  isTyrant = false,
   scs = [],
   exhaustedSCs = [],
-}: {
-  scs?: number[];
-  exhaustedSCs?: number[];
-}) {
+}: Pick<
+  Props,
+  "isSpeaker" | "isTyrant" | "scs" | "exhaustedSCs"
+>) {
   return (
     <>
+      {isSpeaker && <SpeakerToken />}
+      {isTyrant && <TyrantToken />}
       {scs.map((scNumber) => (
         <StrategyCard
           key={scNumber}
@@ -56,7 +62,7 @@ function PlayerIdentity({
   userName,
   factionDisplayName,
   color,
-}: Pick<PlayerCardHeaderProps, "userName" | "factionDisplayName" | "color">) {
+}: Pick<Props, "userName" | "factionDisplayName" | "color">) {
   return (
     <>
       <Text span size="sm" className={styles.playerName} flex="0 1 auto">
@@ -71,8 +77,7 @@ function PlayerIdentity({
 }
 
 const MOBILE_IDENTITY_WIDTH = 354;
-/* Widened from 176: the longest breakthrough names were being truncated to an
-   ellipsis inside the slot, and the slot exists precisely so they don't have to be. */
+/* Wide enough that the longest breakthrough names are not truncated. */
 const MOBILE_BREAKTHROUGH_WIDTH = 194;
 
 export function PlayerCardHeaderCompact({
@@ -81,13 +86,13 @@ export function PlayerCardHeaderCompact({
   factionDisplayName,
   color,
   factionImageUrl,
-  isSpeaker = false,
-  isTyrant = false,
-  scs = [],
-  exhaustedSCs = [],
+  isSpeaker,
+  isTyrant,
+  scs,
+  exhaustedSCs,
   passed = false,
   active = false,
-}: PlayerCardHeaderProps) {
+}: Props) {
   return (
     <Group
       gap={4}
@@ -116,9 +121,12 @@ export function PlayerCardHeaderCompact({
       </Group>
 
       <Group gap={8} className={styles.rightGroup}>
-        {isSpeaker && <SpeakerToken isVisible />}
-        {isTyrant && <TyrantToken isVisible />}
-        <StrategyCards scs={scs} exhaustedSCs={exhaustedSCs} />
+        <HeaderTokens
+          isSpeaker={isSpeaker}
+          isTyrant={isTyrant}
+          scs={scs}
+          exhaustedSCs={exhaustedSCs}
+        />
       </Group>
     </Group>
   );
@@ -130,16 +138,16 @@ export function PlayerCardHeaderFull({
   factionDisplayName,
   color,
   factionImageUrl,
-  isSpeaker = false,
-  isTyrant = false,
-  scs = [],
-  exhaustedSCs = [],
+  isSpeaker,
+  isTyrant,
+  scs,
+  exhaustedSCs,
   unfollowedSCs = [],
   passed = false,
   active = false,
   neighbors = [],
   showNeighbors = true,
-}: PlayerCardHeaderProps & { neighbors?: string[] }) {
+}: Props) {
   return (
     <Group justify="space-between" align="center" mb="md">
       <Group gap={8} px={4} align="center">
@@ -176,9 +184,12 @@ export function PlayerCardHeaderFull({
       </Group>
 
       <Group gap="xs" align="center">
-        {isSpeaker && <SpeakerToken isVisible />}
-        {isTyrant && <TyrantToken isVisible />}
-        <StrategyCards scs={scs} exhaustedSCs={exhaustedSCs} />
+        <HeaderTokens
+          isSpeaker={isSpeaker}
+          isTyrant={isTyrant}
+          scs={scs}
+          exhaustedSCs={exhaustedSCs}
+        />
       </Group>
     </Group>
   );
@@ -190,10 +201,10 @@ export function PlayerCardHeaderMobile({
   factionDisplayName,
   color,
   factionImageUrl,
-  isSpeaker = false,
-  isTyrant = false,
-  scs = [],
-  exhaustedSCs = [],
+  isSpeaker,
+  isTyrant,
+  scs,
+  exhaustedSCs,
   passed = false,
   unfollowedSCs = [],
   active = false,
@@ -201,12 +212,7 @@ export function PlayerCardHeaderMobile({
   showNeighbors = true,
   breakthrough,
   rightSection,
-}: PlayerCardHeaderProps & {
-  neighbors?: string[];
-  showNeighbors?: boolean;
-  breakthrough?: BreakthroughData;
-  rightSection?: ReactNode;
-}) {
+}: Props & { rightSection?: ReactNode }) {
   return (
     <Group
       gap={0}
@@ -288,9 +294,12 @@ export function PlayerCardHeaderMobile({
         wrap="nowrap"
         className={styles.rightGroup}
       >
-        {isSpeaker && <SpeakerToken isVisible />}
-        {isTyrant && <TyrantToken isVisible />}
-        <StrategyCards scs={scs} exhaustedSCs={exhaustedSCs} />
+        <HeaderTokens
+          isSpeaker={isSpeaker}
+          isTyrant={isTyrant}
+          scs={scs}
+          exhaustedSCs={exhaustedSCs}
+        />
       </Group>
     </Group>
   );

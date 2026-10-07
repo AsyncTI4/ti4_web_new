@@ -3,15 +3,14 @@ import { IconMap2, IconTarget, IconUsers } from "@tabler/icons-react";
 
 type MantineBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 
-export type MainTabValue = "map" | "objectives" | "general" | "players";
+type MainTabValue = "map" | "objectives" | "general" | "players";
 
-export type MainTabConfig = {
+type MainTabConfig = {
   value: MainTabValue;
   label: string;
   Icon: ComponentType<{ size?: number }>;
   visibleFrom?: MantineBreakpoint;
   hideOnMobile?: boolean;
-  includeInDrawer?: boolean;
 };
 
 export const MAIN_TAB_CONFIGS: MainTabConfig[] = [

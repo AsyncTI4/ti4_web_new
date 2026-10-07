@@ -1,40 +1,24 @@
-import {AppShell, Flex} from "@mantine/core";
-import MapImageErrorDialog from "@/image-map/components/MapImageErrorDialog";
+import { AppShell, Flex } from "@mantine/core";
+import { MapImageErrorDialog } from "./MapImageErrorDialog";
 import { ScrollMap } from "./ScrollMap";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
-import { FloatingRefreshButton } from "@/shared/ui/FloatingRefreshButton";
 import { MapHeaderSwitch } from "@/shared/ui/MapHeaderSwitch";
 import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import type { MapImageError } from "@/hooks/useMapImage";
-import type { Params } from "react-router-dom";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
-
+import { DashboardLinks } from "@/shared/ui/DashboardLinks";
+import { useUser } from "@/hooks/useUser";
 import "../styles/MapScreen.css";
-import {DashboardLinks} from "@/shared/ui/DashboardLinks.tsx";
-import {useUser} from "@/hooks/useUser.ts";
 
 type MapUIProps = {
-  params: Params<"mapid">;
+  gameId: string;
   imageUrl?: string;
-  reconnect: () => void;
-  isReconnecting: boolean;
-  showRefresh?: boolean;
   isError: boolean;
   error?: MapImageError | Error | null;
   onShowNewUI?: () => void;
 };
 
-function MapUI({
-  params,
-  imageUrl,
-  reconnect,
-  isReconnecting,
-  showRefresh,
-  isError,
-  error,
-  onShowNewUI,
-}: MapUIProps) {
-  const gameId = params.mapid ?? "";
+function MapUI({ gameId, imageUrl, isError, error, onShowNewUI }: MapUIProps) {
   const { user } = useUser();
 
   return (
@@ -49,24 +33,13 @@ function MapUI({
         <div className="main">
           <div className="imageContainer">
             <Flex p="xs" hiddenFrom="sm" justify="space-between">
-              {user?.authenticated && ( <DashboardLinks /> )}
+              {user?.authenticated && <DashboardLinks />}
               <DiscordLogin />
             </Flex>
 
-            {isError ? (
-              <MapImageErrorDialog gameId={gameId} error={error} />
-            ) : !imageUrl ? (
-              <MapViewportLoader />
-            ) : undefined}
+            {isError && <MapImageErrorDialog gameId={gameId} error={error} />}
+            {!isError && !imageUrl && <MapViewportLoader />}
             <ScrollMap gameId={gameId} imageUrl={imageUrl} />
-
-            {/* New refresh button */}
-            {showRefresh && (
-              <FloatingRefreshButton
-                onClick={reconnect}
-                loading={isReconnecting}
-              />
-            )}
           </div>
         </div>
       </AppShell.Main>

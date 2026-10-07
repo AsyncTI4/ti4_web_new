@@ -1,55 +1,31 @@
 /**
- * Unit Z-Index Stacking System
- *
- * This file handles unit stacking logic and z-index calculations for game units.
- * All other z-index values should use CSS variables from zIndexVariables.css
+ * Unit stacking order. All other z-index values use the CSS variables in
+ * zIndexVariables.css.
  */
 
-export const Z_INDEX_LAYERS = {
-  // Game Units Layer (100-999)
-  UNIT_BASE: 53,
+const UNIT_BASE_Z_INDEX = 53;
 
-  // Unit type priorities (higher number = higher z-index)
-  // Based on actual TI4 unit types from entityZStackPriority
-  UNIT_PRIORITIES: {
-    // Special tokens (lower than units)
-    THUNDERS_EDGE: 53, // Thunder's Edge token - renders below other tokens
+/** Higher priority renders above lower. */
+const UNIT_PRIORITIES: Record<string, number> = {
+  THUNDERS_EDGE: 53,
+  FF: 110,
+  MF: 120,
+  // Ground forces render above mech artwork.
+  GF: 125,
+  SD: 130,
+  PD: 140,
+  DD: 150,
+  CV: 160,
+  CA: 170,
+  DN: 180,
+  FS: 190,
+  WS: 200,
+};
 
-    // Regular units
-    GF: 125, // Ground Forces render above mech artwork
-    FF: 110, // Fighters
-    MF: 120, // Mechs
-    SD: 130, // Space Docks
-    PD: 140, // PDS
-    DD: 150, // Destroyers
-    CV: 160, // Carriers
-    CA: 170, // Cruisers
-    DN: 180, // Dreadnoughts
-    FS: 190, // Flagships
-    WS: 200, // War Suns
-  },
-} as const;
-
-/**
- * Calculate z-index for a unit based on its type and stack position
- */
 export function getUnitZIndex(
   unitType: string | null | undefined,
   stackIndex: number = 0
 ): number {
-  if (!unitType) {
-    return Z_INDEX_LAYERS.UNIT_BASE + stackIndex;
-  }
-
-  const capitalizedUnitType = unitType.toUpperCase().replace(/_/g, "_");
-  const basePriority =
-    Z_INDEX_LAYERS.UNIT_PRIORITIES[
-      capitalizedUnitType as keyof typeof Z_INDEX_LAYERS.UNIT_PRIORITIES
-    ] || Z_INDEX_LAYERS.UNIT_BASE;
-  return basePriority + stackIndex;
+  const priority = unitType ? UNIT_PRIORITIES[unitType.toUpperCase()] : 0;
+  return (priority || UNIT_BASE_Z_INDEX) + stackIndex;
 }
-
-// Legacy compatibility - keep existing entity base z-index function
-export const entityBaseZIndex = (entityType: string) => {
-  return getUnitZIndex(entityType, 0);
-};

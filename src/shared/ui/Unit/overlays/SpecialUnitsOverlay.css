@@ -33,16 +33,14 @@
 
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 
-  /* Updated */
-    transform: translate(-4px, -27px) rotate(42deg);
-    transform-origin: bottom center;
+  transform: translate(-4px, -27px) rotate(42deg);
+  transform-origin: bottom center;
 
   box-shadow:
     0 2px 5px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-/* Optional variants */
 .special-unit-badge--lady {
   background: linear-gradient(
     180deg,
