@@ -263,6 +263,24 @@
   min-height: calc(100vh - 60px);
 }
 
+/*
+ * Below `sm` the strip stacks the Discord channel links under the tool rack.
+ * The strip's height is asserted, so that second row overflowed it and the map
+ * panel painted over the links. The contract grows by the row instead: 22px of
+ * compact button plus its 4px foot.
+ *
+ * The derived offsets are restated because :root resolved them against the
+ * single-row height; a descendant override of --map-tabs-height alone would
+ * leave them stale.
+ */
+@media (max-width: 47.99375em) {
+  .mainBackground[data-channel-links] {
+    --map-tabs-height: 80px;
+    --map-viewport-top: calc(var(--app-header-height) + var(--map-tabs-height));
+    --map-viewport-height: calc(100vh - var(--map-viewport-top));
+  }
+}
+
 .tabsList {
   position: relative;
   /* Asserted, not measured. Everything below the header derives its offset from
