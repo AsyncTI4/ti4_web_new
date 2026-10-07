@@ -14,19 +14,19 @@ This is a Twilight Imperium 4 web application built with React, Vite, and TypeSc
 
 ```bash
 # Install dependencies
-yarn install
+npm install
 
 # Start development server
-yarn dev
+npm run dev
 
 # Type checking
-yarn type-check
+npm run type-check
 
 # Build for production
-yarn build
+npm run build
 
 # Preview production build
-yarn preview
+npm run preview
 ```
 
 ## Repository Structure
