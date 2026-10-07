@@ -185,8 +185,8 @@ export function PlayerCardDeck({ playerData }: Props) {
         <PlayerCardPlanetsSection
           planetEconomics={planetEconomics}
           gap={4}
-          economyGap={6}
           align="stretch"
+          economyClassName={styles.planetsEconomy}
           showTotalSpend={settings.showPlayerAreaTotalSpend}
         >
           <Group gap={4} align="center" className={styles.planetsFlow}>
