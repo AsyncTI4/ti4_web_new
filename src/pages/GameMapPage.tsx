@@ -32,6 +32,7 @@ import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
 import { TabPanelSection } from "@/domains/game-shell/components/TabPanelSection";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
+import { TabActiveContext } from "@/hooks/useIsTabActive";
 
 const REQUIRED_VERSION_SCHEMA = 5;
 
@@ -73,6 +74,16 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
 
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [activeTab, setActiveTab] = useState("map");
+  // Tabs mount on first visit and then stay mounted (hidden), so switching back
+  // to the map doesn't rebuild ~10k components every time.
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set(["map"]));
+
+  const changeActiveTab = (value: string) => {
+    setActiveTab(value);
+    setVisitedTabs((prev) =>
+      prev.has(value) ? prev : new Set(prev).add(value),
+    );
+  };
 
   const activePlayerName = data?.playerData?.find((p) => p.active)?.userName;
   useDocumentTitle(
@@ -112,9 +123,9 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         >
           <Tabs
             value={activeTab}
-            onChange={(value) => setActiveTab(value || "map")}
+            onChange={(value) => changeActiveTab(value || "map")}
             h={{ base: "100vh", sm: "calc(100vh - var(--app-header-height))" }}
-            keepMounted={false}
+            keepMounted
           >
             <Tabs.List className={classes.tabsList}>
               {MAIN_TAB_CONFIGS.map((tab) => {
@@ -148,18 +159,21 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
                 over real data — chrome calibrated to nothing is the artifact
                 this replaces. */}
             <Tabs.Panel value="map" h="calc(100% - var(--map-tabs-height))">
-              {!data ? (
-                <MapLoadingState gameId={gameId} />
-              ) : pannable ? (
-                <PannableMapView gameId={gameId} />
-              ) : (
-                <MapView gameId={gameId} />
-              )}
+              <TabActiveContext value={activeTab === "map"}>
+                {!data ? (
+                  <MapLoadingState gameId={gameId} />
+                ) : pannable ? (
+                  <PannableMapView gameId={gameId} />
+                ) : (
+                  <MapView gameId={gameId} />
+                )}
+              </TabActiveContext>
             </Tabs.Panel>
 
             <TabPanelSection
               value="players"
               className={classes.playersTabContent}
+              visited={visitedTabs.has("players")}
             >
               <TabContent
                 gameId={gameId}
@@ -179,6 +193,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
             <TabPanelSection
               value="objectives"
               className={classes.playersTabContent}
+              visited={visitedTabs.has("objectives")}
             >
               <TabContent gameId={gameId} ready={!!data} isError={isError}>
                 <ScoreBoard />
@@ -188,6 +203,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
             <TabPanelSection
               value="general"
               className={classes.playersTabContent}
+              visited={visitedTabs.has("general")}
             >
               <TabContent gameId={gameId} ready={!!data} isError={isError}>
                 <GeneralArea />
@@ -213,7 +229,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         opened={drawerOpened}
         onClose={() => setDrawerOpened(false)}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={changeActiveTab}
         gameId={gameId}
         activeTabs={activeTabs}
         onGameChange={changeTab}

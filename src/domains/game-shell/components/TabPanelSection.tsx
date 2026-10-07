@@ -14,6 +14,8 @@ type TabPanelSectionProps = {
    * can keep their existing CSS modules.
    */
   className?: string;
+  /** Content renders only once the tab has been opened, then stays mounted while hidden. */
+  visited?: boolean;
 };
 
 export function TabPanelSection({
@@ -21,12 +23,11 @@ export function TabPanelSection({
   height = "calc(100% - 60px)",
   children,
   className,
+  visited = true,
 }: TabPanelSectionProps) {
   return (
     <Tabs.Panel value={value} h={height}>
-      <Box className={className}>
-        {children}
-      </Box>
+      {visited && <Box className={className}>{children}</Box>}
     </Tabs.Panel>
   );
 }

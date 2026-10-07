@@ -14,7 +14,6 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import GamesPage from "./pages/GamesPage";
 import {
   createTheme,
   darken,
@@ -26,14 +25,9 @@ import {
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage, { loginLoader } from "./pages/LoginPage";
-import FrogGamePage from "./pages/image-map/FrogGamePage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import MapTogglePage from "./pages/MapTogglePage";
-import { SystemTilePage } from "./domains/map/components/SystemTilePage/SystemTilePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
-import DashboardPage from "./pages/DashboardPage";
-import DashboardSettingsPage from "./pages/DashboardSettingsPage";
-import EmbeddedMapPage from "./pages/EmbeddedMapPage";
 
 const queryClient = new QueryClient();
 
@@ -53,15 +47,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/games",
-    element: <GamesPage />,
+    lazy: () =>
+      import("./pages/GamesPage").then((m) => ({ Component: m.default })),
   },
   {
     path: "/dashboard",
-    element: <DashboardPage />,
+    lazy: () =>
+      import("./pages/DashboardPage").then((m) => ({ Component: m.default })),
   },
   {
     path: "/dashboard/settings",
-    element: <DashboardSettingsPage />,
+    lazy: () =>
+      import("./pages/DashboardSettingsPage").then((m) => ({
+        Component: m.default,
+      })),
   },
   {
     path: "/game/:mapid/newui",
@@ -69,11 +68,17 @@ const router = createBrowserRouter([
   },
   {
     path: "/embed/:mapid/map-only",
-    element: <EmbeddedMapPage />,
+    lazy: () =>
+      import("./pages/EmbeddedMapPage").then((m) => ({
+        Component: m.default,
+      })),
   },
   {
     path: "/froggame/:discordid/:mapid",
-    element: <FrogGamePage />,
+    lazy: () =>
+      import("./pages/image-map/FrogGamePage").then((m) => ({
+        Component: m.default,
+      })),
   },
   {
     path: "/login",
@@ -82,11 +87,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/system/:systemId",
-    element: <SystemTilePage />,
+    lazy: () =>
+      import("./domains/map/components/SystemTilePage/SystemTilePage").then(
+        (m) => ({ Component: m.SystemTilePage }),
+      ),
   },
 ]);
 
 document.body.classList.toggle("mobile", isMobileDevice());
+
+/*
+ * Every Mantine portal renders into this one node. Left to itself each closed
+ * Popover/Tooltip appended its own empty div to <body>, and React attached its
+ * full delegated-listener set to each — ~320 divs and ~46k listeners on a game.
+ */
+const portalRoot = document.createElement("div");
+portalRoot.id = "mantine-portal-root";
+document.body.appendChild(portalRoot);
 
 const myColor: MantineColorsTuple = [
   darken("#edf5ff", 0.5),
@@ -178,6 +195,9 @@ const theme = createTheme({
     Tooltip: Tooltip.extend({
       classNames: { tooltip: "overlay-tooltip" },
     }),
+    Portal: {
+      defaultProps: { target: portalRoot },
+    },
   },
 });
 

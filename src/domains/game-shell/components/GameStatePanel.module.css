@@ -68,6 +68,7 @@
 /* The one place the phase colour goes bright. A 6px dot that breathes reports a
    live phase; the old version also lit the label and the whole field. */
 .phaseDot {
+  position: relative;
   width: 6px;
   height: 6px;
   flex-shrink: 0;
@@ -76,16 +77,49 @@
   box-shadow:
     0 0 5px rgba(var(--accent-rgb), 0.5),
     inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-  animation: phaseDotPulse 3.2s ease-in-out infinite;
 }
 
-@keyframes phaseDotPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
+/*
+ * The pulse crossfades a rest glow and a peak glow on pseudo-elements rather
+ * than animating box-shadow, which repainted every frame while the page idled.
+ */
+.phaseDot::before,
+.phaseDot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.phaseDot::before {
+  box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
+  animation: phaseDotRest 3.2s ease-in-out infinite;
+}
+
+.phaseDot::after {
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
+  opacity: 0;
+  animation: phaseDotPeak 3.2s ease-in-out infinite;
+}
+
+/* While pulsing, the pseudo-elements carry the whole glow */
+@media (prefers-reduced-motion: no-preference) {
+  .phaseDot {
+    box-shadow: none;
   }
+}
+
+@keyframes phaseDotRest {
   50% {
-    box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes phaseDotPeak {
+  50% {
+    opacity: 1;
   }
 }
 
@@ -94,24 +128,59 @@
   animation: phaseDotArmed 3.4s ease-out infinite;
 }
 
+:global(.theme-midnightredtheme) .phaseDot::before {
+  animation: phaseDotArmedRest 3.4s ease-out infinite;
+}
+
+:global(.theme-midnightredtheme) .phaseDot::after {
+  box-shadow: 0 0 13px rgba(var(--accent-rgb), 1);
+  animation: phaseDotArmedPeak 3.4s ease-out infinite;
+}
+
 @keyframes phaseDotArmed {
   0%,
   22%,
   100% {
     opacity: 0.9;
-    box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.4);
   }
-  4% {
+  4%,
+  12% {
     opacity: 1;
-    box-shadow: 0 0 13px rgba(var(--accent-rgb), 1);
   }
   8% {
     opacity: 0.92;
-    box-shadow: 0 0 5px rgba(var(--accent-rgb), 0.45);
+  }
+}
+
+@keyframes phaseDotArmedRest {
+  0%,
+  22%,
+  100% {
+    opacity: 1;
+  }
+  4%,
+  12% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes phaseDotArmedPeak {
+  0%,
+  22%,
+  100% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0.1;
   }
   12% {
-    opacity: 1;
-    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.95);
+    opacity: 0.93;
   }
 }
 
@@ -120,10 +189,23 @@
   :global(.theme-midnightredtheme) .phaseDot {
     animation: none;
   }
+
+  .phaseDot::before,
+  .phaseDot::after {
+    display: none;
+  }
 }
 
 :global(.mobile) .phaseDot {
   animation: none;
+  box-shadow:
+    0 0 5px rgba(var(--accent-rgb), 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+:global(.mobile) .phaseDot::before,
+:global(.mobile) .phaseDot::after {
+  display: none;
 }
 
 .turnText {

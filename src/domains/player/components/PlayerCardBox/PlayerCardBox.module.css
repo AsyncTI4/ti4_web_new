@@ -4,35 +4,65 @@
   height: 100%;
 }
 
-/* The active player's card breathes in their faction color (desktop only) */
-.activeCard {
+/*
+ * The active player's card breathes in their faction color (desktop only).
+ * The rest and peak glows sit on two pseudo-elements that crossfade, because
+ * animating box-shadow repaints every frame and kept the main thread ~35% busy
+ * at idle. Opacity runs on the compositor.
+ */
+.activeCard::before,
+.activeCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.activeCard::before {
+  box-shadow:
+    0 0 0 1px var(--active-glow-weak),
+    0 0 14px var(--active-glow-weak);
+  animation: activeCardRest 4.5s ease-in-out infinite;
+}
+
+.activeCard::after {
+  box-shadow:
+    0 0 0 1px var(--active-glow),
+    0 0 26px var(--active-glow-weak),
+    0 0 10px var(--active-glow);
+  opacity: 0;
   animation: activeCardBreath 4.5s ease-in-out infinite;
 }
 
-@keyframes activeCardBreath {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px var(--active-glow-weak),
-      0 0 14px var(--active-glow-weak);
-  }
+@keyframes activeCardRest {
   50% {
-    box-shadow:
-      0 0 0 1px var(--active-glow),
-      0 0 26px var(--active-glow-weak),
-      0 0 10px var(--active-glow);
+    opacity: 0;
   }
 }
 
-:global(.mobile) .activeCard,
-:global(.theme-mobile) .activeCard {
-  animation: none;
+@keyframes activeCardBreath {
+  50% {
+    opacity: 1;
+  }
+}
+
+:global(.mobile) .activeCard::before,
+:global(.mobile) .activeCard::after,
+:global(.theme-mobile) .activeCard::before,
+:global(.theme-mobile) .activeCard::after {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .activeCard {
-    animation: none;
     box-shadow: 0 0 0 1px var(--active-glow-weak);
+  }
+
+  .activeCard::before,
+  .activeCard::after {
+    display: none;
   }
 }
 

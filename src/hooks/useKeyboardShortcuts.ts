@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useGameData } from "@/state/useGameContext";
+import { useIsTabActive } from "@/hooks/useIsTabActive";
 import type { AreaType } from "@/hooks/useTabsAndTooltips";
 import type { Settings } from "@/state/appStore";
 
@@ -46,7 +47,10 @@ export function useKeyboardShortcuts({
   selectedArea,
 }: KeyboardShortcutsProps) {
   const enhancedData = useGameData();
+  const isTabActive = useIsTabActive();
   useEffect(() => {
+    if (!isTabActive) return;
+
     function handleKeyDown(event: KeyboardEvent) {
       if (isTypingTarget(event.target)) return;
       if (event.ctrlKey || event.metaKey || event.altKey) return;
@@ -106,6 +110,7 @@ export function useKeyboardShortcuts({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [
+    isTabActive,
     enhancedData?.playerData,
     toggleOverlays,
     toggleTechSkipsMode,

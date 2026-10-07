@@ -56,6 +56,9 @@ export function usePlayerData<TData = PlayerDataResponse>(
   return useQuery<PlayerDataResponse, Error, TData>({
     queryKey: ["playerData", gameId],
     queryFn: () => fetchPlayerData(gameId),
+    // The socket streams patches into this document and refetches on
+    // reconnect, so a mount never needs to refetch it.
+    staleTime: Infinity,
     retry: false,
     select: options?.select,
   });

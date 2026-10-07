@@ -1,6 +1,13 @@
 import { computePanelsZoom } from "@/utils/zoom";
 import { Popover, PopoverProps } from "@mantine/core";
-import { ComponentProps, ReactNode } from "react";
+import {
+  ComponentProps,
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type SmoothPopoverProps = Omit<PopoverProps, "transitionProps" | "styles"> & {
   children: ReactNode;
@@ -9,6 +16,14 @@ type SmoothPopoverProps = Omit<PopoverProps, "transitionProps" | "styles"> & {
 };
 
 type SmoothPopoverDropdownProps = ComponentProps<typeof Popover.Dropdown>;
+type SmoothPopoverTargetProps = ComponentProps<typeof Popover.Target>;
+
+/**
+ * True until the popover is first opened. A game mounts hundreds of these
+ * closed, and a mounted Mantine Popover costs floating-ui hooks, a portal and
+ * effects even when nothing is shown, so until then only the target renders.
+ */
+const DormantContext = createContext(false);
 
 function SmoothPopoverBase({
   children,
@@ -19,12 +34,29 @@ function SmoothPopoverBase({
   shadow = "xl",
   ...props
 }: SmoothPopoverProps) {
+  const [armed, setArmed] = useState(opened);
+  const [ready, setReady] = useState(opened);
+
+  if (opened && !armed) setArmed(true);
+
+  // Mount closed first and open a frame later: Mantine's Portal mounts its
+  // Transition a commit late, and opening sooner would skip the enter animation.
+  useEffect(() => {
+    if (!armed || ready) return;
+    const frame = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, [armed, ready]);
+
+  if (!armed) {
+    return <DormantContext value={true}>{children}</DormantContext>;
+  }
+
   return (
     <Popover
       position={position}
       withArrow={withArrow}
       shadow={shadow}
-      opened={opened}
+      opened={opened && ready}
       onChange={onChange}
       withinPortal
       transitionProps={{
@@ -46,10 +78,20 @@ function SmoothPopoverBase({
   );
 }
 
+function SmoothPopoverTarget({ children, ...props }: SmoothPopoverTargetProps) {
+  const dormant = useContext(DormantContext);
+  if (dormant) return children;
+
+  return <Popover.Target {...props}>{children}</Popover.Target>;
+}
+
 function SmoothPopoverDropdown({
   children,
   ...props
 }: SmoothPopoverDropdownProps) {
+  const dormant = useContext(DormantContext);
+  if (dormant) return null;
+
   const dropdownScale = computePanelsZoom();
 
   return (
@@ -67,6 +109,6 @@ function SmoothPopoverDropdown({
 }
 
 export const SmoothPopover = Object.assign(SmoothPopoverBase, {
-  Target: Popover.Target,
+  Target: SmoothPopoverTarget,
   Dropdown: SmoothPopoverDropdown,
 });
