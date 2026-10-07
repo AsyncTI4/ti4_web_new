@@ -12,9 +12,15 @@ type Props = {
   objectives: Objectives;
   playerData: PlayerData[];
   lawsInPlay?: LawInPlay[];
+  alwaysShowRequirements?: boolean;
 };
 
-function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: Props) {
+function ExpandedPublicObjectives({
+  objectives,
+  playerData,
+  lawsInPlay = [],
+  alwaysShowRequirements = false,
+}: Props) {
   const [openObjectiveKey, setOpenObjectiveKey] = useState<string | null>(null);
 
   const renderCard = (objective: Objective, color: ObjectiveColor) => (
@@ -23,6 +29,7 @@ function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: P
       playerData={playerData}
       objective={objective}
       color={color}
+      alwaysShowRequirement={alwaysShowRequirements}
       opened={openObjectiveKey === objective.key}
       onToggle={() =>
         setOpenObjectiveKey((current) =>
@@ -53,7 +60,11 @@ function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: P
     <Box className={styles.themedContainer}>
       <Stack gap="md">
         <Box>
-          <SimpleGrid cols={{ base: 2, sm: 2 }} spacing="xs">
+          <SimpleGrid
+            cols={{ base: 2, sm: 2 }}
+            spacing="xs"
+            className={styles.stageGrid}
+          >
             {renderStage("Stage I", objectives.stage1Objectives, "orange")}
             {renderStage("Stage II", objectives.stage2Objectives, "blue")}
           </SimpleGrid>
@@ -61,7 +72,7 @@ function ExpandedPublicObjectives({ objectives, playerData, lawsInPlay = [] }: P
 
         {objectives.customObjectives.length > 0 && (
           <Box>
-            <Flex gap="xs">
+            <Flex gap="xs" className={styles.customRow}>
               {objectives.customObjectives.map((objective) => renderCard(objective, "gray"))}
             </Flex>
           </Box>

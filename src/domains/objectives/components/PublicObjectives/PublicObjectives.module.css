@@ -22,3 +22,16 @@
   box-shadow: none;
   padding: 0;
 }
+
+/* Objectives tab at phone width: the two stages stop sharing a row, and the
+   one-off objectives stack instead of squeezing three plates into one line. */
+@container scoreboard (max-width: 640px) {
+  .stageGrid.stageGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--mantine-spacing-md);
+  }
+
+  .customRow {
+    flex-direction: column;
+  }
+}

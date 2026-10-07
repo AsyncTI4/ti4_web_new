@@ -124,13 +124,18 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     return Math.max(maxTotal, sumPoints(breakdown.entries));
   }, 0);
   const gridColumns = Math.max(vpsToWin, maxPotentialVPs);
-  const gridStyle = { gridTemplateColumns: `repeat(${gridColumns}, 44px)` };
+  const gridStyle = { gridTemplateColumns: `repeat(${gridColumns}, var(--score-cell, 44px))` };
   const leadingVPs = Math.max(...sortedPlayers.map((p) => p.totalVps), 0);
 
   return (
     <div
       className={styles.themedContainer}
-      style={{ "--vps-to-win": vpsToWin } as React.CSSProperties}
+      style={
+        {
+          "--vps-to-win": vpsToWin,
+          "--score-columns": gridColumns,
+        } as React.CSSProperties
+      }
     >
       <Stack gap={10}>
         <Caption size="sm" rule>
@@ -160,7 +165,10 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
         {/* Number track - shown once above all players */}
         <div className={styles.rowContainer}>
           <div className={styles.playerInfoColumn} />
-          <div className={styles.objectivesGrid} style={gridStyle}>
+          <div
+            className={cx(styles.objectivesGrid, styles.numberTrack)}
+            style={gridStyle}
+          >
             {Array.from({ length: gridColumns }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
                 {num <= vpsToWin ? (

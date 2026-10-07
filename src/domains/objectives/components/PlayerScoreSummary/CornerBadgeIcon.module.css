@@ -30,3 +30,10 @@
 .diamondIcon { color: var(--mantine-color-gray-9); }
 
 
+@container scoreboard (max-width: 640px) {
+  .badge {
+    right: 10px;
+    width: 12px;
+    height: 12px;
+  }
+}

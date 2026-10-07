@@ -16,6 +16,7 @@ type Props = {
   objective: Objective;
   color: "orange" | "blue" | "gray";
   opened?: boolean;
+  alwaysShowRequirement?: boolean;
   onToggle?: () => void;
   onOpenChange?: (opened: boolean) => void;
 };
@@ -25,6 +26,7 @@ function ExpandedObjectiveCard({
   playerData,
   color,
   opened = false,
+  alwaysShowRequirement = false,
   onToggle,
   onOpenChange,
 }: Props) {
@@ -32,8 +34,11 @@ function ExpandedObjectiveCard({
   const objectiveData = publicObjectives.find(
     (obj) => obj.alias === objective.key,
   );
+  const showRequirementInline = !isMobile || alwaysShowRequirement;
   const shouldShowMobileTooltip =
-    isMobile && objective.revealed && Boolean(objectiveData?.text);
+    !showRequirementInline &&
+    objective.revealed &&
+    Boolean(objectiveData?.text);
 
   const factionProgressData = playerData
     .map((player) => {
@@ -90,7 +95,7 @@ function ExpandedObjectiveCard({
           >
             {objective.revealed ? objective.name : "UNREVEALED"}
           </Text>
-          {objective.revealed && objectiveData && !isMobile && (
+          {objective.revealed && objectiveData && showRequirementInline && (
             <Text className={styles.requirementText} size="sm">
               {objectiveData.text}
             </Text>

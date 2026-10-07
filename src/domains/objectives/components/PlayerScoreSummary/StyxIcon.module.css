@@ -25,3 +25,14 @@
   object-fit: contain;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
 }
+
+@container scoreboard (max-width: 640px) {
+  .styxIcon {
+    height: 24px;
+  }
+
+  .legendaryIcon {
+    width: 10px;
+    height: 10px;
+  }
+}

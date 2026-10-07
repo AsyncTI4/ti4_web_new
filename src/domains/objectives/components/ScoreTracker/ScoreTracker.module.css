@@ -127,3 +127,33 @@
   color: rgba(250, 204, 21, 0.75);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
+
+/* Objectives tab at phone width: eleven squares share ~300px, so the numeral
+   centres on its own line and the tokens stack beneath it at a size that fits. */
+@container scoreboard (max-width: 640px) {
+  .scoreSquare {
+    align-items: flex-start;
+    padding: 20px 1px 4px;
+  }
+
+  .scoreNumber {
+    top: 6px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .factionTokens {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .tokenContainer img {
+    max-width: 22px;
+    max-height: 22px;
+  }
+
+  .victoryCrown {
+    display: none;
+  }
+}

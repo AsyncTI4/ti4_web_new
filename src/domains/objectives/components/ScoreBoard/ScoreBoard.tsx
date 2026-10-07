@@ -3,6 +3,7 @@ import ExpandedPublicObjectives from "@/domains/objectives/components/PublicObje
 import { ScoreTracker } from "@/domains/objectives/components/ScoreTracker";
 import { useGameData } from "@/state/useGameContext";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
+import styles from "./ScoreBoard.module.css";
 
 function ScoreBoard() {
   const gameData = useGameData();
@@ -10,7 +11,7 @@ function ScoreBoard() {
   const { objectives, playerData, lawsInPlay, vpsToWin = 10 } = gameData;
 
   return (
-    <Box p="lg">
+    <Box p={{ base: 0, sm: "lg" }} className={styles.scoreBoard}>
       <ScoreTracker playerData={playerData} vpsToWin={vpsToWin} />
 
       <Stack gap="xl">
@@ -18,6 +19,7 @@ function ScoreBoard() {
           objectives={objectives}
           playerData={playerData}
           lawsInPlay={lawsInPlay}
+          alwaysShowRequirements
         />
 
         <PlayerScoreSummary playerData={playerData} objectives={objectives} />

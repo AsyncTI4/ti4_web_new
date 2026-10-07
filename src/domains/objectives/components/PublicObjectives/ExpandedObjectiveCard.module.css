@@ -130,3 +130,38 @@
   font-weight: var(--weight-title);
   line-height: 1;
 }
+
+/* Objectives tab at phone width: the requirement takes the full line and the
+   faction badges drop beneath it in three even columns, so each faction keeps
+   the same cell from one objective to the next. */
+@container scoreboard (max-width: 640px) {
+  .mainRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mantine-spacing-xs);
+  }
+
+  .unrevealed .mainRow {
+    gap: 0;
+  }
+
+  .progressBadges {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .factionProgressBadge {
+    min-width: 0;
+  }
+
+  /* One-off objectives only list who scored them, so the title and the icons
+     still fit on one line. */
+  .gray .mainRow {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .gray .progressBadges {
+    display: flex;
+  }
+}
