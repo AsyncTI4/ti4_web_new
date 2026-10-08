@@ -101,8 +101,10 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
         const { title, text } = getCardContent(dataModel, overlay);
         if (!title && !text) return null;
 
-        const imageURL = dataModel?.imageURL
-          ? cdnImage(dataModel.imageURL)
+        const hasCdnImage =
+          !!dataModel?.imageURL && !TEXT_ONLY_MODELS.has(overlay.dataModel ?? "");
+        const imageURL = hasCdnImage
+          ? cdnImage(dataModel.imageURL!)
           : undefined;
         const effectiveOverlayZoom = zoomFitToScreen ? overlayZoom : zoom;
 
@@ -117,6 +119,15 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
             ? `${effectiveOverlayZoom * 4}px solid rgba(255, 255, 0, 0.2)`
             : undefined,
         };
+
+        const boxCenter =
+          (overlay.boxXYWH[0] + overlay.boxXYWH[2] / 2) * effectiveOverlayZoom;
+        const mapWidth = imageNaturalWidth
+          ? imageNaturalWidth * effectiveOverlayZoom
+          : undefined;
+        const tooltipStyle = {
+          "--tooltip-shift": `${getTooltipShift(boxCenter, mapWidth)}px`,
+        } as CSSProperties;
 
         const overlayMaxWidth =
           OVERLAY_MAX_WIDTHS[overlay.dataModel ?? ""] ??
@@ -145,6 +156,7 @@ export function ScrollMap({ gameId, imageUrl }: ScrollMapProps) {
             ) : (
               <div
                 className={`tooltip ${activeTooltip === key ? "active" : ""}`}
+                style={tooltipStyle}
               >
                 <h3 className="tooltip-title">{title}</h3>
                 <p className="tooltip-text">{text}</p>
@@ -163,6 +175,24 @@ const BORDERLESS_MODELS = new Set([
   "UnitModel",
   "ExploreModel",
 ]);
+
+/** Matches the min-width of .tooltip in ScrollMap.css. */
+const TEXT_TOOLTIP_WIDTH = 300;
+const TOOLTIP_EDGE_MARGIN = 8;
+
+/** How far to nudge a centered text tooltip so it stays inside the map. */
+function getTooltipShift(boxCenter: number, mapWidth?: number) {
+  const reach = TEXT_TOOLTIP_WIDTH / 2 + TOOLTIP_EDGE_MARGIN;
+  if (boxCenter < reach) return reach - boxCenter;
+  if (mapWidth === undefined) return 0;
+  return Math.min(0, mapWidth - reach - boxCenter);
+}
+
+/**
+ * Models whose imageURL is not a path on our CDN, so they always render as text.
+ * Strategy cards carry absolute third-party URLs, and only for the base set.
+ */
+const TEXT_ONLY_MODELS = new Set(["StrategyCardModel"]);
 
 function getCardContent(
   dataModel: OverlayDataModel | undefined,
