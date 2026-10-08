@@ -1,4 +1,4 @@
-import { computePanelsZoom } from "@/utils/zoom";
+import { useContentScale } from "@/shared/ui/ScaledContent";
 import { Popover, PopoverProps } from "@mantine/core";
 import {
   ComponentProps,
@@ -90,9 +90,8 @@ function SmoothPopoverDropdown({
   ...props
 }: SmoothPopoverDropdownProps) {
   const dormant = useContext(DormantContext);
+  const dropdownScale = useContentScale();
   if (dormant) return null;
-
-  const dropdownScale = computePanelsZoom();
 
   return (
     <Popover.Dropdown {...props}>
