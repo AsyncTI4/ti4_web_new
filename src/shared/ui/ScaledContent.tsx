@@ -1,6 +1,8 @@
 import {
+  createContext,
   CSSProperties,
   ReactNode,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -22,6 +24,16 @@ type ContentSize = {
   width: number;
   height: number;
 };
+
+/**
+ * The scale of the nearest enclosing ScaledContent, 1 outside of one. Portaled
+ * overlays read it to match the size of the content they were opened from.
+ */
+const ContentScaleContext = createContext(1);
+
+export function useContentScale() {
+  return useContext(ContentScaleContext);
+}
 
 const useIsoLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
@@ -121,7 +133,7 @@ function ZoomScaledContent({
   return (
     <div className={className} style={outerStyle}>
       <div ref={innerRef} className={innerClassName} style={mergedInnerStyle}>
-        {children}
+        <ContentScaleContext value={zoom}>{children}</ContentScaleContext>
       </div>
     </div>
   );

@@ -27,6 +27,7 @@ export function DetailsCard({
   return (
     <Box
       w={width}
+      maw="calc(100vw - 16px)"
       p="md"
       className={cx(classes.card, color !== "none" && classes[color], className)}
       {...boxProps}
