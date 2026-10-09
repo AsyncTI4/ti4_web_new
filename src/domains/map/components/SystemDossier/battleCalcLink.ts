@@ -56,6 +56,46 @@ const CALC_FACTIONS: Record<string, string> = {
   yssaril: "Yssaril",
 };
 
+/**
+ * Technologies ti4battle.com models, keyed by our tech id and mapped to its
+ * effect name. Only the printings whose rules match the calculator are
+ * listed: it implements the current Magen Defense Grid and X-89 Bacterial
+ * Weapon, and none of the homebrew variants. Faction unit upgrades are not
+ * here; they travel as unit upgrades.
+ */
+const CALC_TECH_EFFECTS: Record<string, string> = {
+  amd: "Antimass Deflectors",
+  asc: "Assault Cannon",
+  da: "Duranium Armor",
+  gls: "Graviton Laser System",
+  md: "Magen Defense Grid",
+  md_c1: "Magen Defense Grid",
+  ps: "Plasma Scoring",
+  x89c4: "X-89 Bacterial Weapon",
+  ds: "Dimensional Splicer",
+  ic: "Impulse Core",
+  l4: "L4 Disruptors",
+  nes: "Non-Euclidean Shielding",
+  proxima: "Proxima Targeting VI",
+  sc: "Supercharge",
+  vpw: "Valkyrie Particle Weave",
+};
+
+/**
+ * The calculator effects a player can bring to a battle right now: every
+ * modelled technology they have researched and not exhausted. The calculator
+ * itself drops the ones that do not apply to the battle being run.
+ */
+function techEffects(player: PlayerData | undefined): string[] {
+  if (!player) return [];
+  const exhausted = new Set(player.exhaustedTechs ?? []);
+  const effects = (player.techs ?? [])
+    .filter((tech) => !exhausted.has(tech))
+    .map((tech) => CALC_TECH_EFFECTS[tech])
+    .filter(Boolean);
+  return [...new Set(effects)];
+}
+
 type PlayerFor = (faction: string) => PlayerData | undefined;
 type BattlePlace = "space" | "ground";
 
@@ -75,13 +115,15 @@ const isPds = (row: UnitRow) => row.unit.baseType === "pds";
 
 /**
  * Builds a ti4battle.com link with the given force set as the defender: unit
- * counts, damage already sustained and unit upgrades. Returns null when the
- * force has nothing the calculator can use.
+ * counts, damage already sustained, unit upgrades and the owner's combat
+ * technologies. Returns null when the force has nothing the calculator can
+ * use.
  */
 function buildDefenderUrl(
   faction: string,
   rows: UnitRow[],
   place: BattlePlace,
+  player: PlayerData | undefined,
 ): string | null {
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
@@ -109,6 +151,9 @@ function buildDefenderUrl(
     }
   }
   for (const type of upgraded) params.set(`defender-upgrade-${type}`, "true");
+  for (const effect of techEffects(player)) {
+    params.set(`defender-effect-${effect}`, "1");
+  }
   if (place === "ground") params.set("place", "ground");
 
   return `${BATTLE_CALC_URL}?${params}`;
@@ -131,7 +176,12 @@ export function buildSpaceBattleUrl(
     .filter(isPds);
 
   if (ships.length === 0) return null;
-  return buildDefenderUrl(faction, [...ships, ...pds], "space");
+  return buildDefenderUrl(
+    faction,
+    [...ships, ...pds],
+    "space",
+    playerFor(faction),
+  );
 }
 
 /**
@@ -151,6 +201,7 @@ export function buildGroundBattleUrl(
     faction,
     [...groundForces, ...rows.filter(isPds)],
     "ground",
+    playerFor(faction),
   );
 }
 
@@ -179,5 +230,10 @@ export function buildSystemBattleUrl(
     .flatMap((planet) => factionRows(planet.unitsByFaction, faction, playerFor))
     .filter((row) => row.unit.isGroundForce || isPds(row));
 
-  return buildDefenderUrl(faction, [...ships, ...planetside], "space");
+  return buildDefenderUrl(
+    faction,
+    [...ships, ...planetside],
+    "space",
+    playerFor(faction),
+  );
 }
