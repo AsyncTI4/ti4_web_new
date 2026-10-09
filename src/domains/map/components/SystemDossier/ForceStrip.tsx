@@ -1,4 +1,5 @@
 import { Box, Text, Tooltip } from "@mantine/core";
+import { IconSwords } from "@tabler/icons-react";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
@@ -143,14 +144,16 @@ export type ZoneSummary = {
  * strip, its units flow beside it as named badges, and the three numbers a
  * player weighs a force by sit in a fixed-width readout trough so numerals
  * align across strips. The math counts only units that roll dice in this
- * zone's combat.
+ * zone's combat. A battle calculator link, when given, closes the row.
  */
 export function ForceStrip({
   summary: { faction, rows, math },
   helpers,
+  battleCalcUrl,
 }: {
   summary: ZoneSummary;
   helpers: FactionHelpers;
+  battleCalcUrl?: string | null;
 }) {
   const colorAlias = helpers.colorAlias(faction);
   const color = helpers.playerFor(faction)?.color;
@@ -172,13 +175,27 @@ export function ForceStrip({
           />
         ))}
       </div>
-      <div className={styles.forceMath}>
-        {FORCE_MATH_STATS.map((stat) => (
-          <span key={stat.key} title={stat.title}>
-            <img src={cdnImage(stat.icon)} alt={stat.alt} />
-            {formatStat(math[stat.key])}
-          </span>
-        ))}
+      <div className={styles.forceTrail}>
+        <div className={styles.forceMath}>
+          {FORCE_MATH_STATS.map((stat) => (
+            <span key={stat.key} title={stat.title}>
+              <img src={cdnImage(stat.icon)} alt={stat.alt} />
+              {formatStat(math[stat.key])}
+            </span>
+          ))}
+        </div>
+        {battleCalcUrl && (
+          <a
+            className={styles.battleLink}
+            href={battleCalcUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`Open ti4battle.com with ${helpers.displayName(faction)} set as the defender`}
+          >
+            <IconSwords size={13} aria-hidden />
+            Battle calc
+          </a>
+        )}
       </div>
     </div>
   );

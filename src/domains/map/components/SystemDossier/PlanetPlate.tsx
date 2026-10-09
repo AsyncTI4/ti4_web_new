@@ -15,6 +15,7 @@ import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getAttachmentModifiers } from "@/entities/game/planets";
 import type { TilePlanet } from "@/entities/game/types";
+import { buildGroundBattleUrl } from "./battleCalcLink";
 import { summarizeZone } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";
 import type { FactionHelpers } from "./useFactionHelpers";
@@ -215,6 +216,11 @@ export function PlanetPlate({
                 key={summary.faction}
                 summary={summary}
                 helpers={helpers}
+                battleCalcUrl={buildGroundBattleUrl(
+                  planetTile,
+                  summary.faction,
+                  helpers.playerFor,
+                )}
               />
             ))}
           </div>
