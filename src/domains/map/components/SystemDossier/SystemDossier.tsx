@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconRocket } from "@tabler/icons-react";
+import { IconRocket, IconSwords } from "@tabler/icons-react";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { lookupUnit } from "@/entities/lookup/units";
@@ -13,6 +13,11 @@ import { getPlanetsByTileId } from "@/entities/lookup/planets";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useGameData } from "@/state/useGameContext";
 import type { GameData, Tile } from "@/entities/game/types";
+import {
+  buildSpaceBattleUrl,
+  buildSystemBattleUrl,
+  factionsInSystem,
+} from "./battleCalcLink";
 import { getSystemFeatures } from "./featureRules";
 import { summarizeZone, formatStat } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";
@@ -176,6 +181,11 @@ function SpaceZone({
             key={summary.faction}
             summary={summary}
             helpers={helpers}
+            battleCalcUrl={buildSpaceBattleUrl(
+              tile,
+              summary.faction,
+              helpers.playerFor,
+            )}
           />
         ))}
         <SpaceCannonCoverage pdsInRange={pdsInRange} helpers={helpers} />
@@ -251,6 +261,37 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
   );
 }
 
+/**
+ * One link per faction present, carrying its ships and ground forces
+ * together so both battles can be run from a single calculator tab.
+ */
+function SystemBattleLinks({
+  tile,
+  helpers,
+}: {
+  tile: Tile;
+  helpers: FactionHelpers;
+}) {
+  return factionsInSystem(tile).map((faction) => {
+    const url = buildSystemBattleUrl(tile, faction, helpers.playerFor);
+    if (!url) return null;
+    return (
+      <a
+        key={faction}
+        className={styles.battleLink}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={`Open ti4battle.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`}
+      >
+        <IconSwords size={13} aria-hidden />
+        <FactionIcon faction={faction} w={13} h={13} />
+        Space + ground
+      </a>
+    );
+  });
+}
+
 export function SystemDossier({ tile }: { tile: Tile }) {
   const gameData = useGameData();
   const helpers = useFactionHelpers();
@@ -267,6 +308,7 @@ export function SystemDossier({ tile }: { tile: Tile }) {
           </div>
         </div>
         <div className={styles.headerControl}>
+          <SystemBattleLinks tile={tile} helpers={helpers} />
           <ControllerChip
             label="Space control"
             faction={tile.controlledBy}

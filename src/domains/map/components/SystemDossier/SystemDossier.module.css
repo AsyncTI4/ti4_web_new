@@ -353,9 +353,18 @@
 /* Cost / hits-absorbed / expected-hits, seated in a recessed trough at the
    row's trailing edge. Fixed width, so the numerals still align down the
    column from strip to strip. */
-.forceMath {
+/* The readout and its calculator link travel together, so a wrapping row
+   never strands the link on a line of its own. */
+.forceTrail {
   flex: 0 0 auto;
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.forceMath {
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 174px;
@@ -389,6 +398,39 @@
   border-left: 1px solid var(--panel-separator);
 }
 
+
+/* Hands the force to the external battle calculator. Same height as the
+   readout trough it follows, so the row keeps one baseline. */
+.battleLink {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: stretch;
+  min-height: 22px;
+  padding: 0 8px;
+  border: 1px solid rgba(var(--gd-blue), 0.45);
+  border-radius: 2px;
+  background: rgba(var(--gd-blue), 0.1);
+  font-family: var(--mantine-font-family-headings);
+  font-size: 10px;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--mantine-color-gray-0);
+}
+
+.battleLink:hover {
+  border-color: rgba(var(--gd-blue), 0.8);
+  background: rgba(var(--gd-blue), 0.2);
+}
+
+.battleLink:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 1px;
+}
 
 .structures {
   display: flex;
