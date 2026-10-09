@@ -39,6 +39,7 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
+  onUnitClick?: (faction: string, unitId: string, x: number, y: number) => void;
   onPlanetMouseEnter?: (planetId: string, x: number, y: number) => void;
   onPlanetMouseLeave?: () => void;
   controlOpenSides?: number[];
@@ -52,6 +53,7 @@ export const MapTile = React.memo<Props>(
     onUnitMouseOver,
     onUnitMouseLeave,
     onUnitSelect,
+    onUnitClick,
     onPlanetMouseEnter,
     onPlanetMouseLeave,
     controlOpenSides,
@@ -172,6 +174,7 @@ export const MapTile = React.memo<Props>(
                 onUnitMouseOver={onUnitMouseOver}
                 onUnitMouseLeave={onUnitMouseLeave}
                 onUnitSelect={onUnitSelect}
+                onUnitClick={onUnitClick}
               />
             </>
           )}

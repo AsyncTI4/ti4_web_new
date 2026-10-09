@@ -1,13 +1,14 @@
+import { useState } from "react";
 import { IconRocket } from "@tabler/icons-react";
+import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
+import { SmoothPopover } from "@/shared/ui/SmoothPopover";
+import { lookupUnit } from "@/entities/lookup/units";
 import { Module } from "@/shared/ui/primitives/Module/Module";
 import { MapTile } from "../MapTile";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTileById } from "@/entities/lookup/systems";
-import {
-  TILE_HEIGHT,
-  TILE_WIDTH,
-} from "@/entities/geometry/tilePositioning";
+import { TILE_HEIGHT, TILE_WIDTH } from "@/entities/geometry/tilePositioning";
 import { getPlanetsByTileId } from "@/entities/lookup/planets";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { useGameData } from "@/state/useGameContext";
@@ -24,6 +25,7 @@ const BRACKET_CORNERS = ["tl", "tr", "bl", "br"];
 
 type SystemFeature = ReturnType<typeof getSystemFeatures>[number];
 type PdsCoverage = GameData["pdsByTile"][string];
+type SelectedUnit = { faction: string; unitId: string; x: number; y: number };
 
 /**
  * Static planet order (as printed on the tile), then any live-only planets the
@@ -182,7 +184,27 @@ function SpaceZone({
   );
 }
 
-function TileWell({ tile }: { tile: Tile }) {
+/**
+ * Units on the embedded tile open the same stat card the board shows. One
+ * popover serves the whole tile, anchored to a marker at the clicked stack.
+ */
+function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
+  const [selectedUnit, setSelectedUnit] = useState<SelectedUnit | null>(null);
+  const player = selectedUnit
+    ? helpers.playerFor(selectedUnit.faction)
+    : undefined;
+  const unitId = selectedUnit
+    ? (lookupUnit(selectedUnit.unitId, selectedUnit.faction, player)?.id ??
+      selectedUnit.unitId)
+    : undefined;
+
+  const handleUnitClick = (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number,
+  ) => setSelectedUnit({ faction, unitId, x, y });
+
   return (
     <div className={styles.tileWell}>
       {BRACKET_CORNERS.map((corner) => (
@@ -201,7 +223,28 @@ function TileWell({ tile }: { tile: Tile }) {
         }}
       >
         <div style={{ transform: `scale(${TILE_SCALE})` }}>
-          <MapTile mapTile={tile} embedded />
+          <MapTile mapTile={tile} embedded onUnitClick={handleUnitClick} />
+          <SmoothPopover
+            opened={!!selectedUnit}
+            onChange={(opened) => !opened && setSelectedUnit(null)}
+            offset={22}
+          >
+            <SmoothPopover.Target>
+              <span
+                className={styles.unitAnchor}
+                style={{
+                  left: selectedUnit?.x ?? 0,
+                  top: selectedUnit?.y ?? 0,
+                }}
+                aria-hidden
+              />
+            </SmoothPopover.Target>
+            <SmoothPopover.Dropdown className={styles.unitPopover}>
+              {unitId && (
+                <UnitDetailsCard unitId={unitId} color={player?.color} />
+              )}
+            </SmoothPopover.Dropdown>
+          </SmoothPopover>
         </div>
       </div>
     </div>
@@ -234,7 +277,7 @@ export function SystemDossier({ tile }: { tile: Tile }) {
 
       <div className={styles.columns}>
         <div className={styles.terrain}>
-          <TileWell tile={tile} />
+          <TileWell tile={tile} helpers={helpers} />
         </div>
 
         <div className={styles.forces}>

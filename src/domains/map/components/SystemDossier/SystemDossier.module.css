@@ -138,6 +138,19 @@
   height: 299px;
 }
 
+/* Zero-size marker the tile's unit popover hangs from, placed in tile
+   coordinates at the clicked stack. */
+.unitAnchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.unitPopover {
+  padding: 0;
+}
+
 .bracket {
   position: absolute;
   width: 16px;
@@ -253,6 +266,22 @@
   background: var(--panel-field-flat);
   border: 1px solid var(--panel-hairline);
   border-radius: 2px;
+}
+
+.unitChip {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.unitChip:hover,
+.unitChip[aria-expanded="true"] {
+  border-color: var(--panel-hairline-strong);
+}
+
+.unitChip:focus-visible {
+  outline: 2px solid rgb(var(--gd-blue));
+  outline-offset: 1px;
 }
 
 .unitChipImage {

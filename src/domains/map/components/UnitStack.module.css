@@ -5,6 +5,10 @@
   pointer-events: auto;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .badgeInnerWrapper {
   position: relative;
 }

@@ -18,6 +18,8 @@ type Props = {
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
+  /** Reports the clicked stack with its tile-local anchor point. */
+  onUnitClick?: (faction: string, unitId: string, x: number, y: number) => void;
 };
 
 export function UnitImagesLayer({
@@ -27,6 +29,7 @@ export function UnitImagesLayer({
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
+  onUnitClick,
 }: Props) {
   const lawsInPlay = useGameData()?.lawsInPlay;
   const resolveColorAlias = useResolveColorAlias();
@@ -94,6 +97,12 @@ export function UnitImagesLayer({
           }
           onUnitSelect={
             onUnitSelect ? () => onUnitSelect(stack.faction) : undefined
+          }
+          onUnitClick={
+            onUnitClick
+              ? () =>
+                  onUnitClick(stack.faction, stack.entityId, stack.x, stack.y)
+              : undefined
           }
         />
       );
