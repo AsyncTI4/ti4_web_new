@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CloseButton } from "@mantine/core";
 import { IconRocket, IconSwords } from "@tabler/icons-react";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
@@ -23,6 +24,7 @@ import { summarizeZone, formatStat } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";
 import { PlanetPlate } from "./PlanetPlate";
 import { useFactionHelpers, type FactionHelpers } from "./useFactionHelpers";
+import { UnitSheetContext, useUnitSheet, type SheetUnit } from "./unitSheet";
 import styles from "./SystemDossier.module.css";
 
 const TILE_SCALE = 0.78;
@@ -196,10 +198,12 @@ function SpaceZone({
 
 /**
  * Units on the embedded tile open the same stat card the board shows. One
- * popover serves the whole tile, anchored to a marker at the clicked stack.
+ * popover serves the whole tile, anchored to a marker at the clicked stack;
+ * where the dossier runs a unit sheet, the card goes there instead.
  */
 function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
   const [selectedUnit, setSelectedUnit] = useState<SelectedUnit | null>(null);
+  const openUnitSheet = useUnitSheet();
   const player = selectedUnit
     ? helpers.playerFor(selectedUnit.faction)
     : undefined;
@@ -213,7 +217,14 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
     unitId: string,
     x: number,
     y: number,
-  ) => setSelectedUnit({ faction, unitId, x, y });
+  ) => {
+    if (!openUnitSheet) return setSelectedUnit({ faction, unitId, x, y });
+    const owner = helpers.playerFor(faction);
+    openUnitSheet({
+      unitId: lookupUnit(unitId, faction, owner)?.id ?? unitId,
+      color: owner?.color,
+    });
+  };
 
   return (
     <div className={styles.tileWell}>
@@ -292,55 +303,117 @@ function SystemBattleLinks({
   });
 }
 
-export function SystemDossier({ tile }: { tile: Tile }) {
+/** The stat card's own width; the sheet scales it down to fit under this. */
+const UNIT_CARD_WIDTH = 380;
+
+/**
+ * A unit's stat card laid over the dossier, centred on the visible screen.
+ * A tap anywhere dismisses it.
+ */
+function UnitSheet({
+  unit,
+  maxWidth,
+  onClose,
+}: {
+  unit: SheetUnit;
+  maxWidth: number;
+  onClose: () => void;
+}) {
+  return (
+    <div className={styles.unitSheet} onClick={onClose}>
+      <div style={{ zoom: Math.min(1, maxWidth / UNIT_CARD_WIDTH) }}>
+        <UnitDetailsCard unitId={unit.unitId} color={unit.color} />
+      </div>
+    </div>
+  );
+}
+
+export function SystemDossier({
+  tile,
+  onClose,
+  unitSheetWidth,
+}: {
+  tile: Tile;
+  /** Renders a close button in the header, for hosts without Escape. */
+  onClose?: () => void;
+  /**
+   * Shows unit stat cards as a sheet over the dossier, at most this wide,
+   * instead of as popovers. The host must be a transformed box filling the
+   * visible screen, since the sheet is fixed to it.
+   */
+  unitSheetWidth?: number;
+}) {
   const gameData = useGameData();
   const helpers = useFactionHelpers();
+  const [sheetUnit, setSheetUnit] = useState<SheetUnit | null>(null);
   const systemName =
     getTileById(tile.systemId)?.name || `System ${tile.systemId}`;
 
   return (
-    <div className={styles.dossier}>
-      <header className={styles.header}>
-        <div>
-          <h2 className={styles.title}>{systemName}</h2>
-          <div className={styles.subtitle}>
-            System {tile.systemId} · Position {tile.position}
+    <UnitSheetContext value={unitSheetWidth ? setSheetUnit : null}>
+      {/* Outside the dossier box: its container query makes it the containing
+          block for fixed descendants, which would pin the sheet to the
+          scrolled content rather than the screen. */}
+      {sheetUnit && unitSheetWidth && (
+        <UnitSheet
+          unit={sheetUnit}
+          maxWidth={unitSheetWidth}
+          onClose={() => setSheetUnit(null)}
+        />
+      )}
+      <div className={styles.dossier}>
+        <header
+          className={styles.header}
+          data-closable={!!onClose || undefined}
+        >
+          <div>
+            <h2 className={styles.title}>{systemName}</h2>
+            <div className={styles.subtitle}>
+              System {tile.systemId} · Position {tile.position}
+            </div>
           </div>
-        </div>
-        <div className={styles.headerControl}>
-          <SystemBattleLinks tile={tile} helpers={helpers} />
-          <ControllerChip
-            label="Space control"
-            faction={tile.controlledBy}
-            displayName={helpers.displayName}
-          />
-        </div>
-      </header>
+          <div className={styles.headerControl}>
+            <SystemBattleLinks tile={tile} helpers={helpers} />
+            <ControllerChip
+              label="Space control"
+              faction={tile.controlledBy}
+              displayName={helpers.displayName}
+            />
+          </div>
+          {onClose && (
+            <CloseButton
+              className={styles.closeButton}
+              onClick={onClose}
+              aria-label="Close system view"
+            />
+          )}
+        </header>
 
-      <div className={styles.columns}>
-        <div className={styles.terrain}>
-          <TileWell tile={tile} helpers={helpers} />
-        </div>
+        <div className={styles.columns}>
+          <div className={styles.terrain}>
+            <TileWell tile={tile} helpers={helpers} />
+          </div>
 
-        <div className={styles.forces}>
-          <SpaceZone
-            tile={tile}
-            pdsInRange={gameData?.pdsByTile?.[tile.position]}
-            helpers={helpers}
-          />
-          {orderedPlanetIds(tile).map((planetId) => (
-            <PlanetPlate
-              key={planetId}
-              planetId={planetId}
-              planetTile={tile.planets[planetId]}
+          <div className={styles.forces}>
+            <SpaceZone
+              tile={tile}
+              pdsInRange={gameData?.pdsByTile?.[tile.position]}
               helpers={helpers}
             />
-          ))}
-          <NavigationPlate
-            features={getSystemFeatures(tile, gameData?.tiles ?? {})}
-          />
+            {orderedPlanetIds(tile).map((planetId) => (
+              <PlanetPlate
+                key={planetId}
+                planetId={planetId}
+                planetTile={tile.planets[planetId]}
+                helpers={helpers}
+              />
+            ))}
+            <NavigationPlate
+              features={getSystemFeatures(tile, gameData?.tiles ?? {})}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </UnitSheetContext>
   );
 }

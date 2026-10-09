@@ -8,6 +8,7 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import type { Unit } from "@/entities/data/types";
 import { formatStat, type ForceSummary, type UnitRow } from "./fleetMath";
 import type { FactionHelpers } from "./useFactionHelpers";
+import { useUnitSheet } from "./unitSheet";
 import styles from "./SystemDossier.module.css";
 
 /**
@@ -56,6 +57,7 @@ function UnitChip({
   sustained: number;
 }) {
   const { opened, setOpened, toggle } = useDisclosure(false);
+  const openUnitSheet = useUnitSheet();
   const suffix = unitBadgeSuffix(unit);
 
   return (
@@ -64,7 +66,7 @@ function UnitChip({
         <Tooltip
           multiline
           maw={300}
-          disabled={opened}
+          disabled={opened || !!openUnitSheet}
           label={
             <Box>
               <Text size="xs" fw={600}>
@@ -85,7 +87,11 @@ function UnitChip({
             type="button"
             className={styles.unitChip}
             aria-expanded={opened}
-            onClick={toggle}
+            onClick={
+              openUnitSheet
+                ? () => openUnitSheet({ unitId: unit.id, color })
+                : toggle
+            }
           >
             <img
               src={cdnImage(`/units/${colorAlias}_${unit.asyncId}.png`)}

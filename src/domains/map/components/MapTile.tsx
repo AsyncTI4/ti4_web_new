@@ -35,7 +35,7 @@ type Props = {
     faction: string,
     unitId: string,
     x: number,
-    y: number
+    y: number,
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
@@ -69,27 +69,31 @@ export const MapTile = React.memo<Props>(
       y: mapTile.properties.y,
     };
     const techSkipsMode = useSettingsStore(
-      (state) => state.settings.techSkipsMode
+      (state) => state.settings.techSkipsMode,
     );
     const overlaysEnabled = useSettingsStore(
-      (state) => state.settings.overlaysEnabled
+      (state) => state.settings.overlaysEnabled,
     );
     const planetTypesMode = useSettingsStore(
-      (state) => state.settings.planetTypesMode
+      (state) => state.settings.planetTypesMode,
     );
     const attachmentsMode = useSettingsStore(
-      (state) => state.settings.attachmentsMode
+      (state) => state.settings.attachmentsMode,
     );
     const pdsMode = useSettingsStore((state) => state.settings.showPDSLayer);
     const openSystemDossier = useAppStore((state) => state.openSystemDossier);
 
-    /* Hyperlanes have nothing to report, and touch devices keep the map
-       gesture-only. Hover feedback is pure CSS so the tile never re-renders
-       under a moving cursor. */
+    /* Hyperlanes have nothing to report. Hover feedback is pure CSS so the
+       tile never re-renders under a moving cursor. */
     const isHyperlane = !!getTileById(mapTile.systemId)?.isHyperlane;
-    const dossierEligible = !embedded && !isMobileDevice() && !isHyperlane;
+    const dossierEligible = !embedded && !isHyperlane;
     const handleDossierOpen = () =>
       openSystemDossier(mapTile.position, mapTile.systemId);
+    /* A phone has no hover, and at board zoom a hex is mostly planets and
+       units, so a tap anywhere on the system opens the dossier. The hover
+       cards are dropped there: the dossier carries the same detail, and a
+       tap would otherwise raise one over it. */
+    const tapOpensDossier = dossierEligible && isMobileDevice();
 
     const controllingFaction = mapTile.controlledBy;
 
@@ -158,7 +162,9 @@ export const MapTile = React.memo<Props>(
             systemId={systemId}
             mapTile={mapTile}
             position={position}
-            onPlanetMouseEnter={onPlanetMouseEnter}
+            onPlanetMouseEnter={
+              tapOpensDossier ? undefined : onPlanetMouseEnter
+            }
             onPlanetMouseLeave={onPlanetMouseLeave}
             onPlanetClick={dossierEligible ? handleDossierOpen : undefined}
           />
@@ -171,10 +177,10 @@ export const MapTile = React.memo<Props>(
                 systemId={systemId}
                 mapTile={mapTile}
                 position={position}
-                onUnitMouseOver={onUnitMouseOver}
+                onUnitMouseOver={tapOpensDossier ? undefined : onUnitMouseOver}
                 onUnitMouseLeave={onUnitMouseLeave}
                 onUnitSelect={onUnitSelect}
-                onUnitClick={onUnitClick}
+                onUnitClick={tapOpensDossier ? handleDossierOpen : onUnitClick}
               />
             </>
           )}
@@ -222,5 +228,5 @@ export const MapTile = React.memo<Props>(
         </div>
       </div>
     );
-  }
+  },
 );
