@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useGameState } from "@/api/useGameState";
 import { CloseButton } from "@mantine/core";
 import { IconRocket, IconSwords } from "@tabler/icons-react";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
@@ -18,6 +20,7 @@ import {
   buildSpaceBattleUrl,
   buildSystemBattleUrl,
   factionsInSystem,
+  findAttacker,
 } from "./battleCalcLink";
 import { getSystemFeatures } from "./featureRules";
 import { summarizeZone, formatStat } from "./fleetMath";
@@ -148,10 +151,12 @@ function SpaceZone({
   tile,
   pdsInRange,
   helpers,
+  attacker,
 }: {
   tile: Tile;
   pdsInRange: PdsCoverage | undefined;
   helpers: FactionHelpers;
+  attacker: string | null;
 }) {
   const spaceSummaries = summarizeZone(
     tile.unitsByFaction,
@@ -187,6 +192,7 @@ function SpaceZone({
               tile,
               summary.faction,
               helpers.playerFor,
+              attacker,
             )}
           />
         ))}
@@ -273,19 +279,32 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
 }
 
 /**
- * One link per faction present, carrying its ships and ground forces
- * together so both battles can be run from a single calculator tab.
+ * One link per defending faction, carrying its ships and ground forces
+ * together so both battles can be run from a single calculator tab. In a
+ * contested system the attacker rides along on each, so it gets no link of
+ * its own unless it is the only one there.
  */
 function SystemBattleLinks({
   tile,
   helpers,
+  attacker,
 }: {
   tile: Tile;
   helpers: FactionHelpers;
+  attacker: string | null;
 }) {
-  return factionsInSystem(tile).map((faction) => {
-    const url = buildSystemBattleUrl(tile, faction, helpers.playerFor);
+  const present = factionsInSystem(tile);
+  const defenders = present.filter((faction) => faction !== attacker);
+
+  return (defenders.length > 0 ? defenders : present).map((faction) => {
+    const url = buildSystemBattleUrl(
+      tile,
+      faction,
+      helpers.playerFor,
+      attacker,
+    );
     if (!url) return null;
+    const versus = attacker && attacker !== faction;
     return (
       <a
         key={faction}
@@ -293,9 +312,15 @@ function SystemBattleLinks({
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        title={`Open ti4battle.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`}
+        title={
+          versus
+            ? `Open ti4battle.com with ${helpers.displayName(attacker)} attacking ${helpers.displayName(faction)}, ships and ground forces`
+            : `Open ti4battle.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`
+        }
       >
         <IconSwords size={13} aria-hidden />
+        {versus && <FactionIcon faction={attacker} w={13} h={13} />}
+        {versus && <span className={styles.battleVersus}>vs</span>}
         <FactionIcon faction={faction} w={13} h={13} />
         Space + ground
       </a>
@@ -345,6 +370,9 @@ export function SystemDossier({
 }) {
   const gameData = useGameData();
   const helpers = useFactionHelpers();
+  const { mapid } = useParams<{ mapid: string }>();
+  const { data: gameState } = useGameState(mapid ?? "");
+  const attacker = findAttacker(tile, gameState, gameData?.playerData ?? []);
   const [sheetUnit, setSheetUnit] = useState<SheetUnit | null>(null);
   const systemName =
     getTileById(tile.systemId)?.name || `System ${tile.systemId}`;
@@ -373,7 +401,11 @@ export function SystemDossier({
             </div>
           </div>
           <div className={styles.headerControl}>
-            <SystemBattleLinks tile={tile} helpers={helpers} />
+            <SystemBattleLinks
+              tile={tile}
+              helpers={helpers}
+              attacker={attacker}
+            />
             <ControllerChip
               label="Space control"
               faction={tile.controlledBy}
@@ -399,13 +431,16 @@ export function SystemDossier({
               tile={tile}
               pdsInRange={gameData?.pdsByTile?.[tile.position]}
               helpers={helpers}
+              attacker={attacker}
             />
             {orderedPlanetIds(tile).map((planetId) => (
               <PlanetPlate
                 key={planetId}
                 planetId={planetId}
                 planetTile={tile.planets[planetId]}
+                tile={tile}
                 helpers={helpers}
+                attacker={attacker}
               />
             ))}
             <NavigationPlate

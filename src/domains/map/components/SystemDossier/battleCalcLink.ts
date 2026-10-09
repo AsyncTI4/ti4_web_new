@@ -1,4 +1,4 @@
-import type { PlayerData } from "@/entities/data/types";
+import type { GameState, PlayerData } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
@@ -81,23 +81,31 @@ const CALC_TECH_EFFECTS: Record<string, string> = {
   vpw: "Valkyrie Particle Weave",
 };
 
+/** Effects the calculator would apply to an attacker but the rules do not. */
+const DEFENDER_ONLY_EFFECTS = new Set(["Magen Defense Grid"]);
+
 /**
  * The calculator effects a player can bring to a battle right now: every
  * modelled technology they have researched and not exhausted. The calculator
  * itself drops the ones that do not apply to the battle being run.
  */
-function techEffects(player: PlayerData | undefined): string[] {
+function techEffects(player: PlayerData | undefined, side: Side): string[] {
   if (!player) return [];
   const exhausted = new Set(player.exhaustedTechs ?? []);
   const effects = (player.techs ?? [])
     .filter((tech) => !exhausted.has(tech))
     .map((tech) => CALC_TECH_EFFECTS[tech])
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter(
+      (effect) => side === "defender" || !DEFENDER_ONLY_EFFECTS.has(effect),
+    );
   return [...new Set(effects)];
 }
 
 type PlayerFor = (faction: string) => PlayerData | undefined;
 type BattlePlace = "space" | "ground";
+type Side = "attacker" | "defender";
+type Force = { faction: string; rows: UnitRow[] };
 
 function factionRows(
   unitsByFaction: Tile["unitsByFaction"] | undefined,
@@ -112,19 +120,20 @@ function factionRows(
 }
 
 const isPds = (row: UnitRow) => row.unit.baseType === "pds";
+const isShip = (row: UnitRow) => !!row.unit.isShip;
+const isGroundForce = (row: UnitRow) => !!row.unit.isGroundForce;
 
 /**
- * Builds a ti4battle.com link with the given force set as the defender: unit
- * counts, damage already sustained, unit upgrades and the owner's combat
- * technologies. Returns null when the force has nothing the calculator can
- * use.
+ * Writes one side of the battle: faction, unit counts, damage already
+ * sustained, unit upgrades and the owner's combat technologies. Returns
+ * whether the force had anything the calculator can use.
  */
-function buildDefenderUrl(
-  faction: string,
-  rows: UnitRow[],
-  place: BattlePlace,
-  player: PlayerData | undefined,
-): string | null {
+function writeSide(
+  params: URLSearchParams,
+  side: Side,
+  { faction, rows }: Force,
+  playerFor: PlayerFor,
+): boolean {
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
   const upgraded = new Set<string>();
@@ -137,72 +146,42 @@ function buildDefenderUrl(
     if (unit.upgradesFromUnitId !== undefined) upgraded.add(type);
   }
 
-  if (Object.keys(counts).length === 0) return null;
+  if (Object.keys(counts).length === 0) return false;
 
   /* An unmapped faction (homebrew) still gets its units; the calculator then
-     keeps whichever defender faction it last used. */
-  const params = new URLSearchParams();
+     keeps whichever faction it last used on that side. */
   const calcFaction = CALC_FACTIONS[faction.toLowerCase()];
-  if (calcFaction) params.set("defender-faction", calcFaction);
+  if (calcFaction) params.set(`${side}-faction`, calcFaction);
   for (const [type, count] of Object.entries(counts)) {
-    params.set(`defender-unit-${type}`, String(count));
+    params.set(`${side}-unit-${type}`, String(count));
     if (damaged[type] > 0) {
-      params.set(`defender-damaged-${type}`, String(damaged[type]));
+      params.set(`${side}-damaged-${type}`, String(damaged[type]));
     }
   }
-  for (const type of upgraded) params.set(`defender-upgrade-${type}`, "true");
-  for (const effect of techEffects(player)) {
-    params.set(`defender-effect-${effect}`, "1");
+  for (const type of upgraded) params.set(`${side}-upgrade-${type}`, "true");
+  for (const effect of techEffects(playerFor(faction), side)) {
+    params.set(`${side}-effect-${effect}`, "1");
   }
+  return true;
+}
+
+/**
+ * Builds a ti4battle.com link with the defender filled in and, when the
+ * battle has one, the attacker on the other side of the table. Returns null
+ * when the defender has nothing the calculator can use.
+ */
+function buildBattleUrl(
+  defender: Force,
+  attacker: Force | null,
+  place: BattlePlace,
+  playerFor: PlayerFor,
+): string | null {
+  const params = new URLSearchParams();
+  if (attacker) writeSide(params, "attacker", attacker, playerFor);
+  if (!writeSide(params, "defender", defender, playerFor)) return null;
   if (place === "ground") params.set("place", "ground");
 
   return `${BATTLE_CALC_URL}?${params}`;
-}
-
-/**
- * Space battle for this system: the faction's ships in the space area plus
- * its PDS on the system's planets, which fire space cannon.
- */
-export function buildSpaceBattleUrl(
-  tile: Tile,
-  faction: string,
-  playerFor: PlayerFor,
-): string | null {
-  const ships = factionRows(tile.unitsByFaction, faction, playerFor).filter(
-    (row) => row.unit.isShip,
-  );
-  const pds = Object.values(tile.planets)
-    .flatMap((planet) => factionRows(planet.unitsByFaction, faction, playerFor))
-    .filter(isPds);
-
-  if (ships.length === 0) return null;
-  return buildDefenderUrl(
-    faction,
-    [...ships, ...pds],
-    "space",
-    playerFor(faction),
-  );
-}
-
-/**
- * Ground battle for one planet: the faction's ground forces there plus its
- * PDS on that planet, which fire space cannon at the landing troops.
- */
-export function buildGroundBattleUrl(
-  planet: TilePlanet,
-  faction: string,
-  playerFor: PlayerFor,
-): string | null {
-  const rows = factionRows(planet.unitsByFaction, faction, playerFor);
-  const groundForces = rows.filter((row) => row.unit.isGroundForce);
-
-  if (groundForces.length === 0) return null;
-  return buildDefenderUrl(
-    faction,
-    [...groundForces, ...rows.filter(isPds)],
-    "ground",
-    playerFor(faction),
-  );
 }
 
 /** Every faction with units anywhere in the system, space area first. */
@@ -214,26 +193,145 @@ export function factionsInSystem(tile: Tile): string[] {
 }
 
 /**
- * The faction's whole presence in the system in one link: ships, PDS and the
- * ground forces of every planet summed. It opens on the space battle; the
- * calculator's own space/ground switch then reuses the same force.
+ * Who is attacking in this system, when more than one faction is in it: the
+ * active player if this is the system they activated, otherwise the only
+ * faction present with a command token here. Null when the system is not
+ * contested or the aggressor cannot be told.
+ */
+export function findAttacker(
+  tile: Tile,
+  gameState: GameState | null | undefined,
+  players: PlayerData[],
+): string | null {
+  const present = factionsInSystem(tile);
+  if (present.length < 2) return null;
+
+  if (gameState?.activeSystem === tile.position) {
+    const active = players.find(
+      (player) => player.color === gameState.activePlayer,
+    )?.faction;
+    if (active && present.includes(active)) return active;
+  }
+
+  const activators = present.filter((faction) =>
+    tile.commandCounters.includes(faction),
+  );
+  return activators.length === 1 ? activators[0] : null;
+}
+
+/**
+ * The two forces of a fight in one zone, seen from one faction's row. With
+ * no known attacker, or no one to fight, the faction stands alone as the
+ * defender. Otherwise the attacker takes its side against this faction, or,
+ * on the attacker's own row, against its single opponent in the zone.
+ */
+function matchUp(
+  faction: string,
+  attacker: string | null,
+  contenders: string[],
+  rowsFor: (faction: string, side: Side) => UnitRow[],
+): { defender: Force; attacker: Force | null } {
+  const alone = {
+    defender: { faction, rows: rowsFor(faction, "defender") },
+    attacker: null,
+  };
+  if (!attacker) return alone;
+
+  const opponents = contenders.filter((other) => other !== attacker);
+  const defender = faction === attacker ? opponents[0] : faction;
+  if (!defender || (faction === attacker && opponents.length !== 1)) {
+    return alone;
+  }
+
+  return {
+    defender: { faction: defender, rows: rowsFor(defender, "defender") },
+    attacker: { faction: attacker, rows: rowsFor(attacker, "attacker") },
+  };
+}
+
+/**
+ * Space battle for this system: each side's ships in the space area, plus
+ * its PDS on the system's planets, which fire space cannon.
+ */
+export function buildSpaceBattleUrl(
+  tile: Tile,
+  faction: string,
+  playerFor: PlayerFor,
+  attacker: string | null = null,
+): string | null {
+  const shipsOf = (side: string) =>
+    factionRows(tile.unitsByFaction, side, playerFor).filter(isShip);
+  const rowsFor = (side: string) => [
+    ...shipsOf(side),
+    ...Object.values(tile.planets)
+      .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
+      .filter(isPds),
+  ];
+  if (shipsOf(faction).length === 0) return null;
+
+  const contenders = Object.keys(tile.unitsByFaction ?? {}).filter(
+    (side) => shipsOf(side).length > 0,
+  );
+  const fight = matchUp(faction, attacker, contenders, rowsFor);
+  return buildBattleUrl(fight.defender, fight.attacker, "space", playerFor);
+}
+
+/**
+ * Ground battle for one planet. The defender brings its ground forces and
+ * PDS there. The attacker brings its ground forces on the planet and those
+ * still in the space area, waiting to land, plus its ships, which bombard.
+ */
+export function buildGroundBattleUrl(
+  tile: Tile,
+  planet: TilePlanet,
+  faction: string,
+  playerFor: PlayerFor,
+  attacker: string | null = null,
+): string | null {
+  const onPlanet = (side: string) =>
+    factionRows(planet.unitsByFaction, side, playerFor);
+  const rowsFor = (side: string, role: Side) => {
+    const planetside = onPlanet(side).filter(
+      (row) => isGroundForce(row) || isPds(row),
+    );
+    if (role === "defender") return planetside;
+    return [
+      ...planetside,
+      ...factionRows(tile.unitsByFaction, side, playerFor).filter(
+        (row) => isGroundForce(row) || isShip(row),
+      ),
+    ];
+  };
+  if (!onPlanet(faction).some(isGroundForce)) return null;
+
+  const contenders = Object.keys(planet.unitsByFaction ?? {}).filter((side) =>
+    onPlanet(side).some(isGroundForce),
+  );
+  const fight = matchUp(faction, attacker, contenders, rowsFor);
+  return buildBattleUrl(fight.defender, fight.attacker, "ground", playerFor);
+}
+
+/**
+ * A faction's whole presence in the system in one link: ships, PDS and the
+ * ground forces of every planet summed, against the attacker's when there is
+ * one. It opens on the space battle; the calculator's own space/ground
+ * switch then reuses the same forces.
  */
 export function buildSystemBattleUrl(
   tile: Tile,
   faction: string,
   playerFor: PlayerFor,
+  attacker: string | null = null,
 ): string | null {
-  const ships = factionRows(tile.unitsByFaction, faction, playerFor).filter(
-    (row) => row.unit.isShip,
-  );
-  const planetside = Object.values(tile.planets)
-    .flatMap((planet) => factionRows(planet.unitsByFaction, faction, playerFor))
-    .filter((row) => row.unit.isGroundForce || isPds(row));
+  const rowsFor = (side: string) => [
+    ...factionRows(tile.unitsByFaction, side, playerFor).filter(
+      (row) => isShip(row) || isGroundForce(row),
+    ),
+    ...Object.values(tile.planets)
+      .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
+      .filter((row) => isGroundForce(row) || isPds(row)),
+  ];
 
-  return buildDefenderUrl(
-    faction,
-    [...ships, ...planetside],
-    "space",
-    playerFor(faction),
-  );
+  const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
+  return buildBattleUrl(fight.defender, fight.attacker, "space", playerFor);
 }

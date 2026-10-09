@@ -4,17 +4,17 @@ import { IconPlanet } from "@tabler/icons-react";
 import cx from "clsx";
 import { Module } from "@/shared/ui/primitives/Module/Module";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
-import {
-  TechSkipIcon,
-  type TechType,
-} from "@/shared/ui/TechSkipIcon";
+import { TechSkipIcon, type TechType } from "@/shared/ui/TechSkipIcon";
 import { PlanetTraitIcon } from "@/shared/ui/PlanetTraitIcon";
-import { mergePlanetTraits, type PlanetTrait } from "@/entities/game/planetTraits";
+import {
+  mergePlanetTraits,
+  type PlanetTrait,
+} from "@/entities/game/planetTraits";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getAttachmentModifiers } from "@/entities/game/planets";
-import type { TilePlanet } from "@/entities/game/types";
+import type { Tile, TilePlanet } from "@/entities/game/types";
 import { buildGroundBattleUrl } from "./battleCalcLink";
 import { summarizeZone } from "./fleetMath";
 import { ControllerChip, ForceStrip } from "./ForceStrip";
@@ -181,11 +181,15 @@ function PlanetHeader({
 export function PlanetPlate({
   planetId,
   planetTile,
+  tile,
   helpers,
+  attacker,
 }: {
   planetId: string;
   planetTile: TilePlanet;
+  tile: Tile;
   helpers: FactionHelpers;
+  attacker: string | null;
 }) {
   const planet = getPlanetData(planetId);
   if (!planet) return null;
@@ -217,9 +221,11 @@ export function PlanetPlate({
                 summary={summary}
                 helpers={helpers}
                 battleCalcUrl={buildGroundBattleUrl(
+                  tile,
                   planetTile,
                   summary.faction,
                   helpers.playerFor,
+                  attacker,
                 )}
               />
             ))}

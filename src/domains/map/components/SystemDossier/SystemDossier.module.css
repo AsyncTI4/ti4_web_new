@@ -453,6 +453,10 @@
   color: var(--mantine-color-gray-0);
 }
 
+.battleVersus {
+  color: var(--mantine-color-gray-4);
+}
+
 .battleLink:hover {
   border-color: rgba(var(--gd-blue), 0.8);
   background: rgba(var(--gd-blue), 0.2);
