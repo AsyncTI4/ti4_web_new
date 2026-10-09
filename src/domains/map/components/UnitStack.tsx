@@ -35,6 +35,7 @@ type UnitStackProps = {
   onUnitMouseOver?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitMouseLeave?: (stackKey: string, event: React.MouseEvent) => void;
   onUnitSelect?: (stackKey: string, event: React.MouseEvent) => void;
+  onUnitClick?: (stackKey: string, event: React.MouseEvent) => void;
   lawsInPlay?: LawInPlay[];
   mapTransition?: MapUnitTransition;
   replayHidden?: boolean;
@@ -51,6 +52,7 @@ export function UnitStack({
   onUnitMouseOver,
   onUnitMouseLeave,
   onUnitSelect,
+  onUnitClick,
   lawsInPlay,
   mapTransition,
   replayHidden = false,
@@ -70,7 +72,9 @@ export function UnitStack({
   const flightRef = useMapFlightAnimation(
     flightOptions(mapTransition, x, y, rotateInFlight),
   );
-  const wrapperClass = `${transitionClassName(mapTransition)} ${replayHidden ? classes.mapReplayHidden : ""}`;
+  const isUnit = entityType === "unit";
+  const clickableClass = isUnit && onUnitClick ? classes.clickable : "";
+  const wrapperClass = `${transitionClassName(mapTransition)} ${replayHidden ? classes.mapReplayHidden : ""} ${clickableClass}`;
   const delayStyle = transitionDelayStyle(mapTransition);
   const { handleMouseEnter, handleMouseLeave } = useDelayedHover(
     stackKey,
@@ -85,13 +89,16 @@ export function UnitStack({
 
   const states = unitStates(stack);
   const galvanizedCount = states[2] + states[3];
-  const isUnit = entityType === "unit";
   const handlers = {
     onMouseEnter: isUnit && onUnitMouseOver ? handleMouseEnter : undefined,
     onMouseLeave: isUnit && onUnitMouseLeave ? handleMouseLeave : undefined,
     onMouseDown:
       isUnit && onUnitSelect
         ? (e: React.MouseEvent) => onUnitSelect(stackKey, e)
+        : undefined,
+    onClick:
+      isUnit && onUnitClick
+        ? (e: React.MouseEvent) => onUnitClick(stackKey, e)
         : undefined,
   };
 

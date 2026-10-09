@@ -1,5 +1,8 @@
 import { Box, Text, Tooltip } from "@mantine/core";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { SmoothPopover } from "@/shared/ui/SmoothPopover";
+import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
+import { useDisclosure } from "@/hooks/useDisclosure";
 import { cdnImage } from "@/entities/data/cdnImage";
 import type { Unit } from "@/entities/data/types";
 import { formatStat, type ForceSummary, type UnitRow } from "./fleetMath";
@@ -34,50 +37,72 @@ function unitStatLine(unit: Unit, sustained: number): string {
     .join(" · ");
 }
 
+/**
+ * Hover gives the one-line readout; a click opens the full stat card, the
+ * same one the board shows for the unit.
+ */
 function UnitChip({
   unit,
+  color,
   colorAlias,
   count,
   sustained,
 }: {
   unit: Unit;
+  color: string | undefined;
   colorAlias: string;
   count: number;
   sustained: number;
 }) {
+  const { opened, setOpened, toggle } = useDisclosure(false);
   const suffix = unitBadgeSuffix(unit);
 
   return (
-    <Tooltip
-      multiline
-      maw={300}
-      label={
-        <Box>
-          <Text size="xs" fw={600}>
-            {unit.name}
-          </Text>
-          <Text size="xs" ff="monospace">
-            {unitStatLine(unit, sustained)}
-          </Text>
-          {unit.ability && (
-            <Text size="xs" mt={4} c="gray.4">
-              {unit.ability}
-            </Text>
-          )}
-        </Box>
-      }
-    >
-      <span className={styles.unitChip}>
-        <img
-          src={cdnImage(`/units/${colorAlias}_${unit.asyncId}.png`)}
-          alt=""
-          className={styles.unitChipImage}
-        />
-        {count > 1 && <span className={styles.unitChipCount}>{count}×</span>}
-        <span className={styles.unitChipName}>{unit.name}</span>
-        {suffix && <span className={styles.unitChipSuffix}>{suffix}</span>}
-      </span>
-    </Tooltip>
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
+        <Tooltip
+          multiline
+          maw={300}
+          disabled={opened}
+          label={
+            <Box>
+              <Text size="xs" fw={600}>
+                {unit.name}
+              </Text>
+              <Text size="xs" ff="monospace">
+                {unitStatLine(unit, sustained)}
+              </Text>
+              {unit.ability && (
+                <Text size="xs" mt={4} c="gray.4">
+                  {unit.ability}
+                </Text>
+              )}
+            </Box>
+          }
+        >
+          <button
+            type="button"
+            className={styles.unitChip}
+            aria-expanded={opened}
+            onClick={toggle}
+          >
+            <img
+              src={cdnImage(`/units/${colorAlias}_${unit.asyncId}.png`)}
+              alt=""
+              className={styles.unitChipImage}
+            />
+            {count > 1 && (
+              <span className={styles.unitChipCount}>{count}×</span>
+            )}
+            <span className={styles.unitChipName}>{unit.name}</span>
+            {suffix && <span className={styles.unitChipSuffix}>{suffix}</span>}
+          </button>
+        </Tooltip>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown className={styles.unitPopover}>
+        <UnitDetailsCard unitId={unit.id} color={color} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
   );
 }
 
@@ -128,6 +153,7 @@ export function ForceStrip({
   helpers: FactionHelpers;
 }) {
   const colorAlias = helpers.colorAlias(faction);
+  const color = helpers.playerFor(faction)?.color;
 
   return (
     <div className={styles.forceStrip}>
@@ -139,6 +165,7 @@ export function ForceStrip({
           <UnitChip
             key={row.asyncId}
             unit={row.unit}
+            color={color}
             colorAlias={colorAlias}
             count={row.count}
             sustained={row.sustained}
