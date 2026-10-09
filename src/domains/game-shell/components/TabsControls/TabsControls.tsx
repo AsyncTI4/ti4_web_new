@@ -2,6 +2,7 @@ import { Box, Button, Group, ActionIcon, UnstyledButton } from "@mantine/core";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import {
+  IconCards,
   IconKeyboard,
   IconSettings,
   IconHash,
@@ -234,9 +235,11 @@ function DesktopTabsControls({
 
 function MobileTabsControls({
   onMenuClick,
+  onCardsClick,
   onTryDecalsClick,
 }: {
   onMenuClick: () => void;
+  onCardsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   return (
@@ -247,6 +250,16 @@ function MobileTabsControls({
           onTryDecalsClick={onTryDecalsClick}
         />
         <div style={{ flex: 1 }} />
+        {onCardsClick && (
+          <ActionIcon
+            size="lg"
+            variant="default"
+            aria-label="Your cards"
+            onClick={onCardsClick}
+          >
+            <IconCards size={20} />
+          </ActionIcon>
+        )}
         <ActionIcon
           size="lg"
           variant="filled"
@@ -266,9 +279,12 @@ function MobileTabsControls({
 
 export function TabsControls({
   onMenuClick,
+  onCardsClick,
   onTryDecalsClick,
 }: {
   onMenuClick?: () => void;
+  /** Shows the hand button in the phone controls when given. */
+  onCardsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   return (
@@ -280,6 +296,7 @@ export function TabsControls({
         <Box hiddenFrom="sm" style={{ display: "contents" }}>
           <MobileTabsControls
             onMenuClick={onMenuClick}
+            onCardsClick={onCardsClick}
             onTryDecalsClick={onTryDecalsClick}
           />
         </Box>

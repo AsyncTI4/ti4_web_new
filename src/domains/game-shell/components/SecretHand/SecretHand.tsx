@@ -1,4 +1,4 @@
-import { Box, Text, Stack } from "@mantine/core";
+import { Box, Collapse, Text, Stack } from "@mantine/core";
 import { useState, type ReactNode } from "react";
 import { ActionCard } from "@/domains/player/components/ActionCard";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
@@ -14,9 +14,19 @@ type Props = {
   handData?: PlayerHandData;
   isLoading?: boolean;
   error?: Error | null;
+  /**
+   * Opens a card's text in place under its chip instead of in a popover.
+   * For phones, where a popover can land outside the visible screen.
+   */
+  inlineDetails?: boolean;
 };
 
-export function SecretHand({ handData, isLoading, error }: Props) {
+export function SecretHand({
+  handData,
+  isLoading,
+  error,
+  inlineDetails = false,
+}: Props) {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
 
   const isEmpty =
@@ -25,7 +35,11 @@ export function SecretHand({ handData, isLoading, error }: Props) {
       handData.secretObjectives.length === 0 &&
       handData.promissoryNotes.length === 0);
 
-  const sectionProps = { selectedCard, onSelect: setSelectedCard };
+  const sectionProps = {
+    selectedCard,
+    onSelect: setSelectedCard,
+    inlineDetails,
+  };
 
   return (
     <Box className={classes.container}>
@@ -56,7 +70,9 @@ export function SecretHand({ handData, isLoading, error }: Props) {
                   showDetails={false}
                 />
               )}
-              renderDetails={(id) => <ActionCardDetailsCard actionCardId={id} />}
+              renderDetails={(id) => (
+                <ActionCardDetailsCard actionCardId={id} />
+              )}
             />
             <HandSection
               {...sectionProps}
@@ -103,6 +119,7 @@ type HandSectionProps = {
   ids: string[];
   selectedCard: string | null;
   onSelect: (cardKey: string | null) => void;
+  inlineDetails: boolean;
   renderChip: (id: string, onClick: () => void) => ReactNode;
   renderDetails: (id: string) => ReactNode;
 };
@@ -113,6 +130,7 @@ function HandSection({
   ids,
   selectedCard,
   onSelect,
+  inlineDetails,
   renderChip,
   renderDetails,
 }: HandSectionProps) {
@@ -126,6 +144,19 @@ function HandSection({
       <Stack gap={4}>
         {ids.map((id, index) => {
           const cardKey = `${keyPrefix}-${id}-${index}`;
+          const isOpen = selectedCard === cardKey;
+          if (inlineDetails) {
+            return (
+              <div key={cardKey}>
+                {renderChip(id, () => onSelect(isOpen ? null : cardKey))}
+                <Collapse in={isOpen}>
+                  <div className={classes.inlineDetails}>
+                    {renderDetails(id)}
+                  </div>
+                </Collapse>
+              </div>
+            );
+          }
           return (
             <SmoothPopover
               key={cardKey}

@@ -8,7 +8,13 @@ import {
   ActionIcon,
   Button,
 } from "@mantine/core";
-import { IconLayoutDashboard, IconPencil, IconSettings, IconX } from "@tabler/icons-react";
+import {
+  IconCards,
+  IconLayoutDashboard,
+  IconPencil,
+  IconSettings,
+  IconX,
+} from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/shared/ui/Logo";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
@@ -30,6 +36,8 @@ type NavigationDrawerProps = {
   onGameChange: (gameId: string) => void;
   onRemoveTab: (gameId: string) => void;
   onShowOldUI?: () => void;
+  /** Lists the player's hand in the menu when given. */
+  onCardsClick?: () => void;
 };
 
 export function NavigationDrawer({
@@ -42,6 +50,7 @@ export function NavigationDrawer({
   onGameChange,
   onRemoveTab,
   onShowOldUI,
+  onCardsClick,
 }: NavigationDrawerProps) {
   const tabLabelEditing = useTabLabelEditing();
   const { editingTabId, toggleEditing } = tabLabelEditing;
@@ -127,6 +136,16 @@ export function NavigationDrawer({
         )}
 
         <Stack gap="xs">
+          {onCardsClick && (
+            <NavLink
+              label="Your cards"
+              leftSection={<IconCards size={20} />}
+              onClick={() => {
+                onCardsClick();
+                onClose();
+              }}
+            />
+          )}
           {MAIN_TAB_CONFIGS.map((tab) => {
             const Icon = tab.Icon;
             return (
