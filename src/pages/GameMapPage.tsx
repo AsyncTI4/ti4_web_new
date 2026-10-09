@@ -33,6 +33,8 @@ import { MAIN_TAB_CONFIGS } from "@/domains/game-shell/components/mainTabs";
 import { TabPanelSection } from "@/domains/game-shell/components/TabPanelSection";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 import { TabActiveContext } from "@/hooks/useIsTabActive";
+import { MobileHandSheet } from "@/domains/game-shell/components/SecretHand";
+import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
 
 const REQUIRED_VERSION_SCHEMA = 5;
 
@@ -73,6 +75,12 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
   const hasChannelLinks = !!(data?.actionsJumpLink || data?.tableTalkJumpLink);
 
   const [drawerOpened, setDrawerOpened] = useState(false);
+  /* Desktop reaches the hand through the floating map toolbar, which phones
+     do not show, so there it gets its own entry points and sheet. */
+  const { canViewSecretHand } = useSecretHandAccess();
+  const mobileHand = isMobileDevice() && canViewSecretHand;
+  const [handOpened, setHandOpened] = useState(false);
+  const openHand = mobileHand ? () => setHandOpened(true) : undefined;
   const [activeTab, setActiveTab] = useState("map");
   // Tabs mount on first visit and then stay mounted (hidden), so switching back
   // to the map doesn't rebuild ~10k components every time.
@@ -148,6 +156,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
               })}
               <TabsControls
                 onMenuClick={() => setDrawerOpened(true)}
+                onCardsClick={openHand}
                 onTryDecalsClick={() =>
                   window.dispatchEvent(new CustomEvent("toggleTryDecals"))
                 }
@@ -181,11 +190,11 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
                 isError={isError}
               >
                 <SimpleGrid cols={{ base: 1, md: 2, xl2: 3 }} spacing="sm">
-                  {filterPlayersWithAssignedFaction(
-                    data?.playerData ?? [],
-                  ).map((player) => (
-                    <PlayerCard key={player.color} playerData={player} />
-                  ))}
+                  {filterPlayersWithAssignedFaction(data?.playerData ?? []).map(
+                    (player) => (
+                      <PlayerCard key={player.color} playerData={player} />
+                    ),
+                  )}
                 </SimpleGrid>
               </TabContent>
             </TabPanelSection>
@@ -235,7 +244,16 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         onGameChange={changeTab}
         onRemoveTab={removeTab}
         onShowOldUI={onShowOldUI}
+        onCardsClick={openHand}
       />
+
+      {mobileHand && (
+        <MobileHandSheet
+          gameId={gameId}
+          opened={handOpened}
+          onClose={() => setHandOpened(false)}
+        />
+      )}
     </AppShell>
   );
 }
@@ -265,8 +283,7 @@ function GameMapPage({ onShowOldUI }: Props) {
     }
   }, [mapViewPreference]);
 
-  const effectivePannable =
-    isMobileDevice() || mapViewPreference !== "panels";
+  const effectivePannable = isMobileDevice() || mapViewPreference !== "panels";
 
   return (
     <>

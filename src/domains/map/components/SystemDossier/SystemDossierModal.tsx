@@ -1,11 +1,8 @@
-import type { ModalProps } from "@mantine/core";
 import { AppModal } from "@/shared/ui/AppModal";
 import { useAppStore } from "@/state/appStore";
 import { useGameData } from "@/state/useGameContext";
-import {
-  useVisualViewport,
-  type VisualViewportRect,
-} from "@/hooks/useVisualViewport";
+import { visualViewportModalStyles } from "@/shared/ui/visualViewportModal";
+import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { SystemDossier } from "./SystemDossier";
 import styles from "./SystemDossier.module.css";
@@ -15,40 +12,6 @@ const DOSSIER_WIDTH = 920;
 
 /** Gap between the phone dossier and the edge of the screen. */
 const MOBILE_SCREEN_GAP = 10;
-
-/**
- * On a phone the dossier is a card centred over exactly what is on screen.
- * Players pinch into the board before tapping a system, and a modal sized to
- * the layout viewport would then open several screens wide. The modal's frame
- * is pinned to the visual viewport and laid out at the unzoomed screen size,
- * then scaled back by the pinch factor, so the card reads the same at any
- * zoom. It is only as tall as its content, and no wider than on desktop; a
- * long system scrolls inside it.
- */
-function mobileModalStyles(viewport: VisualViewportRect): ModalProps["styles"] {
-  return {
-    inner: {
-      left: viewport.left,
-      top: viewport.top,
-      right: "auto",
-      bottom: "auto",
-      width: viewport.width * viewport.scale,
-      height: viewport.height * viewport.scale,
-      maxHeight: "none",
-      padding: MOBILE_SCREEN_GAP,
-      alignItems: "center",
-      transform: `scale(${1 / viewport.scale})`,
-      transformOrigin: "top left",
-    },
-    content: {
-      flex: "none",
-      width: "100%",
-      maxWidth: DOSSIER_WIDTH,
-      maxHeight: "100%",
-    },
-    body: { overflowX: "hidden" },
-  };
-}
 
 /**
  * Host for the system dossier. Mounted once above the map views; opens when a
@@ -76,7 +39,14 @@ export function SystemDossierModal() {
       padding={0}
       withCloseButton={false}
       classNames={{ body: styles.modalBody, content: styles.modalContent }}
-      styles={isMobile ? mobileModalStyles(viewport) : undefined}
+      styles={
+        isMobile
+          ? visualViewportModalStyles(viewport, {
+              gap: MOBILE_SCREEN_GAP,
+              maxWidth: DOSSIER_WIDTH,
+            })
+          : undefined
+      }
       transitionProps={{ transition: "fade", duration: 160 }}
     >
       {tile && (
