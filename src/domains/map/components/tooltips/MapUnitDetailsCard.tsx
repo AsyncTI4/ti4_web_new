@@ -38,6 +38,7 @@ export function MapUnitDetailsCard({
       mapZoom={mapZoom}
       mapLayout={mapLayout}
       zIndexVar="var(--z-map-unit-details)"
+      applyBrowserScale
     >
       <UnitDetailsCard unitId={unitIdToUse} color={activePlayer?.color} />
     </MapTooltipPositioner>
