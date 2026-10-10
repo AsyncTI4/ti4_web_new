@@ -10,7 +10,9 @@
 /* Round grouping ------------------------------------------------------- */
 .roundHeader {
   position: sticky;
-  top: 37px;
+  /* Clears the desktop panel's sticky header; hosts that scroll below their
+     own header set this to 0. */
+  top: var(--event-round-sticky-top, 37px);
   z-index: 2;
   display: flex;
   align-items: center;

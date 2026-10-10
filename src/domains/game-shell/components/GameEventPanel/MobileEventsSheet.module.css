@@ -16,5 +16,6 @@
 }
 
 .sheetBody {
+  --event-round-sticky-top: 0px;
   padding: var(--mantine-spacing-sm);
 }
