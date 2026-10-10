@@ -1,5 +1,6 @@
 import type { GameState, PlayerData } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
+import { systemAnomalies } from "./featureRules";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
 const BATTLE_CALC_URL = "https://ti4battle.com/";
@@ -166,11 +167,28 @@ function writeSide(
 }
 
 /**
+ * Writes the anomalies of the system that change a battle fought in it. An
+ * entropic scar binds both sides, so the calculator takes it without a side;
+ * a nebula favours the defender, and only in space.
+ */
+function writeTerrain(params: URLSearchParams, tile: Tile, place: BattlePlace) {
+  const anomalies = systemAnomalies(tile);
+  if (anomalies.includes("entropicScar")) {
+    params.set("effect-Entropic Scar", "1");
+  }
+  if (place === "space" && anomalies.includes("nebula")) {
+    params.set("defender-effect-Defending in nebula", "1");
+  }
+}
+
+/**
  * Builds a ti4battle.com link with the defender filled in and, when the
- * battle has one, the attacker on the other side of the table. Returns null
- * when the defender has nothing the calculator can use.
+ * battle has one, the attacker on the other side of the table, in the
+ * system's terrain. Returns null when the defender has nothing the
+ * calculator can use.
  */
 function buildBattleUrl(
+  tile: Tile,
   defender: Force,
   attacker: Force | null,
   place: BattlePlace,
@@ -179,6 +197,7 @@ function buildBattleUrl(
   const params = new URLSearchParams();
   if (attacker) writeSide(params, "attacker", attacker, playerFor);
   if (!writeSide(params, "defender", defender, playerFor)) return null;
+  writeTerrain(params, tile, place);
   if (place === "ground") params.set("place", "ground");
 
   return `${BATTLE_CALC_URL}?${params}`;
@@ -273,7 +292,13 @@ export function buildSpaceBattleUrl(
     (side) => shipsOf(side).length > 0,
   );
   const fight = matchUp(faction, attacker, contenders, rowsFor);
-  return buildBattleUrl(fight.defender, fight.attacker, "space", playerFor);
+  return buildBattleUrl(
+    tile,
+    fight.defender,
+    fight.attacker,
+    "space",
+    playerFor,
+  );
 }
 
 /**
@@ -308,7 +333,13 @@ export function buildGroundBattleUrl(
     onPlanet(side).some(isGroundForce),
   );
   const fight = matchUp(faction, attacker, contenders, rowsFor);
-  return buildBattleUrl(fight.defender, fight.attacker, "ground", playerFor);
+  return buildBattleUrl(
+    tile,
+    fight.defender,
+    fight.attacker,
+    "ground",
+    playerFor,
+  );
 }
 
 /**
@@ -333,5 +364,11 @@ export function buildSystemBattleUrl(
   ];
 
   const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
-  return buildBattleUrl(fight.defender, fight.attacker, "space", playerFor);
+  return buildBattleUrl(
+    tile,
+    fight.defender,
+    fight.attacker,
+    "space",
+    playerFor,
+  );
 }
