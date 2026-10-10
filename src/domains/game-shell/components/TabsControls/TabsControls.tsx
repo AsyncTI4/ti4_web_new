@@ -247,11 +247,13 @@ function MobileTabsControls({
 }) {
   return (
     <>
-      <Group gap={4} px={8} pb={4} style={{ width: "100%" }}>
-        <ControlButtons
-          showKeyboardButton={false}
-          onTryDecalsClick={onTryDecalsClick}
-        />
+      <Group gap={4} px={8} pb={4} wrap="nowrap" style={{ width: "100%" }}>
+        <Box className={classes.mobileRackScroll}>
+          <ControlButtons
+            showKeyboardButton={false}
+            onTryDecalsClick={onTryDecalsClick}
+          />
+        </Box>
         <div style={{ flex: 1 }} />
         {onEventsClick && (
           <ActionIcon

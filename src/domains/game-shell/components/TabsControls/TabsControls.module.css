@@ -17,6 +17,23 @@
   border-radius: var(--panel-radius);
 }
 
+/* On a phone the rack scrolls sideways so the event log, hand and menu
+   buttons always share its row instead of wrapping under it. */
+.mobileRackScroll {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mobileRackScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileRackScroll > .toolRack {
+  width: max-content;
+}
+
 .toolButton {
   --tool-accent: var(--gd-gray);
   display: flex;
