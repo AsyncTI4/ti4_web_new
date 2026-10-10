@@ -8,9 +8,14 @@ import styles from "./PromissoryNote.module.css";
 type Props = {
   promissoryNoteId: string;
   onClick?: () => void;
+  showDetails?: boolean;
 };
 
-export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
+export function PromissoryNote({
+  promissoryNoteId,
+  onClick,
+  showDetails,
+}: Props) {
   const factionColorMap = useFactionColors();
   const promissoryNoteData = getPromissoryNoteData(
     promissoryNoteId,
@@ -30,6 +35,7 @@ export function PromissoryNote({ promissoryNoteId, onClick }: Props) {
       }
       title={noteData.shortName || displayName}
       onClick={onClick}
+      showDetails={showDetails}
       dropdownContent={<PromissoryNoteCard promissoryNoteId={promissoryNoteId} />}
     />
   );

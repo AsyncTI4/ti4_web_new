@@ -8,9 +8,15 @@ type Props = {
   secretId: string;
   onClick?: () => void;
   variant?: "scored" | "unscored";
+  showDetails?: boolean;
 };
 
-export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
+export function ScoredSecret({
+  secretId,
+  onClick,
+  variant = "scored",
+  showDetails,
+}: Props) {
   const secretData = getSecretObjectiveData(secretId);
   const secretName = secretData?.name || secretId;
   const isScored = variant === "scored";
@@ -23,6 +29,7 @@ export function ScoredSecret({ secretId, onClick, variant = "scored" }: Props) {
       leftIconSize={16}
       title={secretName}
       onClick={onClick}
+      showDetails={showDetails}
       dropdownContent={<SecretObjectiveCard secretId={secretId} />}
     />
   );

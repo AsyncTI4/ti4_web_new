@@ -84,6 +84,7 @@ export function SecretHand({
                   secretId={id}
                   variant="unscored"
                   onClick={onClick}
+                  showDetails={false}
                 />
               )}
               renderDetails={(id) => <SecretObjectiveCard secretId={id} />}
@@ -94,7 +95,11 @@ export function SecretHand({
               keyPrefix="promissory"
               ids={handData.promissoryNotes}
               renderChip={(id, onClick) => (
-                <PromissoryNote promissoryNoteId={id} onClick={onClick} />
+                <PromissoryNote
+                  promissoryNoteId={id}
+                  onClick={onClick}
+                  showDetails={false}
+                />
               )}
               renderDetails={(id) => (
                 <PromissoryNoteCard promissoryNoteId={id} />
