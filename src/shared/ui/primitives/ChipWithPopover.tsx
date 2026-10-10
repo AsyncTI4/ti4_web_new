@@ -5,6 +5,8 @@ import { Chip } from "./Chip";
 type Props = Omit<ComponentProps<typeof Chip>, "onClick"> & {
   dropdownContent: ReactNode;
   onClick?: () => void;
+  /** False when the host shows the details itself and only wants the chip. */
+  showDetails?: boolean;
 };
 
 /**
@@ -14,9 +16,12 @@ type Props = Omit<ComponentProps<typeof Chip>, "onClick"> & {
 export function ChipWithPopover({
   dropdownContent,
   onClick,
+  showDetails = true,
   ...chipProps
 }: Props) {
   const [opened, setOpened] = useState(false);
+
+  if (!showDetails) return <Chip {...chipProps} onClick={onClick} />;
 
   const handleClick = () => {
     setOpened((o) => !o);
