@@ -294,6 +294,14 @@
   gap: 0;
 }
 
+/* The view tabs are hidden on a phone, so the strip's left inset only
+   pushes the tool rack off the right edge. */
+@media (max-width: 47.99375em) {
+  .tabsList {
+    padding-left: 8px !important;
+  }
+}
+
 .tabsList::before {
   border-width: 0;
 }
