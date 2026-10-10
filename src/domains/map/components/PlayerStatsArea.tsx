@@ -1,5 +1,8 @@
-import { memo } from "react";
+import { memo, type CSSProperties } from "react";
 import { Group, Stack, Text } from "@mantine/core";
+import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
+import { useDisclosure } from "@/hooks/useDisclosure";
+import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { calculateStatTilePositions } from "@/entities/geometry/tilePositioning";
 import { determineOpenSides } from "@/entities/game/tileAdjacency";
 import {
@@ -29,6 +32,43 @@ function playerHasArmada(playerData: PlayerData): boolean {
     ...(playerData.techs ?? []),
     ...(playerData.factionTechs ?? []),
   ].some((id) => ARMADA_IDS.has(id.toLowerCase().replace(/[^a-z0-9]/g, "")));
+}
+
+/** The initiative numeral on the plate; a click opens the card's text. */
+function StrategyCardNumber({
+  initiative,
+  isExhausted,
+  className,
+  style,
+}: {
+  initiative: number;
+  isExhausted?: boolean;
+  className: string;
+  style: CSSProperties;
+}) {
+  const { opened, setOpened, toggle } = useDisclosure(false);
+
+  return (
+    <SmoothPopover opened={opened} onChange={setOpened}>
+      <SmoothPopover.Target>
+        <Text
+          component="button"
+          type="button"
+          className={className}
+          c={isExhausted ? "gray.5" : SC_NUMBER_COLORS[SC_COLORS[initiative]]}
+          style={style}
+          aria-expanded={opened}
+          aria-label={`Strategy card ${initiative}`}
+          onClick={toggle}
+        >
+          {initiative}
+        </Text>
+      </SmoothPopover.Target>
+      <SmoothPopover.Dropdown p={0}>
+        <StrategyCardDetailsCard initiative={initiative} />
+      </SmoothPopover.Dropdown>
+    </SmoothPopover>
+  );
 }
 
 type PlayerStatsAreaProps = {
@@ -122,26 +162,21 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                   className={styles.zeroTokenImage}
                 />
               )}
-              {playerData.scs.map((sc, index) => {
-                const isExhausted = playerData.exhaustedSCs?.includes(sc);
-                return (
-                  <Text
-                    key={sc}
-                    className={cx(
-                      styles.strategyCard,
-                      playerData.hasZeroToken &&
-                        styles.strategyCardWithZeroToken,
-                    )}
-                    c={isExhausted ? "gray.5" : SC_NUMBER_COLORS[SC_COLORS[sc]]}
-                    style={{
-                      right: `${24 - index * 36}px`,
-                      fontSize: `${!playerData.hasZeroToken ? 64 : 48 - (playerData.scs.length - 1)}px`,
-                    }}
-                  >
-                    {sc}
-                  </Text>
-                );
-              })}
+              {playerData.scs.map((sc, index) => (
+                <StrategyCardNumber
+                  key={sc}
+                  initiative={sc}
+                  isExhausted={playerData.exhaustedSCs?.includes(sc)}
+                  className={cx(
+                    styles.strategyCard,
+                    playerData.hasZeroToken && styles.strategyCardWithZeroToken,
+                  )}
+                  style={{
+                    right: `${24 - index * 36}px`,
+                    fontSize: `${!playerData.hasZeroToken ? 64 : 48 - (playerData.scs.length - 1)}px`,
+                  }}
+                />
+              ))}
             </Group>
 
             {playerData.numScoreableSecrets > 0 && (

@@ -3,7 +3,7 @@ import classes from "./DetailsCard.module.css";
 
 type Props = {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   icon?: React.ReactNode;
   caption?: string;
   captionColor?: "blue" | "yellow" | "red" | "orange";

@@ -14,6 +14,12 @@
   padding: 2px;
 }
 
+.owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /*
  * Unit stats as seated readouts, not metric tiles.
  *
