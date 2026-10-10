@@ -13,6 +13,12 @@
   max-width: 420px;
 }
 
+/* Docked above the board on a phone (see .gameStateOverlay), so it spans it. */
+:global(.mobile) .panel {
+  min-width: 0;
+  max-width: none;
+}
+
 .collapseToggle {
   display: flex;
   align-items: center;
@@ -63,6 +69,26 @@
   color: var(--mantine-color-gray-1);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
   white-space: nowrap;
+}
+
+/* The active player in the phone's collapsed rail. A name is data, not a rail
+   caption, so it drops the caps and tracking, and is capped so a long one
+   cannot push the collapse toggle off the strip. */
+.railTurn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.railTurnName {
+  max-width: 40vw;
+  overflow: hidden;
+  font-family: var(--mantine-font-family);
+  font-size: 11px;
+  letter-spacing: normal;
+  text-overflow: ellipsis;
+  text-transform: none;
+  color: var(--mantine-color-white);
 }
 
 /* The one place the phase colour goes bright. A 6px dot that breathes reports a
