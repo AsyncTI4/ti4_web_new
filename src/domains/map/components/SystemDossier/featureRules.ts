@@ -155,6 +155,23 @@ function linkedPositions(
     .sort();
 }
 
+type AnomalyId = (typeof SYSTEM_ANOMALY_FLAGS)[number][1];
+
+/**
+ * The anomalies in force in a system, whether printed on the tile or brought
+ * by a token placed on it.
+ */
+export function systemAnomalies(tile: Tile): AnomalyId[] {
+  const tileData = getTileById(tile.systemId);
+  const printed = SYSTEM_ANOMALY_FLAGS.filter(([flag]) => tileData?.[flag]);
+  const fromTokens = tile.tokens.flatMap((tokenId) => {
+    const tokenData = getTokenData(tokenId);
+    return TOKEN_ANOMALY_FLAGS.filter(([flag]) => tokenData?.[flag]);
+  });
+
+  return [...new Set([...printed, ...fromTokens].map(([, id]) => id))];
+}
+
 export function getSystemFeatures(
   tile: Tile,
   allTiles: Record<string, Tile>,
