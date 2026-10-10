@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import {
   IconCards,
+  IconHistory,
   IconLayoutDashboard,
   IconPencil,
   IconSettings,
@@ -38,6 +39,8 @@ type NavigationDrawerProps = {
   onShowOldUI?: () => void;
   /** Lists the player's hand in the menu when given. */
   onCardsClick?: () => void;
+  /** Lists the event log in the menu when given. */
+  onEventsClick?: () => void;
 };
 
 export function NavigationDrawer({
@@ -51,6 +54,7 @@ export function NavigationDrawer({
   onRemoveTab,
   onShowOldUI,
   onCardsClick,
+  onEventsClick,
 }: NavigationDrawerProps) {
   const tabLabelEditing = useTabLabelEditing();
   const { editingTabId, toggleEditing } = tabLabelEditing;
@@ -142,6 +146,16 @@ export function NavigationDrawer({
               leftSection={<IconCards size={20} />}
               onClick={() => {
                 onCardsClick();
+                onClose();
+              }}
+            />
+          )}
+          {onEventsClick && (
+            <NavLink
+              label="Event log"
+              leftSection={<IconHistory size={20} />}
+              onClick={() => {
+                onEventsClick();
                 onClose();
               }}
             />

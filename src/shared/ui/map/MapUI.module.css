@@ -62,6 +62,17 @@
   z-index: var(--z-game-state-overlay);
 }
 
+/* On a phone the plate is the only turn readout, so it stays, but tucked
+   tighter into the corner and capped so an agenda vote can't bury the board. */
+@media (max-width: 47.99375em) {
+  .gameStateOverlay {
+    left: 8px;
+    top: 8px;
+    max-width: calc(100vw - 16px);
+    max-height: 45%;
+  }
+}
+
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;

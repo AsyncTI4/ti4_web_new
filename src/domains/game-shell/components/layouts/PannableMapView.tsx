@@ -152,12 +152,12 @@ export function PannableMapView({ gameId }: { gameId: string }) {
 
   return (
     <Box className={classes.mapContainer}>
+      <Box className={classes.gameStateOverlay}>
+        <GameStatePanel />
+      </Box>
       {!isMobile && (
         <>
           <ReplayAutoScroll mapContainerRef={mapContainerRef} />
-          <Box className={classes.gameStateOverlay}>
-            <GameStatePanel />
-          </Box>
           <FloatingMapToolbar gameId={gameId} rightOffset="35px" />
         </>
       )}
