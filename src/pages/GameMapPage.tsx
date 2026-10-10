@@ -34,6 +34,7 @@ import { TabPanelSection } from "@/domains/game-shell/components/TabPanelSection
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 import { TabActiveContext } from "@/hooks/useIsTabActive";
 import { MobileHandSheet } from "@/domains/game-shell/components/SecretHand";
+import { MobileEventsSheet } from "@/domains/game-shell/components/GameEventPanel";
 import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
 
 const REQUIRED_VERSION_SCHEMA = 5;
@@ -75,12 +76,16 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
   const hasChannelLinks = !!(data?.actionsJumpLink || data?.tableTalkJumpLink);
 
   const [drawerOpened, setDrawerOpened] = useState(false);
-  /* Desktop reaches the hand through the floating map toolbar, which phones
-     do not show, so there it gets its own entry points and sheet. */
+  /* Desktop reaches the hand and event log through the floating map toolbar,
+     which phones do not show, so there they get their own entry points and
+     sheets. */
   const { canViewSecretHand } = useSecretHandAccess();
   const mobileHand = isMobileDevice() && canViewSecretHand;
   const [handOpened, setHandOpened] = useState(false);
   const openHand = mobileHand ? () => setHandOpened(true) : undefined;
+  const mobileEvents = isMobileDevice();
+  const [eventsOpened, setEventsOpened] = useState(false);
+  const openEvents = mobileEvents ? () => setEventsOpened(true) : undefined;
   const [activeTab, setActiveTab] = useState("map");
   // Tabs mount on first visit and then stay mounted (hidden), so switching back
   // to the map doesn't rebuild ~10k components every time.
@@ -157,6 +162,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
               <TabsControls
                 onMenuClick={() => setDrawerOpened(true)}
                 onCardsClick={openHand}
+                onEventsClick={openEvents}
                 onTryDecalsClick={() =>
                   window.dispatchEvent(new CustomEvent("toggleTryDecals"))
                 }
@@ -245,6 +251,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         onRemoveTab={removeTab}
         onShowOldUI={onShowOldUI}
         onCardsClick={openHand}
+        onEventsClick={openEvents}
       />
 
       {mobileHand && (
@@ -252,6 +259,13 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
           gameId={gameId}
           opened={handOpened}
           onClose={() => setHandOpened(false)}
+        />
+      )}
+
+      {mobileEvents && (
+        <MobileEventsSheet
+          opened={eventsOpened}
+          onClose={() => setEventsOpened(false)}
         />
       )}
     </AppShell>

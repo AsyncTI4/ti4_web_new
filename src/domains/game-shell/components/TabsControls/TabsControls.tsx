@@ -6,6 +6,7 @@ import {
   IconKeyboard,
   IconSettings,
   IconHash,
+  IconHistory,
   IconMenu2,
   IconSticker,
   IconLinkPlus,
@@ -236,10 +237,12 @@ function DesktopTabsControls({
 function MobileTabsControls({
   onMenuClick,
   onCardsClick,
+  onEventsClick,
   onTryDecalsClick,
 }: {
   onMenuClick: () => void;
   onCardsClick?: () => void;
+  onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   return (
@@ -250,6 +253,16 @@ function MobileTabsControls({
           onTryDecalsClick={onTryDecalsClick}
         />
         <div style={{ flex: 1 }} />
+        {onEventsClick && (
+          <ActionIcon
+            size="lg"
+            variant="default"
+            aria-label="Event log"
+            onClick={onEventsClick}
+          >
+            <IconHistory size={20} />
+          </ActionIcon>
+        )}
         {onCardsClick && (
           <ActionIcon
             size="lg"
@@ -280,11 +293,14 @@ function MobileTabsControls({
 export function TabsControls({
   onMenuClick,
   onCardsClick,
+  onEventsClick,
   onTryDecalsClick,
 }: {
   onMenuClick?: () => void;
   /** Shows the hand button in the phone controls when given. */
   onCardsClick?: () => void;
+  /** Shows the event log button in the phone controls when given. */
+  onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   return (
@@ -297,6 +313,7 @@ export function TabsControls({
           <MobileTabsControls
             onMenuClick={onMenuClick}
             onCardsClick={onCardsClick}
+            onEventsClick={onEventsClick}
             onTryDecalsClick={onTryDecalsClick}
           />
         </Box>
