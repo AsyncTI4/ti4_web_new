@@ -294,6 +294,12 @@
   gap: 0;
 }
 
+@media (max-width: 47.99375em) {
+  .tabsList {
+    padding-left: 4px !important;
+  }
+}
+
 .tabsList::before {
   border-width: 0;
 }
