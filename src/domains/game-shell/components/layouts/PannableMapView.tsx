@@ -151,7 +151,7 @@ export function PannableMapView({ gameId }: { gameId: string }) {
   const { tryDecalsOpened, setTryDecalsOpened } = useTryDecalsToggle();
 
   return (
-    <Box className={classes.mapContainer}>
+    <Box className={`${classes.mapContainer} ${classes.stateDocked}`}>
       <Box className={classes.gameStateOverlay}>
         <GameStatePanel />
       </Box>

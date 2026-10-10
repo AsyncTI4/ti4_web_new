@@ -73,6 +73,31 @@
   }
 }
 
+/*
+ * A phone has no corner of the board the plate can float over without hiding
+ * systems, so there it leaves the board and docks as a strip between the tabs
+ * and the map, and the map area takes what is left. Expanding it pushes the
+ * board down instead of covering it. Keyed to the device, not the width: a
+ * narrow desktop window keeps the floating plate.
+ */
+:global(.mobile) .gameStateOverlay {
+  position: static;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}
+
+:global(.mobile) .stateDocked {
+  flex-direction: column;
+}
+
+:global(.mobile) .stateDocked > .mapArea {
+  flex: 1 1 0;
+  height: auto;
+  min-height: 0;
+}
+
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;

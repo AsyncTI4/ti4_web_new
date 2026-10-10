@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import {
   Collapse,
@@ -25,6 +25,7 @@ import {
   loadStoredChoice,
   saveStoredChoice,
 } from "@/utils/localStorageSettings";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { AgendaRow } from "./GameStateAgenda";
 import { playerNameForColor, type GameStatePlayer } from "./gameStatePlayers";
 import styles from "./GameStatePanel.module.css";
@@ -96,11 +97,33 @@ function activePlayerPhrase(phase: GamePhase): string {
   }
 }
 
-function PhaseBadge({ phase }: { phase: GamePhase }) {
+function PhaseBadge({ phase, turn }: { phase: GamePhase; turn?: ReactNode }) {
   return (
     <span className={styles.phaseLabel}>
       <span className={styles.phaseDot} />
       {PHASE_CONFIGS[phase].label}
+      {turn}
+    </span>
+  );
+}
+
+/**
+ * Whose turn it is, seated in the rail. Phone only, and only while the plate is
+ * collapsed, so the docked strip reports phase and player in a single line.
+ */
+function RailTurn({
+  activePlayer,
+  playerData,
+}: {
+  activePlayer: string;
+  playerData: GameStatePlayer[];
+}) {
+  return (
+    <span className={styles.railTurn}>
+      <PlayerColorSwatch color={activePlayer} />
+      <span className={styles.railTurnName}>
+        {playerNameForColor(playerData, activePlayer)}
+      </span>
     </span>
   );
 }
@@ -112,12 +135,15 @@ const PANEL_OPEN_KEY = "ti4_game_state_panel_open";
  *
  * The panel floats over the board's top-left corner at every scroll position —
  * in a large agenda vote it covered 18% of the map — so leaving it open has to
- * be the player's choice rather than the only option.
+ * be the player's choice rather than the only option. A phone starts collapsed:
+ * its rail already names the phase and the active player in a single line.
  */
 function useGameStatePanelOpen(): [boolean, (next: boolean) => void] {
-  const [isOpen, setIsOpen] = useState(
-    () => loadStoredChoice(PANEL_OPEN_KEY, ["false"]) === null,
-  );
+  const [isOpen, setIsOpen] = useState(() => {
+    const stored = loadStoredChoice(PANEL_OPEN_KEY, ["true", "false"]);
+    if (stored === null) return !isMobileDevice();
+    return stored === "true";
+  });
 
   const set = (next: boolean) => {
     setIsOpen(next);
@@ -284,9 +310,13 @@ function GameStatePanelContent({
   gameState: GameState;
   playerData: GameStatePlayer[];
 }) {
-  const { phase, winner } = gameState;
+  const { phase, winner, activePlayer } = gameState;
   const [isOpen, setIsOpen] = useGameStatePanelOpen();
   const showWinner = phase === "finished" && !!winner;
+  const showRailTurn = isMobileDevice() && !isOpen && !showWinner;
+  const railTurn = showRailTurn && activePlayer && (
+    <RailTurn activePlayer={activePlayer} playerData={playerData} />
+  );
   const accentRgb = showWinner
     ? PHASE_ACCENT_RGB.red
     : (PHASE_ACCENT_RGB[PHASE_CONFIGS[phase].accent] ?? "var(--gd-gray)");
@@ -294,7 +324,7 @@ function GameStatePanelContent({
   return (
     <Module
       accentRgb={accentRgb}
-      label={<PhaseBadge phase={phase} />}
+      label={<PhaseBadge phase={phase} turn={railTurn} />}
       meta={
         <CollapseToggle
           isOpen={isOpen}
