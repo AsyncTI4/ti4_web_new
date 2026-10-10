@@ -2,7 +2,10 @@ import { Box, Stack, Image } from "@mantine/core";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { getUnitData, isNekroFlagship } from "@/entities/lookup/units";
+import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { useGameData } from "@/state/useGameContext";
 import type { PlayerData, Unit } from "@/entities/data/types";
 import {
   getAssimilatedAbilitiesForNekroFlagship,
@@ -59,6 +62,16 @@ function UnitIcon({ unit, color }: { unit: Unit; color?: string }) {
   );
 }
 
+/** Whose unit this is: the colour alone means nothing without the legend. */
+function UnitOwner({ owner }: { owner: PlayerData }) {
+  return (
+    <span className={styles.owner}>
+      <FactionIcon faction={owner.faction} w={12} h={12} />
+      {getPlayerFactionDisplayName(owner)}
+    </span>
+  );
+}
+
 export function UnitDetailsCard({
   unitId,
   color,
@@ -69,8 +82,13 @@ export function UnitDetailsCard({
   valefarZTargets,
   allPlayerData,
 }: Props) {
+  const gameData = useGameData();
   const unitData = getUnitData(unitId);
   if (!unitData) return null;
+
+  const owner = color
+    ? gameData?.playerData?.find((player) => player.color === color)
+    : undefined;
 
   const isUpgraded = unitData.upgradesFromUnitId !== undefined;
   const inherited =
@@ -91,7 +109,7 @@ export function UnitDetailsCard({
       <Stack gap={12}>
         <DetailsCard.Title
           title={unitData.name}
-          subtitle=""
+          subtitle={owner ? <UnitOwner owner={owner} /> : ""}
           icon={
             <DetailsCard.Icon
               icon={<UnitIcon unit={unitData} color={color} />}

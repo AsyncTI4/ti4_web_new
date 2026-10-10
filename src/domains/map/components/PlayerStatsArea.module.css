@@ -50,9 +50,21 @@
 }
 
 .strategyCard {
+  font-family: inherit;
   font-size: 64px;
   font-weight: var(--weight-rail);
   line-height: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-shadow: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.strategyCard:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .victoryPoints {

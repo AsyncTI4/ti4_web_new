@@ -1,5 +1,6 @@
 import { Divider, Stack, Text } from "@mantine/core";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { SC_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/state/useGameContext";
 
@@ -44,10 +45,12 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
   );
   if (!sc) return null;
 
+  const accent = color ?? (SC_COLORS[initiative] as Props["color"]);
+
   return (
     <DetailsCard
       width={320}
-      color={color === "teal" ? "cyan" : (color ?? "none")}
+      color={accent === "teal" ? "cyan" : (accent ?? "none")}
     >
       <Stack gap="md">
         <DetailsCard.Title
