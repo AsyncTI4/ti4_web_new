@@ -1,6 +1,6 @@
-import { IconHexagon } from "@tabler/icons-react";
-import { getAbility } from "@/entities/lookup/abilities";
+import { getAbility, getAbilityKind } from "@/entities/lookup/abilities";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { ABILITY_KIND_LABEL, AbilityMark } from "./AbilityMark";
 
 type Props = {
   abilityId: string;
@@ -11,14 +11,16 @@ export function AbilityDetailsCard({ abilityId }: Props) {
 
   if (!ability) return null;
 
+  const kind = getAbilityKind(ability);
+
   return (
     <DetailsCard width={340} color="violet">
       <DetailsCard.Title
         title={ability.name}
-        type="Faction ability"
-        meta={[ability.faction, ability.permanentEffect ? "Passive" : null]}
+        type={`${ABILITY_KIND_LABEL[kind]} ability`}
+        meta={[ability.faction]}
         icon={
-          <DetailsCard.Icon shape="round" icon={<IconHexagon stroke={1.6} />} />
+          <DetailsCard.Icon shape="round" icon={<AbilityMark kind={kind} />} />
         }
       />
       {ability.permanentEffect && (

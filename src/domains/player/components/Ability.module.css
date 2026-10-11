@@ -1,32 +1,50 @@
 /*
- * Faction ability: an engraved tag. A violet hairline, almost no fill, and the
- * hex sigil seated in a recessed well.
+ * Faction ability: an inscription, not a plate. Abilities are rules printed on
+ * the faction sheet, so they get no fill and no frame — the only named object
+ * without one. A kind mark, the name, and a violet rule cut beneath that trails
+ * off from the mark.
  */
 .abl {
-  padding: 0 9px 0 3px;
-  background: rgb(var(--ds-sig-ability) / 0.049);
-  border: 1px solid rgb(var(--ds-sig-ability) / 0.294);
-  border-radius: 2px;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  gap: 5px;
+  padding: 0 2px 1px 1px;
+  margin-right: 5px;
 }
 
-.abl:hover {
-  border-color: rgb(var(--ds-sig-ability) / 0.455);
+.abl::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1px;
+  --cut: 0.6;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--ds-sig-ability) / var(--cut)) 12px,
+    transparent
+  );
+  box-shadow: 0 -1px 0 rgb(0 0 0 / 0.5);
 }
 
-.well {
+.mark {
+  position: relative;
+  z-index: 2;
   flex: none;
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 1px;
-  background: var(--ds-socket);
-  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
-  color: color-mix(in oklab, rgb(var(--ds-sig-ability)) 60%, var(--ds-white));
+  width: 13px;
+  height: 13px;
+  color: color-mix(in oklab, rgb(var(--ds-sig-ability)) 72%, var(--ds-white));
 }
 
-.well svg {
-  width: 12px;
-  height: 12px;
+/* Passive rules are always on; they sit a step quieter than the ones you use. */
+.abl[data-s="passive"] .mark {
+  opacity: 0.8;
+}
+
+/* Actions are the abilities a player spends a turn on: the cut runs brighter. */
+.abl[data-s="action"]::after {
+  --cut: 0.8;
+}
+
+.abl:hover::after {
+  --cut: 0.95;
 }
