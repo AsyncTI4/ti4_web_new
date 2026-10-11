@@ -1,150 +1,246 @@
 /*
- * Score breakdown: one row per seat. Who and their total on the left, then the
- * points as tokens on a shared numbered track, scored first, then potential.
+ * Score breakdown: one victory track per seat, aligned on a shared ruler.
+ * Every track has the same spaces, so who is closest to winning reads straight
+ * down the victory column.
  */
-.themedContainer {
-	overflow: hidden;
-	width: fit-content;
-	max-width: 100%;
+.vpBoard {
+  --space: 50px;
+  --space-gap: 3px;
+  --space-h: 34px;
+  --seat: 320px;
+  --track-w: calc(var(--columns, 10) * (var(--space) + var(--space-gap)) - var(--space-gap));
+  --win-x: calc(var(--vps-to-win, 10) * (var(--space) + var(--space-gap)) - var(--space-gap));
+  display: grid;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  padding-right: 4px;
 }
 
-.rowContainer {
-	display: grid;
-	grid-template-columns: 320px max-content;
-	gap: 0;
-	align-items: center;
-	border-bottom: 1px solid var(--ds-h10);
+.legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ds-ink);
 }
 
-.playerInfoColumn {
-	display: grid;
-	grid-template-columns: auto minmax(0, 1fr) auto auto auto;
-	gap: 8px;
-	padding: 0 10px 0 4px;
-	align-items: center;
+.key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.objectivesGrid {
-	position: relative;
-	display: grid;
-	grid-template-columns: repeat(10, 1fr);
-	gap: 0;
-	height: 40px;
+.swatch {
+  --k: var(--ds-hair-rgb);
+  position: relative;
+  width: 18px;
+  height: 13px;
+  border: 1px solid rgb(var(--k) / 0.5);
+  border-radius: 2px;
 }
 
-/* Victory meridian: the winning column's right edge, through every row. */
-.objectivesGrid::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: calc(var(--vps-to-win, 10) * var(--score-cell, 40px) - 1px);
-	width: 1px;
-	pointer-events: none;
-	z-index: 2000;
-	background: rgb(var(--ds-sig-relic) / 0.4);
+.keyScored {
+  background: rgb(var(--k) / 0.3);
 }
 
-.numberTrack {
-	height: 22px;
+.keyReady {
+  border-color: rgb(var(--k) / 0.8);
 }
 
-.numberTrack.numberTrack {
-	border-bottom: 0;
+.keyPossible {
+  border-style: dashed;
 }
 
-.numberCell {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 22px;
-	box-shadow: inset -1px 0 0 var(--ds-h10);
+.keyLosable {
+  background: rgb(var(--k) / 0.3);
 }
 
-.numberText {
-	font-family: var(--ds-font-data);
-	font-size: var(--text-label);
-	color: var(--ds-ink-lo);
+.keyLosable::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 7px;
+  height: 7px;
+  background: rgb(var(--ds-sig-warn));
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
-.winningNumberText {
-	color: rgb(var(--ds-sig-relic));
+.table {
+  display: grid;
 }
 
-.nameBody {
-	min-height: 40px;
+.row {
+  display: grid;
+  grid-template-columns: var(--seat) var(--track-w);
+  column-gap: 16px;
+  align-items: center;
+  min-height: 48px;
+  border-bottom: 1px solid var(--ds-h10);
 }
 
-.playerNameText {
-	overflow: hidden;
-	font-family: var(--ds-font-display);
-	font-size: var(--text-title);
-	font-weight: var(--weight-title);
-	text-align: left;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	color: var(--ds-ink-hi);
+.rulerRow {
+  min-height: 26px;
+  border-bottom-color: var(--ds-h14);
 }
 
-.initiativeText {
-	min-width: 16px;
-	font-family: var(--ds-font-data);
-	font-size: var(--text-data);
-	text-align: center;
-	color: var(--ds-ink-lo);
+.ruler,
+.track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 10), var(--space));
+  column-gap: var(--space-gap);
+  align-items: center;
 }
 
-.vpText {
-	min-width: 44px;
-	font-family: var(--ds-font-data);
-	font-size: var(--text-data);
-	text-align: right;
-	color: var(--ds-ink);
+.ruler > span {
+  font-family: var(--font-data);
+  font-size: var(--text-body);
+  text-align: center;
+  color: var(--ds-ink-lo);
 }
 
-.vpText b {
-	font-weight: var(--weight-title);
-	color: var(--ds-ink-hi);
+.ruler > span[data-win] {
+  color: rgb(var(--ds-sig-relic));
 }
 
-/* Current leader: the total reads in relic gold. Nothing else changes. */
-.leaderRow .vpText b {
-	color: rgb(var(--ds-sig-relic));
+/* The track's spaces: recessed sockets up to the winning score. Tokens sit on
+   top; anything past the winning space has no socket under it. */
+.track::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--win-x);
+  height: var(--space-h);
+  translate: 0 -50%;
+  background: linear-gradient(90deg, var(--ds-socket) var(--space), transparent 0) 0 0 /
+    calc(var(--space) + var(--space-gap)) 100% repeat-x;
+  border-radius: 2px;
+  pointer-events: none;
 }
 
-.noteText.noteText {
-	max-width: 620px;
-	margin-left: auto;
-	font-size: var(--text-meta);
-	line-height: 1.35;
-	text-align: right;
-	color: var(--ds-ink-lo);
+/* The victory line: one gold rule after the winning space, through every row. */
+.ruler::after,
+.track::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: calc(var(--win-x) + 1px);
+  width: 1px;
+  background: rgb(var(--ds-sig-relic) / 0.45);
+  pointer-events: none;
+}
+
+.ruler::after {
+  top: 2px;
+}
+
+.track > * {
+  position: relative;
+  z-index: 1;
+}
+
+.seat {
+  display: grid;
+  grid-template-columns: 24px 26px minmax(0, 1fr) 64px;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding-left: 2px;
+}
+
+.init {
+  --scc: var(--gd-gray);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ds-ink-hi);
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 2px rgba(var(--scc), 0.7);
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ds-ink-hi);
+}
+
+.vp {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 3px;
+  font-family: var(--font-data);
+}
+
+.vp b {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ds-ink-hi);
+}
+
+.vp small {
+  font-size: var(--text-body);
+  color: var(--ds-ink-lo);
+}
+
+/* The leader's total reads in gold. Nothing else about the row changes. */
+.row[data-leading] .vp b {
+  color: rgb(var(--ds-sig-relic));
+}
+
+.note.note {
+  max-width: 70ch;
+  font-size: var(--text-data);
+  line-height: 1.4;
+  color: var(--ds-ink-lo);
 }
 
 @container scoreboard (max-width: 640px) {
-	.themedContainer {
-		--score-cell: calc(100cqw / var(--score-columns, 10));
-		width: 100%;
-	}
+  .vpBoard {
+    --space: calc((100cqw - (var(--columns, 10) - 1) * var(--space-gap)) / var(--columns, 10));
+    --space-h: 28px;
+    width: 100%;
+  }
 
-	.rowContainer {
-		grid-template-columns: minmax(0, 1fr);
-	}
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+    padding: 6px 0;
+  }
 
-	.playerInfoColumn {
-		padding: 4px 8px;
-	}
+  .rulerRow > span:first-child {
+    display: none;
+  }
 
-	.playerInfoColumn:empty {
-		display: none;
-	}
+  .ruler::after,
+  .track::after {
+    left: calc(var(--win-x) - 1px);
+  }
 
-	.objectivesGrid {
-		height: 36px;
-	}
-
-	.noteText.noteText {
-		text-align: left;
-		margin-left: 0;
-	}
+  .seat {
+    padding-right: 2px;
+  }
 }

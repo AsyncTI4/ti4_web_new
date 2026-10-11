@@ -1,0 +1,123 @@
+/*
+ * A point source on the victory track. Three readings of one shape:
+ * filled (scored), solid outline (ready to score), dashed outline (possible).
+ * Tinted by the source's signal, which never changes between themes.
+ */
+.tok {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  height: var(--space-h, 32px);
+  border: 1px solid rgb(var(--k) / 0.5);
+  border-radius: 2px;
+  color: color-mix(in oklab, rgb(var(--k)) 55%, var(--ds-white));
+  cursor: default;
+  outline-offset: 1px;
+}
+
+.tok[data-state="SCORED"] {
+  background: linear-gradient(180deg, rgb(var(--k) / 0.32), rgb(var(--k) / 0.18));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.tok[data-state="QUALIFIES"] {
+  border-color: rgb(var(--k) / 0.75);
+  background: rgb(var(--k) / 0.08);
+}
+
+.tok[data-state="POTENTIAL"],
+.tok[data-state="UNSCORED"] {
+  border-style: dashed;
+  border-color: rgb(var(--k) / 0.42);
+  background: transparent;
+  color: rgb(var(--k) / 0.62);
+}
+
+/* Can be lost: a folded yellow corner, the one warning colour on the track. */
+.tok[data-losable]::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-top-right-radius: 2px;
+  background: rgb(var(--ds-sig-warn));
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.numeral {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.mask {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  -webkit-mask: var(--glyph) center / contain no-repeat;
+  mask: var(--glyph) center / contain no-repeat;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+}
+
+.icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* Imperial with no stage II to score draws a secret instead: a small secret
+   badge rides the token's lower corner. */
+.alt {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--ds-socket);
+  color: color-mix(in oklab, rgb(var(--ds-sig-secret)) 60%, var(--ds-white));
+}
+
+.alt > span {
+  width: 10px;
+  height: 10px;
+}
+
+.progress {
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ds-ink);
+}
+
+.progress i {
+  font-style: normal;
+  color: var(--ds-ink-lo);
+}
+
+.tip {
+  display: grid;
+  gap: 2px;
+}
+
+.tip b {
+  color: var(--ds-ink-hi);
+}
+
+.tipBody {
+  margin-top: 4px;
+  color: var(--ds-ink);
+}
