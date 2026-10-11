@@ -1,26 +1,19 @@
 import type { ReactNode } from "react";
 import {
-  Alert,
-  Badge,
   Button,
-  Group,
   Loader,
   MultiSelect,
   NumberInput,
-  Paper,
   Select,
-  SimpleGrid,
-  Stack,
   Switch,
-  Text,
 } from "@/ds";
 import { useEffect, useState } from "react";
-import { IconAlertCircle, IconCheck, IconSettings } from "@tabler/icons-react";
+import { IconBell, IconCheck, IconPalette, IconUsers } from "@tabler/icons-react";
 import {
   useDashboardSettings,
   useSaveDashboardSettings,
 } from "@/domains/dashboard/hooks/useDashboardSettings";
-import Caption from "@/shared/ui/Caption/Caption";
+import { AuthPrompt } from "@/domains/auth/AuthPrompt";
 import { toEditableSettings } from "./userSettings";
 import {
   EDITABLE_SECTIONS,
@@ -29,13 +22,7 @@ import {
   type Settings,
 } from "./dashboardSettingsFields";
 
-const PANEL_PROPS = {
-  withBorder: true,
-  radius: "md",
-  p: "lg",
-  bg: "dark.8",
-  style: { backdropFilter: "blur(10px)" },
-} as const;
+import classes from "./DashboardSettingsPanel.module.css";
 
 type SaveState = { type: "success" | "error"; message: string } | null;
 
@@ -133,24 +120,22 @@ function SettingField({
 function SettingsSection({
   title,
   description,
+  className,
   children,
 }: {
   title: string;
   description: string;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <Paper {...PANEL_PROPS}>
-      <Stack gap="md">
-        <Stack gap={4}>
-          <Caption size="sm">{title}</Caption>
-          <Text size="sm" c="dimmed">
-            {description}
-          </Text>
-        </Stack>
-        {children}
-      </Stack>
-    </Paper>
+    <section className={className ? `${classes.section} ${className}` : classes.section}>
+      <header className={classes.sectionHead}>
+        <h2 className={classes.sectionTitle}>{title}</h2>
+        <p className={classes.sectionLede}>{description}</p>
+      </header>
+      {children}
+    </section>
   );
 }
 
@@ -164,17 +149,11 @@ function ReadOnlyItem({
   value: string;
 }) {
   return (
-    <Paper withBorder radius="md" p="md" bg="rgba(255, 255, 255, 0.02)">
-      <Text size="xs" c="gray.5" tt="uppercase" fw={700}>
-        {label}
-      </Text>
-      <Text size="sm" c="gray.1" fw={600} mt={4}>
-        {value}
-      </Text>
-      <Text size="xs" c="gray.6" mt={6}>
-        {description}
-      </Text>
-    </Paper>
+    <div className={classes.readOnlyItem}>
+      <span className={classes.label}>{label}</span>
+      <span className={classes.readOnlyValue}>{value}</span>
+      <span className={classes.readOnlyNote}>{description}</span>
+    </div>
   );
 }
 
@@ -189,59 +168,60 @@ function SaveHeader({
   saveState: SaveState;
   onSave: () => void;
 }) {
-  const succeeded = saveState?.type === "success";
   return (
-    <Paper {...PANEL_PROPS}>
-      <Group justify="space-between" align="flex-start" gap="md">
-        <Stack gap={4}>
-          <Group gap={6}>
-            <IconSettings size={16} color="var(--ds-teal-4)" />
-            <Caption size="sm">Dashboard Settings</Caption>
-          </Group>
-          <Text c="gray.3" size="sm">
-            These controls mirror the personal preferences that were previously
-            only practical to manage through Discord commands and buttons.
-          </Text>
-        </Stack>
-        <Group gap="xs">
-          <Badge color={isDirty ? "yellow" : "gray"} variant="light">
-            {isDirty ? "Unsaved changes" : "Saved"}
-          </Badge>
-          <Button
-            color="teal"
-            leftSection={<IconCheck size={14} />}
-            loading={isSaving}
-            disabled={!isDirty}
-            onClick={onSave}
-          >
-            Save settings
-          </Button>
-        </Group>
-      </Group>
+    <header className={classes.head}>
+      <div className={classes.headText}>
+        <span className={classes.label}>Dashboard settings</span>
+        <h1 className={classes.title}>Your bot preferences</h1>
+        <p className={classes.lede}>
+          The same preferences you can set with Discord commands and buttons.
+          They apply to every game you play.
+        </p>
+      </div>
+      <div className={classes.actions}>
+        <span className={classes.state} data-dirty={isDirty || undefined}>
+          {isDirty ? "Unsaved changes" : "Saved"}
+        </span>
+        <Button
+          variant="filled"
+          leftSection={<IconCheck size={14} />}
+          loading={isSaving}
+          disabled={!isDirty}
+          onClick={onSave}
+        >
+          Save settings
+        </Button>
+      </div>
       {saveState && (
-        <Alert
-          mt="md"
-          color={succeeded ? "teal" : "red"}
-          icon={
-            succeeded ? <IconCheck size={16} /> : <IconAlertCircle size={16} />
-          }
+        <div
+          className={classes.result}
+          role="status"
+          data-error={saveState.type === "error" || undefined}
         >
           {saveState.message}
-        </Alert>
+        </div>
       )}
-    </Paper>
+    </header>
   );
 }
 
 function SettingsLoader() {
   return (
-    <Stack align="center" gap="sm" py={120}>
-      <Loader size="lg" color="teal" />
-      <Caption size="sm" uppercase={false}>
-        Loading your settings...
-      </Caption>
-    </Stack>
+    <div className={classes.loading}>
+      <Loader size="md" />
+      Loading your settings…
+    </div>
   );
+}
+
+const LOGGED_OUT_ITEMS = [
+  { icon: <IconBell size={14} />, label: "Turn pings and auto-pass timing" },
+  { icon: <IconPalette size={14} />, label: "Preferred colours and display options" },
+  { icon: <IconUsers size={14} />, label: "Table-talk and deal preferences" },
+];
+
+function isUnauthorized(error: unknown) {
+  return (error as { status?: number } | null)?.status === 401;
 }
 
 export function DashboardSettingsPanel() {
@@ -258,14 +238,23 @@ export function DashboardSettingsPanel() {
   if (settingsQuery.isLoading) return <SettingsLoader />;
 
   if (settingsQuery.isError || !settingsQuery.data) {
+    if (isUnauthorized(settingsQuery.error)) {
+      return (
+        <AuthPrompt
+          kicker="Dashboard settings"
+          title="Log in to change your settings"
+          body="These are the preferences the bot uses in your games. Log in with Discord to read and change them."
+          items={LOGGED_OUT_ITEMS}
+        />
+      );
+    }
     return (
-      <Alert
-        color="red"
-        icon={<IconAlertCircle size={16} />}
-        title="Failed to load settings"
-      >
-        Try refreshing the page and logging in again if the problem persists.
-      </Alert>
+      <AuthPrompt
+        kicker="Dashboard settings"
+        title="Your settings didn't load"
+        body="The game server didn't answer. Refresh the page, or log in again if it keeps failing."
+        buttonLabel="Log in again"
+      />
     );
   }
 
@@ -300,7 +289,7 @@ export function DashboardSettingsPanel() {
   };
 
   return (
-    <Stack gap="md">
+    <div className={classes.panel}>
       <SaveHeader
         isDirty={isDirty}
         isSaving={saveMutation.isPending}
@@ -308,14 +297,14 @@ export function DashboardSettingsPanel() {
         onSave={() => void handleSave()}
       />
 
-      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="md">
+      <div className={classes.grid}>
         {EDITABLE_SECTIONS.map((section) => (
           <SettingsSection
             key={section.title}
             title={section.title}
             description={section.description}
           >
-            <Stack gap="md">
+            <div className={classes.fields}>
               {section.fields.map((field) => (
                 <SettingField
                   key={field.key}
@@ -324,16 +313,16 @@ export function DashboardSettingsPanel() {
                   updateDraft={updateDraft}
                 />
               ))}
-            </Stack>
+            </div>
           </SettingsSection>
         ))}
-      </SimpleGrid>
+      </div>
 
       <SettingsSection
-        title="System-Managed Fields"
-        description="Informational values that come from account state or moderation controls and are not editable here."
+        title="Set by the server"
+        description="Values that come from your account state or moderation. You can't change them here."
       >
-        <SimpleGrid cols={{ base: 1, md: 2, xl: 4 }} spacing="md">
+        <div className={classes.readOnly}>
           {READ_ONLY_FIELDS.map((field) => (
             <ReadOnlyItem
               key={field.label}
@@ -342,8 +331,8 @@ export function DashboardSettingsPanel() {
               value={field.value(data)}
             />
           ))}
-        </SimpleGrid>
+        </div>
       </SettingsSection>
-    </Stack>
+    </div>
   );
 }

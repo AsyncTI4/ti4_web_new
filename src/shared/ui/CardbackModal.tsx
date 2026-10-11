@@ -15,6 +15,7 @@ type CardbackModalProps = {
   cardKey?: string | number;
 };
 
+/** A deck's card back; clicking it opens the deck list on the system modal frame. */
 export function CardbackModal({
   imageSrc,
   alt,
@@ -22,34 +23,28 @@ export function CardbackModal({
   count = 0,
   size = "lg",
   children,
-  modalSize = "xl",
+  modalSize = 620,
   cardKey,
 }: CardbackModalProps) {
   const [opened, setOpened] = useState(false);
+  const countLine =
+    typeof count === "number" || typeof count === "string" ? `${count} in deck` : null;
 
   return (
     <>
       <Stack className={styles.trigger} onClick={() => setOpened(true)}>
-        <Cardback
-          key={cardKey}
-          src={imageSrc}
-          alt={alt}
-          count={count}
-          size={size}
-        />
+        <Cardback key={cardKey} src={imageSrc} alt={alt} count={count} size={size} />
       </Stack>
       <AppModal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={title}
         size={modalSize}
-        classNames={{
-          content: styles.content,
-          header: styles.header,
-          title: styles.title,
-          body: styles.body,
-          close: styles.close,
-        }}
+        title={
+          <span className={styles.titleBlock}>
+            {title}
+            {countLine && <small className={styles.subline}>{countLine}</small>}
+          </span>
+        }
       >
         {children}
       </AppModal>

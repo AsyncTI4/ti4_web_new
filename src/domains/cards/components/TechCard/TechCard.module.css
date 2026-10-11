@@ -1,34 +1,17 @@
-.content {
-  height: 100%;
-  position: relative;
-  z-index: 1;
+.letter {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ds-ink-hi);
 }
 
-.factionIcon {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
-}
-
-.bottomSection {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-
-.techIconContainer {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  display: flex;
-  flex-direction: column;
+.prereqs {
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 2px;
 }
 
-.stackIcon {
-  width: 14px !important;
-  height: 14px !important;
+.prereqs img {
+  width: 12px;
+  height: 12px;
 }

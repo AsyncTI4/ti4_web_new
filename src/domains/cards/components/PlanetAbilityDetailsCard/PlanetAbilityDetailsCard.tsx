@@ -1,8 +1,7 @@
-import { Box, Text, Group, Divider, Image } from "@/ds";
+import { Image } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
-import classes from "./PlanetAbilityDetailsCard.module.css";
 import { PlanetActionCardsSection } from "./PlanetActionCardsSection";
 
 type Props = {
@@ -23,34 +22,24 @@ export function PlanetAbilityDetailsCard({
   if (!planetData) return null;
 
   return (
-    <DetailsCard width={320}>
-      <Box>
-        <Text size="md" fw={700} c="white" className={classes.title}>
-          {planetData.shortName ?? planetData.name}
-        </Text>
-        <Text size="sm" c="gray.3" fw={500} fs="italic">
-          Planet Ability
-        </Text>
-      </Box>
-
-      <Divider c="gray.7" opacity={0.8} />
-
-      <Box>
-        <Group gap="xs" mb={4}>
-          <Image
-            src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-            w={16}
-            h={16}
+    <DetailsCard width={340} color="gold">
+      <DetailsCard.Title
+        title={abilityName}
+        type="Planet ability"
+        meta={[planetData.shortName ?? planetData.name]}
+        icon={
+          <DetailsCard.Icon
+            shape="round"
+            icon={
+              <Image
+                src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
+                alt=""
+              />
+            }
           />
-          <Text size="sm" c="yellow.3" fw={500}>
-            {abilityName}
-          </Text>
-        </Group>
-        <Text size="sm" c="gray.1" lh={1.5}>
-          {abilityText}
-        </Text>
-      </Box>
-
+        }
+      />
+      <DetailsCard.Section title="Ability" content={abilityText} />
       <PlanetActionCardsSection actionCards={actionCards} />
     </DetailsCard>
   );

@@ -1,18 +1,13 @@
 /*
- * Top HUD deck.
- *
- * The header and the tab row are two halves of one console deck the map sits
- * behind, the way an RTS floats its chrome over the battlefield. Both take the
- * same hatched chrome the module rails use, and the deck closes with a bright
- * lower lip plus a downward shadow so the map reads as being *under* it rather
- * than merely next to it.
+ * App bar. A flat rail above the tab strip: the theme's rail texture over its
+ * header ground, closed by one hairline and a pixel of edge light.
  */
 .newHeaderGroup {
   flex-wrap: nowrap;
   max-width: 100vw;
-  background: var(--rail-sheen), var(--header-bg);
-  border-bottom: 1px solid var(--panel-separator);
-  box-shadow: var(--header-shadow), inset 0 1px 0 var(--machined-bevel-light);
+  background: var(--ds-tex-rail), var(--header-bg);
+  border-bottom: 1px solid var(--ds-h22);
+  box-shadow: 0 1px 0 var(--ds-edge-accent);
 }
 
 /* Left sidebar overlay styles */
@@ -51,8 +46,8 @@
  */
 .gameStateOverlay {
   position: absolute;
-  left: 16px;
-  top: 16px;
+  left: 12px;
+  top: 12px;
   width: max-content;
   min-width: 260px;
   max-width: min(420px, calc(100vw - 32px));
@@ -296,130 +291,88 @@
   }
 }
 
+/*
+ * The map deck's tab strip: underline tabs on a flat rail. The selected view is
+ * the only blue in the strip, a 2px foot along the rail's floor.
+ *
+ * The strip is shorter than the shared contract, so the derived viewport offsets
+ * are restated here the same way the phone override below does.
+ */
+@media (min-width: 48em) {
+  .mainBackground {
+    --map-tabs-height: 44px;
+    --map-viewport-top: calc(var(--app-header-height) + var(--map-tabs-height));
+    --map-viewport-height: calc(100vh - var(--map-viewport-top));
+  }
+}
+
 .tabsList {
   position: relative;
-  /* Asserted, not measured. Everything below the header derives its offset from
-     --map-tabs-height, so the strip has to be exactly that tall or the map area
-     drifts against the chrome. All four tabs are single-line by construction. */
+  /* Asserted, not measured: everything below the header derives its offset
+     from --map-tabs-height, so the strip has to be exactly that tall. */
   height: var(--map-tabs-height);
   box-sizing: border-box;
-  background: var(--rail-sheen), var(--map-tabs-bg);
-  /* The deck's lower lip: a lit edge, then shadow falling onto the map. */
-  box-shadow:
-    inset 0 -1px 0 var(--hud-edge-light),
-    0 8px 22px rgba(0, 0, 0, 0.6);
-  padding-top: 8px !important;
-  padding-bottom: 6px !important;
-  justify-content: flex-start !important;
-  padding-left: 16px !important;
-  align-items: center !important;
-  /* No gap: the view tabs butt against each other and share seams (see
-     .tabsTab), so the strip reads as one segmented control rather than four
-     loose buttons. The tool rack that follows carries its own left padding. */
+  display: flex;
+  align-items: stretch;
   gap: 0;
+  padding: 0 10px 0 6px;
+  background: var(--ds-tex-rail), var(--map-tabs-bg);
+  border-bottom: 1px solid var(--ds-h14);
 }
 
 @media (max-width: 47.99375em) {
   .tabsList {
-    padding-left: 4px !important;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 4px 0 0;
   }
 }
 
-.tabsList::before {
-  border-width: 0;
-}
-
-/*
- * View tabs as plates, not browser tabs. The 6px-top-only radius and the navy
- * fill were the two things that read as web chrome; a tab is now a socket at
- * rest and a lit plate when selected, with an accent bar seated along its floor.
- */
 .tabsTab {
   position: relative;
-  flex-grow: 0;
-  flex-shrink: 0;
-  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
   margin: 0;
-  padding: 7px 15px;
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--track-rail);
+  padding: 0 14px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
-  color: var(--ds-gray-5);
-  cursor: pointer;
-  border: 1px solid var(--panel-hairline);
+  color: var(--ds-ink-lo);
+  background: none;
+  border: 0;
   border-radius: 0;
-  background: var(--socket-bg);
-  box-shadow: var(--socket-inset);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition:
-    color 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  transition: color var(--ds-dur-fast) var(--ds-ease);
 }
 
-/*
- * Shared seams. Pulling each tab 1px onto its neighbour collapses the two
- * hairline borders into one, the same 1px seam the map-tool rack uses, so the
- * four plates read as one milled strip with the outer corners rounded.
- */
-.tabsTab + .tabsTab {
-  margin-left: -1px;
+.tabsTab svg {
+  width: 15px;
+  height: 15px;
 }
 
-.tabsTab:first-of-type {
-  border-top-left-radius: var(--panel-radius);
-  border-bottom-left-radius: var(--panel-radius);
-}
-
-.tabsTab:last-of-type {
-  border-top-right-radius: var(--panel-radius);
-  border-bottom-right-radius: var(--panel-radius);
-  /* Break between the view rack and the tool rack that follows it. */
-  margin-right: 10px;
-}
-
-/* Raised so a hovered or selected plate owns both of its seams instead of
-   having one overpainted by the neighbour it shares with. */
 .tabsTab:hover,
 .tabsTab[data-active] {
-  z-index: 1;
+  color: var(--ds-ink-hi);
 }
 
-.tabsTab:hover {
-  color: var(--ds-gray-2);
-  border-color: var(--panel-hairline-strong);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: var(--machined-bevel);
-}
-
-.tabsTab[data-active] {
-  color: var(--ds-gray-0);
-  background: rgba(255, 255, 255, 0.09);
-  border-color: var(--panel-hairline-strong);
-  box-shadow: var(--machined-bevel);
-}
-
-/* Selected view gets a seated accent bar on its floor — the HUD equivalent of a
-   lit indicator, and the one place chroma appears in the tab strip. */
 .tabsTab[data-active]::after {
   content: "";
   position: absolute;
-  left: 5px;
-  right: 5px;
-  bottom: 2px;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
   height: 2px;
-  border-radius: 1px;
-  background: rgba(var(--gd-blue), 0.85);
+  background: var(--ds-accent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tabsTab {
-    transition: none;
-  }
+.tabsTab:last-of-type {
+  margin-right: 14px;
 }
+
 
 .mapContainer {
   position: relative;
@@ -530,51 +483,6 @@
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 6px);
   mix-blend-mode: lighten;
   opacity: 0.12;
-}
-
-:global(.theme-vaporwavetheme) .tabsTab {
-  text-shadow: 0 0 6px rgba(255, 0, 170, 0.5), 0 0 12px rgba(0, 240, 255, 0.35);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-:global(.theme-vaporwavetheme) .tabsTab::after {
-  content: "";
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: -2px;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 0, 170, 0.95), rgba(0, 240, 255, 0.95));
-  opacity: 0;
-  transform: scaleX(0.5);
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  filter: drop-shadow(0 0 6px rgba(255, 0, 170, 0.6)) drop-shadow(0 0 8px rgba(0, 240, 255, 0.5));
-}
-
-:global(.theme-vaporwavetheme) .tabsTab:hover::after,
-:global(.theme-vaporwavetheme) .tabsTab[data-active]::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
-:global(.theme-vaporwavetheme) .tabsTab:hover,
-:global(.theme-vaporwavetheme) .tabsTab[data-active] {
-  animation: vw-pulse-soft 6s ease-in-out infinite alternate;
-}
-
-:global(.theme-vaporwavetheme) .tabsList {
-  position: relative;
-}
-
-:global(.theme-vaporwavetheme) .tabsList::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255, 0, 170, 0.8), rgba(0, 240, 255, 0.8));
-  box-shadow: 0 0 8px rgba(255, 0, 170, 0.35), 0 0 10px rgba(0, 240, 255, 0.25);
-  opacity: 0.6;
-  animation: vw-border-breathe 8s ease-in-out infinite;
 }
 
 :global(.theme-vaporwavetheme) .leftSidebarOverlay {

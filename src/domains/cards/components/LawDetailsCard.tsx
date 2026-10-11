@@ -1,71 +1,51 @@
-import { Stack, Text, Group, Divider } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
 import { LawInPlay } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
+import styles from "./cardText.module.css";
 
 type Props = {
   law: LawInPlay;
 };
 
+function present(text: string | null | undefined): text is string {
+  return !!text && text.trim().length > 0;
+}
+
 export function LawDetailsCard({ law }: Props) {
   return (
-    <DetailsCard width={320}>
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={law.name}
-          subtitle={law.type}
-          icon={<DetailsCard.Icon icon={<IconScale size={24} />} />}
-        />
-
-        <Divider c="gray.7" opacity={0.8} />
-
+    <DetailsCard width={340} color="purple">
+      <DetailsCard.Title
+        title={law.name}
+        type={law.type || "Law"}
+        meta={["In play"]}
+        icon={
+          <DetailsCard.Icon shape="round" icon={<IconScale stroke={1.6} />} />
+        }
+      />
+      <DetailsCard.Section
+        title="Effect"
+        content={
+          <div className={styles.lines}>
+            <p>{law.text1}</p>
+            {present(law.text2) && <p>{law.text2}</p>}
+          </div>
+        }
+      />
+      {present(law.mapText) && (
+        <DetailsCard.Section title="Ongoing effect" content={law.mapText} />
+      )}
+      {law.electedFaction && (
         <DetailsCard.Section
-          title="Effect"
+          title="Elected"
           content={
-            <Stack gap={8}>
-              <Text size="sm" c="gray.2" lh={1.4}>
-                {law.text1}
-              </Text>
-              {law.text2 && law.text2.trim() && (
-                <Text size="sm" c="gray.2" lh={1.4}>
-                  {law.text2}
-                </Text>
-              )}
-            </Stack>
+            <span className={styles.elected}>
+              <CircularFactionIcon faction={law.electedFaction} size={22} />
+              {law.electedFaction}
+            </span>
           }
         />
-
-        {law.mapText && law.mapText.trim() && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <DetailsCard.Section title="Ongoing Effect" content={law.mapText} />
-          </>
-        )}
-
-        {law.electedFaction && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <DetailsCard.Section
-              title="Elected Player"
-              content={
-                <Group gap="sm" align="center">
-                  <CircularFactionIcon faction={law.electedFaction} size={24} />
-                  <Text
-                    size="xs"
-                    c="gray.4"
-                    fw={600}
-                    tt="uppercase"
-                    style={{ minWidth: 60, letterSpacing: "0.5px" }}
-                  >
-                    {law.electedFaction}
-                  </Text>
-                </Group>
-              }
-            />
-          </>
-        )}
-      </Stack>
+      )}
     </DetailsCard>
   );
 }

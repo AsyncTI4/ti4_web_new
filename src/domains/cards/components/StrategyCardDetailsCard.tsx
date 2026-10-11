@@ -1,8 +1,8 @@
-import { Divider, Stack, Text } from "@/ds";
-import { DetailsCard } from "@/shared/ui/DetailsCard";
+import { DetailsCard, type DetailsCardColor } from "@/shared/ui/DetailsCard";
 import { SC_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/state/useGameContext";
+import styles from "./cardText.module.css";
 
 type Props = {
   initiative: number;
@@ -21,21 +21,15 @@ type Props = {
 
 function AbilityLines({ lines, emptyText }: { lines: string[]; emptyText: string }) {
   if (lines.length === 0) {
-    return (
-      <Text size="sm" c="gray.5" fs="italic">
-        {emptyText}
-      </Text>
-    );
+    return <p className={styles.empty}>{emptyText}</p>;
   }
 
   return (
-    <Stack gap={6}>
+    <div className={styles.lines}>
       {lines.map((line, idx) => (
-        <Text key={idx} size="sm" c="gray.2" lh={1.4}>
-          {line}
-        </Text>
+        <p key={idx}>{line}</p>
       ))}
-    </Stack>
+    </div>
   );
 }
 
@@ -47,45 +41,31 @@ export function StrategyCardDetailsCard({ initiative, color, fluid }: Props) {
   );
   if (!sc) return null;
 
-  const accent = color ?? (SC_COLORS[initiative] as Props["color"]);
+  const accent = (color ?? SC_COLORS[initiative] ?? "none") as DetailsCardColor;
 
   return (
-    <DetailsCard
-      width={fluid ? undefined : 320}
-      color={accent === "teal" ? "cyan" : (accent ?? "none")}
-    >
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={sc.name}
-          subtitle="Strategy Card"
-          caption={`Initiative ${sc.initiative}`}
-          captionColor="blue"
-        />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        <DetailsCard.Section
-          title="Primary"
-          content={
-            <AbilityLines
-              lines={sc.primaryTexts}
-              emptyText="No primary ability"
-            />
-          }
-        />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        <DetailsCard.Section
-          title="Secondary"
-          content={
-            <AbilityLines
-              lines={sc.secondaryTexts}
-              emptyText="No secondary ability"
-            />
-          }
-        />
-      </Stack>
+    <DetailsCard width={fluid ? undefined : 340} color={accent}>
+      <DetailsCard.Title
+        title={sc.name}
+        type="Strategy card"
+        meta={[`Initiative ${sc.initiative}`]}
+        icon={<DetailsCard.Icon shape="sc" icon={sc.initiative} />}
+      />
+      <DetailsCard.Section
+        title="Primary"
+        content={
+          <AbilityLines lines={sc.primaryTexts} emptyText="No primary ability" />
+        }
+      />
+      <DetailsCard.Section
+        title="Secondary"
+        content={
+          <AbilityLines
+            lines={sc.secondaryTexts}
+            emptyText="No secondary ability"
+          />
+        }
+      />
     </DetailsCard>
   );
 }

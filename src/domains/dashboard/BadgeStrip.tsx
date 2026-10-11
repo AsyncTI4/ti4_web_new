@@ -1,4 +1,4 @@
-import { Group, Stack } from "@/ds";
+import type { ComponentType } from "react";
 import {
   IconBolt,
   IconFlame,
@@ -9,9 +9,10 @@ import {
 } from "@tabler/icons-react";
 import cx from "clsx";
 import type { BadgeAward } from "./types";
+import { DashBox } from "./DashboardParts";
 import classes from "./BadgeStrip.module.css";
 
-const BADGE_ICONS: Record<string, React.ComponentType<{ size: number }>> = {
+const BADGE_ICONS: Record<string, ComponentType<{ size: number }>> = {
   fleet_logistics: IconBolt,
   from_the_brink: IconFlame,
   galactic_endurance: IconHourglass,
@@ -20,21 +21,17 @@ const BADGE_ICONS: Record<string, React.ComponentType<{ size: number }>> = {
   galactic_metamorph: IconShape,
 };
 
-function badgeColorClass(key: string) {
-  const safe = key.replace(/-/g, "_");
-  return classes[`badge_${safe}`] ?? "";
-}
+const TIER_CLASS: Record<BadgeAward["tier"], string | undefined> = {
+  SILVER: undefined,
+  GOLD: classes.gold,
+  LEGENDARY: classes.legendary,
+};
 
-function tierClasses(tier: BadgeAward["tier"]) {
-  switch (tier) {
-    case "GOLD":
-      return { label: classes.tierGold, pip: classes.tierPipGold, card: classes.tierGoldCard };
-    case "LEGENDARY":
-      return { label: classes.tierLegendary, pip: classes.tierPipLegendary, card: classes.tierLegendaryCard };
-    default:
-      return { label: classes.tierSilver, pip: classes.tierPipSilver, card: undefined };
-  }
-}
+const TIER_LABEL: Record<BadgeAward["tier"], string> = {
+  SILVER: "Silver",
+  GOLD: "Gold",
+  LEGENDARY: "Legendary",
+};
 
 function formatMetric(value: number, unit: string) {
   if (unit === "seconds") {
@@ -52,81 +49,67 @@ function requirementPercent(current: number, target: number) {
   return Math.min(100, (current / target) * 100);
 }
 
-type Props = {
-  badges: BadgeAward[];
-};
+function Badge({ badge }: { badge: BadgeAward }) {
+  const Icon = BADGE_ICONS[badge.key.replace(/-/g, "_")] ?? IconBolt;
+  const primary = badge.primaryMetric;
 
-export function BadgeStrip({ badges }: Props) {
+  return (
+    <article className={cx(classes.badge, TIER_CLASS[badge.tier])}>
+      <div className={classes.head}>
+        <span className={classes.well}>
+          <Icon size={15} />
+        </span>
+        <span>
+          <div className={classes.name} title={badge.name}>
+            {badge.name}
+          </div>
+          <span className={classes.tier}>{TIER_LABEL[badge.tier] ?? badge.tier}</span>
+        </span>
+      </div>
+
+      {primary && (
+        <div className={classes.metric}>
+          <span className={classes.metricValue}>
+            {formatMetric(primary.value, primary.unit)}
+          </span>
+          <span className={classes.metricLabel}>{primary.label}</span>
+        </div>
+      )}
+
+      <div className={classes.reqs}>
+        {badge.requirements.map((req, index) => (
+          <div
+            key={`${badge.key}-${index}`}
+            className={classes.req}
+            data-met={req.met || undefined}
+          >
+            <span title={req.label}>{req.label}</span>
+            <span className={classes.reqValue}>
+              {formatMetric(req.current, req.unit)} / {formatMetric(req.target, req.unit)}
+            </span>
+            <span className={classes.bar} aria-hidden="true">
+              <i style={{ width: `${requirementPercent(req.current, req.target)}%` }} />
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className={classes.desc}>{badge.summary}</div>
+      <div className={classes.desc}>{badge.tierRuleText}</div>
+    </article>
+  );
+}
+
+export function BadgeStrip({ badges }: { badges: BadgeAward[] }) {
   if (badges.length === 0) return null;
 
   return (
-    <div className={classes.strip}>
-      {badges.map((badge) => {
-        const Icon = BADGE_ICONS[badge.key] ?? IconBolt;
-        const tier = tierClasses(badge.tier);
-        const primary = badge.primaryMetric;
-        const firstRequirement = badge.requirements[0];
-
-        return (
-          <div
-            key={badge.key}
-            className={cx(classes.badge, badgeColorClass(badge.key), tier.card)}
-          >
-            <div className={classes.cornerAccent} />
-            <div className={classes.shimmer} />
-
-            <Stack gap={7}>
-              <Group gap={10} wrap="nowrap" align="flex-start">
-                <div className={classes.iconWrap}>
-                  <Icon size={18} />
-                </div>
-                <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
-                  <div className={classes.badgeName}>{badge.name}</div>
-                  <span className={cx(classes.tier, tier.label)}>
-                    <span className={cx(classes.tierPip, tier.pip)} />
-                    {badge.tier}
-                  </span>
-                </Stack>
-              </Group>
-
-              {primary && (
-                <div className={classes.metric}>
-                  <span className={classes.metricValue}>
-                    {formatMetric(primary.value, primary.unit)}
-                  </span>
-                  <span className={classes.metricLabel}>{primary.label}</span>
-                </div>
-              )}
-
-              <Stack gap={2}>
-                {badge.requirements.map((req, idx) => (
-                  <div
-                    key={`${badge.key}-${idx}`}
-                    className={classes.badgeDesc}
-                    style={{ color: req.met ? "var(--ds-green-4)" : "var(--ds-gray-5)" }}
-                  >
-                    {req.label}: {formatMetric(req.current, req.unit)} / {formatMetric(req.target, req.unit)}
-                  </div>
-                ))}
-              </Stack>
-
-              <div className={classes.badgeDesc}>{badge.summary}</div>
-              <div className={classes.badgeDesc}>{badge.tierRuleText}</div>
-
-              <div className={classes.scoreBar}>
-                <div
-                  className={classes.scoreFill}
-                  style={{
-                    width: firstRequirement
-                      ? `${requirementPercent(firstRequirement.current, firstRequirement.target)}%`
-                      : "100%",
-                  }}
-                />
-              </div>
-            </Stack>
-          </div>
-        );
-      })}
-    </div>
+    <DashBox label="Badges" meta={badges.length}>
+      <div className={classes.strip}>
+        {badges.map((badge) => (
+          <Badge key={badge.key} badge={badge} />
+        ))}
+      </div>
+    </DashBox>
   );
 }

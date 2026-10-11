@@ -104,6 +104,8 @@
   --ds-accent: #3b82f6;          /* interaction only: selected, focused */
   --ds-accent-ink: #93c5fd;
   --ds-accent-rgb: 59 130 246;
+  --ds-discord: #5865f2;
+  --ds-discord-hover: #6d78f4;
   --ds-sig-prop: 59 130 246;
   --ds-sig-bio: 34 197 94;
   --ds-sig-cyber: 234 179 8;

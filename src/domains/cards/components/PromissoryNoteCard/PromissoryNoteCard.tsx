@@ -1,4 +1,4 @@
-import { Stack, Box, Image, Divider, Text, Group } from "@/ds";
+import { Image } from "@/ds";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { getAllianceCommander } from "@/entities/lookup/leaders";
 import { useFactionColors } from "@/hooks/useFactionColors";
@@ -6,10 +6,34 @@ import { useGameData } from "@/state/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { showLeader } from "@/entities/lookup/showLeader";
+import styles from "./PromissoryNoteCard.module.css";
 
 type Props = {
   promissoryNoteId: string;
 };
+
+type Commander = NonNullable<ReturnType<typeof getAllianceCommander>>;
+
+function CommanderAbility({ commander }: { commander: Commander }) {
+  return (
+    <div className={styles.commander}>
+      {showLeader(commander.source) && (
+        <Image
+          src={`/leaders/${commander.id}.webp`}
+          alt=""
+          className={styles.portrait}
+        />
+      )}
+      <div className={styles.commanderText}>
+        <span className={styles.commanderName}>{commander.name}</span>
+        {commander.abilityWindow && (
+          <span className={styles.window}>{commander.abilityWindow}</span>
+        )}
+        <p>{commander.abilityText}</p>
+      </div>
+    </div>
+  );
+}
 
 export function PromissoryNoteCard({ promissoryNoteId }: Props) {
   const factionColorMap = useFactionColors();
@@ -39,89 +63,27 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
       )
     : undefined;
 
-  const noteIcon = (
-    <Box
-      pos="relative"
-      w={60}
-      h={60}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Image src="/pnicon.png" w={40} />
-      {noteData.faction && (
-        <Box
-          pos="absolute"
-          bottom={-4}
-          right={-4}
-          style={{ background: "rgba(0,0,0,0.5)", borderRadius: 4, padding: 2 }}
-        >
-          <FactionIcon faction={noteData.faction} w={18} h={18} />
-        </Box>
-      )}
-    </Box>
+  const tileGlyph = noteData.faction ? (
+    <FactionIcon faction={noteData.faction} w={28} h={28} />
+  ) : (
+    <Image src="/pnicon.png" alt="" />
   );
 
   return (
-    <DetailsCard width={320} color="cyan">
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={displayName}
-          subtitle="Promissory Note"
-          icon={<DetailsCard.Icon icon={noteIcon} />}
+    <DetailsCard width={340} color="cyan">
+      <DetailsCard.Title
+        title={displayName}
+        type="Promissory note"
+        meta={[noteData.faction]}
+        icon={<DetailsCard.Icon shape="pn" icon={tileGlyph} />}
+      />
+      {isAlliance && commander && (
+        <DetailsCard.Section
+          title="Commander ability"
+          content={<CommanderAbility commander={commander} />}
         />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        {isAlliance && commander && (
-          <>
-            <DetailsCard.Section
-              content={
-                <Stack gap={8}>
-                  <Group gap={10} align="center">
-                    {showLeader(commander.source) && (
-                      <Box
-                        w={36}
-                        h={46}
-                        style={{ overflow: "hidden", borderRadius: 8 }}
-                      >
-                        <Image
-                          src={`/leaders/${commander.id}.webp`}
-                          w={36}
-                          h={46}
-                        />
-                      </Box>
-                    )}
-                    <Stack gap={0} style={{ flex: 1 }}>
-                      <Text size="sm" fw={700} c="white">
-                        {commander.name}
-                      </Text>
-                      <Text size="xs" c="gray.4" fs="italic">
-                        Commander Ability
-                      </Text>
-                    </Stack>
-                  </Group>
-                  <Stack gap={4} style={{ flex: 1 }}>
-                    {commander.abilityWindow && (
-                      <Text size="xs" c="blue.3" fw={600} tt="uppercase">
-                        {commander.abilityWindow}
-                      </Text>
-                    )}
-                    <Text size="sm" c="gray.2" lh={1.5}>
-                      {commander.abilityText}
-                    </Text>
-                  </Stack>
-                </Stack>
-              }
-            />
-            <Divider c="gray.7" opacity={0.8} />
-          </>
-        )}
-
-        <DetailsCard.Section title="Effect" content={displayText} />
-      </Stack>
+      )}
+      <DetailsCard.Section title="Effect" content={displayText} />
     </DetailsCard>
   );
 }

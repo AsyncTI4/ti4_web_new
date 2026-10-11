@@ -1,0 +1,447 @@
+/*
+ * The player deck. One grid declares the lanes once; every seat is a row that
+ * inherits them with `grid-template-columns: subgrid`, so a lane grows to its
+ * widest seat and every other seat takes the same width. Lane cells are flat
+ * field divided by 1px seams (the row's hairline ground showing through the
+ * gaps); the objects inside them carry the character.
+ */
+.wrap {
+  --l-seat: 58px;
+  --l-stores: 176px;
+  --l-leaders: 212px;
+  --l-hold: 214px;
+  --l-tech: 196px;
+  --l-units: 232px;
+  --l-econ: 156px;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Title strip over the deck. */
+.deckbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  min-height: 34px;
+  padding: 7px 12px;
+  background: var(--ds-tex-rail), linear-gradient(180deg, var(--ds-rail), var(--ds-ground-2));
+  border: 1px solid var(--ds-h14);
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  box-shadow: inset 0 1px 0 var(--ds-edge-accent);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.deckTitle,
+.lhLabel {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.deckTitle {
+  color: var(--ds-ink);
+}
+
+.deck {
+  display: grid;
+  grid-template-columns:
+    var(--l-seat)
+    minmax(var(--l-stores), max-content)
+    var(--l-leaders)
+    minmax(var(--l-hold), max-content)
+    var(--l-tech)
+    minmax(var(--l-tech), max-content)
+    minmax(var(--l-units), max-content)
+    minmax(var(--l-econ), max-content)
+    minmax(max-content, 1fr);
+  column-gap: 1px;
+  row-gap: 10px;
+  width: max-content;
+  min-width: 100%;
+  padding: 0 10px 12px 0;
+  background-color: var(--ds-deck);
+  background-image: var(--ds-tex-deck);
+  background-size: var(--ds-tex-deck-size);
+  background-position: var(--ds-tex-deck-pos);
+  background-repeat: var(--ds-tex-deck-repeat);
+  border: 1px solid var(--ds-h14);
+  border-radius: 0 0 3px 3px;
+  box-shadow: inset 0 1px 0 var(--ds-edge-accent);
+}
+
+/* ── Lane ruler: engraved once for the table ── */
+.ruler {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: 1px;
+}
+
+.lh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-bottom: 2px solid var(--ds-h22);
+  background: linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2));
+  color: var(--ds-ink-lo);
+}
+
+.lhSeat {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  justify-content: center;
+  padding: 0;
+}
+
+.lhLead {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-title);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink);
+  white-space: nowrap;
+}
+
+.lhLead::before {
+  content: "▲";
+  font-size: 7px;
+  color: rgb(var(--ds-sig-ok));
+}
+
+.lhLead img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+/* ── A seat: one subgrid row ── */
+.player {
+  --pc: var(--gd-gray);
+  position: relative;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: 34px auto;
+  row-gap: 1px;
+  background: var(--ds-h14);
+  box-shadow: 0 0 0 1px var(--ds-h14);
+}
+
+.player[data-active] {
+  box-shadow: 0 0 0 1px rgba(var(--pc), 0.4);
+}
+
+/*
+ * The faction spine, pinned while the band scrolls sideways: a bar in the
+ * seat's colour, the sigil watermarked behind a large VP numeral, the speaker
+ * token stamped at the foot. The active seat's edge lights green.
+ */
+.seat {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  justify-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(var(--pc), 0.8) 0 3px, transparent 3px),
+    linear-gradient(180deg, rgba(var(--pc), 0.16), rgba(var(--pc), 0.04) 45%, transparent 80%),
+    linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2));
+  box-shadow:
+    inset -1px 0 0 rgba(var(--pc), 0.245),
+    8px 0 12px -8px rgb(0 0 0 / 0.9);
+}
+
+.seat::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 96px;
+  height: 96px;
+  translate: -50% 0;
+  background: var(--sigil) center / contain no-repeat;
+  opacity: 0.07;
+  filter: grayscale(0.3);
+  pointer-events: none;
+}
+
+.seat::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: rgb(var(--pc));
+}
+
+.player[data-active] .seat::after {
+  background: rgb(var(--ds-sig-ok));
+  animation: edgePulse 3.2s ease-in-out infinite;
+}
+
+.seat > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sig {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.7));
+}
+
+.vp {
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+}
+
+.vp b {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: var(--weight-regular);
+  line-height: 0.9;
+  color: var(--ds-white);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 0.7);
+}
+
+.vp small {
+  margin-top: 3px;
+  font-family: var(--font-data);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink);
+}
+
+.vp small i {
+  font-style: normal;
+  color: var(--ds-ink-lo);
+}
+
+.stamps {
+  align-self: end;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+
+.speaker {
+  width: 34px;
+  height: auto;
+}
+
+.tyrant {
+  padding: 2px 4px 1px;
+  border-radius: 2px;
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-tg) / 0.4);
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: rgb(var(--ds-sig-tg));
+}
+
+/* ── Header rail: each group pinned to the lane below it ── */
+.rc {
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 0 6px;
+  overflow: hidden;
+  /* The rail reports on the lanes; it never widens them. */
+  contain: inline-size;
+  background: var(--ds-tex-rail), linear-gradient(180deg, var(--ds-rail), var(--ds-ground-2));
+}
+
+.isEmpty::after {
+  content: "";
+  width: 12px;
+  height: 1px;
+  background: var(--ds-h22);
+}
+
+.rcId {
+  grid-column: 2 / 4;
+  gap: 8px;
+}
+
+.rcBrk {
+  grid-column: 4;
+}
+
+.rcFol {
+  grid-column: 5;
+}
+
+.rcNbr {
+  grid-column: 6;
+}
+
+.rcPn {
+  grid-column: 7;
+}
+
+.rcAbl {
+  grid-column: 8 / -1;
+}
+
+.rc [role="button"] {
+  flex: 0 1 auto;
+  height: 24px;
+}
+
+.rcBrk [role="button"],
+.rcPn [role="button"] {
+  flex: 1 1 auto;
+  max-width: 220px;
+}
+
+.idName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: var(--weight-title);
+  letter-spacing: 0.02em;
+  color: var(--ds-ink-hi);
+}
+
+.idMeta {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.fac {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+}
+
+.idEnd {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.passed {
+  flex: none;
+  padding: 3px 5px 2px;
+  border-radius: 2px;
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 1px var(--ds-h22);
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink);
+}
+
+/* Holding the turn: a status light, so it may pulse. */
+.activeDot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(var(--ds-sig-ok));
+  animation: edgePulse 3.2s ease-in-out infinite;
+}
+
+@keyframes edgePulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ── Lanes ── */
+.lc {
+  grid-row: 2;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  padding: 6px;
+  background: var(--ds-field);
+}
+
+.lcStores {
+  grid-column: 2;
+}
+
+.lcLeaders {
+  grid-column: 3;
+}
+
+.lcHold {
+  grid-column: 4;
+}
+
+/* The tech rack spans both tech tracks; the rail above splits them. */
+.lcTech {
+  grid-column: 5 / 7;
+}
+
+.lcUnits {
+  grid-column: 7;
+}
+
+.lcEcon {
+  grid-column: 8;
+}
+
+.lcPlanets {
+  grid-column: 9;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding-right: 8px;
+}
+
+.extra {
+  flex: none;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--ds-h10);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player[data-active] .seat::after,
+  .activeDot {
+    animation: none;
+  }
+}

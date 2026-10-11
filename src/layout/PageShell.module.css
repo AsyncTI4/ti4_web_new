@@ -1,0 +1,7 @@
+/* Matches Footer.module.css: below 62em the footer is in flow, so the main
+   area stops reserving space for it. */
+@media (max-width: 61.99em) {
+  .withFooter {
+    padding-bottom: 0 !important;
+  }
+}

@@ -1,444 +1,395 @@
 import type { ReactNode } from "react";
-import {
-  Anchor,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Image,
-  List,
-  Stack,
-  Text,
-  Title,
-} from "@/ds";
-import { IconBrandDiscord } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import WidgetBot from "@widgetbot/react-embed";
-import { Surface } from "@/shared/ui/Surface";
+import { IconBrandDiscordFilled } from "@tabler/icons-react";
+import { Button } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import type { useCommunityStats } from "@/api/useCommunityStats";
+import { Tech } from "@/domains/player/components/Tech/Tech";
+import { GameLaneTable, type LaneGame } from "@/domains/dashboard/GameLanes";
+import classes from "./LandingPage.module.css";
 
 type CommunityStatsQuery = ReturnType<typeof useCommunityStats>;
 
-const HERO_TITLE_SIZES = [
-  { size: 70, visibleFrom: "md" },
-  { size: 50, hiddenFrom: "md" },
-] as const;
-
-const HERO_TICKS = ["Free to play", "Bot-managed rules", "Live web maps"];
+const DISCORD_INVITE = "https://discord.gg/asyncti4";
+const SHOWCASE_GAME = "pbd19460";
 
 const SHOWCASE_FACTIONS = [
-  "hacan",
-  "sol",
-  "letnev",
-  "jolnar",
-  "xxcha",
-  "sardakk",
-  "arborec",
-  "mentak",
-  "naalu",
-  "nekro",
-  "muaat",
-  "yin",
-  "ghost",
-  "l1z1x",
-  "saar",
-  "winnu",
-  "yssaril",
-  "argent",
-  "mahact",
-  "nomad",
-  "bentor",
-  "celdauri",
-  "cheiran",
-  "edyn",
-  "ghemina",
-  "gledge",
-  "kolume",
-  "kyro",
-  "nokar",
-  "tnelis",
-  "vaden",
+  "hacan", "sol", "letnev", "jolnar", "xxcha", "sardakk", "arborec", "mentak",
+  "naalu", "nekro", "muaat", "yin", "ghost", "l1z1x", "saar", "winnu",
+  "yssaril", "argent", "mahact", "nomad", "bentor", "celdauri", "cheiran",
+  "edyn", "ghemina", "gledge", "kolume", "kyro", "nokar", "tnelis", "vaden",
   "zelian",
 ];
 
 const HOW_IT_WORKS = [
   {
     title: "Play at your pace",
-    body: "Take your turns whenever you've got a few minutes. No coordinating schedules across time zones, no all-day table sessions.",
+    body: "Take your turn whenever you have a few minutes. Nobody has to line up schedules across time zones, and nobody sits at a table all day.",
   },
   {
-    title: "Easy to use interface",
-    body: "A Discord bot handles everything. Buttons and slash commands let you move units, resolve combat, and manage your faction right in the chat.",
+    title: "The bot runs the rules",
+    body: "Buttons and slash commands in Discord move your units, resolve combat and track your faction's cards and tokens.",
   },
   {
-    title: "Constantly updating map",
-    body: "Every command updates the map automatically. Check it on this site or in Discord — unit positions, system control, and scoring all stay current.",
+    title: "The board stays current",
+    body: "Every command redraws the map. Check it here or in Discord: units, control and scores are always up to date.",
   },
   {
-    title: "Fully reversible",
-    body: "Made a mistake? Undo it. Game masters can tweak the game state manually too, so house rules and weird edge cases are never a problem.",
+    title: "Mistakes can be undone",
+    body: "Undo a wrong click. Game masters can also edit the game state directly, so house rules and odd edge cases still work.",
   },
 ];
 
-const STAT_FIELDS = [
-  { key: "activeGames", label: "Active Games" },
+const STAT_FACTS = [
+  { key: "activeGames", label: "Games running" },
   { key: "players", label: "Players" },
-  { key: "gamesCompleted", label: "Games Complete" },
+  { key: "gamesCompleted", label: "Games finished" },
 ] as const;
 
-function SectionHeading({
-  number,
-  kicker,
-  mb,
-  className = "gradient-text space-title",
-  children,
-}: {
-  number: string;
-  kicker: string;
-  mb: number;
-  className?: string;
-  children: ReactNode;
-}) {
+const FALLBACK_FACTS = [
+  { value: "Free", label: "To play" },
+  { value: "Any hour", label: "Take your turn" },
+  { value: "Live", label: "Web board" },
+];
+
+function DiscordInvite({ children }: { children: ReactNode }) {
   return (
-    <>
-      <div className="sectionKicker">
-        <span className="sectionKickerNum">{number}</span>
-        {kicker}
-      </div>
-      <Title order={2} ta="center" mb={mb} size={48} className={className}>
-        {children}
-      </Title>
-    </>
+    <Button
+      component="a"
+      href={DISCORD_INVITE}
+      target="_blank"
+      rel="noopener noreferrer"
+      variant="filled"
+      color="var(--ds-discord)"
+      size="lg"
+      leftSection={<IconBrandDiscordFilled size={16} />}
+    >
+      {children}
+    </Button>
   );
 }
 
-export function HeroSection() {
+function SectionHead({
+  num,
+  kicker,
+  title,
+  lede,
+}: {
+  num: string;
+  kicker: string;
+  title: string;
+  lede?: string;
+}) {
   return (
-    <Box className="heroSection">
-      <Box className="heroDockViewport">
-        <Box className="heroDockLayout">
-          <Box className="heroDockContent">
-            <Stack gap="md" className="fadeInUp">
-              <Box>
-                <span className="heroTag">
-                  Play-by-Discord · Twilight Imperium 4E
-                </span>
-                <div className="heroDivider" />
-              </Box>
-              {HERO_TITLE_SIZES.map(({ size, ...visibility }) => (
-                <Title
-                  key={size}
-                  order={1}
-                  className="gradient-text space-title"
-                  size={size}
-                  {...visibility}
-                >
-                  Async Twilight Imperium
-                </Title>
-              ))}
-              <Text size="sm" c="gray.6">
-                A fan project for Twilight Imperium™
-              </Text>
-              <Text
-                fz={22}
-                lh={1.3}
-                fw={500}
-                c="gray.4"
-                className="enhancedText fadeInUp delay-1"
-              >
-                Play full games of Twilight Imperium asynchronously through
-                Discord. No marathon sessions required.
-              </Text>
-              <Button
-                component="a"
-                href="https://discord.gg/asyncti4"
-                target="_blank"
-                rel="noopener noreferrer"
-                size="xl"
-                variant="filled"
-                className="enhancedButton fadeInUp delay-2"
-                mt="md"
-                leftSection={<IconBrandDiscord size={28} />}
-              >
-                Join our Discord
-              </Button>
-              <div className="heroTicks fadeInUp delay-3">
-                {HERO_TICKS.map((tick) => (
-                  <span key={tick} className="heroTick">
-                    {tick}
-                  </span>
-                ))}
-              </div>
-            </Stack>
-          </Box>
+    <div className={classes.sectionHead}>
+      <span className={`${classes.label} ${classes.kicker}`}>
+        <b>{num}</b>
+        {kicker}
+      </span>
+      <h2 className={classes.h2}>{title}</h2>
+      {lede && <p className={classes.sectionLede}>{lede}</p>}
+    </div>
+  );
+}
 
-          <Box className="heroGameEmbedContainer fadeInUp delay-3">
-            <div className="heroGameEmbedFrameWrap">
-              <iframe
-                className="heroGameEmbedFrame"
-                src="/embed/pbd19460/map-only?sidebar=none"
-                title="PBD19460 Map Only"
-                loading="lazy"
-              />
-            </div>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+function HeroFacts({ query }: { query: CommunityStatsQuery }) {
+  if (query.isError) {
+    return (
+      <div className={classes.facts}>
+        {FALLBACK_FACTS.map((fact) => (
+          <span key={fact.label} className={classes.fact}>
+            <b>{fact.value}</b>
+            <small>{fact.label}</small>
+          </span>
+        ))}
+      </div>
+    );
+  }
+  return (
+    <div className={classes.facts}>
+      {STAT_FACTS.map(({ key, label }) => (
+        <span key={key} className={classes.fact}>
+          <b>{query.data?.[key].toLocaleString() ?? "—"}</b>
+          <small>{label}</small>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function LiveBoard() {
+  return (
+    <figure className={classes.board} aria-label="A live game board">
+      <div className={classes.boardBar}>
+        <span className={classes.liveDot} aria-hidden="true" />
+        <span>Live board · {SHOWCASE_GAME}</span>
+        <Link to={`/game/${SHOWCASE_GAME}`}>Open game</Link>
+      </div>
+      <iframe
+        className={classes.boardFrame}
+        src={`/embed/${SHOWCASE_GAME}/map-only?sidebar=none`}
+        title={`Live board for ${SHOWCASE_GAME}`}
+        loading="lazy"
+      />
+      <Link to={`/game/${SHOWCASE_GAME}`} className={classes.boardOpen}>
+        Open the live board
+      </Link>
+    </figure>
+  );
+}
+
+export function HeroSection({ query }: { query: CommunityStatsQuery }) {
+  return (
+    <section className={classes.hero} aria-label="Async Twilight Imperium">
+      <div className={`${classes.inner} ${classes.heroGrid}`}>
+        <div className={classes.heroCopy}>
+          <span className={classes.label}>Play-by-Discord · Twilight Imperium 4e</span>
+          <h1 className={classes.headline}>The galaxy waits for your move.</h1>
+          <p className={classes.lede}>
+            Full games of Twilight Imperium, played asynchronously through
+            Discord. A bot keeps the rules, and the board on this site updates
+            with every command.
+          </p>
+          <div className={classes.ctas}>
+            <DiscordInvite>Join the Discord</DiscordInvite>
+            <Button component={Link} to="/games" variant="default" size="lg">
+              Watch a live game
+            </Button>
+          </div>
+          <HeroFacts query={query} />
+          <span className={classes.fanNote}>A free fan project for Twilight Imperium™.</span>
+        </div>
+        <LiveBoard />
+      </div>
+    </section>
   );
 }
 
 export function FactionStrip() {
   return (
-    <Box className="factionStrip">
-      <div className="factionStripInner">
+    <div className={classes.strip} aria-hidden="true">
+      <div className={classes.stripInner}>
         {SHOWCASE_FACTIONS.map((faction) => (
-          <Image
+          <img
             key={faction}
             src={cdnImage(`/factions/${faction}.png`)}
-            alt={faction}
-            w={44}
-            h={44}
-            className="factionStripIcon"
+            alt=""
+            loading="lazy"
+            className={classes.stripIcon}
           />
         ))}
       </div>
-    </Box>
-  );
-}
-
-export function StatsStrip({ query }: { query: CommunityStatsQuery }) {
-  return (
-    <Box className="statsStrip">
-      <Container size={1400}>
-        {query.isError ? (
-          <Text ta="center" c="gray.6" py={10} size="sm">
-            Could not load stats
-          </Text>
-        ) : (
-          <div className="statsGrid">
-            {STAT_FIELDS.map(({ key, label }) => (
-              <div key={label} className="stat">
-                <span className="statValue">
-                  {query.data?.[key].toLocaleString() ?? "—"}
-                </span>
-                <span className="statLabel">{label}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </Container>
-    </Box>
+    </div>
   );
 }
 
 export function HowItWorksSection() {
   return (
-    <Box
-      pt={100}
-      pb={100}
-      className="enhancedSection sectionVariant1 howItWorksSection"
-    >
-      <img
-        src="/chillhacan.webp"
-        alt=""
-        aria-hidden="true"
-        className="howItWorksCornerArt"
-      />
-      <img
-        src="/mentakcurls.webp"
-        alt=""
-        aria-hidden="true"
-        className="howItWorksCornerArtRight"
-      />
-      <Container size={1600} className="sectionContainer">
-        <SectionHeading number="01" kicker="Gameplay" mb={56}>
-          How it Works
-        </SectionHeading>
-
-        <Box id="how-it-works" className="howItWorksContentWrap">
-          <Grid align="center">
-            <Grid.Col span={{ base: 12, lg: 6 }}>
-              <List spacing="xl" size="lg" center icon={<></>}>
-                {HOW_IT_WORKS.map((item) => (
-                  <List.Item key={item.title} className="enhancedListItem">
-                    <Text size="xl" fw={700} c="gray.2">
-                      {item.title}
-                    </Text>
-                    <Text size="lg" c="gray.4" mt="xs" className="enhancedText">
-                      {item.body}
-                    </Text>
-                  </List.Item>
-                ))}
-              </List>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, lg: 6 }}>
-              <Surface pattern="circle" cornerAccents>
-                <Image
-                  src="/discord.png"
-                  alt="Discord interface"
-                  radius="xl"
-                  height={500}
-                />
-              </Surface>
-            </Grid.Col>
-          </Grid>
-        </Box>
-      </Container>
-    </Box>
+    <section id="how-it-works" className={classes.section} aria-label="How it works">
+      <div className={classes.inner}>
+        <SectionHead
+          num="01"
+          kicker="How it works"
+          title="A full game, a few minutes at a time"
+          lede="A game usually runs for weeks. Each turn happens in your game's Discord channel, whenever it suits you."
+        />
+        <div className={classes.how}>
+          <ol className={classes.steps}>
+            {HOW_IT_WORKS.map((item, index) => (
+              <li key={item.title} className={classes.step}>
+                <span className={classes.stepNum}>{String(index + 1).padStart(2, "0")}</span>
+                <h3 className={classes.stepTitle}>{item.title}</h3>
+                <p className={classes.stepBody}>{item.body}</p>
+              </li>
+            ))}
+          </ol>
+          <figure className={classes.shot}>
+            <img src="/discord.png" alt="A game channel in Discord with the bot's turn buttons" loading="lazy" />
+            <figcaption>A game channel: the bot posts the state, you press buttons to act.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function GameCard({
-  game,
-}: {
-  game: NonNullable<CommunityStatsQuery["data"]>["gamesInProgress"][number];
-}) {
+function MapSpecimen() {
+  const cells = ["a", "", "c", "", "b", "", "a", "", "", "c", "b", "", "a", "a", ""];
   return (
-    <div className="gameCard">
-      <Text className="gameCardTitle" c="gray.2">
-        {game.name}
-      </Text>
-      <Text className="gameCardMeta" c="gray.5">
-        Round {game.round} · {game.vpTarget} VP
-      </Text>
-      <div className="gameCardFactions">
-        {game.factions.map((faction) => (
-          <Image
-            key={faction}
-            src={cdnImage(`/factions/${faction}.png`)}
-            alt={faction}
-            w={28}
-            h={28}
-            className="gameCardFactionIcon"
-          />
+    <div className={classes.specimen} aria-hidden="true">
+      <div className={classes.specimenHex}>
+        {cells.map((c, index) => (
+          <i key={index} data-c={c || undefined} />
         ))}
       </div>
-      <Button
-        component={Link}
-        to={`/game/${game.id}`}
-        variant="default"
-        size="sm"
-        className="gameCardButton"
-      >
-        Watch Game
-      </Button>
     </div>
   );
 }
 
-export function GamesInProgressSection({
-  query,
-}: {
-  query: CommunityStatsQuery;
-}) {
-  const showLoadError = query.isError || (!query.isLoading && !query.data);
+function TechSpecimen() {
+  return (
+    <div className={`${classes.specimen} ${classes.techs}`}>
+      <Tech techId="gd" />
+      <Tech techId="st" />
+      <Tech techId="ps" />
+    </div>
+  );
+}
+
+function TurnSpecimen() {
+  return (
+    <div className={classes.specimen} aria-hidden="true">
+      <div className={classes.specimenRow}>
+        <b>pbd16664</b> <span className={classes.specimenYou}>Your turn</span>
+      </div>
+      <div className={classes.specimenRow}>
+        <b>pbd17012</b> Waiting on the table
+      </div>
+      <div className={classes.specimenRow}>
+        <b>pbd16502</b> Waiting on the table
+      </div>
+    </div>
+  );
+}
+
+const FEATURES = [
+  {
+    title: "The live board",
+    body: "Zoom the map, check who controls what, and open any system to see the units in it.",
+    specimen: <MapSpecimen />,
+  },
+  {
+    title: "Every player's area",
+    body: "Tech, planets, leaders, objectives and promissory notes for each seat, laid out so you can compare them at a glance.",
+    specimen: <TechSpecimen />,
+  },
+  {
+    title: "Your games in one place",
+    body: "Log in with Discord to see which of your games are waiting on you, plus your titles and badges.",
+    specimen: <TurnSpecimen />,
+  },
+];
+
+export function FeaturesSection() {
+  return (
+    <section className={classes.section} aria-label="On this site">
+      <div className={classes.inner}>
+        <SectionHead
+          num="02"
+          kicker="On this site"
+          title="Everything the table can see"
+          lede="Discord is where you play. This site is where you read the game."
+        />
+        <div className={classes.features}>
+          {FEATURES.map((feature) => (
+            <article key={feature.title} className={classes.feature}>
+              {feature.specimen}
+              <h3 className={classes.featureTitle}>{feature.title}</h3>
+              <p className={classes.featureBody}>{feature.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function GamesInProgressSection({ query }: { query: CommunityStatsQuery }) {
+  const failed = query.isError || (!query.isLoading && !query.data);
+  const games: LaneGame[] = (query.data?.gamesInProgress ?? []).map((game) => ({
+    id: game.id,
+    title: game.name,
+    href: `/game/${game.id}`,
+    seats: game.factions.map((faction) => ({ key: faction, faction })),
+    round: `R${game.round}`,
+    clock: { kind: "quiet", label: `First to ${game.vpTarget} VP` },
+    last: "Watch",
+  }));
 
   return (
-    <Box pt={100} pb={100} className="enhancedSection sectionVariant2">
-      <Container size={1400} className="sectionContainer">
-        <SectionHeading number="02" kicker="Live Operations" mb={16}>
-          Games in Progress
-        </SectionHeading>
-        <Text ta="center" c="gray.5" mb={48} maw={520} mx="auto">
-          Dozens of games are running right now. Click into any one to see the
-          map and scores.
-        </Text>
-
-        {showLoadError ? (
-          <Text ta="center" c="gray.6" mt={24} size="sm">
-            Could not load games in progress
-          </Text>
-        ) : (
-          <div className="gameCardGrid">
-            {(query.data?.gamesInProgress ?? []).map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        )}
-      </Container>
-    </Box>
+    <section className={classes.section} aria-label="Games in progress">
+      <div className={classes.inner}>
+        <div className={classes.sectionHeadRow}>
+          <SectionHead
+            num="03"
+            kicker="Live now"
+            title="Games in progress"
+            lede="Open any game to see its board and scores. You don't need an account to watch."
+          />
+          {query.data && (
+            <span className={classes.meta}>
+              {query.data.activeGames.toLocaleString()} games running
+            </span>
+          )}
+        </div>
+        <GameLaneTable
+          label="Games in progress"
+          loading={query.isLoading}
+          games={games}
+          columns={{ seats: "Factions", clock: "Target", last: "" }}
+          empty={
+            failed
+              ? { title: "Live games didn't load", body: "Try again in a moment." }
+              : { title: "No public games to show right now" }
+          }
+        />
+      </div>
+    </section>
   );
 }
 
 export function CommunitySection() {
   return (
-    <Box pt={100} pb={100} className="enhancedSection sectionVariant3">
-      <Container size={1600} className="sectionContainer">
-        <SectionHeading
-          number="03"
+    <section className={classes.section} aria-label="Community">
+      <div className={classes.inner}>
+        <SectionHead
+          num="04"
           kicker="Community"
-          mb={32}
-          className="gradient-text-grey space-title"
-        >
-          Join our Community
-        </SectionHeading>
-
-        <Text size="lg" c="gray.4" ta="center" mb={32} className="enhancedText">
-          We run 32-player mega games, weird mods like 'Rotato Potato' (the map
-          rings rotate each turn), and plenty of homebrew nonsense. Come hang
-          out, talk strategy, or just watch the chaos.
-        </Text>
-
-        <Surface pattern="grid" cornerAccents>
+          title="Come and say hello"
+          lede="We run 32-player mega games, odd mods like Rotato Potato (the map rings turn every round) and plenty of homebrew. Talk strategy, find a game, or watch."
+        />
+        <div className={classes.widget}>
           <WidgetBot
             server="943410040369479690"
             channel="1025083568839471165"
             width="100%"
-            height="600px"
+            height="560px"
           />
-        </Surface>
-      </Container>
-    </Box>
+        </div>
+        <div className={classes.ctas} style={{ marginTop: 16 }}>
+          <DiscordInvite>Join the Discord</DiscordInvite>
+        </div>
+      </div>
+    </section>
   );
 }
 
 export function BanAppealsSection() {
   return (
-    <Box pt={80} pb={80} className="enhancedSection banAppealsSection">
-      <Container size={800} className="sectionContainer">
-        <Stack align="center" gap="md">
-          <Title
-            order={2}
-            ta="center"
-            size={36}
-            c="gray.4"
-            className="space-title"
-          >
-            Server Ban Appeals
-          </Title>
-          <Text size="md" c="gray.5" ta="center" maw={620}>
-            Banned from the AsyncTI4 Discord and think it was a mistake? Submit
-            an appeal below. The mod team will review it and get back to you.
-          </Text>
-          <Button
-            component="a"
-            href="https://forms.gle/o5D9JoXTbxpXEQfT9"
-            target="_blank"
-            rel="noopener noreferrer"
-            size="md"
-            variant="outline"
-            color="gray"
-            mt="sm"
-          >
-            Submit a Ban Appeal
-          </Button>
-          <Text size="xs" c="gray.6" ta="center">
-            Appeals are only for bans from the{" "}
-            <Anchor
-              href="https://discord.gg/asyncti4"
-              target="_blank"
-              rel="noopener noreferrer"
-              c="gray.5"
-              size="xs"
-            >
+    <section className={classes.inner} aria-label="Server ban appeals">
+      <div className={classes.appeals}>
+        <div className={classes.appealsText}>
+          <h2 className={classes.appealsTitle}>Server ban appeals</h2>
+          <p className={classes.appealsBody}>
+            Banned from the{" "}
+            <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">
               AsyncTI4 Discord server
-            </Anchor>
-            . Do not use this form to report bugs or request game support.
-          </Text>
-        </Stack>
-      </Container>
-    </Box>
+            </a>{" "}
+            and think it was a mistake? Send an appeal and the mod team will
+            reply. This form is not for bug reports or game support.
+          </p>
+        </div>
+        <Button
+          component="a"
+          href="https://forms.gle/o5D9JoXTbxpXEQfT9"
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="default"
+        >
+          Submit a ban appeal
+        </Button>
+      </div>
+    </section>
   );
 }

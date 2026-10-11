@@ -5,9 +5,8 @@ import type { useGameData } from "@/state/useGameContext";
 import { ScoreTracker } from "@/domains/objectives/components";
 import ExpandedPublicObjectives from "@/domains/objectives/components/PublicObjectives/ExpandedPublicObjectives";
 import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
-import PlayerCardMobile from "@/domains/player/components/composition/PlayerCardMobile";
+import { PlayerDeck } from "@/domains/player/components/deck/PlayerDeck";
 import { ScaledContent } from "@/shared/ui/ScaledContent";
-import Caption from "@/shared/ui/Caption/Caption";
 import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 import { computePanelsZoom } from "@/utils/zoom";
 
@@ -102,18 +101,10 @@ export function BoardHud({
         )}
 
         <HudSection isMobile={isMobile} innerStyle={playerAreaStyles}>
-          <Stack gap={4} style={{ width: "max-content", minWidth: "100%" }}>
-            <Caption size="sm" rule mt={4}>
-              Player Areas
-            </Caption>
-            {filterPlayersWithAssignedFaction(gameData?.playerData ?? []).map(
-              (player) => (
-                <Box key={player.color}>
-                  <PlayerCardMobile playerData={player} />
-                </Box>
-              ),
-            )}
-          </Stack>
+          <PlayerDeck
+            players={filterPlayersWithAssignedFaction(gameData?.playerData ?? [])}
+            vpsToWin={gameData?.vpsToWin || 10}
+          />
         </HudSection>
 
         {gameData && (

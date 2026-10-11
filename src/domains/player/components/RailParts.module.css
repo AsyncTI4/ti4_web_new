@@ -1,0 +1,44 @@
+.lbl {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+  white-space: nowrap;
+}
+
+.follow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.scn {
+  font-family: var(--font-data);
+  font-size: var(--text-title);
+  font-weight: var(--weight-title);
+  color: color-mix(in oklab, rgb(var(--scc)) 75%, var(--ds-white));
+}
+
+.nbrs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ds-ink-lo);
+}
+
+.nbrs svg {
+  flex: none;
+  margin-right: 3px;
+}
+
+.nbrs img {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}

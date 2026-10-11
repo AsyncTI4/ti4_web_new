@@ -240,7 +240,7 @@ export function Select({ data, value, defaultValue, onChange, placeholder = "Sel
   const items = normalize(data);
   return (
     <FieldFrame {...chrome} size={size}>
-      <BaseSelect.Root items={items} value={value} defaultValue={defaultValue} onValueChange={(v) => onChange?.(v as string | null)} disabled={disabled}>
+      <BaseSelect.Root items={items} value={value} defaultValue={defaultValue} onValueChange={(v) => onChange?.(v)} disabled={disabled}>
         <BaseSelect.Trigger className={cx(classes.input, classes.selectTrigger, classes[`control_${size}`])} aria-label={chrome["aria-label"]}>
           <BaseSelect.Value className={classes.selectValue} placeholder={placeholder} />
           <BaseSelect.Icon className={classes.selectIcon}>▾</BaseSelect.Icon>
@@ -286,7 +286,7 @@ export function MultiSelect({ data, value, defaultValue, onChange, placeholder =
   const labelOf = (v: string) => items.find((i) => i.value === v)?.label ?? v;
   return (
     <FieldFrame {...chrome} size={size}>
-      <BaseSelect.Root multiple items={items} value={value} defaultValue={defaultValue} onValueChange={(v) => onChange?.((v as string[]) ?? [])} disabled={disabled}>
+      <BaseSelect.Root multiple items={items} value={value} defaultValue={defaultValue} onValueChange={(v) => onChange?.((v) ?? [])} disabled={disabled}>
         <BaseSelect.Trigger className={cx(classes.input, classes.selectTrigger, classes.multiTrigger)}>
           <BaseSelect.Value className={classes.selectValue}>
             {(selected: string[] | null) =>

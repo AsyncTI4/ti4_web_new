@@ -1,4 +1,4 @@
-import { Stack, Image, Divider } from "@/ds";
+import { Image } from "@/ds";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { showLeader } from "@/entities/lookup/showLeader";
@@ -24,34 +24,31 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   const displayAbilityText =
     (isTwilightsFallMode && leaderData.tfAbilityText) || leaderData.abilityText;
 
-  const leaderIcon = showLeader(leaderData.source) ? (
-    <Image src={`/leaders/${leaderId}.webp`} w={60} h={80} radius="50%" />
-  ) : null;
+  const portrait = showLeader(leaderData.source) ? (
+    <DetailsCard.Icon
+      shape="leader"
+      icon={<Image src={`/leaders/${leaderId}.webp`} alt="" />}
+    />
+  ) : undefined;
 
   return (
-    <DetailsCard width={320}>
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={displayName}
-          subtitle={displayTitle}
-          icon={<DetailsCard.Icon icon={leaderIcon} />}
-          caption={leaderData.type}
-        />
-
-        <Divider c="gray.7" opacity={0.8} />
-
+    <DetailsCard width={340} color="green">
+      <DetailsCard.Title
+        title={displayName}
+        type={leaderData.type}
+        meta={[displayTitle]}
+        icon={portrait}
+      />
+      {leaderData.unlockCondition && (
         <DetailsCard.Section
-          title="Unlock Condition"
+          title="Unlocks"
           content={leaderData.unlockCondition}
         />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        <DetailsCard.Section
-          title={displayAbilityWindow}
-          content={displayAbilityText}
-        />
-      </Stack>
+      )}
+      <DetailsCard.Section
+        title={displayAbilityWindow}
+        content={displayAbilityText}
+      />
     </DetailsCard>
   );
 }

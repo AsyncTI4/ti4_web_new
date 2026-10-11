@@ -1,8 +1,5 @@
-import { Box, Group, Stack, Text, Image } from "@/ds";
-import { IconLock } from "@tabler/icons-react";
-import cx from "clsx";
+import type { KeyboardEvent } from "react";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import { getLeaderById } from "@/entities/lookup/leaders";
@@ -18,61 +15,62 @@ type Props = {
   active: boolean;
 };
 
-export function LeaderChip({
-  id,
-  type,
-  exhausted,
-  locked,
-  active,
-}: Props) {
+function getLeaderState(exhausted: boolean, locked: boolean) {
+  if (locked) return "locked";
+  if (exhausted) return "exhausted";
+  return undefined;
+}
+
+/**
+ * Leader dossier row: a squared plate with a cut corner and the portrait in an
+ * inset well. Locked leaders are sockets with a + seat; exhausted ones are
+ * hatched.
+ */
+export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const leaderData = getLeaderById(id);
   if (!leaderData) return null;
 
-  const shouldShowGreen = !exhausted && !locked;
-  const accentColor = shouldShowGreen ? "green" : "gray";
-  const showLeaderImage = showLeader(leaderData.source);
-
-  const typeClassName = cx(
-    styles.leaderType,
-    shouldShowGreen ? styles.leaderTypeActive : styles.leaderTypeInactive,
-  );
-
-  const nameClassName = cx(
-    styles.leaderName,
-    shouldShowGreen ? styles.leaderNameActive : styles.leaderNameInactive,
-  );
+  const state = getLeaderState(exhausted, locked);
+  const showPortrait = !locked && showLeader(leaderData.source);
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    toggle();
+  };
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip accent={accentColor} onClick={toggle} className={styles.plate}>
-          <Box className={styles.leaderWrapper}>
-            <Group gap={6} className={styles.leaderGroup}>
-              {showLeaderImage && (
-                <div className={styles.leaderImageContainer}>
-                  <Image
-                    {...lowPriorityImageProps}
-                    src={`/leaders/${id}.webp`}
-                    className={styles.leaderImage}
-                  />
-                </div>
-              )}
-
-              <Stack gap={0} className={styles.textContainer}>
-                <Text className={nameClassName}>{leaderData.name}</Text>
-                <Text className={typeClassName}>{type}</Text>
-              </Stack>
-            </Group>
-
-            {active && <Box className={styles.onlineDot} />}
-            {locked && (
-              <Box className={styles.lockIcon}>
-                <IconLock size={12} color="var(--ds-gray-3)" stroke={2.5} />
-              </Box>
+        <div
+          role="button"
+          tabIndex={0}
+          className={styles.lead}
+          data-s={state}
+          title={leaderData.name}
+          onClick={toggle}
+          onKeyDown={handleKeyDown}
+        >
+          <span className={styles.well}>
+            {showPortrait ? (
+              <img
+                {...lowPriorityImageProps}
+                src={`/leaders/${id}.webp`}
+                alt=""
+              />
+            ) : (
+              <span aria-hidden="true">{locked ? "+" : ""}</span>
             )}
-          </Box>
-        </Chip>
+          </span>
+          <span className={styles.text}>
+            <strong>{leaderData.name}</strong>
+            <em>
+              {type}
+              {exhausted && !locked && " · exhausted"}
+            </em>
+          </span>
+          {active && <span className={styles.onlineDot} />}
+        </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <LeaderDetailsCard leaderId={id} />

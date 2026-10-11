@@ -1,6 +1,4 @@
 import cx from "clsx";
-import type { CSSProperties } from "react";
-import { cdnImage } from "@/entities/data/cdnImage";
 import styles from "./ResourceInfluenceCompact.module.css";
 
 export type PlanetEconomics = {
@@ -28,188 +26,116 @@ type Props = {
   showTotalSpend?: boolean;
 };
 
-type StatColor = "resource" | "influence" | "flex" | "total";
+type Kind = "resource" | "influence" | "flex";
 
-const ROW_CLASS: Record<StatColor, string> = {
-  resource: styles.resource,
-  influence: styles.influence,
-  flex: styles.flex,
-  total: styles.totalRow,
-};
-
-type StatRowProps = {
-  kind: StatColor;
-  current: number;
-  total: number;
-  currentWidth: string;
-  totalWidth: string;
-};
-
-function padNumber(num: number): string {
-  const rounded = Math.floor(num);
-  return rounded < 10 ? ` ${rounded}` : `${rounded}`;
+/** The resource blob, the influence hex and the split flex hex. */
+function EconomyGlyph({ kind }: { kind: Kind }) {
+  if (kind === "resource") {
+    return (
+      <svg viewBox="0 0 20 20" className={cx(styles.glyph, styles.res)} aria-hidden="true">
+        <path d="M10 1.8c2 0 3 1.3 4.6 1.8 1.7.5 3.6 1.5 3.6 4 0 1.6-.9 2.3-.9 3.6 0 1.7 1 2.6.3 4.4-.8 2-3 2.5-4.6 2.6-1.5.1-2.1 0-3 0s-1.5.1-3 0c-1.6-.1-3.8-.6-4.6-2.6-.7-1.8.3-2.7.3-4.4 0-1.3-.9-2-.9-3.6 0-2.5 1.9-3.5 3.6-4C7 3.1 8 1.8 10 1.8z" />
+      </svg>
+    );
+  }
+  if (kind === "influence") {
+    return (
+      <svg viewBox="0 0 20 20" className={cx(styles.glyph, styles.inf)} aria-hidden="true">
+        <path d="M10 1.5 17.4 5.8v8.4L10 18.5 2.6 14.2V5.8z" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 20 20" className={cx(styles.glyph, styles.flexGlyph)} aria-hidden="true">
+      <path className={styles.inf} d="M10 1.5 17.4 5.8v8.4L10 18.5" />
+      <path className={styles.res} d="M10 1.5 2.6 5.8v8.4l7.4 4.3" />
+    </svg>
+  );
 }
 
-function getDigitWidths(values: Array<number | undefined>) {
-  const resolved = values
-    .filter((value): value is number => value !== undefined)
-    .map((value) => Math.floor(value).toString().length);
-  return `${Math.max(1, ...resolved)}ch`;
-}
+const KIND_LABEL: Record<Kind, string> = {
+  resource: "resources",
+  influence: "influence",
+  flex: "flex",
+};
 
-function StatRow({
+function LedgerRow({
   kind,
   current,
   total,
-  currentWidth,
-  totalWidth,
-}: StatRowProps) {
+}: {
+  kind: Kind;
+  current: number;
+  total: number;
+}) {
   return (
-    <div className={cx(styles.statRow, ROW_CLASS[kind])}>
-      <span className={styles.current} style={{ minWidth: currentWidth }}>
-        {padNumber(current)}
-      </span>
-      <span className={styles.total} style={{ minWidth: totalWidth }}>
-        {Math.floor(total)}
-      </span>
+    <div className={cx(styles.row, styles[kind])} title={`${current} of ${total} ${KIND_LABEL[kind]}`}>
+      <EconomyGlyph kind={kind} />
+      <dd>
+        {Math.floor(current)}
+        <span className={styles.of}>{Math.floor(total)}</span>
+      </dd>
     </div>
   );
 }
 
-type ColumnProps = {
-  label: string;
-  currentResources: number;
-  totalResources: number;
-  currentInfluence: number;
-  totalInfluence: number;
-  currentFlex?: number;
-  totalFlex?: number;
-  showFlex?: boolean;
-  showTotal?: boolean;
-  flexSpendOnly?: boolean;
-};
-
-function EconomicsColumn({
-  label,
-  currentResources,
-  totalResources,
-  currentInfluence,
-  totalInfluence,
-  currentFlex,
-  totalFlex,
-  showFlex = false,
-  showTotal = true,
-  flexSpendOnly = false,
-}: ColumnProps) {
-  const currentWidth = getDigitWidths([
-    currentResources,
-    currentInfluence,
-    showFlex ? currentFlex : undefined,
-  ]);
-  const totalWidth = getDigitWidths([
-    totalResources,
-    totalInfluence,
-    showFlex ? totalFlex : undefined,
-  ]);
-
-  if (flexSpendOnly) {
-    return (
-      <div className={styles.column}>
-        <div className={styles.caption}>{label}</div>
-        <StatRow
-          kind="flex"
-          current={currentFlex ?? 0}
-          total={totalFlex ?? 0}
-          currentWidth={getDigitWidths([currentFlex])}
-          totalWidth={getDigitWidths([totalFlex])}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.column}>
-      <div className={styles.caption}>{label}</div>
-      <StatRow
-        kind="resource"
-        current={currentResources}
-        total={totalResources}
-        currentWidth={currentWidth}
-        totalWidth={totalWidth}
-      />
-      <StatRow
-        kind="influence"
-        current={currentInfluence}
-        total={totalInfluence}
-        currentWidth={currentWidth}
-        totalWidth={totalWidth}
-      />
-      {showFlex && currentFlex !== undefined && totalFlex !== undefined ? (
-        <StatRow
-          kind="flex"
-          current={currentFlex}
-          total={totalFlex}
-          currentWidth={currentWidth}
-          totalWidth={totalWidth}
-        />
-      ) : (
-        <div className={styles.hiddenRow} aria-hidden="true" />
-      )}
-      {showTotal && (
-        <StatRow
-          kind="total"
-          current={
-            currentResources +
-            currentInfluence +
-            (showFlex && currentFlex !== undefined ? currentFlex : 0)
-          }
-          total={
-            totalResources +
-            totalInfluence +
-            (showFlex && totalFlex !== undefined ? totalFlex : 0)
-          }
-          currentWidth={currentWidth}
-          totalWidth={totalWidth}
-        />
-      )}
-    </div>
-  );
-}
-
+/**
+ * Economy ledger: optimal spend on the left with its sum under a rule, totals
+ * on the right. Resources are the yellow blob, influence the blue hex and flex
+ * the split hex, matching the planet badges.
+ */
 export function ResourceInfluenceCompact({
   planetEconomics,
   showTotalSpend = true,
 }: Props) {
+  const { optimal, total, flex, flexSpendOnly } = planetEconomics;
+  const sumCurrent =
+    optimal.currentResources + optimal.currentInfluence + flex.currentFlex;
+  const sumTotal =
+    optimal.totalResources + optimal.totalInfluence + flex.totalFlex;
+
   return (
-    <div
-      className={styles.compact}
-      style={
-        {
-          "--resource-icon": `url("${cdnImage("/player_area/pa_resources.png")}")`,
-        } as CSSProperties
-      }
-    >
-      <EconomicsColumn
-        label="Optimal"
-        currentResources={planetEconomics.optimal.currentResources}
-        totalResources={planetEconomics.optimal.totalResources}
-        currentInfluence={planetEconomics.optimal.currentInfluence}
-        totalInfluence={planetEconomics.optimal.totalInfluence}
-        currentFlex={planetEconomics.flex.currentFlex}
-        totalFlex={planetEconomics.flex.totalFlex}
-        showFlex
-        flexSpendOnly={planetEconomics.flexSpendOnly}
-      />
+    <div className={cx(styles.econ, !showTotalSpend && styles.single)}>
+      <span className={styles.lbl}>Optimal</span>
+      {showTotalSpend && <span className={styles.lbl}>Total</span>}
+      <dl>
+        {!flexSpendOnly && (
+          <>
+            <LedgerRow
+              kind="resource"
+              current={optimal.currentResources}
+              total={optimal.totalResources}
+            />
+            <LedgerRow
+              kind="influence"
+              current={optimal.currentInfluence}
+              total={optimal.totalInfluence}
+            />
+          </>
+        )}
+        <LedgerRow kind="flex" current={flex.currentFlex} total={flex.totalFlex} />
+        {!flexSpendOnly && (
+          <div className={cx(styles.row, styles.sum)} title="Optimal spend">
+            <span />
+            <dd>
+              {Math.floor(sumCurrent)}
+              <span className={styles.of}>{Math.floor(sumTotal)}</span>
+            </dd>
+          </div>
+        )}
+      </dl>
       {showTotalSpend && (
-        <EconomicsColumn
-          label="Total"
-          currentResources={planetEconomics.total.currentResources}
-          totalResources={planetEconomics.total.totalResources}
-          currentInfluence={planetEconomics.total.currentInfluence}
-          totalInfluence={planetEconomics.total.totalInfluence}
-          showFlex={false}
-          showTotal={false}
-        />
+        <dl>
+          <LedgerRow
+            kind="resource"
+            current={total.currentResources}
+            total={total.totalResources}
+          />
+          <LedgerRow
+            kind="influence"
+            current={total.currentInfluence}
+            total={total.totalInfluence}
+          />
+        </dl>
       )}
     </div>
   );

@@ -32,20 +32,6 @@ type Props = {
   isExhausted?: boolean;
 };
 
-const LEGENDARY_PARTICLES = [
-  styles.particle1,
-  styles.particle2,
-  styles.particle3,
-  styles.particle4,
-  styles.particle5,
-];
-const OCEAN_BUBBLES = [
-  styles.bubble1,
-  styles.bubble2,
-  styles.bubble3,
-  styles.bubble4,
-];
-
 function PlanetCompactValues({
   iconSources,
   resources,
@@ -73,41 +59,13 @@ function PlanetCompactValues({
   );
 }
 
-function PlanetDecorations({
-  planetData,
-  isLegendary,
-  isOceanic,
-  isExhausted,
-}: {
-  planetData: Planet;
-  isLegendary: boolean;
-  isOceanic: boolean;
-  isExhausted: boolean;
-}) {
+function PlanetDecorations({ planetData }: { planetData: Planet }) {
   const tileBackground = isMobileDevice()
     ? null
     : getPlanetTileBackground(planetData);
 
   return (
     <>
-      {isLegendary && !isExhausted && (
-        <>
-          <Box className={styles.legendaryConstellation} />
-          {LEGENDARY_PARTICLES.map((particle) => (
-            <Box
-              key={particle}
-              className={cx(styles.floatingParticle, particle)}
-            />
-          ))}
-        </>
-      )}
-
-      {isOceanic &&
-        !isExhausted &&
-        OCEAN_BUBBLES.map((bubble) => (
-          <Box key={bubble} className={cx(styles.bubbleParticle, bubble)} />
-        ))}
-
       {tileBackground && (
         <Box
           className={styles.tileArtMask}
@@ -182,12 +140,7 @@ export function PlanetCard({
           )}
           style={{ ...cssVariables, ...getPlanetIconStyle(planetIconSrc) }}
         >
-          <PlanetDecorations
-            planetData={planetData}
-            isLegendary={isLegendary}
-            isOceanic={isOceanic}
-            isExhausted={isExhausted}
-          />
+          <PlanetDecorations planetData={planetData} />
           <Text className={styles.planetName}>
             {planetData.shortName ?? planetData.name}
           </Text>

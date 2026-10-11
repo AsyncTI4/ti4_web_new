@@ -1,22 +1,22 @@
-import { Box, Image, Text } from "@/ds";
-import cx from "clsx";
+import { Fragment, useState } from "react";
+import { Box, Image, UnstyledButton } from "@/ds";
 import {
   getTechData,
   getTechTier,
-  TECH_PREREQ_ICON,
   TECH_TYPE_COLOR,
 } from "@/entities/lookup/tech";
-import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
-import { getColorAlias } from "@/entities/lookup/colors";
-import { cdnImage } from "@/entities/data/cdnImage";
-import type { Tech } from "@/entities/data/types";
+import type { PlayerData, Tech } from "@/entities/data/types";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { RailLabel } from "@/domains/objectives/components/RailLabel";
+import { getSeatOrder } from "@/domains/objectives/hooks/useOrderedFactions";
 import styles from "./GeneralTechCatalog.module.css";
 
 type GeneralTechCatalogProps = {
   technologyDeck?: string[];
+  playerData: PlayerData[];
 };
 
-type TechColor = "blue" | "green" | "red" | "yellow" | "white";
+type TechColor = "blue" | "green" | "red" | "yellow";
 
 type TechGroup = {
   label: string;
@@ -52,18 +52,6 @@ const DEFAULT_COLORED_TECH_GROUPS: TechGroup[] = [
   },
 ];
 
-const DEFAULT_UNIT_TECH_ALIASES = [
-  "ff2",
-  "inf2",
-  "dd2",
-  "cr2",
-  "cv2",
-  "pds2",
-  "dn2",
-  "sd2",
-  "ws",
-];
-
 function byTierThenName(a: Tech, b: Tech) {
   return (
     getTechTier(a.requirements) - getTechTier(b.requirements) ||
@@ -76,79 +64,6 @@ function resolveTechs(aliases: string[]) {
     .map((alias) => getTechData(alias))
     .filter((tech): tech is Tech => Boolean(tech))
     .sort(byTierThenName);
-}
-
-function HeaderRequirementIcons({
-  requirements,
-}: {
-  requirements?: string;
-}) {
-  if (!requirements) return null;
-
-  const icons = requirements
-    .split("")
-    .map((requirement) => TECH_PREREQ_ICON[requirement])
-    .filter((icon): icon is string => Boolean(icon));
-
-  if (icons.length === 0) return null;
-
-  return (
-    <Box className={styles.headerRequirementIcons}>
-      {icons.map((icon, index) => (
-        <Image
-          key={`${icon}-${index}`}
-          src={icon}
-          alt="tech prerequisite"
-          className={styles.headerRequirementIcon}
-        />
-      ))}
-    </Box>
-  );
-}
-
-function getUnitUpgradeImageSrc(tech: Tech) {
-  if (!tech.types.includes("UNITUPGRADE")) return undefined;
-
-  const requiredTechId = tech.baseUpgrade || tech.alias;
-  const unitData = getGenericUnitDataByRequiredTechId(requiredTechId);
-
-  if (!unitData?.asyncId) return undefined;
-
-  return cdnImage(`/units/${getColorAlias(undefined)}_${unitData.asyncId}.png`);
-}
-
-function TechItem({
-  tech,
-  color,
-}: {
-  tech: Tech;
-  color: TechColor;
-}) {
-  const unitImageSrc = getUnitUpgradeImageSrc(tech);
-
-  return (
-    <Box className={cx(styles.techItem, styles[color])}>
-      <Box className={styles.techHeader}>
-        <Box className={styles.techNameGroup}>
-          {unitImageSrc && (
-            <Image
-              src={unitImageSrc}
-              alt=""
-              className={styles.unitUpgradeIcon}
-            />
-          )}
-
-          <Text className={styles.techName}>{tech.name}</Text>
-        </Box>
-
-        <HeaderRequirementIcons requirements={tech.requirements} />
-      </Box>
-
-      <Text className={styles.techText}>
-        {tech.text || "No description available."}
-      </Text>
-    </Box>
-  );
 }
 
 function getTechColor(tech: Tech): string {
@@ -179,86 +94,176 @@ function getColoredTechGroups(technologyDeck: string[]): TechGroup[] {
   }));
 }
 
-function getUnitTechAliases(technologyDeck: string[]): string[] {
-  const units = technologyDeck.filter((alias) => {
-    const techData = getTechData(alias);
+type Seat = Pick<
+  PlayerData,
+  "faction" | "factionImage" | "factionImageType" | "techs" | "exhaustedTechs" | "userName"
+>;
 
-    return (
-      !techData?.faction &&
-      techData?.types?.includes("UNITUPGRADE")
-    );
-  });
-
-  return units.length > 0 ? units : DEFAULT_UNIT_TECH_ALIASES;
+function ownership(seat: Seat, tech: Tech) {
+  if (!seat.techs.includes(tech.alias)) return undefined;
+  return seat.exhaustedTechs.includes(tech.alias) ? "exhausted" : "owned";
 }
 
-function ColoredTechSection({
-  groups,
-}: {
-  groups: TechGroup[];
-}) {
+function TierPips({ tier }: { tier: number }) {
+  if (tier <= 0) return null;
   return (
-    <Box className={styles.section}>
-      <Text className={styles.sectionTitle}>Generic Technology</Text>
+    <span className={styles.pips} aria-label={`Tier ${tier}`}>
+      {Array.from({ length: tier }, (_, i) => (
+        <i key={i} />
+      ))}
+    </span>
+  );
+}
 
-      <Box className={styles.colorGrid}>
-        {groups.map((group) => (
-          <Box key={group.label} className={styles.colorColumn}>
-            <Box className={styles.colorHeading}>
-              <Image
-                src={group.icon}
-                alt=""
-                className={styles.colorIcon}
-              />
+function TechRow({
+  tech,
+  color,
+  seats,
+  expanded,
+  onToggle,
+}: {
+  tech: Tech;
+  color: TechColor;
+  seats: Seat[];
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const owners = seats.filter((seat) => ownership(seat, tech)).length;
 
-              <span>{group.label}</span>
-            </Box>
-
-            <Box className={styles.techList}>
-              {resolveTechs(group.aliases).map((tech) => (
-                <TechItem
-                  key={tech.alias}
-                  tech={tech}
-                  color={group.color}
-                />
-              ))}
-            </Box>
-          </Box>
-        ))}
-      </Box>
+  return (
+    <Box className={styles.row} data-k={color} data-open={expanded || undefined}>
+      <UnstyledButton
+        className={styles.module}
+        onClick={onToggle}
+        aria-expanded={expanded}
+        title={expanded ? "Hide text" : "Show text"}
+      >
+        <span className={styles.name}>{tech.name}</span>
+        <TierPips tier={getTechTier(tech.requirements)} />
+      </UnstyledButton>
+      {seats.map((seat) => {
+        const state = ownership(seat, tech);
+        return (
+          <span
+            key={seat.faction}
+            className={styles.cell}
+            title={state ? `${seat.faction}: ${state}` : undefined}
+          >
+            {state && <i className={styles.own} data-s={state} />}
+          </span>
+        );
+      })}
+      <span className={styles.count}>{owners || ""}</span>
+      {expanded && (
+        <p className={styles.text}>{tech.text || "No description available."}</p>
+      )}
     </Box>
   );
 }
 
-function UnitTechSection({
-  aliases,
+function GroupRows({
+  group,
+  seats,
+  openTech,
+  onToggle,
 }: {
-  aliases: string[];
+  group: TechGroup;
+  seats: Seat[];
+  openTech: string | null;
+  onToggle: (alias: string) => void;
 }) {
-  return (
-    <Box className={styles.section}>
-      <Text className={styles.sectionTitle}>Unit Upgrade Technology</Text>
+  const techs = resolveTechs(group.aliases);
+  if (techs.length === 0) return null;
 
-      <Box className={styles.unitGrid}>
-        {resolveTechs(aliases).map((tech) => (
-          <TechItem
-            key={tech.alias}
-            tech={tech}
-            color="white"
-          />
-        ))}
+  return (
+    <>
+      <Box className={styles.groupRow} data-k={group.color}>
+        <span className={styles.groupLabel}>
+          <Image src={group.icon} alt="" className={styles.groupIcon} />
+          {group.label}
+        </span>
       </Box>
-    </Box>
+      {techs.map((tech) => (
+        <TechRow
+          key={tech.alias}
+          tech={tech}
+          color={group.color}
+          seats={seats}
+          expanded={openTech === tech.alias}
+          onToggle={() => onToggle(tech.alias)}
+        />
+      ))}
+    </>
   );
 }
 
+/**
+ * Generic technology as a tech × seat ownership matrix. Every tech is a row,
+ * every seat a column in seat order; owned is a filled square in the tech's
+ * colour, exhausted an outline. Click a tech to read its text.
+ */
 export function GeneralTechCatalog({
   technologyDeck = [],
+  playerData,
 }: GeneralTechCatalogProps) {
+  const [openTech, setOpenTech] = useState<string | null>(null);
+  const seats = getSeatOrder(playerData);
+  const groups = getColoredTechGroups(technologyDeck);
+  const toggle = (alias: string) =>
+    setOpenTech((current) => (current === alias ? null : alias));
+
   return (
-    <Box className={styles.catalog}>
-      <ColoredTechSection groups={getColoredTechGroups(technologyDeck)} />
-      <UnitTechSection aliases={getUnitTechAliases(technologyDeck)} />
+    <Box className={styles.box}>
+      <RailLabel
+        meta={
+          <>
+            <span className={styles.legend}>
+              <i className={styles.own} data-s="owned" /> owned
+            </span>
+            <span className={styles.legend}>
+              <i className={styles.own} data-s="exhausted" /> exhausted
+            </span>
+            <span className={styles.hint}>click a tech to read it</span>
+          </>
+        }
+      >
+        Technology · who owns what
+      </RailLabel>
+      <Box className={styles.scroller}>
+        <Box
+          className={styles.matrix}
+          style={{ "--seats": seats.length } as React.CSSProperties}
+          role="table"
+          aria-label="Generic technology ownership by seat"
+        >
+          <Box className={styles.headRow}>
+            <span />
+            {seats.map((seat) => (
+              <span key={seat.faction} className={styles.seatHead} title={seat.userName}>
+                <FactionIcon
+                  faction={seat.faction}
+                  factionImageOverride={seat.factionImage}
+                  factionImageTypeOverride={seat.factionImageType}
+                  alt={seat.faction}
+                  w={20}
+                  h={20}
+                />
+              </span>
+            ))}
+            <span className={styles.countHead}>Σ</span>
+          </Box>
+          {groups.map((group) => (
+            <Fragment key={group.label}>
+              <GroupRows
+                group={group}
+                seats={seats}
+                openTech={openTech}
+                onToggle={toggle}
+              />
+            </Fragment>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 }

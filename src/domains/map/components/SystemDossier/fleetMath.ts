@@ -86,3 +86,19 @@ export function summarizeZone(
     })
     .filter(({ rows }) => rows.length > 0);
 }
+
+export type Capacity = { used: number; total: number };
+
+/**
+ * Ship capacity in the space area: what the ships can carry against the
+ * fighters and ground forces riding with them. Null when nothing carries.
+ */
+export function capacityOf(rows: UnitRow[]): Capacity | null {
+  let total = 0;
+  let used = 0;
+  for (const { unit, count } of rows) {
+    if (unit.isShip) total += (unit.capacityValue ?? 0) * count;
+    if (unit.baseType === "fighter" || unit.isGroundForce) used += count;
+  }
+  return total > 0 ? { used, total } : null;
+}

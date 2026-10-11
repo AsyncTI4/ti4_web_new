@@ -1,21 +1,23 @@
 .sheetHeader {
   min-height: 0;
   padding: 6px 6px 6px 12px;
-  background: var(--rail-sheen), var(--rail-bg);
-  border-bottom: 1px solid var(--rail-border);
+  background: var(--ds-tex-rail), var(--ds-rail);
+  border-bottom: 1px solid var(--ds-h14);
 }
 
 .sheetTitle {
-  font-family: var(--font-display);
-  font-size: 10px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
   font-weight: var(--weight-rail);
   line-height: 1;
-  letter-spacing: var(--track-rail);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
-  color: var(--rail-ink);
+  color: var(--ds-ink-hi);
 }
 
+/* The log scrolls inside the sheet so its round bands and scrubber stay put. */
 .sheetBody {
-  --event-round-sticky-top: 0px;
-  padding: var(--ds-space-sm);
+  display: flex;
+  flex-direction: column;
+  height: min(70dvh, 640px);
 }

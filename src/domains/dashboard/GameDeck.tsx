@@ -1,42 +1,29 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, SegmentedControl, Stack, Text, Title } from "@/ds";
-import { Panel } from "@/shared/ui/primitives/Panel";
+import { Button } from "@/ds";
 import type { DashboardGame } from "./types";
-import { GameCard } from "./GameCard";
-import { gameCountLabel } from "./dashboardFormat";
+import { GameLaneTable } from "./GameLanes";
+import { isFogOfWarGame, sortForLanes, toLaneGame } from "./dashboardLanes";
+import { DashBox } from "./DashboardParts";
 import classes from "./DashboardPage.module.css";
 
-const GAMES_PER_PAGE = 5;
+const GAMES_PER_PAGE = 8;
 
-type StatusFilter = "all" | "active" | "finished" | "abandoned";
+type StatusFilter = "active" | "finished" | "abandoned" | "all";
 
 const STATUS_FILTERS: {
   label: string;
   value: StatusFilter;
   match: (game: DashboardGame) => boolean;
 }[] = [
-  { label: "All", value: "all", match: () => true },
   { label: "Active", value: "active", match: (game) => game.isActive },
   {
-    label: "Done",
+    label: "Finished",
     value: "finished",
     match: (game) => game.isFinished && !game.isAbandoned,
   },
-  { label: "Abn", value: "abandoned", match: (game) => game.isAbandoned },
+  { label: "Abandoned", value: "abandoned", match: (game) => game.isAbandoned },
+  { label: "All", value: "all", match: () => true },
 ];
-
-const FILTER_OPTIONS = STATUS_FILTERS.map(({ label, value }) => ({
-  label,
-  value,
-}));
-
-function isFogOfWarGame(game: DashboardGame) {
-  return (
-    game.gameModes.some((mode) => mode.toLowerCase() === "fog_of_war") ||
-    game.gameId.toLowerCase().startsWith("fow")
-  );
-}
 
 function Pagination({
   page,
@@ -53,19 +40,17 @@ function Pagination({
       <Button
         size="compact-xs"
         variant="subtle"
-        color="gray"
         disabled={page === 0}
         onClick={() => onChange(Math.max(0, page - 1))}
       >
         Prev
       </Button>
-      <Text size="xs" c="gray.4" ff="mono">
+      <span>
         {page + 1} / {totalPages}
-      </Text>
+      </span>
       <Button
         size="compact-xs"
         variant="subtle"
-        color="gray"
         disabled={page >= totalPages - 1}
         onClick={() => onChange(Math.min(totalPages - 1, page + 1))}
       >
@@ -75,73 +60,52 @@ function Pagination({
   );
 }
 
+/** Your games as a lane table, games needing you pinned first. */
 export function GameDeck({ games }: { games: DashboardGame[] }) {
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState<StatusFilter>("all");
+  const [filter, setFilter] = useState<StatusFilter>("active");
   const [page, setPage] = useState(0);
 
-  const handleFilterChange = (value: string) => {
-    setFilter(value as StatusFilter);
-    setPage(0);
-  };
-
-  const matchesFilter =
-    STATUS_FILTERS.find((f) => f.value === filter)?.match ?? (() => true);
-  const filteredGames = games.filter(
-    (game) => !isFogOfWarGame(game) && matchesFilter(game),
-  );
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredGames.length / GAMES_PER_PAGE),
-  );
-  const paginatedGames = filteredGames.slice(
+  const visible = games.filter((game) => !isFogOfWarGame(game));
+  const counts = Object.fromEntries(
+    STATUS_FILTERS.map((f) => [f.value, visible.filter(f.match).length]),
+  ) as Record<StatusFilter, number>;
+  const match = STATUS_FILTERS.find((f) => f.value === filter)?.match;
+  const filtered = sortForLanes(visible.filter((game) => match?.(game) ?? true));
+  const totalPages = Math.max(1, Math.ceil(filtered.length / GAMES_PER_PAGE));
+  const pageGames = filtered.slice(
     page * GAMES_PER_PAGE,
     (page + 1) * GAMES_PER_PAGE,
   );
 
+  const choose = (value: StatusFilter) => {
+    setFilter(value);
+    setPage(0);
+  };
+
   return (
-    <>
-      <div className={classes.deckHeader}>
-        <Title order={4} c="gray.2" className={classes.deckTitle}>
-          GAME DECK
-        </Title>
-        <Text c="gray.6" size="xs">
-          Ordered by latest activity
-        </Text>
-      </div>
-
-      <div className={classes.gameDeckControls}>
-        <SegmentedControl
-          size="xs"
-          value={filter}
-          onChange={handleFilterChange}
-          className={classes.filterControl}
-          data={FILTER_OPTIONS}
-        />
-        <Text c="gray.5" size="xs">
-          {gameCountLabel(filteredGames.length)}
-        </Text>
-      </div>
-
-      <Stack gap="sm">
-        {paginatedGames.map((game) => (
-          <GameCard
-            key={game.gameId}
-            game={game}
-            onOpen={() => navigate(`/game/${game.gameId}`)}
-          />
+    <DashBox label="Your games" meta={`${filtered.length} shown`}>
+      <div className={classes.chips} role="group" aria-label="Filter games">
+        {STATUS_FILTERS.map((f) => (
+          <button
+            key={f.value}
+            type="button"
+            className={classes.fchip}
+            aria-pressed={filter === f.value}
+            onClick={() => choose(f.value)}
+          >
+            {f.label} <b>{counts[f.value]}</b>
+          </button>
         ))}
-      </Stack>
-
-      {filteredGames.length === 0 && (
-        <Panel variant="subtle" className={classes.emptyState}>
-          <Text c="gray.5" size="sm">
-            No games in this filter.
-          </Text>
-        </Panel>
-      )}
-
+      </div>
+      <GameLaneTable
+        label="Your games"
+        games={pageGames.map(toLaneGame)}
+        empty={{
+          title: "No games in this filter",
+          body: "Pick another filter, or join a game from the Discord server.",
+        }}
+      />
       <Pagination page={page} totalPages={totalPages} onChange={setPage} />
-    </>
+    </DashBox>
   );
 }

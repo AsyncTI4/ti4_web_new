@@ -1,0 +1,54 @@
+/* Seat dossier rail: seat tabs, a one-line pin/peek readout, then one scroll. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background-color: var(--ds-deck);
+  background-image: var(--ds-tex-deck);
+  background-size: var(--ds-tex-deck-size);
+  background-position: var(--ds-tex-deck-pos);
+  background-repeat: var(--ds-tex-deck-repeat);
+  border-left: 1px solid var(--ds-h22);
+}
+
+.collapsed {
+  opacity: 0;
+  pointer-events: none;
+  border-left: 0;
+}
+
+.mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--ds-h10);
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+}
+
+.mode b {
+  font-weight: var(--weight-rail);
+  color: var(--ds-ink);
+}
+
+.mode[data-mode="pinned"] b {
+  color: var(--ds-accent-ink);
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-h28) transparent;
+}

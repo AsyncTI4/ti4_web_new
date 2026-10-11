@@ -1,14 +1,34 @@
-import { Box, Flex, Stack } from "@/ds";
-import { Surface } from "@/shared/ui/Surface";
+import type { ReactNode } from "react";
+import { Box } from "@/ds";
 import { useGameData } from "@/state/useGameContext";
-import cx from "clsx";
-import styles from "@/domains/objectives/components/ScoreBoard/ScoreBoard.module.css";
+import { RailLabel } from "@/domains/objectives/components/RailLabel";
+import { LawsInPlay } from "@/domains/objectives/components/LawsInPlay";
 import { FactionsInGame } from "./FactionsInGame";
 import { UnpickedSCs } from "./UnpickedSCs";
 import { CardPool } from "./CardPool";
-import { LawsInPlay } from "@/domains/objectives/components/LawsInPlay";
 import { GeneralTechCatalog } from "./GeneralTechCatalog";
+import styles from "./GeneralArea.module.css";
 
+function GenBox({
+  label,
+  meta,
+  children,
+  className,
+}: {
+  label: string;
+  meta?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <Box className={`${styles.genbox} ${className ?? ""}`}>
+      <RailLabel meta={meta}>{label}</RailLabel>
+      {children}
+    </Box>
+  );
+}
+
+/** Table-wide information: seats, unpicked strategy cards, card pool, laws, then the tech matrix. */
 function GeneralArea() {
   const gameData = useGameData();
   if (!gameData) return null;
@@ -17,28 +37,29 @@ function GeneralArea() {
     lawsInPlay = [],
     strategyCards = [],
     cardPool,
+    gameRound,
   } = gameData;
 
   return (
-    <Stack gap={0}>
-      <Surface
-        p="lg"
-        className={cx(styles.scoreBoardSurface, styles.generalPanelSurface)}
-      >
-        <Flex wrap={"wrap"} justify={"center"} gap={64}>
+    <Box className={styles.general}>
+      <Box className={styles.top}>
+        <GenBox label="Seats · turn order" meta={`Round ${gameRound}`}>
+          <FactionsInGame playerData={playerData} />
+        </GenBox>
+        <GenBox label="Unpicked strategy cards">
           <UnpickedSCs strategyCards={strategyCards} />
-          <Stack gap={32}>
-            <FactionsInGame playerData={playerData} />
-            <CardPool cardPool={cardPool} />
-          </Stack>
-
-          <Box>
-            <LawsInPlay laws={lawsInPlay} />
-          </Box>
-        </Flex>
-      </Surface>
-      <GeneralTechCatalog technologyDeck={cardPool.technologyDeck}/>
-    </Stack>
+          <RailLabel>Card pool</RailLabel>
+          <CardPool cardPool={cardPool} />
+        </GenBox>
+        <GenBox label="Laws in play" meta={lawsInPlay.length} className={styles.laws}>
+          <LawsInPlay laws={lawsInPlay} />
+        </GenBox>
+      </Box>
+      <GeneralTechCatalog
+        technologyDeck={cardPool?.technologyDeck}
+        playerData={playerData}
+      />
+    </Box>
   );
 }
 

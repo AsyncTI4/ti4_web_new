@@ -6,7 +6,7 @@ import classes from "./ds.module.css";
 
 export type ImageProps = BoxProps & {
   fit?: CSSProperties["objectFit"];
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
   width?: number | string;
   height?: number | string;
   fallbackSrc?: string;
@@ -92,7 +92,7 @@ export type BadgeProps = BoxProps & {
   size?: SizeKey;
   leftSection?: ReactNode;
   rightSection?: ReactNode;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
 };
 
 /** A small uppercase status tag. */
@@ -139,7 +139,7 @@ export type AlertProps = Omit<BoxProps, "title"> & {
   variant?: "light" | "filled" | "outline" | "default" | "transparent";
   withCloseButton?: boolean;
   onClose?: () => void;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
 };
 
 /** A message that names what happened and what to do. */

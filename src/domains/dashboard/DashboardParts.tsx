@@ -1,53 +1,47 @@
-import type { ComponentProps, ReactNode } from "react";
-import { Group, Text } from "@/ds";
-import { Chip } from "@/shared/ui/primitives/Chip";
-import Caption from "@/shared/ui/Caption/Caption";
-import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
+import type { ReactNode } from "react";
+import cx from "clsx";
 import classes from "./DashboardPage.module.css";
 
-type ChipAccent = ComponentProps<typeof Chip>["accent"];
-
-export function LabelChip({
-  accent,
-  size = "xs",
-  leftSection,
+/** Flat data box with an engraved label and an optional mono readout. */
+export function DashBox({
+  label,
+  meta,
+  className,
   children,
 }: {
-  accent: ChipAccent;
-  size?: "xs" | "sm";
-  leftSection?: ReactNode;
+  label: string;
+  meta?: ReactNode;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <Chip accent={accent} size={size} leftSection={leftSection}>
-      <Text size={size === "xs" ? "10px" : "xs"} fw={700} c="white">
-        {children}
-      </Text>
-    </Chip>
+    <section className={cx(classes.box, className)} aria-label={label}>
+      <header className={classes.boxHead}>
+        <span className={classes.label}>{label}</span>
+        {meta != null && <span className={classes.boxMeta}>{meta}</span>}
+      </header>
+      {children}
+    </section>
   );
 }
 
-export function SectionHeader({
-  icon,
+/** Section title in display caps with a right-aligned mono note. */
+export function SectionHead({
   title,
-  badge,
-  badgeAccent,
+  meta,
+  children,
 }: {
-  icon: ReactNode;
   title: string;
-  badge: ReactNode;
-  badgeAccent: ChipAccent;
+  meta?: ReactNode;
+  children?: ReactNode;
 }) {
   return (
-    <>
-      <div className={classes.sectionHeader}>
-        <Group gap={6}>
-          {icon}
-          <Caption size="sm">{title}</Caption>
-        </Group>
-        <LabelChip accent={badgeAccent}>{badge}</LabelChip>
-      </div>
-      <FadedDivider orientation="horizontal" />
-    </>
+    <div className={classes.sectionHead}>
+      <span className={classes.sectionTitle}>
+        <h2 className={classes.cap}>{title}</h2>
+        {children}
+      </span>
+      {meta != null && <span className={classes.meta}>{meta}</span>}
+    </div>
   );
 }

@@ -1,55 +1,57 @@
-import { Box, Group, Stack } from "@/ds";
-import { StatusBadge } from "@/domains/player/components/StatusBadge";
+import { Box } from "@/ds";
 import type { PlayerData } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { seatColorStyle } from "./seatColor";
+import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 import styles from "./FactionsInGame.module.css";
-import { GeneralSectionTitle } from "@/shared/ui/GeneralSectionTitle/GeneralSectionTitle";
 
 type Props = {
   playerData: PlayerData[];
 };
 
-function FactionsInGame({ playerData }: Props) {
-  const sortedPlayerData = [...playerData].sort((a, b) => {
-    const minScA = a.scs.length > 0 ? Math.min(...a.scs) : Infinity;
-    const minScB = b.scs.length > 0 ? Math.min(...b.scs) : Infinity;
-    return minScA - minScB;
-  });
+function byInitiative(a: PlayerData, b: PlayerData) {
+  const minScA = a.scs.length > 0 ? Math.min(...a.scs) : Infinity;
+  const minScB = b.scs.length > 0 ? Math.min(...b.scs) : Infinity;
+  return minScA - minScB;
+}
 
-  const activePlayerIndex = sortedPlayerData.findIndex(
-    (player) => player.active
-  );
-  const nextPlayerIndex =
-    activePlayerIndex >= 0
-      ? (activePlayerIndex + 1) % sortedPlayerData.length
-      : -1;
+/** Seats in turn order (by initiative) with VP, and ACTIVE / NEXT tags. */
+function FactionsInGame({ playerData }: Props) {
+  const seats = [...filterPlayersWithAssignedFaction(playerData)].sort(byInitiative);
+  const activeIndex = seats.findIndex((player) => player.active);
+  const nextIndex = activeIndex >= 0 ? (activeIndex + 1) % seats.length : -1;
 
   return (
-    <Box>
-      <GeneralSectionTitle>Factions in Game</GeneralSectionTitle>
-      <Group gap="sm">
-        {sortedPlayerData.map((player, index) => {
-          const status = player.active
-            ? "active"
-            : index === nextPlayerIndex
-              ? "next"
-              : null;
-
-          return (
-            <Stack key={player.faction} gap="xs" align="center">
-              <FactionIcon
-                faction={player.faction}
-                factionImageOverride={player.factionImage}
-                factionImageTypeOverride={player.factionImageType}
-                w={36}
-                h={36}
-                className={styles.factionIcon}
-              />
-              {status && <StatusBadge status={status} />}
-            </Stack>
-          );
-        })}
-      </Group>
+    <Box className={styles.ring}>
+      {seats.map((player, index) => {
+        const tag = player.active ? "active" : index === nextIndex ? "next" : null;
+        const initiative = player.scs.length > 0 ? Math.min(...player.scs) : null;
+        return (
+          <Box
+            key={player.faction}
+            className={styles.seat}
+            style={seatColorStyle(player.color)}
+            data-passed={player.passed || undefined}
+            title={`${player.userName} · ${player.faction}${initiative ? ` · initiative ${initiative}` : ""}${player.passed ? " · passed" : ""}`}
+          >
+            {tag && (
+              <span className={styles.tag} data-tag={tag}>
+                {tag}
+              </span>
+            )}
+            <FactionIcon
+              faction={player.faction}
+              factionImageOverride={player.factionImage}
+              factionImageTypeOverride={player.factionImageType}
+              alt={player.faction}
+              w={26}
+              h={26}
+            />
+            <b className={styles.vp}>{player.totalVps}</b>
+            <span className={styles.name}>{player.userName}</span>
+          </Box>
+        );
+      })}
     </Box>
   );
 }

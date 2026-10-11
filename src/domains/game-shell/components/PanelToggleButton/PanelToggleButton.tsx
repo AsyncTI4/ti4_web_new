@@ -1,5 +1,6 @@
-import { Box } from "@/ds";
+import { UnstyledButton } from "@/ds";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import cx from "clsx";
 import classes from "./PanelToggleButton.module.css";
 
 type PanelToggleButtonProps = {
@@ -10,6 +11,7 @@ type PanelToggleButtonProps = {
   className?: string;
 };
 
+/** A tab on a rail's inner edge that collapses or restores the rail. */
 export function PanelToggleButton({
   isCollapsed,
   onClick,
@@ -19,17 +21,20 @@ export function PanelToggleButton({
 }: PanelToggleButtonProps) {
   const pointsRight = (position === "left") === isCollapsed;
   const ToggleIcon = pointsRight ? IconChevronRight : IconChevronLeft;
-
-  const baseClass =
-    position === "left" ? classes.leftPanelToggle : classes.rightPanelToggle;
+  const rail = position === "left" ? "table rail" : "seat dossier";
+  const shortcut = position === "left" ? "L" : "R";
 
   return (
-    <Box
-      className={`${baseClass} ${isCollapsed ? classes.collapsed : ""} ${className || ""}`}
+    <UnstyledButton
+      className={cx(classes.toggle, isCollapsed && classes.collapsed, className)}
+      data-side={position}
       onClick={onClick}
       style={style}
+      aria-label={`${isCollapsed ? "Show" : "Hide"} ${rail}`}
+      aria-expanded={!isCollapsed}
+      title={`${isCollapsed ? "Show" : "Hide"} ${rail} (${shortcut})`}
     >
-      <ToggleIcon size={16} className={classes.toggleIcon} />
-    </Box>
+      <ToggleIcon size={14} stroke={2} />
+    </UnstyledButton>
   );
 }

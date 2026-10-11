@@ -1,43 +1,36 @@
-import { Group, ScrollArea, Stack, Text } from "@/ds";
-import { IconTrophy } from "@tabler/icons-react";
-import { Panel } from "@/shared/ui/primitives/Panel";
+import cx from "clsx";
 import type { TitleSummary } from "./types";
-import { SectionHeader } from "./DashboardParts";
+import { DashBox } from "./DashboardParts";
 import classes from "./DashboardPage.module.css";
 
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const MEDAL_CLASSES = [classes.medalGold, classes.medalSilver, classes.medalBronze];
+
+/** Earned titles as medals, most-earned first. */
 export function TitlesCard({ titles }: { titles: TitleSummary }) {
+  const items = [...titles.items].sort((a, b) => b.count - a.count);
   return (
-    <Panel variant="elevated" className={classes.sectionCard}>
-      <SectionHeader
-        icon={<IconTrophy size={16} color="var(--ds-yellow-5)" />}
-        title="Titles"
-        badgeAccent="yellow"
-        badge={titles.totalCount}
-      />
-      <ScrollArea h={200} scrollbarSize={4}>
-        <Stack gap={8}>
-          {titles.items.length === 0 && (
-            <Text c="gray.6" size="xs">
-              No titles earned yet.
-            </Text>
-          )}
-          {titles.items.map((titleItem) => (
-            <div key={titleItem.title} className={classes.titleItem}>
-              <Group justify="space-between" gap="xs">
-                <Text fw={600} size="sm" c="gray.2">
-                  {titleItem.title}
-                </Text>
-                <Text size="xs" ff="mono" c="yellow.4" fw={700}>
-                  x{titleItem.count}
-                </Text>
-              </Group>
-              <Text c="gray.6" size="10px" truncate>
-                {titleItem.gameIds.join(" · ")}
-              </Text>
+    <DashBox label="Titles" meta={titles.totalCount}>
+      {items.length === 0 && (
+        <div className={classes.boxEmpty}>No titles yet. They are awarded at the end of a game.</div>
+      )}
+      {items.length > 0 && (
+        <div className={classes.titles}>
+          {items.map((item, index) => (
+            <div
+              key={item.title}
+              className={classes.title}
+              title={item.gameIds.join(" · ")}
+            >
+              <span className={cx(classes.medal, MEDAL_CLASSES[index])}>
+                {NUMERALS[index] ?? "·"}
+              </span>
+              <span>{item.title}</span>
+              <small>×{item.count}</small>
             </div>
           ))}
-        </Stack>
-      </ScrollArea>
-    </Panel>
+        </div>
+      )}
+    </DashBox>
   );
 }

@@ -1,11 +1,14 @@
-import { Box, Center } from "@/ds";
+import { Box } from "@/ds";
+import cx from "clsx";
 import { FactionTabBar } from "@/domains/game-shell/components/navigation/FactionTabBar";
 import { PlayerCardDisplay } from "./PlayerCardDisplay";
 import { AreaType } from "@/hooks/useTabsAndTooltips";
-import classes from "@/shared/ui/map/MapUI.module.css";
 import { useGameData, useGameDataState } from "@/state/useGameContext";
 import { PlayerDataErrorAlert } from "@/shared/ui/PlayerDataErrorAlert";
 import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
+import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
+import type { PlayerData } from "@/entities/data/types";
+import styles from "./RightSidebar.module.css";
 
 type RightSidebarProps = {
   isRightPanelCollapsed: boolean;
@@ -21,6 +24,38 @@ type RightSidebarProps = {
   gameId: string;
 };
 
+type DossierMode = "pinned" | "peek" | "active" | "yours" | "first";
+
+/**
+ * The seat the dossier shows. Hovering peeks, a click pins; with nothing pinned
+ * it opens on the seat whose turn it is, so the rail is never empty.
+ */
+function resolveShownSeat(
+  playerData: PlayerData[],
+  hoveredFaction: string | null,
+  selectedFaction: string | null,
+  userFaction: string | null,
+): { faction: string | null; mode: DossierMode } {
+  if (hoveredFaction && hoveredFaction !== selectedFaction) {
+    return { faction: hoveredFaction, mode: "peek" };
+  }
+  if (selectedFaction) return { faction: selectedFaction, mode: "pinned" };
+
+  const seats = filterPlayersWithAssignedFaction(playerData);
+  const active = seats.find((player) => player.active)?.faction;
+  if (active) return { faction: active, mode: "active" };
+  if (userFaction) return { faction: userFaction, mode: "yours" };
+  return { faction: seats[0]?.faction ?? null, mode: "first" };
+}
+
+const MODE_LABEL: Record<DossierMode, string> = {
+  pinned: "Pinned",
+  peek: "Peek · click to pin",
+  active: "Active seat",
+  yours: "Your seat",
+  first: "First seat",
+};
+
 export function RightSidebar({
   isRightPanelCollapsed,
   sidebarWidth,
@@ -28,7 +63,6 @@ export function RightSidebar({
   selectedArea,
   activeArea,
   selectedFaction,
-  hasActiveUnit,
   onAreaSelect,
   onAreaMouseEnter,
   onAreaMouseLeave,
@@ -40,70 +74,54 @@ export function RightSidebar({
   const isError = !!loadingState?.isError;
 
   const { userDiscordId } = useSecretHandAccess(playerData);
-  const userPlayer = playerData?.find(
-    (p) => p.discordId === userDiscordId,
-  );
+  const userPlayer = playerData?.find((p) => p.discordId === userDiscordId);
 
   const hoveredFaction =
     activeArea?.type === "faction" ? activeArea.faction : null;
-  const effectiveFaction =
-    hoveredFaction ?? selectedFaction ?? userPlayer?.faction ?? null;
+  const shown = resolveShownSeat(
+    playerData ?? [],
+    hoveredFaction,
+    selectedFaction,
+    userPlayer?.faction ?? null,
+  );
 
   return (
     <Box
-      className={`${classes.sidebar} ${isRightPanelCollapsed ? classes.collapsedRight : ""}`}
+      component="aside"
+      aria-label="Seat dossier"
+      className={cx(styles.rail, isRightPanelCollapsed && styles.collapsed)}
       style={{
         width: isRightPanelCollapsed ? "0%" : embeddedWidth || `${sidebarWidth}%`,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
       }}
     >
-      <Box
-        style={{
-          flex: 1,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      {playerData && (
+        <FactionTabBar
+          playerData={playerData}
+          selectedArea={selectedArea}
+          activeArea={activeArea}
+          shownFaction={shown.faction}
+          onAreaSelect={onAreaSelect}
+          onAreaMouseEnter={onAreaMouseEnter}
+          onAreaMouseLeave={onAreaMouseLeave}
+        />
+      )}
+
+      {shown.faction && (
+        <Box className={styles.mode} data-mode={shown.mode}>
+          <span>Seat dossier</span>
+          <b>{MODE_LABEL[shown.mode]}</b>
+        </Box>
+      )}
+
+      <Box className={styles.scroll}>
         {playerData && (
-          <FactionTabBar
+          <PlayerCardDisplay
             playerData={playerData}
-            selectedArea={selectedArea}
-            activeArea={activeArea}
-            onAreaSelect={onAreaSelect}
-            onAreaMouseEnter={onAreaMouseEnter}
-            onAreaMouseLeave={onAreaMouseLeave}
+            activeFaction={shown.faction}
           />
         )}
 
-        <Box style={{ flex: 1, overflow: "auto" }}>
-          {playerData && (
-            <PlayerCardDisplay
-              playerData={playerData}
-              activeFaction={effectiveFaction}
-            />
-          )}
-
-          {isError && <PlayerDataErrorAlert gameId={gameId} mb="md" />}
-
-          {playerData &&
-            !selectedFaction &&
-            !hasActiveUnit &&
-            !effectiveFaction && (
-              <Center h="200px" className={classes.hoverInstructions}>
-                <Box>
-                  <div>Hover over a unit</div>
-                  <div>on the map to view</div>
-                  <div>player details</div>
-                  <div className={classes.hoverInstructionsLine}>
-                    Click to pin a player
-                  </div>
-                </Box>
-              </Center>
-            )}
-        </Box>
+        {isError && <PlayerDataErrorAlert gameId={gameId} mb="md" />}
       </Box>
     </Box>
   );

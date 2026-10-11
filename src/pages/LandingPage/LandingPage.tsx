@@ -1,32 +1,30 @@
-import { Stack } from "@/ds";
 import { useCommunityStats } from "@/api/useCommunityStats";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { PageShell } from "@/layout/PageShell";
 import {
   BanAppealsSection,
   CommunitySection,
   FactionStrip,
+  FeaturesSection,
   GamesInProgressSection,
   HeroSection,
   HowItWorksSection,
-  StatsStrip,
 } from "./LandingSections";
-
-import "./LandingPage.css";
+import classes from "./LandingPage.module.css";
 
 export default function LandingPage() {
+  useDocumentTitle("AsyncTI4 · Twilight Imperium over Discord");
   const communityStatsQuery = useCommunityStats();
 
   return (
-    <PageShell footer>
-      <Stack gap={0} w="100%">
-        <HeroSection />
-        <FactionStrip />
-        <StatsStrip query={communityStatsQuery} />
-        <HowItWorksSection />
-        <GamesInProgressSection query={communityStatsQuery} />
-        <CommunitySection />
-        <BanAppealsSection />
-      </Stack>
+    <PageShell footer mainClassName={classes.page}>
+      <HeroSection query={communityStatsQuery} />
+      <FactionStrip />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <GamesInProgressSection query={communityStatsQuery} />
+      <CommunitySection />
+      <BanAppealsSection />
     </PageShell>
   );
 }

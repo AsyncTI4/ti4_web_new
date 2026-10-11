@@ -45,7 +45,7 @@ const AFK_HOUR_OPTIONS = Array.from({ length: 24 }, (_, hour) => ({
 
 export const EDITABLE_SECTIONS: SectionSpec[] = [
   {
-    title: "Turn Alerts And Automation",
+    title: "Turn alerts and automation",
     description:
       "Timing, reminders, and automatic pass behavior for common Discord prompts.",
     fields: [
@@ -105,7 +105,7 @@ export const EDITABLE_SECTIONS: SectionSpec[] = [
     ],
   },
   {
-    title: "Interface And Convenience",
+    title: "Interface and convenience",
     description:
       "Default presentation and transaction behaviors that shape how your games feel.",
     fields: [
@@ -163,7 +163,7 @@ export const EDITABLE_SECTIONS: SectionSpec[] = [
     ],
   },
   {
-    title: "Availability And Presence",
+    title: "Availability and presence",
     description:
       "Global availability settings the bot uses when deciding when to nudge you.",
     fields: [
@@ -185,7 +185,7 @@ export const EDITABLE_SECTIONS: SectionSpec[] = [
     ],
   },
   {
-    title: "Table Conduct Preferences",
+    title: "Table conduct preferences",
     description:
       "Survey-backed social preferences that help other players understand your expected table norms.",
     fields: [

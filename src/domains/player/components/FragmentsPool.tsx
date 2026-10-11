@@ -1,4 +1,3 @@
-import { Group } from "@/ds";
 import { FragmentStack } from "./FragmentStack";
 import classes from "./FragmentsPool.module.css";
 
@@ -6,7 +5,7 @@ type Props = {
   fragments: string[];
   /**
    * Hold the shelf open when the player has none, so the readouts above it sit at
-   * the same height on every card in the band.
+   * the same height on every seat in the deck.
    */
   reserveSpace?: boolean;
 };
@@ -21,19 +20,14 @@ export function FragmentsPool({ fragments, reserveSpace = false }: Props) {
 
   if (fragmentCounts.every(({ count }) => count === 0)) {
     if (!reserveSpace) return null;
-
-    return (
-      <Group gap="xs" p="xs" justify="center" className={classes.empty}>
-        <span className={classes.emptyLabel}>No fragments</span>
-      </Group>
-    );
+    return <span className={classes.emptyLabel}>No fragments</span>;
   }
 
   return (
-    <Group gap="xs" p="xs">
+    <span className={classes.pool}>
       {fragmentCounts.map(({ type, count }) => (
         <FragmentStack key={type} count={count} type={type} />
       ))}
-    </Group>
+    </span>
   );
 }

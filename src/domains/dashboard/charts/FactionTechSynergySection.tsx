@@ -7,13 +7,9 @@ import {
   VisualMapComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
-import { Group, Text } from "@/ds";
-import { IconAffiliate } from "@tabler/icons-react";
 import type { FactionTechSynergy } from "../types";
-import { Panel } from "@/shared/ui/primitives/Panel";
-import Caption from "@/shared/ui/Caption/Caption";
-import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
-import { AXIS_STYLE, TOOLTIP_STYLE } from "./chartTheme";
+import { DashBox } from "../DashboardParts";
+import { useChartTheme } from "./chartTheme";
 import classes from "./AggregateCharts.module.css";
 
 echarts.use([HeatmapChart, GridComponent, TooltipComponent, VisualMapComponent, CanvasRenderer]);
@@ -87,6 +83,7 @@ function filterSynergyData(synergy: FactionTechSynergy): FilteredData {
 type Props = { synergy: FactionTechSynergy };
 
 export function FactionTechSynergySection({ synergy }: Props) {
+  const theme = useChartTheme();
   const { factions, techs } = filterSynergyData(synergy);
 
   if (factions.length === 0 || techs.length === 0) return null;
@@ -102,7 +99,7 @@ export function FactionTechSynergySection({ synergy }: Props) {
 
   const option: echarts.EChartsCoreOption = {
     tooltip: {
-      ...TOOLTIP_STYLE,
+      ...theme.tooltip,
       formatter(params: unknown) {
         const p = params as { data: [number, number, number] };
         const [ti, fi, val] = p.data;
@@ -122,15 +119,14 @@ export function FactionTechSynergySection({ synergy }: Props) {
     xAxis: {
       type: "category",
       data: techs,
-      ...AXIS_STYLE,
-      axisLabel: { ...AXIS_STYLE.axisLabel, rotate: 35, fontSize: 9 },
-      splitArea: { show: true, areaStyle: { color: ["rgba(0,0,0,0)", "rgba(148,163,184,0.02)"] } },
+      ...theme.axis,
+      axisLabel: { ...theme.axis.axisLabel, rotate: 35, fontSize: 9 },
     },
     yAxis: {
       type: "category",
       data: factions,
-      ...AXIS_STYLE,
-      axisLabel: { ...AXIS_STYLE.axisLabel, fontSize: 10 },
+      ...theme.axis,
+      axisLabel: { ...theme.axis.axisLabel, fontSize: 10 },
     },
     visualMap: {
       min: 0,
@@ -140,15 +136,9 @@ export function FactionTechSynergySection({ synergy }: Props) {
       right: 0,
       top: "center",
       inRange: {
-        color: [
-          "rgba(148,163,184,0.06)",
-          "rgba(147,51,234,0.2)",
-          "rgba(249,115,22,0.4)",
-          "rgba(234,179,8,0.6)",
-          "rgba(34,197,94,0.75)",
-        ],
+        color: [theme.sig("ok", 0.06), theme.sig("ok", 0.3), theme.sig("ok", 0.7)],
       },
-      textStyle: { color: "rgba(148,163,184,0.5)", fontSize: 9 },
+      textStyle: { color: theme.inkLo, fontFamily: theme.font, fontSize: 9 },
       itemWidth: 10,
       itemHeight: 70,
     },
@@ -159,27 +149,25 @@ export function FactionTechSynergySection({ synergy }: Props) {
         label: {
           show: true,
           formatter: (p: { data: [number, number, number] }) => `${p.data[2].toFixed(0)}%`,
-          color: "rgba(255,255,255,0.8)",
+          color: theme.inkHi,
           fontSize: 10,
-          fontFamily: "monospace",
+          fontFamily: theme.font,
         },
-        itemStyle: { borderColor: "rgba(0,0,0,0.3)", borderWidth: 1 },
+        itemStyle: { borderColor: theme.hair(0.1), borderWidth: 1 },
       },
     ],
   };
 
   return (
-    <Panel variant="elevated" className={classes.aggregateCardFull}>
-      <div className={classes.sectionHeader}>
-        <Group gap={6}>
-          <IconAffiliate size={16} color="var(--ds-purple-4)" />
-          <Caption size="sm">Faction–Tech Synergy</Caption>
-        </Group>
-        <Text size="10px" c="gray.6">
-          Top {factions.length} factions · {techs.length} most differentiating techs
-        </Text>
-      </div>
-      <FadedDivider orientation="horizontal" />
+    <DashBox
+      className={classes.full}
+      label="Win rate by faction and tech"
+      meta={`${factions.length} factions · ${techs.length} techs`}
+    >
+      <span className={classes.note}>
+        Your win rate in games where you held each tech, for the techs that
+        separate your factions the most.
+      </span>
       <div className={classes.chartWrap}>
         <ReactEChartsCore
           echarts={echarts}
@@ -188,6 +176,7 @@ export function FactionTechSynergySection({ synergy }: Props) {
           opts={{ renderer: "canvas" }}
         />
       </div>
+      <div className={classes.tableWrap}>
       <table className={classes.dataTable}>
         <thead>
           <tr>
@@ -204,7 +193,7 @@ export function FactionTechSynergySection({ synergy }: Props) {
             const entry = synergy.byFaction[f];
             return (
               <tr key={f}>
-                <td className={classes.label}>{f}</td>
+                <td className={classes.cellText}>{f}</td>
                 <td className={classes.alignRight}>{entry.games}</td>
                 <td className={classes.alignRight}>{entry.wins}</td>
                 {techs.map((t) => {
@@ -221,6 +210,7 @@ export function FactionTechSynergySection({ synergy }: Props) {
           })}
         </tbody>
       </table>
-    </Panel>
+      </div>
+    </DashBox>
   );
 }

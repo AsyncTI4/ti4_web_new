@@ -1,11 +1,22 @@
 .footer {
-  border-top: 1px solid var(--ds-dark-4);
-  background-color: var(--ds-dark-8);
+  border-top: 1px solid var(--ds-h14);
+  background: var(--ds-rail);
+}
+
+/*
+ * Below 62em the disclaimer wraps past the height the shell reserves for it,
+ * so a fixed footer would cover the end of the page. There it joins the flow
+ * after the content instead (PageShell drops the reserve at the same width).
+ */
+@media (max-width: 61.99em) {
+  .footer {
+    position: static;
+  }
 }
 
 .text {
-  color: var(--ds-dark-2);
+  color: var(--ds-ink-lo);
   text-align: center;
-  font-size: var(--ds-fz-xs);
-  line-height: var(--ds-lh-sm);
+  font-size: var(--text-meta);
+  line-height: 1.45;
 }

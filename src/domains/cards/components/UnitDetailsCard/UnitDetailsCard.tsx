@@ -1,4 +1,4 @@
-import { Box, Stack, Image } from "@/ds";
+import { Image } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { getUnitData, isNekroFlagship } from "@/entities/lookup/units";
@@ -6,7 +6,7 @@ import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { useGameData } from "@/state/useGameContext";
-import type { PlayerData, Unit } from "@/entities/data/types";
+import type { PlayerData } from "@/entities/data/types";
 import {
   getAssimilatedAbilitiesForNekroFlagship,
   getInheritedAbilitiesForPinktfFlagship,
@@ -33,34 +33,6 @@ type Props = {
   valefarZTargets?: string[];
   allPlayerData?: PlayerData[];
 };
-
-function UnitIcon({ unit, color }: { unit: Unit; color?: string }) {
-  return (
-    <Box pos="relative" w={60} h={60} className={styles.unitIconContainer}>
-      <Image
-        src={cdnImage(`/units/${getColorAlias(color)}_${unit.asyncId}.png`)}
-        w={50}
-        h={50}
-        className={styles.unitImage}
-      />
-      {unit.faction !== undefined && (
-        <Box
-          pos="absolute"
-          bottom={-4}
-          right={-4}
-          className={styles.factionBadge}
-        >
-          <Image
-            src={cdnImage(`/factions/${unit.faction.toLowerCase()}.png`)}
-            alt={`${unit.faction} faction`}
-            w={20}
-            h={20}
-          />
-        </Box>
-      )}
-    </Box>
-  );
-}
 
 /** Whose unit this is: the colour alone means nothing without the legend. */
 function UnitOwner({ owner }: { owner: PlayerData }) {
@@ -106,26 +78,39 @@ export function UnitDetailsCard({
 
   return (
     <DetailsCard width={380}>
-      <Stack gap={12}>
-        <DetailsCard.Title
-          title={unitData.name}
-          subtitle={owner ? <UnitOwner owner={owner} /> : ""}
-          icon={
-            <DetailsCard.Icon
-              icon={<UnitIcon unit={unitData} color={color} />}
-            />
-          }
-          caption={isUpgraded ? "Upgraded" : "Standard"}
-          captionColor="blue"
-        />
+      <DetailsCard.Title
+        title={unitData.name}
+        type={isUpgraded ? "Upgraded unit" : "Unit"}
+        meta={[owner ? <UnitOwner key="owner" owner={owner} /> : null]}
+        icon={
+          <DetailsCard.Icon
+            shape="unit"
+            icon={
+              <Image
+                src={cdnImage(`/units/${getColorAlias(color)}_${unitData.asyncId}.png`)}
+                alt=""
+              />
+            }
+            badge={
+              unitData.faction ? (
+                <Image
+                  src={cdnImage(`/factions/${unitData.faction.toLowerCase()}.png`)}
+                  alt={`${unitData.faction} faction`}
+                />
+              ) : undefined
+            }
+          />
+        }
+      />
+      <div className={styles.stats}>
         <UnitStats unit={unitData} {...modifiers} />
         <ModifierAttribution {...modifiers} />
-        <AbilitySection ability={unitData.ability} />
-        <InheritedAbilityList inherited={inherited} />
-        <AssimilatedAbilityList assimilated={assimilated} />
-        <UnitAbilitiesSection unit={unitData} inherited={inherited} />
-        <UpgradeSection upgrade={upgrade} />
-      </Stack>
+      </div>
+      <AbilitySection ability={unitData.ability} />
+      <InheritedAbilityList inherited={inherited} />
+      <AssimilatedAbilityList assimilated={assimilated} />
+      <UnitAbilitiesSection unit={unitData} inherited={inherited} />
+      <UpgradeSection upgrade={upgrade} />
     </DetailsCard>
   );
 }

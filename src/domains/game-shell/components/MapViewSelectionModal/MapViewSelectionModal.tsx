@@ -1,9 +1,10 @@
-import { Stack, Text, Group, Button } from "@/ds";
+import { Button } from "@/ds";
 import { IconLayoutGrid, IconHandMove } from "@tabler/icons-react";
 import { useState, type ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";
 import { MapViewPreferenceOption } from "./MapViewPreferenceOption";
 import { AppModal } from "@/shared/ui/AppModal";
+import classes from "./MapViewSelectionModal.module.css";
 
 type MapViewSelectionModalProps = {
   opened: boolean;
@@ -14,25 +15,25 @@ type MapViewSelectionModalProps = {
 const OPTIONS: {
   value: MapViewPreference;
   label: string;
-  badge: string;
+  tagline: string;
   description: string;
   icon: ReactNode;
 }[] = [
   {
     value: "pannable",
     label: "Pannable",
-    badge: "Recommended / Dense",
+    tagline: "Dense · recommended",
     description:
-      "A full-screen draggable map with everything on one canvas. Best when you want to scan relationships and compare players quickly.",
-    icon: <IconHandMove size={24} />,
+      "One draggable canvas with the board and every player area. Best for comparing the whole table.",
+    icon: <IconHandMove size={16} aria-hidden />,
   },
   {
     value: "panels",
     label: "Panels",
-    badge: "More Breathing Room",
+    tagline: "More room",
     description:
-      "A separated panel layout with more spacing and clearer focus areas. Better when you want the interface to feel less packed.",
-    icon: <IconLayoutGrid size={24} />,
+      "The board in the middle with objectives and players in side panels. A calmer read.",
+    icon: <IconLayoutGrid size={16} aria-hidden />,
   },
 ];
 
@@ -54,22 +55,19 @@ export function MapViewSelectionModal({
     onClose();
   };
 
+  const selectedLabel =
+    OPTIONS.find((option) => option.value === selectedPreference)?.label ?? "";
+
   return (
     <AppModal
       opened={opened}
       onClose={handleClose}
-      title="Choose Map View"
-      size="md"
+      title="Choose map view"
+      size={520}
+      padding={0}
     >
-      <Stack gap="lg">
-        <Text size="sm" c="dimmed">
-          Select your preferred map view style. Pannable is denser and built
-          for cross-comparing the whole table quickly. Panels gives everything
-          more breathing room when you want a calmer read. You can change this
-          later in Settings.
-        </Text>
-
-        <Stack gap="md">
+      <div className="overlay-modal-content">
+        <div className={classes.choices}>
           {OPTIONS.map((option) => (
             <MapViewPreferenceOption
               key={option.value}
@@ -78,17 +76,17 @@ export function MapViewSelectionModal({
               onSelect={setSelectedPreference}
             />
           ))}
-        </Stack>
-
-        <Group justify="space-between">
-          <Button variant="subtle" size="sm" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button size="sm" onClick={handleConfirm}>
-            Confirm
-          </Button>
-        </Group>
-      </Stack>
+        </div>
+        <p className="overlay-modal-note">You can change this later in Settings.</p>
+      </div>
+      <footer className="overlay-modal-footer">
+        <Button variant="subtle" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button color="var(--ds-accent)" onClick={handleConfirm}>
+          Use {selectedLabel.toLowerCase()}
+        </Button>
+      </footer>
     </AppModal>
   );
 }

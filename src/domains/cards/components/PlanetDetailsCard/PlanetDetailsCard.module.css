@@ -1,7 +1,55 @@
-.planetIconContainer {
-  border-radius: 50%;
-  background: rgba(148, 163, 184, 0.15);
-  display: flex;
+.skips {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 2px;
+}
+
+.legendary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgb(var(--ds-sig-relic));
+}
+
+.attachments {
+  display: grid;
+  gap: 6px;
+}
+
+.attachment {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.attachment img {
+  height: 20px;
+  border-radius: var(--ds-radius-sm);
+}
+
+.attachmentName {
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--ds-ink-hi);
+}
+
+.attachmentMods {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: rgb(var(--ds-sig-ok));
+}
+
+.attachmentMods span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.attachmentMods img {
+  height: 12px;
+  border-radius: 0;
 }

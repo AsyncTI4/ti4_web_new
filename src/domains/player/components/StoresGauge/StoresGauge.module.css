@@ -1,88 +1,59 @@
 /*
- * Stores gauge — trade goods and commodities.
- *
- * These were the last chips in the player area: an accent-tinted rounded plate
- * with a big number sitting on it. A chip is how this card draws a *named card* —
- * a tech, a relic, a leader, a promissory note. A quantity is not a card, and
- * dressing one as a card is why these stopped fitting.
- *
- * They are readouts now, built the same way as the army ledger and the command
- * trough: a recessed socket, the sprite seated in a keyed gutter behind a hairline
- * wall, and the figure in mono tabular against the right edge. The accent keys the
- * seat, its wall and the socket's ring — enough that the store is identifiable at
- * a glance across a stack of six cards — while the field itself stays neutral, so
- * it reads as a keyed instrument rather than a coloured tag.
+ * Stores readout. A quantity is not a card, so it never wears a card
+ * silhouette: a keyed seat behind a hairline wall, then the figure in mono
+ * against the right edge. The ceiling is held back in ink-low; zero reads as
+ * empty, not as an alarm.
  */
-
 .gauge {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  height: 30px;
   min-width: 72px;
-  /* The column has height to spare, and a readout this dense reads better with
-     air above and below the figure than packed to its cap height. */
-  min-height: 32px;
-  border-radius: var(--panel-radius);
-  background: var(--socket-bg);
+  border-radius: 2px;
+  background: var(--ds-trough);
   box-shadow:
-    var(--socket-inset),
-    inset 0 0 0 1px rgba(var(--gauge-accent), 0.24);
+    inset 0 1px 2px rgb(0 0 0 / 0.65),
+    inset 0 0 0 1px rgba(var(--gauge-accent), 0.175);
   overflow: hidden;
 }
 
-/* The keyed seat: the same gutter-and-wall the army readout uses for its metric
-   icons, tinted just enough to say which store this is. */
 .gutter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 24px;
-  background: linear-gradient(
-    180deg,
-    rgba(var(--gauge-accent), 0.34) 0%,
-    rgba(var(--gauge-accent), 0.18) 100%
-  );
-  border-right: 1px solid rgba(var(--gauge-accent), 0.4);
+  display: grid;
+  place-items: center;
+  background: rgba(var(--gauge-accent), 0.112);
+  box-shadow: inset -1px 0 0 rgba(var(--gauge-accent), 0.245);
 }
 
 .icon {
   display: block;
-  width: 18px;
-  height: 18px;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
+  width: 17px;
+  height: 17px;
 }
 
 .readout {
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 1px;
-  flex: 1;
-  min-width: 0;
-  padding: 8px;
+  align-self: center;
+  justify-self: end;
+  padding-right: 8px;
   font-family: var(--font-data);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .value {
-  color: var(--ds-gray-0);
-  font-size: 18px;
-  font-weight: var(--weight-rail);
-  line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  font-size: 17px;
+  font-weight: var(--weight-title);
+  color: var(--ds-ink-hi);
+  text-shadow: var(--ds-num-glow);
 }
 
-/* The ceiling, not the reading — held back exactly as the economics ledger holds
-   back its totals. */
-.capacity {
-  color: var(--ds-gray-5);
-  font-size: 11px;
-  font-weight: var(--weight-data);
-  line-height: 1;
-}
-
-/* Empty stores read as empty rather than as a zero shouting for attention. */
 .value[data-empty="true"] {
-  color: var(--ds-gray-6);
+  color: var(--ds-ink-lo);
+  font-weight: var(--weight-data);
   text-shadow: none;
+}
+
+.capacity {
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink-lo);
 }

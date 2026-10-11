@@ -1,27 +1,49 @@
-.factionIconBox {
-  flex-shrink: 0;
+.progress {
+  display: grid;
+  gap: 2px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 20px 76px minmax(0, 1fr) 40px;
+  gap: 8px;
+  align-items: center;
+  min-height: 24px;
 }
 
 .factionName {
-  width: 70px;
-  letter-spacing: var(--track-label);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex-shrink: 0;
+  font-family: var(--ds-label-font, var(--font-display));
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ds-ink);
 }
 
 .playerName {
-  flex: 1;
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
 }
 
-.progressValueBox {
-  text-align: right;
-  flex-shrink: 0;
+.value {
+  display: inline-flex;
+  justify-content: flex-end;
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: 600;
+  color: var(--ds-ink);
 }
 
+.row[data-scored] .value {
+  color: rgb(var(--ds-sig-ok));
+}
 
+.row[data-scored] .factionName {
+  color: var(--ds-ink-hi);
+}

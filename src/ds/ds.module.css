@@ -303,3 +303,6 @@
 :where(.shellMain) { padding-top: var(--app-shell-header-height); padding-bottom: var(--app-shell-footer-height); min-height: 100dvh; }
 :where(.shellFooter) { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-app-header, 200); }
 :where(.badge_white) { background: var(--ds-white); color: var(--ds-black); }
+
+:where(.modalFooter) { display: flex; align-items: center; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--ds-h14); background: rgb(0 0 0 / 0.18); flex: none; }
+:where(.modal):focus-visible { outline: none; }

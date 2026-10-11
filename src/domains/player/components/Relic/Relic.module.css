@@ -1,155 +1,109 @@
-.relicIconShadow::before {
-  filter: drop-shadow(0 1px 2px rgba(var(--gd-yellow), 0.2));
-}
-
-.exhaustedIcon::before {
-  filter: saturate(0.6) brightness(0.75);
-}
-
-.exhaustedIconX {
-  position: relative;
-}
-
-.exhaustedIconX::after {
-  content: "";
-  position: absolute;
-  right: -4px;
-  bottom: -4px;
-  width: 12px;
-  height: 12px;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      45deg,
-      transparent 43%,
-      var(--ds-red-1) 43% 57%,
-      transparent 57%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 43%,
-      var(--ds-red-1) 43% 57%,
-      transparent 57%
-    );
-}
-
 /*
- * Artifact silhouette: chamfered octagon clipped via polygon. Because clip-path
- * removes the real border, the outer background acts as the gold edge and the
- * ::before layer (inset 1px, same polygon) carries the dark fill.
+ * Relic: an artifact. A chamfered octagon whose outer layer is the gold edge;
+ * ::before (inset 1px, same polygon) is the fill and ::after is a single glint
+ * that sweeps across on hover. Exhausted relics are tarnished and hatched;
+ * frontier stand-ins are inert grey.
  */
-.relicCard.relicCard {
-  --relic-rgb: 232, 186, 60;
-  --relic-edge-a: 0.22;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+.relic {
+  --ra: 0.38;
+  padding: 0 10px;
+  overflow: hidden;
   clip-path: polygon(
-    7px 0,
-    calc(100% - 7px) 0,
-    100% 7px,
-    100% calc(100% - 7px),
-    calc(100% - 7px) 100%,
-    7px 100%,
-    0 calc(100% - 7px),
-    0 7px
+    6px 0,
+    calc(100% - 6px) 0,
+    100% 6px,
+    100% calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    6px 100%,
+    0 calc(100% - 6px),
+    0 6px
   );
   background: linear-gradient(
-    170deg,
-    rgba(var(--relic-rgb), calc(var(--relic-edge-a) + 0.12)) 0%,
-    rgba(var(--relic-rgb), var(--relic-edge-a)) 100%
+    180deg,
+    rgb(var(--ds-sig-relic) / calc(var(--ra) + 0.15)),
+    rgb(var(--ds-sig-relic) / var(--ra))
   );
 }
 
-.relicCard.relicCard::before {
+.relic::before {
   content: "";
   position: absolute;
   inset: 1px;
   z-index: 1;
   clip-path: polygon(
-    6.4px 0,
-    calc(100% - 6.4px) 0,
-    100% 6.4px,
-    100% calc(100% - 6.4px),
-    calc(100% - 6.4px) 100%,
-    6.4px 100%,
-    0 calc(100% - 6.4px),
-    0 6.4px
+    5.6px 0,
+    calc(100% - 5.6px) 0,
+    100% 5.6px,
+    100% calc(100% - 5.6px),
+    calc(100% - 5.6px) 100%,
+    5.6px 100%,
+    0 calc(100% - 5.6px),
+    0 5.6px
   );
   background:
-    radial-gradient(
-      120% 100% at 18% 0%,
-      rgba(var(--relic-rgb), 0.10) 0%,
-      rgba(var(--relic-rgb), 0.03) 55%,
-      transparent 78%
-    ),
-    linear-gradient(170deg, rgba(34, 27, 11, 0.6) 0%, rgba(16, 12, 5, 0.6) 100%);
+    linear-gradient(90deg, rgb(var(--ds-sig-relic) / 0.112), rgb(var(--ds-sig-relic) / 0.028)),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, rgb(var(--ds-sig-relic)) 11%, var(--ds-field)),
+      color-mix(in oklab, rgb(var(--ds-sig-relic)) 5%, var(--ds-socket))
+    );
 }
 
-.relicCard.relicCard:hover {
-  --relic-edge-a: 0.38;
-}
-
-/* Gold glint sweeping the artifact once per hover (parent clip-path keeps it
-   inside the octagon). No transition at rest, so the return snap is unseen. */
-.relicCard.relicCard::after {
+.relic::after {
   content: "";
   position: absolute;
-  inset: 0;
   z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  width: 30%;
   pointer-events: none;
-  transform: translateX(-130%) skewX(-18deg);
   background: linear-gradient(
     100deg,
-    transparent 32%,
-    rgba(255, 226, 130, 0.22) 46%,
-    rgba(255, 245, 200, 0.34) 50%,
-    rgba(255, 226, 130, 0.22) 54%,
-    transparent 68%
+    transparent,
+    rgb(var(--ds-sig-relic) / 0.3),
+    transparent
   );
+  transform: translateX(-100%);
 }
 
-.relicCard.relicCard:hover::after {
-  transform: translateX(130%) skewX(-18deg);
-  transition: transform 0.65s ease-out;
+.relic:hover::after {
+  transform: translateX(560%);
+  transition: transform 0.7s var(--ds-ease);
 }
 
-.exhausted.exhausted::after,
-:global(.mobile) .relicCard.relicCard::after {
+.relic[data-s="exhausted"] {
+  --ra: 0.25;
+  color: var(--ds-ink-lo);
+  text-shadow: none;
+}
+
+.relic[data-s="exhausted"]::before {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.4) 5px 9px),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, rgb(var(--ds-sig-relic)) 7%, var(--ds-field)),
+      color-mix(in oklab, rgb(var(--ds-sig-relic)) 3%, var(--ds-socket))
+    );
+}
+
+.relic[data-s="exhausted"] > span:first-child {
+  filter: saturate(0.5) brightness(0.75);
+}
+
+.relic[data-s="frontier"] {
+  --ra: 0.3;
+  filter: grayscale(1);
+}
+
+:global(.mobile) .relic::after,
+.relic[data-s="exhausted"]::after {
   content: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .relicCard.relicCard::after {
+  .relic::after {
     content: none;
   }
-}
-
-/* Frontier "fake" relics read as inert gray artifacts */
-.fake.fake {
-  --relic-rgb: 148, 163, 184;
-}
-
-/* Exhausted: tarnished gold + diagonal hatching over the fill */
-.exhausted.exhausted {
-  --relic-rgb: 158, 108, 34;
-}
-
-.exhausted.exhausted::before {
-  background:
-    repeating-linear-gradient(
-      135deg,
-      transparent 0 5px,
-      rgba(0, 0, 0, 0.55) 5px 9px
-    ),
-    radial-gradient(
-      120% 100% at 18% 0%,
-      rgba(var(--relic-rgb), 0.12) 0%,
-      transparent 70%
-    ),
-    linear-gradient(
-      170deg,
-      rgba(30, 22, 9, 0.96) 0%,
-      rgba(14, 10, 4, 0.97) 100%
-    );
 }

@@ -1,0 +1,82 @@
+.tabList {
+  margin-bottom: 14px;
+}
+
+.tab {
+  font-family: var(--font-display);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-rail);
+  text-transform: uppercase;
+}
+
+.panel {
+  display: grid;
+  gap: 18px;
+}
+
+.group {
+  display: grid;
+}
+
+.groupLabel {
+  padding-bottom: 4px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+  border-bottom: 1px solid var(--ds-h14);
+}
+
+.intro {
+  margin: 0 0 4px;
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px 16px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--ds-h10);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.label {
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--ds-ink-hi);
+}
+
+.description {
+  grid-column: 1;
+  font-size: var(--text-meta);
+  line-height: 1.45;
+  color: var(--ds-ink-lo);
+}
+
+.control {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  justify-self: end;
+}
+
+@media (max-width: 36em) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .control {
+    grid-row: auto;
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 4px;
+  }
+}

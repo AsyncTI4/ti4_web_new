@@ -1,37 +1,52 @@
 /*
- * Unified overlay chrome. Every Mantine Modal, Drawer, and Tooltip is wired
- * to these classes through the theme's `components` config in main.tsx, so
- * all floating surfaces share the details-card surface of the active theme.
+ * Shared overlay chrome. The modal frame itself (ground gradient, 8px radius,
+ * caps title, square close) lives in the ds Modal; these classes add the parts
+ * every theme shares on top of it.
  */
 
-.overlay-modal-content {
-  background: var(--panel-texture), var(--details-card-bg);
-  border: var(--details-card-border);
-  border-radius: 8px;
-  box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.6),
-    0 6px 20px rgba(0, 0, 0, 0.45);
-}
-
 .overlay-modal-header {
-  background: var(--details-card-bg);
-  border-bottom: 1px solid var(--panel-hairline);
+  background: var(--ds-tex-rail), transparent;
 }
 
-.overlay-modal-title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: var(--weight-title);
-  letter-spacing: var(--track-rail);
+/* A modal whose body is laid out by the overlay itself: padded content, then
+   a decision footer pinned below it. Use with <Modal padding={0}>. */
+.overlay-modal-content {
+  display: grid;
+  gap: 14px;
+  padding: 14px 16px 16px;
+  min-width: 0;
+}
+
+/* Only when there is a decision to make. */
+.overlay-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ds-h14);
+  background: rgb(0 0 0 / 0.2);
+}
+
+.overlay-modal-footer[data-align="start"] {
+  justify-content: flex-start;
+}
+
+.overlay-modal-note {
+  margin: 0 auto 0 0;
+  font-size: var(--text-meta);
+  line-height: 1.45;
+  color: var(--ds-ink-lo);
+}
+
+/* Engraved group label, the rail-cap voice used across modals. */
+.overlay-modal-label {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
-  color: var(--ds-gray-1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.overlay-drawer-content {
-  background: var(--panel-texture), var(--details-card-bg);
-  border-left: var(--details-card-border);
-  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.55);
+  color: var(--ds-ink-lo);
 }
 
 .overlay-tooltip {

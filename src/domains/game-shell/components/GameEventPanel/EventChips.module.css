@@ -1,0 +1,397 @@
+/*
+ * Event-log silhouettes, 22px tall so they sit in a sentence's wake.
+ * Tones: --k, --scc are comma-separated signal triplets (rgba(var(--k), a)).
+ */
+.t {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.g {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 13px;
+  height: 13px;
+  object-fit: contain;
+}
+
+.acard,
+.tech,
+.secret,
+.objective,
+.pn,
+.relic,
+.brk,
+.abl,
+.scp,
+.plain {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  max-width: 100%;
+  min-width: 0;
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  line-height: 1;
+  color: var(--ds-ink-hi);
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.55);
+}
+
+/* Hex position */
+.hex {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 24px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-hi);
+  background: var(--ds-h22);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+
+/* Action card: rounded heel, card-back thumbnail, timing tag. */
+.acard {
+  padding: 0 10px 0 22px;
+  background: linear-gradient(90deg, rgba(var(--gd-red), 0.14), rgba(var(--gd-red), 0.035));
+  border: 1px solid rgba(var(--gd-red), 0.315);
+  border-radius: 3px 3px 3px 10px;
+}
+
+.acard::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  bottom: 3px;
+  width: 12px;
+  border-radius: var(--ds-radius-xs);
+  background: url("/cardback/cardback_action.png") center / cover;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.5);
+}
+
+.when {
+  margin-left: 2px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: rgb(var(--ds-sig-danger));
+  filter: brightness(1.45) saturate(0.7);
+}
+
+/* Tech: circuit module with accent edge, trace and chamfer wedge. */
+.tech {
+  --k: var(--gd-gray);
+  padding: 0 14px 0 12px;
+  background:
+    linear-gradient(315deg, rgba(var(--k), 0.28) 0 4px, transparent 4.5px),
+    rgba(var(--k), 0.052);
+  border: 1px solid rgba(var(--k), 0.14);
+  border-radius: 1px;
+}
+
+.tech::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(var(--k), 0.49);
+}
+
+.tech::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 5px;
+  height: 1px;
+  background: rgba(var(--k), 0.455);
+}
+
+/* Secret: file folder with a hazard stripe down the spine. */
+.secret {
+  padding: 3px 8px 0 13px;
+  clip-path: polygon(0 0, 52px 0, 56px 3px, 100% 3px, 100% 100%, 0 100%);
+  background: rgba(var(--gd-red), 0.3);
+}
+
+.secret::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  clip-path: polygon(0 0, 51px 0, 55px 3px, 100% 3px, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(135deg, rgba(var(--gd-red), 0.42) 0 4px, var(--ds-socket) 4px 8px) 0 0 / 6px 100% no-repeat,
+    linear-gradient(90deg, rgba(var(--gd-red), 0.08), rgba(var(--gd-red), 0.02) 75%),
+    var(--ds-field);
+}
+
+/* Public objective: stage-coloured row (space-separated --s triplet). */
+.objective {
+  --s: var(--ds-sig-stage1);
+  padding: 0 9px;
+  background: linear-gradient(90deg, rgb(var(--s) / 0.1), rgb(var(--s) / 0.03) 70%);
+  border: 1px solid rgb(var(--s) / 0.27);
+}
+
+.objective[data-stage="2"] {
+  --s: var(--ds-sig-stage2);
+}
+
+/* Promissory note: IOU ticket — owner stub, perforation, dog-ear. */
+.pn {
+  gap: 9px;
+  padding: 0 18px 0 4px;
+  clip-path: polygon(0 0, 22px 0, 24px 3px, 26px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 26px 100%, 24px calc(100% - 3px), 22px 100%, 0 100%);
+  background: rgba(var(--gd-cyan), 0.36);
+}
+
+.pn::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  clip-path: polygon(0 0, 21px 0, 23px 3px, 25px 0, calc(100% - 9.4px) 0, 100% 9.4px, 100% 100%, 25px 100%, 23px calc(100% - 3px), 21px 100%, 0 100%);
+  background:
+    repeating-linear-gradient(180deg, rgba(var(--gd-cyan), 0.49) 0 2px, transparent 2px 4px) 22.5px 3px / 1px calc(100% - 6px) no-repeat,
+    linear-gradient(90deg, rgba(var(--gd-cyan), 0.2) 0 22px, transparent 22px),
+    linear-gradient(90deg, rgba(var(--gd-cyan), 0.077), rgba(var(--gd-cyan), 0.021)),
+    var(--ds-socket);
+}
+
+.pn::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  background: rgba(var(--gd-cyan), 0.4);
+}
+
+.stub,
+.stubEmpty {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+/* Relic: gold octagon. */
+.relic {
+  padding: 0 10px;
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+  background: rgb(var(--ds-sig-relic) / 0.45);
+}
+
+.relic::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  clip-path: polygon(5.6px 0, calc(100% - 5.6px) 0, 100% 5.6px, 100% calc(100% - 5.6px), calc(100% - 5.6px) 100%, 5.6px 100%, 0 calc(100% - 5.6px), 0 5.6px);
+  background:
+    linear-gradient(90deg, rgb(var(--ds-sig-relic) / 0.11), rgb(var(--ds-sig-relic) / 0.03)),
+    var(--ds-socket);
+}
+
+/* Breakthrough: capsule around a reactor core. */
+.brk {
+  padding: 0 10px 0 3px;
+  border-radius: 11px;
+  background: linear-gradient(90deg, rgb(var(--ds-sig-break) / 0.1), rgb(var(--ds-sig-break) / 0.03));
+  border: 1px solid rgb(var(--ds-sig-break) / 0.3);
+}
+
+.core {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  color: var(--ds-ink-hi);
+  background: rgb(var(--ds-sig-break) / 0.25);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-break) / 0.55);
+}
+
+/* Ability: engraved tag with a recessed hex well. */
+.abl {
+  padding: 0 9px 0 3px;
+  background: rgb(var(--ds-sig-ability) / 0.05);
+  border: 1px solid rgb(var(--ds-sig-ability) / 0.29);
+  border-radius: var(--ds-radius-xs);
+}
+
+.well {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: rgb(var(--ds-sig-ability));
+  background: rgb(0 0 0 / 0.45);
+  border-radius: 1px;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+/* Law: sealed row. */
+.law {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 4px 12px 4px 5px;
+  background: linear-gradient(180deg, rgb(var(--ds-sig-law) / 0.1), rgb(var(--ds-sig-law) / 0.03));
+  border: 1px solid rgb(var(--ds-sig-law) / 0.29);
+  border-radius: var(--ds-radius-xs);
+}
+
+.law::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(315deg, rgb(var(--ds-sig-law) / 0.49) 0 50%, transparent 50%);
+}
+
+.seal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: rgb(var(--ds-sig-law));
+  background: rgb(var(--ds-sig-law) / 0.15);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-law) / 0.42);
+}
+
+.lawText {
+  display: grid;
+  min-width: 0;
+}
+
+.lawText b {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ds-ink-hi);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lawText small {
+  font-size: var(--text-meta);
+  color: var(--ds-ink);
+}
+
+/* Strategy card plate: chamfered frame and a stamped disc. */
+.scp {
+  --scc: var(--gd-gray);
+  height: 24px;
+  padding: 0 10px 0 3px;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background:
+    linear-gradient(315deg, rgba(var(--scc), 0.5) 0 6px, transparent 6.5px),
+    linear-gradient(90deg, rgba(var(--scc), 0.14), rgba(var(--scc), 0.04)),
+    var(--ds-socket);
+  border: 1px solid rgba(var(--scc), 0.42);
+}
+
+.scp[data-played] {
+  color: var(--ds-ink);
+}
+
+.disc {
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  letter-spacing: 0;
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 1px rgba(var(--scc), 0.56);
+}
+
+/* VP stamp */
+.vp {
+  display: inline-grid;
+  place-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 11px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-title);
+  color: var(--ds-ink-hi);
+  background: rgba(var(--gd-green), 0.12);
+  box-shadow: inset 0 0 0 1px rgba(var(--gd-green), 0.6);
+}
+
+/* Leader portrait */
+.leader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-body);
+  color: var(--ds-ink-hi);
+}
+
+.leader img {
+  width: 30px;
+  height: 36px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--ds-radius-xs);
+  box-shadow: 0 0 0 1px var(--ds-h22);
+}
+
+/* Counted resource */
+.count {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 22px;
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  color: var(--ds-ink-hi);
+}
+
+.count img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.plain {
+  padding: 0 8px;
+  font-weight: var(--weight-data);
+  color: var(--ds-ink);
+  background: var(--ds-socket);
+  border-radius: var(--ds-radius-xs);
+  box-shadow: inset 0 0 0 1px var(--ds-h14);
+}

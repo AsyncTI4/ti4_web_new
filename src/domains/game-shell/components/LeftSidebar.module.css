@@ -1,0 +1,77 @@
+/*
+ * Table rail. Docked flush to the left edge of the map viewport, full height,
+ * on the deck surface. Sections are separated by a hairline, never boxed.
+ */
+.rail {
+  position: fixed;
+  left: 0;
+  top: var(--map-viewport-top);
+  bottom: 0;
+  z-index: var(--z-left-sidebar);
+  display: flex;
+  flex-direction: column;
+  width: var(--table-rail-w, 300px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--ds-deck);
+  background-image: var(--ds-tex-deck);
+  background-size: var(--ds-tex-deck-size);
+  background-position: var(--ds-tex-deck-pos);
+  background-repeat: var(--ds-tex-deck-repeat);
+  border-right: 1px solid var(--ds-h22);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-h28) transparent;
+  transition: transform var(--ds-dur-slow) var(--ds-ease), visibility 0s;
+}
+
+.collapsed {
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform var(--ds-dur-slow) var(--ds-ease), visibility 0s var(--ds-dur-slow);
+}
+
+.title {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--ds-tex-rail), linear-gradient(180deg, var(--ds-ground), var(--ds-deck));
+  border-bottom: 1px solid var(--ds-h14);
+}
+
+.gameName {
+  font-family: var(--ds-font-display);
+  font-size: var(--text-heading);
+  font-weight: var(--weight-title);
+  line-height: 1.15;
+  color: var(--ds-ink-hi);
+  overflow-wrap: anywhere;
+}
+
+.customName {
+  font-size: var(--text-meta);
+  line-height: 1.3;
+  color: var(--ds-ink);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 4px;
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.meta b {
+  font-family: var(--ds-font-data);
+  font-weight: var(--weight-title);
+  color: var(--ds-ink-hi);
+}
+
+.section {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid var(--ds-h10);
+}

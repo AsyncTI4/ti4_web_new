@@ -1,5 +1,15 @@
-import { Box, Text, Stack, Divider } from "@/ds";
+import type { CSSProperties } from "react";
 import styles from "./CardDetailsModal.module.css";
+
+const NOTE = /(\[Note:[^\]]*\])/i;
+
+/** Rulings appended to card text in brackets read as quieter asides. */
+function CardText({ text }: { text: string }) {
+  const parts = text.split(NOTE);
+  return parts.map((part, index) =>
+    NOTE.test(part) ? <i key={index}>{part}</i> : part,
+  );
+}
 
 type CardItemData = {
   name: string;
@@ -17,9 +27,11 @@ type CardSectionData = {
 type Props = {
   sections: CardSectionData[];
   showCounts?: boolean;
+  /** Signal colour of the deck, as a space-separated rgb triplet token. */
+  tone?: string;
 };
 
-function CardItem({
+export function DeckEntry({
   name,
   count,
   text,
@@ -27,56 +39,69 @@ function CardItem({
   showCount,
 }: CardItemData & { showCount: boolean }) {
   return (
-    <div className={styles.cardItem}>
-      <Stack gap="xs">
-        <div className={styles.cardHeader}>
-          <div className={styles.cardNameRow}>
-            <Text className={styles.cardName}>{name}</Text>
-            {showCount && <div className={styles.copyBadge}>{count}</div>}
-          </div>
-          {percentage !== undefined && (
-            <div className={styles.percentage}>{percentage.toFixed(2)}%</div>
-          )}
-        </div>
-        <Text className={styles.cardText}>{text}</Text>
-      </Stack>
+    <div className={styles.entry}>
+      <div className={styles.entryHead}>
+        <b className={styles.entryName}>
+          {name}
+          {showCount && count > 1 && <span className={styles.copies}> ×{count}</span>}
+        </b>
+        {percentage !== undefined && (
+          <span className={styles.percentage} title="Chance to draw next">
+            {percentage.toFixed(1)}%
+          </span>
+        )}
+      </div>
+      <p className={styles.entryText}>
+        <CardText text={text} />
+      </p>
     </div>
   );
 }
 
-function CardSection({
+export function DeckGroup({
   title,
   count,
-  items,
-  showCounts,
-}: CardSectionData & { showCounts: boolean }) {
+  children,
+  tone,
+}: {
+  title: string;
+  count: number;
+  children: React.ReactNode;
+  tone?: string;
+}) {
+  const style = tone ? ({ "--dk": tone } as CSSProperties) : undefined;
   return (
-    <Box>
-      <Text className={styles.sectionTitle}>{title} ({count})</Text>
-      <Box className={styles.cardGrid}>
-        {items.map((item) => (
-          <CardItem key={item.name} {...item} showCount={showCounts} />
-        ))}
-      </Box>
-    </Box>
+    <section className={styles.group} style={style}>
+      <span className={styles.groupLabel}>
+        <span>{title}</span>
+        <span className={styles.groupCount}>{count}</span>
+      </span>
+      {children}
+    </section>
   );
 }
 
-export function CardDetailsModal({ sections, showCounts = true }: Props) {
-  const visibleSections = sections.filter(
-    (section) => section.items.length > 0
+export function DeckList({ children, tone }: { children: React.ReactNode; tone?: string }) {
+  const style = tone ? ({ "--dk": tone } as CSSProperties) : undefined;
+  return (
+    <div className={styles.container} style={style}>
+      {children}
+    </div>
   );
+}
+
+export function CardDetailsModal({ sections, showCounts = true, tone }: Props) {
+  const visibleSections = sections.filter((section) => section.items.length > 0);
 
   return (
-    <Stack className={styles.container} gap="sm">
-      {visibleSections.map((section, index) => (
-        <div key={section.title}>
-          <CardSection {...section} showCounts={showCounts} />
-          {index < visibleSections.length - 1 && (
-            <Divider c="gray.7" opacity={0.3} />
-          )}
-        </div>
+    <DeckList tone={tone}>
+      {visibleSections.map((section) => (
+        <DeckGroup key={section.title} title={section.title} count={section.count}>
+          {section.items.map((item) => (
+            <DeckEntry key={item.name} {...item} showCount={showCounts} />
+          ))}
+        </DeckGroup>
       ))}
-    </Stack>
+    </DeckList>
   );
 }

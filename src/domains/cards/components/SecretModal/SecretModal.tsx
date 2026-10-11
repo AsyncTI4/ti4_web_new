@@ -1,61 +1,41 @@
-import { Box, Text, Stack, Group, Divider } from "@/ds";
 import type { SecretSection } from "@/domains/cards/model/secretObjectiveProcessor";
-import styles from "./SecretModal.module.css";
+import { DeckEntry, DeckGroup, DeckList } from "../CardDetailsModal/CardDetailsModal";
 
 type Props = {
   sections: SecretSection[];
 };
 
-type SecretItemProps = SecretSection["items"][number];
-
-function SecretItem({ name, text, phase, phaseColor }: SecretItemProps) {
-  return (
-    <Box className={`${styles.secretItem} ${styles[phaseColor]}`}>
-      <Stack gap="xs">
-        <Group gap="xs" align="center">
-          <Text className={styles.secretName}>{name}</Text>
-          <Text className={`${styles.phaseText} ${styles[phaseColor]}`}>
-            {phase}
-          </Text>
-        </Group>
-        <Text className={styles.secretText}>{text}</Text>
-      </Stack>
-    </Box>
-  );
-}
-
-function SecretSection({ title, count, items, phaseColor }: SecretSection) {
-  return (
-    <Stack gap="xs">
-      <Text className={`${styles.sectionTitle} ${styles[phaseColor]}`}>
-        {title} ({count})
-      </Text>
-      <Stack gap="2px">
-        {items.map((item) => (
-          <SecretItem key={item.name} {...item} />
-        ))}
-      </Stack>
-    </Stack>
-  );
-}
+/** Secrets file by the phase they score in; each phase keeps its signal colour. */
+const PHASE_TONE: Record<SecretSection["phaseColor"], string> = {
+  red: "var(--ds-sig-secret)",
+  blue: "var(--ds-sig-stage2)",
+  orange: "var(--ds-sig-stage1)",
+};
 
 export function SecretModal({ sections }: Props) {
-  const visibleSections = sections.filter(
-    (section) => section.items.length > 0
-  );
+  const visibleSections = sections.filter((section) => section.items.length > 0);
 
   return (
-    <Box p="sm" className={styles.container}>
-      <Stack gap="sm">
-        {visibleSections.map((section, index) => (
-          <div key={section.title}>
-            <SecretSection {...section} />
-            {index < visibleSections.length - 1 && (
-              <Divider c="gray.7" opacity={0.3} />
-            )}
-          </div>
-        ))}
-      </Stack>
-    </Box>
+    <DeckList>
+      {visibleSections.map((section) => (
+        <DeckGroup
+          key={section.title}
+          title={section.title}
+          count={section.count}
+          tone={PHASE_TONE[section.phaseColor]}
+        >
+          {section.items.map((item) => (
+            <DeckEntry
+              key={item.name}
+              name={item.name}
+              count={item.count}
+              text={item.text}
+              percentage={item.percentage}
+              showCount
+            />
+          ))}
+        </DeckGroup>
+      ))}
+    </DeckList>
   );
 }

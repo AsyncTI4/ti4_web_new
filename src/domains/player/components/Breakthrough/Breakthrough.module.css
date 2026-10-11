@@ -1,58 +1,92 @@
-.container {
-  position: relative;
+/*
+ * Breakthrough: a reactor capsule fed by its two synergy tech colours. The
+ * edge and the fill both run from one into the other, the core on the left
+ * glows in the first, and the pair repeats as pips on the right.
+ */
+.brk {
+  --s1: var(--gd-gray);
+  --s2: var(--gd-gray);
+  padding: 0 10px 0 4px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(90deg, rgba(var(--s1), 0.168), rgba(var(--s2), 0.14)) padding-box,
+    linear-gradient(var(--ds-field), var(--ds-field)) padding-box,
+    linear-gradient(90deg, rgba(var(--s1), 0.525), rgba(var(--s2), 0.525)) border-box;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
 }
 
+.core {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: var(--ds-white);
+  background: radial-gradient(circle, rgba(var(--s1), 0.385), rgba(var(--s1), 0.084) 70%);
+  box-shadow: inset 0 0 0 1px rgba(var(--s1), 0.6);
+}
+
+.core svg {
+  width: 11px;
+  height: 11px;
+}
+
+.syn {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+  padding-left: 6px;
+}
+
+.syn i {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: rgb(var(--c));
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.5);
+}
+
+.tgs {
+  margin-left: auto;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--ds-sig-tg));
+}
+
+.tgs + .syn {
+  margin-left: 4px;
+}
+
+.brk[data-s="locked"] {
+  filter: grayscale(0.85);
+  opacity: 0.6;
+}
+
+.brk[data-s="locked"] .core {
+  box-shadow: inset 0 0 0 1px rgba(var(--s1), 0.35);
+}
+
+.brk[data-s="exhausted"] {
+  color: var(--ds-ink-lo);
+  text-shadow: none;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.35) 5px 9px) padding-box,
+    linear-gradient(90deg, rgba(var(--s1), 0.07), rgba(var(--s2), 0.056)) padding-box,
+    linear-gradient(var(--ds-field), var(--ds-field)) padding-box,
+    linear-gradient(90deg, rgba(var(--s1), 0.28), rgba(var(--s2), 0.28)) border-box;
+}
+
+.brk[data-s="exhausted"] .core {
+  background: none;
+  box-shadow: inset 0 0 0 1px rgba(var(--s1), 0.35);
+}
+
+/* Kept for hosts that size the capsule to a fixed slot. */
 .headerChip {
   width: 100%;
-}
-
-.container.exhausted {
-  filter: grayscale(0.2);
-}
-
-.container.locked {
-  filter: grayscale(0.8);
-  opacity: 0.7;
-}
-
-.exhaustedChip {
-  opacity: 0.72;
-  box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.035);
-}
-
-.synergyIcon::before {
-  position: relative;
-  bottom: 1px;
-  margin-right: -2px;
-}
-
-.exhaustedIcon::before {
-  filter: grayscale(0.55) brightness(0.9);
-}
-
-.tradeGoodsText {
-  margin-left: 6px;
-}
-
-.lockIcon {
-  position: absolute;
-  top: -8px;
-  right: -4px;
-  pointer-events: none;
-}
-
-.exhaustedBadge {
-  position: absolute;
-  right: -6px;
-  bottom: -7px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  background: rgba(58, 12, 18, 0.82);
-  border: 1px solid rgba(226, 232, 240, 0.12);
-  box-shadow: none;
-  pointer-events: none;
 }

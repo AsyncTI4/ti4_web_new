@@ -1,5 +1,5 @@
 import { forwardRef, type KeyboardEvent, type ReactNode } from "react";
-import { Box, Text } from "@/ds";
+import { Box } from "@/ds";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";
 import { FactionBadge, UpgradeFactionBadges } from "./FactionBadges";
@@ -69,12 +69,16 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
         }}
       />
       <span className={styles.denseCellField}>{image}</span>
+      {upgraded && !upgradeFactions?.length && !faction && (
+        <img
+          className={styles.upgradeBadge}
+          src="/UnitUpgradeTech.png"
+          alt="Upgraded"
+        />
+      )}
       {reinforcements !== undefined && (
         <span className={styles.denseTrough}>
-          <Text
-            fz={10}
-            lh={1}
-            fw={700}
+          <span
             className={cx(
               styles.denseCellCount,
               reinforcements === 0 ? styles.countTextZero : styles.countText,
@@ -82,15 +86,16 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
             data-total={totalCapacity}
           >
             {reinforcements}
-          </Text>
+          </span>
         </span>
       )}
       {label && (
         <span className={styles.denseTrough}>
-          <Text fz={8} lh={1} c="gray.6" tt="uppercase">
-            {label}
-          </Text>
+          <span className={styles.denseLabel}>{label}</span>
         </span>
+      )}
+      {reinforcements === undefined && !label && (
+        <span className={styles.denseTrough} />
       )}
     </Box>
   );

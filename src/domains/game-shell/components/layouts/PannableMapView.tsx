@@ -158,7 +158,22 @@ export function PannableMapView({ gameId }: { gameId: string }) {
       {!isMobile && (
         <>
           <ReplayAutoScroll mapContainerRef={mapContainerRef} />
-          <FloatingMapToolbar gameId={gameId} rightOffset="35px" />
+          <FloatingMapToolbar
+            gameId={gameId}
+            rightOffset="16px"
+            renderControls={
+              hideZoomControls
+                ? undefined
+                : (eventsButton) => (
+                    <ZoomControls
+                      zoomClass=""
+                      hideFitToScreen
+                      onFitBoard={handleFitBoard}
+                      trailing={eventsButton}
+                    />
+                  )
+            }
+          />
         </>
       )}
 
@@ -167,10 +182,10 @@ export function PannableMapView({ gameId }: { gameId: string }) {
         className={`dragscroll ${classes.mapArea}`}
         style={{ width: "100%" }}
       >
-        {!hideZoomControls && (
+        {isMobile && !hideZoomControls && (
           <div
             className={classes.zoomControlsDynamic}
-            style={{ right: "35px" }}
+            style={{ right: "16px" }}
           >
             <ZoomControls
               zoomClass=""

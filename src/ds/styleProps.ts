@@ -23,7 +23,7 @@ export type BreakpointKey =
   | "xl7";
 
 export type Responsive<T> = T | Partial<Record<BreakpointKey, T>>;
-export type SpacingValue = SizeKey | number | string;
+export type SpacingValue = SizeKey | number | (string & {});
 
 export type StyleProps = {
   m?: Responsive<SpacingValue>;
@@ -49,13 +49,13 @@ export type StyleProps = {
   c?: string;
   bg?: string;
   fw?: number | string;
-  fz?: SizeKey | number | string;
-  ff?: "text" | "monospace" | "heading" | "display" | string;
+  fz?: SizeKey | number | (string & {});
+  ff?: "text" | "monospace" | "heading" | "display" | (string & {});
   fs?: CSSProperties["fontStyle"];
   ta?: CSSProperties["textAlign"];
   tt?: CSSProperties["textTransform"];
   td?: CSSProperties["textDecoration"];
-  lh?: SizeKey | number | string;
+  lh?: SizeKey | number | (string & {});
   lts?: number | string;
   opacity?: number;
   pos?: CSSProperties["position"];
@@ -100,7 +100,7 @@ export function spacing(value: SpacingValue | undefined) {
 }
 
 /** A font-size keyword or number as a CSS length. */
-export function fontSize(value: SizeKey | number | string | undefined) {
+export function fontSize(value: SizeKey | number | (string & {}) | undefined) {
   if (value === undefined) return undefined;
   if (typeof value === "string" && SIZE_KEYS.has(value)) {
     return `var(--ds-fz-${value})`;
@@ -109,7 +109,7 @@ export function fontSize(value: SizeKey | number | string | undefined) {
 }
 
 /** A radius keyword or number as a CSS length. */
-export function radius(value: SizeKey | number | string | undefined) {
+export function radius(value: SizeKey | number | (string & {}) | undefined) {
   if (value === undefined) return undefined;
   if (typeof value === "string" && SIZE_KEYS.has(value)) {
     return `var(--ds-radius-${value})`;
@@ -117,7 +117,7 @@ export function radius(value: SizeKey | number | string | undefined) {
   return px(value);
 }
 
-function lineHeight(value: SizeKey | number | string | undefined) {
+function lineHeight(value: SizeKey | number | (string & {}) | undefined) {
   if (value === undefined) return undefined;
   if (typeof value === "string" && SIZE_KEYS.has(value)) {
     return `var(--ds-lh-${value})`;
@@ -193,7 +193,7 @@ function isResponsive<T>(value: Responsive<T>): value is Partial<Record<Breakpoi
 
 /** Resolve a responsive value for the given breakpoint (mobile first). */
 export function pick<T>(value: Responsive<T> | undefined, bp: BreakpointKey): T | undefined {
-  if (value === undefined || !isResponsive(value)) return value as T | undefined;
+  if (value === undefined || !isResponsive(value)) return value;
   const upto = ORDER.indexOf(bp);
   let out: T | undefined;
   for (let i = 0; i <= upto; i++) {

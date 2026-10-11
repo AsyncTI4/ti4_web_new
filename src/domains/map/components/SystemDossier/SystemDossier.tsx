@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGameState } from "@/api/useGameState";
-import { CloseButton } from "@/ds";
-import { IconRocket, IconSwords } from "@tabler/icons-react";
+import { CloseButton, Image } from "@/ds";
+import { IconSwords } from "@tabler/icons-react";
+import cx from "clsx";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
+import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { lookupUnit } from "@/entities/lookup/units";
-import { Module } from "@/shared/ui/primitives/Module/Module";
 import { MapTile } from "../MapTile";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTileById } from "@/entities/lookup/systems";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/entities/geometry/tilePositioning";
-import { getPlanetsByTileId } from "@/entities/lookup/planets";
-import { getColorAlias } from "@/entities/lookup/colors";
+import { getPlanetData, getPlanetsByTileId } from "@/entities/lookup/planets";
+import { getAttachmentModifiers } from "@/entities/game/planets";
 import { useGameData } from "@/state/useGameContext";
 import type { GameData, Tile } from "@/entities/game/types";
 import {
@@ -22,16 +23,24 @@ import {
   factionsInSystem,
   findAttacker,
 } from "./battleCalcLink";
-import { getSystemFeatures } from "./featureRules";
-import { summarizeZone, formatStat } from "./fleetMath";
-import { ControllerChip, ForceStrip } from "./ForceStrip";
-import { PlanetPlate } from "./PlanetPlate";
+import { getSystemFeatures, systemAnomalies } from "./featureRules";
+import { capacityOf, summarizeZone } from "./fleetMath";
+import {
+  arrangeZone,
+  Balance,
+  CalcLink,
+  ControlPill,
+  FireRow,
+  ForceRow,
+} from "./ForceRow";
+import { EconomicFigure, PlanetBand } from "./PlanetBand";
 import { useFactionHelpers, type FactionHelpers } from "./useFactionHelpers";
 import { UnitSheetContext, useUnitSheet, type SheetUnit } from "./unitSheet";
 import styles from "./SystemDossier.module.css";
 
-const TILE_SCALE = 0.78;
-const BRACKET_CORNERS = ["tl", "tr", "bl", "br"];
+/** Fits the 345px tile into the art column's 222px well. */
+const TILE_SCALE = 0.64;
+const BRACKET_CORNERS = ["tl", "br"];
 
 type SystemFeature = ReturnType<typeof getSystemFeatures>[number];
 type PdsCoverage = GameData["pdsByTile"][string];
@@ -47,6 +56,35 @@ function orderedPlanetIds(tile: Tile): string[] {
     ...staticIds.filter((id) => tile.planets[id] !== undefined),
     ...Object.keys(tile.planets).filter((id) => !staticIds.includes(id)),
   ];
+}
+
+/** Strips the markdown-italic asterisks the planet data wraps lore in. */
+function cleanFlavour(text: string): string {
+  return text.replace(/^\*+/, "").replace(/\*+$/, "").trim();
+}
+
+function shipsFight(summary: { rows: { unit: { isShip?: boolean } }[] }) {
+  return summary.rows.some((row) => row.unit.isShip);
+}
+
+/** Which zones hold two or more factions that can fight there. */
+function contestedZones(tile: Tile, helpers: FactionHelpers): string[] {
+  const space = summarizeZone(
+    tile.unitsByFaction,
+    helpers.playerFor,
+    () => false,
+  ).filter(shipsFight).length;
+  const ground = Object.values(tile.planets).some(
+    (planet) =>
+      summarizeZone(
+        planet.unitsByFaction,
+        helpers.playerFor,
+        () => false,
+      ).filter((s) => s.rows.some((row) => row.unit.isGroundForce)).length > 1,
+  );
+  return [space > 1 ? "space" : null, ground ? "ground" : null].filter(
+    (zone): zone is string => zone !== null,
+  );
 }
 
 function FeatureIcon({ feature }: { feature: SystemFeature }) {
@@ -69,73 +107,37 @@ function FeatureIcon({ feature }: { feature: SystemFeature }) {
 
 /**
  * A system with no anomaly, wormhole or token has nothing to say, so the
- * navigation plate is absent rather than stating that ordinary rules apply.
+ * navigation band is absent rather than stating that ordinary rules apply.
  */
-function NavigationPlate({ features }: { features: SystemFeature[] }) {
+function NavigationBand({ features }: { features: SystemFeature[] }) {
   if (features.length === 0) return null;
   return (
-    <Module label="Navigation" className={styles.plate}>
-      <div className={styles.features}>
-        {features.map((feature) => (
-          <div key={feature.id} className={styles.feature}>
-            <div className={styles.featureHead}>
-              <FeatureIcon feature={feature} />
-              <span className={styles.featureName}>{feature.name}</span>
-              {feature.detail && (
-                <span className={styles.featureDetail}>{feature.detail}</span>
-              )}
-            </div>
-            {feature.rule && (
-              <p className={styles.featureRule}>{feature.rule}</p>
+    <section className={styles.zone} data-z="nav">
+      <header className={styles.zoneHead}>
+        <span className={styles.alt}>Navigation</span>
+        <span className={styles.lbl}>Rules in force</span>
+      </header>
+      {features.map((feature) => (
+        <div key={feature.id} className={styles.feature}>
+          <div className={styles.featureHead}>
+            <FeatureIcon feature={feature} />
+            <span className={styles.featureName}>{feature.name}</span>
+            {feature.detail && (
+              <span className={styles.featureDetail}>{feature.detail}</span>
             )}
           </div>
-        ))}
-      </div>
-    </Module>
-  );
-}
-
-function SpaceCannonCoverage({
-  pdsInRange,
-  helpers,
-}: {
-  pdsInRange: PdsCoverage | undefined;
-  helpers: FactionHelpers;
-}) {
-  if (!pdsInRange?.length) return null;
-  return (
-    <div className={styles.structures}>
-      <span className={styles.structuresLabel}>Space cannon coverage</span>
-      {pdsInRange.map((pds) => (
-        <span
-          key={pds.faction}
-          className={styles.structure}
-          aria-label={`${helpers.displayName(pds.faction)}: ${pds.count} PDS, ${formatStat(pds.expected)} expected hits`}
-        >
-          <img
-            src={cdnImage(`/units/${getColorAlias(pds.color)}_pd.png`)}
-            alt=""
-            className={styles.structureUnit}
-          />
-          <span className={styles.structureCount}>{pds.count}×</span>
-          <span className={styles.structureName}>PDS</span>
-          <span
-            className={styles.structureExpected}
-            title="Expected space cannon hits"
-          >
-            <img src={cdnImage("/player_area/pa_hit.png")} alt="" />
-            {formatStat(pds.expected)}
-          </span>
-        </span>
+          {feature.rule && <p className={styles.featureRule}>{feature.rule}</p>}
+        </div>
       ))}
-    </div>
+    </section>
   );
 }
 
 function ActivatedBy({ factions }: { factions: string[] }) {
+  if (factions.length === 0) return null;
   return (
-    <span className={styles.ccMeta}>
-      Activated by
+    <span className={styles.activated}>
+      Activated
       {factions.map((faction) => (
         <FactionIcon key={faction} faction={faction} w={13} h={13} />
       ))}
@@ -144,10 +146,10 @@ function ActivatedBy({ factions }: { factions: string[] }) {
 }
 
 /**
- * The space rack shows everything in the area, transported ground forces
- * included, but only ships roll in space combat, so only ships count.
+ * The space area: only ships roll in space combat, so only ships count, but
+ * the rack shows everything there, transported ground forces included.
  */
-function SpaceZone({
+function SpaceBand({
   tile,
   pdsInRange,
   helpers,
@@ -158,47 +160,54 @@ function SpaceZone({
   helpers: FactionHelpers;
   attacker: string | null;
 }) {
-  const spaceSummaries = summarizeZone(
+  const summaries = summarizeZone(
     tile.unitsByFaction,
     helpers.playerFor,
     (unit) => unit.isShip,
   );
+  const { ordered, sides, roleOf } = arrangeZone(
+    summaries,
+    shipsFight,
+    attacker,
+    tile.controlledBy,
+    false,
+  );
+  const defender = sides?.defender.faction ?? ordered.find(shipsFight)?.faction;
+  const calcUrl = defender
+    ? buildSpaceBattleUrl(tile, defender, helpers.playerFor, attacker)
+    : null;
+  const empty = ordered.length === 0 && !pdsInRange?.length;
 
   return (
-    <Module
-      label={
-        <span className={styles.zoneLabel}>
-          <IconRocket size={11} aria-hidden />
-          Space Zone
+    <section className={styles.zone} data-z="space">
+      <header className={styles.zoneHead}>
+        <span className={styles.alt}>Orbit</span>
+        <span className={styles.lbl}>
+          {sides ? "Space combat" : "Space area"}
         </span>
-      }
-      meta={
-        tile.commandCounters.length > 0 ? (
-          <ActivatedBy factions={tile.commandCounters} />
-        ) : undefined
-      }
-      className={styles.plate}
-    >
-      <div className={styles.zoneForces}>
-        {spaceSummaries.length === 0 && (
-          <div className={styles.emptySocket}>No ships in the system</div>
-        )}
-        {spaceSummaries.map((summary) => (
-          <ForceStrip
-            key={summary.faction}
-            summary={summary}
-            helpers={helpers}
-            battleCalcUrl={buildSpaceBattleUrl(
-              tile,
-              summary.faction,
-              helpers.playerFor,
-              attacker,
-            )}
+        <ActivatedBy factions={tile.commandCounters} />
+        <span className={styles.headEnd}>
+          <Balance sides={sides} helpers={helpers} />
+          <CalcLink
+            url={calcUrl}
+            title="Space combat here in the battle calculator"
           />
-        ))}
-        <SpaceCannonCoverage pdsInRange={pdsInRange} helpers={helpers} />
-      </div>
-    </Module>
+        </span>
+      </header>
+      {empty && <div className={styles.empty}>No ships in the system</div>}
+      {ordered.map((summary) => (
+        <ForceRow
+          key={summary.faction}
+          summary={summary}
+          helpers={helpers}
+          role={roleOf(summary.faction)}
+          capacity={capacityOf(summary.rows)}
+        />
+      ))}
+      {pdsInRange?.map((entry) => (
+        <FireRow key={entry.faction} entry={entry} helpers={helpers} />
+      ))}
+    </section>
   );
 }
 
@@ -278,6 +287,97 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
   );
 }
 
+/** The static read of the system: economics summed, anomaly and wormholes named. */
+function SystemFacts({
+  tile,
+  features,
+}: {
+  tile: Tile;
+  features: SystemFeature[];
+}) {
+  const totals = Object.entries(tile.planets).reduce(
+    (sum, [planetId, planetTile]) => {
+      const planet = getPlanetData(planetId);
+      const bonus = getAttachmentModifiers(planetTile.attachments ?? []);
+      return {
+        resources: sum.resources + (planet?.resources ?? 0),
+        influence: sum.influence + (planet?.influence ?? 0),
+        resourceBonus: sum.resourceBonus + bonus.resources,
+        influenceBonus: sum.influenceBonus + bonus.influence,
+      };
+    },
+    { resources: 0, influence: 0, resourceBonus: 0, influenceBonus: 0 },
+  );
+  const anomalyIds = new Set<string>(systemAnomalies(tile));
+  const anomalies = features
+    .filter((feature) => anomalyIds.has(feature.id))
+    .map((feature) => feature.name);
+  const wormholes = features
+    .filter((feature) => feature.id.startsWith("wormhole-"))
+    .map((feature) => feature.glyph ?? feature.name);
+
+  return (
+    <dl className={styles.facts}>
+      <div>
+        <dt>Resources</dt>
+        <dd>
+          <EconomicFigure
+            icon={<Image src="/pa_resources.png" w={14} h={14} />}
+            value={totals.resources}
+            bonus={totals.resourceBonus}
+          />
+        </dd>
+      </div>
+      <div>
+        <dt>Influence</dt>
+        <dd>
+          <EconomicFigure
+            icon={<InfluenceIcon size={14} />}
+            value={totals.influence}
+            bonus={totals.influenceBonus}
+          />
+        </dd>
+      </div>
+      <div>
+        <dt>Anomaly</dt>
+        <dd
+          className={cx(anomalies.length === 0 && styles.nil, styles.textFact)}
+        >
+          {anomalies.length > 0 ? anomalies.join(", ") : "none"}
+        </dd>
+      </div>
+      <div>
+        <dt>Wormhole</dt>
+        <dd className={cx(wormholes.length === 0 && styles.nil)}>
+          {wormholes.length > 0 ? wormholes.join(" ") : "none"}
+        </dd>
+      </div>
+    </dl>
+  );
+}
+
+function Flavour({ planetIds }: { planetIds: string[] }) {
+  const entries = planetIds
+    .map((id) => getPlanetData(id))
+    .filter((planet) => !!planet?.flavourText)
+    .map((planet) => ({
+      name: planet!.name,
+      text: cleanFlavour(planet!.flavourText!),
+    }));
+  if (entries.length === 0) return null;
+  const named = entries.length > 1;
+  return (
+    <div className={styles.flavour}>
+      {entries.map((entry) => (
+        <p key={entry.name}>
+          {named && <b>{entry.name}</b>}
+          {entry.text}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 /**
  * One link per defending faction, carrying its ships and ground forces
  * together so both battles can be run from a single calculator tab. In a
@@ -296,7 +396,7 @@ function SystemBattleLinks({
   const present = factionsInSystem(tile);
   const defenders = present.filter((faction) => faction !== attacker);
 
-  return (defenders.length > 0 ? defenders : present).map((faction) => {
+  return (defenders.length > 0 ? defenders : present).map((faction, index) => {
     const url = buildSystemBattleUrl(
       tile,
       faction,
@@ -308,7 +408,7 @@ function SystemBattleLinks({
     return (
       <a
         key={faction}
-        className={styles.battleLink}
+        className={cx(styles.btn, index === 0 && styles.btnPrimary)}
         href={url}
         target="_blank"
         rel="noopener noreferrer"
@@ -319,10 +419,10 @@ function SystemBattleLinks({
         }
       >
         <IconSwords size={13} aria-hidden />
-        {versus && <FactionIcon faction={attacker} w={13} h={13} />}
-        {versus && <span className={styles.battleVersus}>vs</span>}
-        <FactionIcon faction={faction} w={13} h={13} />
-        Space + ground
+        Battle calc
+        {versus && <FactionIcon faction={attacker} w={14} h={14} />}
+        {versus && <span className={styles.versus}>vs</span>}
+        <FactionIcon faction={faction} w={14} h={14} />
       </a>
     );
   });
@@ -353,13 +453,17 @@ function UnitSheet({
   );
 }
 
+/**
+ * The system dossier as a sector scan: the tile and its static facts on the
+ * left, and on the right the zones read top-down the way combat resolves —
+ * space cannon and orbit, then each planet — on shared numeric columns.
+ */
 export function SystemDossier({
   tile,
   onClose,
   unitSheetWidth,
 }: {
   tile: Tile;
-  /** Renders a close button in the header, for hosts without Escape. */
   onClose?: () => void;
   /**
    * Shows unit stat cards as a sheet over the dossier, at most this wide,
@@ -376,6 +480,21 @@ export function SystemDossier({
   const [sheetUnit, setSheetUnit] = useState<SheetUnit | null>(null);
   const systemName =
     getTileById(tile.systemId)?.name || `System ${tile.systemId}`;
+  const planetIds = orderedPlanetIds(tile);
+  const pdsInRange = gameData?.pdsByTile?.[tile.position];
+  const pdsCount = (pdsInRange ?? []).reduce((n, pds) => n + pds.count, 0);
+  const features = getSystemFeatures(tile, gameData?.tiles ?? {});
+  const contested = contestedZones(tile, helpers);
+  const subline = [
+    `System ${tile.systemId}`,
+    `position ${tile.position}`,
+    planetIds.length > 0
+      ? `${planetIds.length} planet${planetIds.length === 1 ? "" : "s"}`
+      : null,
+    pdsCount > 0 ? `${pdsCount} PDS in range` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <UnitSheetContext value={unitSheetWidth ? setSheetUnit : null}>
@@ -390,28 +509,24 @@ export function SystemDossier({
         />
       )}
       <div className={styles.dossier}>
-        <header
-          className={styles.header}
-          data-closable={!!onClose || undefined}
-        >
-          <div>
+        <header className={styles.head}>
+          <span className={styles.hexno}>{tile.position}</span>
+          <span className={styles.titleBlock}>
             <h2 className={styles.title}>{systemName}</h2>
-            <div className={styles.subtitle}>
-              System {tile.systemId} · Position {tile.position}
-            </div>
-          </div>
-          <div className={styles.headerControl}>
-            <SystemBattleLinks
-              tile={tile}
-              helpers={helpers}
-              attacker={attacker}
-            />
-            <ControllerChip
-              label="Space control"
+            <small className={styles.subtitle}>{subline}</small>
+          </span>
+          <span className={styles.status}>
+            {contested.length > 0 && (
+              <span className={cx(styles.pill, styles.contest)}>
+                <IconSwords size={13} aria-hidden />
+                Contested · {contested.join(" + ")}
+              </span>
+            )}
+            <ControlPill
               faction={tile.controlledBy}
               displayName={helpers.displayName}
             />
-          </div>
+          </span>
           {onClose && (
             <CloseButton
               className={styles.closeButton}
@@ -421,20 +536,29 @@ export function SystemDossier({
           )}
         </header>
 
-        <div className={styles.columns}>
-          <div className={styles.terrain}>
+        <div className={styles.body}>
+          <aside className={styles.art}>
             <TileWell tile={tile} helpers={helpers} />
-          </div>
+            <SystemFacts tile={tile} features={features} />
+            <Flavour planetIds={planetIds} />
+          </aside>
 
-          <div className={styles.forces}>
-            <SpaceZone
+          <div className={styles.zones}>
+            <div className={styles.cols} aria-hidden>
+              <span />
+              <span className={styles.lbl}>Forces</span>
+              <span className={styles.lbl}>Hits</span>
+              <span className={styles.lbl}>HP</span>
+              <span className={styles.lbl}>Cap</span>
+            </div>
+            <SpaceBand
               tile={tile}
-              pdsInRange={gameData?.pdsByTile?.[tile.position]}
+              pdsInRange={pdsInRange}
               helpers={helpers}
               attacker={attacker}
             />
-            {orderedPlanetIds(tile).map((planetId) => (
-              <PlanetPlate
+            {planetIds.map((planetId) => (
+              <PlanetBand
                 key={planetId}
                 planetId={planetId}
                 planetTile={tile.planets[planetId]}
@@ -443,11 +567,21 @@ export function SystemDossier({
                 attacker={attacker}
               />
             ))}
-            <NavigationPlate
-              features={getSystemFeatures(tile, gameData?.tiles ?? {})}
-            />
+            <NavigationBand features={features} />
           </div>
         </div>
+
+        <footer className={styles.foot}>
+          <span className={styles.note}>
+            Expected hits per combat round. Space cannon resolves before the
+            first round.
+          </span>
+          <SystemBattleLinks
+            tile={tile}
+            helpers={helpers}
+            attacker={attacker}
+          />
+        </footer>
       </div>
     </UnitSheetContext>
   );

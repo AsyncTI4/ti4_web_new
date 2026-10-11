@@ -96,6 +96,7 @@ function SubEventContent({
         <>
           <span className={classes.combat}>
             <IconSwords size={11} stroke={2} />
+            {sub.kind === "space" ? "Space" : "Ground"} combat ·{" "}
             {combatLocation(sub, systemName)}
           </span>
           {sub.vsFaction && (

@@ -1,58 +1,76 @@
-import { Title, Text, Box, Grid, Group } from "@/ds";
 import type { ReactNode } from "react";
-import classes from "./KeyboardShortcutsModal.module.css";
 import { AppModal } from "@/shared/ui/AppModal";
+import classes from "./KeyboardShortcutsModal.module.css";
 
 type KeyboardShortcutsModalProps = {
   opened: boolean;
   onClose: () => void;
 };
 
-/* A section rail: engraved label carried across the column by a fading rule. */
-function SectionTitle({ children }: { children: ReactNode }) {
-  return (
-    <Box className={classes.sectionTitle}>
-      {children}
-      <span className={classes.sectionRule} aria-hidden="true" />
-    </Box>
-  );
-}
-
-function Keycap({ children }: { children: ReactNode }) {
-  return <kbd className={classes.key}>{children}</kbd>;
-}
-
-type ShortcutItemProps = {
-  keys: string | string[];
+type Shortcut = {
   description: string;
-  /** True when the keys are a contiguous run rather than alternatives. */
+  /** Each entry is one key; alternatives for the same action share an entry as "+ =". */
+  keys: string[];
+  /** A contiguous run, drawn with an ellipsis between its ends. */
   range?: boolean;
 };
 
-function ShortcutItem({ keys, description, range = false }: ShortcutItemProps) {
-  const keyArray = Array.isArray(keys) ? keys : [keys];
+const NAVIGATION: Shortcut[] = [
+  { description: "Toggle both sidebars", keys: ["h"] },
+  { description: "Left / right sidebar", keys: ["l", "r"] },
+  { description: "Zoom in / out", keys: ["+", "=", "-"] },
+  { description: "Tech skip rendering", keys: ["t"] },
+  { description: "Attachments mode", keys: ["a"] },
+  { description: "Overlays", keys: ["o"] },
+];
 
-  return (
-    <Group
-      justify="space-between"
-      wrap="nowrap"
-      align="center"
-      className={classes.shortcutItem}
-    >
-      <Text className={classes.description}>{description}</Text>
-      <Box className={range ? classes.keyRange : classes.keyContainer}>
-        {keyArray.map((key, index) => (
-          <Box key={key} className={classes.keyContainer}>
-            {!range && index > 0 && (
-              <span className={classes.alt} aria-hidden="true">
-                /
-              </span>
-            )}
-            <Keycap>{key}</Keycap>
-          </Box>
+const RIGHT_SIDEBAR: Shortcut[] = [
+  { description: "Faction by seat", keys: ["1", "2", "3", "8"], range: true },
+  { description: "Tech tab", keys: ["T"] },
+  { description: "Hand tab", keys: ["H"] },
+  { description: "Strength tab", keys: ["S"] },
+];
+
+function Keycap({ children }: { children: ReactNode }) {
+  return <kbd className={classes.kbd}>{children}</kbd>;
+}
+
+function KeySequence({ keys, range }: Pick<Shortcut, "keys" | "range">) {
+  if (!range) {
+    return (
+      <span className={classes.kseq}>
+        {keys.map((key) => (
+          <Keycap key={key}>{key}</Keycap>
         ))}
-      </Box>
-    </Group>
+      </span>
+    );
+  }
+  const head = keys.slice(0, -1);
+  const last = keys[keys.length - 1];
+  return (
+    <span className={classes.kseq}>
+      {head.map((key) => (
+        <Keycap key={key}>{key}</Keycap>
+      ))}
+      <span className={classes.ellipsis} aria-label="through">
+        …
+      </span>
+      <Keycap>{last}</Keycap>
+    </span>
+  );
+}
+
+function ShortcutColumn({ label, shortcuts }: { label: string; shortcuts: Shortcut[] }) {
+  return (
+    <section className={classes.column}>
+      <div className={`overlay-modal-label ${classes.columnLabel}`}>{label}</div>
+      {shortcuts.map((shortcut) => (
+        <div key={shortcut.description} className={classes.krow}>
+          <span>{shortcut.description}</span>
+          <KeySequence keys={shortcut.keys} range={shortcut.range} />
+        </div>
+      ))}
+    </section>
   );
 }
 
@@ -64,54 +82,21 @@ export function KeyboardShortcutsModal({
     <AppModal
       opened={opened}
       onClose={onClose}
-      title={
-        <Title order={3} size="h4">
-          Keyboard Shortcuts
-        </Title>
-      }
-      size="lg"
+      title="Keyboard shortcuts"
+      size={620}
+      padding={0}
     >
-      <Box className={classes.content}>
-        <Grid>
-          <Grid.Col span={6}>
-            <SectionTitle>Navigation &amp; Display</SectionTitle>
-            <Box className={classes.section}>
-              <ShortcutItem
-                keys="h"
-                description="Toggle both sidebars (smart toggle)"
-              />
-              <ShortcutItem keys="l" description="Toggle left sidebar" />
-              <ShortcutItem keys="r" description="Toggle right sidebar" />
-              <ShortcutItem keys={["+", "="]} description="Zoom in" />
-              <ShortcutItem keys="-" description="Zoom out" />
-              <ShortcutItem keys="t" description="Toggle tech skip rendering" />
-              <ShortcutItem keys="a" description="Toggle attachments mode" />
-              <ShortcutItem keys="o" description="Toggle overlays" />
-            </Box>
-          </Grid.Col>
-
-          <Grid.Col span={6}>
-            <SectionTitle>Right Sidebar Selection</SectionTitle>
-            <Box className={classes.section}>
-              <ShortcutItem
-                keys={["1", "2", "3", "4", "5", "6", "7", "8"]}
-                description="Select faction by seat order"
-                range
-              />
-              <ShortcutItem keys="T" description="Toggle tech tab" />
-              <ShortcutItem keys="H" description="Toggle hand tab" />
-              <ShortcutItem keys="S" description="Toggle strength tab" />
-            </Box>
-          </Grid.Col>
-        </Grid>
-
-        <Box mt="lg" className={classes.note}>
-          <Text className={classes.noteText}>
-            Press the same key again to deselect. Shortcuts are disabled while
-            you are typing in an input.
-          </Text>
-        </Box>
-      </Box>
+      <div className="overlay-modal-content">
+        <div className={classes.keys}>
+          <ShortcutColumn label="Navigation & display" shortcuts={NAVIGATION} />
+          <ShortcutColumn label="Right sidebar" shortcuts={RIGHT_SIDEBAR} />
+        </div>
+      </div>
+      <footer className="overlay-modal-footer" data-align="start">
+        <p className="overlay-modal-note">
+          Press a key again to deselect. Shortcuts pause while you type.
+        </p>
+      </footer>
     </AppModal>
   );
 }

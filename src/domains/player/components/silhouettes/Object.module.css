@@ -1,0 +1,55 @@
+/*
+ * Shared by every named object: the 26px row, the 12px semibold label and a
+ * 15px glyph slot. Everything else — edge, fill, corner, state — belongs to
+ * the object's own silhouette.
+ */
+.obj {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--ds-row);
+  min-width: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  line-height: 1;
+  letter-spacing: var(--track-body);
+  color: var(--ds-ink-hi);
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.55);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    border-color var(--ds-dur) var(--ds-ease),
+    background-color var(--ds-dur) var(--ds-ease);
+}
+
+.obj:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
+}
+
+.t {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.g {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  background: center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .obj {
+    transition: none;
+  }
+}

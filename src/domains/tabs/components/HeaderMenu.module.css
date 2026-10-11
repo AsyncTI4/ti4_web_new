@@ -13,6 +13,7 @@
   overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  gap: 6px;
   padding: 4px;
 }
 
@@ -25,42 +26,51 @@
 }
 
 /*
- * Open-game plates. A game id is an identifier, so it is set in mono, and the
- * plate follows the HUD deck: socket at rest, lit when it is the game on screen.
+ * Open-game pills. A game id is an identifier, so it is set in mono; the game on
+ * screen sits on the ground with a firmer hairline, the rest stay sunk in the
+ * socket. A seated player's faction colour marks the pill's leading edge.
  */
 .tab {
   position: relative;
+  height: 30px;
   margin: 0;
-  padding: 6px 11px;
+  padding: 0 6px 0 10px;
+  gap: 8px;
   font-family: var(--font-data);
-  font-size: 12px;
-  font-weight: var(--weight-data);
-  letter-spacing: var(--track-body);
-  color: var(--ds-gray-5) !important;
-  background: var(--socket-bg);
-  border: 1px solid var(--panel-hairline);
-  border-radius: var(--panel-radius);
-  box-shadow: var(--socket-inset);
+  font-size: var(--text-body);
+  font-weight: var(--weight-title);
+  color: var(--ds-ink-lo) !important;
+  background: var(--ds-socket);
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  box-shadow:
+    inset 2px 0 0 var(--tab-faction, transparent),
+    inset 0 0 0 1px var(--ds-h14);
   cursor: pointer;
   transition:
-    color 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    background 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 120ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+    color var(--ds-dur-fast) var(--ds-ease),
+    background var(--ds-dur-fast) var(--ds-ease),
+    box-shadow var(--ds-dur-fast) var(--ds-ease);
 }
 
 .tab:hover {
-  color: var(--ds-gray-2) !important;
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--panel-hairline-strong);
-  box-shadow: var(--machined-bevel);
+  color: var(--ds-ink) !important;
+  box-shadow:
+    inset 2px 0 0 var(--tab-faction, transparent),
+    inset 0 0 0 1px var(--ds-h22);
 }
 
 .tab[data-active] {
-  color: var(--ds-gray-0) !important;
-  background: rgba(255, 255, 255, 0.09);
-  border-color: var(--panel-hairline-strong);
-  box-shadow: var(--machined-bevel);
+  color: var(--ds-ink-hi) !important;
+  background: var(--ds-ground);
+  box-shadow:
+    inset 2px 0 0 var(--tab-faction, transparent),
+    inset 0 0 0 1px var(--ds-h28);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -89,37 +99,37 @@
 }
 
 .editIcon {
-  color: rgba(148, 163, 184, 0.7);
+  color: var(--ds-ink-lo);
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color var(--ds-dur-fast) var(--ds-ease);
 }
 
 .editIcon:hover {
-  color: rgba(59, 130, 246, 0.9);
+  color: var(--ds-accent-ink);
 }
 
-/* Quiet ghost by default; only reads as destructive on hover */
+/* Quiet ghost by default; only reads as destructive on hover. */
 .closeButton {
-  background: transparent !important;
-  color: rgba(148, 163, 184, 0.65) !important;
-  border: 1px solid rgba(148, 163, 184, 0.28) !important;
-  font-size: 12px;
-  font-weight: var(--weight-title);
-  line-height: 1;
-  padding: 2px 6px !important;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  line-height: 1;
+  color: var(--ds-ink-lo);
+  background: transparent;
+  border-radius: var(--ds-radius-xs);
+  box-shadow: inset 0 0 0 1px var(--ds-h22);
   user-select: none;
 }
 
 .closeButton:hover {
-  background: rgba(239, 68, 68, 0.32) !important;
-  border-color: rgba(239, 68, 68, 0.5) !important;
-  color: rgba(255, 255, 255, 1) !important;
+  color: var(--ds-ink-hi);
+  background: rgb(var(--ds-sig-danger) / 0.22);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-danger) / 0.5);
 }
 
 /* Combobox/Dropdown styling */
@@ -174,78 +184,48 @@
   color: inherit;
 }
 
-.tab,
 .closeButton,
 .comboboxInput {
   cursor: pointer;
 }
 
-.tab,
-.closeButton {
-  transition: all 0.2s ease;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .tab {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
   .tabsList {
     padding: 3px;
   }
 }
 
-:global(.theme-vaporwavetheme) .tab {
-  text-shadow: 0 0 6px rgba(255, 0, 170, 0.4), 0 0 10px rgba(0, 240, 255, 0.25);
-}
-
-:global(.theme-vaporwavetheme) .tab::after {
-  content: "";
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: 2px;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 0, 170, 0.95), rgba(0, 240, 255, 0.95));
-  transform: scaleX(0.5);
-  opacity: 0;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-:global(.theme-vaporwavetheme) .tab:hover::after,
-:global(.theme-vaporwavetheme) .tab[data-active]::after {
-  transform: scaleX(1);
-  opacity: 1;
-}
-
-:global(.theme-vaporwavetheme) .tab:hover,
-:global(.theme-vaporwavetheme) .tab[data-active] {
-  animation: vw-soft-pulse 7s ease-in-out infinite alternate;
-}
-
-@keyframes vw-soft-pulse {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 0, 170, 0)) drop-shadow(0 0 0 rgba(0, 240, 255, 0)); }
-  50% { filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.35)) drop-shadow(0 0 6px rgba(0, 240, 255, 0.25)); }
-}
-
+/* Primary navigation: engraved labels on the bar, lit on hover. */
 .dashboardNavTab {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  font-size: 11px;
-  font-weight: var(--weight-data);
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  color: var(--ds-ink);
+  border-radius: var(--ds-radius-sm);
+  transition:
+    color var(--ds-dur-fast) var(--ds-ease),
+    background var(--ds-dur-fast) var(--ds-ease);
+}
+
+.dashboardNavTab:hover {
+  color: var(--ds-ink-hi);
+  background: var(--ds-h10);
+}
+
+.dashboardNavTab[data-active] {
+  color: var(--ds-ink-hi);
+  box-shadow: inset 0 -2px 0 var(--ds-accent);
 }
 
 .dashboardLinkIcon {
   opacity: 0.7;
-}
-
-:global(.theme-vaporwavetheme) .dashboardNavTab {
-  text-shadow: 0 0 6px rgba(255, 0, 170, 0.4), 0 0 10px rgba(0, 240, 255, 0.25);
 }

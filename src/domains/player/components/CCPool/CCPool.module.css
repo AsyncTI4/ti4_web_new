@@ -1,0 +1,33 @@
+.ccs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ccs span {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ccs span + span {
+  box-shadow: -1px 0 0 var(--ds-h10);
+}
+
+.ccs b {
+  font-family: var(--font-data);
+  font-size: 17px;
+  font-weight: var(--weight-data);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink-hi);
+  text-shadow: var(--ds-num-glow);
+}
+
+.ccs em {
+  font-style: normal;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  color: var(--ds-ink-lo);
+}

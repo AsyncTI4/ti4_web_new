@@ -1,38 +1,32 @@
 /*
- * Faction ability chip.
- *
- * Was a purple pill with a 2px accent side-stripe and a generic sparkles icon —
- * the stripe is the one shape the system bans, and the icon said "magic" rather
- * than "this faction can do something the others cannot".
- *
- * Now a keyed plate: squared to the panel radius, a purple hairline frame, an
- * engraved label, and a hex sigil built from the game's own geometry. The hexagon
- * is the unit of the board, and an ability is a power seated inside one.
+ * Faction ability: an engraved tag. A violet hairline, almost no fill, and the
+ * hex sigil seated in a recessed well.
  */
-.chip {
-  border-radius: var(--panel-radius);
-  border-color: rgba(var(--gd-purple), 0.34);
-  box-shadow: var(--machined-bevel);
-  --chip-inner-gap: 6px;
+.abl {
+  padding: 0 9px 0 3px;
+  background: rgb(var(--ds-sig-ability) / 0.049);
+  border: 1px solid rgb(var(--ds-sig-ability) / 0.294);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
 }
 
-.chip:hover {
-  border-color: rgba(var(--gd-purple), 0.55);
-  background: linear-gradient(
-      180deg,
-      rgba(var(--gd-purple), 0.16) 0%,
-      rgba(var(--gd-purple), 0.07) 100%
-    ),
-    var(--panel-field-bg);
+.abl:hover {
+  border-color: rgb(var(--ds-sig-ability) / 0.455);
 }
 
-/* The sigil: a hex cell with a lit core, sized to sit on the label's optical
-   centre rather than filling the slot. The hexagon's flat top and bottom mean it
-   needs a hair less height than a circular icon to look vertically centred. */
-.sigil {
-  display: block;
-  flex-shrink: 0;
-  width: 14px;
-  height: 15px;
-  color: rgba(196, 181, 253, 0.92);
+.well {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 1px;
+  background: var(--ds-socket);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
+  color: color-mix(in oklab, rgb(var(--ds-sig-ability)) 60%, var(--ds-white));
+}
+
+.well svg {
+  width: 12px;
+  height: 12px;
 }

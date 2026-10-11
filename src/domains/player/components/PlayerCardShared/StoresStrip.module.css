@@ -1,0 +1,77 @@
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+}
+
+.sx {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 7px 0 4px;
+  border-radius: 2px;
+  background: var(--ds-trough);
+  box-shadow:
+    inset 0 1px 2px rgb(0 0 0 / 0.6),
+    inset 0 0 0 1px var(--ds-h10);
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink-hi);
+}
+
+.sx img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.sx b {
+  font-weight: inherit;
+}
+
+.sx b i {
+  font-style: normal;
+  font-size: var(--text-label);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink-lo);
+}
+
+.zero {
+  color: var(--ds-ink-lo);
+}
+
+.tg {
+  box-shadow:
+    inset 0 1px 2px rgb(0 0 0 / 0.6),
+    inset 0 0 0 1px rgb(var(--ds-sig-tg) / 0.21);
+}
+
+.card img {
+  width: 11px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.6);
+}
+
+.cc {
+  gap: 2px;
+  padding: 0 7px;
+}
+
+.cc em {
+  margin-right: 5px;
+  font-style: normal;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  color: var(--ds-ink-lo);
+}
+
+.cc em:last-child {
+  margin-right: 0;
+}

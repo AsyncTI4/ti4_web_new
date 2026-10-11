@@ -26,6 +26,7 @@ import { getMapLayoutConfig } from "@/domains/map/components/mapLayout";
 import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
 import { FloatingMapToolbar } from "@/domains/game-shell/components/FloatingMapToolbar";
 import { TryUnitDecalsSidebar } from "../TryUnitDecalsSidebar/TryUnitDecalsSidebar";
+import { GameStatePanel } from "@/domains/game-shell/components/GameStatePanel";
 
 type Props = {
   gameId: string;
@@ -33,8 +34,11 @@ type Props = {
   embeddedSidebar?: "left" | "right" | "none";
 };
 
-// Clears the 36px right-panel toggle at 165px with the toolbar's 8px gap.
+// Below the zoom controls, in the map column.
 const PANELS_TOOLBAR_TOP = 209;
+// The table rail's width plus the collapse tab glued to its edge.
+const TABLE_RAIL_WIDTH = 300;
+const RAIL_TAB_CLEARANCE = 30;
 
 export function MapView({
   gameId,
@@ -201,6 +205,20 @@ export function MapView({
       <ReconnectButton gameDataState={gameDataState} />
 
       {!embedded && (
+        <Box
+          className={classes.gameStateOverlay}
+          style={{
+            left: showLeftPanelToggle && !settings.leftPanelCollapsed
+              ? TABLE_RAIL_WIDTH + RAIL_TAB_CLEARANCE
+              : RAIL_TAB_CLEARANCE,
+            top: 12,
+          }}
+        >
+          <GameStatePanel />
+        </Box>
+      )}
+
+      {!embedded && (
         <FloatingMapToolbar
           gameId={gameId}
           rightOffset={floatingControlsRightOffset}
@@ -209,7 +227,13 @@ export function MapView({
         />
       )}
 
-      {!embedded && <DragHandle onMouseDown={handleSidebarMouseDown} />}
+      {!embedded && (
+        <DragHandle
+          onMouseDown={handleSidebarMouseDown}
+          onDoubleClick={handlers.toggleRightPanelCollapsed}
+          isDragging={isDragging}
+        />
+      )}
 
       {!embedded && (
         <PanelToggleButton
@@ -217,10 +241,8 @@ export function MapView({
           onClick={handlers.toggleRightPanelCollapsed}
           position="right"
           style={{
-            right: settings.rightPanelCollapsed
-              ? "10px"
-              : `calc(${sidebarWidth}vw + 14px)`,
-            transition: isDragging ? "none" : "right 0.1s ease",
+            right: settings.rightPanelCollapsed ? 0 : `${sidebarWidth}vw`,
+            transition: isDragging ? "none" : undefined,
           }}
         />
       )}

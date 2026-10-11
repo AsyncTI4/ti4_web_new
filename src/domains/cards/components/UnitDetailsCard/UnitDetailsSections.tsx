@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from "react";
-import { Box, Text, Stack, Group, Image, Divider } from "@/ds";
+import { Box, Text, Stack, Group, Image } from "@/ds";
 import { IconArrowRight } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { TECH_PREREQ_ICON } from "@/entities/lookup/tech";
@@ -156,13 +156,9 @@ export function ModifierAttribution({
   );
 }
 
+/** A direct child of the details card, which pads and rules it off. */
 function CardSection({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <Divider color="gray.8" />
-      {children}
-    </>
-  );
+  return <div>{children}</div>;
 }
 
 export function AbilitySection({ ability }: { ability?: string }) {
@@ -170,7 +166,7 @@ export function AbilitySection({ ability }: { ability?: string }) {
   return (
     <CardSection>
       <Box>
-        <Text c="gray.5" mb={5} className={styles.sectionTitle}>
+        <Text mb={5} className={styles.sectionTitle}>
           Ability
         </Text>
         <Text size="sm" c="gray.3" className={styles.abilityText}>
@@ -303,7 +299,7 @@ export function UnitAbilitiesSection({
   return (
     <CardSection>
       <Box>
-        <Text c="gray.5" mb={5} className={styles.sectionTitle}>
+        <Text mb={5} className={styles.sectionTitle}>
           Unit Abilities
         </Text>
         <Stack gap={4}>
@@ -381,7 +377,7 @@ export function UpgradeSection({ upgrade }: { upgrade: UpgradeInfo | null }) {
     <CardSection>
       <Box p={8} className={styles.upgradeBox}>
         <Group gap={6} align="center" mb={upgradeUnit.ability ? 6 : 0}>
-          <Text size="xs" fw={500} c="gray.6" className={styles.sectionTitle}>
+          <Text className={styles.sectionTitle}>
             Upgrades to
           </Text>
           <IconArrowRight size={12} color="var(--ds-gray-6)" />

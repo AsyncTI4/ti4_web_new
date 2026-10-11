@@ -1,148 +1,129 @@
-/* Stage color rides a thin left rail + fading tint; the field stays dark so
-   scored/progress badges carry the signal. Doubled class beats the global
-   gradient utilities without !important. */
-.objectiveCard.objectiveCard {
-  border-radius: var(--panel-radius);
-  border: 1px solid rgba(var(--stage-rgb), 0.34);
+/*
+ * Public objective row. The stage colour is a hairline and a wash that fades
+ * out by 70%; the field stays dark so the per-seat pills carry the signal.
+ */
+.objectiveCard {
+  --k: var(--ds-sig-stage1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  padding: 8px 10px;
   background:
-    var(--panel-texture),
-    linear-gradient(
-      90deg,
-      rgba(var(--stage-rgb), 0.09) 0%,
-      rgba(var(--stage-rgb), 0.025) 38%,
-      transparent 64%
-    ),
-    var(--panel-field-bg);
+    linear-gradient(90deg, rgb(var(--k) / 0.07), rgb(var(--k) / 0.02) 70%),
+    var(--panel-field-flat);
+  border: 1px solid rgb(var(--k) / 0.19);
+  border-radius: var(--ds-radius-xs);
 }
 
-.orange {
-  --stage-rgb: var(--gd-orange);
+.objectiveCard[data-stage="blue"],
+.unrevealed[data-stage="blue"] {
+  --k: var(--ds-sig-stage2);
 }
 
-.blue {
-  --stage-rgb: var(--gd-blue);
-}
-
-/* One-off objectives (custodian, relics, ...) read as brass medallions */
-.gray {
-  --stage-rgb: 201, 168, 92;
-}
-
-/* Sealed directive: a slim socket rather than a full card — revealed intel
-   dominates the board, the unknown just holds its place. A socket, not a dashed
-   outline: dashed reads as unfinished layout everywhere else in the system. */
-.objectiveCard.objectiveCard.unrevealed {
-  border: 1px solid rgba(var(--stage-rgb), 0.16);
-  background: var(--socket-bg);
-  box-shadow: var(--socket-inset);
-}
-
-.unrevealed .mainRow {
-  align-items: center;
-  justify-content: center;
-  min-height: 16px;
-}
-
-.unrevealed .objectiveTitle {
-  text-align: center;
-  font-size: 9px;
-  font-weight: var(--weight-title);
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
-  color: rgba(148, 163, 184, 0.45);
-  margin-bottom: 0;
-}
-
-.redTape {
-  align-items: center;
-  justify-content: center;
-}
-
-.mainRow {
-  gap: var(--ds-space-sm);
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+/* One-off objectives (custodian, relics, agendas) sit neutral: who scored is the news. */
+.objectiveCard[data-stage="gray"] {
+  grid-template-columns: auto auto;
+  gap: 10px;
+  background: var(--panel-field-flat);
+  border-color: var(--ds-h22);
 }
 
 .contentArea {
-  flex: 1;
+  display: grid;
+  gap: 1px;
+  min-width: 0;
 }
 
 .objectiveTitle {
-  font-size: 13px;
-  font-weight: var(--weight-rail);
-  font-family: var(--font-display);
-  line-height: var(--lh-tight);
-  margin-bottom: 2px;
-}
-
-.objectiveTitle.revealed {
-  color: var(--ds-white);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.objectiveTitle.hidden {
-  color: var(--ds-gray-4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--text-body);
+  font-weight: var(--weight-title);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--ds-ink-hi);
 }
 
 .requirementText {
-  color: var(--ds-gray-3);
-  font-size: 13px;
-  line-height: var(--lh-tight);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-size: var(--text-data);
+  line-height: 1.35;
+  color: var(--ds-ink);
+}
+
+.redTape {
+  flex: none;
 }
 
 .progressBadges {
-  align-items: center;
+  display: flex;
   flex-wrap: wrap;
-  gap: 4px;
   justify-content: flex-end;
-  flex-shrink: 0;
+  gap: 3px;
 }
 
-.factionProgressBadge {
+.pill {
+  display: inline-flex;
   align-items: center;
-  padding: 2px 5px;
-  border-radius: 5px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.2s ease;
-  min-width: 58px;
-  justify-content: center;
-}
-
-/* Completed objective badge - green glow */
-.factionProgressBadge.completed {
-  background: rgba(34, 197, 94, 0.10);
-  border: 1px solid rgba(34, 197, 94, 0.5);
-}
-
-/* At threshold badge - blue glow */
-.factionProgressBadge.atThreshold {
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.5);
-}
-
-.progressBadgeText {
-  font-size: 10px;
-  color: var(--ds-gray-3);
+  gap: 3px;
+  height: 24px;
+  min-width: 52px;
+  padding: 0 5px 0 3px;
+  font-family: var(--ds-font-data);
+  font-size: var(--text-meta);
   font-weight: var(--weight-title);
   line-height: 1;
+  color: var(--ds-ink-lo);
+  background: var(--ds-socket);
+  border-radius: var(--ds-radius-xs);
+  box-shadow: inset 0 0 0 1px var(--ds-h14);
+}
+
+.pillValue {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.pill[data-s="scored"] {
+  color: rgb(var(--ds-sig-ok));
+  background: rgb(var(--ds-sig-ok) / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-ok) / 0.35);
+}
+
+.pill[data-s="qual"] {
+  color: var(--ds-accent-ink);
+  background: rgb(var(--ds-sig-prop) / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-prop) / 0.38);
+}
+
+.unrevealed {
+  --k: var(--ds-sig-stage1);
+  display: grid;
+  place-items: center;
+  height: 32px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+  background: rgb(var(--k) / 0.02);
+  border: 1px solid rgb(var(--k) / 0.1);
+  border-radius: var(--ds-radius-xs);
 }
 
 /* Objectives tab at phone width: the requirement takes the full line and the
-   faction badges drop beneath it in three even columns, so each faction keeps
-   the same cell from one objective to the next. */
+   pills drop beneath it in three even columns. */
 @container scoreboard (max-width: 640px) {
-  .mainRow {
-    flex-direction: column;
-    align-items: stretch;
+  .objectiveCard {
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ds-space-xs);
-  }
-
-  .unrevealed .mainRow {
-    gap: 0;
   }
 
   .progressBadges {
@@ -150,18 +131,11 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .factionProgressBadge {
-    min-width: 0;
+  .objectiveCard[data-stage="gray"] {
+    grid-template-columns: auto auto;
   }
 
-  /* One-off objectives only list who scored them, so the title and the icons
-     still fit on one line. */
-  .gray .mainRow {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .gray .progressBadges {
+  .objectiveCard[data-stage="gray"] .progressBadges {
     display: flex;
   }
 }

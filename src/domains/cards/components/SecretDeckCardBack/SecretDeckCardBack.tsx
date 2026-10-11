@@ -12,7 +12,7 @@ export function SecretDeckCardBack({ deck, discard }: Props) {
     <CardbackModal
       imageSrc={cdnImage("/player_area/cardback_secret.jpg")}
       alt="secret objectives"
-      title="Not Scored Secrets"
+      title="Not scored secrets"
       count={deck.length}
     >
       <SecretDeckDetailsCard deck={deck} discard={discard} />

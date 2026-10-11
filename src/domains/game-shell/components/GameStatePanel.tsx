@@ -1,142 +1,194 @@
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Collapse,
-  Divider,
-  Group,
-  Stack,
-  Text,
-  UnstyledButton,
-} from "@/ds";
-import { IconChevronDown } from "@tabler/icons-react";
+import { Collapse, UnstyledButton } from "@/ds";
+import { IconChevronDown, IconSwords, IconTrophy } from "@tabler/icons-react";
 import cx from "clsx";
 import { useGameState } from "@/api/useGameState";
 import { useGameData } from "@/state/useGameContext";
-import { Module } from "@/shared/ui/primitives/Module/Module";
-import { Chip } from "@/shared/ui/primitives/Chip";
-import { PlayerColorSwatch } from "@/shared/ui/PlayerColor/PlayerColor";
+import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import { resolvePrimaryRgb } from "@/entities/lookup/colors";
 import type {
   GamePhase,
   GameState,
   GameStateCombat,
+  PlayerData,
 } from "@/entities/data/types";
-import type { ColorKey } from "@/shared/ui/gradientClasses";
 import {
   loadStoredChoice,
   saveStoredChoice,
 } from "@/utils/localStorageSettings";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { SC_NAMES } from "@/entities/data/strategyCardColors";
+import {
+  prettifyId,
+  resolveSystemName,
+} from "./GameEventPanel/eventFormatting";
 import { AgendaRow } from "./GameStateAgenda";
-import { playerNameForColor, type GameStatePlayer } from "./gameStatePlayers";
+import { getPlayerDisplayName, playerNameForColor } from "./gameStatePlayers";
 import styles from "./GameStatePanel.module.css";
 
-type PhaseConfig = { label: string; accent: ColorKey };
+type PhaseStep = "strategy" | "action" | "status" | "agenda";
+
+type PhaseConfig = {
+  label: string;
+  /** Signal triplet (space-separated) the plate's top line and dot key to. */
+  tone: string;
+  step: PhaseStep | null;
+};
+
+const TONE = {
+  neutral: "var(--ds-hair-rgb)",
+  strategy: "var(--ds-sig-break)",
+  action: "var(--ds-sig-bio)",
+  status: "var(--ds-sig-warn)",
+  agenda: "var(--ds-sig-law)",
+  combat: "var(--ds-sig-danger)",
+  finished: "var(--ds-sig-relic)",
+};
 
 const PHASE_CONFIGS: Record<GamePhase, PhaseConfig> = {
-  unknown: { label: "Unknown Phase", accent: "gray" },
-  "setup.draft": { label: "Setup Phase · Draft", accent: "gray" },
-  "setup.players": { label: "Setup Phase · Players", accent: "gray" },
-  strategy: { label: "Strategy Phase", accent: "blue" },
-  action: { label: "Action Phase", accent: "green" },
-  "status.scoring": { label: "Status Phase · Scoring", accent: "yellow" },
-  "status.homework": { label: "Status Phase · Homework", accent: "yellow" },
-  "agenda.readyToFlip": { label: "Agenda Phase · Ready", accent: "blue" },
-  "agenda.whens": { label: "Agenda Phase · Whens", accent: "blue" },
-  "agenda.afters": { label: "Agenda Phase · Afters", accent: "blue" },
-  "agenda.voting": { label: "Agenda Phase · Voting", accent: "blue" },
-  "agenda.resolving": { label: "Agenda Phase · Resolving", accent: "blue" },
-  finished: { label: "Game Over", accent: "red" },
+  unknown: { label: "Unknown phase", tone: TONE.neutral, step: null },
+  "setup.draft": { label: "Setup · Draft", tone: TONE.neutral, step: null },
+  "setup.players": { label: "Setup · Players", tone: TONE.neutral, step: null },
+  strategy: { label: "Strategy phase", tone: TONE.strategy, step: "strategy" },
+  action: { label: "Action phase", tone: TONE.action, step: "action" },
+  "status.scoring": {
+    label: "Status · Scoring",
+    tone: TONE.status,
+    step: "status",
+  },
+  "status.homework": {
+    label: "Status · Homework",
+    tone: TONE.status,
+    step: "status",
+  },
+  "agenda.readyToFlip": {
+    label: "Agenda · Ready",
+    tone: TONE.agenda,
+    step: "agenda",
+  },
+  "agenda.whens": {
+    label: "Agenda · Whens",
+    tone: TONE.agenda,
+    step: "agenda",
+  },
+  "agenda.afters": {
+    label: "Agenda · Afters",
+    tone: TONE.agenda,
+    step: "agenda",
+  },
+  "agenda.voting": {
+    label: "Agenda · Voting",
+    tone: TONE.agenda,
+    step: "agenda",
+  },
+  "agenda.resolving": {
+    label: "Agenda · Resolving",
+    tone: TONE.agenda,
+    step: "agenda",
+  },
+  finished: { label: "Game over", tone: TONE.finished, step: null },
 };
 
-/* The phase colour as an RGB triplet, so the plate keys its frame, rail edge
-   and status dot to it without washing the whole field in the colour. */
-const PHASE_ACCENT_RGB: Partial<Record<ColorKey, string>> = {
-  gray: "var(--gd-gray)",
-  grey: "var(--gd-gray)",
-  blue: "var(--gd-blue)",
-  green: "var(--gd-green)",
-  yellow: "var(--gd-yellow)",
-  orange: "var(--gd-orange)",
-  red: "var(--gd-red)",
+const PHASE_STEPS: { step: PhaseStep; label: string }[] = [
+  { step: "strategy", label: "Strategy" },
+  { step: "action", label: "Action" },
+  { step: "status", label: "Status" },
+  { step: "agenda", label: "Agenda" },
+];
+
+/* Strategy card initiative → its signal triplet (comma-separated). */
+const SC_TONE: Record<number, string> = {
+  1: "var(--gd-red)",
+  2: "var(--gd-orange)",
+  3: "var(--gd-yellow)",
+  4: "var(--gd-green)",
+  5: "var(--gd-teal)",
+  6: "var(--gd-cyan)",
+  7: "var(--gd-blue)",
+  8: "var(--gd-purple)",
 };
 
-const CHIP_ACCENT_BY_COLOR: Record<string, ColorKey> = {
-  red: "red",
-  green: "green",
-  blue: "blue",
-  yellow: "yellow",
-  orange: "orange",
-  purple: "purple",
-  teal: "teal",
-  cyan: "cyan",
+type SeatStatus = "acting" | "passed" | "waiting" | "picked" | "picking";
+
+type Seat = {
+  player: PlayerData;
+  name: string;
+  initiative: number | null;
+  status: SeatStatus;
 };
 
-function colorToChipAccent(color: string): ColorKey | "gray" {
-  return CHIP_ACCENT_BY_COLOR[color.toLowerCase()] ?? "gray";
+/** The player's colour as a comma triplet, for rgba(var(--pc), a). */
+function playerTone(color: string | null | undefined): string | undefined {
+  if (!color) return undefined;
+  const rgb = resolvePrimaryRgb(color);
+  return rgb ? `${rgb.red}, ${rgb.green}, ${rgb.blue}` : undefined;
 }
 
-function phaseGroup(phase: GamePhase): string {
-  if (phase === "strategy") return "strategy";
-  if (phase === "action") return "action";
-  if (phase.startsWith("agenda")) return "agenda";
-  if (phase.startsWith("status")) return "status";
-  return "other";
+function toneStyle(vars: Record<string, string | undefined>): CSSProperties {
+  const entries = Object.entries(vars).filter(([, v]) => v !== undefined);
+  return Object.fromEntries(entries) as CSSProperties;
 }
 
-/* Rendered flush against the player name, so leading spaces matter */
-function activePlayerPhrase(phase: GamePhase): string {
-  switch (phaseGroup(phase)) {
-    case "strategy":
-      return " is picking";
-    case "action":
-      return "’s turn";
-    case "agenda":
-      return " is voting";
-    default:
-      return "";
+function lowestInitiative(player: PlayerData): number | null {
+  if (!player.scs?.length) return null;
+  return Math.min(...player.scs);
+}
+
+function seatStatus(player: PlayerData, phase: GamePhase): SeatStatus {
+  if (player.active) return phase === "strategy" ? "picking" : "acting";
+  if (phase === "strategy") return player.scs?.length ? "picked" : "waiting";
+  return player.passed ? "passed" : "waiting";
+}
+
+function isSeated(player: PlayerData): boolean {
+  if (!player.faction || player.faction === "neutral") return false;
+  const name = getPlayerDisplayName(player, player.color).toLowerCase();
+  return !name.endsWith(".deck") && !name.endsWith('.deck"');
+}
+
+/** Seats in initiative order; players without a card fall to the end. */
+function buildSeats(playerData: PlayerData[], phase: GamePhase): Seat[] {
+  return playerData
+    .filter(isSeated)
+    .map((player) => ({
+      player,
+      name: getPlayerDisplayName(player, player.color),
+      initiative: lowestInitiative(player),
+      status: seatStatus(player, phase),
+    }))
+    .sort((a, b) => (a.initiative ?? 99) - (b.initiative ?? 99));
+}
+
+function systemLabel(
+  position: string | null,
+  tiles: Record<string, { systemId: string }> | undefined,
+): string | null {
+  if (!position) return null;
+  const systemId = tiles?.[position]?.systemId;
+  const name = systemId
+    ? resolveSystemName(position, { [position]: systemId })
+    : position;
+  return name === position ? position : `${position} ${name}`;
+}
+
+function nowPhrase(phase: GamePhase, system: string | null): string {
+  if (phase === "action") {
+    return system ? `Tactical action · ${system}` : "Taking a turn";
   }
-}
-
-function PhaseBadge({ phase, turn }: { phase: GamePhase; turn?: ReactNode }) {
-  return (
-    <span className={styles.phaseLabel}>
-      <span className={styles.phaseDot} />
-      {PHASE_CONFIGS[phase].label}
-      {turn}
-    </span>
-  );
-}
-
-/**
- * Whose turn it is, seated in the rail. Phone only, and only while the plate is
- * collapsed, so the docked strip reports phase and player in a single line.
- */
-function RailTurn({
-  activePlayer,
-  playerData,
-}: {
-  activePlayer: string;
-  playerData: GameStatePlayer[];
-}) {
-  return (
-    <span className={styles.railTurn}>
-      <PlayerColorSwatch color={activePlayer} />
-      <span className={styles.railTurnName}>
-        {playerNameForColor(playerData, activePlayer)}
-      </span>
-    </span>
-  );
+  if (phase === "strategy") return "Picking a strategy card";
+  if (phase === "agenda.voting") return "Casting votes";
+  if (phase.startsWith("agenda")) return "Agenda phase";
+  if (phase.startsWith("status")) return "Status phase";
+  return "On the clock";
 }
 
 const PANEL_OPEN_KEY = "ti4_game_state_panel_open";
 
 /**
- * Whether the plate is expanded, remembered across games and reloads.
- *
- * The panel floats over the board's top-left corner at every scroll position —
- * in a large agenda vote it covered 18% of the map — so leaving it open has to
- * be the player's choice rather than the only option. A phone starts collapsed:
- * its rail already names the phase and the active player in a single line.
+ * Whether the plate is expanded, remembered across games and reloads. The
+ * plate floats over the board's top-left corner, so leaving it open is the
+ * player's choice; a phone starts collapsed.
  */
 function useGameStatePanelOpen(): [boolean, (next: boolean) => void] {
   const [isOpen, setIsOpen] = useState(() => {
@@ -153,197 +205,348 @@ function useGameStatePanelOpen(): [boolean, (next: boolean) => void] {
   return [isOpen, set];
 }
 
-function CollapseToggle({
+const DETAILS_ID = "game-state-panel-details";
+
+function PlateHeader({
+  label,
+  meta,
   isOpen,
-  controlsId,
   onToggle,
 }: {
+  label: string;
+  meta: ReactNode;
   isOpen: boolean;
-  controlsId: string;
   onToggle: () => void;
 }) {
+  const action = isOpen ? "Collapse game state" : "Expand game state";
   return (
     <UnstyledButton
-      aria-controls={controlsId}
+      className={styles.header}
+      aria-controls={DETAILS_ID}
       aria-expanded={isOpen}
-      aria-label={isOpen ? "Collapse game state" : "Expand game state"}
-      title={isOpen ? "Collapse game state" : "Expand game state"}
+      aria-label={action}
+      title={action}
       onClick={onToggle}
-      className={styles.collapseToggle}
     >
+      <span className={styles.phaseDot} aria-hidden="true" />
+      <span className={styles.phaseLabel}>{label}</span>
+      <span className={styles.headerMeta}>{meta}</span>
       <IconChevronDown
         aria-hidden="true"
         size={13}
-        className={cx(styles.chevron, !isOpen && styles.chevronClosed)}
+        className={cx(styles.chevron, isOpen && styles.chevronOpen)}
       />
     </UnstyledButton>
   );
 }
 
-function ActivePlayerRow({
-  activePlayer,
-  phase,
-  playerData,
-}: {
-  activePlayer: string;
-  phase: GamePhase;
-  playerData: GameStatePlayer[];
-}) {
+function PhaseTrack({ step }: { step: PhaseStep | null }) {
+  if (!step) return null;
+  const current = PHASE_STEPS.findIndex((s) => s.step === step);
   return (
-    <Group gap={8} align="center" wrap="nowrap">
-      <PlayerColorSwatch color={activePlayer} />
-      <Text span className={styles.turnText}>
-        <span className={styles.turnName}>
-          {playerNameForColor(playerData, activePlayer)}
-        </span>
-        {activePlayerPhrase(phase)}
-      </Text>
-    </Group>
+    <div className={styles.track} aria-label="Phase">
+      {PHASE_STEPS.map((s, index) => {
+        const state =
+          index < current ? "done" : index === current ? "now" : undefined;
+        return (
+          <span
+            key={s.step}
+            className={styles.trackStep}
+            data-s={state}
+            aria-current={state === "now" ? "step" : undefined}
+          >
+            {s.label}
+          </span>
+        );
+      })}
+    </div>
   );
 }
 
-function CombatRow({
-  combat,
-  playerData,
+function FactionMark({
+  player,
+  size,
 }: {
-  combat: GameStateCombat;
-  playerData: GameStatePlayer[];
+  player: PlayerData | undefined;
+  size: number;
 }) {
-  let title = `Combat — ${combat.system ?? "?"}`;
-  if (combat.unitHolder) title += ` (${combat.unitHolder})`;
-  if (combat.round !== null) title += ` · R${combat.round}`;
-
+  if (!player?.faction) return <span style={{ width: size, height: size }} />;
   return (
-    <Stack gap={4}>
-      <Text size="xs" c="gray.2" fw={600}>
-        {title}
-      </Text>
-      {combat.participantColors.length > 0 && (
-        <Group gap="sm" wrap="wrap">
-          {combat.participantColors.map((color) => (
-            <Group key={color} gap={6} align="center" wrap="nowrap">
-              <PlayerColorSwatch color={color} />
-              <Text span className={styles.turnText}>
-                <span className={styles.turnName}>
-                  {playerNameForColor(playerData, color)}
-                </span>
-              </Text>
-            </Group>
-          ))}
-        </Group>
-      )}
-    </Stack>
+    <CircularFactionIcon
+      faction={player.faction}
+      size={size}
+      factionImageOverride={player.factionImage}
+      factionImageTypeOverride={player.factionImageType}
+    />
   );
 }
 
-function WinnerBanner({
-  winner,
-  playerData,
+function NowCallout({
+  player,
+  name,
+  detail,
+  icon,
 }: {
-  winner: string;
-  playerData: GameStatePlayer[];
+  player: PlayerData | undefined;
+  name: string;
+  detail: ReactNode;
+  icon?: ReactNode;
 }) {
   return (
-    <Chip accent={colorToChipAccent(winner)} size="md" strong>
-      <Group gap="xs" align="center">
-        <Text size="sm" c="white">
-          🏆
-        </Text>
-        <Text size="sm" fw={700} c="white">
-          {playerNameForColor(playerData, winner)} wins!
-        </Text>
-      </Group>
-    </Chip>
+    <div
+      className={styles.now}
+      style={toneStyle({ "--pc": playerTone(player?.color) })}
+    >
+      {icon ?? <FactionMark player={player} size={26} />}
+      <span className={styles.nowText}>
+        <b className={styles.nowName}>{name}</b>
+        <small className={styles.nowDetail}>{detail}</small>
+      </span>
+    </div>
   );
 }
 
-const DETAILS_ID = "game-state-panel-details";
-
-function GameStateDetails({
-  gameState,
-  playerData,
-}: {
-  gameState: GameState;
-  playerData: GameStatePlayer[];
-}) {
-  const { phase } = gameState;
+function ScDisc({ initiative }: { initiative: number | null }) {
+  if (initiative === null) {
+    return <span className={cx(styles.disc, styles.discEmpty)}>–</span>;
+  }
   return (
-    <Stack gap="xs">
-      {gameState.activePlayer && (
-        <ActivePlayerRow
-          activePlayer={gameState.activePlayer}
-          phase={phase}
-          playerData={playerData}
-        />
-      )}
+    <span
+      className={styles.disc}
+      style={toneStyle({ "--scc": SC_TONE[initiative] })}
+    >
+      {initiative}
+    </span>
+  );
+}
 
-      {phaseGroup(phase) === "agenda" && (
-        <>
-          <Divider c="gray.7" opacity={0.4} />
-          <AgendaRow
-            agenda={gameState.agenda}
-            phase={phase}
-            activePlayer={gameState.activePlayer}
-            playerData={playerData}
-          />
-        </>
-      )}
-
-      {gameState.activeCombat && (
-        <>
-          <Divider c="gray.7" opacity={0.4} />
-          <CombatRow combat={gameState.activeCombat} playerData={playerData} />
-        </>
-      )}
-    </Stack>
+function TurnOrder({ seats }: { seats: Seat[] }) {
+  if (seats.length === 0) return null;
+  return (
+    <div className={styles.order} role="list" aria-label="Turn order">
+      {seats.map((seat) => (
+        <div
+          key={seat.player.color}
+          role="listitem"
+          className={styles.seat}
+          data-s={seat.status}
+        >
+          <ScDisc initiative={seat.initiative} />
+          <FactionMark player={seat.player} size={18} />
+          <span className={styles.seatName}>{seat.name}</span>
+          <span className={styles.seatStatus}>{seat.status}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
 /**
- * Collapsed, the plate keeps its rail so the phase stays readable. A finished
- * game collapses like the rest: it is the most static message on the board.
+ * Strategy cards still being followed: who has yet to resolve the secondary
+ * of each played card.
+ */
+function FollowQueue({ seats }: { seats: Seat[] }) {
+  const pending = new Map<number, Seat[]>();
+  for (const seat of seats) {
+    for (const sc of seat.player.unfollowedSCs ?? []) {
+      pending.set(sc, [...(pending.get(sc) ?? []), seat]);
+    }
+  }
+  if (pending.size === 0) return null;
+
+  return (
+    <>
+      {[...pending.entries()].map(([sc, waiting]) => (
+        <div key={sc} className={styles.follow}>
+          <span className={styles.label}>
+            Following {sc}
+            {SC_NAMES[sc] ? ` · ${prettifyId(SC_NAMES[sc].toLowerCase())}` : ""}
+          </span>
+          <span className={styles.followChips}>
+            {waiting.map((seat) => (
+              <span key={seat.player.color} title={seat.name}>
+                <FactionMark player={seat.player} size={16} />
+              </span>
+            ))}
+          </span>
+          <span className={styles.followCount}>{waiting.length} left</span>
+        </div>
+      ))}
+    </>
+  );
+}
+
+function CombatSection({
+  combat,
+  playerData,
+  location,
+}: {
+  combat: GameStateCombat;
+  playerData: PlayerData[];
+  location: string | null;
+}) {
+  const sides = combat.participantColors;
+  return (
+    <div className={styles.section}>
+      <span className={styles.label}>
+        <IconSwords size={11} aria-hidden="true" />
+        Combat{location ? ` · ${location}` : ""}
+        {combat.unitHolder ? ` · ${combat.unitHolder}` : ""}
+        {combat.round !== null ? ` · round ${combat.round}` : ""}
+      </span>
+      {sides.length > 0 && (
+        <div className={styles.sides}>
+          {sides.map((color, index) => {
+            const player = playerData.find((p) => p.color === color);
+            return (
+              <span
+                key={color}
+                className={styles.side}
+                data-align={index === 0 ? "start" : "end"}
+                style={toneStyle({ "--pc": playerTone(color) })}
+              >
+                <FactionMark player={player} size={18} />
+                <span>{playerNameForColor(playerData, color)}</span>
+              </span>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WinnerCallout({
+  winner,
+  playerData,
+}: {
+  winner: string;
+  playerData: PlayerData[];
+}) {
+  const player = playerData.find((p) => p.color === winner);
+  return (
+    <NowCallout
+      player={player}
+      name={`${playerNameForColor(playerData, winner)} wins`}
+      detail="Victory points reached"
+      icon={
+        <span className={styles.trophy}>
+          <IconTrophy size={16} aria-hidden="true" />
+        </span>
+      }
+    />
+  );
+}
+
+type Locations = { system: string | null; combat: string | null };
+
+function PlateBody({
+  gameState,
+  playerData,
+  locations,
+}: {
+  gameState: GameState;
+  playerData: PlayerData[];
+  locations: Locations;
+}) {
+  const { phase, activePlayer, winner, activeCombat } = gameState;
+  if (phase === "finished" && winner) {
+    return <WinnerCallout winner={winner} playerData={playerData} />;
+  }
+
+  const seats = buildSeats(playerData, phase);
+  const active = playerData.find((p) => p.color === activePlayer);
+  const isAgenda = phase.startsWith("agenda");
+  const showOrder = phase === "action" || phase === "strategy";
+
+  return (
+    <>
+      {activePlayer && (
+        <NowCallout
+          player={active}
+          name={playerNameForColor(playerData, activePlayer)}
+          detail={nowPhrase(phase, locations.system)}
+        />
+      )}
+      {activeCombat && (
+        <CombatSection
+          combat={activeCombat}
+          playerData={playerData}
+          location={locations.combat}
+        />
+      )}
+      {showOrder && <TurnOrder seats={seats} />}
+      {phase === "action" && <FollowQueue seats={seats} />}
+      {isAgenda && (
+        <AgendaRow
+          agenda={gameState.agenda}
+          phase={phase}
+          activePlayer={activePlayer}
+          playerData={playerData}
+        />
+      )}
+    </>
+  );
+}
+
+function headerMeta(
+  round: number | undefined,
+  gameState: GameState,
+  playerData: PlayerData[],
+  isOpen: boolean,
+): string {
+  const parts: string[] = [];
+  if (round) parts.push(`R${round}`);
+  if (!isOpen && gameState.activePlayer) {
+    parts.push(playerNameForColor(playerData, gameState.activePlayer));
+  }
+  return parts.join(" · ");
+}
+
+/**
+ * The game-state plate: whose move it is and what they are doing. A phase
+ * track sits on top, the current actor is called out in a faint wash of their
+ * colour, and the body follows the phase. Collapsed, it is one line.
  */
 function GameStatePanelContent({
   gameState,
   playerData,
+  round,
+  locations,
 }: {
   gameState: GameState;
-  playerData: GameStatePlayer[];
+  playerData: PlayerData[];
+  round: number | undefined;
+  locations: Locations;
 }) {
-  const { phase, winner, activePlayer } = gameState;
   const [isOpen, setIsOpen] = useGameStatePanelOpen();
-  const showWinner = phase === "finished" && !!winner;
-  const showRailTurn = isMobileDevice() && !isOpen && !showWinner;
-  const railTurn = showRailTurn && activePlayer && (
-    <RailTurn activePlayer={activePlayer} playerData={playerData} />
-  );
-  const accentRgb = showWinner
-    ? PHASE_ACCENT_RGB.red
-    : (PHASE_ACCENT_RGB[PHASE_CONFIGS[phase].accent] ?? "var(--gd-gray)");
+  const { phase, activeCombat } = gameState;
+  const config = PHASE_CONFIGS[phase];
+  const tone = activeCombat ? TONE.combat : config.tone;
+  const label = activeCombat ? "Combat" : config.label;
 
   return (
-    <Module
-      accentRgb={accentRgb}
-      label={<PhaseBadge phase={phase} turn={railTurn} />}
-      meta={
-        <CollapseToggle
-          isOpen={isOpen}
-          controlsId={DETAILS_ID}
-          onToggle={() => setIsOpen(!isOpen)}
-        />
-      }
-      density="compact"
-      overContent
+    <section
       className={styles.panel}
+      style={toneStyle({ "--ph": tone })}
+      aria-label="Game state"
+      data-open={isOpen || undefined}
     >
+      <PlateHeader
+        label={label}
+        meta={headerMeta(round, gameState, playerData, isOpen)}
+        isOpen={isOpen}
+        onToggle={() => setIsOpen(!isOpen)}
+      />
       <Collapse in={isOpen} id={DETAILS_ID} transitionDuration={160}>
-        {showWinner ? (
-          <WinnerBanner winner={winner} playerData={playerData} />
-        ) : (
-          <GameStateDetails gameState={gameState} playerData={playerData} />
-        )}
+        <PhaseTrack step={config.step} />
+        <PlateBody
+          gameState={gameState}
+          playerData={playerData}
+          locations={locations}
+        />
       </Collapse>
-    </Module>
+    </section>
   );
 }
 
@@ -357,6 +560,17 @@ export function GameStatePanel() {
   if (!gameState?.phase || gameState.phase === "unknown") return null;
 
   return (
-    <GameStatePanelContent gameState={gameState} playerData={playerData} />
+    <GameStatePanelContent
+      gameState={gameState}
+      playerData={playerData}
+      round={gameData?.gameRound}
+      locations={{
+        system: systemLabel(gameState.activeSystem, gameData?.tiles),
+        combat: systemLabel(
+          gameState.activeCombat?.system ?? null,
+          gameData?.tiles,
+        ),
+      }}
+    />
   );
 }

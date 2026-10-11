@@ -1,4 +1,4 @@
-import { Stack, Divider } from "@/ds";
+import { IconHexagon } from "@tabler/icons-react";
 import { getAbility } from "@/entities/lookup/abilities";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 
@@ -12,45 +12,27 @@ export function AbilityDetailsCard({ abilityId }: Props) {
   if (!ability) return null;
 
   return (
-    <DetailsCard width={320} color="purple">
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={ability.name}
-          subtitle={
-            ability.permanentEffect ? "Passive Ability" : "Active Ability"
-          }
+    <DetailsCard width={340} color="violet">
+      <DetailsCard.Title
+        title={ability.name}
+        type="Faction ability"
+        meta={[ability.faction, ability.permanentEffect ? "Passive" : null]}
+        icon={
+          <DetailsCard.Icon shape="round" icon={<IconHexagon stroke={1.6} />} />
+        }
+      />
+      {ability.permanentEffect && (
+        <DetailsCard.Section
+          title="Permanent effect"
+          content={ability.permanentEffect}
         />
-
-        {ability.permanentEffect && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <DetailsCard.Section
-              title="PERMANENT EFFECT"
-              content={ability.permanentEffect}
-            />
-          </>
-        )}
-
-        {ability.window && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <DetailsCard.Section
-              title="TIMING WINDOW"
-              content={ability.window}
-            />
-          </>
-        )}
-
-        {ability.windowEffect && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <DetailsCard.Section
-              title="EFFECT"
-              content={ability.windowEffect}
-            />
-          </>
-        )}
-      </Stack>
+      )}
+      {ability.window && (
+        <DetailsCard.Section title="Timing" content={ability.window} />
+      )}
+      {ability.windowEffect && (
+        <DetailsCard.Section title="Effect" content={ability.windowEffect} />
+      )}
     </DetailsCard>
   );
 }

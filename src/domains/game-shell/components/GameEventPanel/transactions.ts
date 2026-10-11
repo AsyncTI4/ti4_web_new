@@ -13,10 +13,51 @@ type TransactionItem = {
   detail: string;
 };
 
+/** What a traded item looks like in the log, so each keeps its silhouette. */
+export type TransactionItemKind =
+  | "tg"
+  | "comm"
+  | "ac"
+  | "pn"
+  | "so"
+  | "tech"
+  | "relic"
+  | "planet"
+  | "other";
+
+export type TransactionEntry = {
+  kind: TransactionItemKind;
+  label: string;
+  /** Set for counted resources (trade goods, commodities, debt). */
+  count?: number;
+};
+
 export type TransactionSide = {
   sender: string;
-  items: string[];
+  items: TransactionEntry[];
 };
+
+const KIND_BY_TYPE: Record<string, TransactionItemKind> = {
+  TGs: "tg",
+  Comms: "comm",
+  ACs: "ac",
+  PNs: "pn",
+  SOs: "so",
+  Technology: "tech",
+  shipOrders: "relic",
+  starCharts: "relic",
+  Planets: "planet",
+  AlliancePlanets: "planet",
+  dmz: "planet",
+};
+
+function toEntry(item: TransactionItem, label: string): TransactionEntry {
+  const kind = KIND_BY_TYPE[item.type] ?? "other";
+  if (kind === "tg" || kind === "comm") {
+    return { kind, label, count: Number(item.detail) };
+  }
+  return { kind, label };
+}
 
 function parseTransactionItem(item: string): TransactionItem | null {
   const parts = item.split("_");
@@ -88,13 +129,13 @@ export function transactionSides(
   from?: string,
   to?: string,
 ): TransactionSide[] {
-  const bySender = new Map<string, string[]>();
+  const bySender = new Map<string, TransactionEntry[]>();
   for (const raw of rawItems) {
     const item = parseTransactionItem(raw);
     const formatted = item && formatTransactionItem(item);
     if (!item || !formatted) continue;
     const items = bySender.get(item.sender) ?? [];
-    items.push(formatted);
+    items.push(toEntry(item, formatted));
     bySender.set(item.sender, items);
   }
 

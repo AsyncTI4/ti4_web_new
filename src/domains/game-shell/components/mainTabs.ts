@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { IconMap2, IconTarget, IconUsers } from "@tabler/icons-react";
+import { IconLayoutGrid, IconMap, IconTarget, IconUsers } from "@tabler/icons-react";
 
 type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -17,7 +17,7 @@ export const MAIN_TAB_CONFIGS: MainTabConfig[] = [
   {
     value: "map",
     label: "Map",
-    Icon: IconMap2,
+    Icon: IconMap,
     visibleFrom: "sm",
   },
   {
@@ -29,7 +29,7 @@ export const MAIN_TAB_CONFIGS: MainTabConfig[] = [
   {
     value: "general",
     label: "General",
-    Icon: IconTarget,
+    Icon: IconLayoutGrid,
     visibleFrom: "sm",
   },
   {

@@ -7,6 +7,8 @@ type ExplorationCardDetailsModalProps = {
   discard: string[];
   deckLabel?: string;
   discardLabel?: string;
+  /** Signal colour of the deck, as a space-separated rgb triplet token. */
+  tone?: string;
 };
 
 export function ExplorationCardDetailsModal({
@@ -14,6 +16,7 @@ export function ExplorationCardDetailsModal({
   discard,
   deckLabel = "Deck",
   discardLabel = "Discard",
+  tone,
 }: ExplorationCardDetailsModalProps) {
   const sections = createCardSections(
     processCardData(deck, getExploration, "percentage"),
@@ -24,5 +27,5 @@ export function ExplorationCardDetailsModal({
     discardLabel,
   );
 
-  return <CardDetailsModal sections={sections} />;
+  return <CardDetailsModal sections={sections} tone={tone} />;
 }

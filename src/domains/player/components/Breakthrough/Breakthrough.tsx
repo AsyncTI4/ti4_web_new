@@ -1,17 +1,14 @@
+import type { CSSProperties } from "react";
+import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { Box } from "@/ds";
-import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
-import {
-  getTechSynergyPair,
-  TECH_TYPE_COLOR,
-  type TechColor,
-} from "@/entities/lookup/tech";
+import { TECH_TYPE_COLOR, type TechColor } from "@/entities/lookup/tech";
 import { BreakthroughCard } from "@/domains/cards/components/BreakthroughCard";
-import { IconLock, IconX } from "@tabler/icons-react";
-import { cdnImage } from "@/entities/data/cdnImage";
-import cx from "clsx";
+import {
+  ObjectLabel,
+  ObjectShell,
+} from "@/domains/player/components/silhouettes/ObjectShell";
 import styles from "./Breakthrough.module.css";
 
 type Props = {
@@ -19,26 +16,54 @@ type Props = {
   exhausted?: boolean;
   tradeGoodsStored?: number;
   unlocked?: boolean;
+  /** Accepted for API parity; the capsule has one weight. */
   strong?: boolean;
   className?: string;
   chipClassName?: string;
 };
 
-function getAccentFromSynergy(synergy: string[] | undefined) {
+/** The breakthrough's two synergy tech colours, falling back to grey. */
+function getSynergyColors(synergy: string[] | undefined): [string, string] {
   const colors = (synergy ?? [])
     .map((s) => TECH_TYPE_COLOR[s])
     .filter((c): c is TechColor => Boolean(c));
-
-  if (colors.length < 2) return colors[0] ?? ("gray" as const);
-  return getTechSynergyPair(colors.slice(0, 2)) ?? ("gray" as const);
+  const first = colors[0] ?? "gray";
+  return [first, colors[1] ?? first];
 }
 
+/** The reactor core's glyph: a closed cycle, the synergy loop. */
+function CycleGlyph() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M13.5 6.5A5.6 5.6 0 0 0 3.2 5M2.5 9.5A5.6 5.6 0 0 0 12.8 11"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M3 2v3.3h3.3M13 14v-3.3H9.7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Reactor capsule: the only fully rounded object in the deck. Edge and fill
+ * run between its two synergy tech colours, the core glows in the first, and
+ * the pair repeats as two pips on the right after any stored trade goods.
+ */
 export function Breakthrough({
   breakthroughId,
   exhausted = false,
   tradeGoodsStored,
   unlocked = true,
-  strong = true,
   className,
   chipClassName,
 }: Props) {
@@ -47,58 +72,44 @@ export function Breakthrough({
 
   if (!data) return null;
 
-  const accent = getAccentFromSynergy(data.synergy);
+  const [s1, s2] = getSynergyColors(data.synergy);
   const title = data.displayName || data.name;
+  const state = !unlocked ? "locked" : exhausted ? "exhausted" : undefined;
+  const stored = tradeGoodsStored ?? 0;
+  const label = [
+    title,
+    `${s1} / ${s2} synergy`,
+    !unlocked && "locked",
+    exhausted && "exhausted",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Box
-          className={cx(
-            styles.container,
-            exhausted && styles.exhausted,
-            !unlocked && styles.locked,
-            className
-          )}
+        <ObjectShell
+          className={cx(styles.brk, className, chipClassName)}
+          state={state}
+          label={label}
+          onClick={toggle}
+          style={
+            {
+              "--s1": `var(--gd-${s1})`,
+              "--s2": `var(--gd-${s2})`,
+            } as CSSProperties
+          }
         >
-          <Chip
-            accent={accent}
-            breakthrough
-            onClick={toggle}
-            title={title}
-            px={8}
-            py={4}
-            strong={strong}
-            accentLine={exhausted}
-            className={cx(exhausted && styles.exhaustedChip, chipClassName)}
-            leftIconSrc={cdnImage("/general/synergy.png")}
-            leftIconSize="22px"
-            leftIconClassName={cx(
-              styles.synergyIcon,
-              exhausted && styles.exhaustedIcon
-            )}
-          >
-            {(tradeGoodsStored ?? 0) > 0 && (
-              <Box className={styles.tradeGoodsText}>
-                +{tradeGoodsStored} TG
-              </Box>
-            )}
-          </Chip>
-          {!unlocked && (
-            <Box className={styles.lockIcon}>
-              <IconLock size={12} color="white" stroke={2} />
-            </Box>
-          )}
-          {exhausted && (
-            <Box className={styles.exhaustedBadge}>
-              <IconX
-                size={16}
-                color="var(--ds-red-1)"
-                stroke={2.75}
-              />
-            </Box>
-          )}
-        </Box>
+          <span className={styles.core}>
+            <CycleGlyph />
+          </span>
+          <ObjectLabel>{title}</ObjectLabel>
+          {stored > 0 && <span className={styles.tgs}>{stored} TG</span>}
+          <span className={styles.syn} aria-hidden="true">
+            <i style={{ "--c": `var(--gd-${s1})` } as CSSProperties} />
+            <i style={{ "--c": `var(--gd-${s2})` } as CSSProperties} />
+          </span>
+        </ObjectShell>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <BreakthroughCard breakthroughId={breakthroughId} />

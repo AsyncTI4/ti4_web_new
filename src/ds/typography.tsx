@@ -5,7 +5,7 @@ import { fontSize, type SizeKey } from "./styleProps";
 import classes from "./ds.module.css";
 
 export type TextProps = BoxProps & {
-  size?: SizeKey | number | string;
+  size?: SizeKey | number | (string & {});
   /** Render a <span> instead of a <p>. */
   span?: boolean;
   /** Inherit font size, weight and family from the parent. */
@@ -61,7 +61,7 @@ export function Text({
   );
 }
 
-export type TitleProps = BoxProps & { order?: 1 | 2 | 3 | 4 | 5 | 6; size?: SizeKey | number | string | `h${1 | 2 | 3 | 4 | 5 | 6}` };
+export type TitleProps = BoxProps & { order?: 1 | 2 | 3 | 4 | 5 | 6; size?: SizeKey | number | (string & {}) | `h${1 | 2 | 3 | 4 | 5 | 6}` };
 
 /** Headings in the display face. */
 export function Title({ order = 1, size, className, style, ...props }: TitleProps) {

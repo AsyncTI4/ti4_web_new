@@ -5,42 +5,6 @@ import { prettifyId, resolveUnitName } from "./eventFormatting";
 import { pluralize } from "./eventPayload";
 import classes from "./GameEventPanel.module.css";
 
-export function TypeBadge({ label, hue }: { label: string; hue: string }) {
-  return (
-    <span
-      className={classes.badge}
-      style={{ "--badge-hue": hue } as React.CSSProperties}
-    >
-      {label}
-    </span>
-  );
-}
-
-export function EventDescription({ children }: { children?: string }) {
-  if (!children) return null;
-  return <div className={classes.description}>{children}</div>;
-}
-
-export function Headline({
-  title,
-  meta,
-  beforeTitle,
-}: {
-  title: React.ReactNode;
-  meta?: React.ReactNode;
-  beforeTitle?: React.ReactNode;
-}) {
-  return (
-    <div className={classes.headline}>
-      {meta && <div className={classes.metaLine}>{meta}</div>}
-      <div className={classes.titleLine}>
-        {beforeTitle}
-        <span className={classes.primary}>{title}</span>
-      </div>
-    </div>
-  );
-}
-
 export function EventPopover({
   children,
   details,

@@ -1,0 +1,10 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.empty {
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
+}

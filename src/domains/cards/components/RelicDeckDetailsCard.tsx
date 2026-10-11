@@ -23,5 +23,9 @@ export function RelicDeckDetailsCard({ deck, discard }: Props) {
     "Discard",
   );
 
-  return <CardDetailsModal sections={sections} showCounts={false} />;
+  return <CardDetailsModal
+      sections={sections}
+      showCounts={false}
+      tone="var(--ds-sig-relic)"
+    />;
 }

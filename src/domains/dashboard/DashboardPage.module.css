@@ -1,435 +1,577 @@
-/* ─── Page Shell ─── */
 .main {
-  background: var(--main-bg, #060a13);
-  min-height: calc(100vh - 60px);
+  min-height: 100vh;
+  background: var(--ds-ambient), transparent;
 }
 
 .wrap {
-  max-width: 1440px;
+  display: grid;
+  gap: 20px;
+  width: min(100%, 1320px);
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: 20px 16px 72px;
 }
 
-/* ─── Hero: Player Identity ─── */
-.hero {
-  position: relative;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.heroInner {
-  position: relative;
-  z-index: 1;
-}
-
-.playerName {
-  font-family: var(--font-display);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
-}
-
-.rankRow {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 6px;
-}
-
-/* ─── Hero Inline Stats ─── */
-.heroStats {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.heroStat {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.heroStatValue {
-  font-family: var(--font-data);
+/* ── Engraved label / section heads ──────────────────────────────────── */
+.label {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
   font-weight: var(--weight-rail);
-  font-size: 14px;
-  color: var(--ds-gray-2);
-}
-
-.heroStatLabel {
-  font-size: 10px;
-  color: var(--ds-gray-5);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
-  letter-spacing: var(--track-label);
+  color: var(--ds-ink-lo);
 }
 
-.heroStatDot {
-  color: var(--ds-gray-6);
-  font-size: 14px;
-  line-height: 1;
-}
-
-/* ─── Aggregate Analytics Grid (2-col) ─── */
-.aggregateGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 1.25rem;
-}
-
-@media (max-width: 1024px) {
-  .aggregateGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.sectionCard {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 0;
-}
-
-/* Stand-alone section cards (outside grids) need bottom spacing */
-.wrap > .sectionCard {
-  margin-bottom: 1.25rem;
-}
-
-/* ─── Top Researched Techs Grid ─── */
-.techTopGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-@media (max-width: 1100px) {
-  .techTopGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 860px) {
-  .techTopGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .techTopGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ─── Individual Tech Card ─── */
-.techTopItem {
-  --tech-color: var(--gd-blue);
-  position: relative;
-  border: 1px solid rgba(var(--tech-color), 0.18);
-  background: linear-gradient(
-    155deg,
-    rgba(var(--tech-color), 0.07) 0%,
-    rgba(var(--tech-color), 0.02) 40%,
-    rgba(0, 0, 0, 0.12) 100%
-  );
-  border-radius: var(--ds-radius-md);
-  padding: 10px 12px 8px;
-  overflow: hidden;
-  transition: border-color 0.25s ease, transform 0.2s ease;
-}
-
-.techTopItem:hover {
-  border-color: rgba(var(--tech-color), 0.35);
-  transform: translateY(-1px);
-}
-
-/* Top accent bar — mirroring badge card style */
-.techTopItem::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--tech-color), 0.7) 0%,
-    rgba(var(--tech-color), 0.3) 40%,
-    transparent 100%
-  );
-}
-
-.techTopHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-/* Type pip — colored dot indicating tech specialty */
-.techTypePip {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: rgb(var(--tech-color));
-  box-shadow: 0 0 5px rgba(var(--tech-color), 0.4);
-}
-
-.techName {
+.cap {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: var(--track-body);
-  color: var(--ds-gray-1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: var(--track-rail);
+  text-transform: uppercase;
+  color: var(--ds-ink-hi);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+
+.sectionTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.meta {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.section {
+  display: grid;
+  gap: 10px;
   min-width: 0;
 }
 
-.techTopMeta {
+/* ── Box (genbox) ────────────────────────────────────────────────────── */
+.box {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 0;
+  padding: 10px;
+  background-color: var(--ds-deck);
+  border: 1px solid var(--ds-h14);
+  border-radius: var(--ds-r-plate);
+}
+
+.boxHead {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
-  align-items: baseline;
-  margin-bottom: 5px;
+  min-height: 16px;
 }
 
-.techPercent {
+.boxMeta {
   font-family: var(--font-data);
-  font-weight: var(--weight-rail);
-  font-size: 15px;
-  line-height: 1;
-  color: rgb(var(--tech-color));
-  text-shadow: 0 0 8px rgba(var(--tech-color), 0.2), 0 1px 2px rgba(0, 0, 0, 0.4);
+  font-size: var(--text-meta);
+  color: var(--ds-ink);
 }
 
-.techGames {
-  font-size: 10px;
-  color: var(--ds-gray-5);
+.boxEmpty {
+  padding: 10px 0 4px;
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ds-h14);
+}
+
+.identity {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.playerName {
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--ds-ink-hi);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Progress bar for research percentage */
-.techBar {
-  position: relative;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.04);
-  overflow: hidden;
-}
-
-.techBarFill {
-  position: absolute;
-  inset: 0;
-  border-radius: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--tech-color), 0.4),
-    rgba(var(--tech-color), 0.8)
-  );
-  transition: width 0.5s ease;
-}
-
-/* ─── Unit upgrade icon (neutral gray unit image) ─── */
-.techUnitIcon {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 3px rgba(var(--tech-color), 0.35));
-  opacity: 0.85;
-}
-
-/* ─── Per-tech-type color overrides ─── */
-.techBiotic { --tech-color: var(--gd-green); }
-.techPropulsion { --tech-color: var(--gd-blue); }
-.techCybernetic { --tech-color: var(--gd-yellow); }
-.techWarfare { --tech-color: var(--gd-red); }
-.techUnitUpgrade { --tech-color: var(--gd-cyan); }
-
-.sectionHeader {
+.tags {
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 5px;
+  height: 20px;
+  padding: 0 7px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink);
+  background: var(--ds-socket);
+  border-radius: var(--ds-radius-xs);
+  box-shadow: inset 0 0 0 1px var(--ds-h14);
 }
 
-.titleItem {
-  padding: 6px 0 6px 10px;
-  border-left: 3px solid rgba(var(--gd-yellow), 0.4);
-  background: linear-gradient(90deg, rgba(var(--gd-yellow), 0.04) 0%, transparent 60%);
+.tag svg {
+  color: var(--ds-ink-lo);
 }
 
-/* ─── Game Deck Header ─── */
-.deckHeader {
+.tagLaw {
+  color: var(--ds-ink-hi);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-law) / var(--ds-tint-strong));
+}
+
+.tagLaw svg {
+  color: rgb(var(--ds-sig-law));
+}
+
+.stats {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--ds-h10);
+  border-radius: var(--ds-radius-xs);
+  background: var(--ds-h10);
 }
 
-/* ─── Game Cards ─── */
-.gameCard {
-  position: relative;
-  padding: 14px 16px;
-  transition: border-color 0.2s ease;
-}
-
-.gameCard:hover {
-  border-color: rgba(148, 163, 184, 0.4);
-}
-
-.gameCardInner {
+.stat {
   display: grid;
-  grid-template-columns: 1fr auto;
+  gap: 2px;
+  min-width: 78px;
+  padding: 6px 12px;
+  background: var(--ds-field);
+}
+
+.stat + .stat {
+  margin-left: 1px;
+}
+
+.statValue {
+  font-family: var(--font-data);
+  font-size: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--ds-ink-hi);
+  text-shadow: var(--ds-num-glow);
+}
+
+.statValue small {
+  margin-left: 2px;
+  font-size: var(--text-meta);
+  font-weight: 400;
+  color: var(--ds-ink-lo);
+}
+
+/* ── Needs you cards ─────────────────────────────────────────────────── */
+.needs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.gcard {
+  --pc: var(--ds-sig-ok);
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 9px 10px 10px;
+  color: inherit;
+  text-decoration: none;
+  background:
+    linear-gradient(180deg, rgb(var(--pc) / 0.084), transparent 60%),
+    var(--ds-field);
+  border: 1px solid var(--ds-h14);
+  border-radius: var(--ds-r-plate);
+  box-shadow: inset 0 2px 0 rgb(var(--pc));
+  transition: border-color var(--ds-dur-fast) var(--ds-ease-standard);
+}
+
+.gcard:hover {
+  border-color: var(--ds-h28);
+}
+
+.gcard:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+
+.gcardHead {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.gcardHead b {
+  font-family: var(--font-data);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--ds-ink-hi);
+}
+
+.gcardHead small {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.ask {
+  overflow: hidden;
+  font-size: var(--text-data);
+  color: var(--ds-ink-hi);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ask b {
+  font-weight: 600;
+  color: rgb(var(--ds-sig-ok));
+}
+
+.vpRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.vpbar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1px;
+}
+
+.vpbar i {
+  height: 4px;
+  background: var(--ds-h14);
+}
+
+.vpbar i[data-on] {
+  background: rgb(var(--pc));
+}
+
+.vpText {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink);
+}
+
+.vpText b {
+  font-weight: 600;
+  color: var(--ds-ink-hi);
+}
+
+.gcardLinks {
+  display: flex;
+  gap: 10px;
+  font-size: var(--text-meta);
+}
+
+.gcardLinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ds-ink-lo);
+  text-decoration: none;
+}
+
+.gcardLinks a:hover {
+  color: var(--ds-ink-hi);
+}
+
+.calm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: var(--text-data);
+  color: var(--ds-ink);
+  background: var(--ds-field);
+  border: 1px solid var(--ds-h10);
+  border-radius: var(--ds-r-plate);
+}
+
+.calm svg {
+  color: rgb(var(--ds-sig-ok));
+}
+
+/* ── Two-column body ─────────────────────────────────────────────────── */
+.dash {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
 
-@media (max-width: 640px) {
-  .gameCardInner {
-    grid-template-columns: 1fr;
-  }
-}
-
-.gameTitle {
-  font-family: var(--font-display);
-  letter-spacing: var(--track-body);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-.gameActions {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-  align-items: flex-start;
-}
-
-.gameDetails {
+.col {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  margin-top: 10px;
+  gap: 12px;
+  align-content: start;
+  min-width: 0;
 }
 
-@media (max-width: 900px) {
-  .gameDetails {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
-.detailSection {
+/* ── Spark: VP at finish ─────────────────────────────────────────────── */
+.spark {
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  height: 52px;
+  padding-top: 4px;
+  border-bottom: 1px solid var(--ds-h14);
+}
+
+.spark i {
+  flex: 1;
+  min-height: 2px;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--ds-sig-prop) / 0.56),
+    rgb(var(--ds-sig-prop) / 0.175)
+  );
+  border-radius: 1px 1px 0 0;
+}
+
+.spark i[data-w] {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--ds-sig-ok)),
+    rgb(var(--ds-sig-ok) / 0.21)
+  );
+}
+
+.sparkKey {
+  display: flex;
+  gap: 12px;
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.sparkKey span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sparkKey i {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: rgb(var(--ds-sig-prop) / 0.56);
+}
+
+.sparkKey i[data-w] {
+  background: rgb(var(--ds-sig-ok));
+}
+
+/* ── Game deck controls ──────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
-.packRow {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-/* ─── Segmented Control Override ─── */
-.filterControl {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: var(--ds-radius-sm);
-}
-
-/* ─── Game Deck Controls ─── */
-.gameDeckControls {
-  display: flex;
+.fchip {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  font: inherit;
+  font-size: var(--text-meta);
+  font-weight: 500;
+  color: var(--ds-ink);
+  background: var(--ds-socket);
+  border: 0;
+  border-radius: 11px;
+  box-shadow: inset 0 0 0 1px var(--ds-h14);
+  cursor: pointer;
 }
 
-/* ─── Pagination ─── */
+.fchip:hover {
+  color: var(--ds-ink-hi);
+}
+
+.fchip[aria-pressed="true"] {
+  color: var(--ds-ink-hi);
+  background: var(--ds-ground);
+  box-shadow: inset 0 0 0 1px var(--ds-h35);
+}
+
+.fchip b {
+  font-family: var(--font-data);
+  font-weight: 500;
+  color: var(--ds-ink-lo);
+}
+
+.fchip:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+
 .pagination {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 12px;
+  justify-content: flex-end;
+  gap: 8px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
 }
 
-/* ─── Empty State ─── */
-.emptyState {
-  padding: 2rem;
-  text-align: center;
+/* ── Titles (medals) ─────────────────────────────────────────────────── */
+.titles {
+  display: grid;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
-/* ─── Loading State ─── */
-.loadingWrap {
-  display: flex;
-  flex-direction: column;
+.title {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 8px;
   align-items: center;
-  gap: 12px;
-  padding-top: 120px;
+  padding: 5px 8px;
+  font-size: var(--text-data);
+  color: var(--ds-ink-hi);
+  background: var(--ds-field);
+  border-radius: var(--ds-radius-xs);
+  box-shadow: inset 0 0 0 1px var(--ds-h10);
 }
 
-/* ─── Color-coded accent on game card left edge ─── */
-.deckTitle {
+.title > span:nth-child(2) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.title small {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+}
+
+.medal {
+  --mk: var(--ds-gray-6);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
   font-family: var(--font-display);
-  letter-spacing: 0.02em;
+  font-size: var(--text-label);
+  color: var(--ds-dark-9);
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in oklab, var(--mk), var(--ds-white) 70%),
+    var(--mk) 60%
+  );
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.3);
 }
 
-.gameCardAccent {
-  position: absolute;
-  left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-}
+.medalGold { --mk: rgb(var(--ds-sig-relic)); }
+.medalSilver { --mk: var(--ds-gray-4); }
+.medalBronze { --mk: var(--ds-orange-8); }
 
-.accentActive {
-  background: linear-gradient(180deg, rgba(var(--gd-green), 0.8) 0%, rgba(var(--gd-green), 0.2) 100%);
-  box-shadow: 0 0 6px rgba(var(--gd-green), 0.2);
-}
-
-.accentFinished {
-  background: linear-gradient(180deg, rgba(var(--gd-gray), 0.5) 0%, rgba(var(--gd-gray), 0.1) 100%);
-}
-
-.accentAbandoned {
-  background: linear-gradient(180deg, rgba(var(--gd-red), 0.7) 0%, rgba(var(--gd-red), 0.15) 100%);
-  box-shadow: 0 0 6px rgba(var(--gd-red), 0.15);
-}
-
-/* ─── Winner glow on game card ─── */
-.winnerCard {
-  border-color: rgba(var(--gd-yellow), 0.25) !important;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(var(--gd-yellow), 0.08);
-}
-
-/* ─── Active turn indicator ─── */
-.activeTurn {
-  display: inline-flex;
-  align-items: center;
+/* ── Most researched ─────────────────────────────────────────────────── */
+.techs {
+  display: grid;
   gap: 4px;
 }
 
-.activeTurnDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(var(--gd-green), 0.9);
-  box-shadow: 0 0 6px rgba(var(--gd-green), 0.5);
-  animation: pulse 2.4s ease-in-out infinite;
+.techRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px 44px;
+  gap: 6px;
+  align-items: center;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+.techRow > :first-child {
+  min-width: 0;
+}
+
+.techCount {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-hi);
+  text-align: right;
+}
+
+.techPct {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  color: var(--ds-ink-lo);
+  text-align: right;
+}
+
+/* ── States ──────────────────────────────────────────────────────────── */
+.loadingWrap {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 50vh;
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 62em) {
+  .dash,
+  .analyticsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 36em) {
+  .playerName {
+    font-size: 22px;
+  }
+
+  .stat {
+    min-width: 0;
+    flex: 1;
+    padding: 6px 8px;
+  }
+}
+
+a.gcardHead {
+  color: inherit;
+  text-decoration: none;
 }

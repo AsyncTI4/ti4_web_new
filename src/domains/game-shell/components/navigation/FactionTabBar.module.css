@@ -1,87 +1,106 @@
+/* Seat tabs across the top of the seat dossier. */
 .factionTabBar {
-  background: var(--faction-tab-bar-bg);
-  padding: 8px 12px;
   position: sticky;
   top: 0;
   z-index: var(--z-faction-tab-bar);
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(var(--seats, 6), minmax(0, 1fr));
+  background: var(--ds-deck);
+  border-bottom: 1px solid var(--ds-h14);
 }
 
-.tab {
-  width: 44px;
-  height: 36px;
-  border-radius: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  border: var(--faction-tab-border);
-  background: var(--faction-tab-bg);
-  box-shadow: var(--faction-tab-shadow);
+.tab.tab {
+  --pc: var(--ds-hair-rgb);
   position: relative;
-  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 7px 0 5px;
+  box-shadow: inset 0 2px 0 rgb(var(--pc) / 0.42);
+  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard);
 }
 
-.tab:first-child {
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+.tab.tab:hover,
+.tab.tab[data-hover] {
+  background-color: var(--ds-h10);
 }
 
-.tab:last-child {
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-.tab + .tab {
-  border-left: none;
-}
-
-.active {
-  background: var(--faction-tab-active-bg);
-  box-shadow: var(--faction-tab-active-shadow);
-}
-
-.pinned {
-  background: var(--faction-tab-pinned-bg);
-  box-shadow: var(--faction-tab-pinned-shadow);
-}
-
-.activePlayerIndicator {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(22, 163, 74, 1) 100%);
+.tab.tab[aria-selected="true"] {
+  background: linear-gradient(180deg, rgb(var(--pc) / 0.16), transparent), var(--ds-deck);
   box-shadow:
-    0 0 8px rgba(34, 197, 94, 0.6),
-    0 0 4px rgba(34, 197, 94, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  animation: activePlayerPulse 2s ease-in-out infinite;
+    inset 0 3px 0 rgb(var(--pc)),
+    inset 1px 0 0 var(--ds-h14),
+    inset -1px 0 0 var(--ds-h14);
 }
 
-@keyframes activePlayerPulse {
-  0%, 100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
+.tab.tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--ds-deck);
+}
+
+.tab.tab:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: -2px;
 }
 
 .img {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) brightness(0.9);
-  transition: filter 0.2s ease;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6));
 }
 
-.imgActive {
-  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.3)) brightness(1.1);
+.vp {
+  font-family: var(--ds-font-data);
+  font-size: var(--text-label);
+  font-weight: var(--weight-title);
+  line-height: 1.2;
+  color: var(--ds-ink);
 }
 
-.imgPinned {
-  filter: drop-shadow(0 2px 4px rgba(74, 158, 255, 0.4)) brightness(1.2);
+.tab[aria-selected="true"] .vp {
+  color: var(--ds-ink-hi);
+}
+
+.kbd {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  font-family: var(--ds-font-data);
+  font-size: var(--text-micro);
+  line-height: 1;
+  color: var(--ds-ink-lo);
+}
+
+.light {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.light[data-light="active"] {
+  background: rgb(var(--ds-sig-ok));
+  box-shadow: 0 0 4px rgb(var(--ds-sig-ok) / 0.6);
+}
+
+.light[data-light="passed"] {
+  background: var(--ds-h35);
+}
+
+/* While another seat is peeked, the pinned seat keeps a mark so you never lose your place. */
+.tab.tab[data-pinned]:not([aria-selected="true"])::after {
+  content: "";
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--ds-accent);
 }

@@ -1,28 +1,27 @@
-import { Box, Text } from "@/ds";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import classes from "./DetailsCard.module.css";
 
 type Props = {
-  title?: string;
-  content: string | ReactNode;
+  title?: ReactNode;
+  content: ReactNode;
 };
 
+/** A labelled block; the label speaks in the object's colour. */
 function DetailsCardSection({ title, content }: Props) {
   return (
-    <Box>
-      {title && (
-        <Text size="sm" c="blue.3" mb={4} className={classes.sectionTitle}>
-          {title}
-        </Text>
-      )}
-      {typeof content === "string" ? (
-        <Text size="sm" c="gray.2" lh={1.4}>
-          {content}
-        </Text>
-      ) : (
-        content
-      )}
-    </Box>
+    <div className={classes.sec}>
+      {title && <span className={classes.label}>{title}</span>}
+      {typeof content === "string"
+        ? content
+            .split(/\n+/)
+            .filter((line) => line.trim())
+            .map((line, index) => (
+              <p key={index} className={classes.text}>
+                {line}
+              </p>
+            ))
+        : content}
+    </div>
   );
 }
 

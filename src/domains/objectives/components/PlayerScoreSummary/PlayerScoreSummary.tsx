@@ -14,7 +14,7 @@ import cornerBadgeStyles from "./CornerBadgeIcon.module.css";
 import vpTokenStyles from "./VPTokenIcon.module.css";
 import { OBJECTIVE_IMAGE_MAP } from "./objectiveImageMap";
 import { calculateBorderVisibility } from "./borderVisibility";
-import Caption from "@/shared/ui/Caption/Caption";
+import { RailLabel } from "@/domains/objectives/components/RailLabel";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 
@@ -124,7 +124,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
     return Math.max(maxTotal, sumPoints(breakdown.entries));
   }, 0);
   const gridColumns = Math.max(vpsToWin, maxPotentialVPs);
-  const gridStyle = { gridTemplateColumns: `repeat(${gridColumns}, var(--score-cell, 44px))` };
+  const gridStyle = { gridTemplateColumns: `repeat(${gridColumns}, var(--score-cell, 40px))` };
   const leadingVPs = Math.max(...sortedPlayers.map((p) => p.totalVps), 0);
 
   return (
@@ -138,27 +138,18 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
       }
     >
       <Stack gap={10}>
-        <Caption size="sm" rule>
-          Score Breakdown
-        </Caption>
+        <RailLabel rule>Score breakdown</RailLabel>
 
         <div className={legendStyles.legendContainer}>
           {LEGEND_STATES.map(({ label, className }) => (
             <div key={label} className={legendStyles.legendItem}>
               <div className={cx(legendStyles.legendBox, className)} />
-              <Text size="xs" c="dimmed">
-                {label}
-              </Text>
+              <span>{label}</span>
             </div>
           ))}
           <div className={legendStyles.legendItem}>
-            <IconAlertTriangle
-              size={14}
-              color="var(--ds-yellow-6)"
-            />
-            <Text size="xs" c="dimmed">
-              Losable
-            </Text>
+            <IconAlertTriangle size={13} className={legendStyles.losable} />
+            <span>Losable</span>
           </div>
         </div>
 
@@ -172,16 +163,14 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
             {Array.from({ length: gridColumns }, (_, i) => i + 1).map((num) => (
               <div key={`number-${num}`} className={styles.numberCell}>
                 {num <= vpsToWin ? (
-                  <Text
-                    ff="heading"
-                    size="sm"
+                  <span
                     className={cx(
                       styles.numberText,
                       num === vpsToWin && styles.winningNumberText,
                     )}
                   >
                     {num}
-                  </Text>
+                  </span>
                 ) : null}
               </div>
             ))}
@@ -213,34 +202,19 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
                   factionImageOverride={player.factionImage}
                   factionImageTypeOverride={player.factionImageType}
                   alt={player.faction}
-                  w={24}
-                  h={24}
+                  w={22}
+                  h={22}
                 />
-                <Text
-                  size="md"
-                  fw={700}
-                  c="white"
-                  ff="heading"
-                  className={cx(styles.playerName, styles.playerNameText)}
-                >
+                <span className={styles.playerNameText}>
                   {player.userName}
-                </Text>
+                </span>
                 <PlayerColor color={player.color} size="sm" />
-                <Text
-                  ff={"text"}
-                  className={cx(styles.initiativeBody, styles.initiativeText)}
-                  size="md"
-                  fw={600}
-                >
+                <span className={styles.initiativeText} title="Initiative">
                   {player.scs[0]}
-                </Text>
-                <Text
-                  ff={"heading"}
-                  className={cx(styles.vp, styles.vpText)}
-                  size="sm"
-                >
-                  {totalVPs}/{potentialVPs} VP
-                </Text>
+                </span>
+                <span className={styles.vpText}>
+                  <b>{totalVPs}</b>/{potentialVPs}
+                </span>
               </div>
 
               <div className={styles.objectivesGrid} style={gridStyle}>
@@ -289,7 +263,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           );
         })}
 
-        <Text size="xs" c="gray.6" className={styles.noteText} mt="xs">
+        <Text className={styles.noteText}>
           Potential points are a heuristic based on above-the-board information
           only — they cannot account for action cards such as Overrule or
           Impersonation.

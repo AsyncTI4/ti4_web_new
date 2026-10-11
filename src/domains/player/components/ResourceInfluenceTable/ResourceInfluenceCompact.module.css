@@ -1,139 +1,110 @@
 /*
- * The economics ledger is seated in a recessed panel rather than floating on the
- * module floor. Its internals were already disciplined — mono numerals, ch-based
- * column widths, a hairline seam between the two ledgers — but with no surface
- * under them the numbers read as loose text next to the planet strips.
+ * Economy ledger: optimal and totals side by side, figures in mono against
+ * the right edge with the ceiling held back in ink-low.
  */
-.compact {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--ds-space-md);
-  /* Fills the row when the section stretches, so the ledger's floor lines up
-     with the bottom of the planet cards beside it. */
-  height: 100%;
-  padding: 4px 8px 6px;
-  border-radius: var(--panel-radius);
-  background: var(--trough-bg);
-  box-shadow: var(--trough-inset), inset 0 0 0 1px var(--socket-border);
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 2px;
-  font-family: var(--font-data);
-}
-
-/* Hairline seam between the optimal and total ledgers */
-.column + .column {
-  padding-left: var(--ds-space-md);
-  border-left: 1px solid var(--panel-hairline);
-}
-
-/* Engraved, like the module rails: a single pixel of light under dark text reads
-   as stamped into the plate rather than printed on it. */
-.caption {
-  grid-column: 1 / -1;
-  margin-block: 2px;
-  color: var(--ds-gray-6);
-  font-size: 9px;
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--track-rail);
-  line-height: 1.1;
-  text-transform: uppercase;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.055);
-}
-
-.statRow {
+.econ {
+  --inf-ink: color-mix(in oklab, rgb(var(--gd-blue)) 70%, var(--ds-white));
   display: grid;
-  grid-template-columns: 18px max-content max-content;
-  column-gap: 4px;
-  align-items: center;
-  min-height: 16px;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 10px;
+  align-content: start;
 }
 
-.statRow::before {
-  content: "";
-  grid-column: 1;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+.single {
+  grid-template-columns: 1fr;
 }
 
-.resource::before {
-  background-image: var(--resource-icon);
-}
-
-.influence::before {
-  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='6,2 18,2 22,12 18,22 6,22 2,12' fill='transparent' stroke='%233b82f6' stroke-width='2'/%3E%3C/svg%3E");
-}
-
-.flex::before {
-  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='50%25' stop-color='%23eab308'/%3E%3Cstop offset='50%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='6,2 18,2 22,12 18,22 6,22 2,12' fill='transparent' stroke='url(%23g)' stroke-width='2'/%3E%3C/svg%3E");
-}
-
-.totalRow {
-  padding-top: 5px;
-  border-top: 1px solid var(--resource-divider-color, rgba(148, 163, 184, 0.3));
-}
-
-.totalRow::before {
-  background: none;
-}
-
-.current,
-.total {
-  line-height: 1;
-  text-align: right;
-  white-space: pre;
-}
-
-.current {
-  grid-column: 2;
-  font-size: var(--ds-fz-lg);
+.lbl {
+  padding-bottom: 4px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
   font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
 }
 
-.current::after {
+.econ dl {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+  margin: 0;
+}
+
+.econ dl + dl {
+  box-shadow: -5px 0 0 -4px var(--ds-h14);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px;
+  height: 21px;
+}
+
+.row dd {
+  margin: 0;
+  justify-self: end;
+  font-family: var(--font-data);
+  font-size: 16px;
+  font-weight: var(--weight-title);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-shadow: var(--ds-num-glow);
+}
+
+.of {
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink-lo);
+}
+
+.of::before {
   content: "/";
-  display: inline-block;
-  width: 1ch;
-  margin-left: 4px;
-  color: var(--ds-gray-5);
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-data);
+  margin: 0 1px;
+  opacity: 0.6;
 }
 
-.total {
-  grid-column: 3;
-  color: var(--ds-gray-5);
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-data);
+.resource dd {
+  color: rgb(var(--gd-yellow));
 }
 
-.resource .current,
-.resource .current::after,
-.resource .total {
-  color: var(--ds-yellow-5);
+.influence dd {
+  color: var(--inf-ink);
 }
 
-.resource .current {
-  color: var(--ds-yellow-3);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+.flex dd,
+.sum dd {
+  color: var(--ds-ink-hi);
 }
 
-.influence .current {
-  color: var(--ds-blue-3);
+.sum {
+  margin-top: 3px;
+  padding-top: 3px;
+  border-top: 1px solid var(--ds-h14);
 }
 
-.influence .total {
-  color: var(--ds-blue-5);
+.glyph {
+  width: 15px;
+  height: 15px;
 }
 
-.hiddenRow {
-  height: 16px;
-  visibility: hidden;
+.glyph path {
+  fill: rgb(0 0 0 / 0.55);
+  stroke-width: 1.6;
+}
+
+.flexGlyph path {
+  fill: none;
+}
+
+.res path,
+path.res {
+  stroke: rgb(var(--gd-yellow));
+}
+
+.inf path,
+path.inf {
+  stroke: var(--inf-ink);
 }

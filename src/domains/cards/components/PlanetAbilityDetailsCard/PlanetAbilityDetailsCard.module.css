@@ -1,3 +1,19 @@
-.title {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+.cards {
+  display: grid;
+  gap: 4px;
+}
+
+.cardRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-body);
+  color: var(--ds-ink-hi);
+}
+
+.cardRow b {
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: 600;
+  color: var(--ds-ink);
 }

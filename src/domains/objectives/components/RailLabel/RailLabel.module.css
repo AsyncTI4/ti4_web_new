@@ -1,0 +1,35 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.label,
+.meta {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ds-ink-lo);
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ruled {
+  justify-content: flex-start;
+}
+
+.rule {
+  flex: 1;
+  height: 1px;
+  background: var(--ds-h14);
+}

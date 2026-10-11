@@ -1,5 +1,5 @@
-import { Box } from "@/ds";
-import { PlayerEconomyStack } from "./PlayerEconomyStack";
+import { TradeGoods } from "@/domains/player/components/TradeGoods/TradeGoods";
+import { Commodities } from "@/domains/player/components/Commodities/Commodities";
 import { PlayerCardCounts } from "@/domains/player/components/PlayerCardCounts";
 import { CCPool } from "@/domains/player/components/CCPool";
 import { FragmentsPool } from "@/domains/player/components/FragmentsPool";
@@ -23,10 +23,9 @@ type Props = {
 };
 
 /**
- * The status compartment: stores and hand up top, salvage shelf and command
- * trough docked to the plate's floor. The most engineered plate in the band —
- * both player card compositions seat it so the same numbers land in the same
- * place everywhere a player reads them.
+ * The stores lane: trade goods and commodities as keyed readouts beside the
+ * hand's card-backs, a salvage shelf for fragments and debt, and the command
+ * pool docked to the floor.
  */
 export function LogisticsPlate({
   tg,
@@ -43,38 +42,30 @@ export function LogisticsPlate({
   showCommandTokens = true,
 }: Props) {
   return (
-    <Box className={styles.logistics}>
-      <Box className={styles.logisticsTop}>
-        {/* Debt is not part of the stores stack here — it moved down to
-            the salvage shelf, which has width to spare and vertical room
-            the stores column does not. */}
-        <PlayerEconomyStack
-          tg={tg}
-          commodities={commodities}
-          commoditiesTotal={commoditiesTotal}
-        />
-        <Box className={styles.logisticsHand}>
-          <PlayerCardCounts pnCount={pnCount} acCount={acCount} />
-        </Box>
-      </Box>
-      {/* Salvage above, command readout docked to the plate's floor. */}
-      <Box className={styles.logisticsFloor}>
-        <Box className={styles.fragmentRow}>
-          <FragmentsPool fragments={fragments} reserveSpace />
-          {debtTokens && <DebtTokens debts={debtTokens} compact />}
-        </Box>
-        {showCommandTokens && (
-          <Box className={styles.ccRow}>
-            <CCPool
-              tacticalCC={tacticalCC}
-              fleetCC={fleetCC}
-              strategicCC={strategicCC}
-              mahactEdict={mahactEdict}
-              layout="horizontal"
-            />
-          </Box>
-        )}
-      </Box>
-    </Box>
+    <div className={styles.stores}>
+      <TradeGoods tg={tg ?? 0} />
+      <div className={styles.hand}>
+        <PlayerCardCounts pnCount={pnCount} acCount={acCount} />
+      </div>
+      <Commodities
+        commodities={commodities ?? 0}
+        commoditiesTotal={commoditiesTotal ?? 0}
+      />
+      <div className={styles.shelf}>
+        <FragmentsPool fragments={fragments} reserveSpace />
+        {debtTokens && <DebtTokens debts={debtTokens} compact />}
+      </div>
+      {showCommandTokens && (
+        <div className={styles.ccRow}>
+          <CCPool
+            tacticalCC={tacticalCC}
+            fleetCC={fleetCC}
+            strategicCC={strategicCC}
+            mahactEdict={mahactEdict}
+            layout="horizontal"
+          />
+        </div>
+      )}
+    </div>
   );
 }

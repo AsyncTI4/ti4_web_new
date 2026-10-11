@@ -8,7 +8,7 @@ import { SystemDossier } from "./SystemDossier";
 import styles from "./SystemDossier.module.css";
 
 /** The dossier's width wherever the screen has room for it. */
-const DOSSIER_WIDTH = 920;
+const DOSSIER_WIDTH = 1080;
 
 /** Gap between the phone dossier and the edge of the screen. */
 const MOBILE_SCREEN_GAP = 10;
@@ -16,8 +16,7 @@ const MOBILE_SCREEN_GAP = 10;
 /**
  * Host for the system dossier. Mounted once above the map views; opens when a
  * hex is clicked or tapped and reads everything else from game context.
- * Escape and the backdrop close it, per Mantine defaults; a phone has no
- * Escape and little backdrop to hit, so there it also gets a close button.
+ * Escape, the backdrop and the header's close button all close it.
  */
 export function SystemDossierModal() {
   const dossier = useAppStore((state) => state.systemDossier);
@@ -52,7 +51,7 @@ export function SystemDossierModal() {
       {tile && (
         <SystemDossier
           tile={tile}
-          onClose={isMobile ? close : undefined}
+          onClose={close}
           unitSheetWidth={
             isMobile
               ? viewport.width * viewport.scale - MOBILE_SCREEN_GAP * 2

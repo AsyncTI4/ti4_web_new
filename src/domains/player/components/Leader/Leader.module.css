@@ -1,190 +1,150 @@
 /*
- * Leader dossier row.
- *
- * Previously a 20px capsule with the portrait bled outside its container and
- * given its own 20px left rounding, which clipped the character art into a blob
- * and left a hard seam where it met the name field. Inside a deck of chamfered
- * plates, a capsule is the odd shape out.
- *
- * Now: a squared plate with a cut corner, and the portrait seated in an inset
- * well with a hairline wall between it and the text — the same seat/field
- * relationship the unit bays and sockets use.
+ * Leader dossier row. A squared plate with a cut corner, the portrait in an
+ * inset well behind a hairline wall. The 44px row is reserved before the art
+ * decodes so nothing shifts.
  */
+.lead {
+  --lc: var(--gd-green);
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  height: 44px;
+  min-width: 0;
+  padding-right: 8px;
+  background:
+    linear-gradient(90deg, rgba(var(--lc), 0.07), rgba(var(--lc), 0.028)),
+    var(--ds-field);
+  border: 1px solid rgba(var(--lc), 0.196);
+  box-shadow: var(--ds-bevel);
+  cursor: pointer;
+}
 
-.plate {
-  --leader-chamfer: var(--machined-chamfer-sm);
-  border-radius: 0;
-  box-shadow: var(--machined-bevel);
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--leader-chamfer)),
-    calc(100% - var(--leader-chamfer)) 100%,
-    0 100%
+.lead::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(
+    315deg,
+    var(--ds-ground-2) 0 50%,
+    rgba(var(--lc), 0.35) 50% calc(50% + 1px),
+    transparent calc(50% + 1px)
   );
-  /* The portrait fills the plate's full height, so the chip's own padding has to
-     go; the text side re-establishes it. */
-  --chip-inner-padding: 0;
-  --chip-inner-min-height: 34px;
-  --chip-inner-gap: 0;
 }
 
-/*
- * Hover: quiet. The plate's fill lifts by a few percent and the name brightens —
- * nothing more. A dossier already carries a state-coloured border, so an accent
- * ring on top of it read as an alarm rather than as a cursor.
- */
-.plate:hover {
-  background: var(--panel-hairline-strong);
+.lead:hover {
+  background:
+    linear-gradient(90deg, rgba(var(--lc), 0.098), rgba(var(--lc), 0.042)),
+    var(--ds-field);
 }
 
-.plate:hover .textContainer {
-  background: rgba(255, 255, 255, 0.04);
+.lead:hover strong {
+  color: var(--ds-white);
 }
 
-.plate:hover .leaderName {
-  color: var(--ds-gray-0);
-}
-
-.plate:focus-visible {
-  outline: 2px solid rgb(var(--gd-blue));
+.lead:focus-visible {
+  outline: 2px solid var(--ds-accent);
   outline-offset: 1px;
 }
 
-/* Layout components */
-.leaderWrapper {
-  position: relative;
-  overflow: visible;
-  display: flex;
-  width: 100%;
+.well {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 42px;
+  overflow: hidden;
+  background: var(--ds-socket);
+  box-shadow:
+    1px 0 0 rgba(var(--lc), 0.21),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+  color: var(--ds-h28);
+  font-size: 16px;
 }
 
-.leaderGroup {
-  align-items: stretch;
-  flex-wrap: nowrap;
+.well img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.text {
+  display: grid;
+  gap: 3px;
   min-width: 0;
-  width: 100%;
-  gap: 0;
 }
 
-/* Online status indicator */
+.text strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-body);
+  font-weight: var(--weight-title);
+  line-height: 1.1;
+  color: var(--ds-ink-hi);
+  text-shadow: 0 1px 0 rgb(0 0 0);
+}
+
+.text em {
+  font-style: normal;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: rgba(var(--lc), 0.63);
+}
+
+.lead[data-s="exhausted"] {
+  border-color: var(--ds-h14);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.3) 5px 9px),
+    var(--ds-field);
+}
+
+.lead[data-s="exhausted"] .well img {
+  filter: grayscale(0.7) brightness(0.75);
+}
+
+.lead[data-s="exhausted"] em {
+  color: var(--ds-ink-lo);
+}
+
+.lead[data-s="locked"] {
+  background: var(--ds-socket);
+  border-color: var(--ds-h10);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.7);
+}
+
+.lead[data-s="locked"]::after {
+  display: none;
+}
+
+.lead[data-s="locked"] .well {
+  background: transparent;
+  box-shadow: 1px 0 0 var(--ds-h10);
+}
+
+.lead[data-s="locked"] strong {
+  color: var(--ds-ink-lo);
+  font-weight: var(--weight-data);
+}
+
+.lead[data-s="locked"] em {
+  color: var(--ds-ink-lo);
+}
+
+/* The player is online: a status light, so it may glow. */
 .onlineDot {
   position: absolute;
-  top: 3px;
-  right: 4px;
+  top: 4px;
+  right: 5px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(34, 197, 94, 1) 0%, rgba(34, 197, 94, 0.2) 80%);
-  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
-}
-
-/*
- * Portrait well: an inset seat with a hairline wall on its trailing edge. The
- * art fills it with object-fit rather than being oversized and offset, so no
- * corner of the face is cut away.
- */
-.leaderImageContainer {
-  position: relative;
-  flex: 0 0 auto;
-  --leader-portrait-width: 38px;
-  width: var(--leader-portrait-width);
-  align-self: stretch;
-  /*
-   * The portrait art is 120 x 153, and the plate's height came from the image's
-   * intrinsic aspect — so a row was 36px tall until its lazily-loaded portrait
-   * decoded and then jumped to 50px, shifting every dossier below it. Reserving
-   * the art's height up front makes the row the same size loaded or not.
-   * PhantomLeader.module.css derives the empty slot from the same figures.
-   */
-  min-height: calc(var(--leader-portrait-width) * 153 / 120);
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.35);
-  border-right: 1px solid var(--panel-separator);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.leaderImage {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center 22%;
-}
-
-/* A single hairline of top light across the portrait, so the well shares the
-   plate's bevel instead of reading as a hole punched in it. */
-.leaderImageContainer::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: var(--machined-bevel-light);
-  pointer-events: none;
-}
-
-.textContainer {
-  min-width: 0;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1px;
-  padding: 3px 8px 3px 7px;
-}
-
-.leaderName {
-  font-size: 13px;
-  font-weight: var(--weight-rail);
-  line-height: 1.15;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.leaderNameActive {
-  color: var(--ds-gray-0);
-}
-
-.leaderNameInactive {
-  color: var(--ds-gray-4);
-}
-
-/* Role designation in quiet small caps, echoing the faction labels */
-.leaderType {
-  font-size: 9px;
-  font-weight: var(--weight-title);
-  letter-spacing: var(--track-rail);
-  line-height: 1.1;
-  text-transform: uppercase;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.leaderTypeActive {
-  color: var(--ds-green-4);
-}
-
-.leaderTypeInactive {
-  color: var(--ds-gray-6);
-}
-
-/*
- * Locked: seated in the plate's trailing edge rather than floating off the
- * corner, where it used to overlap whatever sat above the row.
- */
-.lockIcon {
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
-  border-radius: 2px;
-  background: rgba(0, 0, 0, 0.45);
-  box-shadow: inset 0 0 0 1px var(--socket-border);
+  background: rgb(var(--ds-sig-ok));
 }

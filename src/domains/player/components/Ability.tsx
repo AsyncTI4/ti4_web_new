@@ -2,42 +2,39 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { getAbility } from "@/entities/lookup/abilities";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { AbilityDetailsCard } from "@/domains/cards/components/AbilityDetailsCard";
-import { Chip } from "@/shared/ui/primitives/Chip";
-import { isMobileDevice } from "@/utils/isTouchDevice";
+import {
+  ObjectLabel,
+  ObjectShell,
+} from "@/domains/player/components/silhouettes/ObjectShell";
 import classes from "./Ability.module.css";
 
-/**
- * A hex cell with a lit core. An ability is a power seated inside the board's own
- * unit of geometry — which says more than a generic sparkle, and ties the chip to
- * the map it belongs to.
- */
+/** A hex cell with a lit core: a power seated in the board's own geometry. */
 function AbilitySigil() {
   return (
-    <svg
-      className={classes.sigil}
-      width="15"
-      height="16"
-      viewBox="0 0 15 16"
-      fill="none"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 16 16" aria-hidden="true">
       <path
-        d="M7.5 1.1 13.1 4.3v7.4L7.5 14.9 1.9 11.7V4.3z"
+        d="M8 1.2 14 4.6v6.8L8 14.8 2 11.4V4.6z"
+        fill="none"
         stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="miter"
+        strokeWidth="1.5"
       />
-      <path d="M7.5 5.4 10 6.9v3l-2.5 1.4L5 9.9v-3z" fill="currentColor" />
+      <circle cx="8" cy="8" r="2.2" fill="currentColor" />
     </svg>
   );
 }
 
 type Props = {
   id: string;
+  /** Accepted for API parity; the tag has one weight. */
   strong?: boolean;
 };
 
-export function Ability({ id, strong = true }: Props) {
+/**
+ * Engraved tag: a violet hairline with no fill weight and the hex sigil seated
+ * in a recessed well. Abilities are permanent rules, so they read as stamped
+ * rather than held.
+ */
+export function Ability({ id }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const abilityData = getAbility(id);
   if (!abilityData) return null;
@@ -45,14 +42,16 @@ export function Ability({ id, strong = true }: Props) {
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
       <SmoothPopover.Target>
-        <Chip
-          accent="purple"
-          strong={strong}
-          title={abilityData.name}
+        <ObjectShell
+          className={classes.abl}
+          label={abilityData.name}
           onClick={toggle}
-          className={classes.chip}
-          leftSection={!isMobileDevice() ? <AbilitySigil /> : undefined}
-        />
+        >
+          <span className={classes.well}>
+            <AbilitySigil />
+          </span>
+          <ObjectLabel>{abilityData.name}</ObjectLabel>
+        </ObjectShell>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <AbilityDetailsCard abilityId={id} />

@@ -1,6 +1,8 @@
-import { Box, Divider, Group, Image, Text } from "@/ds";
+import { Image } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getActionCard } from "@/entities/lookup/actionCards";
+import { DetailsCard } from "@/shared/ui/DetailsCard";
+import classes from "./PlanetAbilityDetailsCard.module.css";
 
 type Props = {
   actionCards?: string[];
@@ -16,30 +18,27 @@ export function PlanetActionCardsSection({ actionCards = [] }: Props) {
   }
 
   return (
-    <>
-      <Divider c="gray.7" opacity={0.8} />
-      <Box>
-        <Text size="sm" c="gray.3" fw={500} mb={4}>
-          Action Cards
-        </Text>
-        {[...counts].map(([alias, count]) => {
-          const cardLabel = getActionCard(alias)?.name ?? alias;
-          return (
-            <Group key={alias} gap="xs" align="center">
-              <Image
-                src={cdnImage("/player_area/cardback_action.jpg")}
-                alt={`Action card ${cardLabel}`}
-                w={18}
-                h={12}
-              />
-              <Text size="sm" c="gray.1" lh={1.5}>
+    <DetailsCard.Section
+      title="Action cards"
+      content={
+        <div className={classes.cards}>
+          {[...counts].map(([alias, count]) => {
+            const cardLabel = getActionCard(alias)?.name ?? alias;
+            return (
+              <span key={alias} className={classes.cardRow}>
+                <Image
+                  src={cdnImage("/player_area/cardback_action.jpg")}
+                  alt={`Action card ${cardLabel}`}
+                  w={18}
+                  h={12}
+                />
                 {cardLabel}
-                {count > 1 ? ` x${count}` : ""}
-              </Text>
-            </Group>
-          );
-        })}
-      </Box>
-    </>
+                {count > 1 && <b>×{count}</b>}
+              </span>
+            );
+          })}
+        </div>
+      }
+    />
   );
 }

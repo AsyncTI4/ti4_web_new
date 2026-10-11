@@ -1,17 +1,15 @@
 import { Group } from "@/ds";
 import { IconPencil } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { generateColorGradient } from "@/entities/lookup/colors";
+import { getPrimaryColorWithOpacity } from "@/entities/lookup/colors";
 import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
 import classes from "./HeaderMenu.module.css";
 
 export function factionTabStyle(factionColor?: string | null) {
   if (!factionColor) return undefined;
   return {
-    border: "2px solid",
-    borderImage: `${generateColorGradient(factionColor, 0.3)} 1`,
-    boxShadow: "inset 0 0 0 1px rgba(100, 116, 139, 0.4)",
-  };
+    "--tab-faction": getPrimaryColorWithOpacity(factionColor, 0.8),
+  } as React.CSSProperties;
 }
 
 export function TabFactionIcon({

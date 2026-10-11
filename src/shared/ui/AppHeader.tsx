@@ -31,8 +31,8 @@ export function AppHeader({
       <Group
         align="center"
         h="100%"
-        px="sm"
-        gap="xs"
+        px={14}
+        gap={12}
         style={{ ...defaultGroupStyle, ...(userGroupStyle ?? {}) }}
         {...restGroupProps}
       >

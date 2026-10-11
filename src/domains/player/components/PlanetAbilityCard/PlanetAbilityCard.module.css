@@ -9,16 +9,12 @@
 
 .abilityCard {
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: filter var(--ds-dur) var(--ds-ease);
   position: relative;
 }
 
 .abilityCard:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1) !important;
-  box-shadow:
-    0 4px 12px rgba(147, 51, 234, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  filter: brightness(1.12);
 }
 
 .mainStack {
@@ -29,7 +25,7 @@
     var(--ability-background) 0%,
     rgba(30, 9, 60, 0.6) 100%
   );
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .exhausted {
@@ -51,8 +47,8 @@
   border-bottom-width: 1px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   height: 150px;
 }
 

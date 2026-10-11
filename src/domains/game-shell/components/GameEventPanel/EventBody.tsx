@@ -1,10 +1,4 @@
-import {
-  IconArrowsLeftRight,
-  IconBuildingFactory2,
-  IconSwords,
-  IconTargetArrow,
-} from "@tabler/icons-react";
-import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import type { ReactNode } from "react";
 import type { GameEvent } from "@/entities/data/types";
 import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDetailsCard";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
@@ -13,6 +7,7 @@ import { RelicCard } from "@/domains/player/components/Relic";
 import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
 import { TechCard } from "@/domains/cards/components/TechCard/TechCard";
 import { BreakthroughCard } from "@/domains/cards/components/BreakthroughCard";
+import { publicObjectives } from "@/entities/data/publicObjectives";
 import {
   prettifyId,
   resolveAgendaName,
@@ -31,152 +26,176 @@ import {
   type EventPayload,
   type SystemNameResolver,
 } from "./eventPayload";
-import { transactionSides, type TransactionSide } from "./transactions";
+import { transactionSides, type TransactionEntry } from "./transactions";
+import { EventPopover, ProductionSummary } from "./EventParts";
 import {
-  EventDescription,
-  EventPopover,
-  Headline,
-  ProductionSummary,
-  TypeBadge,
-} from "./EventParts";
+  AbilityChip,
+  ActionCardChip,
+  BreakthroughChip,
+  CountChip,
+  HexChip,
+  LawChip,
+  LeaderPortrait,
+  ObjectiveChip,
+  PlainChip,
+  PnChip,
+  RelicChip,
+  ScPlate,
+  SecretChip,
+  TechChip,
+  VpStamp,
+} from "./EventChips";
 import { SubEventList } from "./SubEventList";
 import classes from "./GameEventPanel.module.css";
 
-type CardArchetype = {
-  label: string;
-  hue: string;
-  exhausts?: boolean;
-  details?: (cardId: string) => React.ReactNode;
-};
-
-const CARD_ARCHETYPES: Record<string, CardArchetype> = {
-  CARD_PLAY_ACTION_CARD: {
-    label: "AC Played",
-    hue: "oklch(0.66 0.18 45)",
-    details: (id) => <ActionCardDetailsCard actionCardId={id} />,
-  },
-  CARD_PLAY_PROMISSORY_NOTE: {
-    label: "Played Promissory Note",
-    hue: "oklch(0.65 0.16 300)",
-    details: (id) => <PromissoryNoteCard promissoryNoteId={id} />,
-  },
-  CARD_PLAY_AGENT: {
-    label: "Agent",
-    hue: "oklch(0.68 0.15 190)",
-    exhausts: true,
-    details: (id) => <LeaderDetailsCard leaderId={id} />,
-  },
-  CARD_PLAY_HERO: {
-    label: "Hero",
-    hue: "oklch(0.64 0.18 330)",
-    details: (id) => <LeaderDetailsCard leaderId={id} />,
-  },
-  CARD_PLAY_RELIC: {
-    label: "Relic Exhausted",
-    hue: "oklch(0.7 0.14 90)",
-    exhausts: true,
-    details: (id) => <RelicCard relicId={id} />,
-  },
-  CARD_PLAY_TECH_EXHAUST: {
-    label: "Tech",
-    hue: "oklch(0.66 0.15 150)",
-    exhausts: true,
-    details: (id) => <TechCard techId={id} />,
-  },
-  CARD_PLAY_BREAKTHROUGH: {
-    label: "Breakthrough",
-    hue: "oklch(0.64 0.17 330)",
-    details: (id) => <BreakthroughCard breakthroughId={id} />,
-  },
-  CARD_PLAY_ABILITY: { label: "Ability", hue: "oklch(0.6 0.02 260)" },
-};
-
-const OBJECTIVE_HUES: Record<string, string> = {
-  SECRET: "oklch(0.62 0.19 20)",
-  CUSTODIAN: "oklch(0.7 0.14 90)",
-};
-const DEFAULT_OBJECTIVE_HUE = "oklch(0.68 0.15 145)";
+export type PlayerNameResolver = (faction: string) => string;
 
 type BodyProps = {
   event: GameEvent;
   p: EventPayload;
   systemName: SystemNameResolver;
+  playerName: PlayerNameResolver;
 };
 
-function systemChip(
-  position: string | undefined,
-  systemName: SystemNameResolver,
-): React.ReactNode {
-  if (!position) return null;
-  return <span className={classes.sysChip}>{systemName(position)}</span>;
+function Sentence({ children }: { children: ReactNode }) {
+  return <p className={classes.sentence}>{children}</p>;
 }
 
-function TitledDescription({ title, p }: { title: string; p: EventPayload }) {
+function Extras({ children }: { children: ReactNode }) {
+  return <div className={classes.extras}>{children}</div>;
+}
+
+function Actor({ event, playerName }: Pick<BodyProps, "event" | "playerName">) {
+  return <b>{event.faction ? playerName(event.faction) : "Someone"}</b>;
+}
+
+function Note({ p }: { p: EventPayload }) {
+  const text = eventDescription(p);
+  if (!text) return null;
+  return <span className={classes.note}>{text}</span>;
+}
+
+type CardPlay = {
+  verb: string;
+  chip: (id: string, name: string) => ReactNode;
+  details: (id: string) => ReactNode;
+};
+
+const CARD_PLAYS: Record<string, CardPlay> = {
+  CARD_PLAY_ACTION_CARD: {
+    verb: "played an action card",
+    chip: (id, name) => <ActionCardChip id={id} name={name} />,
+    details: (id) => <ActionCardDetailsCard actionCardId={id} />,
+  },
+  CARD_PLAY_PROMISSORY_NOTE: {
+    verb: "played a promissory note",
+    chip: (_id, name) => <PnChip name={name} />,
+    details: (id) => <PromissoryNoteCard promissoryNoteId={id} />,
+  },
+  CARD_PLAY_AGENT: {
+    verb: "exhausted their agent",
+    chip: (id, name) => <LeaderPortrait id={id} name={name} />,
+    details: (id) => <LeaderDetailsCard leaderId={id} />,
+  },
+  CARD_PLAY_HERO: {
+    verb: "played their hero",
+    chip: (id, name) => <LeaderPortrait id={id} name={name} />,
+    details: (id) => <LeaderDetailsCard leaderId={id} />,
+  },
+  CARD_PLAY_RELIC: {
+    verb: "exhausted a relic",
+    chip: (_id, name) => <RelicChip name={name} />,
+    details: (id) => <RelicCard relicId={id} />,
+  },
+  CARD_PLAY_TECH_EXHAUST: {
+    verb: "exhausted a technology",
+    chip: (id, name) => <TechChip id={id} name={name} />,
+    details: (id) => <TechCard techId={id} />,
+  },
+  CARD_PLAY_BREAKTHROUGH: {
+    verb: "used a breakthrough",
+    chip: (_id, name) => <BreakthroughChip name={name} />,
+    details: (id) => <BreakthroughCard breakthroughId={id} />,
+  },
+};
+
+function CardPlayBody({ event, p, playerName }: BodyProps) {
+  const play = CARD_PLAYS[event.archetype];
+  const cardId = str(p, "cardId") ?? "";
+  const name = str(p, "cardName") ?? resolveCardName(event.archetype, cardId);
+  const chip = play.chip(cardId, name);
   return (
     <>
-      <Headline title={title} />
-      <EventDescription>{eventDescription(p)}</EventDescription>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> {play.verb}.
+      </Sentence>
+      <Extras>
+        {cardId ? (
+          <EventPopover details={play.details(cardId)}>{chip}</EventPopover>
+        ) : (
+          chip
+        )}
+        <Note p={p} />
+      </Extras>
     </>
   );
 }
 
-function CardPlayBody({ event, p, card }: BodyProps & { card: CardArchetype }) {
+function AbilityBody({ event, p, playerName }: BodyProps) {
   const cardId = str(p, "cardId") ?? "";
-  const cardName =
-    str(p, "cardName") ?? resolveCardName(event.archetype, cardId);
-  const content = (
+  const name =
+    str(p, "cardName") ?? resolveCardName("CARD_PLAY_ABILITY", cardId);
+  return (
     <>
-      <Headline
-        meta={<TypeBadge label={card.label} hue={card.hue} />}
-        title={card.exhausts ? `Exhausted ${cardName}` : cardName}
-      />
-      <EventDescription>{eventDescription(p)}</EventDescription>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> used an ability.
+      </Sentence>
+      <Extras>
+        <AbilityChip name={name} />
+        <Note p={p} />
+      </Extras>
     </>
   );
-  if (!card.details || !cardId) return content;
-  return <EventPopover details={card.details(cardId)}>{content}</EventPopover>;
 }
 
-function TacticalActionBody({ event, p, systemName }: BodyProps) {
+function TacticalActionBody({ event, p, systemName, playerName }: BodyProps) {
+  const position = str(p, "activeSystem");
   const planets = str(p, "planetsTaken");
-  const combat = str(p, "combat");
   const planetNames = planets ? resolvePlanetsList(planets) : [];
   const subEvents = parseSubEvents(p.subEvents);
-  const headline = (
-    <Headline
-      title="Tactical action"
-      meta={systemChip(str(p, "activeSystem"), systemName)}
-    />
-  );
-
-  if (subEvents.length > 0) {
-    return (
-      <>
-        {headline}
-        <SubEventList
-          subEvents={subEvents}
-          systemName={systemName}
-          actorFaction={event.faction}
-        />
-      </>
-    );
-  }
+  const combat = str(p, "combat");
 
   return (
     <>
-      {headline}
-      {(planetNames.length > 0 || combat) && (
-        <div className={classes.subline}>
-          {planetNames.length > 0 && <span>Took {planetNames.join(", ")}</span>}
-          {combat && (
-            <span className={classes.combat}>
-              <IconSwords size={11} stroke={2} />
-              {combat.split("_").map(prettifyId).join(" vs ")}
-            </span>
-          )}
-        </div>
-      )}
-      <EventDescription>{str(p, "summary")}</EventDescription>
+      <Sentence>
+        <Actor event={event} playerName={playerName} />{" "}
+        {position ? (
+          <>
+            activated <b>{systemName(position)}</b>.
+          </>
+        ) : (
+          "took a tactical action."
+        )}
+      </Sentence>
+      <Extras>
+        {position && position.length <= 4 && <HexChip>{position}</HexChip>}
+        {planetNames.map((planet) => (
+          <PlainChip key={planet}>Took {planet}</PlainChip>
+        ))}
+        {subEvents.length === 0 && combat && (
+          <span className={classes.combat}>
+            Combat · {combat.split("_").map(prettifyId).join(" vs ")}
+          </span>
+        )}
+        {subEvents.length > 0 && (
+          <SubEventList
+            subEvents={subEvents}
+            systemName={systemName}
+            actorFaction={event.faction}
+          />
+        )}
+        {subEvents.length === 0 && <Note p={{ summary: p.summary }} />}
+      </Extras>
     </>
   );
 }
@@ -185,109 +204,128 @@ function StatusScoringBody({ event, p, systemName }: BodyProps) {
   const subEvents = parseSubEvents(p.subEvents);
   return (
     <>
-      <Headline
-        title="Status phase scoring"
-        meta={<TypeBadge label="Status" hue="oklch(0.68 0.15 145)" />}
-      />
+      <Sentence>
+        <b>Status phase</b> scoring.
+      </Sentence>
       {subEvents.length > 0 && (
-        <SubEventList
-          subEvents={subEvents}
-          systemName={systemName}
-          actorFaction={event.faction}
-        />
+        <Extras>
+          <SubEventList
+            subEvents={subEvents}
+            systemName={systemName}
+            actorFaction={event.faction}
+          />
+        </Extras>
       )}
     </>
   );
 }
 
-function ProductionBody({ p, systemName }: BodyProps) {
+function ProductionBody({ event, p, systemName, playerName }: BodyProps) {
   const units =
     p.units && typeof p.units === "object" && !Array.isArray(p.units)
       ? (p.units as Record<string, number>)
       : null;
   const cost = num(p, "cost");
+  const tile = str(p, "tile");
   return (
     <>
-      <Headline
-        title="Produced"
-        beforeTitle={
-          <span className={classes.productionPlace}>
-            <IconBuildingFactory2 size={13} stroke={2} />
-          </span>
-        }
-        meta={systemChip(str(p, "tile"), systemName)}
-      />
-      {(units !== null || cost !== undefined) && (
-        <div className={classes.subline}>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> produced
+        {tile ? (
+          <>
+            {" "}
+            at <b>{systemName(tile)}</b>
+          </>
+        ) : null}
+        .
+      </Sentence>
+      <Extras>
+        {tile && tile.length <= 4 && <HexChip>{tile}</HexChip>}
+        <span className={classes.note}>
           <ProductionSummary units={units} cost={cost ?? null} />
-        </div>
+        </span>
+      </Extras>
+    </>
+  );
+}
+
+function ManualCommandBody({ event, p, playerName }: BodyProps) {
+  const command = str(p, "command");
+  return (
+    <>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> ran a command.
+      </Sentence>
+      {command && (
+        <Extras>
+          <span className={classes.mono}>{command}</span>
+        </Extras>
       )}
     </>
   );
 }
 
-function ManualCommandBody({ p }: BodyProps) {
-  const command = str(p, "command");
-  if (!command) return null;
+function TurnBody({ event, p, playerName }: BodyProps) {
   return (
-    <div className={classes.titleLine}>
-      <span className={classes.mono}>{command}</span>
-    </div>
+    <Sentence>
+      <Actor event={event} playerName={playerName} />{" "}
+      {p.passed === true ? "passed." : "ended their turn."}
+    </Sentence>
   );
 }
 
-function TurnBody({ p }: BodyProps) {
-  if (p.passed !== true) return null;
-  return <Headline title="passed" />;
-}
-
-function TechResearchedBody({ p }: BodyProps) {
+function TechResearchedBody({ event, p, playerName }: BodyProps) {
+  const techId = str(p, "techId") ?? "";
   const payment = str(p, "paymentType");
   return (
     <>
-      <Headline
-        title={`Researched ${resolveTechName(str(p, "techId") ?? "")}`}
-        meta={
-          <>
-            <TypeBadge label="Tech" hue="oklch(0.66 0.15 150)" />
-            {payment && (
-              <span className={classes.subline}>{prettifyId(payment)}</span>
-            )}
-          </>
-        }
-      />
-      <EventDescription>{eventDescription(p)}</EventDescription>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> researched a technology.
+      </Sentence>
+      <Extras>
+        <EventPopover details={<TechCard techId={techId} />}>
+          <TechChip id={techId} name={resolveTechName(techId)} />
+        </EventPopover>
+        {payment && <span className={classes.note}>{prettifyId(payment)}</span>}
+      </Extras>
     </>
   );
 }
 
-function ObjectiveScoredBody({ p }: BodyProps) {
+const publicPoints = new Map(publicObjectives.map((o) => [o.alias, o.points]));
+
+function ObjectiveScoredBody({ event, p, playerName }: BodyProps) {
   const category = str(p, "category") ?? "PUBLIC";
   const id = str(p, "objectiveId");
-  const content = (
-    <>
-      <Headline
-        title={id ? resolveObjectiveName(id) : "Scored objective"}
-        beforeTitle={
-          <span className={classes.trophy}>
-            <IconTargetArrow size={14} stroke={2} />
-          </span>
-        }
-        meta={
-          <TypeBadge
-            label={category}
-            hue={OBJECTIVE_HUES[category] ?? DEFAULT_OBJECTIVE_HUE}
-          />
-        }
-      />
-      <EventDescription>{eventDescription(p)}</EventDescription>
-    </>
+  const name = id ? resolveObjectiveName(id) : "an objective";
+  const points = (id && publicPoints.get(id)) || 1;
+  const isSecret = category === "SECRET";
+  const chip = isSecret ? (
+    <SecretChip name={name} />
+  ) : (
+    <ObjectiveChip name={name} stage={points >= 2 ? 2 : 1} />
   );
-  if (category !== "SECRET" || !id) return content;
+
   return (
-    <EventPopover details={<SecretObjectiveCard secretId={id} />}>
-      {content}
-    </EventPopover>
+    <>
+      <Sentence>
+        <Actor event={event} playerName={playerName} /> scored{" "}
+        {isSecret
+          ? "a secret objective"
+          : `a ${category.toLowerCase()} objective`}
+        .
+      </Sentence>
+      <Extras>
+        {isSecret && id ? (
+          <EventPopover details={<SecretObjectiveCard secretId={id} />}>
+            {chip}
+          </EventPopover>
+        ) : (
+          chip
+        )}
+        <VpStamp>+{points} VP</VpStamp>
+      </Extras>
+    </>
   );
 }
 
@@ -301,99 +339,158 @@ function agendaTitle(p: EventPayload): string {
 
 function AgendaResolvedBody({ p }: BodyProps) {
   const outcome = str(p, "outcome");
+  const title = agendaTitle(p);
   return (
     <>
-      <Headline
-        title={agendaTitle(p)}
-        meta={<TypeBadge label="Agenda" hue="oklch(0.68 0.16 60)" />}
-      />
-      <EventDescription>
-        {outcome ? `Vote resolved: ${prettifyId(outcome)}` : undefined}
-      </EventDescription>
+      <Sentence>
+        <b>{title}</b> resolved.
+      </Sentence>
+      <Extras>
+        <LawChip
+          name={title}
+          outcome={outcome ? prettifyId(outcome) : undefined}
+        />
+      </Extras>
     </>
   );
 }
 
-function TransactionItems({ sides }: { sides: TransactionSide[] }) {
-  return (
-    <div className={classes.transactionGrid}>
-      {sides.map((side) => (
-        <div key={side.sender} className={classes.transactionSide}>
-          <div className={classes.transactionSender}>
-            {prettifyId(side.sender)}
-          </div>
-          <ul className={classes.transactionList}>
-            {side.items.map((item, index) => (
-              <li key={`${side.sender}-${item}-${index}`}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
+function TradeItem({ item }: { item: TransactionEntry }) {
+  switch (item.kind) {
+    case "tg":
+      return (
+        <CountChip src="/tg.png" count={item.count ?? 0} title={item.label} />
+      );
+    case "comm":
+      return (
+        <CountChip
+          src="/comms.png"
+          count={item.count ?? 0}
+          title={item.label}
+        />
+      );
+    case "ac":
+      return <ActionCardChip id="" name={item.label} />;
+    case "pn":
+      return <PnChip name={item.label} />;
+    case "so":
+      return <SecretChip name={item.label} />;
+    case "tech":
+      return <TechChip id="" name={item.label} />;
+    case "relic":
+      return <RelicChip name={item.label} />;
+    default:
+      return <PlainChip>{item.label}</PlainChip>;
+  }
 }
 
-function TransactionBody({ p }: BodyProps) {
+function TransactionBody({ p, playerName }: BodyProps) {
   const from = str(p, "from");
   const to = str(p, "to");
   const sides = transactionSides(stringArray(p, "items"), from, to);
+  const [left, right] = [
+    sides.find((s) => s.sender === from) ?? sides[0],
+    sides.find((s) => s.sender === to) ?? sides[1],
+  ];
+
   return (
     <>
-      <div className={classes.titleLine}>
-        {from && <CircularFactionIcon faction={from} size={16} />}
-        <span className={classes.transactionArrow}>
-          <IconArrowsLeftRight size={13} stroke={2} />
-        </span>
-        {to && <CircularFactionIcon faction={to} size={16} />}
-      </div>
-      {sides.length > 0 ? (
-        <TransactionItems sides={sides} />
-      ) : (
-        <EventDescription>{eventDescription(p)}</EventDescription>
+      <Sentence>
+        <b>{from ? playerName(from) : "Someone"}</b> and{" "}
+        <b>{to ? playerName(to) : "someone"}</b> traded.
+      </Sentence>
+      <Extras>
+        {sides.length > 0 ? (
+          <div className={classes.xfer}>
+            <div>
+              {left?.items.map((item, i) => (
+                <TradeItem key={i} item={item} />
+              ))}
+            </div>
+            <span className={classes.xferArrow} aria-hidden="true">
+              ⇄
+            </span>
+            <div>
+              {right?.items.map((item, i) => (
+                <TradeItem key={i} item={item} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Note p={p} />
+        )}
+      </Extras>
+    </>
+  );
+}
+
+function ScBody({ event, p, playerName }: BodyProps) {
+  const initiative = num(p, "scNumber") ?? num(p, "sc");
+  const picked = event.archetype === "SC_PICKED";
+  const name = picked
+    ? strategyCardName(p, initiative)
+    : (str(p, "scName") ?? strategyCardName(p, initiative));
+  return (
+    <>
+      <Sentence>
+        <Actor event={event} playerName={playerName} />{" "}
+        {picked ? "picked" : "played"} <b>{name}</b>.
+      </Sentence>
+      <Extras>
+        <ScPlate initiative={initiative} name={name} played={!picked} />
+        <Note p={p} />
+      </Extras>
+    </>
+  );
+}
+
+function FallbackBody({ event, p, playerName }: BodyProps) {
+  return (
+    <>
+      <Sentence>
+        {event.faction && (
+          <>
+            <Actor event={event} playerName={playerName} /> ·{" "}
+          </>
+        )}
+        {prettifyId(event.archetype)}
+      </Sentence>
+      {eventDescription(p) && (
+        <Extras>
+          <Note p={p} />
+        </Extras>
       )}
     </>
   );
 }
 
-const ARCHETYPE_BODIES: Record<string, (props: BodyProps) => React.ReactNode> =
-  {
-    TACTICAL_ACTION: TacticalActionBody,
-    STATUS_SCORING: StatusScoringBody,
-    PRODUCTION: ProductionBody,
-    MANUAL_COMMAND: ManualCommandBody,
-    TURN: TurnBody,
-    TECH_RESEARCHED: TechResearchedBody,
-    SC_PLAYED: ({ p }) => (
-      <TitledDescription
-        title={`Played ${str(p, "scName") ?? "strategy card"}`}
-        p={p}
-      />
-    ),
-    SC_PICKED: ({ p }) => (
-      <TitledDescription
-        title={`Picked ${strategyCardName(p, num(p, "scNumber"))}`}
-        p={p}
-      />
-    ),
-    OBJECTIVE_SCORED: ObjectiveScoredBody,
-    AGENDA_RESOLVED: AgendaResolvedBody,
-    TRANSACTION: TransactionBody,
-  };
+const ARCHETYPE_BODIES: Record<string, (props: BodyProps) => ReactNode> = {
+  TACTICAL_ACTION: TacticalActionBody,
+  STATUS_SCORING: StatusScoringBody,
+  PRODUCTION: ProductionBody,
+  MANUAL_COMMAND: ManualCommandBody,
+  TURN: TurnBody,
+  TECH_RESEARCHED: TechResearchedBody,
+  SC_PLAYED: ScBody,
+  SC_PICKED: ScBody,
+  OBJECTIVE_SCORED: ObjectiveScoredBody,
+  AGENDA_RESOLVED: AgendaResolvedBody,
+  TRANSACTION: TransactionBody,
+  CARD_PLAY_ABILITY: AbilityBody,
+};
 
+/** One event as a sentence with bold nouns, then its objects in silhouette. */
 export function EventBody({
   event,
   systemName,
+  playerName,
 }: {
   event: GameEvent;
   systemName: SystemNameResolver;
+  playerName: PlayerNameResolver;
 }) {
-  const props = { event, p: event.payload ?? {}, systemName };
-
-  const card = CARD_ARCHETYPES[event.archetype];
-  if (card) return <CardPlayBody {...props} card={card} />;
-
-  const Body = ARCHETYPE_BODIES[event.archetype];
-  if (Body) return <Body {...props} />;
-
-  return <TitledDescription title={prettifyId(event.archetype)} p={props.p} />;
+  const props = { event, p: event.payload ?? {}, systemName, playerName };
+  if (CARD_PLAYS[event.archetype]) return <CardPlayBody {...props} />;
+  const Body = ARCHETYPE_BODIES[event.archetype] ?? FallbackBody;
+  return <Body {...props} />;
 }

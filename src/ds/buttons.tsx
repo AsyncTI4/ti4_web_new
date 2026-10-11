@@ -15,7 +15,7 @@ export type ButtonProps = BoxProps & {
   rightSection?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
   justify?: "center" | "space-between" | "flex-start";
 };
 
@@ -80,7 +80,7 @@ export type ActionIconProps = BoxProps & {
   variant?: Variant;
   size?: SizeKey | number | `input-${SizeKey}`;
   color?: string;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
   loading?: boolean;
 };
 

@@ -1,5 +1,5 @@
 import { useState, type KeyboardEvent } from "react";
-import { Box, Group, Text } from "@/ds";
+import { Box } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
 import { LawInPlay } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
@@ -11,10 +11,12 @@ type Props = {
   law: LawInPlay;
 };
 
+/** A law in play as a sealed row: wax seal, engraved name, one line of text. */
 function LawCard({ law }: Props) {
   const electedFaction = law.displaysElectedFaction
     ? law.electedFaction
     : undefined;
+  const mapText = law.mapText?.trim();
   const [opened, setOpened] = useState(false);
   const toggleOpened = () => setOpened((current) => !current);
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -28,30 +30,25 @@ function LawCard({ law }: Props) {
     <SmoothPopover opened={opened} onChange={setOpened} position="top-start">
       <SmoothPopover.Target>
         <Box
-          className={styles.lawCard}
+          className={styles.law}
           role="button"
           tabIndex={0}
+          aria-haspopup="dialog"
           onClick={toggleOpened}
           onKeyDown={handleKeyDown}
         >
-          <Group gap={6} wrap="nowrap" align="center">
-            <Box className={styles.lawIcon}>
-              <IconScale size={14} stroke={2.4} />
-            </Box>
-            <Box className={styles.lawText}>
-              <Text className={styles.lawTitle}>{law.name}</Text>
-              {law.mapText && law.mapText.trim() && (
-                <Text className={styles.mapText}>{law.mapText}</Text>
-              )}
-            </Box>
-            {electedFaction && (
-              <CircularFactionIcon
-                faction={electedFaction}
-                size={20}
-                className={styles.factionIcon}
-              />
-            )}
-          </Group>
+          <span className={styles.seal} aria-hidden="true">
+            <IconScale size={13} stroke={2} />
+          </span>
+          <span className={styles.name}>{law.name}</span>
+          {mapText && <span className={styles.text}>{mapText}</span>}
+          {electedFaction && (
+            <CircularFactionIcon
+              faction={electedFaction}
+              size={20}
+              className={styles.elect}
+            />
+          )}
         </Box>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

@@ -1,59 +1,30 @@
-import { Box, Group } from "@/ds";
 import { IconUsers } from "@tabler/icons-react";
 import { useOriginalFactionColors } from "@/hooks/useFactionColors";
-import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { getFactionImage } from "@/entities/lookup/factions";
+import styles from "./RailParts.module.css";
 
 type Props = {
   neighbors: string[];
 };
 
+/** The factions this player borders, keyed by a quiet neighbours glyph. */
 export function Neighbors({ neighbors }: Props) {
   const factionColorMap = useOriginalFactionColors();
   const neighborFactions = neighbors
     .map((neighborColor) => factionColorMap[neighborColor]?.faction)
     .filter((faction): faction is string => Boolean(faction));
 
+  if (neighborFactions.length === 0) return null;
+
   return (
-    <Group
-      gap={2}
-      wrap="nowrap"
-      align="center"
-      style={{
-        width: 152,
-        minWidth: 152,
-        maxWidth: 152,
-        overflow: "hidden",
-        flexShrink: 0,
-      }}
+    <span
+      className={styles.nbrs}
+      title={`Neighbours: ${neighborFactions.join(", ")}`}
     >
-      <Box
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 20,
-          height: 20,
-          borderRadius: 999,
-          background: "rgba(2, 6, 23, 0.86)",
-          border: "1px solid rgba(148, 163, 184, 0.35)",
-          flexShrink: 0,
-        }}
-        aria-label="Neighbors"
-      >
-        <IconUsers size={12} stroke={2.4} color="rgba(226, 232, 240, 0.9)" />
-      </Box>
-      {neighborFactions.map((faction, index) => (
-        <FactionIcon
-          key={index}
-          faction={faction}
-          w={20}
-          h={20}
-          style={{
-            filter:
-              "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)) brightness(0.9)",
-          }}
-        />
+      <IconUsers size={14} stroke={1.6} aria-label="Neighbours" />
+      {neighborFactions.map((faction) => (
+        <img key={faction} src={getFactionImage(faction)} alt={faction} />
       ))}
-    </Group>
+    </span>
   );
 }

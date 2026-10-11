@@ -1,22 +1,34 @@
-import { Stack, Box, BoxProps } from "@/ds";
-import { ReactNode } from "react";
+import { Box, type BoxProps } from "@/ds";
+import type { ReactNode } from "react";
 import cx from "clsx";
 import classes from "./DetailsCard.module.css";
+
+export type DetailsCardColor =
+  | "none"
+  | "yellow"
+  | "purple"
+  | "violet"
+  | "red"
+  | "orange"
+  | "cyan"
+  | "blue"
+  | "green"
+  | "gold"
+  | "teal"
+  | "sky";
 
 type Props = {
   children: ReactNode;
   width?: number;
-  color?:
-    | "none"
-    | "yellow"
-    | "purple"
-    | "red"
-    | "orange"
-    | "cyan"
-    | "blue"
-    | "green";
-} & Omit<BoxProps, "children" | "w">;
+  /** The object's signal colour; it tints the type line, labels and tile. */
+  color?: DetailsCardColor;
+} & Omit<BoxProps, "children" | "w" | "color">;
 
+/**
+ * The floating dossier behind every object popover. Compose it from
+ * `DetailsCard.Title` (header with icon tile), `DetailsCard.Section` and
+ * `DetailsCard.Flavor`; any other child is padded as a section.
+ */
 export function DetailsCard({
   children,
   width,
@@ -27,12 +39,10 @@ export function DetailsCard({
   return (
     <Box
       w={width}
-      maw="calc(100vw - 16px)"
-      p="md"
       className={cx(classes.card, color !== "none" && classes[color], className)}
       {...boxProps}
     >
-      <Stack gap="sm">{children}</Stack>
+      {children}
     </Box>
   );
 }

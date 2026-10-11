@@ -1,217 +1,106 @@
-/* Tech card styles: squared "circuit module" with a chamfer accent
-   painted into the bottom-right corner (background layer, not clip) */
-.techCard {
-  --tech-bg-alpha: 0.075;
-  --tech-border-alpha: 0.18;
-  --tech-accent-alpha: 0.42;
-  padding: 4px 6px;
+/*
+ * Technology: a circuit module. A 3px accent edge (split between two colours
+ * when a breakthrough synergy applies) runs a short trace into the glyph, a
+ * chamfer wedge is cut into the bottom-right corner, and lit pips report the
+ * prerequisite tier. Faction techs swap the type icon for the faction mark.
+ */
+.tech {
+  --k: var(--gd-gray);
+  --k2: var(--k);
+  padding: 0 16px 0 10px;
+  background:
+    linear-gradient(315deg, rgba(var(--k), 0.28) 0 4px, transparent 4.5px),
+    rgba(var(--k), 0.052);
+  border: 1px solid rgba(var(--k), 0.14);
   border-radius: 1px;
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      315deg,
-      rgba(var(--gradient-color), 0.36) 0,
-      rgba(var(--gradient-color), 0.36) 4px,
-      transparent 4.5px
-    ),
-    linear-gradient(
-      rgba(var(--gradient-color), var(--tech-bg-alpha)),
-      rgba(var(--gradient-color), var(--tech-bg-alpha))
-    );
-  border: 1px solid rgba(var(--gradient-color), var(--tech-border-alpha));
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translateY(0);
-  cursor: pointer;
 }
 
-/* Exhausted: dimmed with diagonal hatching, matching exhausted relics */
-.techCard.exhausted {
-  opacity: 0.6;
-  background:
-    repeating-linear-gradient(
-      135deg,
-      transparent 0 5px,
-      rgba(0, 0, 0, 0.34) 5px 9px
-    ),
-    linear-gradient(
-      315deg,
-      rgba(var(--gradient-color), 0.34) 0,
-      rgba(var(--gradient-color), 0.34) 4px,
-      transparent 4.5px
-    ),
-    linear-gradient(
-      rgba(var(--gradient-color), var(--tech-bg-alpha)),
-      rgba(var(--gradient-color), var(--tech-bg-alpha))
-    );
-}
-
-.techCard:hover {
-  --tech-bg-alpha: 0.10;
-  --tech-border-alpha: 0.26;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-.techCard::before {
-  content: '';
+.tech::before {
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   width: 3px;
-  background: rgba(var(--gradient-color), var(--tech-accent-alpha));
-}
-
-/* Synergy-specific ::before gradients with opacity 1 */
-.synergyBlueGreen,
-.synergyBlueYellow,
-.synergyBlueRed,
-.synergyGreenRed,
-.synergyGreenYellow,
-.synergyYellowRed {
-  --synergy-alpha-left: 0.56;
-  --synergy-alpha-right: 0.56;
-}
-
-.synergyBlueGreen::before,
-.synergyBlueYellow::before,
-.synergyBlueRed::before,
-.synergyGreenRed::before,
-.synergyGreenYellow::before,
-.synergyYellowRed::before {
   background: linear-gradient(
-    rgba(var(--synergy-left), var(--synergy-alpha-left)) 0 50%,
-    rgba(var(--synergy-right), var(--synergy-alpha-right)) 50% 100%
+    rgba(var(--k), 0.49) 0 50%,
+    rgba(var(--k2), 0.49) 50% 100%
   );
 }
 
-.synergyBlueGreen {
-  --synergy-left: var(--gd-blue);
-  --synergy-right: var(--gd-green);
-  --synergy-alpha-right: 0.66;
-  --tech-accent-alpha: 0.66;
+/* The circuit trace: the edge runs a short lead into the glyph's node. */
+.tech::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 5px;
+  height: 1px;
+  background: rgba(var(--k), 0.455);
 }
 
-.synergyBlueYellow {
-  --synergy-left: var(--gd-blue);
-  --synergy-right: var(--gd-yellow);
+.tech:hover {
+  border-color: rgba(var(--k), 0.224);
+  background-color: rgba(var(--k), 0.077);
 }
 
-.synergyBlueRed {
-  --synergy-left: var(--gd-blue);
-  --synergy-right: var(--gd-red);
-}
-
-.synergyGreenRed {
-  --synergy-left: var(--gd-green);
-  --synergy-right: var(--gd-red);
-}
-
-.synergyGreenYellow {
-  --synergy-left: var(--gd-green);
-  --synergy-right: var(--gd-yellow);
-}
-
-.synergyYellowRed {
-  --synergy-left: var(--gd-yellow);
-  --synergy-right: var(--gd-red);
-}
-
-/* Tier dots container */
-.tierContainer {
+.pips {
   position: absolute;
   top: 3px;
   right: 4px;
   display: flex;
-  width: 12px;
-  gap: 2px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  gap: 2px;
+  width: 12px;
 }
 
-/* Tier pips: square indicator lights */
-.tierDot {
+.pips i {
   width: 3px;
   height: 3px;
-  border-radius: 0;
-  background: rgba(var(--gradient-color), 0.52);
-  box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(var(--k), 0.42);
 }
 
-/* Main content group */
-.contentGroup {
-  gap: 6px;
+.letter {
   position: relative;
-  min-width: 0;
+  z-index: 2;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  color: var(--ds-ink-hi);
 }
 
-.contentGroupWithIcon::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 1px 1px rgba(var(--gradient-color), 0.12));
-  background-image: var(--tech-icon-image);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: var(--tech-icon-bg-size, contain);
+.tech[data-s="exhausted"] {
+  color: var(--ds-ink-lo);
+  text-shadow: none;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.34) 5px 9px),
+    linear-gradient(315deg, rgba(var(--k), 0.21) 0 4px, transparent 4.5px),
+    rgba(var(--k), 0.035);
 }
 
-/* Tech letter (for Antimatter, Wavelength, etc.) */
-.techLetter::before {
-  content: attr(data-tech-letter);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 14px;
-  font-weight: var(--weight-rail);
-  line-height: 1;
-  background-image: none;
+.tech[data-s="exhausted"] > span:first-child {
+  filter: saturate(0.4) brightness(0.8);
 }
 
-/* Faction tech icon with darkening background */
-.factionTechIcon::before {
-  position: relative;
-  overflow: visible;
+/* Unresearched faction tech: the module is printed but not powered. */
+.tech[data-s="locked"] {
+  color: var(--ds-ink-lo);
+  font-weight: var(--weight-data);
+  text-shadow: none;
+  background: var(--ds-socket);
+  border-color: rgba(var(--k), 0.1);
 }
 
-/* Tech name text */
-.techName {
-  color: var(--ds-white);
-  /* Semibold, not bold: Plex Sans bold at 12px with a shadow loses its counters */
-  font-weight: var(--weight-title);
-  letter-spacing: var(--track-body);
-  flex: 1;
-  min-width: 0;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
-  padding-right: 16px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
+.tech[data-s="locked"]::before {
+  background: rgba(var(--k), 0.22);
 }
 
-/* Color-specific classes using global variables */
-.red {
-  --gradient-color: var(--gd-red);
-}
-
-.green {
-  --gradient-color: var(--gd-green);
-}
-
-.blue {
-  --gradient-color: var(--gd-blue);
-}
-
-.yellow {
-  --gradient-color: var(--gd-yellow);
-}
-
-.gray {
-  --gradient-color: var(--gd-gray);
-}
-
-.white {
-  --gradient-color: 255, 255, 255;
+.tech[data-s="locked"] > span:first-child {
+  filter: grayscale(0.7) brightness(0.7);
 }

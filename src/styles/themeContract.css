@@ -1,0 +1,160 @@
+/*
+ * Theme contract v2.
+ *
+ * Themes are classes on <body> (see usePageThemeClass). This file does two
+ * things for every theme:
+ *
+ * 1. Bridges the theme's surface variables onto the design-system tokens, so
+ *    every primitive in src/ds follows the active theme. The bridge sits on
+ *    <body>, where the theme class lives, so each var() resolves against the
+ *    themed value rather than the :root default.
+ *
+ * 2. Gives each theme a personality beyond its surfaces — texture, label voice,
+ *    numeral glow, plate radius and an ambient light source — at the calm
+ *    calibration. Signals (--ds-sig-*, --gd-*) and object silhouettes are never
+ *    touched here.
+ *
+ * Personality tokens (consumed by HUD decks, rails, plates and numerals):
+ *   --ds-tex-deck          texture under decks and large panels (image layers)
+ *   --ds-tex-deck-size     background-size list for --ds-tex-deck
+ *   --ds-tex-deck-pos      background-position list
+ *   --ds-tex-deck-repeat   background-repeat list
+ *   --ds-tex-rail          texture layer for rails and headers (full layers)
+ *   --ds-label-font        family for engraved uppercase labels
+ *   --ds-label-track       tracking for those labels
+ *   --ds-num-glow          text-shadow for prominent numerals
+ *   --ds-r-plate           radius for plates and cards
+ *   --ds-ambient           page-level light layer
+ */
+
+body {
+  --ds-ground: var(--plate-ground);
+  --ds-ground-2: color-mix(in oklab, var(--plate-ground) 80%, black);
+  --ds-field: color-mix(in oklab, var(--plate-ground) 62%, black);
+  --ds-rail: color-mix(in oklab, var(--plate-ground) 90%, white 2%);
+  --ds-page: var(--hud-deck-ground);
+  --ds-deck: var(--hud-deck-ground);
+  --ds-socket: var(--socket-bg);
+  --ds-trough: var(--trough-bg);
+  --ds-h10: var(--panel-separator);
+  --ds-h14: var(--panel-hairline);
+  --ds-h22: var(--panel-hairline-strong);
+  --ds-edge-accent: var(--hud-edge-accent);
+
+  /* Graphite defaults */
+  --ds-tex-deck: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.008) 0 1px, transparent 1px 3px);
+  --ds-tex-deck-size: auto;
+  --ds-tex-deck-pos: 0 0;
+  --ds-tex-deck-repeat: repeat;
+  --ds-tex-rail: linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 40%);
+  --ds-label-font: var(--font-display);
+  --ds-label-track: var(--track-rail);
+  --ds-num-glow: none;
+  --ds-r-plate: 3px;
+  --ds-ambient: none;
+}
+
+/* Midnight — Deep Space: a sparse starfield and a cool bloom from the top edge. */
+body.theme-midnighttheme {
+  --ds-tex-deck:
+    radial-gradient(1px 1px at 20% 30%, rgb(255 255 255 / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 70% 80%, rgb(180 200 255 / 0.42), transparent 60%),
+    radial-gradient(1.5px 1.5px at 45% 55%, rgb(255 255 255 / 0.36), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0, rgb(59 130 246 / 0.13), transparent 70%);
+  --ds-tex-deck-size: 137px 137px, 211px 211px, 89px 89px, 100% 100%;
+  --ds-tex-deck-pos: 0 0;
+  --ds-tex-deck-repeat: repeat, repeat, repeat, no-repeat;
+  --ds-tex-rail: linear-gradient(180deg, rgb(59 130 246 / 0.05), transparent 60%);
+  --ds-ambient: radial-gradient(ellipse 60% 30% at 50% 0, rgb(59 130 246 / 0.07), transparent 70%);
+}
+
+/* Blue — Admiralty: blueprint grid, drafting ticks, mono chart-legend labels. */
+body.theme-midnightbluetheme {
+  --ds-tex-deck:
+    linear-gradient(rgb(150 180 220 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(150 180 220 / 0.08) 1px, transparent 1px),
+    linear-gradient(rgb(150 180 220 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(150 180 220 / 0.03) 1px, transparent 1px);
+  --ds-tex-deck-size: 96px 96px, 96px 96px, 12px 12px, 12px 12px;
+  --ds-tex-rail: repeating-linear-gradient(90deg, rgb(150 170 196 / 0.17) 0 1px, transparent 1px 12px) 0 100% / 100% 3px no-repeat;
+  --ds-label-font: var(--font-data);
+  --ds-label-track: 0.04em;
+}
+
+/* Red — War Room: hazard hatching and ember light rising from below. */
+body.theme-midnightredtheme {
+  /* The theme's socket/trough are layered backgrounds; the tokens must be colours. */
+  --ds-socket: rgb(0 0 0 / 0.34);
+  --ds-trough: rgb(0 0 0 / 0.4);
+  --ds-tex-deck:
+    repeating-linear-gradient(-45deg, rgb(220 62 72 / 0.036) 0 14px, transparent 14px 28px),
+    radial-gradient(ellipse 70% 60% at 50% 115%, rgb(255 80 40 / 0.17), transparent 70%);
+  --ds-tex-deck-size: auto, 100% 100%;
+  --ds-tex-deck-repeat: repeat, no-repeat;
+  --ds-tex-rail: linear-gradient(0deg, rgb(220 62 72 / 0.3) 0 1px, transparent 1px);
+  --ds-num-glow: 0 0 10px rgb(255 80 60 / 0.21);
+  --ds-ambient: radial-gradient(ellipse 80% 50% at 50% 120%, rgb(220 62 72 / 0.07), transparent 70%);
+}
+
+/* Violet — Mahact Arcana: nebula clouds, rune-dot rails, wide caps, softer plates. */
+body.theme-midnightviolettheme {
+  --ds-tex-deck:
+    radial-gradient(ellipse 50% 60% at 15% 20%, rgb(168 85 247 / 0.18), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 85% 75%, rgb(236 72 153 / 0.12), transparent 70%),
+    radial-gradient(1px 1px at 30% 40%, rgb(230 210 255 / 0.42), transparent 60%);
+  --ds-tex-deck-size: 100% 100%, 100% 100%, 113px 113px;
+  --ds-tex-deck-repeat: no-repeat, no-repeat, repeat;
+  --ds-tex-rail: radial-gradient(circle, rgb(196 181 253 / 0.13) 0.8px, transparent 1.3px) 0 0 / 8px 8px;
+  --ds-label-track: 0.18em;
+  --ds-r-plate: 6px;
+  --ds-ambient: radial-gradient(ellipse 50% 40% at 20% 0, rgb(168 85 247 / 0.07), transparent 70%);
+}
+
+/* Green — Terminal: scanlines, vignette, phosphor readouts, mono labels. */
+body.theme-midnightgreentheme {
+  --ds-tex-deck:
+    repeating-linear-gradient(0deg, rgb(34 197 94 / 0.048) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgb(34 197 94 / 0.036), rgb(0 0 0 / 0.33));
+  --ds-tex-deck-size: auto, 100% 100%;
+  --ds-tex-deck-repeat: repeat, no-repeat;
+  --ds-tex-rail: repeating-linear-gradient(0deg, rgb(34 197 94 / 0.036) 0 1px, transparent 1px 3px);
+  --ds-label-font: var(--font-data);
+  --ds-label-track: 0.02em;
+  --ds-num-glow: 0 0 8px rgb(74 222 128 / 0.27);
+}
+
+/* Vaporwave — Synthwave: a striped sun on a horizon grid, neon numerals. */
+body.theme-vaporwavetheme {
+  --ds-tex-deck:
+    repeating-linear-gradient(180deg, transparent 0 7px, rgb(13 14 39) 7px 10px),
+    radial-gradient(circle at 50% 100%, rgb(255 200 60 / 0.8), rgb(255 60 200 / 0.8) 70%, transparent 71%),
+    linear-gradient(180deg, transparent 52%, rgb(255 60 200 / 0.21) 52.4%, transparent 60%),
+    linear-gradient(90deg, rgb(255 60 200 / 0.084) 1px, transparent 1px),
+    linear-gradient(rgb(0 220 255 / 0.054) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(70 20 120 / 0.36), rgb(10 11 32 / 0) 70%);
+  --ds-tex-deck-size: 160px 70px, 160px 70px, 100% 100%, 48px 100%, 100% 24px, 100% 100%;
+  --ds-tex-deck-pos: 50% 18%, 50% 18%, 0 0, 0 0, 0 0, 0 0;
+  --ds-tex-deck-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
+  --ds-tex-rail: linear-gradient(90deg, rgb(255 60 200 / 0.11), rgb(0 220 255 / 0.06));
+  --ds-label-track: 0.14em;
+  --ds-num-glow: 0 0 10px rgb(255 60 200 / 0.27);
+  --ds-r-plate: 4px;
+  --ds-ambient: radial-gradient(ellipse 70% 40% at 50% 0, rgb(255 60 200 / 0.08), transparent 70%);
+}
+
+/* Utility classes any component can opt into. */
+.ds-deck-texture {
+  background-image: var(--ds-tex-deck);
+  background-size: var(--ds-tex-deck-size);
+  background-position: var(--ds-tex-deck-pos);
+  background-repeat: var(--ds-tex-deck-repeat);
+}
+
+.ds-label {
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: var(--ds-ink-lo);
+}

@@ -1,69 +1,51 @@
-import { Badge, Button, Group, Stack, Text } from "@/ds";
 import type { ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";
+import classes from "./MapViewSelectionModal.module.css";
 
 type MapViewPreferenceOptionProps = {
   icon: ReactNode;
   label: string;
-  badge?: string;
+  tagline: string;
   description: string;
   value: MapViewPreference;
   selected: boolean;
   onSelect: (value: MapViewPreference) => void;
 };
 
+/** A miniature of the layout: which area is the board, which are the side areas. */
+function Schematic({ value }: { value: MapViewPreference }) {
+  return (
+    <span className={classes.schem} data-layout={value} aria-hidden>
+      <i data-board />
+      <i />
+      <i />
+    </span>
+  );
+}
+
 export function MapViewPreferenceOption({
   icon,
   label,
-  badge,
+  tagline,
   description,
   value,
   selected,
   onSelect,
 }: MapViewPreferenceOptionProps) {
-  const recommended = value === "pannable";
-
   return (
-    <Button
-      variant={selected ? "filled" : "default"}
-      color={recommended ? "blue" : undefined}
-      size="lg"
+    <button
+      type="button"
+      className={classes.choice}
+      aria-pressed={selected}
       onClick={() => onSelect(value)}
-      leftSection={icon}
-      justify="flex-start"
-      style={{
-        height: "auto",
-        padding: "1rem",
-        textTransform: "none",
-        letterSpacing: 0,
-        whiteSpace: "normal",
-        borderColor: recommended ? "var(--ds-blue-5)" : undefined,
-      }}
     >
-      <Stack gap={4} align="flex-start">
-        <Group gap="xs">
-          <Text size="md" fw={600} c={selected ? "white" : undefined}>
-            {label}
-          </Text>
-          {badge && (
-            <Badge
-              size="xs"
-              variant={selected ? "white" : "filled"}
-              color="blue"
-            >
-              {badge}
-            </Badge>
-          )}
-        </Group>
-        <Text
-          size="xs"
-          c={selected ? "white" : "dimmed"}
-          fw={400}
-          style={{ whiteSpace: "normal", textAlign: "left" }}
-        >
-          {description}
-        </Text>
-      </Stack>
-    </Button>
+      <Schematic value={value} />
+      <b className={classes.choiceTitle}>
+        {icon}
+        {label}
+      </b>
+      <span className={classes.tagline}>{tagline}</span>
+      <small className={classes.choiceText}>{description}</small>
+    </button>
   );
 }

@@ -1,182 +1,233 @@
-.catalog {
-  margin-top: 32px;
-  width: 100%;
-}
-
-.section {
-  margin-top: 24px;
-}
-
-.sectionTitle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  font-weight: var(--weight-rail);
-  color: var(--ds-gray-5);
-  margin-bottom: var(--ds-space-sm);
-  text-transform: uppercase;
-  letter-spacing: var(--track-rail);
-}
-
-.sectionTitle::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    var(--panel-hairline-strong),
-    transparent
-  );
-}
-
-.colorGrid,
-.unitGrid {
+/*
+ * Tech × seat ownership matrix. Rows are generic techs grouped by colour, each
+ * labelled with the tech circuit module; columns are seats in seat order.
+ * Owned = filled square in the tech colour, exhausted = outline.
+ */
+.box {
+  width: fit-content;
+  max-width: 100%;
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+  padding: 10px;
+  background: var(--ds-deck);
+  background-image: var(--ds-tex-deck);
+  background-size: var(--ds-tex-deck-size);
+  background-position: var(--ds-tex-deck-pos);
+  background-repeat: var(--ds-tex-deck-repeat);
+  border: 1px solid var(--ds-h14);
+  border-radius: var(--ds-r-plate);
 }
 
-.colorColumn {
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  --kc: var(--ds-ink);
+}
+
+.hint {
+  font-family: var(--ds-font-text);
+  font-weight: var(--weight-regular);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: var(--text-meta);
+}
+
+.scroller {
+  overflow-x: auto;
   min-width: 0;
 }
 
-.colorHeading {
+.matrix {
+  --label-col: minmax(200px, 240px);
+  display: grid;
+  gap: 1px;
+  width: max-content;
+  background: var(--ds-h10);
+  border: 1px solid var(--ds-h10);
+}
+
+.headRow,
+.row,
+.groupRow {
+  display: grid;
+  grid-template-columns: var(--label-col) repeat(var(--seats), 30px) 28px;
+  gap: 1px;
+}
+
+.headRow > *,
+.row > *,
+.groupRow > * {
+  display: grid;
+  place-items: center;
+  min-height: 28px;
+  background: var(--ds-ground);
+}
+
+.headRow > * {
+  min-height: 30px;
+  background: var(--ds-deck);
+}
+
+.countHead {
+  font-family: var(--ds-font-data);
+  font-size: var(--text-label);
+  color: var(--ds-ink-lo);
+}
+
+.groupRow > * {
+  grid-column: 1 / -1;
+  min-height: 20px;
+  place-items: center start;
+  padding-left: 6px;
+  background: var(--ds-deck);
+}
+
+.groupLabel {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 8px;
-  color: rgba(226, 232, 240, 0.92);
-  font-size: 11px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
   font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
-  letter-spacing: var(--track-label);
+  color: var(--ds-ink-lo);
 }
 
-.colorIcon {
-  width: 14px;
-  height: 14px;
+.groupIcon {
+  width: 12px;
+  height: 12px;
 }
 
-.techList {
-  display: grid;
-  gap: 8px;
+/* Colour key per group / row. */
+[data-k="blue"] { --kc: rgb(var(--ds-sig-prop)); }
+[data-k="green"] { --kc: rgb(var(--ds-sig-bio)); }
+[data-k="red"] { --kc: rgb(var(--ds-sig-war)); }
+[data-k="yellow"] { --kc: rgb(var(--ds-sig-cyber)); }
+
+.row:hover > *,
+.row[data-open] > * {
+  background: linear-gradient(var(--ds-h10), var(--ds-h10)), var(--ds-ground);
 }
 
-/* Dark field with a type-colored rail and fading tint, matching the
-   objective card language */
-.techItem {
-  --tech-accent-alpha: 0.7;
+/* Tech: circuit module. Accent edge, a trace into the name, chamfer wedge, tier pips. */
+.module.module {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
   min-width: 0;
-  padding: 8px 10px 8px 12px;
-  border-radius: var(--panel-radius);
+  padding: 0 16px 0 10px;
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ds-ink-hi);
+  text-align: left;
   background:
-    var(--panel-texture),
-    linear-gradient(
-      90deg,
-      rgba(var(--gradient-color), 0.09) 0%,
-      rgba(var(--gradient-color), 0.025) 45%,
-      transparent 70%
-    ),
-    var(--panel-field-bg);
-  border: 1px solid var(--panel-hairline);
-  overflow: hidden;
+    linear-gradient(315deg, color-mix(in srgb, var(--kc) 28%, transparent) 0 4px, transparent 4.5px),
+    linear-gradient(color-mix(in srgb, var(--kc) 5%, transparent), color-mix(in srgb, var(--kc) 5%, transparent)),
+    var(--ds-ground);
+  border: 1px solid color-mix(in srgb, var(--kc) 14%, transparent);
+  border-radius: 1px;
+  cursor: pointer;
 }
 
-.techItem::before {
+.module::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   width: 3px;
-  background: rgba(var(--gradient-color), var(--tech-accent-alpha));
+  background: color-mix(in srgb, var(--kc) 49%, transparent);
 }
 
-.techHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
+.module::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 5px;
+  height: 1px;
+  background: color-mix(in srgb, var(--kc) 45%, transparent);
 }
 
-.techNameGroup {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.module.module:hover,
+.row[data-open] > .module.module {
+  border-color: color-mix(in srgb, var(--kc) 28%, transparent);
+}
+
+.module:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: -2px;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
   min-width: 0;
 }
 
-.unitUpgradeIcon {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
-}
-
-.techName {
-  color: white;
-  font-size: var(--ds-fz-sm);
-  font-weight: var(--weight-rail);
-  line-height: var(--lh-tight);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.headerRequirementIcons {
+.pips {
+  position: absolute;
+  top: 3px;
+  right: 4px;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 3px;
-  flex-shrink: 0;
-  padding-top: 1px;
+  gap: 2px;
+  width: 12px;
 }
 
-.headerRequirementIcon {
-  width: 13px;
-  height: 13px;
+.pips i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kc) 42%, transparent);
 }
 
-.techText {
-  margin-top: 6px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-regular);
-  line-height: 1.4;
+.cell {
+  min-width: 0;
+}
+
+.own {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--kc);
+}
+
+.own[data-s="exhausted"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--kc);
+}
+
+.count {
+  font-family: var(--ds-font-data);
+  font-size: var(--text-label);
+  color: var(--ds-ink-lo);
+}
+
+.text.text {
+  grid-column: 1 / -1;
+  display: block;
+  margin: 0;
+  padding: 6px 10px 8px 14px;
+  font-size: var(--text-data);
+  line-height: 1.45;
   white-space: pre-line;
+  color: var(--ds-ink);
+  background: var(--ds-deck);
+  border-top: 1px solid var(--ds-h10);
 }
 
-.blue {
-  --gradient-color: var(--gd-blue);
-}
-
-.green {
-  --gradient-color: var(--gd-green);
-}
-
-.red {
-  --gradient-color: var(--gd-red);
-}
-
-.yellow {
-  --gradient-color: var(--gd-yellow);
-}
-
-.white {
-  --gradient-color: 255, 255, 255;
-}
-
-@media (max-width: 1200px) {
-  .colorGrid,
-  .unitGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  .colorGrid,
-  .unitGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 47.99375em) {
+  .matrix {
+    --label-col: minmax(150px, 170px);
   }
 }

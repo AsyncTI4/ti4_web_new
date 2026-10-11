@@ -1,85 +1,82 @@
-import { Box, Button, Group, ActionIcon, UnstyledButton } from "@/ds";
+import { ActionIcon, Box, Button, Group, Tooltip } from "@/ds";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import {
+  IconBrush,
   IconCards,
-  IconKeyboard,
-  IconSettings,
+  IconFlag,
   IconHash,
   IconHistory,
+  IconKeyboard,
   IconMenu2,
-  IconSticker,
-  IconLinkPlus,
+  IconPaperclip,
+  IconPlayerSkipForward,
+  IconSettings,
+  IconTarget,
+  IconWorld,
 } from "@tabler/icons-react";
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
-import { cdnImage } from "@/entities/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { ThemeSwatches } from "./ThemeSwatches";
 import classes from "./TabsControls.module.css";
 
-type ToolAccent = "cyan" | "blue";
+const LENS_ICON_SIZE = 15;
 
-const TECH_SKIP_ICONS = ["/green.png", "/yellow.png", "/red.png", "/blue.png"];
+function LensTip({ label, shortcut }: { label: string; shortcut?: string }) {
+  return (
+    <span className={classes.tip}>
+      {label}
+      {shortcut && <kbd className={classes.kbd}>{shortcut}</kbd>}
+    </span>
+  );
+}
 
-const ACCENT_CLASS: Record<ToolAccent, string> = {
-  cyan: classes.accentCyan,
-  blue: classes.accentBlue,
-};
-
-/** One bay in the map-tool rack. Engaged state reads as lit, not filled. */
-function ToolButton({
-  active = false,
-  accent = "cyan",
+/**
+ * One lens in the segmented map toolbar. An engaged lens is a raised segment
+ * with a blue foot; the tooltip names it and its key.
+ */
+function Lens({
+  active,
   label,
+  shortcut,
+  separated = false,
   onClick,
   children,
 }: {
   active?: boolean;
-  accent?: ToolAccent;
   label: string;
+  shortcut?: string;
+  separated?: boolean;
   onClick: () => void;
   children: ReactNode;
 }) {
   return (
-    <UnstyledButton
-      className={cx(
-        classes.toolButton,
-        ACCENT_CLASS[accent],
-        active && classes.toolButtonActive,
-      )}
-      onClick={onClick}
-      aria-pressed={active}
-      aria-label={label}
-      title={label}
+    <Tooltip
+      label={<LensTip label={label} shortcut={shortcut} />}
+      position="bottom"
+      openDelay={250}
     >
-      {children}
-    </UnstyledButton>
+      <button
+        type="button"
+        className={cx(classes.lens, separated && classes.lensSeparated)}
+        onClick={onClick}
+        aria-pressed={active === undefined ? undefined : active}
+        aria-label={label}
+      >
+        {children}
+      </button>
+    </Tooltip>
   );
 }
 
-function SettingsButton() {
-  const handlers = useSettingsStore((state) => state.handlers);
-  return (
-    <Button
-      variant="light"
-      size="sm"
-      color="gray"
-      className={classes.settingsButton}
-      style={{ height: "36px", minWidth: "36px" }}
-      px={8}
-      onClick={() => handlers.setSettingsModalOpened(true)}
-    >
-      <IconSettings size={16} />
-    </Button>
-  );
-}
-
-function ControlButtons({
+function LensToolbar({
   showKeyboardButton = true,
+  showSettingsButton = true,
   onTryDecalsClick,
 }: {
   showKeyboardButton?: boolean;
+  showSettingsButton?: boolean;
   onTryDecalsClick?: () => void;
 }) {
   const game = useGameData();
@@ -88,98 +85,70 @@ function ControlButtons({
   const showPds = !!game?.tilesWithPds?.size;
 
   return (
-    <Box className={classes.toolRack}>
-      <ToolButton
+    <Box className={classes.lenses} role="toolbar" aria-label="Map lenses">
+      <Lens
         active={settings.planetTypesMode}
-        label="Planet types"
+        label="Planet traits"
+        shortcut="Y"
         onClick={handlers.togglePlanetTypesMode}
       >
-        <img
-          src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
-          alt=""
-          height={16}
-          className={classes.toolIcon}
-        />
-      </ToolButton>
-
-      <ToolButton
+        <IconWorld size={LENS_ICON_SIZE} />
+      </Lens>
+      <Lens
         active={settings.techSkipsMode}
         label="Tech skips"
+        shortcut="T"
         onClick={handlers.toggleTechSkipsMode}
       >
-        {TECH_SKIP_ICONS.map((src, index) => (
-          <img
-            key={src}
-            src={src}
-            alt=""
-            height={16}
-            className={classes.toolIcon}
-            style={index > 0 ? { marginLeft: -4 } : undefined}
-          />
-        ))}
-      </ToolButton>
-
-      <ToolButton
+        <IconPlayerSkipForward size={LENS_ICON_SIZE} />
+      </Lens>
+      <Lens
         active={settings.attachmentsMode}
         label="Attachments"
+        shortcut="A"
         onClick={handlers.toggleAttachmentsMode}
       >
-        <IconLinkPlus size={16} />
-      </ToolButton>
-
+        <IconPaperclip size={LENS_ICON_SIZE} />
+      </Lens>
       {showPds && (
-        <ToolButton
+        <Lens
           active={settings.showPDSLayer}
-          accent="blue"
           label="PDS coverage"
+          shortcut="P"
           onClick={handlers.togglePdsMode}
         >
-          <img
-            src={cdnImage("/units/gry_pd.webp")}
-            alt=""
-            height={20}
-            className={classes.toolIcon}
-          />
-        </ToolButton>
+          <IconTarget size={LENS_ICON_SIZE} />
+        </Lens>
       )}
-
-      {showKeyboardButton && (
-        <ToolButton
-          label="Keyboard shortcuts"
-          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
-        >
-          <IconKeyboard size={16} />
-        </ToolButton>
-      )}
-
-      <ToolButton
+      <Lens
         active={settings.overlaysEnabled}
-        accent="blue"
         label="Control overlays"
+        shortcut="O"
         onClick={handlers.toggleOverlays}
       >
-        <svg
-          width="16"
-          height="18"
-          viewBox="0 0 16 18"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
-            fill="currentColor"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="miter"
-          />
-        </svg>
-      </ToolButton>
-
+        <IconFlag size={LENS_ICON_SIZE} />
+      </Lens>
       {onTryDecalsClick && (
-        <ToolButton label="Try unit decals" onClick={onTryDecalsClick}>
-          <IconSticker size={16} />
-        </ToolButton>
+        <Lens label="Try unit decals" separated onClick={onTryDecalsClick}>
+          <IconBrush size={LENS_ICON_SIZE} />
+        </Lens>
+      )}
+      {showKeyboardButton && (
+        <Lens
+          label="Keyboard shortcuts"
+          separated={!onTryDecalsClick}
+          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
+        >
+          <IconKeyboard size={LENS_ICON_SIZE} />
+        </Lens>
+      )}
+      {showSettingsButton && (
+        <Lens
+          label="Settings"
+          onClick={() => handlers.setSettingsModalOpened(true)}
+        >
+          <IconSettings size={LENS_ICON_SIZE} />
+        </Lens>
       )}
     </Box>
   );
@@ -201,7 +170,7 @@ function DiscordLinks() {
         target="_blank"
         rel="noopener noreferrer"
         size="compact-xs"
-        leftSection={<IconHash size={14} />}
+        leftSection={<IconHash size={13} />}
         px={6}
         className={classes.discordButton}
       >
@@ -218,17 +187,11 @@ function DesktopTabsControls({
 }) {
   return (
     <>
-      <Group gap={4} pl={8} pb={4}>
-        <ControlButtons onTryDecalsClick={onTryDecalsClick} />
-        <SettingsButton />
-      </Group>
-
-      <div style={{ flex: 1 }} />
-
-      <Group gap={4} mr={12}>
+      <LensToolbar onTryDecalsClick={onTryDecalsClick} />
+      <div className={classes.spacer} />
+      <Group gap={4} mr={14} wrap="nowrap" className={classes.links}>
         <DiscordLinks />
       </Group>
-
       {!isMobileDevice() && <ThemeSwatches />}
     </>
   );
@@ -256,12 +219,13 @@ function MobileTabsControls({
         style={{ width: "100%" }}
       >
         <Box className={classes.mobileRackScroll}>
-          <ControlButtons
+          <LensToolbar
             showKeyboardButton={false}
+            showSettingsButton={false}
             onTryDecalsClick={onTryDecalsClick}
           />
         </Box>
-        <div style={{ flex: 1 }} />
+        <div className={classes.spacer} />
         {onEventsClick && (
           <ActionIcon
             size="lg"
@@ -286,6 +250,7 @@ function MobileTabsControls({
           size="lg"
           variant="filled"
           color="blue"
+          aria-label="Menu"
           onClick={onMenuClick}
           style={{ marginLeft: 4 }}
         >

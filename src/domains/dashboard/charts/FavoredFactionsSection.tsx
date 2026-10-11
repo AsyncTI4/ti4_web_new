@@ -3,24 +3,22 @@ import * as echarts from "echarts/core";
 import { BarChart } from "echarts/charts";
 import {
   GridComponent,
+  LegendComponent,
   TooltipComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
-import { Group } from "@/ds";
-import { IconUsers } from "@tabler/icons-react";
 import type { FavoredFaction } from "../types";
-import { Panel } from "@/shared/ui/primitives/Panel";
-import Caption from "@/shared/ui/Caption/Caption";
-import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
-import { AXIS_STYLE, TOOLTIP_STYLE } from "./chartTheme";
+import { DashBox } from "../DashboardParts";
+import { useChartTheme } from "./chartTheme";
 import classes from "./AggregateCharts.module.css";
 
-echarts.use([BarChart, GridComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([BarChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer]);
 
 type Props = { factions: FavoredFaction[] };
 
 export function FavoredFactionsSection({ factions }: Props) {
+  const theme = useChartTheme();
   if (factions.length === 0) return null;
 
   const labels = factions.map((f) => f.faction);
@@ -28,20 +26,25 @@ export function FavoredFactionsSection({ factions }: Props) {
   const winsData = factions.map((f) => f.wins);
 
   const option: echarts.EChartsCoreOption = {
-    tooltip: {
-      trigger: "axis",
-      ...TOOLTIP_STYLE,
+    tooltip: { trigger: "axis", ...theme.tooltip },
+    legend: {
+      top: 0,
+      right: 0,
+      itemWidth: 8,
+      itemHeight: 8,
+      textStyle: { color: theme.inkLo, fontFamily: theme.font, fontSize: 10 },
     },
-    grid: { top: 12, left: 6, right: 6, bottom: 2, containLabel: true },
+    grid: { top: 22, left: 6, right: 6, bottom: 2, containLabel: true },
     xAxis: {
       type: "category",
       data: labels,
-      ...AXIS_STYLE,
-      axisLabel: { ...AXIS_STYLE.axisLabel, fontSize: 8 },
+      ...theme.axis,
+      axisLabel: { ...theme.axis.axisLabel, fontSize: 9 },
     },
     yAxis: {
       type: "value",
-      ...AXIS_STYLE,
+      minInterval: 1,
+      ...theme.axis,
     },
     series: [
       {
@@ -49,74 +52,64 @@ export function FavoredFactionsSection({ factions }: Props) {
         type: "bar",
         data: gamesData,
         itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: `rgba(148,163,184,0.5)` },
-            { offset: 1, color: `rgba(148,163,184,0.15)` },
-          ]),
+          color: theme.hair(0.35),
           borderRadius: [2, 2, 0, 0],
         },
-        barWidth: "35%",
+        barWidth: "32%",
+        barGap: "10%",
       },
       {
         name: "Wins",
         type: "bar",
         data: winsData,
         itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: `rgba(234,179,8,0.8)` },
-            { offset: 1, color: `rgba(234,179,8,0.25)` },
-          ]),
+          color: theme.sig("ok", 0.75),
           borderRadius: [2, 2, 0, 0],
         },
-        barWidth: "25%",
+        barWidth: "32%",
       },
     ],
   };
 
   return (
-    <Panel variant="elevated" className={classes.aggregateCard}>
-      <div className={classes.sectionHeader}>
-        <Group gap={6}>
-          <IconUsers size={16} color="var(--ds-gray-4)" />
-          <Caption size="sm">Most Played Factions</Caption>
-        </Group>
-      </div>
-      <FadedDivider orientation="horizontal" />
+    <DashBox label="Most played factions" meta={`${factions.length} factions`}>
       <div className={classes.chartWrap}>
         <ReactEChartsCore
           echarts={echarts}
           option={option}
-          style={{ height: 170, width: "100%" }}
+          style={{ height: 180, width: "100%" }}
           opts={{ renderer: "canvas" }}
         />
       </div>
-      <table className={classes.dataTable}>
-        <thead>
-          <tr>
-            <th>Faction</th>
-            <th className={classes.alignRight}>Games</th>
-            <th className={classes.alignRight}>Wins</th>
-            <th className={classes.alignRight}>Win %</th>
-          </tr>
-        </thead>
-        <tbody>
-          {factions.map((f) => (
-            <tr key={f.faction}>
-              <td>
-                <Group gap={6} wrap="nowrap">
-                  <CircularFactionIcon faction={f.faction} size={14} />
-                  <span className={classes.label}>{f.faction}</span>
-                </Group>
-              </td>
-              <td className={classes.alignRight}>{f.gamesPlayed}</td>
-              <td className={classes.alignRight}>{f.wins}</td>
-              <td className={classes.alignRight}>
-                {f.winPercent != null ? `${f.winPercent.toFixed(1)}%` : "—"}
-              </td>
+      <div className={classes.tableWrap}>
+        <table className={classes.dataTable}>
+          <thead>
+            <tr>
+              <th>Faction</th>
+              <th className={classes.alignRight}>Games</th>
+              <th className={classes.alignRight}>Wins</th>
+              <th className={classes.alignRight}>Win %</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </Panel>
+          </thead>
+          <tbody>
+            {factions.map((f) => (
+              <tr key={f.faction}>
+                <td className={classes.cellText}>
+                  <span className={classes.factionCell}>
+                    <CircularFactionIcon faction={f.faction} size={14} />
+                    {f.faction}
+                  </span>
+                </td>
+                <td className={classes.alignRight}>{f.gamesPlayed}</td>
+                <td className={classes.alignRight}>{f.wins}</td>
+                <td className={classes.alignRight}>
+                  {f.winPercent != null ? `${f.winPercent.toFixed(1)}%` : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </DashBox>
   );
 }

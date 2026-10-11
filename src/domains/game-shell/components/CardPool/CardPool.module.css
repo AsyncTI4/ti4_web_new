@@ -1,7 +1,10 @@
-.cardCount {
-  font-size: var(--ds-fz-lg);
-  font-weight: var(--weight-rail);
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  line-height: 1;
+.pool {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 8px;
+}
+
+.empty {
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
 }

@@ -1,5 +1,9 @@
 import type { GameEvent } from "@/entities/data/types";
-import type { CombatReplayEvent, MapStatePreview, RetreatSubEvent } from "@/entities/game/types";
+import type {
+  CombatReplayEvent,
+  MapStatePreview,
+  RetreatSubEvent,
+} from "@/entities/game/types";
 import { findMovementBaseline } from "@/entities/replay/compactMovementState";
 import { parseSubEvents, str } from "./eventPayload";
 

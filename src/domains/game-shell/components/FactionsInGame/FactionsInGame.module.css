@@ -1,3 +1,69 @@
-.factionIcon {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+.ring {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 7px;
+}
+
+.seat {
+  --pc: var(--ds-hair-rgb);
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  width: 58px;
+  padding: 6px 0 5px;
+  background:
+    linear-gradient(180deg, rgb(var(--pc) / 0.12), transparent),
+    var(--panel-field-flat);
+  border-radius: var(--ds-radius-sm);
+  box-shadow:
+    inset 0 2px 0 rgb(var(--pc)),
+    inset 0 0 0 1px var(--ds-h14);
+}
+
+.seat[data-passed] {
+  opacity: 0.7;
+}
+
+.vp {
+  font-family: var(--ds-font-data);
+  font-size: var(--text-data);
+  font-weight: var(--weight-title);
+  line-height: 1;
+  color: var(--ds-ink-hi);
+}
+
+.name {
+  max-width: 52px;
+  overflow: hidden;
+  font-size: var(--text-label);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ds-ink);
+}
+
+.tag {
+  position: absolute;
+  top: -7px;
+  padding: 0 4px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  line-height: 12px;
+  text-transform: uppercase;
+  border-radius: var(--ds-radius-xs);
+}
+
+.tag[data-tag="active"] {
+  color: var(--ds-black);
+  background: rgb(var(--ds-sig-ok));
+}
+
+.tag[data-tag="next"] {
+  color: var(--ds-ink-hi);
+  background: var(--ds-ground);
+  box-shadow: inset 0 0 0 1px var(--ds-h35);
 }

@@ -1,0 +1,1 @@
+export { ObjectiveSeatMatrix } from "./ObjectiveSeatMatrix";

@@ -33,37 +33,33 @@
  */
 .ledger {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+  align-items: center;
+  gap: 5px;
   flex-shrink: 0;
-  align-self: center;
-  padding-left: 8px;
-  border-left: 1px solid var(--panel-separator);
+  margin-left: auto;
 }
 
 .ledgerLabel {
-  font-family: var(--font-display);
+  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
   font-weight: var(--weight-rail);
-  letter-spacing: var(--track-rail);
+  letter-spacing: var(--ds-label-track);
   line-height: var(--lh-flush);
   text-transform: uppercase;
-  color: var(--ds-gray-5);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+  color: var(--ds-ink-lo);
 }
 
 .cells {
   display: flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: 5px;
 }
 
+/* One pip per creditor in their colour, the amount owed beneath it. */
 .cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
   min-width: 9px;
 }
 
@@ -73,7 +69,7 @@
   font-weight: var(--weight-data);
   font-variant-numeric: tabular-nums;
   line-height: var(--lh-flush);
-  color: var(--ds-gray-4);
+  color: var(--ds-ink-hi);
 }
 
 /* ---- Expanded sheet (hover) -------------------------------------------

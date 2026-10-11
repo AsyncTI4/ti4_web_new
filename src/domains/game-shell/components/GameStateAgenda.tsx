@@ -1,4 +1,4 @@
-import { Stack, Text } from "@/ds";
+import { IconGavel } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { agendas } from "@/entities/data/agendas";
 import type { GamePhase, GameStateAgenda } from "@/entities/data/types";
@@ -13,17 +13,7 @@ import styles from "./GameStatePanel.module.css";
 
 type AgendaData = (typeof agendas)[number];
 
-function outcomeStatus(agenda: GameStateAgenda | null): string {
-  const resolvedOutcome = agenda?.resolvedOutcome?.trim();
-  if (resolvedOutcome) {
-    return `Vote resolved: ${titleCaseWords(resolvedOutcome)}`;
-  }
-  return Object.entries(agenda?.outcomeVoteCounts ?? {})
-    .map(([outcome, votes]) => `${titleCaseWords(outcome)} ${votes}`)
-    .join(" · ");
-}
-
-function AgendaCardText({
+function AgendaHeading({
   agenda,
   agendaData,
 }: {
@@ -31,40 +21,68 @@ function AgendaCardText({
   agendaData: AgendaData | undefined;
 }) {
   const displayName = agenda ? (agendaData?.name ?? agenda.id) : null;
+  const target = agendaData?.target ?? null;
   return (
-    <Stack gap={4}>
-      <Text size="xs" c="gray.3" fw={700}>
-        Agenda
-      </Text>
-      {displayName ? (
-        <Text size="sm" c="gray.1" fw={700} lh={1.25}>
-          {displayName}
-        </Text>
-      ) : (
-        <Text size="sm" c="blue.2" fw={700} lh={1.25}>
-          Current agenda unavailable
-        </Text>
+    <div className={styles.section}>
+      <span className={styles.agendaTitle}>
+        <span className={styles.seal} aria-hidden="true">
+          <IconGavel size={12} />
+        </span>
+        <b>{displayName ?? "Agenda not revealed"}</b>
+      </span>
+      {(target || agendaData?.text1) && (
+        <span className={styles.agendaText}>{target ?? agendaData?.text1}</span>
       )}
-      {agendaData?.target && (
-        <Text size="xs" c="gray.3">
-          Elect: {agendaData.target}
-        </Text>
-      )}
-      {agendaData?.text1 && (
-        <Text size="xs" c="gray.2" lh={1.35}>
-          {agendaData.text1}
-        </Text>
-      )}
-      {agendaData?.text2?.trim() && (
-        <Text size="xs" c="gray.2" lh={1.35}>
-          {agendaData.text2}
-        </Text>
-      )}
-    </Stack>
+    </div>
   );
 }
 
-function VoteTable({
+/** Outcome tallies as bars scaled to the leading outcome. */
+function OutcomeBars({ agenda }: { agenda: GameStateAgenda | null }) {
+  const outcomes = Object.entries(agenda?.outcomeVoteCounts ?? {}).sort(
+    (a, b) => b[1] - a[1],
+  );
+  if (outcomes.length === 0) return null;
+  const max = Math.max(1, ...outcomes.map(([, votes]) => votes));
+  const resolved = agenda?.resolvedOutcome?.trim().toLowerCase();
+
+  return (
+    <div className={styles.section}>
+      {outcomes.map(([outcome, votes], index) => (
+        <div
+          key={outcome}
+          className={styles.vote}
+          data-lead={
+            index === 0 || outcome.toLowerCase() === resolved || undefined
+          }
+        >
+          <span className={styles.voteName}>{titleCaseWords(outcome)}</span>
+          <span className={styles.voteBar}>
+            <i style={{ width: `${(votes / max) * 100}%` }} />
+          </span>
+          <b className={styles.voteCount}>{votes}</b>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function VoterIcon({ player }: { player: GameStatePlayer }) {
+  if (!player.faction) return null;
+  return (
+    <span title={getPlayerDisplayName(player, player.color)}>
+      <CircularFactionIcon
+        faction={player.faction}
+        size={16}
+        factionImageOverride={player.factionImage}
+        factionImageTypeOverride={player.factionImageType}
+      />
+    </span>
+  );
+}
+
+/** Each seat's cast votes against what it started with. */
+function VoteLedger({
   agenda,
   activePlayer,
   voters,
@@ -74,52 +92,29 @@ function VoteTable({
   voters: GameStatePlayer[];
 }) {
   return (
-    <Stack gap={4}>
-      <Text size="xs" c="gray.3" fw={700}>
-        Vote counts
-      </Text>
-      <div className={styles.voteTableWrapper}>
-        <table className={styles.voteTable}>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Votes</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {voters.map((player) => (
-              <tr
-                key={player.color}
-                className={
-                  player.color === activePlayer
-                    ? styles.currentVoterRow
-                    : undefined
-                }
-              >
-                <td>
-                  <span className={styles.voterName}>
-                    {player.faction && (
-                      <CircularFactionIcon
-                        faction={player.faction}
-                        size={18}
-                        factionImageOverride={player.factionImage}
-                        factionImageTypeOverride={player.factionImageType}
-                      />
-                    )}
-                    <span className={styles.voterNameText}>
-                      {getPlayerDisplayName(player, player.color)}
-                    </span>
-                  </span>
-                </td>
-                <td>{agenda?.castVoteCounts?.[player.color] ?? 0}</td>
-                <td>{agenda?.startVoteCounts?.[player.color] ?? "?"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className={styles.ledger} role="table" aria-label="Votes by seat">
+      <div className={styles.ledgerHead} role="row">
+        <span role="columnheader" />
+        <span role="columnheader" />
+        <span role="columnheader">Cast</span>
+        <span role="columnheader">Of</span>
       </div>
-    </Stack>
+      {voters.map((player) => (
+        <div
+          key={player.color}
+          role="row"
+          className={styles.ledgerRow}
+          data-active={player.color === activePlayer || undefined}
+        >
+          <VoterIcon player={player} />
+          <span className={styles.ledgerName}>
+            {getPlayerDisplayName(player, player.color)}
+          </span>
+          <b>{agenda?.castVoteCounts?.[player.color] ?? "–"}</b>
+          <b>{agenda?.startVoteCounts?.[player.color] ?? "?"}</b>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -139,35 +134,47 @@ export function AgendaRow({
     : undefined;
   const isVoting = phase === "agenda.voting";
   const voters = playerData.filter(isVoteTablePlayer);
-  const status = outcomeStatus(agenda);
+  const stillToVote = voters.filter(
+    (p) => agenda?.castVoteCounts?.[p.color] === undefined,
+  );
+  const resolved = agenda?.resolvedOutcome?.trim();
   const activeStartVotes =
     activePlayer !== null ? agenda?.startVoteCounts[activePlayer] : undefined;
 
   return (
-    <Stack gap="xs">
-      <AgendaCardText agenda={agenda} agendaData={agendaData} />
-
+    <>
+      <AgendaHeading agenda={agenda} agendaData={agendaData} />
+      <OutcomeBars agenda={agenda} />
+      {resolved && (
+        <div className={styles.section}>
+          <span className={styles.agendaText}>
+            Resolved: {titleCaseWords(resolved)}
+          </span>
+        </div>
+      )}
       {isVoting && voters.length > 0 && (
-        <VoteTable
-          agenda={agenda}
-          activePlayer={activePlayer}
-          voters={voters}
-        />
+        <div className={styles.section}>
+          <VoteLedger
+            agenda={agenda}
+            activePlayer={activePlayer}
+            voters={voters}
+          />
+          {stillToVote.length > 0 && (
+            <div className={styles.toVote}>
+              <span className={styles.label}>To vote</span>
+              {stillToVote.map((player) => (
+                <VoterIcon key={player.color} player={player} />
+              ))}
+            </div>
+          )}
+          {activePlayer !== null && activeStartVotes !== undefined && (
+            <span className={styles.agendaText}>
+              {playerNameForColor(playerData, activePlayer)} has{" "}
+              {activeStartVotes} vote{activeStartVotes !== 1 ? "s" : ""} to cast
+            </span>
+          )}
+        </div>
       )}
-
-      {status && (
-        <Text size="xs" c="gray.3">
-          {status}
-        </Text>
-      )}
-
-      {isVoting && activePlayer !== null && activeStartVotes !== undefined && (
-        <Text size="xs" c="blue.3">
-          {playerNameForColor(playerData, activePlayer)} has {activeStartVotes}{" "}
-          vote
-          {activeStartVotes !== 1 ? "s" : ""} to cast
-        </Text>
-      )}
-    </Stack>
+    </>
   );
 }

@@ -1,4 +1,3 @@
-import { Box } from "@/ds";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { PageShell } from "@/layout/PageShell";
 import { DashboardSettingsPanel } from "@/domains/dashboard/DashboardSettingsPanel";
@@ -8,10 +7,10 @@ export default function DashboardSettingsPage() {
   useDocumentTitle("Dashboard Settings");
 
   return (
-    <PageShell mainClassName={classes.main}>
-      <Box className={classes.wrap}>
+    <PageShell footer mainClassName={classes.main}>
+      <div className={classes.wrap}>
         <DashboardSettingsPanel />
-      </Box>
+      </div>
     </PageShell>
   );
 }

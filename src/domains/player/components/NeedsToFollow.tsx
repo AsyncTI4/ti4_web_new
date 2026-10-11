@@ -1,44 +1,30 @@
-import { Group, Text, Box } from "@/ds";
-import { Caption } from "@/shared/ui/Caption/Caption";
+import type { CSSProperties } from "react";
+import { SC_COLORS, SC_NAMES } from "@/entities/data/strategyCardColors";
+import styles from "./RailParts.module.css";
 
 type Props = {
   values: number[];
 };
 
-const SC_COLORS = {
-  1: "red",
-  2: "orange",
-  3: "yellow",
-  4: "green",
-  5: "teal",
-  6: "cyan",
-  7: "blue",
-  8: "violet",
-} as const;
-
+/** Strategy cards this player still owes a follow on, in each card's colour. */
 export function NeedsToFollow({ values }: Props) {
+  if (values.length === 0) return null;
+
   return (
-    <Group gap={8} align="center">
-      {values.length > 0 && (
-        <Box style={{ alignSelf: "center" }}>
-          <Caption>Needs to Follow</Caption>
-        </Box>
-      )}
-      <Group gap={6}>
-        {values.map((scNumber, index) => (
-          <Text
-            key={index}
-            size="sm"
-            fw={700}
-            c={`${SC_COLORS[scNumber as keyof typeof SC_COLORS]}.3`}
-            style={{
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            {scNumber}
-          </Text>
-        ))}
-      </Group>
-    </Group>
+    <span className={styles.follow}>
+      <span className={styles.lbl}>Needs to follow</span>
+      {values.map((scNumber) => (
+        <span
+          key={scNumber}
+          className={styles.scn}
+          title={SC_NAMES[scNumber] ?? String(scNumber)}
+          style={
+            { "--scc": `var(--gd-${SC_COLORS[scNumber] ?? "gray"})` } as CSSProperties
+          }
+        >
+          {scNumber}
+        </span>
+      ))}
+    </span>
   );
 }

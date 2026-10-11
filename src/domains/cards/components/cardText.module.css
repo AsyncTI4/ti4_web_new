@@ -1,0 +1,30 @@
+.lines {
+  display: grid;
+  gap: 6px;
+}
+
+.lines p {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--ds-ink-hi);
+}
+
+.elected {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ds-label-font, var(--font-display));
+  font-size: var(--text-data);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ds-ink-hi);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--text-body);
+  font-style: italic;
+  color: var(--ds-ink-lo);
+}

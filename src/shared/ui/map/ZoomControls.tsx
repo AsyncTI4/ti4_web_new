@@ -1,4 +1,4 @@
-import { Group, Text } from "@/ds";
+import type { ReactNode } from "react";
 import cx from "clsx";
 import { useAppStore } from "@/state/appStore";
 import classes from "./ZoomControls.module.css";
@@ -8,7 +8,7 @@ import {
   IconZoomOut,
   IconScreenShare,
   IconScreenShareOff,
-  IconFocusCentered,
+  IconMaximize,
 } from "@tabler/icons-react";
 
 type Props = {
@@ -21,12 +21,47 @@ type Props = {
    * that control is hidden there rather than reused.
    */
   onFitBoard?: () => void;
+  /** Renders the buttons without their own frosted float, for embedding. */
+  bare?: boolean;
+  /** Extra controls seated after a separator, inside the same float. */
+  trailing?: ReactNode;
 };
+
+const ICON = 15;
+
+function ZoomButton({
+  label,
+  onClick,
+  disabled,
+  active,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      className={cx(classes.zoomButton, active && classes.zoomButtonActive)}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+}
 
 function ZoomControls({
   zoomClass,
   hideFitToScreen = false,
   onFitBoard,
+  bare = false,
+  trailing,
 }: Props) {
   const zoom = useAppStore((state) => state.zoomLevel);
   const storeZoomFitToScreen = useAppStore((state) => state.zoomFitToScreen);
@@ -38,67 +73,58 @@ function ZoomControls({
   const zoomFitToScreen = !hideFitToScreen && storeZoomFitToScreen;
 
   return (
-    <Group className={zoomClass ?? "zoomContainer"} gap={6}>
-      {!zoomFitToScreen && (
-        <Text span className={classes.zoomLabel}>
-          {Math.round(zoom * 100)}%
-        </Text>
+    <div
+      className={cx(
+        zoomClass ?? "zoomContainer",
+        classes.bar,
+        !bare && classes.float,
       )}
-      <button
-        type="button"
-        aria-label="Zoom in"
-        className={classes.zoomButton}
-        onClick={onZoomIn}
-        disabled={zoom >= 2 || zoomFitToScreen}
-      >
-        <IconZoomIn size={16} />
-      </button>
-      <button
-        type="button"
-        aria-label="Zoom out"
-        className={classes.zoomButton}
+    >
+      {!zoomFitToScreen && (
+        <span className={classes.zoomLabel}>{Math.round(zoom * 100)}%</span>
+      )}
+      <ZoomButton
+        label="Zoom out"
         onClick={onZoomOut}
         disabled={zoom <= 0.25 || zoomFitToScreen}
       >
-        <IconZoomOut size={16} />
-      </button>
-      <button
-        type="button"
-        aria-label="Reset zoom"
-        className={classes.zoomButton}
-        onClick={onZoomReset}
+        <IconZoomOut size={ICON} />
+      </ZoomButton>
+      <ZoomButton
+        label="Zoom in"
+        onClick={onZoomIn}
+        disabled={zoom >= 2 || zoomFitToScreen}
       >
-        <IconZoomCancel size={16} />
-      </button>
+        <IconZoomIn size={ICON} />
+      </ZoomButton>
+      <ZoomButton label="Reset zoom" onClick={onZoomReset}>
+        <IconZoomCancel size={ICON} />
+      </ZoomButton>
       {onFitBoard && (
-        <button
-          type="button"
-          aria-label="Fit board to screen"
-          title="Fit board to screen"
-          className={classes.zoomButton}
-          onClick={onFitBoard}
-        >
-          <IconFocusCentered size={16} />
-        </button>
+        <ZoomButton label="Fit board to screen" onClick={onFitBoard}>
+          <IconMaximize size={ICON} />
+        </ZoomButton>
       )}
       {!hideFitToScreen && (
-        <button
-          type="button"
-          aria-label="Fit map to screen"
-          className={cx(
-            classes.zoomButton,
-            zoomFitToScreen && classes.zoomButtonActive,
-          )}
+        <ZoomButton
+          label="Fit map to screen"
           onClick={onZoomScreenSize}
+          active={zoomFitToScreen}
         >
           {zoomFitToScreen ? (
-            <IconScreenShareOff size={16} />
+            <IconScreenShareOff size={ICON} />
           ) : (
-            <IconScreenShare size={16} />
+            <IconScreenShare size={ICON} />
           )}
-        </button>
+        </ZoomButton>
       )}
-    </Group>
+      {trailing && (
+        <>
+          <span className={classes.sep} aria-hidden="true" />
+          {trailing}
+        </>
+      )}
+    </div>
   );
 }
 

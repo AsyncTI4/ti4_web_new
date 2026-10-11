@@ -1,0 +1,47 @@
+.hand {
+  display: flex;
+  gap: 4px;
+}
+
+.back {
+  --hk: var(--gd-gray);
+  position: relative;
+  width: 34px;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: center / cover no-repeat;
+  box-shadow:
+    0 0 0 1px rgba(var(--hk), 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.15);
+}
+
+.back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 0.8));
+}
+
+.back b {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  text-align: center;
+  font-family: var(--font-data);
+  font-size: 16px;
+  font-weight: var(--weight-title);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-white);
+  text-shadow: 0 1px 2px rgb(0 0 0);
+}
+
+.ac {
+  --hk: var(--gd-red);
+}
+
+.pn {
+  --hk: var(--gd-cyan);
+}

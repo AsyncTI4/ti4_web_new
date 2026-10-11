@@ -1,202 +1,55 @@
-import { Button, Group, Stack, Text, Title } from "@/ds";
-import { IconExternalLink, IconTrophy } from "@tabler/icons-react";
-import cx from "clsx";
-import type { DashboardGame, GamePacks } from "./types";
+import type { CSSProperties } from "react";
+import { Link } from "react-router-dom";
+import { IconExternalLink } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon/CircularFactionIcon";
-import { Panel } from "@/shared/ui/primitives/Panel";
-import { StatDisplay } from "@/shared/ui/primitives/StatDisplay";
-import Caption from "@/shared/ui/Caption/Caption";
-import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";
-import { LabelChip } from "./DashboardParts";
-import { formatDate, formatRatio } from "./dashboardFormat";
+import { resolvePrimaryRgb } from "@/entities/lookup/colors";
+import type { DashboardGame } from "./types";
 import classes from "./DashboardPage.module.css";
 
-const STATUS_STYLES = {
-  ACTIVE: { accent: "green", className: classes.accentActive },
-  ABANDONED: { accent: "red", className: classes.accentAbandoned },
-  FINISHED: { accent: "gray", className: classes.accentFinished },
-} as const;
-
-const PACK_ENTRIES: { key: keyof GamePacks; label: string }[] = [
-  { key: "prophecyOfKings", label: "PoK" },
-  { key: "discordantStars", label: "DS" },
-  { key: "thundersEdge", label: "TE" },
-  { key: "twilightsFall", label: "TF" },
-  { key: "absol", label: "Absol" },
-  { key: "miltyMod", label: "Milty" },
-  { key: "franken", label: "Franken" },
-  { key: "votc", label: "VotC" },
-];
-
-function statusStyle(status: DashboardGame["status"]) {
-  if (status === "ACTIVE" || status === "ABANDONED")
-    return STATUS_STYLES[status];
-  return STATUS_STYLES.FINISHED;
+function seatColorStyle(color: string | null): CSSProperties | undefined {
+  const rgb = color ? resolvePrimaryRgb(color) : undefined;
+  if (!rgb) return undefined;
+  return { "--pc": `${rgb.red} ${rgb.green} ${rgb.blue}` } as CSSProperties;
 }
 
-function GameCardHeader({
-  game,
-  onOpen,
-}: {
-  game: DashboardGame;
-  onOpen: () => void;
-}) {
+function VpBar({ score, target }: { score: number; target: number }) {
+  const segments = Math.max(1, Math.min(target, 20));
   return (
-    <div className={classes.gameCardInner}>
-      <Stack gap={4}>
-        <Group gap={6} wrap="wrap">
-          <LabelChip accent={statusStyle(game.status).accent}>
-            {game.status}
-          </LabelChip>
-          {game.isTiglGame && <LabelChip accent="purple">TIGL</LabelChip>}
-          {game.yourSeat.isWinner && (
-            <LabelChip accent="yellow" leftSection={<IconTrophy size={11} />}>
-              WIN
-            </LabelChip>
-          )}
-        </Group>
-        <Title order={5} className={classes.gameTitle} c="gray.1">
-          {game.title}
-        </Title>
-        <Text c="gray.5" size="xs">
-          {game.gameId} &middot; VP {game.vpTarget} &middot; Round {game.round}
-        </Text>
-      </Stack>
-
-      <div className={classes.gameActions}>
-        <Button size="compact-xs" variant="light" color="gray" onClick={onOpen}>
-          Open
-        </Button>
-        {game.actionsJumpUrl && (
-          <Button
-            component="a"
-            href={game.actionsJumpUrl}
-            target="_blank"
-            rel="noreferrer"
-            size="compact-xs"
-            variant="subtle"
-            color="gray"
-            rightSection={<IconExternalLink size={12} />}
-          >
-            Actions
-          </Button>
-        )}
-      </div>
-    </div>
+    <span className={classes.vpbar} aria-hidden="true">
+      {Array.from({ length: segments }, (_, index) => (
+        <i key={index} data-on={index < score || undefined} />
+      ))}
+    </span>
   );
 }
 
-function SeatSection({ seat }: { seat: DashboardGame["yourSeat"] }) {
+/** "Needs you" card: game, what is asked of you, and your VP bar in your colour. */
+export function GameCard({ game }: { game: DashboardGame }) {
+  const seat = game.yourSeat;
   return (
-    <div className={classes.detailSection}>
-      <Caption size="xs">Your Seat</Caption>
-      <Group gap={6} wrap="nowrap">
-        {seat.faction && (
-          <CircularFactionIcon faction={seat.faction} size={18} />
-        )}
-        <Text size="sm" c="gray.2" fw={600}>
-          {seat.faction ?? "Unknown"} &middot; {seat.color ?? "—"}
-        </Text>
-      </Group>
-      <Group gap={8}>
-        <StatDisplay value={seat.score} label="VP" size="xs" />
-        <FadedDivider />
-        <StatDisplay
-          value={formatRatio(seat.diceLuck.ratio)}
-          label="DICE"
-          size="xs"
-        />
-      </Group>
-      {seat.isActivePlayer && (
-        <span className={classes.activeTurn}>
-          <span className={classes.activeTurnDot} />
-          <Text size="10px" c="green.4" fw={600}>
-            YOUR TURN
-          </Text>
+    <div className={classes.gcard} style={seatColorStyle(seat.color)}>
+      <Link to={`/game/${game.gameId}`} className={classes.gcardHead}>
+        {seat.faction && <CircularFactionIcon faction={seat.faction} size={22} />}
+        <b>{game.gameId}</b>
+        <small>R{game.round}</small>
+      </Link>
+      <span className={classes.ask} title={game.title}>
+        <b>Your turn</b> · {game.title}
+      </span>
+      <span className={classes.vpRow}>
+        <VpBar score={seat.score} target={game.vpTarget} />
+        <span className={classes.vpText}>
+          <b>{seat.score}</b>/{game.vpTarget} VP
         </span>
-      )}
-    </div>
-  );
-}
-
-function TableSection({
-  participants,
-}: {
-  participants: DashboardGame["participants"];
-}) {
-  return (
-    <div className={classes.detailSection}>
-      <Caption size="xs">Table</Caption>
-      <Stack gap={4}>
-        {participants.map((p) => (
-          <Group key={p.userId} gap={6} wrap="nowrap">
-            {p.faction && <CircularFactionIcon faction={p.faction} size={16} />}
-            <Text size="xs" c="gray.3">
-              {p.userName}
-            </Text>
-            {p.isWinner && (
-              <IconTrophy size={11} color="var(--ds-yellow-5)" />
-            )}
-          </Group>
-        ))}
-      </Stack>
-    </div>
-  );
-}
-
-function PacksSection({ game }: { game: DashboardGame }) {
-  const events = game.galacticEvents.inEffect;
-  return (
-    <div className={classes.detailSection}>
-      <Caption size="xs">Packs &amp; Events</Caption>
-      <div className={classes.packRow}>
-        {PACK_ENTRIES.filter((p) => game.packs[p.key]).map((p) => (
-          <LabelChip key={p.key} accent="cyan">
-            {p.label}
-          </LabelChip>
-        ))}
-      </div>
-      {events.length > 0 && (
-        <Text size="10px" c="gray.5">
-          Events: {events.map((e) => e.name).join(", ")}
-        </Text>
-      )}
-      <Text size="10px" c="gray.6">
-        Created {formatDate(game.createdAtEpochMs)} &middot; Updated{" "}
-        {formatDate(game.lastUpdatedEpochMs)}
-      </Text>
-    </div>
-  );
-}
-
-export function GameCard({
-  game,
-  onOpen,
-}: {
-  game: DashboardGame;
-  onOpen: () => void;
-}) {
-  return (
-    <Panel
-      variant="elevated"
-      className={cx(
-        classes.gameCard,
-        game.yourSeat.isWinner && classes.winnerCard,
-      )}
-    >
-      <div
-        className={cx(
-          classes.gameCardAccent,
-          statusStyle(game.status).className,
+      </span>
+      <span className={classes.gcardLinks}>
+        <Link to={`/game/${game.gameId}`}>Open board</Link>
+        {game.actionsJumpUrl && (
+          <a href={game.actionsJumpUrl} target="_blank" rel="noreferrer">
+            Actions channel <IconExternalLink size={11} />
+          </a>
         )}
-      />
-      <GameCardHeader game={game} onOpen={onOpen} />
-      <FadedDivider orientation="horizontal" />
-      <div className={classes.gameDetails}>
-        <SeatSection seat={game.yourSeat} />
-        <TableSection participants={game.participants} />
-        <PacksSection game={game} />
-      </div>
-    </Panel>
+      </span>
+    </div>
   );
 }

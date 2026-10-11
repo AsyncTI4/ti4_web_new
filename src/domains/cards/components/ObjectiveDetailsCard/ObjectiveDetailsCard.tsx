@@ -1,4 +1,4 @@
-import { Stack, Box, Text, Group, Divider, Image } from "@/ds";
+import { Image } from "@/ds";
 import { IconCheck } from "@tabler/icons-react";
 import { publicObjectives } from "@/entities/data/publicObjectives";
 import { PlayerData } from "@/entities/data/types";
@@ -9,8 +9,8 @@ import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 
 type ObjectiveColor = "orange" | "blue" | "gray";
 
-const CARD_COLORS = { orange: "orange", blue: "blue", gray: "none" } as const;
-const CAPTION_COLORS = { orange: "orange", blue: "blue", gray: "yellow" } as const;
+const CARD_COLORS = { orange: "orange", blue: "sky", gray: "none" } as const;
+const STAGE_GLYPH = { orange: "I", blue: "II", gray: "" } as const;
 
 type Props = {
   objectiveKey: string;
@@ -22,6 +22,42 @@ type Props = {
   progressThreshold?: number;
   showFactionProgress?: boolean;
 };
+
+type ProgressRow = { player: PlayerData; progress: number; isScored: boolean };
+
+function FactionProgress({
+  rows,
+  threshold,
+}: {
+  rows: ProgressRow[];
+  threshold: number;
+}) {
+  return (
+    <div className={classes.progress}>
+      {rows.map(({ player, progress, isScored }) => (
+        <div key={player.faction} className={classes.row} data-scored={isScored || undefined}>
+          <CircularFactionIcon
+            faction={player.faction}
+            factionImageOverride={player.factionImage}
+            factionImageTypeOverride={player.factionImageType}
+            size={20}
+          />
+          <span className={classes.factionName}>
+            {getPlayerFactionDisplayName(player)}
+          </span>
+          <span className={classes.playerName}>{player.userName}</span>
+          <span className={classes.value}>
+            {isScored ? (
+              <IconCheck size={15} aria-label="Scored" />
+            ) : (
+              `${progress}/${threshold}`
+            )}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function ObjectiveDetailsCard({
   objectiveKey,
@@ -41,86 +77,44 @@ export function ObjectiveDetailsCard({
 
   const scoredFactionsSet = new Set(scoredFactions);
 
-  const factionProgressData = playerData.map((player) => ({
+  const rows = playerData.map((player) => ({
     player,
     progress: factionProgress[player.faction] || 0,
     isScored: scoredFactionsSet.has(player.faction),
   }));
 
   // Scored first, then unscored by highest progress
-  factionProgressData.sort((a, b) => {
+  rows.sort((a, b) => {
     if (a.isScored !== b.isScored) return a.isScored ? -1 : 1;
     if (a.isScored) return 0;
     return b.progress - a.progress;
   });
 
+  const glyph = hasRedTape ? (
+    <Image src="/redTape.png" alt="" />
+  ) : (
+    STAGE_GLYPH[color]
+  );
+
   return (
-    <DetailsCard width={320} color={CARD_COLORS[color]}>
-      <Stack gap="md">
-        <DetailsCard.Title
-          title={objectiveData.name}
-          icon={hasRedTape && <Image src="/redTape.png" w={48} h={48} />}
-          subtitle={`${objectiveData.phase} Phase`}
-          caption={`${objectiveData.points} VP`}
-          captionColor={CAPTION_COLORS[color]}
+    <DetailsCard width={340} color={CARD_COLORS[color]}>
+      <DetailsCard.Title
+        title={objectiveData.name}
+        type={
+          color === "gray" ? "Objective" : `Stage ${STAGE_GLYPH[color]} objective`
+        }
+        meta={[`${objectiveData.phase} phase`, `${objectiveData.points} VP`]}
+        icon={
+          glyph ? <DetailsCard.Icon shape="round" icon={glyph} /> : undefined
+        }
+      />
+      <DetailsCard.Section title="Requirement" content={objectiveData.text} />
+      {showFactionProgress && (
+        <DetailsCard.Section
+          title="Progress"
+          content={<FactionProgress rows={rows} threshold={progressThreshold} />}
         />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        <DetailsCard.Section title="Requirement" content={objectiveData.text} />
-
-        {showFactionProgress && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-
-            <DetailsCard.Section
-              title="Faction Progress"
-              content={
-                <Stack gap={6}>
-                  {factionProgressData.map(({ player, progress, isScored }) => (
-                    <Group
-                      key={player.faction}
-                      gap="sm"
-                      align="center"
-                      wrap="nowrap"
-                    >
-                      <Box w={24} className={classes.factionIconBox}>
-                        <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={24} />
-                      </Box>
-                      <Text
-                        size="xs"
-                        c="gray.4"
-                        fw={600}
-                        tt="uppercase"
-                        className={classes.factionName}
-                      >
-                        {getPlayerFactionDisplayName(player)}
-                      </Text>
-                      <Text size="sm" c="gray.3" className={classes.playerName}>
-                        {player.userName.length > 12
-                          ? `${player.userName.slice(0, 12)}...`
-                          : player.userName}
-                      </Text>
-                      <Box w={40} className={classes.progressValueBox}>
-                        {isScored ? (
-                          <IconCheck
-                            size={18}
-                            color="var(--ds-green-5)"
-                          />
-                        ) : (
-                          <Text size="sm" c="gray.4" fw={500}>
-                            {progress}/{progressThreshold}
-                          </Text>
-                        )}
-                      </Box>
-                    </Group>
-                  ))}
-                </Stack>
-              }
-            />
-          </>
-        )}
-      </Stack>
+      )}
     </DetailsCard>
   );
 }

@@ -8,6 +8,7 @@ import {
   isValidElement,
   useCallback,
   useContext,
+  useRef,
   useState,
   type CSSProperties,
   type ReactElement,
@@ -68,10 +69,10 @@ export type ModalProps = {
   onClose: () => void;
   title?: ReactNode;
   children?: ReactNode;
-  size?: SizeKey | number | string;
+  size?: SizeKey | number | (string & {});
   centered?: boolean;
   padding?: SizeKey | number;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
   withCloseButton?: boolean;
   closeOnClickOutside?: boolean;
   closeOnEscape?: boolean;
@@ -89,6 +90,8 @@ export type ModalProps = {
   trapFocus?: boolean;
   returnFocus?: boolean;
   hiddenFrom?: string;
+  /** Decision row (cancel / confirm). Rendered only when there is a decision to make. */
+  footer?: ReactNode;
 };
 
 /**
@@ -115,7 +118,9 @@ export function Modal({
   className,
   keepMounted,
   hiddenFrom,
+  footer,
 }: ModalProps) {
+  const popupRef = useRef<HTMLDivElement>(null);
   const width = fullScreen ? "100%" : typeof size === "number" ? size : MODAL_SIZE[size as SizeKey] ?? size;
   return (
     <Dialog.Root
@@ -137,6 +142,8 @@ export function Modal({
           style={{ zIndex, paddingTop: centered || fullScreen ? undefined : yOffset, ...styles.inner }}
         >
           <Dialog.Popup
+            ref={popupRef}
+            initialFocus={popupRef}
             className={cx(classes.modal, classNames.content, className)}
             style={{ width, borderRadius: r !== undefined ? radius(r) : undefined, ...styles.content }}
           >
@@ -157,6 +164,11 @@ export function Modal({
             <div className={cx(classes.modalBody, classNames.body)} style={{ padding: spacing(padding), ...styles.body }}>
               {children}
             </div>
+            {footer ? (
+              <div className={classes.modalFooter} style={{ padding: `var(--ds-space-sm) ${spacing(padding)}` }}>
+                {footer}
+              </div>
+            ) : null}
           </Dialog.Popup>
         </div>
       </Dialog.Portal>
@@ -236,7 +248,7 @@ export type PopoverProps = {
   position?: FloatingPosition;
   offset?: number;
   withArrow?: boolean;
-  width?: number | string | "target";
+  width?: number | (string & {}) | "target";
   shadow?: SizeKey;
   zIndex?: number | string;
   closeOnClickOutside?: boolean;
@@ -250,7 +262,7 @@ export type PopoverProps = {
   returnFocus?: boolean;
   keepMounted?: boolean;
   middlewares?: unknown;
-  radius?: SizeKey | number | string;
+  radius?: SizeKey | number | (string & {});
   arrowSize?: number;
 };
 

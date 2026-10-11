@@ -1,73 +1,69 @@
-import { Box, Text } from "@/ds";
+import { Box } from "@/ds";
 import cx from "clsx";
 import { PlayerData } from "@/entities/data/types";
-import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
-import { useOrderedFactions } from "@/domains/objectives/hooks/useOrderedFactions";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
+import { getSeatOrder } from "@/domains/objectives/hooks/useOrderedFactions";
 import styles from "./ScoreTracker.module.css";
 
 type Props = {
   playerData: PlayerData[];
   vpsToWin: number;
+  /** "mini" is the condensed track for the Panels view's table rail. */
+  variant?: "full" | "mini";
 };
 
-function ScoreTracker({ playerData, vpsToWin }: Props) {
+/**
+ * Victory track. The square one short of victory lights only while someone is
+ * standing on it: a marker that appears exactly when the table should be nervous.
+ */
+function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
   const scorePositions = Array.from({ length: vpsToWin + 1 }, (_, i) => i);
-
-  const orderedFactions = useOrderedFactions(playerData);
-
-  const seatOrder = (player: PlayerData) => orderedFactions.indexOf(player.faction);
   const factionsByScore = new Map<number, PlayerData[]>();
-  for (const player of [...playerData].sort((a, b) => seatOrder(a) - seatOrder(b))) {
-    factionsByScore.set(player.totalVps, [...(factionsByScore.get(player.totalVps) ?? []), player]);
+  for (const player of getSeatOrder(playerData)) {
+    const score = Math.min(player.totalVps, vpsToWin);
+    factionsByScore.set(score, [...(factionsByScore.get(score) ?? []), player]);
   }
+  const iconSize = variant === "mini" ? 14 : 24;
 
   return (
-    <Box mb={8} className={styles.scoreTracker}>
-      {scorePositions.map((score, index) => {
+    <Box
+      className={cx(styles.track, variant === "mini" && styles.mini)}
+      style={{ "--squares": vpsToWin + 1 } as React.CSSProperties}
+    >
+      {scorePositions.map((score) => {
         const playersAtScore = factionsByScore.get(score) ?? [];
         const isWinningScore = score === vpsToWin;
-        /* Only meaningful while someone is actually standing there. */
-        const isOnTheBrink =
-          score === vpsToWin - 1 && playersAtScore.length > 0;
+        const isOnTheBrink = score === vpsToWin - 1 && playersAtScore.length > 0;
 
         return (
           <Box
             key={score}
-            className={cx(
-              styles.scoreSquare,
-              isWinningScore && styles.winningScore,
-              isOnTheBrink && styles.brinkScore,
-              index === 0 && styles.firstSquare,
-              index === scorePositions.length - 1 && styles.lastSquare
-            )}
+            className={styles.square}
+            data-win={isWinningScore || undefined}
+            data-threat={isOnTheBrink || undefined}
             title={
               isOnTheBrink
-                ? `One point from victory: ${playersAtScore
-                    .map((p) => p.faction)
-                    .join(", ")}`
+                ? `One point from victory: ${playersAtScore.map((p) => p.faction).join(", ")}`
                 : undefined
             }
           >
-            <Text
-              className={cx(styles.scoreNumber, isWinningScore && styles.winningNumber)}
-            >
-              {score}
-            </Text>
-
+            <span className={styles.num}>{score}</span>
             {playersAtScore.length > 0 && (
-              <Box className={styles.factionTokens}>
+              <span className={styles.tokens}>
                 {playersAtScore.map((player) => (
-                  <Box key={player.faction} className={styles.tokenContainer}>
-                    <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={32} />
-                  </Box>
+                  <FactionIcon
+                    key={player.faction}
+                    faction={player.faction}
+                    factionImageOverride={player.factionImage}
+                    factionImageTypeOverride={player.factionImageType}
+                    alt={player.faction}
+                    title={`${player.faction} · ${player.totalVps} VP`}
+                    w={iconSize}
+                    h={iconSize}
+                    className={styles.token}
+                  />
                 ))}
-              </Box>
-            )}
-
-            {isWinningScore && (
-              <Box className={styles.victoryCrown}>
-                <Text className={styles.victoryIcon}>★</Text>
-              </Box>
+              </span>
             )}
           </Box>
         );

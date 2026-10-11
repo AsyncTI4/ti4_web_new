@@ -1,9 +1,9 @@
-import { Box, Text, Group, Stack, Image } from "@/ds";
+import { Box, Image } from "@/ds";
 import type { KeyboardEvent } from "react";
-import { Shimmer } from "@/shared/ui/Shimmer";
 import { Objective, PlayerData } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { publicObjectives } from "@/entities/data/publicObjectives";
+import { getSeatOrder } from "@/domains/objectives/hooks/useOrderedFactions";
 import styles from "./ExpandedObjectiveCard.module.css";
 import ProgressObjectiveDisplay from "./ProgressObjectiveDisplay";
 import { ObjectiveDetailsCard } from "@/domains/cards/components/ObjectiveDetailsCard/ObjectiveDetailsCard";
@@ -40,22 +40,22 @@ function ExpandedObjectiveCard({
     objective.revealed &&
     Boolean(objectiveData?.text);
 
-  const factionProgressData = playerData
-    .map((player) => {
-      const progress = objective.factionProgress[player.faction] || 0;
-      return {
-        player,
-        progress,
-        isScored: objective.scoredFactions.includes(player.faction),
-        isAtThreshold: progress >= objective.progressThreshold,
-      };
-    })
-    .sort((a, b) => a.player.faction.localeCompare(b.player.faction));
+  const factionProgressData = getSeatOrder(playerData).map((player) => {
+    const progress = objective.factionProgress[player.faction] || 0;
+    return {
+      player,
+      progress,
+      isScored: objective.scoredFactions.includes(player.faction),
+      isAtThreshold:
+        objective.progressThreshold > 0 &&
+        progress >= objective.progressThreshold,
+    };
+  });
 
   const renderProgressDisplay = () => {
     if (!objective.revealed) return null;
 
-    if (objective.progressThreshold > 0) {
+    if (color !== "gray") {
       return (
         <ProgressObjectiveDisplay
           factionProgressData={factionProgressData}
@@ -73,42 +73,34 @@ function ExpandedObjectiveCard({
     ));
   };
 
-  const cardContent = (
-    <Shimmer
-      color={color}
-      p={objective.revealed ? "xs" : "6px 10px"}
-      className={`${styles.objectiveCard} ${styles[color]} ${!objective.revealed ? styles.unrevealed : ""}`}
-    >
-      <Group className={styles.mainRow}>
-        {objective.hasRedTape && (
-          <Image
-            {...lowPriorityImageProps}
-            className={styles.redTape}
-            src={"/redTape.png"}
-            w={23}
-            h={23}
-          />
-        )}
-        <Box className={styles.contentArea}>
-          <Text
-            className={`${styles.objectiveTitle} ${objective.revealed ? styles.revealed : styles.hidden}`}
-          >
-            {objective.revealed ? objective.name : "UNREVEALED"}
-          </Text>
-          {objective.revealed && objectiveData && showRequirementInline && (
-            <Text className={styles.requirementText} size="sm">
-              {objectiveData.text}
-            </Text>
+  const cardContent = objective.revealed ? (
+    <Box className={styles.objectiveCard} data-stage={color}>
+      <Box className={styles.contentArea}>
+        <span className={styles.objectiveTitle}>
+          {objective.hasRedTape && (
+            <Image
+              {...lowPriorityImageProps}
+              className={styles.redTape}
+              src={"/redTape.png"}
+              alt="Red tape"
+              w={16}
+              h={16}
+            />
           )}
-        </Box>
-        <Stack>
-          <Group className={styles.progressBadges}>
-            {renderProgressDisplay()}
-          </Group>
-        </Stack>
-      </Group>
-    </Shimmer>
+          {objective.name}
+        </span>
+        {objectiveData && showRequirementInline && (
+          <span className={styles.requirementText}>{objectiveData.text}</span>
+        )}
+      </Box>
+      <Box className={styles.progressBadges}>{renderProgressDisplay()}</Box>
+    </Box>
+  ) : (
+    <Box className={styles.unrevealed} data-stage={color}>
+      Unrevealed
+    </Box>
   );
+
   const handleDetailsKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();

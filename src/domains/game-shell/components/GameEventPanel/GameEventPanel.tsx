@@ -1,89 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useParams } from "react-router-dom";
 import { Loader, Text, Tooltip } from "@/ds";
 import {
-  IconArrowsLeftRight,
   IconMap2,
+  IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconTrophy,
 } from "@tabler/icons-react";
+import cx from "clsx";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { useGameEvents } from "@/api/useGameEvents";
-import { useMapStatePreview } from "@/state/useGameContext";
+import { useGameData, useMapStatePreview } from "@/state/useGameContext";
 import { usePlayerData } from "@/api/usePlayerData";
 import type { GameEvent, PlayerDataResponse } from "@/entities/data/types";
+import { getPlayerDisplayName } from "../gameStatePlayers";
 import {
   formatAbsoluteTime,
   formatRelativeTime,
   prettifyId,
   resolveSystemName,
 } from "./eventFormatting";
-import { num, str, stringArray, type SystemNameResolver } from "./eventPayload";
-import { EventBody } from "./EventBody";
+import { str, stringArray, type SystemNameResolver } from "./eventPayload";
+import { EventBody, type PlayerNameResolver } from "./EventBody";
+import {
+  EVENT_FILTERS,
+  eventKind,
+  matchesFilter,
+  type EventFilter,
+} from "./eventKinds";
+import { countSince, lastOwnEventSeq, useMyFaction } from "./sinceLastTurn";
 import {
   buildMapTimeline,
   groupByRound,
   type MapPreviewFrame,
 } from "./mapTimeline";
-import cx from "clsx";
 import classes from "./GameEventPanel.module.css";
 
 const MAX_VISIBLE = 150;
+const MAX_TICKS = 160;
+const PLAY_BEAT_MS = 900;
 const selectTilePositions = (data: PlayerDataResponse) => data.tilePositions;
 
-function ActorIcon({ faction }: { faction: string | null }) {
-  if (!faction) return <span className={classes.glyph}>·</span>;
-  return (
-    <Tooltip label={prettifyId(faction)} withArrow openDelay={300}>
-      <span className={classes.actorIcon}>
-        <CircularFactionIcon faction={faction} size={20} />
-      </span>
-    </Tooltip>
-  );
-}
-
-function EventRow({
-  event,
-  now,
-  systemName,
-}: {
-  event: GameEvent;
-  now: number;
-  systemName: SystemNameResolver;
-}) {
-  const isTransaction = event.archetype === "TRANSACTION";
-  return (
-    <div
-      className={cx(
-        classes.row,
-        event.archetype === "TURN" && classes.passed,
-        isTransaction && classes.transactionRow,
-      )}
-    >
-      <div className={classes.iconCell}>
-        {isTransaction ? (
-          <span className={classes.transactionEventIcon}>
-            <IconArrowsLeftRight size={16} stroke={2} />
-          </span>
-        ) : (
-          <ActorIcon faction={event.faction} />
-        )}
-      </div>
-      <div className={classes.content}>
-        <EventBody event={event} systemName={systemName} />
-      </div>
-      <Tooltip
-        label={formatAbsoluteTime(event.timestamp)}
-        withArrow
-        openDelay={300}
-      >
-        <span className={classes.time}>
-          {formatRelativeTime(event.timestamp, now)}
-        </span>
-      </Tooltip>
-    </div>
-  );
-}
+type Timeline = ReturnType<typeof buildMapTimeline>;
 
 function isSectionDivider(event: GameEvent): boolean {
   return (
@@ -91,71 +49,105 @@ function isSectionDivider(event: GameEvent): boolean {
   );
 }
 
-/**
- * PHASE_STARTED / ROUND_STARTED render as minimal in-scroll dividers; the
- * sticky round headers already announce each round group.
- */
-function sectionDividerLabel(event: GameEvent): string | null {
-  if (event.archetype === "PHASE_STARTED") {
-    const phase = str(event.payload ?? {}, "phase");
-    return phase ? `${prettifyId(phase)} Phase` : null;
-  }
-  const round = num(event.payload ?? {}, "round");
-  return round !== undefined ? `Round ${round}` : null;
+function phaseDividerLabel(event: GameEvent): string | null {
+  if (event.archetype !== "PHASE_STARTED") return null;
+  const phase = str(event.payload ?? {}, "phase");
+  return phase ? `${prettifyId(phase)} phase` : null;
 }
 
-function SectionDividerRow({ label }: { label: string }) {
-  return (
-    <div className={classes.sectionDivider}>
-      <span className={classes.sectionDividerLabel}>{label}</span>
-      <span className={classes.sectionDividerRule} />
-    </div>
-  );
+/** "statusScoring", "status.scoring" and "STATUS_SCORING" all read "Status scoring". */
+function phaseName(phase: string): string {
+  const words = phase
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/[._-]+/g, " ")
+    .trim()
+    .toLowerCase();
+  return words ? words[0].toUpperCase() + words.slice(1) : "";
 }
 
-function GameEndedRow({ event }: { event: GameEvent }) {
-  const winners = stringArray(event.payload ?? {}, "winner");
-  const verb = winners.length > 1 ? "win" : "wins";
+function toneStyle(tone: string): CSSProperties {
+  return { "--ek": tone } as CSSProperties;
+}
+
+function ActorMark({ event }: { event: GameEvent }) {
+  const kind = eventKind(event);
+  const Glyph = kind.Glyph;
+  const faction =
+    event.archetype === "TRANSACTION"
+      ? (str(event.payload ?? {}, "from") ?? event.faction)
+      : event.faction;
   return (
-    <div className={classes.gameEnded}>
-      <span className={classes.trophy}>
-        <IconTrophy size={20} stroke={2} />
+    <span className={classes.mark}>
+      {faction ? (
+        <Tooltip label={prettifyId(faction)} withArrow openDelay={300}>
+          <span className={classes.faction}>
+            <CircularFactionIcon faction={faction} size={24} />
+          </span>
+        </Tooltip>
+      ) : (
+        <span className={classes.factionEmpty} />
+      )}
+      <span className={classes.glyph} style={toneStyle(kind.tone)}>
+        <Glyph size={9} stroke={2.4} />
       </span>
-      <div className={classes.gameEndedWinners}>
-        {winners.map((w) => (
-          <CircularFactionIcon key={w} faction={w} size={22} />
-        ))}
-        <span className={classes.gameEndedText}>
-          {winners.length > 0
-            ? `${winners.map(prettifyId).join(" & ")} ${verb}!`
-            : "Game ended"}
-        </span>
-      </div>
-    </div>
+    </span>
   );
 }
 
-function TimelineRow({
+function EventRow({
   event,
   now,
+  isNew,
+  isFuture,
+  changesMap,
+  animated,
   systemName,
+  playerName,
+  onPreview,
 }: {
   event: GameEvent;
   now: number;
+  isNew: boolean;
+  isFuture: boolean;
+  changesMap: boolean;
+  animated: boolean;
   systemName: SystemNameResolver;
+  playerName: PlayerNameResolver;
+  onPreview: () => void;
 }) {
-  if (event.archetype === "GAME_ENDED") return <GameEndedRow event={event} />;
-  if (!isSectionDivider(event)) {
-    return <EventRow event={event} now={now} systemName={systemName} />;
-  }
-  const label = sectionDividerLabel(event);
-  return label ? <SectionDividerRow label={label} /> : null;
+  return (
+    <div
+      className={cx(classes.row, event.archetype === "TURN" && classes.quiet)}
+      data-new={isNew || undefined}
+      data-future={isFuture || undefined}
+      onMouseEnter={onPreview}
+    >
+      <ActorMark event={event} />
+      <EventBody
+        event={event}
+        systemName={systemName}
+        playerName={playerName}
+      />
+      <span className={classes.meta}>
+        <Tooltip
+          label={formatAbsoluteTime(event.timestamp)}
+          withArrow
+          openDelay={300}
+        >
+          <time className={classes.time}>
+            {formatRelativeTime(event.timestamp, now)}
+          </time>
+        </Tooltip>
+        {changesMap && <MapChangeIndicator animated={animated} />}
+      </span>
+    </div>
+  );
 }
 
 function MapChangeIndicator({ animated }: { animated: boolean }) {
   return (
     <span
-      className={classes.mapChangeIndicator}
+      className={classes.mapChange}
       title={
         animated
           ? "Hover to replay this map change"
@@ -163,17 +155,188 @@ function MapChangeIndicator({ animated }: { animated: boolean }) {
       }
       aria-label={animated ? "Animated map replay" : "Map state change"}
     >
-      {animated ? (
-        <IconPlayerPlayFilled size={9} />
-      ) : (
-        <IconMap2 size={10} stroke={2} />
-      )}
+      {animated ? <IconPlayerPlayFilled size={8} /> : <IconMap2 size={9} />}
     </span>
   );
 }
 
-function isRenderedRow(event: GameEvent): boolean {
-  return !isSectionDivider(event) || sectionDividerLabel(event) !== null;
+function GameEndedRow({
+  event,
+  playerName,
+}: {
+  event: GameEvent;
+  playerName: PlayerNameResolver;
+}) {
+  const winners = stringArray(event.payload ?? {}, "winner");
+  const verb = winners.length > 1 ? "win" : "wins";
+  return (
+    <div className={classes.gameEnded}>
+      <span className={classes.trophy}>
+        <IconTrophy size={16} stroke={2} />
+      </span>
+      {winners.map((w) => (
+        <CircularFactionIcon key={w} faction={w} size={22} />
+      ))}
+      <span className={classes.gameEndedText}>
+        {winners.length > 0
+          ? `${winners.map(playerName).join(" & ")} ${verb}`
+          : "Game ended"}
+      </span>
+    </div>
+  );
+}
+
+function FilterChips({
+  filter,
+  counts,
+  onChange,
+}: {
+  filter: EventFilter;
+  counts: Record<EventFilter, number>;
+  onChange: (filter: EventFilter) => void;
+}) {
+  return (
+    <div className={classes.filters} role="toolbar" aria-label="Filter events">
+      {EVENT_FILTERS.map((f) => (
+        <button
+          key={f.key}
+          type="button"
+          className={classes.chip}
+          aria-pressed={filter === f.key}
+          style={f.tone ? toneStyle(f.tone) : undefined}
+          onClick={() => onChange(f.key)}
+        >
+          {f.tone && <i aria-hidden="true" />}
+          {f.label}
+          <b>{counts[f.key]}</b>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+type Frame = { event: GameEvent; frame: MapPreviewFrame };
+
+function sampledTicks(frames: Frame[]): { frame: Frame; index: number }[] {
+  const step = Math.max(1, Math.ceil(frames.length / MAX_TICKS));
+  const ticks: { frame: Frame; index: number }[] = [];
+  for (let i = 0; i < frames.length; i += step) {
+    ticks.push({ frame: frames[i], index: i });
+  }
+  return ticks;
+}
+
+/** Round labels above the track, skipping any that would crowd the last. */
+function roundMarks(frames: Frame[]): { round: number; index: number }[] {
+  const marks: { round: number; index: number }[] = [];
+  const minGap = frames.length * 0.08;
+  frames.forEach((f, index) => {
+    const last = marks.at(-1);
+    if (last?.round === f.event.round) return;
+    if (last && index - last.index < minGap) {
+      marks[marks.length - 1] = { round: f.event.round, index };
+      return;
+    }
+    marks.push({ round: f.event.round, index });
+  });
+  return marks.slice(-6);
+}
+
+/**
+ * Replays the board through the log. Each tick is an event in its filter
+ * colour; dragging the knob previews the map at that moment, and play steps
+ * through one event per beat. The far right is "now".
+ */
+function Scrubber({
+  frames,
+  position,
+  playing,
+  onScrub,
+  onTogglePlay,
+}: {
+  frames: Frame[];
+  position: number;
+  playing: boolean;
+  onScrub: (position: number) => void;
+  onTogglePlay: () => void;
+}) {
+  const total = frames.length;
+  const pct = (index: number) => (total === 0 ? 100 : (index / total) * 100);
+  const current = position < total ? frames[position].event : null;
+  const PlayGlyph = playing ? IconPlayerPauseFilled : IconPlayerPlayFilled;
+
+  return (
+    <div className={classes.scrub}>
+      <button
+        type="button"
+        className={classes.play}
+        aria-label={playing ? "Pause replay" : "Replay"}
+        onClick={onTogglePlay}
+        disabled={total === 0}
+      >
+        <PlayGlyph size={11} />
+      </button>
+      <div className={classes.track}>
+        {sampledTicks(frames).map(({ frame, index }) => (
+          <i
+            key={frame.event.seq}
+            style={{
+              left: `${pct(index)}%`,
+              ...toneStyle(eventKind(frame.event).tone),
+            }}
+          />
+        ))}
+        {roundMarks(frames).map((mark) => (
+          <span
+            key={mark.round}
+            className={classes.roundMark}
+            style={{ left: `${pct(mark.index)}%` }}
+          >
+            R{mark.round}
+          </span>
+        ))}
+        <span className={classes.fill} style={{ width: `${pct(position)}%` }} />
+        <span className={classes.knob} style={{ left: `${pct(position)}%` }} />
+        <input
+          type="range"
+          className={classes.range}
+          min={0}
+          max={total}
+          step={1}
+          value={position}
+          aria-label="Replay position"
+          aria-valuetext={current ? `Round ${current.round}` : "Now"}
+          onChange={(e) => onScrub(Number(e.currentTarget.value))}
+        />
+      </div>
+      <span className={classes.when}>
+        {current
+          ? `R${current.round} · ${formatRelativeTime(current.timestamp, Date.now())}`
+          : "now"}
+      </span>
+    </div>
+  );
+}
+
+function filterCounts(events: GameEvent[]): Record<EventFilter, number> {
+  const counts = Object.fromEntries(
+    EVENT_FILTERS.map((f) => [f.key, 0]),
+  ) as Record<EventFilter, number>;
+  for (const e of events) {
+    for (const f of EVENT_FILTERS) {
+      if (matchesFilter(e, f.key)) counts[f.key] += 1;
+    }
+  }
+  return counts;
+}
+
+function scrubFrames(events: GameEvent[], timeline: Timeline): Frame[] {
+  return [...events]
+    .sort((a, b) => a.seq - b.seq)
+    .flatMap((event) => {
+      const frame = timeline.previews.get(event.seq);
+      return frame ? [{ event, frame }] : [];
+    });
 }
 
 export function GameEventPanel({ animated = true }: { animated?: boolean }) {
@@ -182,10 +345,17 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
   const { data: tilePositions } = usePlayerData(gameId, {
     select: selectTilePositions,
   });
+  const gameData = useGameData();
+  const myFaction = useMyFaction();
   const setMapStatePreview = useMapStatePreview();
   const { data, isLoading, isError } = useGameEvents(gameId);
   const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState<EventFilter>("all");
+  const [scrubPosition, setScrubPosition] = useState<number | null>(null);
+  const [playing, setPlaying] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const sinceRef = useRef<HTMLDivElement>(null);
+  const scrolledToSince = useRef(false);
   const activePreviewRef = useRef<
     { snapshotSeq: number; replayEventSeq: number | null } | undefined
   >(undefined);
@@ -229,21 +399,73 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
     setMapStatePreview(null);
   };
 
-  const keptEvents = (data ?? []).filter(
+  const allEvents = data ?? [];
+  const keptEvents = allEvents.filter(
     (e) => e.archetype !== "TURN" || e.payload?.passed === true,
   );
-  const visibleEvents = showAll ? keptEvents : keptEvents.slice(-MAX_VISIBLE);
-  const hasHidden = !showAll && keptEvents.length > MAX_VISIBLE;
-  const timeline = buildMapTimeline(data ?? []);
+  const countable = keptEvents.filter((e) => !isSectionDivider(e));
+  const counts = filterCounts(countable);
+  const filtered = keptEvents.filter((e) =>
+    isSectionDivider(e) ? filter === "all" : matchesFilter(e, filter),
+  );
+  const visibleEvents = showAll ? filtered : filtered.slice(-MAX_VISIBLE);
+  const hasHidden = !showAll && filtered.length > MAX_VISIBLE;
+  const timeline = buildMapTimeline(allEvents);
   const grouped = groupByRound(visibleEvents);
+  const frames = scrubFrames(
+    visibleEvents.filter((e) => !isSectionDivider(e)),
+    timeline,
+  );
+  const lastSeq = lastOwnEventSeq(allEvents, myFaction);
+  const newCount = countSince(countable, lastSeq);
+  const position = Math.min(scrubPosition ?? frames.length, frames.length);
+  const scrubSeq = position < frames.length ? frames[position].event.seq : null;
+
+  const scrubTo = (next: number) => {
+    const clamped = Math.max(0, Math.min(frames.length, next));
+    if (clamped >= frames.length) {
+      setScrubPosition(null);
+      setPlaying(false);
+      clearMapPreview();
+      return;
+    }
+    setScrubPosition(clamped);
+    const { event, frame } = frames[clamped];
+    showMapPreview(event.seq, frame);
+  };
+
+  useEffect(() => {
+    if (!playing) return;
+    const id = setTimeout(() => scrubTo(position + 1), PLAY_BEAT_MS);
+    return () => clearTimeout(id);
+  });
+
+  const togglePlay = () => {
+    if (playing) {
+      setPlaying(false);
+      return;
+    }
+    if (position >= frames.length) scrubTo(0);
+    setPlaying(true);
+  };
+
+  useEffect(() => {
+    if (scrolledToSince.current || !sinceRef.current) return;
+    scrolledToSince.current = true;
+    sinceRef.current.scrollIntoView({ block: "center" });
+  });
 
   const positionToSystemId: Record<string, string> = {};
   for (const entry of tilePositions ?? []) {
-    const [position, systemId] = entry.split(":");
-    if (position && systemId) positionToSystemId[position] = systemId;
+    const [pos, systemId] = entry.split(":");
+    if (pos && systemId) positionToSystemId[pos] = systemId;
   }
-  const systemName: SystemNameResolver = (position) =>
-    resolveSystemName(position, positionToSystemId);
+  const systemName: SystemNameResolver = (pos) =>
+    resolveSystemName(pos, positionToSystemId);
+  const playerName: PlayerNameResolver = (faction) => {
+    const player = gameData?.playerData?.find((p) => p.faction === faction);
+    return getPlayerDisplayName(player, prettifyId(faction));
+  };
 
   if (isLoading) {
     return (
@@ -264,7 +486,7 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
     );
   }
 
-  if (grouped.length === 0) {
+  if (countable.length === 0) {
     return (
       <Text className={classes.stateBox} size="sm" c="dimmed">
         No events recorded yet — events start appearing as the game is played.
@@ -272,41 +494,110 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
     );
   }
 
+  let ruleShown = false;
+  const sinceRuleBefore = (event: GameEvent, previous: GameEvent | null) => {
+    if (ruleShown || lastSeq === null || newCount === 0) return false;
+    if (event.seq > lastSeq) return false;
+    if (previous !== null && previous.seq <= lastSeq) return false;
+    if (previous === null && grouped[0]?.events[0] === event) return false;
+    ruleShown = true;
+    return true;
+  };
+
+  let previous: GameEvent | null = null;
+
   return (
-    <div className={classes.root} onMouseLeave={clearMapPreview}>
-      {grouped.map(({ round, events }) => (
-        <div key={round}>
-          <div className={classes.roundHeader}>
-            <span className={classes.roundLabel}>Round {round}</span>
-            <span className={classes.roundRule} />
-          </div>
-          {events.filter(isRenderedRow).map((event) => {
-            const frame = timeline.previews.get(event.seq);
-            const changesMap = timeline.changedEvents.has(event.seq);
-            return (
-              <div
-                key={event.seq}
-                className={changesMap ? classes.mapChangeEvent : undefined}
-                onMouseEnter={() => {
-                  if (frame) showMapPreview(event.seq, frame);
-                }}
-              >
-                {changesMap && <MapChangeIndicator animated={animated} />}
-                <TimelineRow event={event} now={now} systemName={systemName} />
-              </div>
-            );
-          })}
-        </div>
-      ))}
-      {hasHidden && (
-        <button
-          type="button"
-          className={classes.showEarlier}
-          onClick={() => setShowAll(true)}
-        >
-          Show earlier events
-        </button>
-      )}
+    <div
+      className={classes.root}
+      onMouseLeave={scrubPosition === null ? clearMapPreview : undefined}
+    >
+      <FilterChips
+        filter={filter}
+        counts={counts}
+        onChange={(next) => {
+          setFilter(next);
+          setPlaying(false);
+          setScrubPosition(null);
+          clearMapPreview();
+        }}
+      />
+      <div className={classes.list}>
+        {grouped.length === 0 && (
+          <p className={classes.empty}>No events match this filter.</p>
+        )}
+        {grouped.map(({ round, events }) => (
+          <section key={round} aria-label={`Round ${round}`}>
+            <div className={classes.band}>
+              <b>Round {round}</b>
+              <span className={classes.bandLabel}>
+                {phaseName(events[0]?.phase ?? "")}
+              </span>
+              <span className={cx(classes.bandLabel, classes.bandEnd)}>
+                {events.filter((e) => !isSectionDivider(e)).length} events
+              </span>
+            </div>
+            {events.map((event) => {
+              const showRule = sinceRuleBefore(event, previous);
+              if (!isSectionDivider(event)) previous = event;
+              return (
+                <div key={event.seq}>
+                  {showRule && (
+                    <div ref={sinceRef} className={classes.since}>
+                      Since your last turn · {newCount} new
+                    </div>
+                  )}
+                  <TimelineItem
+                    event={event}
+                    now={now}
+                    isNew={lastSeq !== null && event.seq > lastSeq}
+                    isFuture={scrubSeq !== null && event.seq > scrubSeq}
+                    changesMap={timeline.changedEvents.has(event.seq)}
+                    animated={animated}
+                    systemName={systemName}
+                    playerName={playerName}
+                    onPreview={() => {
+                      const frame = timeline.previews.get(event.seq);
+                      if (frame) showMapPreview(event.seq, frame);
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </section>
+        ))}
+        {hasHidden && (
+          <button
+            type="button"
+            className={classes.showEarlier}
+            onClick={() => setShowAll(true)}
+          >
+            Show earlier events
+          </button>
+        )}
+      </div>
+      <Scrubber
+        frames={frames}
+        position={position}
+        playing={playing}
+        onScrub={(next) => {
+          setPlaying(false);
+          scrubTo(next);
+        }}
+        onTogglePlay={togglePlay}
+      />
     </div>
   );
+}
+
+function TimelineItem(props: Parameters<typeof EventRow>[0]) {
+  const { event, playerName } = props;
+  if (event.archetype === "GAME_ENDED") {
+    return <GameEndedRow event={event} playerName={playerName} />;
+  }
+  if (event.archetype === "ROUND_STARTED") return null;
+  if (event.archetype === "PHASE_STARTED") {
+    const label = phaseDividerLabel(event);
+    return label ? <div className={classes.phaseRule}>{label}</div> : null;
+  }
+  return <EventRow {...props} />;
 }

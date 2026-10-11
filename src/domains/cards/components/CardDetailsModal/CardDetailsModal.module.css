@@ -1,95 +1,102 @@
+/* Deck list: one group per section, its header saying the section once, and
+   each entry filed as a dossier folder with a hazard-stripe edge in the
+   group's signal colour (--dk, a space-separated rgb triplet). */
 .container {
-  width: 100%;
-  overflow-y: auto;
-}
-
-.sectionTitle {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-rail);
-  color: rgba(203, 213, 225, 0.9);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  margin-bottom: var(--ds-space-xs);
-  padding-bottom: 4px;
-  border-bottom: var(--card-details-section-title-border);
-}
-
-.cardGrid {
+  --dk: var(--ds-hair-rgb);
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 16px;
+  width: 100%;
 }
 
-.cardItem {
-  padding: 12px 14px;
-  border-radius: 6px;
-  background: var(--card-details-item-bg);
-  border: var(--card-details-item-border);
-  margin-bottom: 1px;
+.group {
+  display: grid;
+  gap: 4px;
 }
 
-.cardItem:last-child {
-  margin-bottom: 0;
-}
-
-.cardHeader {
+.groupLabel {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 4px;
+  margin-bottom: 2px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: rgb(var(--dk));
+  border-bottom: 1px solid rgb(var(--dk) / 0.245);
+  filter: brightness(1.2);
 }
 
-.cardNameRow {
+.groupCount {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  letter-spacing: 0;
+}
+
+.entry {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 7px 10px 8px 14px;
+  background: linear-gradient(90deg, rgb(var(--dk) / 0.07), rgb(var(--dk) / 0.014) 70%);
+  border: 1px solid rgb(var(--dk) / 0.168);
+  border-left: 0;
+}
+
+.entry::before {
+  content: "";
+  position: absolute;
+  inset: -1px auto -1px 0;
+  width: 5px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgb(var(--dk) / 0.35) 0 4px,
+    rgb(0 0 0 / 0.55) 4px 8px
+  );
+}
+
+.entryHead {
   display: flex;
-  gap: 6px;
-  align-items: center;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
 }
 
-.cardName {
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
-  font-weight: var(--weight-rail);
-  font-size: var(--ds-fz-sm);
-  color: white;
-  line-height: var(--lh-tight);
+.entryName {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--ds-ink-hi);
 }
 
-.copyBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  background: var(--card-details-copy-badge-bg);
-  border: var(--card-details-copy-badge-border);
-  border-radius: 50%;
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-rail);
-  color: white;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
-  line-height: 1;
+.copies {
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink);
 }
 
 .percentage {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 6px;
-  background: var(--card-details-percentage-bg);
-  border: var(--card-details-percentage-border);
-  border-radius: 10px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
-  font-weight: var(--weight-title);
-  font-size: var(--ds-fz-xs);
-  color: rgba(203, 213, 225, 0.95);
-  line-height: 1;
+  flex: none;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-data);
+  color: var(--ds-ink-lo);
 }
 
-.cardText {
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
-  font-size: var(--ds-fz-xs);
-  font-weight: var(--weight-regular);
-  color: rgba(226, 232, 240, 0.92);
+.entryText {
+  margin: 0;
+  font-size: var(--text-data);
   line-height: 1.45;
-  padding-top: 4px;
+  color: var(--ds-ink);
+  white-space: pre-line;
+}
+
+.entryText i {
+  color: var(--ds-ink-lo);
 }

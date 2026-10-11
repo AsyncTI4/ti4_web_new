@@ -1,263 +1,181 @@
-import { Stack, Box, Image, Text, Group, Divider } from "@/ds";
+import { Image } from "@/ds";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { PlanetTraitIcon } from "@/shared/ui/PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "@/shared/ui/TechSkipIcon";
-import classes from "./PlanetDetailsCard.module.css";
 import { PlanetActionCardsSection } from "../PlanetAbilityDetailsCard/PlanetActionCardsSection";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getAttachmentModifiers } from "@/entities/game/planets";
-import { DetailsCard } from "@/shared/ui/DetailsCard";
-import DetailsCardTitle from "@/shared/ui/DetailsCard/DetailsCardTitle";
-import DetailsCardIcon from "@/shared/ui/DetailsCard/DetailsCardIcon";
-
+import { DetailsCard, type DetailsCardColor } from "@/shared/ui/DetailsCard";
 import { TilePlanet } from "@/entities/game/types";
+import classes from "./PlanetDetailsCard.module.css";
 
 type Props = {
   planetId: string;
   planetTile?: TilePlanet;
 };
 
+type PlanetData = NonNullable<ReturnType<typeof getPlanetData>>;
+type Trait = "cultural" | "hazardous" | "industrial";
+
 const PLANET_TYPE_LABEL: Record<string, string> = {
   CULTURAL: "Cultural",
   HAZARDOUS: "Hazardous",
   INDUSTRIAL: "Industrial",
-  FACTION: "Faction Homeworld",
+  FACTION: "Faction homeworld",
   MR: "Mecatol Rex",
 };
+
+const TRAIT_COLOR: Record<string, DetailsCardColor> = {
+  CULTURAL: "blue",
+  HAZARDOUS: "red",
+  INDUSTRIAL: "green",
+  MR: "gold",
+};
+
+const TRAITS = ["cultural", "hazardous", "industrial"];
+
+function signed(value: number) {
+  return `${value > 0 ? "+" : ""}${value}`;
+}
+
+function PlanetGlyph({ planet }: { planet: PlanetData }) {
+  if (planet.planetType === "FACTION" && planet.factionHomeworld) {
+    return <Image src={getFactionImage(planet.factionHomeworld)} alt="" />;
+  }
+  const trait = planet.planetType?.toLowerCase();
+  if (!trait || !TRAITS.includes(trait)) return null;
+  return <PlanetTraitIcon trait={trait as Trait} size={26} />;
+}
+
+function Bonus({ value }: { value: number }) {
+  if (value === 0) return null;
+  return <em>{signed(value)}</em>;
+}
+
+function AttachmentRow({ attachmentId }: { attachmentId: string }) {
+  const data = getAttachmentData(attachmentId);
+  if (!data) return null;
+  const skips = data.techSpeciality?.length
+    ? data.techSpeciality.join(", ").toLowerCase()
+    : null;
+
+  return (
+    <div className={classes.attachment}>
+      <img src={cdnImage(`/attachment_token/${data.imagePath}`)} alt="" />
+      <span className={classes.attachmentName}>{data.name || attachmentId}</span>
+      <span className={classes.attachmentMods}>
+        {data.resourcesModifier ? (
+          <span>
+            <Image src="/pa_resources.png" alt="Resources" w={12} h={12} />+
+            {data.resourcesModifier}
+          </span>
+        ) : null}
+        {data.influenceModifier ? (
+          <span>
+            <InfluenceIcon size={12} />+{data.influenceModifier}
+          </span>
+        ) : null}
+        {skips && <span>{skips} skip</span>}
+      </span>
+    </div>
+  );
+}
 
 export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   const planetData = getPlanetData(planetId);
   if (!planetData) return null;
 
-  const isLegendary = !!planetData.legendaryAbilityText;
-  const isFactionPlanet = planetData.planetType === "FACTION";
-
   const attachments = planetTile?.attachments ?? [];
-  const attachmentModifiers = getAttachmentModifiers(attachments);
-
-  const allTechSpecialties = [
+  const modifiers = getAttachmentModifiers(attachments);
+  const techSpecialties = [
     ...(planetData.techSpecialties || []),
-    ...attachmentModifiers.techSpecialties,
+    ...modifiers.techSpecialties,
+  ];
+  const planetType = planetData.planetType ?? "";
+  const glyph = <PlanetGlyph planet={planetData} />;
+
+  const facts = [
+    {
+      key: "res",
+      icon: <Image src="/pa_resources.png" alt="" w={18} h={18} />,
+      value: planetData.resources,
+      bonus: <Bonus value={modifiers.resources} />,
+      label: planetData.resources === 1 ? "resource" : "resources",
+    },
+    {
+      key: "inf",
+      icon: <InfluenceIcon size={18} />,
+      value: planetData.influence,
+      bonus: <Bonus value={modifiers.influence} />,
+      label: "influence",
+    },
+    ...(techSpecialties.length > 0
+      ? [
+          {
+            key: "skip",
+            icon: (
+              <span className={classes.skips}>
+                {techSpecialties.map((specialty, index) => (
+                  <TechSkipIcon
+                    key={`${specialty}-${index}`}
+                    techType={specialty.toLowerCase() as TechType}
+                    size={16}
+                  />
+                ))}
+              </span>
+            ),
+            label: "skip",
+          },
+        ]
+      : []),
   ];
 
-  const techSpecialtyIcons = allTechSpecialties.map(
-    (specialty, index) => (
-      <TechSkipIcon
-        key={`${specialty}-${index}`}
-        techType={specialty.toLowerCase() as TechType}
-      />
-    )
-  );
-
-  const renderTraitIcon = () => {
-    if (isFactionPlanet && planetData.factionHomeworld) {
-      return (
-        <Image
-          src={getFactionImage(planetData.factionHomeworld)}
-          w={80}
-          h={80}
-        />
-      );
-    }
-
-    const traitKey = planetData.planetType?.toLowerCase();
-    if (
-      traitKey &&
-      ["cultural", "hazardous", "industrial"].includes(traitKey)
-    ) {
-      return (
-        <Box w={80} h={80} className={classes.planetIconContainer}>
-          <PlanetTraitIcon
-            trait={traitKey as "cultural" | "hazardous" | "industrial"}
-            size={40}
-          />
-        </Box>
-      );
-    }
-
-    return null;
-  };
-
-  const traitIcon = renderTraitIcon();
-
   return (
-    <DetailsCard width={320}>
-      <Stack gap="md">
-        <DetailsCardTitle
-          title={planetData.name}
-          subtitle={
-            PLANET_TYPE_LABEL[planetData.planetType ?? ""] ??
-            planetData.planetType
+    <DetailsCard width={340} color={TRAIT_COLOR[planetType] ?? "none"}>
+      <DetailsCard.Title
+        title={planetData.name}
+        type={PLANET_TYPE_LABEL[planetType] ?? (planetType || "Planet")}
+        meta={[planetTile?.controlledBy]}
+        icon={<DetailsCard.Icon shape="planet" icon={glyph} />}
+      />
+      <DetailsCard.Facts facts={facts} />
+      {planetData.legendaryAbilityText && (
+        <DetailsCard.Section
+          title={
+            <span className={classes.legendary}>
+              <Image
+                src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
+                alt=""
+                w={14}
+                h={14}
+              />
+              {planetData.legendaryAbilityName ?? "Legendary ability"}
+            </span>
           }
-          icon={traitIcon ? <DetailsCardIcon icon={traitIcon} /> : undefined}
+          content={planetData.legendaryAbilityText}
         />
-
-        <Divider c="gray.7" opacity={0.8} />
-
-        <Group gap="lg">
-          <Group gap="xs">
-            <Image src="/pa_resources.png" w={20} h={20} />
-            <Text size="sm" c="white" fw={600}>
-              {planetData.resources}
-              {attachmentModifiers.resources !== 0 && (
-                <Text component="span" size="sm" c="green.4" ml={4}>
-                  {attachmentModifiers.resources > 0 ? "+" : ""}
-                  {attachmentModifiers.resources}
-                </Text>
-              )}
-              <Text component="span" ml={4}>
-                Resources
-              </Text>
-            </Text>
-          </Group>
-          <Group gap="xs">
-            <InfluenceIcon size={20} />
-            <Text size="sm" c="white" fw={600}>
-              {planetData.influence}
-              {attachmentModifiers.influence !== 0 && (
-                <Text component="span" size="sm" c="green.4" ml={4}>
-                  {attachmentModifiers.influence > 0 ? "+" : ""}
-                  {attachmentModifiers.influence}
-                </Text>
-              )}
-              <Text component="span" ml={4}>
-                Influence
-              </Text>
-            </Text>
-          </Group>
-        </Group>
-
-        {techSpecialtyIcons.length > 0 && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <Box>
-              <Text size="sm" c="blue.3" mb={4}>
-                Technology Specialties
-              </Text>
-              <Group gap="xs">
-                {techSpecialtyIcons}
-                <Text size="sm" c="gray.2">
-                  {allTechSpecialties.join(", ").toUpperCase()}
-                </Text>
-              </Group>
-            </Box>
-          </>
-        )}
-
-        {attachments.length > 0 && (
-          <>
-            <Divider c="purple.6" opacity={0.8} />
-            <Box>
-              <Group gap="xs" mb={8}>
-                <Image
-                  src={cdnImage("/planet_cards/pc_upgrade.png")}
-                  w={16}
-                  h={16}
-                />
-                <Text size="sm" c="purple.3" fw={500}>
-                  Attachments
-                </Text>
-              </Group>
-              <Stack gap="xs">
-                {attachments.map((attachmentId) => {
-                  const attachmentData = getAttachmentData(attachmentId);
-                  if (!attachmentData) return null;
-
-                  return (
-                    <Group key={attachmentId} gap="xs" align="flex-start">
-                      <img
-                        src={cdnImage(
-                          `/attachment_token/${attachmentData.imagePath}`
-                        )}
-                        style={{
-                          height: 20,
-                          borderRadius: 4,
-                        }}
-                      />
-                      <Box flex={1}>
-                        <Text size="sm" c="white" fw={500}>
-                          {attachmentData.name || attachmentId}
-                        </Text>
-                        {(attachmentData.resourcesModifier ||
-                          attachmentData.influenceModifier ||
-                          attachmentData.techSpeciality) && (
-                          <Group gap="md" mt={2}>
-                            {attachmentData.resourcesModifier && (
-                              <Group gap={2}>
-                                <Image src="/pa_resources.png" w={12} h={12} />
-                                <Text size="xs" c="green.4">
-                                  +{attachmentData.resourcesModifier}
-                                </Text>
-                              </Group>
-                            )}
-                            {attachmentData.influenceModifier && (
-                              <Group gap={2}>
-                                <InfluenceIcon size={12} />
-                                <Text size="xs" c="green.4">
-                                  +{attachmentData.influenceModifier}
-                                </Text>
-                              </Group>
-                            )}
-                            {attachmentData.techSpeciality &&
-                              attachmentData.techSpeciality.length > 0 && (
-                                <Text size="xs" c="blue.4">
-                                  Tech:{" "}
-                                  {attachmentData.techSpeciality
-                                    ?.join(", ")
-                                    .toUpperCase()}
-                                </Text>
-                              )}
-                          </Group>
-                        )}
-                      </Box>
-                    </Group>
-                  );
-                })}
-              </Stack>
-            </Box>
-          </>
-        )}
-
-        {isLegendary && (
-          <>
-            <Divider c="yellow.6" opacity={0.8} />
-            <Box>
-              <Group gap="xs" mb={4}>
-                <Image
-                  src={cdnImage("/planet_cards/pc_legendary_rdy.png")}
-                  w={16}
-                  h={16}
-                />
-                <Text size="sm" c="yellow.3" fw={500}>
-                  Legendary Ability
-                </Text>
-              </Group>
-              <Text size="sm" c="gray.1" lh={1.5}>
-                {planetData.legendaryAbilityText}
-              </Text>
-            </Box>
-          </>
-        )}
-
-        <PlanetActionCardsSection actionCards={planetTile?.actionCards} />
-
-        {planetData.flavourText && (
-          <>
-            <Divider c="gray.7" opacity={0.8} />
-            <Box>
-              <Text size="sm" c="blue.3" mb={4}>
-                Description
-              </Text>
-              <Text size="xs" c="gray.4" lh={1.3} fs="italic" opacity={0.7}>
-                {planetData.flavourText}
-              </Text>
-            </Box>
-          </>
-        )}
-      </Stack>
+      )}
+      {attachments.length > 0 && (
+        <DetailsCard.Section
+          title="Attachments"
+          content={
+            <div className={classes.attachments}>
+              {attachments.map((attachmentId, index) => (
+                <AttachmentRow key={`${attachmentId}-${index}`} attachmentId={attachmentId} />
+              ))}
+            </div>
+          }
+        />
+      )}
+      <PlanetActionCardsSection actionCards={planetTile?.actionCards} />
+      {planetData.flavourText && (
+        <DetailsCard.Flavor quiet>
+          {planetData.flavourText.replace(/^\*+|\*+$/g, "").trim()}
+        </DetailsCard.Flavor>
+      )}
     </DetailsCard>
   );
 }

@@ -1,6 +1,9 @@
 import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router-dom";
 import { ensureLocalUser, setLocalUser } from "@/api/auth/useUser";
 import { getBotApiUrl, toLocalUser, type LoginResponse } from "@/api/auth";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { PageShell } from "@/layout/PageShell";
+import { AuthPrompt } from "@/domains/auth/AuthPrompt";
 
 type LoginLoaderData = {
   error: string;
@@ -42,13 +45,20 @@ export async function loginLoader(
 }
 
 function LoginPage() {
+  useDocumentTitle("Log in · AsyncTI4");
   const loaderData = useLoaderData() as LoginLoaderData | null;
 
-  if (loaderData?.error) {
-    return <div>{loaderData.error}</div>;
-  }
-
-  return <div>LoginScreen</div>;
+  return (
+    <PageShell footer>
+      <AuthPrompt
+        withBrand
+        title="Log in to see your games"
+        body="Your dashboard, settings and seat highlights need your Discord account."
+        error={loaderData?.error}
+        buttonLabel={loaderData?.error ? "Try again with Discord" : undefined}
+      />
+    </PageShell>
+  );
 }
 
 export default LoginPage;

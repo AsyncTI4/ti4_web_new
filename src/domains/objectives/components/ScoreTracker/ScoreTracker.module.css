@@ -1,159 +1,112 @@
-/* Victory track: the raised centrepiece of the dashboard — it lifts off the
-   page while everything else stays flush. Faction tokens are the focus,
-   numerals sit small in the corner like gauge markings */
-.scoreTracker {
-  display: flex;
-  gap: 0;
-  align-items: stretch;
-  width: 100%;
-  min-height: 56px;
-  background: var(--panel-texture), var(--panel-field-bg);
-  border: 1px solid var(--panel-hairline-strong);
-  border-radius: calc(var(--panel-radius) + 3px);
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.5),
-    0 3px 8px rgba(0, 0, 0, 0.4);
-}
-
-.scoreSquare {
-  flex: 1;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 4px;
-  min-height: 56px;
-  border-right: 1px solid var(--panel-separator);
-}
-
-.firstSquare {
-  border-top-left-radius: calc(var(--panel-radius) + 2px);
-  border-bottom-left-radius: calc(var(--panel-radius) + 2px);
-}
-
-.lastSquare {
-  border-top-right-radius: calc(var(--panel-radius) + 2px);
-  border-bottom-right-radius: calc(var(--panel-radius) + 2px);
-  border-right: none;
-}
-
-.winningScore {
-  background: linear-gradient(
-    180deg,
-    rgba(234, 179, 8, 0.12) 0%,
-    rgba(234, 179, 8, 0.03) 100%
-  );
-  box-shadow: inset 0 0 0 1px rgba(234, 179, 8, 0.3);
-}
-
 /*
- * Final approach.
- *
- * Someone sitting one point below the target is the single most consequential
- * state in a game of Twilight Imperium, and the track said nothing about it — the
- * only marked square was the finish line. When, and only when, the penultimate
- * square is occupied, it lights as a threat: an ochre floor rising toward the
- * victory square beside it, and a hairline that ties the two together.
- *
- * Conditional by design. An always-on marker is decoration; a marker that appears
- * exactly when the table should be nervous is information.
+ * Victory track. A row of flat squares on a hairline grid. The victory square
+ * is always marked in relic gold; the square before it lights in stage orange
+ * only while a seat is standing on it.
  */
-.brinkScore {
-  background: linear-gradient(
-    0deg,
-    rgba(234, 179, 8, 0.1) 0%,
-    rgba(234, 179, 8, 0.02) 70%,
-    transparent 100%
-  );
-  box-shadow: inset 0 -2px 0 rgba(234, 179, 8, 0.4);
+.track {
+  display: grid;
+  grid-template-columns: repeat(var(--squares, 11), minmax(34px, 1fr));
+  gap: 1px;
+  padding: 1px;
+  width: 100%;
+  background: var(--ds-h14);
+  margin-bottom: 8px;
 }
 
-.brinkScore .scoreNumber {
-  color: rgba(250, 204, 21, 0.85);
+.square {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  height: 62px;
+  padding: 4px 5px;
+  background: linear-gradient(180deg, var(--ds-ground), var(--ds-deck));
 }
 
-/* A short graduation on the shared edge, reading as the last notch before the
-   finish line. */
-.brinkScore::after {
-  content: "";
-  position: absolute;
-  right: -1px;
-  bottom: 0;
-  width: 1px;
-  height: 14px;
-  background: rgba(234, 179, 8, 0.55);
-  pointer-events: none;
-}
-
-.scoreNumber {
-  position: absolute;
-  top: 4px;
-  left: 8px;
-  font-size: 10px;
-  font-weight: var(--weight-title);
-  letter-spacing: var(--track-label);
-  color: rgba(148, 163, 184, 0.55);
+.num {
+  font-family: var(--ds-font-data);
+  font-size: var(--text-label);
+  font-weight: var(--weight-data);
   line-height: 1;
-  font-family: var(--font-display);
+  color: var(--ds-ink-lo);
 }
 
-.winningNumber {
-  color: rgba(250, 204, 21, 0.85);
-}
-
-.factionTokens {
+.tokens {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
-  align-items: center;
   justify-content: center;
-  max-width: 100%;
+  gap: 1px;
 }
 
-.tokenContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.token {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6));
 }
 
-.victoryCrown {
+.square[data-threat] {
+  background:
+    linear-gradient(0deg, rgb(var(--ds-sig-stage1) / 0.14), rgb(var(--ds-sig-stage1) / 0.02) 70%),
+    var(--ds-deck);
+  box-shadow: inset 0 -2px 0 rgb(var(--ds-sig-stage1) / 0.5);
+}
+
+.square[data-threat] .num {
+  color: rgb(var(--ds-sig-stage1));
+}
+
+.square[data-win] {
+  background: linear-gradient(180deg, rgb(var(--ds-sig-relic) / 0.08), var(--ds-deck));
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-relic) / 0.3);
+}
+
+.square[data-win] .num {
+  color: rgb(var(--ds-sig-relic));
+}
+
+.square[data-win]::after {
+  content: "★";
   position: absolute;
   top: 3px;
   right: 5px;
+  font-size: var(--text-label);
+  line-height: 1;
+  color: rgb(var(--ds-sig-relic));
 }
 
-.victoryIcon {
-  font-size: 10px;
-  color: rgba(250, 204, 21, 0.75);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+/* Mini track for the table rail: numerals centred on top, 14px tokens below. */
+.mini {
+  grid-template-columns: repeat(var(--squares, 11), minmax(0, 1fr));
+  margin-bottom: 0;
+  padding: 0;
+  background: none;
 }
 
-/* Objectives tab at phone width: eleven squares share ~300px, so the numeral
-   centres on its own line and the tokens stack beneath it at a size that fits. */
+.mini .square {
+  min-height: 40px;
+  padding: 2px 0 0;
+  align-content: start;
+  justify-items: center;
+  gap: 2px;
+  background: var(--panel-field-flat);
+}
+
+.mini .num {
+  font-size: var(--text-micro);
+}
+
+.mini .tokens {
+  padding: 0 1px 2px;
+}
+
+.mini .square[data-win]::after {
+  content: none;
+}
+
 @container scoreboard (max-width: 640px) {
-  .scoreSquare {
-    align-items: flex-start;
-    padding: 20px 1px 4px;
+  .track {
+    grid-template-columns: repeat(var(--squares, 11), minmax(0, 1fr));
   }
 
-  .scoreNumber {
-    top: 6px;
-    left: 0;
-    right: 0;
-    text-align: center;
-  }
-
-  .factionTokens {
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-
-  .tokenContainer img {
-    max-width: 22px;
-    max-height: 22px;
-  }
-
-  .victoryCrown {
-    display: none;
+  .square {
+    height: 48px;
+    padding: 3px 2px;
   }
 }
