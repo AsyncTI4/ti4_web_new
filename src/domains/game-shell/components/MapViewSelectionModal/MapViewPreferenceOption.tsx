@@ -1,4 +1,4 @@
-import { Badge, Button, Group, Stack, Text } from "@mantine/core";
+import { Badge, Button, Group, Stack, Text } from "@/ds";
 import type { ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";
 
@@ -30,17 +30,14 @@ export function MapViewPreferenceOption({
       size="lg"
       onClick={() => onSelect(value)}
       leftSection={icon}
-      styles={{
-        root: {
-          height: "auto",
-          padding: "1rem",
-          borderColor: recommended ? "var(--mantine-color-blue-5)" : undefined,
-          backgroundColor:
-            recommended && !selected
-              ? "var(--mantine-color-blue-light)"
-              : undefined,
-        },
-        inner: { justifyContent: "flex-start" },
+      justify="flex-start"
+      style={{
+        height: "auto",
+        padding: "1rem",
+        textTransform: "none",
+        letterSpacing: 0,
+        whiteSpace: "normal",
+        borderColor: recommended ? "var(--ds-blue-5)" : undefined,
       }}
     >
       <Stack gap={4} align="flex-start">

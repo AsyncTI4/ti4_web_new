@@ -1,4 +1,4 @@
-import { Text, TextProps } from "@mantine/core";
+import { Text, TextProps } from "@/ds";
 import cx from "clsx";
 import styles from "./Caption.module.css";
 

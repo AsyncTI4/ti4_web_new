@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import cx from "clsx";
 import { cdnImage } from "@/entities/data/cdnImage";
 import styles from "./FragmentStack.module.css";

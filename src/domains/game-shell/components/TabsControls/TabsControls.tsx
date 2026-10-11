@@ -1,4 +1,4 @@
-import { Box, Button, Group, ActionIcon, UnstyledButton } from "@mantine/core";
+import { Box, Button, Group, ActionIcon, UnstyledButton } from "@/ds";
 import cx from "clsx";
 import type { ReactNode } from "react";
 import {

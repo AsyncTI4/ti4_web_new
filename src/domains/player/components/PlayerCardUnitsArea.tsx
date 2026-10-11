@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from "@mantine/core";
+import { Box, SimpleGrid } from "@/ds";
 import { UnitCard, UnitCardUnavailable } from "./UnitCard";
 import { CommandTokenCard } from "./UnitCard/CommandTokenCard";
 import { StasisInfantryCard } from "./StasisInfantryCard";

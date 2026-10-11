@@ -53,7 +53,7 @@
 }
 
 .numberText {
-	color: var(--mantine-color-dimmed);
+	color: var(--ds-ink-lo);
 	opacity: 0.7;
 }
 

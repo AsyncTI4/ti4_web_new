@@ -15,9 +15,9 @@
   position: relative;
   z-index: 1;
   margin-bottom: 8px;
-  color: var(--mantine-color-red-3);
+  color: var(--ds-red-3);
   font-size: 10px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-rail);
   line-height: 1;
   letter-spacing: var(--track-rail);
@@ -48,7 +48,7 @@
 }
 
 .compactFactionName {
-  color: var(--mantine-color-red-2);
+  color: var(--ds-red-2);
   font-weight: var(--weight-title);
   font-size: 10px;
   text-transform: uppercase;
@@ -100,8 +100,8 @@
 }
 
 .compactCountBadge {
-  color: var(--mantine-color-red-2);
-  font-family: var(--mantine-font-family-monospace);
+  color: var(--ds-red-2);
+  font-family: var(--font-data);
   font-weight: var(--weight-rail);
   font-size: 10px;
   margin-left: 1px;

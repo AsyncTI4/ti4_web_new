@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button } from "@/ds";
 import { SiteHeader } from "@/layout/SiteHeader";
 import hud from "@/shared/ui/hudChrome.module.css";
 

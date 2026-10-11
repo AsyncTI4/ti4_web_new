@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { ReactNode } from "react";
 import classes from "./DetailsCard.module.css";
 

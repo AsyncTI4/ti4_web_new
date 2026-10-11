@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGameState } from "@/api/useGameState";
-import { CloseButton } from "@mantine/core";
+import { CloseButton } from "@/ds";
 import { IconRocket, IconSwords } from "@tabler/icons-react";
 import { UnitDetailsCard } from "@/domains/cards/components/UnitDetailsCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

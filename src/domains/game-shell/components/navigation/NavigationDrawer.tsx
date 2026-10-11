@@ -7,7 +7,7 @@ import {
   Group,
   ActionIcon,
   Button,
-} from "@mantine/core";
+} from "@/ds";
 import {
   IconCards,
   IconHistory,

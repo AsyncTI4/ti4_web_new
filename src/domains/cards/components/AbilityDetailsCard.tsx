@@ -1,4 +1,4 @@
-import { Stack, Divider } from "@mantine/core";
+import { Stack, Divider } from "@/ds";
 import { getAbility } from "@/entities/lookup/abilities";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 

@@ -1,4 +1,4 @@
-import { Group, GroupProps } from "@mantine/core";
+import { Group, GroupProps } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getTokenImagePath } from "@/entities/lookup/tokens";
 import { GhostWormholeTokens } from "./GhostWormholeTokens";

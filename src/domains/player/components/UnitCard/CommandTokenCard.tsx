@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import styles from "./UnitCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { BaseCard } from "./BaseCard";

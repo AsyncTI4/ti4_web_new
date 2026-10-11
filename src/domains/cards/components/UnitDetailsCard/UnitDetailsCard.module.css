@@ -37,7 +37,7 @@
 }
 
 .statLabel {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px !important;
   font-weight: var(--weight-rail) !important;
   letter-spacing: var(--track-rail);
@@ -47,7 +47,7 @@
 
 .statValue {
   line-height: 1;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-variant-numeric: tabular-nums;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .sectionTitle {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);

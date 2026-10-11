@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { getColorValues, toRgb } from "@/entities/lookup/colors";
 import type { Color } from "@/entities/data/types";
 import classes from "../TryUnitDecalsSidebar.module.css";

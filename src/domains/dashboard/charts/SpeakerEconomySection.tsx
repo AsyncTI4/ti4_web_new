@@ -1,4 +1,4 @@
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import { IconCrown, IconCoin } from "@tabler/icons-react";
 import type { SpeakerImpact, EconomyProfile } from "../types";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -24,7 +24,7 @@ export function SpeakerEconomySection({ impact, economy }: Props) {
         <>
           <div className={classes.sectionHeader}>
             <Group gap={6}>
-              <IconCrown size={16} color="var(--mantine-color-yellow-4)" />
+              <IconCrown size={16} color="var(--ds-yellow-4)" />
               <Caption size="sm">Speaker Impact</Caption>
             </Group>
             <Chip accent={deltaPositive ? "green" : "red"} size="xs">
@@ -76,7 +76,7 @@ export function SpeakerEconomySection({ impact, economy }: Props) {
         <>
           <div className={classes.sectionHeader}>
             <Group gap={6}>
-              <IconCoin size={14} color="var(--mantine-color-teal-4)" />
+              <IconCoin size={14} color="var(--ds-teal-4)" />
               <Caption size="sm">Economy</Caption>
             </Group>
             <Text size="10px" c="gray.6">{economy.completedGamesConsidered} games</Text>

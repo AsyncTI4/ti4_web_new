@@ -32,11 +32,11 @@
   position: relative;
   margin: 0;
   padding: 6px 11px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 12px;
   font-weight: var(--weight-data);
   letter-spacing: var(--track-body);
-  color: var(--mantine-color-gray-5) !important;
+  color: var(--ds-gray-5) !important;
   background: var(--socket-bg);
   border: 1px solid var(--panel-hairline);
   border-radius: var(--panel-radius);
@@ -50,14 +50,14 @@
 }
 
 .tab:hover {
-  color: var(--mantine-color-gray-2) !important;
+  color: var(--ds-gray-2) !important;
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel);
 }
 
-.tab[data-active="true"] {
-  color: var(--mantine-color-gray-0) !important;
+.tab[data-active] {
+  color: var(--ds-gray-0) !important;
   background: rgba(255, 255, 255, 0.09);
   border-color: var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel);
@@ -215,13 +215,13 @@
 }
 
 :global(.theme-vaporwavetheme) .tab:hover::after,
-:global(.theme-vaporwavetheme) .tab[data-active="true"]::after {
+:global(.theme-vaporwavetheme) .tab[data-active]::after {
   transform: scaleX(1);
   opacity: 1;
 }
 
 :global(.theme-vaporwavetheme) .tab:hover,
-:global(.theme-vaporwavetheme) .tab[data-active="true"] {
+:global(.theme-vaporwavetheme) .tab[data-active] {
   animation: vw-soft-pulse 7s ease-in-out infinite alternate;
 }
 

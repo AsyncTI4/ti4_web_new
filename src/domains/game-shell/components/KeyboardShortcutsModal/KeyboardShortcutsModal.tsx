@@ -1,4 +1,4 @@
-import { Title, Text, Box, Grid, Group } from "@mantine/core";
+import { Title, Text, Box, Grid, Group } from "@/ds";
 import type { ReactNode } from "react";
 import classes from "./KeyboardShortcutsModal.module.css";
 import { AppModal } from "@/shared/ui/AppModal";

@@ -49,7 +49,7 @@
   min-width: 34px;
   height: 34px;
   padding: 0 8px;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   background: var(--panel-field-bg);
   box-shadow: var(--machined-bevel);
   cursor: pointer;
@@ -72,7 +72,7 @@
 /* Hover lifts the bay's fill, not just its top light. Shadow-only feedback on a
    dark field is invisible, which read as the buttons having lost hover entirely. */
 .toolButton:hover {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.11) 0%,
@@ -93,7 +93,7 @@
 /* Lit bay: the tool is engaged. Brightness carries the state, the hue only
    identifies which tool it is. */
 .toolButtonActive {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   background:
     linear-gradient(
       180deg,
@@ -132,7 +132,7 @@
   background: transparent;
   border: 1px solid var(--panel-hairline-strong);
   color: rgba(226, 232, 240, 0.75) !important;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-data);
   font-size: 12px;
   letter-spacing: var(--track-body);

@@ -80,12 +80,12 @@
    mono like every other comparable value and it leads. */
 .compactId {
   font-family: var(--font-data);
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   line-height: var(--lh-flush);
 }
 
 .compactName {
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   letter-spacing: var(--track-body);
   line-height: var(--lh-flush);
   text-transform: uppercase;

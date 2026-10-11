@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import type { ComponentProps, CSSProperties } from "react";
 import { ExpeditionLayer } from "@/domains/map/components/ExpeditionLayer";
 import { MapTilesRenderer } from "./MapTilesRenderer";

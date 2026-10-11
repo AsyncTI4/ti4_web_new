@@ -16,8 +16,8 @@
 .emptyLabel {
   /* A full step below the card's quietest label. dark-3, not gray-6: this is the
      absence of a holding, and it should be findable without ever being read. */
-  color: var(--mantine-color-dark-3);
-  font-family: var(--mantine-font-family-headings);
+  color: var(--ds-dark-3);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);

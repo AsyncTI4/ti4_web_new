@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import { PlayerEconomyStack } from "./PlayerEconomyStack";
 import { PlayerCardCounts } from "@/domains/player/components/PlayerCardCounts";
 import { CCPool } from "@/domains/player/components/CCPool";

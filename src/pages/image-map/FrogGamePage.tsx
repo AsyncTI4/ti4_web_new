@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Center, Stack, Text, Container } from "@mantine/core";
+import { Center, Stack, Text, Container } from "@/ds";
 import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import MapUI from "@/pages/image-map/MapUI";
 import { useFrogMap } from "@/domains/image-map/hooks/useFrogMap";

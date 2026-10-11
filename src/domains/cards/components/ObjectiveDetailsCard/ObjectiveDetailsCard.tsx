@@ -1,4 +1,4 @@
-import { Stack, Box, Text, Group, Divider, Image } from "@mantine/core";
+import { Stack, Box, Text, Group, Divider, Image } from "@/ds";
 import { IconCheck } from "@tabler/icons-react";
 import { publicObjectives } from "@/entities/data/publicObjectives";
 import { PlayerData } from "@/entities/data/types";
@@ -105,7 +105,7 @@ export function ObjectiveDetailsCard({
                         {isScored ? (
                           <IconCheck
                             size={18}
-                            color="var(--mantine-color-green-5)"
+                            color="var(--ds-green-5)"
                           />
                         ) : (
                           <Text size="sm" c="gray.4" fw={500}>

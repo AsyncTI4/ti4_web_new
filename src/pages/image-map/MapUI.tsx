@@ -1,4 +1,4 @@
-import { AppShell, Flex } from "@mantine/core";
+import { AppShell, Flex } from "@/ds";
 import { MapImageErrorDialog } from "@/domains/image-map/components/MapImageErrorDialog";
 import { ScrollMap } from "@/domains/image-map/components/ScrollMap";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";

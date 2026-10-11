@@ -1,4 +1,4 @@
-import { Stack, Text, Box } from "@mantine/core";
+import { Stack, Text, Box } from "@/ds";
 import { useState } from "react";
 import { CompactObjective } from "../CompactObjective";
 import { Objectives, PlayerData } from "@/entities/data/types";

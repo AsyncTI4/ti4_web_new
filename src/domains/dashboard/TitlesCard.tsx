@@ -1,4 +1,4 @@
-import { Group, ScrollArea, Stack, Text } from "@mantine/core";
+import { Group, ScrollArea, Stack, Text } from "@/ds";
 import { IconTrophy } from "@tabler/icons-react";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import type { TitleSummary } from "./types";
@@ -9,7 +9,7 @@ export function TitlesCard({ titles }: { titles: TitleSummary }) {
   return (
     <Panel variant="elevated" className={classes.sectionCard}>
       <SectionHeader
-        icon={<IconTrophy size={16} color="var(--mantine-color-yellow-5)" />}
+        icon={<IconTrophy size={16} color="var(--ds-yellow-5)" />}
         title="Titles"
         badgeAccent="yellow"
         badge={titles.totalCount}

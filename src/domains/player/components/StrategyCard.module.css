@@ -105,7 +105,7 @@
 }
 
 .numberText {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   font-size: 14px;
   font-weight: var(--weight-rail);
   line-height: 1;
@@ -143,12 +143,12 @@
 }
 
 .numberExhausted .numberText {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .name {
   min-width: 0;
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
   font-size: 14px;
   font-weight: var(--weight-title);
   letter-spacing: var(--track-label);
@@ -160,7 +160,7 @@
 }
 
 .exhausted .name {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 /* Trade goods parked on the card: seated on the baseline, not nudged with a
@@ -182,7 +182,7 @@
   font-size: 14px;
   font-weight: var(--weight-rail);
   line-height: 1;
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   font-variant-numeric: tabular-nums;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }

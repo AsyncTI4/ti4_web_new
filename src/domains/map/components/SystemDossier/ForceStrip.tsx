@@ -1,4 +1,4 @@
-import { Box, Text, Tooltip } from "@mantine/core";
+import { Box, Text, Tooltip } from "@/ds";
 import { IconSwords } from "@tabler/icons-react";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

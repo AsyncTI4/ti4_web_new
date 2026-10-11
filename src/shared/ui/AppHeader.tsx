@@ -1,5 +1,5 @@
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
-import { AppShell, Group, type GroupProps } from "@mantine/core";
+import { AppShell, Group, type GroupProps } from "@/ds";
 import Logo from "@/shared/ui/Logo";
 import classes from "./AppHeader.module.css";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, SegmentedControl, Stack, Text, Title } from "@mantine/core";
+import { Button, SegmentedControl, Stack, Text, Title } from "@/ds";
 import { Panel } from "@/shared/ui/primitives/Panel";
 import type { DashboardGame } from "./types";
 import { GameCard } from "./GameCard";

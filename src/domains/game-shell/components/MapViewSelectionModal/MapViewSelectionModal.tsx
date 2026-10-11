@@ -1,4 +1,4 @@
-import { Stack, Text, Group, Button } from "@mantine/core";
+import { Stack, Text, Group, Button } from "@/ds";
 import { IconLayoutGrid, IconHandMove } from "@tabler/icons-react";
 import { useState, type ReactNode } from "react";
 import type { MapViewPreference } from "@/utils/mapViewPreference";

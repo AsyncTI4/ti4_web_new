@@ -1,4 +1,4 @@
-import { Box, Group } from "@mantine/core";
+import { Box, Group } from "@/ds";
 import cx from "clsx";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import classes from "./FactionTabBar.module.css";

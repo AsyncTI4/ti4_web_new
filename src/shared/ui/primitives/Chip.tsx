@@ -1,4 +1,4 @@
-import { Box, Text, type BoxProps } from "@mantine/core";
+import { Box, Text, type BoxProps } from "@/ds";
 import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";

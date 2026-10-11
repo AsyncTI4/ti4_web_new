@@ -79,7 +79,7 @@
 
 /* Focus styles for accessibility */
 .tile:focus {
-  outline: 2px solid var(--mantine-color-blue-6);
+  outline: 2px solid var(--ds-blue-6);
   outline-offset: 2px;
 }
 

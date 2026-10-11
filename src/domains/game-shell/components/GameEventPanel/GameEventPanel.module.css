@@ -29,7 +29,7 @@
   margin-top: -4px;
 }
 .roundLabel {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
@@ -126,7 +126,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .content {
@@ -156,10 +156,10 @@
   background: transparent;
 }
 .cardEventButton:hover .primary {
-  color: var(--mantine-color-blue-2);
+  color: var(--ds-blue-2);
 }
 .cardEventButton:focus-visible {
-  outline: 2px solid var(--mantine-color-blue-5);
+  outline: 2px solid var(--ds-blue-5);
   outline-offset: 2px;
 }
 .headline {
@@ -187,7 +187,7 @@
 .primary {
   font-size: 13px;
   line-height: 1.25;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   font-weight: var(--weight-data);
   min-width: 0;
   overflow: hidden;
@@ -200,23 +200,23 @@
   gap: 5px;
   font-size: 11px;
   line-height: var(--lh-tight);
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   flex-wrap: wrap;
 }
 .description {
   margin-top: 3px;
   font-size: 11px;
   line-height: 1.35;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 .combat {
-  color: var(--mantine-color-red-4);
+  color: var(--ds-red-4);
   display: inline-flex;
   align-items: center;
   gap: 2px;
 }
 .productionPlace {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -239,7 +239,7 @@
   flex-wrap: wrap;
   font-size: 11px;
   line-height: 1.35;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   min-width: 0;
 }
 .subFaction {
@@ -247,14 +247,14 @@
   align-items: center;
   gap: 4px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   white-space: nowrap;
 }
 .subMuted {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 .subCardName {
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   font-weight: var(--weight-data);
 }
 .subEventButton {
@@ -280,17 +280,17 @@
   background: transparent;
 }
 .subEventButton:hover .subCardName {
-  color: var(--mantine-color-blue-2);
+  color: var(--ds-blue-2);
 }
 .subEventButton:focus-visible {
-  outline: 2px solid var(--mantine-color-blue-5);
+  outline: 2px solid var(--ds-blue-5);
   outline-offset: 1px;
 }
 .mono {
   font-family: var(--font-data);
   font-size: 10.5px;
   line-height: 1.4;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   word-break: break-all;
 }
 
@@ -307,7 +307,7 @@
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   white-space: nowrap;
 }
 .sectionDividerRule {
@@ -322,7 +322,7 @@
 
 .time {
   font-size: 10px;
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   white-space: nowrap;
   padding-top: 2px;
   font-variant-numeric: tabular-nums;
@@ -356,7 +356,7 @@
   border-radius: 4px;
   font-size: 10px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   background: color-mix(in oklab, var(--event-accent) 16%, rgba(148, 163, 184, 0.1));
   border: 1px solid color-mix(in oklab, var(--event-accent) 35%, rgba(148, 163, 184, 0.18));
   white-space: nowrap;
@@ -373,7 +373,7 @@
 .passed .primary {
   font-size: 12px;
   font-style: normal;
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   font-weight: var(--weight-title);
 }
 
@@ -400,16 +400,16 @@
 .gameEndedText {
   font-size: 13px;
   font-weight: var(--weight-rail);
-  color: var(--mantine-color-yellow-2);
+  color: var(--ds-yellow-2);
   letter-spacing: var(--track-body);
 }
 .trophy {
-  color: var(--mantine-color-yellow-4);
+  color: var(--ds-yellow-4);
   display: flex;
 }
 
 .transactionArrow {
-  color: color-mix(in oklab, var(--event-accent) 54%, var(--mantine-color-gray-5));
+  color: color-mix(in oklab, var(--event-accent) 54%, var(--ds-gray-5));
   display: inline-flex;
   align-items: center;
 }
@@ -419,14 +419,14 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: color-mix(in oklab, var(--event-accent) 54%, var(--mantine-color-gray-5));
+  color: color-mix(in oklab, var(--event-accent) 54%, var(--ds-gray-5));
 }
 .transactionGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-top: 6px;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 .transactionSide {
   min-width: 0;
@@ -436,7 +436,7 @@
   font-size: 10px;
   font-weight: var(--weight-rail);
   line-height: var(--lh-tight);
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -466,12 +466,12 @@
   align-self: center;
   margin: 4px 0 8px;
   padding: 4px 12px;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   background: var(--trough-bg);
   border: 1px solid var(--panel-hairline);
   border-radius: var(--panel-radius);
@@ -482,5 +482,5 @@
 }
 .showEarlier:hover {
   background: color-mix(in oklab, var(--event-accent) 20%, rgba(148, 163, 184, 0.12));
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
 }

@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Text } from "@/ds";
 import type { ReactNode } from "react";
 import styles from "./GeneralSectionTitle.module.css";
 

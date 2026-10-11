@@ -1,4 +1,4 @@
-import { Box, Collapse, Text, Stack } from "@mantine/core";
+import { Box, Collapse, Text, Stack } from "@/ds";
 import { useState, type ReactNode } from "react";
 import { ActionCard } from "@/domains/player/components/ActionCard";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";

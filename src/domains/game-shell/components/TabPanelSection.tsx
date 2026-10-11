@@ -1,14 +1,14 @@
-import { Box, Tabs, type TabsPanelProps } from "@mantine/core";
+import { Box, Tabs, type BoxProps } from "@/ds";
 import type { ReactNode } from "react";
 
 type TabPanelSectionProps = {
   value: string;
   children: ReactNode;
   /**
-   * Height passed directly to Mantine Tabs.Panel. Defaults to the content panel height used
+   * Height of the tab panel. Defaults to the content panel height used
    * across the GameMapPage tabbed sections.
    */
-  height?: TabsPanelProps["h"];
+  height?: BoxProps["h"];
   /**
    * Optional className applied to the Box that wraps the panel content so callers
    * can keep their existing CSS modules.

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AppShell } from "@mantine/core";
+import { AppShell } from "@/ds";
 import { usePageThemeClass } from "@/hooks/usePageThemeClass";
 import { APP_HEADER_HEIGHT } from "@/shared/ui/AppHeader";
 import { Footer } from "@/shared/ui/Footer";

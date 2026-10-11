@@ -1,0 +1,197 @@
+/*
+ * AsyncTI4 design system — tokens.
+ *
+ * One token layer for the whole app. Components read only these variables;
+ * themes (styles/*theme.css) override the surface and personality blocks and
+ * never the signal block. The calm calibration is the default: signals are
+ * used at reduced strength and glow is reserved for state.
+ *
+ * Layers, in order:
+ *   1. Palette     — raw colour scales (--ds-<hue>-<0..9>)
+ *   2. Ink         — the three text steps
+ *   3. Surfaces    — ground → field → socket depth order
+ *   4. Hairlines   — the five-step alpha ladder
+ *   5. Signals     — fixed game meaning, rgb triplets
+ *   6. Type        — families, size ladder, weights, tracking, leading
+ *   7. Space       — spacing ladder, radius ladder, lanes
+ *   8. Elevation   — shadows (overlays only)
+ *   9. Motion
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── 1. Palette ─────────────────────────────────────────────────────── */
+  --ds-white: #ffffff;
+  --ds-black: #000000;
+
+  --ds-gray-0: #f8f9fa;
+  --ds-gray-1: #f1f3f5;
+  --ds-gray-2: #e9ecef;
+  --ds-gray-3: #dee2e6;
+  --ds-gray-4: #ced4da;
+  --ds-gray-5: #adb5bd;
+  --ds-gray-6: #868e96;
+  --ds-gray-7: #495057;
+  --ds-gray-8: #343a40;
+  --ds-gray-9: #212529;
+
+  --ds-dark-0: #c9c9c9;
+  --ds-dark-1: #b8b8b8;
+  --ds-dark-2: #828282;
+  --ds-dark-3: #696969;
+  --ds-dark-4: #424242;
+  --ds-dark-5: #3b3b3b;
+  --ds-dark-6: #2e2e2e;
+  --ds-dark-7: #242424;
+  --ds-dark-8: #1f1f1f;
+  --ds-dark-9: #141414;
+
+  --ds-blue-0: #e7f5ff; --ds-blue-1: #d0ebff; --ds-blue-2: #a5d8ff; --ds-blue-3: #74c0fc; --ds-blue-4: #4dabf7;
+  --ds-blue-5: #339af0; --ds-blue-6: #228be6; --ds-blue-7: #1c7ed6; --ds-blue-8: #1971c2; --ds-blue-9: #1864ab;
+  --ds-red-0: #fff5f5; --ds-red-1: #ffe3e3; --ds-red-2: #ffc9c9; --ds-red-3: #ffa8a8; --ds-red-4: #ff8787;
+  --ds-red-5: #ff6b6b; --ds-red-6: #fa5252; --ds-red-7: #f03e3e; --ds-red-8: #e03131; --ds-red-9: #c92a2a;
+  --ds-green-0: #ebfbee; --ds-green-1: #d3f9d8; --ds-green-2: #b2f2bb; --ds-green-3: #8ce99a; --ds-green-4: #69db7c;
+  --ds-green-5: #51cf66; --ds-green-6: #40c057; --ds-green-7: #37b24d; --ds-green-8: #2f9e44; --ds-green-9: #2b8a3e;
+  --ds-yellow-0: #fff9db; --ds-yellow-1: #fff3bf; --ds-yellow-2: #ffec99; --ds-yellow-3: #ffe066; --ds-yellow-4: #ffd43b;
+  --ds-yellow-5: #fcc419; --ds-yellow-6: #fab005; --ds-yellow-7: #f59f00; --ds-yellow-8: #f08c00; --ds-yellow-9: #e67700;
+  --ds-orange-0: #fff4e6; --ds-orange-1: #ffe8cc; --ds-orange-2: #ffd8a8; --ds-orange-3: #ffc078; --ds-orange-4: #ffa94d;
+  --ds-orange-5: #ff922b; --ds-orange-6: #fd7e14; --ds-orange-7: #f76707; --ds-orange-8: #e8590c; --ds-orange-9: #d9480f;
+  --ds-teal-0: #e6fcf5; --ds-teal-1: #c3fae8; --ds-teal-2: #96f2d7; --ds-teal-3: #63e6be; --ds-teal-4: #38d9a9;
+  --ds-teal-5: #20c997; --ds-teal-6: #12b886; --ds-teal-7: #0ca678; --ds-teal-8: #099268; --ds-teal-9: #087f5b;
+  --ds-cyan-0: #e3fafc; --ds-cyan-1: #c5f6fa; --ds-cyan-2: #99e9f2; --ds-cyan-3: #66d9e8; --ds-cyan-4: #3bc9db;
+  --ds-cyan-5: #22b8cf; --ds-cyan-6: #15aabf; --ds-cyan-7: #1098ad; --ds-cyan-8: #0c8599; --ds-cyan-9: #0b7285;
+  --ds-violet-0: #f3f0ff; --ds-violet-1: #e5dbff; --ds-violet-2: #d0bfff; --ds-violet-3: #b197fc; --ds-violet-4: #9775fa;
+  --ds-violet-5: #845ef7; --ds-violet-6: #7950f2; --ds-violet-7: #7048e8; --ds-violet-8: #6741d9; --ds-violet-9: #5f3dc4;
+  --ds-grape-0: #f8f0fc; --ds-grape-1: #f3d9fa; --ds-grape-2: #eebefa; --ds-grape-3: #e599f7; --ds-grape-4: #da77f2;
+  --ds-grape-5: #cc5de8; --ds-grape-6: #be4bdb; --ds-grape-7: #ae3ec9; --ds-grape-8: #9c36b5; --ds-grape-9: #862e9c;
+  --ds-pink-0: #fff0f6; --ds-pink-1: #ffdeeb; --ds-pink-2: #fcc2d7; --ds-pink-3: #faa2c1; --ds-pink-4: #f783ac;
+  --ds-pink-5: #f06595; --ds-pink-6: #e64980; --ds-pink-7: #d6336c; --ds-pink-8: #c2255c; --ds-pink-9: #a61e4d;
+  --ds-indigo-0: #edf2ff; --ds-indigo-1: #dbe4ff; --ds-indigo-2: #bac8ff; --ds-indigo-3: #91a7ff; --ds-indigo-4: #748ffc;
+  --ds-indigo-5: #5c7cfa; --ds-indigo-6: #4c6ef5; --ds-indigo-7: #4263eb; --ds-indigo-8: #3b5bdb; --ds-indigo-9: #364fc7;
+  /* "purple" is the app's word for the law/agenda hue; it is violet. */
+  --ds-purple-0: var(--ds-violet-0); --ds-purple-1: var(--ds-violet-1); --ds-purple-2: var(--ds-violet-2);
+  --ds-purple-3: var(--ds-violet-3); --ds-purple-4: var(--ds-violet-4); --ds-purple-5: var(--ds-violet-5);
+  --ds-purple-6: var(--ds-violet-6); --ds-purple-7: var(--ds-violet-7); --ds-purple-8: var(--ds-violet-8);
+  --ds-purple-9: var(--ds-violet-9);
+
+  /* ── 2. Ink ─────────────────────────────────────────────────────────── */
+  --ds-ink-hi: #f1f3f5;   /* names, values, titles — 13.4:1 */
+  --ds-ink: #adb5bd;      /* default text — 9.5:1 */
+  --ds-ink-lo: #868e96;   /* labels, totals, exhausted — the floor, 5.95:1 */
+  --ds-dimmed: var(--ds-ink-lo);
+
+  /* ── 3. Surfaces (themes override) ──────────────────────────────────── */
+  --ds-page: #0b0b0c;
+  --ds-deck: #0d0d0e;
+  --ds-ground: #151517;
+  --ds-ground-2: #101012;
+  --ds-field: #0c0c0d;
+  --ds-rail: #121214;
+  --ds-socket: #050506;
+  --ds-trough: #070708;
+  --ds-hair-rgb: 190 190 196;
+  --ds-edge-accent: rgb(196 196 202 / 0.22);
+
+  /* ── 4. Hairline ladder (the only five) ─────────────────────────────── */
+  --ds-h10: rgb(var(--ds-hair-rgb) / 0.10);
+  --ds-h14: rgb(var(--ds-hair-rgb) / 0.14);
+  --ds-h22: rgb(var(--ds-hair-rgb) / 0.22);
+  --ds-h28: rgb(var(--ds-hair-rgb) / 0.28);
+  --ds-h35: rgb(var(--ds-hair-rgb) / 0.35);
+
+  /* ── 5. Signals (never themed) ──────────────────────────────────────── */
+  --ds-accent: #3b82f6;          /* interaction only: selected, focused */
+  --ds-accent-ink: #93c5fd;
+  --ds-accent-rgb: 59 130 246;
+  --ds-sig-prop: 59 130 246;
+  --ds-sig-bio: 34 197 94;
+  --ds-sig-cyber: 234 179 8;
+  --ds-sig-war: 239 68 68;
+  --ds-sig-secret: 239 68 68;
+  --ds-sig-pn: 6 182 212;
+  --ds-sig-relic: 212 167 44;
+  --ds-sig-law: 168 85 247;
+  --ds-sig-stage1: 249 115 22;
+  --ds-sig-stage2: 56 189 248;
+  --ds-sig-break: 20 184 166;
+  --ds-sig-ability: 168 85 247;
+  --ds-sig-tg: 234 179 8;
+  --ds-sig-ok: 34 197 94;
+  --ds-sig-warn: 234 179 8;
+  --ds-sig-danger: 239 68 68;
+  /* Calm calibration: how strongly signals tint surfaces */
+  --ds-tint-fill: 0.06;
+  --ds-tint-edge: 0.22;
+  --ds-tint-strong: 0.38;
+
+  /* ── 6. Type ────────────────────────────────────────────────────────── */
+  --ds-font-text: var(--font-text, "IBM Plex Sans", system-ui, sans-serif);
+  --ds-font-data: var(--font-data, "IBM Plex Mono", ui-monospace, monospace);
+  --ds-font-display: var(--font-display, "Slider", "IBM Plex Sans", sans-serif);
+  /* Component-prop ladder (kept at its historical values; see DESIGN.md) */
+  --ds-fz-xs: 0.75rem;
+  --ds-fz-sm: 0.875rem;
+  --ds-fz-md: 1rem;
+  --ds-fz-lg: 1.125rem;
+  --ds-fz-xl: 1.25rem;
+  --ds-lh-xs: 1.25;
+  --ds-lh-sm: 1.45;
+  --ds-lh-md: 1.55;
+  --ds-lh-lg: 1.6;
+  --ds-lh-xl: 1.65;
+  --ds-h1: 2.125rem;
+  --ds-h2: 1.625rem;
+  --ds-h3: 1.375rem;
+  --ds-h4: 1.125rem;
+  --ds-h5: 1rem;
+  --ds-h6: 0.875rem;
+
+  /* ── 7. Space, radius, layout ───────────────────────────────────────── */
+  --ds-space-xs: 0.625rem;  /* 10 */
+  --ds-space-sm: 0.75rem;   /* 12 */
+  --ds-space-md: 1rem;      /* 16 */
+  --ds-space-lg: 1.25rem;   /* 20 */
+  --ds-space-xl: 2rem;      /* 32 */
+  --ds-radius-xs: 2px;
+  --ds-radius-sm: 3px;
+  --ds-radius-md: 4px;
+  --ds-radius-lg: 6px;
+  --ds-radius-xl: 8px;
+  --ds-radius-overlay: 8px;
+  --ds-row: 26px;
+  --ds-control-h: 30px;
+  --ds-control-h-sm: 26px;
+  --ds-control-h-xs: 22px;
+
+  /* ── 8. Elevation (overlays only) ───────────────────────────────────── */
+  --ds-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --ds-shadow-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+  --ds-shadow-md: 0 8px 24px rgb(0 0 0 / 0.5);
+  --ds-shadow-lg: 0 10px 40px rgb(0 0 0 / 0.5);
+  --ds-shadow-xl: 0 24px 64px rgb(0 0 0 / 0.6), 0 6px 20px rgb(0 0 0 / 0.45);
+  --ds-bevel: inset 0 1px 0 rgb(255 255 255 / 0.05), inset 0 -1px 0 rgb(0 0 0 / 0.45);
+  --ds-backdrop: rgb(0 0 0 / 0.6);
+
+  /* ── 9. Motion ──────────────────────────────────────────────────────── */
+  --ds-dur-fast: 0.12s;
+  --ds-dur: 0.2s;
+  --ds-dur-slow: 0.3s;
+  --ds-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Breakpoints (for reference; media queries use literal em values) */
+  --ds-bp-xs: 36em;
+  --ds-bp-sm: 48em;
+  --ds-bp-md: 62em;
+  --ds-bp-lg: 75em;
+  --ds-bp-xl: 88em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-dur-fast: 0s;
+    --ds-dur: 0s;
+    --ds-dur-slow: 0s;
+  }
+}

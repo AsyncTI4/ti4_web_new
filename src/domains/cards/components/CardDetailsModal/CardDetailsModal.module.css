@@ -5,12 +5,12 @@
 
 .sectionTitle {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  font-size: var(--mantine-font-size-xs);
+  font-size: var(--ds-fz-xs);
   font-weight: var(--weight-rail);
   color: rgba(203, 213, 225, 0.9);
   text-transform: uppercase;
   letter-spacing: var(--track-label);
-  margin-bottom: var(--mantine-spacing-xs);
+  margin-bottom: var(--ds-space-xs);
   padding-bottom: 4px;
   border-bottom: var(--card-details-section-title-border);
 }
@@ -48,7 +48,7 @@
 .cardName {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
   font-weight: var(--weight-rail);
-  font-size: var(--mantine-font-size-sm);
+  font-size: var(--ds-fz-sm);
   color: white;
   line-height: var(--lh-tight);
 }
@@ -63,7 +63,7 @@
   background: var(--card-details-copy-badge-bg);
   border: var(--card-details-copy-badge-border);
   border-radius: 50%;
-  font-size: var(--mantine-font-size-xs);
+  font-size: var(--ds-fz-xs);
   font-weight: var(--weight-rail);
   color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
@@ -80,14 +80,14 @@
   border-radius: 10px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
   font-weight: var(--weight-title);
-  font-size: var(--mantine-font-size-xs);
+  font-size: var(--ds-fz-xs);
   color: rgba(203, 213, 225, 0.95);
   line-height: 1;
 }
 
 .cardText {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
-  font-size: var(--mantine-font-size-xs);
+  font-size: var(--ds-fz-xs);
   font-weight: var(--weight-regular);
   color: rgba(226, 232, 240, 0.92);
   line-height: 1.45;

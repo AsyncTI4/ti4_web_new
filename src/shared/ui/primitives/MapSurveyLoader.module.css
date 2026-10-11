@@ -213,7 +213,7 @@
   font-size: var(--text-data);
   font-weight: var(--weight-data);
   line-height: var(--lh-flush);
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 /* Elapsed time is noise on a fast load and reassurance on a slow one, so it
@@ -224,7 +224,7 @@
   font-weight: var(--weight-data);
   font-variant-numeric: tabular-nums;
   line-height: var(--lh-flush);
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   opacity: 0;
   transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -238,7 +238,7 @@
   max-width: 44ch;
   font-size: var(--text-meta);
   line-height: var(--lh-body);
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .retry {

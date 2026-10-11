@@ -1,4 +1,4 @@
-import { Stack, Box, Text } from "@mantine/core";
+import { Stack, Box, Text } from "@/ds";
 import cx from "clsx";
 import { PlanetAbilityCard } from "../PlanetAbilityCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

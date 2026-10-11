@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { Shimmer } from "@/shared/ui/Shimmer";
 import { getActionCard } from "@/entities/lookup/actionCards";

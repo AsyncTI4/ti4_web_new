@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import {
   getPlanetTraitIconSrc,
   mergePlanetTraits,

@@ -1,4 +1,4 @@
-import { Box, Image } from "@mantine/core";
+import { Box, Image } from "@/ds";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 

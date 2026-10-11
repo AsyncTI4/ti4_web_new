@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@mantine/core";
+import { Box, Image, Text } from "@/ds";
 import cx from "clsx";
 import {
   getTechData,

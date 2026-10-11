@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mantine/core";
+import { Box, Stack } from "@/ds";
 import ExpandedPublicObjectives from "@/domains/objectives/components/PublicObjectives/ExpandedPublicObjectives";
 import { ScoreTracker } from "@/domains/objectives/components/ScoreTracker";
 import { useGameData } from "@/state/useGameContext";

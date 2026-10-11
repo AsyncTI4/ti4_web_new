@@ -1,4 +1,4 @@
-import { AppShell, Text } from "@mantine/core";
+import { AppShell, Text } from "@/ds";
 import classes from "./Footer.module.css";
 
 const DISCLAIMER =

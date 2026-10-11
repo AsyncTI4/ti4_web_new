@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import cx from "clsx";
 import { ScoredSecret } from "@/domains/player/components/ScoredSecret";
 import { UnscoredSecret } from "@/domains/player/components/ScoredSecret/UnscoredSecret";

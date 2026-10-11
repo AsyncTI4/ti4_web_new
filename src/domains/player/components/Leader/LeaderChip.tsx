@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Text, Image } from "@mantine/core";
+import { Box, Group, Stack, Text, Image } from "@/ds";
 import { IconLock } from "@tabler/icons-react";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
@@ -68,7 +68,7 @@ export function LeaderChip({
             {active && <Box className={styles.onlineDot} />}
             {locked && (
               <Box className={styles.lockIcon}>
-                <IconLock size={12} color="var(--mantine-color-gray-3)" stroke={2.5} />
+                <IconLock size={12} color="var(--ds-gray-3)" stroke={2.5} />
               </Box>
             )}
           </Box>

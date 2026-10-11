@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 
 type ScaledContentProps = {
   zoom: number;

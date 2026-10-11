@@ -1,5 +1,5 @@
 import { memo, type CSSProperties } from "react";
-import { Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@/ds";
 import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
 import { StrategyCardSheet } from "@/domains/cards/components/StrategyCardSheet";
 import { isMobileDevice } from "@/utils/isTouchDevice";

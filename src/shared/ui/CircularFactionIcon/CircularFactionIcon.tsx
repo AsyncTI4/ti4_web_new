@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import styles from "./CircularFactionIcon.module.css";
 import cx from "clsx";
 import { useFactionImageUrl } from "@/hooks/useFactionImages";

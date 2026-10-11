@@ -13,7 +13,7 @@ import {
   Stack,
   Switch,
   Text,
-} from "@mantine/core";
+} from "@/ds";
 import { useEffect, useState } from "react";
 import { IconAlertCircle, IconCheck, IconSettings } from "@tabler/icons-react";
 import {
@@ -195,7 +195,7 @@ function SaveHeader({
       <Group justify="space-between" align="flex-start" gap="md">
         <Stack gap={4}>
           <Group gap={6}>
-            <IconSettings size={16} color="var(--mantine-color-teal-4)" />
+            <IconSettings size={16} color="var(--ds-teal-4)" />
             <Caption size="sm">Dashboard Settings</Caption>
           </Group>
           <Text c="gray.3" size="sm">

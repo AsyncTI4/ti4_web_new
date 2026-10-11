@@ -1,4 +1,4 @@
-import { Stack, Text, Group, Divider } from "@mantine/core";
+import { Stack, Text, Group, Divider } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
 import { LawInPlay } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";

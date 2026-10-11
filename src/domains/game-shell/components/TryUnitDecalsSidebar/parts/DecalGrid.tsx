@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from "@mantine/core";
+import { Box, SimpleGrid } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { DECAL_IDS } from "@/entities/data/decalIds";
 import classes from "../TryUnitDecalsSidebar.module.css";

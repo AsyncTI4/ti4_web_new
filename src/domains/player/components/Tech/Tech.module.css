@@ -178,7 +178,7 @@
 
 /* Tech name text */
 .techName {
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
   /* Semibold, not bold: Plex Sans bold at 12px with a shadow loses its counters */
   font-weight: var(--weight-title);
   letter-spacing: var(--track-body);

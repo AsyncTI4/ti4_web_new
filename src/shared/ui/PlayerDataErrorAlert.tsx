@@ -1,4 +1,4 @@
-import { Alert, type AlertProps } from "@mantine/core";
+import { Alert, type AlertProps } from "@/ds";
 import { IconAlertCircle } from "@tabler/icons-react";
 
 type PlayerDataErrorAlertProps = Omit<

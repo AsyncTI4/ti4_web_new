@@ -1,4 +1,4 @@
-import { Divider, Stack, Text } from "@mantine/core";
+import { Divider, Stack, Text } from "@/ds";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { SC_COLORS } from "@/entities/data/strategyCardColors";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";

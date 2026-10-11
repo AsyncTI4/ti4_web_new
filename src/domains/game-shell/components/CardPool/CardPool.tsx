@@ -1,4 +1,4 @@
-import { Box, Text, SimpleGrid } from "@mantine/core";
+import { Box, Text, SimpleGrid } from "@/ds";
 import { Cardback } from "@/shared/ui/Cardback";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { CardPoolData } from "@/entities/data/types";

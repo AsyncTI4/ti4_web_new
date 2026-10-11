@@ -1,4 +1,4 @@
-import { Image, type ImageProps } from "@mantine/core";
+import { Image, type ImageProps } from "@/ds";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type SecretObjectiveIconProps = Omit<ImageProps, "src"> & {

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Box, Group, Stack, Text } from "@mantine/core";
+import { Box, Group, Stack, Text } from "@/ds";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import type { useGameData } from "@/state/useGameContext";
 import { ScoreTracker } from "@/domains/objectives/components";

@@ -1,4 +1,4 @@
-import { Stack, Image, Divider } from "@mantine/core";
+import { Stack, Image, Divider } from "@/ds";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { showLeader } from "@/entities/lookup/showLeader";

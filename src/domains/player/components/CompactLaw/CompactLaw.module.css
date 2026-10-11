@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--mantine-spacing-xs);
+  gap: var(--ds-space-xs);
   min-width: 0;
 }
 

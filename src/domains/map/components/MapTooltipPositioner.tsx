@@ -5,7 +5,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { Box, type BoxProps } from "@mantine/core";
+import { Box, type BoxProps } from "@/ds";
 import { useAppStore } from "@/state/appStore";
 import { getBrowserZoomScale } from "@/utils/zoom";
 import {

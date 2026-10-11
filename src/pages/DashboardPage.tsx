@@ -1,4 +1,4 @@
-import { Alert, Box, Loader, Stack, Text, Title } from "@mantine/core";
+import { Alert, Box, Loader, Stack, Text, Title } from "@/ds";
 import { Fragment } from "react";
 import {
   IconAlertCircle,

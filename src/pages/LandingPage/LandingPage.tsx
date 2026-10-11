@@ -1,4 +1,4 @@
-import { Stack } from "@mantine/core";
+import { Stack } from "@/ds";
 import { useCommunityStats } from "@/api/useCommunityStats";
 import { PageShell } from "@/layout/PageShell";
 import {

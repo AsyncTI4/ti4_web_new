@@ -1,4 +1,4 @@
-import { Box, Text, SimpleGrid } from "@mantine/core";
+import { Box, Text, SimpleGrid } from "@/ds";
 import { LawCard } from "./LawCard";
 import { LawInPlay } from "@/entities/data/types";
 import styles from "./LawsInPlay.module.css";

@@ -59,7 +59,7 @@
 }
 
 .mainRow {
-  gap: var(--mantine-spacing-sm);
+  gap: var(--ds-space-sm);
   align-items: flex-start;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -72,22 +72,22 @@
 .objectiveTitle {
   font-size: 13px;
   font-weight: var(--weight-rail);
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   line-height: var(--lh-tight);
   margin-bottom: 2px;
 }
 
 .objectiveTitle.revealed {
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .objectiveTitle.hidden {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .requirementText {
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   font-size: 13px;
   line-height: var(--lh-tight);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
@@ -126,7 +126,7 @@
 
 .progressBadgeText {
   font-size: 10px;
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   font-weight: var(--weight-title);
   line-height: 1;
 }
@@ -138,7 +138,7 @@
   .mainRow {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--mantine-spacing-xs);
+    gap: var(--ds-space-xs);
   }
 
   .unrevealed .mainRow {

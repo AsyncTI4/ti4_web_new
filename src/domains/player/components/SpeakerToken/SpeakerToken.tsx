@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import styles from "./SpeakerToken.module.css";
 
 export function SpeakerToken() {

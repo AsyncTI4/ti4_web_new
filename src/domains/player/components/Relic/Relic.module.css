@@ -22,13 +22,13 @@
     linear-gradient(
       45deg,
       transparent 43%,
-      var(--mantine-color-red-1) 43% 57%,
+      var(--ds-red-1) 43% 57%,
       transparent 57%
     ),
     linear-gradient(
       -45deg,
       transparent 43%,
-      var(--mantine-color-red-1) 43% 57%,
+      var(--ds-red-1) 43% 57%,
       transparent 57%
     );
 }

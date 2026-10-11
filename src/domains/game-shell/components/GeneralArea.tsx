@@ -1,4 +1,4 @@
-import { Box, Flex, Stack } from "@mantine/core";
+import { Box, Flex, Stack } from "@/ds";
 import { Surface } from "@/shared/ui/Surface";
 import { useGameData } from "@/state/useGameContext";
 import cx from "clsx";

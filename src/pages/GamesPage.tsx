@@ -5,7 +5,7 @@ import {
   Card,
   SimpleGrid,
   Text,
-} from "@mantine/core";
+} from "@/ds";
 import { useMaps } from "@/api/useMaps";
 import { MapViewportLoader } from "@/shared/ui/primitives/MapViewportLoader";
 import { useNavigate } from "react-router-dom";

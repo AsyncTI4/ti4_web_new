@@ -1,7 +1,7 @@
 
 
 .surface {
-  border-radius: var(--mantine-radius-md);
+  border-radius: var(--ds-radius-md);
   background: var(--surface-bg);
   border: var(--surface-border);
   position: relative;

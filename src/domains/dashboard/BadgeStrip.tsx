@@ -1,4 +1,4 @@
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack } from "@/ds";
 import {
   IconBolt,
   IconFlame,
@@ -103,7 +103,7 @@ export function BadgeStrip({ badges }: Props) {
                   <div
                     key={`${badge.key}-${idx}`}
                     className={classes.badgeDesc}
-                    style={{ color: req.met ? "var(--mantine-color-green-4)" : "var(--mantine-color-gray-5)" }}
+                    style={{ color: req.met ? "var(--ds-green-4)" : "var(--ds-gray-5)" }}
                   >
                     {req.label}: {formatMetric(req.current, req.unit)} / {formatMetric(req.target, req.unit)}
                   </div>

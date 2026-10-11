@@ -1,4 +1,4 @@
-import { Stack } from "@mantine/core";
+import { Stack } from "@/ds";
 import { TradeGoods } from "../TradeGoods/TradeGoods";
 import { Commodities } from "../Commodities/Commodities";
 

@@ -1,5 +1,5 @@
-import { Image } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { Image } from "@/ds";
+import { useMediaQuery } from "@/ds";
 
 import desktopLogo from "@/assets/banner.png";
 import mobileLogo from "@/assets/bannerStacked.png";

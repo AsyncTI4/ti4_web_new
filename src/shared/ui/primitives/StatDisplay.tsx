@@ -1,4 +1,4 @@
-import { Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@/ds";
 import classes from "./StatDisplay.module.css";
 
 type StatSize = "xs" | "sm" | "md" | "lg";

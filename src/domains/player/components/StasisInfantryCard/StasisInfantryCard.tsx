@@ -1,4 +1,4 @@
-import { Stack, Box, Group, Text, Flex } from "@mantine/core";
+import { Stack, Box, Group, Text, Flex } from "@/ds";
 import cx from "clsx";
 import styles from "./StasisInfantryCard.module.css";
 import { Unit } from "@/shared/ui/Unit";

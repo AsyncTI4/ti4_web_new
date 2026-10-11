@@ -1,4 +1,4 @@
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import styles from "./CompactLeader.module.css";

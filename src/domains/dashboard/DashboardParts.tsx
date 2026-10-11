@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import Caption from "@/shared/ui/Caption/Caption";
 import FadedDivider from "@/shared/ui/primitives/FadedDivider/FadedDivider";

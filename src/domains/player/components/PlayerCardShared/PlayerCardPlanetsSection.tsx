@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Box, Group } from "@mantine/core";
+import { Box, Group } from "@/ds";
 import {
   ResourceInfluenceCompact,
   type PlanetEconomics,

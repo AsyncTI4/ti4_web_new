@@ -1,4 +1,4 @@
-import { Button, Group, Paper, Text, useMantineTheme } from "@mantine/core";
+import { Button, Group, Paper, Text } from "@/ds";
 import { IconRefresh, IconLogin, IconLock } from "@tabler/icons-react";
 import { useRefreshMap } from "@/domains/image-map/hooks/useRefreshMap";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
@@ -20,7 +20,6 @@ function isMapImageError(error: unknown): error is MapImageError {
 }
 
 export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps) {
-  const theme = useMantineTheme();
   const refreshMutation = useRefreshMap(gameId);
 
   const mapError = isMapImageError(error) ? error : null;
@@ -35,7 +34,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
         p="lg"
         withBorder
         style={{
-          background: theme.colors.dark[7],
+          background: "var(--ds-dark-7)",
           maxWidth: 520,
           width: "90%",
         }}
@@ -43,8 +42,8 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
         {requiresAuth ? (
           <>
             <Group gap="xs" mb="xs">
-              <IconLogin size={24} color={theme.colors.blue[4]} />
-              <Text fw={700} fz="lg" c={theme.colors.blue[4]}>
+              <IconLogin size={24} color={"var(--ds-blue-4)"} />
+              <Text fw={700} fz="lg" c={"var(--ds-blue-4)"}>
                 Login Required
               </Text>
             </Group>
@@ -59,8 +58,8 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
         ) : notParticipant ? (
           <>
             <Group gap="xs" mb="xs">
-              <IconLock size={24} color={theme.colors.orange[4]} />
-              <Text fw={700} fz="lg" c={theme.colors.orange[4]}>
+              <IconLock size={24} color={"var(--ds-orange-4)"} />
+              <Text fw={700} fz="lg" c={"var(--ds-orange-4)"}>
                 Access Restricted
               </Text>
             </Group>
@@ -71,7 +70,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
           </>
         ) : (
           <>
-            <Text fw={700} fz="lg" mb="xs" c={theme.colors.red[4]}>
+            <Text fw={700} fz="lg" mb="xs" c={"var(--ds-red-4)"}>
               Could not load the map image
             </Text>
             <Text mb="md">
@@ -79,7 +78,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
               request a refresh to generate a new image.
             </Text>
             {refreshMutation.isError && (
-              <Text c={theme.colors.red[5]} mb="sm">
+              <Text c={"var(--ds-red-5)"} mb="sm">
                 {refreshMutation.error?.message ||
                   "Failed to request refresh. Please try again."}
               </Text>
@@ -100,7 +99,7 @@ export function MapImageErrorDialog({ gameId, error }: MapImageErrorDialogProps)
               </Group>
             ) : (
               <Group justify="center">
-                <Text c={theme.colors.green[4]}>
+                <Text c={"var(--ds-green-4)"}>
                   Refresh requested. Waiting for update...
                 </Text>
               </Group>

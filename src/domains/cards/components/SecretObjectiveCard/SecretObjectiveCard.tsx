@@ -1,4 +1,4 @@
-import { Stack, Divider } from "@mantine/core";
+import { Stack, Divider } from "@/ds";
 import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { SecretObjectiveIcon } from "@/shared/ui/SecretObjectiveIcon";

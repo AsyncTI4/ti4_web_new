@@ -1,0 +1,69 @@
+/*
+ * Global base. Replaces Mantine's global stylesheet: box model, document
+ * defaults, form-control inheritance, and the responsive visibility helpers
+ * the `hiddenFrom` / `visibleFrom` style props emit.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+:where(body) {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-fz-md);
+  line-height: var(--ds-lh-md);
+  color: var(--ds-ink);
+  background: var(--ds-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:where(input, button, textarea, select) {
+  font: inherit;
+}
+
+:where(button) {
+  color: inherit;
+}
+
+:where(p, h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
+:where(a) {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgb(var(--ds-accent-rgb) / 0.35);
+}
+
+#ds-portal-root {
+  position: relative;
+  z-index: var(--z-app-modal, 3000);
+}
+
+/* hiddenFrom / visibleFrom */
+@media (min-width: 36em) { .ds-hidden-from-xs { display: none !important; } }
+@media (min-width: 48em) { .ds-hidden-from-sm { display: none !important; } }
+@media (min-width: 62em) { .ds-hidden-from-md { display: none !important; } }
+@media (min-width: 75em) { .ds-hidden-from-lg { display: none !important; } }
+@media (min-width: 88em) { .ds-hidden-from-xl { display: none !important; } }
+@media (max-width: 35.99em) { .ds-visible-from-xs { display: none !important; } }
+@media (max-width: 47.99em) { .ds-visible-from-sm { display: none !important; } }
+@media (max-width: 61.99em) { .ds-visible-from-md { display: none !important; } }
+@media (max-width: 74.99em) { .ds-visible-from-lg { display: none !important; } }
+@media (max-width: 87.99em) { .ds-visible-from-xl { display: none !important; } }

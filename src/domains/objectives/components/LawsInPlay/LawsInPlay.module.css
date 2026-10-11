@@ -1,6 +1,6 @@
 .emptyText {
-  color: var(--mantine-color-gray-5);
-  font-size: var(--mantine-font-size-sm);
+  color: var(--ds-gray-5);
+  font-size: var(--ds-fz-sm);
   font-weight: var(--weight-title);
   text-transform: lowercase;
 }

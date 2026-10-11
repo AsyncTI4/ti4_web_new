@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from "@mantine/core";
+import { Box, Group, Stack } from "@/ds";
 import { StatusBadge } from "@/domains/player/components/StatusBadge";
 import type { PlayerData } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";

@@ -8,7 +8,7 @@ export const AXIS_STYLE = {
   axisTick: { lineStyle: { color: "rgba(148,163,184,0.15)" } },
   axisLabel: {
     color: "rgba(148,163,184,0.7)",
-    fontFamily: "var(--mantine-font-family-monospace), monospace",
+    fontFamily: "var(--font-data), monospace",
     fontSize: 10,
   },
   splitLine: { lineStyle: { color: "rgba(148,163,184,0.06)" } },

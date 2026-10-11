@@ -1,4 +1,4 @@
-import { Box, Text, Image, BoxProps } from "@mantine/core";
+import { Box, Text, Image, BoxProps } from "@/ds";
 import type { ReactNode } from "react";
 import cx from "clsx";
 import styles from "./Cardback.module.css";

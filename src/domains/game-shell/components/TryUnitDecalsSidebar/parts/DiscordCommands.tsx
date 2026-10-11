@@ -1,4 +1,4 @@
-import { Box, Stack, Text, Code, ActionIcon, Group } from "@mantine/core";
+import { Box, Stack, Text, Code, ActionIcon, Group } from "@/ds";
 import { IconCopy } from "@tabler/icons-react";
 import classes from "../TryUnitDecalsSidebar.module.css";
 

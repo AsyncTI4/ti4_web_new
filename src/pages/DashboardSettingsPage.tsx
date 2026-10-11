@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { PageShell } from "@/layout/PageShell";
 import { DashboardSettingsPanel } from "@/domains/dashboard/DashboardSettingsPanel";

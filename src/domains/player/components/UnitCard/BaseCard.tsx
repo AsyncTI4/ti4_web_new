@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { ReactNode, type KeyboardEventHandler } from "react";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";

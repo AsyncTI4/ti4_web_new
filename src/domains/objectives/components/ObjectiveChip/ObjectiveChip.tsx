@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { EntryType, EntryState } from "@/entities/data/types";
 import cx from "clsx";
 import styles from "./ObjectiveChip.module.css";
-import { Tooltip } from "@mantine/core";
+import { Tooltip } from "@/ds";
 import { shouldShowProgress } from "./utils";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 

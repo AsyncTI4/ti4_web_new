@@ -1,4 +1,4 @@
-import { Group, Box } from "@mantine/core";
+import { Group, Box } from "@/ds";
 import type { ComponentProps } from "react";
 import {
   getTechGridMobileColumnCount,

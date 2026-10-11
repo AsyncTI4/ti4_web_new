@@ -1,5 +1,5 @@
 import { useState, type KeyboardEvent } from "react";
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Group, Text } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
 import { LawInPlay } from "@/entities/data/types";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";

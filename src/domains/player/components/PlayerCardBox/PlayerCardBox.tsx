@@ -1,4 +1,4 @@
-import { Paper, Box } from "@mantine/core";
+import { Paper, Box } from "@/ds";
 import { getPrimaryColorWithOpacity } from "@/entities/lookup/colors";
 import "@/styles/theme.css";
 import styles from "./PlayerCardBox.module.css";

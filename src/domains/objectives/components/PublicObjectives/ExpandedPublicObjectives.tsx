@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Stack, SimpleGrid, Flex } from "@mantine/core";
+import { Box, Stack, SimpleGrid, Flex } from "@/ds";
 import ExpandedObjectiveCard from "./ExpandedObjectiveCard";
 import { Objective, Objectives, PlayerData, type LawInPlay } from "@/entities/data/types";
 import styles from "./PublicObjectives.module.css";

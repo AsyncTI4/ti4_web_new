@@ -1,4 +1,4 @@
-import { TextInput, type TextInputProps } from "@mantine/core";
+import { TextInput, type TextInputProps } from "@/ds";
 import type { ReactNode, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 import type { TabLabelEditingApi } from "@/domains/tabs/hooks/useTabLabelEditing";
 

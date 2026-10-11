@@ -1,9 +1,9 @@
 /* Stage Titles */
 .stageTitle {
-  font-size: var(--mantine-font-size-md);
+  font-size: var(--ds-fz-md);
   font-weight: var(--weight-rail);
-  color: var(--mantine-color-white) !important;
-  margin-bottom: var(--mantine-spacing-xs);
+  color: var(--ds-white) !important;
+  margin-bottom: var(--ds-space-xs);
 }
 
 .lawsTitle {
@@ -28,7 +28,7 @@
 @container scoreboard (max-width: 640px) {
   .stageGrid.stageGrid {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--mantine-spacing-md);
+    gap: var(--ds-space-md);
   }
 
   .customRow {

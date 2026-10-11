@@ -47,7 +47,7 @@
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.62);
   color: var(--army-rank-first-color);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 9px;
   font-weight: var(--weight-rail);
   line-height: 1.25;

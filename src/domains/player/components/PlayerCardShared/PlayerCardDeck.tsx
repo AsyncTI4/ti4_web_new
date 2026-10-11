@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from "@mantine/core";
+import { Box, Group, Stack } from "@/ds";
 import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ArmyStats } from "@/domains/player/components/ArmyStats";

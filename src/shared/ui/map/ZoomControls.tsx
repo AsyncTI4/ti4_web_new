@@ -1,4 +1,4 @@
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import cx from "clsx";
 import { useAppStore } from "@/state/appStore";
 import classes from "./ZoomControls.module.css";

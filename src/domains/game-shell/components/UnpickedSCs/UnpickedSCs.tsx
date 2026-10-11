@@ -1,4 +1,4 @@
-import { Box, Group, SimpleGrid } from "@mantine/core";
+import { Box, Group, SimpleGrid } from "@/ds";
 import { StrategyCard } from "@/domains/player/components/StrategyCard";
 import { StrategyCard as StrategyCardType } from "@/entities/data/types";
 import { GeneralSectionTitle } from "@/shared/ui/GeneralSectionTitle/GeneralSectionTitle";

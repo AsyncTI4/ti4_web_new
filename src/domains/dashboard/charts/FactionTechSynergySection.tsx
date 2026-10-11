@@ -7,7 +7,7 @@ import {
   VisualMapComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import { IconAffiliate } from "@tabler/icons-react";
 import type { FactionTechSynergy } from "../types";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -172,7 +172,7 @@ export function FactionTechSynergySection({ synergy }: Props) {
     <Panel variant="elevated" className={classes.aggregateCardFull}>
       <div className={classes.sectionHeader}>
         <Group gap={6}>
-          <IconAffiliate size={16} color="var(--mantine-color-purple-4)" />
+          <IconAffiliate size={16} color="var(--ds-purple-4)" />
           <Caption size="sm">Faction–Tech Synergy</Caption>
         </Group>
         <Text size="10px" c="gray.6">

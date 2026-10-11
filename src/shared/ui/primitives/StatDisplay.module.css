@@ -14,7 +14,7 @@
 }
 
 .label {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   text-transform: uppercase;
   letter-spacing: var(--track-body);
 }

@@ -29,7 +29,7 @@
 
 .pointsText {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   min-width: 12px;
   text-align: center;
   line-height: 1;

@@ -1,4 +1,4 @@
-import { Group, Stack, SimpleGrid } from "@mantine/core";
+import { Group, Stack, SimpleGrid } from "@/ds";
 import { LeaderChip } from "./Leader/LeaderChip";
 import { CompactLeader } from "./Leader/CompactLeader";
 import compactStyles from "./Leader/CompactLeader.module.css";

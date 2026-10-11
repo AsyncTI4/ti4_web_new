@@ -1,4 +1,4 @@
-import { Box, Group, Image, Stack, Text } from "@mantine/core";
+import { Box, Group, Image, Stack, Text } from "@/ds";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import styles from "./TechCard.module.css";

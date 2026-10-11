@@ -1,4 +1,4 @@
-import { Box, Group, Image } from "@mantine/core";
+import { Box, Group, Image } from "@/ds";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerData } from "@/entities/data/types";
 import styles from "./CompactObjective.module.css";

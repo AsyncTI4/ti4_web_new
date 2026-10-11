@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import { IconMap2, IconTarget, IconUsers } from "@tabler/icons-react";
 
-type MantineBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
+type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 
 type MainTabValue = "map" | "objectives" | "general" | "players";
 
@@ -9,7 +9,7 @@ type MainTabConfig = {
   value: MainTabValue;
   label: string;
   Icon: ComponentType<{ size?: number }>;
-  visibleFrom?: MantineBreakpoint;
+  visibleFrom?: Breakpoint;
   hideOnMobile?: boolean;
 };
 

@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import { Cardback } from "@/shared/ui/Cardback";
 import { cdnImage } from "@/entities/data/cdnImage";
 

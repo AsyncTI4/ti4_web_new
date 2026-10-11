@@ -3,8 +3,8 @@
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
-  background: var(--mantine-color-dark-8);
-  color: var(--mantine-color-gray-0);
+  background: var(--ds-dark-8);
+  color: var(--ds-gray-0);
 }
 
 .tileContainer {
@@ -13,9 +13,9 @@
   align-items: center;
   margin: 2rem 0;
   padding: 2rem;
-  background: var(--mantine-color-dark-7);
+  background: var(--ds-dark-7);
   border-radius: 12px;
-  border: 2px solid var(--mantine-color-dark-4);
+  border: 2px solid var(--ds-dark-4);
 }
 
 .systemTileDisplay {

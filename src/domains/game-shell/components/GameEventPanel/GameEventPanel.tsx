@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader, Text, Tooltip } from "@mantine/core";
+import { Loader, Text, Tooltip } from "@/ds";
 import {
   IconArrowsLeftRight,
   IconMap2,

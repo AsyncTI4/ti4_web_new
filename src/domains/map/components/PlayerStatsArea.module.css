@@ -99,11 +99,11 @@
 }
 
 .playerStatusActive {
-  color: var(--mantine-color-green-5);
+  color: var(--ds-green-5);
 }
 
 .playerStatusPassed {
-  color: var(--mantine-color-red-5);
+  color: var(--ds-red-5);
 }
 
 .tradeGoodsGroup {

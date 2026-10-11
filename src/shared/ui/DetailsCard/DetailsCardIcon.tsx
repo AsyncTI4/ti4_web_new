@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import classes from "./DetailsCard.module.css";
 
 function DetailsCardIcon({ icon }: { icon: React.ReactNode }) {

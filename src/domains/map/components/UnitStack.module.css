@@ -150,9 +150,9 @@
 .galvanizeBadgeContainer {
   position: absolute;
   transform: translate(-50%, -110%);
-  background: var(--mantine-color-dark-9);
+  background: var(--ds-dark-9);
   border-radius: 16px;
-  border: 1px solid var(--mantine-color-dark-3);
+  border: 1px solid var(--ds-dark-3);
 }
 
 .galvanizeBadgeInner {

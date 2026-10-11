@@ -1,4 +1,4 @@
-import { SimpleGrid, Group, Text } from "@mantine/core";
+import { SimpleGrid, Group, Text } from "@/ds";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerData } from "@/entities/data/types";
 import cx from "clsx";

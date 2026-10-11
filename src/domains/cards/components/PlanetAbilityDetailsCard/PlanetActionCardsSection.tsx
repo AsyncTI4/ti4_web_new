@@ -1,4 +1,4 @@
-import { Box, Divider, Group, Image, Text } from "@mantine/core";
+import { Box, Divider, Group, Image, Text } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getActionCard } from "@/entities/lookup/actionCards";
 

@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
   UnstyledButton,
-} from "@mantine/core";
+} from "@/ds";
 import { IconChevronDown } from "@tabler/icons-react";
 import cx from "clsx";
 import { useGameState } from "@/api/useGameState";

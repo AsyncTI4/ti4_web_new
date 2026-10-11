@@ -142,7 +142,7 @@
 /* Engraved rather than printed: one pixel of light below the glyphs reads as
    text stamped into the plate. It is the cheapest material cue in the system. */
 .railLabel {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   line-height: 1;
@@ -162,7 +162,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 9px;
   font-weight: var(--weight-data);
   line-height: 1;

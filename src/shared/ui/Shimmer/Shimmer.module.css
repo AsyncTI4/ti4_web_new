@@ -1,6 +1,6 @@
 .shimmerWrapper {
   position: relative;
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--ds-radius-sm);
 }
 
 .diagonalPattern {

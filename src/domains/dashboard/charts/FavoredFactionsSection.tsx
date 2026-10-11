@@ -6,7 +6,7 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import { IconUsers } from "@tabler/icons-react";
 import type { FavoredFaction } from "../types";
 import { Panel } from "@/shared/ui/primitives/Panel";
@@ -77,7 +77,7 @@ export function FavoredFactionsSection({ factions }: Props) {
     <Panel variant="elevated" className={classes.aggregateCard}>
       <div className={classes.sectionHeader}>
         <Group gap={6}>
-          <IconUsers size={16} color="var(--mantine-color-gray-4)" />
+          <IconUsers size={16} color="var(--ds-gray-4)" />
           <Caption size="sm">Most Played Factions</Caption>
         </Group>
       </div>

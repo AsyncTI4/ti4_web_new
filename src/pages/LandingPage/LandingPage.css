@@ -463,8 +463,8 @@
    LIST ITEMS
    ============================================ */
 .enhancedListItem {
-  padding: var(--mantine-spacing-lg);
-  margin-bottom: var(--mantine-spacing-md);
+  padding: var(--ds-space-lg);
+  margin-bottom: var(--ds-space-md);
   border-radius: 8px;
   background: linear-gradient(
     135deg,
@@ -606,7 +606,7 @@
   }
 
   .enhancedListItem {
-    padding: var(--mantine-spacing-md);
+    padding: var(--ds-space-md);
   }
 
   .statsGrid {

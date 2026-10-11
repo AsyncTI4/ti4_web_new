@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import { Plot } from "./Plot";
 import type { PlotCard } from "@/entities/data/types";
 

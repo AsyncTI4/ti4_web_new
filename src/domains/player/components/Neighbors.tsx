@@ -1,4 +1,4 @@
-import { Box, Group } from "@mantine/core";
+import { Box, Group } from "@/ds";
 import { IconUsers } from "@tabler/icons-react";
 import { useOriginalFactionColors } from "@/hooks/useFactionColors";
 import { FactionIcon } from "@/shared/ui/FactionIcon";

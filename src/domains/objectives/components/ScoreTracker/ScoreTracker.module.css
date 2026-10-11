@@ -94,7 +94,7 @@
   letter-spacing: var(--track-label);
   color: rgba(148, 163, 184, 0.55);
   line-height: 1;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
 }
 
 .winningNumber {

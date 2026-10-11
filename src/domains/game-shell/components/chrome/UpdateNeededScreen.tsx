@@ -1,4 +1,4 @@
-import { AppShell, Center, Stack, Title, Text, Button } from "@mantine/core";
+import { AppShell, Center, Stack, Title, Text, Button } from "@/ds";
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { HeaderMenu } from "@/domains/tabs/components/HeaderMenu";
 import { Surface } from "@/shared/ui/Surface";

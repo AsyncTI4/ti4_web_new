@@ -1,4 +1,5 @@
-import { Group, useCombobox, Combobox, CheckIcon } from "@mantine/core";
+import { useState } from "react";
+import { CheckIcon, Group, Popover, UnstyledButton } from "@/ds";
 import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
 import type { TabLabelEditingApi } from "@/domains/tabs/hooks/useTabLabelEditing";
 import { EditableTabLabel } from "@/domains/tabs/components/EditableTabLabel";
@@ -18,20 +19,30 @@ function TabOption({
   isCurrent,
   tabLabelEditing,
   removeTab,
+  onSelect,
 }: {
   tab: EnrichedTab;
   isCurrent: boolean;
   tabLabelEditing: TabLabelEditingApi;
   removeTab: (tab: string) => void;
+  onSelect: (tab: string) => void;
 }) {
   return (
-    <Combobox.Option
-      value={tab.id}
-      active={isCurrent}
+    <div
+      role="option"
+      aria-selected={isCurrent}
+      tabIndex={0}
+      data-combobox-selected={isCurrent || undefined}
       className={classes.dropdownOption}
       style={factionTabStyle(tab.factionColor)}
+      onClick={() => onSelect(tab.id)}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onSelect(tab.id);
+      }}
     >
-      <Group gap="xs" style={{ width: "100%" }}>
+      <Group gap="xs" wrap="nowrap" style={{ width: "100%" }}>
         <TabFactionIcon tab={tab} size={12} />
         {isCurrent && <CheckIcon size={12} />}
         <EditableTabLabel
@@ -59,10 +70,11 @@ function TabOption({
           )}
         />
       </Group>
-    </Combobox.Option>
+    </div>
   );
 }
 
+/** The narrow-screen tab picker: the current game, with every open game below. */
 export function TabDropdownView({
   mapId,
   activeTabs,
@@ -70,24 +82,23 @@ export function TabDropdownView({
   removeTab,
   tabLabelEditing,
 }: TabViewProps) {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-  });
+  const [opened, setOpened] = useState(false);
   const currentTab = activeTabs.find((tab) => tab.id === mapId);
 
   return (
-    <Combobox
-      store={combobox}
-      onOptionSubmit={(val) => {
-        combobox.closeDropdown();
-        changeTab(val);
-      }}
-      styles={{ dropdown: { zIndex: "var(--z-header-menu)" } }}
+    <Popover
+      opened={opened}
+      onChange={setOpened}
+      position="bottom-start"
+      offset={4}
+      zIndex="var(--z-header-menu)"
     >
-      <Combobox.Target>
-        <div
+      <Popover.Target>
+        <UnstyledButton
+          aria-haspopup="listbox"
+          aria-expanded={opened}
           className={classes.comboboxInput}
-          onClick={() => combobox.openDropdown()}
+          onClick={() => setOpened((o) => !o)}
           style={
             factionTabStyle(currentTab?.factionColor) ?? {
               border: "1px solid rgba(59, 130, 246, 0.3)",
@@ -101,18 +112,17 @@ export function TabDropdownView({
                 {tabLabelEditing.getDisplayName(mapId)}
               </span>
             </Group>
-            <Combobox.Chevron />
+            <span aria-hidden style={{ fontSize: 10, opacity: 0.7 }}>▾</span>
           </Group>
-        </div>
-      </Combobox.Target>
+        </UnstyledButton>
+      </Popover.Target>
 
-      <Combobox.Dropdown
-        className={classes.dropdown}
-        style={{ minWidth: "220px" }}
-      >
-        <Combobox.Options>
+      <Popover.Dropdown className={classes.dropdown} style={{ minWidth: 220 }} p={4}>
+        <div role="listbox" aria-label="Open games">
           {activeTabs.length === 0 && (
-            <Combobox.Empty>Nothing found</Combobox.Empty>
+            <div className={classes.dropdownText} style={{ padding: 8 }}>
+              No games open
+            </div>
           )}
           {activeTabs.map((tab) => (
             <TabOption
@@ -121,10 +131,14 @@ export function TabDropdownView({
               isCurrent={tab.id === mapId}
               tabLabelEditing={tabLabelEditing}
               removeTab={removeTab}
+              onSelect={(id) => {
+                setOpened(false);
+                changeTab(id);
+              }}
             />
           ))}
-        </Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+        </div>
+      </Popover.Dropdown>
+    </Popover>
   );
 }

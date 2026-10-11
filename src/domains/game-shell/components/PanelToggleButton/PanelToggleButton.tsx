@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import classes from "./PanelToggleButton.module.css";
 

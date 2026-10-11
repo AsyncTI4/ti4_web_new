@@ -1,4 +1,4 @@
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import classes from "../UnitStack.module.css";
 

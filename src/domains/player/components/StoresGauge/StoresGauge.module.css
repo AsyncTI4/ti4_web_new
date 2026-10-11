@@ -60,12 +60,12 @@
   flex: 1;
   min-width: 0;
   padding: 8px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-variant-numeric: tabular-nums;
 }
 
 .value {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   font-size: 18px;
   font-weight: var(--weight-rail);
   line-height: 1;
@@ -75,7 +75,7 @@
 /* The ceiling, not the reading — held back exactly as the economics ledger holds
    back its totals. */
 .capacity {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   font-size: 11px;
   font-weight: var(--weight-data);
   line-height: 1;
@@ -83,6 +83,6 @@
 
 /* Empty stores read as empty rather than as a zero shouting for attention. */
 .value[data-empty="true"] {
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   text-shadow: none;
 }

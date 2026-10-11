@@ -1,4 +1,4 @@
-import { Group, Text, Box } from "@mantine/core";
+import { Group, Text, Box } from "@/ds";
 import { Caption } from "@/shared/ui/Caption/Caption";
 
 type Props = {

@@ -1,4 +1,4 @@
-import { Box, Text, Group } from "@mantine/core";
+import { Box, Text, Group } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { LawInPlay } from "@/entities/data/types";

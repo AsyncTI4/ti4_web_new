@@ -44,12 +44,12 @@
 
 .title {
   margin: 0;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 20px;
   font-weight: var(--weight-title);
   letter-spacing: 0.02em;
   line-height: var(--lh-tight);
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   text-wrap: balance;
 }
 
@@ -58,10 +58,10 @@
   align-items: center;
   gap: 8px;
   margin-top: 2px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 11px;
   font-weight: var(--weight-data);
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .headerControl {
@@ -227,15 +227,15 @@
 .featureName {
   font-size: 13px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   white-space: nowrap;
 }
 
 .featureDetail {
   margin-left: auto;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 10px;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   text-align: right;
 }
 
@@ -243,7 +243,7 @@
   margin: 3px 0 0;
   font-size: 12px;
   line-height: 1.55;
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
   max-width: 65ch;
   text-wrap: pretty;
 }
@@ -324,15 +324,15 @@
 .unitChipName {
   font-size: 12px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   white-space: nowrap;
 }
 
 .unitChipCount {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 11px;
   font-weight: var(--weight-data);
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 
@@ -340,12 +340,12 @@
   margin-left: 1px;
   padding-left: 6px;
   border-left: 1px solid var(--panel-separator);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 10px;
   font-weight: var(--weight-data);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 /* Empty capacity is a socket, never a bare sentence. */
@@ -356,12 +356,12 @@
   border: 1px solid var(--socket-border);
   border-radius: 2px;
   box-shadow: var(--socket-inset);
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 /* Wormhole letters as instrument medallions. */
@@ -375,10 +375,10 @@
   border: 1px solid var(--panel-hairline-strong);
   border-radius: 50%;
   background: var(--panel-field-flat);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 11px;
   line-height: 1;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
 }
 
 /* Cost / hits-absorbed / expected-hits, seated in a recessed trough at the
@@ -404,10 +404,10 @@
   border-radius: 2px;
   background: var(--trough-bg);
   box-shadow: var(--trough-inset);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 12px;
   font-weight: var(--weight-data);
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   font-variant-numeric: tabular-nums;
 }
 
@@ -443,18 +443,18 @@
   border: 1px solid rgba(var(--gd-blue), 0.45);
   border-radius: 2px;
   background: rgba(var(--gd-blue), 0.1);
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
 }
 
 .battleVersus {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .battleLink:hover {
@@ -476,12 +476,12 @@
 }
 
 .structuresLabel {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .structure {
@@ -494,7 +494,7 @@
   border-radius: 2px;
   background: var(--panel-field-flat);
   font-size: 11px;
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
 }
 
 .structureUnit {
@@ -504,13 +504,13 @@
 }
 
 .structureCount {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-data);
   font-variant-numeric: tabular-nums;
 }
 
 .structureName {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: var(--weight-title);
 }
@@ -522,10 +522,10 @@
   margin-left: 2px;
   padding-left: 6px;
   border-left: 1px solid var(--panel-separator);
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 10px;
   font-variant-numeric: tabular-nums;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .structureExpected img {
@@ -536,9 +536,9 @@
 
 .attachment em {
   font-style: normal;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 10px;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .ccMeta {
@@ -556,7 +556,7 @@
 
 .zoneKindIcon {
   flex-shrink: 0;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 /* ---------- Controller chips ---------- */
@@ -567,12 +567,12 @@
 }
 
 .controlLabel {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   padding-right: 6px;
   margin-right: 1px;
   border-right: 1px solid var(--panel-separator);
@@ -589,12 +589,12 @@
   border-radius: 2px;
   font-size: 11px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   white-space: nowrap;
 }
 
 .uncontrolled {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 /* ---------- Planet plates ---------- */
@@ -624,12 +624,12 @@
 }
 
 .planetName {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 14px;
   font-weight: var(--weight-title);
   letter-spacing: 0.02em;
   line-height: var(--lh-tight);
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -650,7 +650,7 @@
   border: 1px solid rgba(var(--gd-orange), 0.2);
   border-radius: 2px;
   background: rgba(var(--gd-orange), 0.035);
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 8px;
   font-weight: var(--weight-data);
   letter-spacing: 0.1em;
@@ -673,10 +673,10 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 13px;
   font-weight: var(--weight-data);
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
 }
 
 .figureExhausted {
@@ -685,7 +685,7 @@
 
 .bonus {
   font-style: normal;
-  color: var(--mantine-color-green-4);
+  color: var(--ds-green-4);
   margin-left: 2px;
 }
 
@@ -693,12 +693,12 @@
   padding: 1px 6px;
   border: 1px solid var(--panel-hairline);
   border-radius: 2px;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .attachments {
@@ -716,7 +716,7 @@
   border: 1px solid var(--panel-hairline);
   border-radius: 2px;
   font-size: 12px;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
 }
 
 .attachment img {
@@ -738,14 +738,14 @@
 .legendaryName {
   font-size: 11px;
   font-weight: var(--weight-title);
-  color: var(--mantine-color-yellow-4);
+  color: var(--ds-yellow-4);
 }
 
 .legendaryText {
   margin: 2px 0 0;
   font-size: 12px;
   line-height: 1.55;
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   text-wrap: pretty;
 }
 
@@ -757,7 +757,7 @@
   font-style: italic;
   font-size: 12px;
   line-height: 1.55;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   max-width: 65ch;
   text-wrap: pretty;
 }

@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
+} from "@/ds";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import WidgetBot from "@widgetbot/react-embed";

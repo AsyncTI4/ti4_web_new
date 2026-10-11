@@ -1,4 +1,4 @@
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Group, Text } from "@/ds";
 import styles from "./TyrantToken.module.css";
 
 export function TyrantToken() {

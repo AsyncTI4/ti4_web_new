@@ -1,4 +1,4 @@
-import { Stack, Text } from "@mantine/core";
+import { Stack, Text } from "@/ds";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { agendas } from "@/entities/data/agendas";
 import type { GamePhase, GameStateAgenda } from "@/entities/data/types";

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IconLayoutDashboard, IconSettings } from "@tabler/icons-react";
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import cx from "clsx";
 import classes from "@/domains/tabs/components/HeaderMenu.module.css";
 

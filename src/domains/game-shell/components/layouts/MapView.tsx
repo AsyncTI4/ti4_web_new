@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Box } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { Box } from "@/ds";
+import { useMediaQuery } from "@/ds";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { LeftSidebar } from "@/domains/game-shell/components/LeftSidebar";
 import { DragHandle } from "@/domains/game-shell/components/chrome/DragHandle";

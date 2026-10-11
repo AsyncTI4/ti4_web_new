@@ -1,4 +1,4 @@
-import { Box, Text, Stack, Group } from "@mantine/core";
+import { Box, Text, Stack, Group } from "@/ds";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import type { ReactElement } from "react";

@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Stack, Text } from "@/ds";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { CompactObjective } from "../CompactObjective";
 import { ObjectiveDetailsCard } from "@/domains/cards/components/ObjectiveDetailsCard/ObjectiveDetailsCard";

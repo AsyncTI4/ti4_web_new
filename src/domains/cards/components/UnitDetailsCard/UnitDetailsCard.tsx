@@ -1,4 +1,4 @@
-import { Box, Stack, Image } from "@mantine/core";
+import { Box, Stack, Image } from "@/ds";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { getUnitData, isNekroFlagship } from "@/entities/lookup/units";

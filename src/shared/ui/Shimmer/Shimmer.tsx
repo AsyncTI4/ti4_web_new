@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mantine/core";
+import { Box, BoxProps } from "@/ds";
 import { getGradientClasses, ColorKey } from "@/shared/ui/gradientClasses";
 import cx from "clsx";
 import styles from "./Shimmer.module.css";

@@ -1,4 +1,4 @@
-import { Box, Text, Group, Stack, Image } from "@mantine/core";
+import { Box, Text, Group, Stack, Image } from "@/ds";
 import type { KeyboardEvent } from "react";
 import { Shimmer } from "@/shared/ui/Shimmer";
 import { Objective, PlayerData } from "@/entities/data/types";

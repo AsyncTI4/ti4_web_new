@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mantine/core";
+import { Box, BoxProps } from "@/ds";
 import type { ReactNode } from "react";
 import cx from "clsx";
 import classes from "./Surface.module.css";

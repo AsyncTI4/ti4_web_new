@@ -1,4 +1,4 @@
-import { Box, Group, Text } from "@mantine/core";
+import { Box, Group, Text } from "@/ds";
 import styles from "./Tech.module.css";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { TechCard } from "@/domains/cards/components/TechCard/TechCard";

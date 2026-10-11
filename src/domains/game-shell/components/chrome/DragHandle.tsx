@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import { IconGripVertical } from "@tabler/icons-react";
 import classes from "./DragHandle.module.css";
 

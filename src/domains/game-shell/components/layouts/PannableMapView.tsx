@@ -1,5 +1,5 @@
 import { useRef, type RefObject } from "react";
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import { InteractiveMapRenderer } from "@/domains/map/components/renderer/InteractiveMapRenderer";
 import { useDragScroll } from "@/hooks/useDragScroll";

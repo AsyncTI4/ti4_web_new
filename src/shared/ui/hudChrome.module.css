@@ -13,12 +13,12 @@
 .hudButton {
   height: 28px;
   padding: 0 11px;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   background: var(--socket-bg);
   border: 1px solid var(--panel-hairline);
   border-radius: var(--panel-radius);
@@ -39,7 +39,7 @@
  * a button that cannot be pressed should not light up under the cursor.
  */
 .hudButton:hover:not([data-loading]):not(:disabled) {
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   background: rgba(255, 255, 255, 0.07);
   border-color: var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel);
@@ -49,7 +49,7 @@
    component. A hud plate goes quiet instead: same plate, dimmer ink. */
 .hudButton:disabled,
 .hudButton[data-disabled] {
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   background: var(--socket-bg);
   border-color: var(--panel-hairline);
   box-shadow: var(--socket-inset);

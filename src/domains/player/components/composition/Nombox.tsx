@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { Surface } from "@/shared/ui/Surface";
 import { units } from "@/entities/data/units";
 import { CapturedUnitsData } from "@/entities/data/types";

@@ -59,8 +59,8 @@
   align-items: flex-end;
   justify-content: flex-end;
   padding: 1px 7px 3px;
-  color: var(--mantine-color-gray-6);
-  font-family: var(--mantine-font-family-headings);
+  color: var(--ds-gray-6);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
@@ -110,9 +110,9 @@
   min-width: 42px;
   min-height: 22px;
   padding: 3px 7px;
-  color: var(--mantine-color-gray-1);
-  font-family: var(--mantine-font-family-monospace);
-  font-size: var(--mantine-font-size-sm);
+  color: var(--ds-gray-1);
+  font-family: var(--font-data);
+  font-size: var(--ds-fz-sm);
   font-weight: var(--weight-rail);
   line-height: 1;
   letter-spacing: 0;
@@ -134,7 +134,7 @@
  * against eleven", not "thirty point zero against eleven point zero".
  */
 .fraction {
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   font-size: 11px;
 }
 
@@ -172,11 +172,11 @@
 /* Fourth place and below is a position, not a medal: neutral, and quiet. */
 .rankOther {
   --rank-rgb: 148, 163, 184;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .rankText {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 11px;
   font-weight: var(--weight-rail);
   line-height: 1;

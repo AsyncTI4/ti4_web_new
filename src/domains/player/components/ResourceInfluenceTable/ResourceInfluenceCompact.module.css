@@ -7,7 +7,7 @@
 .compact {
   display: flex;
   align-items: flex-start;
-  gap: var(--mantine-spacing-md);
+  gap: var(--ds-space-md);
   /* Fills the row when the section stretches, so the ledger's floor lines up
      with the bottom of the planet cards beside it. */
   height: 100%;
@@ -22,12 +22,12 @@
   flex-direction: column;
   gap: 6px;
   margin-top: 2px;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
 }
 
 /* Hairline seam between the optimal and total ledgers */
 .column + .column {
-  padding-left: var(--mantine-spacing-md);
+  padding-left: var(--ds-space-md);
   border-left: 1px solid var(--panel-hairline);
 }
 
@@ -36,7 +36,7 @@
 .caption {
   grid-column: 1 / -1;
   margin-block: 2px;
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
@@ -93,7 +93,7 @@
 
 .current {
   grid-column: 2;
-  font-size: var(--mantine-font-size-lg);
+  font-size: var(--ds-fz-lg);
   font-weight: var(--weight-rail);
 }
 
@@ -102,35 +102,35 @@
   display: inline-block;
   width: 1ch;
   margin-left: 4px;
-  color: var(--mantine-color-gray-5);
-  font-size: var(--mantine-font-size-xs);
+  color: var(--ds-gray-5);
+  font-size: var(--ds-fz-xs);
   font-weight: var(--weight-data);
 }
 
 .total {
   grid-column: 3;
-  color: var(--mantine-color-gray-5);
-  font-size: var(--mantine-font-size-xs);
+  color: var(--ds-gray-5);
+  font-size: var(--ds-fz-xs);
   font-weight: var(--weight-data);
 }
 
 .resource .current,
 .resource .current::after,
 .resource .total {
-  color: var(--mantine-color-yellow-5);
+  color: var(--ds-yellow-5);
 }
 
 .resource .current {
-  color: var(--mantine-color-yellow-3);
+  color: var(--ds-yellow-3);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .influence .current {
-  color: var(--mantine-color-blue-3);
+  color: var(--ds-blue-3);
 }
 
 .influence .total {
-  color: var(--mantine-color-blue-5);
+  color: var(--ds-blue-5);
 }
 
 .hiddenRow {

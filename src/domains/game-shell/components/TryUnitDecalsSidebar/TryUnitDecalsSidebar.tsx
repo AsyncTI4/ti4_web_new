@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, ActionIcon, Text, SegmentedControl } from "@mantine/core";
+import { Box, ActionIcon, Text, SegmentedControl } from "@/ds";
 import { IconX } from "@tabler/icons-react";
 import { FactionTabBar } from "@/domains/game-shell/components/navigation/FactionTabBar";
 import { useGameData, useDecalOverrides, useColorOverrides } from "@/state/useGameContext";

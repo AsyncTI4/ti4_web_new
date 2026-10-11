@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import { CommandCounter } from "./CommandCounter";
 import type { ReactNode } from "react";
 

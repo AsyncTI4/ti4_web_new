@@ -1,4 +1,4 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text } from "@/ds";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

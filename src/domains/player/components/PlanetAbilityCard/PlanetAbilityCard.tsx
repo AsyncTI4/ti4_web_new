@@ -1,4 +1,4 @@
-import { Stack, Text, Image } from "@mantine/core";
+import { Stack, Text, Image } from "@/ds";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";

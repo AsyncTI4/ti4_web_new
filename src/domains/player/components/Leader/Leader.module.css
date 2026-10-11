@@ -43,7 +43,7 @@
 }
 
 .plate:hover .leaderName {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
 }
 
 .plate:focus-visible {
@@ -144,11 +144,11 @@
 }
 
 .leaderNameActive {
-  color: var(--mantine-color-gray-0);
+  color: var(--ds-gray-0);
 }
 
 .leaderNameInactive {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 /* Role designation in quiet small caps, echoing the faction labels */
@@ -164,11 +164,11 @@
 }
 
 .leaderTypeActive {
-  color: var(--mantine-color-green-4);
+  color: var(--ds-green-4);
 }
 
 .leaderTypeInactive {
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
 }
 
 /*

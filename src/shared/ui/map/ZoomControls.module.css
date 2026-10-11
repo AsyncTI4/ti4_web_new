@@ -1,7 +1,7 @@
 .zoomLabel {
   min-width: 40px;
   text-align: right;
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   color: rgba(203, 213, 225, 0.75);
@@ -29,7 +29,7 @@
 
 .zoomButton:hover:not(:disabled) {
   border-color: rgba(148, 163, 184, 0.55);
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
 }
 
 .zoomButton:disabled {

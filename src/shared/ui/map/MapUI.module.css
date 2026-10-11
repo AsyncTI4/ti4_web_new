@@ -101,7 +101,7 @@
 /* Section heading styles */
 .sectionHeading {
   margin: 0 0 1rem 0;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   font-size: 1.1rem;
   font-weight: var(--weight-title);
 }
@@ -144,11 +144,11 @@
 }
 
 .hudRoundNumeral {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 30px;
   font-weight: var(--weight-title);
   line-height: 1;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
@@ -341,12 +341,12 @@
   width: auto;
   margin: 0;
   padding: 7px 15px;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 11px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   cursor: pointer;
   border: 1px solid var(--panel-hairline);
   border-radius: 0;
@@ -384,19 +384,19 @@
 /* Raised so a hovered or selected plate owns both of its seams instead of
    having one overpainted by the neighbour it shares with. */
 .tabsTab:hover,
-.tabsTab[data-active="true"] {
+.tabsTab[data-active] {
   z-index: 1;
 }
 
 .tabsTab:hover {
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
   border-color: var(--panel-hairline-strong);
   background: rgba(255, 255, 255, 0.05);
   box-shadow: var(--machined-bevel);
 }
 
-.tabsTab[data-active="true"] {
-  color: var(--mantine-color-gray-0);
+.tabsTab[data-active] {
+  color: var(--ds-gray-0);
   background: rgba(255, 255, 255, 0.09);
   border-color: var(--panel-hairline-strong);
   box-shadow: var(--machined-bevel);
@@ -404,7 +404,7 @@
 
 /* Selected view gets a seated accent bar on its floor — the HUD equivalent of a
    lit indicator, and the one place chroma appears in the tab strip. */
-.tabsTab[data-active="true"]::after {
+.tabsTab[data-active]::after {
   content: "";
   position: absolute;
   left: 5px;
@@ -459,7 +459,7 @@
 
 .hoverInstructions {
   text-align: center;
-  color: var(--mantine-color-gray-6);
+  color: var(--ds-gray-6);
 }
 
 .hoverInstructionsLine {
@@ -552,13 +552,13 @@
 }
 
 :global(.theme-vaporwavetheme) .tabsTab:hover::after,
-:global(.theme-vaporwavetheme) .tabsTab[data-active="true"]::after {
+:global(.theme-vaporwavetheme) .tabsTab[data-active]::after {
   opacity: 1;
   transform: scaleX(1);
 }
 
 :global(.theme-vaporwavetheme) .tabsTab:hover,
-:global(.theme-vaporwavetheme) .tabsTab[data-active="true"] {
+:global(.theme-vaporwavetheme) .tabsTab[data-active] {
   animation: vw-pulse-soft 6s ease-in-out infinite alternate;
 }
 

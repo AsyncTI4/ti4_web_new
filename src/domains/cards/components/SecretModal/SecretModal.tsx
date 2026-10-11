@@ -1,4 +1,4 @@
-import { Box, Text, Stack, Group, Divider } from "@mantine/core";
+import { Box, Text, Stack, Group, Divider } from "@/ds";
 import type { SecretSection } from "@/domains/cards/model/secretObjectiveProcessor";
 import styles from "./SecretModal.module.css";
 

@@ -26,8 +26,8 @@
   pointer-events: none;
 }
 
-.bookIcon { color: var(--mantine-color-gray-9); }
-.diamondIcon { color: var(--mantine-color-gray-9); }
+.bookIcon { color: var(--ds-gray-9); }
+.diamondIcon { color: var(--ds-gray-9); }
 
 
 @container scoreboard (max-width: 640px) {

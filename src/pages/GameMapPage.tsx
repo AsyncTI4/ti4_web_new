@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
-import { AppShell, Box, Tabs, SimpleGrid } from "@mantine/core";
+import { AppShell, Box, Tabs, SimpleGrid } from "@/ds";
 import { MapHeaderSwitch } from "@/layout/MapHeaderSwitch";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "@/domains/objectives/components/ScoreBoard/ScoreBoard";

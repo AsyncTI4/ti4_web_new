@@ -1,6 +1,6 @@
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { PlayerData } from "@/entities/data/types";
-import { Text, Group } from "@mantine/core";
+import { Text, Group } from "@/ds";
 import { IconCheck } from "@tabler/icons-react";
 import cx from "clsx";
 import styles from "./ExpandedObjectiveCard.module.css";
@@ -35,7 +35,7 @@ function ProgressObjectiveDisplay({
             <Group key={player.faction} className={badgeClass} gap={4}>
               <CircularFactionIcon faction={player.faction} factionImageOverride={player.factionImage} factionImageTypeOverride={player.factionImageType} size={23} />
               {isScored ? (
-                <IconCheck size={14} color="var(--mantine-color-green-5)" />
+                <IconCheck size={14} color="var(--ds-green-5)" />
               ) : (
                 <Text className={styles.progressBadgeText}>
                   {progress}/{progressThreshold}

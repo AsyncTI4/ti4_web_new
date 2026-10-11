@@ -1,4 +1,4 @@
-import { Box, Center } from "@mantine/core";
+import { Box, Center } from "@/ds";
 import { FactionTabBar } from "@/domains/game-shell/components/navigation/FactionTabBar";
 import { PlayerCardDisplay } from "./PlayerCardDisplay";
 import { AreaType } from "@/hooks/useTabsAndTooltips";

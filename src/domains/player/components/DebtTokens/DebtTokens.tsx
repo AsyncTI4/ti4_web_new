@@ -1,4 +1,4 @@
-import { Group, Text } from "@mantine/core";
+import { Group, Text } from "@/ds";
 import { SmallControlToken } from "@/shared/ui/ControlToken";
 import { PlayerColorSwatch } from "@/shared/ui/PlayerColor/PlayerColor";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";

@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import type { Key } from "react";
 
 export type TokenDescriptor = {

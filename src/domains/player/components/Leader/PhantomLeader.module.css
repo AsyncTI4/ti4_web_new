@@ -99,8 +99,8 @@
  * genuinely carries: this faction has a hero, and it is not on the table.
  */
 .role {
-  color: var(--mantine-color-gray-6);
-  font-family: var(--mantine-font-family-headings);
+  color: var(--ds-gray-6);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-title);
   letter-spacing: var(--track-rail);

@@ -8,7 +8,7 @@ import {
   Text,
   Tooltip,
   Transition,
-} from "@mantine/core";
+} from "@/ds";
 import { IconCards, IconHistory } from "@tabler/icons-react";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { SecretHand } from "@/domains/game-shell/components/SecretHand";
@@ -151,6 +151,11 @@ export function FloatingMapToolbar({
                       })
                     }
                     className={classes.animatedSwitch}
+                    classNames={{
+                      track: classes.switchTrack,
+                      thumb: classes.switchThumb,
+                      label: classes.switchLabel,
+                    }}
                   />
                 )}
                 <CloseButton

@@ -100,7 +100,7 @@ export function TopTechsPanel({
   return (
     <Panel variant="elevated" className={classes.sectionCard}>
       <SectionHeader
-        icon={<IconCrosshair size={16} color="var(--mantine-color-blue-4)" />}
+        icon={<IconCrosshair size={16} color="var(--ds-blue-4)" />}
         title="Top Researched Techs"
         badgeAccent="blue"
         badge={`${aggregates.eligibleGameCount} Eligible`}

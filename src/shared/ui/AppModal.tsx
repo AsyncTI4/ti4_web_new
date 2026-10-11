@@ -1,4 +1,4 @@
-import { Modal, type ModalProps } from "@mantine/core";
+import { Modal, type ModalProps } from "@/ds";
 
 export function AppModal({
   zIndex = "var(--z-app-modal)",

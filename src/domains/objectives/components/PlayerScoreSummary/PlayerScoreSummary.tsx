@@ -1,4 +1,4 @@
-import { Text, Stack } from "@mantine/core";
+import { Text, Stack } from "@/ds";
 import type { PlayerData, Objectives, EntryType, ScoreBreakdownEntry } from "@/entities/data/types";
 import { PlayerColor } from "@/shared/ui/PlayerColor/PlayerColor";
 import styles from "./PlayerScoreSummary.module.css";
@@ -154,7 +154,7 @@ export function PlayerScoreSummary({ playerData, objectives }: Props) {
           <div className={legendStyles.legendItem}>
             <IconAlertTriangle
               size={14}
-              color="var(--mantine-color-yellow-6)"
+              color="var(--ds-yellow-6)"
             />
             <Text size="xs" c="dimmed">
               Losable

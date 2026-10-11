@@ -1,4 +1,4 @@
-import { Stack, Text, Image, Divider } from "@mantine/core";
+import { Stack, Text, Image, Divider } from "@/ds";
 import { getRelicData } from "@/entities/lookup/relics";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { cdnImage } from "@/entities/data/cdnImage";

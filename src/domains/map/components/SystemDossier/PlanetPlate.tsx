@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Image } from "@mantine/core";
+import { Image } from "@/ds";
 import { IconPlanet } from "@tabler/icons-react";
 import cx from "clsx";
 import { Module } from "@/shared/ui/primitives/Module/Module";

@@ -1,5 +1,5 @@
 .panel {
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--ds-radius-sm);
   padding: 6px;
 }
 

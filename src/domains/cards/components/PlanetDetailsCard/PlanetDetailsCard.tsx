@@ -1,4 +1,4 @@
-import { Stack, Box, Image, Text, Group, Divider } from "@mantine/core";
+import { Stack, Box, Image, Text, Group, Divider } from "@/ds";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getFactionImage } from "@/entities/lookup/factions";

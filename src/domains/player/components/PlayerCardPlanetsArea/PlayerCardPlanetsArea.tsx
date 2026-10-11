@@ -1,4 +1,4 @@
-import { Group, Box } from "@mantine/core";
+import { Group, Box } from "@/ds";
 import { PlanetCard } from "../PlanetCard";
 import { filterPlanetsByOcean } from "@/entities/game/planets";
 

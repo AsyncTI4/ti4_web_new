@@ -1,4 +1,4 @@
-import type { ModalProps } from "@mantine/core";
+import type { ModalProps } from "@/ds";
 import type { VisualViewportRect } from "@/hooks/useVisualViewport";
 
 type Options = {

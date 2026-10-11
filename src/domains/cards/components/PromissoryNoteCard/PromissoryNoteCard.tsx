@@ -1,4 +1,4 @@
-import { Stack, Box, Image, Divider, Text, Group } from "@mantine/core";
+import { Stack, Box, Image, Divider, Text, Group } from "@/ds";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { getAllianceCommander } from "@/entities/lookup/leaders";
 import { useFactionColors } from "@/hooks/useFactionColors";

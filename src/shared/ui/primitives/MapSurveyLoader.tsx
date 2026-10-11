@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "@mantine/core";
+import { Button } from "@/ds";
 import { IconRefresh } from "@tabler/icons-react";
 import cx from "clsx";
 

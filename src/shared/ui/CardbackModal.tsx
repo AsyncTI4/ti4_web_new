@@ -1,4 +1,4 @@
-import { Stack } from "@mantine/core";
+import { Stack } from "@/ds";
 import { ReactNode, useState } from "react";
 import { Cardback } from "@/shared/ui/Cardback";
 import { AppModal } from "@/shared/ui/AppModal";

@@ -6,7 +6,7 @@
 }
 
 .sheetTitle {
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: var(--weight-rail);
   line-height: 1;
@@ -17,5 +17,5 @@
 
 .sheetBody {
   --event-round-sticky-top: 0px;
-  padding: var(--mantine-spacing-sm);
+  padding: var(--ds-space-sm);
 }

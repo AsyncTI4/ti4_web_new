@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Group, Stack, Box } from "@mantine/core";
+import { Group, Stack, Box } from "@/ds";
 import {
   techCategories,
   buildTechElementsForType,

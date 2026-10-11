@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import { FragmentStack } from "./FragmentStack";
 import classes from "./FragmentsPool.module.css";
 

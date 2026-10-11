@@ -1,4 +1,4 @@
-import { Image, ImageProps } from "@mantine/core";
+import { Image, ImageProps } from "@/ds";
 import { useFactionImageUrl } from "@/hooks/useFactionImages";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 

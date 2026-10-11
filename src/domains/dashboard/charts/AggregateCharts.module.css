@@ -28,7 +28,7 @@
 .dataTable th {
   padding: 3px 6px;
   text-align: left;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
   font-weight: var(--weight-title);
   font-size: 10px;
   letter-spacing: var(--track-label);
@@ -43,8 +43,8 @@
 
 .dataTable td {
   padding: 3px 6px;
-  font-family: var(--mantine-font-family-monospace);
-  color: var(--mantine-color-gray-2);
+  font-family: var(--font-data);
+  color: var(--ds-gray-2);
   white-space: nowrap;
   font-size: 11px;
 }
@@ -57,7 +57,7 @@
   font-family: var(--font-display);
   font-size: 11px;
   letter-spacing: var(--track-body);
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
 }
 
 .dataTable tr + tr td {
@@ -90,7 +90,7 @@
   align-items: center;
   gap: 3px;
   padding: 10px 8px;
-  border-radius: var(--mantine-radius-md);
+  border-radius: var(--ds-radius-md);
   background: linear-gradient(
     155deg,
     rgba(var(--bucket-color), 0.08) 0%,
@@ -108,7 +108,7 @@
 }
 
 .speakerBucketRate {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-rail);
   font-size: 1.25rem;
   line-height: 1;
@@ -124,7 +124,7 @@
 }
 
 .speakerDeltaValue {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-rail);
   font-size: 1rem;
   line-height: 1;
@@ -143,7 +143,7 @@
   display: flex;
   gap: 20px;
   padding: 6px 8px;
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--ds-radius-sm);
   background: rgba(var(--gd-teal), 0.03);
   border: 1px solid rgba(var(--gd-teal), 0.08);
 }
@@ -155,11 +155,11 @@
 }
 
 .economyValue {
-  font-family: var(--mantine-font-family-monospace);
+  font-family: var(--font-data);
   font-weight: var(--weight-rail);
   font-size: 1.1rem;
   line-height: 1.1;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 

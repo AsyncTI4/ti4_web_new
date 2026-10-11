@@ -19,7 +19,7 @@
 }
 
 .body {
-  padding-top: var(--mantine-spacing-md);
+  padding-top: var(--ds-space-md);
 }
 
 .close {

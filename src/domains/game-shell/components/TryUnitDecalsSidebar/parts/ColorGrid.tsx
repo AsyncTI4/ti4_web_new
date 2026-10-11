@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Box, SimpleGrid, Text } from "@mantine/core";
+import { Box, SimpleGrid, Text } from "@/ds";
 import { colors } from "@/entities/data/colors";
 import { ColorSwatch } from "./ColorSwatch";
 

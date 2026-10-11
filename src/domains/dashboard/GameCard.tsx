@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Text, Title } from "@mantine/core";
+import { Button, Group, Stack, Text, Title } from "@/ds";
 import { IconExternalLink, IconTrophy } from "@tabler/icons-react";
 import cx from "clsx";
 import type { DashboardGame, GamePacks } from "./types";
@@ -135,7 +135,7 @@ function TableSection({
               {p.userName}
             </Text>
             {p.isWinner && (
-              <IconTrophy size={11} color="var(--mantine-color-yellow-5)" />
+              <IconTrophy size={11} color="var(--ds-yellow-5)" />
             )}
           </Group>
         ))}

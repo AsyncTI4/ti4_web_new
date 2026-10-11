@@ -2,7 +2,7 @@
 .actionCard {
   transition: all 0.2s ease;
   cursor: pointer;
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--ds-radius-sm);
 }
 
 .actionCard:hover {
@@ -13,7 +13,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--mantine-spacing-xs);
+  gap: var(--ds-space-xs);
   min-width: 0;
 }
 
@@ -31,7 +31,7 @@
   flex-shrink: 0;
   background: linear-gradient(180deg, rgba(249, 115, 22, 0.22) 0%, rgba(239, 68, 68, 0.18) 100%);
   border: 1px solid rgba(249, 115, 22, 0.44);
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--ds-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;

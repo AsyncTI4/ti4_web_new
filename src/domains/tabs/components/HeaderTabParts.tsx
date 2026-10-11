@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Group } from "@/ds";
 import { IconPencil } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { generateColorGradient } from "@/entities/lookup/colors";

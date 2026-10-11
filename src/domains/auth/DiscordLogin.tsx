@@ -1,4 +1,4 @@
-import { Button, Group, Text, type ButtonProps } from "@mantine/core";
+import { Button, Group, Text, type ButtonProps } from "@/ds";
 import { useUser } from "@/api/auth/useUser";
 import { IconBrandDiscordFilled } from "@tabler/icons-react";
 import { config } from "@/config";

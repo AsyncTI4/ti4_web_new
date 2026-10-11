@@ -26,12 +26,12 @@
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  color: var(--mantine-color-gray-5);
+  color: var(--ds-gray-5);
 }
 
 .collapseToggle:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
 }
 
 .collapseToggle:focus-visible {
@@ -61,12 +61,12 @@
   min-width: 0;
   align-items: center;
   gap: 8px;
-  font-family: var(--mantine-font-family-headings);
+  font-family: var(--font-display);
   font-size: 9px;
   font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
   white-space: nowrap;
 }
@@ -83,12 +83,12 @@
 .railTurnName {
   max-width: 40vw;
   overflow: hidden;
-  font-family: var(--mantine-font-family);
+  font-family: var(--font-text);
   font-size: 11px;
   letter-spacing: normal;
   text-overflow: ellipsis;
   text-transform: none;
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
 }
 
 /* The one place the phase colour goes bright. A 6px dot that breathes reports a
@@ -235,8 +235,8 @@
 }
 
 .turnText {
-  color: var(--mantine-color-gray-4);
-  font-size: var(--mantine-font-size-xs);
+  color: var(--ds-gray-4);
+  font-size: var(--ds-fz-xs);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -244,7 +244,7 @@
 }
 
 .turnName {
-  color: var(--mantine-color-white);
+  color: var(--ds-white);
   font-weight: var(--weight-rail);
 }
 
@@ -259,18 +259,18 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
 }
 
 .voteTable th {
   padding: 3px 6px;
   text-align: right;
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
   font-weight: var(--weight-title);
   font-size: 10px;
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--mantine-color-dark-4);
+  border-bottom: 1px solid var(--ds-dark-4);
 }
 
 .voteTable th:first-child {
@@ -282,17 +282,17 @@
   text-align: right;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-variant-numeric: tabular-nums;
-  color: var(--mantine-color-gray-2);
+  color: var(--ds-gray-2);
 }
 
 .voteTable td:first-child {
   text-align: left;
   font-weight: var(--weight-data);
-  color: var(--mantine-color-gray-3);
+  color: var(--ds-gray-3);
 }
 
 .voteTable td:last-child {
-  color: var(--mantine-color-gray-4);
+  color: var(--ds-gray-4);
 }
 
 .currentVoterRow {
@@ -301,7 +301,7 @@
 
 .currentVoterRow td:first-child {
   font-weight: var(--weight-rail);
-  color: var(--mantine-color-gray-1);
+  color: var(--ds-gray-1);
 }
 
 .voterName {

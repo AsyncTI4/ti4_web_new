@@ -1,4 +1,4 @@
-import { Box, Text, Stack, Divider } from "@mantine/core";
+import { Box, Text, Stack, Divider } from "@/ds";
 import styles from "./CardDetailsModal.module.css";
 
 type CardItemData = {

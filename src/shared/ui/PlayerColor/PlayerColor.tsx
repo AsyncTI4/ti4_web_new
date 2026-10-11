@@ -1,4 +1,3 @@
-import { lighten } from "@mantine/core";
 import cx from "clsx";
 import {
   findColorData,
@@ -46,7 +45,7 @@ export function PlayerColorSwatch({ color }: { color: string }) {
 
 export function PlayerColor({ color, size = "sm" }: Props) {
   const swatchBackground = getSwatchBackground(color);
-  const labelColor = lighten(getPrimaryColorCSS(color), 0.45);
+  const labelColor = `color-mix(in oklab, ${getPrimaryColorCSS(color)} 55%, white)`;
 
   return (
     <span

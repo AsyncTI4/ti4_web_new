@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Group, Text, Box, Image, Stack } from "@mantine/core";
+import { Group, Text, Box, Image, Stack } from "@/ds";
 import cx from "clsx";
 import { PlayerColor } from "@/shared/ui/PlayerColor/PlayerColor";
 import { StatusIndicator } from "../StatusIndicator";

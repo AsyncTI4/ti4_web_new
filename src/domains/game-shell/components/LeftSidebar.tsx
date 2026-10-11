@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Stack, Text } from "@/ds";
 import { CompactObjectives } from "@/domains/player/components/CompactObjectives";
 import { PointTotals } from "@/domains/player/components/PointTotals";
 import { CompactLaw } from "@/domains/player/components/CompactLaw";

@@ -1,4 +1,4 @@
-import { Tabs, Box } from "@mantine/core";
+import { Tabs, Box } from "@/ds";
 import { useEffect, useRef, useState } from "react";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { isMobileDevice } from "@/utils/isTouchDevice";

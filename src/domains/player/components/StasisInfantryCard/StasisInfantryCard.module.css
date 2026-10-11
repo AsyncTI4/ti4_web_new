@@ -82,12 +82,12 @@
 }
 
 .infoStack {
-  gap: var(--mantine-spacing-xs);
+  gap: var(--ds-space-xs);
   align-items: center;
 }
 
 .mainGroup {
-  gap: var(--mantine-spacing-xs);
+  gap: var(--ds-space-xs);
   justify-content: center;
   align-items: baseline;
 }
@@ -109,7 +109,7 @@
 }
 
 .reviveLabel {
-  color: var(--mantine-color-green-3);
+  color: var(--ds-green-3);
   font-weight: var(--weight-title);
   font-size: 9px;
   line-height: 1;

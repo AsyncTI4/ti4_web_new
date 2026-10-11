@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from "react";
-import { Box, Text, Stack, Group, Image, Divider } from "@mantine/core";
+import { Box, Text, Stack, Group, Image, Divider } from "@/ds";
 import { IconArrowRight } from "@tabler/icons-react";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { TECH_PREREQ_ICON } from "@/entities/lookup/tech";
@@ -384,7 +384,7 @@ export function UpgradeSection({ upgrade }: { upgrade: UpgradeInfo | null }) {
           <Text size="xs" fw={500} c="gray.6" className={styles.sectionTitle}>
             Upgrades to
           </Text>
-          <IconArrowRight size={12} color="var(--mantine-color-gray-6)" />
+          <IconArrowRight size={12} color="var(--ds-gray-6)" />
           <Text size="sm" fw={600} c="gray.4">
             {upgradeUnit.name}
           </Text>

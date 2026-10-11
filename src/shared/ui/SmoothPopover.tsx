@@ -1,51 +1,23 @@
 import { useContentScale } from "@/shared/ui/ScaledContent";
-import { Popover, PopoverProps } from "@mantine/core";
-import {
-  ComponentProps,
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Popover, type PopoverDropdownProps, type PopoverProps } from "@/ds";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
-type SmoothPopoverProps = Omit<PopoverProps, "transitionProps" | "styles"> & {
+type SmoothPopoverProps = Omit<PopoverProps, "children"> & {
   children: ReactNode;
   opened: boolean;
   onChange: (opened: boolean) => void;
 };
 
-type SmoothPopoverDropdownProps = ComponentProps<typeof Popover.Dropdown>;
-type SmoothPopoverTargetProps = ComponentProps<typeof Popover.Target>;
-
 /**
  * True until the popover is first opened. A game mounts hundreds of these
- * closed, and a mounted Mantine Popover costs floating-ui hooks, a portal and
- * effects even when nothing is shown, so until then only the target renders.
+ * closed, and a mounted popover costs positioning hooks, a portal and effects
+ * even when nothing is shown, so until then only the target renders.
  */
 const DormantContext = createContext(false);
 
-function SmoothPopoverBase({
-  children,
-  opened,
-  onChange,
-  position = "top",
-  withArrow = true,
-  shadow = "xl",
-  ...props
-}: SmoothPopoverProps) {
+function SmoothPopoverBase({ children, opened, onChange, position = "top", withArrow = true, ...props }: SmoothPopoverProps) {
   const [armed, setArmed] = useState(opened);
-  const [ready, setReady] = useState(opened);
-
   if (opened && !armed) setArmed(true);
-
-  // Mount closed first and open a frame later: Mantine's Portal mounts its
-  // Transition a commit late, and opening sooner would skip the enter animation.
-  useEffect(() => {
-    if (!armed || ready) return;
-    const frame = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(frame);
-  }, [armed, ready]);
 
   if (!armed) {
     return <DormantContext value={true}>{children}</DormantContext>;
@@ -55,21 +27,8 @@ function SmoothPopoverBase({
     <Popover
       position={position}
       withArrow={withArrow}
-      shadow={shadow}
-      opened={opened && ready}
+      opened={opened}
       onChange={onChange}
-      withinPortal
-      transitionProps={{
-        duration: 280,
-        timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
-      styles={{
-        dropdown: {
-          background: "transparent",
-          padding: 0,
-          border: "none",
-        },
-      }}
       zIndex="var(--z-smooth-popover)"
       {...props}
     >
@@ -78,31 +37,21 @@ function SmoothPopoverBase({
   );
 }
 
-function SmoothPopoverTarget({ children, ...props }: SmoothPopoverTargetProps) {
+function SmoothPopoverTarget({ children }: { children: ReactNode }) {
   const dormant = useContext(DormantContext);
   if (dormant) return children;
-
-  return <Popover.Target {...props}>{children}</Popover.Target>;
+  return <Popover.Target>{children}</Popover.Target>;
 }
 
-function SmoothPopoverDropdown({
-  children,
-  ...props
-}: SmoothPopoverDropdownProps) {
+/** The dropdown brings no frame of its own: the details card inside is the surface. */
+function SmoothPopoverDropdown({ children, ...props }: PopoverDropdownProps) {
   const dormant = useContext(DormantContext);
   const dropdownScale = useContentScale();
   if (dormant) return null;
 
   return (
-    <Popover.Dropdown {...props}>
-      <div
-        style={{
-          zoom: dropdownScale,
-          transformOrigin: "top left",
-        }}
-      >
-        {children}
-      </div>
+    <Popover.Dropdown unstyled {...props}>
+      <div style={{ zoom: dropdownScale, transformOrigin: "top left" }}>{children}</div>
     </Popover.Dropdown>
   );
 }

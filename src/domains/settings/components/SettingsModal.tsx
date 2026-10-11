@@ -5,7 +5,7 @@ import {
   Divider,
   SegmentedControl,
   Tabs,
-} from "@mantine/core";
+} from "@/ds";
 import { useSettingsStore } from "@/state/appStore";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { AppModal } from "@/shared/ui/AppModal";

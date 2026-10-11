@@ -22,7 +22,7 @@
 }
 
 .mainStack {
-  padding: 6px var(--mantine-spacing-xs);
+  padding: 6px var(--ds-space-xs);
   border: 1px solid var(--ability-border);
   background: linear-gradient(
     135deg,
@@ -66,7 +66,7 @@
 }
 
 .planetName {
-  font-size: var(--mantine-font-size-xs);
+  font-size: var(--ds-fz-xs);
   color: white;
   font-weight: var(--weight-rail);
   writing-mode: vertical-rl;

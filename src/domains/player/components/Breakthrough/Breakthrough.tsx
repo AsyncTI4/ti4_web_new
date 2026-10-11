@@ -1,5 +1,5 @@
 import { useDisclosure } from "@/hooks/useDisclosure";
-import { Box } from "@mantine/core";
+import { Box } from "@/ds";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { getBreakthroughData } from "@/entities/lookup/breakthroughs";
@@ -93,7 +93,7 @@ export function Breakthrough({
             <Box className={styles.exhaustedBadge}>
               <IconX
                 size={16}
-                color="var(--mantine-color-red-1)"
+                color="var(--ds-red-1)"
                 stroke={2.75}
               />
             </Box>
