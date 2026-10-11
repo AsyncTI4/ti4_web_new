@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent,
   type ReactElement,
   type ReactNode,
   type Ref,
@@ -361,13 +362,17 @@ export type TooltipProps = {
   maw?: number | string;
   zIndex?: number | string;
   className?: string;
-  /** Accepted for API parity. */
-  events?: unknown;
+  /** `touch` lets a tap toggle the tooltip; hover and focus always work. */
+  events?: { hover?: boolean; focus?: boolean; touch?: boolean };
   withinPortal?: boolean;
   opened?: boolean;
   color?: string;
   transitionProps?: unknown;
 };
+
+/* After a tap, the browser's synthetic hover and focus changes must not close
+   what the tap just opened. */
+const TOUCH_IGNORED_REASONS = new Set<string>(["trigger-hover", "trigger-focus"]);
 
 /** A short hover/focus label. The trigger is the child element. */
 export function Tooltip({
@@ -384,14 +389,42 @@ export function Tooltip({
   maw,
   zIndex = "var(--z-tooltip, 4500)",
   className,
+  events,
   opened,
 }: TooltipProps) {
+  const [tapOpen, setTapOpen] = useState(false);
+  const pointerType = useRef("");
   const { side, align } = toSideAlign(position);
   if (disabled || label === null || label === undefined || label === "") return <>{children}</>;
   const trigger = isValidElement(children) ? (children as ReactElement) : <span>{children}</span>;
+  // Touch has no hover, so a tap toggles the tooltip and an outside tap closes it.
+  const tappable = Boolean(events?.touch) && opened === undefined;
+  const rootProps = tappable
+    ? {
+        open: tapOpen,
+        onOpenChange: (next: boolean, details: BaseTooltip.Root.ChangeEventDetails) => {
+          const touchHoverEnd = pointerType.current === "touch" && TOUCH_IGNORED_REASONS.has(details.reason);
+          if (!touchHoverEnd) setTapOpen(next);
+        },
+      }
+    : { open: opened };
+  const tapProps = tappable
+    ? {
+        closeOnClick: false,
+        onPointerEnter: (event: PointerEvent) => {
+          pointerType.current = event.pointerType;
+        },
+        onPointerDown: (event: PointerEvent) => {
+          pointerType.current = event.pointerType;
+        },
+        onClick: () => {
+          if (pointerType.current === "touch") setTapOpen((open) => !open);
+        },
+      }
+    : {};
   return (
-    <BaseTooltip.Root open={opened}>
-      <BaseTooltip.Trigger render={trigger} delay={openDelay} closeDelay={closeDelay} />
+    <BaseTooltip.Root {...rootProps}>
+      <BaseTooltip.Trigger render={trigger} delay={openDelay} closeDelay={closeDelay} {...tapProps} />
       <BaseTooltip.Portal container={getPortalRoot()}>
         <BaseTooltip.Positioner side={side} align={align} sideOffset={offset} collisionPadding={8} style={{ zIndex }}>
           <BaseTooltip.Popup className={cx(classes.tooltip, multiline && classes.tooltipMulti, "overlay-tooltip", className)} style={{ width: w, maxWidth: maw }}>

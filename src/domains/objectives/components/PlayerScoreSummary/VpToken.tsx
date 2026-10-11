@@ -56,7 +56,7 @@ export function VpToken({ entry }: { entry: ScoreBreakdownEntry }) {
   const isMobile = isMobileDevice();
 
   return (
-    <Tooltip label={label} multiline w={260} events={{ hover: !isMobile, focus: true, touch: isMobile }}>
+    <Tooltip label={label} multiline w={260} openDelay={120} events={{ hover: !isMobile, focus: true, touch: isMobile }}>
       <span
         className={styles.tok}
         tabIndex={0}
