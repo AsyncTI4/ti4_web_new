@@ -78,6 +78,16 @@ function RailCell({
   );
 }
 
+function getVictoryReadout(vp: number, vpsToWin: number) {
+  if (vp >= vpsToWin) return "Victory";
+  return `${vpsToWin - vp} to win`;
+}
+
+/**
+ * The faction spine doubles as a victory gauge: it fills from the foot in the
+ * seat's colour to its share of the points needed, with a notch per point on
+ * the track, so the race reads down the whole table at a glance.
+ */
 function Seat({
   player,
   factionImageUrl,
@@ -87,24 +97,27 @@ function Seat({
   factionImageUrl?: string;
   vpsToWin: number;
 }) {
+  const vp = player.totalVps ?? 0;
+  const track = Math.max(vpsToWin, 1);
+  const fill = Math.min(vp / track, 1);
+  const won = vp >= track;
+  const style = {
+    "--fill": fill,
+    "--track": track,
+    ...(factionImageUrl ? { "--sigil": `url("${factionImageUrl}")` } : {}),
+  } as CSSProperties;
+
   return (
-    <div
-      className={styles.seat}
-      style={
-        factionImageUrl
-          ? ({ "--sigil": `url("${factionImageUrl}")` } as CSSProperties)
-          : undefined
-      }
-    >
+    <div className={styles.seat} style={style} data-won={won || undefined}>
+      <span className={styles.gauge} aria-hidden="true">
+        <span className={styles.gaugeFill} />
+      </span>
       {factionImageUrl && (
         <img className={styles.sig} src={factionImageUrl} alt={player.faction} />
       )}
-      <span className={styles.vp} title={`${player.totalVps} victory points`}>
-        <b>{player.totalVps ?? 0}</b>
-        <small>
-          {player.totalVps ?? 0}
-          <i>/{vpsToWin}</i>
-        </small>
+      <span className={styles.vp} title={`${vp} of ${track} victory points`}>
+        <b>{vp}</b>
+        <small>{getVictoryReadout(vp, track)}</small>
       </span>
       <span />
       <span className={styles.stamps}>
