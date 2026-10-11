@@ -15,6 +15,8 @@ type Props = {
     | "cyan"
     | "blue"
     | "purple";
+  /** Fill the container instead of the fixed popover width. */
+  fluid?: boolean;
 };
 
 function AbilityLines({ lines, emptyText }: { lines: string[]; emptyText: string }) {
@@ -37,7 +39,7 @@ function AbilityLines({ lines, emptyText }: { lines: string[]; emptyText: string
   );
 }
 
-export function StrategyCardDetailsCard({ initiative, color }: Props) {
+export function StrategyCardDetailsCard({ initiative, color, fluid }: Props) {
   const gameData = useGameData();
   const sc = getStrategyCardByInitiative(
     initiative,
@@ -49,7 +51,7 @@ export function StrategyCardDetailsCard({ initiative, color }: Props) {
 
   return (
     <DetailsCard
-      width={320}
+      width={fluid ? undefined : 320}
       color={accent === "teal" ? "cyan" : (accent ?? "none")}
     >
       <Stack gap="md">
