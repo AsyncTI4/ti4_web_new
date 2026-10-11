@@ -192,9 +192,3 @@
     transition: none;
   }
 }
-
-/* The details card brings its own surface; the phone sheet only frames it. */
-.sheetContent {
-  background: transparent;
-  box-shadow: none;
-}

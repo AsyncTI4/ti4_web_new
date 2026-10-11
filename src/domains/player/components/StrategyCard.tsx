@@ -2,9 +2,6 @@ import { Box, Text } from "@mantine/core";
 import cx from "clsx";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { AppModal } from "@/shared/ui/AppModal";
-import { visualViewportModalStyles } from "@/shared/ui/visualViewportModal";
-import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { Chip } from "@/shared/ui/primitives/Chip";
 import {
@@ -14,6 +11,7 @@ import {
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import { useGameData } from "@/state/useGameContext";
 import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
+import { StrategyCardSheet } from "@/domains/cards/components/StrategyCardSheet";
 import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./StrategyCard.module.css";
 import { cdnImage } from "@/entities/data/cdnImage";
@@ -22,10 +20,6 @@ type StrategyCardColor = Extract<
   ColorKey,
   "red" | "orange" | "yellow" | "green" | "teal" | "cyan" | "blue" | "purple"
 >;
-
-/** The details card's width wherever the screen has room for it. */
-const DETAILS_WIDTH = 320;
-const MOBILE_SCREEN_GAP = 10;
 
 type Props = {
   initiative: number;
@@ -118,38 +112,5 @@ export function StrategyCard({
         <StrategyCardDetailsCard initiative={initiative} color={color} />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
-  );
-}
-
-type SheetProps = {
-  initiative: number;
-  color: StrategyCardColor;
-  opened: boolean;
-  onClose: () => void;
-};
-
-/**
- * The card's text on a phone. A popover is placed against the layout
- * viewport, so on a pinched board it lands off screen and scales with the
- * pinch; this sheet is pinned to what is actually on screen instead.
- */
-function StrategyCardSheet({ initiative, color, opened, onClose }: SheetProps) {
-  const viewport = useVisualViewport(opened);
-
-  return (
-    <AppModal
-      opened={opened}
-      onClose={onClose}
-      padding={0}
-      withCloseButton={false}
-      classNames={{ content: classes.sheetContent }}
-      styles={visualViewportModalStyles(viewport, {
-        gap: MOBILE_SCREEN_GAP,
-        maxWidth: DETAILS_WIDTH,
-      })}
-      transitionProps={{ transition: "fade", duration: 160 }}
-    >
-      <StrategyCardDetailsCard initiative={initiative} color={color} fluid />
-    </AppModal>
   );
 }
