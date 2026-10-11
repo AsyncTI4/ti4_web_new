@@ -247,7 +247,14 @@ function MobileTabsControls({
 }) {
   return (
     <>
-      <Group gap={4} px={8} pb={4} wrap="nowrap" style={{ width: "100%" }}>
+      <Group
+        gap={4}
+        pl={0}
+        pr={8}
+        pb={4}
+        wrap="nowrap"
+        style={{ width: "100%" }}
+      >
         <Box className={classes.mobileRackScroll}>
           <ControlButtons
             showKeyboardButton={false}

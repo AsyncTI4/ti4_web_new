@@ -34,6 +34,12 @@
   width: max-content;
 }
 
+/* Narrower bays on a phone so the whole rack fits beside the buttons
+   without scrolling on common screen widths. */
+.mobileRackScroll .toolButton {
+  padding: 0 5px;
+}
+
 .toolButton {
   --tool-accent: var(--gd-gray);
   display: flex;
