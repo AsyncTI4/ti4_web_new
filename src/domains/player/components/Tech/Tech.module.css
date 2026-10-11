@@ -84,8 +84,7 @@
     rgba(var(--k), 0.035);
 }
 
-.tech[data-s="exhausted"] > span:first-child,
-.tech[data-s="exhausted"] > .letter {
+.tech[data-s="exhausted"] > span:first-child {
   filter: saturate(0.4) brightness(0.8);
 }
 
@@ -104,18 +103,4 @@
 
 .tech[data-s="locked"] > span:first-child {
   filter: grayscale(0.7) brightness(0.7);
-}
-
-/* Solder pads: a via field printed on the board, fading in toward the pips. */
-.board {
-  position: absolute;
-  inset: 1px 1px 1px 45%;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(circle, rgba(var(--k), 0.3) 0.7px, transparent 1.2px) 0 0 / 5px 5px;
-  mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 0.9) 85%);
-}
-
-.tech[data-s="locked"] .board {
-  opacity: 0.4;
 }

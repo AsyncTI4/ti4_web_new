@@ -10,21 +10,6 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
 }
 
-/* The board's own geometry, etched faintly across the tag. */
-.abl::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: rgb(var(--ds-sig-ability) / 0.32);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 14 24'%3E%3Cpath d='M7 0 14 4v8l-7 4-7-4V4zM7 16v8' fill='none' stroke='black' stroke-width='.7'/%3E%3C/svg%3E") 0 0 / 14px 24px repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 14 24'%3E%3Cpath d='M7 0 14 4v8l-7 4-7-4V4zM7 16v8' fill='none' stroke='black' stroke-width='.7'/%3E%3C/svg%3E") 0 0 / 14px 24px repeat;
-}
-
-.abl > * {
-  position: relative;
-}
-
 .abl:hover {
   border-color: rgb(var(--ds-sig-ability) / 0.455);
 }

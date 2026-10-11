@@ -51,13 +51,6 @@
     repeating-linear-gradient(180deg, rgb(var(--ds-sig-pn) / 0.49) 0 2px, transparent 2px 4px)
       22.5px 3px / 1px calc(100% - 6px) no-repeat,
     linear-gradient(90deg, rgba(var(--pc), 0.28) 0 22px, transparent 22px),
-    /* Banknote guilloche: fine engraved arcs radiating from off the right edge. */
-    repeating-radial-gradient(
-        circle at calc(100% + 40px) 50%,
-        rgb(var(--ds-sig-pn) / 0.2) 0 0.7px,
-        transparent 0.6px 3.2px
-      )
-      26px 0 / calc(100% - 26px) 100% no-repeat,
     linear-gradient(90deg, rgb(var(--ds-sig-pn) / 0.077), rgb(var(--ds-sig-pn) / 0.021)),
     linear-gradient(
       180deg,

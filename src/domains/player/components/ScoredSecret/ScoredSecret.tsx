@@ -40,13 +40,6 @@ export function ScoredSecret({
     >
       <ObjectGlyph src="/so_icon.png" />
       <ObjectLabel>{secretName}</ObjectLabel>
-      {variant === "scored" && (
-        <span className={styles.stamp} aria-hidden="true">
-          <svg viewBox="0 0 12 12">
-            <path d="m2.5 6.4 2.3 2.2 4.7-5" />
-          </svg>
-        </span>
-      )}
     </ObjectShell>
   );
 
