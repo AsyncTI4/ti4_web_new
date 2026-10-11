@@ -15,6 +15,26 @@ type Props = {
   active: boolean;
 };
 
+const LEADER_RANK: Record<Props["type"], number> = {
+  agent: 1,
+  commander: 2,
+  hero: 3,
+};
+
+/** Rank chevrons: one for an agent, two for a commander, three for a hero. */
+function RankChevrons({ type }: { type: Props["type"] }) {
+  const rank = LEADER_RANK[type] ?? 0;
+  return (
+    <span className={styles.rank} aria-hidden="true">
+      {[1, 2, 3].map((step) => (
+        <svg key={step} viewBox="0 0 10 5" data-on={step <= rank || undefined}>
+          <path d="M1 4.2 5 1l4 3.2" />
+        </svg>
+      ))}
+    </span>
+  );
+}
+
 function getLeaderState(exhausted: boolean, locked: boolean) {
   if (locked) return "locked";
   if (exhausted) return "exhausted";
@@ -69,6 +89,7 @@ export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
               {exhausted && !locked && " · exhausted"}
             </em>
           </span>
+          <RankChevrons type={type} />
           {active && <span className={styles.onlineDot} />}
         </div>
       </SmoothPopover.Target>

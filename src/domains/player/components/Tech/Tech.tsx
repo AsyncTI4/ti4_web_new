@@ -103,6 +103,7 @@ export function Tech({
           ) : (
             <ObjectGlyph src={iconSrc} size={isFactionTech ? 16 : 15} />
           )}
+          <span className={styles.board} aria-hidden="true" />
           <ObjectLabel>{techData.name}</ObjectLabel>
           {tier > 0 && (
             <span className={styles.pips} aria-hidden="true">

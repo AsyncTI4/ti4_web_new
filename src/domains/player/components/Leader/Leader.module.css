@@ -7,7 +7,7 @@
   --lc: var(--gd-green);
   position: relative;
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
+  grid-template-columns: 38px minmax(0, 1fr) auto;
   align-items: center;
   gap: 9px;
   height: 44px;
@@ -147,4 +147,38 @@
   height: 6px;
   border-radius: 50%;
   background: rgb(var(--ds-sig-ok));
+}
+
+/* Rank chevrons stacked like insignia; lit ones carry the leader's state colour. */
+.rank {
+  display: grid;
+  gap: 1px;
+  align-self: center;
+}
+
+.rank svg {
+  width: 10px;
+  height: 5px;
+  fill: none;
+  stroke: var(--ds-h22);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rank svg:nth-child(1) {
+  order: 3;
+}
+
+.rank svg:nth-child(3) {
+  order: 1;
+}
+
+.rank svg[data-on] {
+  stroke: rgba(var(--lc), 0.7);
+}
+
+.lead[data-s="exhausted"] .rank svg[data-on],
+.lead[data-s="locked"] .rank svg[data-on] {
+  stroke: var(--ds-ink-lo);
 }

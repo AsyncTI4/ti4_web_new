@@ -41,6 +41,9 @@
     0 5.6px
   );
   background:
+    /* Cut-gem facets: a lit plane across the top-left, a shadowed one below. */
+    linear-gradient(158deg, rgb(var(--ds-sig-relic) / 0.24) 0 24%, transparent 24.5%),
+    linear-gradient(338deg, rgb(0 0 0 / 0.22) 0 18%, transparent 18.5%),
     linear-gradient(90deg, rgb(var(--ds-sig-relic) / 0.112), rgb(var(--ds-sig-relic) / 0.028)),
     linear-gradient(
       180deg,
