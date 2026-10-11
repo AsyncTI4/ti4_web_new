@@ -1,6 +1,8 @@
 import { memo, type CSSProperties } from "react";
 import { Group, Stack, Text } from "@mantine/core";
 import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
+import { StrategyCardSheet } from "@/domains/cards/components/StrategyCardSheet";
+import { isMobileDevice } from "@/utils/isTouchDevice";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { calculateStatTilePositions } from "@/entities/geometry/tilePositioning";
@@ -48,22 +50,37 @@ function StrategyCardNumber({
 }) {
   const { opened, setOpened, toggle } = useDisclosure(false);
 
+  const numeral = (
+    <Text
+      component="button"
+      type="button"
+      className={className}
+      c={isExhausted ? "gray.5" : SC_NUMBER_COLORS[SC_COLORS[initiative]]}
+      style={style}
+      aria-expanded={opened}
+      aria-label={`Strategy card ${initiative}`}
+      onClick={toggle}
+    >
+      {initiative}
+    </Text>
+  );
+
+  if (isMobileDevice()) {
+    return (
+      <>
+        {numeral}
+        <StrategyCardSheet
+          initiative={initiative}
+          opened={opened}
+          onClose={() => setOpened(false)}
+        />
+      </>
+    );
+  }
+
   return (
     <SmoothPopover opened={opened} onChange={setOpened}>
-      <SmoothPopover.Target>
-        <Text
-          component="button"
-          type="button"
-          className={className}
-          c={isExhausted ? "gray.5" : SC_NUMBER_COLORS[SC_COLORS[initiative]]}
-          style={style}
-          aria-expanded={opened}
-          aria-label={`Strategy card ${initiative}`}
-          onClick={toggle}
-        >
-          {initiative}
-        </Text>
-      </SmoothPopover.Target>
+      <SmoothPopover.Target>{numeral}</SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
         <StrategyCardDetailsCard initiative={initiative} />
       </SmoothPopover.Dropdown>
