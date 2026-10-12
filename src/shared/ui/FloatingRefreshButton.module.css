@@ -23,3 +23,21 @@
 .anchor > * {
   pointer-events: auto;
 }
+
+/*
+ * On a phone the top of the board is the tool rack and the game state plate,
+ * so the prompt covered both. It docks to the bottom edge instead: one fixed
+ * spot within thumb reach, clear of every control, and a taller plate so it
+ * is an easy target.
+ */
+@media (max-width: 47.99375em) {
+  .anchor {
+    top: auto;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .anchor > :global(.mantine-Button-root) {
+    height: 40px;
+    padding: 0 16px;
+  }
+}
