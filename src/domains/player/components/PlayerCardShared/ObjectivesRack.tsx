@@ -27,11 +27,17 @@ type ObjectivesRackProps = {
    * rather than pooling as dead field beside the rack.
    */
   fluid?: boolean;
+  /**
+   * Holdings as two runs of seats, secrets beside relics and notes, each
+   * wrapping to its share of the plate's width, with no empty sockets. For a card that gives holdings a full-width row of their
+   * own: depth is whatever the holdings need, never padded to match a sibling.
+   */
+  flow?: boolean;
 };
 
 type ObjectiveCounts = Omit<
   ObjectivesRackProps,
-  "exhaustedRelics" | "minColumns" | "minRows" | "fluid"
+  "exhaustedRelics" | "minColumns" | "minRows" | "fluid" | "flow"
 >;
 
 const OBJECTIVE_COLUMN_WIDTH = 170;
@@ -121,6 +127,7 @@ export function ObjectivesRack({
   minColumns = 1,
   minRows = 0,
   fluid = false,
+  flow = false,
 }: ObjectivesRackProps) {
   const knownUnscoredIds = Object.keys(knownUnscoredSecrets ?? {});
   const hiddenSecretCount = Math.max((soCount || 0) - knownUnscoredIds.length, 0);
@@ -159,6 +166,23 @@ export function ObjectivesRack({
     )),
   ];
   const allItems = [...secretItems, ...otherItems];
+
+  if (flow) {
+    return (
+      <Box className={styles.flowFrame}>
+        <Box className={styles.rackFlow}>
+          {[secretItems, otherItems]
+            .filter((group) => group.length > 0)
+            .map((group, index) => (
+              <Box className={styles.flowGroup} key={index}>
+                {group}
+              </Box>
+            ))}
+        </Box>
+      </Box>
+    );
+  }
+
   const minWidth = fluid
     ? undefined
     : minColumns * OBJECTIVE_COLUMN_WIDTH +

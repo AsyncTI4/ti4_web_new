@@ -19,12 +19,6 @@ type Props = {
    * seat into a lattice instead of a one-line rail.
    */
   groupClassName?: string;
-  /**
-   * When set, each bay opens with its name in this class. The band's rail
-   * stays unlabelled — position identifies its compartments — but the card's
-   * lattice reflows with width, so the bays carry their own names.
-   */
-  groupLabelClassName?: string;
 };
 
 /*
@@ -41,20 +35,14 @@ export function PlayerCardAbilitiesFactionTechsMobile({
   showFactionAbilities = true,
   showBreakthrough = true,
   groupClassName,
-  groupLabelClassName,
 }: Props) {
   const { synergy, breakthroughUnlocked } = getBreakthroughSynergy(breakthrough);
   const groupClass = groupClassName ?? rail.railGroup;
-  const bayLabel = (label: string) =>
-    groupLabelClassName ? (
-      <span className={groupLabelClassName}>{label}</span>
-    ) : null;
 
   return (
     <>
       {showBreakthrough && breakthrough?.breakthroughId && (
         <div className={groupClass}>
-          {bayLabel("Breakthrough")}
           <Breakthrough
             breakthroughId={breakthrough.breakthroughId}
             exhausted={breakthrough.exhausted}
@@ -66,7 +54,6 @@ export function PlayerCardAbilitiesFactionTechsMobile({
       )}
       {showFactionAbilities && notResearchedFactionTechs.length > 0 && (
         <div className={groupClass}>
-          {bayLabel("Faction Techs")}
           {notResearchedFactionTechs.map((techId) => (
             <Tech
               techId={techId}
@@ -79,7 +66,6 @@ export function PlayerCardAbilitiesFactionTechsMobile({
       )}
       {showFactionAbilities && customPromissoryNotes.length > 0 && (
         <div className={groupClass}>
-          {bayLabel("Promissory Notes")}
           {customPromissoryNotes.map((pnId) => (
             <PromissoryNote promissoryNoteId={pnId} key={pnId} />
           ))}
@@ -87,7 +73,6 @@ export function PlayerCardAbilitiesFactionTechsMobile({
       )}
       {showFactionAbilities && abilities.length > 0 && (
         <div className={groupClass}>
-          {bayLabel("Abilities")}
           {abilities.map((abilityId, index) => (
             <Ability id={abilityId} key={index} strong={false} />
           ))}

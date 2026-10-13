@@ -1,4 +1,4 @@
-import { Box, Group, Stack } from "@/ds";
+import { Box, Stack } from "@/ds";
 import { PlayerData } from "@/entities/data/types";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ArmyStats } from "@/domains/player/components/ArmyStats";
@@ -6,15 +6,11 @@ import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnits
 import { PlotCardsList } from "@/domains/player/components/PlotCardsList";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import { usePlayerCardComputedData } from "./usePlayerCardComputedData";
-import { PlayerCardPlanetsSection } from "./PlayerCardPlanetsSection";
+import { ResourceInfluenceCompact } from "@/domains/player/components/ResourceInfluenceTable";
 import { getPlayerCardLayoutFields } from "./getPlayerCardLayoutFields";
 import { Compartment } from "./Compartment";
 import { LogisticsPlate } from "./LogisticsPlate";
-import {
-  MIN_RACK_ROWS,
-  ObjectivesRack,
-  getGameObjectiveColumnCount,
-} from "./ObjectivesRack";
+import { ObjectivesRack } from "./ObjectivesRack";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { PlayerCardAbilitiesFactionTechsMobile } from "@/domains/player/components/PlayerCardAbilitiesFactionTechs";
 import {
@@ -23,6 +19,7 @@ import {
 } from "@/domains/player/components/Tech/TechGridShared";
 import { PhantomTech } from "@/domains/player/components/Tech/PhantomTech";
 import { Nombox } from "@/domains/player/components/composition/Nombox";
+import { getTechData } from "@/entities/lookup/tech";
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
 import styles from "./PlayerCardDeck.module.css";
@@ -31,16 +28,30 @@ type Props = {
   playerData: PlayerData;
 };
 
-/** Sockets drawn per tech color, so an unresearched line reads as capacity. */
-const TECH_MIN_SLOTS = 4;
 
 /**
- * The expanded player dossier: the same compartment band as the pannable map
- * view, reflowed into rows for a surface that is taller than it is wide. Same
- * plates, same fixed order — the band wraps instead of scrolling. Shared by
- * the Player tab's card grid and the Panels-view sidebar; container queries,
- * not media queries, drive the reflow, so both hosts get the layout their
- * actual width deserves.
+ * How deep the tech rack is drawn: the player's longest color line. Shorter
+ * lines are socketed to that depth so the rack stays a rectangle, but nothing
+ * is padded past what this player has actually researched.
+ */
+function getTechRackDepth(techIds: string[]) {
+  const counts = techCategories.map(
+    (techType) =>
+      techIds.filter((techId) => getTechData(techId)?.types[0] === techType)
+        .length
+  );
+  return Math.max(1, ...counts);
+}
+
+/**
+ * The expanded player dossier for the Player tab. Plates run in the order a
+ * player reads an opponent: who they are (faction loadout), what they can do
+ * this turn (stores, command tokens, planet spend, leaders), what they hold
+ * (secrets, relics, notes), what they have built (tech, units) and where they
+ * are (planets, across the full card width).
+ *
+ * Container queries, not media queries, drive the reflow: the tab's grid
+ * deals cards anywhere from ~480px to ~1000px wide.
  */
 export function PlayerCardDeck({ playerData }: Props) {
   const gameData = useGameData();
@@ -60,20 +71,24 @@ export function PlayerCardDeck({ playerData }: Props) {
   const hasCapturedUnits =
     player.nombox && Object.keys(player.nombox).length > 0;
 
-  const players = (gameData?.playerData ?? []).filter((p) => p.faction);
-  const objectiveColumns = getGameObjectiveColumnCount(players);
-
   /* One column per tech color, fluid width — the researched/socket mix reads
      as a build queue at any card width. */
+  const techDepth = getTechRackDepth(filteredTechs);
   const techRackColumns = techCategories.map((techType) =>
     buildTechElementsForType(
       techType,
       filteredTechs,
       playerData.exhaustedTechs ?? [],
-      TECH_MIN_SLOTS,
+      techDepth,
       playerData.breakthrough
     )
   );
+
+  const hasHoldings =
+    Object.keys(player.secretsScored ?? {}).length > 0 ||
+    (player.soCount ?? 0) > 0 ||
+    (player.relics?.length ?? 0) > 0 ||
+    promissoryNotes.length > 0;
 
   const hasLoadout =
     Boolean(playerData.breakthrough?.breakthroughId) ||
@@ -100,12 +115,17 @@ export function PlayerCardDeck({ playerData }: Props) {
               breakthrough={playerData.breakthrough}
               showFactionAbilities={settings.showPlayerAreaFactionAbilities}
               groupClassName={styles.loadoutGroup}
-              groupLabelClassName={styles.loadoutGroupLabel}
             />
           </Box>
         </Compartment>
       )}
 
+      {/* This turn: what they can spend, who they can send, what they hold.
+          Stores, ledger and leaders keep their natural widths; holdings take
+          the line's slack, or drop to a full-width line of their own when the
+          card is too narrow to seat them. The planet ledger sits here rather
+          than beside the planet cards — it is a spending figure, and the
+          cards get the card's full width back. */}
       <Box className={styles.row}>
         <Compartment brackets density="flush" className={styles.statusSection}>
           <LogisticsPlate
@@ -124,29 +144,38 @@ export function PlayerCardDeck({ playerData }: Props) {
           />
         </Compartment>
 
-        <Compartment className={styles.holdingsSection}>
-          <ObjectivesRack
-            fluid
-            secretsScored={player.secretsScored}
-            knownUnscoredSecrets={player.knownUnscoredSecrets}
-            soCount={player.soCount}
-            promissoryNotes={promissoryNotes}
-            relics={player.relics}
-            exhaustedRelics={player.exhaustedRelics}
-            minColumns={objectiveColumns}
-            minRows={MIN_RACK_ROWS}
+        <Compartment className={styles.economySection}>
+          <ResourceInfluenceCompact
+            planetEconomics={planetEconomics}
+            showTotalSpend={settings.showPlayerAreaTotalSpend}
           />
         </Compartment>
 
         <Compartment className={styles.leadersSection}>
           <Leaders leaders={player.leaders} faction={player.faction} />
         </Compartment>
+
+        {/* Holdings: one run of seats sized to what the player actually holds,
+            so a single relic is one seat, not one seat in a rack of empties. */}
+        {hasHoldings && (
+          <Compartment className={styles.holdingsSection}>
+            <ObjectivesRack
+              flow
+              secretsScored={player.secretsScored}
+              knownUnscoredSecrets={player.knownUnscoredSecrets}
+              soCount={player.soCount}
+              promissoryNotes={promissoryNotes}
+              relics={player.relics}
+              exhaustedRelics={player.exhaustedRelics}
+            />
+          </Compartment>
+        )}
       </Box>
 
       <Compartment className={styles.techSection}>
         <Box className={styles.techRack}>
           {techCategories.map((techType, index) => (
-            <Stack key={techType} gap={4}>
+            <Stack key={techType} gap={4} className={styles.techLane}>
               {techRackColumns[index].length > 0 ? (
                 techRackColumns[index]
               ) : (
@@ -182,30 +211,22 @@ export function PlayerCardDeck({ playerData }: Props) {
       </Box>
 
       <Compartment className={styles.planetsSection}>
-        <PlayerCardPlanetsSection
-          planetEconomics={planetEconomics}
-          gap={4}
-          align="stretch"
-          economyClassName={styles.planetsEconomy}
-          showTotalSpend={settings.showPlayerAreaTotalSpend}
-        >
-          <Group gap={4} align="center" className={styles.planetsFlow}>
-            <PlayerCardPlanetsArea
-              planets={player.planets}
-              exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
-              exhaustedPlanets={player.exhaustedPlanets}
+        <Box className={styles.planetsFlow}>
+          <PlayerCardPlanetsArea
+            planets={player.planets}
+            exhaustedPlanetAbilities={player.exhaustedPlanetAbilities}
+            exhaustedPlanets={player.exhaustedPlanets}
+          />
+          {settings.showPlayerAreaReinforcements && (
+            <ReinforcementTokensGroup
+              breachTokensReinf={player.breachTokensReinf}
+              sleeperTokensReinf={player.sleeperTokensReinf}
+              ghostWormholesReinf={player.ghostWormholesReinf}
+              galvanizeTokensReinf={player.galvanizeTokensReinf}
+              ml="xs"
             />
-            {settings.showPlayerAreaReinforcements && (
-              <ReinforcementTokensGroup
-                breachTokensReinf={player.breachTokensReinf}
-                sleeperTokensReinf={player.sleeperTokensReinf}
-                ghostWormholesReinf={player.ghostWormholesReinf}
-                galvanizeTokensReinf={player.galvanizeTokensReinf}
-                ml="xs"
-              />
-            )}
-          </Group>
-        </PlayerCardPlanetsSection>
+          )}
+        </Box>
       </Compartment>
 
       {Array.isArray(player.plotCards) && player.plotCards.length > 0 && (

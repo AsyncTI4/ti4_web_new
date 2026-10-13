@@ -6,8 +6,10 @@
 .stores {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto auto;
+  /* The shelf absorbs any slack so the command pool sits on the floor. */
+  grid-template-rows: auto auto 1fr auto;
   gap: 4px 6px;
+  height: 100%;
 }
 
 .hand {

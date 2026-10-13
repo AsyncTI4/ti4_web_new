@@ -26,21 +26,29 @@
   align-items: stretch;
 }
 
-/* Fixed-width anchor, same as the band; the racks beside it absorb the slack. */
+/* Stores, ledger and leaders are readouts with a natural size; stretched far,
+   they turn into long empty bars. Stores and leaders may grow a little to close
+   a line, up to a cap; the ledger never does. Holdings take the rest. */
 .statusSection {
-  flex: 0 0 auto;
-  min-width: 148px;
+  flex: 1 0 200px;
+  max-width: 240px;
 }
 
-/* Fluid rack: grows to fill whatever the row deals it. */
-.holdingsSection {
-  flex: 1 1 240px;
-  min-width: 0;
+.economySection {
+  flex: 0 0 auto;
 }
 
 .leadersSection {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
+  max-width: 300px;
   overflow: visible;
+}
+
+/* Beside the readouts when one seat fits; otherwise a full-width line. The
+   heavy grow weight makes the seats, not the readouts, soak up slack. */
+.holdingsSection {
+  flex: 12 1 200px;
+  min-width: 0;
 }
 
 .techSection,
@@ -62,20 +70,22 @@
   flex: 0 0 auto;
 }
 
-/* One column per tech color. Fluid tracks, so the rack fills the plate at any
-   card width instead of pinning columns to a px measure the row can't honour. */
+/* One column per tech color. Lanes are sized by their longest name and share
+   the plate's slack, so a color the player has not researched gives its width
+   to the lines that need it instead of forcing every name to truncate. */
 .techRack {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(64px, auto));
   gap: 4px;
 }
 
-.planetsEconomy {
-  margin-right: 6px;
-}
-
+/* Planet cards run the plate's full width and wrap; reinforcements trail the
+   last card. */
 .planetsFlow {
-  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -83,118 +93,79 @@
  * The faction loadout: the deck's first plate, one bay per chip group —
  * breakthrough, faction techs, promissory notes, abilities.
  *
- * The band's header rail keeps these groups on one seam-divided line, which a
- * card is too narrow to honour; wrapped rail groups tumbled into ragged rows.
- * Here the plate is a lattice instead: 1px gaps let a hairline ground show
- * between bays — the condensed unit rack's construction — so the seams draw
- * themselves around any wrap pattern. Bays grow to fill their row, and chips
- * wrap *inside* their bay, so a group is never split across rows.
+ * Bays size to their chips and grow to fill the line they land on, so the
+ * plate packs as many groups per line as the card allows and every line ends
+ * flush. 1px gaps let a hairline ground show between bays — the condensed
+ * unit rack's construction — so the seams draw themselves around any wrap.
+ * Chips wrap *inside* their bay, so a group is never split across lines.
  */
 .loadoutSection {
   width: 100%;
 }
 
 .loadoutRail {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1px;
   height: 100%;
   background: var(--panel-hairline);
 }
 
 .loadoutGroup {
+  position: relative;
+  flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   align-content: center;
   gap: 3px;
-  padding: 4px 7px 6px;
+  padding: 6px 7px;
   background: var(--panel-field-strip);
 }
 
-/* An odd trailing bay takes the whole row, so the lattice never shows an
-   empty cell when a player is missing one of the four groups. */
-.loadoutGroup:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-}
-
-/* The bay's name, engraved in the same label voice as a Module rail. It takes
-   the bay's full first line so the chips cluster beneath it. */
-.loadoutGroupLabel {
-  flex-basis: 100%;
-  margin-bottom: 1px;
-  font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: var(--weight-rail);
-  line-height: 1;
-  letter-spacing: var(--track-rail);
-  text-transform: uppercase;
-  color: var(--rail-ink);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
 /*
- * Narrow decks (three-across tab grid, mid-width sidebar): the command trio
- * can't share a row, so the holdings rack drops to its own full-width row —
- * its fluid columns widen to fill it — and the status plate stretches beside
- * the leaders instead.
+ * Narrow decks (the two-up tab grid on a small laptop, phone widths): stores,
+ * ledger and leaders no longer fit one line. Pair stores with leaders (two
+ * plates of similar height and width), then the ledger with the holdings
+ * seats, so neither line ends in a gap.
  */
-@container (max-width: 649px) {
-  .statusSection {
-    flex: 1 1 148px;
+@container (max-width: 599px) {
+  .leadersSection {
+    order: 1;
+  }
+
+  .economySection {
+    order: 2;
   }
 
   .holdingsSection {
-    flex-basis: 100%;
-    order: 4;
-  }
-
-  .techRack {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    order: 3;
   }
 }
 
-/*
- * Very narrow decks (a sidebar dragged tight): status and leaders can't share
- * a row either, so each plate takes its own and grows into it — the leader
- * tiles hold their size and the plate's slack reads as field, not as a hole
- * beside a stranded plate.
- */
-@container (max-width: 429px) {
+@container (max-width: 559px) {
+  /* Four color lanes can't share a narrow plate, and a 2x2 of lanes turns
+     every unresearched color into a stack of empty sockets. The lanes dissolve
+     instead: techs run in color order across two columns, sockets dropped. */
+  .techRack {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
+
+  .techLane {
+    display: contents;
+  }
+
+  .techLane > [aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Very narrow decks: every plate in the status row gets its own line. */
+@container (max-width: 379px) {
   .statusSection,
   .leadersSection {
     flex: 1 1 100%;
-  }
-
-  /*
-   * Beside the ledger the planet cards are left a track one card wide, so they
-   * stack into a column several screens tall. The ledger takes its own row and
-   * the cards wrap across the full plate beneath it. A legendary planet and its
-   * ability are one flex item, so the pair always wraps together.
-   */
-  .planetsEconomy,
-  .planetsFlow {
-    flex: 1 1 100%;
-  }
-
-  .planetsEconomy {
-    margin-right: 0;
-  }
-
-  .planetsEconomy > * {
-    flex: 1;
-  }
-}
-
-/* The loadout holds its 2x2 shape well past the other tiers — a bay's chips
-   wrap internally, so only a truly tight panel forces one bay per row. */
-@container (max-width: 299px) {
-  .loadoutRail {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .loadoutGroup:last-child:nth-child(odd) {
-    grid-column: auto;
+    max-width: none;
   }
 }

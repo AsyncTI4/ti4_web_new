@@ -41,3 +41,40 @@
   min-width: 0;
   max-width: none;
 }
+
+/*
+ * Flow variant: secrets in one half, relics and notes in the other — the same
+ * split the columns make, so each kind sits in its own place on every card.
+ * A player holding only one kind still gets a half-width column. A half takes
+ * a second track of its own once it is wide enough; the halves stack only
+ * when the plate can't hold two seats side by side.
+ */
+.flowFrame {
+  container-type: inline-size;
+  width: 100%;
+  min-width: 0;
+}
+
+.rackFlow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  align-items: start;
+}
+
+.flowGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  gap: 4px;
+  min-width: 0;
+}
+
+.flowGroup > * {
+  min-width: 0;
+}
+
+@container (max-width: 279px) {
+  .rackFlow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
