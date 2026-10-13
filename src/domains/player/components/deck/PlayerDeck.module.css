@@ -57,7 +57,9 @@
     var(--l-leaders)
     minmax(var(--l-hold), max-content)
     var(--l-tech)
-    minmax(var(--l-tech), max-content)
+    /* Second tech track: only as wide as a seat's overflow column. A table
+       whose racks all fit one column keeps the lane one column wide. */
+    minmax(0, max-content)
     minmax(var(--l-units), max-content)
     minmax(var(--l-econ), max-content)
     minmax(max-content, 1fr);
