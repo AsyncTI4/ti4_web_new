@@ -363,14 +363,14 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
             />
           </div>
         )}
-        {settings.showPlayerAreaArmyStrength && (
-          <div className={styles.extra}>
-            <ArmyStats stats={armyStats} rank={rank} />
-          </div>
-        )}
         {hasCapturedUnits && (
           <div className={styles.extra}>
             <Nombox capturedUnits={player.nombox} />
+          </div>
+        )}
+        {settings.showPlayerAreaArmyStrength && (
+          <div className={cx(styles.extra, styles.armyExtra)}>
+            <ArmyStats stats={armyStats} rank={rank} />
           </div>
         )}
       </Lane>

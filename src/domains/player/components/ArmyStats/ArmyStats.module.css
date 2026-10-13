@@ -10,26 +10,20 @@
  * to do.
  */
 
+/*
+ * The readout fills whatever height its lane gives it: the trough takes the
+ * slack rather than leaving a dead band between the figures and the rank footer,
+ * the same way the unit rack fills its compartment.
+ */
 .root {
-  width: max-content;
-}
-
-.rootWithRank {
   display: flex;
   flex-direction: column;
+  width: max-content;
   height: 100%;
 }
 
-/*
- * With a rank footer pinned to the floor, the trough takes the slack rather than
- * leaving a dead band between the figures and the badge — the same way the unit
- * rack fills its compartment.
- */
-.rootWithRank .ledger {
-  flex: 1;
-}
-
 .ledger {
+  flex: 1;
   display: grid;
   /* Icon gutter, then the two figure columns. */
   grid-template-columns: 22px auto auto;
@@ -139,21 +133,20 @@
 }
 
 /*
- * Rank sits on the trough's floor as a footer keyed to its medal colour. Gold,
- * silver and bronze mean the same thing in every theme, so they come from the
- * shared signal tokens rather than from the theme's surfaces.
+ * Rank. The podium is struck as a medal: a coin of gold, silver or bronze with
+ * the place embossed on its face, set into a footer washed in the same metal.
+ * The coin is the whole statement; the wording is in the tooltip. Fourth place
+ * and below is a position, not a medal: the bare ordinal, quiet.
  */
 .rankBadge {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  margin-top: auto;
-  padding: 3px 7px;
-  border-top: 1px solid rgba(var(--rank-rgb), 0.28);
-  border-radius: 0 0 var(--panel-radius) var(--panel-radius);
-  background: rgba(var(--rank-rgb), 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  gap: 8px;
+  margin-top: 4px;
+  padding: 5px 8px 5px 6px;
+  border-radius: var(--panel-radius);
+  background: linear-gradient(90deg, rgba(var(--rank-rgb), 0.16), rgba(var(--rank-rgb), 0.03) 70%);
+  box-shadow: inset 0 0 0 1px rgba(var(--rank-rgb), 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   color: rgb(var(--rank-rgb));
 }
 
@@ -169,16 +162,77 @@
   --rank-rgb: var(--army-rank-third-rgb);
 }
 
-/* Fourth place and below is a position, not a medal: neutral, and quiet. */
+/* The coin: banded metal under a specular highlight, a milled rim, the place
+   pressed into its face. */
+.medal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.6), transparent 42%),
+    conic-gradient(
+      from 210deg,
+      rgba(0, 0, 0, 0) 0deg,
+      rgba(0, 0, 0, 0.32) 70deg,
+      rgba(0, 0, 0, 0) 140deg,
+      rgba(0, 0, 0, 0.22) 230deg,
+      rgba(0, 0, 0, 0) 320deg
+    ),
+    rgb(var(--rank-rgb));
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 2.5px rgba(255, 255, 255, 0.28),
+    inset 0 0 0 3.5px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(var(--rank-rgb), 0.25);
+  color: rgba(0, 0, 0, 0.62);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Gold catches the light once when the deck draws. */
+.rankFirst .medal::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.75) 50%, transparent 60%);
+  transform: translateX(-100%);
+  animation: medalGlint 1.4s 0.6s var(--ds-ease) both;
+}
+
+@keyframes medalGlint {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rankFirst .medal::after {
+    animation: none;
+    content: none;
+  }
+}
+
 .rankOther {
   --rank-rgb: 148, 163, 184;
-  color: var(--ds-gray-4);
+  padding-left: 8px;
+  background: none;
+  box-shadow: none;
+  color: var(--ds-gray-5);
 }
 
 .rankText {
-  font-family: var(--font-data);
+  font-family: var(--font-text, var(--ds-font-text));
   font-size: 11px;
-  font-weight: var(--weight-rail);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
 }

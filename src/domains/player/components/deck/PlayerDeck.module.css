@@ -485,6 +485,13 @@
   border-left: 1px solid var(--ds-h10);
 }
 
+/* Army readout closes the lane: pinned to its right edge and as tall as the lane,
+   so it lines up down the deck whatever each seat holds. */
+.armyExtra {
+  align-self: stretch;
+  margin-left: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .player[data-active] .seat::after,
   .activeDot,

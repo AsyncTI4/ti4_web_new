@@ -1,5 +1,4 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import { IconTrophy } from "@tabler/icons-react";
 import cx from "clsx";
 import type { CSSProperties } from "react";
 import classes from "./ArmyStats.module.css";
@@ -73,14 +72,35 @@ const RANK_CLASS: Record<number, string> = {
   3: classes.rankThird,
 };
 
+function ordinal(n: number): string {
+  const tens = n % 100;
+  if (tens >= 11 && tens <= 13) return `${n}th`;
+  return `${n}${({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[n % 10] ?? "th"}`;
+}
+
+/**
+ * The podium gets a struck medal; everyone else gets their place as a plain
+ * ordinal. The wording lives in the tooltip.
+ */
 function RankBadge({ rank }: { rank: number }) {
+  const medal = RANK_CLASS[rank];
+  const fullLabel = rank === 1 ? "Strongest army" : `${ordinal(rank)} strongest army`;
+
   return (
     <div
-      className={cx(classes.rankBadge, RANK_CLASS[rank] ?? classes.rankOther)}
-      title={`Rank ${rank} by army strength`}
+      className={cx(classes.rankBadge, medal ?? classes.rankOther)}
+      title={fullLabel}
+      aria-label={fullLabel}
     >
-      <IconTrophy size={12} />
-      <span className={classes.rankText}>{rank}</span>
+      {medal ? (
+        <span className={classes.medal} aria-hidden="true">
+          {rank}
+        </span>
+      ) : (
+        <span className={classes.rankText} aria-hidden="true">
+          {ordinal(rank)}
+        </span>
+      )}
     </div>
   );
 }
@@ -88,7 +108,7 @@ function RankBadge({ rank }: { rank: number }) {
 export function ArmyStats({ stats, rank }: Props) {
   return (
     <div
-      className={cx(classes.root, rank && classes.rootWithRank)}
+      className={classes.root}
       style={
         {
           "--army-res-icon": `url("${cdnImage("/player_area/pa_resources.png")}")`,
