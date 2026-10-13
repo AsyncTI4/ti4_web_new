@@ -97,6 +97,7 @@ function ActorMark({ event }: { event: GameEvent }) {
 function EventRow({
   event,
   now,
+  showTime,
   isNew,
   isFuture,
   changesMap,
@@ -107,6 +108,8 @@ function EventRow({
 }: {
   event: GameEvent;
   now: number;
+  /** Off when the row above already reads the same relative time. */
+  showTime: boolean;
   isNew: boolean;
   isFuture: boolean;
   changesMap: boolean;
@@ -129,15 +132,17 @@ function EventRow({
         playerName={playerName}
       />
       <span className={classes.meta}>
-        <Tooltip
-          label={formatAbsoluteTime(event.timestamp)}
-          withArrow
-          openDelay={300}
-        >
-          <time className={classes.time}>
-            {formatRelativeTime(event.timestamp, now)}
-          </time>
-        </Tooltip>
+        {showTime && (
+          <Tooltip
+            label={formatAbsoluteTime(event.timestamp)}
+            withArrow
+            openDelay={300}
+          >
+            <time className={classes.time}>
+              {formatRelativeTime(event.timestamp, now)}
+            </time>
+          </Tooltip>
+        )}
         {changesMap && <MapChangeIndicator animated={animated} />}
       </span>
     </div>
@@ -505,6 +510,9 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
   };
 
   let previous: GameEvent | null = null;
+  /* A run of events with the same relative time shows it once, on its first
+     row; every round starts a fresh run. */
+  let lastTime: string | null = null;
 
   return (
     <div
@@ -525,7 +533,9 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
         {grouped.length === 0 && (
           <p className={classes.empty}>No events match this filter.</p>
         )}
-        {grouped.map(({ round, events }) => (
+        {grouped.map(({ round, events }) => {
+          lastTime = null;
+          return (
           <section key={round} aria-label={`Round ${round}`}>
             <div className={classes.band}>
               <b>Round {round}</b>
@@ -538,7 +548,13 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
             </div>
             {events.map((event) => {
               const showRule = sinceRuleBefore(event, previous);
+              const timeLabel = formatRelativeTime(event.timestamp, now);
+              const showTime = showRule || timeLabel !== lastTime;
               if (!isSectionDivider(event)) previous = event;
+              /* Only rows that print a time start or continue a run; a phase
+                 rule starts a fresh one. */
+              if (isSectionDivider(event)) lastTime = null;
+              else if (event.archetype !== "GAME_ENDED") lastTime = timeLabel;
               return (
                 <div key={event.seq}>
                   {showRule && (
@@ -549,6 +565,7 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
                   <TimelineItem
                     event={event}
                     now={now}
+                    showTime={showTime}
                     isNew={lastSeq !== null && event.seq > lastSeq}
                     isFuture={scrubSeq !== null && event.seq > scrubSeq}
                     changesMap={timeline.changedEvents.has(event.seq)}
@@ -564,7 +581,8 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
               );
             })}
           </section>
-        ))}
+          );
+        })}
         {hasHidden && (
           <button
             type="button"

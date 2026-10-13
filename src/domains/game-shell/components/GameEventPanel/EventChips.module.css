@@ -59,26 +59,40 @@
 
 /* Action card: rounded heel, card-back thumbnail, timing tag. */
 .acard {
-  padding: 0 10px 0 22px;
+  gap: 0;
+  padding: 0 0 0 24px;
   background: linear-gradient(90deg, rgba(var(--gd-red), 0.14), rgba(var(--gd-red), 0.035));
   border: 1px solid rgba(var(--gd-red), 0.315);
-  border-radius: 3px 3px 3px 10px;
+  border-radius: 3px;
 }
 
+.acard > .t {
+  padding-right: 9px;
+}
+
+/* The card back, upright and centred in the chip's height. */
 .acard::before {
   content: "";
   position: absolute;
-  left: 3px;
-  top: 3px;
-  bottom: 3px;
-  width: 12px;
-  border-radius: var(--ds-radius-xs);
+  left: 4px;
+  top: 50%;
+  width: 11px;
+  height: 15px;
+  translate: 0 -50%;
+  border-radius: 2px;
   background: url("/cardback/cardback_action.png") center / cover;
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.5);
 }
 
+/* Timing sits in its own segment at the card's end, split off by a seam, its
+   caps nudged down a pixel to sit on the name's optical centre. */
 .when {
-  margin-left: 2px;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 1px 8px 0;
+  border-left: 1px solid rgba(var(--gd-red), 0.25);
+  line-height: 1;
   font-family: var(--ds-label-font);
   font-size: var(--text-micro);
   font-weight: var(--weight-rail);
@@ -107,16 +121,6 @@
   bottom: 0;
   width: 3px;
   background: rgba(var(--k), 0.49);
-}
-
-.tech::after {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 50%;
-  width: 5px;
-  height: 1px;
-  background: rgba(var(--k), 0.455);
 }
 
 /* Secret: file folder with a hazard stripe down the spine. */

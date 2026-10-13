@@ -15,17 +15,28 @@
 }
 
 /* Filters --------------------------------------------------------------- */
+/* One line that scrolls sideways, fading at the edge, rather than wrapping a
+   lone chip onto a second row. */
 .filters {
   flex: none;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 4px;
   padding: 7px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
   border-bottom: 1px solid var(--ds-h10);
+  mask-image: linear-gradient(90deg, black calc(100% - 24px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, black calc(100% - 24px), transparent);
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
 }
 
 .chip {
   --ek: var(--gd-gray);
+  flex: none;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -301,10 +312,16 @@ section:first-child > .band {
   color: var(--ds-ink-lo);
 }
 
+/* Combat reads as ordinary text; the crossed-swords mark carries the red. */
 .combat {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
+  color: var(--ds-ink);
+}
+
+.combat svg {
+  flex: none;
   color: rgba(var(--gd-red), 1);
   filter: brightness(1.25) saturate(0.75);
 }
@@ -365,12 +382,16 @@ section:first-child > .band {
 }
 
 /* Sub-events (tactical action detail) ---------------------------------- */
+/* What happened inside the action hangs off one hairline, so the detail
+   reads as a single group under its event rather than loose lines. */
 .subEvents {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   width: 100%;
-  margin-top: 1px;
+  margin-top: 2px;
+  padding: 1px 0 1px 10px;
+  border-left: 1px solid var(--ds-h14);
 }
 
 .subEventLine {
@@ -534,11 +555,10 @@ section:first-child > .band {
 .track i {
   --ek: var(--gd-gray);
   position: absolute;
-  top: 7px;
-  width: 2px;
-  height: 12px;
-  margin-left: -1px;
-  background: rgba(var(--ek), 0.7);
+  top: 9px;
+  width: 1px;
+  height: 8px;
+  background: rgba(var(--ek), 0.4);
   pointer-events: none;
 }
 

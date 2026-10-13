@@ -164,6 +164,10 @@ function TacticalActionBody({ event, p, systemName, playerName }: BodyProps) {
   const planetNames = planets ? resolvePlanetsList(planets) : [];
   const subEvents = parseSubEvents(p.subEvents);
   const combat = str(p, "combat");
+  /* The sub-event lines already say who took what; don't repeat it as chips. */
+  const capturesListed = subEvents.some(
+    (sub) => sub.type === "CONTROL_ESTABLISHED",
+  );
 
   return (
     <>
@@ -179,9 +183,10 @@ function TacticalActionBody({ event, p, systemName, playerName }: BodyProps) {
       </Sentence>
       <Extras>
         {position && position.length <= 4 && <HexChip>{position}</HexChip>}
-        {planetNames.map((planet) => (
-          <PlainChip key={planet}>Took {planet}</PlainChip>
-        ))}
+        {!capturesListed &&
+          planetNames.map((planet) => (
+            <PlainChip key={planet}>Took {planet}</PlainChip>
+          ))}
         {subEvents.length === 0 && combat && (
           <span className={classes.combat}>
             Combat · {combat.split("_").map(prettifyId).join(" vs ")}

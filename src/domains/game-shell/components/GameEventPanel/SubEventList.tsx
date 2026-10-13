@@ -113,7 +113,10 @@ function SubEventContent({
       return (
         <>
           {controllingFaction && <SubFaction faction={controllingFaction} />}
-          <span>Took control of {resolvePlanetName(sub.planet)}</span>
+          <span className={classes.subMuted}>took control of</span>
+          <span className={classes.subCardName}>
+            {resolvePlanetName(sub.planet)}
+          </span>
         </>
       );
     }
