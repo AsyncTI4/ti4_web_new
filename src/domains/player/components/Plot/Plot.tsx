@@ -83,7 +83,7 @@ export function Plot({ plotCard, faction, compact = false }: Props) {
           />
         )}
       </Group>
-      <Group gap={3} wrap="nowrap" className={styles.compactSeats}>
+      <Group gap={6} wrap="nowrap" className={styles.compactSeats}>
         {renderCompactSeats()}
       </Group>
     </Stack>

@@ -25,6 +25,7 @@
 }
 
 .plotCardCompact {
+  --plot-thread: rgba(200, 72, 72, 0.6);
   --chip-inner-min-height: 22px;
   --chip-inner-padding: 3px 7px;
   min-width: 108px;
@@ -44,16 +45,49 @@
  * the player area has.
  */
 .compactSeats {
+  position: relative;
+  isolation: isolate;
   min-height: 13px;
 }
 
+/* The string. The seats are pins on a conspiracy board's red thread, which is
+   what makes a plot read as a plot: factions being tied into one scheme. */
+.compactSeats::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  right: -4px;
+  z-index: -1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--plot-thread) 12%,
+    var(--plot-thread) 88%,
+    transparent
+  );
+}
+
 .tokenSeatSm {
-  width: 11px;
-  height: 11px;
+  position: relative;
+  width: 9px;
+  height: 9px;
+  margin: 2px;
   border-radius: 50%;
-  background: var(--socket-bg);
+  /* Opaque underneath, so the thread passes behind the pin rather than
+     through it; the theme's socket sits on top. */
+  background: var(--ds-field, #0b0e13);
   border: 1px solid var(--socket-border);
   box-shadow: var(--socket-inset);
+}
+
+.tokenSeatSm::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--socket-bg);
 }
 
 /*
