@@ -141,15 +141,19 @@ export function PlanetCard({
           style={{ ...cssVariables, ...getPlanetIconStyle(planetIconSrc) }}
         >
           <PlanetDecorations planetData={planetData} />
+          {attachments.length > 0 && (
+            <span
+              className={styles.attachmentCorner}
+              role="img"
+              aria-label="Has attachments"
+              title="Has attachments"
+            />
+          )}
           <Text className={styles.planetName}>
             {planetData.shortName ?? planetData.name}
           </Text>
           <PlanetCompactValues
-            iconSources={createIconSources(
-              planetData,
-              attachmentModifiers,
-              attachments,
-            )}
+            iconSources={createIconSources(planetData, attachmentModifiers)}
             resources={finalResources}
             influence={finalInfluence}
           />
@@ -165,7 +169,7 @@ export function PlanetCard({
 
   return (
     <div
-      className={styles.legendaryWrapper}
+      className={cx(styles.legendaryWrapper, isExhausted && styles.wrapperExhausted)}
       style={cssVariables}
       onClick={() => setScrollToPlanetId(planetId)}
       onMouseEnter={() => setHoveredPlanetId(planetId)}

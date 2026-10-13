@@ -33,22 +33,18 @@ export function planetCssType(
   return traits.length === 1 ? traits[0] : "default";
 }
 
+/** Tech specialty icons, printed and gained from attachments. */
 export function createIconSources(
   planetData: Planet,
   attachmentModifiers: AttachmentModifiers,
-  attachments: string[],
 ): string[] {
-  const techSkipSources = [
+  return [
     ...(planetData.techSpecialties || []),
     ...attachmentModifiers.techSpecialties,
   ].flatMap((specialty) => {
     const src = TECH_SKIP_IMAGES[specialty.toLowerCase() as TechType];
     return src ? [src] : [];
   });
-
-  return attachments.length > 0
-    ? [...techSkipSources, cdnImage("/planet_cards/pc_upgrade.png")]
-    : techSkipSources;
 }
 
 /** Server-computed values (e.g. Triad) win over the client-side sum. */
@@ -111,23 +107,16 @@ export function getStackedIconStyle(
       count * STACKED_ICON_SIZE +
       Math.max(0, count - 1) * STACKED_ICON_GAP
     }px`,
-    backgroundImage: [
-      "linear-gradient(180deg, rgba(3, 7, 12, 0.08), rgba(3, 7, 12, 0.42))",
-      ...iconSources.map((src) => `url("${src}")`),
-    ].join(", "),
-    backgroundPosition: [
-      "0 0",
-      ...iconSources.map(
+    backgroundImage: iconSources.map((src) => `url("${src}")`).join(", "),
+    backgroundPosition: iconSources
+      .map(
         (_, index) =>
           `center ${STACKED_ICON_PADDING + index * (STACKED_ICON_SIZE + STACKED_ICON_GAP)}px`,
-      ),
-    ].join(", "),
-    backgroundSize: [
-      "100% 100%",
-      ...iconSources.map(() => `${STACKED_ICON_SIZE}px ${STACKED_ICON_SIZE}px`),
-    ].join(", "),
-    backgroundRepeat: ["no-repeat", ...iconSources.map(() => "no-repeat")].join(
-      ", ",
-    ),
+      )
+      .join(", "),
+    backgroundSize: iconSources
+      .map(() => `${STACKED_ICON_SIZE}px ${STACKED_ICON_SIZE}px`)
+      .join(", "),
+    backgroundRepeat: iconSources.map(() => "no-repeat").join(", "),
   };
 }
