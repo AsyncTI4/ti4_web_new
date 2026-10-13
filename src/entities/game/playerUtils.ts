@@ -55,3 +55,22 @@ export function calculateArmyRankings(
 
   return rankings;
 }
+
+/**
+ * A promissory note's text with its owner filled in: "the <color> player"
+ * names the faction holding that colour (or owning the note), falling back to
+ * the colour itself when nobody at the table matches.
+ */
+export function resolvePromissoryNoteText(
+  text: string,
+  owner: { color?: string; faction?: string },
+  players: PlayerData[] | undefined,
+) {
+  const player =
+    players?.find((p) => owner.color && p.color === owner.color) ??
+    players?.find((p) => owner.faction && p.faction === owner.faction);
+  const name = player
+    ? getPlayerFactionDisplayName(player)
+    : owner.color || owner.faction || "";
+  return text.replace(/<color>/g, name);
+}

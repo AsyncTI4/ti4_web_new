@@ -6,6 +6,7 @@ import { useGameData } from "@/state/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { showLeader } from "@/entities/lookup/showLeader";
+import { resolvePromissoryNoteText } from "@/entities/game/playerUtils";
 import styles from "./PromissoryNoteCard.module.css";
 
 type Props = {
@@ -43,9 +44,10 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
   if (!noteData) return null;
 
   const displayName = noteData.noteData.shortName || noteData.displayName;
-  const displayText = noteData.noteData.text.replace(
-    /<color>/g,
-    noteData.color || ""
+  const displayText = resolvePromissoryNoteText(
+    noteData.noteData.text,
+    noteData,
+    gameData?.playerData
   );
 
   const isAlliance =
@@ -83,7 +85,7 @@ export function PromissoryNoteCard({ promissoryNoteId }: Props) {
           content={<CommanderAbility commander={commander} />}
         />
       )}
-      <DetailsCard.Section title="Effect" content={displayText} />
+      <DetailsCard.Section content={displayText} />
     </DetailsCard>
   );
 }
