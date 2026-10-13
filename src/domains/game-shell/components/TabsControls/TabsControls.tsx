@@ -1,27 +1,25 @@
 import { ActionIcon, Box, Button, Group, Tooltip } from "@/ds";
-import cx from "clsx";
 import type { ReactNode } from "react";
 import {
-  IconBrush,
   IconCards,
-  IconFlag,
   IconHash,
   IconHistory,
   IconKeyboard,
+  IconLinkPlus,
   IconMenu2,
-  IconPaperclip,
-  IconPlayerSkipForward,
   IconSettings,
-  IconTarget,
-  IconWorld,
+  IconSticker,
 } from "@tabler/icons-react";
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
+import { cdnImage } from "@/entities/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { ThemeSwatches } from "./ThemeSwatches";
 import classes from "./TabsControls.module.css";
 
-const LENS_ICON_SIZE = 15;
+const LENS_ICON_SIZE = 16;
+
+const TECH_SKIP_ICONS = ["/green.png", "/yellow.png", "/red.png", "/blue.png"];
 
 function LensTip({ label, shortcut }: { label: string; shortcut?: string }) {
   return (
@@ -33,21 +31,19 @@ function LensTip({ label, shortcut }: { label: string; shortcut?: string }) {
 }
 
 /**
- * One lens in the segmented map toolbar. An engaged lens is a raised segment
- * with a blue foot; the tooltip names it and its key.
+ * One button in the map toolbar. A lens (has `active`) is a raised key with
+ * an accent bar while engaged; the tooltip names it and its key.
  */
 function Lens({
   active,
   label,
   shortcut,
-  separated = false,
   onClick,
   children,
 }: {
   active?: boolean;
   label: string;
   shortcut?: string;
-  separated?: boolean;
   onClick: () => void;
   children: ReactNode;
 }) {
@@ -59,7 +55,7 @@ function Lens({
     >
       <button
         type="button"
-        className={cx(classes.lens, separated && classes.lensSeparated)}
+        className={classes.lens}
         onClick={onClick}
         aria-pressed={active === undefined ? undefined : active}
         aria-label={label}
@@ -85,71 +81,108 @@ function LensToolbar({
   const showPds = !!game?.tilesWithPds?.size;
 
   return (
-    <Box className={classes.lenses} role="toolbar" aria-label="Map lenses">
-      <Lens
-        active={settings.planetTypesMode}
-        label="Planet traits"
-        shortcut="Y"
-        onClick={handlers.togglePlanetTypesMode}
-      >
-        <IconWorld size={LENS_ICON_SIZE} />
-      </Lens>
-      <Lens
-        active={settings.techSkipsMode}
-        label="Tech skips"
-        shortcut="T"
-        onClick={handlers.toggleTechSkipsMode}
-      >
-        <IconPlayerSkipForward size={LENS_ICON_SIZE} />
-      </Lens>
-      <Lens
-        active={settings.attachmentsMode}
-        label="Attachments"
-        shortcut="A"
-        onClick={handlers.toggleAttachmentsMode}
-      >
-        <IconPaperclip size={LENS_ICON_SIZE} />
-      </Lens>
-      {showPds && (
+    <Box className={classes.toolbar}>
+      <Box className={classes.lenses} role="toolbar" aria-label="Map lenses">
         <Lens
-          active={settings.showPDSLayer}
-          label="PDS coverage"
-          shortcut="P"
-          onClick={handlers.togglePdsMode}
+          active={settings.planetTypesMode}
+          label="Planet traits"
+          shortcut="Y"
+          onClick={handlers.togglePlanetTypesMode}
         >
-          <IconTarget size={LENS_ICON_SIZE} />
+          <img
+            src={cdnImage("/planet_cards/pc_attribute_combo_CHI.webp")}
+            alt=""
+            height={16}
+            className={classes.lensArt}
+          />
         </Lens>
-      )}
-      <Lens
-        active={settings.overlaysEnabled}
-        label="Control overlays"
-        shortcut="O"
-        onClick={handlers.toggleOverlays}
-      >
-        <IconFlag size={LENS_ICON_SIZE} />
-      </Lens>
-      {onTryDecalsClick && (
-        <Lens label="Try unit decals" separated onClick={onTryDecalsClick}>
-          <IconBrush size={LENS_ICON_SIZE} />
-        </Lens>
-      )}
-      {showKeyboardButton && (
         <Lens
-          label="Keyboard shortcuts"
-          separated={!onTryDecalsClick}
-          onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
+          active={settings.techSkipsMode}
+          label="Tech skips"
+          shortcut="T"
+          onClick={handlers.toggleTechSkipsMode}
         >
-          <IconKeyboard size={LENS_ICON_SIZE} />
+          <span className={classes.lensSkips}>
+            {TECH_SKIP_ICONS.map((src) => (
+              <img
+                key={src}
+                src={src}
+                alt=""
+                height={16}
+                className={classes.lensArt}
+              />
+            ))}
+          </span>
         </Lens>
-      )}
-      {showSettingsButton && (
         <Lens
-          label="Settings"
-          onClick={() => handlers.setSettingsModalOpened(true)}
+          active={settings.attachmentsMode}
+          label="Attachments"
+          shortcut="A"
+          onClick={handlers.toggleAttachmentsMode}
         >
-          <IconSettings size={LENS_ICON_SIZE} />
+          <IconLinkPlus size={LENS_ICON_SIZE} />
         </Lens>
-      )}
+        {showPds && (
+          <Lens
+            active={settings.showPDSLayer}
+            label="PDS coverage"
+            shortcut="P"
+            onClick={handlers.togglePdsMode}
+          >
+            <img
+              src={cdnImage("/units/gry_pd.webp")}
+              alt=""
+              height={20}
+              className={classes.lensArt}
+            />
+          </Lens>
+        )}
+        <Lens
+          active={settings.overlaysEnabled}
+          label="Control overlays"
+          shortcut="O"
+          onClick={handlers.toggleOverlays}
+        >
+          <svg
+            width="13"
+            height="15"
+            viewBox="0 0 16 18"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 2L12 2L15 9L12 16L4 16L1 9L4 2Z"
+              fill="currentColor"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinejoin="miter"
+            />
+          </svg>
+        </Lens>
+      </Box>
+      <Box className={classes.utilities} role="toolbar" aria-label="Map tools">
+        {onTryDecalsClick && (
+          <Lens label="Try unit decals" onClick={onTryDecalsClick}>
+            <IconSticker size={LENS_ICON_SIZE} />
+          </Lens>
+        )}
+        {showKeyboardButton && (
+          <Lens
+            label="Keyboard shortcuts"
+            onClick={() => handlers.setKeyboardShortcutsModalOpened(true)}
+          >
+            <IconKeyboard size={LENS_ICON_SIZE} />
+          </Lens>
+        )}
+        {showSettingsButton && (
+          <Lens
+            label="Settings"
+            onClick={() => handlers.setSettingsModalOpened(true)}
+          >
+            <IconSettings size={LENS_ICON_SIZE} />
+          </Lens>
+        )}
+      </Box>
     </Box>
   );
 }

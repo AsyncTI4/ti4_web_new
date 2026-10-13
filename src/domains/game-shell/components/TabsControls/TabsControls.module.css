@@ -1,26 +1,46 @@
 /*
- * Lens toolbar. The map's view toggles are one segmented group sunk into the
- * tab rail: an engaged lens is a raised segment with a blue foot, and every
- * lens names itself and its key in a tooltip.
+ * Map toolbar: a sunk socket of lenses, then a looser group of tools.
+ * An engaged lens is a raised key with an accent bar under it, so you can
+ * read which lenses are on at a glance.
  */
-.lenses {
+.toolbar {
   display: flex;
   align-items: center;
   align-self: center;
-  gap: 0;
-  padding: 2px;
+  gap: 10px;
+}
+
+.lenses {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
   background: var(--ds-socket);
   border-radius: var(--ds-radius-md);
-  box-shadow: inset 0 0 0 1px var(--ds-h14);
+  box-shadow:
+    inset 0 1px 2px rgb(0 0 0 / 0.35),
+    inset 0 0 0 1px var(--ds-h14);
+}
+
+.utilities {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: 10px;
+  border-left: 1px solid var(--ds-h14);
+}
+
+.utilities:empty {
+  display: none;
 }
 
 .lens {
   position: relative;
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 24px;
-  padding: 0;
+  min-width: 32px;
+  height: 28px;
+  padding: 0 6px;
   color: var(--ds-ink-lo);
   background: none;
   border: 0;
@@ -28,7 +48,8 @@
   cursor: pointer;
   transition:
     color var(--ds-dur-fast) var(--ds-ease),
-    background var(--ds-dur-fast) var(--ds-ease);
+    background var(--ds-dur-fast) var(--ds-ease),
+    box-shadow var(--ds-dur-fast) var(--ds-ease);
 }
 
 .lens:hover {
@@ -38,10 +59,23 @@
 
 .lens[aria-pressed="true"] {
   color: var(--ds-ink-hi);
-  background: var(--ds-ground);
+  background: linear-gradient(180deg, var(--ds-h10), transparent), var(--ds-ground);
   box-shadow:
     inset 0 0 0 1px var(--ds-h22),
-    inset 0 -2px 0 var(--ds-accent);
+    0 1px 2px rgb(0 0 0 / 0.4);
+}
+
+/* Engaged: a short accent bar centred under the key. */
+.lens[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 12px;
+  height: 2px;
+  margin-left: -6px;
+  border-radius: 1px;
+  background: var(--ds-accent);
 }
 
 .lens:focus-visible {
@@ -50,18 +84,27 @@
   z-index: 1;
 }
 
-.lensSeparated {
-  margin-left: 7px;
+/* Game art in a lens: the planet-trait card, the tech-skip set, the PDS unit.
+   Always in full colour so each lens stays recognisable; off lenses sit a
+   touch back and come forward on hover or when engaged. */
+.lensArt {
+  display: block;
+  opacity: 0.8;
+  transition: opacity var(--ds-dur-fast) var(--ds-ease);
 }
 
-.lensSeparated::before {
-  content: "";
-  position: absolute;
-  left: -4px;
-  top: 4px;
-  bottom: 4px;
-  width: 1px;
-  background: var(--ds-h14);
+.lens:hover .lensArt,
+.lens[aria-pressed="true"] .lensArt {
+  opacity: 1;
+}
+
+/* The four tech-skip icons overlap like a fanned hand. */
+.lensSkips {
+  display: flex;
+}
+
+.lensSkips .lensArt + .lensArt {
+  margin-left: -5px;
 }
 
 .tip {
@@ -101,7 +144,7 @@
   display: none;
 }
 
-.mobileRackScroll > .lenses {
+.mobileRackScroll > .toolbar {
   width: max-content;
 }
 
@@ -125,7 +168,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lens {
+  .lens,
+  .lensArt {
     transition: none;
   }
 }
