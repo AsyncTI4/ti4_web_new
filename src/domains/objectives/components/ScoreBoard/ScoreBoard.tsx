@@ -2,7 +2,7 @@ import { Box, Stack } from "@/ds";
 import ExpandedPublicObjectives from "@/domains/objectives/components/PublicObjectives/ExpandedPublicObjectives";
 import { ScoreTracker } from "@/domains/objectives/components/ScoreTracker";
 import { useGameData } from "@/state/useGameContext";
-import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
+import { ScoreLawsRow } from "@/domains/objectives/components/ScoreLawsRow/ScoreLawsRow";
 import styles from "./ScoreBoard.module.css";
 
 function ScoreBoard() {
@@ -18,11 +18,10 @@ function ScoreBoard() {
         <ExpandedPublicObjectives
           objectives={objectives}
           playerData={playerData}
-          lawsInPlay={lawsInPlay}
           alwaysShowRequirements
         />
 
-        <PlayerScoreSummary playerData={playerData} objectives={objectives} />
+        <ScoreLawsRow playerData={playerData} objectives={objectives} lawsInPlay={lawsInPlay} />
       </Stack>
     </Box>
   );

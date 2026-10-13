@@ -4,7 +4,7 @@ import classes from "@/shared/ui/map/MapUI.module.css";
 import type { useGameData } from "@/state/useGameContext";
 import { ScoreTracker } from "@/domains/objectives/components";
 import ExpandedPublicObjectives from "@/domains/objectives/components/PublicObjectives/ExpandedPublicObjectives";
-import { PlayerScoreSummary } from "@/domains/objectives/components/PlayerScoreSummary/PlayerScoreSummary";
+import { ScoreLawsRow } from "@/domains/objectives/components/ScoreLawsRow/ScoreLawsRow";
 import { PlayerDeck } from "@/domains/player/components/deck/PlayerDeck";
 import { ScaledContent } from "@/shared/ui/ScaledContent";
 import { filterPlayersWithAssignedFaction } from "@/entities/game/playerUtils";
@@ -93,6 +93,12 @@ export function BoardHud({
                 <ExpandedPublicObjectives
                   objectives={gameData.objectives}
                   playerData={gameData.playerData}
+                />
+              </Box>
+              <Box className={classes.hudFitScreen}>
+                <ScoreLawsRow
+                  playerData={gameData.playerData}
+                  objectives={gameData.objectives}
                   lawsInPlay={gameData.lawsInPlay}
                 />
               </Box>
@@ -106,15 +112,6 @@ export function BoardHud({
             vpsToWin={gameData?.vpsToWin || 10}
           />
         </HudSection>
-
-        {gameData && (
-          <HudSection isMobile={isMobile} innerStyle={areaStyles}>
-            <PlayerScoreSummary
-              playerData={gameData.playerData}
-              objectives={gameData.objectives}
-            />
-          </HudSection>
-        )}
       </Box>
     </Box>
   );

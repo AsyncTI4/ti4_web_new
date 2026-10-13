@@ -218,7 +218,23 @@
   color: var(--ds-ink-lo);
 }
 
-@container scoreboard (max-width: 640px) {
+/*
+ * Sized by the score-and-laws row (ScoreLawsRow). Once the full tracks no
+ * longer fit, the seat column narrows and the spaces shrink to share what is
+ * left; on a phone the seat sits above its track instead.
+ */
+@container scorelaws (max-width: 1000px) {
+  .vpBoard {
+    --seat: 280px;
+    --space: calc(
+      (100cqw - var(--seat) - 16px - 4px - (var(--columns, 10) - 1) * var(--space-gap)) /
+        var(--columns, 10)
+    );
+    width: 100%;
+  }
+}
+
+@container scorelaws (max-width: 760px) {
   .vpBoard {
     --space: calc((100cqw - (var(--columns, 10) - 1) * var(--space-gap)) / var(--columns, 10));
     --space-h: 28px;

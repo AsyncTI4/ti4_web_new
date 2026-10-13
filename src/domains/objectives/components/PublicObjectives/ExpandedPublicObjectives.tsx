@@ -1,28 +1,24 @@
 import { useState } from "react";
 import { Box } from "@/ds";
-import type { Objectives, PlayerData, LawInPlay } from "@/entities/data/types";
+import type { Objectives, PlayerData } from "@/entities/data/types";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { getSeatOrder } from "@/domains/objectives/hooks/useOrderedFactions";
-import { RailLabel } from "@/domains/objectives/components/RailLabel";
-import { LawCard } from "@/domains/objectives/components/LawsInPlay";
 import { ObjectiveTable } from "./ObjectiveTable";
 import styles from "./PublicObjectives.module.css";
 
 type Props = {
   objectives: Objectives;
   playerData: PlayerData[];
-  lawsInPlay?: LawInPlay[];
   alwaysShowRequirements?: boolean;
 };
 
 /**
  * The objectives on the table: Stage I beside Stage II, one-off points under
- * Stage II, and laws in play beneath them all.
+ * Stage II. Laws sit beside the score breakdown instead (see ScoreLawsRow).
  */
 function ExpandedPublicObjectives({
   objectives,
   playerData,
-  lawsInPlay = [],
   alwaysShowRequirements = false,
 }: Props) {
   const [openKey, setOpenKey] = useState<string | null>(null);
@@ -51,16 +47,6 @@ function ExpandedPublicObjectives({
         </Box>
       </Box>
 
-      {lawsInPlay.length > 0 && (
-        <Box className={styles.stage}>
-          <RailLabel meta={lawsInPlay.length}>Laws in play</RailLabel>
-          <Box className={styles.lawGrid}>
-            {lawsInPlay.map((law, index) => (
-              <LawCard key={`${law.id}-${index}`} law={law} playerData={playerData} />
-            ))}
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 }

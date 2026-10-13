@@ -1,0 +1,24 @@
+/*
+ * The tracks keep their fixed width and the laws take what is left. The frame
+ * is the size container, so the row restacks by its own width wherever it is
+ * placed (score tab or map deck) and the tracks can size to it too.
+ */
+.frame {
+  container: scorelaws / inline-size;
+  min-width: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  min-width: 0;
+}
+
+/* Below the tracks' full width plus one law card, the laws go underneath. */
+@container scorelaws (max-width: 1360px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
