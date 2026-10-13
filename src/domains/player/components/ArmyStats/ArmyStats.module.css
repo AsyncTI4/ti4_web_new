@@ -134,20 +134,29 @@
 
 /*
  * Rank. The podium is struck as a medal: a coin of gold, silver or bronze with
- * the place embossed on its face, set into a footer washed in the same metal.
+ * the place embossed on its face, hung on a ribbon of the same metal that runs
+ * the width of the readout.
  * The coin is the whole statement; the wording is in the tooltip. Fourth place
  * and below is a position, not a medal: the bare ordinal, quiet.
  */
 .rankBadge {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  padding: 5px 8px 5px 6px;
-  border-radius: var(--panel-radius);
-  background: linear-gradient(90deg, rgba(var(--rank-rgb), 0.16), rgba(var(--rank-rgb), 0.03) 70%);
-  box-shadow: inset 0 0 0 1px rgba(var(--rank-rgb), 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  gap: 6px;
+  margin-top: 5px;
   color: rgb(var(--rank-rgb));
+}
+
+.rankBadge::before,
+.rankBadge::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--rank-rgb), 0.4));
+}
+
+.rankBadge::after {
+  background: linear-gradient(270deg, transparent, rgba(var(--rank-rgb), 0.4));
 }
 
 .rankFirst {
@@ -162,71 +171,30 @@
   --rank-rgb: var(--army-rank-third-rgb);
 }
 
-/* The coin: banded metal under a specular highlight, a milled rim, the place
-   pressed into its face. */
+/* The coin: a flat disc of the metal with the place cut into it. */
 .medal {
-  position: relative;
   display: grid;
   place-items: center;
   flex: none;
-  width: 24px;
-  height: 24px;
-  overflow: hidden;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.6), transparent 42%),
-    conic-gradient(
-      from 210deg,
-      rgba(0, 0, 0, 0) 0deg,
-      rgba(0, 0, 0, 0.32) 70deg,
-      rgba(0, 0, 0, 0) 140deg,
-      rgba(0, 0, 0, 0.22) 230deg,
-      rgba(0, 0, 0, 0) 320deg
-    ),
-    rgb(var(--rank-rgb));
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 2.5px rgba(255, 255, 255, 0.28),
-    inset 0 0 0 3.5px rgba(0, 0, 0, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.6),
-    0 0 10px rgba(var(--rank-rgb), 0.25);
-  color: rgba(0, 0, 0, 0.62);
+  background: rgba(var(--rank-rgb), 0.85);
+  color: rgba(0, 0, 0, 0.7);
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 1;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
-}
-
-/* Gold catches the light once when the deck draws. */
-.rankFirst .medal::after {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.75) 50%, transparent 60%);
-  transform: translateX(-100%);
-  animation: medalGlint 1.4s 0.6s var(--ds-ease) both;
-}
-
-@keyframes medalGlint {
-  to {
-    transform: translateX(100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rankFirst .medal::after {
-    animation: none;
-    content: none;
-  }
 }
 
 .rankOther {
   --rank-rgb: 148, 163, 184;
-  padding-left: 8px;
-  background: none;
-  box-shadow: none;
   color: var(--ds-gray-5);
+}
+
+.rankOther::before,
+.rankOther::after {
+  opacity: 0.5;
 }
 
 .rankText {
