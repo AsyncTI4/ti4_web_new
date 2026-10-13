@@ -1,13 +1,12 @@
 :root {
-  /* Shared across all themes */
   /* Medal colours as triplets, so a rank's fill, edge and text can all be mixed
      from one value. The rgba() forms below are the same colours, kept for the
      places that only need the ink. */
   --army-rank-first-rgb: 255, 215, 0;
   --army-rank-second-rgb: 192, 192, 192;
   --army-rank-third-rgb: 205, 127, 50;
-  --army-rank-first-color: rgba(255, 215, 0, 0.95);
   --unit-details-upgrade-bg: rgba(255, 255, 255, 0.02);
+  --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   /*
    * The console stack above the board, as one derivation instead of six.
    *
@@ -42,8 +41,6 @@
   /* Flat fills: sealed/unrevealed cards, breakdown grid strip, name plates */
   --panel-field-flat: rgba(2, 6, 23, 0.5);
   --panel-field-strip: rgba(2, 6, 23, 0.62);
-  --panel-field-soft: rgba(2, 6, 23, 0.42);
-  --panel-cell-bg: rgba(15, 23, 42, 0.14);
   /* Hairlines: outer frames, strong frames, internal separators, reticle
      corner brackets */
   --panel-hairline: rgba(148, 163, 184, 0.14);
@@ -151,7 +148,6 @@
   --socket-border: rgba(148, 163, 184, 0.09);
   --socket-inset: inset 0 1px 2px rgba(0, 0, 0, 0.45),
     inset 0 -1px 0 rgba(255, 255, 255, 0.022);
-  --socket-tick: rgba(148, 163, 184, 0.2);
 
   /* Troughs: recessed channels that seat numeric readouts and unit counts. The
      lower light line is what sells the recess — without a bottom highlight a

@@ -1,22 +1,10 @@
 
 .theme-midnightredtheme {
-
     /* Surface.tsx */
     --surface-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
     --surface-border: 1px solid rgba(148, 163, 184, 0.24);
     --surface-corner-accent: 2px solid rgba(172, 28, 38, 0.38);
     --surface-shadow: 0 12px 48px rgba(172, 28, 38, 0.22), 0 8px 28px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    --faction-tab-bg: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.96) 100%);
-    --faction-tab-border: 1px solid rgba(172, 28, 38, 0.32);
-    --faction-tab-shadow: 0 1px 3px rgba(172, 28, 38, 0.26);
-
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(172, 28, 38, 0.46) 0%, rgba(106, 16, 24, 0.36) 50%, rgba(12, 3, 5, 0.94) 100%);
-    --faction-tab-active-shadow: 0 2px 12px rgba(172, 28, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    --faction-tab-pinned-shadow: 0 4px 16px rgba(172, 28, 38, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
     /* PlayerCard.tsx
        A pure-black ground sat DARKER than the panel field on top of it, which
@@ -29,9 +17,7 @@
     --sidebar-bg: rgba(0, 0, 0, 1);
     --left-sidebar-bg: rgba(0, 0, 0, 1);
     --sidebar-border: 1px solid rgba(172, 28, 38, 0.22);
-    --sidebar-blur: 8px;
 
-    /** Map **/
     /* Diagonal ember wash over the void */
     --main-bg:
       linear-gradient(160deg, rgba(172, 28, 38, 0.05) 0%, transparent 42%),
@@ -39,19 +25,8 @@
       #000;
     --map-tabs-bg: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
 
-    --map-tab-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
-
-    --map-tab-active-border: rgba(172, 28, 38, 0.82);
-
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    --header-shadow: 0 4px 12px rgba(172, 28, 38, 0.22);
-
-    /** Header Tabs  **/
-    --header-tab-bg: rgba(0, 0, 0, 0.8);
-
-    --header-tab-active-bg: rgba(172, 28, 38, 0.5);
-    --header-tab-active-border: rgba(172, 28, 38, 0.85);
 
     /** Header Tabs Input **/
     --header-tab-input-bg: rgba(0, 0, 0, 0.9);
@@ -62,21 +37,6 @@
     --header-tab-dropdown-border: 1px solid rgba(172, 28, 38, 0.46);
     --header-tab-dropdown-hover-bg: rgba(172, 28, 38, 0.34);
     --header-dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-
-    /** Objectives Tab **/
-    --score-board-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%);
-
-    /** Card Stack Details Modal **/
-    --card-details-section-title-border: 1px solid rgba(148, 163, 184, 0.24);
-
-    --card-details-item-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.06) 0%, rgba(107, 114, 128, 0.04) 100%);
-    --card-details-item-border: 1px solid rgba(148, 163, 184, 0.16);
-
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(172, 28, 38, 0.42) 0%, rgba(106, 16, 24, 0.32) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(148, 163, 184, 0.4);
-
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.12) 0%, rgba(107, 114, 128, 0.09) 100%);
-    --card-details-percentage-border: 1px solid rgba(148, 163, 184, 0.22);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
@@ -94,117 +54,59 @@
     --scrollbar-color-thumb: rgba(172, 28, 38, 0.6);
     --scrollbar-color-track: rgba(0, 0, 0, 1);
 
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(172, 28, 38, 0.4);
-
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(172, 28, 38, 0.06);
     --unit-details-inherited-border: rgba(172, 28, 38, 0.15);
 
     /*
-     * Surface language — the forge.
-     *
-     * This theme used to put its chroma in the LINES: every hairline, separator
-     * and panel floor was a saturated red at 0.28-0.42. Two problems. A player
-     * area is mostly hairlines, so the whole deck read as one red wash; and red
-     * is a signal colour here — secrets, warnings, destructive state — which
-     * stops meaning anything once every frame in the product is already red.
-     *
-     * The chroma moved from the lines into the MATERIAL. Hairlines drop to a
-     * warm ash that still reads red-cast at a glance but no longer competes
-     * with a secret-objective chip two rows away, and the machined vocabulary
-     * below — which this theme previously left at the generic white-and-black
-     * defaults — now carries the heat instead. Same identity, told by the metal
-     * rather than by the outlines.
+     * The forge. Red is a signal colour here (secrets, warnings, destructive
+     * state), so the chroma lives in the material rather than the lines:
+     * hairlines are a warm ash and the machined surfaces carry the heat.
      */
     --panel-field-bg: linear-gradient(180deg, rgba(12, 2, 3, 0.95), rgba(1, 0, 0, 0.98));
     --panel-field-flat: rgba(9, 1, 2, 0.55);
     --panel-field-strip: rgba(12, 2, 3, 0.66);
-    --panel-field-soft: rgba(12, 2, 3, 0.46);
-    --panel-cell-bg: rgba(58, 26, 26, 0.16);
-    /* Warm ash, not signal red. Chroma roughly halved, alpha eased. */
     --panel-hairline: rgba(198, 126, 124, 0.22);
     --panel-hairline-strong: rgba(212, 146, 142, 0.30);
     --panel-separator: rgba(198, 126, 124, 0.15);
     --panel-bracket: rgba(232, 162, 156, 0.42);
     --panel-radius: 2px;
-    /* Heat still rises off the top edge; the floor line is an ember cooling in
-       the seam now rather than a drawn red rule at full strength. */
+    /* Heat off the top edge; an ember cooling in the floor seam. */
     --panel-texture:
       linear-gradient(180deg, rgba(196, 42, 52, 0.055), transparent 34%),
       linear-gradient(0deg, rgba(206, 66, 62, 0.22) 0 1px, transparent 1px);
-    /*
-     * The card is a bolted armour plate.
-     *
-     * This is the theme's identity mark and the only real ornament in it. Every
-     * other theme's player card is an enclosure; this one is a plate someone
-     * fastened down — four countersunk rivets at the corners, a brushed grain
-     * running off-axis across the face, and the heat still coming off the top
-     * edge. All of it rides the --player-card-inner-glow hook that already
-     * existed, so no component changes and no new elements: one background on
-     * one layer per card, sitting behind the content.
-     *
-     * Each rivet is two stops — a crown offset up-left of a seated ring — which
-     * is what turns a flat dot into a dome. Four per card, not four per module:
-     * sixty domed rivets on screen is a texture, four is a fastening.
-     */
+
+    /* The player card is a bolted armour plate: a domed rivet in each corner
+       (a crown offset up-left of a seated ring), off-axis brushed grain, and
+       heat off the top edge. */
+    --rivet-crown: rgba(255, 226, 200, 0.50), transparent 100%;
+    --rivet-seat: rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px;
     --player-card-inner-glow:
-      radial-gradient(circle 1.9px at calc(7px - 1px) calc(7px - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
-      radial-gradient(circle 5px at 7px 7px, rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
-      radial-gradient(circle 1.9px at calc(calc(100% - 7px) - 1px) calc(7px - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
-      radial-gradient(circle 5px at calc(100% - 7px) 7px, rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
-      radial-gradient(circle 1.9px at calc(7px - 1px) calc(calc(100% - 7px) - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
-      radial-gradient(circle 5px at 7px calc(100% - 7px), rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
-      radial-gradient(circle 1.9px at calc(calc(100% - 7px) - 1px) calc(calc(100% - 7px) - 1px), rgba(255, 226, 200, 0.50), transparent 100%),
-      radial-gradient(circle 5px at calc(100% - 7px) calc(100% - 7px), rgba(212, 120, 86, 0.42) 0 3px, rgba(0, 0, 0, 0.66) 3.4px 5px, transparent 5px),
+      radial-gradient(circle 1.9px at 6px 6px, var(--rivet-crown)),
+      radial-gradient(circle 5px at 7px 7px, var(--rivet-seat)),
+      radial-gradient(circle 1.9px at calc(100% - 8px) 6px, var(--rivet-crown)),
+      radial-gradient(circle 5px at calc(100% - 7px) 7px, var(--rivet-seat)),
+      radial-gradient(circle 1.9px at 6px calc(100% - 8px), var(--rivet-crown)),
+      radial-gradient(circle 5px at 7px calc(100% - 7px), var(--rivet-seat)),
+      radial-gradient(circle 1.9px at calc(100% - 8px) calc(100% - 8px), var(--rivet-crown)),
+      radial-gradient(circle 5px at calc(100% - 7px) calc(100% - 7px), var(--rivet-seat)),
       repeating-linear-gradient(112deg, rgba(255, 196, 160, 0.026) 0 1px, transparent 1px 5px),
       radial-gradient(90% 55% at 50% 0%, rgba(172, 28, 38, 0.05), transparent 60%);
 
-    /*
-     * Machined vocabulary — tempered, not painted.
-     *
-     * Steel that has been through heat carries an oxide scale: straw around
-     * 200C, bronze by 250. So the light on a plate's top edge is not white here,
-     * it is straw, and the shade under it is warm rather than neutral. One token
-     * and every plate, bay and stores chip in the theme changes material.
-     */
+    /* Tempered steel: straw light on the top edge, warm shade under it. */
     --machined-bevel-light: rgba(255, 214, 170, 0.075);
     --machined-bevel-shade: rgba(26, 6, 7, 0.40);
 
-    /*
-     * The cut corner came off the mill hot.
-     *
-     * The chamfer is the one edge on a plate that was actually *cut* — the rest
-     * are just where the plate ends — so it is the one edge entitled to show a
-     * heat-affected zone. A 3.5px oxide band runs straw into bronze along the
-     * inside of the diagonal and stops dead at the frame hairline. It is the
-     * theme's signature and it appears on every module, unit bay, strategy card
-     * and condensed rack cell without a single new element.
-     */
-    --machined-temper-br: linear-gradient(
-      to bottom right,
+    /* The cut chamfer shows a heat-affected oxide band, straw into bronze. */
+    --machined-temper-stops:
       transparent 0 calc(50% - 4px),
       rgba(255, 186, 130, 0.14) calc(50% - 4px) calc(50% - 2.2px),
       rgba(206, 92, 58, 0.12) calc(50% - 2.2px) calc(50% - 0.5px),
-      transparent calc(50% - 0.5px)
-    );
-    --machined-temper-tr: linear-gradient(
-      to top right,
-      transparent 0 calc(50% - 4px),
-      rgba(255, 186, 130, 0.14) calc(50% - 4px) calc(50% - 2.2px),
-      rgba(206, 92, 58, 0.12) calc(50% - 2.2px) calc(50% - 0.5px),
-      transparent calc(50% - 0.5px)
-    );
+      transparent calc(50% - 0.5px);
+    --machined-temper-br: linear-gradient(to bottom right, var(--machined-temper-stops));
+    --machined-temper-tr: linear-gradient(to top right, var(--machined-temper-stops));
 
-    /*
-     * The socket is a cinder bed.
-     *
-     * Empty capacity is the single most common surface in a player area — an
-     * unresearched tech, a unit a faction cannot build, a sealed secret — so it
-     * is the right place to spend the theme's one real ornament. Instead of a
-     * flat black hole, the pocket holds a faint ember at its floor, the way a
-     * crucible does after the pour. Nothing moves; it is just still hot.
-     */
+    /* Empty sockets hold a faint ember at the floor, like a crucible after the pour. */
     --socket-bg:
       radial-gradient(150% 108% at 50% 103%, rgba(200, 52, 42, 0.26), transparent 56%),
       rgba(0, 0, 0, 0.34);
@@ -212,10 +114,8 @@
     --socket-inset:
       inset 0 1px 2px rgba(0, 0, 0, 0.55),
       inset 0 -1px 0 rgba(255, 168, 132, 0.07);
-    --socket-tick: rgba(226, 150, 140, 0.24);
 
-    /* A trough seats a numeral in a channel; here the channel has heat pooled
-       along its floor, which is also the highlight that sells the recess. */
+    /* Heat pooled along the trough floor sells the recess. */
     --trough-bg:
       linear-gradient(0deg, rgba(150, 34, 32, 0.16), transparent 58%),
       rgba(0, 0, 0, 0.40);
@@ -223,8 +123,7 @@
       inset 0 2px 3px rgba(0, 0, 0, 0.58),
       inset 0 -1px 0 rgba(255, 158, 122, 0.10);
 
-    /* Mill finish: the rail is a scored strip, not a smooth one. 3px scoring at
-       under 2% contrast — felt rather than seen, and only on chrome. */
+    /* Mill finish: 3px scoring under 2% contrast. */
     --rail-bg:
       repeating-linear-gradient(
         90deg,

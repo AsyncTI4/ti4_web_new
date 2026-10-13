@@ -73,20 +73,6 @@ body {
   --ds-ambient: none;
 }
 
-/* Midnight — Deep Space: a sparse starfield and a cool bloom from the top edge. */
-body.theme-midnighttheme {
-  --ds-tex-deck:
-    radial-gradient(1px 1px at 20% 30%, rgb(255 255 255 / 0.5), transparent 60%),
-    radial-gradient(1px 1px at 70% 80%, rgb(180 200 255 / 0.42), transparent 60%),
-    radial-gradient(1.5px 1.5px at 45% 55%, rgb(255 255 255 / 0.36), transparent 60%),
-    radial-gradient(ellipse 80% 50% at 50% 0, rgb(59 130 246 / 0.13), transparent 70%);
-  --ds-tex-deck-size: 137px 137px, 211px 211px, 89px 89px, 100% 100%;
-  --ds-tex-deck-pos: 0 0;
-  --ds-tex-deck-repeat: repeat, repeat, repeat, no-repeat;
-  --ds-tex-rail: linear-gradient(180deg, rgb(59 130 246 / 0.05), transparent 60%);
-  --ds-ambient: radial-gradient(ellipse 60% 30% at 50% 0, rgb(59 130 246 / 0.07), transparent 70%);
-}
-
 /* Blue — Admiralty: blueprint grid, drafting ticks, mono chart-legend labels. */
 body.theme-midnightbluetheme {
   --ds-tex-deck:
@@ -165,13 +151,6 @@ body.theme-vaporwavetheme {
 }
 
 /* Utility classes any component can opt into. */
-.ds-deck-texture {
-  background-image: var(--ds-tex-deck);
-  background-size: var(--ds-tex-deck-size);
-  background-position: var(--ds-tex-deck-pos);
-  background-repeat: var(--ds-tex-deck-repeat);
-}
-
 .ds-label {
   font-family: var(--ds-label-font);
   font-size: var(--text-label);

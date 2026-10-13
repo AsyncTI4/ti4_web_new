@@ -9,12 +9,34 @@
 }
 
 .label {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: ds-label from global;
+}
+
+/* Titles and copy shared by the how-it-works steps, features and appeals. */
+.cardTitle {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: 600;
+  color: var(--ds-ink-hi);
+}
+
+.cardBody {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: 1.55;
+  color: var(--ds-ink);
+}
+
+/* A live reading carries the same green light the app uses for a seat whose
+   turn it is. */
+.liveDot,
+.live::before,
+.specimenYou::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(var(--ds-sig-ok));
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────── */
@@ -92,13 +114,9 @@
   text-shadow: var(--ds-num-glow);
 }
 
-.fact small {
-  font-family: var(--ds-label-font);
+.factLabel {
+  composes: ds-label from global;
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .fanNote {
@@ -148,8 +166,6 @@
 .liveDot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background: rgb(var(--ds-sig-ok));
 }
 
 .boardFrame {
@@ -160,6 +176,7 @@
 }
 
 .boardOpen {
+  composes: ds-label from global;
   display: none;
 }
 
@@ -239,8 +256,6 @@
   color: var(--ds-ink-lo);
 }
 
-/* The running-games count is a live reading, so it carries the same green
-   light the app uses for a seat whose turn it is. */
 .live {
   display: inline-flex;
   align-items: center;
@@ -248,11 +263,6 @@
 }
 
 .live::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgb(var(--ds-sig-ok));
   box-shadow: 0 0 0 3px rgb(var(--ds-sig-ok) / 0.15);
 }
 
@@ -289,20 +299,6 @@
   font-size: var(--text-title);
   font-weight: 600;
   color: var(--ds-ink-lo);
-}
-
-.stepTitle {
-  margin: 0;
-  font-size: var(--text-title);
-  font-weight: 600;
-  color: var(--ds-ink-hi);
-}
-
-.stepBody {
-  margin: 0;
-  font-size: var(--text-body);
-  line-height: 1.55;
-  color: var(--ds-ink);
 }
 
 .shot {
@@ -344,20 +340,6 @@
   background-color: var(--ds-deck);
 }
 
-.featureTitle {
-  margin: 0;
-  font-size: var(--text-title);
-  font-weight: 600;
-  color: var(--ds-ink-hi);
-}
-
-.featureBody {
-  margin: 0;
-  font-size: var(--text-body);
-  line-height: 1.55;
-  color: var(--ds-ink);
-}
-
 .specimen {
   display: grid;
   gap: 4px;
@@ -390,13 +372,8 @@
 }
 
 .specimenYou::before {
-  content: "";
   display: inline-block;
-  width: 7px;
-  height: 7px;
   margin-right: 6px;
-  border-radius: 50%;
-  background: rgb(var(--ds-sig-ok));
 }
 
 .specimenHex {
@@ -443,13 +420,6 @@
   display: grid;
   gap: 4px;
   max-width: 70ch;
-}
-
-.appealsTitle {
-  margin: 0;
-  font-size: var(--text-title);
-  font-weight: 600;
-  color: var(--ds-ink-hi);
 }
 
 .appealsBody {
@@ -518,11 +488,6 @@
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 12px;
-    font-family: var(--ds-label-font);
-    font-size: var(--text-label);
-    font-weight: var(--weight-rail);
-    letter-spacing: var(--ds-label-track);
-    text-transform: uppercase;
     color: var(--ds-ink-hi);
     text-decoration: none;
     background: linear-gradient(180deg, transparent 55%, var(--ds-backdrop));

@@ -2,7 +2,7 @@ import { Text, TextProps } from "@/ds";
 import cx from "clsx";
 import styles from "./Caption.module.css";
 
-type CaptionSize = "xs" | "sm" | "md";
+type CaptionSize = "xs" | "sm";
 
 type Props = Omit<TextProps, "size"> & {
   children: React.ReactNode;

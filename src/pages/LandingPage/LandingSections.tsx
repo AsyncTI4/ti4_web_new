@@ -86,7 +86,7 @@ function HeroFacts({ query }: { query: CommunityStatsQuery }) {
         {FALLBACK_FACTS.map((fact) => (
           <span key={fact.label} className={classes.fact}>
             <b>{fact.value}</b>
-            <small>{fact.label}</small>
+            <small className={classes.factLabel}>{fact.label}</small>
           </span>
         ))}
       </div>
@@ -97,7 +97,7 @@ function HeroFacts({ query }: { query: CommunityStatsQuery }) {
       {STAT_FACTS.map(({ key, label }) => (
         <span key={key} className={classes.fact}>
           <b>{query.data?.[key].toLocaleString() ?? "—"}</b>
-          <small>{label}</small>
+          <small className={classes.factLabel}>{label}</small>
         </span>
       ))}
     </div>
@@ -183,8 +183,8 @@ export function HowItWorksSection() {
             {HOW_IT_WORKS.map((item, index) => (
               <li key={item.title} className={classes.step}>
                 <span className={classes.stepNum}>{String(index + 1).padStart(2, "0")}</span>
-                <h3 className={classes.stepTitle}>{item.title}</h3>
-                <p className={classes.stepBody}>{item.body}</p>
+                <h3 className={classes.cardTitle}>{item.title}</h3>
+                <p className={classes.cardBody}>{item.body}</p>
               </li>
             ))}
           </ol>
@@ -267,8 +267,8 @@ export function FeaturesSection() {
           {FEATURES.map((feature) => (
             <article key={feature.title} className={classes.feature}>
               {feature.specimen}
-              <h3 className={classes.featureTitle}>{feature.title}</h3>
-              <p className={classes.featureBody}>{feature.body}</p>
+              <h3 className={classes.cardTitle}>{feature.title}</h3>
+              <p className={classes.cardBody}>{feature.body}</p>
             </article>
           ))}
         </div>
@@ -348,7 +348,7 @@ export function BanAppealsSection() {
     <section className={classes.inner} aria-label="Server ban appeals">
       <div className={classes.appeals}>
         <div className={classes.appealsText}>
-          <h2 className={classes.appealsTitle}>Server ban appeals</h2>
+          <h2 className={classes.cardTitle}>Server ban appeals</h2>
           <p className={classes.appealsBody}>
             Banned from the{" "}
             <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">

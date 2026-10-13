@@ -17,12 +17,7 @@
       #060b14;
     --map-tabs-bg: #101628;
 
-    --map-tab-active-border: #3168C5;
-
     --header-bg: #0B1324;
-
-    --header-tab-active-bg: #18367C;
-    --header-tab-active-border: #306CD4;
 
     --header-tab-input-bg: rgba(8, 14, 33, 0.83);
     --header-tab-input-border: 1px solid rgba(59, 130, 246, 0.425);
@@ -30,14 +25,10 @@
     --header-tab-dropdown-bg: rgba(8, 14, 33, 0.92);
     --header-tab-dropdown-border: 1px solid rgba(59, 130, 246, 0.425);
     --header-tab-dropdown-hover-bg: rgba(37, 99, 235, 0.34);
-    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: #0A111E;
     --details-card-border: 1px solid #162D56;
-
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(49, 57, 71, 0.6);
 
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
@@ -54,8 +45,6 @@
     --panel-field-bg: linear-gradient(180deg, rgba(14, 24, 42, 0.96), rgba(6, 11, 21, 0.98));
     --panel-field-flat: rgba(8, 14, 28, 0.6);
     --panel-field-strip: rgba(8, 14, 28, 0.7);
-    --panel-field-soft: rgba(8, 14, 28, 0.5);
-    --panel-cell-bg: rgba(40, 60, 92, 0.16);
     --panel-hairline: rgba(150, 170, 196, 0.2);
     --panel-hairline-strong: rgba(150, 170, 196, 0.3);
     --panel-separator: rgba(150, 170, 196, 0.12);

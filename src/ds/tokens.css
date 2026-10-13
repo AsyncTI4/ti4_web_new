@@ -69,17 +69,11 @@
   --ds-pink-5: #f06595; --ds-pink-6: #e64980; --ds-pink-7: #d6336c; --ds-pink-8: #c2255c; --ds-pink-9: #a61e4d;
   --ds-indigo-0: #edf2ff; --ds-indigo-1: #dbe4ff; --ds-indigo-2: #bac8ff; --ds-indigo-3: #91a7ff; --ds-indigo-4: #748ffc;
   --ds-indigo-5: #5c7cfa; --ds-indigo-6: #4c6ef5; --ds-indigo-7: #4263eb; --ds-indigo-8: #3b5bdb; --ds-indigo-9: #364fc7;
-  /* "purple" is the app's word for the law/agenda hue; it is violet. */
-  --ds-purple-0: var(--ds-violet-0); --ds-purple-1: var(--ds-violet-1); --ds-purple-2: var(--ds-violet-2);
-  --ds-purple-3: var(--ds-violet-3); --ds-purple-4: var(--ds-violet-4); --ds-purple-5: var(--ds-violet-5);
-  --ds-purple-6: var(--ds-violet-6); --ds-purple-7: var(--ds-violet-7); --ds-purple-8: var(--ds-violet-8);
-  --ds-purple-9: var(--ds-violet-9);
 
   /* ── 2. Ink ─────────────────────────────────────────────────────────── */
   --ds-ink-hi: #f1f3f5;   /* names, values, titles — 13.4:1 */
   --ds-ink: #adb5bd;      /* default text — 9.5:1 */
   --ds-ink-lo: #868e96;   /* labels, totals, exhausted — the floor, 5.95:1 */
-  --ds-dimmed: var(--ds-ink-lo);
 
   /* ── 3. Surfaces (themes override) ──────────────────────────────────── */
   --ds-page: #0b0b0c;
@@ -105,7 +99,6 @@
   --ds-accent-ink: #93c5fd;
   --ds-accent-rgb: 59 130 246;
   --ds-discord: #5865f2;
-  --ds-discord-hover: #6d78f4;
   --ds-sig-prop: 59 130 246;
   --ds-sig-bio: 34 197 94;
   --ds-sig-cyber: 234 179 8;
@@ -183,13 +176,6 @@
   --ds-dur-slow: 0.3s;
   --ds-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Breakpoints (for reference; media queries use literal em values) */
-  --ds-bp-xs: 36em;
-  --ds-bp-sm: 48em;
-  --ds-bp-md: 62em;
-  --ds-bp-lg: 75em;
-  --ds-bp-xl: 88em;
 }
 
 @media (prefers-reduced-motion: reduce) {

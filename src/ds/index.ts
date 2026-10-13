@@ -27,13 +27,11 @@ export {
   Divider,
   Paper,
   Card,
-  Badge,
   Loader,
   Alert,
   type ImageProps,
   type DividerProps,
   type PaperProps,
-  type BadgeProps,
   type LoaderProps,
   type AlertProps,
 } from "./surfaces";

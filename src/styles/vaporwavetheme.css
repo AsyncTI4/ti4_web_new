@@ -12,18 +12,6 @@
     --surface-corner-accent: 2px solid rgba(var(--vw-pink-rgb), 0.35);
     --surface-shadow: 0 10px 40px rgba(var(--vw-pink-rgb), 0.15), 0 6px 24px rgba(var(--vw-cyan-rgb), 0.12), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.08);
 
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 1) 0%, rgba(var(--vw-panel-soft-rgb), 1) 100%);
-    --faction-tab-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.72) 0%, rgba(var(--vw-panel-soft-rgb), 0.68) 100%);
-    --faction-tab-border: 1px solid rgba(var(--vw-pink-rgb), 0.22);
-    --faction-tab-shadow: 0 1px 3px rgba(var(--vw-pink-rgb), 0.2);
-
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(var(--vw-panel-strong-rgb), 0.82) 0%, rgba(var(--vw-panel-soft-rgb), 0.78) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(var(--vw-pink-rgb), 0.35) 0%, rgba(var(--vw-cyan-rgb), 0.28) 50%, rgba(var(--vw-panel-strong-rgb), 0.78) 100%);
-    --faction-tab-active-shadow: 0 2px 10px rgba(var(--vw-pink-rgb), 0.35), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.1);
-    --faction-tab-pinned-shadow: 0 4px 14px rgba(var(--vw-cyan-rgb), 0.35), inset 0 1px 0 rgba(var(--vw-white-rgb), 0.12);
-
-    /* PlayerCard.tsx */
     /* Lifted a step above --panel-field-bg; at equal values the plates sat
        flush with the ground and the card lost its enclosure. */
     --player-card-box-bg: linear-gradient(135deg, rgba(34, 18, 52, 1) 0%, rgba(18, 26, 56, 1) 100%);
@@ -33,7 +21,6 @@
     --sidebar-bg: rgba(10, 8, 24, 0.6);
     --left-sidebar-bg: rgba(10, 8, 24, 0.6);
     --sidebar-border: 1px solid rgba(var(--vw-cyan-rgb), 0.22);
-    --sidebar-blur: 8px;
 
     /** Map **/
     --main-bg:
@@ -47,19 +34,8 @@
       linear-gradient(180deg, rgba(12, 8, 28, 0.98) 0%, rgba(10, 8, 26, 0.98) 60%, rgba(6, 6, 18, 0.98) 100%);
     --map-tabs-bg: linear-gradient(180deg, rgba(var(--vw-panel-strong-rgb), 0.85) 0%, rgba(var(--vw-panel-soft-rgb), 0.8) 100%);
 
-    --map-tab-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-
-    --map-tab-active-border: rgba(var(--vw-cyan-rgb), 0.55);
-
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(var(--vw-panel-strong-rgb), 0.85) 0%, rgba(var(--vw-panel-soft-rgb), 0.8) 100%);
-    --header-shadow: 0 3px 10px rgba(var(--vw-pink-rgb), 0.15);
-
-    /** Header Tabs  **/
-    --header-tab-bg: rgba(var(--vw-panel-mid-rgb), 0.5);
-
-    --header-tab-active-bg: rgba(var(--vw-cyan-rgb), 0.28);
-    --header-tab-active-border: rgba(var(--vw-cyan-rgb), 0.6);
 
     /** Header Tabs Input **/
     --header-tab-input-bg: rgba(var(--vw-panel-mid-rgb), 0.66);
@@ -70,21 +46,6 @@
     --header-tab-dropdown-border: 1px solid rgba(var(--vw-pink-rgb), 0.36);
     --header-tab-dropdown-hover-bg: rgba(var(--vw-pink-rgb), 0.28);
     --header-dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-
-    /** Objectives Tab **/
-    --score-board-bg: linear-gradient(135deg, rgba(18, 14, 32, 0.96) 0%, rgba(10, 16, 38, 0.9) 50%, rgba(18, 14, 32, 0.96) 100%);
-
-    /** Card Stack Details Modal **/
-    --card-details-section-title-border: 1px solid rgba(255, 255, 255, 0.18);
-
-    --card-details-item-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.04) 100%);
-    --card-details-item-border: 1px solid rgba(255, 255, 255, 0.16);
-
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(255, 0, 170, 0.35) 0%, rgba(0, 240, 255, 0.28) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(255, 255, 255, 0.36);
-
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.085) 100%);
-    --card-details-percentage-border: 1px solid rgba(255, 255, 255, 0.21);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgba(18, 14, 32, 1) 0%, rgba(10, 16, 38, 1) 100%);
@@ -102,9 +63,6 @@
     --scrollbar-color-thumb: rgba(255, 0, 170, 0.6);
     --scrollbar-color-track: rgba(16, 12, 36, 0.85);
 
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(255, 0, 170, 0.35);
-
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(255, 0, 170, 0.06);
     --unit-details-inherited-border: rgba(255, 0, 170, 0.15);
@@ -114,8 +72,6 @@
     --panel-field-bg: linear-gradient(160deg, rgba(var(--vw-panel-strong-rgb), 0.94), rgba(var(--vw-panel-soft-rgb), 0.96));
     --panel-field-flat: rgba(16, 10, 32, 0.55);
     --panel-field-strip: rgba(16, 10, 32, 0.66);
-    --panel-field-soft: rgba(16, 10, 32, 0.46);
-    --panel-cell-bg: rgba(var(--vw-pink-rgb), 0.05);
     --panel-hairline: rgba(var(--vw-pink-rgb), 0.2);
     --panel-hairline-strong: rgba(var(--vw-cyan-rgb), 0.26);
     --panel-separator: rgba(var(--vw-pink-rgb), 0.14);

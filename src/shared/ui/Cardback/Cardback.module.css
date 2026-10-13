@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  width: 65px;
 }
 
 .imageWrapper {
@@ -34,8 +35,3 @@
   line-height: 1;
 }
 
-/* Size variants */
-.size_xs { width: 35px; }
-.size_sm { width: 45px; }
-.size_md { width: 55px; }
-.size_lg { width: 65px; }

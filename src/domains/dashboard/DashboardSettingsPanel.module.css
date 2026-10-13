@@ -111,12 +111,7 @@
 }
 
 .label {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: ds-label from global;
 }
 
 .sectionTitle {
@@ -163,10 +158,6 @@
 .readOnlyNote {
   font-size: var(--text-meta);
   color: var(--ds-ink-lo);
-}
-
-.full {
-  grid-column: 1 / -1;
 }
 
 .loading {

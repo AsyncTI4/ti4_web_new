@@ -11,14 +11,6 @@
     --surface-border: 1px solid rgba(var(--mobile-rgb-gray), 0.28);
     --surface-corner-accent: 2px solid rgba(var(--mobile-rgb-gray-light), 0.18);
 
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: transparent;
-    --faction-tab-bg: linear-gradient(135deg, #111111 0%, #161616 100%);
-    --faction-tab-border: 1px solid #3A3A3A;
-
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(8, 8, 8, 0.97) 0%, rgba(24, 24, 24, 0.94) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(200, 200, 200, 0.45) 0%, rgba(160, 160, 160, 0.35) 50%, rgba(8, 8, 8, 0.94) 100%);
-
     /* PlayerCard.tsx */
     --player-card-box-bg: rgba(var(--mobile-rgb-dark), 1);
 
@@ -31,16 +23,8 @@
     --main-bg: #0a0a0a;
     --map-tabs-bg: linear-gradient(180deg, #080808, #161616 100%);
 
-    --map-tab-active-border: #A9A9A9;
-
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(8, 8, 8) 0%, rgba(24, 24, 24) 100%);
-
-    /** Header Tabs  **/
-    --header-tab-bg: linear-gradient(180deg, #080808, #161616 100%);
-
-    --header-tab-active-bg: #3F3F3F;
-    --header-tab-active-border: #A9A9A9;
 
     /** Header Tabs Input **/
     --header-tab-input-bg: rgba(var(--mobile-rgb-dark), 0.86);
@@ -50,29 +34,10 @@
     --header-tab-dropdown-bg: rgba(var(--mobile-rgb-dark), 0.94);
     --header-tab-dropdown-border: 1px solid rgba(var(--mobile-rgb-gray-light), 0.45);
     --header-tab-dropdown-hover-bg: rgba(var(--mobile-rgb-gray-hover), 0.38);
-    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-
-    /** Objectives Tab **/
-    --score-board-bg: linear-gradient(135deg, rgba(var(--mobile-rgb-dark), 0.985) 0%, rgba(var(--mobile-rgb-mid), 0.96) 50%, rgba(var(--mobile-rgb-dark), 0.985) 100%);
-
-    /** Card Stack Details Modal **/
-    --card-details-section-title-border: 1px solid rgba(var(--mobile-rgb-gray), 0.28);
-
-    --card-details-item-bg: linear-gradient(135deg, rgba(var(--mobile-rgb-gray), 0.06) 0%, rgba(var(--mobile-rgb-gray-soft), 0.04) 100%);
-    --card-details-item-border: 1px solid rgba(var(--mobile-rgb-gray), 0.16);
-
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(var(--mobile-rgb-gray), 0.35) 0%, rgba(var(--mobile-rgb-gray-soft), 0.28) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(var(--mobile-rgb-gray), 0.45);
-
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(var(--mobile-rgb-gray), 0.12) 0%, rgba(var(--mobile-rgb-gray-soft), 0.09) 100%);
-    --card-details-percentage-border: 1px solid rgba(var(--mobile-rgb-gray), 0.22);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgb(var(--mobile-rgb-dark)) 0%, rgb(var(--mobile-rgb-mid)) 100%);
     --details-card-border: 1px solid rgba(var(--mobile-rgb-gray-light), 0.28);
-
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(var(--mobile-rgb-gray), 0.35);
 }
 
 .mobile *, .mobile *::before, .mobile *::after {

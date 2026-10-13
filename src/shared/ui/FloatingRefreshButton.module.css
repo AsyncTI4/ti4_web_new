@@ -2,11 +2,6 @@
  * The prompt's plate, type and hover come from `hudChrome.module.css`, the same
  * place the header and deck actions get theirs. All that is left here is where it
  * sits: centred at the top of the board, above the map's controls.
- *
- * The centring is a flex anchor rather than `translateX(-50%)` on the button
- * itself, because Mantine's Button sets `transform: none` on several of its own
- * states — a button that centres itself with a transform teleports half its width
- * sideways the moment one of them applies.
  */
 .anchor {
   position: fixed;
@@ -27,17 +22,11 @@
 /*
  * On a phone the top of the board is the tool rack and the game state plate,
  * so the prompt covered both. It docks to the bottom edge instead: one fixed
- * spot within thumb reach, clear of every control, and a taller plate so it
- * is an easy target.
+ * spot within thumb reach, clear of every control.
  */
 @media (max-width: 47.99375em) {
   .anchor {
     top: auto;
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .anchor > :global(.mantine-Button-root) {
-    height: 40px;
-    padding: 0 16px;
   }
 }

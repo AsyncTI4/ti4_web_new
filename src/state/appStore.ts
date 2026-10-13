@@ -19,11 +19,8 @@ const THEME_STORAGE_KEY = "ti4_theme";
 
 export const THEME_NAMES = [
   "midnightbluetheme",
-  "midnighttheme",
   "midnightgraytheme",
   "midnightredtheme",
-  "sunsettheme",
-  "magmatheme",
   "vaporwavetheme",
   "midnightviolettheme",
   "midnightgreentheme",
@@ -37,6 +34,9 @@ const DEFAULT_THEME: ThemeName = "midnightgraytheme";
 const DEPRECATED_THEMES: Record<string, ThemeName> = {
   bluetheme: "midnightbluetheme",
   slatetheme: "midnightgraytheme",
+  midnighttheme: "midnightbluetheme",
+  sunsettheme: "midnightgraytheme",
+  magmatheme: "midnightgraytheme",
 };
 
 const CONTROL_TOKEN_DISPLAY_MODES: ControlTokenDisplayMode[] = [

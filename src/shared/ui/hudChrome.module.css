@@ -11,13 +11,9 @@
  * follow `.hudButton` in source order and win their overrides outright.
  */
 .hudButton {
+  composes: ds-label from global;
   height: 28px;
   padding: 0 11px;
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-ink);
   background: var(--ds-socket);
   border: 1px solid var(--ds-h22);
@@ -42,11 +38,6 @@
   background: var(--ds-socket);
   border-color: var(--ds-h14);
   cursor: default;
-}
-
-.hudButton:focus-visible {
-  outline: 2px solid var(--ds-accent);
-  outline-offset: 2px;
 }
 
 /* Discord: the brand hue lives on the frame and the glyph, not the fill. */

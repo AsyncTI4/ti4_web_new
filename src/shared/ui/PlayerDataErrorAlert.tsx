@@ -19,7 +19,6 @@ export function PlayerDataErrorAlert({
 }: PlayerDataErrorAlertProps) {
   return (
     <Alert
-      variant="light"
       color="red"
       title="Error loading player data"
       icon={<IconAlertCircle />}

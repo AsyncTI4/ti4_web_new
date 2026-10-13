@@ -4,16 +4,6 @@
     --surface-border: 1px solid rgba(95, 115, 85, 0.85);
     --surface-corner-accent: 2px solid rgba(85, 105, 75, 0.6);
 
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: linear-gradient(135deg, rgba(3, 6, 2, 1) 0%, rgba(10, 15, 6, 1) 100%);
-    --faction-tab-bg: linear-gradient(135deg, rgba(6, 12, 4, 0.96) 0%, rgba(15, 20, 12, 0.92) 100%);
-    --faction-tab-border: 1px solid rgba(95, 115, 85, 0.75);
-    --faction-tab-shadow: 0 1px 3px rgba(45, 100, 55, 0.3);
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(25, 38, 20, 0.96) 0%, rgba(35, 48, 28, 0.92) 100%);
-    --faction-tab-active-shadow: 0 2px 10px rgba(45, 100, 55, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(58, 105, 58, 0.4) 0%, rgba(48, 95, 48, 0.35) 50%, rgba(6, 12, 4, 0.92) 100%);
-    --faction-tab-pinned-shadow: 0 4px 14px rgba(60, 120, 70, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
     /* PlayerCard.tsx */
     --player-card-box-bg: linear-gradient(135deg, rgba(6, 12, 4, 0.96) 0%, rgba(16, 24, 14, 0.92) 100%);
 
@@ -22,24 +12,15 @@
     --left-sidebar-bg: rgb(6 12 4 / 91%);
     --sidebar-border: 1px solid rgba(95, 115, 85, 0.75);
 
-    /** Map **/
     /* Dappled canopy light drifting in from the corners */
     --main-bg:
       radial-gradient(110% 75% at 18% -10%, rgba(74, 122, 60, 0.06), transparent 55%),
       radial-gradient(90% 60% at 90% 110%, rgba(96, 128, 52, 0.045), transparent 60%),
       #040603;
     --map-tabs-bg: linear-gradient(180deg, rgba(8, 14, 6, 0.96) 0%, rgba(20, 28, 18, 0.92) 100%);
-    --map-tab-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    --map-tab-active-border: rgba(105, 125, 95, 0.95);
 
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(3, 6, 2, 0.96) 0%, rgba(10, 15, 6, 0.92) 100%);
-    --header-shadow: 0 4px 12px rgba(45, 100, 55, 0.32);
-
-    /** Header Tabs  **/
-    --header-tab-bg: rgba(8, 14, 6, 0.6);
-    --header-tab-active-bg: rgba(56, 85, 50, 0.5);
-    --header-tab-active-border: rgba(105, 125, 95, 1);
 
     /** Header Tabs Input **/
     --header-tab-input-bg: rgba(3, 6, 2, 0.83);
@@ -51,24 +32,9 @@
     --header-tab-dropdown-hover-bg: rgba(26, 68, 36, 0.45);
     --header-dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 
-    /** Objectives Tab **/
-    --score-board-bg: linear-gradient(135deg, rgba(3, 6, 2, 0.98) 0%, rgba(20, 28, 18, 0.95) 50%, rgba(3, 6, 2, 0.98) 100%);
-
-    /** Card Stack Details Modal **/
-    --card-details-section-title-border: 1px solid rgba(95, 115, 85, 0.9);
-    --card-details-item-bg: linear-gradient(135deg, rgba(61, 105, 55, 0.14) 0%, rgba(46, 90, 40, 0.1) 100%);
-    --card-details-item-border: 1px solid rgba(75, 90, 68, 0.7);
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(61, 105, 55, 0.6) 0%, rgba(46, 90, 40, 0.5) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(105, 125, 95, 0.95);
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(56, 100, 50, 0.28) 0%, rgba(46, 90, 40, 0.2) 100%);
-    --card-details-percentage-border: 1px solid rgba(75, 90, 65, 0.8);
-
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgb(3, 6, 2) 0%, rgb(20, 28, 18) 100%);
     --details-card-border: 1px solid rgba(105, 125, 95, 0.95);
-
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(60, 75, 52, 0.8);
 
     /* Scrollbar */
     --scrollbar-track-bg: rgba(3, 6, 2, 0.85);
@@ -91,8 +57,6 @@
     --panel-field-bg: linear-gradient(180deg, rgba(10, 17, 8, 0.94), rgba(4, 8, 3, 0.97));
     --panel-field-flat: rgba(6, 12, 4, 0.52);
     --panel-field-strip: rgba(6, 12, 4, 0.64);
-    --panel-field-soft: rgba(6, 12, 4, 0.46);
-    --panel-cell-bg: rgba(25, 38, 20, 0.22);
     --panel-hairline: rgba(122, 139, 108, 0.24);
     --panel-hairline-strong: rgba(122, 139, 108, 0.34);
     --panel-separator: rgba(122, 139, 108, 0.15);

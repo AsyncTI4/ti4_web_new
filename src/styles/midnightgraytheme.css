@@ -4,14 +4,6 @@
     --surface-border: 1px solid rgba(160, 160, 160, 0.28);
     --surface-corner-accent: 2px solid rgba(200, 200, 200, 0.18);
 
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: transparent;
-    --faction-tab-bg: linear-gradient(135deg, #111111 0%, #161616 100%);
-    --faction-tab-border: 1px solid #3A3A3A;
-
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(8, 8, 8, 0.97) 0%, rgba(24, 24, 24, 0.94) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(200, 200, 200, 0.45) 0%, rgba(160, 160, 160, 0.35) 50%, rgba(8, 8, 8, 0.94) 100%);
-
     /* PlayerCard.tsx
        The card is the panel and the modules inside it are subpanels, so the card
        ground sits a step ABOVE the module field rather than at pitch black. At
@@ -29,14 +21,7 @@
       #0a0a0a;
     --map-tabs-bg: linear-gradient(180deg, #080808, #161616 100%);
 
-    --map-tab-active-border: #A9A9A9;
-
     --header-bg: linear-gradient(90deg, rgba(8, 8, 8) 0%, rgba(24, 24, 24) 100%);
-
-    --header-tab-bg: linear-gradient(180deg, #080808, #161616 100%);
-
-    --header-tab-active-bg: #3F3F3F;
-    --header-tab-active-border: #A9A9A9;
 
     --header-tab-input-bg: rgba(8, 8, 8, 0.86);
     --header-tab-input-border: 1px solid rgba(200, 200, 200, 0.45);
@@ -44,25 +29,9 @@
     --header-tab-dropdown-bg: rgba(8, 8, 8, 0.94);
     --header-tab-dropdown-border: 1px solid rgba(200, 200, 200, 0.45);
     --header-tab-dropdown-hover-bg: rgba(180, 180, 180, 0.38);
-    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-
-    --score-board-bg: linear-gradient(135deg, rgba(8, 8, 8, 0.985) 0%, rgba(24, 24, 24, 0.96) 50%, rgba(8, 8, 8, 0.985) 100%);
-
-    --card-details-section-title-border: 1px solid rgba(160, 160, 160, 0.28);
-
-    --card-details-item-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.06) 0%, rgba(115, 115, 115, 0.04) 100%);
-    --card-details-item-border: 1px solid rgba(160, 160, 160, 0.16);
-
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.35) 0%, rgba(115, 115, 115, 0.28) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(160, 160, 160, 0.45);
-
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(160, 160, 160, 0.12) 0%, rgba(115, 115, 115, 0.09) 100%);
-    --card-details-percentage-border: 1px solid rgba(160, 160, 160, 0.22);
 
     --details-card-bg: linear-gradient(135deg, rgb(8, 8, 8) 0%, rgb(24, 24, 24) 100%);
     --details-card-border: 1px solid rgba(200, 200, 200, 0.28);
-
-    --resource-divider-color: rgba(160, 160, 160, 0.35);
 
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(139, 92, 246, 0.06);
@@ -78,8 +47,6 @@
     --panel-field-bg: linear-gradient(180deg, rgba(12, 12, 13, 0.96), rgba(8, 8, 9, 0.98));
     --panel-field-flat: rgba(8, 8, 9, 0.55);
     --panel-field-strip: rgba(10, 10, 11, 0.66);
-    --panel-field-soft: rgba(11, 11, 12, 0.46);
-    --panel-cell-bg: rgba(38, 38, 40, 0.16);
 
     --panel-hairline: rgba(190, 190, 196, 0.12);
     --panel-hairline-strong: rgba(190, 190, 196, 0.2);
@@ -91,7 +58,6 @@
 
     --socket-bg: rgba(0, 0, 0, 0.3);
     --socket-border: rgba(190, 190, 196, 0.09);
-    --socket-tick: rgba(190, 190, 196, 0.2);
 
     --survey-lit: rgba(216, 216, 222, 0.8);
 }

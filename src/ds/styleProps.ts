@@ -127,7 +127,7 @@ function lineHeight(value: SizeKey | number | (string & {}) | undefined) {
 
 const HUES = new Set([
   "gray", "dark", "blue", "red", "green", "yellow", "orange", "teal",
-  "cyan", "violet", "grape", "pink", "indigo", "purple",
+  "cyan", "violet", "grape", "pink", "indigo",
 ]);
 
 /**
@@ -140,7 +140,9 @@ export function color(value: string | undefined) {
   if (value === "bright") return "var(--ds-ink-hi)";
   if (value === "white") return "var(--ds-white)";
   if (value === "black") return "var(--ds-black)";
-  const [hue, shade] = value.split(".");
+  const [name, shade] = value.split(".");
+  // "purple" is the app's word for the law/agenda hue; it is violet.
+  const hue = name === "purple" ? "violet" : name;
   if (!HUES.has(hue)) return value;
   return `var(--ds-${hue}-${shade ?? "6"})`;
 }

@@ -56,14 +56,45 @@ html {
   z-index: var(--z-app-modal, 3000);
 }
 
-/* hiddenFrom / visibleFrom */
-@media (min-width: 36em) { .ds-hidden-from-xs { display: none !important; } }
+/* hiddenFrom / visibleFrom. Only the sm breakpoint is used; add a pair here
+   before passing another breakpoint. */
 @media (min-width: 48em) { .ds-hidden-from-sm { display: none !important; } }
-@media (min-width: 62em) { .ds-hidden-from-md { display: none !important; } }
-@media (min-width: 75em) { .ds-hidden-from-lg { display: none !important; } }
-@media (min-width: 88em) { .ds-hidden-from-xl { display: none !important; } }
-@media (max-width: 35.99em) { .ds-visible-from-xs { display: none !important; } }
 @media (max-width: 47.99em) { .ds-visible-from-sm { display: none !important; } }
-@media (max-width: 61.99em) { .ds-visible-from-md { display: none !important; } }
-@media (max-width: 74.99em) { .ds-visible-from-lg { display: none !important; } }
-@media (max-width: 87.99em) { .ds-visible-from-xl { display: none !important; } }
+
+/* Themed scrollbars. Browsers that support scrollbar-color use it and ignore
+   the -webkit- rules, which remain for Safari. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border-radius: 6px;
+  border: var(--scrollbar-track-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 6px;
+  border: var(--scrollbar-thumb-border);
+  box-shadow: var(--scrollbar-thumb-shadow);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+  box-shadow: var(--scrollbar-thumb-hover-shadow);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.7) 0%, rgba(29, 78, 216, 0.8) 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-corner-bg);
+}

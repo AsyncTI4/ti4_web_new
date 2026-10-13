@@ -55,11 +55,8 @@
 }
 
 .tier {
-  font-family: var(--ds-label-font);
+  composes: ds-label from global;
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--tier);
 }
 

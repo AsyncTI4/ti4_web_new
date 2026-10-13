@@ -24,33 +24,16 @@
 :where(.image) { display: block; max-width: 100%; }
 :where(.divider) { width: 100%; height: 0; border: 0; flex: none; }
 :where(.dividerV) { align-self: stretch; width: 0; border: 0; flex: none; }
-:where(.dividerLabel) { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: var(--text-label, 10px); font-weight: 700; letter-spacing: var(--track-rail, 0.09em); text-transform: uppercase; color: var(--ds-ink-lo); }
-:where(.dividerLabel)::before, :where(.dividerLabel)::after { content: ""; flex: 1; border-top: var(--ds-divider-line); }
-:where(.dividerLabel_left)::before { flex: 0 0 8px; }
-:where(.dividerLabel_right)::after { flex: 0 0 8px; }
 :where(.paper) { background: linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2)); color: var(--ds-ink); }
 :where(.paperBorder) { box-shadow: inset 0 0 0 1px var(--ds-h14); }
 :where(.cardSection) { margin-inline: calc(var(--ds-space-md) * -1); }
 
-:where(.badge) { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border-radius: var(--ds-radius-sm); font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: var(--track-label, 0.06em); text-transform: uppercase; white-space: nowrap; line-height: 1; }
-:where(.badge_xs) { height: 16px; padding: 0 5px; font-size: 9px; }
-:where(.badge_md) { height: 22px; font-size: 11px; }
-:where(.badge_lg) { height: 26px; padding: 0 10px; font-size: 12px; }
-:where(.badge_xl) { height: 30px; padding: 0 12px; font-size: 13px; }
-:where(.badge_filled) { background: var(--ds-badge-c); color: #fff; }
-:where(.badge_light), :where(.badge_default) { background: color-mix(in oklab, var(--ds-badge-c) 14%, transparent); color: color-mix(in oklab, var(--ds-badge-c) 55%, white); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-badge-c) 32%, transparent); }
-:where(.badge_outline) { color: color-mix(in oklab, var(--ds-badge-c) 60%, white); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-badge-c) 55%, transparent); }
-:where(.badge_dot), :where(.badge_transparent) { color: var(--ds-ink); }
-:where(.badgeDot) { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-badge-c); }
-:where(.badgeLabel) { overflow: hidden; text-overflow: ellipsis; }
 
 :where(.loader) { display: inline-block; border-radius: 50%; border: 2px solid color-mix(in oklab, var(--ds-loader-c) 25%, transparent); border-top-color: var(--ds-loader-c); animation: dsSpin 0.8s linear infinite; flex: none; }
 @keyframes dsSpin { to { rotate: 360deg; } }
 @media (prefers-reduced-motion: reduce) { :where(.loader) { animation-duration: 2.4s; } }
 
 :where(.alert) { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px 12px; border-radius: var(--ds-radius-md); background: color-mix(in oklab, var(--ds-alert-c) 7%, var(--ds-field)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ds-alert-c) 35%, transparent); color: var(--ds-ink); }
-:where(.alert_filled) { background: color-mix(in oklab, var(--ds-alert-c) 70%, black); color: #fff; }
-:where(.alert_outline), :where(.alert_default), :where(.alert_transparent) { background: transparent; }
 :where(.alertIcon) { display: inline-flex; color: color-mix(in oklab, var(--ds-alert-c) 70%, white); padding-top: 1px; }
 :where(.alertBody) { display: grid; gap: 2px; min-width: 0; }
 :where(.alertTitle) { font-weight: 600; font-size: var(--text-body, 13px); color: color-mix(in oklab, var(--ds-alert-c) 45%, white); }
@@ -94,10 +77,6 @@
 :where(.button_light:hover:not(:disabled)) { background: color-mix(in oklab, var(--ds-btn-c) 20%, transparent); }
 :where(.button_subtle) { color: var(--ds-ink); background: transparent; }
 :where(.button_subtle:hover:not(:disabled)) { color: var(--ds-ink-hi); background: var(--ds-h10); }
-:where(.button_outline) { color: color-mix(in oklab, var(--ds-btn-c) 50%, white); background: transparent; border-color: color-mix(in oklab, var(--ds-btn-c) 55%, transparent); }
-:where(.button_outline:hover:not(:disabled)) { background: color-mix(in oklab, var(--ds-btn-c) 10%, transparent); }
-:where(.button_transparent) { color: var(--ds-ink); background: transparent; }
-:where(.button_white) { color: var(--ds-black); background: var(--ds-white); }
 
 :where(.actionIcon) { display: inline-grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: var(--ds-radius-md); cursor: pointer; flex: none; transition: background-color var(--ds-dur) var(--ds-ease), color var(--ds-dur) var(--ds-ease); -webkit-tap-highlight-color: transparent; }
 :where(.actionIcon:disabled) { opacity: 0.45; cursor: not-allowed; }
@@ -129,14 +108,8 @@
 :where(.modalBody) { overflow-y: auto; min-height: 0; flex: 1 1 auto; }
 
 :where(.drawer) { position: fixed; display: flex; flex-direction: column; background: linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2)); color: var(--ds-ink); outline: none; transition: transform var(--ds-dur-slow) var(--ds-ease); }
-:where(.drawer_left) { top: 0; bottom: 0; left: 0; max-width: 100vw; border-right: 1px solid var(--ds-h28); box-shadow: 16px 0 48px rgb(0 0 0 / 0.55); }
 :where(.drawer_right) { top: 0; bottom: 0; right: 0; max-width: 100vw; border-left: 1px solid var(--ds-h28); box-shadow: -16px 0 48px rgb(0 0 0 / 0.55); }
-:where(.drawer_top) { top: 0; left: 0; right: 0; border-bottom: 1px solid var(--ds-h28); }
-:where(.drawer_bottom) { bottom: 0; left: 0; right: 0; border-top: 1px solid var(--ds-h28); border-radius: var(--ds-radius-overlay) var(--ds-radius-overlay) 0 0; }
-:where(.drawer_left[data-starting-style]), :where(.drawer_left[data-ending-style]) { transform: translateX(-100%); }
 :where(.drawer_right[data-starting-style]), :where(.drawer_right[data-ending-style]) { transform: translateX(100%); }
-:where(.drawer_top[data-starting-style]), :where(.drawer_top[data-ending-style]) { transform: translateY(-100%); }
-:where(.drawer_bottom[data-starting-style]), :where(.drawer_bottom[data-ending-style]) { transform: translateY(100%); }
 :where(.drawerBody) { overflow-y: auto; flex: 1 1 auto; min-height: 0; }
 
 :where(.popover) {
@@ -190,7 +163,6 @@
 :where(.tabs_pills .tabsList) { gap: 2px; }
 :where(.tabs_pills .tab) { min-height: 28px; border-radius: var(--ds-radius-sm); }
 :where(.tabs_pills .tab[data-active]) { background: var(--ds-ground); box-shadow: inset 0 0 0 1px var(--ds-h22), inset 0 1px 0 rgb(255 255 255 / 0.05); }
-:where(.tabs_outline .tab[data-active]) { box-shadow: inset 0 0 0 1px var(--ds-h22); border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0; }
 :where(.tabSection) { display: inline-flex; flex: none; }
 :where(.tabLabel) { overflow: hidden; text-overflow: ellipsis; }
 :where(.tabsPanel) { min-height: 0; outline: none; }
@@ -207,9 +179,6 @@
 :where(.switch_xs) { width: 28px; height: 16px; }
 :where(.switch_xs .switchThumb) { width: 10px; height: 10px; }
 :where(.switch_xs .switchThumb[data-checked]) { translate: 12px 0; }
-:where(.switch_lg), :where(.switch_xl) { width: 42px; height: 22px; border-radius: 11px; }
-:where(.switch_lg .switchThumb), :where(.switch_xl .switchThumb) { width: 16px; height: 16px; }
-:where(.switch_lg .switchThumb[data-checked]), :where(.switch_xl .switchThumb[data-checked]) { translate: 20px 0; }
 :where(.switchBody) { display: grid; gap: 2px; cursor: pointer; min-width: 0; }
 :where(.switchLabel) { font-size: var(--text-body, 13px); color: var(--ds-ink-hi); line-height: 1.4; }
 :where(.switchDescription) { font-size: var(--text-meta, 11px); color: var(--ds-ink-lo); line-height: 1.45; }
@@ -302,7 +271,6 @@
 :where(.shellHeader) { position: fixed; top: 0; left: 0; right: 0; height: var(--app-shell-header-height); z-index: var(--z-app-header, 200); }
 :where(.shellMain) { padding-top: var(--app-shell-header-height); padding-bottom: var(--app-shell-footer-height); min-height: 100dvh; }
 :where(.shellFooter) { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-app-header, 200); }
-:where(.badge_white) { background: var(--ds-white); color: var(--ds-black); }
 
 :where(.modalFooter) { display: flex; align-items: center; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--ds-h14); background: rgb(0 0 0 / 0.18); flex: none; }
 :where(.modal):focus-visible { outline: none; }

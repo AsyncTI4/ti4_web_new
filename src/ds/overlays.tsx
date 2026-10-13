@@ -178,18 +178,18 @@ export function Modal({
 }
 
 export type DrawerProps = Omit<ModalProps, "centered" | "fullScreen" | "yOffset"> & {
-  position?: "left" | "right" | "top" | "bottom";
+  /** Drawers only slide in from the right. */
+  position?: "right";
 };
 
 const DRAWER_SIZE: Record<SizeKey, number> = { xs: 320, sm: 380, md: 440, lg: 620, xl: 780 };
 
-/** A panel that slides in from an edge. */
+/** A panel that slides in from the right edge. */
 export function Drawer({
   opened,
   onClose,
   title,
   children,
-  position = "left",
   size = "md",
   padding = "md",
   withCloseButton = true,
@@ -203,7 +203,6 @@ export function Drawer({
   hiddenFrom,
 }: DrawerProps) {
   const extent = typeof size === "number" ? size : DRAWER_SIZE[size as SizeKey] ?? size;
-  const horizontal = position === "left" || position === "right";
   return (
     <Dialog.Root
       open={opened}
@@ -217,8 +216,8 @@ export function Drawer({
       <Dialog.Portal container={getPortalRoot()} keepMounted={keepMounted}>
         <Dialog.Backdrop className={cx(classes.backdrop, classNames.overlay, hiddenFrom && `ds-hidden-from-${hiddenFrom}`)} style={{ zIndex, ...styles.overlay }} />
         <Dialog.Popup
-          className={cx(classes.drawer, classes[`drawer_${position}`], classNames.content, className, hiddenFrom && `ds-hidden-from-${hiddenFrom}`)}
-          style={{ zIndex, [horizontal ? "width" : "height"]: extent, ...styles.content }}
+          className={cx(classes.drawer, classes.drawer_right, classNames.content, className, hiddenFrom && `ds-hidden-from-${hiddenFrom}`)}
+          style={{ zIndex, width: extent, ...styles.content }}
         >
           {title !== undefined || withCloseButton ? (
             <div className={cx(classes.modalHeader, classNames.header)} style={{ padding: `var(--ds-space-sm) ${spacing(padding)}`, ...styles.header }}>

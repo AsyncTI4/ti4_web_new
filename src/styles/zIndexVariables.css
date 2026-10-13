@@ -13,22 +13,6 @@
   --z-control-border: 52;
   --z-control-token: 55;
 
-  /* Game Units Layer (100-999) */
-  --z-unit-base: 100;
-
-  /* Unit type priorities - actual TI4 unit types */
-  --z-gf: 100;    /* Ground Forces */
-  --z-ff: 110;    /* Fighters */
-  --z-mf: 120;    /* Mechs */
-  --z-sd: 130;    /* Space Docks */
-  --z-pd: 140;    /* PDS */
-  --z-dd: 150;    /* Destroyers */
-  --z-cv: 160;    /* Carriers */
-  --z-ca: 170;    /* Cruisers */
-  --z-dn: 180;    /* Dreadnoughts */
-  --z-fs: 190;    /* Flagships */
-  --z-ws: 200;    /* War Suns */
-
   /* MAP OVERLAYS - Map overlays and PDS overlay (1000-1999) */
   --z-system-indicator: 1090;
   --z-pds-overlay: 1100;
@@ -37,11 +21,9 @@
 
   /* MAP UI - Left sidebar, faction tab bar, scrollbar, controls (2000-2999) */
   --z-left-sidebar: 2000;
-  --z-player-card: 2001;
   --z-faction-tab-bar: 2010;
   --z-decal-sidebar: 2330;
   --z-drag-handle: 2100;
-  --z-drag-handle-active: 2101;
   --z-panel-toggle-button: 2200;
   --z-zoom-controls: 2300;
   --z-game-state-overlay: 2320;
@@ -52,8 +34,6 @@
   --z-reconnect-prompt: 2420;
 
   /* MODALS - Settings, shortcuts and popovers (3000-3999) */
-  --z-settings-modal: 3000;
-  --z-keyboard-shortcuts-modal: 3100;
   --z-header-menu: 3300;
   --z-app-modal: 3500;
   --z-smooth-popover: 3500;

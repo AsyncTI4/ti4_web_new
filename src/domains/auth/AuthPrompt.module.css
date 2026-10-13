@@ -32,12 +32,7 @@
 }
 
 .kicker {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: ds-label from global;
 }
 
 .title {

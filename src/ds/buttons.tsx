@@ -5,7 +5,7 @@ import { color, radius, type SizeKey } from "./styleProps";
 import { Loader } from "./surfaces";
 import classes from "./ds.module.css";
 
-type Variant = "default" | "filled" | "light" | "subtle" | "outline" | "transparent" | "white";
+type Variant = "default" | "filled" | "light" | "subtle";
 
 export type ButtonProps = BoxProps & {
   variant?: Variant;

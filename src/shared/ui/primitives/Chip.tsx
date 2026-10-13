@@ -1,74 +1,34 @@
 import { Box, Text, type BoxProps } from "@/ds";
-import type { ColorKey } from "@/shared/ui/gradientClasses";
 import classes from "./Chip.module.css";
 import cx from "clsx";
-import type { CSSProperties } from "react";
 
-type ChipSize = "xs" | "sm" | "md";
+type ChipSize = "xs" | "md";
 
-type ChipAccent =
-  | ColorKey
-  | "grey"
-  | "gray"
-  | "deepRed"
-  | "bloodOrange"
-  | "blueRed"
-  | "blueGreen"
-  | "blueYellow"
-  | "greenRed"
-  | "greenYellow"
-  | "yellowRed";
+type ChipAccent = "red" | "blue" | "green" | "purple" | "orange" | "gray";
 
 type Props = Omit<BoxProps, "color" | "onClick"> & {
   title?: string;
-  leftSection?: React.ReactNode;
-  leftIconSrc?: string;
-  leftIconClassName?: string;
-  leftIconSize?: number | string;
   children?: React.ReactNode;
-  ribbon?: boolean;
-  accentLine?: boolean;
   accent?: ChipAccent;
   strong?: boolean;
-  breakthrough?: boolean;
   size?: ChipSize;
-  /** When true, shows an absolute-positioned full title on hover */
-  revealFullTitleOnHover?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: (event: React.SyntheticEvent<HTMLDivElement>) => void;
 };
 
-const HYBRID_ACCENTS = new Set<ChipAccent>([
-  "blueRed",
-  "blueGreen",
-  "blueYellow",
-  "greenRed",
-  "greenYellow",
-  "yellowRed",
-]);
-
 const TEXT_SIZES: Record<ChipSize, string> = {
   xs: "10px",
-  sm: "xs",
   md: "xs",
 };
 
 export function Chip({
   title,
-  leftSection,
-  leftIconSrc,
-  leftIconClassName,
-  leftIconSize,
   children,
   className,
   accent = "gray",
-  ribbon = false,
-  accentLine = false,
   strong = false,
-  breakthrough = false,
   size = "md",
-  revealFullTitleOnHover = false,
   onClick,
   px,
   py,
@@ -76,7 +36,6 @@ export function Chip({
 }: Props) {
   const textSize = TEXT_SIZES[size];
   const clickable = onClick !== undefined;
-  const isHybrid = HYBRID_ACCENTS.has(accent);
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (!clickable) return;
     if (event.key === "Enter" || event.key === " ") {
@@ -84,19 +43,6 @@ export function Chip({
       onClick?.(event);
     }
   };
-  const leftIconStyle = leftIconSrc
-    ? ({
-        "--chip-left-icon": `url("${leftIconSrc}")`,
-        ...(leftIconSize
-          ? {
-              "--chip-left-icon-size":
-                typeof leftIconSize === "number"
-                  ? `${leftIconSize}px`
-                  : leftIconSize,
-            }
-          : {}),
-      } as CSSProperties)
-    : undefined;
 
   return (
     <Box
@@ -108,44 +54,18 @@ export function Chip({
       className={cx(
         classes.chip,
         classes[accent],
-        classes[`size_${size}`],
-        breakthrough && classes.breakthrough,
-        clickable && classes.hover,
+        size === "xs" && classes.size_xs,
         clickable && classes.clickable,
-        ribbon && classes.ribbon,
-        accentLine && classes.accentLine,
         strong && classes.strong,
         className
       )}
-      data-split={isHybrid ? "true" : undefined}
     >
-      {isHybrid && (
-        <>
-          <div className={classes.halfLeft} />
-          <div className={classes.halfRight} />
-        </>
-      )}
-      <Box
-        className={cx(
-          classes.inner,
-          leftIconSrc && classes.innerWithLeftIcon,
-          leftIconSrc && leftIconClassName,
-          revealFullTitleOnHover && classes.revealFullTitle
-        )}
-        style={leftIconStyle}
-        px={px}
-        py={py}
-      >
-        {leftSection && (
-          <Box className={cx(classes.leftSection, leftIconClassName)}>
-            {leftSection}
-          </Box>
-        )}
+      <Box className={classes.inner} px={px} py={py}>
         {title && (
           <Text
             size={textSize}
-            /* Semibold, not bold. Set here rather than in CSS because Mantine's
-               fw prop emits an inline style that overrides the class. */
+            /* Semibold, not bold. Set here rather than in CSS because the fw
+               prop emits an inline style that overrides the class. */
             fw={600}
             c="white"
             className={classes.textContainer}
@@ -153,11 +73,6 @@ export function Chip({
                be read without opening the details popover. */
             title={title}
           >
-            {title}
-          </Text>
-        )}
-        {title && revealFullTitleOnHover && (
-          <Text size={textSize} fw={600} c="white" className={classes.fullTitle}>
             {title}
           </Text>
         )}

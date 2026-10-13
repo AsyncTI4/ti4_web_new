@@ -9,7 +9,6 @@ type CardbackModalProps = {
   alt: string;
   title: string;
   count?: string | number | ReactNode;
-  size?: "xs" | "sm" | "md" | "lg";
   children: ReactNode;
   modalSize?: string | number;
   cardKey?: string | number;
@@ -21,7 +20,6 @@ export function CardbackModal({
   alt,
   title,
   count = 0,
-  size = "lg",
   children,
   modalSize = 620,
   cardKey,
@@ -33,7 +31,7 @@ export function CardbackModal({
   return (
     <>
       <Stack className={styles.trigger} onClick={() => setOpened(true)}>
-        <Cardback key={cardKey} src={imageSrc} alt={alt} count={count} size={size} />
+        <Cardback key={cardKey} src={imageSrc} alt={alt} count={count} />
       </Stack>
       <AppModal
         opened={opened}

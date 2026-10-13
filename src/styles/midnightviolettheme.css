@@ -1,17 +1,8 @@
 .theme-midnightviolettheme {
-
     /* Surface.tsx */
     --surface-bg: linear-gradient(135deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
     --surface-border: 1px solid rgba(148, 163, 184, 0.24);
     --surface-corner-accent: 2px solid rgba(168, 85, 247, 0.14);
-
-    /* FactionTabBar.tsx */
-    --faction-tab-bar-bg: linear-gradient(135deg, rgba(14, 10, 26, 1) 0%, rgba(34, 16, 46, 1) 100%);
-    --faction-tab-bg: linear-gradient(135deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
-    --faction-tab-border: 1px solid rgba(148, 163, 184, 0.225);
-
-    --faction-tab-active-bg: linear-gradient(135deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
-    --faction-tab-pinned-bg: linear-gradient(135deg, rgba(168, 85, 247, 0.425) 0%, rgba(126, 34, 206, 0.325) 50%, rgba(14, 10, 26, 0.92) 100%);
 
     /* PlayerCard.tsx */
     --player-card-box-bg: linear-gradient(135deg, rgba(14, 10, 26, 1) 0%, rgba(34, 16, 46, 1) 100%);
@@ -21,7 +12,6 @@
     --left-sidebar-bg: rgb(15 10 22 / 91%);
     --sidebar-border: 1px solid rgba(148, 163, 184, 0.225);
 
-    /** Map **/
     /* Soft nebula bloom, soothing by design */
     --main-bg:
       radial-gradient(120% 80% at 50% -10%, rgba(147, 51, 234, 0.055), transparent 55%),
@@ -29,16 +19,8 @@
       #0f0a16;
     --map-tabs-bg: linear-gradient(180deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
 
-    --map-tab-active-border: rgba(168, 85, 247, 0.675);
-
     /** Header **/
     --header-bg: linear-gradient(90deg, rgba(14, 10, 26, 0.96) 0%, rgba(34, 16, 46, 0.92) 100%);
-
-    /** Header Tabs  **/
-    --header-tab-bg: rgba(14, 10, 26, 0.525);
-
-    --header-tab-active-bg: rgba(147, 51, 234, 0.4);
-    --header-tab-active-border: rgba(168, 85, 247, 0.7);
 
     /** Header Tabs Input **/
     --header-tab-input-bg: rgba(14, 10, 26, 0.83);
@@ -48,29 +30,10 @@
     --header-tab-dropdown-bg: rgba(14, 10, 26, 0.92);
     --header-tab-dropdown-border: 1px solid rgba(168, 85, 247, 0.425);
     --header-tab-dropdown-hover-bg: rgba(147, 51, 234, 0.34);
-    --header-dropdown-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-
-    /** Objectives Tab **/
-    --score-board-bg: linear-gradient(135deg, rgba(14, 10, 26, 0.983) 0%, rgba(34, 16, 46, 0.955) 50%, rgba(14, 10, 26, 0.983) 100%);
-
-    /** Card Stack Details Modal **/
-    --card-details-section-title-border: 1px solid rgba(148, 163, 184, 0.24);
-
-    --card-details-item-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.055) 0%, rgba(107, 114, 128, 0.035) 100%);
-    --card-details-item-border: 1px solid rgba(148, 163, 184, 0.13);
-
-    --card-details-copy-badge-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.325) 0%, rgba(107, 114, 128, 0.265) 100%);
-    --card-details-copy-badge-border: 1px solid rgba(148, 163, 184, 0.425);
-
-    --card-details-percentage-bg: linear-gradient(135deg, rgba(148, 163, 184, 0.11) 0%, rgba(107, 114, 128, 0.085) 100%);
-    --card-details-percentage-border: 1px solid rgba(148, 163, 184, 0.21);
 
     /** Details Card (for all the popovers) **/
     --details-card-bg: linear-gradient(135deg, rgb(14, 10, 26) 0%, rgb(34, 16, 46) 100%);
     --details-card-border: 1px solid rgba(168, 85, 247, 0.28);
-
-    /* Resource/Influence Display */
-    --resource-divider-color: rgba(148, 163, 184, 0.3);
 
     /* Unit Details Card */
     --unit-details-inherited-bg: rgba(168, 85, 247, 0.06);
@@ -81,8 +44,6 @@
     --panel-field-bg: linear-gradient(180deg, rgba(21, 15, 36, 0.92), rgba(12, 8, 22, 0.96));
     --panel-field-flat: rgba(14, 10, 26, 0.5);
     --panel-field-strip: rgba(14, 10, 26, 0.62);
-    --panel-field-soft: rgba(14, 10, 26, 0.44);
-    --panel-cell-bg: rgba(34, 16, 46, 0.18);
     --panel-hairline: rgba(196, 181, 253, 0.13);
     --panel-hairline-strong: rgba(196, 181, 253, 0.2);
     --panel-separator: rgba(196, 181, 253, 0.09);

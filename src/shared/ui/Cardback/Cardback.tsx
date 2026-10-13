@@ -4,26 +4,22 @@ import cx from "clsx";
 import styles from "./Cardback.module.css";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
-type CardbackSize = "xs" | "sm" | "md" | "lg";
-
 type Props = BoxProps & {
   src: string;
   alt: string;
   count: ReactNode;
-  size?: CardbackSize;
 };
 
 export function Cardback({
   src,
   alt,
   count,
-  size = "sm",
   className,
   ...boxProps
 }: Props) {
   return (
     <Box
-      className={cx(styles.container, styles[`size_${size}`], className)}
+      className={cx(styles.container, className)}
       {...boxProps}
     >
       <Box className={styles.imageWrapper}>

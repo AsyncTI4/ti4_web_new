@@ -1,149 +1,38 @@
-.yellow,
-.cyan,
-.red,
-.blue,
-.green,
-.purple,
-.orange,
-.gray,
-.grey {
-    --background-color: var(--accent-rgb);
-    --border-color: rgba(var(--accent-rgb), 0.18);
-    --hover-border-color: rgba(var(--accent-rgb), 0.36);
-    --hover-shadow-1: rgba(var(--accent-rgb), 0.18);
-    --hover-shadow-2: rgba(var(--accent-rgb), 0.10);
-    --ribbon-color: var(--accent-rgb);
-}
-
-.yellow { --accent-rgb: var(--gd-yellow); }
-.cyan { --accent-rgb: var(--gd-cyan); }
 .red { --accent-rgb: var(--gd-red); }
 .blue { --accent-rgb: var(--gd-blue); }
-.teal { --accent-rgb: var(--gd-teal); }
 .green { --accent-rgb: var(--gd-green); }
 .purple { --accent-rgb: var(--gd-purple); }
-
-.deepRed {
-    /* Use RGB triplet for consistency with other accents */
-    --background-color: 48, 6, 6;
-    --border-color: rgba(var(--background-color), 1);
-    --hover-border-color: rgba(var(--background-color), 1);
-    --hover-shadow-1: rgba(var(--background-color), 0.18);
-    --hover-shadow-2: rgba(var(--background-color), 0.10);
-    --ribbon-color: var(--background-color);
-}
-
-/* Strengthen deep red background to be clearly visible */
-.deepRed.chip { background: rgba(var(--background-color), 0.20); }
-
-.orange {
-    --accent-rgb: var(--gd-orange);
-    --hover-border-color: rgba(var(--accent-rgb), 0.38);
-    --hover-shadow-1: rgba(var(--accent-rgb), 0.20);
-    --hover-shadow-2: rgba(var(--accent-rgb), 0.12);
-}
-
-/* Darker, deeper orange accent for exhausted relics */
-.bloodOrange {
-    /* RGB triplet chosen to be darker and richer than standard orange */
-    --background-color: 191, 71, 0;
-    --border-color: rgba(var(--background-color), 0.36);
-    --hover-border-color: rgba(var(--background-color), 0.58);
-    --hover-shadow-1: rgba(var(--background-color), 0.22);
-    --hover-shadow-2: rgba(var(--background-color), 0.12);
-    --ribbon-color: var(--background-color);
-}
-
-.bloodOrange.chip { background: rgba(var(--background-color), 0.15); }
-
-.gray,
-.grey {
-    --accent-rgb: var(--gd-gray);
-    --hover-border-color: rgba(var(--accent-rgb), 0.34);
-    --hover-shadow-1: rgba(var(--accent-rgb), 0.16);
-    --hover-shadow-2: rgba(var(--accent-rgb), 0.08);
-}
-
-.ribbon::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 6px;
-    bottom: 6px;
-    width: 4px;
-    border-radius: 0 2px 2px 0;
-    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.42) 0%, rgba(var(--ribbon-color), 0.16) 100%);
-    opacity: 0.78;
-}
-
-.accentLine::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 2px;
-    bottom: 2px;
-    width: 2px;
-    border-radius: 0 2px 2px 0;
-    background: linear-gradient(180deg, rgba(var(--ribbon-color), 0.62) 0%, rgba(var(--ribbon-color), 0.26) 100%);
-    box-shadow: none;
-    opacity: 0.9;
-}
-
-.accentLine {
-    padding-left: 2px;
-}
-
+.orange { --accent-rgb: var(--gd-orange); }
+.gray { --accent-rgb: var(--gd-gray); }
 
 .chip {
     --chip-inner-padding: 4px 6px;
     --chip-inner-min-height: 28px;
     --chip-inner-gap: 6px;
-    --chip-left-section-size: 20px;
     position: relative;
     border-radius: var(--ds-radius-md);
-    background: rgba(var(--background-color), 0.085);
-    border: 1px solid var(--border-color);
+    background: rgba(var(--accent-rgb), 0.085);
+    border: 1px solid rgba(var(--accent-rgb), 0.18);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    cursor: pointer;
 }
 
 .chip.strong {
-    background: rgba(var(--background-color), 0.15);
-}
-
-.hover {
-    transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.hover:hover {
-    box-shadow: 0 0 0 1px var(--hover-shadow-1);
+    background: rgba(var(--accent-rgb), 0.15);
 }
 
 .clickable {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: box-shadow 120ms ease;
 }
 
-/* Size variants */
+.clickable:hover {
+    box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.16);
+}
+
 .size_xs {
     --chip-inner-padding: 2px 4px;
     --chip-inner-min-height: 22px;
     --chip-inner-gap: 4px;
-    --chip-left-section-size: 14px;
-}
-
-.size_sm {
-    --chip-inner-padding: 2px 4px;
-    --chip-inner-min-height: 26px;
-    --chip-inner-gap: 4px;
-    --chip-left-section-size: 18px;
-}
-
-.size_md {
-    --chip-inner-padding: 4px 6px;
-    --chip-inner-min-height: 28px;
-    --chip-inner-gap: 6px;
-    --chip-left-section-size: 20px;
 }
 
 .inner {
@@ -156,47 +45,10 @@
     z-index: 2;
 }
 
-/* Centre whatever sits in the left slot. The box is a fixed square but its
-   contents rarely match it exactly — an SVG sigil or an icon smaller than the
-   slot was pinned to the top-left corner and read as misaligned against the
-   label's optical centre. */
-.leftSection {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--chip-left-icon-size, var(--chip-left-section-size));
-    height: var(--chip-left-icon-size, var(--chip-left-section-size));
-    max-width: var(--chip-left-icon-size, var(--chip-left-section-size));
-    max-height: var(--chip-left-icon-size, var(--chip-left-section-size));
-    flex-shrink: 0;
-}
-
-.innerWithLeftIcon::before {
-    content: "";
-    display: block;
-    width: var(--chip-left-icon-size, var(--chip-left-section-size));
-    height: var(--chip-left-icon-size, var(--chip-left-section-size));
-    max-width: var(--chip-left-icon-size, var(--chip-left-section-size));
-    max-height: var(--chip-left-icon-size, var(--chip-left-section-size));
-    flex-shrink: 0;
-    background-image: var(--chip-left-icon);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-}
-
 /* Ellipsis, not clip: a hard cut lands mid-glyph, so "Destroy Heretical Works"
    truncated to "Destroy Heretical Wo|" reads as a rendering fault rather than as
-   a name that continues. The ellipsis is the affordance that says "hover me". */
-/*
- * Chip labels — tech names, relics, promissory notes, abilities.
- *
- * These are the densest text in the app and they were set at the heaviest weight
- * with a drop shadow. IBM Plex Sans has a smaller x-height than the system UI
- * faces, so bold-plus-shadow at chip size turned into mush. Semibold reads
- * cleaner at 12px, and the shadow only needs to lift the text off the tint
- * behind it, not outline it. A hair of tracking compensates for light-on-dark.
- */
+   a name that continues. Semibold with a light shadow reads cleaner than bold at
+   12px in IBM Plex Sans; a hair of tracking compensates for light-on-dark. */
 .textContainer {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -206,141 +58,4 @@
     font-weight: var(--weight-title);
     letter-spacing: var(--track-body);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-}
-
-
-/* Reveal full title text on hover without wrapping (used opt-in) */
-.revealFullTitle { position: relative; }
-
-.fullTitle {
-    position: absolute;
-    left: 0; /* match inner horizontal padding */
-    top: 50%;
-    transform: translateY(-50%);
-    white-space: nowrap;
-    pointer-events: none;
-    display: none;
-    z-index: 2;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
-    width: max-content;
-    background: rgba(0, 0, 0, 1);
-    padding: 0 8px 0 6px;
-}
-
-.revealFullTitle:hover .fullTitle {
-    display: block;
-}
-
-.revealFullTitle:hover .textContainer {
-    visibility: hidden;
-}
-
-/* Provide a standalone export for CSS Modules */
-.strong { outline: none; }
-
-/* Hybrid two-sided chip variants (hard split at 50%) */
-/* blue | red */
-.blueRed {
-    --left-color:  var(--gd-blue);
-    --right-color: var(--gd-red);
-}
-
-/* blue | green */
-.blueGreen {
-    --left-color: var(--gd-blue);
-    --right-color: var(--gd-green);
-}
-
-
-/* blue | yellow */
-.blueYellow {
-    --left-color: var(--gd-blue);
-    --right-color: var(--gd-yellow);
-}
-
-
-/* green | red */
-.greenRed {
-    --left-color: var(--gd-green);
-    --right-color: var(--gd-red);
-}
-
-/* green | yellow */
-.greenYellow {
-    --left-color: var(--gd-green);
-    --right-color: var(--gd-yellow);
-}
-
-/* yellow | red */
-.yellowRed {
-    --left-color: var(--gd-yellow);
-    --right-color: var(--gd-red);
-}
-
-
-/* Generic hybrid layout: two absolutely-positioned halves */
-[data-split="true"].chip {
-    background: transparent;
-    background-image: none;
-    border: none;
-}
-
-[data-split="true"] .halfLeft,
-[data-split="true"] .halfRight {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 50%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-[data-split="true"] .halfLeft {
-    left: 0;
-    border: 1px solid rgba(var(--left-color), 0.18);
-    border-right-width: 0;
-    border-radius: var(--ds-radius-md) 0 0 var(--ds-radius-md);
-    background: rgba(var(--left-color), 0.10);
-}
-
-[data-split="true"] .halfRight {
-    right: 0;
-    border: 1px solid rgba(var(--right-color), 0.18);
-    border-left-width: 0;
-    border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
-    background: rgba(var(--right-color), 0.10);
-}
-
-.chip:hover .halfLeft {
-    border-color: rgba(var(--left-color), 0.35);
-    border-width: 3px;
-    border-right-width: 0;
-}
-
-.chip:hover .halfRight {
-    border-color: rgba(var(--right-color), 0.35);
-    border-width: 3px;
-    border-left-width: 0;
-}
-
-[data-split="true"].strong .halfLeft { background: rgba(var(--left-color), 0.13); }
-[data-split="true"].strong .halfRight { background: rgba(var(--right-color), 0.13); }
-
-/* Standalone export to satisfy CSS Modules for breakthrough */
-.breakthrough { outline: none; }
-
-.breakthrough.chip::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 3px;
-    width: 26px;
-    border-radius: 0 0 3px 3px;
-    background: linear-gradient(
-        90deg,
-        rgb(var(--left-color)),
-        rgb(var(--right-color)));
-    z-index: 1;
 }

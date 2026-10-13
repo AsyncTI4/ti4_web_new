@@ -33,28 +33,18 @@ export function Image({ fit = "cover", radius: r, fallbackSrc, src, onError, wid
 
 export type DividerProps = BoxProps & {
   orientation?: "horizontal" | "vertical";
-  label?: ReactNode;
-  labelPosition?: "left" | "center" | "right";
   size?: SizeKey | number;
   color?: string;
   variant?: "solid" | "dashed" | "dotted";
 };
 
 /** A hairline. Uses the 14% step of the ladder unless a colour is given. */
-export function Divider({ orientation = "horizontal", label, labelPosition = "left", size, color: c, variant = "solid", className, style, ...props }: DividerProps) {
+export function Divider({ orientation = "horizontal", size, color: c, variant = "solid", className, style, ...props }: DividerProps) {
   const w = typeof size === "number" ? size : size ? { xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }[size] : 1;
   const line = `${w}px ${variant} ${c ? color(c) : "var(--ds-h14)"}`;
   if (orientation === "vertical") {
     return <Box {...props} className={cx(classes.dividerV, className)} baseStyle={{ borderLeft: line }}
       style={style} />;
-  }
-  if (label) {
-    return (
-      <Box {...props} className={cx(classes.dividerLabel, classes[`dividerLabel_${labelPosition}`], className)} baseStyle={{ ["--ds-divider-line" as string]: line }}
-      style={style}>
-        <span>{label}</span>
-      </Box>
-    );
   }
   return <Box {...props} className={cx(classes.divider, className)} baseStyle={{ borderTop: line }}
       style={style} />;
@@ -86,34 +76,6 @@ function CardSection({ className, ...props }: BoxProps & { withBorder?: boolean;
 
 export const Card = Object.assign(CardRoot, { Section: CardSection });
 
-export type BadgeProps = BoxProps & {
-  color?: string;
-  variant?: "filled" | "light" | "outline" | "dot" | "default" | "transparent" | "white";
-  size?: SizeKey;
-  leftSection?: ReactNode;
-  rightSection?: ReactNode;
-  radius?: SizeKey | number | (string & {});
-};
-
-/** A small uppercase status tag. */
-export function Badge({ color: c = "blue", variant = "light", size = "sm", leftSection, rightSection, radius: r, className, style, children, ...props }: BadgeProps) {
-  const hue = color(c.includes(".") ? c : `${c}.6`) ?? c;
-  return (
-    <Box
-      component="span"
-      {...props}
-      className={cx(classes.badge, classes[`badge_${variant}`], classes[`badge_${size}`], className)}
-      baseStyle={{ ["--ds-badge-c" as string]: hue, borderRadius: r !== undefined ? radius(r) : undefined }}
-      style={style}
-    >
-      {variant === "dot" ? <span className={classes.badgeDot} /> : null}
-      {leftSection}
-      <span className={classes.badgeLabel}>{children}</span>
-      {rightSection}
-    </Box>
-  );
-}
-
 export type LoaderProps = BoxProps & { size?: SizeKey | number; color?: string; type?: string };
 
 /** A small spinner in the accent colour. */
@@ -136,20 +98,19 @@ export type AlertProps = Omit<BoxProps, "title"> & {
   title?: ReactNode;
   icon?: ReactNode;
   color?: string;
-  variant?: "light" | "filled" | "outline" | "default" | "transparent";
   withCloseButton?: boolean;
   onClose?: () => void;
   radius?: SizeKey | number | (string & {});
 };
 
 /** A message that names what happened and what to do. */
-export function Alert({ title, icon, color: c = "blue", variant = "light", withCloseButton, onClose, radius: r, className, style, children, ...props }: AlertProps) {
+export function Alert({ title, icon, color: c = "blue", withCloseButton, onClose, radius: r, className, style, children, ...props }: AlertProps) {
   const hue = color(c.includes(".") ? c : `${c}.6`) ?? c;
   return (
     <Box
       role="alert"
       {...props}
-      className={cx(classes.alert, classes[`alert_${variant}`], className)}
+      className={cx(classes.alert, className)}
       baseStyle={{ ["--ds-alert-c" as string]: hue, borderRadius: r !== undefined ? radius(r) : undefined }}
       style={style}
     >

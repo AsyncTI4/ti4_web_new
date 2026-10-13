@@ -17,7 +17,7 @@ type TabsRootProps = Omit<BoxProps, "onChange" | "defaultValue"> & {
   value?: string | null;
   defaultValue?: string;
   onChange?: (value: string | null) => void;
-  variant?: "default" | "outline" | "pills";
+  variant?: "default" | "pills";
   orientation?: "horizontal" | "vertical";
   keepMounted?: boolean;
   radius?: SizeKey;
