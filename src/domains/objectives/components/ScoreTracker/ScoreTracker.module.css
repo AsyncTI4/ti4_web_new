@@ -1,51 +1,75 @@
 /*
- * Victory track. A row of flat squares on a hairline grid. The victory square
- * is always marked in relic gold; the square before it lights in stage orange
- * only while a seat is standing on it.
+ * Victory track: the board's numbered spaces. Empty spaces are recessed
+ * sockets; a space with seats on it lifts into a plate holding their badges.
+ * Victory is always ringed in relic gold; the space before it lights in stage
+ * orange only while a seat is standing on it.
  */
 .track {
+  --tok: 32px;
   display: grid;
-  grid-template-columns: repeat(var(--squares, 11), minmax(34px, 1fr));
-  gap: 1px;
-  padding: 1px;
+  grid-template-columns: repeat(var(--squares, 11), minmax(40px, 1fr));
+  gap: 3px;
   width: 100%;
-  background: var(--ds-h14);
   margin-bottom: 8px;
 }
 
 .square {
   position: relative;
   display: grid;
-  align-content: space-between;
-  height: 62px;
-  padding: 4px 5px;
-  background: linear-gradient(180deg, var(--ds-ground), var(--ds-deck));
+  grid-template-rows: auto 1fr;
+  height: 60px;
+  padding: 5px 6px 6px;
+  border-radius: 3px;
+  background: var(--ds-socket);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.5);
 }
 
 .num {
   font-family: var(--ds-font-data);
-  font-size: var(--text-label);
-  font-weight: var(--weight-data);
+  font-size: var(--text-meta);
+  font-weight: 500;
   line-height: 1;
   color: var(--ds-ink-lo);
+  opacity: 0.7;
 }
 
 .tokens {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 1px;
+  align-items: center;
 }
 
 .token {
-  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6));
+  width: var(--tok);
+  height: var(--tok);
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.7));
+}
+
+/* Three or more seats on one space overlap like stacked control tokens. */
+.square[data-crowd] .token + .token {
+  margin-left: calc(var(--tok) * -0.3);
+}
+
+.square[data-occupied] {
+  background: linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2));
+  box-shadow:
+    inset 0 0 0 1px var(--ds-h22),
+    inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.square[data-occupied] .num {
+  color: var(--ds-ink-hi);
+  font-weight: 600;
+  opacity: 1;
 }
 
 .square[data-threat] {
   background:
-    linear-gradient(0deg, rgb(var(--ds-sig-stage1) / 0.14), rgb(var(--ds-sig-stage1) / 0.02) 70%),
-    var(--ds-deck);
-  box-shadow: inset 0 -2px 0 rgb(var(--ds-sig-stage1) / 0.5);
+    linear-gradient(0deg, rgb(var(--ds-sig-stage1) / 0.16), rgb(var(--ds-sig-stage1) / 0.03) 70%),
+    var(--ds-ground);
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--ds-sig-stage1) / 0.35),
+    inset 0 -2px 0 rgb(var(--ds-sig-stage1) / 0.6);
 }
 
 .square[data-threat] .num {
@@ -53,60 +77,82 @@
 }
 
 .square[data-win] {
-  background: linear-gradient(180deg, rgb(var(--ds-sig-relic) / 0.08), var(--ds-deck));
-  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-relic) / 0.3);
+  background: linear-gradient(180deg, rgb(var(--ds-sig-relic) / 0.1), rgb(var(--ds-sig-relic) / 0.02)), var(--ds-socket);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-relic) / 0.4);
+}
+
+.square[data-win][data-occupied] {
+  background: linear-gradient(180deg, rgb(var(--ds-sig-relic) / 0.22), rgb(var(--ds-sig-relic) / 0.06)), var(--ds-ground);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-relic) / 0.7);
 }
 
 .square[data-win] .num {
   color: rgb(var(--ds-sig-relic));
+  opacity: 1;
 }
 
 .square[data-win]::after {
   content: "★";
   position: absolute;
-  top: 3px;
-  right: 5px;
-  font-size: var(--text-label);
+  top: 4px;
+  right: 6px;
+  font-size: var(--text-meta);
   line-height: 1;
   color: rgb(var(--ds-sig-relic));
 }
 
 /* Mini track for the table rail: numerals centred on top, 14px tokens below. */
 .mini {
+  --tok: 14px;
   grid-template-columns: repeat(var(--squares, 11), minmax(0, 1fr));
+  gap: 1px;
   margin-bottom: 0;
-  padding: 0;
-  background: none;
 }
 
 .mini .square {
+  height: auto;
   min-height: 40px;
-  padding: 2px 0 0;
-  align-content: start;
+  padding: 3px 0 2px;
   justify-items: center;
   gap: 2px;
-  background: var(--panel-field-flat);
+  border-radius: 2px;
 }
 
 .mini .num {
   font-size: var(--text-micro);
 }
 
-.mini .tokens {
-  padding: 0 1px 2px;
-}
-
 .mini .square[data-win]::after {
   content: none;
 }
 
+/* Phone: spaces are narrow, so seats on one space stack upward instead. */
 @container scoreboard (max-width: 640px) {
   .track {
+    --tok: 18px;
     grid-template-columns: repeat(var(--squares, 11), minmax(0, 1fr));
+    gap: 2px;
   }
 
   .square {
-    height: 48px;
-    padding: 3px 2px;
+    height: auto;
+    min-height: 52px;
+    padding: 3px 2px 4px;
+    justify-items: center;
+    gap: 3px;
+  }
+
+  .tokens {
+    flex-direction: column;
+  }
+
+  .square[data-crowd] .token + .token,
+  .token + .token {
+    margin-left: 0;
+    margin-top: -5px;
+  }
+
+  .square[data-win]::after {
+    content: none;
   }
 }

@@ -13,8 +13,9 @@ type Props = {
 };
 
 /**
- * Victory track. The square one short of victory lights only while someone is
- * standing on it: a marker that appears exactly when the table should be nervous.
+ * Victory track: the board's numbered spaces with every seat's badge on its
+ * score. The space one short of victory lights only while someone is standing
+ * on it: a marker that appears exactly when the table should be nervous.
  */
 function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
   const scorePositions = Array.from({ length: vpsToWin + 1 }, (_, i) => i);
@@ -23,7 +24,6 @@ function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
     const score = Math.min(player.totalVps, vpsToWin);
     factionsByScore.set(score, [...(factionsByScore.get(score) ?? []), player]);
   }
-  const iconSize = variant === "mini" ? 14 : 24;
 
   return (
     <Box
@@ -40,6 +40,8 @@ function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
             key={score}
             className={styles.square}
             data-win={isWinningScore || undefined}
+            data-occupied={playersAtScore.length > 0 || undefined}
+            data-crowd={playersAtScore.length > 2 || undefined}
             data-threat={isOnTheBrink || undefined}
             title={
               isOnTheBrink
@@ -57,9 +59,7 @@ function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
                     factionImageOverride={player.factionImage}
                     factionImageTypeOverride={player.factionImageType}
                     alt={player.faction}
-                    title={`${player.faction} · ${player.totalVps} VP`}
-                    w={iconSize}
-                    h={iconSize}
+                    title={`${player.userName}: ${player.totalVps} points`}
                     className={styles.token}
                   />
                 ))}
