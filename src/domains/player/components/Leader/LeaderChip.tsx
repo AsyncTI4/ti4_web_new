@@ -1,10 +1,12 @@
 import type { KeyboardEvent } from "react";
+import { IconLock } from "@tabler/icons-react";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { showLeader } from "@/entities/lookup/showLeader";
 import styles from "./Leader.module.css";
+import { RankChevrons } from "./RankChevrons";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 
 type Props = {
@@ -23,8 +25,9 @@ function getLeaderState(exhausted: boolean, locked: boolean) {
 
 /**
  * Leader dossier row: a squared plate with a cut corner and the portrait in an
- * inset well. Locked leaders are sockets with a + seat; exhausted ones are
- * hatched.
+ * inset well, and rank chevrons (agent 1, commander 2, hero 3) in the top-right
+ * corner. Locked leaders are sockets with a small padlock after their role; exhausted
+ * ones are hatched.
  */
 export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
   const { opened, setOpened, toggle } = useDisclosure(false);
@@ -59,17 +62,29 @@ export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
                 alt=""
               />
             ) : (
-              <span aria-hidden="true">{locked ? "+" : ""}</span>
+              <span aria-hidden="true" />
             )}
           </span>
           <span className={styles.text}>
             <strong>{leaderData.name}</strong>
             <em>
               {type}
-              {exhausted && !locked && " · exhausted"}
+              {locked ? (
+                <IconLock
+                  className={styles.lock}
+                  size={11}
+                  stroke={2}
+                  aria-label="locked"
+                />
+              ) : (
+                exhausted && " · exhausted"
+              )}
             </em>
           </span>
-          {active && <span className={styles.onlineDot} />}
+          <span className={styles.corner}>
+            {active && <span className={styles.onlineDot} />}
+            <RankChevrons type={type} />
+          </span>
         </div>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

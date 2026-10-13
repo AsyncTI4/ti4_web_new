@@ -1,5 +1,6 @@
 /* An empty leader seat: the dossier's geometry, pressed in. */
 .plate {
+  position: relative;
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
@@ -16,16 +17,22 @@
   box-shadow: 1px 0 0 var(--ds-h10);
 }
 
-.well::before {
+/* Purged: the seat is crossed out. */
+.well::before,
+.well::after {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 1.5px;
   translate: -50% -50%;
-  border: 1px solid var(--ds-h14);
-  border-radius: 1px;
+  rotate: 45deg;
+  background: var(--ds-h22);
+}
+
+.well::after {
+  rotate: -45deg;
 }
 
 .role {
@@ -35,4 +42,12 @@
   letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
   color: var(--ds-ink-lo);
+}
+
+.corner {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  display: flex;
+  color: var(--ds-h22);
 }
