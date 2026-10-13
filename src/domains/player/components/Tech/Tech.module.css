@@ -28,26 +28,40 @@
   );
 }
 
-/* The circuit trace: the edge runs a short lead into the glyph's node. */
-.tech::after {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 50%;
-  width: 5px;
-  height: 1px;
-  background: rgba(var(--k), 0.455);
-}
-
 .tech:hover {
   border-color: rgba(var(--k), 0.224);
   background-color: rgba(var(--k), 0.077);
+}
+
+/* Etched circuitry: faint traces and vias in the tech's colour run in from the
+   chamfer and fade out before the name, so they read as texture, not content. */
+.tech::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(var(--k), 0.3);
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20140%2028'%20fill='none'%20stroke='black'%20stroke-width='1'%3E%3Cpath%20d='M140%205H112l-5%205H84'/%3E%3Cpath%20d='M140%2014H118l-4%204H92l-5-5H62'/%3E%3Cpath%20d='M140%2023H104l-3-3H80'/%3E%3Cpath%20d='M126%200v3l-3%202'/%3E%3Cpath%20d='M98%200v2h9'/%3E%3Ccircle%20cx='82'%20cy='10'%20r='1.75'/%3E%3Ccircle%20cx='60'%20cy='13'%20r='1.75'/%3E%3Ccircle%20cx='78'%20cy='20'%20r='1.75'/%3E%3C/svg%3E") right center / auto 100% no-repeat,
+    linear-gradient(to left, #000 15%, transparent 75%);
+  -webkit-mask-composite: source-in;
+  mask:
+    url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20140%2028'%20fill='none'%20stroke='black'%20stroke-width='1'%3E%3Cpath%20d='M140%205H112l-5%205H84'/%3E%3Cpath%20d='M140%2014H118l-4%204H92l-5-5H62'/%3E%3Cpath%20d='M140%2023H104l-3-3H80'/%3E%3Cpath%20d='M126%200v3l-3%202'/%3E%3Cpath%20d='M98%200v2h9'/%3E%3Ccircle%20cx='82'%20cy='10'%20r='1.75'/%3E%3Ccircle%20cx='60'%20cy='13'%20r='1.75'/%3E%3Ccircle%20cx='78'%20cy='20'%20r='1.75'/%3E%3C/svg%3E") right center / auto 100% no-repeat,
+    linear-gradient(to left, #000 15%, transparent 75%);
+  mask-composite: intersect;
+  transition: background-color var(--ds-dur-fast) var(--ds-ease);
+}
+
+.tech:hover::after {
+  background: rgba(var(--k), 0.5);
 }
 
 .pips {
   position: absolute;
   top: 3px;
   right: 4px;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -75,17 +89,34 @@
   color: var(--ds-ink-hi);
 }
 
+/* Exhausted: the module is spent, so it goes hollow — no fill, grey type —
+   but keeps a dim trace of its colour on the edge, glyph and circuitry so you
+   can still tell which colour it is. */
 .tech[data-s="exhausted"] {
   color: var(--ds-ink-lo);
   text-shadow: none;
-  background:
-    repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.34) 5px 9px),
-    linear-gradient(315deg, rgba(var(--k), 0.21) 0 4px, transparent 4.5px),
-    rgba(var(--k), 0.035);
+  background: transparent;
+  border-color: rgba(var(--k), 0.1);
+}
+
+.tech[data-s="exhausted"]::after {
+  background: rgba(var(--k), 0.14);
+}
+
+.tech[data-s="exhausted"]::before {
+  background: linear-gradient(
+    rgba(var(--k), 0.3) 0 50%,
+    rgba(var(--k2), 0.3) 50% 100%
+  );
+}
+
+.tech[data-s="exhausted"] .pips i {
+  background: rgba(var(--k), 0.24);
 }
 
 .tech[data-s="exhausted"] > span:first-child {
-  filter: saturate(0.4) brightness(0.8);
+  opacity: 0.55;
+  filter: saturate(0.6);
 }
 
 /* Unresearched faction tech: the module is printed but not powered. */
@@ -99,6 +130,10 @@
 
 .tech[data-s="locked"]::before {
   background: rgba(var(--k), 0.22);
+}
+
+.tech[data-s="locked"]::after {
+  display: none;
 }
 
 .tech[data-s="locked"] > span:first-child {
