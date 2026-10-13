@@ -15,6 +15,7 @@ type Props = {
 
 /** A lane's engraved name, with the seat that leads it and by how much. */
 function LaneHeader({ lane, players }: { lane: Lane; players: PlayerData[] }) {
+  if (!lane.name) return null;
   const leader = lane.key === "seat" ? undefined : getLaneLeader(lane, players);
   const leaderIcon = leader ? getFactionImage(leader.player.faction) : undefined;
 
@@ -27,7 +28,7 @@ function LaneHeader({ lane, players }: { lane: Lane; players: PlayerData[] }) {
       {leader && (
         <span
           className={styles.lhLead}
-          title={`${leader.player.userName} leads in ${lane.leadLabel.toLowerCase()} · ${Math.floor(leader.value)}`}
+          title={`${leader.player.userName} leads in ${lane.leadLabel?.toLowerCase()} · ${Math.floor(leader.value)}`}
         >
           {leaderIcon && <img src={leaderIcon} alt="" />}
           {Math.floor(leader.value)}
@@ -54,6 +55,10 @@ export function PlayerDeck({ players, vpsToWin }: Props) {
       ),
     [players],
   );
+  const hasBreakthroughs = useMemo(
+    () => players.some((player) => player.breakthrough?.breakthroughId),
+    [players],
+  );
 
   return (
     <section className={styles.wrap} aria-label="Player areas">
@@ -72,6 +77,7 @@ export function PlayerDeck({ players, vpsToWin }: Props) {
             player={player}
             objectiveColumns={objectiveColumns}
             techColumns={techColumns}
+            hasBreakthroughs={hasBreakthroughs}
             vpsToWin={vpsToWin}
           />
         ))}

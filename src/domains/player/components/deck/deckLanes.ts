@@ -13,17 +13,13 @@ export type LaneKey =
 export type Lane = {
   key: LaneKey;
   /** Engraved header text. */
-  name: string;
-  /** What "leading" this lane means, for the header's leader readout. */
-  leadLabel: string;
+  name?: string;
+  /** What "leading" this lane means, for the header's leader readout; omit for no readout. */
+  leadLabel?: string;
   /** CSS grid-column for the header, so it sits over its lane. */
   column: string;
-  metric: (player: PlayerData) => number;
+  metric?: (player: PlayerData) => number;
 };
-
-function unlockedLeaders(player: PlayerData) {
-  return (player.leaders ?? []).filter((leader) => !leader.locked).length;
-}
 
 function unitsOnBoard(player: PlayerData) {
   return Object.values(player.unitCounts ?? {}).reduce(
@@ -32,36 +28,33 @@ function unitsOnBoard(player: PlayerData) {
   );
 }
 
-export function optimalSpend(player: PlayerData) {
+/** Optimal spend across every planet, exhausted or not. */
+export function totalOptimalSpend(player: PlayerData) {
   return (
-    (player.optimalResources ?? 0) +
-    (player.optimalInfluence ?? 0) +
-    (player.flexValue ?? 0)
+    (player.totOptimalResources ?? 0) +
+    (player.totOptimalInfluence ?? 0) +
+    (player.totFlexValue ?? 0)
   );
 }
 
 export const LANES: Lane[] = [
   { key: "seat", name: "VP", leadLabel: "Victory points", column: "1", metric: (p) => p.totalVps ?? 0 },
-  { key: "stores", name: "Stores", leadLabel: "Trade goods", column: "2", metric: (p) => p.tg ?? 0 },
-  { key: "leaders", name: "Leaders", leadLabel: "Unlocked leaders", column: "3", metric: unlockedLeaders },
-  {
-    key: "holdings",
-    name: "Holdings",
-    leadLabel: "Secrets scored",
-    column: "4",
-    metric: (p) => Object.keys(p.secretsScored ?? {}).length,
-  },
+  { key: "stores", name: "Money", leadLabel: "Trade goods", column: "2", metric: (p) => p.tg ?? 0 },
+  { key: "leaders", name: "Leaders", column: "3" },
+  { key: "holdings", column: "4" },
   { key: "tech", name: "Tech", leadLabel: "Technologies", column: "5 / 7", metric: (p) => (p.techs ?? []).length },
   { key: "units", name: "Units", leadLabel: "Units on the board", column: "7", metric: unitsOnBoard },
-  { key: "economy", name: "Economy", leadLabel: "Optimal spend", column: "8", metric: optimalSpend },
+  { key: "economy", name: "Economy", leadLabel: "Total optimal spend", column: "8", metric: totalOptimalSpend },
   { key: "planets", name: "Planets", leadLabel: "Planets controlled", column: "9", metric: (p) => (p.planets ?? []).length },
 ];
 
 /** Which seat leads a lane, and by how much. Ties go to the earlier seat. */
 export function getLaneLeader(lane: Lane, players: PlayerData[]) {
+  const { metric } = lane;
+  if (!metric) return undefined;
   return players.reduce<{ player: PlayerData; value: number } | undefined>(
     (best, player) => {
-      const value = lane.metric(player);
+      const value = metric(player);
       if (!best || value > best.value) return { player, value };
       return best;
     },

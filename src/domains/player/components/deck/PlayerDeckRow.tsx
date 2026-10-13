@@ -5,7 +5,7 @@ import { resolvePrimaryRgb } from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
-import { PlayerColor } from "@/shared/ui/PlayerColor/PlayerColor";
+import { PlayerColorSwatch } from "@/shared/ui/PlayerColor/PlayerColor";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ArmyStats } from "@/domains/player/components/ArmyStats";
 import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
@@ -43,6 +43,8 @@ type Props = {
   objectiveColumns: number;
   /** Game-wide tech rack columns. */
   techColumns: number;
+  /** Whether any seat holds a breakthrough; without one the rail drops that slot. */
+  hasBreakthroughs: boolean;
   vpsToWin: number;
 };
 
@@ -62,7 +64,7 @@ function Lane({
   );
 }
 
-/** A rail group pinned over its lane; an empty group draws a single hairline. */
+/** A rail group pinned over its lane; an empty group leaves the rail bare. */
 function RailCell({
   className,
   children,
@@ -70,9 +72,8 @@ function RailCell({
   className: string;
   children?: ReactNode;
 }) {
-  const empty = children === null || children === undefined || children === false;
   return (
-    <div className={cx(styles.rc, className, empty && styles.isEmpty)}>
+    <div className={cx(styles.rc, className)}>
       {children}
     </div>
   );
@@ -121,6 +122,9 @@ function Seat({
       </span>
       <span />
       <span className={styles.stamps}>
+        {player.passed && !player.active && (
+          <span className={styles.passed}>Passed</span>
+        )}
         {player.isTyrant && <span className={styles.tyrant}>Tyrant</span>}
         {player.isSpeaker && (
           <img
@@ -135,10 +139,8 @@ function Seat({
   );
 }
 
-function StatusMark({ passed, active }: { passed: boolean; active: boolean }) {
-  if (active) return <span className={styles.activeDot} title="Active" />;
-  if (passed) return <span className={styles.passed}>Passed</span>;
-  return null;
+function ActiveMark({ active }: { active: boolean }) {
+  return active ? <span className={styles.activeDot} title="Active" /> : null;
 }
 
 /**
@@ -150,6 +152,7 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
   player: playerData,
   objectiveColumns,
   techColumns,
+  hasBreakthroughs,
   vpsToWin,
 }: Props) {
   const gameData = useGameData();
@@ -193,6 +196,9 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
   const showLoadout = settings.showPlayerAreaFactionAbilities;
   const breakthroughId = playerData.breakthrough?.breakthroughId;
   const customNotes = showLoadout ? (player.customPromissoryNotes ?? []) : [];
+  const showNeighbors =
+    settings.showPlayerAreaNeighborship && player.neighbors.length > 0;
+  const hasToFollow = player.unfollowedSCs.length > 0;
   const abilities = showLoadout ? (player.abilities ?? []) : [];
   const factionTechs = showLoadout ? allNotResearchedFactionTechs : [];
   const hasCapturedUnits = player.nombox && Object.keys(player.nombox).length > 0;
@@ -207,14 +213,16 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
     >
       <Seat player={player} factionImageUrl={factionImageUrl} vpsToWin={vpsToWin} />
 
-      <RailCell className={styles.rcId}>
-        <span className={styles.idName}>{player.userName}</span>
+      <RailCell className={cx(styles.rcId, !hasBreakthroughs && styles.rcIdWide)}>
+        <span className={styles.idName} title={player.userName}>
+          {player.userName}
+        </span>
+        <PlayerColorSwatch color={player.color} />
         <span className={styles.idMeta}>
           <span className={styles.fac}>{player.factionDisplayName}</span>
-          <PlayerColor color={player.color} size="xs" />
         </span>
-        <StatusMark passed={player.passed} active={player.active} />
         <span className={styles.idEnd}>
+          <ActiveMark active={player.active} />
           {player.scs.map((scNumber) => (
             <StrategyCard
               key={scNumber}
@@ -226,26 +234,31 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
         </span>
       </RailCell>
 
-      <RailCell className={styles.rcBrk}>
-        {breakthroughId ? (
-          <Breakthrough
-            breakthroughId={breakthroughId}
-            exhausted={playerData.breakthrough?.exhausted}
-            tradeGoodsStored={playerData.breakthrough?.tradeGoodsStored}
-            unlocked={playerData.breakthrough?.unlocked ?? false}
-          />
-        ) : null}
-      </RailCell>
+      {hasBreakthroughs && (
+        <RailCell className={styles.rcBrk}>
+          {breakthroughId ? (
+            <Breakthrough
+              breakthroughId={breakthroughId}
+              exhausted={playerData.breakthrough?.exhausted}
+              tradeGoodsStored={playerData.breakthrough?.tradeGoodsStored}
+              unlocked={playerData.breakthrough?.unlocked ?? false}
+            />
+          ) : null}
+        </RailCell>
+      )}
 
-      <RailCell className={styles.rcFol}>
-        {player.unfollowedSCs.length > 0 ? (
-          <NeedsToFollow values={player.unfollowedSCs} />
-        ) : null}
-      </RailCell>
-
-      <RailCell className={styles.rcNbr}>
-        {settings.showPlayerAreaNeighborship && player.neighbors.length > 0 ? (
-          <Neighbors neighbors={player.neighbors} />
+      {/* One group over the whole tech lane: who the seat borders on the left,
+          the strategy cards it still has to follow pushed to the right. */}
+      <RailCell className={styles.rcTech}>
+        {showNeighbors || hasToFollow ? (
+          <>
+            {showNeighbors && <Neighbors neighbors={player.neighbors} />}
+            {hasToFollow && (
+              <span className={styles.railEnd}>
+                <NeedsToFollow values={player.unfollowedSCs} />
+              </span>
+            )}
+          </>
         ) : null}
       </RailCell>
 

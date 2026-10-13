@@ -1,11 +1,17 @@
 /*
  * The player deck. One grid declares the lanes once; every seat is a row that
  * inherits them with `grid-template-columns: subgrid`, so a lane grows to its
- * widest seat and every other seat takes the same width. Lane cells are flat
- * field divided by 1px seams (the row's hairline ground showing through the
- * gaps); the objects inside them carry the character.
+ * widest seat and every other seat takes the same width.
+ *
+ * Each seat is a panel: a soft grey plate, rounded, standing off the deck. Its
+ * lanes are recessed wells cut into that plate, with air between them, and the
+ * header sits straight on the plate. The plate is the seat; the wells are its
+ * compartments; the objects inside them carry the character.
  */
 .wrap {
+  --seat-plate: var(--ds-plate);
+  --seat-well: var(--ds-well);
+  --lane-gap: 8px;
   --l-seat: 58px;
   --l-stores: 176px;
   --l-leaders: 212px;
@@ -17,19 +23,14 @@
   min-width: 100%;
 }
 
-/* Title strip over the deck. */
+/* The deck's name, set on the ground like the other deck sections: the seats
+   below are the panels, so the title needs no strip of its own. */
 .deckbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 16px;
-  min-height: 34px;
-  padding: 7px 12px;
-  background: var(--ds-tex-rail), linear-gradient(180deg, var(--ds-rail), var(--ds-ground-2));
-  border: 1px solid var(--ds-h14);
-  border-bottom: 0;
-  border-radius: 3px 3px 0 0;
-  box-shadow: inset 0 1px 0 var(--ds-edge-accent);
+  padding: 0 2px 8px;
   font-size: var(--text-meta);
   color: var(--ds-ink-lo);
 }
@@ -60,19 +61,11 @@
     minmax(var(--l-units), max-content)
     minmax(var(--l-econ), max-content)
     minmax(max-content, 1fr);
-  column-gap: 1px;
-  row-gap: 10px;
+  column-gap: var(--lane-gap);
+  row-gap: 12px;
   width: max-content;
   min-width: 100%;
-  padding: 0 10px 12px 0;
-  background-color: var(--ds-deck);
-  background-image: var(--ds-tex-deck);
-  background-size: var(--ds-tex-deck-size);
-  background-position: var(--ds-tex-deck-pos);
-  background-repeat: var(--ds-tex-deck-repeat);
-  border: 1px solid var(--ds-h14);
-  border-radius: 0 0 3px 3px;
-  box-shadow: inset 0 1px 0 var(--ds-edge-accent);
+  padding: 0 0 4px;
 }
 
 /* ── Lane ruler: engraved once for the table ── */
@@ -80,7 +73,8 @@
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  column-gap: 1px;
+  column-gap: var(--lane-gap);
+  padding-right: 10px;
 }
 
 .lh {
@@ -91,9 +85,13 @@
   height: 28px;
   padding: 0 6px;
   border: 0;
-  border-bottom: 2px solid var(--ds-h22);
-  background: linear-gradient(180deg, var(--ds-ground), var(--ds-ground-2));
+  border-bottom: 1px solid var(--ds-h14);
   color: var(--ds-ink-lo);
+}
+
+/* Pinned over the seats as they scroll sideways, so it needs the ground. */
+.lhSeat {
+  background: var(--ds-deck);
 }
 
 .lhSeat {
@@ -136,14 +134,20 @@
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  grid-template-rows: 34px auto;
-  row-gap: 1px;
-  background: var(--ds-h14);
-  box-shadow: 0 0 0 1px var(--ds-h14);
+  grid-template-rows: 38px auto;
+  row-gap: 0;
+  padding: 0 10px 10px 0;
+  overflow: clip;
+  border-radius: var(--ds-plate-r);
+  background: var(--seat-plate);
+  box-shadow: var(--ds-plate-edge);
 }
 
 .player[data-active] {
-  box-shadow: 0 0 0 1px rgba(var(--pc), 0.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--pc), 0.4),
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 2px 8px rgb(0 0 0 / 0.35);
 }
 
 /*
@@ -157,6 +161,8 @@
   z-index: 4;
   grid-column: 1;
   grid-row: 1 / 3;
+  /* Runs through the panel's bottom padding so the spine meets its edge. */
+  margin-bottom: -10px;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   justify-items: center;
@@ -321,14 +327,6 @@
   overflow: hidden;
   /* The rail reports on the lanes; it never widens them. */
   contain: inline-size;
-  background: var(--ds-tex-rail), linear-gradient(180deg, var(--ds-rail), var(--ds-ground-2));
-}
-
-.isEmpty::after {
-  content: "";
-  width: 12px;
-  height: 1px;
-  background: var(--ds-h22);
 }
 
 .rcId {
@@ -336,16 +334,22 @@
   gap: 8px;
 }
 
+.rcIdWide {
+  grid-column: 2 / 5;
+}
+
 .rcBrk {
   grid-column: 4;
 }
 
-.rcFol {
-  grid-column: 5;
+.rcTech {
+  grid-column: 5 / 7;
 }
 
-.rcNbr {
-  grid-column: 6;
+/* Pushed to the far end of its group. */
+.railEnd {
+  display: flex;
+  margin-left: auto;
 }
 
 .rcPn {
@@ -379,6 +383,7 @@
   color: var(--ds-ink-hi);
 }
 
+/* The faction always shows in full; a long player name truncates instead. */
 .idMeta {
   display: flex;
   flex: none;
@@ -400,22 +405,23 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   margin-left: auto;
 }
 
+/* Passed is a state of the seat, so it is stamped on the spine with the
+   seat's other marks, in the same plate as Tyrant but in neutral ink. */
 .passed {
-  flex: none;
-  padding: 3px 5px 2px;
+  padding: 2px 3px 1px;
   border-radius: 2px;
   background: var(--ds-socket);
   box-shadow: inset 0 0 0 1px var(--ds-h22);
   font-family: var(--ds-label-font);
-  font-size: var(--text-micro);
+  font-size: 9px;
   font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ds-ink);
+  color: var(--ds-ink-lo);
 }
 
 /* Holding the turn: a status light, so it may pulse. */
@@ -442,11 +448,15 @@
   gap: 4px;
   min-width: 0;
   padding: 6px;
-  background: var(--ds-field);
+  border-radius: var(--ds-well-r);
+  background: var(--seat-well);
+  box-shadow: var(--ds-well-edge);
 }
 
 .lcStores {
   grid-column: 2;
+  /* The stores plate fills the well so its command pool docks to the floor. */
+  align-content: stretch;
 }
 
 .lcLeaders {
@@ -464,6 +474,15 @@
 
 .lcUnits {
   grid-column: 7;
+  align-content: stretch;
+}
+
+/* The rack fills its lane: neighbouring lanes set the row's height and the
+   lane's width, so the cells grow from their minimum into whatever is there
+   rather than leaving the lane's floor and right edge empty. */
+.lcUnits > :first-child {
+  grid-template-columns: repeat(4, minmax(52px, 1fr));
+  grid-auto-rows: minmax(46px, 1fr);
 }
 
 .lcEcon {
