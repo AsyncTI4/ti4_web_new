@@ -70,23 +70,9 @@ function DiscordInvite({ children }: { children: ReactNode }) {
   );
 }
 
-function SectionHead({
-  num,
-  kicker,
-  title,
-  lede,
-}: {
-  num: string;
-  kicker: string;
-  title: string;
-  lede?: string;
-}) {
+function SectionHead({ title, lede }: { title: string; lede?: string }) {
   return (
     <div className={classes.sectionHead}>
-      <span className={`${classes.label} ${classes.kicker}`}>
-        <b>{num}</b>
-        {kicker}
-      </span>
       <h2 className={classes.h2}>{title}</h2>
       {lede && <p className={classes.sectionLede}>{lede}</p>}
     </div>
@@ -189,8 +175,6 @@ export function HowItWorksSection() {
     <section id="how-it-works" className={classes.section} aria-label="How it works">
       <div className={classes.inner}>
         <SectionHead
-          num="01"
-          kicker="How it works"
           title="A full game, a few minutes at a time"
           lede="A game usually runs for weeks. Each turn happens in your game's Discord channel, whenever it suits you."
         />
@@ -276,8 +260,6 @@ export function FeaturesSection() {
     <section className={classes.section} aria-label="On this site">
       <div className={classes.inner}>
         <SectionHead
-          num="02"
-          kicker="On this site"
           title="Everything the table can see"
           lede="Discord is where you play. This site is where you read the game."
         />
@@ -312,13 +294,11 @@ export function GamesInProgressSection({ query }: { query: CommunityStatsQuery }
       <div className={classes.inner}>
         <div className={classes.sectionHeadRow}>
           <SectionHead
-            num="03"
-            kicker="Live now"
             title="Games in progress"
             lede="Open any game to see its board and scores. You don't need an account to watch."
           />
           {query.data && (
-            <span className={classes.meta}>
+            <span className={`${classes.meta} ${classes.live}`}>
               {query.data.activeGames.toLocaleString()} games running
             </span>
           )}
@@ -344,8 +324,6 @@ export function CommunitySection() {
     <section className={classes.section} aria-label="Community">
       <div className={classes.inner}>
         <SectionHead
-          num="04"
-          kicker="Community"
           title="Come and say hello"
           lede="We run 32-player mega games, odd mods like Rotato Potato (the map rings turn every round) and plenty of homebrew. Talk strategy, find a game, or watch."
         />

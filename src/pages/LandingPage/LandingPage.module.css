@@ -217,26 +217,6 @@
   margin-bottom: 0;
 }
 
-.kicker {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.kicker b {
-  font-family: var(--font-data);
-  font-size: var(--text-meta);
-  font-weight: 500;
-  color: var(--ds-ink);
-}
-
-.kicker::after {
-  content: "";
-  width: 48px;
-  height: 1px;
-  background: var(--ds-h22);
-}
-
 .h2 {
   margin: 0;
   font-family: var(--font-display);
@@ -257,6 +237,23 @@
   font-family: var(--font-data);
   font-size: var(--text-meta);
   color: var(--ds-ink-lo);
+}
+
+/* The running-games count is a live reading, so it carries the same green
+   light the app uses for a seat whose turn it is. */
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(var(--ds-sig-ok));
+  box-shadow: 0 0 0 3px rgb(var(--ds-sig-ok) / 0.15);
 }
 
 /* How it works */
