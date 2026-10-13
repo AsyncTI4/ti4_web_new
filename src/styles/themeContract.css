@@ -96,7 +96,7 @@ body.theme-midnightredtheme {
   --ds-ambient: radial-gradient(ellipse 80% 50% at 50% 120%, rgb(220 62 72 / 0.07), transparent 70%);
 }
 
-/* Violet — Mahact Arcana: nebula clouds, rune-dot rails, wide caps, softer plates. */
+/* Violet — Mahact Arcana: nebula clouds, rune-dot rail edges, wide caps, softer plates. */
 body.theme-midnightviolettheme {
   --ds-tex-deck:
     radial-gradient(ellipse 50% 60% at 15% 20%, rgb(168 85 247 / 0.18), transparent 70%),
@@ -104,7 +104,10 @@ body.theme-midnightviolettheme {
     radial-gradient(1px 1px at 30% 40%, rgb(230 210 255 / 0.42), transparent 60%);
   --ds-tex-deck-size: 100% 100%, 100% 100%, 113px 113px;
   --ds-tex-deck-repeat: no-repeat, no-repeat, repeat;
-  --ds-tex-rail: radial-gradient(circle, rgb(196 181 253 / 0.13) 0.8px, transparent 1.3px) 0 0 / 8px 8px;
+  /* One line of rune dots along the rail's lower edge, over a faint violet wash from the top. */
+  --ds-tex-rail:
+    radial-gradient(circle, rgb(196 181 253 / 0.28) 0.8px, transparent 1.3px) 0 100% / 10px 3px repeat-x,
+    linear-gradient(180deg, rgb(168 85 247 / 0.045), transparent 60%);
   --ds-label-track: 0.18em;
   --ds-r-plate: 6px;
   --ds-ambient: radial-gradient(ellipse 50% 40% at 20% 0, rgb(168 85 247 / 0.07), transparent 70%);
