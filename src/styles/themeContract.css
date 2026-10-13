@@ -41,6 +41,25 @@ body {
   --ds-h22: var(--panel-hairline-strong);
   --ds-edge-accent: var(--hud-edge-accent);
 
+  /*
+   * Panel surfaces. One light, from above, for every panel on the deck:
+   * the ground is darkest; a plate is lifted a step toward white and casts a
+   * shadow down; a well is pressed into its plate and catches shade along its
+   * top edge. Colour never tints these surfaces — signals live on the marks
+   * inside them.
+   */
+  --ds-plate: color-mix(in oklab, var(--plate-ground) 94%, white 4%);
+  --ds-well: color-mix(in oklab, var(--ds-plate) 72%, black);
+  --ds-plate-r: 8px;
+  --ds-well-r: 5px;
+  --ds-plate-edge:
+    inset 0 0 0 1px var(--ds-h14),
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 2px 8px rgb(0 0 0 / 0.35);
+  --ds-well-edge:
+    inset 0 0 0 1px var(--ds-h10),
+    inset 0 1px 2px rgb(0 0 0 / 0.2);
+
   /* Graphite defaults */
   --ds-tex-deck: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.008) 0 1px, transparent 1px 3px);
   --ds-tex-deck-size: auto;
