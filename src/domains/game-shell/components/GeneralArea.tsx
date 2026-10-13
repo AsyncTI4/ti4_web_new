@@ -28,7 +28,11 @@ function GenBox({
   );
 }
 
-/** Table-wide information: seats, unpicked strategy cards, card pool, laws, then the tech matrix. */
+/**
+ * Table-wide information. A fixed rail on the left holds the at-a-glance state
+ * (seats, unpicked strategy cards, card pool, laws); the tech list takes the
+ * remaining width and flows its colour tables side by side.
+ */
 function GeneralArea() {
   const gameData = useGameData();
   if (!gameData) return null;
@@ -42,20 +46,22 @@ function GeneralArea() {
 
   return (
     <Box className={styles.general}>
-      <Box className={styles.top}>
+      <Box className={styles.rail}>
         <GenBox label="Seats · turn order" meta={`Round ${gameRound}`}>
           <FactionsInGame playerData={playerData} />
         </GenBox>
         <GenBox label="Unpicked strategy cards">
           <UnpickedSCs strategyCards={strategyCards} />
-          <RailLabel>Card pool</RailLabel>
+        </GenBox>
+        <GenBox label="Card pool">
           <CardPool cardPool={cardPool} />
         </GenBox>
-        <GenBox label="Laws in play" meta={lawsInPlay.length} className={styles.laws}>
+        <GenBox label="Laws in play" meta={lawsInPlay.length}>
           <LawsInPlay laws={lawsInPlay} />
         </GenBox>
       </Box>
       <GeneralTechCatalog
+        className={styles.tech}
         technologyDeck={cardPool?.technologyDeck}
         playerData={playerData}
       />

@@ -1,10 +1,14 @@
-import { Fragment, useState } from "react";
-import { Box, Image, UnstyledButton } from "@/ds";
+import cx from "clsx";
+import { Box, Image } from "@/ds";
 import {
   getTechData,
   getTechTier,
+  TECH_PREREQ_ICON,
   TECH_TYPE_COLOR,
 } from "@/entities/lookup/tech";
+import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
+import { getColorAlias } from "@/entities/lookup/colors";
+import { cdnImage } from "@/entities/data/cdnImage";
 import type { PlayerData, Tech } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { RailLabel } from "@/domains/objectives/components/RailLabel";
@@ -14,9 +18,10 @@ import styles from "./GeneralTechCatalog.module.css";
 type GeneralTechCatalogProps = {
   technologyDeck?: string[];
   playerData: PlayerData[];
+  className?: string;
 };
 
-type TechColor = "blue" | "green" | "red" | "yellow";
+type TechColor = "blue" | "green" | "red" | "yellow" | "unit";
 
 type TechGroup = {
   label: string;
@@ -50,6 +55,18 @@ const DEFAULT_COLORED_TECH_GROUPS: TechGroup[] = [
     icon: "/yellow.png",
     aliases: ["st", "sdn", "gls", "pi", "td", "ie"],
   },
+];
+
+const DEFAULT_UNIT_TECH_ALIASES = [
+  "ff2",
+  "inf2",
+  "dd2",
+  "cr2",
+  "cv2",
+  "pds2",
+  "dn2",
+  "sd2",
+  "ws",
 ];
 
 function byTierThenName(a: Tech, b: Tech) {
@@ -94,6 +111,24 @@ function getColoredTechGroups(technologyDeck: string[]): TechGroup[] {
   }));
 }
 
+function getUnitTechAliases(technologyDeck: string[]): string[] {
+  const units = technologyDeck.filter((alias) => {
+    const tech = getTechData(alias);
+    return !tech?.faction && tech?.types?.includes("UNITUPGRADE");
+  });
+
+  return units.length > 0 ? units : DEFAULT_UNIT_TECH_ALIASES;
+}
+
+function getUnitUpgradeImageSrc(tech: Tech) {
+  if (!tech.types.includes("UNITUPGRADE")) return undefined;
+
+  const unitData = getGenericUnitDataByRequiredTechId(tech.baseUpgrade || tech.alias);
+  if (!unitData?.asyncId) return undefined;
+
+  return cdnImage(`/units/${getColorAlias(undefined)}_${unitData.asyncId}.png`);
+}
+
 type Seat = Pick<
   PlayerData,
   "faction" | "factionImage" | "factionImageType" | "techs" | "exhaustedTechs" | "userName"
@@ -104,166 +139,132 @@ function ownership(seat: Seat, tech: Tech) {
   return seat.exhaustedTechs.includes(tech.alias) ? "exhausted" : "owned";
 }
 
-function TierPips({ tier }: { tier: number }) {
-  if (tier <= 0) return null;
+function PrereqIcons({ requirements }: { requirements?: string }) {
+  const icons = (requirements ?? "")
+    .split("")
+    .map((requirement) => TECH_PREREQ_ICON[requirement])
+    .filter((icon): icon is string => Boolean(icon));
+
+  if (icons.length === 0) return null;
+
   return (
-    <span className={styles.pips} aria-label={`Tier ${tier}`}>
-      {Array.from({ length: tier }, (_, i) => (
-        <i key={i} />
+    <span className={styles.prereqs} aria-label={`Requires ${requirements}`}>
+      {icons.map((icon, index) => (
+        <Image key={`${icon}-${index}`} src={icon} alt="" className={styles.prereq} />
       ))}
     </span>
   );
 }
 
-function TechRow({
+/** Seats holding this tech, in seat order; exhausted copies are dimmed. */
+function Owners({ tech, seats }: { tech: Tech; seats: Seat[] }) {
+  const owners = seats
+    .map((seat) => ({ seat, state: ownership(seat, tech) }))
+    .filter((owner) => owner.state);
+
+  if (owners.length === 0) return null;
+
+  return (
+    <span className={styles.owners}>
+      {owners.map(({ seat, state }) => (
+        <span
+          key={seat.faction}
+          className={styles.owner}
+          data-s={state}
+          title={`${seat.userName} (${seat.faction}): ${state}`}
+        >
+          <FactionIcon
+            faction={seat.faction}
+            factionImageOverride={seat.factionImage}
+            factionImageTypeOverride={seat.factionImageType}
+            alt={seat.faction}
+            w={18}
+            h={18}
+          />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function TechItem({
   tech,
   color,
   seats,
-  expanded,
-  onToggle,
 }: {
   tech: Tech;
   color: TechColor;
   seats: Seat[];
-  expanded: boolean;
-  onToggle: () => void;
 }) {
-  const owners = seats.filter((seat) => ownership(seat, tech)).length;
+  const unitImageSrc = getUnitUpgradeImageSrc(tech);
 
   return (
-    <Box className={styles.row} data-k={color} data-open={expanded || undefined}>
-      <UnstyledButton
-        className={styles.module}
-        onClick={onToggle}
-        aria-expanded={expanded}
-        title={expanded ? "Hide text" : "Show text"}
-      >
+    <Box className={styles.tech} data-k={color}>
+      <Box className={styles.head}>
+        {unitImageSrc && <Image src={unitImageSrc} alt="" className={styles.unit} />}
         <span className={styles.name}>{tech.name}</span>
-        <TierPips tier={getTechTier(tech.requirements)} />
-      </UnstyledButton>
-      {seats.map((seat) => {
-        const state = ownership(seat, tech);
-        return (
-          <span
-            key={seat.faction}
-            className={styles.cell}
-            title={state ? `${seat.faction}: ${state}` : undefined}
-          >
-            {state && <i className={styles.own} data-s={state} />}
-          </span>
-        );
-      })}
-      <span className={styles.count}>{owners || ""}</span>
-      {expanded && (
-        <p className={styles.text}>{tech.text || "No description available."}</p>
-      )}
+        <PrereqIcons requirements={tech.requirements} />
+      </Box>
+      <Owners tech={tech} seats={seats} />
+      <p className={styles.text}>{tech.text || "No description available."}</p>
     </Box>
   );
 }
 
-function GroupRows({
-  group,
-  seats,
-  openTech,
-  onToggle,
-}: {
-  group: TechGroup;
-  seats: Seat[];
-  openTech: string | null;
-  onToggle: (alias: string) => void;
-}) {
+function TechColumn({ group, seats }: { group: TechGroup; seats: Seat[] }) {
   const techs = resolveTechs(group.aliases);
   if (techs.length === 0) return null;
 
   return (
-    <>
-      <Box className={styles.groupRow} data-k={group.color}>
-        <span className={styles.groupLabel}>
-          <Image src={group.icon} alt="" className={styles.groupIcon} />
-          {group.label}
-        </span>
-      </Box>
+    <Box className={styles.column} data-k={group.color}>
+      <span className={styles.groupLabel}>
+        <Image src={group.icon} alt="" className={styles.groupIcon} />
+        {group.label}
+      </span>
       {techs.map((tech) => (
-        <TechRow
-          key={tech.alias}
-          tech={tech}
-          color={group.color}
-          seats={seats}
-          expanded={openTech === tech.alias}
-          onToggle={() => onToggle(tech.alias)}
-        />
+        <TechItem key={tech.alias} tech={tech} color={group.color} seats={seats} />
       ))}
-    </>
+    </Box>
   );
 }
 
 /**
- * Generic technology as a tech × seat ownership matrix. Every tech is a row,
- * every seat a column in seat order; owned is a filled square in the tech's
- * colour, exhausted an outline. Click a tech to read its text.
+ * Generic technology listed in full: every tech with its text, grouped by
+ * colour, then the unit upgrades. Owners sit on each tech as faction icons in
+ * seat order; exhausted copies are dimmed.
  */
 export function GeneralTechCatalog({
   technologyDeck = [],
   playerData,
+  className,
 }: GeneralTechCatalogProps) {
-  const [openTech, setOpenTech] = useState<string | null>(null);
   const seats = getSeatOrder(playerData);
   const groups = getColoredTechGroups(technologyDeck);
-  const toggle = (alias: string) =>
-    setOpenTech((current) => (current === alias ? null : alias));
+  const unitTechs = resolveTechs(getUnitTechAliases(technologyDeck));
 
   return (
-    <Box className={styles.box}>
+    <Box className={cx(styles.box, className)}>
       <RailLabel
-        meta={
-          <>
-            <span className={styles.legend}>
-              <i className={styles.own} data-s="owned" /> owned
-            </span>
-            <span className={styles.legend}>
-              <i className={styles.own} data-s="exhausted" /> exhausted
-            </span>
-            <span className={styles.hint}>click a tech to read it</span>
-          </>
-        }
+        meta={<span className={styles.hint}>owners shown on each tech · dimmed = exhausted</span>}
       >
-        Technology · who owns what
+        Generic technology
       </RailLabel>
-      <Box className={styles.scroller}>
-        <Box
-          className={styles.matrix}
-          style={{ "--seats": seats.length } as React.CSSProperties}
-          role="table"
-          aria-label="Generic technology ownership by seat"
-        >
-          <Box className={styles.headRow}>
-            <span />
-            {seats.map((seat) => (
-              <span key={seat.faction} className={styles.seatHead} title={seat.userName}>
-                <FactionIcon
-                  faction={seat.faction}
-                  factionImageOverride={seat.factionImage}
-                  factionImageTypeOverride={seat.factionImageType}
-                  alt={seat.faction}
-                  w={20}
-                  h={20}
-                />
-              </span>
-            ))}
-            <span className={styles.countHead}>Σ</span>
-          </Box>
-          {groups.map((group) => (
-            <Fragment key={group.label}>
-              <GroupRows
-                group={group}
-                seats={seats}
-                openTech={openTech}
-                onToggle={toggle}
-              />
-            </Fragment>
-          ))}
-        </Box>
+      <Box className={styles.grid}>
+        {groups.map((group) => (
+          <TechColumn key={group.label} group={group} seats={seats} />
+        ))}
       </Box>
+
+      {unitTechs.length > 0 && (
+        <>
+          <RailLabel>Unit upgrades</RailLabel>
+          <Box className={styles.grid}>
+            {unitTechs.map((tech) => (
+              <TechItem key={tech.alias} tech={tech} color="unit" seats={seats} />
+            ))}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

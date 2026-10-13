@@ -1,15 +1,25 @@
+/*
+ * Rail + field. The rail is sized to the card pool's four columns so seats,
+ * strategy cards and decks all share one edge; the tech list fills the rest.
+ */
 .general {
+  --rail-w: 400px;
   display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
   gap: 12px;
+  align-items: start;
   padding: 16px;
   min-width: 0;
 }
 
-.top {
+.rail {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(320px, 1fr);
   gap: 12px;
-  align-items: start;
+  min-width: 0;
+}
+
+.tech {
+  min-width: 0;
 }
 
 .genbox {
@@ -27,22 +37,20 @@
   border-radius: var(--ds-r-plate);
 }
 
-@media (max-width: 75em) {
-  .top {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+/* Narrower screens: the rail becomes a two-up band above the tech list. */
+@media (max-width: 64em) {
+  .general {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .laws {
-    grid-column: 1 / -1;
+  .rail {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--rail-w)), 1fr));
+    align-items: start;
   }
 }
 
 @media (max-width: 47.99375em) {
   .general {
     padding: 8px;
-  }
-
-  .top {
-    grid-template-columns: minmax(0, 1fr);
   }
 }
