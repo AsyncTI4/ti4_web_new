@@ -14,7 +14,7 @@ type Props = {
 
 /**
  * Victory track: the board's numbered spaces with every seat's badge on its
- * score. The space one short of victory lights only while someone is standing
+ * score. The ground the race has covered, up to the leader, is lit. The space one short of victory lights only while someone is standing
  * on it: a marker that appears exactly when the table should be nervous.
  */
 function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
@@ -24,6 +24,8 @@ function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
     const score = Math.min(player.totalVps, vpsToWin);
     factionsByScore.set(score, [...(factionsByScore.get(score) ?? []), player]);
   }
+
+  const lead = Math.max(0, ...factionsByScore.keys());
 
   return (
     <Box
@@ -41,6 +43,8 @@ function ScoreTracker({ playerData, vpsToWin, variant = "full" }: Props) {
             className={styles.square}
             data-win={isWinningScore || undefined}
             data-occupied={playersAtScore.length > 0 || undefined}
+            data-covered={score <= lead || undefined}
+            data-front={(score === lead && lead > 0) || undefined}
             data-crowd={playersAtScore.length > 2 || undefined}
             data-threat={isOnTheBrink || undefined}
             title={
