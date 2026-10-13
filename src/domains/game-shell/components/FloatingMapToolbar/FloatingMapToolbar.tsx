@@ -152,6 +152,9 @@ export function FloatingMapToolbar({
   renderControls,
 }: Props) {
   const [openPanel, setOpenPanel] = useState<FloatingPanel | null>(null);
+  /* The panel keeps rendering what was last open while it animates out, so
+     closing the hand doesn't flash the events log on its way out. */
+  const [lastPanel, setLastPanel] = useState<FloatingPanel>("events");
   const { canViewSecretHand } = useSecretHandAccess();
   const { data: handData, isLoading, error } = usePlayerHand(gameId);
   const animateEventPreviews = useSettingsStore(
@@ -162,6 +165,7 @@ export function FloatingMapToolbar({
 
   const togglePanel = (panel: FloatingPanel) => {
     setOpenPanel((current) => (current === panel ? null : panel));
+    setLastPanel(panel);
   };
 
   useEffect(() => {
@@ -184,7 +188,7 @@ export function FloatingMapToolbar({
       ? `${topOffset}px`
       : "calc(var(--map-viewport-top) + 12px)";
   const eventsTop = `calc(${controlsTop} + ${CONTROLS_HEIGHT + PANEL_GAP}px)`;
-  const renderedPanel = openPanel ?? "events";
+  const renderedPanel = openPanel ?? lastPanel;
 
   const eventsButton = (
     <EventsButton

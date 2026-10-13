@@ -163,10 +163,12 @@
   height: 720px;
 }
 
+/* One fixed height for every tab, so switching tabs never resizes the panel;
+   the list scrolls inside it. */
 .handPanel {
   bottom: 70px;
   width: min(380px, calc(100vw - 96px));
-  max-height: calc(100vh - var(--map-viewport-top) - 96px);
+  height: min(520px, calc(100vh - var(--map-viewport-top) - 96px));
 }
 
 .panelHeader {
