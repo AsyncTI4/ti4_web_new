@@ -1,7 +1,8 @@
 /*
  * Relic: an artifact. A chamfered octagon whose outer layer is the gold edge;
  * ::before (inset 1px, same polygon) is the fill and ::after is a single glint
- * that sweeps across on hover. Exhausted relics are tarnished and hatched;
+ * that sweeps across on hover. .glyphs sits between them: a short
+ * alien inscription etched near the right edge. Exhausted relics are tarnished and hatched;
  * frontier stand-ins are inert grey.
  */
 .relic {
@@ -65,6 +66,25 @@
     transparent
   );
   transform: translateX(-100%);
+}
+
+/* Inscription: a short line of alien glyphs etched in the relic's gold,
+   set in from the right edge, clear of the name. */
+.glyphs {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  width: 44px;
+  z-index: 1;
+  pointer-events: none;
+  background: rgb(var(--ds-sig-relic) / 0.4);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2028'%20fill='none'%20stroke='black'%20stroke-width='1.4'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='6'%20cy='8'%20r='3'/%3E%3Cpath%20d='M6%2011v11M2%2017h8'/%3E%3Cpath%20d='M16%206h8l-4%207%204%207h-8'/%3E%3Ccircle%20cx='20'%20cy='24'%20r='.6'%20fill='black'/%3E%3Cpath%20d='M31%2022V6M31%2010l6-4M31%2016l6-4'/%3E%3Ccircle%20cx='37'%20cy='20'%20r='.6'%20fill='black'/%3E%3Cpath%20d='M50%206l5%206-5%206-5-6z%20M50%2018v5'/%3E%3Ccircle%20cx='45'%20cy='22'%20r='.6'%20fill='black'/%3E%3Ccircle%20cx='55'%20cy='22'%20r='.6'%20fill='black'/%3E%3C/svg%3E") right center / auto 72% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2028'%20fill='none'%20stroke='black'%20stroke-width='1.4'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='6'%20cy='8'%20r='3'/%3E%3Cpath%20d='M6%2011v11M2%2017h8'/%3E%3Cpath%20d='M16%206h8l-4%207%204%207h-8'/%3E%3Ccircle%20cx='20'%20cy='24'%20r='.6'%20fill='black'/%3E%3Cpath%20d='M31%2022V6M31%2010l6-4M31%2016l6-4'/%3E%3Ccircle%20cx='37'%20cy='20'%20r='.6'%20fill='black'/%3E%3Cpath%20d='M50%206l5%206-5%206-5-6z%20M50%2018v5'/%3E%3Ccircle%20cx='45'%20cy='22'%20r='.6'%20fill='black'/%3E%3Ccircle%20cx='55'%20cy='22'%20r='.6'%20fill='black'/%3E%3C/svg%3E") right center / auto 72% no-repeat;
+}
+
+.relic[data-s="exhausted"] .glyphs {
+  background: rgb(230 236 245 / 0.1);
 }
 
 .relic:hover::after {

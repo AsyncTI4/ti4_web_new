@@ -43,6 +43,7 @@ export function Relic({ relicId, isExhausted = false }: Props) {
             size={16}
           />
           <ObjectLabel>{relicData.name}</ObjectLabel>
+          <span className={styles.glyphs} aria-hidden="true" />
         </ObjectShell>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>
