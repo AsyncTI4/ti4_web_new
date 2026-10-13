@@ -2,6 +2,11 @@
  * Objectives as cards on the table. Seats are columns, named once in the
  * header; every row below is only state. A scored card shows the seat's
  * faction badge in a lit well; anything else shows progress toward it.
+ *
+ * Each stage is a panel in the same make as a player seat: a grey plate with
+ * the header set straight on it and the rows sunk into one well below. The
+ * plate and well tones come from the board; outside it the table falls back
+ * to a flat field.
  */
 .table {
   --k: var(--ds-sig-stage1);
@@ -9,10 +14,22 @@
   --cols: minmax(0, 1fr) repeat(var(--seats, 6), var(--seat-col));
   display: grid;
   min-width: 0;
-  background: var(--panel-field-flat);
-  border: 1px solid var(--ds-h14);
-  border-radius: var(--ds-r-plate, 3px);
+  padding: 0 var(--plate-pad, 0px) var(--plate-pad, 0px);
+  /* The stage is named in its colour and marked on each row's spine; the
+     plate itself stays the same grey as every other panel. */
+  background: var(--seat-plate, var(--panel-field-flat));
+  border-radius: var(--plate-radius, var(--ds-r-plate, 3px));
+  box-shadow: var(--plate-edge, inset 0 0 0 1px var(--ds-h14));
   overflow: hidden;
+}
+
+.well {
+  display: grid;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--well-radius, 0);
+  background: var(--seat-well, transparent);
+  box-shadow: var(--well-edge, inset 0 1px 0 var(--ds-h22));
 }
 
 .table[data-stage="blue"] {
@@ -31,16 +48,8 @@
   min-width: 0;
 }
 
-/* Every other seat column carries a faint band so a seat reads straight down. */
-.head > .seat:nth-child(odd),
-.row > .cell:nth-child(odd) {
-  background: rgb(255 255 255 / 0.018);
-}
-
 .head {
-  min-height: 40px;
-  background: linear-gradient(180deg, rgb(var(--k) / 0.07), transparent), var(--ds-ground);
-  border-bottom: 1px solid var(--ds-h22);
+  min-height: 46px;
 }
 
 .title {
@@ -48,13 +57,32 @@
   align-items: baseline;
   gap: 10px;
   align-self: center;
-  padding: 0 14px;
+  /* Lines up with the objective names in the well below. */
+  padding: 0 16px;
   font-family: var(--ds-label-font);
   font-size: var(--text-label);
   font-weight: var(--weight-rail);
   letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
   color: color-mix(in oklab, rgb(var(--k)) 55%, var(--ds-ink-hi));
+}
+
+/* The stage's colour, struck once before its name. */
+.title::before {
+  content: "";
+  align-self: center;
+  width: 6px;
+  height: 6px;
+  margin-right: -2px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: rgb(var(--k));
+  box-shadow: 0 0 6px rgb(var(--k) / 0.5);
+}
+
+.table[data-stage="gray"] .title::before {
+  background: var(--ds-ink-lo);
+  box-shadow: none;
 }
 
 .title small {
@@ -70,6 +98,31 @@
   display: grid;
   justify-items: center;
   align-content: center;
+  gap: 5px;
+}
+
+/* A seat with nothing scored in this stage sits back a step. */
+.table:not([data-stage="gray"]) .seat:not([data-scored]) > :first-child {
+  opacity: 0.55;
+  filter: saturate(0.4);
+}
+
+/* The seat's tally: one pip per revealed objective, lit in the stage colour. */
+.pips {
+  display: flex;
+  gap: 2px;
+}
+
+.pips i {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--ds-h14);
+}
+
+.pips i[data-lit] {
+  background: rgb(var(--k));
+  box-shadow: 0 0 4px rgb(var(--k) / 0.55);
 }
 
 .row {
@@ -82,7 +135,7 @@
   transition: background-color var(--ds-dur-fast) var(--ds-ease);
 }
 
-.head + .row {
+.well > :first-child {
   border-top: 0;
 }
 
@@ -193,7 +246,7 @@
   border-radius: 7px;
   color: var(--ds-ground);
   background: rgb(var(--ds-sig-ok));
-  box-shadow: 0 0 0 2px var(--panel-field-flat, var(--ds-ground));
+  box-shadow: 0 0 0 2px var(--seat-well, var(--panel-field-flat));
   font-family: var(--font-data);
   font-size: 9px;
   font-weight: 700;
@@ -290,7 +343,7 @@
   }
 
   .title {
-    padding: 8px 12px 0;
+    padding: 8px 16px 0;
   }
 
   .row {

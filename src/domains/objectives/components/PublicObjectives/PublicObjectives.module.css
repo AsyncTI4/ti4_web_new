@@ -1,35 +1,93 @@
+/*
+ * The board's panels are made like the player seats: a grey plate with its
+ * name set on it and its contents sunk into wells (see --ds-plate in the theme
+ * contract). The tables and law cards read these names; anywhere else they
+ * fall back to their flat fields.
+ */
 .board {
+  --seat-plate: var(--ds-plate);
+  --seat-well: var(--ds-well);
+  --plate-pad: 10px;
+  --plate-radius: var(--ds-plate-r);
+  --plate-edge: var(--ds-plate-edge);
+  --well-radius: var(--ds-well-r);
+  --well-border: var(--ds-h10);
+  --well-edge: var(--ds-well-edge);
   container: objboard / inline-size;
   display: grid;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 
 .stageGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
   align-items: start;
 }
 
 .column {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   align-content: start;
   min-width: 0;
 }
 
-.stage {
+/* Laws in play: one plate, each law its own well, with air between them. */
+.laws {
   display: grid;
-  gap: 6px;
+  gap: 0;
   align-content: start;
   min-width: 0;
+  padding: 0 var(--plate-pad) var(--plate-pad);
+  background: var(--seat-plate);
+  border-radius: var(--plate-radius);
+  box-shadow: var(--plate-edge);
+}
+
+.lawsTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 10px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: color-mix(in oklab, rgb(var(--ds-sig-law)) 45%, var(--ds-ink-hi));
+}
+
+.lawsTitle small {
+  font-family: var(--font-text);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ds-ink-lo);
 }
 
 .lawGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 8px;
+}
+
+/* The empty plate: one well, sized like a law card, so the plate keeps its shape. */
+.noLaws {
+  display: grid;
+  place-items: center;
+  min-height: 72px;
+  padding: 10px 14px;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  font-style: italic;
+  color: var(--ds-ink-lo);
+  background: var(--seat-well, var(--panel-field-flat));
+  border: 1px solid var(--well-border, var(--ds-h14));
+  border-radius: var(--well-radius, var(--ds-r-plate, 3px));
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.2);
 }
 
 /* Two stages side by side only while each keeps room for its seat columns. */

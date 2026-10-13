@@ -56,26 +56,56 @@ function SeatCell({ objective, seat }: { objective: Objective; seat: Seat }) {
   return <span className={styles.empty} aria-hidden="true" />;
 }
 
-/** Faction icons, once per table, so every row below is just state. */
-function SeatHeader({ seats, title, meta }: { seats: Seat[]; title: string; meta?: ReactNode }) {
+/**
+ * Faction icons, once per table, so every row below is just state. Under each
+ * icon, one pip per revealed objective, lit for each one that seat has scored.
+ */
+function SeatHeader({
+  seats,
+  title,
+  meta,
+  revealed,
+  tally,
+}: {
+  seats: Seat[];
+  title: string;
+  meta?: ReactNode;
+  revealed: Objective[];
+  tally: boolean;
+}) {
   return (
     <div className={styles.head}>
       <span className={styles.title}>
         {title}
         {meta && <small>{meta}</small>}
       </span>
-      {seats.map((seat) => (
-        <span key={seat.faction} className={styles.seat} title={seat.userName}>
-          <FactionIcon
-            faction={seat.faction}
-            factionImageOverride={seat.factionImage}
-            factionImageTypeOverride={seat.factionImageType}
-            alt={seat.userName}
-            w={22}
-            h={22}
-          />
-        </span>
-      ))}
+      {seats.map((seat) => {
+        const scored = revealed.filter((objective) => objective.scoredFactions.includes(seat.faction)).length;
+        return (
+          <span
+            key={seat.faction}
+            className={styles.seat}
+            data-scored={scored > 0 || undefined}
+            title={tally ? `${seat.userName}: ${scored} of ${revealed.length} scored` : seat.userName}
+          >
+            <FactionIcon
+              faction={seat.faction}
+              factionImageOverride={seat.factionImage}
+              factionImageTypeOverride={seat.factionImageType}
+              alt={seat.userName}
+              w={22}
+              h={22}
+            />
+            {tally && revealed.length > 0 && (
+              <span className={styles.pips} aria-hidden="true">
+                {revealed.map((objective, i) => (
+                  <i key={objective.key} data-lit={i < scored || undefined} />
+                ))}
+              </span>
+            )}
+          </span>
+        );
+      })}
     </div>
   );
 }
@@ -216,24 +246,26 @@ export function ObjectiveTable({
 
   return (
     <div className={styles.table} data-stage={stage} style={{ "--seats": seats.length } as CSSProperties}>
-      <SeatHeader seats={seats} title={title} meta={meta} />
-      {revealed.map((objective) =>
-        stage === "gray" ? (
-          <OtherPointRow key={objective.key} objective={objective} seats={seats} />
-        ) : (
-          <ObjectiveRow
-            key={objective.key}
-            objective={objective}
-            stage={stage}
-            seats={seats}
-            playerData={playerData}
-            showRequirement={showRequirement}
-            opened={openKey === objective.key}
-            onOpenChange={(next) => onOpenKeyChange(next ? objective.key : null)}
-          />
-        ),
-      )}
-      {faceDown > 0 && <FaceDownRow count={faceDown} />}
+      <SeatHeader seats={seats} title={title} meta={meta} revealed={revealed} tally={stage !== "gray"} />
+      <div className={styles.well}>
+        {revealed.map((objective) =>
+          stage === "gray" ? (
+            <OtherPointRow key={objective.key} objective={objective} seats={seats} />
+          ) : (
+            <ObjectiveRow
+              key={objective.key}
+              objective={objective}
+              stage={stage}
+              seats={seats}
+              playerData={playerData}
+              showRequirement={showRequirement}
+              opened={openKey === objective.key}
+              onOpenChange={(next) => onOpenKeyChange(next ? objective.key : null)}
+            />
+          ),
+        )}
+        {faceDown > 0 && <FaceDownRow count={faceDown} />}
+      </div>
     </div>
   );
 }

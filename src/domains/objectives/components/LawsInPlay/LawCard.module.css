@@ -2,6 +2,9 @@
  * Law: a sealed row. A violet seal in a recessed well, the law's name, what it
  * does in up to two lines, and a folded corner. The name keeps its own case;
  * the seal is what marks it as law.
+ *
+ * On the objectives board the card is a well sunk into the laws plate, and
+ * takes the board's well tone, radius and edge; elsewhere it is a flat field.
  */
 .law {
   position: relative;
@@ -14,9 +17,10 @@
   padding: 10px 14px 10px 10px;
   background:
     linear-gradient(90deg, rgb(var(--ds-sig-law) / 0.06), transparent 45%),
-    var(--panel-field-flat);
-  border: 1px solid var(--ds-h14);
-  border-radius: var(--ds-r-plate, 3px);
+    var(--seat-well, var(--panel-field-flat));
+  border: 1px solid var(--well-border, var(--ds-h14));
+  border-radius: var(--well-radius, var(--ds-r-plate, 3px));
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.2);
   cursor: pointer;
   transition: border-color var(--ds-dur-fast) var(--ds-ease-standard);
 }
@@ -28,6 +32,8 @@
   bottom: -1px;
   width: 10px;
   height: 10px;
+  /* The fold follows the card's rounded corner. */
+  border-bottom-right-radius: inherit;
   background: linear-gradient(315deg, rgb(var(--ds-sig-law) / 0.4) 0 50%, transparent 50%);
 }
 
