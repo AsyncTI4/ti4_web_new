@@ -27,7 +27,6 @@
   scrollbar-width: none;
   border-bottom: 1px solid var(--ds-h10);
   mask-image: linear-gradient(90deg, black calc(100% - 24px), transparent);
-  -webkit-mask-image: linear-gradient(90deg, black calc(100% - 24px), transparent);
 }
 
 .filters::-webkit-scrollbar {
@@ -121,12 +120,8 @@ section:first-child > .band {
 }
 
 .bandLabel {
-  font-family: var(--ds-label-font);
+  composes: ds-label from global;
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .bandEnd {
@@ -137,15 +132,12 @@ section:first-child > .band {
 }
 
 .since {
+  composes: ds-label from global;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 4px 12px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-accent-ink);
   scroll-margin-top: 40px;
 }
@@ -159,13 +151,9 @@ section:first-child > .band {
 }
 
 .phaseRule {
+  composes: ds-label from global;
   padding: 4px 12px 4px 45px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
   border-bottom: 1px solid var(--ds-h10);
 }
 
@@ -480,14 +468,11 @@ section:first-child > .band {
 }
 
 .showEarlier {
+  composes: ds-label from global;
   display: block;
   margin: 10px auto;
   padding: 4px 12px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-ink);
   background: var(--ds-socket);
   border: 0;

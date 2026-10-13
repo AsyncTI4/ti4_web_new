@@ -1,3 +1,5 @@
+/* Shared by the hand sheet: a phone sheet's header is a rail, matching the
+   desktop floating panel. */
 .sheetHeader {
   min-height: 0;
   padding: 6px 6px 6px 12px;
@@ -5,13 +7,9 @@
   border-bottom: 1px solid var(--ds-h14);
 }
 
+/* Paired with .ds-label */
 .sheetTitle {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
   line-height: 1;
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-ink-hi);
 }
 

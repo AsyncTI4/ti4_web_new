@@ -1,3 +1,4 @@
+import cx from "clsx";
 import { AppModal } from "@/shared/ui/AppModal";
 import { visualViewportModalStyles } from "@/shared/ui/visualViewportModal";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
@@ -26,7 +27,10 @@ export function MobileEventsSheet({ opened, onClose }: Props) {
       onClose={onClose}
       title="Event Log"
       padding={0}
-      classNames={{ header: classes.sheetHeader, title: classes.sheetTitle }}
+      classNames={{
+        header: classes.sheetHeader,
+        title: cx("ds-label", classes.sheetTitle),
+      }}
       styles={visualViewportModalStyles(viewport, {
         gap: SCREEN_GAP,
         maxWidth: SHEET_WIDTH,

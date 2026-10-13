@@ -65,7 +65,6 @@
   z-index: var(--z-tactical-activation);
   overflow: visible;
   pointer-events: none;
-  opacity: 1;
   filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.95))
     drop-shadow(0 0 20px rgba(59, 130, 246, 0.72));
 }
@@ -91,15 +90,9 @@
   font-family: var(--font-display);
   font-weight: var(--weight-rail);
   font-size: 26px;
-  text-shadow:
-    -1px -1px 0 black,
-    1px -1px 0 black,
-    -1px 1px 0 black,
-    1px 1px 0 black,
-    -2px 0 0 black,
-    2px 0 0 black,
-    0 -2px 0 black,
-    0 2px 0 black;
+  /* A 2px outline drawn behind the fill */
+  -webkit-text-stroke: 4px black;
+  paint-order: stroke fill;
   pointer-events: none;
   z-index: var(--z-ring-position);
 }
@@ -111,32 +104,36 @@
 .planetCircle {
   position: absolute;
   border-radius: 50%;
-  background-color: transparent;
   transform: translate(-50%, -50%);
   pointer-events: auto;
   z-index: var(--z-planet-circle);
 }
 
 .planetCircle.highlighted {
+  border: 2px solid rgba(255, 255, 255, 0.8);
   box-shadow:
     0 0 20px 8px rgba(255, 255, 255, 0.6),
     0 0 40px 16px rgba(255, 255, 255, 0.3),
     inset 0 0 10px 2px rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* The pulse fades a wider glow in and out rather than animating box-shadow,
+   so it composites instead of repainting every frame. */
+.planetCircle.highlighted::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    0 0 30px 12px rgba(255, 255, 255, 0.4),
+    0 0 60px 24px rgba(255, 255, 255, 0.2);
+  opacity: 0;
   animation: planetHighlightPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes planetHighlightPulse {
-  0%, 100% {
-    box-shadow:
-      0 0 20px 8px rgba(255, 255, 255, 0.6),
-      0 0 40px 16px rgba(255, 255, 255, 0.3),
-      inset 0 0 10px 2px rgba(255, 255, 255, 0.2);
-  }
   50% {
-    box-shadow:
-      0 0 30px 12px rgba(255, 255, 255, 0.8),
-      0 0 60px 24px rgba(255, 255, 255, 0.4),
-      inset 0 0 15px 4px rgba(255, 255, 255, 0.3);
+    opacity: 1;
   }
 }

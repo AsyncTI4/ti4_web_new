@@ -10,6 +10,7 @@ import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/
 import { useSettingsStore } from "@/state/appStore";
 import { cdnImage } from "@/entities/data/cdnImage";
 import type { PlayerHandData } from "@/shared/types/playerHand";
+import zoomClasses from "@/shared/ui/map/ZoomControls.module.css";
 import classes from "./FloatingMapToolbar.module.css";
 
 type FloatingPanel = "events" | "cards";
@@ -47,7 +48,10 @@ function EventsButton({
   return (
     <button
       type="button"
-      className={cx(classes.eventsButton, open && classes.eventsButtonOpen)}
+      className={cx(
+        zoomClasses.zoomButton,
+        open && [zoomClasses.zoomButtonActive, classes.eventsButtonOpen]
+      )}
       aria-label={label}
       title={label}
       aria-controls={panelId}

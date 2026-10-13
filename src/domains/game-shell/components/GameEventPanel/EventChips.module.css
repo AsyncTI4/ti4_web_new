@@ -87,17 +87,14 @@
 /* Timing sits in its own segment at the card's end, split off by a seam, its
    caps nudged down a pixel to sit on the name's optical centre. */
 .when {
+  composes: ds-label from global;
   align-self: stretch;
   display: flex;
   align-items: center;
   padding: 1px 8px 0;
   border-left: 1px solid rgba(var(--gd-red), 0.25);
   line-height: 1;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: rgb(var(--ds-sig-danger));
   filter: brightness(1.45) saturate(0.7);
 }

@@ -24,36 +24,12 @@
   padding: 3px;
 }
 
-/* Events button with the unread count clipped to its corner. */
-.eventsButton {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  color: var(--ds-ink);
-  background: none;
-  border: 0;
-  border-radius: var(--ds-radius-sm);
-  cursor: pointer;
-  transition:
-    color var(--ds-dur-fast) var(--ds-ease),
-    background var(--ds-dur-fast) var(--ds-ease);
-}
-
-.eventsButton:hover {
-  color: var(--ds-ink-hi);
-  background: var(--ds-h10);
-}
-
+/* The events button is a zoom-control button (ZoomControls.module.css) that
+   stays lit while its panel is open. */
 .eventsButtonOpen {
-  color: var(--ds-ink-hi);
   background: var(--ds-h10);
-  box-shadow: inset 0 -2px 0 var(--ds-accent);
 }
 
-.eventsButton:focus-visible,
 .hand:focus-visible {
   outline: 2px solid var(--ds-accent);
   outline-offset: 1px;
@@ -183,12 +159,9 @@
 }
 
 .panelTitle {
+  composes: ds-label from global;
   margin: 0;
-  font-family: var(--ds-label-font);
   font-size: var(--text-data);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-ink-hi);
 }
 
@@ -203,12 +176,8 @@
 }
 
 .switchLabel {
-  font-family: var(--ds-label-font);
+  composes: ds-label from global;
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .panelBody {
@@ -224,7 +193,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .controls,
-  .eventsButton,
   .hand {
     transition: none;
   }

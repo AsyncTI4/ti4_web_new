@@ -57,15 +57,12 @@
 }
 
 .groupLabel {
+  composes: ds-label from global;
   display: flex;
   align-items: center;
   gap: 6px;
   min-height: 22px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: color-mix(in srgb, var(--kc) 70%, var(--ds-ink));
 }
 

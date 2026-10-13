@@ -45,15 +45,12 @@
 }
 
 .tag {
+  composes: ds-label from global;
   position: absolute;
   top: -7px;
   padding: 0 4px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
   line-height: 12px;
-  text-transform: uppercase;
   border-radius: var(--ds-radius-xs);
 }
 

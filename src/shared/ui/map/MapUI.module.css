@@ -10,30 +10,6 @@
   box-shadow: 0 1px 0 var(--ds-edge-accent);
 }
 
-/* Left sidebar overlay styles */
-.leftSidebarOverlay {
-  position: fixed;
-  left: 20px;
-  top: var(--map-viewport-top);
-  width: 300px;
-  max-height: var(--map-viewport-height);
-  height: auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: var(--z-left-sidebar);
-  border: var(--sidebar-border);
-  border-radius: 10px;
-  backdrop-filter: blur(var(--sidebar-blur));
-  background-color: var(--left-sidebar-bg);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-/* Dedicated class to avoid relying on nested selector in modules checks */
-.leftSidebarOverlayCollapsed {
-  transform: translateX(-310px);
-  opacity: 0;
-}
-
 /*
  * The game-state plate floats over the board's top-left corner, which is the
  * strongest position on the page, so it has to stay small and stay escapable.
@@ -91,14 +67,6 @@
   flex: 1 1 0;
   height: auto;
   min-height: 0;
-}
-
-/* Section heading styles */
-.sectionHeading {
-  margin: 0 0 1rem 0;
-  color: var(--ds-gray-1);
-  font-size: 1.1rem;
-  font-weight: var(--weight-title);
 }
 
 /* Zoom controls positioning */
@@ -184,15 +152,6 @@
 }
 
 @keyframes vwNumeralGlitch {
-  0%,
-  96%,
-  100% {
-    transform: none;
-    text-shadow:
-      -1.5px 0 rgba(255, 0, 170, 0.6),
-      1.5px 0 rgba(0, 240, 255, 0.6),
-      0 1px 3px rgba(0, 0, 0, 0.7);
-  }
   96.6% {
     transform: translateX(1.5px);
     text-shadow:
@@ -216,54 +175,30 @@
   }
 }
 
-/* Green: the canopy light drifts across the page, slow as an afternoon */
+/* Green and violet: the canopy light and the nebula bloom sit off-centre,
+   oversized so only part of each wash falls on the page */
 :global(.theme-midnightgreentheme) .mainBackground {
   background-size:
     220% 220%,
     200% 200%,
     auto;
-  animation: canopyDrift 75s ease-in-out infinite alternate;
+  background-position:
+    0% 0%,
+    100% 100%;
 }
 
-@keyframes canopyDrift {
-  from {
-    background-position:
-      0% 0%,
-      100% 100%;
-  }
-  to {
-    background-position:
-      24% 14%,
-      74% 80%;
-  }
-}
-
-/* Violet: the nebula bloom breathes sideways like an aurora, slower still */
 :global(.theme-midnightviolettheme) .mainBackground {
   background-size:
     240% 200%,
     220% 200%,
     auto;
-  animation: auroraDrift 90s ease-in-out infinite alternate;
-}
-
-@keyframes auroraDrift {
-  from {
-    background-position:
-      30% 0%,
-      72% 100%;
-  }
-  to {
-    background-position:
-      58% 8%,
-      42% 86%;
-  }
+  background-position:
+    30% 0%,
+    72% 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(.theme-vaporwavetheme) .hudRoundNumeral,
-  :global(.theme-midnightgreentheme) .mainBackground,
-  :global(.theme-midnightviolettheme) .mainBackground {
+  :global(.theme-vaporwavetheme) .hudRoundNumeral {
     animation: none;
   }
 }
@@ -329,6 +264,7 @@
 }
 
 .tabsTab {
+  composes: ds-label from global;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -336,12 +272,8 @@
   flex: none;
   margin: 0;
   padding: 0 14px;
-  font-family: var(--ds-label-font);
   font-size: var(--text-data);
   font-weight: var(--weight-title);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
   background: none;
   border: 0;
   border-radius: 0;
@@ -373,7 +305,6 @@
   margin-right: 14px;
 }
 
-
 .mapContainer {
   position: relative;
   display: flex;
@@ -383,18 +314,8 @@
 
 .mapArea {
   position: relative;
+  height: 100%;
   overflow: auto;
-}
-
-.sidebar {
-  overflow: scroll;
-  background: var(--sidebar-bg);
-}
-
-.sidebar.collapsedRight {
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
 }
 
 .playerCardsContainer {
@@ -402,78 +323,13 @@
   min-height: 400px;
 }
 
-.playerCard {
-  position: static;
-  width: auto;
-  visibility: visible;
-  pointer-events: auto;
-  z-index: var(--z-player-card);
-}
-
-.hoverInstructions {
-  text-align: center;
-  color: var(--ds-gray-6);
-}
-
-.hoverInstructionsLine {
-  margin-top: 8px;
-  font-size: 12px;
-}
-
 .playersTabContent {
+  height: 100%;
   overflow-y: scroll;
   padding: 16px;
 }
 
-.mapArea,
-.sidebar,
-.playersTabContent {
-  height: 100%;
-}
-
-/* Custom scrollbar styling for thematic blue-gray design */
-:global(*::-webkit-scrollbar) {
-  width: 16px;
-  height: 16px;
-}
-
-:global(*::-webkit-scrollbar-track) {
-  background: var(--scrollbar-track-bg);
-  border-radius: 6px;
-  border: var(--scrollbar-track-border);
-}
-
-:global(*::-webkit-scrollbar-thumb) {
-  background: var(--scrollbar-thumb-bg);
-  border-radius: 6px;
-  border: var(--scrollbar-thumb-border);
-  box-shadow: var(--scrollbar-thumb-shadow);
-}
-
-:global(*::-webkit-scrollbar-thumb:hover) {
-  background: var(--scrollbar-thumb-hover-bg);
-  box-shadow: var(--scrollbar-thumb-hover-shadow);
-}
-
-:global(*::-webkit-scrollbar-thumb:active) {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.7) 0%, rgba(29, 78, 216, 0.8) 100%);
-}
-
-:global(*::-webkit-scrollbar-corner) {
-  background: var(--scrollbar-corner-bg);
-}
-
-/* Firefox scrollbar styling */
-:global(*) {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
-}
-
 /* Vaporwave (TRON) decorative effects - only when theme is active */
-:global(.theme-vaporwavetheme) .mapArea {
-  position: relative;
-}
-
 :global(.theme-vaporwavetheme) .mapArea::before {
   content: "";
   position: absolute;
@@ -484,25 +340,6 @@
   mix-blend-mode: lighten;
   opacity: 0.12;
 }
-
-:global(.theme-vaporwavetheme) .leftSidebarOverlay {
-  box-shadow:
-    0 12px 40px rgba(255, 0, 170, 0.14),
-    0 8px 28px rgba(0, 240, 255, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
-:global(.theme-vaporwavetheme) .leftSidebarOverlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(350px 140px at 0% 0%, rgba(255, 0, 170, 0.14), transparent 70%),
-    radial-gradient(350px 140px at 100% 0%, rgba(0, 240, 255, 0.12), transparent 70%);
-  mix-blend-mode: screen;
-}
-
 
 /* =========================================================================
  * HUD decks
@@ -605,7 +442,6 @@
  * against the unscaled viewport. Keyed off the .mobile body class the app already
  * sets from isMobileDevice(), not a width breakpoint.
  */
-:global(.mobile) .hudFitScreen,
-:global(.theme-mobile) .hudFitScreen {
+:global(.mobile) .hudFitScreen {
   width: 100%;
 }

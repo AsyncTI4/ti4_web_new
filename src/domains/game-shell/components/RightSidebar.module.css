@@ -20,18 +20,14 @@
 }
 
 .mode {
+  composes: ds-label from global;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 4px 10px;
   border-bottom: 1px solid var(--ds-h10);
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .mode b {

@@ -23,13 +23,11 @@ function CardPool({ cardPool }: Props) {
         src={cdnImage("/player_area/cardback_action.jpg")}
         alt="action cards"
         count={cardPool.actionCardDeckSize ?? "–"}
-        size="lg"
       />
       <Cardback
         src={cdnImage("/player_area/cardback_agenda.png")}
         alt="agenda cards"
         count={cardPool.agendaDeckSize ?? "–"}
-        size="lg"
       />
       <SecretDeckCardBack
         deck={cardPool.secretObjectiveDeck || []}

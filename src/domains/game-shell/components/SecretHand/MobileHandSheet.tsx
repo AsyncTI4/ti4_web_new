@@ -1,9 +1,10 @@
+import cx from "clsx";
 import { AppModal } from "@/shared/ui/AppModal";
 import { visualViewportModalStyles } from "@/shared/ui/visualViewportModal";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { SecretHand } from "./SecretHand";
 import { usePlayerHand } from "./usePlayerHand";
-import classes from "./SecretHand.module.css";
+import sheetClasses from "../GameEventPanel/MobileEventsSheet.module.css";
 
 const SHEET_WIDTH = 440;
 const SCREEN_GAP = 10;
@@ -29,7 +30,10 @@ export function MobileHandSheet({ gameId, opened, onClose }: Props) {
       onClose={onClose}
       title="Your Cards"
       padding={0}
-      classNames={{ header: classes.sheetHeader, title: classes.sheetTitle }}
+      classNames={{
+        header: sheetClasses.sheetHeader,
+        title: cx("ds-label", sheetClasses.sheetTitle),
+      }}
       styles={visualViewportModalStyles(viewport, {
         gap: SCREEN_GAP,
         maxWidth: SHEET_WIDTH,

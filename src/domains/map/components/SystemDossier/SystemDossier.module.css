@@ -106,12 +106,7 @@
 }
 
 .pillLabel {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: ds-label from global;
 }
 
 .contest {
@@ -298,12 +293,7 @@
 }
 
 .lbl {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-label);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: ds-label from global;
 }
 
 .cols {
@@ -369,17 +359,14 @@
 }
 
 .tag {
+  composes: ds-label from global;
   display: inline-flex;
   align-items: center;
   height: 18px;
   padding: 0 6px;
   border-radius: var(--ds-radius-xs);
   box-shadow: inset 0 0 0 1px var(--ds-h22);
-  font-family: var(--ds-label-font);
   font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
   color: var(--ds-ink);
 }
 

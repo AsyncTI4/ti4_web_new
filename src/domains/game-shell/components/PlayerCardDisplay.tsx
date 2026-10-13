@@ -23,9 +23,7 @@ export const PlayerCardDisplay = memo(function PlayerCardDisplay({
 
     return (
       <Box className={classes.playerCardsContainer}>
-        <Box className={classes.playerCard}>
-          <PlayerCardSidebar key={activeFaction} playerData={playerToShow} />
-        </Box>
+        <PlayerCardSidebar key={activeFaction} playerData={playerToShow} />
       </Box>
     );
   }
