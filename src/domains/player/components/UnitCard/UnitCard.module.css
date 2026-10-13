@@ -336,13 +336,15 @@
   outline-offset: -2px;
 }
 
+/* Upgraded: a firmer accent frame and a cool tint from above, plus the
+   upgrade arrow. Enough to pick out of the rack without lighting it up. */
 .denseCellUpgraded,
 .denseCellUpgraded:hover {
   background:
-    radial-gradient(ellipse at 50% 30%, var(--bay-lit-tint), transparent 78%),
+    radial-gradient(ellipse at 50% 20%, rgba(var(--gd-blue), 0.24), transparent 78%),
     var(--ds-field);
   box-shadow:
-    inset 0 0 0 1px var(--bay-lit-edge),
+    inset 0 0 0 1px rgb(96 165 250 / 0.6),
     inset 0 1px 0 var(--bay-lit-light);
 }
 
@@ -441,10 +443,11 @@
   height: 10px;
 }
 
+/* Top-left so it never competes with the faction marks in the opposite corner. */
 .upgradeBadge {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 3px;
+  left: 3px;
   z-index: 2;
   width: 13px;
   height: 13px;

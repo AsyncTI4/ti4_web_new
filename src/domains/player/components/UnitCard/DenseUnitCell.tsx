@@ -69,7 +69,7 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
         }}
       />
       <span className={styles.denseCellField}>{image}</span>
-      {upgraded && !upgradeFactions?.length && !faction && (
+      {upgraded && (
         <img
           className={styles.upgradeBadge}
           src="/UnitUpgradeTech.png"
