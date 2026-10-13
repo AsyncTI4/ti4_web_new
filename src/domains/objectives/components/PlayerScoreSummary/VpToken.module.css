@@ -62,7 +62,6 @@
   width: 18px;
   height: 18px;
   background: currentColor;
-  -webkit-mask: var(--glyph) center / contain no-repeat;
   mask: var(--glyph) center / contain no-repeat;
 }
 

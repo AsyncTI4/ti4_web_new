@@ -16,16 +16,11 @@
 }
 
 .lbl {
+  composes: label from "../RailParts.module.css";
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-family: var(--ds-label-font);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .two {

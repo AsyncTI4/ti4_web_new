@@ -22,8 +22,8 @@
 
 .statLabel {
   font-family: var(--ds-label-font, var(--font-display));
-  font-size: var(--text-micro) !important;
-  font-weight: var(--weight-rail) !important;
+  font-size: var(--text-micro);
+  font-weight: var(--weight-rail);
   letter-spacing: var(--track-rail);
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -42,7 +42,7 @@
 
 .sectionTitle {
   font-family: var(--ds-label-font, var(--font-display));
-  font-size: var(--text-label) !important;
+  font-size: var(--text-label);
   font-weight: var(--weight-rail);
   letter-spacing: var(--ds-label-track, var(--track-rail));
   text-transform: uppercase;

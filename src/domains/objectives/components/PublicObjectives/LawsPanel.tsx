@@ -21,7 +21,7 @@ export function LawsPanel({ laws, playerData, standalone = false, className }: P
     <Box className={cx(standalone && styles.board, styles.laws, className)}>
       <span className={styles.lawsTitle}>
         Laws in play
-        <small>{laws.length}</small>
+        <small className={styles.lawsCount}>{laws.length}</small>
       </span>
       {laws.length > 0 ? (
         <Box className={styles.lawGrid}>

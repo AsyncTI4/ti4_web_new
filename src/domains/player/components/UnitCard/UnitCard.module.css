@@ -234,8 +234,8 @@
 }
 
 .unitImage:global(.unit-sprite) {
-  width: auto !important;
-  height: 26px !important;
+  width: auto;
+  height: 26px;
 }
 
 /* ---------- Numerals ---------- */
@@ -375,8 +375,8 @@
 }
 
 .denseUnitImage:global(.unit-sprite) {
-  width: auto !important;
-  height: 26px !important;
+  width: auto;
+  height: 26px;
 }
 
 .denseCommandTokenImage {

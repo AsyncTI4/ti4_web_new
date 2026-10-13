@@ -1,1 +1,0 @@
-export { CompactLaw } from "./CompactLaw";

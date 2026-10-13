@@ -33,7 +33,7 @@ export function Nombox({ capturedUnits }: Props) {
   }
 
   return (
-    <Surface className={styles.compactNombox} p="xs">
+    <Surface className={styles.compactNombox}>
       <Text className={styles.compactTitle}>CAPTURED</Text>
       <Box className={styles.compactGrid}>
         {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {

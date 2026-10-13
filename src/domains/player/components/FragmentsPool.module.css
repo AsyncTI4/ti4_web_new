@@ -6,12 +6,7 @@
 
 /* The absence of a holding: findable, never loud. */
 .emptyLabel {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
+  composes: label from "./RailParts.module.css";
   line-height: 1;
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
   opacity: 0.7;
 }

@@ -85,7 +85,8 @@
   box-shadow: none;
 }
 
-.title small {
+/* A count or note set beside a title in plain running type. */
+.titleNote {
   font-family: var(--font-text);
   font-size: var(--text-meta);
   font-weight: 400;

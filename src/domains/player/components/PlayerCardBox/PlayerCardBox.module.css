@@ -49,9 +49,7 @@
 }
 
 :global(.mobile) .activeCard::before,
-:global(.mobile) .activeCard::after,
-:global(.theme-mobile) .activeCard::before,
-:global(.theme-mobile) .activeCard::after {
+:global(.mobile) .activeCard::after {
   display: none;
 }
 

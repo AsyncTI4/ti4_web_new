@@ -73,7 +73,6 @@ export function getCSSVariables(planetType: string): React.CSSProperties {
   return {
     "--planet-background": `var(--${finalType}-background)`,
     "--planet-border": `var(--${finalType}-border)`,
-    "--planet-shadow": `var(--${finalType}-shadow)`,
   } as React.CSSProperties;
 }
 

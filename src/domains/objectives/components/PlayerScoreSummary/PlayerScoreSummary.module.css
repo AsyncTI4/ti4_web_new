@@ -44,10 +44,6 @@
   border-radius: 2px;
 }
 
-.keyScored {
-  background: rgb(var(--k) / 0.3);
-}
-
 .keyReady {
   border-color: rgb(var(--k) / 0.8);
 }
@@ -56,6 +52,7 @@
   border-style: dashed;
 }
 
+.keyScored,
 .keyLosable {
   background: rgb(var(--k) / 0.3);
 }
@@ -211,7 +208,7 @@
   color: rgb(var(--ds-sig-relic));
 }
 
-.note.note {
+.note {
   max-width: 70ch;
   font-size: var(--text-data);
   line-height: 1.4;

@@ -3,14 +3,19 @@
  * inset well behind a hairline wall. The 44px row is reserved before the art
  * decodes so nothing shifts.
  */
-.lead {
-  --lc: var(--gd-green);
+/* The seat geometry, shared with the empty seat in PhantomLeader. */
+.seat {
   position: relative;
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
   gap: 9px;
   height: 44px;
+}
+
+.lead {
+  composes: seat;
+  --lc: var(--gd-green);
   min-width: 0;
   padding-right: 20px;
   background:

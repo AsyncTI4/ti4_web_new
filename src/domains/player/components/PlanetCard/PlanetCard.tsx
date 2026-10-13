@@ -131,8 +131,6 @@ export function PlanetCard({
           onMouseLeave={() => setHoveredPlanetId(null)}
           className={cx(
             styles.mainStack,
-            isLegendary && styles.legendaryBackground,
-            isOceanic && styles.deepAbyssBackground,
             isLegendary && styles.legendary,
             hasLegendaryAbility && styles.noRightRadius,
             isExhausted && styles.exhausted,

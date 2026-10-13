@@ -77,7 +77,7 @@ function SeatHeader({
     <div className={styles.head}>
       <span className={styles.title}>
         {title}
-        {meta && <small>{meta}</small>}
+        {meta && <small className={styles.titleNote}>{meta}</small>}
       </span>
       {seats.map((seat) => {
         const scored = revealed.filter((objective) => objective.scoredFactions.includes(seat.faction)).length;

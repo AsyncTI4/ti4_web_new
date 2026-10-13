@@ -1,11 +1,6 @@
 /* An empty leader seat: the dossier's geometry, pressed in. */
 .plate {
-  position: relative;
-  display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
-  align-items: center;
-  gap: 9px;
-  height: 44px;
+  composes: seat from "./Leader.module.css";
   background: var(--ds-socket);
   border: 1px solid var(--ds-h10);
   box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.7);
@@ -36,12 +31,7 @@
 }
 
 .role {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
+  composes: label from "../RailParts.module.css";
 }
 
 .corner {

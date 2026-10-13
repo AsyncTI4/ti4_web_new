@@ -15,6 +15,8 @@ type Props = {
   enableAnimations?: boolean;
   locked?: boolean;
   upgradeFactions?: string[];
+  /** Shown after the count in place of the capacity, e.g. "revive". */
+  label?: string;
 };
 
 /**
@@ -32,11 +34,12 @@ export function BaseCard({
   enableAnimations = true,
   locked = false,
   upgradeFactions,
+  label,
 }: Props) {
   const showReinforcements =
     !locked &&
     reinforcements !== undefined &&
-    totalCapacity !== undefined;
+    (totalCapacity !== undefined || label !== undefined);
   const clickable = onClick !== undefined && !locked;
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
@@ -88,7 +91,11 @@ export function BaseCard({
             >
               {reinforcements}
             </Text>
-            <Text className={styles.maxCountText}>/{totalCapacity}</Text>
+            {totalCapacity !== undefined ? (
+              <Text className={styles.maxCountText}>/{totalCapacity}</Text>
+            ) : (
+              <span className={styles.denseLabel}>{label}</span>
+            )}
           </div>
         )}
       </div>

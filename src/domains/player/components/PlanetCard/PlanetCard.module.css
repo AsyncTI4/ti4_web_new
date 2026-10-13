@@ -1,85 +1,30 @@
-.tileArtMask {
-  position: absolute;
-  inset: 0;
-}
-
 :global(.mobile) .tileArtMask {
   display: none;
-}
-
-.deepAbyssBackground {
-  background:
-    linear-gradient(
-      135deg,
-      var(--planet-background) 0%,
-      rgba(15, 23, 42, 0.7) 100%
-    ),
-    radial-gradient(
-      circle at 25% 75%,
-      rgba(80, 180, 255, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 75% 25%,
-      rgba(80, 180, 255, 0.06) 0%,
-      transparent 50%
-    );
-}
-
-.legendaryBackground {
-  background:
-    linear-gradient(
-      135deg,
-      var(--planet-background) 0%,
-      rgba(15, 23, 42, 0.6) 100%
-    ),
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 215, 0, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 215, 0, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(255, 215, 0, 0.06) 0%,
-      transparent 50%
-    );
 }
 
 /* Planet color variables */
 :root {
   --cultural-background: rgba(59, 130, 246, 0.14);
   --cultural-border: rgba(59, 130, 246, 0.35);
-  --cultural-shadow: rgba(59, 130, 246, 0.1);
 
   --hazardous-background: rgba(239, 68, 68, 0.14);
   --hazardous-border: rgba(239, 68, 68, 0.35);
-  --hazardous-shadow: rgba(239, 68, 68, 0.1);
 
   --industrial-background: rgba(34, 197, 94, 0.14);
   --industrial-border: rgba(34, 197, 94, 0.35);
-  --industrial-shadow: rgba(34, 197, 94, 0.1);
 
   --default-background: rgba(107, 114, 128, 0.14);
   --default-border: rgba(107, 114, 128, 0.35);
-  --default-shadow: rgba(107, 114, 128, 0.1);
 
   --faction-background: var(--default-background);
   --faction-border: var(--default-border);
-  --faction-shadow: var(--default-shadow);
 
   --mr-background: var(--default-background);
   --mr-border: var(--default-border);
-  --mr-shadow: var(--default-shadow);
 
   /* Ocean (Deep Abyss) - deep greyish cyan distinct from cultural */
   --ocean-background: rgba(64, 112, 128, 0.16);
   --ocean-border: rgba(64, 160, 176, 0.38);
-  --ocean-shadow: rgba(24, 44, 50, 0.12);
 
   /* The printed card's own colours: resources gold, influence blue. */
   --planet-resource-color: #f4c84a;
@@ -110,6 +55,27 @@
 
 .mainStack.legendary {
   border-color: var(--legendary-border);
+  background:
+    linear-gradient(
+      135deg,
+      var(--planet-background) 0%,
+      rgba(15, 23, 42, 0.6) 100%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 215, 0, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 215, 0, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 215, 0, 0.06) 0%,
+      transparent 50%
+    );
 }
 
 .mainStack:hover {
@@ -145,13 +111,14 @@
    out well above the name and values, so they sit on a plain field and need no
    plate of their own. */
 .tileArtMask {
+  position: absolute;
+  inset: 0;
   z-index: 0;
   overflow: hidden;
   opacity: 0.5;
   pointer-events: none;
   filter: saturate(0.85);
   mask-image: linear-gradient(180deg, black 0%, black 22%, transparent 62%);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 22%, transparent 62%);
 }
 
 .tileArtImage {
@@ -324,7 +291,6 @@
 .legendaryWrapper {
   display: flex;
   align-items: stretch;
-  gap: 0;
   height: 150px;
   box-sizing: border-box;
   overflow: hidden;

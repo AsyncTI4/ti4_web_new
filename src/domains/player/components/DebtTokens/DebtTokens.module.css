@@ -40,13 +40,8 @@
 }
 
 .ledgerLabel {
-  font-family: var(--ds-label-font);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-rail);
-  letter-spacing: var(--ds-label-track);
+  composes: label from "../RailParts.module.css";
   line-height: var(--lh-flush);
-  text-transform: uppercase;
-  color: var(--ds-ink-lo);
 }
 
 .cells {

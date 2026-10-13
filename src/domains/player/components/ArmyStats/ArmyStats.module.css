@@ -31,7 +31,6 @@
      height beyond their natural 22px. At natural size 1fr resolves to that
      content height, so the default readout is unchanged. */
   grid-template-rows: min-content repeat(3, 1fr);
-  gap: 0;
   /* Cells fill their tracks so the gutter wall and the ground/space seam stay
      continuous when the trough is taller than its natural height. Each cell
      centres its own contents. */

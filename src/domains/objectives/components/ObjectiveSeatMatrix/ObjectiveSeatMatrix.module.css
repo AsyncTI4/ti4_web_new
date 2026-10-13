@@ -5,7 +5,7 @@
 }
 
 .head,
-.row.row {
+.row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) repeat(var(--seats, 6), 18px);
   gap: 2px;
@@ -20,7 +20,7 @@
   justify-self: center;
 }
 
-.row.row {
+.row {
   --k: var(--ds-sig-stage1);
   width: 100%;
   height: 22px;
@@ -39,12 +39,12 @@
   --k: var(--ds-sig-stage2);
 }
 
-.row.row[data-k="gray"] {
+.row[data-k="gray"] {
   background: var(--panel-field-flat);
   box-shadow: inset 2px 0 0 var(--ds-h22);
 }
 
-.row.row:hover {
+.row:hover {
   background-color: var(--ds-ground);
 }
 

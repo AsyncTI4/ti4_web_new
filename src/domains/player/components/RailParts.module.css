@@ -1,10 +1,15 @@
-.lbl {
+/* The engraved micro label every rail and ledger uses. */
+.label {
   font-family: var(--ds-label-font);
   font-size: var(--text-micro);
   font-weight: var(--weight-rail);
   letter-spacing: var(--ds-label-track);
   text-transform: uppercase;
   color: var(--ds-ink-lo);
+}
+
+.lbl {
+  composes: label;
   white-space: nowrap;
 }
 

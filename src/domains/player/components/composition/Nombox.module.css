@@ -6,7 +6,7 @@
   width: max-content;
   min-width: 0;
   max-width: 128px;
-  padding: 8px 10px !important;
+  padding: 8px 10px;
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
@@ -95,8 +95,8 @@
 }
 
 .compactUnitImage:global(.unit-sprite) {
-  width: 20px !important;
-  height: 20px !important;
+  width: 20px;
+  height: 20px;
 }
 
 .compactCountBadge {

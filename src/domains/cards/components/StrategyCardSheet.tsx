@@ -3,7 +3,6 @@ import { AppModal } from "@/shared/ui/AppModal";
 import { visualViewportModalStyles } from "@/shared/ui/visualViewportModal";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { StrategyCardDetailsCard } from "./StrategyCardDetailsCard";
-import classes from "./StrategyCardSheet.module.css";
 
 /** The details card's width wherever the screen has room for it. */
 const DETAILS_WIDTH = 320;
@@ -35,7 +34,6 @@ export function StrategyCardSheet({
       onClose={onClose}
       padding={0}
       withCloseButton={false}
-      classNames={{ content: classes.sheetContent }}
       styles={visualViewportModalStyles(viewport, {
         gap: SCREEN_GAP,
         maxWidth: DETAILS_WIDTH,

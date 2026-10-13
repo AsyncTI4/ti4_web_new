@@ -1,74 +1,14 @@
-/* Stasis Infantry card styles - similar to UnitCard but with green hue */
-.stasisCard {
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.25) 0%, rgba(22, 163, 74, 0.15) 30%, rgba(21, 128, 61, 0.20) 70%, rgba(34, 197, 94, 0.25) 100%);
-  border: 1px solid rgba(34, 197, 94, 0.6);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(34, 197, 94, 0.4);
-  min-height: 64px;
-  box-sizing: border-box;
-}
-
-.stasisCard:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4), 0 0 12px rgba(134, 239, 172, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(34, 197, 94, 0.4);
-}
-
-.highlight {
-  background: linear-gradient(90deg, transparent 0%, rgba(134, 239, 172, 0.8) 50%, transparent 100%);
-}
-
-
-/* Utility classes */
-.cardStack {
-  padding: 6px 4px;
-  gap: 4px;
-  justify-content: space-between;
-  min-height: 64px;
-  box-sizing: border-box;
-}
-
-.topHighlight {
-  position: absolute;
-  top: 0;
-  left: 20%;
-  right: 20%;
-  height: 1px;
-}
-
-.glassySheen,
-.innerGlow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.glassySheen {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 30%, transparent 70%, rgba(255, 255, 255, 0.08) 100%);
-}
-
-.innerGlow {
-  background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
-}
-
-.imageContainer {
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  min-height: 40px;
-}
-
+/* A revivable infantry is held in stasis: the sprite is shadowed in its bay. */
 .unitImage {
-  width: 30px;
+  height: 26px;
+  width: auto;
+  display: block;
   filter: brightness(0.25);
 }
 
 .unitImage:global(.unit-sprite) {
-  width: 30px !important;
-  height: auto !important;
+  height: 26px;
+  width: auto;
 }
 
 .denseUnitImage {
@@ -77,43 +17,6 @@
 }
 
 .denseUnitImage:global(.unit-sprite) {
-  height: 22px !important;
-  width: auto !important;
-}
-
-.infoStack {
-  gap: var(--ds-space-xs);
-  align-items: center;
-}
-
-.mainGroup {
-  gap: var(--ds-space-xs);
-  justify-content: center;
-  align-items: baseline;
-}
-
-.reviveGroup {
-  gap: 3px;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.countText {
-  color: white;
-  font-weight: var(--weight-rail);
-  font-size: 14px;
-  line-height: 1;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  text-align: center;
-}
-
-.reviveLabel {
-  color: var(--ds-green-3);
-  font-weight: var(--weight-title);
-  font-size: 9px;
-  line-height: 1;
-  text-transform: uppercase;
-  text-shadow: 0 0 3px rgba(34, 197, 94, 0.8), 0 1px 2px rgba(0, 0, 0, 0.8);
-  letter-spacing: var(--track-label);
+  height: 22px;
+  width: auto;
 }

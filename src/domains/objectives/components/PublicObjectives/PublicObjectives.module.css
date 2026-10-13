@@ -59,13 +59,8 @@
   color: color-mix(in oklab, rgb(var(--ds-sig-law)) 45%, var(--ds-ink-hi));
 }
 
-.lawsTitle small {
-  font-family: var(--font-text);
-  font-size: var(--text-meta);
-  font-weight: 400;
-  letter-spacing: normal;
-  text-transform: none;
-  color: var(--ds-ink-lo);
+.lawsCount {
+  composes: titleNote from "./ObjectiveTable.module.css";
 }
 
 .lawGrid {

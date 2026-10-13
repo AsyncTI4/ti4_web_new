@@ -17,7 +17,7 @@ type UpgradeInfo = NonNullable<ReturnType<typeof getUpgradeInfo>>;
 function StatBox({ label, children }: { label: string; children: ReactNode }) {
   return (
     <Box ta="center" py={6} className={styles.statBox}>
-      <Text size="10px" fw={500} c="gray.5" className={styles.statLabel} mb={2}>
+      <Text c="gray.5" className={styles.statLabel} mb={2}>
         {label}
       </Text>
       <Text size="md" fw={700} c="white" className={styles.statValue}>

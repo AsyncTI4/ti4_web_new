@@ -1,8 +1,7 @@
-import { Stack, Box, Group, Text, Flex } from "@/ds";
-import cx from "clsx";
 import styles from "./StasisInfantryCard.module.css";
 import { Unit } from "@/shared/ui/Unit";
 import { getColorAlias } from "@/entities/lookup/colors";
+import { BaseCard } from "../UnitCard/BaseCard";
 import { DenseUnitCell } from "../UnitCard/DenseUnitCell";
 
 type Props = {
@@ -16,47 +15,26 @@ export function StasisInfantryCard({ reviveCount, color, condensed }: Props) {
 
   if (reviveCount <= 0) return null;
 
+  const image = (
+    <Unit
+      unitType="gf"
+      colorAlias={colorAlias}
+      className={condensed ? styles.denseUnitImage : styles.unitImage}
+      scaleSprite
+    />
+  );
+
   if (condensed) {
     return (
-      <DenseUnitCell
-        image={
-          <Unit
-            unitType="gf"
-            colorAlias={colorAlias}
-            className={styles.denseUnitImage}
-            scaleSprite
-          />
-        }
-        reinforcements={reviveCount}
-        label="revive"
-      />
+      <DenseUnitCell image={image} reinforcements={reviveCount} label="revive" />
     );
   }
 
   return (
-    <Stack className={cx(styles.stasisCard, styles.cardStack)}>
-      <Box className={cx(styles.highlight, styles.topHighlight)} />
-
-      <Box className={styles.glassySheen} />
-      <Box className={styles.innerGlow} />
-
-      <Flex className={styles.imageContainer}>
-        <Unit
-          unitType="gf"
-          colorAlias={colorAlias}
-          className={styles.unitImage}
-          scaleSprite
-        />
-      </Flex>
-
-      <Stack className={styles.infoStack}>
-        <Group className={styles.mainGroup}>
-          <Group className={styles.reviveGroup}>
-            <Text className={styles.countText}>{reviveCount}</Text>
-            <Text className={styles.reviveLabel}>revive</Text>
-          </Group>
-        </Group>
-      </Stack>
-    </Stack>
+    <div style={{ minWidth: "44px" }}>
+      <BaseCard reinforcements={reviveCount} label="revive" enableAnimations={false}>
+        {image}
+      </BaseCard>
+    </div>
   );
 }
