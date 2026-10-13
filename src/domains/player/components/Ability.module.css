@@ -1,8 +1,7 @@
 /*
  * Faction ability: an inscription, not a plate. Abilities are rules printed on
  * the faction sheet, so they get no fill and no frame — the only named object
- * without one. A kind mark, the name, and a violet rule cut beneath that trails
- * off from the mark.
+ * without one. A kind mark, the name, and a violet rule cut beneath it.
  */
 .abl {
   gap: 5px;
@@ -18,11 +17,7 @@
   bottom: 2px;
   height: 1px;
   --cut: 0.6;
-  background: linear-gradient(
-    90deg,
-    rgb(var(--ds-sig-ability) / var(--cut)) 12px,
-    transparent
-  );
+  background: rgb(var(--ds-sig-ability) / var(--cut));
   box-shadow: 0 -1px 0 rgb(0 0 0 / 0.5);
 }
 
