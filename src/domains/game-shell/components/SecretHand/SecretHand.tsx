@@ -7,6 +7,12 @@ import { ActionCardDetailsCard } from "@/domains/cards/components/ActionCardDeta
 import { SecretObjectiveCard } from "@/domains/cards/components/SecretObjectiveCard";
 import { PromissoryNoteCard } from "@/domains/cards/components/PromissoryNoteCard";
 import { getActionCard } from "@/entities/lookup/actionCards";
+import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
+import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
+import { useFactionColors } from "@/hooks/useFactionColors";
+import { cdnImage } from "@/entities/data/cdnImage";
+import { resolvePromissoryNoteText } from "@/entities/game/playerUtils";
+import { useGameData } from "@/state/useGameContext";
 import { PlayerHandData } from "@/shared/types/playerHand";
 import { actionCardTiming } from "../actionCardTiming";
 import classes from "./SecretHand.module.css";
@@ -51,6 +57,85 @@ function ActionCardRow({ id, onClick }: { id: string; onClick: () => void }) {
         {card?.text && <p>{card.text}</p>}
       </span>
     </button>
+  );
+}
+
+const SECRET_BACK = cdnImage("/player_area/cardback_secret.jpg");
+const NOTE_BACK = cdnImage("/player_area/pa_cardbacks_pn.png");
+
+/**
+ * A secret or note lying face-up in the hand: the action card's silhouette in
+ * the object's own signal, its text clamped until the card is clicked open.
+ */
+function FaceUpRow({
+  tone,
+  back,
+  name,
+  tag,
+  text,
+}: {
+  tone: string;
+  back: string;
+  name: string;
+  tag?: string;
+  text: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <button
+      type="button"
+      className={classes.acard}
+      style={{ "--hk": tone } as CSSProperties}
+      aria-expanded={expanded}
+      onClick={() => setExpanded((open) => !open)}
+    >
+      <i
+        className={classes.back}
+        style={{ backgroundImage: `url("${back}")` }}
+        aria-hidden="true"
+      />
+      <span className={classes.acardText}>
+        <b>
+          {name}
+          {tag && <span className={classes.when}>{tag}</span>}
+        </b>
+        <p data-expanded={expanded || undefined}>{text}</p>
+      </span>
+    </button>
+  );
+}
+
+function SecretRow({ id }: { id: string }) {
+  const secret = getSecretObjectiveData(id);
+  if (!secret) return null;
+  return (
+    <FaceUpRow
+      tone="var(--gd-red)"
+      back={SECRET_BACK}
+      name={secret.name}
+      tag={`${secret.phase} · ${secret.points} VP`}
+      text={secret.text}
+    />
+  );
+}
+
+function NoteRow({ id }: { id: string }) {
+  const factionColorMap = useFactionColors();
+  const gameData = useGameData();
+  const note = getPromissoryNoteData(id, factionColorMap);
+  if (!note) return null;
+  return (
+    <FaceUpRow
+      tone="var(--gd-cyan)"
+      back={NOTE_BACK}
+      name={note.noteData.shortName || note.displayName}
+      tag={note.faction}
+      text={resolvePromissoryNoteText(
+        note.noteData.text,
+        note,
+        gameData?.playerData,
+      )}
+    />
   );
 }
 
@@ -159,6 +244,18 @@ function HandList({
   inlineDetails: boolean;
 }) {
   const { chip, details } = RENDERERS[tab];
+  /* Secrets and notes lie face-up with their text; clicking one opens the
+     clamped text in place rather than in a popover. */
+  if (tab !== "actions") {
+    const Row = tab === "secrets" ? SecretRow : NoteRow;
+    return (
+      <div className={classes.list}>
+        {ids.map((id, index) => (
+          <Row key={`${tab}-${id}-${index}`} id={id} />
+        ))}
+      </div>
+    );
+  }
   return (
     <div className={classes.list}>
       {ids.map((id, index) => {
