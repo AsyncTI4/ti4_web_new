@@ -1,6 +1,6 @@
 import {
-  getUnitSpriteDimensions,
-  type SpriteDimensions,
+  getUnitSpriteFrame,
+  type SpriteFrame,
 } from "@/entities/data/renderedSpriteDimensions";
 
 const COLORED_SPRITE_COLORS = new Set([
@@ -131,10 +131,12 @@ export const SPECIAL_FACTION_SPRITES = {
 
 const SHARED_SPRITE_UNITS = new Set(["plenaryorbital", "tyrantslament"]);
 
-export type UnitSprite = {
+export type UnitSprite = SpriteFrame & {
   color: string;
   unit: string;
-} & SpriteDimensions;
+  /** Sheet image URL; absent when no sheet exists for the colour. */
+  image?: string;
+};
 
 export function getUnitSprite(
   colorAlias: string,
@@ -162,6 +164,12 @@ export function getUnitSprite(
 }
 
 function createUnitSprite(color: string, unit: string): UnitSprite | undefined {
-  const dimensions = getUnitSpriteDimensions(unit);
-  return dimensions ? { color, unit, ...dimensions } : undefined;
+  const frame = getUnitSpriteFrame(unit);
+  if (!frame) return undefined;
+
+  const hasSheet = color === "shared" || COLORED_SPRITE_COLORS.has(color);
+  const image = hasSheet
+    ? `https://images.asyncti4.com/units/sheets/${color}.webp?v=4`
+    : undefined;
+  return { color, unit, image, ...frame };
 }

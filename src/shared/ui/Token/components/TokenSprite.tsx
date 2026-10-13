@@ -20,20 +20,15 @@ export function TokenSprite({
       role="img"
       aria-label={alt}
       {...props}
-      style={{ width: sprite.width, height: sprite.height, ...style }}
-      className={cx(
-        "token-sprite",
-        sprite.sheetClassName,
-        `token-sprite--${sprite.kind}-${sanitizeSpriteId(sprite.id)}`,
-        className,
-      )}
+      style={{
+        width: sprite.width,
+        height: sprite.height,
+        backgroundImage: `url("https://images.asyncti4.com/tokens/sheets/${sprite.sheet}.webp?v=4")`,
+        backgroundSize: `${sprite.sheetWidth}px ${sprite.sheetHeight}px`,
+        backgroundPosition: `-${sprite.x}px -${sprite.y}px`,
+        ...style,
+      }}
+      className={cx("token-sprite", className)}
     />
   );
-}
-
-function sanitizeSpriteId(id: string): string {
-  return id
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]/g, "-")
-    .replace(/^-+/, "");
 }
