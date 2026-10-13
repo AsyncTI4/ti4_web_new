@@ -1,21 +1,45 @@
 import { useState, type KeyboardEvent } from "react";
 import { Box } from "@/ds";
 import { IconScale } from "@tabler/icons-react";
-import { LawInPlay } from "@/entities/data/types";
-import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import type { LawInPlay, PlayerData } from "@/entities/data/types";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LawDetailsCard } from "@/domains/cards/components/LawDetailsCard";
 import styles from "./LawCard.module.css";
 
 type Props = {
   law: LawInPlay;
+  /** Lets an elected player read as their name, not only their faction. */
+  playerData?: PlayerData[];
 };
 
-/** A law in play as a sealed row: wax seal, engraved name, one line of text. */
-function LawCard({ law }: Props) {
-  const electedFaction = law.displaysElectedFaction
-    ? law.electedFaction
-    : undefined;
+function Elected({ law, playerData }: Props) {
+  if (law.displaysElectedFaction && law.electedFaction) {
+    const player = playerData?.find((p) => p.faction === law.electedFaction);
+    return (
+      <span className={styles.elected} title={`Elected: ${player?.userName ?? law.electedFaction}`}>
+        <FactionIcon
+          faction={law.electedFaction}
+          factionImageOverride={player?.factionImage}
+          factionImageTypeOverride={player?.factionImageType}
+          alt=""
+          w={18}
+          h={18}
+        />
+        {player && <span>{player.userName}</span>}
+      </span>
+    );
+  }
+  if (!law.electedInfo) return null;
+  return (
+    <span className={styles.elected} title={`Elected: ${law.electedInfo}`}>
+      <span>{law.electedInfo}</span>
+    </span>
+  );
+}
+
+/** A law in play as a sealed row: the seal, its name, what it does, and who or what was elected. */
+function LawCard({ law, playerData }: Props) {
   const mapText = law.mapText?.trim();
   const [opened, setOpened] = useState(false);
   const toggleOpened = () => setOpened((current) => !current);
@@ -38,17 +62,13 @@ function LawCard({ law }: Props) {
           onKeyDown={handleKeyDown}
         >
           <span className={styles.seal} aria-hidden="true">
-            <IconScale size={13} stroke={2} />
+            <IconScale size={14} stroke={1.8} />
           </span>
-          <span className={styles.name}>{law.name}</span>
+          <span className={styles.head}>
+            <span className={styles.name}>{law.name}</span>
+            <Elected law={law} playerData={playerData} />
+          </span>
           {mapText && <span className={styles.text}>{mapText}</span>}
-          {electedFaction && (
-            <CircularFactionIcon
-              faction={electedFaction}
-              size={20}
-              className={styles.elect}
-            />
-          )}
         </Box>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown p={0}>

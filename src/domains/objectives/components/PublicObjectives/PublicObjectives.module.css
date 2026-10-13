@@ -12,6 +12,13 @@
   align-items: start;
 }
 
+.column {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
 .stage {
   display: grid;
   gap: 6px;
@@ -19,39 +26,20 @@
   min-width: 0;
 }
 
-.rows {
-  display: grid;
-  gap: 4px;
-}
-
-.customRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
 .lawGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 4px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 6px;
 }
 
-/* Two stages side by side only while each keeps room for its pills. */
-@container objboard (max-width: 1240px) {
+/* Two stages side by side only while each keeps room for its seat columns. */
+@container objboard (max-width: 960px) {
   .stageGrid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@container scoreboard (max-width: 640px) {
-  .stageGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .customRow {
-    flex-direction: column;
-  }
-
+@container objboard (max-width: 560px) {
   .lawGrid {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -1,0 +1,310 @@
+/*
+ * Objectives as cards on the table. Seats are columns, named once in the
+ * header; every row below is only state. A scored card shows the seat's
+ * faction badge in a lit well; anything else shows progress toward it.
+ */
+.table {
+  --k: var(--ds-sig-stage1);
+  --seat-col: 48px;
+  --cols: minmax(0, 1fr) repeat(var(--seats, 6), var(--seat-col));
+  display: grid;
+  min-width: 0;
+  background: var(--panel-field-flat);
+  border: 1px solid var(--ds-h14);
+  border-radius: var(--ds-r-plate, 3px);
+  overflow: hidden;
+}
+
+.table[data-stage="blue"] {
+  --k: var(--ds-sig-stage2);
+}
+
+.table[data-stage="gray"] {
+  --k: var(--ds-hair-rgb);
+}
+
+.head,
+.row {
+  display: grid;
+  grid-template-columns: var(--cols);
+  align-items: stretch;
+  min-width: 0;
+}
+
+/* Every other seat column carries a faint band so a seat reads straight down. */
+.head > .seat:nth-child(odd),
+.row > .cell:nth-child(odd) {
+  background: rgb(255 255 255 / 0.018);
+}
+
+.head {
+  min-height: 40px;
+  background: linear-gradient(180deg, rgb(var(--k) / 0.07), transparent), var(--ds-ground);
+  border-bottom: 1px solid var(--ds-h22);
+}
+
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  align-self: center;
+  padding: 0 14px;
+  font-family: var(--ds-label-font);
+  font-size: var(--text-label);
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--ds-label-track);
+  text-transform: uppercase;
+  color: color-mix(in oklab, rgb(var(--k)) 55%, var(--ds-ink-hi));
+}
+
+.title small {
+  font-family: var(--font-text);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ds-ink-lo);
+}
+
+.seat {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+}
+
+.row {
+  position: relative;
+  min-height: 50px;
+  width: 100%;
+  text-align: left;
+  border-top: 1px solid var(--ds-h10);
+  cursor: pointer;
+  transition: background-color var(--ds-dur-fast) var(--ds-ease);
+}
+
+.head + .row {
+  border-top: 0;
+}
+
+/* The card's stage, as a short spine at the row's left edge. */
+.row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 0 1px 1px 0;
+  background: rgb(var(--k) / 0.7);
+}
+
+.row:hover {
+  background-color: rgb(255 255 255 / 0.025);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: -2px;
+}
+
+.row[data-static] {
+  min-height: 40px;
+  cursor: default;
+}
+
+.row[data-static]:hover {
+  background-color: transparent;
+}
+
+.text {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 14px 8px 16px;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--text-body);
+  font-weight: var(--weight-title);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--ds-ink-hi);
+}
+
+.req {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--text-data);
+  line-height: 1.35;
+  color: var(--ds-ink);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.value {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 2px;
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: var(--ds-ink);
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 1px var(--ds-h14);
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+}
+
+/* Scored: the faction badge in a softly lit well. A repeat point carries its count. */
+.scored {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 30px;
+  border-radius: 3px;
+  background: rgb(var(--ds-sig-ok) / 0.09);
+  box-shadow: inset 0 0 0 1px rgb(var(--ds-sig-ok) / 0.38);
+}
+
+.scored b {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
+  border-radius: 7px;
+  color: var(--ds-ground);
+  background: rgb(var(--ds-sig-ok));
+  box-shadow: 0 0 0 2px var(--panel-field-flat, var(--ds-ground));
+  font-family: var(--font-data);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.meter {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+}
+
+.count {
+  font-family: var(--font-data);
+  font-size: var(--text-data);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ds-ink);
+}
+
+.count i {
+  font-style: normal;
+  color: var(--ds-ink-lo);
+}
+
+.bar {
+  position: relative;
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ds-socket);
+  box-shadow: inset 0 0 0 1px var(--ds-h10);
+  overflow: hidden;
+}
+
+.bar::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--fill) * 100%);
+  background: var(--ds-ink-lo);
+}
+
+/* Ready to score: the meter is full and lit in the stage's colour. */
+.meter[data-ready] .count {
+  color: var(--ds-ink-hi);
+}
+
+.meter[data-ready] .bar::after {
+  background: rgb(var(--k));
+}
+
+.empty {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ds-h14);
+}
+
+.faceDown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 14px 0 16px;
+  font-size: var(--text-data);
+  color: var(--ds-ink-lo);
+  border-top: 1px solid var(--ds-h10);
+}
+
+.backs {
+  display: flex;
+  gap: 4px;
+}
+
+/* Card backs: hatched in the stage's colour, waiting to be turned over. */
+.backs i {
+  width: 14px;
+  height: 20px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(135deg, rgb(var(--k) / 0.16) 0 2px, transparent 2px 5px);
+  box-shadow: inset 0 0 0 1px rgb(var(--k) / 0.35);
+}
+
+@container objboard (max-width: 560px) {
+  .table {
+    --seat-col: minmax(0, 1fr);
+    --cols: repeat(var(--seats, 6), minmax(0, 1fr));
+  }
+
+  .title,
+  .text {
+    grid-column: 1 / -1;
+  }
+
+  .title {
+    padding: 8px 12px 0;
+  }
+
+  .row {
+    row-gap: 4px;
+    padding-bottom: 8px;
+  }
+
+  .row[data-static] .text {
+    padding-bottom: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+}
