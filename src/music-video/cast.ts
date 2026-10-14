@@ -19,6 +19,10 @@ export type CastUnit = {
   z: number;
 };
 
+/** Centre of the first command token in a tile, tile-local px (the app's CommandCounterStack draws
+ * the 85x75 token at 10,90). The AFK player's token drops here on the destroyer's system. */
+export const COMMAND_SLOT = { x: 10 + 85 / 2, y: 90 + 75 / 2 };
+
 export type CastTile = {
   pos: string;
   /** Tile centre in world px; the board centre (Mecatol) is 0,0. */

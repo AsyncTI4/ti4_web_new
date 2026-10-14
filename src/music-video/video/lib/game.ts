@@ -16,6 +16,9 @@ export type Game = {
   /** World positions of the destroyer and cruiser. */
   dd: Pt;
   cruiser: Pt;
+  /** Centres of their systems. */
+  heroHex: Pt;
+  crushHex: Pt;
   /** The AFK player's home system (ring position + world centre). */
   afkHomePos: string | null;
   afkHome: Pt;
@@ -56,6 +59,8 @@ export function setCast(cast: MusicVideoCast) {
     crushPos: cast.crushPos,
     dd: cast.heroAt,
     cruiser: cast.crushAt,
+    heroHex: center(cast.heroPos),
+    crushHex: center(cast.crushPos),
     afkHomePos: afk.home,
     afkHome,
     afkSeat: afk.stats?.[0] ?? afkHome,

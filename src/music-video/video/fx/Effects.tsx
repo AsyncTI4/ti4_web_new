@@ -80,9 +80,10 @@ export const CommandTokenDrop: React.FC<{ t: number; at: number; x: number; y: n
   const sc = p < 0.68 ? 1.18 - 0.21 * k1 : 0.97 + 0.03 * k2;
   const rot = p < 0.68 ? -10 + 12 * k1 : 2 - 2 * k2;
   return (
-    <div style={{ position: "absolute", left: x - 40 * scale, top: y - 36 * scale, width: 80 * scale, height: 72 * scale, opacity: clamp(p * 3), transform: `translateY(${ty * scale}px) scale(${sc}) rotate(${rot}deg)` }}>
+    <div style={{ position: "absolute", left: x - 42.5 * scale, top: y - 37.5 * scale, width: 85 * scale, height: 75 * scale, opacity: clamp(p * 3), transform: `translateY(${ty * scale}px) scale(${sc}) rotate(${rot}deg)` }}>
+      {/* the app's CommandCounter: the colour's token at its natural 85x75 with the faction symbol 45px tall */}
       <Img src={tokenSrc("command", color)} style={{ width: "100%", height: "100%" }} />
-      <Img src={icon} style={{ position: "absolute", left: "50%", top: "50%", height: 34 * scale, transform: "translate(-50%,-30%)" }} />
+      <Img src={icon} style={{ position: "absolute", left: "50%", top: "50%", height: 45 * scale, transform: "translate(-50%,-30%)" }} />
     </div>
   );
 };

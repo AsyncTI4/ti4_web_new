@@ -16,7 +16,8 @@ import { danceTransform, bob, squash, snapSway } from "../lib/dance";
 import { FONT } from "../lib/fonts";
 import { NEON, UnitType, botSrc, spriteOf, unitSrc } from "../lib/assets";
 import { G, duskOf, glowOf, nameColorOf, neonOf } from "../lib/game";
-import { ringOf } from "../lib/hex";
+import { TILE_H, TILE_W, ringOf } from "../lib/hex";
+import { COMMAND_SLOT } from "../../cast";
 
 const W = (l: number, w: number) => LINES[l].words[w].s;
 const mapDance = (t: number) => ({ index, x }: { index: number; x: number }) =>
@@ -232,12 +233,31 @@ const UnitDossier: React.FC<{ t: number; at: number }> = ({ t, at }) => {
   );
 };
 
+/** Top-left of the activate prompt (about 690x110 on stage): the candidate spot farthest from the
+ * ships and the token, seen from a camera on `cam` at `zoom`. The first spot wins ties. */
+function promptSpot(cam: { x: number; y: number }, zoom: number, avoid: { x: number; y: number }[]) {
+  const spots = [[1030, 290], [1030, 130], [200, 130], [200, 290], [615, 110], [1030, 470], [200, 470]];
+  const marks = avoid.map((p) => ({ x: 960 + (p.x - cam.x) * zoom, y: 540 + (p.y - cam.y) * zoom }));
+  let best = spots[0];
+  let bestGap = -Infinity;
+  for (const [x, y] of spots) {
+    const gap = Math.min(...marks.map((m) => Math.hypot(Math.max(x - m.x, 0, m.x - (x + 690)), Math.max(y - m.y, 0, m.y - (y + 110)))));
+    if (gap > bestGap + 1) {
+      bestGap = gap;
+      best = [x, y];
+    }
+  }
+  return { x: best[0], y: best[1] };
+}
+
 /* ───────────── 1D · "If they'd just activate you, girl, you'd be mine" + build ───────────── */
 export const V1Activate: React.FC<SceneProps> = ({ t }) => {
   const a = 12.45;
-  const { dd: DD_POS, cruiser: CRUISER_POS, hero, afk } = G;
+  const { dd: DD_POS, cruiser: CRUISER_POS, heroHex, hero, afk } = G;
   const buildStart = bt(28);
   const mid = { x: (DD_POS.x + CRUISER_POS.x) / 2, y: (DD_POS.y + CRUISER_POS.y) / 2 + 30 };
+  // The cruiser's move needs the destroyer's system activated: the AFK player's token hangs over its slot there.
+  const slot = { x: heroHex.x + COMMAND_SLOT.x - TILE_W / 2, y: heroHex.y + COMMAND_SLOT.y - TILE_H / 2 };
   const k = kick(t);
   // zoom-out in 8th-note steps during the drum fill
   const steps = Array.from({ length: 8 }, (_, i) => bt(28 + i * 0.5));
@@ -264,8 +284,9 @@ export const V1Activate: React.FC<SceneProps> = ({ t }) => {
     const p = clamp((t - steps[Math.min(litStep, 7)]) / 0.3);
     return { a: 0.35 + 0.65 * (1 - p) + buildP * 0.4, color: [NEON.cyan, NEON.magenta, NEON.yellow, NEON.green, NEON.cyan][r] };
   };
-  // cursor path toward the activate button
-  const btn = { x: 1260, y: 300 };
+  // cursor path toward the activate button, which sits clear of both ships and the token
+  const box = promptSpot(mid, 1.7, [DD_POS, CRUISER_POS, slot, heroHex]);
+  const btn = { x: box.x + 230, y: box.y + 10 };
   const cp = ease.inOutCubic(clamp((t - W(3, 0)) / 0.7));
   const tremble = t > W(3, 3) ? Math.sin(t * 61) * 3 + Math.sin(t * 37) * 2 : 0;
   const cur = { x: lerp(1900, btn.x + 60, cp) + tremble, y: lerp(820, btn.y + 22, cp) + tremble * 0.7 };
@@ -276,18 +297,18 @@ export const V1Activate: React.FC<SceneProps> = ({ t }) => {
       <Stars t={t} drift={10} warp={buildP * 0.8} />
       <World cam={cam}>
         <Board hideUnits={hideLeads()} dance={mapDance(t)} rim={ringLit} />
-        <ActivationGlow x={CRUISER_POS.x} y={CRUISER_POS.y} a={glowA * (1 - uiOut)} />
+        <ActivationGlow x={heroHex.x} y={heroHex.y} a={glowA * (1 - uiOut)} />
         <Ship color={afk.color} unit="ca" x={CRUISER_POS.x} y={CRUISER_POS.y + Math.sin(t * 2.2) * 5} scale={2.2} transform={`rotate(${Math.sin(t * 1.3) * 3}deg)`} glow={glowOf(afk.hex, 0.85)} glowSize={14} />
-        <CommandTokenDrop t={t} at={W(3, 3)} x={CRUISER_POS.x - 95} y={CRUISER_POS.y - 40} color={afk.color} icon={afk.icon} dur={1.4} stallAt={0.42 + Math.sin(t * 40) * 0.01} />
+        <CommandTokenDrop t={t} at={W(3, 3)} x={slot.x} y={slot.y} color={afk.color} icon={afk.icon} dur={1.4} stallAt={0.42 + Math.sin(t * 40) * 0.01} />
         <Ship color={hero.color} unit="dd_eyes" x={DD_POS.x} y={DD_POS.y} scale={2.2} transform={`translateY(${bob(t, 10) - jump * 120}px) rotate(${snapSway(t, 7) + jump * 20}deg) scale(${1 + jump * 0.5})`} glow={glowOf(hero.hex, 0.7)} glowSize={12} />
         <HeartBurst t={t} emits={[mineAt, mineAt + 0.05, mineAt + 0.1, mineAt + 0.16, mineAt + 0.22, mineAt + 0.3]} x={DD_POS.x} y={DD_POS.y - 40} spread={150} size={50} rise={320} seed={9} />
         <Shockwave t={t} at={mineAt} x={DD_POS.x} y={DD_POS.y} color="#ff4fa8" size={1.6} />
       </World>
       <div style={{ position: "absolute", left: btn.x - 230, top: btn.y - 10, opacity: (t > W(3, 0) ? clamp((t - W(3, 0)) / 0.2) : 0) * (1 - uiOut), transform: `scale(${1 + (t > W(3, 3) ? Math.sin(t * 30) * 0.01 : 0)})` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 26px", background: "linear-gradient(180deg,#1b2436,#121a2c)", border: "1px solid rgba(103,232,249,.55)", borderRadius: 6, boxShadow: glowOn ? "0 0 30px rgba(103,232,249,.55)" : "0 10px 30px rgba(0,0,0,.5)", fontFamily: FONT.display, color: "#e6f7ff", fontSize: 28, letterSpacing: "0.1em" }}>
-          <span style={{ color: NEON.cyan }}>▶</span> TACTICAL ACTION · ACTIVATE {G.crushPos}
+          <span style={{ color: NEON.cyan }}>▶</span> TACTICAL ACTION · ACTIVATE {G.heroPos}
         </div>
-        <div style={{ marginTop: 10, fontFamily: FONT.mono, fontSize: 18, color: "#93c5fd", opacity: 0.85 }}>awaiting {afk.name}…</div>
+        <div style={{ marginTop: 10, fontFamily: FONT.mono, fontSize: 18, color: "#93c5fd", textShadow: "0 1px 2px #000, 0 0 8px #000, 0 0 14px #000" }}>awaiting {afk.name}…</div>
       </div>
       {uiOut < 1 && t > W(3, 0) && <Cursor x={cur.x} y={cur.y} scale={1.3} />}
     </Fill>

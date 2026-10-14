@@ -229,7 +229,7 @@ export const Breakdown: React.FC<SceneProps> = ({ t, from }) => {
         <SleepingFlagship t={t} x={1660} y={860} scale={3} opacity={0.9} color={G.afk.color} glow={glowOf(G.afk.hex, 0.55)} />
         <LyingPhone t={t} x={1240} y={915} w={260} pings={PINGS} />
       </div>
-      <div style={{ position: "absolute", left: lerp(330, 960, zoomIn), top: lerp(540, 520, zoomIn), transform: `translate(-50%, -50%) translate(${shakeX}px, ${lerp(0, 230, zoomIn) * 0}px) scale(${panelScale})`, transformOrigin: zoomIn > 0 ? "50% 64%" : "50% 50%" }}>
+      <div style={{ position: "absolute", left: lerp(390, 960, zoomIn), top: lerp(540, 520, zoomIn), transform: `translate(-50%, -50%) translate(${shakeX}px, ${lerp(0, 230, zoomIn) * 0}px) scale(${panelScale})`, transformOrigin: zoomIn > 0 ? "50% 64%" : "50% 50%" }}>
         <TurnPanel t={t} timer={timer} actingPulse={pk} />
       </div>
       {PINGS.map((p, i) => (

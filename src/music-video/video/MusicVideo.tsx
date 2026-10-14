@@ -8,22 +8,11 @@ import { Subtitles } from "./components/Subtitles";
 import { PostFX } from "./fx/PostFX";
 import { BleedContext, Fill, STAGE_H, STAGE_W } from "./lib/stage";
 
-/** Big hits that get an RGB channel split. */
+/** Big hits that get an RGB-split jolt. The split is faked with a sideways jump and red/cyan edge
+ * fringes: a real channel-split SVG filter over the whole stage made Chrome's GPU compositor tear
+ * rectangles out of the blurred and will-change layers underneath, so those hits flickered. */
 const CHROMA_HITS = [bt(32), bt(64), bt(80), bt(96), bt(128), bt(152), bt(156), bt(160), bt(164), bt(168)];
-
-const ChromaFilter: React.FC<{ amount: number }> = ({ amount }) => (
-  <svg width={0} height={0} style={{ position: "absolute" }}>
-    <filter id="chroma" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
-      <feOffset in="r" dx={amount} dy={0} result="r2" />
-      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g" />
-      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b" />
-      <feOffset in="b" dx={-amount} dy={amount * 0.3} result="b2" />
-      <feBlend in="r2" in2="g" mode="screen" result="rg" />
-      <feBlend in="rg" in2="b2" mode="screen" />
-    </filter>
-  </svg>
-);
+const FRINGE = "linear-gradient(90deg, rgba(255,40,90,.6), rgba(255,40,90,0) 16%, rgba(0,220,255,0) 84%, rgba(0,220,255,.6))";
 
 export type MusicVideoProps = { bleedX?: number; bleedY?: number };
 
@@ -36,15 +25,18 @@ export const MusicVideo: React.FC<MusicVideoProps> = ({ bleedX = 0, bleedY = 0 }
   const sn = rap ? snare(t, 0.06) : 0;
   const hit = CHROMA_HITS.map((h) => t - h).filter((d) => d >= 0 && d < 0.2).sort((a, b) => a - b)[0];
   const chroma = hit === undefined ? 0 : Math.round(18 * Math.exp(-hit / 0.06));
-  const twitch = sn > 0.15 ? `translate(${(frame % 2 ? 1 : -1) * sn * 5}px, ${(frame % 3 ? -1 : 1) * sn * 3}px)` : undefined;
+  const side = frame % 2 ? 1 : -1;
+  const shiftX = (sn > 0.15 ? side * sn * 5 : 0) + (chroma > 1 ? side * chroma * 0.6 : 0);
+  const shiftY = sn > 0.15 ? (frame % 3 ? -1 : 1) * sn * 3 : 0;
+  // a hair of zoom during a hit keeps the jump from baring the window edge
+  const twitch = shiftX || shiftY ? `translate(${shiftX}px, ${shiftY}px)${chroma > 1 ? ` scale(${1 + chroma * 0.0008})` : ""}` : undefined;
   return (
     <BleedContext.Provider value={bleed}>
       <AbsoluteFill style={{ background: "#03050b", overflow: "hidden" }}>
         <Audio src={assetUrl("audio/song.m4a")} endAt={Math.ceil(AUDIO_SECONDS * FPS)} />
-        {chroma > 1 && <ChromaFilter amount={chroma} />}
         {/* The 1920x1080 stage every scene is laid out on, centred; scene layers bleed out to the window edges. */}
         <div style={{ position: "absolute", left: bleedX, top: bleedY, width: STAGE_W, height: STAGE_H }}>
-          <Fill style={{ transform: twitch, filter: chroma > 1 ? "url(#chroma)" : undefined }}>
+          <Fill style={{ transform: twitch }}>
             {SCENES.filter((s) => t >= s.from && t < s.to).map((s) => (
               <Fill key={s.id} style={{ zIndex: s.z ?? 0 }}>
                 <s.C t={t} from={s.from} to={s.to} />
@@ -52,6 +44,7 @@ export const MusicVideo: React.FC<MusicVideoProps> = ({ bleedX = 0, bleedY = 0 }
             ))}
           </Fill>
         </div>
+        {chroma > 1 && <AbsoluteFill style={{ background: FRINGE, mixBlendMode: "screen", opacity: chroma / 18, pointerEvents: "none" }} />}
         {/* HUD, subtitles and grain hug the real window edges. */}
         <TurnTimer t={t} visible={!SCENES.some((s) => (s.id === "c1-bot" || s.id === "c2-bot" || s.id === "v3-phone") && t >= s.from - 0.1 && t < s.to)} />
         <Subtitles t={t} />

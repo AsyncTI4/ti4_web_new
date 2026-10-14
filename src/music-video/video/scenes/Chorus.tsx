@@ -237,10 +237,11 @@ const ChorusWait: React.FC<SceneProps & { v: V }> = ({ t, from, v }) => {
   const { c } = L(v);
   const k = kick(t);
   const zoomIn = ease.outCubic(clamp((t - from) / 0.6));
-  const { dd: DD_POS, hero, afk, heroPos } = G;
-  const cam = { x: DD_POS.x + 40, y: DD_POS.y + 10, zoom: lerp(1.6, 2.35, zoomIn) + (t - from) * 0.04, rot: sway(t, 1.5, 2) };
+  // laid out around the middle of the destroyer's system, wherever the destroyer itself sits on the map
+  const { heroHex: HEX, hero, afk, heroPos } = G;
+  const cam = { x: HEX.x + 40, y: HEX.y + 10, zoom: lerp(1.6, 2.35, zoomIn) + (t - from) * 0.04, rot: sway(t, 1.5, 2) };
   const savedAt = W(c, 6);
-  const ghost = { x: DD_POS.x + 95, y: DD_POS.y - 35 };
+  const ghost = { x: HEX.x + 95, y: HEX.y - 35 };
   const ghostA = 0.35 + 0.25 * Math.sin(t * 6) + k * 0.2;
   const sign = ease.outBack(clamp((t - savedAt) / 0.3), 2);
   const choir: readonly string[] = v === 2 ? CHOIR : [];
@@ -253,21 +254,21 @@ const ChorusWait: React.FC<SceneProps & { v: V }> = ({ t, from, v }) => {
           <Board hideUnits={hideLeads()} dance={partyDance(t, 0.6)} tileFilter={(pos) => (pos === heroPos ? "brightness(1.1)" : "brightness(0.5) saturate(0.7)")} />
           {choir.map((col, i) => {
             const ang = Math.PI * (0.8 + (i / (choir.length - 1)) * 1.4);
-            const x = DD_POS.x + Math.cos(ang) * 150;
-            const y = DD_POS.y + Math.sin(ang) * 110 - 10;
+            const x = HEX.x + Math.cos(ang) * 150;
+            const y = HEX.y + Math.sin(ang) * 110 - 10;
             return <Ship key={col} color={col} unit="dd" x={x} y={y} scale={1.25} transform={`translateY(${bob(t, 8, 2, i * 0.08)}px) rotate(${sway(t, 14, 2, i * 0.08)}deg)`} opacity={clamp((t - from - 0.1 - i * 0.05) / 0.3)} />;
           })}
-          <div style={{ position: "absolute", left: DD_POS.x - 240, top: DD_POS.y - 260, width: 480, height: 480, background: "radial-gradient(closest-side, rgba(255,80,180,.32), transparent)", mixBlendMode: "screen" }} />
+          <div style={{ position: "absolute", left: HEX.x - 240, top: HEX.y - 260, width: 480, height: 480, background: "radial-gradient(closest-side, rgba(255,80,180,.32), transparent)", mixBlendMode: "screen" }} />
           <Ship color={afk.color} unit="ca" x={ghost.x} y={ghost.y} scale={1.9} opacity={ghostA} filter={`brightness(0) invert(1) drop-shadow(0 0 3px ${neonOf(afk.hex)}) drop-shadow(0 0 10px #ff2bd6)`} />
           <VelvetRope x={ghost.x} y={ghost.y + 70} t={t} />
-          <Ship color={hero.color} unit="dd_eyes" x={DD_POS.x - 55} y={DD_POS.y + 25} scale={2.0} transform={`translateY(${bob(t, 8, 2)}px) rotate(${sway(t, 12, 2)}deg)`} glow="rgba(255,90,170,.8)" glowSize={10 + k * 10} />
-          <HeartBurst t={t} emits={[0, 1, 2, 3, 4, 5, 6, 7].map((i) => from + 0.3 + i * 0.5)} x={DD_POS.x - 55} y={DD_POS.y - 20} spread={50} size={28} rise={170} seed={21} />
+          <Ship color={hero.color} unit="dd_eyes" x={HEX.x - 55} y={HEX.y + 25} scale={2.0} transform={`translateY(${bob(t, 8, 2)}px) rotate(${sway(t, 12, 2)}deg)`} glow="rgba(255,90,170,.8)" glowSize={10 + k * 10} />
+          <HeartBurst t={t} emits={[0, 1, 2, 3, 4, 5, 6, 7].map((i) => from + 0.3 + i * 0.5)} x={HEX.x - 55} y={HEX.y - 20} spread={50} size={28} rise={170} seed={21} />
           {sign > 0 && (
             <div style={{ position: "absolute", left: ghost.x - 120, top: ghost.y - 150, width: 240, transform: `scale(${sign}) rotate(${-4 + Math.sin(t * 5) * 2}deg)`, transformOrigin: "50% 100%", textAlign: "center", fontFamily: FONT.display, fontSize: 24, color: "#1a0f00", background: "linear-gradient(180deg,#ffe58a,#f0b232)", borderRadius: 8, padding: "8px 10px", boxShadow: "0 0 24px rgba(255,200,60,.8)", letterSpacing: "0.06em" }}>
               RESERVED<div style={{ fontSize: 15, fontFamily: FONT.mono }}>for: cruiser ♥</div>
             </div>
           )}
-          <SparkleField t={t} seed={5} count={14} w={420} h={300} x={DD_POS.x + 20} y={DD_POS.y} color="#ffc8f0" size={12} intensity={0.8} />
+          <SparkleField t={t} seed={5} count={14} w={420} h={300} x={HEX.x + 20} y={HEX.y} color="#ffc8f0" size={12} intensity={0.8} />
         </World>
       </Fill>
     </Whip>
@@ -305,9 +306,9 @@ const ChorusTurn: React.FC<SceneProps & { v: V }> = ({ t, to, v }) => {
   const tf = frozen ? breakAt : t;
   const snapAt = v === 1 ? spaceAt + 0.5 : Infinity;
   const snapP = clamp((tf - snapAt) / 0.25);
-  const { dd: DD_POS, cruiser: CRUISER_POS, hero, afk, heroPos, crushPos } = G;
+  const { heroHex: HEX, cruiser: CRUISER_POS, hero, afk, heroPos, crushPos } = G;
   const from2 = [CRUISER_POS.x, CRUISER_POS.y];
-  const to2 = [DD_POS.x + 95, DD_POS.y - 35];
+  const to2 = [HEX.x + 95, HEX.y - 35];
   // the flight loops out behind the cruiser and swoops in from above, whatever side the systems touch on
   const dist = Math.hypot(to2[0] - from2[0], to2[1] - from2[1]) || 1;
   const u = [(to2[0] - from2[0]) / dist, (to2[1] - from2[1]) / dist];
@@ -318,7 +319,7 @@ const ChorusTurn: React.FC<SceneProps & { v: V }> = ({ t, to, v }) => {
   const pos = bezier(from2, c1, c2, to2, snapP > 0 ? fp * (1 - ease.inExpo(snapP)) : fp);
   const glitchAmt = v === 1 ? Math.max(clamp(1 - Math.abs(tf - snapAt - 0.1) / 0.15), clamp((t - (to - 0.35)) / 0.35)) : 0;
   const camZ = lerp(0.95, 1.2, ease.inOutCubic(clamp((tf - moveAt) / 2)));
-  const cam = { x: (CRUISER_POS.x + DD_POS.x) / 2 + 30, y: (CRUISER_POS.y + DD_POS.y) / 2 - 90, zoom: camZ * (1 + (frozen ? 0 : k * 0.02)), rot: frozen ? 0 : Math.sin(t) * 1 };
+  const cam = { x: (CRUISER_POS.x + HEX.x) / 2 + 30, y: (CRUISER_POS.y + HEX.y) / 2 - 90, zoom: camZ * (1 + (frozen ? 0 : k * 0.02)), rot: frozen ? 0 : Math.sin(t) * 1 };
   const freezeA = frozen ? clamp((t - breakAt) / 0.2) : 0;
   return (
     <Fill style={{ background: "#03050b" }}>
@@ -332,7 +333,7 @@ const ChorusTurn: React.FC<SceneProps & { v: V }> = ({ t, to, v }) => {
               <CurvePath t={tf} pts={[from2, c1, c2, to2]} reveal={ease.outCubic(clamp((tf - moveAt) / 0.45))} color={NEON.cyan} width={7} />
               <Ship color={afk.color} unit="ca" x={CRUISER_POS.x} y={CRUISER_POS.y} scale={2.0} glow={glowOf(afk.hex, 0.8)} glowSize={12} transform={`rotate(${Math.sin(t * 1.3) * 3}deg)`} />
               {flyP > 0 && <Ship color={afk.color} unit="ca" x={pos.x} y={pos.y} scale={2.0} heading={pos.angle} opacity={0.55} filter="brightness(1.6) saturate(0.5)" glow="rgba(103,232,249,.95)" glowSize={16} />}
-              <Ship color={hero.color} unit="dd_eyes" x={DD_POS.x - 40} y={DD_POS.y + 25} scale={2.0} transform={danceTransform(tf, { amp: 12, deg: 10 })} glow={glowOf(hero.hex, 0.7)} glowSize={12} />
+              <Ship color={hero.color} unit="dd_eyes" x={HEX.x - 40} y={HEX.y + 25} scale={2.0} transform={danceTransform(tf, { amp: 12, deg: 10 })} glow={glowOf(hero.hex, 0.7)} glowSize={12} />
             </World>
           </Fill>
         </Glitch>

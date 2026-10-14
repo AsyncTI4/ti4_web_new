@@ -11,7 +11,7 @@ import { getPlanetData, getPlanetPositionsBySystemId } from "@/entities/lookup/p
 import { getTileById } from "@/entities/lookup/systems";
 import { getUnitSprite } from "@/shared/ui/Unit/unitSprites";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
-import type { CastPlayer, CastTile, CastUnit, MusicVideoCast } from "@/music-video/cast";
+import { COMMAND_SLOT, type CastPlayer, type CastTile, type CastUnit, type MusicVideoCast } from "@/music-video/cast";
 
 /*
  * Turns the live game into the music video's cast:
@@ -134,21 +134,25 @@ export function musicVideoEligible(data: GameData | undefined, gameState: GameSt
   return tiles.length >= 19 && stacks >= Math.max(60, 11 * seated.length) && occupied >= Math.max(12, Math.ceil(tiles.length * 0.4));
 }
 
-/** A spot in the tile clear of planets, for a lead placed into a system it wasn't in. */
-function openSpot(data: GameData, pos: string): { x: number; y: number } {
+/** Where a lead sits in its system: clear of the planets and the command token slot, as near the
+ * middle as that allows. The leads are drawn at about twice board size, so they need the room. */
+function leadSpot(data: GameData, pos: string): { x: number; y: number } {
   const systemId = data.tiles[pos]?.systemId;
   const planets = systemId ? Object.values(getPlanetPositionsBySystemId(systemId)) : [];
-  if (!planets.length) return { x: CX, y: CY };
+  const blockers = [...planets.map((p) => ({ x: p.x, y: p.y, r: 70 })), { ...COMMAND_SLOT, r: 50 }];
   let best = { x: CX, y: CY };
   let bestScore = -Infinity;
-  for (const r of [0, 60, 95]) {
-    for (let a = 0; a < 360; a += r ? 30 : 360) {
-      const rad = (a * Math.PI) / 180;
-      const p = { x: CX + Math.cos(rad) * r * 1.1, y: CY + Math.sin(rad) * r * 0.9 };
-      const score = Math.min(...planets.map((q) => Math.hypot(q.x - p.x, q.y - p.y))) - r * 0.25;
+  for (let dy = -70; dy <= 70; dy += 10) {
+    for (let dx = -100; dx <= 100; dx += 10) {
+      // keep the whole ship inside the hex's slanted sides
+      if (Math.abs(dx) + Math.abs(dy) * 0.58 > 98) continue;
+      const x = CX + dx;
+      const y = CY + dy;
+      const clear = Math.min(...blockers.map((b) => Math.hypot(b.x - x, b.y - y) - b.r));
+      const score = Math.min(clear, 70) - Math.hypot(dx, dy) * 0.2;
       if (score > bestScore) {
         bestScore = score;
-        best = p;
+        best = { x, y };
       }
     }
   }
@@ -274,7 +278,6 @@ export function buildMusicVideoCast(
 
   const candidates = board.tiles.map((t) => t.pos).filter((pos) => ordinary(pos) && neighbours(pos).length);
   let heroPos: string | undefined = shuffle(candidates.filter((pos) => lone(pos, hero, "dd")), rng)[0];
-  const heroAlready = !!heroPos;
   if (!heroPos) {
     const empty = candidates.filter(isEmpty);
     heroPos = empty.length
@@ -289,16 +292,12 @@ export function buildMusicVideoCast(
     loneCruiser ?? pickBest(around, (pos) => (isEmpty(pos) ? 10 : -board.byPos.get(pos)!.units.length) + planetless(pos));
   if (!crushPos) return null;
 
+  // Each lead is alone in its system (found that way, or the system is cleared for it) and moved to
+  // the system's most open spot.
   const heroTile = board.byPos.get(heroPos)!;
   const crushTile = board.byPos.get(crushPos)!;
-  if (!heroAlready) {
-    const spot = openSpot(data, heroPos);
-    heroTile.units = [{ unit: "dd", count: 1, color: players[hero].color, owner: hero, ...spot, z: getUnitZIndex("dd") }];
-  }
-  if (!loneCruiser) {
-    const spot = openSpot(data, crushPos);
-    crushTile.units = [{ unit: "ca", count: 1, color: players[afk].color, owner: afk, ...spot, z: getUnitZIndex("ca") }];
-  }
+  heroTile.units = [{ unit: "dd", count: 1, color: players[hero].color, owner: hero, ...leadSpot(data, heroPos), z: getUnitZIndex("dd") }];
+  crushTile.units = [{ unit: "ca", count: 1, color: players[afk].color, owner: afk, ...leadSpot(data, crushPos), z: getUnitZIndex("ca") }];
   const worldOf = (tile: CastTile) => ({ x: tile.x + tile.units[0].x - CX, y: tile.y + tile.units[0].y - CY });
 
   return {
