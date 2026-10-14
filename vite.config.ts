@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 
@@ -8,6 +8,21 @@ const ReactCompilerConfig = {
   sources: (filename: string) => !filename.includes("/src/music-video/"),
 };
 
+/*
+ * Rollup's property-path tree-shaking spends ~5 minutes analysing react-dom's single-file
+ * production bundle (89% of the build), only to keep nearly all of it. Including React whole
+ * cuts the build to ~1 minute with byte-identical output.
+ */
+const includeReactWhole: Plugin = {
+  name: "include-react-whole",
+  enforce: "post",
+  transform(code, id) {
+    if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) {
+      return { code, map: null, moduleSideEffects: "no-treeshake" };
+    }
+  },
+};
+
 export default defineConfig({
   plugins: [
     react({
@@ -15,6 +30,7 @@ export default defineConfig({
         plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
       },
     }),
+    includeReactWhole,
   ],
   resolve: {
     alias: {
