@@ -21,6 +21,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import MapTogglePage from "./pages/MapTogglePage";
 import { isMobileDevice } from "./utils/isTouchDevice";
 import { getPortalRoot } from "./ds";
+import { scheduleMusicVideoPrefetch } from "./domains/music-video";
 
 const queryClient = new QueryClient();
 
@@ -124,3 +125,6 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
+
+/* Background-downloads the music video for the map toolbar button (desktop only). */
+scheduleMusicVideoPrefetch();

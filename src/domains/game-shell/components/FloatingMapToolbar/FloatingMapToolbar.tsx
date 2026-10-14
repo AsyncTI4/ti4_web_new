@@ -5,6 +5,7 @@ import cx from "clsx";
 import { GameEventPanel } from "@/domains/game-shell/components/GameEventPanel";
 import { useUnreadEventCount } from "@/domains/game-shell/components/GameEventPanel/sinceLastTurn";
 import { SecretHand } from "@/domains/game-shell/components/SecretHand";
+import { MusicVideoButton } from "@/domains/music-video";
 import { usePlayerHand } from "@/domains/game-shell/components/SecretHand/usePlayerHand";
 import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
 import { useSettingsStore } from "@/state/appStore";
@@ -195,12 +196,15 @@ export function FloatingMapToolbar({
   const renderedPanel = openPanel ?? lastPanel;
 
   const eventsButton = (
-    <EventsButton
-      gameId={gameId}
-      open={openPanel === "events"}
-      panelId={panelId}
-      onClick={() => togglePanel("events")}
-    />
+    <>
+      <EventsButton
+        gameId={gameId}
+        open={openPanel === "events"}
+        panelId={panelId}
+        onClick={() => togglePanel("events")}
+      />
+      <MusicVideoButton gameId={gameId} />
+    </>
   );
 
   return (

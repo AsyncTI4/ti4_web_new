@@ -1,0 +1,175 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  overflow: hidden;
+}
+
+/* Darkness pooling out from the button over the (already dimmed) live board. */
+.dim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ox) var(--oy), rgba(4, 8, 20, 0.15), rgba(2, 4, 12, 0.7) 70%);
+  animation: dimIn 700ms ease-out both;
+}
+
+.root[data-phase="closing"] .dim {
+  animation: dimOut 600ms ease-in both;
+}
+
+@keyframes dimIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dimOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* The tactical activation glow from MapTile.module.css, rippled across a hex lattice. */
+.hexes {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(103, 232, 249, 0.85)) drop-shadow(0 0 14px rgba(59, 130, 246, 0.5));
+}
+
+.hexes polygon {
+  fill: rgba(103, 232, 249, 0.06);
+  stroke: rgba(165, 243, 252, 0.98);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  opacity: 0;
+  animation: hexWave 700ms ease-out both;
+}
+
+.hexes[data-waiting] polygon {
+  animation: hexIdle 1.6s ease-in-out infinite;
+}
+
+.root[data-phase="playing"] .hexes {
+  display: none;
+}
+
+@keyframes hexWave {
+  0% { opacity: 0; transform-box: fill-box; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes hexIdle {
+  0%, 100% { opacity: 0.08; }
+  50% { opacity: 0.45; }
+}
+
+/* The animation bursts out of the toolbar button. */
+.frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  clip-path: circle(0px at var(--ox) var(--oy));
+  transition: clip-path 1000ms cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.frame[data-revealed] {
+  clip-path: circle(calc(var(--cover) + 40px) at var(--ox) var(--oy));
+}
+
+.root[data-phase="closing"] .frame {
+  clip-path: circle(0px at var(--ox) var(--oy));
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+/* Glowing edge riding the reveal. */
+.ring {
+  position: absolute;
+  left: var(--ox);
+  top: var(--oy);
+  width: calc(var(--cover) * 2 + 80px);
+  height: calc(var(--cover) * 2 + 80px);
+  margin: calc(var(--cover) * -1 - 40px) 0 0 calc(var(--cover) * -1 - 40px);
+  border-radius: 50%;
+  border: 3px solid rgba(165, 243, 252, 0.95);
+  box-shadow: 0 0 24px rgba(103, 232, 249, 0.9), inset 0 0 24px rgba(103, 232, 249, 0.6);
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.ring[data-revealed] {
+  animation: ringOut 1000ms cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+
+.root[data-phase="closing"] .ring {
+  animation: ringIn 700ms cubic-bezier(0.6, 0, 0.4, 1) both;
+}
+
+@keyframes ringOut {
+  0% { transform: scale(0); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes ringIn {
+  0% { transform: scale(1); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: scale(0); opacity: 1; }
+}
+
+.progress {
+  position: absolute;
+  left: calc(var(--ox) - 32px);
+  top: calc(var(--oy) - 32px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.progressTrack {
+  fill: none;
+  stroke: rgba(103, 232, 249, 0.18);
+  stroke-width: 4;
+}
+
+.progressValue {
+  fill: none;
+  stroke: #67e8f9;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 163;
+  filter: drop-shadow(0 0 6px #67e8f9);
+  transition: stroke-dashoffset 160ms linear;
+}
+
+/* Always on screen, small and quiet, for anyone who isn't feeling it. */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: #e8ecff;
+  background: rgba(10, 12, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 150ms ease-out, background 150ms ease-out;
+}
+
+.close:hover,
+.close:focus-visible {
+  opacity: 1;
+  background: rgba(30, 34, 56, 0.92);
+}
+
+.root[data-phase="closing"] .close {
+  opacity: 0;
+}
