@@ -19,6 +19,7 @@ import {
 } from "@/domains/player/components/Tech/TechGridShared";
 import { PhantomTech } from "@/domains/player/components/Tech/PhantomTech";
 import { Nombox } from "@/domains/player/components/composition/Nombox";
+import { OmenDice } from "@/domains/player/components/OmenDice";
 import { getTechData } from "@/entities/lookup/tech";
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
@@ -226,6 +227,7 @@ export function PlayerCardDeck({ playerData }: Props) {
               ml="xs"
             />
           )}
+          <OmenDice dice={playerData.omenDice} />
         </Box>
       </Compartment>
 

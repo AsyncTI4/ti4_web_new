@@ -1,0 +1,14 @@
+/* Omen dice stand as tall as the planet cards beside them. */
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.die {
+  display: block;
+  width: 50px;
+  height: 150px;
+  flex: none;
+  object-fit: contain;
+}

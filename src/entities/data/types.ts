@@ -604,6 +604,9 @@ export type PlayerData = {
   // nekro-specific properties (Thunder's Edge)
   valefarZTargets?: string[];
 
+  // myko-mentori-specific properties (Divination omen dice results)
+  omenDice?: number[];
+
   hasZeroToken?: boolean;
 };
 

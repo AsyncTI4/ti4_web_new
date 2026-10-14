@@ -14,6 +14,7 @@ import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPla
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { ResourceInfluenceCompact } from "@/domains/player/components/ResourceInfluenceTable";
 import { Nombox } from "@/domains/player/components/composition/Nombox";
+import { OmenDice } from "@/domains/player/components/OmenDice";
 import { StrategyCard } from "@/domains/player/components/StrategyCard";
 import { NeedsToFollow } from "@/domains/player/components/NeedsToFollow";
 import { Neighbors } from "@/domains/player/components/Neighbors";
@@ -203,6 +204,7 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
   const factionTechs = showLoadout ? allNotResearchedFactionTechs : [];
   const hasCapturedUnits = player.nombox && Object.keys(player.nombox).length > 0;
   const hasPlots = Array.isArray(player.plotCards) && player.plotCards.length > 0;
+  const hasOmenDice = (playerData.omenDice?.length ?? 0) > 0;
 
   return (
     <div
@@ -365,6 +367,11 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
             ghostWormholesReinf={player.ghostWormholesReinf}
             galvanizeTokensReinf={player.galvanizeTokensReinf}
           />
+        )}
+        {hasOmenDice && (
+          <div className={styles.extra}>
+            <OmenDice dice={playerData.omenDice} />
+          </div>
         )}
         {hasPlots && (
           <div className={styles.extra}>
