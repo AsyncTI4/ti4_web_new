@@ -1,0 +1,1 @@
+export { OmenDice } from "./OmenDice";
