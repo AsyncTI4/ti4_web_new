@@ -69,10 +69,16 @@ function Lens({
 function LensToolbar({
   showKeyboardButton = true,
   showSettingsButton = true,
+  onCardsClick,
+  onEventsClick,
   onTryDecalsClick,
 }: {
   showKeyboardButton?: boolean;
   showSettingsButton?: boolean;
+  /** Event log and hand on the non-map desktop tabs, where the floating map
+      toolbar that carries them is not shown. */
+  onCardsClick?: () => void;
+  onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   const game = useGameData();
@@ -161,6 +167,16 @@ function LensToolbar({
         </Lens>
       </Box>
       <Box className={classes.utilities} role="toolbar" aria-label="Map tools">
+        {onEventsClick && (
+          <Lens label="Event log" onClick={onEventsClick}>
+            <IconHistory size={LENS_ICON_SIZE} />
+          </Lens>
+        )}
+        {onCardsClick && (
+          <Lens label="Your cards" onClick={onCardsClick}>
+            <IconCards size={LENS_ICON_SIZE} />
+          </Lens>
+        )}
         {onTryDecalsClick && (
           <Lens label="Try unit decals" onClick={onTryDecalsClick}>
             <IconSticker size={LENS_ICON_SIZE} />
@@ -222,29 +238,14 @@ function DesktopTabsControls({
   onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
-  const hasPanelButtons = !!(onEventsClick || onCardsClick);
   return (
     <>
-      <LensToolbar onTryDecalsClick={onTryDecalsClick} />
+      <LensToolbar
+        onCardsClick={onCardsClick}
+        onEventsClick={onEventsClick}
+        onTryDecalsClick={onTryDecalsClick}
+      />
       <div className={classes.spacer} />
-      {hasPanelButtons && (
-        <Box
-          className={classes.panelButtons}
-          role="toolbar"
-          aria-label="Game panels"
-        >
-          {onEventsClick && (
-            <Lens label="Event log" onClick={onEventsClick}>
-              <IconHistory size={LENS_ICON_SIZE} />
-            </Lens>
-          )}
-          {onCardsClick && (
-            <Lens label="Your cards" onClick={onCardsClick}>
-              <IconCards size={LENS_ICON_SIZE} />
-            </Lens>
-          )}
-        </Box>
-      )}
       <Group gap={4} mr={14} wrap="nowrap" className={classes.links}>
         <DiscordLinks />
       </Group>
