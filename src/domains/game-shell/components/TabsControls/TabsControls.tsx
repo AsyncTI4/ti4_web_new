@@ -214,14 +214,37 @@ function DiscordLinks() {
 }
 
 function DesktopTabsControls({
+  onCardsClick,
+  onEventsClick,
   onTryDecalsClick,
 }: {
+  onCardsClick?: () => void;
+  onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
+  const hasPanelButtons = !!(onEventsClick || onCardsClick);
   return (
     <>
       <LensToolbar onTryDecalsClick={onTryDecalsClick} />
       <div className={classes.spacer} />
+      {hasPanelButtons && (
+        <Box
+          className={classes.panelButtons}
+          role="toolbar"
+          aria-label="Game panels"
+        >
+          {onEventsClick && (
+            <Lens label="Event log" onClick={onEventsClick}>
+              <IconHistory size={LENS_ICON_SIZE} />
+            </Lens>
+          )}
+          {onCardsClick && (
+            <Lens label="Your cards" onClick={onCardsClick}>
+              <IconCards size={LENS_ICON_SIZE} />
+            </Lens>
+          )}
+        </Box>
+      )}
       <Group gap={4} mr={14} wrap="nowrap" className={classes.links}>
         <DiscordLinks />
       </Group>
@@ -301,6 +324,8 @@ export function TabsControls({
   onMenuClick,
   onCardsClick,
   onEventsClick,
+  onDesktopCardsClick,
+  onDesktopEventsClick,
   onTryDecalsClick,
 }: {
   onMenuClick?: () => void;
@@ -308,12 +333,20 @@ export function TabsControls({
   onCardsClick?: () => void;
   /** Shows the event log button in the phone controls when given. */
   onEventsClick?: () => void;
+  /** Shows the hand button in the desktop rail when given. */
+  onDesktopCardsClick?: () => void;
+  /** Shows the event log button in the desktop rail when given. */
+  onDesktopEventsClick?: () => void;
   onTryDecalsClick?: () => void;
 }) {
   return (
     <>
       <Box visibleFrom="sm" style={{ display: "contents" }}>
-        <DesktopTabsControls onTryDecalsClick={onTryDecalsClick} />
+        <DesktopTabsControls
+          onCardsClick={onDesktopCardsClick}
+          onEventsClick={onDesktopEventsClick}
+          onTryDecalsClick={onTryDecalsClick}
+        />
       </Box>
       {onMenuClick && (
         <Box hiddenFrom="sm" style={{ display: "contents" }}>

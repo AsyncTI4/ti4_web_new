@@ -16,8 +16,8 @@ type Props = {
 };
 
 /**
- * The player's hand on a phone, where the floating map toolbar that carries
- * it on desktop is not shown. It rises from the bottom of the visible screen,
+ * The player's hand on a phone or a non-map desktop tab, where the floating
+ * map toolbar that carries it is not shown. It rises from the bottom of the visible screen,
  * within thumb reach, and each card opens its text in place.
  */
 export function MobileHandSheet({ gameId, opened, onClose }: Props) {

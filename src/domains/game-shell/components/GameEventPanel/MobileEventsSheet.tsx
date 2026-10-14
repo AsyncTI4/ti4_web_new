@@ -14,8 +14,8 @@ type Props = {
 };
 
 /**
- * The event log on a phone, where the floating map toolbar that carries it on
- * desktop is not shown. It rises from the bottom of the visible screen, within
+ * The event log on a phone or a non-map desktop tab, where the floating map
+ * toolbar that carries it on the map is not shown. It rises from the bottom of the visible screen, within
  * thumb reach, like the hand sheet.
  */
 export function MobileEventsSheet({ opened, onClose }: Props) {
