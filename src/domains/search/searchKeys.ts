@@ -12,7 +12,8 @@ export type SearchKind =
   | "promissory"
   | "secret"
   | "objective"
-  | "law";
+  | "law"
+  | "strategy";
 
 export type SearchKey = `${SearchKind}:${string}`;
 

@@ -40,6 +40,7 @@ export type SearchEntry = {
 export const SEARCH_KIND_LABELS: Record<EntryKind, string> = {
   faction: "Player",
   role: "Player",
+  strategy: "Strategy",
   token: "Token",
   anomaly: "Anomaly",
   trait: "Trait",
@@ -61,6 +62,7 @@ export const SEARCH_KIND_LABELS: Record<EntryKind, string> = {
 const KIND_PRIORITY: EntryKind[] = [
   "faction",
   "role",
+  "strategy",
   "planet",
   "system",
   "anomaly",
@@ -130,6 +132,7 @@ export function buildSearchIndex(gameData: GameData): SearchEntry[] {
   addSystems(builder, gameData);
   players.forEach((player) => addPlayerHoldings(builder, gameData, player));
   addPublicCards(builder, gameData);
+  addStrategyCards(builder, gameData, factionNames);
 
   return [...builder.entries(), ...buildCategoryEntries(gameData, players, factionNames)];
 }
@@ -276,6 +279,32 @@ function addPlayerHoldings(
       secret.name,
     ]);
     builder.owners(key, player.faction);
+  });
+}
+
+/** Strategy cards by name or initiative, wherever they sit: a player's row or the unpicked pool. */
+function addStrategyCards(
+  builder: IndexBuilder,
+  gameData: GameData,
+  factionNames: Map<string, string>,
+) {
+  gameData.strategyCards.forEach((card) => {
+    const holder = card.pickedByFaction;
+    const holderName = holder ? factionNames.get(holder) ?? holder : null;
+    const tradeGoods = card.tradeGoods > 0 ? ` · ${card.tradeGoods} TG` : "";
+    const status = holderName
+      ? `${holderName}${card.played || card.exhausted ? " · played" : ""}`
+      : `Unpicked${tradeGoods}`;
+
+    builder.add(
+      {
+        key: searchKey("strategy", String(card.initiative)),
+        kind: "strategy",
+        label: `${card.initiative} ${card.name}`,
+        detail: status,
+      },
+      [card.name, card.id, String(card.initiative), `sc ${card.initiative}`],
+    );
   });
 }
 
