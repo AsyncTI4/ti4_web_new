@@ -84,6 +84,8 @@ const MAX_RESULTS = 8;
 
 type ItemEntry = Pick<SearchEntry, "kind" | "label" | "detail"> & {
   key: SearchKey;
+  /** Where the result points, when that isn't the item itself. */
+  targets?: SearchKey[];
 };
 
 type IndexBuilder = {
@@ -103,8 +105,8 @@ function createIndexBuilder(factionNames: Map<string, string>): IndexBuilder {
   return {
     add: (entry, terms) => {
       if (entries.has(entry.key)) return;
-      const { key, ...rest } = entry;
-      entries.set(key, { ...rest, id: key, targets: [key], terms: toTerms(terms) });
+      const { key, targets = [key], ...rest } = entry;
+      entries.set(key, { ...rest, id: key, targets, terms: toTerms(terms) });
     },
     owners: (key, faction) => {
       const name = factionNames.get(faction) ?? faction;
@@ -282,7 +284,11 @@ function addPlayerHoldings(
   });
 }
 
-/** Strategy cards by name or initiative, wherever they sit: a player's row or the unpicked pool. */
+/**
+ * Strategy cards by name or initiative. A picked card points at its holder's
+ * player areas, like a faction or speaker search; an unpicked one at the card
+ * in the pool.
+ */
 function addStrategyCards(
   builder: IndexBuilder,
   gameData: GameData,
@@ -302,6 +308,7 @@ function addStrategyCards(
         kind: "strategy",
         label: `${card.initiative} ${card.name}`,
         detail: status,
+        targets: holder ? [searchKey("faction", holder)] : undefined,
       },
       [card.name, card.id, String(card.initiative), `sc ${card.initiative}`],
     );
