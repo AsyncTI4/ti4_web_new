@@ -6,6 +6,7 @@ import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 import { ObjectiveDetailsCard } from "@/domains/cards/components/ObjectiveDetailsCard/ObjectiveDetailsCard";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import styles from "./ObjectiveTable.module.css";
 
 export type ObjectiveStage = "orange" | "blue" | "gray";
@@ -134,6 +135,7 @@ function ObjectiveRow({
       <SmoothPopover.Target>
         <UnstyledButton
           className={styles.row}
+          {...searchTarget(searchKey("objective", objective.key))}
           aria-haspopup="dialog"
           onClick={() => onOpenChange(!opened)}
         >
@@ -175,7 +177,11 @@ function OtherPointRow({ objective, seats }: { objective: Objective; seats: Seat
   const points = objective.pointValue;
 
   return (
-    <div className={styles.row} data-static>
+    <div
+      className={styles.row}
+      data-static
+      {...searchTarget(searchKey("objective", objective.key))}
+    >
       <span className={styles.text}>
         <span className={styles.name}>
           <span className={styles.value} title={`Worth ${points} point${points === 1 ? "" : "s"}`}>

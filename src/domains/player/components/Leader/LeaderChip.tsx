@@ -8,6 +8,7 @@ import { showLeader } from "@/entities/lookup/showLeader";
 import styles from "./Leader.module.css";
 import { RankChevrons } from "./RankChevrons";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 
 type Props = {
   id: string;
@@ -51,6 +52,7 @@ export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
           className={styles.lead}
           data-s={state}
           title={leaderData.name}
+          {...searchTarget(searchKey("leader", id))}
           onClick={toggle}
           onKeyDown={handleKeyDown}
         >

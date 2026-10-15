@@ -9,6 +9,7 @@ import { useGameData } from "@/state/useGameContext";
 import { StrategyCardDetailsCard } from "@/domains/cards/components/StrategyCardDetailsCard";
 import { StrategyCardSheet } from "@/domains/cards/components/StrategyCardSheet";
 import type { ColorKey } from "@/shared/ui/gradientClasses";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import classes from "./StrategyCard.module.css";
 
 type StrategyCardColor = Extract<
@@ -75,6 +76,7 @@ export function StrategyCard({
       title={isExhausted ? `${name} (played)` : name}
       className={cx(classes.plate, size === "sm" && classes.sm)}
       data-s={isExhausted ? "played" : undefined}
+      {...searchTarget(searchKey("strategy", String(initiative)))}
       style={{ "--scc": `var(--gd-${color})` } as CSSProperties}
       onClick={toggle}
       onKeyDown={handleKeyDown}

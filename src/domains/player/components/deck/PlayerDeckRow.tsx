@@ -35,6 +35,7 @@ import {
 import { usePlayerCardComputedData } from "@/domains/player/components/PlayerCardShared/usePlayerCardComputedData";
 import { getPlayerCardLayoutFields } from "@/domains/player/components/PlayerCardShared/getPlayerCardLayoutFields";
 import { getBreakthroughSynergy } from "@/domains/player/components/Tech/TechGridShared";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import type { LaneKey } from "./deckLanes";
 import styles from "./PlayerDeck.module.css";
 
@@ -212,6 +213,7 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
       style={style}
       data-seat={player.color}
       data-active={player.active || undefined}
+      {...searchTarget(searchKey("faction", player.faction))}
     >
       <Seat player={player} factionImageUrl={factionImageUrl} vpsToWin={vpsToWin} />
 

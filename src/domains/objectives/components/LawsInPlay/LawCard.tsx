@@ -5,6 +5,7 @@ import type { LawInPlay, PlayerData } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LawDetailsCard } from "@/domains/cards/components/LawDetailsCard";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import styles from "./LawCard.module.css";
 
 type Props = {
@@ -58,6 +59,7 @@ function LawCard({ law, playerData }: Props) {
           role="button"
           tabIndex={0}
           aria-haspopup="dialog"
+          {...searchTarget(searchKey("law", law.id))}
           onClick={toggleOpened}
           onKeyDown={handleKeyDown}
         >

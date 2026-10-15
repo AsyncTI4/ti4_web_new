@@ -7,6 +7,7 @@ import {
   TILE_HEIGHT,
   TILE_WIDTH,
 } from "@/entities/geometry/tilePositioning";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import styles from "./PlayerStatsArea.module.css";
 
 type HexagonData = {
@@ -109,6 +110,7 @@ export function PlayerStatsHex({
   return (
     <svg
       className={styles.svg}
+      {...searchTarget(searchKey("faction", faction), "map-tile")}
       style={{
         left: svgBounds.x,
         top: svgBounds.y,

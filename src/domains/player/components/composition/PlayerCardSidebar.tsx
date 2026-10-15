@@ -78,7 +78,11 @@ export default function PlayerCardSidebar(props: Props) {
   );
 
   return (
-    <PlayerCardBox color={player.color} isActive={player.active}>
+    <PlayerCardBox
+      color={player.color}
+      isActive={player.active}
+      faction={player.faction}
+    >
       <PlayerCardHeaderCompact
         userName={player.userName}
         faction={player.faction}

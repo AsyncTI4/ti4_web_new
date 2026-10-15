@@ -1,6 +1,7 @@
 import { getRelicData } from "@/entities/lookup/relics";
 import { RelicCard } from "./RelicCard";
 import styles from "./Relic.module.css";
+import { searchKey } from "@/domains/search/searchKeys";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { cdnImage } from "@/entities/data/cdnImage";
@@ -33,6 +34,7 @@ export function Relic({ relicId, isExhausted = false }: Props) {
           state={state}
           label={isExhausted ? `${relicData.name} (exhausted)` : relicData.name}
           onClick={toggle}
+          searchKey={searchKey("relic", relicId)}
         >
           <ObjectGlyph
             src={
