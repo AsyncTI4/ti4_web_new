@@ -9,18 +9,43 @@ import { getSecretObjectiveData } from "@/entities/lookup/secretObjectives";
 import { getTileById } from "@/entities/lookup/systems";
 import { getPlayerFactionDisplayName } from "@/entities/game/playerUtils";
 import { searchKey, type SearchKey, type SearchKind } from "./searchKeys";
+import { buildCategoryEntries } from "./searchCategories";
+import { normalizeSearchText, toTerms } from "./searchText";
+
+/** Results that stand for a group of things rather than one named item. */
+export type CategoryKind =
+  | "role"
+  | "token"
+  | "anomaly"
+  | "trait"
+  | "specialty"
+  | "attachment"
+  | "unit";
+
+export type EntryKind = SearchKind | CategoryKind;
 
 export type SearchEntry = {
-  key: SearchKey;
-  kind: SearchKind;
+  id: string;
+  kind: EntryKind;
   label: string;
   detail: string;
   /** Normalized names this entry answers to. */
   terms: string[];
+  /** Every tagged element that belongs to this result: one item, or a whole category. */
+  targets: SearchKey[];
+  /** Only the board's copies of the targets count, e.g. units: a planet card says nothing about them. */
+  boardOnly?: boolean;
 };
 
-export const SEARCH_KIND_LABELS: Record<SearchKind, string> = {
+export const SEARCH_KIND_LABELS: Record<EntryKind, string> = {
   faction: "Player",
+  role: "Player",
+  token: "Token",
+  anomaly: "Anomaly",
+  trait: "Trait",
+  specialty: "Specialty",
+  attachment: "Attachment",
+  unit: "Unit",
   planet: "Planet",
   system: "System",
   tech: "Tech",
@@ -33,10 +58,17 @@ export const SEARCH_KIND_LABELS: Record<SearchKind, string> = {
 };
 
 /** Breaks ties between equally good matches: the board before the cards. */
-const KIND_PRIORITY: SearchKind[] = [
+const KIND_PRIORITY: EntryKind[] = [
   "faction",
+  "role",
   "planet",
   "system",
+  "anomaly",
+  "token",
+  "trait",
+  "specialty",
+  "attachment",
+  "unit",
   "tech",
   "leader",
   "relic",
@@ -48,26 +80,12 @@ const KIND_PRIORITY: SearchKind[] = [
 
 const MAX_RESULTS = 8;
 
-/** Lowercase, accent-free, punctuation as spaces: "N'orr" reads as "n orr". */
-export function normalizeSearchText(text: string) {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-function toTerms(values: (string | null | undefined)[]) {
-  const terms = values
-    .filter((value): value is string => !!value)
-    .map(normalizeSearchText)
-    .filter(Boolean);
-  return [...new Set(terms)];
-}
+type ItemEntry = Pick<SearchEntry, "kind" | "label" | "detail"> & {
+  key: SearchKey;
+};
 
 type IndexBuilder = {
-  add: (entry: Omit<SearchEntry, "terms">, terms: (string | null | undefined)[]) => void;
+  add: (entry: ItemEntry, terms: (string | null | undefined)[]) => void;
   owners: (key: SearchKey, faction: string) => void;
   entries: () => SearchEntry[];
 };
@@ -83,7 +101,8 @@ function createIndexBuilder(factionNames: Map<string, string>): IndexBuilder {
   return {
     add: (entry, terms) => {
       if (entries.has(entry.key)) return;
-      entries.set(entry.key, { ...entry, terms: toTerms(terms) });
+      const { key, ...rest } = entry;
+      entries.set(key, { ...rest, id: key, targets: [key], terms: toTerms(terms) });
     },
     owners: (key, faction) => {
       const name = factionNames.get(faction) ?? faction;
@@ -92,7 +111,7 @@ function createIndexBuilder(factionNames: Map<string, string>): IndexBuilder {
     },
     entries: () =>
       [...entries.values()].map((entry) => {
-        const names = holders.get(entry.key);
+        const names = holders.get(entry.id as SearchKey);
         if (!names?.length || entry.detail) return entry;
         return { ...entry, detail: names.join(", ") };
       }),
@@ -112,7 +131,7 @@ export function buildSearchIndex(gameData: GameData): SearchEntry[] {
   players.forEach((player) => addPlayerHoldings(builder, gameData, player));
   addPublicCards(builder, gameData);
 
-  return builder.entries();
+  return [...builder.entries(), ...buildCategoryEntries(gameData, players, factionNames)];
 }
 
 function addPlanets(

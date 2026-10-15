@@ -30,7 +30,12 @@ import type { SearchKey } from "./searchKeys";
 import classes from "./BoardSearch.module.css";
 
 /** Which hit of the committed result is in view; `nonce` re-focuses the same hit. */
-type Cursor = { key: SearchKey; index: number; nonce: number };
+type Cursor = {
+  targets: SearchKey[];
+  boardOnly: boolean;
+  index: number;
+  nonce: number;
+};
 
 function isTypingTarget(target: EventTarget | null) {
   return (
@@ -70,11 +75,15 @@ export function BoardSearch() {
   const highlightedIndex = Math.min(highlighted, results.length - 1);
   const highlightedEntry = listOpen ? results[highlightedIndex] : undefined;
   const showList = listOpen && query.trim().length > 0;
-  useSearchHighlight(highlightedEntry?.key ?? cursor?.key ?? null);
+  const activeResult = highlightedEntry ?? cursor;
+  useSearchHighlight(
+    activeResult?.targets ?? null,
+    activeResult?.boardOnly ?? false,
+  );
 
   useEffect(() => {
     if (!cursor) return;
-    const hits = findSearchHits(cursor.key);
+    const hits = findSearchHits(cursor.targets, cursor.boardOnly);
     setHitCount(hits.length);
     if (hits.length === 0) return;
     focusSearchHit(hits[Math.min(cursor.index, hits.length - 1)]);
@@ -112,7 +121,8 @@ export function BoardSearch() {
     setListOpen(false);
     setHitCount(null);
     setCursor((current) => ({
-      key: entry.key,
+      targets: entry.targets,
+      boardOnly: entry.boardOnly ?? false,
       index: 0,
       nonce: (current?.nonce ?? 0) + 1,
     }));
@@ -120,13 +130,13 @@ export function BoardSearch() {
 
   const step = (delta: number) => {
     if (!cursor) return;
-    const count = findSearchHits(cursor.key).length;
+    const count = findSearchHits(cursor.targets, cursor.boardOnly).length;
     if (count === 0) {
       setHitCount(0);
       return;
     }
     setCursor({
-      key: cursor.key,
+      ...cursor,
       index: (cursor.index + delta + count) % count,
       nonce: cursor.nonce + 1,
     });
@@ -269,7 +279,7 @@ export function BoardSearch() {
           )}
           {results.map((entry, entryIndex) => (
             <div
-              key={entry.key}
+              key={entry.id}
               id={`${listId}-${entryIndex}`}
               role="option"
               aria-selected={entryIndex === highlightedIndex}

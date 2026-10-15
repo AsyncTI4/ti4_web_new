@@ -8,21 +8,39 @@ function isMapHit(element: HTMLElement) {
   return element.dataset.searchScope?.startsWith("map") ?? false;
 }
 
+/** Board hits in reading order, so stepping through a category sweeps the map. */
+function byReadingOrder(a: HTMLElement, b: HTMLElement) {
+  const ra = a.getBoundingClientRect();
+  const rb = b.getBoundingClientRect();
+  return ra.top - rb.top || ra.left - rb.left;
+}
+
 /**
- * Every rendered element tagged with this key, board first and then the player
- * areas in page order. Elements with no box (a collapsed sidebar, a hidden
- * breakpoint variant) are skipped, since there is nothing to show.
+ * Every rendered element tagged with one of these keys: the board first, top
+ * to bottom, then the player areas in page order. Elements with no box (a
+ * collapsed sidebar, a hidden breakpoint variant) are skipped, since there is
+ * nothing to show.
  */
-export function findSearchHits(key: SearchKey): HTMLElement[] {
-  const selector = `[data-search-key="${CSS.escape(key)}"]`;
+export function findSearchHits(
+  targets: SearchKey[],
+  boardOnly = false,
+): HTMLElement[] {
+  if (targets.length === 0) return [];
+  const scope = boardOnly ? "[data-search-scope]" : "";
+  const selector = targets
+    .map((key) => `[data-search-key="${CSS.escape(key)}"]${scope}`)
+    .join(",");
   const hits = Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
     (element) => element.getClientRects().length > 0,
   );
-  return [...hits.filter(isMapHit), ...hits.filter((hit) => !isMapHit(hit))];
+  return [
+    ...hits.filter(isMapHit).sort(byReadingOrder),
+    ...hits.filter((hit) => !isMapHit(hit)),
+  ];
 }
 
-function markHits(key: SearchKey) {
-  findSearchHits(key).forEach((hit) => hit.setAttribute(MATCH_ATTR, ""));
+function markHits(targets: SearchKey[], boardOnly: boolean) {
+  findSearchHits(targets, boardOnly).forEach((hit) => hit.setAttribute(MATCH_ATTR, ""));
 }
 
 function clearMarks(attribute: string) {
@@ -55,21 +73,28 @@ export function focusSearchHit(hit: HTMLElement) {
 }
 
 /**
- * Marks every element matching the active key. The marks are attributes set
+ * Marks every element matching the active result's targets. The marks are attributes set
  * outside React so the hundreds of tagged cards never subscribe to search state;
  * a mutation observer re-applies them when the board re-renders new nodes, for
  * instance after a live game update or a tab switch.
  */
-export function useSearchHighlight(activeKey: SearchKey | null) {
-  useEffect(() => {
-    if (!activeKey) return;
+export function useSearchHighlight(
+  targets: SearchKey[] | null,
+  boardOnly = false,
+) {
+  /* A string dependency, so a rebuilt but identical target list doesn't re-mark. */
+  const targetList = targets?.join("|") ?? "";
 
-    markHits(activeKey);
+  useEffect(() => {
+    if (!targetList) return;
+    const activeTargets = targetList.split("|") as SearchKey[];
+
+    markHits(activeTargets, boardOnly);
 
     let frame = 0;
     const observer = new MutationObserver(() => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => markHits(activeKey));
+      frame = requestAnimationFrame(() => markHits(activeTargets, boardOnly));
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -79,5 +104,5 @@ export function useSearchHighlight(activeKey: SearchKey | null) {
       clearMarks(MATCH_ATTR);
       clearMarks(CURRENT_ATTR);
     };
-  }, [activeKey]);
+  }, [targetList, boardOnly]);
 }
