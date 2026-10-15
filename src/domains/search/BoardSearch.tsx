@@ -82,15 +82,21 @@ export function BoardSearch() {
 
   useEffect(() => {
     function handleShortcut(event: globalThis.KeyboardEvent) {
-      const isModK =
-        (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k";
+      /* Ctrl+F takes over the browser's find, which can't read the board
+         (it is images). Pressed again from the field, it falls through so
+         native find is still one keystroke away. */
+      const isModF =
+        (event.ctrlKey || event.metaKey) &&
+        !event.altKey &&
+        event.key.toLowerCase() === "f" &&
+        document.activeElement !== inputRef.current;
       const isSlash =
         event.key === "/" &&
         !event.ctrlKey &&
         !event.metaKey &&
         !event.altKey &&
         !isTypingTarget(event.target);
-      if (!isModK && !isSlash) return;
+      if (!isModF && !isSlash) return;
 
       event.preventDefault();
       inputRef.current?.focus();
