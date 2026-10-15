@@ -4,6 +4,7 @@ import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard"
 import styles from "./CompactLeader.module.css";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 
 type Props = {
   id: string;
@@ -23,6 +24,7 @@ export function CompactLeader({ id, exhausted, locked }: Props) {
           onClick={toggle}
           role="button"
           tabIndex={0}
+          {...searchTarget(searchKey("leader", id))}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();

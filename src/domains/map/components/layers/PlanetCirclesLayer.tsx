@@ -10,6 +10,7 @@ import { useSettingsStore, useAppStore } from "@/state/appStore";
 import { getTokenData } from "@/entities/lookup/tokens";
 import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning/constants";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 
 const TOKEN_PLANET_RADIUS = 45;
 const REGULAR_PLANET_Z_INDEX = 52;
@@ -121,6 +122,7 @@ export function PlanetCirclesLayer({
           classes.planetCircle,
           isHighlighted && classes.highlighted,
         )}
+        {...searchTarget(searchKey("planet", planetId), "map")}
         style={{
           position: "absolute",
           left: `${x + offsetX}px`,

@@ -28,6 +28,7 @@ import { FactionControlBorderOverlay } from "./FactionControlBorderOverlay";
 import { SystemHexTarget } from "./SystemHexTarget";
 import { getTileById } from "@/entities/lookup/systems";
 import { isMobileDevice } from "@/utils/isTouchDevice";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 
 type Props = {
   mapTile: TileType;
@@ -138,6 +139,8 @@ export const MapTile = React.memo<Props>(
             systemId={systemId}
             className={classes.tile}
             data-map-tile-visual="true"
+            {...(!embedded &&
+              searchTarget(searchKey("system", ringPosition), "map-tile"))}
           />
 
           {dossierEligible && <SystemHexTarget onOpen={handleDossierOpen} />}

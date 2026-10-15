@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import styles from "./Tech.module.css";
+import { searchKey } from "@/domains/search/searchKeys";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { TechCard } from "@/domains/cards/components/TechCard/TechCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
@@ -95,6 +96,7 @@ export function Tech({
           label={unresearched ? `${techData.name} (not researched)` : techData.name}
           onClick={toggle}
           style={style}
+          searchKey={searchKey("tech", techId)}
         >
           {techLetter && !iconSrc ? (
             <span className={styles.letter} aria-hidden="true">

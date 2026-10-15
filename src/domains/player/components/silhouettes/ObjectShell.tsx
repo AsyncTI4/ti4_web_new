@@ -1,5 +1,6 @@
 import cx from "clsx";
 import type { CSSProperties, KeyboardEvent, ReactNode, Ref } from "react";
+import { searchTarget, type SearchKey } from "@/domains/search/searchKeys";
 import styles from "./Object.module.css";
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
   style?: CSSProperties;
   children: ReactNode;
   ref?: Ref<HTMLDivElement>;
+  /** Makes the object findable by board search. */
+  searchKey?: SearchKey;
 };
 
 /**
@@ -26,6 +29,7 @@ export function ObjectShell({
   style,
   children,
   ref,
+  searchKey,
 }: Props) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!onClick) return;
@@ -46,6 +50,7 @@ export function ObjectShell({
       style={style}
       onClick={onClick}
       onKeyDown={handleKeyDown}
+      {...(searchKey && searchTarget(searchKey))}
     >
       {children}
     </div>

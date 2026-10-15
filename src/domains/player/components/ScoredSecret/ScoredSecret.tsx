@@ -7,6 +7,7 @@ import {
   ObjectLabel,
   ObjectShell,
 } from "@/domains/player/components/silhouettes/ObjectShell";
+import { searchKey } from "@/domains/search/searchKeys";
 import styles from "./ScoredSecret.module.css";
 
 type Props = {
@@ -37,6 +38,7 @@ export function ScoredSecret({
       state={variant === "scored" ? undefined : "unscored"}
       label={variant === "scored" ? secretName : `${secretName} (not scored)`}
       onClick={handleClick}
+      searchKey={searchKey("secret", secretId)}
     >
       <ObjectGlyph src="/so_icon.png" />
       <ObjectLabel>{secretName}</ObjectLabel>

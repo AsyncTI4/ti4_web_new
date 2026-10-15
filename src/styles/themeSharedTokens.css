@@ -161,4 +161,11 @@
   --bay-lit-tint: rgba(59, 130, 246, 0.16);
   --bay-lit-edge: rgba(96, 165, 250, 0.34);
   --bay-lit-light: rgba(255, 255, 255, 0.085);
+
+  /*
+   * Board search. A found item is a state ("look here"), so like the replay's
+   * tactical-activation glow it keeps one hue in every theme — the same cyan,
+   * so the board has a single colour for "the thing you are looking for".
+   */
+  --search-hit-rgb: 103, 232, 249;
 }

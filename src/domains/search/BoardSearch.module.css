@@ -1,0 +1,218 @@
+/*
+ * Board search sits in the tool row as one more instrument: a recessed field
+ * the height of the tool rack, with the result list dropping beneath it.
+ */
+.root {
+  position: relative;
+  align-self: center;
+  width: 260px;
+  margin-left: 10px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+  padding: 0 5px 0 9px;
+  background: var(--panel-field-bg);
+  border: 1px solid var(--panel-hairline-strong);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--machined-bevel);
+  transition: border-color 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.field:focus-within {
+  border-color: rgb(var(--gd-blue));
+  box-shadow:
+    var(--machined-bevel),
+    0 0 0 1px rgba(var(--gd-blue), 0.35);
+}
+
+.fieldEngaged {
+  border-color: rgba(var(--search-hit-rgb), 0.55);
+}
+
+.searchIcon {
+  flex: none;
+  color: var(--mantine-color-gray-5);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 4px;
+  color: var(--mantine-color-gray-1);
+  font-family: var(--font-text);
+  font-size: 13px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--mantine-color-gray-5);
+}
+
+.counter {
+  flex: none;
+  padding: 0 4px;
+  color: rgb(var(--search-hit-rgb));
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: var(--weight-data);
+  white-space: nowrap;
+}
+
+.counterEmpty {
+  color: var(--mantine-color-gray-5);
+  font-family: var(--font-text);
+}
+
+.kbd {
+  flex: none;
+  min-width: 18px;
+  padding: 1px 5px;
+  color: var(--mantine-color-gray-5);
+  font-family: var(--font-data);
+  font-size: 11px;
+  text-align: center;
+  background: var(--trough-bg);
+  border: 1px solid var(--panel-hairline);
+  border-radius: 2px;
+  box-shadow: var(--trough-inset);
+}
+
+/* Dropdown lift: this list floats over the board. */
+.results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: var(--z-header-menu);
+  width: 360px;
+  padding: 3px;
+  background: var(--panel-texture), var(--details-card-bg);
+  border: 1px solid var(--panel-hairline-strong);
+  border-radius: var(--mantine-radius-sm);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.option {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.optionActive {
+  background: rgba(var(--search-hit-rgb), 0.1);
+  box-shadow: inset 0 0 0 1px rgba(var(--search-hit-rgb), 0.28);
+}
+
+.kind {
+  color: var(--mantine-color-gray-5);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: var(--weight-rail);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.optionActive .kind {
+  color: rgb(var(--search-hit-rgb));
+}
+
+.label {
+  overflow: hidden;
+  color: var(--mantine-color-gray-1);
+  font-family: var(--font-text);
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.detail {
+  max-width: 140px;
+  overflow: hidden;
+  color: var(--mantine-color-gray-5);
+  font-family: var(--font-text);
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  padding: 8px;
+  color: var(--mantine-color-gray-5);
+  font-family: var(--font-text);
+  font-size: 12px;
+}
+
+/*
+ * Highlights on the found items themselves. These are attributes set by
+ * searchHits.ts on elements all over the app, so they are global by nature.
+ *
+ * Cards in a player area take a hairline ring; the one in view takes a solid
+ * ring that lands once (a single contraction, the motion reporting that the
+ * view just moved to it).
+ */
+:global([data-search-match]:not([data-search-scope])) {
+  outline: 1px solid rgba(var(--search-hit-rgb), 0.6);
+  outline-offset: 1px;
+}
+
+:global([data-search-current]:not([data-search-scope])) {
+  outline: 2px solid rgb(var(--search-hit-rgb));
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(var(--search-hit-rgb), 0.45);
+  animation: searchLand 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes searchLand {
+  from {
+    outline-offset: 12px;
+    outline-color: rgba(var(--search-hit-rgb), 0);
+  }
+}
+
+/* Planet circles live inside the zoomed board, so strokes are drawn at board
+   scale: ~40% zoom renders these at roughly 2–4px. */
+:global([data-search-scope="map"][data-search-match]) {
+  outline: 6px solid rgba(var(--search-hit-rgb), 0.75);
+  outline-offset: 8px;
+}
+
+:global([data-search-scope="map"][data-search-current]) {
+  outline: 10px solid rgb(var(--search-hit-rgb));
+  box-shadow: 0 0 48px 16px rgba(var(--search-hit-rgb), 0.5);
+}
+
+/* A system lights its hex art: stacked zero-blur shadows dilate the bitmap's
+   alpha into a stroke that follows the hex, not the image's rectangle. The
+   stroke falls outside the hex, so the art is lifted over its neighbours' art
+   (z-index 2 stays under planet circles and units) or they would paint over it. */
+:global([data-search-scope="map-tile"][data-search-match]) {
+  z-index: 2;
+  filter: drop-shadow(5px 0 0 rgba(var(--search-hit-rgb), 0.85))
+    drop-shadow(-5px 0 0 rgba(var(--search-hit-rgb), 0.85))
+    drop-shadow(0 5px 0 rgba(var(--search-hit-rgb), 0.85))
+    drop-shadow(0 -5px 0 rgba(var(--search-hit-rgb), 0.85));
+}
+
+:global([data-search-scope="map-tile"][data-search-current]) {
+  filter: drop-shadow(6px 0 0 rgb(var(--search-hit-rgb)))
+    drop-shadow(-6px 0 0 rgb(var(--search-hit-rgb)))
+    drop-shadow(0 6px 0 rgb(var(--search-hit-rgb)))
+    drop-shadow(0 -6px 0 rgb(var(--search-hit-rgb)))
+    drop-shadow(0 0 28px rgba(var(--search-hit-rgb), 0.7));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global([data-search-current]:not([data-search-scope])) {
+    animation: none;
+  }
+}

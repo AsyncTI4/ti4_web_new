@@ -15,6 +15,7 @@ import { useSettingsStore } from "@/state/appStore";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { ThemeSwatches } from "./ThemeSwatches";
+import { BoardSearch } from "@/domains/search/BoardSearch";
 import classes from "./TabsControls.module.css";
 
 const LENS_ICON_SIZE = 16;
@@ -245,6 +246,7 @@ function DesktopTabsControls({
         onEventsClick={onEventsClick}
         onTryDecalsClick={onTryDecalsClick}
       />
+      <BoardSearch />
       <div className={classes.spacer} />
       <Group gap={4} mr={14} wrap="nowrap" className={classes.links}>
         <DiscordLinks />

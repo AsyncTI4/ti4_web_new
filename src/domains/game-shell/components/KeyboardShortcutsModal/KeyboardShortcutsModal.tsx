@@ -22,6 +22,8 @@ const NAVIGATION: Shortcut[] = [
   { description: "Tech skip rendering", keys: ["t"] },
   { description: "Attachments mode", keys: ["a"] },
   { description: "Overlays", keys: ["o"] },
+  { description: "Search the board", keys: ["/", "Ctrl K"] },
+  { description: "Next / previous match", keys: ["Enter", "Shift Enter"] },
 ];
 
 const RIGHT_SIDEBAR: Shortcut[] = [

@@ -14,6 +14,7 @@ import { isMobileDevice } from "@/utils/isTouchDevice";
 import { getPlanetTileBackground } from "./planetTileBackground";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
 import { getAttachmentModifiers } from "@/entities/game/planets";
+import { searchKey, searchTarget } from "@/domains/search/searchKeys";
 import {
   calculateFinalValues,
   createIconSources,
@@ -118,6 +119,7 @@ export function PlanetCard({
   const isOceanic = isOceanicPlanet(planetId, planetData);
   const cssVariables = getCSSVariables(planetCssType(isOceanic, finalTraits));
   const planetIconSrc = getPlanetIconSrc(planetData, finalTraits);
+  const searchAttributes = searchTarget(searchKey("planet", planetId));
 
   const planetCardContent = (
     <SmoothPopover opened={opened} onChange={setOpened}>
@@ -129,6 +131,7 @@ export function PlanetCard({
           }}
           onMouseEnter={() => setHoveredPlanetId(planetId)}
           onMouseLeave={() => setHoveredPlanetId(null)}
+          {...(!hasLegendaryAbility && searchAttributes)}
           className={cx(
             styles.mainStack,
             isLegendary && styles.legendary,
@@ -169,6 +172,7 @@ export function PlanetCard({
     <div
       className={cx(styles.legendaryWrapper, isExhausted && styles.wrapperExhausted)}
       style={cssVariables}
+      {...searchAttributes}
       onClick={() => setScrollToPlanetId(planetId)}
       onMouseEnter={() => setHoveredPlanetId(planetId)}
       onMouseLeave={() => setHoveredPlanetId(null)}

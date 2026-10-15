@@ -11,6 +11,7 @@ import {
   ObjectLabel,
   ObjectShell,
 } from "@/domains/player/components/silhouettes/ObjectShell";
+import { searchKey } from "@/domains/search/searchKeys";
 import styles from "./PromissoryNote.module.css";
 
 type Props = {
@@ -66,6 +67,7 @@ export function PromissoryNote({
       className={styles.pn}
       label={`${name} · from ${faction}`}
       onClick={handleClick}
+      searchKey={searchKey("promissory", promissoryNoteId)}
       style={ownerRgb ? ({ "--pc": ownerRgb } as CSSProperties) : undefined}
     >
       <ObjectGlyph src={getFactionImage(faction)} size={16} />
