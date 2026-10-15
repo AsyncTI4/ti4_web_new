@@ -22,8 +22,9 @@ export function searchKey(kind: SearchKind, id: string): SearchKey {
 
 /**
  * Where a target is drawn. Map targets live inside the zoomed board, so their
- * highlight is scaled up to survive the zoom; a tile highlights its hex art
- * rather than its rectangular box.
+ * highlight is scaled up to survive the zoom; a hex (a system, or a player's
+ * stat area off the board's edge) highlights its own outline rather than its
+ * rectangular box.
  */
 export type SearchScope = "map" | "map-tile";
 
