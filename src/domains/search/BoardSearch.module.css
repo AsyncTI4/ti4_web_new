@@ -88,9 +88,15 @@
 .results {
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
+  /* Hung from the field's right edge: the toolbar is always to its left, so
+     the list grows into it instead of off the viewport's edge. */
+  right: 0;
   z-index: var(--z-header-menu);
-  width: 360px;
+  /* One grid for the whole list, shared by every row through subgrid, so the
+     kind column is as wide as its longest label and the names still align. */
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  width: 380px;
   padding: 3px;
   background: var(--panel-texture), var(--details-card-bg);
   border: 1px solid var(--panel-hairline-strong);
@@ -100,7 +106,8 @@
 
 .option {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: baseline;
   gap: 8px;
   padding: 6px 8px;
@@ -146,6 +153,7 @@
 }
 
 .empty {
+  grid-column: 1 / -1;
   padding: 8px;
   color: var(--mantine-color-gray-5);
   font-family: var(--font-text);
