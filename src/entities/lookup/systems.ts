@@ -1,4 +1,4 @@
-import { systems } from "@/entities/data/systems";
+import { systems } from "@/entities/data/catalogs";
 import type { TileData } from "@/entities/data/types";
 
 const tilesById = new Map<string, TileData>();

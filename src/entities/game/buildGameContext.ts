@@ -1,7 +1,8 @@
 import {
   calculateSingleTilePosition,
   calculateTilePositions,
-  isFractureInPlay,
+  getFractureYBump,
+  isSupportedTilePosition,
 } from "@/entities/geometry/tilePositioning";
 import {
   ACCESSIBLE_COLOR_ORDER,
@@ -44,9 +45,6 @@ import type {
 import { getAllEntityPlacementsForTile } from "@/entities/positioning";
 import { startPerformanceSpan } from "@/utils/performanceMarks";
 import type { GameData, PrePlacementTile, Tile, TilePlanet } from "@/entities/game/types";
-
-/** Vertical shift applied to every tile when the Fracture is on the map. */
-const FRACTURE_Y_OFFSET = 400;
 
 function splitEntitiesByType(entities: EntityData[]) {
   return {
@@ -355,21 +353,35 @@ export function buildGameContext(
 
   const tileContext: TileBuildContext = {
     ringCount: data.ringCount,
-    fractureYOffset:
-      data.tilePositions && isFractureInPlay(data.tilePositions)
-        ? FRACTURE_Y_OFFSET
-        : 0,
+    fractureYOffset: getFractureYBump(data.tilePositions),
     playerData,
     exhaustedPlanets: allExhaustedPlanets,
     borderAnomaliesByTile,
   };
 
   const tiles: Record<string, Tile> = {};
+  const unpositionedTileData: Record<string, TileUnitData> = {};
+  const unsupportedPositions = new Set(
+    [
+      ...data.tilePositions.map((entry) => entry.split(":")[0]),
+      ...Object.values(data.statTilePositions ?? {}).flat(),
+    ].filter((position) => !isSupportedTilePosition(position)),
+  );
   const planetIdToPlanetTile: Record<string, TilePlanet> = {};
 
   Object.entries(data.tileUnitData).forEach(([position, tileData]) => {
     // The "special" tile holds off-map planets (triad, custodiavigilia, etc.).
     if (position === "special") {
+      Object.assign(
+        planetIdToPlanetTile,
+        buildPlanets(tileData.planets, allExhaustedPlanets),
+      );
+      return;
+    }
+    if (!isSupportedTilePosition(position)) {
+      unsupportedPositions.add(position);
+      unpositionedTileData[position] = tileData;
+      // Player details still need these planets even though the tile cannot be drawn.
       Object.assign(
         planetIdToPlanetTile,
         buildPlanets(tileData.planets, allExhaustedPlanets),
@@ -394,6 +406,8 @@ export function buildGameContext(
 
   const gameContext = {
     tiles,
+    unpositionedTileData,
+    unsupportedPositions: [...unsupportedPositions].sort(),
     tilePositions: data.tilePositions,
     factionColorMap,
     originalFactionColorMap,

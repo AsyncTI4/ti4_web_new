@@ -1,4 +1,4 @@
-import { planets } from "@/entities/data/planets";
+import { planets } from "@/entities/data/catalogs";
 import { groupBy, indexBy } from "@/entities/lookup/indexBy";
 import type { Planet, Point } from "@/entities/data/types";
 
