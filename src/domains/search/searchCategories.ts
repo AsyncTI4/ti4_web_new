@@ -58,7 +58,7 @@ function createCategories() {
           detail: `${count} ${category.noun}${count === 1 ? "" : "s"}`,
           terms: toTerms([category.label, ...category.terms]),
           targets: [...category.targets],
-          boardOnly: category.kind === "unit",
+          boardOnly: category.kind === "unit" || category.kind === "army",
         };
       }),
   };
@@ -186,33 +186,70 @@ function addSystemCategories(categories: Categories, tile: Tile) {
 }
 
 /**
- * Units by type. A unit on a planet points at the planet, one in space at the
- * system, so a PDS search rings the planet it actually sits on.
+ * Units by type, by faction, and by faction and type. A unit on a planet points
+ * at the planet, one in space at the system, so a PDS search rings the planet it
+ * actually sits on.
  */
-function addUnitCategories(categories: Categories, tile: Tile) {
+function addUnitCategories(
+  categories: Categories,
+  tile: Tile,
+  factionNames: Map<string, string>,
+) {
+  const add = (
+    input: Omit<CategoryInput, "noun" | "kind">,
+    target: SearchKey,
+    kind: CategoryKind = "unit",
+  ) => categories.add({ ...input, kind, noun: "system" }, target, tile.position);
+
   const addUnits = (
     unitsByFaction: Tile["unitsByFaction"],
     target: SearchKey,
   ) =>
-    Object.values(unitsByFaction).forEach((entities) =>
+    Object.entries(unitsByFaction).forEach(([faction, entities]) => {
+      const factionName = factionNames.get(faction) ?? capitalize(faction);
+      add(
+        {
+          id: `faction-units:${faction}`,
+          label: `${factionName} units`,
+          terms: [
+            `${faction} units`,
+            `${factionName} fleet`,
+            `${faction} fleet`,
+            `${factionName} ships`,
+          ],
+        },
+        target,
+        "army",
+      );
+
       entities.forEach(({ entityId }) => {
         const name =
           UNIT_NAMES[entityId] ??
           getGenericUnitDataByAsyncId(entityId)?.name ??
           entityId;
-        categories.add(
+        add(
           {
             id: `unit:${entityId}`,
-            kind: "unit",
             label: name,
             terms: [entityId, `${name}s`, ...(UNIT_TERMS[entityId] ?? [])],
-            noun: "system",
           },
           target,
-          tile.position,
         );
-      }),
-    );
+        add(
+          {
+            id: `faction-units:${faction}:${entityId}`,
+            label: `${factionName} ${name}`,
+            terms: [
+              `${factionName} ${name}s`,
+              `${faction} ${name}`,
+              `${faction} ${entityId}`,
+              ...(UNIT_TERMS[entityId] ?? []).map((term) => `${factionName} ${term}`),
+            ],
+          },
+          target,
+        );
+      });
+    });
 
   addUnits(tile.unitsByFaction, searchKey("system", tile.position));
   Object.entries(tile.planets).forEach(([planetId, planet]) =>
@@ -330,7 +367,7 @@ export function buildCategoryEntries(
 
   Object.values(gameData.tiles).forEach((tile) => {
     addSystemCategories(categories, tile);
-    addUnitCategories(categories, tile);
+    addUnitCategories(categories, tile, factionNames);
     Object.keys(tile.planets).forEach((planetId) => planetIds.add(planetId));
   });
   planetIds.forEach((planetId) =>

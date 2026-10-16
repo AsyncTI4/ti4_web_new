@@ -20,7 +20,9 @@ export type CategoryKind =
   | "trait"
   | "specialty"
   | "attachment"
-  | "unit";
+  | "unit"
+  /** All of one faction's units, ranked straight after the faction itself. */
+  | "army";
 
 export type EntryKind = SearchKind | CategoryKind;
 
@@ -47,6 +49,7 @@ export const SEARCH_KIND_LABELS: Record<EntryKind, string> = {
   specialty: "Specialty",
   attachment: "Attachment",
   unit: "Unit",
+  army: "Unit",
   planet: "Planet",
   system: "System",
   tech: "Tech",
@@ -62,6 +65,7 @@ export const SEARCH_KIND_LABELS: Record<EntryKind, string> = {
 const KIND_PRIORITY: EntryKind[] = [
   "faction",
   "role",
+  "army",
   "strategy",
   "planet",
   "system",
