@@ -130,6 +130,25 @@
   margin-top: 16px;
 }
 
+.actionCardsContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* A square crop of the action-card back around its symbol (65x100 source,
+   symbol centred in a 51px square starting at 7,4.5). */
+.actionCardsImage {
+  width: 40px;
+  height: 40px;
+  margin-top: 8px;
+  border-radius: 4px;
+  background-image: url("/cardback/cardback_action.png");
+  background-size: 127.45% auto;
+  background-position: 50% 9.2%;
+  background-repeat: no-repeat;
+}
+
 .commoditiesText {
   margin-top: 4px;
 }
