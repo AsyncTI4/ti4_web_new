@@ -333,6 +333,20 @@ export const PlayerStatsArea = memo(function PlayerStatsArea({
                 {playerData.commodities || 0}/{playerData.commoditiesTotal || 0}
               </Text>
             </div>
+
+            <div
+              className={styles.actionCardsContainer}
+              title={`${playerData.acCount || 0} action cards`}
+            >
+              <span
+                role="img"
+                aria-label="Action Cards"
+                className={styles.actionCardsImage}
+              />
+              <Text size="24px" fw={600} c="white" ff="heading">
+                {playerData.acCount || 0}
+              </Text>
+            </div>
           </Group>
           {playerData.isSpeaker && (
             <img
