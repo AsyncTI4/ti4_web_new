@@ -208,6 +208,19 @@
   min-height: calc(100vh - 60px);
 }
 
+.positionWarning {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(560px, calc(100vw - 24px));
+  max-height: 25vh;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  z-index: var(--z-game-state-overlay);
+}
+
 /*
  * Below `sm` the strip stacks the Discord channel links under the tool rack.
  * The strip's height is asserted, so that second row overflowed it and the map

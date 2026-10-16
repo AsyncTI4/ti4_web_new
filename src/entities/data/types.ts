@@ -22,6 +22,7 @@ type PlanetType =
   | "NONE"
   | "MR"
   | "SPACESTATION"
+  | "LIGHTNING"
   | "FAKE";
 
 export type TileData = {
@@ -39,6 +40,7 @@ export type TileData = {
   isNebula?: boolean;
   isGravityRift?: boolean;
   isScar?: boolean;
+  hasIngress?: boolean;
   hasEgress?: boolean;
   imageURL?: string;
   source: string;

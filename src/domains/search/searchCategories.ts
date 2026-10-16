@@ -152,10 +152,11 @@ function addSystemCategories(categories: Categories, tile: Tile) {
     if (tokenId === "frontier") {
       add({ id: "frontier", kind: "token", label: "Frontier token", terms: ["frontier"] });
     }
-    if (tokenId === "ingress") {
-      add({ id: "ingress", kind: "token", label: "Ingress token", terms: ["ingress"] });
-    }
   });
+
+  if (tileData.hasIngress || tokens.some(({ tokenId }) => tokenId === "ingress")) {
+    add({ id: "ingress", kind: "token", label: "Ingress", terms: ["ingress", "ingress token"] });
+  }
 
   const anomalies = new Set<string>();
   if (tileData.isAsteroidField) anomalies.add("asteroids");
