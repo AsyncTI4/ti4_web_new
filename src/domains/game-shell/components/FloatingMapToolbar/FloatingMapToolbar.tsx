@@ -32,6 +32,10 @@ type Props = {
 
 const CONTROLS_HEIGHT = 36;
 const PANEL_GAP = 8;
+const PANEL_BOTTOM_GAP = 16;
+/* The hand button sits 16px off the bottom and is ~48px tall; the events
+   panel stops above it, matching where the hand panel's bottom sits. */
+const HAND_CLEARANCE = 70;
 
 function EventsButton({
   gameId,
@@ -252,7 +256,9 @@ export function FloatingMapToolbar({
               ...(renderedPanel === "events"
                 ? {
                     top: eventsTop,
-                    maxHeight: `calc(100vh - ${eventsTop} - 16px)`,
+                    maxHeight: `calc(100vh - ${eventsTop} - ${
+                      canViewSecretHand ? HAND_CLEARANCE : PANEL_BOTTOM_GAP
+                    }px)`,
                   }
                 : {}),
             }}
