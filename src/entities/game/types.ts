@@ -7,6 +7,7 @@ import type {
   BorderAnomalyInfo,
   Point,
   RGBColor,
+  TileUnitData,
 } from "@/entities/data/types";
 import type { HexSide } from "@/entities/geometry/hexagonUtils";
 import { EntityStack } from "@/entities/positioning";
@@ -45,6 +46,9 @@ export type TilePdsEntry = {
 
 export type GameData = {
   tiles: Record<string, Tile>;
+  /** Retained without inventing map coordinates for unsupported bot positions. */
+  unpositionedTileData: Record<string, TileUnitData>;
+  unsupportedPositions: string[];
   tilePositions: string[];
   factionColorMap: FactionColorMap;
   originalFactionColorMap: FactionColorMap;

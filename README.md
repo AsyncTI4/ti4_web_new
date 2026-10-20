@@ -2,6 +2,17 @@
 
 This is a Twilight Imperium 4 web application built with React, Vite, and TypeScript.
 
+The map supports Fracture positions `frac1` through `frac25`. The original seven
+positions reserve 400 pixels of vertical space; any expanded position (`frac8`–`frac25`)
+adds another 600 pixels, matching the bot layout for tiles and player-stat areas.
+Expanded Fracture systems (`ef1`–`ef12`) and their planets are included through
+`src/entities/data/catalogs.ts`, supplementing the generated base catalogs.
+
+Unknown bot map positions are omitted from drawing and listed in a “Map incomplete”
+warning. Their raw tile data and planet lookups are retained; other game views
+remain usable. Add verified coordinates in `src/entities/data/tileCoordinates.ts`
+to render those positions. This also applies to player-stat positions and map previews.
+
 ## Tech Stack
 
 - **React 18** - UI framework

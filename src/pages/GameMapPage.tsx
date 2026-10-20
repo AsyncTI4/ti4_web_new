@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
-import { AppShell, Box, Tabs, SimpleGrid } from "@/ds";
+import { Alert, AppShell, Box, Tabs, SimpleGrid } from "@/ds";
 import { MapHeaderSwitch } from "@/layout/MapHeaderSwitch";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "@/domains/objectives/components/ScoreBoard/ScoreBoard";
@@ -233,6 +233,14 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
           </Tabs>
         </Box>
       </AppShell.Main>
+
+      {!!data?.unsupportedPositions.length && (
+        <Alert color="yellow" title="Map incomplete" className={classes.positionWarning}>
+          Some tiles or player areas cannot be drawn because their positions are
+          not supported yet: {data.unsupportedPositions.join(", ")}. Their game
+          data is preserved.
+        </Alert>
+      )}
 
       <SettingsModal
         opened={settings.settingsModalOpened}

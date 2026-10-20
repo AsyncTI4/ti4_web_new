@@ -184,6 +184,9 @@ export function getSystemFeatures(
       features.push({ id: anomalyId, ...ANOMALY_RULES[anomalyId] });
     }
   }
+  if (tileData?.hasIngress) {
+    features.push({ id: "ingress", ...TOKEN_RULES.ingress });
+  }
   if (tileData?.hasEgress) {
     features.push({ id: "egress", ...TOKEN_RULES.egress });
   }
@@ -222,6 +225,7 @@ export function getSystemFeatures(
 
     const known = TOKEN_RULES[tokenId];
     if (known) {
+      if (features.some((feature) => feature.id === tokenId)) continue;
       features.push({
         id: tokenId,
         name: known.name,

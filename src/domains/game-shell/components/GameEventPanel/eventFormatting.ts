@@ -1,8 +1,7 @@
 import { promissoryNotes } from "@/entities/data/promissoryNotes";
 import { agendas } from "@/entities/data/agendas";
 import { publicObjectives } from "@/entities/data/publicObjectives";
-import { planets } from "@/entities/data/planets";
-import { systems } from "@/entities/data/systems";
+import { planets, systems } from "@/entities/data/catalogs";
 import { units } from "@/entities/data/units";
 import { getAbility } from "@/entities/lookup/abilities";
 import { getActionCard } from "@/entities/lookup/actionCards";

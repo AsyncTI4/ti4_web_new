@@ -19,6 +19,7 @@ const TILE_PADDING = 100;
 const RING_MAX_COUNT = 8;
 const RING_MIN_COUNT = 3;
 const FRACTURE_Y_BUMP = 400;
+const EXPANDED_FRACTURE_Y_BUMP = 600;
 
 /** SVG path tracing the hex outline in tile-local coordinates. */
 export const HEX_PATH = `${HEX_VERTICES.map(
@@ -57,6 +58,9 @@ function normalizeRingCount(ringCount: number): number {
 }
 
 const FRACTURE_POSITIONS = ["frac1", "frac2", "frac3", "frac4", "frac5", "frac6", "frac7"];
+const EXPANDED_FRACTURE_POSITIONS = new Set(
+  Array.from({ length: 18 }, (_, index) => `frac${index + 8}`),
+);
 
 /** True when all seven fracture positions appear in the "position:systemId" entries. */
 function isFractureInPlay(tilePositions: string[]): boolean {
@@ -66,9 +70,14 @@ function isFractureInPlay(tilePositions: string[]): boolean {
   return FRACTURE_POSITIONS.every((pos) => positionSet.has(pos));
 }
 
+/** External position IDs must match an own entry, never an Object prototype key. */
+function isSupportedTilePosition(position: string): boolean {
+  return Object.hasOwn(TILE_COORDINATES, position);
+}
+
 function getBaseCoordinates(position: string): { x: number; y: number } {
   const coords = TILE_COORDINATES[position];
-  if (!coords) {
+  if (!isSupportedTilePosition(position)) {
     throw new Error(`Unknown position: ${position}`);
   }
   return { ...coords };
@@ -109,7 +118,7 @@ function applyRingAdjustments(
     } else if (position.startsWith("frac")) {
       // Fracture positions: special handling matching Java implementation
       x -= lower * HORIZONTAL_TILE_SPACING;
-      y -= (fractureYbump - 300) / 2; // equals 50 when fractureYbump is 400
+      y += fractureYbump === FRACTURE_Y_BUMP ? -50 : 250;
     } else {
       // Regular tiles: center the map by reducing coordinates
       x -= lower * HORIZONTAL_TILE_SPACING;
@@ -155,25 +164,31 @@ const calculateTilePositions = (
 ): TilePosition[] => {
   const finalFractureYbump = fractureYbump ?? getFractureYBump(inputData);
 
-  return inputData.map((entry) => {
+  return inputData.flatMap((entry) => {
     const [position, systemId] = entry.split(":");
+    if (!isSupportedTilePosition(position)) return [];
     const coordinates = calculateSingleTilePosition(
       position,
       ringCount,
       finalFractureYbump
     );
 
-    return {
+    return [{
       systemId,
       ringPosition: position,
       x: coordinates.x,
       y: coordinates.y,
-    };
+    }];
   });
 };
 
 function getFractureYBump(tilePositions: string[] | undefined): number {
-  return tilePositions && isFractureInPlay(tilePositions) ? FRACTURE_Y_BUMP : 0;
+  if (!tilePositions) return 0;
+  const baseBump = isFractureInPlay(tilePositions) ? FRACTURE_Y_BUMP : 0;
+  const hasExpandedFracture = tilePositions.some((entry) =>
+    EXPANDED_FRACTURE_POSITIONS.has(entry.split(":")[0]),
+  );
+  return baseBump + (hasExpandedFracture ? EXPANDED_FRACTURE_Y_BUMP : 0);
 }
 
 /**
@@ -197,5 +212,7 @@ export {
   calculateSingleTilePosition,
   calculateStatTilePositions,
   isFractureInPlay,
+  getFractureYBump,
+  isSupportedTilePosition,
   type TilePosition,
 };
