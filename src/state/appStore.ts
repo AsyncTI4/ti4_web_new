@@ -125,6 +125,13 @@ function getInitialZoomIndex() {
   return isMobileDevice() ? 0 : defaultZoomIndex;
 }
 
+/** A faction's forces in one zone: a planet, or the space area when null. */
+export type BattleAttackerPick = {
+  position: string;
+  planetId: string | null;
+  faction: string;
+};
+
 type AppStore = {
   hoveredPlanetId: string | null;
   scrollToPlanetId: string | null;
@@ -137,6 +144,13 @@ type AppStore = {
   systemDossier: { position: string; systemId: string } | null;
   openSystemDossier: (position: string, systemId: string) => void;
   closeSystemDossier: () => void;
+
+  /**
+   * A force picked in one dossier as the attacker of a battle, to be matched
+   * with a defender picked in any system. Null when none is picked.
+   */
+  battleAttacker: BattleAttackerPick | null;
+  setBattleAttacker: (pick: BattleAttackerPick | null) => void;
 
   handleZoomIn: () => void;
   handleZoomOut: () => void;
@@ -172,6 +186,10 @@ export const useAppStore = create<AppStore>((set) => {
     openSystemDossier: (position: string, systemId: string) =>
       set({ systemDossier: { position, systemId } }),
     closeSystemDossier: () => set({ systemDossier: null }),
+
+    battleAttacker: null,
+    setBattleAttacker: (pick: BattleAttackerPick | null) =>
+      set({ battleAttacker: pick }),
 
     setHoveredPlanetId: (planetId: string | null) =>
       set({ hoveredPlanetId: planetId }),

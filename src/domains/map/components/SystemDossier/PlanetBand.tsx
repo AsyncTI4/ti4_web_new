@@ -22,6 +22,7 @@ import {
   ControlPill,
   ForceRow,
 } from "./ForceRow";
+import { PickedBattleActions } from "./PickedBattle";
 import type { FactionHelpers } from "./useFactionHelpers";
 import styles from "./SystemDossier.module.css";
 
@@ -211,6 +212,14 @@ export function PlanetBand({
           summary={summary}
           helpers={helpers}
           role={roleOf(summary.faction)}
+          actions={
+            <PickedBattleActions
+              tile={tile}
+              planetId={planetId}
+              faction={summary.faction}
+              helpers={helpers}
+            />
+          }
         />
       ))}
       <AttachmentList attachments={planetTile.attachments ?? []} />

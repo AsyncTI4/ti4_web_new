@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Box, Text, Tooltip } from "@/ds";
 import { IconCalculator, IconTarget } from "@tabler/icons-react";
 import cx from "clsx";
@@ -139,11 +139,14 @@ export function ForceRow({
   helpers,
   role,
   capacity,
+  actions,
 }: {
   summary: ZoneSummary;
   helpers: FactionHelpers;
   role?: Role;
   capacity?: Capacity | null;
+  /** Controls set at the end of the units cell. */
+  actions?: ReactNode;
 }) {
   const colorAlias = helpers.colorAlias(faction);
   const color = helpers.playerFor(faction)?.color;
@@ -171,6 +174,7 @@ export function ForceRow({
             sustained={row.sustained}
           />
         ))}
+        {actions}
       </span>
       <b className={styles.n} title="Expected hits per combat round">
         {math.expectedHits > 0 ? formatStat(math.expectedHits) : "–"}

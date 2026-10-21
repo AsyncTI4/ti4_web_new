@@ -1,5 +1,6 @@
 import type { GameState, PlayerData } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
+import type { BattleAttackerPick } from "@/state/appStore";
 import { systemAnomalies } from "./featureRules";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
@@ -371,4 +372,78 @@ export function buildSystemBattleUrl(
     "space",
     playerFor,
   );
+}
+
+/**
+ * The forces a picked attacker brings out of its zone. From a planet, its
+ * ground forces there and whatever it has in the system's space area, ships
+ * and ground forces waiting to land. From the space area, just the latter.
+ */
+function pickedAttackerRows(
+  tile: Tile,
+  pick: BattleAttackerPick,
+  playerFor: PlayerFor,
+): UnitRow[] {
+  const inSpace = factionRows(
+    tile.unitsByFaction,
+    pick.faction,
+    playerFor,
+  ).filter((row) => isShip(row) || isGroundForce(row));
+  const planet = pick.planetId ? tile.planets[pick.planetId] : undefined;
+  if (!planet) return inSpace;
+  return [
+    ...factionRows(planet.unitsByFaction, pick.faction, playerFor).filter(
+      isGroundForce,
+    ),
+    ...inSpace,
+  ];
+}
+
+/**
+ * A battle between a picked attacker, from any system, and one faction's
+ * forces in a zone of the defending system: its ships and PDS in space, or
+ * its ground forces and PDS on a planet. The defender's system sets the
+ * terrain. Null when either side has nothing the calculator can use.
+ */
+export function buildPickedBattleUrl(
+  attackerTile: Tile,
+  pick: BattleAttackerPick,
+  defenderTile: Tile,
+  defenderPlanetId: string | null,
+  defenderFaction: string,
+  playerFor: PlayerFor,
+): string | null {
+  const planet = defenderPlanetId
+    ? defenderTile.planets[defenderPlanetId]
+    : undefined;
+  const place: BattlePlace = planet ? "ground" : "space";
+  const defenderRows = planet
+    ? factionRows(planet.unitsByFaction, defenderFaction, playerFor).filter(
+        (row) => isGroundForce(row) || isPds(row),
+      )
+    : [
+        ...factionRows(
+          defenderTile.unitsByFaction,
+          defenderFaction,
+          playerFor,
+        ).filter(isShip),
+        ...Object.values(defenderTile.planets)
+          .flatMap((p) =>
+            factionRows(p.unitsByFaction, defenderFaction, playerFor),
+          )
+          .filter(isPds),
+      ];
+
+  const params = new URLSearchParams();
+  const attacker = {
+    faction: pick.faction,
+    rows: pickedAttackerRows(attackerTile, pick, playerFor),
+  };
+  if (!writeSide(params, "attacker", attacker, playerFor)) return null;
+  const defender = { faction: defenderFaction, rows: defenderRows };
+  if (!writeSide(params, "defender", defender, playerFor)) return null;
+  writeTerrain(params, defenderTile, place);
+  if (place === "ground") params.set("place", "ground");
+
+  return `${BATTLE_CALC_URL}?${params}`;
 }

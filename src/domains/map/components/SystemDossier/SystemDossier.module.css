@@ -462,6 +462,64 @@
   outline-offset: 2px;
 }
 
+button.calcLink {
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* ---------- Picked attacker ---------- */
+
+.pickActions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.pickOn,
+.pickOn:hover {
+  color: var(--ds-white);
+  background: rgb(var(--ds-accent-rgb) / 0.8);
+  border-color: var(--ds-accent);
+}
+
+.pickCalc {
+  color: var(--ds-accent);
+  border-color: rgb(var(--ds-accent-rgb) / 0.6);
+}
+
+.pickNote {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--text-meta);
+  color: var(--ds-ink);
+}
+
+.pickNote b {
+  color: var(--ds-ink-hi);
+}
+
+.pickClear {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--ds-h22);
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  color: var(--ds-ink);
+  cursor: pointer;
+}
+
+.pickClear:hover {
+  color: var(--ds-ink-hi);
+  border-color: var(--ds-h35);
+}
+
 .empty {
   padding: 10px 14px;
   font-size: var(--text-data);
