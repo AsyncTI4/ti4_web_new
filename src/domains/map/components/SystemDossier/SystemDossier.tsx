@@ -15,10 +15,12 @@ import { getTileById } from "@/entities/lookup/systems";
 import { TILE_HEIGHT, TILE_WIDTH } from "@/entities/geometry/tilePositioning";
 import { getPlanetData, getPlanetsByTileId } from "@/entities/lookup/planets";
 import { getAttachmentModifiers } from "@/entities/game/planets";
+import { useAppStore } from "@/state/appStore";
 import { useGameData } from "@/state/useGameContext";
 import type { GameData, Tile } from "@/entities/game/types";
 import {
   buildSpaceBattleUrl,
+  buildPickedSystemBattleUrl,
   buildSystemBattleUrl,
   factionsInSystem,
   findAttacker,
@@ -391,27 +393,36 @@ function Flavour({ planetIds }: { planetIds: string[] }) {
  * One link per defending faction, carrying its ships and ground forces
  * together so both battles can be run from a single calculator tab. In a
  * contested system the attacker rides along on each, so it gets no link of
- * its own unless it is the only one there.
+ * its own unless it is the only one there. A picked attacker, gathered from
+ * any zones and systems, takes the place of the system's own attacker.
  */
 function SystemBattleLinks({
   tile,
   helpers,
-  attacker,
+  attacker: systemAttacker,
 }: {
   tile: Tile;
   helpers: FactionHelpers;
   attacker: string | null;
 }) {
+  const gameData = useGameData();
+  const picks = useAppStore((state) => state.battleAttackers);
+  const picked = picks[0]?.faction;
+  const attacker = picked ?? systemAttacker;
   const present = factionsInSystem(tile);
   const defenders = present.filter((faction) => faction !== attacker);
 
   return (defenders.length > 0 ? defenders : present).map((faction, index) => {
-    const url = buildSystemBattleUrl(
-      tile,
-      faction,
-      helpers.playerFor,
-      attacker,
-    );
+    const url =
+      picked && picked !== faction
+        ? buildPickedSystemBattleUrl(
+            (position) => gameData?.tiles?.[position],
+            picks,
+            tile,
+            faction,
+            helpers.playerFor,
+          )
+        : buildSystemBattleUrl(tile, faction, helpers.playerFor, attacker);
     if (!url) return null;
     const versus = attacker && attacker !== faction;
     return (

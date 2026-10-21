@@ -395,6 +395,20 @@ export function buildGroundBattleUrl(
   );
 }
 
+/** A faction's ships and ground forces in the space area and on every planet, plus its PDS. */
+function systemRows(tile: Tile, faction: string, playerFor: PlayerFor) {
+  return [
+    ...factionRows(tile.unitsByFaction, faction, playerFor).filter(
+      (row) => isShip(row) || isGroundForce(row),
+    ),
+    ...Object.values(tile.planets)
+      .flatMap((planet) =>
+        factionRows(planet.unitsByFaction, faction, playerFor),
+      )
+      .filter((row) => isGroundForce(row) || isPds(row)),
+  ];
+}
+
 /**
  * A faction's whole presence in the system in one link: ships, PDS and the
  * ground forces of every planet summed, against the attacker's when there is
@@ -407,15 +421,7 @@ export function buildSystemBattleUrl(
   playerFor: PlayerFor,
   attacker: string | null = null,
 ): string | null {
-  const rowsFor = (side: string) => [
-    ...factionRows(tile.unitsByFaction, side, playerFor).filter(
-      (row) => isShip(row) || isGroundForce(row),
-    ),
-    ...Object.values(tile.planets)
-      .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
-      .filter((row) => isGroundForce(row) || isPds(row)),
-  ];
-
+  const rowsFor = (side: string) => systemRows(tile, side, playerFor);
   const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
   return buildBattleUrl(
     tile,
@@ -498,6 +504,51 @@ export function buildPickedBattleUrl(
           .filter(isPds),
       ];
 
+  return pickedBattleUrl(
+    tileAt,
+    picks,
+    defenderTile,
+    { faction: defenderFaction, rows: defenderRows },
+    place,
+    playerFor,
+  );
+}
+
+/**
+ * A picked attacker, gathered from any zones and systems, against one
+ * faction's whole presence in the defending system: ships, PDS and the
+ * ground forces of every planet. It opens on the space battle; the
+ * calculator's own space/ground switch then reuses the same forces.
+ */
+export function buildPickedSystemBattleUrl(
+  tileAt: (position: string) => Tile | undefined,
+  picks: BattleAttackerPick[],
+  defenderTile: Tile,
+  defenderFaction: string,
+  playerFor: PlayerFor,
+): string | null {
+  return pickedBattleUrl(
+    tileAt,
+    picks,
+    defenderTile,
+    {
+      faction: defenderFaction,
+      rows: systemRows(defenderTile, defenderFaction, playerFor),
+    },
+    "space",
+    playerFor,
+  );
+}
+
+/** The picked attacker against a defender's force, in the defender's terrain. */
+function pickedBattleUrl(
+  tileAt: (position: string) => Tile | undefined,
+  picks: BattleAttackerPick[],
+  defenderTile: Tile,
+  defender: Force,
+  place: BattlePlace,
+  playerFor: PlayerFor,
+): string | null {
   if (picks.length === 0) return null;
   const params = new URLSearchParams();
   const attacker = {
@@ -507,7 +558,6 @@ export function buildPickedBattleUrl(
   if (!writeSide(params, "attacker", attacker, playerFor, defenderTile)) {
     return null;
   }
-  const defender = { faction: defenderFaction, rows: defenderRows };
   if (!writeSide(params, "defender", defender, playerFor, defenderTile)) {
     return null;
   }
