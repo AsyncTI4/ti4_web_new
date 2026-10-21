@@ -104,6 +104,26 @@ function techEffects(player: PlayerData | undefined, side: Side): string[] {
   return [...new Set(effects)];
 }
 
+/**
+ * Relics ti4battle.com models, keyed by our relic id and mapped to its effect
+ * name. Lightrail Ordnance is not here: it counts space docks, so it is
+ * written apart.
+ */
+const CALC_RELIC_EFFECTS: Record<string, string> = {
+  heartofixth: "Heart of Ixth",
+  metalivoidarmaments: "Metali Void Armaments",
+  metalivoidshielding: "Metali Void Shielding",
+};
+
+const LIGHTRAIL_ORDNANCE = "lightrailordnance";
+
+/** The player's relics that are ready to use: held and not exhausted. */
+function readyRelics(player: PlayerData | undefined): string[] {
+  if (!player) return [];
+  const exhausted = new Set(player.exhaustedRelics ?? []);
+  return (player.relics ?? []).filter((relic) => !exhausted.has(relic));
+}
+
 type PlayerFor = (faction: string) => PlayerData | undefined;
 type BattlePlace = "space" | "ground";
 type Side = "attacker" | "defender";
@@ -135,6 +155,7 @@ function writeSide(
   side: Side,
   { faction, rows }: Force,
   playerFor: PlayerFor,
+  battleTile: Tile,
 ): boolean {
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
@@ -164,7 +185,38 @@ function writeSide(
   for (const effect of techEffects(playerFor(faction), side)) {
     params.set(`${side}-effect-${effect}`, "1");
   }
+  writeRelics(params, side, faction, playerFor, battleTile);
   return true;
+}
+
+/**
+ * Writes the combat relics the side's owner has ready. Lightrail Ordnance
+ * arms the owner's space docks in the battle's system; docks in adjacent
+ * systems, which may also fire, are left to set by hand.
+ */
+function writeRelics(
+  params: URLSearchParams,
+  side: Side,
+  faction: string,
+  playerFor: PlayerFor,
+  battleTile: Tile,
+) {
+  const relics = readyRelics(playerFor(faction));
+  for (const relic of relics) {
+    const effect = CALC_RELIC_EFFECTS[relic];
+    if (effect) params.set(`${side}-effect-${effect}`, "1");
+  }
+  if (relics.includes(LIGHTRAIL_ORDNANCE)) {
+    const docks = Object.values(battleTile.planets)
+      .flatMap((planet) =>
+        factionRows(planet.unitsByFaction, faction, playerFor),
+      )
+      .filter((row) => row.unit.baseType === "spacedock")
+      .reduce((sum, row) => sum + row.count, 0);
+    if (docks > 0) {
+      params.set(`${side}-effect-Lightrail Ordnance`, String(docks));
+    }
+  }
 }
 
 /**
@@ -196,8 +248,8 @@ function buildBattleUrl(
   playerFor: PlayerFor,
 ): string | null {
   const params = new URLSearchParams();
-  if (attacker) writeSide(params, "attacker", attacker, playerFor);
-  if (!writeSide(params, "defender", defender, playerFor)) return null;
+  if (attacker) writeSide(params, "attacker", attacker, playerFor, tile);
+  if (!writeSide(params, "defender", defender, playerFor, tile)) return null;
   writeTerrain(params, tile, place);
   if (place === "ground") params.set("place", "ground");
 
@@ -439,9 +491,13 @@ export function buildPickedBattleUrl(
     faction: pick.faction,
     rows: pickedAttackerRows(attackerTile, pick, playerFor),
   };
-  if (!writeSide(params, "attacker", attacker, playerFor)) return null;
+  if (!writeSide(params, "attacker", attacker, playerFor, defenderTile)) {
+    return null;
+  }
   const defender = { faction: defenderFaction, rows: defenderRows };
-  if (!writeSide(params, "defender", defender, playerFor)) return null;
+  if (!writeSide(params, "defender", defender, playerFor, defenderTile)) {
+    return null;
+  }
   writeTerrain(params, defenderTile, place);
   if (place === "ground") params.set("place", "ground");
 
