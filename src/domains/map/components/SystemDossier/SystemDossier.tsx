@@ -34,6 +34,7 @@ import {
   ForceRow,
 } from "./ForceRow";
 import { EconomicFigure, PlanetBand } from "./PlanetBand";
+import { PickedAttackerNote, PickedBattleActions } from "./PickedBattle";
 import { useFactionHelpers, type FactionHelpers } from "./useFactionHelpers";
 import { UnitSheetContext, useUnitSheet, type SheetUnit } from "./unitSheet";
 import styles from "./SystemDossier.module.css";
@@ -202,6 +203,14 @@ function SpaceBand({
           helpers={helpers}
           role={roleOf(summary.faction)}
           capacity={capacityOf(summary.rows)}
+          actions={
+            <PickedBattleActions
+              tile={tile}
+              planetId={null}
+              faction={summary.faction}
+              helpers={helpers}
+            />
+          }
         />
       ))}
       {pdsInRange?.map((entry) => (
@@ -576,6 +585,7 @@ export function SystemDossier({
             Expected hits per combat round. Space cannon resolves before the
             first round.
           </span>
+          <PickedAttackerNote helpers={helpers} />
           <SystemBattleLinks
             tile={tile}
             helpers={helpers}
