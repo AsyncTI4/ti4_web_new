@@ -17,19 +17,26 @@ function zoneName(pick: BattleAttackerPick): string {
     : `space area of ${pick.position}`;
 }
 
-function samePick(a: BattleAttackerPick | null, b: BattleAttackerPick) {
+function samePick(a: BattleAttackerPick, b: BattleAttackerPick) {
   return (
-    !!a &&
     a.position === b.position &&
     a.planetId === b.planetId &&
     a.faction === b.faction
   );
 }
 
+/** The picked zones in a sentence: "A", "A and B", "A, B and C". */
+function zoneNames(picks: BattleAttackerPick[]): string {
+  const names = picks.map(zoneName);
+  return names.length < 2
+    ? names.join("")
+    : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
 /**
- * A force row's battle actions: pick its force as the attacker, and, once an
- * attacker from any zone or system is picked, open the calculator with that
- * attacker against this force.
+ * A force row's battle actions: add its force to the attacker, and, once an
+ * attacker is gathered from any zones or systems, open the calculator with
+ * that attacker against this force.
  */
 export function PickedBattleActions({
   tile,
@@ -42,18 +49,18 @@ export function PickedBattleActions({
   faction: string;
   helpers: FactionHelpers;
 }) {
-  const pick = useAppStore((state) => state.battleAttacker);
-  const setPick = useAppStore((state) => state.setBattleAttacker);
+  const picks = useAppStore((state) => state.battleAttackers);
+  const togglePick = useAppStore((state) => state.toggleBattleAttacker);
   const gameData = useGameData();
   const self = { position: tile.position, planetId, faction };
-  const picked = samePick(pick, self);
+  const picked = picks.some((pick) => samePick(pick, self));
+  const attacker = picks[0]?.faction;
 
-  const attackerTile = pick ? gameData?.tiles?.[pick.position] : undefined;
   const url =
-    pick && attackerTile && pick.faction !== faction
+    attacker && attacker !== faction
       ? buildPickedBattleUrl(
-          attackerTile,
-          pick,
+          (position) => gameData?.tiles?.[position],
+          picks,
           tile,
           planetId,
           faction,
@@ -61,11 +68,16 @@ export function PickedBattleActions({
         )
       : null;
 
+  const name = helpers.displayName(faction);
   const pickTitle = picked
-    ? "Picked as attacker. Click to clear"
-    : `Pick ${helpers.displayName(faction)} here as the attacker, then open the battle calculator from the defender's row in any system`;
-  const calcTitle = pick
-    ? `${helpers.displayName(pick.faction)} from ${zoneName(pick)} attacking ${helpers.displayName(faction)} here, in the battle calculator`
+    ? "Part of the attacker. Click to drop it"
+    : attacker === faction
+      ? `Add ${name}'s forces here to the attacker`
+      : attacker
+        ? `Pick ${name} here as the attacker instead of ${helpers.displayName(attacker)}`
+        : `Pick ${name} here as the attacker, add more of its forces from other zones or systems, then open the battle calculator from the defender's row in any system`;
+  const calcTitle = attacker
+    ? `${helpers.displayName(attacker)} from ${zoneNames(picks)} attacking ${name} here, in the battle calculator`
     : "";
 
   return (
@@ -89,7 +101,7 @@ export function PickedBattleActions({
           className={cx(styles.calcLink, picked && styles.pickOn)}
           aria-pressed={picked}
           aria-label={pickTitle}
-          onClick={() => setPick(picked ? null : self)}
+          onClick={() => togglePick(self)}
         >
           <IconSword size={14} aria-hidden />
         </button>
@@ -100,8 +112,9 @@ export function PickedBattleActions({
 
 /** Names the picked attacker in the dossier's footer, with a way to clear it. */
 export function PickedAttackerNote({ helpers }: { helpers: FactionHelpers }) {
-  const pick = useAppStore((state) => state.battleAttacker);
-  const setPick = useAppStore((state) => state.setBattleAttacker);
+  const picks = useAppStore((state) => state.battleAttackers);
+  const clearPicks = useAppStore((state) => state.clearBattleAttackers);
+  const pick = picks[0];
   if (!pick) return null;
 
   return (
@@ -110,11 +123,11 @@ export function PickedAttackerNote({ helpers }: { helpers: FactionHelpers }) {
       Attacker
       <FactionIcon faction={pick.faction} w={14} h={14} />
       <b>{helpers.displayName(pick.faction)}</b>
-      <span>from {zoneName(pick)}</span>
+      <span>from {zoneNames(picks)}</span>
       <button
         type="button"
         className={styles.pickClear}
-        onClick={() => setPick(null)}
+        onClick={clearPicks}
         aria-label="Clear the picked attacker"
       >
         <IconX size={12} aria-hidden />

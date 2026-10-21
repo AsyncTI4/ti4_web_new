@@ -427,39 +427,51 @@ export function buildSystemBattleUrl(
 }
 
 /**
- * The forces a picked attacker brings out of its zone. From a planet, its
- * ground forces there and whatever it has in the system's space area, ships
- * and ground forces waiting to land. From the space area, just the latter.
+ * The forces a picked attacker brings out of its zones. From a planet, its
+ * ground forces there; from any zone of a system, whatever it has in that
+ * system's space area, ships and ground forces waiting to land, counted once
+ * however many zones of the system are picked.
  */
 function pickedAttackerRows(
-  tile: Tile,
-  pick: BattleAttackerPick,
+  tileAt: (position: string) => Tile | undefined,
+  picks: BattleAttackerPick[],
   playerFor: PlayerFor,
 ): UnitRow[] {
-  const inSpace = factionRows(
-    tile.unitsByFaction,
-    pick.faction,
-    playerFor,
-  ).filter((row) => isShip(row) || isGroundForce(row));
-  const planet = pick.planetId ? tile.planets[pick.planetId] : undefined;
-  if (!planet) return inSpace;
-  return [
-    ...factionRows(planet.unitsByFaction, pick.faction, playerFor).filter(
-      isGroundForce,
-    ),
-    ...inSpace,
-  ];
+  const rows: UnitRow[] = [];
+  const positions = new Set(picks.map((pick) => pick.position));
+  for (const position of positions) {
+    const tile = tileAt(position);
+    if (!tile) continue;
+    for (const pick of picks) {
+      if (pick.position !== position || !pick.planetId) continue;
+      const planet = tile.planets[pick.planetId];
+      if (!planet) continue;
+      rows.push(
+        ...factionRows(planet.unitsByFaction, pick.faction, playerFor).filter(
+          isGroundForce,
+        ),
+      );
+    }
+    const faction = picks[0].faction;
+    rows.push(
+      ...factionRows(tile.unitsByFaction, faction, playerFor).filter(
+        (row) => isShip(row) || isGroundForce(row),
+      ),
+    );
+  }
+  return rows;
 }
 
 /**
- * A battle between a picked attacker, from any system, and one faction's
- * forces in a zone of the defending system: its ships and PDS in space, or
- * its ground forces and PDS on a planet. The defender's system sets the
- * terrain. Null when either side has nothing the calculator can use.
+ * A battle between a picked attacker, gathered from any zones and systems,
+ * and one faction's forces in a zone of the defending system: its ships and
+ * PDS in space, or its ground forces and PDS on a planet. The defender's
+ * system sets the terrain. Null when either side has nothing the calculator
+ * can use.
  */
 export function buildPickedBattleUrl(
-  attackerTile: Tile,
-  pick: BattleAttackerPick,
+  tileAt: (position: string) => Tile | undefined,
+  picks: BattleAttackerPick[],
   defenderTile: Tile,
   defenderPlanetId: string | null,
   defenderFaction: string,
@@ -486,10 +498,11 @@ export function buildPickedBattleUrl(
           .filter(isPds),
       ];
 
+  if (picks.length === 0) return null;
   const params = new URLSearchParams();
   const attacker = {
-    faction: pick.faction,
-    rows: pickedAttackerRows(attackerTile, pick, playerFor),
+    faction: picks[0].faction,
+    rows: pickedAttackerRows(tileAt, picks, playerFor),
   };
   if (!writeSide(params, "attacker", attacker, playerFor, defenderTile)) {
     return null;

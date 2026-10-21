@@ -146,11 +146,17 @@ type AppStore = {
   closeSystemDossier: () => void;
 
   /**
-   * A force picked in one dossier as the attacker of a battle, to be matched
-   * with a defender picked in any system. Null when none is picked.
+   * The forces picked, in one or more zones and systems, as one faction's
+   * attacker in a battle, to be matched with a defender picked in any
+   * system. Empty when none is picked.
    */
-  battleAttacker: BattleAttackerPick | null;
-  setBattleAttacker: (pick: BattleAttackerPick | null) => void;
+  battleAttackers: BattleAttackerPick[];
+  /**
+   * Adds a zone to the attacker, or drops it when already picked. A zone of
+   * another faction starts a new attacker.
+   */
+  toggleBattleAttacker: (pick: BattleAttackerPick) => void;
+  clearBattleAttackers: () => void;
 
   handleZoomIn: () => void;
   handleZoomOut: () => void;
@@ -187,9 +193,23 @@ export const useAppStore = create<AppStore>((set) => {
       set({ systemDossier: { position, systemId } }),
     closeSystemDossier: () => set({ systemDossier: null }),
 
-    battleAttacker: null,
-    setBattleAttacker: (pick: BattleAttackerPick | null) =>
-      set({ battleAttacker: pick }),
+    battleAttackers: [],
+    toggleBattleAttacker: (pick: BattleAttackerPick) =>
+      set(({ battleAttackers }) => {
+        const sameFaction = battleAttackers.filter(
+          (other) => other.faction === pick.faction,
+        );
+        const rest = sameFaction.filter(
+          (other) =>
+            other.position !== pick.position ||
+            other.planetId !== pick.planetId,
+        );
+        return {
+          battleAttackers:
+            rest.length < sameFaction.length ? rest : [...sameFaction, pick],
+        };
+      }),
+    clearBattleAttackers: () => set({ battleAttackers: [] }),
 
     setHoveredPlanetId: (planetId: string | null) =>
       set({ hoveredPlanetId: planetId }),
