@@ -347,6 +347,17 @@
   color: var(--ds-ink-hi);
 }
 
+.traitButton {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.traitLabel {
+  font-size: var(--text-data);
+  color: var(--ds-ink-hi);
+  white-space: nowrap;
+}
+
 .vals {
   display: inline-flex;
   align-items: center;
