@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { Image } from "@/ds";
+import { useState, type ReactNode } from "react";
+import { Image, Popover, UnstyledButton } from "@/ds";
 import cx from "clsx";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { TechSkipIcon, type TechType } from "@/shared/ui/TechSkipIcon";
@@ -56,6 +56,35 @@ export function EconomicFigure({
 function planetTraits(planet: PlanetData): PlanetTrait[] {
   if (planet.planetTypes?.length) return mergePlanetTraits(planet.planetTypes);
   return mergePlanetTraits(planet.planetType ? [planet.planetType] : null);
+}
+
+const TRAIT_LABEL: Record<PlanetTrait, string> = {
+  cultural: "Cultural",
+  hazardous: "Hazardous",
+  industrial: "Industrial",
+};
+
+/** The trait icon names the planet type when clicked or tapped. */
+function TraitBadge({ traits }: { traits: PlanetTrait[] }) {
+  const [opened, setOpened] = useState(false);
+  const label = `${traits.map((trait) => TRAIT_LABEL[trait]).join(" / ")} planet`;
+  return (
+    <Popover opened={opened} onChange={setOpened} position="top" withArrow>
+      <Popover.Target>
+        <UnstyledButton
+          className={styles.traitButton}
+          aria-label={label}
+          aria-haspopup="dialog"
+          onClick={() => setOpened(!opened)}
+        >
+          <PlanetTraitIcon traits={traits} size={16} />
+        </UnstyledButton>
+      </Popover.Target>
+      <Popover.Dropdown p="xs" className={styles.traitLabel}>
+        {label}
+      </Popover.Dropdown>
+    </Popover>
+  );
 }
 
 /** The legendary ability is shown in its own row, so it is not flagged here. */
@@ -159,7 +188,7 @@ export function PlanetBand({
     <section className={styles.zone} data-z="ground">
       <header className={styles.zoneHead}>
         <span className={styles.alt}>
-          {traits.length > 0 && <PlanetTraitIcon traits={traits} size={16} />}
+          {traits.length > 0 && <TraitBadge traits={traits} />}
           {planet.name}
         </span>
         <span
