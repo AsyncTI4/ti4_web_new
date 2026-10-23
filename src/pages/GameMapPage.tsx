@@ -164,6 +164,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
                 );
               })}
               <TabsControls
+                showSearch={onMapTab}
                 onMenuClick={() => setDrawerOpened(true)}
                 onCardsClick={mobileOpenHand}
                 onEventsClick={mobileOpenEvents}

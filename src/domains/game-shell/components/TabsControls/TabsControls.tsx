@@ -231,10 +231,12 @@ function DiscordLinks() {
 }
 
 function DesktopTabsControls({
+  showSearch,
   onCardsClick,
   onEventsClick,
   onTryDecalsClick,
 }: {
+  showSearch: boolean;
   onCardsClick?: () => void;
   onEventsClick?: () => void;
   onTryDecalsClick?: () => void;
@@ -246,7 +248,7 @@ function DesktopTabsControls({
         onEventsClick={onEventsClick}
         onTryDecalsClick={onTryDecalsClick}
       />
-      <BoardSearch />
+      {showSearch && <BoardSearch />}
       <div className={classes.spacer} />
       <Group gap={4} mr={14} wrap="nowrap" className={classes.links}>
         <DiscordLinks />
@@ -324,6 +326,7 @@ function MobileTabsControls({
 }
 
 export function TabsControls({
+  showSearch = true,
   onMenuClick,
   onCardsClick,
   onEventsClick,
@@ -331,6 +334,9 @@ export function TabsControls({
   onDesktopEventsClick,
   onTryDecalsClick,
 }: {
+  /** Off on the tabs that are plain HTML, where unmounting the board search
+      also hands Ctrl+F back to the browser's find. */
+  showSearch?: boolean;
   onMenuClick?: () => void;
   /** Shows the hand button in the phone controls when given. */
   onCardsClick?: () => void;
@@ -346,6 +352,7 @@ export function TabsControls({
     <>
       <Box visibleFrom="sm" style={{ display: "contents" }}>
         <DesktopTabsControls
+          showSearch={showSearch}
           onCardsClick={onDesktopCardsClick}
           onEventsClick={onDesktopEventsClick}
           onTryDecalsClick={onTryDecalsClick}
