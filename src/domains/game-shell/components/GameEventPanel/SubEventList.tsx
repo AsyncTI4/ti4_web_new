@@ -121,6 +121,21 @@ function SubEventContent({
       );
     }
 
+    case "CARD_CANCELED":
+      return (
+        <>
+          <SubFaction faction={sub.canceledBy} />
+          <span className={classes.subMuted}>canceled</span>
+          <span className={classes.subCardName}>{sub.cardName}</span>
+          {sub.faction && (
+            <>
+              <span className={classes.subMuted}>from</span>
+              <SubFaction faction={sub.faction} />
+            </>
+          )}
+        </>
+      );
+
     case "ACTION_CARD_PLAYED":
       return (
         <SubCardPlay

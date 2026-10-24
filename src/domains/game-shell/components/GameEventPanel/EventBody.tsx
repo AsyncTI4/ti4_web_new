@@ -282,16 +282,23 @@ function TurnBody({ event, p, playerName }: BodyProps) {
 function TechResearchedBody({ event, p, playerName }: BodyProps) {
   const techId = str(p, "techId") ?? "";
   const payment = str(p, "paymentType");
+  const source = str(p, "source");
   return (
     <>
       <Sentence>
-        <Actor event={event} playerName={playerName} /> researched a technology.
+        <Actor event={event} playerName={playerName} />{" "}
+        {!source || source === "RESEARCH"
+          ? "researched a technology."
+          : "gained a technology."}
       </Sentence>
       <Extras>
         <EventPopover details={<TechCard techId={techId} />}>
           <TechChip id={techId} name={resolveTechName(techId)} />
         </EventPopover>
         {payment && <span className={classes.note}>{prettifyId(payment)}</span>}
+        {source && source !== "RESEARCH" && (
+          <span className={classes.note}>{prettifyId(source)}</span>
+        )}
       </Extras>
     </>
   );

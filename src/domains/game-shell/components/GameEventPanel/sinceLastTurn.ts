@@ -2,8 +2,13 @@ import { skipToken, useQuery } from "@tanstack/react-query";
 import { useUser } from "@/api/auth/useUser";
 import { useGameData } from "@/state/useGameContext";
 import type { GameEvent } from "@/entities/data/types";
+import { isDataOnlyEvent } from "./dataOnlyEvents";
 
 const IGNORED_ARCHETYPES = new Set(["PHASE_STARTED", "ROUND_STARTED"]);
+
+function isIgnored(event: GameEvent): boolean {
+  return IGNORED_ARCHETYPES.has(event.archetype) || isDataOnlyEvent(event);
+}
 
 /** The faction the signed-in user is seated as in this game, if any. */
 export function useMyFaction(): string | null {
@@ -26,7 +31,7 @@ export function lastOwnEventSeq(
   if (!faction) return null;
   let last: number | null = null;
   for (const e of events) {
-    if (e.faction !== faction || IGNORED_ARCHETYPES.has(e.archetype)) continue;
+    if (e.faction !== faction || isIgnored(e)) continue;
     if (last === null || e.seq > last) last = e.seq;
   }
   return last;
@@ -34,9 +39,7 @@ export function lastOwnEventSeq(
 
 export function countSince(events: GameEvent[], seq: number | null): number {
   if (seq === null) return 0;
-  return events.filter(
-    (e) => e.seq > seq && !IGNORED_ARCHETYPES.has(e.archetype),
-  ).length;
+  return events.filter((e) => e.seq > seq && !isIgnored(e)).length;
 }
 
 /**
