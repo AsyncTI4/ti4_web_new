@@ -28,6 +28,7 @@ import {
   matchesFilter,
   type EventFilter,
 } from "./eventKinds";
+import { isDataOnlyEvent } from "./dataOnlyEvents";
 import { countSince, lastOwnEventSeq, useMyFaction } from "./sinceLastTurn";
 import {
   buildMapTimeline,
@@ -406,7 +407,9 @@ export function GameEventPanel({ animated = true }: { animated?: boolean }) {
 
   const allEvents = data ?? [];
   const keptEvents = allEvents.filter(
-    (e) => e.archetype !== "TURN" || e.payload?.passed === true,
+    (e) =>
+      !isDataOnlyEvent(e) &&
+      (e.archetype !== "TURN" || e.payload?.passed === true),
   );
   const countable = keptEvents.filter((e) => !isSectionDivider(e));
   const counts = filterCounts(countable);

@@ -378,6 +378,19 @@ type GameEventArchetype =
   | "MANUAL_COMMAND"
   | "PHASE_STARTED"
   | "ROUND_STARTED"
+  | "GAME_STARTED"
+  | "DRAFT_STARTED"
+  | "DRAFT_PICK"
+  | "DRAFT_ENDED"
+  | "PUBLIC_OBJECTIVE_REVEALED"
+  | "CONTROL_ESTABLISHED"
+  | "COMBAT_ROLL"
+  | "COMBAT_OUTCOME"
+  | "INVASION_COMMITTED"
+  | "CARD_CANCELED"
+  | "CARD_DISCARDED"
+  | "CARD_STOLEN"
+  | "EXPLORE_RESOLVED"
   | "GAME_ENDED";
 
 /** Structured sub-events embedded in TACTICAL_ACTION payloads (payload.subEvents). */
@@ -389,7 +402,12 @@ export type GameSubEvent =
       planet: string | null;
       vsFaction: string;
     }
-  | { type: "CONTROL_ESTABLISHED"; planet: string; faction?: string }
+  | {
+      type: "CONTROL_ESTABLISHED";
+      planet: string;
+      faction?: string | null;
+      previousOwner?: string | null;
+    }
   | {
       type: "ACTION_CARD_PLAYED";
       faction: string;
@@ -401,6 +419,7 @@ export type GameSubEvent =
       faction: string;
       leaderType: "AGENT" | "HERO";
       leaderId: string;
+      target?: string | null;
     }
   | { type: "TECH_EXHAUSTED"; faction: string; techId: string }
   | {
@@ -414,6 +433,7 @@ export type GameSubEvent =
       tile: string | null;
       units: Record<string, number> | null;
       cost: number | null;
+      source?: string | null;
     }
   | {
       type: "RETREAT";
@@ -424,7 +444,80 @@ export type GameSubEvent =
       toHolder: string;
       units: Record<string, StateCounts>;
     }
-  | { type: "MANUAL_COMMAND"; user: string | null; command: string };
+  | { type: "MANUAL_COMMAND"; user: string | null; command: string }
+  | {
+      type: "COMBAT_ROLL";
+      kind: string;
+      tile: string | null;
+      planet: string | null;
+      faction: string;
+      vsFaction: string | null;
+      hits: number;
+      expectedHitsTimes10: number;
+      units: Record<string, number>;
+    }
+  | {
+      type: "COMBAT_OUTCOME";
+      kind: "space" | "ground";
+      tile: string | null;
+      planet: string | null;
+      winner: string | null;
+      survivors: Record<string, Record<string, number>>;
+    }
+  | {
+      type: "INVASION_COMMITTED";
+      faction: string;
+      tile: string;
+      groundForces: Record<string, Record<string, number>>;
+    }
+  | {
+      type: "CARD_CANCELED";
+      faction: string | null;
+      cardName: string;
+      canceledBy: string;
+      method: string;
+    };
+
+/**
+ * Per-player snapshot row inside `GameEvent.playerState`, in this order:
+ * [vp, tg, commodities, tacticalCC, fleetCC, strategicCC, strategyCards,
+ * reactedStrategyCards, secondariesUsedThisRound, unlockedLeaders ("id:R|E|A"),
+ * techs, exhaustedTechs, relics, fragments, actionCardCount,
+ * unscoredSecretCount, promissoryNoteCount, passed (0|1), scoredObjectives].
+ */
+export type PlayerStateRow = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number[],
+  number[],
+  number[],
+  string[],
+  string[],
+  string[],
+  string[],
+  string[],
+  number,
+  number,
+  number,
+  0 | 1,
+  string[],
+];
+
+/**
+ * JSON in `GameEvent.playerState`: only what changed since the previous
+ * event that carried one. Absent keys mean "unchanged"; `players` holds only
+ * the changed factions' rows.
+ */
+export type PlayerStateDelta = {
+  v: number;
+  speaker?: string | null;
+  revealed?: string[];
+  players?: Record<string, PlayerStateRow>;
+};
 
 export type GameEvent = {
   seq: number;
@@ -436,6 +529,8 @@ export type GameEvent = {
   payload: Record<string, unknown>;
   mapState?: string | null;
   movementState?: string | null;
+  /** A JSON-encoded `PlayerStateDelta`, present only when player state changed. */
+  playerState?: string | null;
 };
 
 export type GamePhase =
