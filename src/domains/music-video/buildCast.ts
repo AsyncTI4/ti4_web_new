@@ -53,8 +53,10 @@ function phaseLabel(phase: GameState["phase"] | undefined) {
 }
 
 /** Whose turn it is: the live game state, then the per-player flag. */
-export function findActivePlayer(data: GameData, gameState: GameState | undefined): PlayerData | undefined {
+export function findActivePlayer(data: GameData, gameState: GameState | undefined, playerColor?: string): PlayerData | undefined {
   const seated = data.playerData.filter(isSeated);
+  const selected = playerColor ? seated.find((p) => p.color.toLowerCase() === playerColor && !p.eliminated) : undefined;
+  if (selected) return selected;
   if (gameState?.phase === "finished" || gameState?.winner) return undefined;
   return (
     (gameState?.activePlayer ? seated.find((p) => p.color === gameState.activePlayer) : undefined) ??
@@ -119,10 +121,10 @@ function readBoard(data: GameData, playerIndex: Map<string, number>, colorOf: (f
 
 /** Enough of the board is in play for a proper crowd of backup dancers. Starting positions come to
  * roughly 6-8 unit stacks a player; a few rounds in it's 15-25, spread over most of the map. */
-export function musicVideoEligible(data: GameData | undefined, gameState: GameState | undefined): boolean {
+export function musicVideoEligible(data: GameData | undefined, gameState: GameState | undefined, playerColor?: string): boolean {
   if (!data) return false;
   const seated = data.playerData.filter(isSeated);
-  if (seated.length < 3 || !findActivePlayer(data, gameState)) return false;
+  if (seated.length < 3 || !findActivePlayer(data, gameState, playerColor)) return false;
   const tiles = Object.values(data.tiles);
   let occupied = 0;
   let stacks = 0;
@@ -173,9 +175,10 @@ export function buildMusicVideoCast(
   gameState: GameState | undefined,
   discordId: string | null,
   rng: Rng = Math.random,
+  playerColor?: string,
 ): MusicVideoCast | null {
   const seated = data.playerData.filter(isSeated);
-  const active = findActivePlayer(data, gameState);
+  const active = findActivePlayer(data, gameState, playerColor);
   if (!active) return null;
 
   const colorOf = (faction: string) => getColorAlias(data.factionColorMap[faction]?.color);

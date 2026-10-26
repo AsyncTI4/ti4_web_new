@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import cx from "clsx";
+import { useSearchParams } from "react-router-dom";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { useGameState } from "@/api/useGameState";
 import { useUser } from "@/api/auth/useUser";
@@ -23,27 +24,30 @@ export function MusicVideoButton({ gameId }: { gameId: string }) {
   const data = useGameData();
   const { data: gameState } = useGameState(gameId);
   const { user } = useUser();
+  const [searchParams] = useSearchParams();
+  // Hidden override for games waiting on one player outside a normal turn.
+  const playerColor = searchParams.get("musicVideoPlayer")?.trim().toLowerCase();
   const [launch, setLaunch] = useState<{ origin: Point; cast: MusicVideoCast } | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const eligible = useMemo(() => musicVideoEligible(data, gameState), [data, gameState]);
+  const eligible = useMemo(() => musicVideoEligible(data, gameState, playerColor), [data, gameState, playerColor]);
   const discordId = user?.authenticated ? (user.discord_id ?? null) : null;
 
-  const castKey = data ? `${data.gameName}:${data.gameRound}` : "";
+  const castKey = data ? `${data.gameName}:${data.gameRound}:${playerColor ?? ""}` : "";
 
   // Warm this game's art in the background so the video opens without a wait.
   useEffect(() => {
     if (!eligible || !data || status !== "ready") return;
     prefetchMusicVideoCast(castKey, () => {
-      const preview = buildMusicVideoCast(data, gameState, discordId);
+      const preview = buildMusicVideoCast(data, gameState, discordId, Math.random, playerColor);
       return preview ? castImageUrls(preview, DECOR_COLORS) : [];
     });
-  }, [eligible, data, gameState, discordId, status, castKey]);
+  }, [eligible, data, gameState, discordId, status, castKey, playerColor]);
 
   // Once open, game updates (a new round, units moving) must not unmount the video mid-song.
   if (!data || (!launch && (status !== "ready" || warmedCast !== castKey || !eligible))) return null;
   const open = launch !== null;
   const start = () => {
-    const cast = buildMusicVideoCast(data, gameState, discordId);
+    const cast = buildMusicVideoCast(data, gameState, discordId, Math.random, playerColor);
     if (!cast) return;
     const rect = buttonRef.current?.getBoundingClientRect();
     const origin = rect ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 } : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
