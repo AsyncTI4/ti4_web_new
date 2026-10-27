@@ -1,5 +1,6 @@
 import { assetUrl } from "../../assetUrls";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { commandTokenUrl, unitSpriteUrl } from "../../castAssets";
 import { G } from "./game";
 
@@ -40,7 +41,7 @@ const broken = new Set<string>();
 export const markBroken = (url: string) => broken.add(url);
 export const usable = (url: string | undefined): url is string => !!url && !broken.has(url);
 
-export const leaderSrc = (name: string) => `/leaders/${name}.webp`;
+export const leaderSrc = getLeaderPortraitUrl;
 export const tileSrc = (image: string) => cdnImage(`/tiles/${image}`);
 export const tokenSrc = (kind: "command" | "fleet", color: string) => commandTokenUrl(kind, color);
 export const cardSrc = (name: string) => staticFile(`cards/${name}.webp`);

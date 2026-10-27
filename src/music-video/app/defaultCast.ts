@@ -3,6 +3,7 @@
  * capture harness): the reference game's board with fictional players.
  */
 import { cdnImage } from "@/entities/data/cdnImage";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import mapData from "../video/data/map.json";
 import { TILE_H, TILE_W, hexCenter } from "../video/lib/hex";
 import type { CastPlayer, CastTile, CastUnit, MusicVideoCast } from "../cast";
@@ -84,7 +85,7 @@ export function defaultCast(): MusicVideoCast {
     sc: [2, 3, 4, 5, 8, 1][i],
     stats: stats[p.faction]?.map(hexCenter) ?? null,
     home: p.faction === "hacan" ? "304" : null,
-    leaders: { agent: `/leaders/${p.faction}agent.webp`, commander: `/leaders/${p.faction}commander.webp`, hero: `/leaders/${p.faction}hero.webp` },
+    leaders: { agent: getLeaderPortraitUrl(`${p.faction}agent`), commander: getLeaderPortraitUrl(`${p.faction}commander`), hero: getLeaderPortraitUrl(`${p.faction}hero`) },
   }));
   return {
     game: "pbd1337",

@@ -42,20 +42,28 @@ npm run preview
 
 ## Repository Structure
 
-Leader portraits in `public/leaders/` use lowercase leader IDs as WebP filenames.
-Discordant Stars and Theodisi portraits come from the bot repository's
-`src/main/resources/emojis/leaders/ds/` and `theodisi/` PNGs, converted at their
-original dimensions with transparency preserved. Portrait visibility and leader
-definitions are managed separately from these image assets.
+Leader portraits, including the music video, use `getLeaderPortraitUrl()` to map
+leader IDs to existing CDN images. Source paths and filename casing are recorded
+in `src/entities/data/leaderPortraits.ts` from the bot's `emojis/leaders/` PNGs
+and `emojis/Reupload/KeleresCommander.png`. The bot's upload workflow converts
+these PNGs to WebP; `cdnImage()` selects that generated format.
+
+The `naaluagent-te` and `xxchahero-te` aliases use the same portraits as their base
+IDs, matching the bot's emoji aliases. Their previous frontend WebP files were
+byte-identical to the base portraits. Unknown or unavailable portraits retain the
+transparent fallback. No duplicate image assets are needed in either repository.
+
+Portrait visibility and leader definitions are managed separately from these assets.
 The supplemental `src/entities/data/theodisiLeaders.ts` catalog is generated from
 the bot's `src/main/resources/data/leaders/theodisi_leaders.json`; it fills missing
 IDs through `catalogs.ts` without replacing definitions in the base catalog.
 
-Default faction icons for `franken19` through `franken26` are bundled in
-`public/factions/`, converted from the bot's
-`src/main/resources/emojis/factions/franken/Franken19.png` through `Franken26.png`.
-These fill gaps in the standard faction-image collection; custom emoji and
-Discord image overrides still take precedence.
+Default faction icons for `franken19` through `franken26` use the existing CDN
+images generated from `emojis/factions/franken/Franken19.png` through `Franken26.png`.
+Custom emoji and Discord image overrides still take precedence.
+
+The frontend carries no local copies of these images and requires no new bot image
+publication for this migration.
 
 Dependencies point downward: `pages` → `layout` → `domains` → `shared`/`hooks` → `state` → `api` → `entities` → `utils`. `game-shell` composes the other domains; `cards` sits below them.
 
@@ -64,7 +72,6 @@ ti4_web_new/
 ├── public/                    # Static assets
 │   ├── cardback/             # Card background images
 │   ├── font/                 # Custom fonts
-│   ├── leaders/              # Faction leader images
 │   ├── planet_attributes/    # Planet trait icons
 │   └── ...                   # Game assets (tokens, icons, etc.)
 ├── src/
