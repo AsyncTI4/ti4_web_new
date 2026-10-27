@@ -1,4 +1,5 @@
 import { Tile } from "@/entities/game/types";
+import { TECH_COLOR_IMAGES } from "@/entities/data/uiImages";
 import { TECH_TYPE_COLOR } from "@/entities/lookup/tech";
 import { PlanetMarkersLayer } from "./PlanetMarkersLayer";
 
@@ -20,7 +21,7 @@ export function TechSkipIconsLayer({ systemId, mapTile }: Props) {
           return [
             <img
               key={`${systemId}-${planetId}-${specialty}-${index}`}
-              src={`/${color}.png`}
+              src={TECH_COLOR_IMAGES[color]}
               alt={specialty}
               style={{
                 position: "absolute",

@@ -1,4 +1,5 @@
 import { techs } from "@/entities/data/tech";
+import { TECH_COLOR_IMAGES } from "@/entities/data/uiImages";
 import { indexBy } from "@/entities/lookup/indexBy";
 import type { Tech } from "@/entities/data/types";
 
@@ -64,10 +65,10 @@ export const TECH_TYPE_COLOR: Record<string, TechColor> = {
 
 /** Prerequisite letter in a requirements string (e.g. "BBY") to its skip icon. */
 export const TECH_PREREQ_ICON: Record<string, string> = {
-  B: "/blue.png",
-  G: "/green.png",
-  R: "/red.png",
-  Y: "/yellow.png",
+  B: TECH_COLOR_IMAGES.blue,
+  G: TECH_COLOR_IMAGES.green,
+  R: TECH_COLOR_IMAGES.red,
+  Y: TECH_COLOR_IMAGES.yellow,
 };
 
 const SYNERGY_PAIRS: Record<string, TechSynergyPair> = {

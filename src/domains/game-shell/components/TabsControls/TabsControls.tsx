@@ -13,6 +13,7 @@ import {
 import { useGameData } from "@/state/useGameContext";
 import { useSettingsStore } from "@/state/appStore";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { TECH_COLOR_IMAGES } from "@/entities/data/uiImages";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 import { ThemeSwatches } from "./ThemeSwatches";
 import { BoardSearch } from "@/domains/search/BoardSearch";
@@ -20,7 +21,12 @@ import classes from "./TabsControls.module.css";
 
 const LENS_ICON_SIZE = 16;
 
-const TECH_SKIP_ICONS = ["/green.png", "/yellow.png", "/red.png", "/blue.png"];
+const TECH_SKIP_ICONS = [
+  TECH_COLOR_IMAGES.green,
+  TECH_COLOR_IMAGES.yellow,
+  TECH_COLOR_IMAGES.red,
+  TECH_COLOR_IMAGES.blue,
+];
 
 function LensTip({ label, shortcut }: { label: string; shortcut?: string }) {
   return (

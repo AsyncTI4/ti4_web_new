@@ -236,7 +236,7 @@
 
 .resourceValue::before {
   inset: 1px;
-  background-image: url("/pa_resources.png");
+  background-image: url("https://images.asyncti4.com/player_area/pa_resources.webp?v=4");
 }
 
 .influenceValue {

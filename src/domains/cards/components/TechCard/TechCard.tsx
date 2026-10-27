@@ -11,6 +11,7 @@ import {
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { TECH_COLOR_IMAGES } from "@/entities/data/uiImages";
 
 type Props = {
   techId: string;
@@ -46,7 +47,7 @@ function TileGlyph({ techId, techData }: { techId: string; techData: TechData })
   if (letter) return <span className={styles.letter}>{letter}</span>;
 
   const color = TECH_TYPE_COLOR[techData.types[0]];
-  if (color) return <Image src={`/${color}.png`} alt="" />;
+  if (color) return <Image src={TECH_COLOR_IMAGES[color]} alt="" />;
   return null;
 }
 

@@ -437,7 +437,7 @@ export const systems: TileData[] = [
     "wormholes": [],
     "planets": [],
     "source": "other",
-    "tileBack": "black"
+    "tileBack": "green"
   },
   {
     "id": "0gray",
@@ -572,7 +572,7 @@ export const systems: TileData[] = [
     "id": "103",
     "name": "Vira Pics III",
     "aliases": [
-      "te20",
+      "103",
       "vira",
       "virapics",
       "vira3",
@@ -591,7 +591,7 @@ export const systems: TileData[] = [
     "id": "104",
     "name": "Lesab",
     "aliases": [
-      "te21",
+      "104",
       "lesab"
     ],
     "imagePath": "104_Lesab.png",
@@ -749,13 +749,15 @@ export const systems: TileData[] = [
   },
   {
     "id": "110",
-    "name": "Horizon/El'Nath/Luthien IV",
+    "name": "Horizon/El'Nath/Luthien VI",
     "aliases": [
       "te26",
       "horizon",
       "elnath",
       "luthien4",
-      "luthieniv"
+      "luthieniv",
+      "luthienvi",
+      "luthien6"
     ],
     "imagePath": "110_Horizon.png",
     "planets": [
@@ -771,7 +773,7 @@ export const systems: TileData[] = [
     "id": "111",
     "name": "Tarana/Oluz Station",
     "aliases": [
-      "te22",
+      "111",
       "tarana",
       "oluz",
       "oluzstation"
@@ -813,7 +815,7 @@ export const systems: TileData[] = [
       "betarift"
     ],
     "imagePath": "113_BetaRift.png",
-    "shipPositionsType": "TYPE08",
+    "shipPositionsType": "TYPE05",
     "wormholes": [
       "BETA"
     ],
@@ -894,7 +896,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "118",
-    "name": "Ahk Creuxx (Crimson)",
+    "name": "Ahk Creuxx - Rebellion",
     "aliases": [
       "te06",
       "creuxx",
@@ -964,7 +966,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "13",
-    "name": "Quinarra/Trenlak - N'orr",
+    "name": "Quinarra/Trenlak - Sardakk",
     "aliases": [
       "13",
       "trenlak",
@@ -3856,7 +3858,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "78",
-    "name": "Void",
+    "name": "Empty System",
     "aliases": [
       "78",
       "void7",
@@ -4014,6 +4016,49 @@ export const systems: TileData[] = [
     "isSupernova": true,
     "source": "pok",
     "tileBack": "green"
+  },
+  {
+    "id": "8100",
+    "name": "Mecatol Rex",
+    "aliases": [
+      "mecatolcity",
+      "mechatolcity",
+      "jun",
+      "castelle",
+      "gul",
+      "polarcastelle",
+      "junsystem",
+      "gulsystem",
+      "mecsystem"
+    ],
+    "imagePath": "Mecatol_Rex_Citadels_tile.png",
+    "shipPositionsType": "TYPE06",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "mc",
+      "tpc",
+      "jun"
+    ],
+    "source": "addiction",
+    "tileBack": "black"
   },
   {
     "id": "82a",
@@ -7218,7 +7263,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "92",
-    "name": "Ordinian/Revelation (Bastion)",
+    "name": "Ordinian/Revelation - Bastion",
     "aliases": [
       "te01",
       "ordinian",
@@ -7238,7 +7283,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "92new",
-    "name": "Archon Ren/Archon Tau Keleres",
+    "name": "Archon Ren/Archon Tau - Keleres",
     "aliases": [
       "keleresx",
       "archontauk",
@@ -7274,7 +7319,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "93",
-    "name": "Mez Lo Orz Fei Zsha/Rep Lo Orz Qet (RalNel)",
+    "name": "Mez Lo Orz Fei Zsha/Rep Lo Orz Qet - Ral Nel",
     "aliases": [
       "te02",
       "mez",
@@ -7295,7 +7340,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "93new",
-    "name": "Ylir/Avar/Valk Keleres",
+    "name": "Ylir/Avar/Valk - Keleres",
     "aliases": [
       "keleresa",
       "ylirk",
@@ -7333,7 +7378,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "94",
-    "name": "Sorrow (Crimson)",
+    "name": "The Sorrow - Rebellion",
     "aliases": [
       "te04",
       "epsilonwh",
@@ -7354,7 +7399,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "94new",
-    "name": "Moll Primus Keleres",
+    "name": "Moll Primus - Keleres",
     "aliases": [
       "keleresm",
       "mollprimusk"
@@ -7388,7 +7433,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "95",
-    "name": "Ikatena (Deepwrought)",
+    "name": "Ikatena - Deepwrought",
     "aliases": [
       "te11",
       "ikatena",
@@ -7407,7 +7452,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "96a",
-    "name": "Cronos/Tallin (Firmament)",
+    "name": "Cronos/Tallin - Firmament",
     "aliases": [
       "te15a",
       "cronos",
@@ -7426,7 +7471,7 @@ export const systems: TileData[] = [
   },
   {
     "id": "96b",
-    "name": "Cronos Hollow/Tallin Hollow (Obsidian)",
+    "name": "Cronos Hollow/Tallin Hollow - Obsidian",
     "aliases": [
       "te15b",
       "cronoshollow",
@@ -7525,13 +7570,353 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "99omega"
     ],
     "source": "asteroid",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao1",
+    "name": "Midgard",
+    "aliases": [
+      "ao1",
+      "midgard"
+    ],
+    "imagePath": "ao1_midgard.png",
+    "planets": [
+      "midgard"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao2",
+    "name": "Asgard",
+    "aliases": [
+      "ao2",
+      "asgard"
+    ],
+    "imagePath": "ao2_asgard.png",
+    "planets": [
+      "asgard"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": true,
+    "source": "goose",
+    "tileBack": "red"
+  },
+  {
+    "id": "ao3",
+    "name": "Alfheim",
+    "aliases": [
+      "ao3",
+      "alfheim"
+    ],
+    "imagePath": "ao3_alfheim.png",
+    "planets": [
+      "alfheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao4",
+    "name": "Svartalfheim",
+    "aliases": [
+      "ao4",
+      "svartalfheim"
+    ],
+    "imagePath": "ao4_svartalfheim.png",
+    "planets": [
+      "svartalfheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245.0,
+        "y": 100.0
+      },
+      {
+        "x": 200.0,
+        "y": 185.0
+      },
+      {
+        "x": 110.0,
+        "y": 215.0
+      },
+      {
+        "x": 120.0,
+        "y": 40.0
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": true,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "red"
+  },
+  {
+    "id": "ao5",
+    "name": "Vanaheim",
+    "aliases": [
+      "ao5",
+      "vanaheim"
+    ],
+    "imagePath": "ao5_vanaheim.png",
+    "planets": [
+      "vanaheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao6",
+    "name": "Muspelheim",
+    "aliases": [
+      "ao6",
+      "muspelheim"
+    ],
+    "imagePath": "ao6_muspelheim.png",
+    "planets": [
+      "muspelheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao7",
+    "name": "jotunheim",
+    "aliases": [
+      "ao7",
+      "jotunheim"
+    ],
+    "imagePath": "ao7_jotunheim.png",
+    "planets": [
+      "jotunheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao8",
+    "name": "Helheim",
+    "aliases": [
+      "ao8",
+      "helheim"
+    ],
+    "imagePath": "ao8_helheim.png",
+    "planets": [
+      "helheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": false,
+    "isGravityRift": false,
+    "source": "goose",
+    "tileBack": "blue"
+  },
+  {
+    "id": "ao9",
+    "name": "Niflheim",
+    "aliases": [
+      "ao9",
+      "niflheim"
+    ],
+    "imagePath": "ao9_niflheim.png",
+    "planets": [
+      "niflheim"
+    ],
+    "shipPositionsType": "TYPE01",
+    "spaceTokenLocations": [
+      {
+        "x": 245,
+        "y": 100
+      },
+      {
+        "x": 200,
+        "y": 185
+      },
+      {
+        "x": 110,
+        "y": 215
+      },
+      {
+        "x": 120,
+        "y": 40
+      }
+    ],
+    "wormholes": null,
+    "isAsteroidField": false,
+    "isSupernova": false,
+    "isNebula": true,
+    "isGravityRift": false,
+    "source": "goose",
     "tileBack": "blue"
   },
   {
@@ -7572,107 +7957,16 @@ export const systems: TileData[] = [
     "tileBack": "green"
   },
   {
-    "tileBack": "green",
-    "id": "as01",
-    "name": "Thyolcian - Cantokylegance",
+    "id": "ar2",
+    "name": "Cyanea/Chrysaora/Tamoya - Zooid",
     "aliases": [
-      "canto",
-      "thyolcian"
+      "ar2",
+      "chrysaora",
+      "cyanea",
+      "tamoya",
+      "zooid"
     ],
-    "imagePath": "as01.png",
-    "shipPositionsType": "TYPE01",
-    "spaceTokenLocations": [
-      {
-        "x": 245.0,
-        "y": 100.0
-      },
-      {
-        "x": 200.0,
-        "y": 185.0
-      },
-      {
-        "x": 110.0,
-        "y": 215.0
-      },
-      {
-        "x": 120.0,
-        "y": 40.0
-      }
-    ],
-    "wormholes": [],
-    "planets": [
-      "thyolcian"
-    ],
-    "source": "eronous"
-  },
-  {
-    "id": "as02",
-    "name": "Voyd/Etyr - Eidolon",
-    "aliases": [
-      "as02",
-      "voyd",
-      "etyr",
-      "eidolon"
-    ],
-    "imagePath": "as02.png",
-    "shipPositionsType": "TYPE02",
-    "wormholes": [],
-    "planets": [
-      "voyd",
-      "etyr"
-    ],
-    "source": "eronous",
-    "tileBack": "green"
-  },
-  {
-    "id": "as03",
-    "name": "Eccon V/Tyria Prime - Shadows",
-    "aliases": [
-      "as03",
-      "ecconv",
-      "tyriaprime",
-      "shadows"
-    ],
-    "imagePath": "as03.png",
-    "shipPositionsType": "TYPE02",
-    "wormholes": [],
-    "planets": [
-      "ecconv",
-      "tyriaprime"
-    ],
-    "source": "eronous",
-    "tileBack": "green"
-  },
-  {
-    "id": "as04",
-    "name": "Akredrite/Meccna - Mechi",
-    "aliases": [
-      "as04",
-      "akredrite",
-      "meccna",
-      "mechi"
-    ],
-    "imagePath": "as04.png",
-    "shipPositionsType": "TYPE02",
-    "wormholes": [],
-    "planets": [
-      "akredrite",
-      "meccna"
-    ],
-    "source": "eronous",
-    "tileBack": "green"
-  },
-  {
-    "id": "as05",
-    "name": "Gaia/Gensis/Aeva - Saera",
-    "aliases": [
-      "as05",
-      "gaia",
-      "gensis",
-      "aeva",
-      "saera"
-    ],
-    "imagePath": "as05.png",
+    "imagePath": "AR2_Cyanea.png",
     "shipPositionsType": "TYPE03",
     "spaceTokenLocations": [
       {
@@ -7694,12 +7988,11 @@ export const systems: TileData[] = [
     ],
     "wormholes": [],
     "planets": [
-      "gaia",
-      "gensis",
-      "aeva"
+      "chrysaora",
+      "cyanea",
+      "tamoya"
     ],
-    "isNebula": true,
-    "source": "eronous",
+    "source": "other",
     "tileBack": "green"
   },
   {
@@ -7737,7 +8030,7 @@ export const systems: TileData[] = [
       "lirastra",
       "vraxil"
     ],
-    "source": "balacasi"
+    "source": "wftv"
   },
   {
     "tileBack": "green",
@@ -7754,7 +8047,7 @@ export const systems: TileData[] = [
     "planets": [
       "krax"
     ],
-    "source": "balacasi"
+    "source": "wftv"
   },
   {
     "id": "ba3",
@@ -7791,7 +8084,7 @@ export const systems: TileData[] = [
       "vyseraiii",
       "tala9"
     ],
-    "source": "balacasi",
+    "source": "wftv",
     "tileBack": "green"
   },
   {
@@ -7809,7 +8102,7 @@ export const systems: TileData[] = [
     "planets": [
       "velarune"
     ],
-    "source": "balacasi"
+    "source": "wftv"
   },
   {
     "id": "ba5",
@@ -7845,7 +8138,7 @@ export const systems: TileData[] = [
       "xelvorr",
       "vaelthuun"
     ],
-    "source": "balacasi",
+    "source": "wftv",
     "tileBack": "green"
   },
   {
@@ -7882,7 +8175,7 @@ export const systems: TileData[] = [
       "terranovus",
       "luna"
     ],
-    "source": "balacasi",
+    "source": "wftv",
     "tileBack": "green"
   },
   {
@@ -7918,7 +8211,7 @@ export const systems: TileData[] = [
       "xan",
       "thar"
     ],
-    "source": "balacasi",
+    "source": "wftv",
     "tileBack": "green"
   },
   {
@@ -7955,8 +8248,191 @@ export const systems: TileData[] = [
       "zephyrax",
       "dralius"
     ],
-    "source": "balacasi",
+    "source": "wftv",
     "tileBack": "green"
+  },
+  {
+    "id": "be1",
+    "name": "Xylath/Kathulun - Dream",
+    "aliases": [
+      "be1",
+      "dream",
+      "xylath",
+      "kathulun"
+    ],
+    "imagePath": "be1_dreamhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "isNebula": true,
+    "planets": [
+      "xylath",
+      "kathulun"
+    ],
+    "source": "beans",
+    "tileBack": "green"
+  },
+  {
+    "id": "be2",
+    "name": "Prism/Spire - Crystellum",
+    "aliases": [
+      "be2",
+      "prisma",
+      "spire",
+      "chystellum"
+    ],
+    "imagePath": "be2_crystellumhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "prisma",
+      "spire"
+    ],
+    "source": "beans",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "be3",
+    "name": "Pyra - Ashen",
+    "aliases": [
+      "be3",
+      "ashen",
+      "pyra"
+    ],
+    "imagePath": "be3_ashenhs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "pyra"
+    ],
+    "source": "beans"
+  },
+  {
+    "tileBack": "green",
+    "id": "be4",
+    "name": "Kymore/Polaris - Iron",
+    "aliases": [
+      "be4",
+      "iron",
+      "kymore",
+      "polaris"
+    ],
+    "imagePath": "be4_ironhs.png",
+    "shipPositionsType": "TYPE02",
+    "wormholes": [],
+    "planets": [
+      "kymore",
+      "polaris"
+    ],
+    "source": "beans"
+  },
+  {
+    "tileBack": "green",
+    "id": "be5",
+    "name": "Ta - Ta",
+    "aliases": [
+      "be5",
+      "ta"
+    ],
+    "imagePath": "be5_tahs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "ta"
+    ],
+    "source": "beans"
+  },
+  {
+    "tileBack": "green",
+    "id": "be6",
+    "name": "Kha - Netrunners",
+    "aliases": [
+      "be6",
+      "netrunners",
+      "kha"
+    ],
+    "imagePath": "be6_netrunnershs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "kha"
+    ],
+    "source": "beans"
+  },
+  {
+    "tileBack": "green",
+    "id": "be7",
+    "name": "Decay/Disorder/Demise - Natau",
+    "aliases": [
+      "be7",
+      "natau",
+      "decay",
+      "demise",
+      "disorder"
+    ],
+    "imagePath": "be7_natauhs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "decay",
+      "demise",
+      "disorder"
+    ],
+    "source": "beans"
   },
   {
     "id": "blackblank",
@@ -8020,7 +8496,7 @@ export const systems: TileData[] = [
     "planets": [
       "uikos"
     ],
-    "source": "ds",
+    "source": "blue_reverie",
     "tileBack": "green"
   },
   {
@@ -8037,7 +8513,7 @@ export const systems: TileData[] = [
     "planets": [
       "phar"
     ],
-    "source": "ds",
+    "source": "blue_reverie",
     "tileBack": "green"
   },
   {
@@ -8055,7 +8531,7 @@ export const systems: TileData[] = [
       "qhet",
       "drakkol"
     ],
-    "source": "ds",
+    "source": "blue_reverie",
     "tileBack": "green"
   },
   {
@@ -8090,7 +8566,7 @@ export const systems: TileData[] = [
     "planets": [
       "magna"
     ],
-    "source": "ds"
+    "source": "blue_reverie"
   },
   {
     "id": "br5",
@@ -8098,8 +8574,7 @@ export const systems: TileData[] = [
     "aliases": [
       "br5",
       "strang",
-      "reil",
-      "belkosea"
+      "reil"
     ],
     "imagePath": "BR5_Belkosea.png",
     "shipPositionsType": "TYPE02",
@@ -8108,7 +8583,26 @@ export const systems: TileData[] = [
       "strang",
       "reil"
     ],
-    "source": "ds",
+    "source": "blue_reverie",
+    "tileBack": "green"
+  },
+  {
+    "id": "br5b",
+    "name": "Iterum/Conviction - Belkosea",
+    "aliases": [
+      "br5b",
+      "iterum",
+      "conviction",
+      "belkosea"
+    ],
+    "imagePath": "BR5b_Belkosea.png",
+    "shipPositionsType": "TYPE02",
+    "wormholes": [],
+    "planets": [
+      "iterum",
+      "conviction"
+    ],
+    "source": "blue_reverie",
     "tileBack": "green"
   },
   {
@@ -8127,7 +8621,58 @@ export const systems: TileData[] = [
       "khodd",
       "dryun"
     ],
-    "source": "ds",
+    "source": "blue_reverie",
+    "tileBack": "green"
+  },
+  {
+    "id": "br7",
+    "name": "Avkho/Kaltrim - Kaltrim",
+    "aliases": [
+      "br7",
+      "avkho",
+      "kaltrim"
+    ],
+    "imagePath": "BR7_Kaltrim.png",
+    "shipPositionsType": "TYPE02",
+    "wormholes": [],
+    "planets": [
+      "avkho",
+      "kaltrim"
+    ],
+    "source": "blue_reverie",
+    "tileBack": "green"
+  },
+  {
+    "id": "br8",
+    "name": "Yu - Xin",
+    "aliases": [
+      "br8",
+      "xin",
+      "yu"
+    ],
+    "imagePath": "BR8_Yu.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "yu"
+    ],
+    "source": "blue_reverie",
+    "tileBack": "green"
+  },
+  {
+    "id": "br9",
+    "name": "Sarcosa - Sarcosa",
+    "aliases": [
+      "br9",
+      "sarcosa"
+    ],
+    "imagePath": "BR9_Sarcosa.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "sarcosa"
+    ],
+    "source": "blue_reverie",
     "tileBack": "green"
   },
   {
@@ -8416,11 +8961,12 @@ export const systems: TileData[] = [
       "atropos"
     ],
     "wormholes": [
-      "ZETA"
+      "OMEGA"
     ],
     "shipPositionsType": "TYPE05",
-    "tileBack": "red",
+    "tileBack": "fracture",
     "isAsteroidField": true,
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8438,6 +8984,7 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE05",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8453,6 +9000,7 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE04",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8491,7 +9039,8 @@ export const systems: TileData[] = [
       "briareus"
     ],
     "source": "other",
-    "tileBack": "fracture"
+    "tileBack": "fracture",
+    "isFracture": true
   },
   {
     "id": "cpti20emptyleft",
@@ -8502,6 +9051,7 @@ export const systems: TileData[] = [
     "imagePath": "cpti20-emptyleft.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8513,6 +9063,7 @@ export const systems: TileData[] = [
     "imagePath": "cpti20-emptyright.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8527,6 +9078,7 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE04",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -8541,10 +9093,12 @@ export const systems: TileData[] = [
     "shipPositionsType": "TYPE08",
     "planets": [],
     "wormholes": [
-      "ZETA"
+      "OMEGA"
     ],
     "tileBack": "fracture",
     "isGravityRift": true,
+    "isFracture": true,
+    "hasEgress": true,
     "source": "other"
   },
   {
@@ -8561,11 +9115,12 @@ export const systems: TileData[] = [
       "clotho"
     ],
     "wormholes": [
-      "ZETA"
+      "OMEGA"
     ],
     "shipPositionsType": "TYPE05",
     "tileBack": "fracture",
     "isScar": true,
+    "isFracture": true,
     "source": "other"
   },
   {
@@ -10288,6 +10843,347 @@ export const systems: TileData[] = [
     "tileBack": "green"
   },
   {
+    "id": "ef1",
+    "name": "Persephone",
+    "aliases": [
+      "ef1",
+      "persephone"
+    ],
+    "imagePath": "ef1.png",
+    "shipPositionsType": "TYPE09",
+    "spaceTokenLocations": [
+      {
+        "x": 195.0,
+        "y": 10.0
+      },
+      {
+        "x": 255.0,
+        "y": 50.0
+      },
+      {
+        "x": 305.0,
+        "y": 105.0
+      },
+      {
+        "x": 115.0,
+        "y": 40.0
+      }
+    ],
+    "wormholes": [],
+    "hasIngress": true,
+    "isFracture": true,
+    "planets": [
+      "persephone"
+    ],
+    "source": "expanded_fracture",
+    "tileBack": "fracture"
+  },
+  {
+    "id": "ef10",
+    "name": "Mnemosyne",
+    "aliases": [
+      "ef10",
+      "mnemosyne",
+      "mne"
+    ],
+    "imagePath": "ef10.png",
+    "planets": [
+      "mnemosyne"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef11",
+    "name": "Fracture Void",
+    "aliases": [
+      "ef11"
+    ],
+    "imagePath": "ef11.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef12",
+    "name": "Thanatos/Charon",
+    "aliases": [
+      "ef12",
+      "thanatos",
+      "charon"
+    ],
+    "imagePath": "ef12.png",
+    "planets": [
+      "thanatos",
+      "charon"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef2",
+    "name": "Hades",
+    "aliases": [
+      "ef2",
+      "hades"
+    ],
+    "imagePath": "ef2.png",
+    "shipPositionsType": "TYPE09",
+    "spaceTokenLocations": [
+      {
+        "x": 195.0,
+        "y": 10.0
+      },
+      {
+        "x": 255.0,
+        "y": 50.0
+      },
+      {
+        "x": 305.0,
+        "y": 105.0
+      },
+      {
+        "x": 115.0,
+        "y": 40.0
+      }
+    ],
+    "wormholes": [],
+    "hasEgress": true,
+    "hasIngress": true,
+    "isFracture": true,
+    "planets": [
+      "hades"
+    ],
+    "source": "expanded_fracture",
+    "tileBack": "fracture"
+  },
+  {
+    "id": "ef3",
+    "name": "Prometheus Supernova",
+    "aliases": [
+      "ef3",
+      "prometheus"
+    ],
+    "imagePath": "ef3.png",
+    "shipPositionsType": "TYPE05",
+    "spaceTokenLocations": [
+      {
+        "x": 190.0,
+        "y": 30.0
+      },
+      {
+        "x": 215.0,
+        "y": 110.0
+      },
+      {
+        "x": 185.0,
+        "y": 205.0
+      },
+      {
+        "x": 100.0,
+        "y": 90.0
+      },
+      {
+        "x": 60.0,
+        "y": 130.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "prometheus"
+    ],
+    "isSupernova": true,
+    "tileBack": "red",
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef4",
+    "name": "Sisyphus Gravity Rift",
+    "aliases": [
+      "ef4",
+      "sisyphus"
+    ],
+    "imagePath": "ef4.png",
+    "shipPositionsType": "TYPE05",
+    "spaceTokenLocations": [
+      {
+        "x": 190.0,
+        "y": 30.0
+      },
+      {
+        "x": 215.0,
+        "y": 110.0
+      },
+      {
+        "x": 185.0,
+        "y": 205.0
+      },
+      {
+        "x": 100.0,
+        "y": 90.0
+      },
+      {
+        "x": 60.0,
+        "y": 130.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "sisyphus"
+    ],
+    "isGravityRift": true,
+    "isFracture": true,
+    "tileBack": "red",
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef5",
+    "name": "Fracture Void",
+    "aliases": [
+      "ef5"
+    ],
+    "imagePath": "ef5.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef6",
+    "name": "Entropic Scar (Fracture)",
+    "aliases": [
+      "ef6"
+    ],
+    "imagePath": "ef6.png",
+    "shipPositionsType": "TYPE08",
+    "planets": [],
+    "wormholes": [],
+    "tileBack": "red",
+    "isScar": true,
+    "isFracture": true,
+    "source": "expanded_fracture"
+  },
+  {
+    "id": "ef7",
+    "name": "Nyx/Hypnos/Hecate",
+    "aliases": [
+      "ef7",
+      "nyx",
+      "hypnos",
+      "hecate"
+    ],
+    "imagePath": "ef7.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "nyx",
+      "hypnos",
+      "hecate"
+    ],
+    "source": "expanded_fracture",
+    "isFracture": true,
+    "tileBack": "red"
+  },
+  {
+    "id": "ef8",
+    "name": "Nebula (Fracture)",
+    "aliases": [
+      "ef8",
+      "fracturenebula"
+    ],
+    "imagePath": "ef8.png",
+    "shipPositionsType": "TYPE08",
+    "spaceTokenLocations": [
+      {
+        "x": 190.0,
+        "y": 30.0
+      },
+      {
+        "x": 215.0,
+        "y": 110.0
+      },
+      {
+        "x": 185.0,
+        "y": 205.0
+      },
+      {
+        "x": 100.0,
+        "y": 190.0
+      },
+      {
+        "x": 60.0,
+        "y": 130.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [],
+    "isNebula": true,
+    "isFracture": true,
+    "source": "expanded_fracture",
+    "tileBack": "red"
+  },
+  {
+    "id": "ef9",
+    "name": "Asteroids Fracture",
+    "aliases": [
+      "ef9"
+    ],
+    "imagePath": "ef9.png",
+    "shipPositionsType": "TYPE08",
+    "spaceTokenLocations": [
+      {
+        "x": 190.0,
+        "y": 30.0
+      },
+      {
+        "x": 215.0,
+        "y": 110.0
+      },
+      {
+        "x": 185.0,
+        "y": 205.0
+      },
+      {
+        "x": 100.0,
+        "y": 190.0
+      },
+      {
+        "x": 60.0,
+        "y": 130.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [],
+    "isAsteroidField": true,
+    "isFracture": true,
+    "source": "expanded_fracture",
+    "tileBack": "red"
+  },
+  {
     "id": "emeraldblank",
     "name": "Emerald, blank draft tile",
     "aliases": [
@@ -10321,9 +11217,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_02_async.png",
     "shipPositionsType": "TYPE10",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "eshonia"
     ],
@@ -10362,9 +11256,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_04_async.png",
     "shipPositionsType": "TYPE04",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "suprima"
     ],
@@ -10380,9 +11272,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_05_async.png",
     "shipPositionsType": "TYPE04",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "kkita"
     ],
@@ -10400,9 +11290,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_06_async.png",
     "shipPositionsType": "TYPE05",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "selen",
       "solin"
@@ -10420,9 +11308,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_07_async.png",
     "shipPositionsType": "TYPE05",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "khjan",
       "shul"
@@ -10461,9 +11347,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_09_async.png",
     "shipPositionsType": "TYPE02",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "ugamma",
       "urho"
@@ -10489,9 +11373,7 @@ export const systems: TileData[] = [
       "eloknu"
     ],
     "shipPositionsType": "TYPE02",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "isNebula": true,
     "tileBack": "red",
     "source": "eronous"
@@ -11873,9 +12755,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_21_async.png",
     "shipPositionsType": "TYPE08",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "isAsteroidField": true,
     "isSupernova": true,
@@ -11892,9 +12772,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_22_async.png",
     "shipPositionsType": "TYPE04",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "ilvoshu"
     ],
@@ -11911,9 +12789,7 @@ export const systems: TileData[] = [
     ],
     "imagePath": "er_23_async.png",
     "shipPositionsType": "TYPE10",
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "xyon"
     ],
@@ -11947,9 +12823,7 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "ynnis"
     ],
@@ -13708,9 +14582,7 @@ export const systems: TileData[] = [
         "y": 130.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "isNebula": true,
     "tileBack": "red",
@@ -13747,9 +14619,7 @@ export const systems: TileData[] = [
         "y": 130.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "isSupernova": true,
     "tileBack": "red",
@@ -13786,9 +14656,7 @@ export const systems: TileData[] = [
         "y": 130.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "isGravityRift": true,
     "tileBack": "red",
@@ -13825,9 +14693,7 @@ export const systems: TileData[] = [
         "y": 130.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "tileBack": "red",
     "source": "eronous"
@@ -13863,9 +14729,7 @@ export const systems: TileData[] = [
         "y": 130.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [],
     "isAsteroidField": true,
     "tileBack": "red",
@@ -14451,9 +15315,7 @@ export const systems: TileData[] = [
         "y": 185.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "meranna",
       "hurigati",
@@ -14490,9 +15352,7 @@ export const systems: TileData[] = [
         "y": 170.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "argenum",
       "vernium"
@@ -14528,9 +15388,7 @@ export const systems: TileData[] = [
         "y": 170.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "elan",
       "verdis"
@@ -14600,9 +15458,7 @@ export const systems: TileData[] = [
         "y": 170.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "char"
     ],
@@ -14636,9 +15492,7 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "dognui"
     ],
@@ -14673,9 +15527,7 @@ export const systems: TileData[] = [
         "y": 170.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "fyrain",
       "leonelli"
@@ -14710,9 +15562,7 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "sigilus"
     ],
@@ -14933,6 +15783,295 @@ export const systems: TileData[] = [
     "isGravityRift": false,
     "source": "eronous",
     "tileBack": "red"
+  },
+  {
+    "tileBack": "green",
+    "id": "et0",
+    "name": "Raia -- The United Empire",
+    "aliases": [
+      "et0",
+      "raia",
+      "uempire"
+    ],
+    "imagePath": "et0.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "raia"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "id": "et1",
+    "name": "Hekim/Illumination - The Sophonity",
+    "aliases": [
+      "et1",
+      "hekim",
+      "illumination",
+      "sophon"
+    ],
+    "imagePath": "et1.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "hekim",
+      "illumination"
+    ],
+    "source": "endlesst",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "et10",
+    "name": "Vexa 8 Minor -- The Umbral Choir",
+    "aliases": [
+      "et10",
+      "vexa8minor",
+      "uchoir"
+    ],
+    "imagePath": "et10.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "vexa8minor"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "tileBack": "green",
+    "id": "et11",
+    "name": "Sobra -- The Nakalim Progenitors",
+    "aliases": [
+      "et11",
+      "sobra",
+      "nakalim"
+    ],
+    "imagePath": "et11.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "sobra"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "tileBack": "green",
+    "id": "et2",
+    "name": "Husk -- The Craver Swarm",
+    "aliases": [
+      "et2",
+      "husk",
+      "craver"
+    ],
+    "imagePath": "et2.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "husk"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "tileBack": "green",
+    "id": "et3",
+    "name": "Horatio Prime -- The Horatio Supremacy",
+    "aliases": [
+      "et3",
+      "horatioprime",
+      "horatio"
+    ],
+    "imagePath": "et3.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "horatioprime"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "id": "et5",
+    "name": "Chrism/Anchorite/Eschaton - The Church of the Vodyani",
+    "aliases": [
+      "et5",
+      "chrism",
+      "anchorite",
+      "eschaton",
+      "vodyani"
+    ],
+    "imagePath": "et5.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "chrism",
+      "anchorite",
+      "eschaton"
+    ],
+    "source": "endlesst",
+    "tileBack": "green"
+  },
+  {
+    "id": "et6",
+    "name": "Jenes/Meos - The Lumeris Families",
+    "aliases": [
+      "et6",
+      "jenes",
+      "meos",
+      "lumeris"
+    ],
+    "imagePath": "et6.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "jenes",
+      "meos"
+    ],
+    "source": "endlesst",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "et7",
+    "name": "Koyasil -- The Unfallen",
+    "aliases": [
+      "et7",
+      "koyasil",
+      "unfallen"
+    ],
+    "imagePath": "et7.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "koyasil"
+    ],
+    "source": "endlesst"
+  },
+  {
+    "id": "et8",
+    "name": "Vanguard/Diametus - The Riftborn Expedition",
+    "aliases": [
+      "et8",
+      "vanguard",
+      "diametus",
+      "riftborn"
+    ],
+    "imagePath": "et8.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "vanguard",
+      "diametus"
+    ],
+    "source": "endlesst",
+    "tileBack": "green"
+  },
+  {
+    "id": "et9",
+    "name": "Uchi/Skyagoja - The Hissho Bushidan",
+    "aliases": [
+      "et9",
+      "uchi",
+      "skyagoja",
+      "hissho"
+    ],
+    "imagePath": "et9.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "uchi",
+      "skyagoja"
+    ],
+    "source": "endlesst",
+    "tileBack": "green"
   },
   {
     "id": "etherealblank",
@@ -15250,7 +16389,8 @@ export const systems: TileData[] = [
       "cocytus",
       "cocy",
       "cody",
-      "codytct"
+      "codytct",
+      "frac1"
     ],
     "imagePath": "fracture1.png",
     "planets": [
@@ -15258,31 +16398,548 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE04",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
+  },
+  {
+    "id": "fracture10",
+    "name": "Anibus/Sekhmet/Nile",
+    "aliases": [
+      "fracture10",
+      "anubius",
+      "sekhmet",
+      "nile",
+      "frac10"
+    ],
+    "imagePath": "fracture10.png",
+    "planets": [
+      "anubius",
+      "sekhmet",
+      "nile"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture11",
+    "name": "Fracture Astroid",
+    "aliases": [
+      "fracture11",
+      "astroid",
+      "frac11"
+    ],
+    "imagePath": "fracture11.png",
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isAstroid": true,
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture12",
+    "name": "Rift Egress",
+    "aliases": [
+      "fracture12",
+      "riftegress",
+      "frac12"
+    ],
+    "hasEgress": true,
+    "isRift": true,
+    "imagePath": "fracture12.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture13",
+    "name": "Mater Calyxa",
+    "aliases": [
+      "fracture13",
+      "matercalyxa",
+      "frac13",
+      "mcx"
+    ],
+    "imagePath": "fracture13.png",
+    "planets": [
+      "matercalyxa"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture14",
+    "name": "Fracture Set2 Right",
+    "aliases": [
+      "fracture14",
+      "midway right",
+      "frac14"
+    ],
+    "imagePath": "fracture14.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture15",
+    "name": "Charon",
+    "aliases": [
+      "fracture15",
+      "charon",
+      "char",
+      "frac15"
+    ],
+    "imagePath": "fracture15.png",
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture16",
+    "name": "Fracture Set2 Egress Right",
+    "aliases": [
+      "fracture16",
+      "Set2egressright",
+      "frac16",
+      "fracrightegr"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture16.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture17",
+    "name": "Experiment/Janus",
+    "aliases": [
+      "fracture17",
+      "experiment",
+      "janus",
+      "exp",
+      "frac17"
+    ],
+    "imagePath": "fracture17.png",
+    "planets": [
+      "experiment",
+      "janus"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture18",
+    "name": "Fenrir",
+    "aliases": [
+      "fracture18",
+      "fenrir",
+      "fen",
+      "frac18"
+    ],
+    "imagePath": "fracture18.png",
+    "planets": [
+      "fenrir"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture19",
+    "name": "Fracture Nebulae",
+    "aliases": [
+      "fracture19",
+      "fracturenebulae",
+      "frac19",
+      "nebfrac"
+    ],
+    "imagePath": "fracture19.png",
+    "isNebulae": true,
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
   },
   {
     "id": "fracture2",
     "name": "Fracture Egress Left",
     "aliases": [
       "fracture2",
-      "egressleft"
+      "egressleft",
+      "frac2",
+      "fracleftegr"
     ],
     "hasEgress": true,
     "imagePath": "fracture2.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
+  },
+  {
+    "id": "fracture20",
+    "name": "Fracture Set3 Midway",
+    "aliases": [
+      "fracture20",
+      "fracturemidway",
+      "frac20"
+    ],
+    "imagePath": "fracture20.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture21",
+    "name": "Fracture Set3 Midway Egress",
+    "aliases": [
+      "fracture21",
+      "egressmidway",
+      "frac21",
+      "fracmidegr"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture21.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture22",
+    "name": "Fracture Set3 Peak Egress",
+    "aliases": [
+      "fracture2p",
+      "egresspeak",
+      "frac22",
+      "fracpeakegrs"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture22.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture23",
+    "name": "Nidhogg",
+    "aliases": [
+      "fracture23",
+      "nidhogg",
+      "nid",
+      "frac23"
+    ],
+    "imagePath": "fracture23.png",
+    "planets": [
+      "nidhogg"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture24",
+    "name": "Fracture Set3 Right",
+    "aliases": [
+      "fracture24",
+      "rightpath",
+      "frac24",
+      "fracrightpath"
+    ],
+    "imagePath": "fracture24.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture25",
+    "name": "Lekythoi",
+    "aliases": [
+      "fracture25",
+      "lekythoi",
+      "lek",
+      "frac25"
+    ],
+    "imagePath": "fracture25.png",
+    "planets": [
+      "lekythoi"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture26",
+    "name": "Ptoma Station",
+    "aliases": [
+      "fracture26",
+      "ptomastation",
+      "ptomastation",
+      "frac26"
+    ],
+    "imagePath": "fracture26.png",
+    "planets": [
+      "ptomastation"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture27",
+    "name": "Fracture Set4 Egress Right",
+    "aliases": [
+      "fracture27",
+      "egressright",
+      "frac27",
+      "fracrightegress"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture27.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture28",
+    "name": "Fracture Rift",
+    "aliases": [
+      "fracture28",
+      "rift",
+      "frac28",
+      "fracrift"
+    ],
+    "isRift": true,
+    "imagePath": "fracture28.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture29",
+    "name": "Maahes",
+    "aliases": [
+      "fracture29",
+      "maahes",
+      "maa",
+      "frac29"
+    ],
+    "imagePath": "fracture29.png",
+    "planets": [
+      "maahes"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
   },
   {
     "id": "fracture3",
     "name": "Fracture Void Left",
     "aliases": [
-      "fracture3"
+      "fracture3",
+      "frac3",
+      "fracleftvoid"
     ],
     "imagePath": "fracture3.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
+  },
+  {
+    "id": "fracture30",
+    "name": "Fracture Set6 Base",
+    "aliases": [
+      "fracture30",
+      "fracturebase",
+      "frac30",
+      "fracrightbase"
+    ],
+    "imagePath": "fracture30.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture31",
+    "name": "Fracture Set6 Base Right",
+    "aliases": [
+      "fracture31",
+      "fracrightbase",
+      "frac31",
+      "fracrightbase"
+    ],
+    "imagePath": "fracture31.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture32",
+    "name": "Castor",
+    "aliases": [
+      "fracture32",
+      "castor",
+      "cas",
+      "frac32"
+    ],
+    "imagePath": "fracture32.png",
+    "planets": [
+      "castor"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture33",
+    "name": "Fracture Astroid Egress",
+    "aliases": [
+      "fracture33",
+      "astroidegress",
+      "frac33",
+      "astroidfrac"
+    ],
+    "hasEgress": true,
+    "isAstroid": true,
+    "imagePath": "fracture33.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture34",
+    "name": "Pollux",
+    "aliases": [
+      "fracture34",
+      "pollux",
+      "pol",
+      "frac34"
+    ],
+    "imagePath": "fracture34.png",
+    "planets": [
+      "pollux"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture35",
+    "name": "Makara",
+    "aliases": [
+      "fracture35",
+      "makara",
+      "mak",
+      "frac35"
+    ],
+    "imagePath": "fracture35.png",
+    "planets": [
+      "makara"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture36",
+    "name": "Izana-gi / Izana-mi",
+    "aliases": [
+      "fracture36",
+      "izana-mi",
+      "izana-gi",
+      "mi",
+      "gi",
+      "frac36"
+    ],
+    "imagePath": "fracture36.png",
+    "planets": [
+      "izana-mi",
+      "izana-gi"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture37",
+    "name": "Fracture set8 Egress Right",
+    "aliases": [
+      "fracture37",
+      "egressright",
+      "frac37",
+      "fracrightegress"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture37.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture38",
+    "name": "Demeter II",
+    "aliases": [
+      "demeterII",
+      "fracture38",
+      "fracturenexus",
+      "nexusfrac",
+      "frac38"
+    ],
+    "imagePath": "fracture38.png",
+    "shipPositionsType": "TYPE09",
+    "spaceTokenLocations": [
+      {
+        "x": 195.0,
+        "y": 10.0
+      },
+      {
+        "x": 255.0,
+        "y": 50.0
+      },
+      {
+        "x": 305.0,
+        "y": 105.0
+      },
+      {
+        "x": 115.0,
+        "y": 40.0
+      }
+    ],
+    "hasEgress": true,
+    "hasingress": true,
+    "planets": [
+      "demeterii"
+    ],
+    "source": "merford",
+    "tileBack": "black"
   },
   {
     "id": "fracture4",
@@ -15291,7 +16948,8 @@ export const systems: TileData[] = [
       "fracture4",
       "styx",
       "sticks",
-      "stix"
+      "stix",
+      "frac4"
     ],
     "imagePath": "fracture4.png",
     "planets": [
@@ -15299,17 +16957,21 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE04",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
   },
   {
     "id": "fracture5",
     "name": "Fracture Void Right",
     "aliases": [
-      "fracture5"
+      "fracture5",
+      "frac5",
+      "fracrightvoid"
     ],
     "imagePath": "fracture5.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
   },
   {
@@ -15317,12 +16979,15 @@ export const systems: TileData[] = [
     "name": "Fracture Egress Right",
     "aliases": [
       "fracture6",
-      "egressright"
+      "egressright",
+      "frac6",
+      "fracrightegr"
     ],
     "hasEgress": true,
     "imagePath": "fracture6.png",
     "shipPositionsType": "TYPE08",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
   },
   {
@@ -15338,7 +17003,8 @@ export const systems: TileData[] = [
       "leth",
       "plegeth",
       "phleg",
-      "lathe"
+      "lathe",
+      "frac7"
     ],
     "imagePath": "fracture7.png",
     "planets": [
@@ -15347,7 +17013,42 @@ export const systems: TileData[] = [
     ],
     "shipPositionsType": "TYPE05",
     "tileBack": "fracture",
+    "isFracture": true,
     "source": "thunders_edge"
+  },
+  {
+    "id": "fracture8",
+    "name": "Qilin Station",
+    "aliases": [
+      "fracture8",
+      "qilinstation",
+      "qilin",
+      "frac8"
+    ],
+    "hasEgress": true,
+    "imagePath": "fracture8.png",
+    "planets": [
+      "qilinstation"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
+  },
+  {
+    "id": "fracture9",
+    "name": "Fracture Set2 Left",
+    "aliases": [
+      "fracture9",
+      "midwayleft",
+      "frac9",
+      "fracleftmid"
+    ],
+    "imagePath": "fracture9.png",
+    "shipPositionsType": "TYPE08",
+    "tileBack": "fracture",
+    "isFracture": true,
+    "source": "merford"
   },
   {
     "id": "goldblank",
@@ -17212,6 +18913,101 @@ export const systems: TileData[] = [
     "source": "draft"
   },
   {
+    "tileBack": "green",
+    "id": "lu1",
+    "name": "Bruhd/Muhmass/Wheb - Arachnera",
+    "aliases": [
+      "lu1",
+      "arachnera",
+      "bruhd",
+      "muhmass",
+      "wheb"
+    ],
+    "imagePath": "lu1_arachnerahs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "isNebula": true,
+    "planets": [
+      "bruhd",
+      "muhmass",
+      "wheb"
+    ],
+    "source": "luminous"
+  },
+  {
+    "id": "lu2",
+    "name": "Terra/Nova - PSM",
+    "aliases": [
+      "lu2",
+      "psm",
+      "terra",
+      "nova"
+    ],
+    "imagePath": "lu2_psmhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "terra",
+      "nova"
+    ],
+    "source": "luminous",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "lu3",
+    "name": "Eros - Outer Planets Alliance",
+    "aliases": [
+      "lu3",
+      "opa",
+      "eros"
+    ],
+    "imagePath": "lu3_opahs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "isAsteroidField": true,
+    "planets": [
+      "eros"
+    ],
+    "source": "luminous"
+  },
+  {
     "id": "m01",
     "name": "Altor",
     "aliases": [
@@ -17238,9 +19034,7 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "altor"
     ],
@@ -17383,9 +19177,7 @@ export const systems: TileData[] = [
         "y": 205.0
       }
     ],
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "gaea"
     ],
@@ -17542,9 +19334,7 @@ export const systems: TileData[] = [
     "imagePath": "m28_bunker.png",
     "shipPositionsType": "TYPE17",
     "spaceTokenLocations": null,
-    "wormholes": [
-      null
-    ],
+    "wormholes": [],
     "planets": [
       "bunker"
     ],
@@ -17621,6 +19411,79 @@ export const systems: TileData[] = [
     "imagePath": "draft_navyblank.png",
     "tileBack": "black",
     "source": "draft"
+  },
+  {
+    "tileBack": "green",
+    "id": "nf1",
+    "name": "Arel -- Councilors",
+    "aliases": [
+      "arel",
+      "nf1",
+      "councilors"
+    ],
+    "imagePath": "NF1_Councilors.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "arel"
+    ],
+    "source": "nomadfalcon"
+  },
+  {
+    "tileBack": "green",
+    "id": "nf2",
+    "name": "Erock -- Erock",
+    "aliases": [
+      "erock",
+      "nf2"
+    ],
+    "imagePath": "NF2_Erock.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "erock"
+    ],
+    "source": "nomadfalcon"
+  },
+  {
+    "id": "nf3",
+    "name": "Nerot/Zardell/Garer/Aldim - Explanetary",
+    "aliases": [
+      "ba3",
+      "hexaraii",
+      "vyseraiii",
+      "tala9",
+      "explanetary"
+    ],
+    "imagePath": "NF3_Explanetary.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "nerot",
+      "zardell",
+      "garer",
+      "aldim"
+    ],
+    "source": "nomadfalcon",
+    "tileBack": "green"
   },
   {
     "id": "orangeblank",
@@ -18385,6 +20248,18 @@ export const systems: TileData[] = [
     "tileBack": "blue"
   },
   {
+    "id": "silver_flame",
+    "name": "Remnants of The Silver Flame",
+    "aliases": [],
+    "imagePath": "silver_flame.png",
+    "shipPositionsType": null,
+    "spaceTokenLocations": [],
+    "wormholes": [],
+    "planets": [],
+    "source": "thunders_edge",
+    "tileBack": "black"
+  },
+  {
     "id": "springblank",
     "name": "Spring, blank draft tile",
     "aliases": [
@@ -18423,6 +20298,1077 @@ export const systems: TileData[] = [
     "imagePath": "draft_tealblank.png",
     "tileBack": "black",
     "source": "draft"
+  },
+  {
+    "id": "th1",
+    "name": "Weyr/Ardentia - Ardentia",
+    "aliases": [
+      "th1",
+      "weyr",
+      "ardentia"
+    ],
+    "imagePath": "th1_ardentiahs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "weyr",
+      "ardentia"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "id": "th10",
+    "name": "Heroh/The Crypt - Revenant",
+    "aliases": [
+      "th10",
+      "heroh",
+      "thecrypt",
+      "crypt",
+      "revenant"
+    ],
+    "imagePath": "th10_revenanths.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "heroh",
+      "thecrypt"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "th11",
+    "name": "Ruin - Thrones",
+    "aliases": [
+      "th11",
+      "ruin",
+      "thrones"
+    ],
+    "imagePath": "th11_throneshs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "ruin"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th12",
+    "name": "Aeterna - Aeterna",
+    "aliases": [
+      "th12",
+      "aeterna"
+    ],
+    "imagePath": "th12_aeternahs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "aeterna"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th13",
+    "name": "Ponthous - Ponthous",
+    "aliases": [
+      "th13",
+      "ponthous"
+    ],
+    "imagePath": "th13_ponthoushs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "ponthous"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th14",
+    "name": "Iron Keep - Vanguard",
+    "aliases": [
+      "th14",
+      "ironkeep"
+    ],
+    "imagePath": "th14_vanguardhs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "ironkeep"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "id": "th15",
+    "name": "Junkyard/Scrapheap - Scrapyard",
+    "aliases": [
+      "th15",
+      "junkyard",
+      "scrapheap"
+    ],
+    "imagePath": "th15_scrapyardhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "junkyard",
+      "scrapheap"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "tileBack": "green",
+    "id": "th16a",
+    "name": "Petra - Stoneborn",
+    "aliases": [
+      "th16a",
+      "petra"
+    ],
+    "imagePath": "th16a_stonebornhs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "petra"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th16b",
+    "name": "Petra Unleashed - Stoneborn",
+    "aliases": [
+      "th16b",
+      "petraunleashed",
+      "unleashed"
+    ],
+    "imagePath": "th16b_stonebornhs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "petraunleashed"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "id": "th17",
+    "name": "Nuclei/Mito - Morpha",
+    "aliases": [
+      "th17",
+      "nuclei",
+      "mito"
+    ],
+    "imagePath": "th17_morphahs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "nuclei",
+      "mito"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "id": "th18",
+    "name": "Ghidah/Amarok - Thurviali",
+    "aliases": [
+      "th18",
+      "ghidah",
+      "amarok"
+    ],
+    "imagePath": "th18_thurvialihs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "ghidah",
+      "amarok"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "id": "th19",
+    "name": "Illyra",
+    "aliases": [
+      "th19",
+      "illyra"
+    ],
+    "imagePath": "th19.png",
+    "planets": [
+      "illyra"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th2",
+    "name": "Verydith/Graveth/Orsalis - Verydith",
+    "aliases": [
+      "th2",
+      "verydith",
+      "graveth",
+      "orsalis"
+    ],
+    "imagePath": "th2_verydithhs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "verydith",
+      "graveth",
+      "orsalis"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "id": "th20",
+    "name": "Vespix",
+    "aliases": [
+      "th20",
+      "vespix"
+    ],
+    "imagePath": "th20.png",
+    "planets": [
+      "vespix"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th21",
+    "name": "Edran",
+    "aliases": [
+      "th21",
+      "edran"
+    ],
+    "imagePath": "th21.png",
+    "planets": [
+      "edran"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "ALPHA",
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th22",
+    "name": "Karst/Karst Station",
+    "aliases": [
+      "th22",
+      "karst",
+      "karststation"
+    ],
+    "imagePath": "th22.png",
+    "planets": [
+      "karst",
+      "karststation"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th23",
+    "name": "Neryth",
+    "aliases": [
+      "th23",
+      "neryth"
+    ],
+    "imagePath": "th23.png",
+    "planets": [
+      "neryth"
+    ],
+    "shipPositionsType": "TYPE04",
+    "wormholes": [
+      "GAMMA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th24",
+    "name": "Aureole Station/Silex",
+    "aliases": [
+      "th24",
+      "aureole",
+      "aureolestation",
+      "silex"
+    ],
+    "imagePath": "th24.png",
+    "planets": [
+      "aureolestation",
+      "silex"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th25",
+    "name": "Cadris",
+    "aliases": [
+      "th25",
+      "cadris"
+    ],
+    "imagePath": "th25.png",
+    "planets": [
+      "cadris"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th26",
+    "name": "Velis/Mora",
+    "aliases": [
+      "th26",
+      "velis",
+      "mora"
+    ],
+    "imagePath": "th26.png",
+    "planets": [
+      "velis",
+      "mora"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th27",
+    "name": "Nexar/Ulth",
+    "aliases": [
+      "th27",
+      "nexar",
+      "ulth"
+    ],
+    "imagePath": "th27.png",
+    "planets": [
+      "nexar",
+      "ulth"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th28",
+    "name": "Kher/Veyra",
+    "aliases": [
+      "th28",
+      "kher",
+      "veyra"
+    ],
+    "imagePath": "th28.png",
+    "planets": [
+      "kher",
+      "veyra"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th29",
+    "name": "Voska/Pelor",
+    "aliases": [
+      "th29",
+      "voska",
+      "pelor"
+    ],
+    "imagePath": "th29.png",
+    "planets": [
+      "voska",
+      "pelor"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th3",
+    "name": "Veylor Prime/Cindral's Step - Veylor",
+    "aliases": [
+      "th3",
+      "veylor",
+      "veylorprime",
+      "cindralsstep"
+    ],
+    "imagePath": "th3_veylorhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "veylorprime",
+      "cindralsstep"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
+  },
+  {
+    "id": "th30",
+    "name": "Ilex/Ombra",
+    "aliases": [
+      "th30",
+      "ilex",
+      "ombra"
+    ],
+    "imagePath": "th30.png",
+    "planets": [
+      "ilex",
+      "ombra"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th31",
+    "name": "Tael/Soryn/Eline",
+    "aliases": [
+      "th31",
+      "tael",
+      "soryn",
+      "eline"
+    ],
+    "imagePath": "th31.png",
+    "planets": [
+      "tael",
+      "soryn",
+      "eline"
+    ],
+    "shipPositionsType": "TYPE06",
+    "wormholes": [
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th32",
+    "name": "Jass/Idejett/Moruun",
+    "aliases": [
+      "th32",
+      "jass",
+      "idejett",
+      "moruun"
+    ],
+    "imagePath": "th32.png",
+    "planets": [
+      "jass",
+      "idejett",
+      "moruun"
+    ],
+    "shipPositionsType": "TYPE06",
+    "wormholes": [
+      "ALPHA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th33",
+    "name": "Celyon",
+    "aliases": [
+      "th33",
+      "celyon"
+    ],
+    "imagePath": "th33.png",
+    "planets": [
+      "celyon"
+    ],
+    "shipPositionsType": "TYPE04",
+    "wormholes": [
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th34",
+    "name": "Thren",
+    "aliases": [
+      "th34",
+      "thren"
+    ],
+    "imagePath": "th34.png",
+    "planets": [
+      "thren"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th35",
+    "name": "Myphis",
+    "aliases": [
+      "th35",
+      "myphis"
+    ],
+    "imagePath": "th35.png",
+    "planets": [
+      "myphis"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th36",
+    "name": "Asterin/Dovan",
+    "aliases": [
+      "th36",
+      "asterin",
+      "dovan"
+    ],
+    "imagePath": "th36.png",
+    "planets": [
+      "asterin",
+      "dovan"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "ALPHA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th37",
+    "name": "Ilun/Saresh",
+    "aliases": [
+      "th37",
+      "ilun",
+      "saresh"
+    ],
+    "imagePath": "th37.png",
+    "planets": [
+      "ilun",
+      "saresh"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th38",
+    "name": "Merakha/Keth",
+    "aliases": [
+      "th38",
+      "merakha",
+      "keth"
+    ],
+    "imagePath": "th38.png",
+    "planets": [
+      "merakha",
+      "keth"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th39",
+    "name": "Akren/Sephis",
+    "aliases": [
+      "th39",
+      "akren",
+      "sephis"
+    ],
+    "imagePath": "th39.png",
+    "planets": [
+      "akren",
+      "sephis"
+    ],
+    "shipPositionsType": "TYPE05",
+    "wormholes": [
+      "ALPHA",
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th4",
+    "name": "Myrr Serash - Myrr",
+    "aliases": [
+      "th4",
+      "myrr",
+      "myrrserash"
+    ],
+    "imagePath": "th4_myrrhs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "myrrserash"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "id": "th40",
+    "name": "Avarin",
+    "aliases": [
+      "th40",
+      "avarin"
+    ],
+    "imagePath": "th40.png",
+    "planets": [
+      "avarin"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "red",
+    "isSupernova": true,
+    "source": "theodisi"
+  },
+  {
+    "id": "th41",
+    "name": "Drethis/Veilwatch",
+    "aliases": [
+      "th41",
+      "drethis",
+      "veilwatch"
+    ],
+    "imagePath": "th41.png",
+    "planets": [
+      "drethis",
+      "veilwatch"
+    ],
+    "shipPositionsType": "TYPE05",
+    "tileBack": "red",
+    "isAsteroidField": true,
+    "isNebula": true,
+    "source": "theodisi"
+  },
+  {
+    "id": "th42",
+    "name": "Ptera Station",
+    "aliases": [
+      "th42",
+      "ptera",
+      "pterastation"
+    ],
+    "imagePath": "th42.png",
+    "planets": [
+      "pterastation"
+    ],
+    "shipPositionsType": "TYPE04",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th43",
+    "name": "Alpha/Beta Wormhole",
+    "aliases": [
+      "th43",
+      "alphabetawormhole"
+    ],
+    "imagePath": "th43.png",
+    "planets": [],
+    "shipPositionsType": "TYPE08",
+    "wormholes": [
+      "ALPHA",
+      "BETA"
+    ],
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th44",
+    "name": "Gamma Wormhole/Nebula",
+    "aliases": [
+      "th44",
+      "gammawormhole"
+    ],
+    "imagePath": "th44.png",
+    "planets": [],
+    "shipPositionsType": "TYPE08",
+    "wormholes": [
+      "GAMMA"
+    ],
+    "tileBack": "red",
+    "isNebula": true,
+    "source": "theodisi"
+  },
+  {
+    "id": "th45",
+    "name": "Osslet Station",
+    "aliases": [
+      "th45",
+      "osslet",
+      "ossletstation"
+    ],
+    "imagePath": "th45.png",
+    "planets": [
+      "ossletstation"
+    ],
+    "shipPositionsType": "TYPE08",
+    "wormholes": [
+      "ALPHA",
+      "BETA",
+      "GAMMA"
+    ],
+    "tileBack": "red",
+    "isAsteroidField": true,
+    "isNebula": true,
+    "isGravityRift": true,
+    "source": "theodisi"
+  },
+  {
+    "id": "th46",
+    "name": "Nebula/Gravity Rift",
+    "aliases": [
+      "th46",
+      "nebulagravityrift"
+    ],
+    "imagePath": "th46.png",
+    "planets": [],
+    "shipPositionsType": "TYPE08",
+    "tileBack": "red",
+    "isNebula": true,
+    "isGravityRift": true,
+    "source": "theodisi"
+  },
+  {
+    "id": "th47",
+    "name": "Empty Space",
+    "aliases": [
+      "th47"
+    ],
+    "imagePath": "th47.png",
+    "planets": [],
+    "shipPositionsType": "TYPE08",
+    "tileBack": "blue",
+    "source": "theodisi"
+  },
+  {
+    "id": "th48",
+    "name": "Entropic Scar/Asteroids",
+    "aliases": [
+      "th48",
+      "entropicscarasteroids"
+    ],
+    "imagePath": "th48.png",
+    "planets": [],
+    "shipPositionsType": "TYPE08",
+    "tileBack": "red",
+    "isAsteroidField": true,
+    "isScar": true,
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th5",
+    "name": "Kairn/Darnak/Plotyz - Kairn",
+    "aliases": [
+      "th5",
+      "kairn",
+      "darnak",
+      "plotyz"
+    ],
+    "imagePath": "th5_kairnhs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "kairn",
+      "darnak",
+      "plotyz"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th6",
+    "name": "Cullspire/Chrysali/Bruud - Kryxos",
+    "aliases": [
+      "th6",
+      "cullspire",
+      "chrysali",
+      "bruud",
+      "kryxos"
+    ],
+    "imagePath": "th6_kryxoshs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "cullspire",
+      "chrysali",
+      "bruud"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th7",
+    "name": "Syphos/Crythisis/The Arcanum - Arcanum",
+    "aliases": [
+      "th7",
+      "syphos",
+      "crythisis",
+      "thearcanum",
+      "arcanum"
+    ],
+    "imagePath": "th7_arcanumhs.png",
+    "shipPositionsType": "TYPE03",
+    "spaceTokenLocations": [
+      {
+        "x": 250.0,
+        "y": 90.0
+      },
+      {
+        "x": 80.0,
+        "y": 10.0
+      },
+      {
+        "x": 135.0,
+        "y": 105.0
+      },
+      {
+        "x": 80.0,
+        "y": 185.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "syphos",
+      "crythisis",
+      "thearcanum"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "tileBack": "green",
+    "id": "th8",
+    "name": "Hiveworld - Xytheris",
+    "aliases": [
+      "th8",
+      "hiveworld",
+      "xytheris"
+    ],
+    "imagePath": "th8_xytherishs.png",
+    "shipPositionsType": "TYPE01",
+    "wormholes": [],
+    "planets": [
+      "hiveworld"
+    ],
+    "source": "theodisi"
+  },
+  {
+    "id": "th9",
+    "name": "Nihlus/Veydra - Oblivion",
+    "aliases": [
+      "th9",
+      "nihlus",
+      "veydra",
+      "oblivion"
+    ],
+    "imagePath": "th9_oblivionhs.png",
+    "shipPositionsType": "TYPE02",
+    "spaceTokenLocations": [
+      {
+        "x": 180.0,
+        "y": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0
+      },
+      {
+        "x": 45.0,
+        "y": 120.0
+      },
+      {
+        "x": 95.0,
+        "y": 170.0
+      }
+    ],
+    "wormholes": [],
+    "planets": [
+      "nihlus",
+      "veydra"
+    ],
+    "source": "theodisi",
+    "tileBack": "green"
   },
   {
     "id": "turquoiseblank",

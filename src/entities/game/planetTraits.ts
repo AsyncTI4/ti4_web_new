@@ -33,7 +33,7 @@ export function mergePlanetTraits(
 export function getPlanetTraitIconSrc(traits: PlanetTrait[]): string | null {
   if (traits.length === 0) return null;
   if (traits.length === 1) {
-    return `/planet_attributes/pc_attribute_${traits[0]}.png`;
+    return cdnImage(`/planet_cards/pc_attribute_${traits[0]}.png`);
   }
 
   const hasC = traits.includes("cultural");

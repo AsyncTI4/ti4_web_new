@@ -10,6 +10,7 @@ import { usePlayerHand } from "@/domains/game-shell/components/SecretHand/usePla
 import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
 import { useSettingsStore } from "@/state/appStore";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { ACTION_CARD_BACK } from "@/entities/data/uiImages";
 import type { PlayerHandData } from "@/shared/types/playerHand";
 import zoomClasses from "@/shared/ui/map/ZoomControls.module.css";
 import classes from "./FloatingMapToolbar.module.css";
@@ -72,7 +73,7 @@ function EventsButton({
 }
 
 const FAN_BACKS = [
-  "/cardback/cardback_action.png",
+  ACTION_CARD_BACK,
   cdnImage("/player_area/cardback_secret.jpg"),
   cdnImage("/player_area/pa_cardbacks_pn.png"),
 ];
