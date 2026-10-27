@@ -48,12 +48,19 @@ in `src/entities/data/leaderPortraits.ts` from the bot's `emojis/leaders/` PNGs
 and `emojis/Reupload/KeleresCommander.png`. The bot's upload workflow converts
 these PNGs to WebP; `cdnImage()` selects that generated format.
 
-The `naaluagent-te` and `xxchahero-te` aliases use the same portraits as their base
-IDs, matching the bot's emoji aliases. Their previous frontend WebP files were
-byte-identical to the base portraits. Unknown or unavailable portraits retain the
+Portrait lookup checks an ID's own artwork, then the bot's emoji aliases, then
+`homebrewReplacesID` from the leader catalog. It follows replacement chains and
+stops on cycles or unknown IDs. Portrait visibility depends on resolved artwork,
+so every source can display its available portraits. Missing images retain the
 transparent fallback. No duplicate image assets are needed in either repository.
 
+The `naaluagent-te` and `xxchahero-te` aliases retain the same artwork as their base
+IDs. Their previous frontend WebP files were byte-identical to the base portraits.
+
 Portrait visibility and leader definitions are managed separately from these assets.
+The base leader catalog is refreshed from the production-published
+`https://images.asyncti4.com/web_data/leaders.ts`; deployment downloads this catalog
+from the same S3 `web_data` source before building.
 The supplemental `src/entities/data/theodisiLeaders.ts` catalog is generated from
 the bot's `src/main/resources/data/leaders/theodisi_leaders.json`; it fills missing
 IDs through `catalogs.ts` without replacing definitions in the base catalog.

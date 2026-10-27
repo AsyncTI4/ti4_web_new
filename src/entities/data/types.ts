@@ -200,9 +200,17 @@ export type LeaderData = {
   searchTags?: string[];
   homebrewReplacesID?: string;
   tfName?: string;
+  tfShortName?: string;
+  tfShrinkName?: boolean;
   tfTitle?: string;
   tfAbilityWindow?: string;
   tfAbilityText?: string;
+  imageURL?: string;
+  tfImageURL?: string;
+  imageBackURL?: string;
+  notes?: string;
+  tfNotes?: string;
+  flavourText?: string;
 };
 
 export type CapturedUnitsData = {
