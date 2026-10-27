@@ -1,154 +1,170 @@
-# TI4 Web - React + Vite + TypeScript
+# TI4 Web
 
-This is a Twilight Imperium 4 web application built with React, Vite, and TypeScript.
-
-The map supports Fracture positions `frac1` through `frac25`. The original seven
-positions reserve 400 pixels of vertical space; any expanded position (`frac8`–`frac25`)
-adds another 600 pixels, matching the bot layout for tiles and player-stat areas.
-Expanded Fracture systems (`ef1`–`ef12`) and their planets are included through
-`src/entities/data/catalogs.ts`, supplementing the generated base catalogs.
-
-Unknown bot map positions are omitted from drawing and listed in a “Map incomplete”
-warning. Their raw tile data and planet lookups are retained; other game views
-remain usable. Add verified coordinates in `src/entities/data/tileCoordinates.ts`
-to render those positions. This also applies to player-stat positions and map previews.
+A Twilight Imperium 4 companion application for AsyncTI4 games, built with React,
+Vite, and TypeScript. Game state comes from the bot API and websocket; static
+catalogs supply definitions for systems, planets, cards, technologies, and leaders.
 
 ## Tech Stack
 
-- **React 18** - UI framework
-- **Vite** - Build tool and development server
-- **TypeScript** - Type safety and better developer experience
-- **Mantine** - UI component library
-- **ESLint** - Code linting with TypeScript support
+- **React 19** with the React Compiler
+- **Vite** and **TypeScript**
+- **Base UI** through the local design system in `src/ds/`
+- **TanStack Query** for server state and **Zustand** for application settings
+- **React Router** for routing
+- **Remotion** for the music video
+- **ESLint** with type-aware TypeScript rules
 
 ## Development
 
+Use Node.js 22.12+ and Yarn. Run commands from the repository root.
+
 ```bash
-# Install dependencies
-npm install
+# Install dependencies and start the development server
+yarn install
+yarn dev
 
-# Start development server
-npm run dev
+# Check both TypeScript projects explicitly
+yarn tsc -p tsconfig.app.json --noEmit
+yarn tsc -p tsconfig.node.json --noEmit
 
-# Type checking
-npm run type-check
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+# Lint, build, and preview the production output
+yarn lint
+yarn build
+yarn preview
 ```
+
+The root `tsconfig.json` contains project references rather than source files;
+explicit project checks above cover application and build-tool code.
+
+API endpoints are centralized in `src/config.ts`. The development server proxies
+`/bot` to `https://bot.asyncti4.com`, `/proxy` to `https://asyncti4.com`, and `/auth`
+to a local service on port 8000. Game data and websocket updates use the remote bot
+in development as well as production.
+
+## Game Data Catalogs
+
+Live game data contains IDs that must resolve through the static TypeScript
+catalogs in `src/entities/data/`. A missing catalog entry can hide a tile, planet,
+leader, relic, promissory note, or technology even when the bot reports it in the
+game state.
+
+The [production deployment](.github/workflows/deploy-to-prod-new.yaml) and
+[test deployment](.github/workflows/deploy-to-test.yaml) replace generated catalogs
+from `s3://bot-images-asyncti4.com/web_data/` before building. The local development
+server and ordinary local builds use the files already in the checkout. This can
+make local games differ from production when those files are stale.
+
+Published catalogs are available at
+`https://images.asyncti4.com/web_data/<catalog>.ts`. To refresh the map, leader,
+relic, promissory-note, and technology catalogs:
+
+```bash
+for catalog in systems planets leaders relics promissoryNotes tech; do
+  curl --fail --silent --show-error \
+    "https://images.asyncti4.com/web_data/${catalog}.ts" \
+    --output "src/entities/data/${catalog}.ts" || break
+done
+```
+
+Keep generated catalogs as published. Review their diffs and update the explicit
+metadata types in `src/entities/data/types.ts` if upstream adds fields, then run
+the checks above. Refresh generated data files individually rather than replacing
+hand-maintained helpers such as `catalogs.ts`, `leaderPortraits.ts`, or `uiImages.ts`.
+
+`src/entities/data/catalogs.ts` merges the generated system, planet, and leader
+catalogs with local supplements. Generated entries take precedence; supplements
+only fill IDs absent from the base catalogs.
+
+## Images and Icons
+
+### Faction Icons
+
+Use `FactionIcon` or `useFactionImageUrl()` when an icon represents a player in a
+game. They resolve custom emoji and Discord images from game context or explicit
+overrides. Neighbors, player-area column headers, PDS coverage, and promissory-note
+chips use this approach. Artwork representing a specific faction's technology or
+unit keeps that faction's fixed symbol.
+
+`getFactionImage()` also handles the bot's alternate CDN paths and filename casing
+for `franken19` through `franken26`. Callers do not need to construct those paths.
+
+### Leader Portraits
+
+`getLeaderPortraitUrl()` resolves portraits for every source, including the music
+video. It checks an ID's own artwork, then the bot's emoji aliases, then
+`homebrewReplacesID` from the leader catalog. IDs are matched without regard to
+case, replacement chains are followed, and cycles or unknown IDs return no URL.
+Portrait visibility depends on resolved artwork rather than a source allowlist.
+
+Paths and aliases live in `src/entities/data/leaderPortraits.ts`, matching the bot's
+`LeaderEmojis` mappings and existing portrait files. Preserve CDN filename casing.
+`LeaderPortraitImage` uses a transparent fallback when artwork is unknown or fails
+to load, including locked and exhausted leaders.
+
+### Shared Game Images
+
+Reference existing bot assets through `cdnImage()`. The helper selects the WebP
+files generated by the bot's image-upload workflow from its PNG/JPEG sources.
+Leader portraits, system tiles, planet-card tile backgrounds, and default faction
+icons use these CDN assets.
+
+Common technology, unit-upgrade, resource, and action-card images are centralized
+in `src/entities/data/uiImages.ts`. Single planet-trait icons also use the CDN;
+CSS backgrounds use the corresponding CDN URLs. Reuse those assets instead of
+adding local copies or duplicate converted images to either repository.
+
+Remaining music-video image assets and their preload behavior are maintained
+separately in `src/music-video/`.
+
+## Map Coverage
+
+The map supports Fracture positions `frac1` through `frac25`. When all original
+seven positions are present, the layout reserves 400 pixels of vertical space;
+any expanded position (`frac8`–`frac25`) adds another 600 pixels, matching the bot
+layout for tiles and player-stat areas.
+
+Unknown bot map positions are omitted from drawing and listed in a “Map incomplete”
+warning. Their raw tile data and planet lookups are retained so other game views
+remain usable. Add verified coordinates in `src/entities/data/tileCoordinates.ts`
+to render those positions. This also applies to player-stat positions and map previews.
 
 ## Repository Structure
 
-Leader portraits, including the music video, use `getLeaderPortraitUrl()` to map
-leader IDs to existing CDN images. Source paths and filename casing are recorded
-in `src/entities/data/leaderPortraits.ts` from the bot's `emojis/leaders/` PNGs
-and `emojis/Reupload/KeleresCommander.png`. The bot's upload workflow converts
-these PNGs to WebP; `cdnImage()` selects that generated format.
-
-Portrait lookup checks an ID's own artwork, then the bot's emoji aliases, then
-`homebrewReplacesID` from the leader catalog. It follows replacement chains and
-stops on cycles or unknown IDs. Portrait visibility depends on resolved artwork,
-so every source can display its available portraits. Missing images retain the
-transparent fallback. No duplicate image assets are needed in either repository.
-
-The `naaluagent-te` and `xxchahero-te` aliases retain the same artwork as their base
-IDs. Their previous frontend WebP files were byte-identical to the base portraits.
-
-Portrait visibility and leader definitions are managed separately from these assets.
-The base leader catalog is refreshed from the production-published
-`https://images.asyncti4.com/web_data/leaders.ts`; deployment downloads this catalog
-from the same S3 `web_data` source before building.
-The supplemental `src/entities/data/theodisiLeaders.ts` catalog is generated from
-the bot's `src/main/resources/data/leaders/theodisi_leaders.json`; it fills missing
-IDs through `catalogs.ts` without replacing definitions in the base catalog.
-
-Default faction icons for `franken19` through `franken26` use the existing CDN
-images generated from `emojis/factions/franken/Franken19.png` through `Franken26.png`.
-Custom emoji and Discord image overrides still take precedence.
-
-The frontend carries no local copies of these images and requires no new bot image
-publication for this migration.
-
-Shared technology icons, planet traits, resource icons, and action-card backs also
-use existing bot CDN images. Common UI URLs live in `src/entities/data/uiImages.ts`;
-CSS image backgrounds use the same CDN paths. Their local duplicates and unused
-legacy copies have been removed. Music-video image assets retain their current
-local files and preload behavior.
-
-Dependencies point downward: `pages` → `layout` → `domains` → `shared`/`hooks` → `state` → `api` → `entities` → `utils`. `game-shell` composes the other domains; `cards` sits below them.
-
-```
+```text
 ti4_web_new/
-├── public/                    # Static assets
-│   ├── font/                 # Custom fonts
-│   └── ...                   # Game assets (tokens, icons, etc.)
+├── public/                   # Remaining static assets and fonts
 ├── src/
-│   ├── main.tsx             # Entry point and routes
-│   ├── config.ts            # Environment config
-│   ├── pages/               # Route-level pages (landing, games, dashboard, game map, image map)
-│   ├── layout/              # Site chrome shared by pages (PageShell, SiteHeader, GamesBar)
-│   ├── domains/             # Feature areas
-│   │   ├── game-shell/      # In-game shell: layouts, sidebars, panels, event log
-│   │   ├── map/             # Board rendering: tiles, layers, unit stacks, tooltips
-│   │   ├── player/          # Player area cards and composition
-│   │   ├── cards/           # Details cards, card backs and deck modals for every card type
-│   │   ├── objectives/      # Scoring, public objectives, laws in play
-│   │   ├── tabs/            # Game tab bar and tab management
-│   │   ├── dashboard/ auth/ settings/ image-map/
-│   ├── shared/ui/           # Reusable, domain-agnostic UI
-│   ├── hooks/               # Generic hooks
-│   ├── state/               # App settings store and game context provider
-│   ├── api/                 # Fetching, sockets and auth session
-│   ├── entities/            # Pure game model
-│   │   ├── data/            # Static game data
-│   │   ├── lookup/          # Map-backed getters over the data
-│   │   ├── game/            # GameData types and buildGameContext
-│   │   ├── geometry/        # Hex and tile geometry
-│   │   ├── positioning/     # Unit placement on tiles
-│   │   └── replay/          # Map replay planning
-│   ├── styles/              # Global styles, themes, z-index variables
-│   └── utils/               # Generic helpers
-├── build/                   # Production build output
-├── dist/                    # Vite build output
-├── CLAUDE.md               # AI assistant coding guidelines
-├── eslint.config.js        # ESLint configuration
-├── postcss.config.cjs      # PostCSS configuration
-├── tsconfig.json           # TypeScript configuration
-├── tsconfig.app.json       # App-specific TypeScript config
-├── tsconfig.node.json      # Node-specific TypeScript config
-├── vite.config.ts          # Vite configuration
-└── package.json            # Dependencies and scripts
+│   ├── main.tsx              # Application entry point and routes
+│   ├── config.ts             # Environment-specific API endpoints
+│   ├── pages/                # Route-level pages
+│   ├── layout/               # Shared site chrome
+│   ├── domains/              # Game shell, map, players, cards, auth, and other features
+│   ├── ds/                   # Design tokens and Base UI-backed primitives
+│   ├── shared/               # Shared UI, accessibility helpers, and types
+│   ├── hooks/                # Shared React hooks
+│   ├── state/                # Settings stores and game context
+│   ├── api/                  # Data fetching and websocket updates
+│   ├── entities/
+│   │   ├── data/             # Static catalogs, data types, and asset mappings
+│   │   ├── lookup/           # Entity and image lookup helpers
+│   │   ├── game/             # Game models and context construction
+│   │   ├── geometry/         # Hex and tile geometry
+│   │   ├── positioning/      # Unit placement
+│   │   └── replay/           # Map replay planning
+│   ├── music-video/          # Remotion composition, assets, and player
+│   ├── styles/               # Global styles and themes
+│   └── utils/                # General utilities
+├── dist/                     # Generated Vite build output
+├── .github/workflows/        # Build and deployment workflows
+├── eslint.config.js          # Type-aware TypeScript lint configuration
+├── tsconfig.json             # Project references
+├── tsconfig.app.json         # Application TypeScript configuration
+├── tsconfig.node.json        # Build-tool TypeScript configuration
+├── vite.config.ts            # Vite configuration
+└── package.json              # Dependencies and scripts
 ```
 
-## TypeScript Configuration
-
-The project uses two TypeScript configurations:
-
-- `tsconfig.json` - Main configuration for source code
-- `tsconfig.node.json` - Configuration for build tools (Vite config, etc.)
-
-### Key TypeScript Features Enabled
-
-- Strict type checking
-- Path mapping with `@/*` alias for `src/*`
-- React JSX support
-- JSON module resolution
-- Unused variable detection
-
-### Adding Types
-
-- Game model types live in `src/entities/game/types.ts`; static data types in `src/entities/data/types.ts`
-- Component-specific types should be defined in the same file or nearby
-- Third-party library types are automatically included when available
-
-## ESLint Configuration
-
-ESLint is configured to work with both JavaScript and TypeScript files:
-
-- JavaScript/JSX files: Standard React rules
-- TypeScript/TSX files: Additional TypeScript-specific rules
-- Automatic unused variable detection
-- React hooks rules enforcement
+The `game-shell` domain composes the game views; `cards` supplies details panels
+used across those views. Imports use the `@/` alias for `src/`. Game model types
+live in `src/entities/game/types.ts`; catalog types live in
+`src/entities/data/types.ts`. Keep component-specific types near their components.

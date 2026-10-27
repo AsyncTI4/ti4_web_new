@@ -141,6 +141,8 @@ export type Tech = {
   shortName?: string;
   shrinkName?: boolean;
   homebrewReplacesID?: string;
+  notes?: string;
+  isUpgrade?: boolean;
 };
 
 export type Relic = {
@@ -155,6 +157,10 @@ export type Relic = {
   homebrewReplacesID?: string;
   isFakeRelic?: boolean;
   actualSource?: string;
+  notes?: string;
+  flavorText?: string;
+  automation?: string;
+  automationNotes?: string;
 };
 
 export type FactionUnits = {
@@ -836,6 +842,7 @@ export type PromissoryNote = {
   shrinkName?: boolean;
   attachment?: string | boolean;
   homebrewReplacesID?: string;
+  notes?: string;
 };
 
 type ObjectiveDefinition = {
