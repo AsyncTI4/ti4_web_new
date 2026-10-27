@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { ACTION_CARD_BACK } from "@/entities/data/uiImages";
 import styles from "./PlayerCardCounts.module.css";
 
 type Props = {
@@ -38,7 +39,7 @@ export function PlayerCardCounts({ pnCount, acCount }: Props) {
   return (
     <span className={styles.hand}>
       <HandBack
-        src="/cardback/cardback_action.png"
+        src={ACTION_CARD_BACK}
         count={acCount}
         label="action cards"
         className={styles.ac}

@@ -40,8 +40,14 @@ export type TileData = {
   isNebula?: boolean;
   isGravityRift?: boolean;
   isScar?: boolean;
+  isFracture?: boolean;
   hasIngress?: boolean;
   hasEgress?: boolean;
+  // Alternate field names retained in the published system catalog.
+  isAstroid?: boolean;
+  isRift?: boolean;
+  isNebulae?: boolean;
+  hasingress?: boolean;
   imageURL?: string;
   source: string;
   tileBack?: string;
@@ -727,6 +733,8 @@ export type Planet = {
   legendaryAbilityName?: string | null;
   legendaryAbilityText?: string | null;
   legendaryAbilityFlavourText?: string | null;
+  legendaryNotes?: string;
+  radius?: number;
   planetLayout?: {
     unitHolderName: string;
     resourcesLocation: "TopRight" | "BottomLeft" | "TopLeft" | "BottomRight";
@@ -736,6 +744,9 @@ export type Planet = {
   };
   contrastColor?: string;
   flavourText?: string | null;
+  // Alternate spellings retained in the published planet catalog.
+  flavorText?: string;
+  flavortext?: string;
   source: string;
   spaceCannonDieCount?: number;
   spaceCannonHitsOn?: number;

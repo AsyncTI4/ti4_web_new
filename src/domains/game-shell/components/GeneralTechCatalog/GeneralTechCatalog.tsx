@@ -9,6 +9,7 @@ import {
 import { getGenericUnitDataByRequiredTechId } from "@/entities/lookup/units";
 import { getColorAlias } from "@/entities/lookup/colors";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { TECH_COLOR_IMAGES } from "@/entities/data/uiImages";
 import type { PlayerData, Tech } from "@/entities/data/types";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { RailLabel } from "@/domains/objectives/components/RailLabel";
@@ -34,25 +35,25 @@ const DEFAULT_COLORED_TECH_GROUPS: TechGroup[] = [
   {
     label: "Propulsion",
     color: "blue",
-    icon: "/blue.png",
+    icon: TECH_COLOR_IMAGES.blue,
     aliases: ["amd", "det", "gd", "fl", "lwd", "sr"],
   },
   {
     label: "Biotic",
     color: "green",
-    icon: "/green.png",
+    icon: TECH_COLOR_IMAGES.green,
     aliases: ["nm", "dxa", "hm", "pa", "bs", "x89c4"],
   },
   {
     label: "Warfare",
     color: "red",
-    icon: "/red.png",
+    icon: TECH_COLOR_IMAGES.red,
     aliases: ["ps", "aida", "md", "sar", "da", "asc"],
   },
   {
     label: "Cybernetic",
     color: "yellow",
-    icon: "/yellow.png",
+    icon: TECH_COLOR_IMAGES.yellow,
     aliases: ["st", "sdn", "gls", "pi", "td", "ie"],
   },
 ];

@@ -65,14 +65,18 @@ Custom emoji and Discord image overrides still take precedence.
 The frontend carries no local copies of these images and requires no new bot image
 publication for this migration.
 
+Shared technology icons, planet traits, resource icons, and action-card backs also
+use existing bot CDN images. Common UI URLs live in `src/entities/data/uiImages.ts`;
+CSS image backgrounds use the same CDN paths. Their local duplicates and unused
+legacy copies have been removed. Music-video image assets retain their current
+local files and preload behavior.
+
 Dependencies point downward: `pages` → `layout` → `domains` → `shared`/`hooks` → `state` → `api` → `entities` → `utils`. `game-shell` composes the other domains; `cards` sits below them.
 
 ```
 ti4_web_new/
 ├── public/                    # Static assets
-│   ├── cardback/             # Card background images
 │   ├── font/                 # Custom fonts
-│   ├── planet_attributes/    # Planet trait icons
 │   └── ...                   # Game assets (tokens, icons, etc.)
 ├── src/
 │   ├── main.tsx             # Entry point and routes

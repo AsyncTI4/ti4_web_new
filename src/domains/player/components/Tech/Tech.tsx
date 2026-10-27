@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { TECH_COLOR_IMAGES, UNIT_UPGRADE_IMAGE } from "@/entities/data/uiImages";
 import styles from "./Tech.module.css";
 import { searchKey } from "@/domains/search/searchKeys";
 import { getFactionImage } from "@/entities/lookup/factions";
@@ -27,7 +28,7 @@ type Props = {
   unresearched?: boolean;
 };
 
-const getTechColor = (techType: string): string =>
+const getTechColor = (techType: string): TechColor | "gray" =>
   TECH_TYPE_COLOR[techType] ?? "gray";
 
 /**
@@ -50,14 +51,14 @@ function getSynergyPartner(
 function getTechIconSrc(
   faction: string | undefined,
   techType: string,
-  color: string,
+  color: TechColor | "gray",
   techLetter: string | undefined,
 ): string | undefined {
   if (faction) return getFactionImage(faction);
   if (techLetter) return undefined;
-  if (techType === "UNITUPGRADE") return "/UnitUpgradeTech.png";
+  if (techType === "UNITUPGRADE") return UNIT_UPGRADE_IMAGE;
   if (color === "gray") return undefined;
-  return `/${color}.png`;
+  return TECH_COLOR_IMAGES[color];
 }
 
 /** Circuit module: accent edge, trace into the glyph, chamfer wedge, tier pips. */
