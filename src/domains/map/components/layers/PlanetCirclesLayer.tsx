@@ -11,6 +11,7 @@ import { getTokenData } from "@/entities/lookup/tokens";
 import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning/constants";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 import { searchKey, searchTarget } from "@/domains/search/searchKeys";
+import { planetStatBadgeOffsets } from "@/entities/data/planetStatBadges";
 
 const TOKEN_PLANET_RADIUS = 45;
 const REGULAR_PLANET_Z_INDEX = 52;
@@ -92,6 +93,15 @@ export function PlanetCirclesLayer({
   if (!mapTile?.planets) return null;
   const planetPositions = getPlanetPositionsBySystemId(systemId);
 
+  const shouldGreyOut = (
+    planet: NonNullable<ReturnType<typeof getPlanetData>>,
+  ) => {
+    const isSpaceStation =
+      planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
+      false;
+    return showExhaustedPlanets && !isSpaceStation;
+  };
+
   const createPlanetCircle = (
     planetId: string,
     x: number,
@@ -108,11 +118,7 @@ export function PlanetCirclesLayer({
       isTokenPlanet,
     );
     const diameter = radius * 2;
-    const isSpaceStation =
-      planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
-      false;
-    const showExhausted =
-      isExhausted && showExhaustedPlanets && !isSpaceStation;
+    const showExhausted = isExhausted && shouldGreyOut(planet);
     const isHighlighted = hoveredPlanetId === planetId;
 
     return (
@@ -177,5 +183,37 @@ export function PlanetCirclesLayer({
     },
   );
 
-  return <>{[...regularPlanetCircles, ...tokenPlanetCircles]}</>;
+  /* The resource and influence numbers are part of the tile art, so they are
+     turned red by multiplying a red disc over each one. Drawn after every
+     circle so the multiply lands on top of the grey backdrop filter. */
+  const exhaustedStatTints = Object.entries(mapTile.planets).flatMap(
+    ([planetId, planetTile]) => {
+      const position = planetPositions[planetId];
+      const offsets = planetStatBadgeOffsets[planetId];
+      const planet = getPlanetData(planetId);
+      if (!planetTile.exhausted || !position || !offsets || !planet) return [];
+      if (!shouldGreyOut(planet)) return [];
+      const [resX, resY, infX, infY] = offsets;
+      return [
+        [resX, resY],
+        [infX, infY],
+      ].map(([dx, dy], index) => (
+        <div
+          key={`${systemId}-${planetId}-stat-${index}`}
+          className={classes.exhaustedStatTint}
+          style={{
+            left: `${position.x + dx}px`,
+            top: `${position.y + dy}px`,
+            zIndex: REGULAR_PLANET_Z_INDEX,
+          }}
+        />
+      ));
+    },
+  );
+
+  return (
+    <>
+      {[...regularPlanetCircles, ...tokenPlanetCircles, ...exhaustedStatTints]}
+    </>
+  );
 }

@@ -109,6 +109,19 @@
   z-index: var(--z-planet-circle);
 }
 
+/* Multiplying by red keeps a badge's dark fill dark and turns its white
+   number red. Sized to sit inside the badge ring. */
+.exhaustedStatTint {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(var(--ds-sig-danger));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 .planetCircle.highlighted {
   border: 2px solid rgba(255, 255, 255, 0.8);
   box-shadow:
