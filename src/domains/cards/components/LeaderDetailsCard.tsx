@@ -1,4 +1,4 @@
-import { Image } from "@/ds";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { showLeader } from "@/entities/lookup/showLeader";
@@ -27,7 +27,7 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   const portrait = showLeader(leaderData.source) ? (
     <DetailsCard.Icon
       shape="leader"
-      icon={<Image src={`/leaders/${leaderId}.webp`} alt="" />}
+      icon={<LeaderPortraitImage leaderId={leaderId} />}
     />
   ) : undefined;
 

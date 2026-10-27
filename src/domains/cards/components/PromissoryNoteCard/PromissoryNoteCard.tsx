@@ -1,4 +1,5 @@
 import { Image } from "@/ds";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { getAllianceCommander } from "@/entities/lookup/leaders";
 import { useFactionColors } from "@/hooks/useFactionColors";
@@ -19,9 +20,8 @@ function CommanderAbility({ commander }: { commander: Commander }) {
   return (
     <div className={styles.commander}>
       {showLeader(commander.source) && (
-        <Image
-          src={`/leaders/${commander.id}.webp`}
-          alt=""
+        <LeaderPortraitImage
+          leaderId={commander.id}
           className={styles.portrait}
         />
       )}

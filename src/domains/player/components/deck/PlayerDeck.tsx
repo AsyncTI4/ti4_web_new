@@ -17,7 +17,13 @@ type Props = {
 function LaneHeader({ lane, players }: { lane: Lane; players: PlayerData[] }) {
   if (!lane.name) return null;
   const leader = lane.key === "seat" ? undefined : getLaneLeader(lane, players);
-  const leaderIcon = leader ? getFactionImage(leader.player.faction) : undefined;
+  const leaderIcon = leader
+    ? getFactionImage(
+        leader.player.faction,
+        leader.player.factionImage,
+        leader.player.factionImageType,
+      )
+    : undefined;
 
   return (
     <div
