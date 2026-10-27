@@ -2,8 +2,8 @@
  * Where each planet's resource and influence numbers sit on its tile art, as
  * [resX, resY, infX, infY] offsets from the planet's centerPosition in tile
  * pixels. The numbers are drawn into the tile images rather than by us, so
- * these were measured from the art. Planets missing here (token planets and
- * homebrew tiles with a different badge design) keep the plain exhausted look.
+ * these were measured from the art. Planets missing here (homebrew tiles with
+ * a different badge design) keep the plain exhausted look.
  */
 export const planetStatBadgeOffsets: Record<
   string,
@@ -416,4 +416,17 @@ export const planetStatBadgeOffsets: Record<
   zephyrax: [-43, -37, -25, -52],
   zhgen: [-45, -36, -25, -50],
   zohbat: [28, 49, 48, 34],
+};
+
+/**
+ * The same offsets for planets that arrive as tokens. Their numbers are drawn
+ * on the token sprite, so the offsets are from the token's center.
+ */
+export const tokenPlanetStatBadgeOffsets: Record<
+  string,
+  readonly [number, number, number, number]
+> = {
+  avernus: [33, 52, 54, 36],
+  mirage: [-49, 32, -30, 45],
+  thundersedge: [33, 65, 54, 51],
 };

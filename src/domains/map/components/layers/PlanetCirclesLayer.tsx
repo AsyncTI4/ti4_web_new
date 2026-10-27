@@ -11,7 +11,10 @@ import { getTokenData } from "@/entities/lookup/tokens";
 import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning/constants";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 import { searchKey, searchTarget } from "@/domains/search/searchKeys";
-import { planetStatBadgeOffsets } from "@/entities/data/planetStatBadges";
+import {
+  planetStatBadgeOffsets,
+  tokenPlanetStatBadgeOffsets,
+} from "@/entities/data/planetStatBadges";
 
 const TOKEN_PLANET_RADIUS = 45;
 const REGULAR_PLANET_Z_INDEX = 52;
@@ -186,12 +189,16 @@ export function PlanetCirclesLayer({
 
   /* The resource and influence numbers are part of the tile art, so they are
      turned red by multiplying a red disc over each one. Drawn after every
-     circle so the multiply lands on top of the grey backdrop filter. */
+     circle so the multiply lands on top of the grey backdrop filter. Token
+     planets carry their numbers on the token, which sits above the tile. */
   const exhaustedStatTints = Object.entries(mapTile.planets).flatMap(
     ([planetId, planetTile]) => {
       if (!redExhaustedPlanetNumbers || !planetTile.exhausted) return [];
-      const position = planetPositions[planetId];
-      const offsets = planetStatBadgeOffsets[planetId];
+      const isTokenPlanet = !planetPositions[planetId];
+      const position = planetPositions[planetId] ?? tokenPlanets[planetId];
+      const offsets = isTokenPlanet
+        ? tokenPlanetStatBadgeOffsets[planetId]
+        : planetStatBadgeOffsets[planetId];
       const planet = getPlanetData(planetId);
       if (!position || !offsets || !planet || isSpaceStation(planet)) return [];
       const [resX, resY, infX, infY] = offsets;
@@ -205,7 +212,9 @@ export function PlanetCirclesLayer({
           style={{
             left: `${position.x + dx}px`,
             top: `${position.y + dy}px`,
-            zIndex: REGULAR_PLANET_Z_INDEX,
+            zIndex: isTokenPlanet
+              ? TOKEN_PLANET_Z_INDEX
+              : REGULAR_PLANET_Z_INDEX,
           }}
         />
       ));
