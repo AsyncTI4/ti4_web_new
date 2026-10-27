@@ -202,22 +202,28 @@ export function PlanetCirclesLayer({
       const planet = getPlanetData(planetId);
       if (!position || !offsets || !planet || isSpaceStation(planet)) return [];
       const [resX, resY, infX, infY] = offsets;
+      const zIndex = isTokenPlanet
+        ? TOKEN_PLANET_Z_INDEX
+        : REGULAR_PLANET_Z_INDEX;
       return [
         [resX, resY],
         [infX, infY],
-      ].map(([dx, dy], index) => (
-        <div
-          key={`${systemId}-${planetId}-stat-${index}`}
-          className={classes.exhaustedStatTint}
-          style={{
-            left: `${position.x + dx}px`,
-            top: `${position.y + dy}px`,
-            zIndex: isTokenPlanet
-              ? TOKEN_PLANET_Z_INDEX
-              : REGULAR_PLANET_Z_INDEX,
-          }}
-        />
-      ));
+      ].flatMap(([dx, dy], index) => {
+        const style = {
+          left: `${position.x + dx}px`,
+          top: `${position.y + dy}px`,
+          zIndex,
+        };
+        const key = `${systemId}-${planetId}-stat-${index}`;
+        return [
+          <div
+            key={`${key}-lift`}
+            className={classes.exhaustedStatLift}
+            style={style}
+          />,
+          <div key={key} className={classes.exhaustedStatTint} style={style} />,
+        ];
+      });
     },
   );
 
