@@ -40,8 +40,14 @@ export type TileData = {
   isNebula?: boolean;
   isGravityRift?: boolean;
   isScar?: boolean;
+  isFracture?: boolean;
   hasIngress?: boolean;
   hasEgress?: boolean;
+  // Alternate field names retained in the published system catalog.
+  isAstroid?: boolean;
+  isRift?: boolean;
+  isNebulae?: boolean;
+  hasingress?: boolean;
   imageURL?: string;
   source: string;
   tileBack?: string;
@@ -135,6 +141,8 @@ export type Tech = {
   shortName?: string;
   shrinkName?: boolean;
   homebrewReplacesID?: string;
+  notes?: string;
+  isUpgrade?: boolean;
 };
 
 export type Relic = {
@@ -149,6 +157,10 @@ export type Relic = {
   homebrewReplacesID?: string;
   isFakeRelic?: boolean;
   actualSource?: string;
+  notes?: string;
+  flavorText?: string;
+  automation?: string;
+  automationNotes?: string;
 };
 
 export type FactionUnits = {
@@ -194,9 +206,17 @@ export type LeaderData = {
   searchTags?: string[];
   homebrewReplacesID?: string;
   tfName?: string;
+  tfShortName?: string;
+  tfShrinkName?: boolean;
   tfTitle?: string;
   tfAbilityWindow?: string;
   tfAbilityText?: string;
+  imageURL?: string;
+  tfImageURL?: string;
+  imageBackURL?: string;
+  notes?: string;
+  tfNotes?: string;
+  flavourText?: string;
 };
 
 export type CapturedUnitsData = {
@@ -727,6 +747,8 @@ export type Planet = {
   legendaryAbilityName?: string | null;
   legendaryAbilityText?: string | null;
   legendaryAbilityFlavourText?: string | null;
+  legendaryNotes?: string;
+  radius?: number;
   planetLayout?: {
     unitHolderName: string;
     resourcesLocation: "TopRight" | "BottomLeft" | "TopLeft" | "BottomRight";
@@ -736,6 +758,9 @@ export type Planet = {
   };
   contrastColor?: string;
   flavourText?: string | null;
+  // Alternate spellings retained in the published planet catalog.
+  flavorText?: string;
+  flavortext?: string;
   source: string;
   spaceCannonDieCount?: number;
   spaceCannonHitsOn?: number;
@@ -817,6 +842,7 @@ export type PromissoryNote = {
   shrinkName?: boolean;
   attachment?: string | boolean;
   homebrewReplacesID?: string;
+  notes?: string;
 };
 
 type ObjectiveDefinition = {

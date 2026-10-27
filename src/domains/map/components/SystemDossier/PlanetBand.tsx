@@ -9,6 +9,7 @@ import {
   type PlanetTrait,
 } from "@/entities/game/planetTraits";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { RESOURCE_IMAGE } from "@/entities/data/uiImages";
 import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getAttachmentModifiers } from "@/entities/game/planets";
@@ -198,7 +199,7 @@ export function PlanetBand({
           )}
         >
           <EconomicFigure
-            icon={<Image src="/pa_resources.png" w={13} h={13} />}
+            icon={<Image src={RESOURCE_IMAGE} w={13} h={13} />}
             value={planet.resources}
             bonus={bonus.resources}
           />

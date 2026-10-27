@@ -1,6 +1,7 @@
 import { Image } from "@/ds";
 import InfluenceIcon from "@/shared/ui/InfluenceIcon";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { RESOURCE_IMAGE } from "@/entities/data/uiImages";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { PlanetTraitIcon } from "@/shared/ui/PlanetTraitIcon";
 import { TechSkipIcon, TechType } from "@/shared/ui/TechSkipIcon";
@@ -69,7 +70,7 @@ function AttachmentRow({ attachmentId }: { attachmentId: string }) {
       <span className={classes.attachmentMods}>
         {data.resourcesModifier ? (
           <span>
-            <Image src="/pa_resources.png" alt="Resources" w={12} h={12} />+
+            <Image src={RESOURCE_IMAGE} alt="Resources" w={12} h={12} />+
             {data.resourcesModifier}
           </span>
         ) : null}
@@ -100,7 +101,7 @@ export function PlanetDetailsCard({ planetId, planetTile }: Props) {
   const facts = [
     {
       key: "res",
-      icon: <Image src="/pa_resources.png" alt="" w={18} h={18} />,
+      icon: <Image src={RESOURCE_IMAGE} alt="" w={18} h={18} />,
       value: planetData.resources,
       bonus: <Bonus value={modifiers.resources} />,
       label: planetData.resources === 1 ? "resource" : "resources",

@@ -7,6 +7,7 @@ import { calculateStatTilePositions, TILE_HEIGHT, TILE_WIDTH } from "@/entities/
 import { getColorAlias, resolvePrimaryRgb } from "@/entities/lookup/colors";
 import { getFactionImage } from "@/entities/lookup/factions";
 import { getLeaderById } from "@/entities/lookup/leaders";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { getPlanetData, getPlanetPositionsBySystemId } from "@/entities/lookup/planets";
 import { getTileById } from "@/entities/lookup/systems";
 import { getUnitSprite } from "@/shared/ui/Unit/unitSprites";
@@ -197,7 +198,7 @@ export function buildMusicVideoCast(
     const displayName = getPlayerFactionDisplayName(p);
     const leaders: CastPlayer["leaders"] = {};
     for (const type of ["agent", "commander", "hero"] as const) {
-      if (getLeaderById(`${p.faction}${type}`)) leaders[type] = `/leaders/${p.faction}${type}.webp`;
+      if (getLeaderById(`${p.faction}${type}`)) leaders[type] = getLeaderPortraitUrl(`${p.faction}${type}`);
     }
     return {
       name: p.userName?.trim() || p.flexibleDisplayName?.trim() || titleCase(p.faction),
@@ -248,7 +249,7 @@ export function buildMusicVideoCast(
     usedScs.add(sc);
     const leaders: CastPlayer["leaders"] = {};
     for (const type of ["agent", "commander", "hero"] as const) {
-      if (getLeaderById(`${faction}${type}`)) leaders[type] = `/leaders/${faction}${type}.webp`;
+      if (getLeaderById(`${faction}${type}`)) leaders[type] = getLeaderPortraitUrl(`${faction}${type}`);
     }
     players.push({
       name, faction, factionName: titleCase(faction), icon: cdnImage(`/factions/${faction}.png`), color, hex: toHex(color),

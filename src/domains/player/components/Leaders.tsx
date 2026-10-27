@@ -3,8 +3,7 @@ import { LeaderChip } from "./Leader/LeaderChip";
 import { CompactLeader } from "./Leader/CompactLeader";
 import compactStyles from "./Leader/CompactLeader.module.css";
 import { PhantomLeader } from "./Leader/PhantomLeader";
-import { showLeader } from "@/entities/lookup/showLeader";
-import { getLeaderById } from "@/entities/lookup/leaders";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { Leader as LeaderType } from "@/entities/data/types";
 import { isMobileDevice } from "@/utils/isTouchDevice";
 
@@ -56,10 +55,9 @@ function RegularLeaders({ leaders, faction }: Props) {
     : leaders;
   /* A dossier with a portrait is half again as tall as one without, so the empty
      slot has to know which kind of row it is joining. */
-  const hasPortraits = otherLeaders.some((leader) => {
-    const data = getLeaderById(leader.id);
-    return data ? showLeader(data.source) : false;
-  });
+  const hasPortraits = otherLeaders.some((leader) =>
+    Boolean(getLeaderPortraitUrl(leader.id))
+  );
 
   return (
     <Stack gap={4} style={{ overflow: "visible" }}>

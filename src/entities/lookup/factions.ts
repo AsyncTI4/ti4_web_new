@@ -11,6 +11,10 @@ export function getFactionImage(
     return `https://emoji-cdn.mqrio.dev/${factionImage}?style=twitter`;
   }
   if (factionImageType === "DISCORD") return factionImage;
+  const franken = /^franken(19|2[0-6])$/.exec(faction);
+  if (franken) {
+    return cdnImage(`/emojis/factions/franken/Franken${franken[1]}.png`);
+  }
   return cdnImage(`/factions/${faction}.png`);
 }
 
