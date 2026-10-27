@@ -11,7 +11,10 @@ import { getTokenData } from "@/entities/lookup/tokens";
 import { DEFAULT_PLANET_RADIUS } from "@/entities/positioning/constants";
 import { isLargeLegendaryPlanet } from "./legendaryPlanetSize";
 import { searchKey, searchTarget } from "@/domains/search/searchKeys";
-import { planetStatBadgeOffsets } from "@/entities/data/planetStatBadges";
+import {
+  planetStatBadgeOffsets,
+  tokenPlanetStatBadgeOffsets,
+} from "@/entities/data/planetStatBadges";
 
 const TOKEN_PLANET_RADIUS = 45;
 const REGULAR_PLANET_Z_INDEX = 52;
@@ -63,6 +66,9 @@ export function PlanetCirclesLayer({
   const showExhaustedPlanets = useSettingsStore(
     (state) => state.settings.showExhaustedPlanets,
   );
+  const redExhaustedPlanetNumbers = useSettingsStore(
+    (state) => state.settings.redExhaustedPlanetNumbers,
+  );
   const hoveredPlanetId = useAppStore((state) => {
     const planetId = state.hoveredPlanetId;
     return planetId && mapTile.planets[planetId] ? planetId : null;
@@ -93,14 +99,11 @@ export function PlanetCirclesLayer({
   if (!mapTile?.planets) return null;
   const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-  const shouldGreyOut = (
+  const isSpaceStation = (
     planet: NonNullable<ReturnType<typeof getPlanetData>>,
-  ) => {
-    const isSpaceStation =
-      planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
-      false;
-    return showExhaustedPlanets && !isSpaceStation;
-  };
+  ) =>
+    planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
+    false;
 
   const createPlanetCircle = (
     planetId: string,
@@ -118,7 +121,8 @@ export function PlanetCirclesLayer({
       isTokenPlanet,
     );
     const diameter = radius * 2;
-    const showExhausted = isExhausted && shouldGreyOut(planet);
+    const showExhausted =
+      isExhausted && showExhaustedPlanets && !isSpaceStation(planet);
     const isHighlighted = hoveredPlanetId === planetId;
 
     return (
@@ -185,29 +189,41 @@ export function PlanetCirclesLayer({
 
   /* The resource and influence numbers are part of the tile art, so they are
      turned red by multiplying a red disc over each one. Drawn after every
-     circle so the multiply lands on top of the grey backdrop filter. */
+     circle so the multiply lands on top of the grey backdrop filter. Token
+     planets carry their numbers on the token, which sits above the tile. */
   const exhaustedStatTints = Object.entries(mapTile.planets).flatMap(
     ([planetId, planetTile]) => {
-      const position = planetPositions[planetId];
-      const offsets = planetStatBadgeOffsets[planetId];
+      if (!redExhaustedPlanetNumbers || !planetTile.exhausted) return [];
+      const isTokenPlanet = !planetPositions[planetId];
+      const position = planetPositions[planetId] ?? tokenPlanets[planetId];
+      const offsets = isTokenPlanet
+        ? tokenPlanetStatBadgeOffsets[planetId]
+        : planetStatBadgeOffsets[planetId];
       const planet = getPlanetData(planetId);
-      if (!planetTile.exhausted || !position || !offsets || !planet) return [];
-      if (!shouldGreyOut(planet)) return [];
+      if (!position || !offsets || !planet || isSpaceStation(planet)) return [];
       const [resX, resY, infX, infY] = offsets;
+      const zIndex = isTokenPlanet
+        ? TOKEN_PLANET_Z_INDEX
+        : REGULAR_PLANET_Z_INDEX;
       return [
         [resX, resY],
         [infX, infY],
-      ].map(([dx, dy], index) => (
-        <div
-          key={`${systemId}-${planetId}-stat-${index}`}
-          className={classes.exhaustedStatTint}
-          style={{
-            left: `${position.x + dx}px`,
-            top: `${position.y + dy}px`,
-            zIndex: REGULAR_PLANET_Z_INDEX,
-          }}
-        />
-      ));
+      ].flatMap(([dx, dy], index) => {
+        const style = {
+          left: `${position.x + dx}px`,
+          top: `${position.y + dy}px`,
+          zIndex,
+        };
+        const key = `${systemId}-${planetId}-stat-${index}`;
+        return [
+          <div
+            key={`${key}-lift`}
+            className={classes.exhaustedStatLift}
+            style={style}
+          />,
+          <div key={key} className={classes.exhaustedStatTint} style={style} />,
+        ];
+      });
     },
   );
 

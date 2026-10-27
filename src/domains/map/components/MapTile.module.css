@@ -109,17 +109,26 @@
   z-index: var(--z-planet-circle);
 }
 
-/* Multiplying by red keeps a badge's dark fill dark and turns its white
-   number red. Sized to sit inside the badge ring. */
+/* Brightening first thickens the number and lifts it back to white where
+   the grey filter dimmed it; multiplying by red then keeps the badge's dark
+   fill dark and turns the number red. Sized to sit inside the badge ring. */
+.exhaustedStatLift,
 .exhaustedStatTint {
   position: absolute;
   width: 18px;
   height: 18px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background: rgb(var(--ds-sig-danger));
-  mix-blend-mode: multiply;
   pointer-events: none;
+}
+
+.exhaustedStatLift {
+  backdrop-filter: brightness(1.8);
+}
+
+.exhaustedStatTint {
+  background: rgb(255 26 26);
+  mix-blend-mode: multiply;
 }
 
 .planetCircle.highlighted {
