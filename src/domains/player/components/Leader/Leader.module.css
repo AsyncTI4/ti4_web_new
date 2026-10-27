@@ -111,7 +111,8 @@
     var(--ds-field);
 }
 
-.lead[data-s="exhausted"] .well img {
+.lead[data-s="exhausted"] .well img,
+.lead[data-s="locked"] .well img {
   filter: grayscale(0.7) brightness(0.75);
 }
 

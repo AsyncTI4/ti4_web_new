@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getFactionImage } from "@/entities/lookup/factions";
+import { useFactionTokenImage } from "@/hooks/useFactionTokenImage";
 import styles from "./PdsControlToken.module.css";
 
 type PdsControlTokenProps = {
@@ -18,6 +18,8 @@ export const PdsControlToken = ({
   expected,
   style,
 }: PdsControlTokenProps) => {
+  const factionUrl = useFactionTokenImage(faction);
+
   return (
     <div style={style}>
       <div className={styles.container}>
@@ -28,7 +30,7 @@ export const PdsControlToken = ({
         />
         {faction && (
           <img
-            src={getFactionImage(faction)}
+            src={factionUrl}
             alt={`${faction} faction`}
             className={styles.factionIcon}
           />

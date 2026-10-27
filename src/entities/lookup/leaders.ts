@@ -1,4 +1,4 @@
-import { leaders } from "@/entities/data/leaders";
+import { leaders } from "@/entities/data/catalogs";
 import { indexBy } from "@/entities/lookup/indexBy";
 import type { Leader, LeaderData } from "@/entities/data/types";
 

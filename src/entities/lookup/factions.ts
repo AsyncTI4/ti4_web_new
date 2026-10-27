@@ -11,6 +11,9 @@ export function getFactionImage(
     return `https://emoji-cdn.mqrio.dev/${factionImage}?style=twitter`;
   }
   if (factionImageType === "DISCORD") return factionImage;
+  if (/^franken(19|2[0-6])$/.test(faction)) {
+    return `/factions/${faction}.webp`;
+  }
   return cdnImage(`/factions/${faction}.png`);
 }
 

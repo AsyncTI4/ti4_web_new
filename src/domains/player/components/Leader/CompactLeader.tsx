@@ -1,4 +1,4 @@
-import { Image } from "@/ds";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import styles from "./CompactLeader.module.css";
@@ -33,9 +33,9 @@ export function CompactLeader({ id, exhausted, locked }: Props) {
           }}
         >
           <div className={styles.imageFrame}>
-            <Image
+            <LeaderPortraitImage
               {...lowPriorityImageProps}
-              src={`/leaders/${id}.webp`}
+              leaderId={id}
               className={styles.image}
             />
           </div>

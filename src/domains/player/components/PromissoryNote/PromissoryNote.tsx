@@ -3,7 +3,7 @@ import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { PromissoryNoteCard } from "@/domains/cards/components/PromissoryNoteCard";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
-import { getFactionImage } from "@/entities/lookup/factions";
+import { useFactionImageUrl } from "@/hooks/useFactionImages";
 import { resolvePrimaryRgb } from "@/entities/lookup/colors";
 import type { FactionColorMap } from "@/entities/game/types";
 import {
@@ -51,6 +51,7 @@ export function PromissoryNote({
     promissoryNoteId,
     factionColorMap,
   );
+  const factionUrl = useFactionImageUrl(promissoryNoteData?.faction ?? "");
 
   if (!promissoryNoteData) return null;
 
@@ -70,7 +71,7 @@ export function PromissoryNote({
       searchKey={searchKey("promissory", promissoryNoteId)}
       style={ownerRgb ? ({ "--pc": ownerRgb } as CSSProperties) : undefined}
     >
-      <ObjectGlyph src={getFactionImage(faction)} size={16} />
+      <ObjectGlyph src={factionUrl} size={16} />
       <ObjectLabel>{name}</ObjectLabel>
     </ObjectShell>
   );

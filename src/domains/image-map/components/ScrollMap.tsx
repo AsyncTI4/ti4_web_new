@@ -10,7 +10,7 @@ import { secretObjectives } from "@/entities/data/secretObjectives";
 import { promissoryNotes } from "@/entities/data/promissoryNotes";
 import { relics } from "@/entities/data/relics";
 import { explorations } from "@/entities/data/explorations";
-import { leaders } from "@/entities/data/leaders";
+import { leaders } from "@/entities/data/catalogs";
 import { units } from "@/entities/data/units";
 import { techs as technologies } from "@/entities/data/tech";
 import { breakthroughs } from "@/entities/data/breakthroughs";

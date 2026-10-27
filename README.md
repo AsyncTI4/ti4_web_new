@@ -42,6 +42,21 @@ npm run preview
 
 ## Repository Structure
 
+Leader portraits in `public/leaders/` use lowercase leader IDs as WebP filenames.
+Discordant Stars and Theodisi portraits come from the bot repository's
+`src/main/resources/emojis/leaders/ds/` and `theodisi/` PNGs, converted at their
+original dimensions with transparency preserved. Portrait visibility and leader
+definitions are managed separately from these image assets.
+The supplemental `src/entities/data/theodisiLeaders.ts` catalog is generated from
+the bot's `src/main/resources/data/leaders/theodisi_leaders.json`; it fills missing
+IDs through `catalogs.ts` without replacing definitions in the base catalog.
+
+Default faction icons for `franken19` through `franken26` are bundled in
+`public/factions/`, converted from the bot's
+`src/main/resources/emojis/factions/franken/Franken19.png` through `Franken26.png`.
+These fill gaps in the standard faction-image collection; custom emoji and
+Discord image overrides still take precedence.
+
 Dependencies point downward: `pages` → `layout` → `domains` → `shared`/`hooks` → `state` → `api` → `entities` → `utils`. `game-shell` composes the other domains; `cards` sits below them.
 
 ```
