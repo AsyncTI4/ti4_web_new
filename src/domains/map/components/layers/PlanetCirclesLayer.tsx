@@ -208,22 +208,17 @@ export function PlanetCirclesLayer({
       return [
         [resX, resY],
         [infX, infY],
-      ].flatMap(([dx, dy], index) => {
-        const style = {
-          left: `${position.x + dx}px`,
-          top: `${position.y + dy}px`,
-          zIndex,
-        };
-        const key = `${systemId}-${planetId}-stat-${index}`;
-        return [
-          <div
-            key={`${key}-lift`}
-            className={classes.exhaustedStatLift}
-            style={style}
-          />,
-          <div key={key} className={classes.exhaustedStatTint} style={style} />,
-        ];
-      });
+      ].map(([dx, dy], index) => (
+        <div
+          key={`${systemId}-${planetId}-stat-${index}`}
+          className={classes.exhaustedStatTint}
+          style={{
+            left: `${position.x + dx}px`,
+            top: `${position.y + dy}px`,
+            zIndex,
+          }}
+        />
+      ));
     },
   );
 
