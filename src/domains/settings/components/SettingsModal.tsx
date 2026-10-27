@@ -165,6 +165,14 @@ export function SettingsModal({ opened, onClose }: SettingsModalProps) {
               onToggle={() => handlers.toggleShowExhaustedPlanets()}
             />
             <SwitchRow
+              label="Red numbers on exhausted planets"
+              description="Resource and influence numbers of exhausted planets turn red."
+              checked={settings.redExhaustedPlanetNumbers}
+              onToggle={(checked) =>
+                handlers.updateSettings({ redExhaustedPlanetNumbers: checked })
+              }
+            />
+            <SwitchRow
               label="Accessible colours"
               description="Blue, green, purple, yellow, red, pink, black, light gray, in seat order. Extra players keep their own colours."
               checked={settings.accessibleColors}

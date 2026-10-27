@@ -63,6 +63,9 @@ export function PlanetCirclesLayer({
   const showExhaustedPlanets = useSettingsStore(
     (state) => state.settings.showExhaustedPlanets,
   );
+  const redExhaustedPlanetNumbers = useSettingsStore(
+    (state) => state.settings.redExhaustedPlanetNumbers,
+  );
   const hoveredPlanetId = useAppStore((state) => {
     const planetId = state.hoveredPlanetId;
     return planetId && mapTile.planets[planetId] ? planetId : null;
@@ -93,14 +96,11 @@ export function PlanetCirclesLayer({
   if (!mapTile?.planets) return null;
   const planetPositions = getPlanetPositionsBySystemId(systemId);
 
-  const shouldGreyOut = (
+  const isSpaceStation = (
     planet: NonNullable<ReturnType<typeof getPlanetData>>,
-  ) => {
-    const isSpaceStation =
-      planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
-      false;
-    return showExhaustedPlanets && !isSpaceStation;
-  };
+  ) =>
+    planet.planetTypes?.some((type) => (type as string) === "SPACESTATION") ??
+    false;
 
   const createPlanetCircle = (
     planetId: string,
@@ -118,7 +118,8 @@ export function PlanetCirclesLayer({
       isTokenPlanet,
     );
     const diameter = radius * 2;
-    const showExhausted = isExhausted && shouldGreyOut(planet);
+    const showExhausted =
+      isExhausted && showExhaustedPlanets && !isSpaceStation(planet);
     const isHighlighted = hoveredPlanetId === planetId;
 
     return (
@@ -188,11 +189,11 @@ export function PlanetCirclesLayer({
      circle so the multiply lands on top of the grey backdrop filter. */
   const exhaustedStatTints = Object.entries(mapTile.planets).flatMap(
     ([planetId, planetTile]) => {
+      if (!redExhaustedPlanetNumbers || !planetTile.exhausted) return [];
       const position = planetPositions[planetId];
       const offsets = planetStatBadgeOffsets[planetId];
       const planet = getPlanetData(planetId);
-      if (!planetTile.exhausted || !position || !offsets || !planet) return [];
-      if (!shouldGreyOut(planet)) return [];
+      if (!position || !offsets || !planet || isSpaceStation(planet)) return [];
       const [resX, resY, infX, infY] = offsets;
       return [
         [resX, resY],

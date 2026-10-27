@@ -58,6 +58,7 @@ const DEFAULT_SETTINGS: Settings = {
   showControlLayer: false,
   controlTokenDisplayMode: "ambiguous",
   showExhaustedPlanets: true,
+  redExhaustedPlanetNumbers: false,
   animateEventPreviews: true,
   themeName: DEFAULT_THEME,
   accessibleColors: false,
@@ -260,6 +261,7 @@ export type Settings = {
   showControlLayer: boolean;
   controlTokenDisplayMode: ControlTokenDisplayMode;
   showExhaustedPlanets: boolean;
+  redExhaustedPlanetNumbers: boolean;
   animateEventPreviews: boolean;
   themeName: ThemeName;
   accessibleColors: boolean;
