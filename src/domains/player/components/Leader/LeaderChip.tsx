@@ -4,7 +4,7 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { SmoothPopover } from "@/shared/ui/SmoothPopover";
 import { LeaderDetailsCard } from "@/domains/cards/components/LeaderDetailsCard";
 import { getLeaderById } from "@/entities/lookup/leaders";
-import { showLeader } from "@/entities/lookup/showLeader";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import styles from "./Leader.module.css";
 import { RankChevrons } from "./RankChevrons";
 import { lowPriorityImageProps } from "@/shared/ui/imageLoading";
@@ -37,7 +37,7 @@ export function LeaderChip({ id, type, exhausted, locked, active }: Props) {
   if (!leaderData) return null;
 
   const state = getLeaderState(exhausted, locked);
-  const showPortrait = showLeader(leaderData.source);
+  const showPortrait = Boolean(getLeaderPortraitUrl(id));
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();

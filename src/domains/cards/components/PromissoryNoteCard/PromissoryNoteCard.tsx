@@ -6,7 +6,7 @@ import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameData } from "@/state/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
-import { showLeader } from "@/entities/lookup/showLeader";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { resolvePromissoryNoteText } from "@/entities/game/playerUtils";
 import styles from "./PromissoryNoteCard.module.css";
 
@@ -19,7 +19,7 @@ type Commander = NonNullable<ReturnType<typeof getAllianceCommander>>;
 function CommanderAbility({ commander }: { commander: Commander }) {
   return (
     <div className={styles.commander}>
-      {showLeader(commander.source) && (
+      {getLeaderPortraitUrl(commander.id) && (
         <LeaderPortraitImage
           leaderId={commander.id}
           className={styles.portrait}
