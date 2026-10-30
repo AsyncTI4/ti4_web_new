@@ -36,8 +36,8 @@ export const HEXAGON_EDGE_MIDPOINTS = [
     y: TILE_HEIGHT / 4,
   },
   {
-    x: (3 * TILE_WIDTH) / 4,
-    y: (7 * TILE_HEIGHT) / 8,
+    x: (7 * TILE_WIDTH) / 8,
+    y: (3 * TILE_HEIGHT) / 4,
   },
   {
     x: TILE_WIDTH / 2,
