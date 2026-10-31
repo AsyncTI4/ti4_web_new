@@ -9,7 +9,7 @@ const DIMENSIONAL_TEAR_UNIT_IDS = new Set([
   "absol_cabal_spacedock2Alt",
 ]);
 
-/** Unit IDs that have the Dimensional Tear ability (create a gravity rift) */
+/** Tech IDs that have the Dimensional Tear ability (create a gravity rift) */
 const DIMENSIONAL_TEAR_TECH_IDS = new Set([
   "tf-dimensionaltear",
 ]);
