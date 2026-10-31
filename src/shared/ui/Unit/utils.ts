@@ -20,7 +20,7 @@ const DIMENSIONAL_TEAR_TECH_IDS = new Set([
 export function isDimensionalTearSpaceDock(
   unitType: string,
   playerTechs: string[],
-  faction?: string,
+  faction?: string
 ): boolean {
   if (unitType !== "sd" || !faction) return false;
 
