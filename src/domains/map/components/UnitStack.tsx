@@ -1,4 +1,5 @@
 import { Unit } from "@/shared/ui/Unit";
+import { useGameData } from "@/state/useGameContext";
 import { Token } from "./Token";
 import { Attachment } from "./Attachment";
 import { EntityStack } from "@/entities/positioning";
@@ -62,6 +63,10 @@ export function UnitStack({
   delayedDamageStates,
 }: UnitStackProps) {
   const { entityId: unitType, faction, count, x, y, entityType } = stack;
+  const playerData = useGameData()?.playerData?.find(
+    (player) => player.faction === faction,
+  );
+  const playerTechs = playerData?.techs ?? [];
   const isBadge = isBadgeUnit(unitType);
   /* Combat badges are compact summaries and must stay legible above the much
      larger rotated ship silhouettes in the transition layer. */
@@ -229,6 +234,7 @@ export function UnitStack({
             key={unitKey}
             unitType={unitType}
             colorAlias={colorAlias}
+            playerTechs={playerTechs}
             faction={faction}
             bgDecalPath={bgDecalPath}
             decalPath={decalPath || undefined}

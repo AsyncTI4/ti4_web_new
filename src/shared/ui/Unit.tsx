@@ -19,6 +19,7 @@ import { getUnitSprite } from "./Unit/unitSprites";
 type UnitProps = {
   unitType: string;
   colorAlias: string;
+  playerTechs: string[];
   faction?: string;
   sustained?: boolean;
   bgDecalPath?: string;
@@ -40,6 +41,7 @@ type UnitProps = {
 export function Unit({
   unitType,
   colorAlias,
+  playerTechs,
   faction,
   alt,
   sustained,
@@ -70,7 +72,8 @@ export function Unit({
 
   // Cabal space docks (Dimensional Tear) create a gravity rift in their system
   const showDimensionalTear =
-    showFactionTokens && isDimensionalTearSpaceDock(unitType, faction);
+    showFactionTokens &&
+    isDimensionalTearSpaceDock(unitType, playerTechs, faction);
 
   const isPositioned = x !== undefined && y !== undefined;
 
