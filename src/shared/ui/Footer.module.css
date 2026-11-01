@@ -20,3 +20,15 @@
   font-size: var(--text-meta);
   line-height: 1.45;
 }
+
+/* The version sits on the left; the disclaimer keeps the rest of the row. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-sm);
+}
+
+.row .text {
+  flex: 1 1 auto;
+  min-width: 0;
+}

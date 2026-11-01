@@ -1,4 +1,5 @@
 import { AppShell, Text } from "@/ds";
+import { VersionBadge } from "@/shared/ui/VersionBadge";
 import classes from "./Footer.module.css";
 
 const DISCLAIMER =
@@ -7,7 +8,10 @@ const DISCLAIMER =
 export function Footer() {
   return (
     <AppShell.Footer className={classes.footer} p="xs">
-      <Text className={classes.text}>{DISCLAIMER}</Text>
+      <div className={classes.row}>
+        <VersionBadge />
+        <Text className={classes.text}>{DISCLAIMER}</Text>
+      </div>
     </AppShell.Footer>
   );
 }

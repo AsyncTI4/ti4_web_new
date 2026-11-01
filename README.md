@@ -13,6 +13,18 @@ warning. Their raw tile data and planet lookups are retained; other game views
 remain usable. Add verified coordinates in `src/entities/data/tileCoordinates.ts`
 to render those positions. This also applies to player-stat positions and map previews.
 
+## Versioning
+
+The app version (`MAJOR.MINOR.PATCH`) lives in `package.json` and is shown in the
+bottom-left corner of every page (site footer and game map). **Bump it with every
+change that ships**: MAJOR for breaking changes or redesigns, MINOR for new
+features, PATCH for fixes and tweaks (`npm version patch --no-git-tag-version`).
+
+Clicking the version copies a human-readable debug report to the clipboard: build,
+browser and login info, and on a game page the full game state (players, strategy
+cards, objectives, laws, every map system with its units, tokens and planets, decks)
+plus the logged-in player's action cards, secret objectives and promissory notes.
+
 ## Tech Stack
 
 - **React 18** - UI framework
