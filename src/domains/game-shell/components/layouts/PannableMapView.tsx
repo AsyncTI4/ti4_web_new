@@ -21,6 +21,7 @@ import { useTryDecalsToggle } from "@/domains/map/components/hooks/useTryDecalsT
 import { useScrollToReplayHighlight } from "@/hooks/useScrollToReplayHighlight";
 import { TryUnitDecalsSidebar } from "../TryUnitDecalsSidebar/TryUnitDecalsSidebar";
 import { BoardHud } from "./BoardHud";
+import { GameVersionBadge } from "@/domains/game-shell/components/GameVersionBadge";
 
 /** DESIGN.md's stated gap between the board's outermost paint and the chrome. */
 const BOARD_CLEARANCE = 20;
@@ -223,6 +224,14 @@ export function PannableMapView({ gameId }: { gameId: string }) {
           bleedBottom={board.bleedBottom}
           isMobile={isMobile}
         />
+
+        {/* Phones get the version at the end of the board, scrolling with it,
+            instead of a floating badge over the player areas. */}
+        {isMobile && (
+          <div className={classes.versionFooter}>
+            <GameVersionBadge gameId={gameId} floating={false} />
+          </div>
+        )}
       </Box>
 
       {/* Outside the scroller on purpose: dragscroll pans on any mousedown that

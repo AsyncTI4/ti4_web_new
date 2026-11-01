@@ -6,11 +6,17 @@ import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/
 import { buildGameDebugReport } from "@/domains/game-shell/debug/buildGameDebugReport";
 
 /**
- * The version badge for the game page, pinned bottom-left (the hand docks
- * bottom-right). Clicking copies the whole game state, plus the viewer's own
+ * The version badge for the game page: pinned bottom-left on desktop (the hand
+ * docks bottom-right), in flow at the end of the board on phones. Clicking copies the whole game state, plus the viewer's own
  * hand when they are logged in and seated, as a readable debug report.
  */
-export function GameVersionBadge({ gameId }: { gameId: string }) {
+export function GameVersionBadge({
+  gameId,
+  floating = true,
+}: {
+  gameId: string;
+  floating?: boolean;
+}) {
   const data = useGameData();
   const dataState = useGameDataState();
   const { data: gameState } = useGameState(gameId);
@@ -32,5 +38,5 @@ export function GameVersionBadge({ gameId }: { gameId: string }) {
       },
     });
 
-  return <VersionBadge floating getReport={getReport} />;
+  return <VersionBadge floating={floating} getReport={getReport} />;
 }

@@ -283,7 +283,7 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         onClose={() => setEventsOpened(false)}
       />
 
-      <GameVersionBadge gameId={gameId} />
+      {!isMobile && <GameVersionBadge gameId={gameId} />}
     </AppShell>
   );
 }

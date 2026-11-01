@@ -458,3 +458,12 @@
 :global(.mobile) .hudFitScreen {
   width: 100%;
 }
+
+/* Phone-only version row after the board: in flow, pinned to the left edge
+   while the board scrolls sideways, with room below so nothing is covered. */
+.versionFooter {
+  position: sticky;
+  left: 0;
+  width: max-content;
+  padding: 12px 12px calc(24px + env(safe-area-inset-bottom));
+}
