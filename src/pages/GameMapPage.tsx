@@ -36,6 +36,7 @@ import { TabActiveContext } from "@/hooks/useIsTabActive";
 import { MobileHandSheet } from "@/domains/game-shell/components/SecretHand";
 import { MobileEventsSheet } from "@/domains/game-shell/components/GameEventPanel";
 import { useSecretHandAccess } from "@/domains/game-shell/components/SecretHand/useSecretHandAccess";
+import { GameVersionBadge } from "@/domains/game-shell/components/GameVersionBadge";
 
 const REQUIRED_VERSION_SCHEMA = 5;
 
@@ -281,6 +282,8 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         opened={eventsOpened}
         onClose={() => setEventsOpened(false)}
       />
+
+      <GameVersionBadge gameId={gameId} />
     </AppShell>
   );
 }

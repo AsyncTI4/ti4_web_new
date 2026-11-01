@@ -1,6 +1,12 @@
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync } from "fs";
 import { resolve } from "path";
+
+// The version shown in the footer badge; bump it in package.json with every change.
+const { version: appVersion } = JSON.parse(
+  readFileSync(resolve(__dirname, "package.json"), "utf-8"),
+) as { version: string };
 
 const ReactCompilerConfig = {
   target: "19",
@@ -24,6 +30,9 @@ const includeReactWhole: Plugin = {
 };
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(appVersion),
+  },
   plugins: [
     react({
       babel: {

@@ -1,0 +1,40 @@
+.badge {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border: 1px solid var(--ds-h14);
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-ink-lo);
+  font-family: var(--font-data);
+  font-size: var(--text-meta);
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.badge:hover {
+  color: var(--ds-ink);
+  border-color: var(--ds-h22);
+}
+
+.badge:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
+}
+
+.badge[data-state="copied"] {
+  color: var(--ds-accent);
+}
+
+/* Bottom-left over the map: the hand ("Your cards") docks bottom-right. */
+.floating {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: var(--z-floating-toolbar);
+  background: color-mix(in oklab, var(--ds-ground) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
