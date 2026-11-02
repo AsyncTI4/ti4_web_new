@@ -5161,6 +5161,18 @@ export const leaders: LeaderData[] = [
     source: "twilights_fall",
   },
   {
+    id: "sanctionhero",
+    faction: "hacan",
+    type: "hero",
+    name: "Sanction of the Queiron",
+    title: "Hacan Paradigm",
+    abilityWindow: "ACTION:",
+    abilityText:
+      "Resolve the PRODUCTION abilities of your units in your home system. You may reduce the cost of each of your units to 0 during this use of PRODUCTION. Then, purge this card.",
+    unlockCondition: "Always Unlocked",
+    source: "twilights_fall",
+  },
+  {
     id: "voicehero",
     faction: "xxcha",
     type: "hero",

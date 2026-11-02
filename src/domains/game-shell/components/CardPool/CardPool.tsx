@@ -6,13 +6,27 @@ import styles from "./CardPool.module.css";
 import { ExplorationCardBack } from "@/domains/cards/components/ExplorationCardBack";
 import { SecretDeckCardBack } from "@/domains/cards/components/SecretDeckCardBack";
 import { RelicDeckCardBack } from "@/domains/cards/components/RelicDeckCardBack";
+import { SpliceDeckCardBack, type SpliceDeckKind } from "@/domains/cards/components/SpliceDeckCardBack";
+import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
 
 type Props = {
   cardPool?: CardPoolData;
 };
 
+/** The Twilight's Fall splice decks the bot sent, in the bot's map order. */
+function spliceDecks(cardPool: CardPoolData) {
+  const decks: Array<{ kind: SpliceDeckKind; deck?: string[] }> = [
+    { kind: "ability", deck: cardPool.abilitySpliceDeck },
+    { kind: "unit", deck: cardPool.unitSpliceDeck },
+    { kind: "genome", deck: cardPool.genomeSpliceDeck },
+    { kind: "paradigm", deck: cardPool.paradigmSpliceDeck },
+  ];
+  return decks.filter((d): d is { kind: SpliceDeckKind; deck: string[] } => !!d.deck);
+}
+
 /** Deck card backs with the cards left in each; click a deck for its list. */
 function CardPool({ cardPool }: Props) {
+  const isTwilightsFallMode = useIsTwilightsFallMode();
   if (!cardPool) {
     return <Text className={styles.empty}>No card pool data available</Text>;
   }
@@ -57,6 +71,10 @@ function CardPool({ cardPool }: Props) {
         deck={cardPool.frontierExploreDeck}
         discard={cardPool.frontierExploreDiscard}
       />
+      {isTwilightsFallMode &&
+        spliceDecks(cardPool).map(({ kind, deck }) => (
+          <SpliceDeckCardBack key={kind} kind={kind} deck={deck} />
+        ))}
     </Box>
   );
 }
