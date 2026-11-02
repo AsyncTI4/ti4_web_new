@@ -1,4 +1,5 @@
 import type {
+  CardPoolData,
   EntityData,
   FactionUnits,
   GameState,
@@ -22,8 +23,11 @@ import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getStrategyCardByInitiative } from "@/entities/lookup/strategyCards";
 import {
   getGenericUnitDataByAsyncId,
+  getUnitData,
   lookupUnit,
 } from "@/entities/lookup/units";
+import { getExploration } from "@/entities/lookup/explorations";
+import { agendas } from "@/entities/data/agendas";
 
 export type GameDebugReportInput = {
   gameId: string;
@@ -404,6 +408,71 @@ function handLines(
 }
 
 /** Builds a human-readable dump of everything the game page shows, for debugging. */
+const agendasByAlias = new Map(agendas.map((agenda) => [agenda.alias, agenda]));
+
+type CardNamer = (id: string) => string;
+
+const agendaName: CardNamer = (id) => named(id, agendasByAlias.get(id)?.name);
+const actionCardName: CardNamer = (id) => named(id, safe(() => getActionCard(id))?.name);
+const secretName: CardNamer = (id) => named(id, safe(() => getSecretObjectiveData(id))?.name);
+const exploreName: CardNamer = (id) => named(id, safe(() => getExploration(id))?.name);
+const unitName: CardNamer = (id) => named(id, safe(() => getUnitData(id))?.name);
+const tfLeaderName: CardNamer = (id) => {
+  const leader = safe(() => getLeaderById(id));
+  return named(id, leader?.tfName || leader?.name);
+};
+
+function count(cards: string[] | undefined, fullSize: number | undefined): string {
+  const size = cards?.length ?? "?";
+  return fullSize ? `${size}/${fullSize}` : `${size}`;
+}
+
+function cardList(label: string, cards: string[] | undefined, name: CardNamer): string {
+  return `${INDENT}${label} (${cards?.length ?? 0}): ${list(cards?.map(name))}`;
+}
+
+/** What the General tab's card pool shows, card by card. */
+function deckLines(pool: CardPoolData): string[] {
+  const lines = section("Decks");
+  lines.push(
+    `Action cards: deck hidden, ${pool.actionCardFullDeckSize ?? "?"} in the full deck`,
+    cardList("Discard", pool.actionCardDiscard, actionCardName),
+    `Agendas: ${count(pool.agendaDeck, pool.agendaFullDeckSize)} in deck`,
+    cardList("Deck", pool.agendaDeck, agendaName),
+    cardList("Discard", pool.agendaDiscard, agendaName),
+    `Secret objectives: ${count(pool.secretObjectiveDeck, pool.secretObjectiveFullDeckSize)} unscored (deck and hands)`,
+    cardList("Unscored", pool.secretObjectiveDeck, secretName),
+    `Relics: ${count(pool.relicDeck, pool.relicFullDeckSize)} in deck`,
+    cardList("Deck", pool.relicDeck, relicName),
+  );
+
+  const explores = [
+    ["Cultural", pool.culturalExploreDeck, pool.culturalExploreDiscard, pool.culturalExploreFullDeckSize],
+    ["Industrial", pool.industrialExploreDeck, pool.industrialExploreDiscard, pool.industrialExploreFullDeckSize],
+    ["Hazardous", pool.hazardousExploreDeck, pool.hazardousExploreDiscard, pool.hazardousExploreFullDeckSize],
+    ["Frontier", pool.frontierExploreDeck, pool.frontierExploreDiscard, pool.frontierExploreFullDeckSize],
+  ] as const;
+  for (const [type, deck, discard, fullSize] of explores) {
+    lines.push(
+      `${type} explore: ${count(deck, fullSize)} in deck`,
+      cardList("Deck", deck, exploreName),
+      cardList("Discard", discard, exploreName),
+    );
+  }
+
+  const spliceDecks = [
+    ["Ability splice", pool.abilitySpliceDeck, pool.abilitySpliceFullDeckSize, techName],
+    ["Unit upgrade splice", pool.unitSpliceDeck, pool.unitSpliceFullDeckSize, unitName],
+    ["Genome splice", pool.genomeSpliceDeck, pool.genomeSpliceFullDeckSize, tfLeaderName],
+    ["Paradigm", pool.paradigmSpliceDeck, pool.paradigmSpliceFullDeckSize, tfLeaderName],
+  ] as const;
+  for (const [title, deck, fullSize, name] of spliceDecks) {
+    if (!deck) continue;
+    lines.push(`${title} deck: ${count(deck, fullSize)} in deck`, cardList("Deck", deck, name));
+  }
+  return lines;
+}
+
 export function buildGameDebugReport(input: GameDebugReportInput): string {
   const { data, dataState, gameId } = input;
   const lines: string[] = [
@@ -545,24 +614,7 @@ export function buildGameDebugReport(input: GameDebugReportInput): string {
     }
   }
 
-  // Decks ----------------------------------------------------------------
-  const pool = data.cardPool;
-  if (pool) {
-    lines.push(...section("Decks"));
-    lines.push(
-      `Action cards: ${pool.actionCardDeckSize}/${pool.actionCardFullDeckSize} in deck, ${pool.actionCardDiscardSize} discarded, ${pool.actionCardPurgedSize} purged`,
-      `Secret objectives: ${pool.secretObjectiveDeckSize}/${pool.secretObjectiveFullDeckSize} in deck`,
-      `Agendas: ${pool.agendaDeckSize}/${pool.agendaFullDeckSize} in deck, ${pool.agendaDiscardSize} discarded`,
-      `Relics: ${pool.relicDeckSize}/${pool.relicFullDeckSize} in deck; discard: ${list(
-        pool.relicDiscard?.map(relicName),
-      )}`,
-      `Explore discards: cultural ${list(pool.culturalExploreDiscard)}; industrial ${list(
-        pool.industrialExploreDiscard,
-      )}; hazardous ${list(pool.hazardousExploreDiscard)}; frontier ${list(
-        pool.frontierExploreDiscard,
-      )}`,
-    );
-  }
+  if (data.cardPool) lines.push(...deckLines(data.cardPool));
 
   lines.push(...handLines(data, input));
   return lines.join("\n");

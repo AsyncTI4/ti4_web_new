@@ -275,6 +275,15 @@ export type CardPoolData = {
   agendaFullDeckSize: number;
   agendaDiscardSize: number;
   technologyDeck: string[];
+  /** Lists the bot actually sends; the *Size counts above are not in its payload. */
+  actionCardDeck?: string[];
+  actionCardDiscard?: string[];
+  agendaDeck?: string[];
+  agendaDiscard?: string[];
+  culturalExploreFullDeckSize?: number;
+  industrialExploreFullDeckSize?: number;
+  hazardousExploreFullDeckSize?: number;
+  frontierExploreFullDeckSize?: number;
   /** Twilight's Fall splice decks; absent outside TF and from bots that predate them. */
   abilitySpliceDeck?: string[];
   abilitySpliceFullDeckSize?: number;
