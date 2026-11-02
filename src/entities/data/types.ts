@@ -275,6 +275,15 @@ export type CardPoolData = {
   agendaFullDeckSize: number;
   agendaDiscardSize: number;
   technologyDeck: string[];
+  /** Twilight's Fall splice decks; absent outside TF and from bots that predate them. */
+  abilitySpliceDeck?: string[];
+  abilitySpliceFullDeckSize?: number;
+  unitSpliceDeck?: string[];
+  unitSpliceFullDeckSize?: number;
+  genomeSpliceDeck?: string[];
+  genomeSpliceFullDeckSize?: number;
+  paradigmSpliceDeck?: string[];
+  paradigmSpliceFullDeckSize?: number;
 };
 
 export type EntryType =
