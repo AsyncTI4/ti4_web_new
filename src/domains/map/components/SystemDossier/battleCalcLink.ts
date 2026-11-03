@@ -197,11 +197,7 @@ function hasStructureInOrNextTo(
   tileAt: TileAt | undefined,
   playerFor: PlayerFor,
 ): boolean {
-  const neighbours = (tileAdjacencies[battleTile.position] ?? [])
-    .filter((position): position is string => !!position)
-    .map((position) => tileAt?.(position))
-    .filter((tile): tile is Tile => !!tile);
-  return [battleTile, ...neighbours].some((tile) =>
+  return [battleTile, ...neighbourTiles(battleTile, tileAt)].some((tile) =>
     [tile, ...Object.values(tile.planets)].some((zone) =>
       factionRows(zone.unitsByFaction, faction, playerFor).some(
         (row) => !!row.unit.isStructure,
@@ -210,18 +206,42 @@ function hasStructureInOrNextTo(
   );
 }
 
+/** The systems next to this one on the map that the lookup knows. */
+function neighbourTiles(tile: Tile, tileAt: TileAt | undefined): Tile[] {
+  return (tileAdjacencies[tile.position] ?? [])
+    .filter((position): position is string => !!position)
+    .map((position) => tileAt?.(position))
+    .filter((neighbour): neighbour is Tile => !!neighbour);
+}
+
+/**
+ * Anomalies a unit in this system is in or adjacent to: those of the system
+ * itself and of each system next to it, printed or from a token.
+ */
+function anomaliesInOrNextTo(tile: Tile, tileAt: TileAt | undefined): number {
+  return [tile, ...neighbourTiles(tile, tileAt)].reduce(
+    (sum, system) => sum + systemAnomalies(system).length,
+    0,
+  );
+}
+
+const IL_NA_VIROSET = "Il Na Viroset (TF)";
+
 type KingContext = {
   faction: string;
   playerFor: PlayerFor;
   battleTile: Tile;
   tileAt: TileAt | undefined;
+  /** Whether the side brings mechs to the fight. */
+  hasMechs: boolean;
 };
 
 /**
  * What a Twilight's Fall king brings beyond its techs: Munitions Reserves,
  * one use per 2 trade goods it holds; Planesplitter in the Fracture;
- * Smothering Presence next to its structures; and its genomes that are
- * ready.
+ * Smothering Presence next to its structures; Il Na Viroset's Starlancer XI
+ * bonus, +1 per anomaly its mechs are in or adjacent to; and its genomes that
+ * are ready.
  */
 function writeTwilightsFall(
   params: URLSearchParams,
@@ -250,6 +270,18 @@ function writeTwilightsFall(
     )
   ) {
     params.set(`${side}-effect-Smothering Presence (TF)`, "1");
+  }
+  if (
+    CALC_FACTIONS[context.faction.toLowerCase()] === IL_NA_VIROSET &&
+    context.hasMechs
+  ) {
+    const anomalies = anomaliesInOrNextTo(context.battleTile, context.tileAt);
+    if (anomalies > 0) {
+      params.set(
+        `${side}-effect-Starlancer XI anomaly bonus`,
+        String(anomalies),
+      );
+    }
   }
   for (const leader of player.leaders ?? []) {
     const effect = CALC_GENOME_EFFECTS[leader.id];
@@ -423,6 +455,7 @@ function writeSide(
       playerFor,
       battleTile,
       tileAt,
+      hasMechs: (counts.mech ?? 0) > 0,
     });
   }
   writeRelics(params, side, faction, playerFor, battleTile);
