@@ -54,7 +54,10 @@ function GeneralArea() {
           <UnpickedSCs strategyCards={strategyCards} />
         </GenBox>
         <GenBox label="Card pool">
-          <CardPool cardPool={cardPool} />
+          <CardPool
+            cardPool={cardPool}
+            actionCardsInHands={playerData?.reduce((sum, p) => sum + (p.acCount ?? 0), 0)}
+          />
         </GenBox>
         <GenBox label="Laws in play" meta={lawsInPlay.length}>
           <LawsInPlay laws={lawsInPlay} />
