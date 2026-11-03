@@ -2,6 +2,7 @@ import type { GameState, PlayerData, Unit } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import type { BattleAttackerPick } from "@/state/appStore";
 import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
+import { getUnitData } from "@/entities/lookup/units";
 import { systemAnomalies } from "./featureRules";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
@@ -121,16 +122,6 @@ const TF_MUNITIONS_RESERVES = "tf-munitions";
 const TF_PLANESPLITTER = "tf-planesplitter";
 const TF_SMOTHERING_PRESENCE = "tf-smotheringpresence";
 
-/**
- * Spliced mech and flagship upgrades ti4calc.leviatas.com models, keyed by our
- * unit id. They are kept in play next to the king's own card and add to it,
- * so they travel as effects on the king's unit, not as its stats.
- */
-const CALC_SPLICED_UNIT_EFFECTS: Record<string, { type: string; effect: string }> = {
-  "tf-echoofascension": { type: "flagship", effect: "Echo of Ascension (TF)" },
-  "tf-eidolonlandwaster": { type: "mech", effect: "Eidolon Landwaster (TF)" },
-  "tf-eidolonterminus": { type: "mech", effect: "Eidolon Terminus (TF)" },
-};
 
 /**
  * Genomes ti4calc.leviatas.com models, keyed by our leader id and mapped to its
@@ -224,15 +215,13 @@ type KingContext = {
   playerFor: PlayerFor;
   battleTile: Tile;
   tileAt: TileAt | undefined;
-  /** Unit counts this side brings, by base type. */
-  counts: Record<string, number>;
 };
 
 /**
  * What a Twilight's Fall king brings beyond its techs: Munitions Reserves,
  * one use per 2 trade goods it holds; Planesplitter in the Fracture;
- * Smothering Presence next to its structures; its spliced mech and flagship
- * upgrades; and its genomes that are ready.
+ * Smothering Presence next to its structures; and its genomes that are
+ * ready.
  */
 function writeTwilightsFall(
   params: URLSearchParams,
@@ -261,12 +250,6 @@ function writeTwilightsFall(
     )
   ) {
     params.set(`${side}-effect-Smothering Presence (TF)`, "1");
-  }
-  for (const unitId of player.unitsOwned ?? []) {
-    const spliced = CALC_SPLICED_UNIT_EFFECTS[unitId];
-    if (spliced && context.counts[spliced.type] > 0) {
-      params.set(`${side}-effect-${spliced.effect}`, "1");
-    }
   }
   for (const leader of player.leaders ?? []) {
     const effect = CALC_GENOME_EFFECTS[leader.id];
@@ -301,16 +284,50 @@ function unitStats(unit: Unit): string {
 }
 
 /**
- * Whether the unit is a Twilight's Fall unit upgrade that replaces the
- * printed unit. Spliced mechs and flagships are left out: they add to the
- * king's own card instead of replacing it, and the kings' own flagships and
- * mechs are modelled by the calculator.
+ * Whether the unit is a Twilight's Fall unit upgrade spliced from another
+ * faction (tf-…), which the calculator has no model of. The kings' own
+ * flagships and mechs (redtf_flagship…) are not: the calculator models them.
+ * A spliced flagship or mech only reaches the calculator when it is better
+ * than the king's own; the calculator then sets its rolls and keeps the
+ * king's abilities.
  */
 const isSplicedUnit = (unit: Unit) =>
-  unit.source === "twilights_fall" &&
-  unit.id.startsWith("tf") &&
-  unit.baseType !== "flagship" &&
-  unit.baseType !== "mech";
+  unit.source === "twilights_fall" && unit.id.startsWith("tf");
+
+/** Expected hits of one roll of a unit ability, 0 when it has none. */
+const expectedHits = (hitsOn?: number, dice?: number) =>
+  hitsOn ? (dice ?? 1) * Math.min(Math.max((11 - hitsOn) / 10, 0), 1) : 0;
+
+/**
+ * How good a unit card is in a fight: its combat roll first, then sustain
+ * damage, then its other rolls. On a tie the upgraded card wins, since its
+ * upgrade improves something else (move, capacity, a text ability).
+ */
+const unitScore = (unit: Unit) =>
+  expectedHits(unit.combatHitsOn, unit.combatDieCount) * 100 +
+  (unit.sustainDamage ? 10 : 0) +
+  expectedHits(unit.afbHitsOn, unit.afbDieCount) +
+  expectedHits(unit.bombardHitsOn, unit.bombardDieCount) +
+  expectedHits(unit.spaceCannonHitsOn, unit.spaceCannonDieCount) +
+  (unit.upgradesFromUnitId ? 0.001 : 0);
+
+/**
+ * The best card a Twilight's Fall king owns for a unit type. A king can own
+ * several for one type: its own flagship or mech next to a spliced one, or a
+ * generic unit next to a spliced upgrade. The best one is what fights.
+ */
+function bestOwnedUnit(
+  player: PlayerData | undefined,
+  type: string,
+): Unit | undefined {
+  return (player?.unitsOwned ?? [])
+    .map((id) => getUnitData(id))
+    .filter((unit): unit is Unit => !!unit && unit.baseType === type)
+    .reduce<Unit | undefined>(
+      (best, unit) => (!best || unitScore(unit) > unitScore(best) ? unit : best),
+      undefined,
+    );
+}
 
 type PlayerFor = (faction: string) => PlayerData | undefined;
 type TileAt = (position: string) => Tile | undefined;
@@ -352,11 +369,23 @@ function writeSide(
   const upgraded = new Set<string>();
   const stats: Record<string, string> = {};
 
-  for (const { unit, count, sustained } of rows) {
-    const type = unit.baseType;
+  /* An unmapped faction (homebrew) still gets its units; the calculator then
+     keeps whichever faction it last used on that side. */
+  const calcFaction = CALC_FACTIONS[faction.toLowerCase()];
+  const king = isTwilightsFallKing(calcFaction);
+  const player = playerFor(faction);
+
+  for (const row of rows) {
+    const { count, sustained } = row;
+    const type = row.unit.baseType;
     if (!CALC_UNIT_TYPES.has(type)) continue;
     counts[type] = (counts[type] ?? 0) + count;
     damaged[type] = (damaged[type] ?? 0) + sustained;
+    const unit = (king && bestOwnedUnit(player, type)) || row.unit;
+    if (king && unit.faction?.toLowerCase() === faction.toLowerCase()) {
+      /* The king's own flagship or mech: the calculator models it. */
+      continue;
+    }
     if (isSplicedUnit(unit)) {
       const printed = unitStats(unit);
       if (printed) stats[type] = printed;
@@ -367,9 +396,6 @@ function writeSide(
 
   if (Object.keys(counts).length === 0) return false;
 
-  /* An unmapped faction (homebrew) still gets its units; the calculator then
-     keeps whichever faction it last used on that side. */
-  const calcFaction = CALC_FACTIONS[faction.toLowerCase()];
   if (calcFaction) params.set(`${side}-faction`, calcFaction);
   for (const [type, count] of Object.entries(counts)) {
     params.set(`${side}-unit-${type}`, String(count));
@@ -381,17 +407,15 @@ function writeSide(
   for (const [type, printed] of Object.entries(stats)) {
     params.set(`${side}-stats-${type}`, printed);
   }
-  const king = isTwilightsFallKing(calcFaction);
-  for (const effect of techEffects(playerFor(faction), side, king)) {
+  for (const effect of techEffects(player, side, king)) {
     params.set(`${side}-effect-${effect}`, "1");
   }
   if (king) {
-    writeTwilightsFall(params, side, playerFor(faction), {
+    writeTwilightsFall(params, side, player, {
       faction,
       playerFor,
       battleTile,
       tileAt,
-      counts,
     });
   }
   writeRelics(params, side, faction, playerFor, battleTile);
