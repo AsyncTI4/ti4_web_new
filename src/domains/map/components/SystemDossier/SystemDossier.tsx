@@ -434,8 +434,8 @@ function SystemBattleLinks({
         rel="noopener noreferrer"
         title={
           versus
-            ? `Open ti4battle.com with ${helpers.displayName(attacker)} attacking ${helpers.displayName(faction)}, ships and ground forces`
-            : `Open ti4battle.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`
+            ? `Open ti4calc.leviatas.com with ${helpers.displayName(attacker)} attacking ${helpers.displayName(faction)}, ships and ground forces`
+            : `Open ti4calc.leviatas.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`
         }
       >
         <IconSwords size={13} aria-hidden />
