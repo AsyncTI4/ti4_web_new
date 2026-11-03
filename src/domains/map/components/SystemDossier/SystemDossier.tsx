@@ -163,6 +163,7 @@ function SpaceBand({
   helpers: FactionHelpers;
   attacker: string | null;
 }) {
+  const gameData = useGameData();
   const summaries = summarizeZone(
     tile.unitsByFaction,
     helpers.playerFor,
@@ -177,7 +178,13 @@ function SpaceBand({
   );
   const defender = sides?.defender.faction ?? ordered.find(shipsFight)?.faction;
   const calcUrl = defender
-    ? buildSpaceBattleUrl(tile, defender, helpers.playerFor, attacker)
+    ? buildSpaceBattleUrl(
+        tile,
+        defender,
+        helpers.playerFor,
+        attacker,
+        (position) => gameData?.tiles?.[position],
+      )
     : null;
   const empty = ordered.length === 0 && !pdsInRange?.length;
 
@@ -422,7 +429,13 @@ function SystemBattleLinks({
             faction,
             helpers.playerFor,
           )
-        : buildSystemBattleUrl(tile, faction, helpers.playerFor, attacker);
+        : buildSystemBattleUrl(
+            tile,
+            faction,
+            helpers.playerFor,
+            attacker,
+            (position) => gameData?.tiles?.[position],
+          );
     if (!url) return null;
     const versus = attacker && attacker !== faction;
     return (
