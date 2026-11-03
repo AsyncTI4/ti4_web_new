@@ -369,6 +369,7 @@ function writeSide(
   const damaged: Record<string, number> = {};
   const upgraded = new Set<string>();
   const stats: Record<string, string> = {};
+  const names: Record<string, string> = {};
 
   /* An unmapped faction (homebrew) still gets its units; the calculator then
      keeps whichever faction it last used on that side. */
@@ -389,7 +390,10 @@ function writeSide(
     }
     if (isSplicedUnit(unit)) {
       const printed = unitStats(unit);
-      if (printed) stats[type] = printed;
+      if (printed) {
+        stats[type] = printed;
+        names[type] = unit.name;
+      }
     } else if (unit.upgradesFromUnitId !== undefined) {
       upgraded.add(type);
     }
@@ -407,6 +411,8 @@ function writeSide(
   for (const type of upgraded) params.set(`${side}-upgrade-${type}`, "true");
   for (const [type, printed] of Object.entries(stats)) {
     params.set(`${side}-stats-${type}`, printed);
+    /* The calculator lists the card by name, so it is clear which it is. */
+    if (names[type]) params.set(`${side}-unitname-${type}`, names[type]);
   }
   for (const effect of techEffects(player, side, king)) {
     params.set(`${side}-effect-${effect}`, "1");
