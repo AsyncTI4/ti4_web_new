@@ -197,11 +197,7 @@ function hasStructureInOrNextTo(
   tileAt: TileAt | undefined,
   playerFor: PlayerFor,
 ): boolean {
-  const neighbours = (tileAdjacencies[battleTile.position] ?? [])
-    .filter((position): position is string => !!position)
-    .map((position) => tileAt?.(position))
-    .filter((tile): tile is Tile => !!tile);
-  return [battleTile, ...neighbours].some((tile) =>
+  return [battleTile, ...neighbourTiles(battleTile, tileAt)].some((tile) =>
     [tile, ...Object.values(tile.planets)].some((zone) =>
       factionRows(zone.unitsByFaction, faction, playerFor).some(
         (row) => !!row.unit.isStructure,
@@ -210,18 +206,42 @@ function hasStructureInOrNextTo(
   );
 }
 
+/** The systems next to this one on the map that the lookup knows. */
+function neighbourTiles(tile: Tile, tileAt: TileAt | undefined): Tile[] {
+  return (tileAdjacencies[tile.position] ?? [])
+    .filter((position): position is string => !!position)
+    .map((position) => tileAt?.(position))
+    .filter((neighbour): neighbour is Tile => !!neighbour);
+}
+
+/**
+ * Anomalies a unit in this system is in or adjacent to: those of the system
+ * itself and of each system next to it, printed or from a token.
+ */
+function anomaliesInOrNextTo(tile: Tile, tileAt: TileAt | undefined): number {
+  return [tile, ...neighbourTiles(tile, tileAt)].reduce(
+    (sum, system) => sum + systemAnomalies(system).length,
+    0,
+  );
+}
+
+const IL_NA_VIROSET = "Il Na Viroset (TF)";
+
 type KingContext = {
   faction: string;
   playerFor: PlayerFor;
   battleTile: Tile;
   tileAt: TileAt | undefined;
+  /** Whether the side brings mechs to the fight. */
+  hasMechs: boolean;
 };
 
 /**
  * What a Twilight's Fall king brings beyond its techs: Munitions Reserves,
  * one use per 2 trade goods it holds; Planesplitter in the Fracture;
- * Smothering Presence next to its structures; and its genomes that are
- * ready.
+ * Smothering Presence next to its structures; Il Na Viroset's Starlancer XI
+ * bonus, +1 per anomaly its mechs are in or adjacent to; and its genomes that
+ * are ready.
  */
 function writeTwilightsFall(
   params: URLSearchParams,
@@ -250,6 +270,18 @@ function writeTwilightsFall(
     )
   ) {
     params.set(`${side}-effect-Smothering Presence (TF)`, "1");
+  }
+  if (
+    CALC_FACTIONS[context.faction.toLowerCase()] === IL_NA_VIROSET &&
+    context.hasMechs
+  ) {
+    const anomalies = anomaliesInOrNextTo(context.battleTile, context.tileAt);
+    if (anomalies > 0) {
+      params.set(
+        `${side}-effect-Starlancer XI anomaly bonus`,
+        String(anomalies),
+      );
+    }
   }
   for (const leader of player.leaders ?? []) {
     const effect = CALC_GENOME_EFFECTS[leader.id];
@@ -348,6 +380,7 @@ function factionRows(
 }
 
 const isPds = (row: UnitRow) => row.unit.baseType === "pds";
+const isMech = (row: UnitRow) => row.unit.baseType === "mech";
 const isShip = (row: UnitRow) => !!row.unit.isShip;
 const isGroundForce = (row: UnitRow) => !!row.unit.isGroundForce;
 
@@ -368,6 +401,7 @@ function writeSide(
   const damaged: Record<string, number> = {};
   const upgraded = new Set<string>();
   const stats: Record<string, string> = {};
+  const names: Record<string, string> = {};
 
   /* An unmapped faction (homebrew) still gets its units; the calculator then
      keeps whichever faction it last used on that side. */
@@ -388,7 +422,10 @@ function writeSide(
     }
     if (isSplicedUnit(unit)) {
       const printed = unitStats(unit);
-      if (printed) stats[type] = printed;
+      if (printed) {
+        stats[type] = printed;
+        names[type] = unit.name;
+      }
     } else if (unit.upgradesFromUnitId !== undefined) {
       upgraded.add(type);
     }
@@ -406,6 +443,8 @@ function writeSide(
   for (const type of upgraded) params.set(`${side}-upgrade-${type}`, "true");
   for (const [type, printed] of Object.entries(stats)) {
     params.set(`${side}-stats-${type}`, printed);
+    /* The calculator lists the card by name, so it is clear which it is. */
+    if (names[type]) params.set(`${side}-unitname-${type}`, names[type]);
   }
   for (const effect of techEffects(player, side, king)) {
     params.set(`${side}-effect-${effect}`, "1");
@@ -416,6 +455,7 @@ function writeSide(
       playerFor,
       battleTile,
       tileAt,
+      hasMechs: (counts.mech ?? 0) > 0,
     });
   }
   writeRelics(params, side, faction, playerFor, battleTile);
@@ -560,6 +600,23 @@ function matchUp(
 }
 
 /**
+ * What a side brings to a space combat from the space area: its ships and,
+ * for a Twilight's Fall king, its mechs there too. Saint of Swords' mechs
+ * (Colada) give a ship extra dice from the space area, and Il Na Viroset's
+ * (Starlancer XI) fight as ships; mechs of other kings take no part.
+ */
+function spaceCombatRows(
+  tile: Tile,
+  faction: string,
+  playerFor: PlayerFor,
+): UnitRow[] {
+  const king = isTwilightsFallKing(CALC_FACTIONS[faction.toLowerCase()]);
+  return factionRows(tile.unitsByFaction, faction, playerFor).filter(
+    (row) => isShip(row) || (king && isMech(row)),
+  );
+}
+
+/**
  * Space battle for this system: each side's ships in the space area, plus
  * its PDS on the system's planets, which fire space cannon.
  */
@@ -573,7 +630,7 @@ export function buildSpaceBattleUrl(
   const shipsOf = (side: string) =>
     factionRows(tile.unitsByFaction, side, playerFor).filter(isShip);
   const rowsFor = (side: string) => [
-    ...shipsOf(side),
+    ...spaceCombatRows(tile, side, playerFor),
     ...Object.values(tile.planets)
       .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
       .filter(isPds),
@@ -736,11 +793,7 @@ export function buildPickedBattleUrl(
         (row) => isGroundForce(row) || isPds(row),
       )
     : [
-        ...factionRows(
-          defenderTile.unitsByFaction,
-          defenderFaction,
-          playerFor,
-        ).filter(isShip),
+        ...spaceCombatRows(defenderTile, defenderFaction, playerFor),
         ...Object.values(defenderTile.planets)
           .flatMap((p) =>
             factionRows(p.unitsByFaction, defenderFaction, playerFor),
