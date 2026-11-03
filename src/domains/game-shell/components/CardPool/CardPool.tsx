@@ -54,6 +54,7 @@ function CardPool({ cardPool, actionCardsInHands }: Props) {
       <ActionDeckCardBack
         count={actionDeckCount(cardPool, actionCardsInHands)}
         discard={cardPool.actionCardDiscard || []}
+        fullDeckSize={cardPool.actionCardFullDeckSize}
       />
       <Cardback
         src={cdnImage("/player_area/cardback_agenda.png")}
