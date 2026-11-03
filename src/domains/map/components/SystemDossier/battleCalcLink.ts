@@ -348,6 +348,7 @@ function factionRows(
 }
 
 const isPds = (row: UnitRow) => row.unit.baseType === "pds";
+const isMech = (row: UnitRow) => row.unit.baseType === "mech";
 const isShip = (row: UnitRow) => !!row.unit.isShip;
 const isGroundForce = (row: UnitRow) => !!row.unit.isGroundForce;
 
@@ -560,6 +561,23 @@ function matchUp(
 }
 
 /**
+ * What a side brings to a space combat from the space area: its ships and,
+ * for a Twilight's Fall king, its mechs there too. Saint of Swords' mechs
+ * (Colada) give a ship extra dice from the space area, and Il Na Viroset's
+ * (Starlancer XI) fight as ships; mechs of other kings take no part.
+ */
+function spaceCombatRows(
+  tile: Tile,
+  faction: string,
+  playerFor: PlayerFor,
+): UnitRow[] {
+  const king = isTwilightsFallKing(CALC_FACTIONS[faction.toLowerCase()]);
+  return factionRows(tile.unitsByFaction, faction, playerFor).filter(
+    (row) => isShip(row) || (king && isMech(row)),
+  );
+}
+
+/**
  * Space battle for this system: each side's ships in the space area, plus
  * its PDS on the system's planets, which fire space cannon.
  */
@@ -573,7 +591,7 @@ export function buildSpaceBattleUrl(
   const shipsOf = (side: string) =>
     factionRows(tile.unitsByFaction, side, playerFor).filter(isShip);
   const rowsFor = (side: string) => [
-    ...shipsOf(side),
+    ...spaceCombatRows(tile, side, playerFor),
     ...Object.values(tile.planets)
       .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
       .filter(isPds),
@@ -736,11 +754,7 @@ export function buildPickedBattleUrl(
         (row) => isGroundForce(row) || isPds(row),
       )
     : [
-        ...factionRows(
-          defenderTile.unitsByFaction,
-          defenderFaction,
-          playerFor,
-        ).filter(isShip),
+        ...spaceCombatRows(defenderTile, defenderFaction, playerFor),
         ...Object.values(defenderTile.planets)
           .flatMap((p) =>
             factionRows(p.unitsByFaction, defenderFaction, playerFor),
