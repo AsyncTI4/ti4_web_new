@@ -1,4 +1,4 @@
-import type { GameState, PlayerData } from "@/entities/data/types";
+import type { GameState, PlayerData, Unit } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import type { BattleAttackerPick } from "@/state/appStore";
 import { systemAnomalies } from "./featureRules";
@@ -56,7 +56,20 @@ const CALC_FACTIONS: Record<string, string> = {
   xxcha: "Xxcha",
   yin: "Yin",
   yssaril: "Yssaril",
+  /* Twilight's Fall: the eight Mad Mahact Kings, named after their colour. */
+  redtf: "Ruby Monarch (TF)",
+  orangetf: "Radiant Aur (TF)",
+  yellowtf: "Avarice Rex (TF)",
+  greentf: "Il Sai Lakoe (TF)",
+  bluetf: "Saint of Swords (TF)",
+  purpletf: "Il Na Viroset (TF)",
+  pinktf: "El Nel Janovet (TF)",
+  blacktf: "A Sickening Lurch (TF)",
 };
+
+/** Whether the calculator faction is one of the Twilight's Fall kings. */
+const isTwilightsFallKing = (calcFaction: string | undefined) =>
+  !!calcFaction?.endsWith("(TF)");
 
 /**
  * Technologies ti4calc.leviatas.com models, keyed by our tech id and mapped to its
@@ -83,6 +96,39 @@ const CALC_TECH_EFFECTS: Record<string, string> = {
   vpw: "Valkyrie Particle Weave",
 };
 
+/**
+ * Twilight's Fall abilities ti4calc.leviatas.com models, keyed by our ability
+ * id. Only a king can splice them, and the calculator offers them to kings
+ * only. Proxima Targeting VI is not here: the calculator implements the Last
+ * Bastion printing, whose rules differ. Planesplitter counts only in the
+ * Fracture and Munitions Reserves spends trade goods, so both are written
+ * apart.
+ */
+const CALC_TF_ABILITY_EFFECTS: Record<string, string> = {
+  "tf-ambush": "Ambush (TF)",
+  "tf-devotion": "Devotion",
+  "tf-ds": "Dimensional Splicer",
+  "tf-harrow": "Harrow (TF)",
+  "tf-nes": "Non-Euclidean Shielding",
+  "tf-raidformation": "Raid Formation (TF)",
+  "tf-supercharge": "Supercharge (TF)",
+  "tf-unrelenting": "Unrelenting (TF)",
+  "tf-vpw": "Valkyrie Particle Weave",
+};
+
+const TF_MUNITIONS_RESERVES = "tf-munitions";
+
+/**
+ * Genomes ti4calc.leviatas.com models, keyed by our leader id and mapped to its
+ * agent effect. Each is the king's own to exhaust, so it goes on its side.
+ */
+const CALC_GENOME_EFFECTS: Record<string, string> = {
+  letnevagent: "Barony Agent",
+  solagent: "Sol agent",
+  titansagent: "Titans agent",
+  yinagent: "Yin agent",
+};
+
 /** Effects the calculator would apply to an attacker but the rules do not. */
 const DEFENDER_ONLY_EFFECTS = new Set(["Magen Defense Grid"]);
 
@@ -91,13 +137,21 @@ const DEFENDER_ONLY_EFFECTS = new Set(["Magen Defense Grid"]);
  * modelled technology they have researched and not exhausted. The calculator
  * itself drops the ones that do not apply to the battle being run.
  */
-function techEffects(player: PlayerData | undefined, side: Side): string[] {
+function techEffects(
+  player: PlayerData | undefined,
+  side: Side,
+  king: boolean,
+): string[] {
   if (!player) return [];
   const exhausted = new Set(player.exhaustedTechs ?? []);
   const effects = (player.techs ?? [])
     .filter((tech) => !exhausted.has(tech))
-    .map((tech) => CALC_TECH_EFFECTS[tech])
-    .filter(Boolean)
+    .map(
+      (tech) =>
+        CALC_TECH_EFFECTS[tech] ??
+        (king ? CALC_TF_ABILITY_EFFECTS[tech] : undefined),
+    )
+    .filter((effect): effect is string => !!effect)
     .filter(
       (effect) => side === "defender" || !DEFENDER_ONLY_EFFECTS.has(effect),
     );
@@ -123,6 +177,68 @@ function readyRelics(player: PlayerData | undefined): string[] {
   const exhausted = new Set(player.exhaustedRelics ?? []);
   return (player.relics ?? []).filter((relic) => !exhausted.has(relic));
 }
+
+/**
+ * What a Twilight's Fall king brings beyond its techs: Munitions Reserves,
+ * one use per 2 trade goods it holds, and its genomes that are ready.
+ */
+function writeTwilightsFall(
+  params: URLSearchParams,
+  side: Side,
+  player: PlayerData | undefined,
+) {
+  if (!player) return;
+  const exhausted = new Set(player.exhaustedTechs ?? []);
+  if (
+    player.techs?.includes(TF_MUNITIONS_RESERVES) &&
+    !exhausted.has(TF_MUNITIONS_RESERVES)
+  ) {
+    const uses = Math.floor((player.tg ?? 0) / 2);
+    if (uses > 0) params.set(`${side}-effect-Munitions Reserves`, String(uses));
+  }
+  for (const leader of player.leaders ?? []) {
+    const effect = CALC_GENOME_EFFECTS[leader.id];
+    if (!effect || leader.type !== "agent") continue;
+    if (leader.exhausted || leader.locked) continue;
+    params.set(`${side}-effect-${effect}`, "1");
+  }
+}
+
+/**
+ * The printed stats of a Twilight's Fall unit upgrade, in the calculator's
+ * compact form: `c5x2` combat, `a`, `b` and `s` for anti-fighter barrage,
+ * bombardment and space cannon, `sd` sustain damage, `ps` planetary shield,
+ * `dh` safe from Spark (Direct Hit). The calculator has no model of these
+ * spliced units, so it takes the numbers as they are printed.
+ */
+function unitStats(unit: Unit): string {
+  const roll = (token: string, hitsOn?: number, dice?: number) =>
+    hitsOn ? [`${token}${hitsOn}x${dice ?? 1}`] : [];
+  const safeFromSpark =
+    unit.canBeDirectHit === false ||
+    /cannot be destroyed by "(Spark|Direct Hit)"/i.test(unit.ability ?? "");
+  return [
+    ...roll("c", unit.combatHitsOn, unit.combatDieCount),
+    ...roll("a", unit.afbHitsOn, unit.afbDieCount),
+    ...roll("b", unit.bombardHitsOn, unit.bombardDieCount),
+    ...roll("s", unit.spaceCannonHitsOn, unit.spaceCannonDieCount),
+    ...(unit.sustainDamage ? ["sd"] : []),
+    ...(unit.planetaryShield ? ["ps"] : []),
+    ...(unit.sustainDamage && safeFromSpark ? ["dh"] : []),
+  ].join(".");
+}
+
+/**
+ * Whether the unit is a Twilight's Fall unit upgrade that replaces the
+ * printed unit. Spliced mechs and flagships are left out: they add to the
+ * king's own card instead of replacing it, and the kings' own flagships and
+ * mechs are modelled by the calculator.
+ */
+const isSplicedUnit = (unit: Unit) =>
+  unit.source === "twilights_fall" &&
+  unit.id.startsWith("tf") &&
+  unit.baseType !== "flagship" &&
+  unit.baseType !== "mech";
 
 type PlayerFor = (faction: string) => PlayerData | undefined;
 type BattlePlace = "space" | "ground";
@@ -160,13 +276,19 @@ function writeSide(
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
   const upgraded = new Set<string>();
+  const stats: Record<string, string> = {};
 
   for (const { unit, count, sustained } of rows) {
     const type = unit.baseType;
     if (!CALC_UNIT_TYPES.has(type)) continue;
     counts[type] = (counts[type] ?? 0) + count;
     damaged[type] = (damaged[type] ?? 0) + sustained;
-    if (unit.upgradesFromUnitId !== undefined) upgraded.add(type);
+    if (isSplicedUnit(unit)) {
+      const printed = unitStats(unit);
+      if (printed) stats[type] = printed;
+    } else if (unit.upgradesFromUnitId !== undefined) {
+      upgraded.add(type);
+    }
   }
 
   if (Object.keys(counts).length === 0) return false;
@@ -182,9 +304,14 @@ function writeSide(
     }
   }
   for (const type of upgraded) params.set(`${side}-upgrade-${type}`, "true");
-  for (const effect of techEffects(playerFor(faction), side)) {
+  for (const [type, printed] of Object.entries(stats)) {
+    params.set(`${side}-stats-${type}`, printed);
+  }
+  const king = isTwilightsFallKing(calcFaction);
+  for (const effect of techEffects(playerFor(faction), side, king)) {
     params.set(`${side}-effect-${effect}`, "1");
   }
+  if (king) writeTwilightsFall(params, side, playerFor(faction));
   writeRelics(params, side, faction, playerFor, battleTile);
   return true;
 }
