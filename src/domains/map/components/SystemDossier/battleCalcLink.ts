@@ -1,6 +1,7 @@
 import type { GameState, PlayerData, Unit } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import type { BattleAttackerPick } from "@/state/appStore";
+import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
 import { systemAnomalies } from "./featureRules";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
@@ -101,8 +102,8 @@ const CALC_TECH_EFFECTS: Record<string, string> = {
  * id. Only a king can splice them, and the calculator offers them to kings
  * only. Proxima Targeting VI is not here: the calculator implements the Last
  * Bastion printing, whose rules differ. Planesplitter counts only in the
- * Fracture and Munitions Reserves spends trade goods, so both are written
- * apart.
+ * Fracture, Smothering Presence only next to the king's structures and
+ * Munitions Reserves spends trade goods, so they are written apart.
  */
 const CALC_TF_ABILITY_EFFECTS: Record<string, string> = {
   "tf-ambush": "Ambush (TF)",
@@ -117,6 +118,19 @@ const CALC_TF_ABILITY_EFFECTS: Record<string, string> = {
 };
 
 const TF_MUNITIONS_RESERVES = "tf-munitions";
+const TF_PLANESPLITTER = "tf-planesplitter";
+const TF_SMOTHERING_PRESENCE = "tf-smotheringpresence";
+
+/**
+ * Spliced mech and flagship upgrades ti4calc.leviatas.com models, keyed by our
+ * unit id. They are kept in play next to the king's own card and add to it,
+ * so they travel as effects on the king's unit, not as its stats.
+ */
+const CALC_SPLICED_UNIT_EFFECTS: Record<string, { type: string; effect: string }> = {
+  "tf-echoofascension": { type: "flagship", effect: "Echo of Ascension (TF)" },
+  "tf-eidolonlandwaster": { type: "mech", effect: "Eidolon Landwaster (TF)" },
+  "tf-eidolonterminus": { type: "mech", effect: "Eidolon Terminus (TF)" },
+};
 
 /**
  * Genomes ti4calc.leviatas.com models, keyed by our leader id and mapped to its
@@ -178,23 +192,81 @@ function readyRelics(player: PlayerData | undefined): string[] {
   return (player.relics ?? []).filter((relic) => !exhausted.has(relic));
 }
 
+/** Whether the system is in the Fracture, whose positions are frac1, frac2… */
+const isInFracture = (tile: Tile) => tile.position.startsWith("frac");
+
+/**
+ * Whether the faction has a structure (PDS, space dock…) in the battle's
+ * system or in a system next to it. Adjacency is by position on the map;
+ * wormholes and hyperlanes are not followed.
+ */
+function hasStructureInOrNextTo(
+  faction: string,
+  battleTile: Tile,
+  tileAt: TileAt | undefined,
+  playerFor: PlayerFor,
+): boolean {
+  const neighbours = (tileAdjacencies[battleTile.position] ?? [])
+    .filter((position): position is string => !!position)
+    .map((position) => tileAt?.(position))
+    .filter((tile): tile is Tile => !!tile);
+  return [battleTile, ...neighbours].some((tile) =>
+    [tile, ...Object.values(tile.planets)].some((zone) =>
+      factionRows(zone.unitsByFaction, faction, playerFor).some(
+        (row) => !!row.unit.isStructure,
+      ),
+    ),
+  );
+}
+
+type KingContext = {
+  faction: string;
+  playerFor: PlayerFor;
+  battleTile: Tile;
+  tileAt: TileAt | undefined;
+  /** Unit counts this side brings, by base type. */
+  counts: Record<string, number>;
+};
+
 /**
  * What a Twilight's Fall king brings beyond its techs: Munitions Reserves,
- * one use per 2 trade goods it holds, and its genomes that are ready.
+ * one use per 2 trade goods it holds; Planesplitter in the Fracture;
+ * Smothering Presence next to its structures; its spliced mech and flagship
+ * upgrades; and its genomes that are ready.
  */
 function writeTwilightsFall(
   params: URLSearchParams,
   side: Side,
   player: PlayerData | undefined,
+  context: KingContext,
 ) {
   if (!player) return;
   const exhausted = new Set(player.exhaustedTechs ?? []);
-  if (
-    player.techs?.includes(TF_MUNITIONS_RESERVES) &&
-    !exhausted.has(TF_MUNITIONS_RESERVES)
-  ) {
+  const ready = (tech: string) =>
+    !!player.techs?.includes(tech) && !exhausted.has(tech);
+  if (ready(TF_MUNITIONS_RESERVES)) {
     const uses = Math.floor((player.tg ?? 0) / 2);
     if (uses > 0) params.set(`${side}-effect-Munitions Reserves`, String(uses));
+  }
+  if (ready(TF_PLANESPLITTER) && isInFracture(context.battleTile)) {
+    params.set(`${side}-effect-Planesplitter (TF)`, "1");
+  }
+  if (
+    ready(TF_SMOTHERING_PRESENCE) &&
+    hasStructureInOrNextTo(
+      context.faction,
+      context.battleTile,
+      context.tileAt,
+      context.playerFor,
+    )
+  ) {
+    params.set(`${side}-effect-Smothering Presence (TF)`, "1");
+  }
+  for (const unitId of player.unitsOwned ?? []) {
+    const spliced = CALC_SPLICED_UNIT_EFFECTS[unitId];
+    if (spliced && context.counts[spliced.type] > 0) {
+      params.set(`${side}-effect-${spliced.effect}`, "1");
+    }
   }
   for (const leader of player.leaders ?? []) {
     const effect = CALC_GENOME_EFFECTS[leader.id];
@@ -241,6 +313,7 @@ const isSplicedUnit = (unit: Unit) =>
   unit.baseType !== "mech";
 
 type PlayerFor = (faction: string) => PlayerData | undefined;
+type TileAt = (position: string) => Tile | undefined;
 type BattlePlace = "space" | "ground";
 type Side = "attacker" | "defender";
 type Force = { faction: string; rows: UnitRow[] };
@@ -272,6 +345,7 @@ function writeSide(
   { faction, rows }: Force,
   playerFor: PlayerFor,
   battleTile: Tile,
+  tileAt?: TileAt,
 ): boolean {
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
@@ -311,7 +385,15 @@ function writeSide(
   for (const effect of techEffects(playerFor(faction), side, king)) {
     params.set(`${side}-effect-${effect}`, "1");
   }
-  if (king) writeTwilightsFall(params, side, playerFor(faction));
+  if (king) {
+    writeTwilightsFall(params, side, playerFor(faction), {
+      faction,
+      playerFor,
+      battleTile,
+      tileAt,
+      counts,
+    });
+  }
   writeRelics(params, side, faction, playerFor, battleTile);
   return true;
 }
@@ -373,10 +455,15 @@ function buildBattleUrl(
   attacker: Force | null,
   place: BattlePlace,
   playerFor: PlayerFor,
+  tileAt?: TileAt,
 ): string | null {
   const params = new URLSearchParams();
-  if (attacker) writeSide(params, "attacker", attacker, playerFor, tile);
-  if (!writeSide(params, "defender", defender, playerFor, tile)) return null;
+  if (attacker) {
+    writeSide(params, "attacker", attacker, playerFor, tile, tileAt);
+  }
+  if (!writeSide(params, "defender", defender, playerFor, tile, tileAt)) {
+    return null;
+  }
   writeTerrain(params, tile, place);
   if (place === "ground") params.set("place", "ground");
 
@@ -457,6 +544,7 @@ export function buildSpaceBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
+  tileAt?: TileAt,
 ): string | null {
   const shipsOf = (side: string) =>
     factionRows(tile.unitsByFaction, side, playerFor).filter(isShip);
@@ -478,6 +566,7 @@ export function buildSpaceBattleUrl(
     fight.attacker,
     "space",
     playerFor,
+    tileAt,
   );
 }
 
@@ -492,6 +581,7 @@ export function buildGroundBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
+  tileAt?: TileAt,
 ): string | null {
   const onPlanet = (side: string) =>
     factionRows(planet.unitsByFaction, side, playerFor);
@@ -519,6 +609,7 @@ export function buildGroundBattleUrl(
     fight.attacker,
     "ground",
     playerFor,
+    tileAt,
   );
 }
 
@@ -547,6 +638,7 @@ export function buildSystemBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
+  tileAt?: TileAt,
 ): string | null {
   const rowsFor = (side: string) => systemRows(tile, side, playerFor);
   const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
@@ -556,6 +648,7 @@ export function buildSystemBattleUrl(
     fight.attacker,
     "space",
     playerFor,
+    tileAt,
   );
 }
 
@@ -566,7 +659,7 @@ export function buildSystemBattleUrl(
  * however many zones of the system are picked.
  */
 function pickedAttackerRows(
-  tileAt: (position: string) => Tile | undefined,
+  tileAt: TileAt,
   picks: BattleAttackerPick[],
   playerFor: PlayerFor,
 ): UnitRow[] {
@@ -603,7 +696,7 @@ function pickedAttackerRows(
  * can use.
  */
 export function buildPickedBattleUrl(
-  tileAt: (position: string) => Tile | undefined,
+  tileAt: TileAt,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defenderPlanetId: string | null,
@@ -648,7 +741,7 @@ export function buildPickedBattleUrl(
  * calculator's own space/ground switch then reuses the same forces.
  */
 export function buildPickedSystemBattleUrl(
-  tileAt: (position: string) => Tile | undefined,
+  tileAt: TileAt,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defenderFaction: string,
@@ -669,7 +762,7 @@ export function buildPickedSystemBattleUrl(
 
 /** The picked attacker against a defender's force, in the defender's terrain. */
 function pickedBattleUrl(
-  tileAt: (position: string) => Tile | undefined,
+  tileAt: TileAt,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defender: Force,
@@ -682,10 +775,14 @@ function pickedBattleUrl(
     faction: picks[0].faction,
     rows: pickedAttackerRows(tileAt, picks, playerFor),
   };
-  if (!writeSide(params, "attacker", attacker, playerFor, defenderTile)) {
+  if (
+    !writeSide(params, "attacker", attacker, playerFor, defenderTile, tileAt)
+  ) {
     return null;
   }
-  if (!writeSide(params, "defender", defender, playerFor, defenderTile)) {
+  if (
+    !writeSide(params, "defender", defender, playerFor, defenderTile, tileAt)
+  ) {
     return null;
   }
   writeTerrain(params, defenderTile, place);

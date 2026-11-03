@@ -13,6 +13,7 @@ import { getPlanetData } from "@/entities/lookup/planets";
 import { getAttachmentData } from "@/entities/lookup/attachments";
 import { getAttachmentModifiers } from "@/entities/game/planets";
 import type { Tile, TilePlanet } from "@/entities/game/types";
+import { useGameData } from "@/state/useGameContext";
 import { buildGroundBattleUrl } from "./battleCalcLink";
 import { summarizeZone } from "./fleetMath";
 import {
@@ -154,6 +155,7 @@ export function PlanetBand({
   helpers: FactionHelpers;
   attacker: string | null;
 }) {
+  const gameData = useGameData();
   const planet = getPlanetData(planetId);
   if (!planet) return null;
 
@@ -179,6 +181,7 @@ export function PlanetBand({
         defender,
         helpers.playerFor,
         attacker,
+        (position) => gameData?.tiles?.[position],
       )
     : null;
   const bonus = getAttachmentModifiers(planetTile.attachments ?? []);
