@@ -10,6 +10,7 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { getColorAlias } from "@/entities/lookup/colors";
 import type { Unit } from "@/entities/data/types";
 import type { TilePdsEntry } from "@/entities/game/types";
+import { useBattleCalcHref } from "./battleCalcHost";
 import {
   formatStat,
   type Capacity,
@@ -358,12 +359,13 @@ export function CalcLink({
   url: string | null | undefined;
   title: string;
 }) {
+  const calcHref = useBattleCalcHref();
   if (!url) return null;
   return (
     <Tooltip label={title} multiline maw={260}>
       <a
         className={styles.calcLink}
-        href={url}
+        href={calcHref(url)}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={title}

@@ -2,9 +2,8 @@ import type { GameState, PlayerData } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import type { BattleAttackerPick } from "@/state/appStore";
 import { systemAnomalies } from "./featureRules";
+import { BATTLE_CALC_URL } from "./battleCalcHost";
 import { summarizeZone, type UnitRow } from "./fleetMath";
-
-const BATTLE_CALC_URL = "https://ti4calc.leviatas.com/";
 
 /** Unit types ti4calc.leviatas.com knows, which share their names with our base types. */
 const CALC_UNIT_TYPES = new Set([

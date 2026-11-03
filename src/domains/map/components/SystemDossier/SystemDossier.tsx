@@ -25,6 +25,7 @@ import {
   factionsInSystem,
   findAttacker,
 } from "./battleCalcLink";
+import { useBattleCalcHref } from "./battleCalcHost";
 import { getSystemFeatures, systemAnomalies } from "./featureRules";
 import { capacityOf, summarizeZone } from "./fleetMath";
 import {
@@ -406,6 +407,7 @@ function SystemBattleLinks({
   attacker: string | null;
 }) {
   const gameData = useGameData();
+  const calcHref = useBattleCalcHref();
   const picks = useAppStore((state) => state.battleAttackers);
   const picked = picks[0]?.faction;
   const attacker = picked ?? systemAttacker;
@@ -429,13 +431,13 @@ function SystemBattleLinks({
       <a
         key={faction}
         className={cx(styles.btn, index === 0 && styles.btnPrimary)}
-        href={url}
+        href={calcHref(url)}
         target="_blank"
         rel="noopener noreferrer"
         title={
           versus
-            ? `Open ti4calc.leviatas.com with ${helpers.displayName(attacker)} attacking ${helpers.displayName(faction)}, ships and ground forces`
-            : `Open ti4calc.leviatas.com with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`
+            ? `Open the battle calculator with ${helpers.displayName(attacker)} attacking ${helpers.displayName(faction)}, ships and ground forces`
+            : `Open the battle calculator with all of ${helpers.displayName(faction)}'s ships and ground forces here set as the defender`
         }
       >
         <IconSwords size={13} aria-hidden />

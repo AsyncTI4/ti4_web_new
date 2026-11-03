@@ -6,6 +6,7 @@ import { getPlanetData } from "@/entities/lookup/planets";
 import { useAppStore, type BattleAttackerPick } from "@/state/appStore";
 import { useGameData } from "@/state/useGameContext";
 import type { Tile } from "@/entities/game/types";
+import { useBattleCalcHref } from "./battleCalcHost";
 import { buildPickedBattleUrl } from "./battleCalcLink";
 import type { FactionHelpers } from "./useFactionHelpers";
 import styles from "./SystemDossier.module.css";
@@ -52,6 +53,7 @@ export function PickedBattleActions({
   const picks = useAppStore((state) => state.battleAttackers);
   const togglePick = useAppStore((state) => state.toggleBattleAttacker);
   const gameData = useGameData();
+  const calcHref = useBattleCalcHref();
   const self = { position: tile.position, planetId, faction };
   const picked = picks.some((pick) => samePick(pick, self));
   const attacker = picks[0]?.faction;
@@ -86,7 +88,7 @@ export function PickedBattleActions({
         <Tooltip label={calcTitle} multiline maw={260}>
           <a
             className={cx(styles.calcLink, styles.pickCalc)}
-            href={url}
+            href={calcHref(url)}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={calcTitle}
