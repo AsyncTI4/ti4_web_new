@@ -4,9 +4,9 @@ import type { BattleAttackerPick } from "@/state/appStore";
 import { systemAnomalies } from "./featureRules";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
-const BATTLE_CALC_URL = "https://ti4battle.com/";
+const BATTLE_CALC_URL = "https://ti4calc.leviatas.com/";
 
-/** Unit types ti4battle.com knows, which share their names with our base types. */
+/** Unit types ti4calc.leviatas.com knows, which share their names with our base types. */
 const CALC_UNIT_TYPES = new Set([
   "carrier",
   "cruiser",
@@ -20,7 +20,7 @@ const CALC_UNIT_TYPES = new Set([
   "pds",
 ]);
 
-/** Our faction ids mapped to the faction names ti4battle.com expects. */
+/** Our faction ids mapped to the faction names ti4calc.leviatas.com expects. */
 const CALC_FACTIONS: Record<string, string> = {
   arborec: "Arborec",
   argent: "Argent flight",
@@ -59,7 +59,7 @@ const CALC_FACTIONS: Record<string, string> = {
 };
 
 /**
- * Technologies ti4battle.com models, keyed by our tech id and mapped to its
+ * Technologies ti4calc.leviatas.com models, keyed by our tech id and mapped to its
  * effect name. Only the printings whose rules match the calculator are
  * listed: it implements the current Magen Defense Grid and X-89 Bacterial
  * Weapon, and none of the homebrew variants. Faction unit upgrades are not
@@ -105,7 +105,7 @@ function techEffects(player: PlayerData | undefined, side: Side): string[] {
 }
 
 /**
- * Relics ti4battle.com models, keyed by our relic id and mapped to its effect
+ * Relics ti4calc.leviatas.com models, keyed by our relic id and mapped to its effect
  * name. Lightrail Ordnance is not here: it counts space docks, so it is
  * written apart.
  */
@@ -235,7 +235,7 @@ function writeTerrain(params: URLSearchParams, tile: Tile, place: BattlePlace) {
 }
 
 /**
- * Builds a ti4battle.com link with the defender filled in and, when the
+ * Builds a ti4calc.leviatas.com link with the defender filled in and, when the
  * battle has one, the attacker on the other side of the table, in the
  * system's terrain. Returns null when the defender has nothing the
  * calculator can use.
