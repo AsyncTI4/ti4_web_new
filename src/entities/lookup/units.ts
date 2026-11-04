@@ -79,7 +79,18 @@ export function lookupUnit(
       (unit) => !isPlayAreaUnitUpgrade(unit.id)
     );
     if (unitCards.length > 0) return preferUpgradedUnit(unitCards);
-    if (ownedMatches.length > 0) return preferUpgradedUnit(ownedMatches);
+    if (ownedMatches.length > 0) {
+      // Only an upgrade is owned: the unit it changes is the faction's own
+      // card (a Mahact King's flagship), even when it is not listed as owned.
+      const factionCards = unitsWithAsyncId.filter(
+        (unit) =>
+          unit.faction?.toLowerCase() === faction.toLowerCase() &&
+          !isPlayAreaUnitUpgrade(unit.id)
+      );
+      return preferUpgradedUnit(
+        factionCards.length > 0 ? factionCards : ownedMatches
+      );
+    }
   }
 
   const factionUnits = filterUnitsFromList(
