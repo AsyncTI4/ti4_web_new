@@ -1,6 +1,7 @@
 import { getUnitData } from "@/entities/lookup/units";
 import { getTechData } from "@/entities/lookup/tech";
 import type { PlayerData, Unit } from "@/entities/data/types";
+import { isPlayAreaUnitUpgrade } from "@/entities/game/unitModifiers";
 
 export const DICE_ABILITIES = [
   {
@@ -104,7 +105,9 @@ function flagshipAbilityFor(
     (p) => p.faction.toLowerCase() === targetFaction.toLowerCase(),
   );
   const flagshipUnitId = targetPlayer?.unitsOwned.find(
-    (unitId) => getUnitData(unitId)?.baseType === "flagship",
+    (unitId) =>
+      getUnitData(unitId)?.baseType === "flagship" &&
+      !isPlayAreaUnitUpgrade(unitId),
   );
   if (!flagshipUnitId) return null;
 
