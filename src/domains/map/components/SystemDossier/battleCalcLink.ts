@@ -9,6 +9,12 @@ import {
   type Tiles,
 } from "@/entities/game/anomalies";
 import { summarizeZone, type UnitRow } from "./fleetMath";
+import {
+  getUnitModifiers,
+  isPlayAreaUnitUpgrade,
+  modifiedCombatValue,
+  ownedPlayAreaUpgrades,
+} from "@/entities/game/unitModifiers";
 
 const BATTLE_CALC_URL = "https://ti4calc.leviatas.com/";
 
@@ -281,16 +287,25 @@ function writeTwilightsFall(
  * compact form: `c5x2` combat, `a`, `b` and `s` for anti-fighter barrage,
  * bombardment and space cannon, `sd` sustain damage, `ps` planetary shield,
  * `dh` safe from Spark (Direct Hit). The calculator has no model of these
- * spliced units, so it takes the numbers as they are printed.
+ * spliced units, so it takes the numbers as they are printed, changed by the
+ * modifiers given (from the upgrades kept beside the unit card).
  */
-function unitStats(unit: Unit): string {
+function unitStats(
+  unit: Unit,
+  combatValueModifier?: number,
+  bonusCombatDice?: number,
+): string {
   const roll = (token: string, hitsOn?: number, dice?: number) =>
     hitsOn ? [`${token}${hitsOn}x${dice ?? 1}`] : [];
+  const combatHitsOn = unit.combatHitsOn
+    ? modifiedCombatValue(unit.combatHitsOn, combatValueModifier)
+    : undefined;
+  const combatDice = (unit.combatDieCount ?? 1) + (bonusCombatDice ?? 0);
   const safeFromSpark =
     unit.canBeDirectHit === false ||
     /cannot be destroyed by "(Spark|Direct Hit)"/i.test(unit.ability ?? "");
   return [
-    ...roll("c", unit.combatHitsOn, unit.combatDieCount),
+    ...roll("c", combatHitsOn, combatDice),
     ...roll("a", unit.afbHitsOn, unit.afbDieCount),
     ...roll("b", unit.bombardHitsOn, unit.bombardDieCount),
     ...roll("s", unit.spaceCannonHitsOn, unit.spaceCannonDieCount),
@@ -332,6 +347,8 @@ const unitScore = (unit: Unit) =>
  * The best card a Twilight's Fall king owns for a unit type. A king can own
  * several for one type: its own flagship or mech next to a spliced one, or a
  * generic unit next to a spliced upgrade. The best one is what fights.
+ * Upgrades kept beside the unit card (Echo of Ascension, Eidolon mechs) do
+ * not fight on their own: they change the card that does.
  */
 function bestOwnedUnit(
   player: PlayerData | undefined,
@@ -339,7 +356,10 @@ function bestOwnedUnit(
 ): Unit | undefined {
   return (player?.unitsOwned ?? [])
     .map((id) => getUnitData(id))
-    .filter((unit): unit is Unit => !!unit && unit.baseType === type)
+    .filter(
+      (unit): unit is Unit =>
+        !!unit && unit.baseType === type && !isPlayAreaUnitUpgrade(unit.id),
+    )
     .reduce<Unit | undefined>(
       (best, unit) => (!best || unitScore(unit) > unitScore(best) ? unit : best),
       undefined,
@@ -400,6 +420,23 @@ function writeSide(
     counts[type] = (counts[type] ?? 0) + count;
     damaged[type] = (damaged[type] ?? 0) + sustained;
     const unit = (king && bestOwnedUnit(player, type)) || row.unit;
+    /* Upgrades kept beside the card change its rolls (Echo of Ascension,
+       Eidolon Terminus, Eidolon Landwaster): the calculator gets the rolls
+       the unit really makes, and keeps a king's own unit abilities. The
+       Starlancer XI anomaly bonus travels apart, so it is left out here. */
+    const { combatValueModifier, bonusCombatDice } = getUnitModifiers(
+      unit,
+      player?.unitsOwned,
+    );
+    if (combatValueModifier || bonusCombatDice) {
+      const upgrades = ownedPlayAreaUpgrades(type, player?.unitsOwned)
+        .filter((id) => id !== unit.id)
+        .map((id) => getUnitData(id)?.name)
+        .filter((name): name is string => !!name);
+      stats[type] = unitStats(unit, combatValueModifier, bonusCombatDice);
+      names[type] = [unit.name, ...upgrades].join(" + ");
+      continue;
+    }
     if (king && unit.faction?.toLowerCase() === faction.toLowerCase()) {
       /* The king's own flagship or mech: the calculator models it. */
       continue;
