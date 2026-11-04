@@ -1,6 +1,7 @@
 import { units } from "@/entities/data/units";
 import { groupBy, indexBy } from "@/entities/lookup/indexBy";
 import type { PlayerData, Unit } from "@/entities/data/types";
+import { isPlayAreaUnitUpgrade } from "@/entities/game/unitModifiers";
 
 const unitsMap = indexBy(units, (unit) => unit.id);
 
@@ -67,14 +68,18 @@ export function lookupUnit(
     return variantUnits.length > 0 ? preferUpgradedUnit(variantUnits) : null;
   }
 
-  // First, if the player owns any unit with this asyncId, prefer that regardless of faction
+  // First, if the player owns any unit with this asyncId, prefer that regardless of faction.
+  // Upgrades kept beside the unit card (Echo of Ascension, Eidolon mechs) only
+  // stand in for the unit when the player owns no other card for it.
   if (ownedUnits && ownedUnits.length > 0) {
     const ownedMatches = unitsWithAsyncId.filter((unit) =>
       ownedUnits.includes(unit.id)
     );
-    if (ownedMatches.length > 0) {
-      return preferUpgradedUnit(ownedMatches);
-    }
+    const unitCards = ownedMatches.filter(
+      (unit) => !isPlayAreaUnitUpgrade(unit.id)
+    );
+    if (unitCards.length > 0) return preferUpgradedUnit(unitCards);
+    if (ownedMatches.length > 0) return preferUpgradedUnit(ownedMatches);
   }
 
   const factionUnits = filterUnitsFromList(

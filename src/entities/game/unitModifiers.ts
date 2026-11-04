@@ -12,13 +12,40 @@ export type UnitModifiers = {
   /** Added to the printed COMBAT value: negative is better. */
   combatValueModifier?: number;
   bonusCombatDice?: number;
+  moveModifier?: number;
+  capacityModifier?: number;
   notes: UnitModifierNote[];
 };
 
 const EIDOLON_TERMINUS = "tf-eidolonterminus";
 const EIDOLON_LANDWASTER = "tf-eidolonlandwaster";
 const VALEFAR_PRIME = "tf-valefarprime";
+const ECHO_OF_ASCENSION = "tf-echoofascension";
 const STARLANCER_XI = "purpletf_mech";
+
+/**
+ * Twilight's Fall unit upgrades kept in the play area beside the normal unit
+ * card: they change the owner's unit of that type instead of replacing it.
+ */
+export const PLAY_AREA_UNIT_UPGRADES: Record<string, string> = {
+  [EIDOLON_TERMINUS]: "mech",
+  [EIDOLON_LANDWASTER]: "mech",
+  [VALEFAR_PRIME]: "mech",
+  [ECHO_OF_ASCENSION]: "flagship",
+};
+
+export const isPlayAreaUnitUpgrade = (unitId: string) =>
+  unitId in PLAY_AREA_UNIT_UPGRADES;
+
+/** The play-area upgrades the player owns that change units of this type. */
+export function ownedPlayAreaUpgrades(
+  baseType: string,
+  unitsOwned: string[] | undefined,
+): string[] {
+  return (unitsOwned ?? []).filter(
+    (id) => PLAY_AREA_UNIT_UPGRADES[id] === baseType,
+  );
+}
 
 function signed(value: number) {
   return `${value > 0 ? "+" : ""}${value}`;
@@ -27,7 +54,9 @@ function signed(value: number) {
 /**
  * What changes a unit's printed numbers for its owner: the Twilight's Fall
  * mech upgrades kept beside the normal mech card (Eidolon Terminus −1 combat,
- * Eidolon Landwaster +1 die, Valefar Prime −1 cost) and, where the unit's
+ * Eidolon Landwaster +1 die, Valefar Prime −1 cost), the flagship one kept
+ * beside the normal flagship card (Echo of Ascension −1 combat, +1 die,
+ * +1 move, +2 capacity) and, where the unit's
  * system is known, Starlancer XI's +1 to its rolls per anomaly it is in or
  * adjacent to.
  */
@@ -36,13 +65,16 @@ export function getUnitModifiers(
   unitsOwned: string[] | undefined,
   anomaliesNearby?: number,
 ): UnitModifiers {
-  const isMech = unit.baseType === "mech";
   const owns = (id: string) =>
-    isMech && unit.id !== id && !!unitsOwned?.includes(id);
+    PLAY_AREA_UNIT_UPGRADES[id] === unit.baseType &&
+    unit.id !== id &&
+    !!unitsOwned?.includes(id);
 
   let combat = 0;
   let dice = 0;
   let cost = 0;
+  let move = 0;
+  let capacity = 0;
   const notes: UnitModifierNote[] = [];
 
   if (owns(VALEFAR_PRIME)) {
@@ -55,6 +87,17 @@ export function getUnitModifiers(
       key: "terminus",
       tone: "green",
       text: "−1 combat (Eidolon Terminus)",
+    });
+  }
+  if (owns(ECHO_OF_ASCENSION)) {
+    combat -= 1;
+    dice += 1;
+    move += 1;
+    capacity += 2;
+    notes.push({
+      key: "echo",
+      tone: "green",
+      text: "−1 combat, +1 die, +1 move, +2 capacity (Echo of Ascension)",
     });
   }
   if (unit.id === STARLANCER_XI && anomaliesNearby) {
@@ -78,6 +121,8 @@ export function getUnitModifiers(
     costModifier: cost || undefined,
     combatValueModifier: combat || undefined,
     bonusCombatDice: dice || undefined,
+    moveModifier: move || undefined,
+    capacityModifier: capacity || undefined,
     notes,
   };
 }

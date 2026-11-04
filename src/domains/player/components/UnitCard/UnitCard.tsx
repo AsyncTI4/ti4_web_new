@@ -12,6 +12,7 @@ import {
   isNekroFlagship,
 } from "@/entities/lookup/units";
 import { useGameContext } from "@/state/useGameContext";
+import { ownedPlayAreaUpgrades } from "@/entities/game/unitModifiers";
 
 type Props = {
   unitId: string;
@@ -51,27 +52,26 @@ export function UnitCard({
 
   if (!unitData) return null;
 
-  const isMech = unitData.baseType === "mech";
   const playerData = color
     ? gameData?.playerData?.find((p) => p.color === color)
     : undefined;
   const playerUnitsOwned = playerData?.unitsOwned;
 
-  const hasCabalMechUpgrade =
-    isMech && playerUnitsOwned?.includes("tf-eidolonterminus");
-  const hasNaazMechUpgrade =
-    isMech && playerUnitsOwned?.includes("tf-eidolonlandwaster");
-  const hasNekroMechUpgrade =
-    isMech && playerUnitsOwned?.includes("tf-valefarprime");
+  /* Upgrades kept beside the unit card (Eidolon mechs, Echo of Ascension). */
+  const playAreaUpgradeFactions = ownedPlayAreaUpgrades(
+    unitData.baseType,
+    playerUnitsOwned,
+  )
+    .filter((id) => id !== unitData.id)
+    .map((id) => getUnitData(id)?.faction)
+    .filter((faction): faction is string => !!faction);
   const ownedTwilightsFallUnit = getOwnedTwilightsFallUnitByAsyncId(
     unitData.asyncId,
     playerUnitsOwned
   );
 
   const allUpgradeFactions = Array.from(new Set([
-    ...(hasCabalMechUpgrade ? ["cabal"] : []),
-    ...(hasNaazMechUpgrade ? ["naaz"] : []),
-    ...(hasNekroMechUpgrade ? ["nekro"] : []),
+    ...playAreaUpgradeFactions,
     ...(ownedTwilightsFallUnit?.faction ? [ownedTwilightsFallUnit.faction] : []),
   ]));
   const unitIsUpgraded =

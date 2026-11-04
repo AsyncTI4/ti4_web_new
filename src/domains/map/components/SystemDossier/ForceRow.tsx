@@ -55,8 +55,12 @@ function unitStatLine(
     unit.combatHitsOn
       ? `Combat ${modifiedCombatValue(unit.combatHitsOn, modifiers.combatValueModifier)}${combatDice > 1 ? ` ×${combatDice}` : ""}`
       : null,
-    unit.moveValue ? `Move ${unit.moveValue}` : null,
-    unit.capacityValue ? `Capacity ${unit.capacityValue}` : null,
+    unit.moveValue
+      ? `Move ${unit.moveValue + (modifiers.moveModifier ?? 0)}`
+      : null,
+    unit.capacityValue
+      ? `Capacity ${unit.capacityValue + (modifiers.capacityModifier ?? 0)}`
+      : null,
     unit.productionValue ? `Production ${unit.productionValue}` : null,
     unit.spaceCannonHitsOn
       ? `Space cannon ${unit.spaceCannonHitsOn}${(unit.spaceCannonDieCount ?? 1) > 1 ? ` ×${unit.spaceCannonDieCount}` : ""}`
