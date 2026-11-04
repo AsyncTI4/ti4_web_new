@@ -64,11 +64,15 @@ export function UnitStats({
   bonusCombatDice,
   combatValueModifier,
   costModifier,
+  moveModifier,
+  capacityModifier,
 }: {
   unit: Unit;
   bonusCombatDice?: number;
   combatValueModifier?: number;
   costModifier?: number;
+  moveModifier?: number;
+  capacityModifier?: number;
 }) {
   const showDice = !!(unit.combatDieCount || bonusCombatDice);
   return (
@@ -108,8 +112,26 @@ export function UnitStats({
           "—"
         )}
       </StatBox>
-      <StatBox label="Move">{unit.moveValue ?? "—"}</StatBox>
-      <StatBox label="Capacity">{unit.capacityValue ?? "—"}</StatBox>
+      <StatBox label="Move">
+        {unit.moveValue != null ? (
+          <ModifiedValue
+            base={unit.moveValue}
+            modified={unit.moveValue + (moveModifier ?? 0)}
+          />
+        ) : (
+          "—"
+        )}
+      </StatBox>
+      <StatBox label="Capacity">
+        {unit.capacityValue != null ? (
+          <ModifiedValue
+            base={unit.capacityValue}
+            modified={unit.capacityValue + (capacityModifier ?? 0)}
+          />
+        ) : (
+          "—"
+        )}
+      </StatBox>
     </Group>
   );
 }
