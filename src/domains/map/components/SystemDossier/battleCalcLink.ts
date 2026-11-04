@@ -286,7 +286,8 @@ function writeTwilightsFall(
  * The printed stats of a Twilight's Fall unit upgrade, in the calculator's
  * compact form: `c5x2` combat, `a`, `b` and `s` for anti-fighter barrage,
  * bombardment and space cannon, `sd` sustain damage, `ps` planetary shield,
- * `dh` safe from Spark (Direct Hit). The calculator has no model of these
+ * `dh` safe from Spark (Direct Hit), `nf` hits go to non-fighter ships if
+ * able (Justicer Rail). The calculator has no model of these
  * spliced units, so it takes the numbers as they are printed, changed by the
  * modifiers given (from the upgrades kept beside the unit card).
  */
@@ -304,6 +305,10 @@ function unitStats(
   const safeFromSpark =
     unit.canBeDirectHit === false ||
     /cannot be destroyed by "(Spark|Direct Hit)"/i.test(unit.ability ?? "");
+  const hitsToNonFighters =
+    /hits produced by this unit must be assigned to non-fighter ships/i.test(
+      unit.ability ?? "",
+    );
   return [
     ...roll("c", combatHitsOn, combatDice),
     ...roll("a", unit.afbHitsOn, unit.afbDieCount),
@@ -312,6 +317,7 @@ function unitStats(
     ...(unit.sustainDamage ? ["sd"] : []),
     ...(unit.planetaryShield ? ["ps"] : []),
     ...(unit.sustainDamage && safeFromSpark ? ["dh"] : []),
+    ...(hitsToNonFighters ? ["nf"] : []),
   ].join(".");
 }
 
@@ -387,6 +393,28 @@ const isPds = (row: UnitRow) => row.unit.baseType === "pds";
 const isMech = (row: UnitRow) => row.unit.baseType === "mech";
 const isShip = (row: UnitRow) => !!row.unit.isShip;
 const isGroundForce = (row: UnitRow) => !!row.unit.isGroundForce;
+
+/**
+ * The faction's PDS in systems adjacent to the battle whose space cannon
+ * reaches it (PDS II, Justicer Rail, Keeper Matrix…). The card checked is
+ * the one that fires: for a Twilight's Fall king, its best PDS card, as
+ * writeSide sends it. Adjacency follows the map and matching wormholes.
+ */
+function adjacentPdsRows(
+  battleTile: Tile,
+  faction: string,
+  playerFor: PlayerFor,
+  tiles: Tiles | undefined,
+): UnitRow[] {
+  const player = playerFor(faction);
+  const king = isTwilightsFallKing(CALC_FACTIONS[faction.toLowerCase()]);
+  const reaches = (row: UnitRow) =>
+    !!((king && bestOwnedUnit(player, "pds")) || row.unit).deepSpaceCannon;
+  return neighbourTiles(battleTile, tiles)
+    .flatMap((tile) => [tile, ...Object.values(tile.planets)])
+    .flatMap((zone) => factionRows(zone.unitsByFaction, faction, playerFor))
+    .filter((row) => isPds(row) && reaches(row));
+}
 
 /**
  * Writes one side of the battle: faction, unit counts, damage already
@@ -639,7 +667,8 @@ function spaceCombatRows(
 
 /**
  * Space battle for this system: each side's ships in the space area, plus
- * its PDS on the system's planets, which fire space cannon.
+ * its PDS on the system's planets and those in adjacent systems that reach
+ * it, which fire space cannon.
  */
 export function buildSpaceBattleUrl(
   tile: Tile,
@@ -655,6 +684,7 @@ export function buildSpaceBattleUrl(
     ...Object.values(tile.planets)
       .flatMap((planet) => factionRows(planet.unitsByFaction, side, playerFor))
       .filter(isPds),
+    ...adjacentPdsRows(tile, side, playerFor, tiles),
   ];
   if (shipsOf(faction).length === 0) return null;
 
@@ -715,8 +745,16 @@ export function buildGroundBattleUrl(
   );
 }
 
-/** A faction's ships and ground forces in the space area and on every planet, plus its PDS. */
-function systemRows(tile: Tile, faction: string, playerFor: PlayerFor) {
+/**
+ * A faction's ships and ground forces in the space area and on every planet,
+ * plus its PDS there and those in adjacent systems that reach it.
+ */
+function systemRows(
+  tile: Tile,
+  faction: string,
+  playerFor: PlayerFor,
+  tiles: Tiles | undefined,
+) {
   return [
     ...factionRows(tile.unitsByFaction, faction, playerFor).filter(
       (row) => isShip(row) || isGroundForce(row),
@@ -726,6 +764,7 @@ function systemRows(tile: Tile, faction: string, playerFor: PlayerFor) {
         factionRows(planet.unitsByFaction, faction, playerFor),
       )
       .filter((row) => isGroundForce(row) || isPds(row)),
+    ...adjacentPdsRows(tile, faction, playerFor, tiles),
   ];
 }
 
@@ -742,7 +781,7 @@ export function buildSystemBattleUrl(
   attacker: string | null = null,
   tiles?: Tiles,
 ): string | null {
-  const rowsFor = (side: string) => systemRows(tile, side, playerFor);
+  const rowsFor = (side: string) => systemRows(tile, side, playerFor, tiles);
   const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
   return buildBattleUrl(
     tile,
@@ -820,6 +859,7 @@ export function buildPickedBattleUrl(
             factionRows(p.unitsByFaction, defenderFaction, playerFor),
           )
           .filter(isPds),
+        ...adjacentPdsRows(defenderTile, defenderFaction, playerFor, tiles),
       ];
 
   return pickedBattleUrl(
@@ -851,7 +891,7 @@ export function buildPickedSystemBattleUrl(
     defenderTile,
     {
       faction: defenderFaction,
-      rows: systemRows(defenderTile, defenderFaction, playerFor),
+      rows: systemRows(defenderTile, defenderFaction, playerFor, tiles),
     },
     "space",
     playerFor,
@@ -871,7 +911,13 @@ function pickedBattleUrl(
   const params = new URLSearchParams();
   const attacker = {
     faction: picks[0].faction,
-    rows: pickedAttackerRows(tiles, picks, playerFor),
+    rows: [
+      ...pickedAttackerRows(tiles, picks, playerFor),
+      /* Its PDS next to the defending system fire too, in space. */
+      ...(place === "space"
+        ? adjacentPdsRows(defenderTile, picks[0].faction, playerFor, tiles)
+        : []),
+    ],
   };
   if (
     !writeSide(params, "attacker", attacker, playerFor, defenderTile, tiles)
