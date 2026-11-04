@@ -7,6 +7,8 @@ import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
 import { useGameData } from "@/state/useGameContext";
 import type { PlayerData } from "@/entities/data/types";
+import { anomaliesInOrNextTo } from "@/entities/game/anomalies";
+import { getUnitModifiers } from "@/entities/game/unitModifiers";
 import {
   getAssimilatedAbilitiesForNekroFlagship,
   getInheritedAbilitiesForPinktfFlagship,
@@ -26,9 +28,11 @@ import styles from "./UnitDetailsCard.module.css";
 type Props = {
   unitId: string;
   color?: string;
-  bonusCombatDice?: number;
-  combatValueModifier?: number;
-  costModifier?: number;
+  /**
+   * The map position the unit stands in, when it is a unit on the board: its
+   * surroundings can change its numbers (Starlancer XI and anomalies).
+   */
+  tilePosition?: string;
   playerUnitsOwned?: string[];
   valefarZTargets?: string[];
   allPlayerData?: PlayerData[];
@@ -47,9 +51,7 @@ function UnitOwner({ owner }: { owner: PlayerData }) {
 export function UnitDetailsCard({
   unitId,
   color,
-  bonusCombatDice,
-  combatValueModifier,
-  costModifier,
+  tilePosition,
   playerUnitsOwned,
   valefarZTargets,
   allPlayerData,
@@ -74,7 +76,13 @@ export function UnitDetailsCard({
     !isUpgraded && unitData.upgradesToUnitId
       ? getUpgradeInfo(unitData.upgradesToUnitId)
       : null;
-  const modifiers = { bonusCombatDice, combatValueModifier, costModifier };
+  const tiles = gameData?.tiles;
+  const tile = tilePosition ? tiles?.[tilePosition] : undefined;
+  const { notes, ...modifiers } = getUnitModifiers(
+    unitData,
+    owner?.unitsOwned,
+    tile ? anomaliesInOrNextTo(tile, tiles) : undefined,
+  );
 
   return (
     <DetailsCard width={380}>
@@ -104,7 +112,7 @@ export function UnitDetailsCard({
       />
       <div className={styles.stats}>
         <UnitStats unit={unitData} {...modifiers} />
-        <ModifierAttribution {...modifiers} />
+        <ModifierAttribution notes={notes} />
       </div>
       <AbilitySection ability={unitData.ability} />
       <InheritedAbilityList inherited={inherited} />

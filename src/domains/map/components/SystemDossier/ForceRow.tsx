@@ -9,6 +9,10 @@ import { useDisclosure } from "@/hooks/useDisclosure";
 import { cdnImage } from "@/entities/data/cdnImage";
 import { getColorAlias } from "@/entities/lookup/colors";
 import type { Unit } from "@/entities/data/types";
+import {
+  modifiedCombatValue,
+  type UnitModifiers,
+} from "@/entities/game/unitModifiers";
 import type { TilePdsEntry } from "@/entities/game/types";
 import {
   formatStat,
@@ -36,12 +40,20 @@ export type Role =
 /** The two sides of a zone's fight, when there are exactly two. */
 export type Sides = { attacker: ZoneSummary; defender: ZoneSummary } | null;
 
-function unitStatLine(unit: Unit, sustained: number): string {
-  const combatDice = unit.combatDieCount ?? 1;
+function unitStatLine(
+  unit: Unit,
+  sustained: number,
+  modifiers: UnitModifiers,
+): string {
+  const combatDice = (unit.combatDieCount ?? 1) + (modifiers.bonusCombatDice ?? 0);
+  const cost =
+    unit.cost != null
+      ? Math.max(0, unit.cost + (modifiers.costModifier ?? 0))
+      : null;
   return [
-    unit.cost != null ? `Cost ${formatStat(unit.cost)}` : null,
+    cost != null ? `Cost ${formatStat(cost)}` : null,
     unit.combatHitsOn
-      ? `Combat ${unit.combatHitsOn}${combatDice > 1 ? ` ×${unit.combatDieCount}` : ""}`
+      ? `Combat ${modifiedCombatValue(unit.combatHitsOn, modifiers.combatValueModifier)}${combatDice > 1 ? ` ×${combatDice}` : ""}`
       : null,
     unit.moveValue ? `Move ${unit.moveValue}` : null,
     unit.capacityValue ? `Capacity ${unit.capacityValue}` : null,
@@ -66,12 +78,16 @@ function UnitChip({
   colorAlias,
   count,
   sustained,
+  modifiers,
+  tilePosition,
 }: {
   unit: Unit;
   color: string | undefined;
   colorAlias: string;
   count: number;
   sustained: number;
+  modifiers: UnitModifiers;
+  tilePosition: string | undefined;
 }) {
   const { opened, setOpened, toggle } = useDisclosure(false);
   const openUnitSheet = useUnitSheet();
@@ -91,7 +107,7 @@ function UnitChip({
                   {unit.name}
                 </Text>
                 <Text size="xs" ff="monospace">
-                  {unitStatLine(unit, sustained)}
+                  {unitStatLine(unit, sustained, modifiers)}
                 </Text>
                 {unit.ability && (
                   <Text size="xs" mt={4} c="gray.4">
@@ -108,7 +124,7 @@ function UnitChip({
               aria-label={`${count} ${unit.name}`}
               onClick={
                 openUnitSheet
-                  ? () => openUnitSheet({ unitId: unit.id, color })
+                  ? () => openUnitSheet({ unitId: unit.id, color, tilePosition })
                   : toggle
               }
             >
@@ -123,7 +139,11 @@ function UnitChip({
         </span>
       </SmoothPopover.Target>
       <SmoothPopover.Dropdown className={styles.unitPopover}>
-        <UnitDetailsCard unitId={unit.id} color={color} />
+        <UnitDetailsCard
+          unitId={unit.id}
+          color={color}
+          tilePosition={tilePosition}
+        />
       </SmoothPopover.Dropdown>
     </SmoothPopover>
   );
@@ -137,12 +157,15 @@ function UnitChip({
 export function ForceRow({
   summary: { faction, rows, math },
   helpers,
+  tilePosition,
   role,
   capacity,
   actions,
 }: {
   summary: ZoneSummary;
   helpers: FactionHelpers;
+  /** The map position of the system, for effects of the units' surroundings. */
+  tilePosition?: string;
   role?: Role;
   capacity?: Capacity | null;
   /** Controls set at the end of the units cell. */
@@ -172,6 +195,8 @@ export function ForceRow({
             colorAlias={colorAlias}
             count={row.count}
             sustained={row.sustained}
+            modifiers={row.modifiers}
+            tilePosition={tilePosition}
           />
         ))}
         {actions}

@@ -15,7 +15,13 @@ type Props = {
   tilesList: Tile[];
   contentSize: { width: number; height: number };
   tileContainerStyle: CSSProperties;
-  onUnitMouseOver: (faction: string, unitId: string, x: number, y: number) => void;
+  onUnitMouseOver: (
+    faction: string,
+    unitId: string,
+    x: number,
+    y: number,
+    tilePosition?: string,
+  ) => void;
   onUnitMouseLeave: () => void;
   onUnitSelect: (faction: string) => void;
   onPlanetMouseEnter: (planetId: string, x: number, y: number) => void;

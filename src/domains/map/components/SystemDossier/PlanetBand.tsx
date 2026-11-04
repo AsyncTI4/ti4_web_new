@@ -16,6 +16,7 @@ import type { Tile, TilePlanet } from "@/entities/game/types";
 import { useGameData } from "@/state/useGameContext";
 import { buildGroundBattleUrl } from "./battleCalcLink";
 import { summarizeZone } from "./fleetMath";
+import { anomaliesInOrNextTo } from "@/entities/game/anomalies";
 import {
   arrangeZone,
   Balance,
@@ -165,6 +166,7 @@ export function PlanetBand({
     planetTile.unitsByFaction,
     helpers.playerFor,
     (unit) => unit.isGroundForce,
+    anomaliesInOrNextTo(tile, gameData?.tiles),
   );
   const { ordered, sides, roleOf } = arrangeZone(
     summaries,
@@ -181,7 +183,7 @@ export function PlanetBand({
         defender,
         helpers.playerFor,
         attacker,
-        (position) => gameData?.tiles?.[position],
+        gameData?.tiles,
       )
     : null;
   const bonus = getAttachmentModifiers(planetTile.attachments ?? []);
@@ -243,6 +245,7 @@ export function PlanetBand({
           key={summary.faction}
           summary={summary}
           helpers={helpers}
+          tilePosition={tile.position}
           role={roleOf(summary.faction)}
           actions={
             <PickedBattleActions

@@ -7,6 +7,8 @@ export type TooltipUnit = {
   faction: string;
   unitId?: string;
   coords: Point;
+  /** The map position of the system the unit stands in. */
+  tilePosition?: string;
 };
 
 export type AreaType = ({ type: "faction" } & TooltipUnit) | null;
@@ -39,11 +41,12 @@ export function useTabsAndTooltips() {
     unitId: string,
     x: number,
     y: number,
+    tilePosition?: string,
   ) => {
     setActiveArea({ type: "faction", faction, unitId, coords: { x, y } });
     clearHoverTimeout();
     hoverTimeoutRef.current = window.setTimeout(() => {
-      setTooltipUnit({ faction, unitId, coords: { x, y } });
+      setTooltipUnit({ faction, unitId, coords: { x, y }, tilePosition });
       hoverTimeoutRef.current = null;
     }, TOOLTIP_DELAY_MS);
   };

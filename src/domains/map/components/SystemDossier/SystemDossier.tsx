@@ -27,6 +27,8 @@ import {
 } from "./battleCalcLink";
 import { getSystemFeatures, systemAnomalies } from "./featureRules";
 import { capacityOf, summarizeZone } from "./fleetMath";
+import { anomaliesInOrNextTo } from "@/entities/game/anomalies";
+import { fightsAsShip } from "@/entities/game/unitModifiers";
 import {
   arrangeZone,
   Balance,
@@ -167,7 +169,8 @@ function SpaceBand({
   const summaries = summarizeZone(
     tile.unitsByFaction,
     helpers.playerFor,
-    (unit) => unit.isShip,
+    (unit) => unit.isShip || fightsAsShip(unit),
+    anomaliesInOrNextTo(tile, gameData?.tiles),
   );
   const { ordered, sides, roleOf } = arrangeZone(
     summaries,
@@ -183,7 +186,7 @@ function SpaceBand({
         defender,
         helpers.playerFor,
         attacker,
-        (position) => gameData?.tiles?.[position],
+        gameData?.tiles,
       )
     : null;
   const empty = ordered.length === 0 && !pdsInRange?.length;
@@ -210,6 +213,7 @@ function SpaceBand({
           key={summary.faction}
           summary={summary}
           helpers={helpers}
+          tilePosition={tile.position}
           role={roleOf(summary.faction)}
           capacity={capacityOf(summary.rows)}
           actions={
@@ -256,6 +260,7 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
     openUnitSheet({
       unitId: lookupUnit(unitId, faction, owner)?.id ?? unitId,
       color: owner?.color,
+      tilePosition: tile.position,
     });
   };
 
@@ -295,7 +300,11 @@ function TileWell({ tile, helpers }: { tile: Tile; helpers: FactionHelpers }) {
             </SmoothPopover.Target>
             <SmoothPopover.Dropdown className={styles.unitPopover}>
               {unitId && (
-                <UnitDetailsCard unitId={unitId} color={player?.color} />
+                <UnitDetailsCard
+                  unitId={unitId}
+                  color={player?.color}
+                  tilePosition={tile.position}
+                />
               )}
             </SmoothPopover.Dropdown>
           </SmoothPopover>
@@ -423,7 +432,7 @@ function SystemBattleLinks({
     const url =
       picked && picked !== faction
         ? buildPickedSystemBattleUrl(
-            (position) => gameData?.tiles?.[position],
+            gameData?.tiles,
             picks,
             tile,
             faction,
@@ -434,7 +443,7 @@ function SystemBattleLinks({
             faction,
             helpers.playerFor,
             attacker,
-            (position) => gameData?.tiles?.[position],
+            gameData?.tiles,
           );
     if (!url) return null;
     const versus = attacker && attacker !== faction;
@@ -480,7 +489,11 @@ function UnitSheet({
   return (
     <div className={styles.unitSheet} onClick={onClose}>
       <div style={{ zoom: Math.min(1, maxWidth / UNIT_CARD_WIDTH) }}>
-        <UnitDetailsCard unitId={unit.unitId} color={unit.color} />
+        <UnitDetailsCard
+          unitId={unit.unitId}
+          color={unit.color}
+          tilePosition={unit.tilePosition}
+        />
       </div>
     </div>
   );
