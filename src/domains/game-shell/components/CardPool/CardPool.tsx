@@ -7,6 +7,7 @@ import { ExplorationCardBack } from "@/domains/cards/components/ExplorationCardB
 import { SecretDeckCardBack } from "@/domains/cards/components/SecretDeckCardBack";
 import { ActionDeckCardBack } from "@/domains/cards/components/ActionDeckCardBack";
 import { RelicDeckCardBack } from "@/domains/cards/components/RelicDeckCardBack";
+import { AgendaDeckCardBack } from "@/domains/cards/components/AgendaDeckCardBack";
 import { SpliceDeckCardBack, type SpliceDeckKind } from "@/domains/cards/components/SpliceDeckCardBack";
 import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
 
@@ -56,11 +57,16 @@ function CardPool({ cardPool, actionCardsInHands }: Props) {
         discard={cardPool.actionCardDiscard || []}
         fullDeckSize={cardPool.actionCardFullDeckSize}
       />
-      <Cardback
-        src={cdnImage("/player_area/cardback_agenda.png")}
-        alt="agenda cards"
-        count={cardPool.agendaDeckSize ?? "–"}
-      />
+      {cardPool.agendaDeck ? (
+        <AgendaDeckCardBack deck={cardPool.agendaDeck} discard={cardPool.agendaDiscard || []} />
+      ) : (
+        <Cardback
+          src={cdnImage("/player_area/cardback_agenda.png")}
+          alt="agenda cards"
+          label="Agenda Cards"
+          count={cardPool.agendaDeckSize ?? "–"}
+        />
+      )}
       <SecretDeckCardBack
         deck={cardPool.secretObjectiveDeck || []}
         discard={cardPool.secretObjectiveDiscard || []}

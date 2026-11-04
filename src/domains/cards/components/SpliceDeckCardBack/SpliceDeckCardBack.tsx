@@ -81,15 +81,59 @@ type Props = {
   deck: string[];
 };
 
+/** Board order, so each unit's upgrades sit where players expect them. */
+const UNIT_TYPE_ORDER = [
+  "infantry",
+  "mech",
+  "fighter",
+  "pds",
+  "spacedock",
+  "destroyer",
+  "cruiser",
+  "carrier",
+  "dreadnought",
+  "flagship",
+  "warsun",
+];
+
+const UNIT_TYPE_LABEL: Record<string, string> = {
+  pds: "PDS",
+  spacedock: "Space Dock",
+  warsun: "War Sun",
+};
+
+function unitTypeLabel(baseType: string): string {
+  return UNIT_TYPE_LABEL[baseType] ?? baseType.charAt(0).toUpperCase() + baseType.slice(1);
+}
+
+/** The unit upgrade deck split by the unit each card upgrades; unknown ids go last. */
+function unitSections(deck: string[], lookup: (id: string) => DeckCard | undefined) {
+  const byType = new Map<string, string[]>();
+  for (const id of deck) {
+    const type = getUnitData(id)?.baseType ?? "other";
+    byType.set(type, [...(byType.get(type) ?? []), id]);
+  }
+  const rank = (type: string) => {
+    if (type === "other") return Infinity;
+    const index = UNIT_TYPE_ORDER.indexOf(type);
+    return index === -1 ? UNIT_TYPE_ORDER.length : index;
+  };
+  return [...byType.entries()]
+    .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
+    .map(([type, ids]) => ({
+      title: type === "other" ? "Other" : unitTypeLabel(type),
+      count: ids.length,
+      items: processCardData(ids, lookup, "alphanumeric"),
+    }));
+}
+
 /** One of the Twilight's Fall splice decks; click it for the cards still in it. */
 export function SpliceDeckCardBack({ kind, deck }: Props) {
   const { image, title, lookup } = DECKS[kind];
-  const sections = createCardSections(
-    processCardData(deck, lookup, "alphanumeric"),
-    [],
-    deck,
-    [],
-  );
+  const sections =
+    kind === "unit"
+      ? unitSections(deck, lookup)
+      : createCardSections(processCardData(deck, lookup, "alphanumeric"), [], deck, []);
 
   return (
     <CardbackModal imageSrc={cdnImage(image)} alt={title} title={title} count={deck.length}>

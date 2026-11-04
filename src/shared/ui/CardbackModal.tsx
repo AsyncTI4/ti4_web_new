@@ -8,6 +8,8 @@ type CardbackModalProps = {
   imageSrc: string;
   alt: string;
   title: string;
+  /** Hover label naming the deck; defaults to the title. */
+  label?: string;
   count?: string | number | ReactNode;
   children: ReactNode;
   modalSize?: string | number;
@@ -19,6 +21,7 @@ export function CardbackModal({
   imageSrc,
   alt,
   title,
+  label = title,
   count = 0,
   children,
   modalSize = 620,
@@ -31,7 +34,7 @@ export function CardbackModal({
   return (
     <>
       <Stack className={styles.trigger} onClick={() => setOpened(true)}>
-        <Cardback key={cardKey} src={imageSrc} alt={alt} count={count} />
+        <Cardback key={cardKey} src={imageSrc} alt={alt} count={count} label={label} />
       </Stack>
       <AppModal
         opened={opened}
