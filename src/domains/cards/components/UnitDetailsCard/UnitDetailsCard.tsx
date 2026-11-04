@@ -80,7 +80,7 @@ export function UnitDetailsCard({
   const tile = tilePosition ? tiles?.[tilePosition] : undefined;
   const { notes, ...modifiers } = getUnitModifiers(
     unitData,
-    owner?.unitsOwned,
+    owner,
     tile ? anomaliesInOrNextTo(tile, tiles) : undefined,
   );
 

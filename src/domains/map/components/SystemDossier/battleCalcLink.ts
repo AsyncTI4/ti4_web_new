@@ -10,6 +10,7 @@ import {
 } from "@/entities/game/anomalies";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 import {
+  combatTechNames,
   getUnitModifiers,
   isPlayAreaUnitUpgrade,
   modifiedCombatValue,
@@ -115,6 +116,8 @@ const CALC_TECH_EFFECTS: Record<string, string> = {
  * Bastion printing, whose rules differ. Planesplitter counts only in the
  * Fracture, Smothering Presence only next to the king's structures and
  * Munitions Reserves spends trade goods, so they are written apart.
+ * Unrelenting is not here either: it travels in each unit's stats, as −1
+ * combat, like the upgrades kept beside the unit card.
  */
 const CALC_TF_ABILITY_EFFECTS: Record<string, string> = {
   "tf-ambush": "Ambush (TF)",
@@ -124,7 +127,6 @@ const CALC_TF_ABILITY_EFFECTS: Record<string, string> = {
   "tf-nes": "Non-Euclidean Shielding",
   "tf-raidformation": "Raid Formation (TF)",
   "tf-supercharge": "Supercharge (TF)",
-  "tf-unrelenting": "Unrelenting (TF)",
   "tf-vpw": "Valkyrie Particle Weave",
 };
 
@@ -449,18 +451,20 @@ function writeSide(
     damaged[type] = (damaged[type] ?? 0) + sustained;
     const unit = (king && bestOwnedUnit(player, type)) || row.unit;
     /* Upgrades kept beside the card change its rolls (Echo of Ascension,
-       Eidolon Terminus, Eidolon Landwaster): the calculator gets the rolls
+       Eidolon Terminus, Eidolon Landwaster), and so does Unrelenting, +1 to
+       every combat roll of the owner's units: the calculator gets the rolls
        the unit really makes, and keeps a king's own unit abilities. The
        Starlancer XI anomaly bonus travels apart, so it is left out here. */
     const { combatValueModifier, bonusCombatDice } = getUnitModifiers(
       unit,
-      player?.unitsOwned,
+      player,
     );
     if (combatValueModifier || bonusCombatDice) {
       const upgrades = ownedPlayAreaUpgrades(type, player?.unitsOwned)
         .filter((id) => id !== unit.id)
         .map((id) => getUnitData(id)?.name)
-        .filter((name): name is string => !!name);
+        .filter((name): name is string => !!name)
+        .concat(combatTechNames(unit, player));
       stats[type] = unitStats(unit, combatValueModifier, bonusCombatDice);
       names[type] = [unit.name, ...upgrades].join(" + ");
       continue;

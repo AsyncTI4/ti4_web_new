@@ -1,4 +1,4 @@
-import type { Unit } from "@/entities/data/types";
+import type { PlayerData, Unit } from "@/entities/data/types";
 
 /** Why a printed stat is not what the unit rolls with, for the card's footnote. */
 export type UnitModifierNote = {
@@ -22,6 +22,10 @@ const EIDOLON_LANDWASTER = "tf-eidolonlandwaster";
 const VALEFAR_PRIME = "tf-valefarprime";
 const ECHO_OF_ASCENSION = "tf-echoofascension";
 const STARLANCER_XI = "purpletf_mech";
+const UNRELENTING = "tf-unrelenting";
+
+/** What of its owner's play area changes a unit: unit upgrades and techs. */
+export type UnitOwner = Pick<PlayerData, "unitsOwned" | "techs">;
 
 /**
  * Twilight's Fall unit upgrades kept in the play area beside the normal unit
@@ -56,15 +60,17 @@ function signed(value: number) {
  * mech upgrades kept beside the normal mech card (Eidolon Terminus −1 combat,
  * Eidolon Landwaster +1 die, Valefar Prime −1 cost), the flagship one kept
  * beside the normal flagship card (Echo of Ascension −1 combat, +1 die,
- * +1 move, +2 capacity) and, where the unit's
+ * +1 move, +2 capacity), Unrelenting's +1 to every combat roll of the
+ * owner's units (−1 combat) and, where the unit's
  * system is known, Starlancer XI's +1 to its rolls per anomaly it is in or
  * adjacent to.
  */
 export function getUnitModifiers(
   unit: Unit,
-  unitsOwned: string[] | undefined,
+  owner: UnitOwner | undefined,
   anomaliesNearby?: number,
 ): UnitModifiers {
+  const unitsOwned = owner?.unitsOwned;
   const owns = (id: string) =>
     PLAY_AREA_UNIT_UPGRADES[id] === unit.baseType &&
     unit.id !== id &&
@@ -98,6 +104,14 @@ export function getUnitModifiers(
       key: "echo",
       tone: "green",
       text: "−1 combat, +1 die, +1 move, +2 capacity (Echo of Ascension)",
+    });
+  }
+  if (unit.combatHitsOn && owner?.techs?.includes(UNRELENTING)) {
+    combat -= 1;
+    notes.push({
+      key: "unrelenting",
+      tone: "green",
+      text: "−1 combat (Unrelenting)",
     });
   }
   if (unit.id === STARLANCER_XI && anomaliesNearby) {
@@ -138,4 +152,14 @@ export function modifiedCombatValue(
   modifier: number | undefined,
 ): number {
   return Math.max(1, hitsOn + (modifier ?? 0));
+}
+
+/** Names of the owner's techs that change the unit's combat roll. */
+export function combatTechNames(
+  unit: Unit,
+  owner: UnitOwner | undefined,
+): string[] {
+  return unit.combatHitsOn && owner?.techs?.includes(UNRELENTING)
+    ? ["Unrelenting"]
+    : [];
 }
