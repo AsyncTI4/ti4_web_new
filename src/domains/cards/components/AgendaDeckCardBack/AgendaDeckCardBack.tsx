@@ -23,10 +23,43 @@ function toAgendaCard(alias: string) {
 type Props = {
   deck: string[];
   discard: string[];
+  /**
+   * Twilight's Fall: the deck holds the edicts. Every Edict Phase the bot shuffles
+   * all of them, minus laws in play, and the Tyrant picks one of the top three,
+   * so there is no discard.
+   */
+  edicts?: boolean;
+  /** Ids of the laws in play, which can't be drawn as edicts. */
+  lawsInPlay?: string[];
 };
 
 /** The agenda deck; click it for the agendas still in it and the discard pile. */
-export function AgendaDeckCardBack({ deck, discard }: Props) {
+export function AgendaDeckCardBack({ deck, discard, edicts, lawsInPlay = [] }: Props) {
+  if (edicts) {
+    const inPlay = new Set(lawsInPlay);
+    const drawable = deck.filter((id) => !inPlay.has(id));
+    return (
+      <CardbackModal
+        imageSrc={cdnImage("/player_area/cardback_edict.jpg")}
+        alt="edicts"
+        title="Edicts"
+        count={drawable.length}
+      >
+        <CardDetailsModal
+          sections={[
+            {
+              title: "Can be drawn",
+              count: drawable.length,
+              items: processCardData(drawable, toAgendaCard, "alphanumeric"),
+            },
+          ]}
+          showCounts={false}
+          tone="var(--ds-sig-law)"
+        />
+      </CardbackModal>
+    );
+  }
+
   const sections = createCardSections(
     processCardData(deck, toAgendaCard, "alphanumeric"),
     processCardData(discard, toAgendaCard, "alphanumeric"),

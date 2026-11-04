@@ -15,6 +15,8 @@ type Props = {
   cardPool?: CardPoolData;
   /** Action cards held across all players' hands. */
   actionCardsInHands?: number;
+  /** Ids of the laws in play; in Twilight's Fall they can't be drawn as edicts. */
+  lawsInPlay?: string[];
 };
 
 /**
@@ -44,7 +46,7 @@ function spliceDecks(cardPool: CardPoolData) {
 }
 
 /** Deck card backs with the cards left in each; click a deck for its list. */
-function CardPool({ cardPool, actionCardsInHands }: Props) {
+function CardPool({ cardPool, actionCardsInHands, lawsInPlay }: Props) {
   const isTwilightsFallMode = useIsTwilightsFallMode();
   if (!cardPool) {
     return <Text className={styles.empty}>No card pool data available</Text>;
@@ -58,7 +60,12 @@ function CardPool({ cardPool, actionCardsInHands }: Props) {
         fullDeckSize={cardPool.actionCardFullDeckSize}
       />
       {cardPool.agendaDeck ? (
-        <AgendaDeckCardBack deck={cardPool.agendaDeck} discard={cardPool.agendaDiscard || []} />
+        <AgendaDeckCardBack
+          deck={cardPool.agendaDeck}
+          discard={cardPool.agendaDiscard || []}
+          edicts={isTwilightsFallMode}
+          lawsInPlay={lawsInPlay}
+        />
       ) : (
         <Cardback
           src={cdnImage("/player_area/cardback_agenda.png")}

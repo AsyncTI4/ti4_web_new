@@ -57,6 +57,7 @@ function GeneralArea() {
           <CardPool
             cardPool={cardPool}
             actionCardsInHands={playerData?.reduce((sum, p) => sum + (p.acCount ?? 0), 0)}
+            lawsInPlay={lawsInPlay.map((law) => law.id)}
           />
         </GenBox>
         <GenBox label="Laws in play" meta={lawsInPlay.length}>
