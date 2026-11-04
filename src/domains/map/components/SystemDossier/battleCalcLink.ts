@@ -286,7 +286,8 @@ function writeTwilightsFall(
  * The printed stats of a Twilight's Fall unit upgrade, in the calculator's
  * compact form: `c5x2` combat, `a`, `b` and `s` for anti-fighter barrage,
  * bombardment and space cannon, `sd` sustain damage, `ps` planetary shield,
- * `dh` safe from Spark (Direct Hit). The calculator has no model of these
+ * `dh` safe from Spark (Direct Hit), `nf` hits go to non-fighter ships if
+ * able (Justicer Rail). The calculator has no model of these
  * spliced units, so it takes the numbers as they are printed, changed by the
  * modifiers given (from the upgrades kept beside the unit card).
  */
@@ -304,6 +305,10 @@ function unitStats(
   const safeFromSpark =
     unit.canBeDirectHit === false ||
     /cannot be destroyed by "(Spark|Direct Hit)"/i.test(unit.ability ?? "");
+  const hitsToNonFighters =
+    /hits produced by this unit must be assigned to non-fighter ships/i.test(
+      unit.ability ?? "",
+    );
   return [
     ...roll("c", combatHitsOn, combatDice),
     ...roll("a", unit.afbHitsOn, unit.afbDieCount),
@@ -312,6 +317,7 @@ function unitStats(
     ...(unit.sustainDamage ? ["sd"] : []),
     ...(unit.planetaryShield ? ["ps"] : []),
     ...(unit.sustainDamage && safeFromSpark ? ["dh"] : []),
+    ...(hitsToNonFighters ? ["nf"] : []),
   ].join(".");
 }
 
