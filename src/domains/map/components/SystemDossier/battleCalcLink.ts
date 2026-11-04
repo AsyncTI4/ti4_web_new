@@ -10,7 +10,7 @@ import {
 } from "@/entities/game/anomalies";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 import {
-  combatTechNames,
+  combatTechs,
   getUnitModifiers,
   isPlayAreaUnitUpgrade,
   modifiedCombatValue,
@@ -464,7 +464,7 @@ function writeSide(
         .filter((id) => id !== unit.id)
         .map((id) => getUnitData(id)?.name)
         .filter((name): name is string => !!name)
-        .concat(combatTechNames(unit, player));
+        .concat(combatTechs(unit, player).map((tech) => tech.name));
       stats[type] = unitStats(unit, combatValueModifier, bonusCombatDice);
       names[type] = [unit.name, ...upgrades].join(" + ");
       continue;

@@ -154,12 +154,15 @@ export function modifiedCombatValue(
   return Math.max(1, hitsOn + (modifier ?? 0));
 }
 
-/** Names of the owner's techs that change the unit's combat roll. */
-export function combatTechNames(
+/**
+ * The owner's techs that change the unit's combat roll (Unrelenting), with
+ * the faction each comes from, for the unit's name and its upgrade badges.
+ */
+export function combatTechs(
   unit: Unit,
   owner: UnitOwner | undefined,
-): string[] {
+): { name: string; faction: string }[] {
   return unit.combatHitsOn && owner?.techs?.includes(UNRELENTING)
-    ? ["Unrelenting"]
+    ? [{ name: "Unrelenting", faction: "sardakk" }]
     : [];
 }

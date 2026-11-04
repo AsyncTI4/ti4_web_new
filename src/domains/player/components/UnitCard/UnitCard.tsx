@@ -12,7 +12,10 @@ import {
   isNekroFlagship,
 } from "@/entities/lookup/units";
 import { useGameContext } from "@/state/useGameContext";
-import { ownedPlayAreaUpgrades } from "@/entities/game/unitModifiers";
+import {
+  combatTechs,
+  ownedPlayAreaUpgrades,
+} from "@/entities/game/unitModifiers";
 
 type Props = {
   unitId: string;
@@ -70,8 +73,15 @@ export function UnitCard({
     playerUnitsOwned
   );
 
+  /* Techs that change every unit's combat roll (Unrelenting) light the card
+     and add their faction's badge, as the play-area upgrades do. */
+  const combatTechFactions = combatTechs(unitData, playerData).map(
+    (tech) => tech.faction,
+  );
+
   const allUpgradeFactions = Array.from(new Set([
     ...playAreaUpgradeFactions,
+    ...combatTechFactions,
     ...(ownedTwilightsFallUnit?.faction ? [ownedTwilightsFallUnit.faction] : []),
   ]));
   const unitIsUpgraded =
