@@ -40,7 +40,11 @@ export function MapUnitDetailsCard({
       zIndexVar="var(--z-map-unit-details)"
       applyBrowserScale
     >
-      <UnitDetailsCard unitId={unitIdToUse} color={activePlayer?.color} />
+      <UnitDetailsCard
+        unitId={unitIdToUse}
+        color={activePlayer?.color}
+        tilePosition={tooltipUnit.tilePosition}
+      />
     </MapTooltipPositioner>
   );
 }

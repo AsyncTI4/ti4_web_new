@@ -11,7 +11,8 @@ export function useMapTooltips(
     faction: string,
     unitId: string,
     x: number,
-    y: number
+    y: number,
+    tilePosition?: string
   ) => void,
   handleMouseLeave: () => void
 ) {
@@ -29,10 +30,11 @@ export function useMapTooltips(
     faction: string,
     unitId: string,
     x: number,
-    y: number
+    y: number,
+    tilePosition?: string
   ) => {
     setTooltipPlanet(null);
-    handleMouseEnter(faction, unitId, x, y);
+    handleMouseEnter(faction, unitId, x, y, tilePosition);
   };
 
   return {

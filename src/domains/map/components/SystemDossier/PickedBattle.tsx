@@ -59,7 +59,7 @@ export function PickedBattleActions({
   const url =
     attacker && attacker !== faction
       ? buildPickedBattleUrl(
-          (position) => gameData?.tiles?.[position],
+          gameData?.tiles,
           picks,
           tile,
           planetId,

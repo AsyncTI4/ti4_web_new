@@ -1,6 +1,11 @@
 import { createContext, useContext } from "react";
 
-export type SheetUnit = { unitId: string; color?: string };
+export type SheetUnit = {
+  unitId: string;
+  color?: string;
+  /** The map position the unit stands in, for effects of its surroundings. */
+  tilePosition?: string;
+};
 
 /**
  * Set when the dossier shows unit stat cards itself, as a sheet over its own

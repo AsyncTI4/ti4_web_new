@@ -1,6 +1,13 @@
 import { getTileById } from "@/entities/lookup/systems";
 import { getTokenData } from "@/entities/lookup/tokens";
 import type { Tile } from "@/entities/game/types";
+import {
+  SYSTEM_ANOMALY_FLAGS,
+  TOKEN_ANOMALY_FLAGS,
+  wormholesOnTile,
+} from "@/entities/game/anomalies";
+
+export { systemAnomalies } from "@/entities/game/anomalies";
 
 /**
  * One movement-relevant fact about a system, with the rule that governs it.
@@ -101,22 +108,6 @@ const BORDER_RULES: Record<string, { name: string; rule: string }> = {
   },
 };
 
-/** System-data flags paired with the anomaly each one marks. */
-const SYSTEM_ANOMALY_FLAGS = [
-  ["isAsteroidField", "asteroidField"],
-  ["isNebula", "nebula"],
-  ["isSupernova", "supernova"],
-  ["isGravityRift", "gravityRift"],
-  ["isScar", "entropicScar"],
-] as const;
-
-/** Token-data flags that turn a token into an anomaly, in precedence order. */
-const TOKEN_ANOMALY_FLAGS = [
-  ["isScar", "entropicScar"],
-  ["isRift", "gravityRift"],
-  ["isNebula", "nebula"],
-] as const;
-
 /** Hex sides in tile-direction order, for naming a border anomaly's edge. */
 const EDGE_NAMES = ["N", "NE", "SE", "S", "SW", "NW"];
 
@@ -125,18 +116,6 @@ function titleCaseFromId(id: string): string {
     .replace(/[_-]+/g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-function wormholesOnTile(tile: Tile): string[] {
-  const tileData = getTileById(tile.systemId);
-  const printed = (tileData?.wormholes ?? []).filter(
-    (w): w is string => w !== null,
-  );
-  const fromTokens = tile.tokens.flatMap(
-    (tokenId) => getTokenData(tokenId)?.wormholes ?? [],
-  );
-
-  return [...new Set([...printed, ...fromTokens].map((w) => w.toUpperCase()))];
 }
 
 /** Ring positions of every other system sharing this wormhole type. */
@@ -153,23 +132,6 @@ function linkedPositions(
     )
     .map((tile) => tile.position)
     .sort();
-}
-
-type AnomalyId = (typeof SYSTEM_ANOMALY_FLAGS)[number][1];
-
-/**
- * The anomalies in force in a system, whether printed on the tile or brought
- * by a token placed on it.
- */
-export function systemAnomalies(tile: Tile): AnomalyId[] {
-  const tileData = getTileById(tile.systemId);
-  const printed = SYSTEM_ANOMALY_FLAGS.filter(([flag]) => tileData?.[flag]);
-  const fromTokens = tile.tokens.flatMap((tokenId) => {
-    const tokenData = getTokenData(tokenId);
-    return TOKEN_ANOMALY_FLAGS.filter(([flag]) => tokenData?.[flag]);
-  });
-
-  return [...new Set([...printed, ...fromTokens].map(([, id]) => id))];
 }
 
 export function getSystemFeatures(

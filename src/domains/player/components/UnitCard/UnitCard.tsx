@@ -137,9 +137,6 @@ export function UnitCard({
         <UnitDetailsCard
           unitId={unitId}
           color={color}
-          bonusCombatDice={hasNaazMechUpgrade ? 1 : undefined}
-          combatValueModifier={hasCabalMechUpgrade ? -1 : undefined}
-          costModifier={hasNekroMechUpgrade ? -1 : undefined}
           playerUnitsOwned={
             unitId === "pinktf_flagship" ? playerUnitsOwned : undefined
           }

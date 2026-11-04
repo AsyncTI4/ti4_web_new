@@ -15,6 +15,7 @@ type Props = {
     unitId: string,
     x: number,
     y: number,
+    tilePosition?: string,
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;
@@ -89,6 +90,7 @@ export function UnitImagesLayer({
                     stack.entityId,
                     position.x + stack.x,
                     position.y + stack.y,
+                    mapTile.position,
                   )
               : undefined
           }

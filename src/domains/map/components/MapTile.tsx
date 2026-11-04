@@ -37,6 +37,7 @@ type Props = {
     unitId: string,
     x: number,
     y: number,
+    tilePosition?: string,
   ) => void;
   onUnitMouseLeave?: () => void;
   onUnitSelect?: (faction: string) => void;

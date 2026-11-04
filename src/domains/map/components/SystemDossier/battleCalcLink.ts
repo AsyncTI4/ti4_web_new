@@ -1,9 +1,13 @@
 import type { GameState, PlayerData, Unit } from "@/entities/data/types";
 import type { Tile, TilePlanet } from "@/entities/game/types";
 import type { BattleAttackerPick } from "@/state/appStore";
-import { tileAdjacencies } from "@/entities/data/tileAdjacencies";
 import { getUnitData } from "@/entities/lookup/units";
-import { systemAnomalies } from "./featureRules";
+import {
+  anomaliesInOrNextTo,
+  neighbourTiles,
+  systemAnomalies,
+  type Tiles,
+} from "@/entities/game/anomalies";
 import { summarizeZone, type UnitRow } from "./fleetMath";
 
 const BATTLE_CALC_URL = "https://ti4calc.leviatas.com/";
@@ -194,34 +198,15 @@ const isInFracture = (tile: Tile) => tile.position.startsWith("frac");
 function hasStructureInOrNextTo(
   faction: string,
   battleTile: Tile,
-  tileAt: TileAt | undefined,
+  tiles: Tiles | undefined,
   playerFor: PlayerFor,
 ): boolean {
-  return [battleTile, ...neighbourTiles(battleTile, tileAt)].some((tile) =>
+  return [battleTile, ...neighbourTiles(battleTile, tiles)].some((tile) =>
     [tile, ...Object.values(tile.planets)].some((zone) =>
       factionRows(zone.unitsByFaction, faction, playerFor).some(
         (row) => !!row.unit.isStructure,
       ),
     ),
-  );
-}
-
-/** The systems next to this one on the map that the lookup knows. */
-function neighbourTiles(tile: Tile, tileAt: TileAt | undefined): Tile[] {
-  return (tileAdjacencies[tile.position] ?? [])
-    .filter((position): position is string => !!position)
-    .map((position) => tileAt?.(position))
-    .filter((neighbour): neighbour is Tile => !!neighbour);
-}
-
-/**
- * Anomalies a unit in this system is in or adjacent to: those of the system
- * itself and of each system next to it, printed or from a token.
- */
-function anomaliesInOrNextTo(tile: Tile, tileAt: TileAt | undefined): number {
-  return [tile, ...neighbourTiles(tile, tileAt)].reduce(
-    (sum, system) => sum + systemAnomalies(system).length,
-    0,
   );
 }
 
@@ -231,7 +216,7 @@ type KingContext = {
   faction: string;
   playerFor: PlayerFor;
   battleTile: Tile;
-  tileAt: TileAt | undefined;
+  tiles: Tiles | undefined;
   /** Whether the side brings mechs to the fight. */
   hasMechs: boolean;
 };
@@ -265,7 +250,7 @@ function writeTwilightsFall(
     hasStructureInOrNextTo(
       context.faction,
       context.battleTile,
-      context.tileAt,
+      context.tiles,
       context.playerFor,
     )
   ) {
@@ -275,7 +260,7 @@ function writeTwilightsFall(
     CALC_FACTIONS[context.faction.toLowerCase()] === IL_NA_VIROSET &&
     context.hasMechs
   ) {
-    const anomalies = anomaliesInOrNextTo(context.battleTile, context.tileAt);
+    const anomalies = anomaliesInOrNextTo(context.battleTile, context.tiles);
     if (anomalies > 0) {
       params.set(
         `${side}-effect-Starlancer XI anomaly bonus`,
@@ -362,7 +347,6 @@ function bestOwnedUnit(
 }
 
 type PlayerFor = (faction: string) => PlayerData | undefined;
-type TileAt = (position: string) => Tile | undefined;
 type BattlePlace = "space" | "ground";
 type Side = "attacker" | "defender";
 type Force = { faction: string; rows: UnitRow[] };
@@ -395,7 +379,7 @@ function writeSide(
   { faction, rows }: Force,
   playerFor: PlayerFor,
   battleTile: Tile,
-  tileAt?: TileAt,
+  tiles?: Tiles,
 ): boolean {
   const counts: Record<string, number> = {};
   const damaged: Record<string, number> = {};
@@ -454,7 +438,7 @@ function writeSide(
       faction,
       playerFor,
       battleTile,
-      tileAt,
+      tiles,
       hasMechs: (counts.mech ?? 0) > 0,
     });
   }
@@ -519,13 +503,13 @@ function buildBattleUrl(
   attacker: Force | null,
   place: BattlePlace,
   playerFor: PlayerFor,
-  tileAt?: TileAt,
+  tiles?: Tiles,
 ): string | null {
   const params = new URLSearchParams();
   if (attacker) {
-    writeSide(params, "attacker", attacker, playerFor, tile, tileAt);
+    writeSide(params, "attacker", attacker, playerFor, tile, tiles);
   }
-  if (!writeSide(params, "defender", defender, playerFor, tile, tileAt)) {
+  if (!writeSide(params, "defender", defender, playerFor, tile, tiles)) {
     return null;
   }
   writeTerrain(params, tile, place);
@@ -625,7 +609,7 @@ export function buildSpaceBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
-  tileAt?: TileAt,
+  tiles?: Tiles,
 ): string | null {
   const shipsOf = (side: string) =>
     factionRows(tile.unitsByFaction, side, playerFor).filter(isShip);
@@ -647,7 +631,7 @@ export function buildSpaceBattleUrl(
     fight.attacker,
     "space",
     playerFor,
-    tileAt,
+    tiles,
   );
 }
 
@@ -662,7 +646,7 @@ export function buildGroundBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
-  tileAt?: TileAt,
+  tiles?: Tiles,
 ): string | null {
   const onPlanet = (side: string) =>
     factionRows(planet.unitsByFaction, side, playerFor);
@@ -690,7 +674,7 @@ export function buildGroundBattleUrl(
     fight.attacker,
     "ground",
     playerFor,
-    tileAt,
+    tiles,
   );
 }
 
@@ -719,7 +703,7 @@ export function buildSystemBattleUrl(
   faction: string,
   playerFor: PlayerFor,
   attacker: string | null = null,
-  tileAt?: TileAt,
+  tiles?: Tiles,
 ): string | null {
   const rowsFor = (side: string) => systemRows(tile, side, playerFor);
   const fight = matchUp(faction, attacker, factionsInSystem(tile), rowsFor);
@@ -729,7 +713,7 @@ export function buildSystemBattleUrl(
     fight.attacker,
     "space",
     playerFor,
-    tileAt,
+    tiles,
   );
 }
 
@@ -740,14 +724,14 @@ export function buildSystemBattleUrl(
  * however many zones of the system are picked.
  */
 function pickedAttackerRows(
-  tileAt: TileAt,
+  tiles: Tiles,
   picks: BattleAttackerPick[],
   playerFor: PlayerFor,
 ): UnitRow[] {
   const rows: UnitRow[] = [];
   const positions = new Set(picks.map((pick) => pick.position));
   for (const position of positions) {
-    const tile = tileAt(position);
+    const tile = tiles[position];
     if (!tile) continue;
     for (const pick of picks) {
       if (pick.position !== position || !pick.planetId) continue;
@@ -777,7 +761,7 @@ function pickedAttackerRows(
  * can use.
  */
 export function buildPickedBattleUrl(
-  tileAt: TileAt,
+  tiles: Tiles,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defenderPlanetId: string | null,
@@ -802,7 +786,7 @@ export function buildPickedBattleUrl(
       ];
 
   return pickedBattleUrl(
-    tileAt,
+    tiles,
     picks,
     defenderTile,
     { faction: defenderFaction, rows: defenderRows },
@@ -818,14 +802,14 @@ export function buildPickedBattleUrl(
  * calculator's own space/ground switch then reuses the same forces.
  */
 export function buildPickedSystemBattleUrl(
-  tileAt: TileAt,
+  tiles: Tiles,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defenderFaction: string,
   playerFor: PlayerFor,
 ): string | null {
   return pickedBattleUrl(
-    tileAt,
+    tiles,
     picks,
     defenderTile,
     {
@@ -839,7 +823,7 @@ export function buildPickedSystemBattleUrl(
 
 /** The picked attacker against a defender's force, in the defender's terrain. */
 function pickedBattleUrl(
-  tileAt: TileAt,
+  tiles: Tiles,
   picks: BattleAttackerPick[],
   defenderTile: Tile,
   defender: Force,
@@ -850,15 +834,15 @@ function pickedBattleUrl(
   const params = new URLSearchParams();
   const attacker = {
     faction: picks[0].faction,
-    rows: pickedAttackerRows(tileAt, picks, playerFor),
+    rows: pickedAttackerRows(tiles, picks, playerFor),
   };
   if (
-    !writeSide(params, "attacker", attacker, playerFor, defenderTile, tileAt)
+    !writeSide(params, "attacker", attacker, playerFor, defenderTile, tiles)
   ) {
     return null;
   }
   if (
-    !writeSide(params, "defender", defender, playerFor, defenderTile, tileAt)
+    !writeSide(params, "defender", defender, playerFor, defenderTile, tiles)
   ) {
     return null;
   }

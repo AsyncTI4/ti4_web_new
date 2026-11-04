@@ -5,6 +5,10 @@ import { cdnImage } from "@/entities/data/cdnImage";
 import { TECH_PREREQ_ICON } from "@/entities/lookup/tech";
 import type { Unit } from "@/entities/data/types";
 import {
+  modifiedCombatValue,
+  type UnitModifierNote,
+} from "@/entities/game/unitModifiers";
+import {
   DICE_ABILITIES,
   type AssimilatedAbility,
   type getUpgradeInfo,
@@ -29,19 +33,19 @@ function StatBox({ label, children }: { label: string; children: ReactNode }) {
 
 function ModifiedValue({
   base,
-  modifier,
+  modified,
 }: {
   base: number;
-  modifier?: number;
+  modified: number;
 }) {
-  if (!modifier) return base;
+  if (modified === base) return base;
   return (
     <>
       <Text component="span" c="gray.6" td="line-through" fz="xs" mr={3}>
         {base}
       </Text>
       <Text component="span" c="green.4">
-        {base + modifier}
+        {modified}
       </Text>
     </>
   );
@@ -53,10 +57,6 @@ function InheritedTag() {
       inherited
     </Text>
   );
-}
-
-function signed(value: number) {
-  return `${value > 0 ? "+" : ""}${value}`;
 }
 
 export function UnitStats({
@@ -75,7 +75,10 @@ export function UnitStats({
     <Group gap={8}>
       <StatBox label="Cost">
         {unit.cost != null ? (
-          <ModifiedValue base={unit.cost} modifier={costModifier} />
+          <ModifiedValue
+            base={unit.cost}
+            modified={Math.max(0, unit.cost + (costModifier ?? 0))}
+          />
         ) : (
           "—"
         )}
@@ -85,7 +88,10 @@ export function UnitStats({
           <>
             <ModifiedValue
               base={unit.combatHitsOn}
-              modifier={combatValueModifier}
+              modified={modifiedCombatValue(
+                unit.combatHitsOn,
+                combatValueModifier,
+              )}
             />
             {showDice && (
               <Text
@@ -108,47 +114,16 @@ export function UnitStats({
   );
 }
 
-export function ModifierAttribution({
-  bonusCombatDice,
-  combatValueModifier,
-  costModifier,
-}: {
-  bonusCombatDice?: number;
-  combatValueModifier?: number;
-  costModifier?: number;
-}) {
-  const parts = [
-    costModifier
-      ? {
-          key: "cost",
-          color: "green.5",
-          text: `${signed(costModifier)} cost (Valefar Prime)`,
-        }
-      : null,
-    combatValueModifier
-      ? {
-          key: "combat",
-          color: "green.5",
-          text: `${signed(combatValueModifier)} combat (Eidolon Terminus)`,
-        }
-      : null,
-    bonusCombatDice
-      ? {
-          key: "dice",
-          color: "violet.4",
-          text: `+${bonusCombatDice} die (Eidolon Landwaster)`,
-        }
-      : null,
-  ].filter((part) => part !== null);
-  if (parts.length === 0) return null;
+export function ModifierAttribution({ notes }: { notes: UnitModifierNote[] }) {
+  if (notes.length === 0) return null;
 
   return (
     <Text size="xs" c="gray.5" className={styles.modifierAttribution}>
-      {parts.map((part, index) => (
-        <Fragment key={part.key}>
+      {notes.map((note, index) => (
+        <Fragment key={note.key}>
           {index > 0 && " · "}
-          <Text component="span" c={part.color}>
-            {part.text}
+          <Text component="span" c={note.tone === "violet" ? "violet.4" : "green.5"}>
+            {note.text}
           </Text>
         </Fragment>
       ))}
