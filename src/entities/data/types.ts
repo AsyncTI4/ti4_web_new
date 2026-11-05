@@ -368,6 +368,10 @@ export type PlayerDataResponse = {
   actionsJumpLink?: string;
   scoreBreakdowns?: Record<string, WebScoreBreakdown>;
   borderAnomalies?: BorderAnomalyInfo[];
+  /** Position -> 6x6 connection matrix for custom ("hl") hyperlane tiles. */
+  customHyperlanes?: Record<string, string>;
+  /** How one-way custom hyperlanes are drawn: DASHED, ARROWS, FADING or GATES. */
+  customHyperlaneStyle?: string;
   isTwilightsFallMode?: boolean;
   gameState?: GameState;
   /** Increments whenever new game events are available; used to invalidate the events query without polling. */

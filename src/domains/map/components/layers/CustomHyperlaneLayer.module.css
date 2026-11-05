@@ -1,0 +1,9 @@
+.lanes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 345px;
+  height: 299px;
+  pointer-events: none;
+  z-index: var(--z-anomaly-overlay);
+}
