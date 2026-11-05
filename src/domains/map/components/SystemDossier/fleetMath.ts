@@ -68,7 +68,7 @@ function collectUnitRows(
       unit,
       count: entity.count,
       sustained: entity.sustained ?? 0,
-      modifiers: getUnitModifiers(unit, playerData?.unitsOwned, anomaliesNearby),
+      modifiers: getUnitModifiers(unit, playerData, anomaliesNearby),
     });
   }
   return rows;
