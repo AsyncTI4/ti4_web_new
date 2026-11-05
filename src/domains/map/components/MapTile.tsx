@@ -13,6 +13,8 @@ import { PdsOverlayLayer } from "./layers/PdsOverlayLayer";
 import { PlanetaryShieldOverlayLayer } from "./layers/PlanetaryShieldOverlayLayer";
 import { AnomalyOverlay } from "./layers/AnomalyOverlay";
 import { BorderAnomalyLayer } from "./layers/BorderAnomalyLayer";
+import { CustomHyperlaneLayer } from "./layers/CustomHyperlaneLayer";
+import { CUSTOM_HYPERLANE_TILE_ID } from "@/entities/game/customHyperlanes";
 import {
   HEX_PATH,
   TILE_HEIGHT,
@@ -138,11 +140,19 @@ export const MapTile = React.memo<Props>(
         >
           <Tile
             systemId={systemId}
+            customHyperlane={mapTile.customHyperlane}
             className={classes.tile}
             data-map-tile-visual="true"
             {...(!embedded &&
               searchTarget(searchKey("system", ringPosition), "map-tile"))}
           />
+
+          {systemId === CUSTOM_HYPERLANE_TILE_ID && (
+            <CustomHyperlaneLayer
+              matrix={mapTile.customHyperlane}
+              style={gameData?.customHyperlaneStyle ?? "DASHED"}
+            />
+          )}
 
           {dossierEligible && <SystemHexTarget onOpen={handleDossierOpen} />}
 

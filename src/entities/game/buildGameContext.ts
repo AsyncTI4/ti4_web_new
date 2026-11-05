@@ -1,4 +1,8 @@
 import {
+  CUSTOM_HYPERLANE_TILE_ID,
+  toHyperlaneStyle,
+} from "@/entities/game/customHyperlanes";
+import {
   calculateSingleTilePosition,
   calculateTilePositions,
   getFractureYBump,
@@ -223,6 +227,7 @@ type TileBuildContext = {
   playerData: PlayerData[];
   exhaustedPlanets: Set<string>;
   borderAnomaliesByTile: Record<string, BorderAnomalyInfo[]>;
+  customHyperlanes: Record<string, string>;
 };
 
 function buildPlanets(
@@ -273,6 +278,10 @@ function buildPrePlacementTile(
     hasAttachments: hasAttachments(planets),
     controlledBy: getTileController(planets, spaceUnitsByFaction),
     borderAnomalies: context.borderAnomaliesByTile[position],
+    customHyperlane:
+      systemId === CUSTOM_HYPERLANE_TILE_ID
+        ? context.customHyperlanes[position]
+        : undefined,
   };
 }
 
@@ -357,6 +366,7 @@ export function buildGameContext(
     playerData,
     exhaustedPlanets: allExhaustedPlanets,
     borderAnomaliesByTile,
+    customHyperlanes: data.customHyperlanes ?? {},
   };
 
   const tiles: Record<string, Tile> = {};
@@ -435,6 +445,7 @@ export function buildGameContext(
     expeditions: data.expeditions,
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,
+    customHyperlaneStyle: toHyperlaneStyle(data.customHyperlaneStyle),
   };
 
   endBuildGameContextMeasure({

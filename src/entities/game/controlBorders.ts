@@ -9,15 +9,15 @@ export function computeControlOpenSides(tiles: Tile[]): ControlOpenSides {
   const hyperlaneSidesByPosition = new Map<string, Set<number>>();
   const openSidesByPosition: ControlOpenSides = {};
 
-  const getActiveSidesForPosition = (
-    position: string,
-    systemId: string
-  ): Set<number> => {
-    const cached = hyperlaneSidesByPosition.get(position);
+  const getActiveSidesForTile = (hyperlaneTile: Tile): Set<number> => {
+    const cached = hyperlaneSidesByPosition.get(hyperlaneTile.position);
     if (cached) return cached;
 
-    const activeSides = getHyperlaneActiveSides(systemId);
-    hyperlaneSidesByPosition.set(position, activeSides);
+    const activeSides = getHyperlaneActiveSides(
+      hyperlaneTile.systemId,
+      hyperlaneTile.customHyperlane
+    );
+    hyperlaneSidesByPosition.set(hyperlaneTile.position, activeSides);
     return activeSides;
   };
 
@@ -39,10 +39,7 @@ export function computeControlOpenSides(tiles: Tile[]): ControlOpenSides {
       if (!adjacentTile || adjacentTile.controlledBy !== faction) continue;
 
       if (currentIsHyperlane) {
-        const activeSides = getActiveSidesForPosition(
-          tile.position,
-          tile.systemId
-        );
+        const activeSides = getActiveSidesForTile(tile);
         if (!activeSides.has(direction)) continue;
       }
 
@@ -54,10 +51,7 @@ export function computeControlOpenSides(tiles: Tile[]): ControlOpenSides {
         );
         if (neighborSide === -1) continue;
 
-        const activeSides = getActiveSidesForPosition(
-          adjacentPos,
-          adjacentTile.systemId
-        );
+        const activeSides = getActiveSidesForTile(adjacentTile);
         if (!activeSides.has(neighborSide)) continue;
       }
 

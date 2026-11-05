@@ -1,3 +1,4 @@
+import type { HyperlaneStyle } from "@/entities/game/customHyperlanes";
 import { calculateTilePositions } from "@/entities/geometry/tilePositioning";
 import type {
   PlayerDataResponse,
@@ -78,6 +79,7 @@ export type GameData = {
   expeditions: PlayerDataResponse["expeditions"];
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
+  customHyperlaneStyle: HyperlaneStyle;
 };
 
 export type Tile = {
@@ -104,6 +106,8 @@ export type Tile = {
   commandCounters: string[];
   entityPlacements: EntityStack[];
   borderAnomalies?: BorderAnomalyInfo[];
+  /** Connection matrix of a custom ("hl") hyperlane tile. */
+  customHyperlane?: string;
 };
 
 export type PrePlacementTile = Omit<Tile, "entityPlacements">;
