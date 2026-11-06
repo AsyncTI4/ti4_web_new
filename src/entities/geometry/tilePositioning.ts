@@ -62,12 +62,17 @@ const EXPANDED_FRACTURE_POSITIONS = new Set(
   Array.from({ length: 18 }, (_, index) => `frac${index + 8}`),
 );
 
-/** True when all seven fracture positions appear in the "position:systemId" entries. */
+/**
+ * True when any fracture position appears in the "position:systemId" entries, as the
+ * bot's renderer decides (FractureService.isFractureRegionOnMap). A Fog of War seat
+ * only gets the fracture tiles it has seen; requiring all seven dropped the shift for
+ * that seat and slid the fracture row onto the regular tiles.
+ */
 function isFractureInPlay(tilePositions: string[]): boolean {
   const positionSet = new Set(
     tilePositions.map((entry) => entry.split(":")[0])
   );
-  return FRACTURE_POSITIONS.every((pos) => positionSet.has(pos));
+  return FRACTURE_POSITIONS.some((pos) => positionSet.has(pos));
 }
 
 /** External position IDs must match an own entry, never an Object prototype key. */

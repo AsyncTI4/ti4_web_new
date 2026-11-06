@@ -150,3 +150,19 @@
     opacity: 1;
   }
 }
+
+/* Fog of War: a system out of sight, shown as the viewer last saw it. */
+.remembered {
+  filter: grayscale(0.75) brightness(0.45);
+}
+
+.fogLabel {
+  position: absolute;
+  transform: translateX(-50%);
+  color: var(--ds-dark-0, #e9ecef);
+  font-size: 22px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 0 6px #000, 0 0 2px #000;
+  pointer-events: none;
+}

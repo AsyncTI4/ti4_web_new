@@ -80,6 +80,7 @@ export type GameData = {
   planetIdToPlanetTile: Record<string, TilePlanet>;
   isTwilightsFallMode?: boolean;
   customHyperlaneStyle: HyperlaneStyle;
+  fogTiles?: PlayerDataResponse["fogTiles"];
 };
 
 export type Tile = {

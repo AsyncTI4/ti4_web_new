@@ -100,6 +100,9 @@ export const MapTile = React.memo<Props>(
     const tapOpensDossier = dossierEligible && isMobileDevice();
 
     const controllingFaction = mapTile.controlledBy;
+    /* Fog of War: a system the viewer cannot see right now, drawn from memory. */
+    const fogLabel = gameData?.fogTiles?.[ringPosition];
+    const isRemembered = fogLabel !== undefined;
 
     const getTileOpacity = () => {
       if (techSkipsMode && attachmentsMode) {
@@ -136,7 +139,7 @@ export const MapTile = React.memo<Props>(
         <div
           className={`${classes.tileContainer} ${
             dossierEligible ? classes.dossierEligible : ""
-          }`}
+          } ${isRemembered ? classes.remembered : ""}`}
         >
           <Tile
             systemId={systemId}
@@ -240,6 +243,14 @@ export const MapTile = React.memo<Props>(
             />
           )}
         </div>
+        {fogLabel && (
+          <div
+            className={classes.fogLabel}
+            style={{ left: TILE_WIDTH / 2, top: TILE_HEIGHT * 0.7 }}
+          >
+            {fogLabel}
+          </div>
+        )}
       </div>
     );
   },

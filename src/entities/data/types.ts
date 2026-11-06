@@ -376,6 +376,24 @@ export type PlayerDataResponse = {
   gameState?: GameState;
   /** Increments whenever new game events are available; used to invalidate the events query without polling. */
   eventSequence?: number;
+  /** Fog of War only: position -> memory label for systems the viewer cannot see right now. */
+  fogTiles?: Record<string, string>;
+  /** Fog of War only: whose eyes this document was built for. */
+  fogView?: FogView;
+};
+
+export type FogSeat = {
+  faction: string;
+  color: string;
+  userName: string;
+};
+
+export type FogView = {
+  role: "player" | "gm";
+  /** The seat the map is fogged for; null when a GM sees the whole game. */
+  viewingAs: string | null;
+  /** GM only: every seat the GM can view the map as. */
+  seats?: FogSeat[];
 };
 
 type GameEventArchetype =
@@ -618,6 +636,8 @@ export type PlotCard = {
 };
 
 export type PlayerData = {
+  /** Fog of War: a player the viewer cannot identify, known only by color. */
+  fogHidden?: boolean;
   breakthrough?: BreakthroughData;
   plotCards?: PlotCard[];
   discordId: string;

@@ -425,7 +425,7 @@ export function buildGameContext(
     tilesWithPds,
     pdsByTile,
     armyRankings,
-    playerData: playerDataWithOverrides,
+    playerData: playerDataWithOverrides.filter((player) => !player.fogHidden),
     objectives: data.objectives,
     lawsInPlay: data.lawsInPlay,
     strategyCards: data.strategyCards,
@@ -446,6 +446,7 @@ export function buildGameContext(
     planetIdToPlanetTile,
     isTwilightsFallMode: data.isTwilightsFallMode,
     customHyperlaneStyle: toHyperlaneStyle(data.customHyperlaneStyle),
+    fogTiles: data.fogTiles,
   };
 
   endBuildGameContextMeasure({
