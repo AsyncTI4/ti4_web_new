@@ -59,6 +59,7 @@ export function Nombox({ capturedUnits }: Props) {
                           faction={factionName}
                           className={styles.compactUnitImage}
                           scaleSprite
+                          showFactionTokens={false}
                         />
                       </Box>
                       <Text className={styles.compactCountBadge}>×{count}</Text>

@@ -19,7 +19,7 @@ import { getUnitSprite } from "./Unit/unitSprites";
 type UnitProps = {
   unitType: string;
   colorAlias: string;
-  playerTechs: string[];
+  playerTechs?: string[];
   faction?: string;
   sustained?: boolean;
   bgDecalPath?: string;
@@ -41,7 +41,7 @@ type UnitProps = {
 export function Unit({
   unitType,
   colorAlias,
-  playerTechs,
+  playerTechs = [],
   faction,
   alt,
   sustained,
