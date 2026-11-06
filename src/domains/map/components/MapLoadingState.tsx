@@ -1,5 +1,6 @@
 import { useGameDataState } from "@/state/useGameContext";
 import { GameDataFetchError } from "@/api/usePlayerData";
+import { isFogOfWarGameId } from "@/api/useFogViewAs";
 import { MapSurveyLoader } from "@/shared/ui/primitives/MapSurveyLoader";
 
 type Props = {
@@ -11,13 +12,26 @@ type Props = {
  * id and no amount of retrying fixes it; a 5xx is the bot being busy, which
  * retrying usually does.
  */
-function describeFailure(error: Error | null): string | undefined {
+function describeFailure(
+  error: Error | null,
+  gameId: string,
+): string | undefined {
   if (!(error instanceof GameDataFetchError)) return undefined;
+  const fog = isFogOfWarGameId(gameId);
   if (error.status === 404) {
     return "No game data exists under this id. Check the game name, or ask the bot to rebuild it.";
   }
-  if (error.status === 403 || error.status === 401) {
-    return "This game's data is not public. Log in with the Discord account that plays in it.";
+  /* 401: nobody is logged in (or the login expired). 403: someone is logged in,
+     but that Discord account has no seat in this game. They need different advice. */
+  if (error.status === 401) {
+    return fog
+      ? "This is a Fog of War game. Log in with Discord to view your personalized map."
+      : "This game's data is not public. Log in with the Discord account that plays in it.";
+  }
+  if (error.status === 403) {
+    return fog
+      ? "This is a Fog of War game and you are not a participant. Only players in this game can view the map."
+      : "Your Discord account is not a player in this game, so its data is not available to you.";
   }
   if (error.status >= 500) {
     return `The game data service answered ${error.status}. Nothing has changed on the board — a retry usually clears it.`;
@@ -39,7 +53,7 @@ export function MapLoadingState({ gameId }: Props) {
       gameId={gameId}
       status={failed ? "failed" : "surveying"}
       errorMessage={
-        failed ? describeFailure(dataState?.error ?? null) : undefined
+        failed ? describeFailure(dataState?.error ?? null, gameId) : undefined
       }
       onRetry={failed ? dataState?.refetch : undefined}
     />
