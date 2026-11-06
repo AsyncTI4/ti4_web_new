@@ -1,14 +1,14 @@
 {
   "name": "ti4-web",
   "private": true,
-  "version": "1.7.11",
+  "version": "1.7.12",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc -b"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
