@@ -1,14 +1,10 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import GameMapPage from "./GameMapPage";
 import { GamePage } from "@/pages/image-map/GamePage";
 
 const OLD_UI_KEY = "showOldUI";
 
 export default function MapTogglePage() {
-  const params = useParams<{ mapid: string }>();
-  const gameId = params.mapid ?? "";
-  const isFowGame = gameId.toLowerCase().startsWith("fow");
   const [showOldUI, setShowOldUI] = useState(
     () => localStorage.getItem(OLD_UI_KEY) === "true"
   );
@@ -23,9 +19,8 @@ export default function MapTogglePage() {
     setShowOldUI(false);
   };
 
-  // FoW games always use old UI (which handles auth errors properly)
-  if (isFowGame || showOldUI) {
-    return <GamePage onShowNewUI={isFowGame ? undefined : handleShowNewUI} />;
+  if (showOldUI) {
+    return <GamePage onShowNewUI={handleShowNewUI} />;
   }
 
   return <GameMapPage onShowOldUI={handleShowOldUI} />;

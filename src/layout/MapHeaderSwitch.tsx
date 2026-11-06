@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Button } from "@/ds";
 import { SiteHeader } from "@/layout/SiteHeader";
 import hud from "@/shared/ui/hudChrome.module.css";
@@ -7,6 +8,7 @@ type MapHeaderSwitchProps = {
   buttonLabel: string;
   onButtonClick?: () => void;
   hideOnMobile?: boolean;
+  children?: ReactNode;
 };
 
 /**
@@ -18,9 +20,11 @@ export function MapHeaderSwitch({
   buttonLabel,
   onButtonClick,
   hideOnMobile,
+  children,
 }: MapHeaderSwitchProps) {
   return (
     <SiteHeader currentMapId={gameId}>
+      {children}
       <Button
         variant="default"
         size="xs"

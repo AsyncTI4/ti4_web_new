@@ -3,6 +3,9 @@ import { PlayerDataResponse, GameStateMessage } from "@/entities/data/types";
 import { useGameSocket } from "./useGameSocket";
 import { useRef } from "react";
 import { config } from "@/config";
+import { authenticatedFetch } from "@/api/auth/authenticatedFetch";
+import { getLocalUser } from "@/api/auth/useUser";
+import { isFogOfWarGameId, useFogViewAs } from "./useFogViewAs";
 
 // RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
 function deepMergePatch<T>(base: T, patch: unknown): T {
@@ -39,10 +42,20 @@ export class GameDataFetchError extends Error {
   }
 }
 
+/*
+ * Fog of War web data is fogged for whoever asks, so it goes out with the login
+ * token; a GM can also ask for one seat's view. Other games stay anonymous.
+ */
 async function fetchPlayerData(
-  gameId: string
+  gameId: string,
+  viewAs: string | null
 ): Promise<PlayerDataResponse> {
-  const response = await fetch(`${config.api.gameDataUrl}/${gameId}/web-data`);
+  const query = viewAs ? `?viewAs=${encodeURIComponent(viewAs)}` : "";
+  const url = `${config.api.gameDataUrl}/${gameId}/web-data${query}`;
+  const response =
+    isFogOfWarGameId(gameId) && getLocalUser()?.token
+      ? await authenticatedFetch(url)
+      : await fetch(url);
   if (!response.ok) {
     throw new GameDataFetchError(response.status, response.statusText);
   }
@@ -53,9 +66,14 @@ export function usePlayerData<TData = PlayerDataResponse>(
   gameId: string,
   options?: { select?: (data: PlayerDataResponse) => TData }
 ) {
+  const [requestedViewAs] = useFogViewAs();
+  const viewAs = isFogOfWarGameId(gameId) ? requestedViewAs : null;
   return useQuery<PlayerDataResponse, Error, TData>({
-    queryKey: ["playerData", gameId],
-    queryFn: () => fetchPlayerData(gameId),
+    queryKey: viewAs ? ["playerData", gameId, viewAs] : ["playerData", gameId],
+    queryFn: () => fetchPlayerData(gameId, viewAs),
+    // A GM switching fog views keeps the current map up until the next one lands.
+    placeholderData: (previous, previousQuery) =>
+      previousQuery?.queryKey[1] === gameId ? previous : undefined,
     // The socket streams patches into this document and refetches on
     // reconnect, so a mount never needs to refetch it.
     staleTime: Infinity,

@@ -2,6 +2,10 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import { Alert, AppShell, Box, Tabs, SimpleGrid } from "@/ds";
 import { MapHeaderSwitch } from "@/layout/MapHeaderSwitch";
+import { FogViewerSelect } from "@/domains/game-shell/components/FogViewerSelect";
+import { GamePage } from "@/pages/image-map/GamePage";
+import { GameDataFetchError } from "@/api/usePlayerData";
+import { isFogOfWarGameId } from "@/api/useFogViewAs";
 import classes from "@/shared/ui/map/MapUI.module.css";
 import ScoreBoard from "@/domains/objectives/components/ScoreBoard/ScoreBoard";
 import { UpdateNeededScreen } from "@/domains/game-shell/components/chrome/UpdateNeededScreen";
@@ -110,6 +114,15 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
       : `${gameId} - Async TI`,
   );
 
+  /* A bot that doesn't serve fogged web-data yet answers 404 for every Fog of War
+     game (a missing game is a 400). The old UI's image route still handles login
+     and seat checks for those, so fall back to it as production does. */
+  const fogDataUnavailable =
+    isFogOfWarGameId(gameId) &&
+    gameDataState?.error instanceof GameDataFetchError &&
+    gameDataState.error.status === 404;
+  if (fogDataUnavailable) return <GamePage />;
+
   if (
     data &&
     !gameDataState?.isLoading &&
@@ -132,7 +145,9 @@ function GameMapContent({ pannable, onShowOldUI }: ContentProps) {
         buttonLabel="OLD UI"
         onButtonClick={onShowOldUI}
         hideOnMobile
-      />
+      >
+        <FogViewerSelect gameId={gameId} />
+      </MapHeaderSwitch>
 
       <AppShell.Main>
         <Box
