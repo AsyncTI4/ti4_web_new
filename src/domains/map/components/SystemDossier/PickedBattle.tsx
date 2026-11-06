@@ -57,9 +57,9 @@ export function PickedBattleActions({
   const attacker = picks[0]?.faction;
 
   const url =
-    attacker && attacker !== faction
+    gameData && attacker && attacker !== faction
       ? buildPickedBattleUrl(
-          gameData?.tiles,
+          gameData.tiles,
           picks,
           tile,
           planetId,

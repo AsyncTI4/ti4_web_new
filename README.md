@@ -35,9 +35,8 @@ Use Node.js 22.12+ and Yarn. Run commands from the repository root.
 yarn install
 yarn dev
 
-# Check both TypeScript projects explicitly
-yarn tsc -p tsconfig.app.json --noEmit
-yarn tsc -p tsconfig.node.json --noEmit
+# Check the application and build-tool TypeScript projects
+yarn type-check
 
 # Lint, build, and preview the production output
 yarn lint
@@ -46,7 +45,10 @@ yarn preview
 ```
 
 The root `tsconfig.json` contains project references rather than source files;
-explicit project checks above cover application and build-tool code.
+`yarn type-check` follows those references with `tsc -b` to check application
+and build-tool code. Running `tsc --noEmit` against the root alone checks neither.
+`yarn build` runs the same project checks before bundling, so type errors also
+block PR builds and deployments.
 
 API endpoints are centralized in `src/config.ts`. The development server proxies
 `/bot` to `https://bot.asyncti4.com`, `/proxy` to `https://asyncti4.com`, and `/auth`
