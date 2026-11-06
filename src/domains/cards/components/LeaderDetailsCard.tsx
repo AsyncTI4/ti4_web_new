@@ -1,7 +1,7 @@
-import { Image } from "@/ds";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { getLeaderById } from "@/entities/lookup/leaders";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
-import { showLeader } from "@/entities/lookup/showLeader";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { useIsTwilightsFallMode } from "@/hooks/useIsTwilightsFallMode";
 
 type Props = {
@@ -24,10 +24,10 @@ export function LeaderDetailsCard({ leaderId }: Props) {
   const displayAbilityText =
     (isTwilightsFallMode && leaderData.tfAbilityText) || leaderData.abilityText;
 
-  const portrait = showLeader(leaderData.source) ? (
+  const portrait = getLeaderPortraitUrl(leaderId) ? (
     <DetailsCard.Icon
       shape="leader"
-      icon={<Image src={`/leaders/${leaderId}.webp`} alt="" />}
+      icon={<LeaderPortraitImage leaderId={leaderId} />}
     />
   ) : undefined;
 

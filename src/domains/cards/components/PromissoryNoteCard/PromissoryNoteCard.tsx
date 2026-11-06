@@ -1,11 +1,12 @@
 import { Image } from "@/ds";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { getPromissoryNoteData } from "@/entities/lookup/promissoryNotes";
 import { getAllianceCommander } from "@/entities/lookup/leaders";
 import { useFactionColors } from "@/hooks/useFactionColors";
 import { useGameData } from "@/state/useGameContext";
 import { DetailsCard } from "@/shared/ui/DetailsCard";
 import { FactionIcon } from "@/shared/ui/FactionIcon";
-import { showLeader } from "@/entities/lookup/showLeader";
+import { getLeaderPortraitUrl } from "@/entities/lookup/leaderPortraits";
 import { resolvePromissoryNoteText } from "@/entities/game/playerUtils";
 import styles from "./PromissoryNoteCard.module.css";
 
@@ -18,10 +19,9 @@ type Commander = NonNullable<ReturnType<typeof getAllianceCommander>>;
 function CommanderAbility({ commander }: { commander: Commander }) {
   return (
     <div className={styles.commander}>
-      {showLeader(commander.source) && (
-        <Image
-          src={`/leaders/${commander.id}.webp`}
-          alt=""
+      {getLeaderPortraitUrl(commander.id) && (
+        <LeaderPortraitImage
+          leaderId={commander.id}
           className={styles.portrait}
         />
       )}

@@ -1,6 +1,6 @@
 import { IconUsers } from "@tabler/icons-react";
 import { useOriginalFactionColors } from "@/hooks/useFactionColors";
-import { getFactionImage } from "@/entities/lookup/factions";
+import { FactionIcon } from "@/shared/ui/FactionIcon";
 import styles from "./RailParts.module.css";
 
 type Props = {
@@ -23,7 +23,7 @@ export function Neighbors({ neighbors }: Props) {
     >
       <IconUsers size={14} stroke={1.6} aria-label="Neighbours" />
       {neighborFactions.map((faction) => (
-        <img key={faction} src={getFactionImage(faction)} alt={faction} />
+        <FactionIcon key={faction} faction={faction} alt={faction} fit="contain" />
       ))}
     </span>
   );

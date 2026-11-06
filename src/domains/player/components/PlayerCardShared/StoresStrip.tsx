@@ -1,5 +1,6 @@
 import type { PlayerData } from "@/entities/data/types";
 import { cdnImage } from "@/entities/data/cdnImage";
+import { ACTION_CARD_BACK } from "@/entities/data/uiImages";
 import { FragmentsPool } from "@/domains/player/components/FragmentsPool";
 import { DebtTokens } from "@/domains/player/components/DebtTokens";
 import styles from "./StoresStrip.module.css";
@@ -49,7 +50,7 @@ export function StoresStrip({
         </b>
       </span>
       <span className={`${styles.sx} ${styles.card}`} title={`${acCount} action cards`}>
-        <img src="/cardback/cardback_action.png" alt="" />
+        <img src={ACTION_CARD_BACK} alt="" />
         <b>{acCount}</b>
       </span>
       <span className={`${styles.sx} ${styles.card}`} title={`${pnCount} promissory notes`}>

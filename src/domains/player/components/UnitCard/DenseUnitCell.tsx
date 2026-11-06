@@ -1,5 +1,6 @@
 import { forwardRef, type KeyboardEvent, type ReactNode } from "react";
 import { Box } from "@/ds";
+import { UNIT_UPGRADE_IMAGE } from "@/entities/data/uiImages";
 import styles from "./UnitCard.module.css";
 import cx from "clsx";
 import { FactionBadge, UpgradeFactionBadges } from "./FactionBadges";
@@ -72,7 +73,7 @@ export const DenseUnitCell = forwardRef<HTMLDivElement, Props>(function DenseUni
       {upgraded && (
         <img
           className={styles.upgradeBadge}
-          src="/UnitUpgradeTech.png"
+          src={UNIT_UPGRADE_IMAGE}
           alt="Upgraded"
         />
       )}

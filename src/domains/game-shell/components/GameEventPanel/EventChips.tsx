@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { IconAtom, IconGavel, IconHexagon } from "@tabler/icons-react";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
+import { LeaderPortraitImage } from "@/shared/ui/LeaderPortraitImage";
 import { getTechData } from "@/entities/lookup/tech";
 import { actionCardTiming } from "../actionCardTiming";
 import classes from "./EventChips.module.css";
@@ -180,7 +181,7 @@ export function VpStamp({ children }: { children: ReactNode }) {
 export function LeaderPortrait({ id, name }: { id: string; name: string }) {
   return (
     <span className={classes.leader}>
-      <img src={`/leaders/${id}.webp`} alt="" loading="lazy" />
+      <LeaderPortraitImage leaderId={id} loading="lazy" />
       <span>{name}</span>
     </span>
   );
