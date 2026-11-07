@@ -1,9 +1,14 @@
 import { cdnImage } from "@/entities/data/cdnImage";
-import { getTokenImagePath, getTokenData } from "@/entities/lookup/tokens";
+import {
+  getOneWayWormholeToken,
+  getTokenImagePath,
+  getTokenData,
+} from "@/entities/lookup/tokens";
 import { getAttachmentImagePath } from "@/entities/lookup/attachments";
 import { getTokenSprite } from "@/shared/ui/Token/tokenSprites";
 import { getRenderedStackFootprint } from "@/entities/geometry/renderedStackGeometry";
 import { PositionedSprite } from "./PositionedSprite";
+import { OneWayWormholeRing } from "./OneWayWormholeRing";
 
 type TokenProps = {
   tokenId: string;
@@ -44,6 +49,34 @@ export const Token = ({ tokenId, faction, x, y, zIndex }: TokenProps) => {
   }
 
   const scale = getTokenData(tokenId)?.scale || 1;
+  const transform =
+    scale !== 1
+      ? `translate(-50%, -50%) scale(${scale})`
+      : "translate(-50%, -50%)";
+
+  /* One-way wormholes: the base wormhole token wrapped in the entry/exit ring. */
+  const oneWay = getOneWayWormholeToken(tokenId);
+  if (oneWay) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: `${x}px`,
+          top: `${y}px`,
+          transform,
+          zIndex,
+        }}
+      >
+        <PositionedSprite
+          sprite={getTokenSprite("token", oneWay.baseId)}
+          imagePath={imagePath}
+          alt={alt}
+          style={{ display: "block" }}
+        />
+        <OneWayWormholeRing direction={oneWay.direction} />
+      </div>
+    );
+  }
 
   return (
     <PositionedSprite
@@ -54,10 +87,7 @@ export const Token = ({ tokenId, faction, x, y, zIndex }: TokenProps) => {
         position: "absolute",
         left: `${x}px`,
         top: `${y}px`,
-        transform:
-          scale !== 1
-            ? `translate(-50%, -50%) scale(${scale})`
-            : "translate(-50%, -50%)",
+        transform,
         zIndex,
       }}
     />

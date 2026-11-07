@@ -3,7 +3,7 @@ import {
   getTokenSpriteDimensions,
   getUnitSpriteDimensions,
 } from "@/entities/data/renderedSpriteDimensions";
-import { getTokenData } from "@/entities/lookup/tokens";
+import { getOneWayWormholeToken, getTokenData } from "@/entities/lookup/tokens";
 
 const SPLAY_OFFSET_X = 10;
 const SPLAY_OFFSET_Y = 10;
@@ -85,9 +85,10 @@ function getBaseFootprint(
       : DEFAULT_FOOTPRINT;
   }
 
+  const spriteId = getOneWayWormholeToken(entityId)?.baseId ?? entityId;
   const token =
-    getTokenSpriteDimensions("token", entityId) ??
-    getTokenSpriteDimensions("attachment", entityId);
+    getTokenSpriteDimensions("token", spriteId) ??
+    getTokenSpriteDimensions("attachment", spriteId);
   if (!token) return DEFAULT_FOOTPRINT;
 
   const scale = getTokenData(entityId)?.scale ?? 1;
