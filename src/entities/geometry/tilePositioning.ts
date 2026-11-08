@@ -75,17 +75,79 @@ function isFractureInPlay(tilePositions: string[]): boolean {
   return FRACTURE_POSITIONS.some((pos) => positionSet.has(pos));
 }
 
+/**
+ * Fog of War games can place tiles on extra maps "A"-"G" next to the main map
+ * (positions a000-g1696, bot BoardPosition). Each is a full board laid out with
+ * the regular ring positions, shifted right of the main map.
+ */
+const EXTRA_BOARDS = ["a", "b", "c", "d", "e", "f", "g"];
+const BOARD_POSITION_PATTERN = /^[a-g](?:1[0-6]|[0-9])[0-9][0-9]$/;
+const BOARD_MAX_RING = 16;
+
+type BoardPosition = { index: number; local: string };
+
+function parseBoardPosition(position: string): BoardPosition | null {
+  if (!BOARD_POSITION_PATTERN.test(position)) return null;
+  return {
+    index: EXTRA_BOARDS.indexOf(position[0]),
+    local: position.slice(1),
+  };
+}
+
 /** External position IDs must match an own entry, never an Object prototype key. */
-function isSupportedTilePosition(position: string): boolean {
+function hasCoordinates(position: string): boolean {
   return Object.hasOwn(TILE_COORDINATES, position);
 }
 
-function getBaseCoordinates(position: string): { x: number; y: number } {
-  const coords = TILE_COORDINATES[position];
-  if (!isSupportedTilePosition(position)) {
+function isSupportedTilePosition(position: string): boolean {
+  if (hasCoordinates(position)) return true;
+  const board = parseBoardPosition(position);
+  return board !== null && hasCoordinates(board.local);
+}
+
+/**
+ * Ring count the bot lays the map out with (MapPositionMapper.layoutRingCount):
+ * the game's ring count, widened to the outermost ring used on an extra map.
+ */
+function getLayoutRingCount(
+  ringCount: number,
+  tilePositions: string[] | undefined,
+): number {
+  let layoutRings = ringCount;
+  for (const entry of tilePositions ?? []) {
+    const board = parseBoardPosition(entry.split(":")[0]);
+    if (board) {
+      layoutRings = Math.max(layoutRings, Math.floor(Number(board.local) / 100));
+    }
+  }
+  return layoutRings;
+}
+
+/** Bot MapPositionMapper.boardWidth: horizontal room one board of that many rings takes. */
+function boardWidth(ringCount: number): number {
+  return (2 * ringCount + 2) * HORIZONTAL_TILE_SPACING;
+}
+
+function getBaseCoordinates(
+  position: string,
+  ringCount: number,
+): { x: number; y: number } {
+  if (hasCoordinates(position)) return { ...TILE_COORDINATES[position] };
+  const board = parseBoardPosition(position);
+  if (!board || !hasCoordinates(board.local)) {
     throw new Error(`Unknown position: ${position}`);
   }
-  return { ...coords };
+  // Bot: extraBoardOffsetX minus extraBoardCompression, which nets to one
+  // board width per board, sized for the layout ring count.
+  const boardRings = Math.max(
+    Math.min(ringCount, BOARD_MAX_RING),
+    RING_MIN_COUNT,
+  );
+  const coords = TILE_COORDINATES[board.local];
+  return {
+    x: coords.x + (board.index + 1) * boardWidth(boardRings),
+    y: coords.y,
+  };
 }
 
 function applyRingAdjustments(
@@ -147,7 +209,7 @@ function calculateSingleTilePosition(
   ringCount: number = 3,
   fractureYbump: number = 0
 ): { x: number; y: number } {
-  const baseCoords = getBaseCoordinates(position);
+  const baseCoords = getBaseCoordinates(position, ringCount);
   const adjustedCoords = applyRingAdjustments(
     baseCoords.x,
     baseCoords.y,
@@ -160,7 +222,8 @@ function calculateSingleTilePosition(
 
 /**
  * Positions "position:systemId" entries on the board. The fracture Y offset is
- * detected from the entries unless passed explicitly.
+ * detected from the entries unless passed explicitly. `ringCount` is the layout
+ * ring count (see getLayoutRingCount).
  */
 const calculateTilePositions = (
   inputData: string[],
@@ -207,7 +270,7 @@ function calculateStatTilePositions(
 ): TilePosition[] {
   return calculateTilePositions(
     statPositions.map((position) => `${position}:stat_${position}`),
-    ringCount,
+    getLayoutRingCount(ringCount ?? 3, gameTilePositions),
     getFractureYBump(gameTilePositions),
   );
 }
@@ -218,6 +281,7 @@ export {
   calculateStatTilePositions,
   isFractureInPlay,
   getFractureYBump,
+  getLayoutRingCount,
   isSupportedTilePosition,
   type TilePosition,
 };

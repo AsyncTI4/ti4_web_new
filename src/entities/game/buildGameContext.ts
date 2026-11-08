@@ -5,6 +5,7 @@ import {
 import {
   calculateSingleTilePosition,
   calculateTilePositions,
+  getLayoutRingCount,
   getFractureYBump,
   isSupportedTilePosition,
 } from "@/entities/geometry/tilePositioning";
@@ -336,8 +337,12 @@ export function buildGameContext(
 
   const { tilesWithPds, pdsByTile } = computePdsData(data, factionToColor);
   const allExhaustedPlanets = new Set(computeAllExhaustedPlanets(data));
+  const layoutRingCount = getLayoutRingCount(
+    data.ringCount,
+    data.tilePositions,
+  );
   const calculatedTilePositions = data.tilePositions
-    ? calculateTilePositions(data.tilePositions, data.ringCount)
+    ? calculateTilePositions(data.tilePositions, layoutRingCount)
     : [];
 
   const armyRankings = calculateArmyRankings(playerData);
@@ -361,7 +366,7 @@ export function buildGameContext(
   }
 
   const tileContext: TileBuildContext = {
-    ringCount: data.ringCount,
+    ringCount: layoutRingCount,
     fractureYOffset: getFractureYBump(data.tilePositions),
     playerData,
     exhaustedPlanets: allExhaustedPlanets,
