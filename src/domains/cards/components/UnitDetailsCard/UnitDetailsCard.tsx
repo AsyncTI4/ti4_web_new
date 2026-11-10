@@ -73,7 +73,7 @@ export function UnitDetailsCard({
     ? getAssimilatedAbilitiesForNekroFlagship(valefarZTargets, allPlayerData)
     : [];
   const upgrade =
-    !isUpgraded && unitData.upgradesToUnitId
+    owner && !isUpgraded && unitData.upgradesToUnitId
       ? getUpgradeInfo(unitData.upgradesToUnitId)
       : null;
   const tiles = gameData?.tiles;
@@ -95,14 +95,18 @@ export function UnitDetailsCard({
             shape="unit"
             icon={
               <Image
-                src={cdnImage(`/units/${getColorAlias(color)}_${unitData.asyncId}.png`)}
+                src={cdnImage(
+                  `/units/${getColorAlias(color)}_${unitData.asyncId}.png`,
+                )}
                 alt=""
               />
             }
             badge={
               unitData.faction ? (
                 <Image
-                  src={cdnImage(`/factions/${unitData.faction.toLowerCase()}.png`)}
+                  src={cdnImage(
+                    `/factions/${unitData.faction.toLowerCase()}.png`,
+                  )}
                   alt={`${unitData.faction} faction`}
                 />
               ) : undefined

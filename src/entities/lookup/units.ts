@@ -9,8 +9,21 @@ const unitsAsyncIdMap = groupBy(units, (unit) => unit.asyncId);
 
 const unitsByRequiredTechIdMap = groupBy(
   units,
-  (unit) => unit.requiredTechId || undefined
+  (unit) => unit.requiredTechId || undefined,
 );
+
+const NEUTRAL_UPGRADES = new Set([
+  "ws",
+  "fs",
+  "dn",
+  "cv",
+  "ca",
+  "dd",
+  "ff",
+  "mf",
+  "sd",
+  "pd",
+]);
 
 export const getUnitData = (unitId: string) => {
   return unitsMap.get(unitId);
@@ -18,7 +31,7 @@ export const getUnitData = (unitId: string) => {
 
 export const getOwnedTwilightsFallUnitByAsyncId = (
   asyncId: string,
-  ownedUnits?: string[]
+  ownedUnits?: string[],
 ) => {
   if (!ownedUnits || ownedUnits.length === 0) return undefined;
 
@@ -27,7 +40,7 @@ export const getOwnedTwilightsFallUnitByAsyncId = (
     (unit) =>
       unit.source === "twilights_fall" &&
       unit.id.startsWith("tf-") &&
-      ownedUnits.includes(unit.id)
+      ownedUnits.includes(unit.id),
   );
 };
 
@@ -53,7 +66,7 @@ export function lookupUnit(
   asyncId: string,
   faction: string,
   playerData?: PlayerData,
-  gameVariant?: string
+  gameVariant?: string,
 ) {
   const ownedUnits = playerData?.unitsOwned;
   const unitsWithAsyncId = unitsAsyncIdMap.get(asyncId);
@@ -63,9 +76,16 @@ export function lookupUnit(
   if (faction.toLowerCase() === "neutral") {
     const variant = gameVariant?.toLowerCase() ?? "base";
     const variantUnits = unitsWithAsyncId.filter(
-      (unit) => !unit.faction && unit.source === variant
+      (unit) => !unit.faction && unit.source === variant,
     );
-    return variantUnits.length > 0 ? preferUpgradedUnit(variantUnits) : null;
+
+    if (NEUTRAL_UPGRADES.has(asyncId)) {
+      return variantUnits.length > 0 ? preferUpgradedUnit(variantUnits) : null;
+    } else {
+      return variantUnits.length > 0
+        ? preferUnupgradedUnit(variantUnits)
+        : null;
+    }
   }
 
   // First, if the player owns any unit with this asyncId, prefer that regardless of faction.
@@ -73,10 +93,10 @@ export function lookupUnit(
   // stand in for the unit when the player owns no other card for it.
   if (ownedUnits && ownedUnits.length > 0) {
     const ownedMatches = unitsWithAsyncId.filter((unit) =>
-      ownedUnits.includes(unit.id)
+      ownedUnits.includes(unit.id),
     );
     const unitCards = ownedMatches.filter(
-      (unit) => !isPlayAreaUnitUpgrade(unit.id)
+      (unit) => !isPlayAreaUnitUpgrade(unit.id),
     );
     if (unitCards.length > 0) return preferUpgradedUnit(unitCards);
     if (ownedMatches.length > 0) {
@@ -85,10 +105,10 @@ export function lookupUnit(
       const factionCards = unitsWithAsyncId.filter(
         (unit) =>
           unit.faction?.toLowerCase() === faction.toLowerCase() &&
-          !isPlayAreaUnitUpgrade(unit.id)
+          !isPlayAreaUnitUpgrade(unit.id),
       );
       return preferUpgradedUnit(
-        factionCards.length > 0 ? factionCards : ownedMatches
+        factionCards.length > 0 ? factionCards : ownedMatches,
       );
     }
   }
@@ -96,7 +116,7 @@ export function lookupUnit(
   const factionUnits = filterUnitsFromList(
     unitsWithAsyncId,
     faction,
-    ownedUnits
+    ownedUnits,
   );
   if (factionUnits.length > 0) {
     return preferUpgradedUnit(factionUnits);
@@ -105,7 +125,7 @@ export function lookupUnit(
   const genericUnits = filterUnitsFromList(
     unitsWithAsyncId,
     undefined,
-    ownedUnits
+    ownedUnits,
   );
   if (genericUnits.length > 0) {
     return preferUpgradedUnit(genericUnits);
@@ -119,10 +139,15 @@ function preferUpgradedUnit(unitsList: Unit[]) {
   return upgradedUnit || unitsList[0];
 }
 
+function preferUnupgradedUnit(unitsList: Unit[]) {
+  const upgradedUnit = unitsList.find((unit) => !unit.upgradesFromUnitId);
+  return upgradedUnit || unitsList[0];
+}
+
 function filterUnitsFromList(
   unitsList: Unit[],
   faction?: string,
-  ownedUnits?: string[]
+  ownedUnits?: string[],
 ) {
   return unitsList.filter((unit) => {
     if (ownedUnits && !ownedUnits.includes(unit.id)) return false;
