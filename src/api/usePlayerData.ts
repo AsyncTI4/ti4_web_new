@@ -6,6 +6,7 @@ import { config } from "@/config";
 import { authenticatedFetch } from "@/api/auth/authenticatedFetch";
 import { getLocalUser } from "@/api/auth/useUser";
 import { isFogOfWarGameId, useFogViewAs } from "./useFogViewAs";
+import { redactFogTurn } from "./fogTurnRedaction";
 
 // RFC 7386-style merge: null removes the key, arrays/scalars replace, objects recurse.
 function deepMergePatch<T>(base: T, patch: unknown): T {
@@ -78,7 +79,14 @@ export function usePlayerData<TData = PlayerDataResponse>(
     // reconnect, so a mount never needs to refetch it.
     staleTime: Infinity,
     retry: false,
-    select: options?.select,
+    // The cache keeps the raw document (socket patches merge into it); every
+    // reader sees it with other seats' turns fogged out.
+    select: (data) => {
+      const fogged = redactFogTurn(data);
+      return options?.select
+        ? options.select(fogged)
+        : (fogged as unknown as TData);
+    },
   });
 }
 
