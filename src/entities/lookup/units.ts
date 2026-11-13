@@ -21,8 +21,6 @@ const NEUTRAL_UPGRADES = new Set([
   "dd",
   "ff",
   "mf",
-  "sd",
-  "pd",
 ]);
 
 export const getUnitData = (unitId: string) => {
