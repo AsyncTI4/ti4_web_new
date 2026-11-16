@@ -21,6 +21,7 @@ import Logo from "@/shared/ui/Logo";
 import { DiscordLogin } from "@/domains/auth/DiscordLogin";
 import { CircularFactionIcon } from "@/shared/ui/CircularFactionIcon";
 import { EditableTabLabel } from "@/domains/tabs/components/EditableTabLabel";
+import { OpenGameForm } from "@/domains/tabs/components/OpenGameButton";
 import { generateColorGradient } from "@/entities/lookup/colors";
 import { useTabLabelEditing } from "@/domains/tabs/hooks/useTabLabelEditing";
 import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
@@ -238,6 +239,7 @@ export function NavigationDrawer({
               />
             </Box>
           ))}
+          <OpenGameForm onOpen={onClose} fill />
         </Stack>
       </Stack>
     </Drawer>

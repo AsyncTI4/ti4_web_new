@@ -4,6 +4,7 @@ import type { EnrichedTab } from "@/domains/tabs/hooks/useTabManagement";
 import type { TabLabelEditingApi } from "@/domains/tabs/hooks/useTabLabelEditing";
 import { EditableTabLabel } from "@/domains/tabs/components/EditableTabLabel";
 import { factionTabStyle, TabActions, TabFactionIcon } from "./HeaderTabParts";
+import { OpenGameForm } from "./OpenGameButton";
 import classes from "./HeaderMenu.module.css";
 
 type TabViewProps = {
@@ -118,7 +119,7 @@ export function TabDropdownView({
       </Popover.Target>
 
       <Popover.Dropdown className={classes.dropdown} style={{ minWidth: 220 }} p={4}>
-        <div role="listbox" aria-label="Open games">
+        <div role="listbox" aria-label="Open games" className={classes.dropdownList}>
           {activeTabs.length === 0 && (
             <div className={classes.dropdownText} style={{ padding: 8 }}>
               No games open
@@ -137,6 +138,10 @@ export function TabDropdownView({
               }}
             />
           ))}
+        </div>
+        {/* Where the next game would appear: open one by its id. */}
+        <div className={classes.dropdownOpenGame}>
+          <OpenGameForm fill onOpen={() => setOpened(false)} />
         </div>
       </Popover.Dropdown>
     </Popover>

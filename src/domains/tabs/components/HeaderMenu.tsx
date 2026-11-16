@@ -10,6 +10,7 @@ import {
 import { EditableTabLabel } from "@/domains/tabs/components/EditableTabLabel";
 import { factionTabStyle, TabActions, TabFactionIcon } from "./HeaderTabParts";
 import { TabDropdownView } from "./TabDropdownView";
+import { OpenGameButton } from "./OpenGameButton";
 import classes from "./HeaderMenu.module.css";
 
 type Props = {
@@ -136,7 +137,10 @@ export function HeaderMenu({
         {overflowing || isMobileDevice() ? (
           <TabDropdownView {...viewProps} />
         ) : (
-          <TabStripView {...viewProps} tabsListRef={tabsListRef} />
+          <>
+            <TabStripView {...viewProps} tabsListRef={tabsListRef} />
+            <OpenGameButton />
+          </>
         )}
       </div>
       {actions}

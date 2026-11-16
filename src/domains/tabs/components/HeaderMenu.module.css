@@ -4,8 +4,20 @@
   align-items: center;
 }
 
+/* Only as wide as the open tabs, so the "+" sits where the next tab would go. */
 .tabs {
-  width: 100%;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.openGameButton {
+  flex-shrink: 0;
+  margin-left: 4px;
+  color: var(--ds-ink-lo);
+}
+
+.openGameButton:hover {
+  color: var(--ds-ink-hi);
 }
 
 .tabsList {
@@ -176,6 +188,18 @@
 
 .dropdownText {
   color: inherit;
+}
+
+/* Long lists scroll so the open-a-game field below always stays on screen. */
+.dropdownList {
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
+}
+
+.dropdownOpenGame {
+  margin-top: 4px;
+  padding: 8px 6px 4px;
+  border-top: 1px solid var(--ds-h14);
 }
 
 .closeButton,
