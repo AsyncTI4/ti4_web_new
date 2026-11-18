@@ -425,6 +425,8 @@ function SystemBattleLinks({
   const gameData = useGameData();
   const picks = useAppStore((state) => state.battleAttackers);
   const picked = picks[0]?.faction;
+  if (!gameData) return null;
+
   const attacker = picked ?? systemAttacker;
   const present = factionsInSystem(tile);
   const defenders = present.filter((faction) => faction !== attacker);
@@ -433,7 +435,7 @@ function SystemBattleLinks({
     const url =
       picked && picked !== faction
         ? buildPickedSystemBattleUrl(
-            gameData?.tiles,
+            gameData.tiles,
             picks,
             tile,
             faction,
@@ -444,7 +446,7 @@ function SystemBattleLinks({
             faction,
             helpers.playerFor,
             attacker,
-            gameData?.tiles,
+            gameData.tiles,
           );
     if (!url) return null;
     const versus = attacker && attacker !== faction;
