@@ -10,9 +10,14 @@ import { Ability } from "@/domains/player/components/Ability";
 import { Tech } from "@/domains/player/components/Tech";
 import { Leaders } from "@/domains/player/components/Leaders";
 import { ObjectivesRack } from "@/domains/player/components/PlayerCardShared/ObjectivesRack";
-import { buildTechElementsForType, techCategories, getBreakthroughSynergy } from "@/domains/player/components/Tech/TechGridShared";
+import {
+  buildTechElementsForType,
+  techCategories,
+  getBreakthroughSynergy,
+} from "@/domains/player/components/Tech/TechGridShared";
 import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnitsArea";
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
+import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { ResourceInfluenceCompact } from "@/domains/player/components/ResourceInfluenceTable";
 import { StoresStrip } from "@/domains/player/components/PlayerCardShared/StoresStrip";
 import { useSettingsStore } from "@/state/appStore";
@@ -59,7 +64,9 @@ export default function PlayerCardSidebar(props: Props) {
     promissoryNotes,
     mahactEdict,
   } = usePlayerCardComputedData(playerData);
-  const { synergy, breakthroughUnlocked } = getBreakthroughSynergy(playerData.breakthrough);
+  const { synergy, breakthroughUnlocked } = getBreakthroughSynergy(
+    playerData.breakthrough,
+  );
   const breakthrough = playerData.breakthrough;
   const showLoadout = settings.showPlayerAreaFactionAbilities;
   const techs = techCategories.flatMap((techType) =>
@@ -123,7 +130,9 @@ export default function PlayerCardSidebar(props: Props) {
                   techId={techId}
                   synergy={synergy}
                   breakthroughUnlocked={breakthroughUnlocked}
-                  unresearched={(player.notResearchedFactionTechs ?? []).includes(techId)}
+                  unresearched={(
+                    player.notResearchedFactionTechs ?? []
+                  ).includes(techId)}
                 />
               ))}
           </div>
@@ -191,6 +200,24 @@ export default function PlayerCardSidebar(props: Props) {
             />
           </div>
         </Block>
+
+        {settings.showPlayerAreaReinforcements &&
+          ((player.breachTokensReinf ?? 0) > 0 ||
+            (player.sleeperTokensReinf ?? 0) > 0 ||
+            (player.ghostWormholesReinf?.length ?? 0) > 0 ||
+            (player.galvanizeTokensReinf ?? 0) > 0) && (
+            <Block label="Tokens">
+              <div className={styles.bays}>
+                <ReinforcementTokensGroup
+                  breachTokensReinf={player.breachTokensReinf}
+                  sleeperTokensReinf={player.sleeperTokensReinf}
+                  ghostWormholesReinf={player.ghostWormholesReinf}
+                  galvanizeTokensReinf={player.galvanizeTokensReinf}
+                  mt="xs"
+                />
+              </div>
+            </Block>
+          )}
       </div>
     </PlayerCardBox>
   );
