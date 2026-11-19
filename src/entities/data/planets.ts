@@ -2196,7 +2196,7 @@ export const planets: Planet[] = [
       extraIcons: 1,
     },
     flavourText:
-      '*The techno-anchorites of the Grovian Order forbid mining of their "sacred planet," but the world is so toxic few would try anyway.*',
+      '*The techno-anchorites of the Grovian Order forbid mining of their "sacred planet", but the world is so toxic few would try anyway.*',
     source: "thunders_edge",
   },
   {
