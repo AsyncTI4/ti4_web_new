@@ -349,9 +349,9 @@ export const relics: Relic[] = [
   {
     alias: "circletofthevoid",
     name: "Circlet of the Void",
-    text: "Your units do not roll for gravity rifts [you still get the bonus movement], and you ignore the effects of all other anomalies on movement.\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships. [Note: you must have an available DET token in order to use this action. It cannot just be a stall]",
+    text: "Your units do not roll for gravity rifts, and you ignore the movement effects of other anomalies. [Note: you still get the bonus movement from gravity rifts]\n\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships. [Note: you must have an available DET token in order to use this action. It cannot just be a stall]",
     flavourText:
-      "Xuange touched the silver circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
+      "Xuange touched the jeweled circlet that sat upon their temple. The pride of the Archive. Knowledge of the stars, passed down from the First, fated for the Last.",
     imageURL: "/hover_images/relics/pok/circlet_of_the_void.jpg",
     source: "codex4",
   },

@@ -162,7 +162,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Populace lives on continent sized fungal rafts that float atop a soupy, world-spanning ocean of useful bio-compounds. Popular research site for biologists.*",
+      "*Populace lives on continent-sized fungal rafts that float atop a soupy, world-spanning ocean of useful bio-compounds. Popular research site for biologists.*",
     source: "pok",
   },
   {
@@ -453,7 +453,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Wet planet covered in rivers, lakes and small seas but no oceans. Dry poles provide haven from constant floods. Numerous farms famous for luxury foodstuffs.*",
+      "*Wet planet covered in rivers, lakes, and small seas, but no oceans. Dry poles provide haven from constant floods. Numerous farms famous for luxury foodstuffs.*",
     source: "pok",
   },
   {
@@ -572,7 +572,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*High rotational speed creates extremely energized magnetosphere. Orbital taps use this to energize starship fuels and power labs developing new beam weapons.*",
+      "*High rotational speed creates extremely energized magnetosphere. Orbital taps use this to energize starship fuels, and power labs developing new beam weapons.*",
     source: "pok",
   },
   {
@@ -919,7 +919,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Below the thin surface of atmosphere lie the continent-sized caverns of the Letnev. Rich in metals and energy, its vast fungus fields struggle to feed its population.*",
+      "*Below the thin surface atmosphere lie the continent-sized caverns of the Letnev. Rich in metals and energy, its vast fungus fields struggle to feed its population.*",
     source: "base",
   },
   {
@@ -2233,7 +2233,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Trapped between matter and void lies the realm of the Creuss. Made of trapped light and radioactive gas, this realm hosts the most peculiar forms of life.*",
+      "*Trapped between matter and void lies the realm of Creuss. Made of trapped light and radioactive gas, this realm hosts the most peculiar forms of life.*",
     source: "base",
   },
   {
@@ -2918,7 +2918,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Despite its oversized poles, Druaa is one of the most beautiful planets. Its flowered steppes, violet mountains, and glowing forests are famous across the galaxy.*",
+      "*Despite its oversized poles, one of the most beautiful of planets. Its flowered steppes, violet mountains, and glowing forests are famous across the galaxy.*",
     source: "base",
   },
   {
@@ -4272,7 +4272,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Trapped between matter and void lies the realm of the Creuss. Made of trapped light and radioactive gas, this realm hosts the most peculiar forms of life.*",
+      "*Trapped between matter and void lies the realm of Creuss. Made of trapped light and radioactive gas, this realm hosts the most peculiar forms of life.*",
     source: "dane_leaks",
   },
   {
@@ -4848,7 +4848,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Heavily industrialized world. Pollution has killed all life outside of dome cities, but twin suns provide constant power for factories and huge populace.*",
+      "*Heavily industrialized world. Pollution has killed all life outside of dome cities, but twin suns provide constant power for factories and huge population.*",
     source: "pok",
   },
   {
@@ -4874,7 +4874,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Covered by cold oceans and a few inhospitable islands. The seat of the Headmaster, the Hylar ruler, dwells in the deep underwater city of Wun-Escha.*",
+      "*Covered by cold oceans and a few inhospitable islands. The seat of the Headmaster, the Hylar ruler, who dwells in the deep underwater city of Wun-Escha.*",
     source: "base",
   },
   {
@@ -5505,7 +5505,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*Lesab is either a resounding success or a dangerous failure of terraforming, with its surface now dominated by a semi-sentient fungus.*",
+      "*Lesab is either a resounding success or dangerous failure of terraforming, with its surface now dominated by a semi-sentient fungus.*",
     source: "thunders_edge",
   },
   {
@@ -5630,7 +5630,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Primordial world with primitive native life. Potential for terraforming led to the infamous genocide of Saar settlements by Sardakk N'orr and ongoing conflicts between them and Naalu forces.*",
+      "*Primordial world with primitive native life. Potential for terraforming led to the infamous genocide of Saar settlements by Sardakk N'orr, and ongoing conflict between them and Naalu forces.*",
     source: "pok",
   },
   {
@@ -5880,7 +5880,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Wreathed in vast seas of methane ice. Sea floor drilling platforms harvest rare crystals used in advanced computers and energy weapons.*",
+      "*Wreathed in vast seas of methane ice. Seafloor drilling platforms harvest rare crystals used in advanced computers and energy weapons.*",
     source: "base",
   },
   {
@@ -6023,7 +6023,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Mostly pungent marshland and mudplains. Original world of the Naalu race, which now enslaves winged Miashan to work its great iron-extraction plants.*",
+      "*Mostly pungent marshland and mudplains. Original world of the Naalu race, which now enslaves the winged Miashan to work its great iron-extraction plants.*",
     source: "base",
   },
   {
@@ -6338,7 +6338,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Unstable radiation belts create hazardous living conditions but facilitate research in the electro-quantum propulsion technologies.*",
+      "*Unstable radiation belts create hazardous living conditions but facilitate research in electro-quantum propulsion technologies.*",
     source: "base",
   },
   {
@@ -8637,7 +8637,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Prosperous planet with large native population and substantial industry. Extreme axial tilt results in long day-night cycle that some races find uncomfortable.*",
+      "*Prosperous planet with large native population and substantial industry. Extreme axial tilt results in long day-night cycles that some races find uncomfortable.*",
     source: "base",
   },
   {
@@ -8798,7 +8798,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Covered with tundra, wetlands, and rainforest, much like its sister-planet Retillion. Home to the Mojeb, the only major Yssaril city catalogued by off-worlders.*",
+      "*Covered with tundra, wetlands, and rainforest, much like its sister-planet Retillion. Home to Mojeb, the only major Yssaril city catalogued by off-worlders.*",
     source: "base",
   },
   {
@@ -9431,7 +9431,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Small isolated planet with small population and modest resources. Most famous for its delicious avinberries.*",
+      "*Small, isolated planet with small population and modest resources. Most famous for its delicious avinberries.*",
     source: "base",
   },
   {
@@ -11113,7 +11113,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Arid, windy, and populated primarily by predatory Daartar hounds. The Barony utilizes large swathes of its northern steppes for low-yield agriculture.*",
+      "*Arid, windy, and populated primarily by predatory Daartar hounds. The Barony utilizes large swaths of its northern steppes for low-yield agriculture.*",
     source: "base",
   },
   {

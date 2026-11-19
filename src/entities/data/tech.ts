@@ -987,7 +987,7 @@ export const techs: Tech[] = [
     requirements: "YY",
     faction: "keleres",
     source: "pok",
-    text: "Once per action, when you resolve a unit's PRODUCTION ability, you may resolve another of your unit's PRODUCTION abilities in any system.",
+    text: "When you resolve a unit's PRODUCTION ability, you may resolve another of your unit's PRODUCTION abilities in any system; this ability can be used only once per action.",
     shortName: "Agency\nSupply Net.",
     shrinkName: false,
     imageURL: "/hover_images/techs/faction/agency_supply_network.jpg",

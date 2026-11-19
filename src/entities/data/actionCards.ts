@@ -5609,7 +5609,7 @@ export const actionCards: ActionCard[] = [
     alias: "puppetsonastring",
     name: "Puppets on a String",
     phase: "Action",
-    window: "At the end of a player's turn, if you have passed",
+    window: "At the end of any player's turn, if you have passed",
     text: "Perform 1 action.",
     flavorText:
       'A red light flashed as the pile that was once thought to be destroyed remains of UNIT_DSGN_ASTAROTH came once more to life. "YOU THOUGHT. YOU BELIEVED YOUR VICTORY SECURE. BUT YOU WERE WRONG."',
@@ -5785,7 +5785,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Perform the primary ability of a readied or unchosen strategy card.",
     flavorText:
-      "Treilla absentmindedly smiled at the audacity of the newly promoted commander. Making waves like this - he'd likely be dead or demoted within a day or two. Still, she found the posturing...amusing.",
+      "Treilla absentmindedly smiled at the audacity of the newly promoted commander. Making waves like this—he'd likely be dead or demoted within a day or two. Still, she found the posturing...amusing.",
     source: "thunders_edge",
   },
 ];
