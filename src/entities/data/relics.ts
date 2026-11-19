@@ -384,7 +384,7 @@ export const relics: Relic[] = [
   {
     alias: "dynamiscore",
     name: "Dynamis Core",
-    text: "While this card is in your play area, your commodity value is increased by 2.\nACTION: Purge this card to gain trade goods equal to your printed commodity value+2.",
+    text: "While this card is in your play area, your commodity value is increased by 2.\nACTION: Gain trade goods equal to your commodity value, then purge this card.",
     imageURL: "/hover_images/relics/pok/dynamis_core.jpg",
     source: "codex2",
     flavourText:

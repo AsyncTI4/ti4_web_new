@@ -5,10 +5,26 @@ import { Ability } from "./types";
 
 export const abilities: Ability[] = [
   {
+    id: "echo_of_divergence",
+    name: "Echo of Divergence",
+    faction: "crimson",
+    permanentEffect:
+      "During your tactical actions, apply +1 to the move value of each of your ships that starts its movement in your home system.",
+    source: "twilights_fall",
+  },
+  {
+    id: "echo_of_sacrifice",
+    name: "Echo of Sacrifice",
+    faction: "ghost",
+    permanentEffect:
+      "During your tactical actions, apply +1 to the move value of each of your ships that starts its movement in your home system.",
+    source: "twilights_fall",
+  },
+  {
     id: "raid_formation",
     name: "Raid Formation",
     faction: "argent",
-    window: "When 1 or more of your units uses ANTI-FIGHTER BARRAGE",
+    window: "When 1 or more of your units use ANTI-FIGHTER BARRAGE",
     windowEffect:
       "for each hit produced in excess of your opponent's fighters, choose 1 of your opponent's ships that has SUSTAIN DAMAGE to become damaged.",
     source: "pok",
@@ -80,7 +96,7 @@ export const abilities: Ability[] = [
     name: "Edict",
     faction: "mahact",
     permanentEffect:
-      "Other player's tokens in your fleet pool increase your fleet limit but cannot be redistributed.",
+      "Other players' tokens in your fleet pool increase your fleet limit but cannot be redistributed.",
     window: "When you win a combat",
     windowEffect:
       "Place 1 command token from your opponent's reinforcements in your fleet pool if it does not already contain 1 of that player's tokens.",
@@ -91,7 +107,7 @@ export const abilities: Ability[] = [
     name: "Hubris",
     faction: "mahact",
     permanentEffect:
-      'During setup, purge your "Alliance" promissory note. Other players cannot give you their \'Alliance" promissory note.',
+      'During setup, purge your "Alliance" promissory note. Other players cannot give you their "Alliance" promissory note.',
     source: "pok",
   },
   {
@@ -256,7 +272,7 @@ export const abilities: Ability[] = [
   },
   {
     id: "the_tribuni",
-    name: "The Tribuni",
+    name: "The Tribunii",
     faction: "keleres",
     permanentEffect:
       "During setup, choose an unplayed faction from among the Mentak, the Xxcha and The Argent Flight; take that faction's home system, command tokens and control markers. Additionally, take the Keleres Hero that corresponds to that faction",
@@ -2165,7 +2181,7 @@ export const abilities: Ability[] = [
     id: "survivalinstinct",
     name: "Survival Instinct",
     faction: "ralnel",
-    window: "After a player activates a system that contains your ships",
+    window: "After another player activates a system that contains your ships",
     windowEffect:
       "you may move up to 2 of your ships into the active system from adjacent systems that do not contain your command tokens.",
     source: "thunders_edge",
@@ -2202,7 +2218,7 @@ export const abilities: Ability[] = [
     name: "Incursion",
     faction: "crimson",
     permanentEffect:
-      "When you activate a system that contains a breach, you may flip that breach; systems that contain active breaches are adjacent. at the end of the status phase, any player with ships in a system that contain an active breach may remove that breach.",
+      "When you activate a system that contains a breach, you may flip that breach; systems that contain active breaches are adjacent. at the end of the status phase, any player with ships in a system that contains an active breach may remove that breach.",
     source: "thunders_edge",
   },
   {
@@ -2221,7 +2237,7 @@ export const abilities: Ability[] = [
     name: "Sorrow",
     faction: "crimson",
     permanentEffect:
-      "When you create the game board, place the Sorrow (tile 94) where your home system would normally be placed, then place a inactive breach there. The Sorrow is not a home system. Then, place your home system (tile 118) in your play area.",
+      "When you create the game board, place the Sorrow (tile 94) where your home system would normally be placed, then place an inactive breach there. The Sorrow is not a home system. Then, place your home system (tile 118) in your play area.",
     source: "thunders_edge",
   },
   {

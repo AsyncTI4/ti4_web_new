@@ -176,7 +176,7 @@ export const publicObjectives: PublicObjective[] = [
     alias: "distant_lands",
     name: "Rule Distant Lands",
     phase: "Status",
-    text: "Control 2 planets that are each in or adjacent to a different, other player's home system. [Note: The two planets need to be next to or in TWO seperate players HS.]",
+    text: "Control 2 planets that are each in or adjacent to a different, other player's home system. [Note: The two planets need to be next to or in TWO separate players' HS.]",
     points: 2,
     source: "pok",
   },

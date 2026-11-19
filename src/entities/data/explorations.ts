@@ -193,7 +193,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may gain 2 commodities, or you may convert up to 2 of your commodities to trade goods.",
     flavorText:
-      "*Suffi An drifted into the derelict orbital and brushed her suited hand across the inner hatch controls. A light glowed, and she smiled. The statis seals were still operational.*",
+      "*Suffi An drifted into the derelict orbital and brushed her suited hand across the inner hatch controls. A light glowed, and she smiled. The stasis seals were still operational.*",
     source: "pok",
   },
   {
@@ -268,7 +268,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, gain 1 trade good.",
     flavorText:
-      "*The borehole was over a kilometer across. It seemed to stretch down forever, but Ilan could see a faint orange glow in its depths.*",
+      "*Without the proper machinery, a core mine can be a more hostile environment than a star's corona.*",
     source: "pok",
   },
   {
@@ -536,7 +536,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may gain 1 commodity, or you may spend 1 trade good or 1 commodity to draw 1 action card.",
     flavorText:
-      "*The Imperial Survey Corp outpost had been adandoned since the Twilight Wars, but the facilities had been built to last for millennia.*",
+      "*The Imperial Survey Corp outpost had been abandoned since the Twilight Wars, but the facilities had been built to last for millennia.*",
     source: "pok",
   },
   {
@@ -752,7 +752,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may produce 1 unit in this system. You may spend influence as if it were resources to produce this unit.",
     flavorText:
-      "*The Vexis Howelers were well-equipped with transports, powered armor, and even logistical support—everything a fledgling outpost needed to survive.*",
+      "*The Vexis Howlers were well-equipped with transports, powered armor, and even logistical support—everything a fledgling outpost needed to survive.*",
     source: "pok",
   },
   {

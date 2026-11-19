@@ -3240,7 +3240,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Larger than a thousand terrestrial planets, Elysium is an artificial shell-world built around the powerful singularity in its hollow heart. Its surface is covered in calm seas and cultivated plants.*",
+      "*Larger than a thousand terrestrial planets, Elysium is an artificial shell-world built around the powerful singularity in its hollow heart. Its surface is covered in calm seas and cultivated plains.*",
     source: "pok",
   },
   {
@@ -11210,7 +11210,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Known for genetically complex native lifeforms adapted to tainted atmosphere and biochemistry.*",
+      "*Known for genetically complex native lifeforms adapted to tainted atmosphere and toxic biochemistry.*",
     source: "base",
   },
   {

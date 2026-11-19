@@ -2066,7 +2066,7 @@ export const agendas: Agenda[] = [
     alias: "core_mining",
     name: "Core Mining",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Hazardous Planet",
     text1:
       "Attach this card to the elected planet's card. Then, destroy 1 infantry on the planet. The resource value of this planet is increased by 2.",
     text2: "",
@@ -2090,7 +2090,7 @@ export const agendas: Agenda[] = [
     name: "Covert Legislation",
     type: "Directive",
     target:
-      "When this agenda is revealed, the speaker draws the next card in the agenda deck but does not reveal it to the other players. Instead, the speaker reads the eligible outcomes aloud (for, against, elect Elect Player, etc.). The other Players vote for these outcomes as if they were outcomes of this agenda, without knowing their effects.",
+      "When this agenda is revealed, the speaker draws the next card in the agenda deck but does not reveal it to the other players. Instead, the speaker reads the eligible outcomes aloud (for, against, elect player, etc.). The other Players vote for these outcomes as if they were outcomes of this agenda, without knowing their effects.",
     text1: "",
     text2: "",
     source: "pok",
@@ -2735,7 +2735,7 @@ export const agendas: Agenda[] = [
     alias: "demilitarized_zone",
     name: "Demilitarized Zone",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Cultural Planet",
     text1:
       "Attach this card to the elected planet's card. Then, destroy all units on that planet. Player's units cannot land, be produced, or be placed on this planet.",
     text2: "",
@@ -2747,7 +2747,7 @@ export const agendas: Agenda[] = [
     type: "Directive",
     target: "Elect Planet",
     text1:
-      "Destroy each ground force on the elected planet. For each unit that was destroyed, the player who control that planet gains 1 trade good.",
+      "Destroy each ground force on the elected planet. For each unit that was destroyed, the player who controls that planet gains 1 trade good.",
     text2: "",
     source: "base",
   },
@@ -2811,7 +2811,7 @@ export const agendas: Agenda[] = [
     alias: "holy_planet_of_ixth",
     name: "Holy Planet of Ixth",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Cultural Planet",
     text1:
       "Attach this card to the elected planet's card. The planet's owner gains 1 victory point. Units on this planet cannot use PRODUCTION. When a player gains control of this planet, they gain 1 victory point. When a player loses control of this planet, they lose 1 victory point.",
     text2: "",
@@ -2849,7 +2849,7 @@ export const agendas: Agenda[] = [
     text1:
       "For: Draw and reveal 1 stage I public objective from the deck and place it near the public objectives.",
     text2:
-      "Against: Draw and reveal 1 stage II public from the deck and place it near the public objectives.",
+      "Against: Draw and reveal 1 stage II public objective from the deck and place it near the public objectives.",
     forEmoji: "Public1alt",
     againstEmoji: "Public2alt",
     source: "base",
@@ -3596,10 +3596,10 @@ export const agendas: Agenda[] = [
     type: "Law",
     target: "Elect Player",
     text1:
-      "The elected player gains this card. The owner of this card may discard this card after performing an action to remove 1 of their command counters from the game board and return it to their reinforcements - then they may perform 1 additional action.",
+      "The elected player gains this card. The owner of this card may discard this card after performing an action to remove 1 of their command tokens from the game board and return it to their reinforcements - then they may perform 1 additional action.",
     text2: "",
     mapText:
-      "Discard this card after performing an action to return 1 of your command counters from the game board to your reinforcements. then you may perform 1 additional action.",
+      "Discard this card after performing an action to return 1 of your command tokens from the game board to your reinforcements. then you may perform 1 additional action.",
     source: "base",
   },
   {
@@ -3843,7 +3843,7 @@ export const agendas: Agenda[] = [
     alias: "rt_biotic",
     name: "Research Team: Biotic",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Industrial Planet",
     text1:
       "Attach this card to the elected planet's card. When the owner of this planet researches technology, they may exhaust this card to ignore 1 green prerequisite.",
     text2: "",
@@ -3853,7 +3853,7 @@ export const agendas: Agenda[] = [
     alias: "rt_cybernetic",
     name: "Research Team: Cybernetic",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Industrial Planet",
     text1:
       "Attach this card to the elected planet's card. When the owner of this planet researches technology, they may exhaust this card to ignore 1 yellow prerequisite.",
     text2: "",
@@ -3863,7 +3863,7 @@ export const agendas: Agenda[] = [
     alias: "rt_propulsion",
     name: "Research Team: Propulsion",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Industrial Planet",
     text1:
       "Attach this card to the elected planet's card. When the owner of this planet researches technology, they may exhaust this card to ignore 1 blue prerequisite.",
     text2: "",
@@ -3873,7 +3873,7 @@ export const agendas: Agenda[] = [
     alias: "rt_warfare",
     name: "Research Team: Warfare",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Hazardous Planet",
     text1:
       "Attach this card to the elected planet's card. When the owner of this planet researches technology, they may exhaust this card to ignore 1 red prerequisite.",
     text2: "",
@@ -3929,7 +3929,7 @@ export const agendas: Agenda[] = [
     alias: "senate_sancuary",
     name: "Senate Sanctuary",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Cultural Planet",
     text1:
       "Attach this card to the elected planet's card. The influence value of this planet is increased by 2.",
     text2: "",
@@ -4213,7 +4213,7 @@ export const agendas: Agenda[] = [
     type: "Directive",
     target: "Elect Player",
     text1:
-      "The elected player place command tokens from their reinforcements so that they have 3 tokens in their tactic pool, 3 tokens in their fleet pool, and 2 tokens in their strategy pool. They return any excess tokens to their reinforcements.",
+      "The elected player places command tokens from their reinforcements so that they have 3 tokens in their tactic pool, 3 tokens in their fleet pool, and 2 tokens in their strategy pool. They return any excess tokens to their reinforcements.",
     text2: "",
     source: "pok",
   },
@@ -4232,7 +4232,7 @@ export const agendas: Agenda[] = [
     alias: "terraforming_initiative",
     name: "Terraforming Initiative",
     type: "Law",
-    target: "Elect Planet",
+    target: "Elect Hazardous Planet",
     text1:
       "Attach this card to the elected planet's card. The resource and influence values of this planet are increased by 1.",
     text2: "",
@@ -4275,7 +4275,7 @@ export const agendas: Agenda[] = [
     type: "Directive",
     target: "Edict",
     text1:
-      "Gain each of the following, then each other player chooses 1 of the following to gain: 1 command token; 2 action cads; 3 trade goods.",
+      "Gain each of the following, then each other player chooses 1 of the following to gain: 1 command token; 2 action cards; 3 trade goods.",
     source: "twilights_fall",
   },
   {
@@ -4285,7 +4285,7 @@ export const agendas: Agenda[] = [
     type: "Law",
     target: "Elect Player",
     text1:
-      "Place any player's control marker on this card. That player cannot perform transactions during this game round. Discard this card at the end of the game round. ",
+      "Place any player's control marker on this card. That player cannot perform transactions during this game round. Discard this card at the end of the status phase. ",
     source: "twilights_fall",
   },
   {

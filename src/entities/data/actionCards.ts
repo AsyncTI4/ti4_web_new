@@ -418,7 +418,7 @@ export const actionCards: ActionCard[] = [
     window: "At the start of an invasion",
     text: "Each of your non-fighter ships in the active system that do not have BOMBARDMENT gain BOMBARDMENT 6 until the end of the invasion.",
     flavorText:
-      "T-these weren't meant to be used like this. T-this is a t-terrible idea. Tai mumbled, wringing his hands. \"Well 'course it is,\" Dart grinned, slamming his fist down on the release lock. \"But we've got about sixty kilotons of 'surprise' and nothing to lose!\"",
+      '"T-these weren\'t meant to be used like this. T-this is a t-terrible idea." Tai mumbled, wringing his hands. "Well \'course it is," Dart grinned, slamming his fist down on the release lock. "But we\'ve got about sixty kilotons of \'surprise\' and nothing to lose!"',
     source: "codex1",
   },
   {
@@ -493,7 +493,7 @@ export const actionCards: ActionCard[] = [
     text: "Spend any number of trade goods. For each trade good spent, cast 1 additional vote for the outcome on which you voted.",
     automationID: "bribery",
     flavorText:
-      "We think that this initiative would spell disaster for the galaxy, not just the Creuss. Taivra said, quietly slipping Z'eu an envelope. \"Don't you agree?\"",
+      '"We think that this initiative would spell disaster for the galaxy, not just the Creuss." Taivra said, quietly slipping Z\'eu an envelope. "Don\'t you agree?"',
     source: "base",
   },
   {
@@ -504,7 +504,7 @@ export const actionCards: ActionCard[] = [
     text: "Spend any number of trade goods. For each trade good spent, cast 1 additional vote for the outcome on which you voted.",
     automationID: "bribery",
     flavorText:
-      "We think that this initiative would spell disaster for the galaxy, not just the Creuss. Taivra said, quietly slipping Z'eu an envelope. \"Don't you agree?\"",
+      '"We think that this initiative would spell disaster for the galaxy, not just the Creuss." Taivra said, quietly slipping Z\'eu an envelope. "Don\'t you agree?"',
     source: "base",
   },
   {
@@ -515,7 +515,7 @@ export const actionCards: ActionCard[] = [
     text: "Spend any number of trade goods. For each trade good spent, cast 1 additional vote for the outcome on which you voted.",
     automationID: "bribery",
     flavorText:
-      "We think that this initiative would spell disaster for the galaxy, not just the Creuss. Taivra said, quietly slipping Z'eu an envelope. \"Don't you agree?\"",
+      '"We think that this initiative would spell disaster for the galaxy, not just the Creuss." Taivra said, quietly slipping Z\'eu an envelope. "Don\'t you agree?"',
     source: "base",
   },
   {
@@ -526,7 +526,7 @@ export const actionCards: ActionCard[] = [
     text: "Spend any number of trade goods. For each trade good spent, cast 1 additional vote for the outcome on which you voted.",
     automationID: "bribery",
     flavorText:
-      "We think that this initiative would spell disaster for the galaxy, not just the Creuss. Taivra said, quietly slipping Z'eu an envelope. \"Don't you agree?\"",
+      '"We think that this initiative would spell disaster for the galaxy, not just the Creuss." Taivra said, quietly slipping Z\'eu an envelope. "Don\'t you agree?"',
     source: "base",
   },
   {
@@ -679,7 +679,7 @@ export const actionCards: ActionCard[] = [
     window: "When another player is elected as the outcome of an agenda",
     text: "You are the elected player instead.",
     flavorText:
-      'Unfortunately, Cinnabian said in a level voice, "the Galactic Council requires the dispute be arbitrated by a truly neutral party. As the Titans were still slumbering when your war began, we will oversee your negotiations... instead of your friends on Jord."',
+      '"Unfortunately," Cinnabian said in a level voice, "the Galactic Council requires the dispute be arbitrated by a truly neutral party. As the Titans were still slumbering when your war began, we will oversee your negotiations... instead of your friends on Jord."',
     source: "pok",
   },
   {
@@ -800,10 +800,10 @@ export const actionCards: ActionCard[] = [
     name: "Counterstroke",
     phase: "Action",
     window:
-      "After a player activates a system that contains 1 of your command tokens",
+      "After another player activates a system that contains 1 of your command tokens",
     text: "Return that command token to your tactic pool.",
     flavorText:
-      'That\'s the thing about loyalty -  Viktor mused, turning one of the pieces backward, facing its own side. "It can be bought."',
+      '"That\'s the thing about loyalty - " Viktor mused, turning one of the pieces backward, facing its own side. "It can be bought."',
     source: "codex1",
   },
   {
@@ -814,7 +814,7 @@ export const actionCards: ActionCard[] = [
       "After a player activates a system that contains 1 of your command tokens",
     text: "Return that command token to your tactic pool.",
     flavorText:
-      'That\'s the thing about loyalty -  Viktor mused, turning one of the pieces backward, facing its own side. "It can be bought."',
+      '"That\'s the thing about loyalty - " Viktor mused, turning one of the pieces backward, facing its own side. "It can be bought."',
     source: "codex1",
   },
   {
@@ -1320,7 +1320,7 @@ export const actionCards: ActionCard[] = [
       "At the start of an invasion in a system that contains 1 or more of your opponents' PDS units",
     text: "Your opponents' PDS units lose PLANETARY SHIELD and SPACE CANNON during this invasion.",
     flavorText:
-      'Ssruu has met their systems and fixed them. Ssruu dropped a handful of ripped wires and broken circuitry on the pedestal before Q\'uesh Sish. "He will await his next task aboard his ship."',
+      '"Ssruu has met their systems and fixed them." Ssruu dropped a handful of ripped wires and broken circuitry on the pedestal before Q\'uesh Sish. "He will await his next task aboard his ship."',
     source: "base",
   },
   {
@@ -1331,7 +1331,7 @@ export const actionCards: ActionCard[] = [
       "At the start of an invasion in a system that contains 1 or more of your opponents' PDS units",
     text: "Your opponents' PDS units lose PLANETARY SHIELD and SPACE CANNON during this invasion.",
     flavorText:
-      'Ssruu has met their systems and fixed them. Ssruu dropped a handful of ripped wires and broken circuitry on the pedestal before Q\'uesh Sish. "He will await his next task aboard his ship."',
+      '"Ssruu has met their systems and fixed them." Ssruu dropped a handful of ripped wires and broken circuitry on the pedestal before Q\'uesh Sish. "He will await his next task aboard his ship."',
     source: "base",
   },
   {
@@ -1414,7 +1414,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Return a non-unit upgrade, non-faction technology that you own to your technology deck. Then, research another technology.",
     flavorText:
-      'I am sorry, Academician, Arbiter Berekon shrugged. "I am sure psychoarchaeology is an interesting subject, but the supreme leader feels your budget would be better spent on more militaristic research."',
+      '"I am sorry, Academician," Arbiter Berekon shrugged. "I am sure psychoarchaeology is an interesting subject, but the supreme leader feels your budget would be better spent on more militaristic research."',
     source: "pok",
   },
   {
@@ -1425,7 +1425,7 @@ export const actionCards: ActionCard[] = [
     text: "Return a non-unit upgrade, non-faction technology that you own to your technology deck. Then, research another technology.",
     automationID: "divert_funding",
     flavorText:
-      'I am sorry, Academician, Arbiter Berekon shrugged. "I am sure psychoarchaeology is an interesting subject, but the supreme leader feels your budget would be better spent on more militaristic research."',
+      '"I am sorry, Academician," Arbiter Berekon shrugged. "I am sure psychoarchaeology is an interesting subject, but the supreme leader feels your budget would be better spent on more militaristic research."',
     source: "pok",
   },
   {
@@ -1469,7 +1469,7 @@ export const actionCards: ActionCard[] = [
     text: "Choose another player. That player must give you 1 promissory note from their hand. [Note: one player cannot play multiple of these on another player in the same agenda]",
     automationID: "diplo_pressure",
     flavorText:
-      'It would be unfortunate, the Arborec Dirzuga said, "if your supplies of diraxium were to dry up. How would your fleet defend you if we stopped supplying its fuel?"',
+      '"It would be unfortunate," the Arborec Dirzuga said, "if your supplies of diraxium were to dry up. How would your fleet defend you if we stopped supplying its fuel?"',
     source: "pok",
   },
   {
@@ -1480,7 +1480,7 @@ export const actionCards: ActionCard[] = [
     text: "Choose another player. That player must give you 1 promissory note from their hand. [Note: one player cannot play multiple of these on another player in the same agenda]",
     automationID: "diplo_pressure",
     flavorText:
-      'Damn you! Brother MIlor hissed. "You leave us no choice but to fight in your war." Dirzuga Ohao smiled, dead skin stretching over her teeth.',
+      '"Damn you!" Brother MIlor hissed. "You leave us no choice but to fight in your war." Dirzuga Ohao smiled, dead skin stretching over her teeth.',
     source: "pok",
   },
   {
@@ -1552,7 +1552,7 @@ export const actionCards: ActionCard[] = [
     text: "Repair all of your units that have SUSTAIN DAMAGE in the active system.",
     automationID: "emergency_repairs",
     flavorText:
-      "What do you mean 'It's fine!?' Dahla said, nearly tripping over a damaged bulkhead as the ship rocked from the explosive barrage.",
+      "\"What do you mean 'It's fine!?'\" Dahla said, nearly tripping over a damaged bulkhead as the ship rocked from the explosive barrage.",
     source: "base",
   },
   {
@@ -1618,7 +1618,7 @@ export const actionCards: ActionCard[] = [
     text: "Choose 1 of your space docks that is either in or adjacent to that system. That space dock uses SPACE CANNON 5(x3) against ships in the active system.",
     automationID: "experimental",
     flavorText:
-      'Arm the relay! Mendosa bared his fangs. "The Saar will not submit!"',
+      '"Arm the relay!" Mendosa bared his fangs. "The Saar will not submit!"',
     source: "base",
   },
   {
@@ -1630,7 +1630,7 @@ export const actionCards: ActionCard[] = [
     text: "Choose 1 of your space docks that is either in or adjacent to that system. That space dock uses SPACE CANNON 5(x3) against ships in the active system.",
     automationID: "experimental",
     flavorText:
-      'Arm the relay! Mendosa bared his fangs. "The Saar will not submit!"',
+      '"Arm the relay!" Mendosa bared his fangs. "The Saar will not submit!"',
     source: "base",
   },
   {
@@ -2040,8 +2040,9 @@ export const actionCards: ActionCard[] = [
     alias: "ghost_squad",
     name: "Ghost Squad",
     phase: "Action",
-    window: "After a player commits units to land on a planet you control",
-    text: "Move any number of ground forces from any planet you control in the active system to any other planet you control in the active system.",
+    window:
+      "After another player commits units to land on a planet you control",
+    text: "Move any number of your ground forces from any planet you control in the active system to any other planet you control in the active system.",
     flavorText:
       "The L1 advance team was expecting to find the outpost abandoned. What they found - unfortunately for them - was Connor.",
     source: "codex1",
@@ -2082,7 +2083,7 @@ export const actionCards: ActionCard[] = [
     name: "Hack Election",
     phase: "Agenda",
     window: "After an agenda is revealed",
-    text: "During this agenda, voting begins with the player to the right of the speaker and continues counterclockwise.",
+    text: "During this agenda, you vote last.",
     flavorText:
       "YOUR [NULL ID] STATELY GAME WILL BE FOR NAUGHT<< [VAR:42687] ORDER WILL ARISE FROM [VAR:89001] CHAOS<< IT IS OUR HAND THAT CONTROLS THE OUTCOME",
     source: "codex1",
@@ -2094,7 +2095,7 @@ export const actionCards: ActionCard[] = [
     window: "After you activate an anomaly",
     text: "Replenish your commodities.",
     flavorText:
-      'Manipulating the cosmos was a power reserved for the gods. Rowl spat at the ground as his contraption whirred to life. "Not anymore."',
+      '"Manipulating the cosmos was a power reserved for the gods." Rowl spat at the ground as his contraption whirred to life. "Not anymore."',
     source: "codex1",
   },
   {
@@ -2200,7 +2201,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Spend 3 influence to draw 1 secret objective.",
     flavorText:
-      'Also, Connor continued, bemused. "Someone just handed me this as I was leaving. I think it was meant for our dear friend Sucaban. We should be able to put it to good use."',
+      '"Also," Connor continued, bemused. "Someone just handed me this as I was leaving. I think it was meant for our dear friend Sucaban. We should be able to put it to good use."',
     source: "codex1",
   },
   {
@@ -2250,7 +2251,7 @@ export const actionCards: ActionCard[] = [
     name: "Insider Information",
     phase: "Agenda",
     window: "After an agenda is revealed",
-    text: "Look at the top card of the agenda deck.",
+    text: "Look at the top 3 cards of the agenda deck.",
     automationID: "insider",
     flavorText:
       "M'aban yawned. Another filibuster. Politics could be so flavorless at times. Besides, she already knew how this one was going to turn out. Not well. Not well at all...",
@@ -2304,7 +2305,7 @@ export const actionCards: ActionCard[] = [
     window: "At the start of the strategy phase",
     text: "Place a total of 5 trade goods from the supply on strategy cards of your choice. You must place these tokens on at least 3 different cards.",
     flavorText:
-      'But my good fellow, the envoy sputtered. "Surely you can\'t expect me to agree to those prices!" Durruq leaned in close. "Check again. You may find your goods are trading for less than you think."',
+      '"But my good fellow," the envoy sputtered. "Surely you can\'t expect me to agree to those prices!" Durruq leaned in close. "Check again. You may find your goods are trading for less than you think."',
     source: "pok",
   },
   {
@@ -2455,7 +2456,7 @@ export const actionCards: ActionCard[] = [
     name: "Master Plan",
     phase: "Action",
     window: "After you perform an action",
-    text: "You may perform an additional action this turn.",
+    text: "Perform an additional action.",
     flavorText:
       "Viktor laced his long fingers with a wicked smile. Unlenn would be proud. The tactician's reputation was well-earned; even pawns could unseat kings.",
     source: "codex1",
@@ -2497,7 +2498,7 @@ export const actionCards: ActionCard[] = [
     window: "At the start of a combat round",
     text: "Apply +1 to the result of each of your unit's combat rolls during this combat round.",
     flavorText:
-      "We have done the impossible. I am proud to call you my brothers. My equals. My betters. Harrugh's whiskers bristled with energy as he spoke.",
+      '"We have done the impossible. I am proud to call you my brothers. My equals. My betters." Harrugh\'s whiskers bristled with energy as he spoke.',
     source: "base",
   },
   {
@@ -2507,7 +2508,7 @@ export const actionCards: ActionCard[] = [
     window: "At the start of a combat round",
     text: "Apply +1 to the result of each of your unit's combat rolls during this combat round.",
     flavorText:
-      "Today we turn these invaders to ash and take back what is ours! Harrugh paused, noting the murmurs of approval rippling through the ranks.",
+      '"Today we turn these invaders to ash and take back what is ours!" Harrugh paused, noting the murmurs of approval rippling through the ranks.',
     source: "base",
   },
   {
@@ -2883,7 +2884,7 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "During the 'Movement' step of this tactical action, ignore the effect of anomalies.",
     flavorText:
-      'The field is too thick! Sikosk gasped. Trrakan\'s plume flared. "Not for me, and not for Iruth." A flick of his talon, and the destroyer flipped and dove for the asteroid field.',
+      '"The field is too thick!" Sikosk gasped. Trrakan\'s plume flared. "Not for me, and not for Iruth." A flick of his talon, and the destroyer flipped and dove for the asteroid field.',
     source: "pok",
   },
   {
@@ -2893,7 +2894,7 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "During the 'Movement' step of this tactical action, ignore the effect of anomalies.",
     flavorText:
-      'The field is too thick! Sikosk gasped. Trrakan\'s plume flared. "Not for me, and not for Iruth." A flick of his talon, and the destroyer flipped and dove for the asteroid field.',
+      '"The field is too thick!" Sikosk gasped. Trrakan\'s plume flared. "Not for me, and not for Iruth." A flick of his talon, and the destroyer flipped and dove for the asteroid field.',
     source: "pok",
   },
   {
@@ -3905,7 +3906,7 @@ export const actionCards: ActionCard[] = [
     text: "Move all of your ships from the active system into an adjacent system that does not contain another player's ships. The space combat ends in a draw. Then, place a command token from your reinforcements in that system.",
     automationID: "skilled_retreat",
     flavorText:
-      'We have no choice, captain. Ciel looked nervous."We must retreat."',
+      '"We have no choice, captain." Ciel looked nervous."We must retreat."',
     source: "base",
   },
   {
@@ -4057,7 +4058,7 @@ export const actionCards: ActionCard[] = [
       "After another player makes a BOMBARDMENT, SPACE CANNON, or ANTI-FIGHTER BARRAGE roll",
     text: "That player rerolls all of their dice.",
     flavorText:
-      "I will not accept this from that worthless scum! Feng growled as his enigmatic companion interfaced with the ship's nav suite. The Memoria's position flickered and shifted, and the blast flashed harmlessly by.",
+      "\"I will not accept this from that worthless scum!\" Feng growled as his enigmatic companion interfaced with the ship's nav suite. The Memoria's position flickered and shifted, and the blast flashed harmlessly by.",
     source: "codex1",
   },
   {
@@ -4552,7 +4553,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose 1 player. That player gives you 1 random action card from their hand.",
     flavorText:
-      'I\'m no spy, Connor said, casually stuffing the data drives into his pack. "Now, how can I get out of here without being seen?"',
+      '"I\'m no spy," Connor said, casually stuffing the data drives into his pack. "Now, how can I get out of here without being seen?"',
     source: "base",
   },
   {
@@ -4860,7 +4861,7 @@ export const actionCards: ActionCard[] = [
     text: "Replace 1 of your cruisers in that system with 1 dreadnought from your reinforcements.",
     automationID: "upgrade",
     flavorText:
-      'More guns? Connor shook his head. "Not more guns. Let\'s try something bigger."',
+      '"More guns?" Connor shook his head. "Not more guns. Let\'s try something bigger."',
     source: "base",
   },
   {
@@ -4965,7 +4966,7 @@ export const actionCards: ActionCard[] = [
     text: "Apply +4 to the total PRODUCTION value of your units and reduce the combined cost of the produced units by 1.",
     automationID: "war_machine",
     flavorText:
-      'This would take weeks to replace if you had run it backwards, Varish called as she rotated the massive capacitor bank. "Okay, fire it up."',
+      '"This would take weeks to replace if you had run it backwards," Varish called as she rotated the massive capacitor bank. "Okay, fire it up."',
     source: "codex1",
   },
   {
@@ -5031,7 +5032,7 @@ export const actionCards: ActionCard[] = [
     text: "Apply +4 to the total PRODUCTION value of your units and reduce the combined cost of the produced units by 1.",
     automationID: "war_machine",
     flavorText:
-      "Varish, let the Commanders know they can contact the Tetrarchy. Tell them the fighter squadron assembly will be done ahead of schedule, and under budget.",
+      '"Varish, let the Commanders know they can contact the Tetrarchy. Tell them the fighter squadron assembly will be done ahead of schedule, and under budget."',
     source: "codex1",
   },
   {
@@ -5084,6 +5085,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Give 1 of your abilities to 1 of your neighbors, then take one of their abilities.",
     source: "twilights_fall",
+    flavorText:
+      "So accustomed had the Mahact become to their unending struggle, they had forgotten that power need not always be seized by force. From the lesser beings of the galaxy, Avarice Rex had seen that it could be bought, or even freely given. Was an effortless victory not, in fact, the truest display of power?",
   },
   {
     alias: "tf-transpose2",
@@ -5092,6 +5095,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Give 1 of your abilities to 1 of your neighbors, then take one of their abilities.",
     source: "twilights_fall",
+    flavorText:
+      "Aelo An Goldos cared not whence the thralls came, or who they had once been, only that they served. The Dominus Orb ensured that.",
   },
   {
     alias: "tf-mutate1",
@@ -5100,6 +5105,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Discard 1 of your abilities and draw 1 random ability",
     source: "twilights_fall",
+    flavorText:
+      '"Very well," growled Vesh Nil Qor. "When we meet again, I shall reduce your bodies to wizened and twisted husks. And you shall be fully aware to experience the horror of your fate."',
   },
   {
     alias: "tf-mutate2",
@@ -5108,6 +5115,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Discard 1 of your abilities and draw 1 random ability",
     source: "twilights_fall",
+    flavorText:
+      'A Sickening Lurch knew that to move forward, they must leave something behind. That their so-called "peers" were aghast at their choice was of little consequence.',
   },
   {
     alias: "tf-scarab",
@@ -5116,6 +5125,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose a spliced card you own; gain 2 trade goods for each card you own with a faction origin that matches that card",
     source: "twilights_fall",
+    flavorText:
+      "A swarm of thrall-ships buzzed through the skies of Aior Dol Gorgos, bearing the tribute of a thousand worlds to the hungry maws of the assembler halls below.",
   },
   {
     alias: "tf-genophage",
@@ -5124,6 +5135,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Discard 1 of your neighbor's genomes.",
     source: "twilights_fall",
+    flavorText:
+      '"You mean, after all this time," whispered Brother Omar in horror, "the Greyfire...it was a Mahact test?" "Yes," lied the Herald of Thorns, "And now, you have passed."',
   },
   {
     alias: "tf-engineer",
@@ -5132,6 +5145,8 @@ export const actionCards: ActionCard[] = [
     window: "When you draw cards for a splice that you initiated",
     text: "Add 2 additional cards to the splice; after you choose your card, choose and discard 2 of the spliced cards before passing them to the next player.",
     source: "twilights_fall",
+    flavorText:
+      '"It seems that Zel Tol Mosin did not intend his heir to receive his estate," rumbled Tyrolian the Gatekeeper, "but instead, to provide a vessel for his mind."',
   },
   {
     alias: "tf-manipulate",
@@ -5141,6 +5156,8 @@ export const actionCards: ActionCard[] = [
       "After cards are drawn for a splice that you are not participating in",
     text: "Take the spliced cards. Choose which card each participating player will take.",
     source: "twilights_fall",
+    flavorText:
+      "The others had always thought Jae Mir Kan a mere courier. They failed to appreciate how much a message's reception depended on the manner of its delivery.",
   },
   {
     alias: "tf-helix",
@@ -5149,6 +5166,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Initiate a splice of any type, including all players.",
     source: "twilights_fall",
+    flavorText:
+      "Strands of dormant genetic code, seeded by the Mahact amongst the galaxy's younger species during their fall long ago, made for a bountiful harvest upon their return.",
   },
   {
     alias: "tf-thieve",
@@ -5157,6 +5176,8 @@ export const actionCards: ActionCard[] = [
     window: "After a splice ends, if you did not participate",
     text: "Take all remaining cards.",
     source: "twilights_fall",
+    flavorText:
+      "The other Mahact had dismissed the system as inferior, its inhabitants unsuited even for enthrallment. That did not deter A Sickening Lurch from picking their bones clean.",
   },
   {
     alias: "tf-lash",
@@ -5165,6 +5186,8 @@ export const actionCards: ActionCard[] = [
     window: "When 1 of your units is destroyed",
     text: "Destroy a unit in its system that has an equal or lower cost.",
     source: "twilights_fall",
+    flavorText:
+      "Even as Lakoe's Roots writhed and burned under the bombardment, thorny needles reached up to pluck one of the escorts from orbit and drag it into the firestorm below.",
   },
   {
     alias: "tf-locust",
@@ -5173,6 +5196,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose 1 infantry in a system adjacent to your units and roll 1 die. On a result of 3 or higher, destroy that infantry and choose an infantry in the same or an adjacent system to repeat the roll; for each new roll, choose an infantry owned by a different player than the previous infantry, if able.",
     source: "twilights_fall",
+    flavorText: '"FEED." - Il Sai Lakoe',
   },
   {
     alias: "tf-spark1",
@@ -5182,6 +5206,8 @@ export const actionCards: ActionCard[] = [
       "After another player's unit uses SUSTAIN DAMAGE to cancel a hit produced by your units or abilities",
     text: "Destroy that unit.",
     source: "twilights_fall",
+    flavorText:
+      "Though outmassed by several orders of magnitude, the valiant destroyer's final salvo found its mark amidst the flagship's engine array, leaving the Arvicon Rex stranded deep in the gravity well.",
   },
   {
     alias: "tf-spark2",
@@ -5191,6 +5217,8 @@ export const actionCards: ActionCard[] = [
       "After another player's unit uses SUSTAIN DAMAGE to cancel a hit produced by your units or abilities",
     text: "Destroy that unit.",
     source: "twilights_fall",
+    flavorText:
+      "For a moment, the Starlancer strode on, heedless of the sting of a single silver missile. Then, the fires of its fusion heart erupted from the wound, consuming it from within.",
   },
   {
     alias: "tf-command1",
@@ -5199,6 +5227,8 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "Apply +1 to the move value of each of your ships during this tactical action. Additionally, your ships may move through or into asteroid fields during this movement.",
     source: "twilights_fall",
+    flavorText:
+      "Tizona slid from the Kuiper belt like a sword unsheathed, sweeping toward the inner system with her flotilla trailing in a glittering arc.",
   },
   {
     alias: "tf-command2",
@@ -5207,6 +5237,8 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "Apply +1 to the move value of each of your ships during this tactical action. Additionally, your ships may move through or into asteroid fields during this movement.",
     source: "twilights_fall",
+    flavorText:
+      "Il Na Viroset led the fleet in a deadly ballet above Perimeter, each delicate turn through the perpendicular orbital rings leaving the Winnu defenders flat-footed.",
   },
   {
     alias: "tf-shatter1",
@@ -5216,6 +5248,8 @@ export const actionCards: ActionCard[] = [
       'When another player exhausts a genome or plays an action card other than "Shatter"',
     text: "That genome is exhausted without effect, or that action card is canceled.",
     source: "twilights_fall",
+    flavorText:
+      '"No!" gasped Zel Tol Mosin, the neural link to his thralls severed by one of the Saint\'s suspended blades. But now that his thralls had been freed, the outcome was, in fact, inevitable.',
   },
   {
     alias: "tf-shatter2",
@@ -5225,6 +5259,8 @@ export const actionCards: ActionCard[] = [
       'When another player exhausts a genome or plays an action card other than "Shatter"',
     text: "That genome is exhausted without effect, or that action card is canceled.",
     source: "twilights_fall",
+    flavorText:
+      '"No!" Aur roared as the light enveloped them. "It didn\'t...It wasn\'t..." But even as they spoke, they became something changed. Something more.',
   },
   {
     alias: "tf-evolve",
@@ -5233,6 +5269,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Draw 1 card from any splice deck.",
     source: "twilights_fall",
+    flavorText:
+      "When they beheld the true infinity of possibility spread out before them, the Ruby Monarch did the unthinkable: they knelt. When they rose, they did so greater than ever before.",
   },
   {
     alias: "tf-magnificence",
@@ -5241,6 +5279,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Move all units from the space area of any system into an adjacent system that contains a different player's ships. Space combat is resolved in that system; neither player can retreat or resolve abilities that would move their ships.",
     source: "twilights_fall",
+    flavorText:
+      '"The light...it is so radiant...we...we are radiant. We are the light." - Airo Shir Aur',
   },
   {
     alias: "tf-irradiate",
@@ -5249,6 +5289,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose 1 unit type other than a flagship; reveal cards from the unit upgrade deck until you reveal a card of that type, if able. Then, gain that card and shuffle the rest back into the unit upgrade deck.",
     source: "twilights_fall",
+    flavorText:
+      "The warships lay in orbit around the Torali Pulsar, its searing rays tempering their impurities even as it shielded them from discovery.",
   },
   {
     alias: "tf-reverse",
@@ -5257,6 +5299,8 @@ export const actionCards: ActionCard[] = [
     window: "When a splice begins",
     text: "Reverse the order the spliced cards are passed.",
     source: "twilights_fall",
+    flavorText:
+      "Il Gacyn Klar had made extensive preparations to ensure that everything was in order. If that order happened to benefit her, well... what of it?",
   },
   {
     alias: "tf-twinning",
@@ -5266,6 +5310,8 @@ export const actionCards: ActionCard[] = [
       "After another player resolves the component action of an action card",
     text: "Immediately resolve that action card.",
     source: "twilights_fall",
+    flavorText:
+      "Even their mastery of the known sciences could only take the Mahact so far: true gene-sorcery was art, and each artist had a style all their own.",
   },
   {
     alias: "tf-meddle",
@@ -5274,6 +5320,8 @@ export const actionCards: ActionCard[] = [
     window: "When any die is rolled",
     text: "Add or subtract 1 from its result.",
     source: "twilights_fall",
+    flavorText:
+      '"Are you certain?" inquired Jae Mir Kan. "You have accounted for every possible eventuality?"',
   },
   {
     alias: "tf-hardlight1",
@@ -5282,6 +5330,8 @@ export const actionCards: ActionCard[] = [
     window: "Before hits are assigned to your units",
     text: "Cancel up to 2 hits.",
     source: "twilights_fall",
+    flavorText:
+      "The Letnev gunnery crews studied their displays in frustration that quickly grew to panic. Each return constantly flickered between the many Faces of Janovet, and fire discipline collapsed as they struggled to prioritize their targets.",
   },
   {
     alias: "tf-meteor",
@@ -5290,6 +5340,8 @@ export const actionCards: ActionCard[] = [
     window: "When you would remove ground forces due to insufficient capacity",
     text: "Commit those ground forces to a planet in that system instead; resolve an invasion on that planet using only those ground forces",
     source: "twilights_fall",
+    flavorText:
+      'As her escape pod plummeted down the gravity well, Il Gacyn Klar repeated her liege\'s parting words with a sneer, "Nothing personal."',
   },
   {
     alias: "tf-hardlight2",
@@ -5298,6 +5350,8 @@ export const actionCards: ActionCard[] = [
     window: "Before hits are assigned to your units",
     text: "Cancel up to 2 hits.",
     source: "twilights_fall",
+    flavorText:
+      "The Crimson Legionnaires advanced relentlessly into the blistering crossfire, their rune-etched armor turning even the strikes of heavy weaponry aside.",
   },
   {
     alias: "tf-feint",
@@ -5307,6 +5361,8 @@ export const actionCards: ActionCard[] = [
     text: "Immediately retreat; do not place a command token in that system.",
     automationID: "skilled_retreat",
     source: "twilights_fall",
+    flavorText:
+      "Once the defenders had committed to an intercept course within the system's gravity well, the Saint of Swords twisted Tizona aside, striking for her true target.",
   },
   {
     alias: "tf-manifest",
@@ -5315,6 +5371,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Resolve the PRODUCTION ability of 1 of your units; reduce the combined cost of the produced units by 3.",
     source: "twilights_fall",
+    flavorText:
+      "The Ruby Monarch paced the great assembly hall, imagining the blade they would wield. In their footsteps the sharp lines of a warship began to form, the machinery of the hall shaping matter to their whim.",
   },
   {
     alias: "tf-flux",
@@ -5323,6 +5381,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Either remove any player's command token from the board, or place a command token from any player's reinforcements in a system that contains or is adjacent to one of your ships. ",
     source: "twilights_fall",
+    flavorText:
+      "Vesh Nil Qor looked up from his calibrations to the battle raging above Mecatol Rex. Once he fired the Synaptic Ordinator, nothing would ever be the same.",
   },
   {
     alias: "tf-entangle",
@@ -5331,6 +5391,8 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "All systems that contain alpha wormholes, beta wormholes, gamma wormholes, and gravity rifts are adjacent for this movement.",
     source: "twilights_fall",
+    flavorText:
+      'When the Mahact first claimed dominion over "every star in Ixth\'s sky," the galaxy had lain fifty-thousand light-years distant. The unleashed energies of the Acheron Gate have given that boast new meaning.',
   },
   {
     alias: "tf-unravel",
@@ -5339,6 +5401,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose and purge a relic. If the relic belonged to another player, that player gains 1 victory point; if it belonged to you, put The Fracture into play and place 1 additional ingress token in a system that contains your units.",
     source: "twilights_fall",
+    flavorText:
+      "Strength fading, his own blood pooling beneath his feet, Jace fired his final shot point blank into the Quantumcore. The galaxy screamed.",
   },
   {
     alias: "tf-rise",
@@ -5347,6 +5411,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Either place 1 infantry on each planet you control or place 1 fighter in each system that contains your ships or space docks.",
     source: "twilights_fall",
+    flavorText:
+      "Stone and soil shook and fell as the mountains rose on limbs of living metal. Even when the tremors subsided, the world's inhabitants still trembled, for the Titans had heeded their masters' call.",
   },
   {
     alias: "tf-atomize",
@@ -5355,14 +5421,18 @@ export const actionCards: ActionCard[] = [
     window: "When your flagship is destroyed",
     text: "Purge your flagship and destroy all units in its system",
     source: "twilights_fall",
+    flavorText:
+      "As the final act of their reign, Vertar Auran Oblis denied their usurpers any triumph, overloading the ruptured superliminal drives of the crippled Arvicon Rex. When the laws of physics finally reasserted themselves, no trace of either fleet remained.",
   },
   {
     alias: "tf-trine",
     name: "Trine",
     phase: "Action",
     window: 'During the "space cannon offense" step of a tactical action',
-    text: "Your units up 2 system away can use their SPACE CANNON abilities against units in the active system.",
+    text: "Your units up to 2 systems away can use their SPACE CANNON abilities against units in the active system.",
     source: "twilights_fall",
+    flavorText:
+      "The Mahact had awaited the restoration of their Dominion for nearly thirty millennia. What was the matter of mere decades for the very stars to align in their favor?",
   },
   {
     alias: "tf-pax",
@@ -5372,6 +5442,8 @@ export const actionCards: ActionCard[] = [
       "After another player commits units to land on a planet you control",
     text: "Return the committed units to the space area; choose 1 of them to destroy.",
     source: "twilights_fall",
+    flavorText:
+      '"Each of our voices speaks for all," declared El Nen Janovet. "Is that so?" Avarice Rex retorted, drawing back the cloth to reveal a shattered rose-gold mask alike to those that addressed him. "Then I shall keep this as a reminder."',
   },
   {
     alias: "tf-ignis",
@@ -5380,6 +5452,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Place a command token from your tactic pool in any non-home system; choose and destroy 1 unit in that system.",
     source: "twilights_fall",
+    flavorText:
+      "At their masters' command, the Titans had once harnessed the energy of a singularity. Little was beyond their reach.",
   },
   {
     alias: "tf-coerce",
@@ -5388,6 +5462,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose a player; that player must give you 1 of their abilities.",
     source: "twilights_fall",
+    flavorText:
+      'The Ruby Monarch turned from the Eidolon salvaged in Cormund\'s shattered orbit to address its pair of captured pilots. "Your union has proven more resilient than anticipated," they crackled, "your species will make a fine addition to my collection."',
   },
   {
     alias: "tf-stasis",
@@ -5396,6 +5472,8 @@ export const actionCards: ActionCard[] = [
     window: "At the start of another player's turn",
     text: "Immediately end that player's turn.",
     source: "twilights_fall",
+    flavorText:
+      '"I knew, then, that I could not defeat my enemies. But!" The holographic entity that resembled Kor Noq Weer held up one finger. "I could outlast them. In a way."',
   },
   {
     alias: "tf-tartarus",
@@ -5404,6 +5482,8 @@ export const actionCards: ActionCard[] = [
     window: "At the start of the strategy phase",
     text: "Choose a strategy card: that card cannot be picked unless there is no other option.",
     source: "twilights_fall",
+    flavorText:
+      "The bindings snapped tight, one after another, tethering the corrupted King's limbs to the earth. Roars of earsplitting rage echoed throughout the valley, but it remained immobilized. For a time, at least.",
   },
   {
     alias: "tf-create",
@@ -5412,6 +5492,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Draw 1 relic.",
     source: "twilights_fall",
+    flavorText:
+      "Aelo An Goldos immersed themself in the act of creation, bending matter and energy alike to their will. No effort was spared, and no flaw tolerated, until they were satisfied at last. And then they began again.",
   },
   {
     alias: "tf-timestop",
@@ -5420,6 +5502,8 @@ export const actionCards: ActionCard[] = [
     window: "When a player activates a system that contains your units",
     text: "Immediately perform an action, during which you are the active player.",
     source: "twilights_fall",
+    flavorText:
+      '"It must be done," whispered the Thundarian, "it is the only way."',
   },
   {
     alias: "tf-starflare",
@@ -5428,6 +5512,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Choose a supernova; each player destroys 3 of their units in that supernova and each adjacent system.",
     source: "twilights_fall",
+    flavorText:
+      "Airo Shir Aur basked in the glow as the star's death throes consumed their rivals. A fitting end for those who had dared cast a shadow across their radiance.",
   },
   {
     alias: "tf-vault",
@@ -5436,6 +5522,8 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "You may ignore the effects of anomalies during this movement.",
     source: "twilights_fall",
+    flavorText:
+      "Il Na Viroset soared the aether of the galactic core, riding the gravitational currents of the Great Heart of the Galaxy that no lesser being dared.",
   },
   {
     alias: "tf-meld",
@@ -5444,6 +5532,8 @@ export const actionCards: ActionCard[] = [
     window: "When any die is rolled",
     text: "Roll two dice instead, and add the results together (max 10)",
     source: "twilights_fall",
+    flavorText:
+      '"How shall we handle this?" mused El Nen Janovet, their many crowned masks tilted in thought. Each pondered myriad possibilities, yet all came to the same conclusion.',
   },
   {
     alias: "tf-reflect",
@@ -5452,6 +5542,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "For each trade good you have, either gain 1 commodity or convert 1 of your commodities to a trade good.",
     source: "twilights_fall",
+    flavorText:
+      "The hold of the Scintillia glittered with the riches of the galaxy, each treasure mirrored over and over again by faceted bulkheads that made the bays appear to stretch on forever. Yet it was never enough.",
   },
   {
     alias: "tf-elevate",
@@ -5460,6 +5552,8 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Draw 1 paradigm.",
     source: "twilights_fall",
+    flavorText:
+      'The Saint of Swords regarded the Shikrai who knelt beaten before her, valor and grace untarnished by broken talons and bloody feathers. "What a noble thrall," she mused, lifting Trilossa Aun Mirik\'s beak with the point of her blade, "If only you served a more worthy mistress."',
   },
   {
     alias: "tf-cloak",
@@ -5468,6 +5562,8 @@ export const actionCards: ActionCard[] = [
     window: "After you activate a system",
     text: "Your ships can move through systems that contain other players ships during this action, and SPACE CANNON cannot be used against them.",
     source: "twilights_fall",
+    flavorText:
+      "A Strangled Whisper passed through the picket ships without alarm, bringing A Sickening Lurch to its destination with none the wiser.",
   },
   {
     alias: "tf-converge",
@@ -5476,6 +5572,8 @@ export const actionCards: ActionCard[] = [
     window: "Before you roll dice for space cannon",
     text: "Your hits must be applied to non-fighter ships during SPACE CANNON OFFENSE, or mechs during SPACE CANNON DEFENSE, if able",
     source: "twilights_fall",
+    flavorText:
+      '"Don\'t waste my time with their strike craft," sneered Zel Tol Mosin, as the Watchtower\'s floating defense arrays targeted the rebel fleet, "find me their carriers!"',
   },
   {
     alias: "tf-divinity",
@@ -5484,6 +5582,8 @@ export const actionCards: ActionCard[] = [
     window: "When 1 of your units would be destroyed",
     text: "It is not destroyed instead.",
     source: "twilights_fall",
+    flavorText:
+      "The Airo Shir Rex emerged from the inferno unscathed, the corona a radiant halo about it, and all who beheld it were in awe.",
   },
   {
     alias: "lieinwait",
@@ -5685,7 +5785,7 @@ export const actionCards: ActionCard[] = [
     window: "Action",
     text: "Perform the primary ability of a readied or unchosen strategy card.",
     flavorText:
-      "Treilla absentmindedly smiled a sickly sweet smile at the newly promoted commander. With any luck, he'd be dead or demoted within a day or two.",
+      "Treilla absentmindedly smiled at the audacity of the newly promoted commander. Making waves like this - he'd likely be dead or demoted within a day or two. Still, she found the posturing...amusing.",
     source: "thunders_edge",
   },
 ];

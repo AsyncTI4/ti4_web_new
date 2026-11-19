@@ -1288,7 +1288,8 @@ export const units: Unit[] = [
     basicProduction: "res",
     capacityValue: 3,
     isStructure: true,
-    ability: "This unit's PRODUCTION value is equal to 2 more than the resource value of this planet.\nThe resource value of this planet is increased by 1.\nUp to 3 fighters in this system do not count against your ships' capacity.",
+    ability:
+      "This unit's PRODUCTION value is equal to 2 more than the resource value of this planet.\nThe resource value of this planet is increased by 1.\nUp to 3 fighters in this system do not count against your ships' capacity.",
   },
   {
     id: "bastion_spacedock2",
@@ -1303,7 +1304,8 @@ export const units: Unit[] = [
     basicProduction: "res",
     capacityValue: 3,
     isStructure: true,
-    ability: "This unit's PRODUCTION value is equal to 4 more than the resource value of this planet.\nThe resource value of this planet is increased by 2.\nUp to 3 fighters in this system do not count against your ships' capacity.",
+    ability:
+      "This unit's PRODUCTION value is equal to 4 more than the resource value of this planet.\nThe resource value of this planet is increased by 2.\nUp to 3 fighters in this system do not count against your ships' capacity.",
   },
   {
     id: "belkosea_fighter",
@@ -1974,7 +1976,7 @@ export const units: Unit[] = [
     afbDieCount: 3,
     isShip: true,
     ability:
-      "At the end of any players' combat in this unit's system or up to 2 systems away, you may place 1 active or inactive breach in that system.",
+      "At the end of any player's combat in this unit's system or up to 2 systems away, you may place 1 active or inactive breach in that system.",
   },
   {
     id: "crimson_flagship",
@@ -3188,7 +3190,7 @@ export const units: Unit[] = [
     combatDieCount: 1,
     isGroundForce: true,
     ability:
-      "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home.",
+      "After this unit is destroyed, roll 1 die. If the result is 6 or greater, place the unit on this card. At the start of your next turn, place each unit that is on this card on a planet you control in your home system.",
     imageURL: "/hover_images/techs/generic/infantry_2.jpg",
   },
   {
@@ -3837,7 +3839,7 @@ export const units: Unit[] = [
     id: "l1z1x_mech",
     baseType: "mech",
     asyncId: "mf",
-    name: "Anihilator",
+    name: "Annihilator",
     source: "pok",
     faction: "l1z1x",
     capacityUsed: 1,
@@ -3849,7 +3851,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability:
-      "While not participating in ground combat, this unit can use it's BOMBARDMENT ability on planets in its system as if it were a ship.",
+      "While not participating in ground combat, this unit can use its BOMBARDMENT ability on planets in its system as if it were a ship.",
     imageURL: "/hover_images/units/pok/mechs/annihilator.jpg",
   },
   {
@@ -3971,7 +3973,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability:
-      "Other player's units in this system lose PLANETARY SHIELD.\nAt the start of each space combat round, repair this ship.",
+      "Other players' units in this system lose PLANETARY SHIELD.\nAt the start of each space combat round, repair this ship.",
     imageURL: "/hover_images/units/pok/flagships/arc_secundus.png",
   },
   {
@@ -4334,7 +4336,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     canBeDirectHit: true,
     isShip: true,
-    ability: "Other player's ships in this system cannot use SUSTAIN DAMAGE.",
+    ability: "Other players' ships in this system cannot use SUSTAIN DAMAGE.",
     imageURL: "/hover_images/units/pok/flagships/fourth_moon.png",
   },
   {
@@ -4351,7 +4353,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability:
-      "Other player's ground forces on this planet cannot use SUSTAIN DAMAGE.",
+      "Other players' ground forces on this planet cannot use SUSTAIN DAMAGE.",
     imageURL: "/hover_images/units/pok/mechs/moll_terminus.jpg",
   },
   {
@@ -7485,7 +7487,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability:
-      "At the end of a round of combat on this planet, you may move up to 2 ground forces to this planet from planets in adjacent systems.",
+      "At the end of a round of combat on this planet, you may move up to 2 of your ground forces to this planet from planets in adjacent systems.",
   },
   {
     id: "raven_flagship",
@@ -7932,7 +7934,7 @@ export const units: Unit[] = [
     sustainDamage: true,
     isGroundForce: true,
     ability:
-      "After this unit uses it's SUSTAIN DAMAGE ability during ground combat, it produces 1 hit against your opponent's ground forces on this planet.",
+      "After this unit uses its SUSTAIN DAMAGE ability during ground combat, it produces 1 hit against your opponent's ground forces on this planet.",
     imageURL: "/hover_images/units/pok/mechs/valkyrie_exoskeleton.jpg",
   },
   {
@@ -9513,7 +9515,7 @@ export const units: Unit[] = [
     asyncId: "ws",
     name: "The Dragon, Freed",
     source: "twilights_fall",
-    faction: "firmament",
+    faction: "obsidian",
     moveValue: 2,
     capacityValue: 6,
     capacityUsed: 1,
@@ -9637,7 +9639,7 @@ export const units: Unit[] = [
     id: "tf-hcf",
     baseType: "fighter",
     asyncId: "ff",
-    name: "Hybrid Crystral Fighter (TF)",
+    name: "Hybrid Crystal Fighter (TF)",
     source: "twilights_fall",
     faction: "naalu",
     moveValue: 2,
@@ -9792,7 +9794,7 @@ export const units: Unit[] = [
     canBeDirectHit: true,
     isShip: true,
     ability:
-      "Other player's units in this system lose PLANETARY SHIELD. This unit and other units moving at the same time can move into and through supernovas.",
+      "Other players' units in this system lose PLANETARY SHIELD. This unit and other units moving at the same time can move into and through supernovas.",
   },
   {
     id: "tf-saggitaria",
@@ -9884,7 +9886,7 @@ export const units: Unit[] = [
     disablesPlanetaryShield: true,
     canBeDirectHit: true,
     isShip: true,
-    ability: "Other player's units in this system lose PLANETARY SHIELD.",
+    ability: "Other players' units in this system lose PLANETARY SHIELD.",
   },
   {
     id: "tf-valefarprime",
@@ -10096,7 +10098,7 @@ export const units: Unit[] = [
     isStructure: true,
     isGroundForce: true,
     ability:
-      "This unit is treated as both a structure and a ground force. It cannot be transported.\nYou may use this unit's SPACE CANNON against ships that are adjacent to this unit's systems.",
+      "This unit is treated as both a structure and a ground force. It cannot be transported.\nYou may use this unit's SPACE CANNON against ships that are adjacent to this unit's system.",
     imageURL: "/hover_images/techs/faction/heltitan_2.jpg",
   },
   {
@@ -10694,7 +10696,7 @@ export const units: Unit[] = [
     disablesPlanetaryShield: true,
     canBeDirectHit: true,
     isShip: true,
-    ability: "Other player's units in this system lose PLANETARY SHIELD.",
+    ability: "Other players' units in this system lose PLANETARY SHIELD.",
     imageURL: "/hover_images/techs/generic/warsun.jpg",
   },
   {
