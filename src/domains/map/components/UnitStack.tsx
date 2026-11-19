@@ -4,6 +4,7 @@ import { Token } from "./Token";
 import { Attachment } from "./Attachment";
 import { EntityStack } from "@/entities/positioning";
 import { getUnitZIndex } from "@/utils/zIndexLayers";
+import { getTokenData } from "@/entities/lookup/tokens";
 import { UnitBadge } from "./UnitBadge";
 import { getTextColor } from "@/entities/lookup/colors";
 import type { LawInPlay } from "@/entities/data/types";
@@ -71,7 +72,9 @@ export function UnitStack({
   /* Combat badges are compact summaries and must stay legible above the much
      larger rotated ship silhouettes in the transition layer. */
   const baseZIndex =
-    getUnitZIndex(unitType, 0) + (mapTransition && isBadge ? 200 : 0);
+    getUnitZIndex(unitType, 0) +
+    (isSpaceToken(stack) ? 1 : 0) +
+    (mapTransition && isBadge ? 200 : 0);
   const rotateInFlight =
     !isBadge && getGenericUnitDataByAsyncId(unitType)?.isShip === true;
   const flightRef = useMapFlightAnimation(
@@ -249,5 +252,16 @@ export function UnitStack({
         );
       })}
     </div>
+  );
+}
+
+/* Planet tokens such as the custodians can be larger than the space a space
+   token is allowed to use, so space tokens render above them to stay visible.
+   Token planets stay level so their own planet tokens still sit on top. */
+function isSpaceToken(stack: EntityStack): boolean {
+  return (
+    stack.entityType === "token" &&
+    !stack.planetName &&
+    !getTokenData(stack.entityId)?.isPlanet
   );
 }
