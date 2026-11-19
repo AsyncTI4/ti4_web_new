@@ -756,7 +756,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Populated by small arboreal villages, this planet's only true urban center is the royal city of Kklaj.*",
+      "*Populated by small arboreal villages, this planet's only true urban center is the royal city of Kklaj. The Xxcha home world and home to the renowned library of Xuun.*",
     source: "base",
   },
   {
@@ -784,7 +784,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Populated by small arboreal villages, this planet's only true urban center is the royal city of Kklaj.*",
+      "*Populated by small arboreal villages, this planet's only true urban center is the royal city of Kklaj. The Xxcha home world and home to the renowned library of Xuun.*",
     source: "codex3",
   },
   {
@@ -821,7 +821,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*The Xxcha home world and home to the renowned library of Xuun.*",
+      "*Ravaged by Sol and Letnev bombardments during the Twilight Wars. The Xxcha commit substantial resources to rebuilding its ecology and cleansing its toxic continents.*",
     source: "base",
   },
   {
@@ -848,7 +848,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*The Xxcha home world and home to the renowned library of Xuun.*",
+      "*Ravaged by Sol and Letnev bombardments during the Twilight Wars. The Xxcha commit substantial resources to rebuilding its ecology and cleansing its toxic continents.*",
     source: "codex3",
   },
   {
@@ -1263,8 +1263,7 @@ export const planets: Planet[] = [
       planetRadius: 45,
       extraIcons: 1,
     },
-    flavourText:
-      "*The first artificial world of this galactic age.*",
+    flavourText: "*The first artificial world of this galactic age.*",
     source: "thunders_edge",
   },
   {
@@ -2074,8 +2073,7 @@ export const planets: Planet[] = [
       },
       extraIcons: 1,
     },
-    flavourText:
-      "*Witness the end of a world, piece by glittering piece.*",
+    flavourText: "*Witness the end of a world, piece by glittering piece.*",
     source: "thunders_edge",
   },
   {
@@ -2198,7 +2196,7 @@ export const planets: Planet[] = [
       extraIcons: 1,
     },
     flavourText:
-      "*The techno-anchorites of the Grovian Order forbid mining of their \"sacred planet\" but the world is so toxic few would try anyway.*",
+      '*The techno-anchorites of the Grovian Order forbid mining of their "sacred planet," but the world is so toxic few would try anyway.*',
     source: "thunders_edge",
   },
   {
@@ -2279,7 +2277,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*Although they spend most of their time working deep in the mines, the people of Cronos revere their beautiful sky. Its dense clouds cannot quite hide the luminous rings that shine every night.*",
+      "*Although they spend most of their time working in the deep mines, the people of Cronos revere their beautiful sky. Its dense clouds cannot quite hide the luminous rings that shine every night.*",
     source: "thunders_edge",
   },
   {
@@ -2302,7 +2300,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*The night sky is deep black, unbroken by any star. During the day, the clouds are an unvarying gunmetal grey.*",
+      "*The night sky is a deep black, unbroken by any star. During the day, the clouds are an unvarying gunmetal grey.*",
     source: "thunders_edge",
   },
   {
@@ -2523,7 +2521,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Ravaged by Sol and Letnev bombardments during the Twilight Wars. The Xxcha commit substantial resources to rebuilding its ecology and cleansing its toxic continents.*",
+      "*Darien is the heart of the Brotherhood's realm. Here, within the great Monastery of Lucas, rests the Yin, the holy egg from which all the Brotherhood were made.*",
     source: "base",
   },
   {
@@ -3166,7 +3164,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*El'nath's local magnetic field is so strong that metallic objects are repelled towards the sky. Specialized tools are required for mining and industrial operations.*",
+      "*El'nath's local magnetic field is so strong that metallic objects are repelled toward the sky. Specialized tools are required for mining and industrial operations.*",
     source: "thunders_edge",
   },
   {
@@ -4567,7 +4565,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*With over a million small islands and shallow, warm seas, Ikatena is considered a paradise by many species. Its recent Mahact occupation has left the once peaceful planet scarred, but resolute.*",
+      "*With over a million small islands and shallow, warm seas, Ikatena is considered a paradise by many species. Its recent Mahact occupation has left the once-peaceful planet scarred, but resolute.*",
     source: "thunders_edge",
   },
   {
@@ -5464,7 +5462,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "Its twin space elevators are marvels of engineering, but industry on the planet came to a grinding halt when local spacetime collapsed.*",
+      "*Its twin space elevators are marvels of engineering, but industry on the planet came to a grinding halt when local spacetime collapsed.*",
     source: "thunders_edge",
   },
   {
@@ -5507,7 +5505,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*Lesab is either a resounding success or dangerous failure of terraforming, with its surface now dominated by a semi-sentient fungus.*",
+      "*Lesab is either a resounding success or a dangerous failure of terraforming, with its surface now dominated by a semi-sentient fungus.*",
     source: "thunders_edge",
   },
   {
@@ -5882,7 +5880,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Wreathed in vast seas of methane ice. Sea floor drilling platforms harvest rare crystals used in advance computers and energy weapons.*",
+      "*Wreathed in vast seas of methane ice. Sea floor drilling platforms harvest rare crystals used in advanced computers and energy weapons.*",
     source: "base",
   },
   {
@@ -6496,7 +6494,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*The great cities of Mez Lo Orz Fei Zsha cover most of the surface in their concentric, well organized rings. Each city is owned and operated by its own massive corporate-consortium.*",
+      "*The great cities of Mez Lo Orz Fei Zsha cover most of the surface in their concentric, well-organized rings. Each city is owned and operated by its own massive corporate-consortium.*",
     source: "thunders_edge",
   },
   {
@@ -6775,7 +6773,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Once a splendid place, now a sad devasted wasteland. Only the radiation-shielded Mecatol city, the seat of the powerful Galactic Council, remains habitable.*",
+      "*Once a splendid place, now a sad devastated wasteland. Only the radiation-shielded Mecatol city, the seat of the powerful Galactic Council, remains habitable.*",
     source: "base",
   },
   {
@@ -6802,7 +6800,7 @@ export const planets: Planet[] = [
       planetRadius: 120,
     },
     flavourText:
-      "*Once a splendid place, now a sad devasted wasteland. Only the radiation-shielded Mecatol city, the seat of the powerful Galactic Council, remains habitable.*",
+      "*Once a splendid place, now a sad devastated wasteland. Only the radiation-shielded Mecatol city, the seat of the powerful Galactic Council, remains habitable.*",
     source: "thunders_edge",
   },
   {
@@ -7350,7 +7348,7 @@ export const planets: Planet[] = [
       extraIcons: 2,
     },
     flavourText:
-      "*Olergodt's dozen moons create dramatic and dangerous tides, but also host a bustling mining industry*.",
+      "*Olergodt's dozen moons create dramatic and dangerous tides, but also host a bustling mining industry.*",
     source: "thunders_edge",
   },
   {
@@ -7690,8 +7688,7 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
-    flavourText:
-      "*A ruined planet for a ruined universe.*",
+    flavourText: "*A ruined planet for a ruined universe.*",
     source: "thunders_edge",
   },
   {
@@ -7803,7 +7800,7 @@ export const planets: Planet[] = [
     legendaryAbilityFlavourText:
       "*A clade of assassin-scholars has watched over Primor, pledged to its populace's survival.*",
     flavourText:
-      "*Large temperate world. Site of several pitched battles during the Twilight Wars due to valuable osmium deposits and a well- educated populace.*",
+      "*Large temperate world. Site of several pitched battles during the Twilight Wars due to valuable osmium deposits and a well-educated populace.*",
     source: "pok",
   },
   {
@@ -8200,7 +8197,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*Arid and desolate, except along its equatorial sea, the Ral Nel birth world has escaped the worst depredations of industrialization. The cities along the coast balance modern amenities with natural beauty.*",
+      "*Arid and desolate except along its equatorial sea, the Ral Nel birth world has escaped the worst depredations of industrialization. The cities along the coast balance modern amenities with natural beauty.*",
     source: "thunders_edge",
   },
   {
@@ -8755,7 +8752,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*Home to the Semanora, and heavily damaged in the Twilight Wars. Rustling warship hulks litter the rod-deserts, making it a war memorial and salvage site.*",
+      "*Home to the Semanora, and heavily damaged in the Twilight Wars. Rusting warship hulks litter the rad-deserts, making it a war memorial and salvage site.*",
     source: "pok",
   },
   {
@@ -9185,8 +9182,7 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
-    flavourText:
-      "*Where light goes to die.*",
+    flavourText: "*Where light goes to die.*",
     source: "thunders_edge",
   },
   {
@@ -9381,8 +9377,7 @@ export const planets: Planet[] = [
         y: 205.0,
       },
     },
-    flavourText:
-      "*The oceans lie as dead as the hearts of the populace.*",
+    flavourText: "*The oceans lie as dead as the hearts of the populace.*",
     source: "thunders_edge",
   },
   {
@@ -9436,7 +9431,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Small, isolated planet with small population and modest resources. Most famous for its delicious avinberries.*",
+      "*Small isolated planet with small population and modest resources. Most famous for its delicious avinberries.*",
     source: "base",
   },
   {
@@ -9866,7 +9861,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*Blessed with both a productive biome and exploitable mineral wealth, Tiamat is peaceful but surpirisingly uninterested in galactic affairs.*",
+      "*Blessed with both a productive biome and exploitable mineral wealth, Tiamat is peaceful but surprisingly uninterested in galactic affairs.*",
     source: "thunders_edge",
   },
   {
@@ -9887,7 +9882,7 @@ export const planets: Planet[] = [
       },
     },
     flavourText:
-      "*\"Oceans\" of black sand drift in the lowlands, forcing industry and most of the planet's biome to the frigid highlands.*",
+      '*"Oceans" of black sand drift in the lowlands, forcing industry and most of the planet\'s biome to the frigid highlands.*',
     source: "thunders_edge",
   },
   {
@@ -11263,7 +11258,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*The smallest of the three planets in the Atharel Torus, Ylir is covered in kilometers of water. The Murmeration meets in platform cities that drift with the currents.*",
+      "*The smallest of the three planets in the Atharal Torus, Ylir is covered in kilometers of water. The Murmeration meets in platform cities that drift with the currents.*",
     source: "pok",
   },
   {
@@ -11289,7 +11284,7 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     flavourText:
-      "*The smallest of the three planets in the Atharel Torus, Ylir is covered in kilometers of water. The Murmeration meets in platform cities that drift with the currents.*",
+      "*The smallest of the three planets in the Atharal Torus, Ylir is covered in kilometers of water. The Murmeration meets in platform cities that drift with the currents.*",
     source: "codex3",
   },
   {
