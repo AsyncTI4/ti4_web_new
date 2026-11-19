@@ -283,6 +283,8 @@ export const planets: Planet[] = [
         y: 160.0,
       },
     },
+    flavourText:
+      "*The mysterious world discovered by the Crimson Rebellion is just as impossible in physical space as its sister planet, Creuss. Initially uninhabited, the world has begun to foster life - of a sort.*",
     source: "thunders_edge",
   },
   {
@@ -519,6 +521,8 @@ export const planets: Planet[] = [
       },
       extraIcons: 1,
     },
+    flavourText:
+      "*Located deep in Shaleri space, the formerly isolated shikrai outpost on Andeara serves as a key access point to those wishing to do business with the Creuss.*",
     source: "thunders_edge",
   },
   {
@@ -779,6 +783,8 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     contrastColor: "orange",
+    flavourText:
+      "*Populated by small arboreal villages, this planet's only true urban center is the royal city of Kklaj.*",
     source: "codex3",
   },
   {
@@ -841,6 +847,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*The Xxcha home world and home to the renowned library of Xuun.*",
     source: "codex3",
   },
   {
@@ -1229,6 +1237,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*Lighter than its companion worlds, Avar is riddled with caverns. The majority of the Atharal Torus lives in the bustling aeries within, sheltered from the radiation bursts emanating from nearby Phorus.*",
     source: "codex3",
   },
   {
@@ -1253,6 +1263,8 @@ export const planets: Planet[] = [
       planetRadius: 45,
       extraIcons: 1,
     },
+    flavourText:
+      "*The first artificial world of this galactic age.*",
     source: "thunders_edge",
   },
   {
@@ -1368,6 +1380,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*Dry, rocky deserts stretch from pole to pole. Shield cities protect against sandstorms while supplying nomadic harvester crawlers that mine the barrens for salt compounds.*",
     source: "pok",
   },
   {
@@ -1430,6 +1444,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*Once devoted to war, Bellatrix was thoroughly demilitarized and now espouses a pacifist philosophy.*",
     source: "thunders_edge",
   },
   {
@@ -1847,6 +1863,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*The green zones maintain a stable atmosphere, but Capha's lack of a magnetosphere means that its breathable air is swiftly stripped by cosmic wind.*",
     source: "thunders_edge",
   },
   {
@@ -2056,6 +2074,8 @@ export const planets: Planet[] = [
       },
       extraIcons: 1,
     },
+    flavourText:
+      "*Witness the end of a world, piece by glittering piece.*",
     source: "thunders_edge",
   },
   {
@@ -2105,6 +2125,8 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     contrastColor: "orange",
+    flavourText:
+      "*Former garden world that has subsequently enjoyed increased industrialization. Home to the esteemed Free Worlds Academy of Military Science and Research.*",
     source: "base",
   },
   {
@@ -2175,6 +2197,8 @@ export const planets: Planet[] = [
       },
       extraIcons: 1,
     },
+    flavourText:
+      "*The techno-anchorites of the Grovian Order forbid mining of their \"sacred planet\" but the world is so toxic few would try anyway.*",
     source: "thunders_edge",
   },
   {
@@ -2254,6 +2278,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*Although they spend most of their time working deep in the mines, the people of Cronos revere their beautiful sky. Its dense clouds cannot quite hide the luminous rings that shine every night.*",
     source: "thunders_edge",
   },
   {
@@ -2275,6 +2301,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*The night sky is deep black, unbroken by any star. During the day, the clouds are an unvarying gunmetal grey.*",
     source: "thunders_edge",
   },
   {
@@ -3137,6 +3165,8 @@ export const planets: Planet[] = [
         y: 135,
       },
     },
+    flavourText:
+      "*El'nath's local magnetic field is so strong that metallic objects are repelled towards the sky. Specialized tools are required for mining and industrial operations.*",
     source: "thunders_edge",
   },
   {
@@ -3238,6 +3268,8 @@ export const planets: Planet[] = [
       extraIcons: 1,
       planetRadius: 95,
     },
+    flavourText:
+      "*The legendary ruins on Emelpar's moons must certainly date to before the Lazax, but no other trace of this vanished civilization remains.*",
     source: "thunders_edge",
   },
   {
@@ -3510,6 +3542,8 @@ export const planets: Planet[] = [
       extraIcons: 2,
       planetRadius: 95,
     },
+    flavourText:
+      "*Faunus is ecologically rich, which supports the controversial biogenetics research of the Maxis order.*",
     source: "thunders_edge",
   },
   {
@@ -3697,6 +3731,8 @@ export const planets: Planet[] = [
       extraIcons: 1,
       planetRadius: 95,
     },
+    flavourText:
+      "*Once an Imperial dumping ground, the mixture of mineral and chemical waste on Garbozia has become a resource - and a hazard - of its own.*",
     source: "thunders_edge",
   },
   {
@@ -4060,6 +4096,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*Overfarming devastated Hercalor's biosphere. Now the planet is a haven for rogues and pirates.*",
     source: "thunders_edge",
   },
   {
@@ -4268,6 +4306,8 @@ export const planets: Planet[] = [
     legendaryAbilityName: "Exterrix Headquarters",
     legendaryAbilityText:
       "You may exhaust this card at the end of your turn to gain 2 trade goods or convert all of your commodities to trade goods.",
+    flavourText:
+      "*Trapped in a space believed to be beyond our universe, a shimmering world of strange energies and disconcerting warping of physical laws sitting at the heart of a strategically vital wormhole nexus.*",
     source: "dane_leaks",
   },
   {
@@ -4393,6 +4433,8 @@ export const planets: Planet[] = [
         y: 92,
       },
     },
+    flavourText:
+      "*Horizon's biomes are heavily stratified by elevation, with shallow seas, lowland forests, and arid, rocky highlands. Strong air currents at higher altitudes may be responsible.*",
     source: "thunders_edge",
   },
   {
@@ -4524,6 +4566,8 @@ export const planets: Planet[] = [
         y: 130.0,
       },
     },
+    flavourText:
+      "*With over a million small islands and shallow, warm seas, Ikatena is considered a paradise by many species. Its recent Mahact occupation has left the once peaceful planet scarred, but resolute.*",
     source: "thunders_edge",
   },
   {
@@ -4644,6 +4688,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "*With an unusually strong planetary magnetosphere, Industrex also sports an active and quite beautiful atmosphere full of auroras.*",
     source: "thunders_edge",
   },
   {
@@ -5059,6 +5105,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*Kostboth is an infant planet, not yet cooled from its formation. A tiny community of poets and scientists lives in orbit, chronicling the planet's first era.*",
     source: "thunders_edge",
   },
   {
@@ -5395,6 +5443,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*Once a subsector capital, Lazul Rex has somehow endured the Twilight Wars unscathed with a fully functional government and economy.*",
     source: "thunders_edge",
   },
   {
@@ -5413,6 +5463,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "Its twin space elevators are marvels of engineering, but industry on the planet came to a grinding halt when local spacetime collapsed.*",
     source: "thunders_edge",
   },
   {
@@ -5454,6 +5506,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "*Lesab is either a resounding success or dangerous failure of terraforming, with its surface now dominated by a semi-sentient fungus.*",
     source: "thunders_edge",
   },
   {
@@ -5472,6 +5526,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*A planet riven by disaster, awaiting the final calamitous blow.*",
     source: "thunders_edge",
   },
   {
@@ -5726,6 +5782,8 @@ export const planets: Planet[] = [
     legendaryAbilityName: "Exterrix Headquarters",
     legendaryAbilityText:
       "You may exhaust this card at the end of your turn to gain 2 trade goods or convert all of your commodities to trade goods.",
+    flavourText:
+      "*Trapped in a space believed to be beyond our universe, a shimmering world of strange energies and disconcerting warping of physical laws sitting at the heart of a strategically vital wormhole nexus.*",
     source: "pok",
   },
   {
@@ -5941,6 +5999,8 @@ export const planets: Planet[] = [
         y: 225,
       },
     },
+    flavourText:
+      "*A mid-sized gas giant with unusually rich gas clouds, Luthien VI's populace live in floating cities in a narrow habitable zone just below the outer layer.*",
     source: "thunders_edge",
   },
   {
@@ -6435,6 +6495,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*The great cities of Mez Lo Orz Fei Zsha cover most of the surface in their concentric, well organized rings. Each city is owned and operated by its own massive corporate-consortium.*",
     source: "thunders_edge",
   },
   {
@@ -6574,6 +6636,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*In places lush and rich, in others a barren wasteland. This old Lazax penal colony has prospered under the rule of the governing Mentak Coalition.*",
     source: "codex3",
   },
   {
@@ -6933,6 +6997,8 @@ export const planets: Planet[] = [
       },
       extraIcons: 1,
     },
+    flavourText:
+      "*Explorers were surprised to discover that this apparently lifeless rock has a rich fungal ecosystem in its interior, eating radiation from the planetoid's heavy metal core.*",
     source: "thunders_edge",
   },
   {
@@ -7283,6 +7349,8 @@ export const planets: Planet[] = [
       },
       extraIcons: 2,
     },
+    flavourText:
+      "*Olergodt's dozen moons create dramatic and dangerous tides, but also host a bustling mining industry*.",
     source: "thunders_edge",
   },
   {
@@ -7301,6 +7369,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*Built by the Kieros and refitted by the Hylar, Oluz Station consists primarily of flooded compartments for aquatic species.*",
     source: "thunders_edge",
   },
   {
@@ -7391,6 +7461,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*The Nekro Virus consumed this former Naaz-Rokha colony virtually down to its bedrock. Restoration efforts have only begun to restore its ravaged biosphere.*",
     source: "thunders_edge",
   },
   {
@@ -7618,6 +7690,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*A ruined planet for a ruined universe.*",
     source: "thunders_edge",
   },
   {
@@ -8125,6 +8199,8 @@ export const planets: Planet[] = [
         y: 205.0,
       },
     },
+    flavourText:
+      "*Arid and desolate, except along its equatorial sea, the Ral Nel birth world has escaped the worst depredations of industrialization. The cities along the coast balance modern amenities with natural beauty.*",
     source: "thunders_edge",
   },
   {
@@ -8182,7 +8258,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*Darien is the heart of the brotherhood's realm. Here, within the great Monastery of Lucas, rests the Yin, the holy egg from which all the Brotherhood were made.*",
+      "*A mix of tundra, swamps, rivers, and dense forests. Home to the mysterious, chameleonic Yssaril, whose capital Wueca has eluded all attempts at cartography.*",
     source: "base",
   },
   {
@@ -8202,6 +8278,8 @@ export const planets: Planet[] = [
         y: 205.0,
       },
     },
+    flavourText:
+      "*Hanging like a cathedral above Ordinian, the space station Revelation was constructed practically overnight to serve as the Last Bastion's military and economic hub.*",
     source: "thunders_edge",
   },
   {
@@ -8723,7 +8801,7 @@ export const planets: Planet[] = [
     legendaryAbilityText: null,
     contrastColor: "orange",
     flavourText:
-      "*A mix of tundra, swamps, rivers, and dense forests. Home to the mysterious, chameleonic Yssaril, whose capital Wueca has eluded all attempts at cartography.*",
+      "*Covered with tundra, wetlands, and rainforest, much like its sister-planet Retillion. Home to the Mojeb, the only major Yssaril city catalogued by off-worlders.*",
     source: "base",
   },
   {
@@ -9107,6 +9185,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "*Where light goes to die.*",
     source: "thunders_edge",
   },
   {
@@ -9278,6 +9358,8 @@ export const planets: Planet[] = [
         y: 205.0,
       },
     },
+    flavourText:
+      "*Tallin's two oceans never intermix, completely separated by its main continent. They have unique chemical compositions and distinct biospheres.*",
     source: "thunders_edge",
   },
   {
@@ -9299,6 +9381,8 @@ export const planets: Planet[] = [
         y: 205.0,
       },
     },
+    flavourText:
+      "*The oceans lie as dead as the hearts of the populace.*",
     source: "thunders_edge",
   },
   {
@@ -9317,6 +9401,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*Visitors are encouraged to wear UV-filtering eye protection at all times, which also color-corrects the vibrant planet to a more neutral palette.*",
     source: "thunders_edge",
   },
   {
@@ -9349,6 +9435,8 @@ export const planets: Planet[] = [
     legendaryAbilityName: null,
     legendaryAbilityText: null,
     contrastColor: "orange",
+    flavourText:
+      "*Small, isolated planet with small population and modest resources. Most famous for its delicious avinberries.*",
     source: "base",
   },
   {
@@ -9441,6 +9529,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "*The frozen halo in Tempesta's sky is a potent fuel for reaction drives. The planet itself is virtually uninhabitable.*",
     source: "thunders_edge",
   },
   {
@@ -9652,6 +9742,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*Sporting methods of construction found nowhere else in the known galaxy, the Watchtower's origin is unknown. Some of its occupants have been standing watch there for countless generations.*",
     source: "thunders_edge",
   },
   {
@@ -9728,6 +9820,8 @@ export const planets: Planet[] = [
       },
       planetRadius: 30,
     },
+    flavourText:
+      "*Lightning arcs between the stone spires of the planet. The constant storms give Thunder's Edge its name.*",
     source: "thunders_edge",
   },
   {
@@ -9771,6 +9865,8 @@ export const planets: Planet[] = [
         y: 85.0,
       },
     },
+    flavourText:
+      "*Blessed with both a productive biome and exploitable mineral wealth, Tiamat is peaceful but surpirisingly uninterested in galactic affairs.*",
     source: "thunders_edge",
   },
   {
@@ -9790,6 +9886,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*\"Oceans\" of black sand drift in the lowlands, forcing industry and most of the planet's biome to the frigid highlands.*",
     source: "thunders_edge",
   },
   {
@@ -9881,6 +9979,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*Icy and desolate. Other than the ferocious snow dracs and the rare icemoon flowers, life is restricted to the N'orr boomtowers and ice mines.*",
     source: "base",
   },
   {
@@ -10009,6 +10109,8 @@ export const planets: Planet[] = [
         y: 210.0,
       },
     },
+    flavourText:
+      "*The people of Bellatrix converted Tsion Station into a haven for refugees in order to atone for their past warmongering.*",
     source: "thunders_edge",
   },
   {
@@ -10280,6 +10382,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*Valk contains lodes of rare minerals and metals within its crust. Skyhooks bring ore shipments up from the surface to the open-air shipyards in orbit.*",
     source: "codex3",
   },
   {
@@ -10728,6 +10832,8 @@ export const planets: Planet[] = [
         y: 150.0,
       },
     },
+    flavourText:
+      "*The atmosphere on Vira-Pics III is so dense that no trace of the rugged civilization clinging to life on the planet's surface is visible from orbit.*",
     source: "thunders_edge",
   },
   {
@@ -11182,6 +11288,8 @@ export const planets: Planet[] = [
     techSpecialties: null,
     legendaryAbilityName: null,
     legendaryAbilityText: null,
+    flavourText:
+      "*The smallest of the three planets in the Atharel Torus, Ylir is covered in kilometers of water. The Murmeration meets in platform cities that drift with the currents.*",
     source: "codex3",
   },
   {
