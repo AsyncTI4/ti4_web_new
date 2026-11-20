@@ -7,7 +7,11 @@
   min-width: 0;
   max-width: 128px;
   padding: 8px 10px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.04) 0%, rgba(220, 38, 38, 0.02) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.04) 0%,
+    rgba(220, 38, 38, 0.02) 100%
+  );
   border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
@@ -31,6 +35,17 @@
   gap: 8px;
   position: relative;
   z-index: 1;
+}
+
+.compactNombox[data-orientation="horizontal"] {
+  width: 100%;
+  max-width: none;
+}
+
+.compactNombox[data-orientation="horizontal"] .compactGrid {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .compactFaction {
