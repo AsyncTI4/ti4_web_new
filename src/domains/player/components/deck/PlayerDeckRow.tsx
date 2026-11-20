@@ -74,11 +74,7 @@ function RailCell({
   className: string;
   children?: ReactNode;
 }) {
-  return (
-    <div className={cx(styles.rc, className)}>
-      {children}
-    </div>
-  );
+  return <div className={cx(styles.rc, className)}>{children}</div>;
 }
 
 function getVictoryReadout(vp: number, vpsToWin: number) {
@@ -116,7 +112,11 @@ function Seat({
         <span className={styles.gaugeFill} />
       </span>
       {factionImageUrl && (
-        <img className={styles.sig} src={factionImageUrl} alt={player.faction} />
+        <img
+          className={styles.sig}
+          src={factionImageUrl}
+          alt={player.faction}
+        />
       )}
       <span className={styles.vp} title={`${vp} of ${track} victory points`}>
         <b>{vp}</b>
@@ -203,8 +203,10 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
   const hasToFollow = player.unfollowedSCs.length > 0;
   const abilities = showLoadout ? (player.abilities ?? []) : [];
   const factionTechs = showLoadout ? allNotResearchedFactionTechs : [];
-  const hasCapturedUnits = player.nombox && Object.keys(player.nombox).length > 0;
-  const hasPlots = Array.isArray(player.plotCards) && player.plotCards.length > 0;
+  const hasCapturedUnits =
+    player.nombox && Object.keys(player.nombox).length > 0;
+  const hasPlots =
+    Array.isArray(player.plotCards) && player.plotCards.length > 0;
   const hasOmenDice = (playerData.omenDice?.length ?? 0) > 0;
 
   return (
@@ -215,9 +217,15 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
       data-active={player.active || undefined}
       {...searchTarget(searchKey("faction", player.faction))}
     >
-      <Seat player={player} factionImageUrl={factionImageUrl} vpsToWin={vpsToWin} />
+      <Seat
+        player={player}
+        factionImageUrl={factionImageUrl}
+        vpsToWin={vpsToWin}
+      />
 
-      <RailCell className={cx(styles.rcId, !hasBreakthroughs && styles.rcIdWide)}>
+      <RailCell
+        className={cx(styles.rcId, !hasBreakthroughs && styles.rcIdWide)}
+      >
         <span className={styles.idName} title={player.userName}>
           {player.userName}
         </span>
@@ -286,7 +294,9 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
                 techId={techId}
                 synergy={synergy}
                 breakthroughUnlocked={breakthroughUnlocked}
-                unresearched={(player.notResearchedFactionTechs ?? []).includes(techId)}
+                unresearched={(player.notResearchedFactionTechs ?? []).includes(
+                  techId,
+                )}
               />
             ))}
           </>
@@ -364,6 +374,7 @@ export const PlayerDeckRow = memo(function PlayerDeckRow({
         />
         {settings.showPlayerAreaReinforcements && (
           <ReinforcementTokensGroup
+            hasSeverTokenReinf={player.hasSeverTokenReinf}
             breachTokensReinf={player.breachTokensReinf}
             sleeperTokensReinf={player.sleeperTokensReinf}
             ghostWormholesReinf={player.ghostWormholesReinf}

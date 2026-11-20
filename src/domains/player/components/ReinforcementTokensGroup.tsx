@@ -8,6 +8,7 @@ import {
 } from "./StackedTokenStrip";
 
 type Props = {
+  hasSeverTokenReinf?: boolean;
   breachTokensReinf?: number;
   sleeperTokensReinf?: number;
   ghostWormholesReinf?: string[];
@@ -15,6 +16,7 @@ type Props = {
 } & GroupProps;
 
 export function ReinforcementTokensGroup({
+  hasSeverTokenReinf = false,
   breachTokensReinf = 0,
   sleeperTokensReinf = 0,
   ghostWormholesReinf = [],
@@ -22,6 +24,7 @@ export function ReinforcementTokensGroup({
   ...groupProps
 }: Props) {
   const hasTokens =
+    hasSeverTokenReinf ||
     breachTokensReinf > 0 ||
     sleeperTokensReinf > 0 ||
     ghostWormholesReinf.length > 0 ||
@@ -33,6 +36,13 @@ export function ReinforcementTokensGroup({
 
   return (
     <Group gap={0} wrap="wrap" align="flex-start" {...groupProps}>
+      <CountTokenStrip
+        count={hasSeverTokenReinf ? 1 : 0}
+        src={cdnImage("/tokens/token_severed.png")}
+        alt="Sever Token"
+        horizontalSpacing={32}
+        tokenWidth={32}
+      />
       <CountTokenStrip
         count={breachTokensReinf}
         src={cdnImage("/tokens/token_breachActive.webp")}
@@ -64,7 +74,12 @@ type CountTokenStripProps = {
   alt: string;
 } & Omit<StackedTokenStripProps, "tokens">;
 
-function CountTokenStrip({ count, src, alt, ...stripProps }: CountTokenStripProps) {
+function CountTokenStrip({
+  count,
+  src,
+  alt,
+  ...stripProps
+}: CountTokenStripProps) {
   if (count <= 0) return null;
 
   const tokens = Array.from({ length: count }, (_, key) => ({ key, src, alt }));

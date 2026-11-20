@@ -29,7 +29,6 @@ type Props = {
   playerData: PlayerData;
 };
 
-
 /**
  * How deep the tech rack is drawn: the player's longest color line. Shorter
  * lines are socketed to that depth so the rack stays a rectangle, but nothing
@@ -39,7 +38,7 @@ function getTechRackDepth(techIds: string[]) {
   const counts = techCategories.map(
     (techType) =>
       techIds.filter((techId) => getTechData(techId)?.types[0] === techType)
-        .length
+        .length,
   );
   return Math.max(1, ...counts);
 }
@@ -81,8 +80,8 @@ export function PlayerCardDeck({ playerData }: Props) {
       filteredTechs,
       playerData.exhaustedTechs ?? [],
       techDepth,
-      playerData.breakthrough
-    )
+      playerData.breakthrough,
+    ),
   );
 
   const hasHoldings =
@@ -220,6 +219,7 @@ export function PlayerCardDeck({ playerData }: Props) {
           />
           {settings.showPlayerAreaReinforcements && (
             <ReinforcementTokensGroup
+              hasSeverTokenReinf={player.hasSeverTokenReinf}
               breachTokensReinf={player.breachTokensReinf}
               sleeperTokensReinf={player.sleeperTokensReinf}
               ghostWormholesReinf={player.ghostWormholesReinf}
