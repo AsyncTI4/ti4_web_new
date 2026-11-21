@@ -13,6 +13,11 @@ export type Breakthrough = {
   synergy: string[];
   text: string;
   source: string;
+  shortName?: string;
+  shrinkName?: boolean;
+  imageURL?: string;
+  homebrewReplacesID?: string;
+  notes?: string;
 };
 type PlanetType =
   | "FACTION"
@@ -104,7 +109,10 @@ export type Unit = {
   homebrewReplacesID?: string;
   fleetSupplyBonus?: number;
   eligiblePlanetTypes?: string[];
+  ineligiblePlanetTypes?: string[];
+  isUpgrade?: boolean;
   unlock?: string;
+  notes?: string;
 };
 
 export type Token = {
@@ -217,6 +225,7 @@ export type LeaderData = {
   notes?: string;
   tfNotes?: string;
   flavourText?: string;
+  flavorText?: string;
 };
 
 export type CapturedUnitsData = {
@@ -853,10 +862,15 @@ export type Agenda = {
     | "omega_phase"
     | "riftset"
     | "blue_reverie"
-    | "twilights_fall";
+    | "twilights_fall"
+    | "black_spectrum"
+    | "monuments"
+    | "theodisi"
+    | "tk_destroyer_cup";
   forEmoji?: string;
   againstEmoji?: string;
   mapText?: string;
+  notes?: string;
 };
 
 export type Ability = {
@@ -868,7 +882,10 @@ export type Ability = {
   permanentEffect?: string;
   source: string;
   shortName?: string;
+  shrinkName?: boolean;
+  imageURL?: string;
   homebrewReplacesID?: string;
+  notes?: string;
 };
 
 export type PromissoryNote = {
@@ -887,6 +904,9 @@ export type PromissoryNote = {
   notes?: string;
 };
 
+/** How fully the bot automates a card. */
+type Automation = "FULL" | "PARTIAL" | "MANUAL";
+
 type ObjectiveDefinition = {
   alias: string;
   name: string;
@@ -895,6 +915,9 @@ type ObjectiveDefinition = {
   points: number;
   source: string;
   homebrewReplacesID?: string;
+  automation?: Automation;
+  automationNotes?: string;
+  notes?: string;
 };
 
 export type SecretObjective = ObjectiveDefinition;
@@ -923,6 +946,9 @@ export type Exploration = {
   name: string;
   text: string;
   source: string;
+  automation?: Automation;
+  automationNotes?: string;
+  notes?: string;
 };
 
 export type AttachmentData = {
@@ -948,9 +974,17 @@ export type ActionCard = {
   window: string;
   text: string;
   automationID?: string;
+  automation?: Automation;
+  automationNotes?: string;
   actual_source?: string;
+  actualSource?: string;
+  playTiming?: "AGENDA_WHEN" | "AGENDA_AFTER";
+  affectedByWildWildGalaxy?: boolean;
+  wildWildWindow?: string;
+  wildWildText?: string;
   flavorText?: string;
   source: string;
+  notes?: string;
 };
 
 export type StrategyCardDefinition = {
