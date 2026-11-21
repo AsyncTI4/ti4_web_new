@@ -77,6 +77,20 @@ export const explorations: Exploration[] = [
     source: "asteroid",
   },
   {
+    id: "affordablemassproduction30k",
+    name: "Affordable Mass Production",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "Attach: When fighters are produced using the PRODUCTION of units in this system, reduce the combined cost of the produced units by 1.",
+    flavorText:
+      "*Stamped from scrap, fuelled by optimism, and delivered by the dozen.*",
+    attachmentId: "affordablemassproduction30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Production cost drops by 1 when fighters are produced in this system.",
+  },
+  {
     id: "ahrf1",
     name: "Hazardous Relic Fragment",
     type: "Hazardous",
@@ -149,6 +163,32 @@ export const explorations: Exploration[] = [
     source: "asteroid",
   },
   {
+    id: "ancientbiologicalspecimens30k",
+    name: "Ancient Biological Specimens",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 3 trade goods, or you may purge this card and spend 5 resources to research 1 green technology.",
+    flavorText:
+      "*Sealed in glass for a hundred thousand years, the samples stirred the moment the laboratory lights came on.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 3 trade goods, or purge it and spend 5 resources to research a green technology.",
+  },
+  {
+    id: "ancientexcavators30k",
+    name: "Ancient Excavators",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 1 trade good, or you may purge this card and spend 2 resources to gain the Scanlink Drone Network technology. This card can be traded as part of a transaction.",
+    flavorText:
+      "*The excavators had dug on alone for millennia, mapping every tunnel and waiting for someone to read the results.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 1 trade good, or purge it and spend 2 resources to gain Scanlink Drone Network. Can be traded as a relic in transactions.",
+  },
+  {
     id: "ancientshipyard",
     name: "Ancient Shipyard",
     type: "Industrial",
@@ -193,7 +233,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may gain 2 commodities, or you may convert up to 2 of your commodities to trade goods.",
     flavorText:
-      "*Suffi An drifted into the derelict orbital and brushed her suited hand across the inner hatch controls. A light glowed, and she smiled. The statis seals were still operational.*",
+      "*Suffi An drifted into the derelict orbital and brushed her suited hand across the inner hatch controls. A light glowed, and she smiled. The stasis seals were still operational.*",
     source: "pok",
   },
   {
@@ -217,11 +257,22 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "battleworld",
+    name: "Battleworld",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "ATTACH: At the end of your turn, if this planet contains no neutral units, place 1 infantry from your reinforcements, 1 neutral mech, and 2 neutral infantry on this planet. Those neutral units enter coexistence. When a player wins a combat against neutral units on this planet, they may gain 1 command token.",
+    attachmentId: "battleworld",
+    flavorText:
+      "*The crowd roared as the Arcanum grandmaster was struck down by the Xytheris soldier.*",
+    source: "theodisi",
+  },
+  {
     id: "biotic",
     name: "Biotic Research Facility",
     type: "Industrial",
     resolution: "Attach",
-    text: "This planet has a green technology specialty. If this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
+    text: "This planet has a green technology specialty; if this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
     attachmentId: "biotic",
     source: "pok",
   },
@@ -240,6 +291,109 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may remove a mech or remove an infantry and pay 2 resources to place a structure onto this planet.",
     source: "asteroid",
+  },
+  {
+    id: "bsp_abandoned_warehouses1",
+    name: "Abandoned Warehouses (1)",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You gain 1 trade good and may convert 1 of your commodities to a trade good. Then, you gain 1 commodity for each industrial planet you control.",
+    flavorText:
+      "Far beneath the storm-wracked seas, vast storage tanks drifted in the lightless depths.",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_abandoned_warehouses2",
+    name: "Abandoned Warehouses (2)",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You gain 1 trade good and may convert 1 of your commodities to a trade good. Then, you gain 1 commodity for each industrial planet you control.",
+    flavorText:
+      "Looks like some smuggler hid their shipment of gerr root here and forgot to pick it up.",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_abandoned_warehouses3",
+    name: "Abandoned Warehouses (3)",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You gain 1 trade good and may convert 1 of your commodities to a trade good. Then, you gain 1 commodity for each industrial planet you control.",
+    flavorText:
+      "Suffi An drifted into the derelict orbital and brushed her suited hand across the inner hatch controls. A light glowed, and she smiled. The stasis seals were still operational.",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_abandoned_warehouses4",
+    name: "Abandoned Warehouses (4)",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You gain 1 trade good and may convert 1 of your commodities to a trade good. Then, you gain 1 commodity for each industrial planet you control.",
+    flavorText:
+      "The storage silos had been half buried in sand dunes, sealed enviro-doors hiding the stockpiles within.",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_demilitarized_zone",
+    name: "Demilitarized Zone",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "Remove units from this planet and place them on another planet you control. Ground forces may instead be placed in the space area of this system.\n\nATTACH: Units cannot be committed to, produced on, or placed on this planet. During the agenda phase, this planet's planet card can be traded as part of a transaction.",
+    attachmentId: "dmz",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_freelancers1",
+    name: "Freelancers (1)",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "You may produce 1 unit in this system with its cost reduced by 1; you may spend influence as if it were resources to produce that unit.",
+    flavorText:
+      "As part of the annexation agreement, local artisans would be well paid to lay the groundwork for military installations in the newly acquired territories.",
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_freelancers2",
+    name: "Freelancers (2)",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "You may produce 1 unit in this system with its cost reduced by 1; you may spend influence as if it were resources to produce that unit.",
+    flavorText:
+      'Overseer Klix was known for hiring hundreds of freelancers and then "forgetting" to pay them once the bulk of the work was complete.',
+    source: "black_spectrum",
+  },
+  {
+    id: "bsp_freelancers3",
+    name: "Freelancers (3)",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "You may produce 1 unit in this system with its cost reduced by 1; you may spend influence as if it were resources to produce that unit.",
+    flavorText:
+      "The Vexis Howlers were well-equipped with transports, powered armor, and even logistical support—everything a fledgling outpost needed to survive.",
+    source: "black_spectrum",
+  },
+  {
+    id: "carbonconsciousness30k",
+    name: "Carbon Consciousness",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "Attach: When this planet is exhausted, you may spend influence equal to its resource value to ready it. If you do, place 1 infantry from your reinforcements on this planet.",
+    flavorText:
+      "*The colony's bioreactors turn civic devotion into fuel, and fuel into fresh recruits.*",
+    attachmentId: "carbonconsciousness30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Exhausting the planet with spend or vote buttons offers to ready it and place 1 infantry, with influence payment buttons. The bot offers it once per turn for each planet.",
+  },
+  {
+    id: "celestialpath",
+    name: "Celestial Path",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Remove 1 command token from this system, if able, and gain 1 command token. Then, place 1 frontier token in your home system.",
+    flavorText:
+      "*The dark-energy scanners, which had been ringing violently moments before, suddenly went silent and began returning pings from the Nihlus system.*",
+    source: "theodisi",
   },
   {
     id: "cm1",
@@ -268,7 +422,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, gain 1 trade good.",
     flavorText:
-      "*The borehole was over a kilometer across. It seemed to stretch down forever, but Ilan could see a faint orange glow in its depths.*",
+      "*Without the proper machinery, a core mine can be a more hostile environment than a star's corona.*",
     source: "pok",
   },
   {
@@ -302,6 +456,42 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "Choose a ship in this system. You may replace that ship with one from your reinforcements that costs up to 1 more than the replaced ship.",
     source: "asteroid",
+  },
+  {
+    id: "corrosivediscovery30k1",
+    name: "Corrosive Discovery",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Roll 3 dice. Gain 1 trade good for each result of 5 or greater. For each result of 2 or less, assign 1 hit to your ground forces on this planet.",
+    flavorText:
+      "*The ore was priceless and the air was acid. The prospectors were paid by the kilogram, not by the hour.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Rolls 3 dice, gives the trade goods and offers the assign-hits button. The button lists ground forces on every planet in the system; assign to this planet.",
+  },
+  {
+    id: "corrosivediscovery30k2",
+    name: "Corrosive Discovery",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Roll 3 dice. Gain 1 trade good for each result of 5 or greater. For each result of 2 or less, assign 1 hit to your ground forces on this planet.",
+    flavorText:
+      "*The drill bits dissolved in an hour. The crystals they reached were worth a fleet.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Rolls 3 dice, gives the trade goods and offers the assign-hits button. The button lists ground forces on every planet in the system; assign to this planet.",
+  },
+  {
+    id: "cosmicboon",
+    name: "Cosmic Boon",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area and place a number of control tokens on it equal to the number of adjacent systems that contain no planets + 1. When this card has no control tokens, discard it. At the end of your tactical action, you may remove 1 control token from this card to explore 1 planet you control in the active system.",
+    flavorText:
+      '*"What Nothi found in the core of Veydra would go on to reshape the future of the Nihlus system."*',
+    source: "theodisi",
   },
   {
     id: "councilpreserve",
@@ -385,11 +575,31 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "crossspeciesmingling30k",
+    name: "Cross-species Mingling",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Place 1 infantry from your reinforcements on this planet, plus 1 additional infantry for each planet in or adjacent to this system that contains another player's infantry.",
+    flavorText:
+      "*Within a generation the settlers of three species shared one market, one dialect and, increasingly, one militia.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes: "Places the infantry automatically.",
+  },
+  {
+    id: "culturalartifact",
+    name: "Cultural Artifact",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Place this card face up in your play area; this card may be exchanged as part of a transaction.\nWhen an agenda is revealed: Discard this card and that agenda to reveal 1 agenda from the top of the deck. Players vote on this agenda instead.",
+    source: "blue_reverie",
+  },
+  {
     id: "cybernetic",
     name: "Cybernetic Research Facility",
     type: "Industrial",
     resolution: "Attach",
-    text: "This planet has a yellow technology specialty. If this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
+    text: "This planet has a yellow technology specialty; if this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
     attachmentId: "cybernetic",
     source: "pok",
   },
@@ -402,6 +612,100 @@ export const explorations: Exploration[] = [
     flavorText:
       "*If you stare too long into the voids between the stars, you may find that the voids begin to whisper.*",
     source: "uncharted_space",
+  },
+  {
+    id: "datainterchangehubjmsc",
+    name: "Data Interchange Hub",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "Attach: During its controller's turn, this planet's controller may transact with any player who has ships in a system that contains a wormhole.",
+    flavorText:
+      "*Every signal through the wormhole passes through the hub first, and the hub's owners listen to all of them.*",
+    attachmentId: "datainterchangehubjmsc",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes: "The transaction permission is not given by the bot.",
+  },
+  {
+    id: "dauntingweaponsschematics30k",
+    name: "Daunting Weapons Schematics",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 1 trade good, or you may purge this card and spend 5 resources to gain the Dreadnought II unit upgrade technology. This card can be traded as part of a transaction.",
+    flavorText:
+      "*The blueprints called for a hull so heavy that the shipwrights laughed, and then asked about the budget.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 1 trade good, or purge it and spend 5 resources to gain Dreadnought II. Can be traded as a relic in transactions.",
+  },
+  {
+    id: "decodedbriefings",
+    name: "Decoded Briefings",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Resolve the secondary ability of a readied or unchosen strategy card, without spending a command token, if able.",
+    source: "blue_reverie",
+  },
+  {
+    id: "defensivebastion30k",
+    name: "Defensive Bastion",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "Attach: When your ships retreat into this system, if it does not contain 1 of your command tokens, you may place up to 4 fighters from your reinforcements in its space area.",
+    flavorText:
+      "*The bastion's hangars stood fuelled and waiting for the day a battered fleet would limp home.*",
+    attachmentId: "defensivebastion30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Retreating with the bot's retreat buttons into this system without your command token offers to place up to 4 fighters.",
+  },
+  {
+    id: "destructiveelements30k",
+    name: "Destructive Elements",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 3 trade goods, or you may purge this card and spend 5 resources to research 1 red technology.",
+    flavorText:
+      "*The isotopes were unstable, illegal in eleven systems, and exactly what the weapons division had asked for.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 3 trade goods, or purge it and spend 5 resources to research a red technology.",
+  },
+  {
+    id: "diplomaticboon",
+    name: "Diplomatic Boon",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Place this card face up in your play area and place a number of control tokens on it equal to this planet's influence value + 1. When this card has no control tokens, discard it. At any time, you may remove any number of control tokens from this card to place that many fighters from your reinforcements in systems that contain your ships or infantry from your reinforcements on planets you control.",
+    flavorText:
+      '*"Not to worry, we\'ll be providing a Verydith security detail to ensure the safety of all politicians involved."*',
+    source: "theodisi",
+  },
+  {
+    id: "directimport30k",
+    name: "Direct Import",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Gain 1 commodity. Then, you may move 1 of your ships from an adjacent system into this system.",
+    flavorText:
+      "*The freighter arrived with its manifest in perfect order, and its escort exactly where the buyer wanted it.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gives 1 commodity, then offers to move 1 of your ships from an adjacent system.",
+  },
+  {
+    id: "disruptiveforces",
+    name: "Disruptive Forces",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "If The Fracture is not in play, put it into play. Place 1 ingress token in this system, or gain 1 command token and draw 1 action card.",
+    flavorText:
+      "*From the newly opened wormhole emerged the Throne of Wrath—an omen of doom for all who saw it.*",
+    source: "theodisi",
   },
   {
     id: "distinguishedadmiral",
@@ -420,6 +724,28 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "You may purge your agent and replace it with this card. While this card is your agent, it counts as a point.",
     source: "asteroid",
+  },
+  {
+    id: "distractionefforts30k",
+    name: "Distraction Efforts",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Gain 3 trade goods. Then, you may perform 1 additional component action.",
+    flavorText:
+      "*A few forged beacons and one burning decoy hulk, and every patrol in the sector was looking the wrong way.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gives 3 trade goods and an extra component action button.",
+  },
+  {
+    id: "diversifiedresearchfacility",
+    name: "Diversified Research Facility",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "ATTACH: This planet may be treated as if it had a technology specialty of any color; if this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
+    attachmentId: "diversifiedresearchfacility",
+    source: "theodisi",
   },
   {
     id: "dmz",
@@ -446,7 +772,7 @@ export const explorations: Exploration[] = [
     resolution: "Instant",
     text: "Draw 1 secret objective.",
     flavorText:
-      "The flickering ion storm illuminated the hulk, its hull rent and torn apart by some monstrous force.",
+      "The flickering ion storm illuminated the hulk, its hull rent and torn by some monstrous force.",
     source: "pok",
   },
   {
@@ -470,6 +796,16 @@ export const explorations: Exploration[] = [
     source: "codex3",
   },
   {
+    id: "economicboon",
+    name: "Economic Boon",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area and place a number of control tokens on it equal to the number of planets in systems adjacent to this system. When this card has no control tokens, discard it. At the start of your turn, you may remove any number of control tokens from this card to produce 1 non-fighter ship with a cost equal to or less than the number of tokens removed in a system containing 1 of your space docks.",
+    flavorText:
+      "*\"If you'll just sign here, the deal will be done. I'm sure you're familiar with the terms and conditions, but just in case...\"*",
+    source: "theodisi",
+  },
+  {
     id: "ed1",
     name: "Enigmatic Device",
     type: "Frontier",
@@ -488,6 +824,74 @@ export const explorations: Exploration[] = [
     flavorText:
       "*The silver pinwheel spun slowly in the midst of the nebula, each kilometer-long blade glittering faintly with reflected starlight.*",
     source: "pok",
+  },
+  {
+    id: "efficiencytechniques30k",
+    name: "Efficiency Techniques",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "Attach: If any unit on this planet has PRODUCTION, increase this planet's PRODUCTION value by 2.",
+    flavorText:
+      "*Retooled lines, rotating shifts and an overseer who never sleeps.*",
+    attachmentId: "efficiencytechniques30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Adds 2 to the planet's production when units on it have production.",
+  },
+  {
+    id: "electromagneticflux30k",
+    name: "Electromagnetic Flux",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "Attach: During ground combat on this planet, mechs that do not belong to this planet's controller lose their unit abilities and SUSTAIN DAMAGE.",
+    flavorText:
+      "*Every servo seizes and every shield stutters. The planet's own garrison learned long ago to fight by hand.*",
+    attachmentId: "electromagneticflux30k",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes:
+      "Mech abilities in ground combat are not switched off by the bot.",
+  },
+  {
+    id: "emergencyabortsignal30k",
+    name: "Emergency Abort Signal",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "Attach: When this planet's controller announces a retreat, if this system is within 3 systems of the active system, they may retreat into this system. If they do, they may repair 1 of their damaged units after the retreat.",
+    flavorText:
+      "*The beacon screamed on every emergency band at once, a bright thread leading home through the dark.*",
+    attachmentId: "emergencyabortsignal30k",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes:
+      "Retreat targeting and repair are not automated; resolve them yourselves.",
+  },
+  {
+    id: "emergentdefenses30k",
+    name: "Emergent Defenses",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, place 1 PDS from your reinforcements on this planet.",
+    flavorText:
+      "*Buried beneath the ice lay a defense battery, its targeting arrays still tracking ships that had left millennia ago.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Use-a-mech or remove-1-infantry buttons, then places the PDS.",
+  },
+  {
+    id: "enhancedmobilitycore30k",
+    name: "Enhanced Mobility Core",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. If you have Gravity Drive, it gives 2 additional movement instead of 1. This card can be traded as part of a transaction.",
+    flavorText:
+      "*The core hums at a pitch that sets teeth on edge, and folds distance like paper.*",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes:
+      "Goes to your play area and can be traded; the extra movement is not calculated.",
   },
   {
     id: "ent",
@@ -530,13 +934,65 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "explorationenclave",
+    name: "Exploration Enclave",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "You may spend up to 2 influence to ready that many non-home planets.",
+    flavorText:
+      "*The Kairn navigated the newfound planet's surface as though they had seen it a thousand times.*",
+    source: "theodisi",
+  },
+  {
+    id: "extractionrun",
+    name: "Extraction Run",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, you may draw 1 secret objective, or spend 1 token from your command sheet to unlock your commander.",
+    source: "blue_reverie",
+  },
+  {
+    id: "fallenempire",
+    name: "Fallen Empire",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Explore this planet once as each of two different planet types of your choice. Then, purge this card.",
+    source: "blue_reverie",
+  },
+  {
+    id: "faultyemergencysignal30k",
+    name: "Faulty Emergency Signal",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "If no other player has ships in your home system, you may move any number of your ships from the active system to your home system.",
+    flavorText:
+      "*The recall order was a malfunction. By the time anyone noticed, half the fleet was already home.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Move-ship-home buttons, offered only if no other player's ships are in your home system.",
+  },
+  {
+    id: "fauxaltruisticfestivals30k",
+    name: "Faux Altruistic Festivals",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Each of your neighbors may give you 1 promissory note from their hand; each neighbor who does draws 1 action card. Then, draw 1 action card.",
+    flavorText:
+      "*The banners promised friendship between all peoples. The guest list had been drawn up with rather more calculation.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "You draw 1 action card; each neighbor gets give-a-promissory-note buttons and draws 1 action card if they give one.",
+  },
+  {
     id: "fb1",
     name: "Functioning Base",
     type: "Industrial",
     resolution: "Instant",
     text: "You may gain 1 commodity, or you may spend 1 trade good or 1 commodity to draw 1 action card.",
     flavorText:
-      "*The Imperial Survey Corp outpost had been adandoned since the Twilight Wars, but the facilities had been built to last for millennia.*",
+      "*The Imperial Survey Corp outpost had been abandoned since the Twilight Wars, but the facilities had been built to last for millennia.*",
     source: "pok",
   },
   {
@@ -638,6 +1094,132 @@ export const explorations: Exploration[] = [
     source: "fowplus",
   },
   {
+    id: "foregonediscoveriesjmsc",
+    name: "Foregone Discoveries",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Reveal the top card of the relic deck and choose a player; that player gains that relic. During this action phase, you and that player may transact even if you are not neighbors.",
+    flavorText:
+      "*The relic had been found, lost and found again so often that nobody remembered who it belonged to.*",
+    notes: "The chosen player gains exactly the revealed relic.",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Shows the top relic; the chosen player gains exactly that relic and may transact with you this action phase.",
+  },
+  {
+    id: "foresightofindustry30k1",
+    name: "Foresight of Industry",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 2 commodities, or you may spend 1 influence to reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*The surveyors' projections were so precise that the next discovery was already pencilled into the budget.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gain 2 commodities, or spend 1 influence to resolve the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustry30k2",
+    name: "Foresight of Industry",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 2 commodities, or you may spend 1 influence to reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*The Hacan trade guild had already sold shares in the mine before the first shaft was dug.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gain 2 commodities, or spend 1 influence to resolve the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustry30k3",
+    name: "Foresight of Industry",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 2 commodities, or you may spend 1 influence to reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*Old Lazax survey markers still pointed the way to seams nobody had bothered to mine.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gain 2 commodities, or spend 1 influence to resolve the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustry30k4",
+    name: "Foresight of Industry",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 2 commodities, or you may spend 1 influence to reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*The forecast was wrong only once, and the analyst responsible was promoted for his boldness.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Gain 2 commodities, or spend 1 influence to resolve the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustryb30k1",
+    name: "Established Surveying",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 1 commodity for each attachment on other planets in or adjacent to this system. If there are none, reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*Every outpost in range was quietly feeding its survey data into the same industrial forecast.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Counts attachments on other planets in or next to this system; with none, resolves the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustryb30k2",
+    name: "Established Surveying",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 1 commodity for each attachment on other planets in or adjacent to this system. If there are none, reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*Each new attachment on the neighbouring worlds sent another column of numbers to the regional planners.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Counts attachments on other planets in or next to this system; with none, resolves the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustryb30k3",
+    name: "Established Surveying",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 1 commodity for each attachment on other planets in or adjacent to this system. If there are none, reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*The planners called it synergy. The miners called it more paperwork.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Counts attachments on other planets in or next to this system; with none, resolves the next industrial exploration card here.",
+  },
+  {
+    id: "foresightofindustryb30k4",
+    name: "Established Surveying",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may gain 1 commodity for each attachment on other planets in or adjacent to this system. If there are none, reveal the top card of the industrial exploration deck and resolve it on this planet.",
+    flavorText:
+      "*Where three settlements traded, a fourth was always already being drawn on the map.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Counts attachments on other planets in or next to this system; with none, resolves the next industrial exploration card here.",
+  },
+  {
+    id: "forgottenlegion",
+    name: "Forgotten Legion",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Place up to 3 neutral infantry on this planet and resolve ground combat. During that combat, for each of those units you destroy, gain 1 trade good.",
+    source: "blue_reverie",
+  },
+  {
     id: "forgottentradestation",
     name: "Deserted Trade Station",
     type: "Cultural",
@@ -700,10 +1282,21 @@ export const explorations: Exploration[] = [
     name: "Gravity Wave",
     type: "Frontier",
     resolution: "Instant",
-    text: "Remove all your non-infantry units from this system and place them in any adjacent system that does not contain other players' ships. Then place a Gravity Rift token in this system. [Note: Infantry will not survive.]",
+    text: "Remove all your non-infantry units from this system and place them in any adjacent system that does not contain other players' ships. Then place a Gravity Rift token in this system.",
+    notes: "Infantry will not survive.",
     flavorText:
       "*Gravity twisted violently, ejecting vessels into nearby space.*",
     source: "fowplus",
+  },
+  {
+    id: "freedomfighters",
+    name: "Freedom Fighters",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place 2 destroyers and 2 infantry from your reinforcements in this system.",
+    flavorText:
+      '*"The veterans were happy to take up arms when they realized who the target was."*',
+    source: "theodisi",
   },
   {
     id: "freetech1",
@@ -750,9 +1343,9 @@ export const explorations: Exploration[] = [
     name: "Freelancers",
     type: "Cultural",
     resolution: "Instant",
-    text: "You may produce 1 unit in this system. You may spend influence as if it were resources to produce this unit.",
+    text: "You may produce 1 unit in this system; you may spend influence as if it were resources to produce this unit.",
     flavorText:
-      "*The Vexis Howelers were well-equipped with transports, powered armor, and even logistical support—everything a fledgling outpost needed to survive.*",
+      "*The Vexis Howlers were well-equipped with transports, powered armor, and even logistical support—everything a fledgling outpost needed to survive.*",
     source: "pok",
   },
   {
@@ -760,7 +1353,7 @@ export const explorations: Exploration[] = [
     name: "Freelancers",
     type: "Cultural",
     resolution: "Instant",
-    text: "You may produce 1 unit in this system. You may spend influence as if it were resources to produce this unit.",
+    text: "You may produce 1 unit in this system; you may spend influence as if it were resources to produce this unit.",
     flavorText:
       "*As part of the annexation agreement, local artisans would be well paid to lay the groundwork for military installations in the newly acquired territories.*",
     source: "pok",
@@ -770,9 +1363,9 @@ export const explorations: Exploration[] = [
     name: "Freelancers",
     type: "Cultural",
     resolution: "Instant",
-    text: "You may produce 1 unit in this system. You may spend influence as if it were resources to produce this unit.",
+    text: "You may produce 1 unit in this system; you may spend influence as if it were resources to produce this unit.",
     flavorText:
-      '*Overseer Flix was known for hiring hundreds of freelancers and then "forgetting" to pay them once the bulk of the work was complete.*',
+      '*Overseer Klix was known for hiring hundreds of freelancers and then "forgetting" to pay them once the bulk of the work was complete.*',
     source: "pok",
   },
   {
@@ -871,6 +1464,22 @@ export const explorations: Exploration[] = [
     source: "fowplus",
   },
   {
+    id: "grandbazaar",
+    name: "Grand Bazaar",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Gain a number of commodities equal to the number of planets either in, or adjacent to, this system. Then, convert all of your commodities to trade goods.",
+    source: "blue_reverie",
+  },
+  {
+    id: "greatwork",
+    name: "Great Work",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Ready a planet you control that has an influence value less than this planet's influence value.",
+    source: "blue_reverie",
+  },
+  {
     id: "gw",
     name: "Gamma Wormhole",
     type: "Cultural",
@@ -880,6 +1489,14 @@ export const explorations: Exploration[] = [
       "*The gravic sensors howled a warning. Ahead of the ship was a ring of twisted starlight, surrounding a sphere of utter darkness.*",
     attachmentId: "gamma",
     source: "pok",
+  },
+  {
+    id: "hazardousartifact",
+    name: "Hazardous Artifact",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Place this card face up in your play area; this card may be exchanged as part of a transaction.\nAfter a round of ground combat on a planet you do not control: Discard this card to force your opponent’s units into coexistence.",
+    source: "blue_reverie",
   },
   {
     id: "hiddenlaboratory",
@@ -948,6 +1565,95 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "hyperalgorithms30k",
+    name: "Hyper Algorithms",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 3 trade goods, or you may purge this card and spend 5 resources to research 1 yellow technology.",
+    flavorText:
+      "*The code rewrote itself overnight. By morning it was solving problems no one had thought to ask.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 3 trade goods, or purge it and spend 5 resources to research a yellow technology.",
+  },
+  {
+    id: "imitationfactories30k1",
+    name: "Imitation Factories",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Choose 1 card in the hazardous exploration discard pile and resolve it as if you had just explored this planet. Then, purge this card.",
+    flavorText:
+      "*The factories copied everything they found, down to the last flaw, and sometimes the danger along with it.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Pick a card from the hazardous discard pile; it resolves on this planet and Imitation Factories is purged. The copied card is automated as far as its own line says.",
+  },
+  {
+    id: "imitationfactories30k2",
+    name: "Imitation Factories",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Choose 1 card in the hazardous exploration discard pile and resolve it as if you had just explored this planet. Then, purge this card.",
+    flavorText:
+      "*The Hylar engineers studied the ruins for a week. Then the ruins began studying them back.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Pick a card from the hazardous discard pile; it resolves on this planet and Imitation Factories is purged. The copied card is automated as far as its own line says.",
+  },
+  {
+    id: "imitationfactories30k3",
+    name: "Imitation Factories",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Choose 1 card in the hazardous exploration discard pile and resolve it as if you had just explored this planet. Then, purge this card.",
+    flavorText:
+      "*Nobody remembered who first switched the assembly lines on. Nobody could find the switch to turn them off.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Pick a card from the hazardous discard pile; it resolves on this planet and Imitation Factories is purged. The copied card is automated as far as its own line says.",
+  },
+  {
+    id: "imitationfactories30k4",
+    name: "Imitation Factories",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Choose 1 card in the hazardous exploration discard pile and resolve it as if you had just explored this planet. Then, purge this card.",
+    flavorText:
+      "*Each copy was perfect, right down to the warning labels nobody could read.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Pick a card from the hazardous discard pile; it resolves on this planet and Imitation Factories is purged. The copied card is automated as far as its own line says.",
+  },
+  {
+    id: "immediateassembly",
+    name: "Immediate Assembly",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet or remove 1 infantry from this planet, choose 1: This planet gains PRODUCTION 3 as if it were a unit until the end of this turn; or place 1 mech from your reinforcements on this planet.",
+    flavorText:
+      '*"The master\'s dictate could potentially be interpreted in such a way as to allow me to lend you a hand." — Orun*',
+    source: "theodisi",
+  },
+  {
+    id: "imperialisticgates30k",
+    name: "Imperialistic Gates",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "Attach: After this planet's controller activates the Mecatol Rex system, they purge this card. Then, ships that begin their movement in this planet's system are treated as if they were adjacent to Mecatol Rex.",
+    flavorText:
+      "*The old imperial transit arches still answered to the right codes. Once.*",
+    attachmentId: "imperialisticgates30k",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes:
+      "Movement is not calculated by the bot; purge the attachment and move yourselves.",
+  },
+  {
     id: "imperialresearchinstitute",
     name: "Imperial Research Institute",
     type: "Cultural",
@@ -955,6 +1661,67 @@ export const explorations: Exploration[] = [
     text: "ATTACH: This planet gains a non-unit technology specialty (exhaust this planet to ignore one prerequisite on any non-unit upgrade).",
     attachmentId: "imperialinstitute",
     source: "asteroid",
+  },
+  {
+    id: "industrialartifact",
+    name: "Industrial Artifact",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area; this card may be exchanged as part of a transaction.\nAfter you produce a unit: Discard this card to gain 3 commodities, or spend 2 commodities or 2 trade goods to research that unit's unit upgrade technology.",
+    source: "blue_reverie",
+  },
+  {
+    id: "inhospitableenvironment30k",
+    name: "Inhospitable Environment",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "Attach: Each time infantry are committed to or produced on this planet, roll 1 die for each of those infantry. For each result of 3 or less, destroy 1 of those infantry.",
+    flavorText:
+      "*The air burns, the ground shifts, and the native spores have strong opinions about visitors.*",
+    attachmentId: "inhospitableenvironment30k",
+    source: "thirtyk",
+    automation: "PARTIAL",
+    automationNotes:
+      "Infantry landed with the land buttons or produced on the planet gets a roll button. Other ways of committing infantry are not detected.",
+  },
+  {
+    id: "initialinvestmentsurplus30k",
+    name: "Initial Investment Surplus",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "You may spend 1 commodity or 1 trade good to ready this planet.",
+    flavorText:
+      "*The colonial charter had been overfunded by a clerical error. The administrators saw no reason to report it.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Spend-a-commodity or spend-a-trade-good buttons ready the planet.",
+  },
+  {
+    id: "insatiablefuelsource30k",
+    name: "Insatiable Fuel Source",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Each player who has a command token in this system returns it to their tactic pool.",
+    flavorText:
+      "*A single tank of the stuff could refuel a battle group, and every fleet waiting on resupply was suddenly free to move.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Every command token in the system returns to its owner's tactic pool.",
+  },
+  {
+    id: "interestingcontagion30k",
+    name: "Interesting Contagion",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place 1 frontier token in each adjacent system that contains no planets and no frontier token.",
+    flavorText:
+      "*Whatever the probes brought back was spreading, quietly, from one empty patch of space to the next.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Places frontier tokens in adjacent empty systems without one.",
   },
   {
     id: "ion",
@@ -1004,6 +1771,21 @@ export const explorations: Exploration[] = [
     resolution: "Fragment",
     text: "ACTION: Purge 3 of your industrial relic fragments to gain 1 relic.",
     source: "pok",
+  },
+  {
+    id: "itsatrapjmsc",
+    name: "It's a Trap!",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Of the players whose home systems are more than 5 hexes from this system, the one with the fewest victory points may place up to 4 destroyers in this system; if tied, choose 1 at random. That player immediately engages in space combat with the other players who have ships in this system.",
+    flavorText:
+      "*The frontier beacon was bait, and the ambushers had been waiting a very long time for someone to take it.*",
+    notes:
+      "Distance counts adjacency, so wormholes and hyperlanes count as adjacent. The exploring player can be the chosen player. If no player's home system is far enough away, nothing happens.",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Picks the player with the fewest victory points among those whose home is more than 5 hexes away (random tie-break); they place up to 4 destroyers and combat starts.",
   },
   {
     id: "kel1",
@@ -1103,6 +1885,65 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "localinstability",
+    name: "Local Instability",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Place 1 ingress token in this system if it does not contain one, or explore the frontier deck in this system. Then, purge this card.",
+    source: "blue_reverie",
+  },
+  {
+    id: "localtariffs30k",
+    name: "Local Tariffs",
+    type: "Cultural",
+    resolution: "Attach",
+    text: "Attach: After a player activates a system, you may allow that player to move ships through this planet's system as if it contained no ships. If they do, you may take 1 trade good from that player and gain 1 commodity.",
+    flavorText:
+      "*Safe passage, the customs officer explained, was guaranteed. The receipt cost extra.*",
+    attachmentId: "localtariffs30k",
+    source: "thirtyk",
+    automation: "MANUAL",
+    automationNotes:
+      "Movement through ships and the trade good payment are not automated.",
+  },
+  {
+    id: "lostandfound30k1",
+    name: "Lost and Found",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, place 1 destroyer from your reinforcements in this system's space area if it contains no other player's ships.",
+    flavorText:
+      "*The derelict's crew had been gone for centuries, but its engines warmed at the first touch.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Use-a-mech or remove-1-infantry buttons, then places the destroyer if no other player's ships are there.",
+  },
+  {
+    id: "lostandfound30k2",
+    name: "Lost and Found",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, place 1 destroyer from your reinforcements in this system's space area if it contains no other player's ships.",
+    flavorText:
+      '*Its registry read "lost with all hands, Lazax year 4,105". It had been waiting in the dust ever since.*',
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Use-a-mech or remove-1-infantry buttons, then places the destroyer if no other player's ships are there.",
+  },
+  {
+    id: "loststation",
+    name: "Lost Station",
+    type: "Hazardous",
+    resolution: "Token",
+    text: "Place the Lost Station token in this system. Gain the Lost Station card and ready it. Then, purge this card.",
+    attachmentId: "loststation",
+    flavorText:
+      "*Before the Ponthous outfit lay a barren Throne station. No king, no chaos.*",
+    source: "theodisi",
+  },
+  {
     id: "ls",
     name: "Lazax Survivors",
     type: "Hazardous",
@@ -1110,6 +1951,19 @@ export const explorations: Exploration[] = [
     text: "This planet's resource value is increased by 1 and its influence value is increased by 2.",
     attachmentId: "lazaxsurvivors",
     source: "pok",
+  },
+  {
+    id: "macguffianoutpostjmsc",
+    name: "MacGuffin Outpost",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. When you lose a space combat, you and the winner each gain 2 trade goods.",
+    flavorText:
+      "*Nobody knew what the outpost actually guarded, only that every warlord in the sector wanted it.*",
+    source: "thirtyk",
+    automation: "PARTIAL",
+    automationNotes:
+      "Goes to your play area. You and the winner each get 2 trade goods when you lose your last ship to the bot's assign-hits buttons; a neutral winner gains nothing. Retreats and losses outside those buttons are not detected.",
   },
   {
     id: "majent",
@@ -1120,6 +1974,40 @@ export const explorations: Exploration[] = [
     flavorText:
       "Jaset had worked the field for several months before the dreams began to bleed into waking hours. Voices. Flashes of red. Dust-filled caverns that went deep into the planet's core. He'd blink and rub his eyes and carry on with his work. Exhaustion, he told himself. Nothing more.",
     source: "codex3",
+  },
+  {
+    id: "materialcache",
+    name: "Material Cache",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Gain 3 commodities or use the PRODUCTION ability of 1 of your units. Then, purge this card.",
+    source: "blue_reverie",
+  },
+  {
+    id: "militaryproceduraldocuments30k1",
+    name: "Military Procedural Documents",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "If there are no mechs on this planet, you may replace 1 of your infantry on this planet with 1 mech from your reinforcements. Otherwise, gain 1 commodity.",
+    flavorText:
+      "*Page four hundred described, in tedious detail, how to build a war machine from spare parts and one volunteer.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Replace-infantry-with-mech button when the planet has no mech; otherwise 1 commodity.",
+  },
+  {
+    id: "militaryproceduraldocuments30k2",
+    name: "Military Procedural Documents",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "If there are no mechs on this planet, you may replace 1 of your infantry on this planet with 1 mech from your reinforcements. Otherwise, gain 1 commodity.",
+    flavorText:
+      '*The manual was signed by a Sardakk N\'orr quartermaster and stamped "field-tested". Nobody asked on whom.*',
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Replace-infantry-with-mech button when the planet has no mech; otherwise 1 commodity.",
   },
   {
     id: "minent",
@@ -1193,6 +2081,46 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "mutagencultural",
+    name: "Mutagen",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. This card may be exchanged as part of a transaction.\nACTION: Purge 2 of your Mutagen cards and draw 1 random unused faction reference card. Gain 1 of that faction's unused non-unit upgrade faction technologies, 1 of its unused agents, or its alliance card.",
+    flavorText:
+      '*Test 17413: Integration with Xytheris DNA alters broodling brain chemistry, making them more subservient to "Matriarch" figures and causing them to defend their chosen mothers with their lives.*',
+    source: "theodisi",
+  },
+  {
+    id: "mutagenfrontier",
+    name: "Mutagen",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. This card may be exchanged as part of a transaction.\nACTION: Purge 2 of your Mutagen cards and draw 1 random unused faction reference card. Gain 1 of that faction's unused non-unit upgrade faction technologies, 1 of its unused agents, or its alliance card.",
+    flavorText:
+      "*Test 203411: The chaotic forces of the Throne of Pride's genetic material have been deemed entirely unfit for integration with Kryxos broods. Chaotic and unpredictable results make finding any meaningful results a futile effort.*",
+    source: "theodisi",
+  },
+  {
+    id: "mutagenhazardous",
+    name: "Mutagen",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. This card may be exchanged as part of a transaction.\nACTION: Purge 2 of your Mutagen cards and draw 1 random unused faction reference card. Gain 1 of that faction's unused non-unit upgrade faction technologies, 1 of its unused agents, or its alliance card.",
+    flavorText:
+      "*Test 31: Introducing foreign DNA into Kryxos broodlings seems to have a profound effect on their expressed traits and physical characteristics. The High Evolutionary has requested further analysis into the viability of potential enhancements.*",
+    source: "theodisi",
+  },
+  {
+    id: "mutagenindustrial",
+    name: "Mutagen",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. This card may be exchanged as part of a transaction.\nACTION: Purge 2 of your Mutagen cards and draw 1 random unused faction reference card. Gain 1 of that faction's unused non-unit upgrade faction technologies, 1 of its unused agents, or its alliance card.",
+    flavorText:
+      "*Test 4081: Tests with bipedal species yield the most consistent results. The subjects show enhanced intelligence and adopt the strengths of their genetic contributors.*",
+    source: "theodisi",
+  },
+  {
     id: "mw",
     name: "Mining World",
     type: "Hazardous",
@@ -1200,6 +2128,34 @@ export const explorations: Exploration[] = [
     text: "This planet's resource value is increased by 2.",
     attachmentId: "miningworld",
     source: "pok",
+  },
+  {
+    id: "naturesboon",
+    name: "Nature's Boon",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Place this card face up in your play area and place a number of control tokens on it equal to this planet's resource value + 1. When this card has no control tokens, discard it. When you activate a system, you may remove any number of control tokens from this card to increase the resource value of 1 planet you control by 1 for each token removed until the end of that tactical action.",
+    flavorText:
+      '*"With no profit motive, the Myrr was able to take its time removing the resources of the planet without disturbing its natural beauty and ecosystems."*',
+    source: "theodisi",
+  },
+  {
+    id: "nomadictraders",
+    name: "Nomadic Traders",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Place up to 1 infantry from your reinforcements on a planet in your home system, or into coexistence on a non-home planet one of your neighbors controls.",
+    source: "blue_reverie",
+  },
+  {
+    id: "objectivedeliberations",
+    name: "Objective Deliberations",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Gain 2 trade goods, or spend 2 trade goods to draw 1 secret objective.",
+    flavorText:
+      "*Synod politicians attend rigorous athletics courses to ensure they're capable of standing in place for days on end for a Galactic Senate filibuster.*",
+    source: "theodisi",
   },
   {
     id: "orbitalfoundries",
@@ -1211,6 +2167,27 @@ export const explorations: Exploration[] = [
     source: "uncharted_space",
   },
   {
+    id: "overchargedtargetingsystemjmsc",
+    name: "Overcharged Targeting System",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "Attach: Apply +1 to the result of each SPACE CANNON roll made by units on this planet.",
+    flavorText:
+      "*Recalibrated firing solutions, overclocked capacitors and a maintenance crew sworn to secrecy.*",
+    attachmentId: "overchargedtargetingsystemjmsc",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes: "Units on this planet get +1 on space cannon rolls.",
+  },
+  {
+    id: "overgrowninfrastructure",
+    name: "Overgrown Infrastructure",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Gain 2 commodities or spend 2 commodities or 2 trade goods to place 1 structure from your reinforcements on this planet.",
+    source: "blue_reverie",
+  },
+  {
     id: "pi_toe",
     name: "Tomb of Emphidia",
     type: "Cultural",
@@ -1220,11 +2197,103 @@ export const explorations: Exploration[] = [
     source: "project_pi",
   },
   {
+    id: "pilotrecoveryprogram30k1",
+    name: "Pilot Recovery Program",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, gain 1 command token and place it in your fleet pool.",
+    flavorText:
+      "*The search teams pulled the downed pilots from the wreckage alive. Every one of them asked for a new ship.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Use-a-mech or remove-1-infantry buttons, then adds 1 fleet token.",
+  },
+  {
+    id: "pilotrecoveryprogram30k2",
+    name: "Pilot Recovery Program",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "If you have at least 1 mech on this planet, or if you remove 1 infantry from this planet, gain 1 command token and place it in your fleet pool.",
+    flavorText:
+      "*The rescue beacon still blinked after three weeks. So did the pilot, stubbornly, at the bottom of the crater.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Use-a-mech or remove-1-infantry buttons, then adds 1 fleet token.",
+  },
+  {
+    id: "polymorphism",
+    name: "Polymorphism",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "ATTACH: When you exhaust this planet, you may replace 1 non-fighter ship you control with 1 ship from your reinforcements with a cost no more than 1 greater than the replaced ship's cost.",
+    flavorText:
+      "*\"I likely wouldn't have believed it if I hadn't seen it with my own eyes, but one second I'm tailing a destroyer and the next I'm getting left in the dust by a cruiser-class ship.\"*",
+    attachmentId: "polymorphism",
+    source: "theodisi",
+  },
+  {
+    id: "ponderingthenebulaejmsc",
+    name: "Pondering the Nebulae",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "You may discard 1 of your unscored secret objectives. If you do, draw 1 secret objective.",
+    flavorText:
+      "*Hours spent watching the nebula's slow storms left the admiral with a very different idea of what mattered.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Discard buttons for your unscored secret objectives in your cards info thread; a new one is drawn.",
+  },
+  {
+    id: "precisionlaserdefenses30k",
+    name: "Precision Laser Defenses",
+    type: "Hazardous",
+    resolution: "Attach",
+    text: "Attach: While this planet's system is the active system, this planet has SPACE CANNON 3.",
+    flavorText:
+      "*The beam lattice tracks everything that enters the system and burns it long before it can choose a landing site.*",
+    attachmentId: "precisionlaserdefenses30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "The planet gets Space Cannon 3 from the attachment data; it fires only in its own system.",
+  },
+  {
+    id: "productionrelayjmsc",
+    name: "Production Relay",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "Attach: When fighters are produced using the PRODUCTION of units in this system, choose a player. That player places 2 fighters from their reinforcements in their home system if it contains no other player's ships.",
+    flavorText:
+      "*Half of every fighter batch is routed through the relay to wherever its owners decide it is needed most.*",
+    attachmentId: "productionrelayjmsc",
+    source: "thirtyk",
+    automation: "PARTIAL",
+    automationNotes:
+      "After you click Done Producing with fighters made in this system you pick a player for the 2 fighters. Other production paths are not detected.",
+  },
+  {
+    id: "profitablefactories30k",
+    name: "Profitable Factories",
+    type: "Industrial",
+    resolution: "Attach",
+    text: "Attach: When this planet is exhausted, gain 1 trade good and exhaust this card.",
+    flavorText:
+      "*The assembly lines never stopped. Even when the planet went quiet, the ledgers kept running.*",
+    attachmentId: "profitablefactories30k",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Exhausting the planet with spend or vote buttons gives 1 trade good, once until this card is readied again. Exhausting it some other way does not trigger it.",
+  },
+  {
     id: "propulsion",
     name: "Propulsion Research Facility",
     type: "Industrial",
     resolution: "Attach",
-    text: "This planet has a blue technology specialty. If this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
+    text: "This planet has a blue technology specialty; if this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
     attachmentId: "propulsion",
     source: "pok",
   },
@@ -1236,6 +2305,61 @@ export const explorations: Exploration[] = [
     text: "This planet's influence value is increased by 2.",
     attachmentId: "paradiseworld",
     source: "pok",
+  },
+  {
+    id: "recoveredmemorycore",
+    name: "Recovered Memory Core",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Purge this card to gain the speaker token or 2 command tokens, if able.",
+    source: "blue_reverie",
+  },
+  {
+    id: "replicationarrays30k",
+    name: "Replication Arrays",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Discard 2 action cards, if able. Then, take 1 action card of your choice from the action card discard pile and add it to your hand.",
+    flavorText:
+      "*Feed the array two blueprints and it hands back a third, usually one you had already thrown away.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Discard buttons for 2 action cards, then the pick-from-discard buttons.",
+  },
+  {
+    id: "repurposedfacilities30k",
+    name: "Repurposed Facilities",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "You may spend 5 resources to place 1 space dock from your reinforcements on this planet. If you do not, gain 1 trade good.",
+    flavorText:
+      "*The derelict refinery needed only power, a crew and a great deal of welding to build ships again.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Space dock plus resource payment buttons, or 1 trade good.",
+  },
+  {
+    id: "retiredadventurers",
+    name: "Retired Adventurers",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Resolve 1 expedition without paying its cost, or place 3 infantry from your reinforcements into coexistence on Thunder's Edge, if able. Then, purge this card.",
+    source: "blue_reverie",
+  },
+  {
+    id: "richhostages30k",
+    name: "Rich Hostages",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. When you score a 1-point objective that requires you to spend trade goods, influence, resources or command tokens, you may purge this card to reduce that cost by 3.",
+    flavorText:
+      "*The ransom note arrived with a portrait of the heir and a very reasonable payment schedule.*",
+    source: "thirtyk",
+    automation: "PARTIAL",
+    automationNotes:
+      "Goes to your play area. When you score a 1-point public objective that requires spending, you get a purge button; adjust the spending yourself (if the bot deducted the 5 trade goods for Negotiate Trade Routes, it refunds 3). The bot's score check does not know the discount.",
   },
   {
     id: "riftset_invasion",
@@ -1295,6 +2419,21 @@ export const explorations: Exploration[] = [
     flavorText:
       "*There are safer places to find a merc, but that sort of place doesn't attract the sort of operation the Emoress had tasked Za-trè with recruiting.*",
     source: "uncharted_space",
+  },
+  {
+    id: "sharedwealth30k",
+    name: "Shared Wealth",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Each player who has units adjacent to this planet may draw 1 action card. Gain 1 trade good for each player who does.",
+    flavorText:
+      "*The colony threw its granaries open to every passing crew. Gratitude, the governor reasoned, was the cheapest currency in the galaxy.*",
+    notes:
+      "The exploring player may also draw, and gains 1 trade good for their own draw as well.",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Each player with units in or next to the system gets a draw button; the explorer gains 1 trade good per draw.",
   },
   {
     id: "sigma_ancient_hall",
@@ -1417,6 +2556,96 @@ export const explorations: Exploration[] = [
     source: "sigma",
   },
   {
+    id: "sodossierc1",
+    name: "Diplomatic Cables",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*Among the courtly pleasantries lay a single line of cipher, meant for other eyes.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossierc2",
+    name: "Diplomatic Cables",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*Among the courtly pleasantries lay a single line of cipher, meant for other eyes.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossierf1",
+    name: "Intercepted Transmission",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*A tight-beam burst, bounced off a dead moon, never meant to reach this far.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossierf2",
+    name: "Intercepted Transmission",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*A tight-beam burst, bounced off a dead moon, never meant to reach this far.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossierh1",
+    name: "Black Box Recovery",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*The wreck was long dead, but its flight recorder still whispered of a patron's ambitions.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossierh2",
+    name: "Black Box Recovery",
+    type: "Hazardous",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*The wreck was long dead, but its flight recorder still whispered of a patron's ambitions.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossieri1",
+    name: "Corporate Espionage",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*The shipping manifests did not add up, and the discrepancy pointed straight to a rival's war chest.*",
+    source: "secrets_only",
+  },
+  {
+    id: "sodossieri2",
+    name: "Corporate Espionage",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Draw 1 secret objective.",
+    flavorText:
+      "*The shipping manifests did not add up, and the discrepancy pointed straight to a rival's war chest.*",
+    source: "secrets_only",
+  },
+  {
+    id: "spatialdisplacement",
+    name: "Spatial Displacement",
+    type: "Industrial",
+    resolution: "Instant",
+    text: "Gain 1 commodity or spend 1 commodity or trade good to move 1 of your ships from this system into an adjacent system that contains no other player's ships.",
+    flavorText:
+      '*"The fleets moved with speed and grace and, most importantly, without any need to stop and refuel."*',
+    source: "theodisi",
+  },
+  {
     id: "spyagency",
     name: "Spy Agency",
     type: "Cultural",
@@ -1458,6 +2687,115 @@ export const explorations: Exploration[] = [
     source: "uncharted_space",
   },
   {
+    id: "stonebornculturalfragment",
+    name: "Stoneborn Cultural Fragment",
+    type: "Cultural",
+    resolution: "Fragment",
+    text: "This card is always considered a cultural relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornculturalfragment2",
+    name: "Stoneborn Cultural Fragment",
+    type: "Cultural",
+    resolution: "Fragment",
+    text: "This card is always considered a cultural relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornhazardousfragment",
+    name: "Stoneborn Hazardous Fragment",
+    type: "Hazardous",
+    resolution: "Fragment",
+    text: "This card is always considered a hazardous relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornhazardousfragment2",
+    name: "Stoneborn Hazardous Fragment",
+    type: "Hazardous",
+    resolution: "Fragment",
+    text: "This card is always considered a hazardous relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornindustrialfragment",
+    name: "Stoneborn Industrial Fragment",
+    type: "Industrial",
+    resolution: "Fragment",
+    text: "This card is always considered an industrial relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornindustrialfragment2",
+    name: "Stoneborn Industrial Fragment",
+    type: "Industrial",
+    resolution: "Fragment",
+    text: "This card is always considered an industrial relic fragment. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornunknownfragment",
+    name: "Stoneborn Unknown Fragment",
+    type: "Frontier",
+    resolution: "Fragment",
+    text: "This card may be considered a relic fragment of any type. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "stonebornunknownfragment2",
+    name: "Stoneborn Unknown Fragment",
+    type: "Frontier",
+    resolution: "Fragment",
+    text: "This card may be considered a relic fragment of any type. This card may be exchanged as part of a transaction.",
+    source: "theodisi",
+  },
+  {
+    id: "subjectivityequasion30k",
+    name: "Subjectivity Equation",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area. At the start of your turn, you may purge this card to gain 3 trade goods, or you may purge this card and spend 5 resources to research 1 blue technology.",
+    flavorText:
+      "*Once the navigators accepted that distance was a matter of opinion, the drives began to agree with them.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Goes to your play area with a start-of-turn button: purge it for 3 trade goods, or purge it and spend 5 resources to research a blue technology.",
+  },
+  {
+    id: "supermassivecultural",
+    name: "Supermassive Cultural Fragment",
+    type: "Cultural",
+    resolution: "Fragment",
+    text: "This card is always treated as a cultural relic fragment while it is in your play area.\n\nWhen this card is purged, you may gain 1 purged cultural relic fragment.",
+    source: "theodisi",
+  },
+  {
+    id: "supermassivehazardous",
+    name: "Supermassive Hazardous Fragment",
+    type: "Hazardous",
+    resolution: "Fragment",
+    text: "This card is always treated as a hazardous relic fragment while it is in your play area.\n\nWhen this card is purged, you may gain 1 purged hazardous relic fragment.",
+    source: "theodisi",
+  },
+  {
+    id: "supermassiveindustrial",
+    name: "Supermassive Industrial Fragment",
+    type: "Industrial",
+    resolution: "Fragment",
+    text: "This card is always treated as an industrial relic fragment while it is in your play area.\n\nWhen this card is purged, you may gain 1 purged industrial relic fragment.",
+    source: "theodisi",
+  },
+  {
+    id: "supermassiveunknown",
+    name: "Supermassive Unknown Fragment",
+    type: "Frontier",
+    resolution: "Fragment",
+    text: "This card is always treated as an unknown relic fragment while it is in your play area.\n\nWhen this card is purged, you may gain 1 other purged relic fragment of any type.",
+    source: "theodisi",
+  },
+  {
     id: "suspiciouswreckage",
     name: "Suspicious Wreckage",
     type: "Frontier",
@@ -1466,6 +2804,31 @@ export const explorations: Exploration[] = [
     flavorText:
       "*The abandoned ships provided a trove of compromising diplomatic communications.*",
     source: "uncharted_space",
+  },
+  {
+    id: "synergisticresearch",
+    name: "Synergistic Research",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Gain your breakthrough or research 1 technology with no prerequisites in a color that matches 1 of your synergy colors. If your breakthrough has no synergy colors, gain 2 command tokens instead.",
+    flavorText:
+      "*\"Let's play to our strengths; no need to fix what isn't broken.\"*",
+    source: "theodisi",
+  },
+  {
+    id: "systematicsympathiesjmsc",
+    name: "Systematic Sympathies",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Destroy all units in this system. Each player whose destroyed ships have a combined cost of 4 or more gains 1 victory point. Each other player who lost units gains 1 trade good.",
+    flavorText:
+      "*The resonance tore every hull in the system apart, and the galaxy remembered those who lost the most.*",
+    notes:
+      "Use each ship's production cost; each fighter counts as 0.5. The victory point is permanent and is scored as a custom objective named Systematic Sympathies (a player's second one is Systematic Sympathies 2, and so on). Every player who lost units here without gaining the victory point gains 1 trade good.",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Destroys all units; players who lose ships costing 4 or more score the Systematic Sympathies custom objective (1 point), other players who lost units gain 1 trade good.",
   },
   {
     id: "talentedofficer1",
@@ -1493,6 +2856,19 @@ export const explorations: Exploration[] = [
     source: "pok",
   },
   {
+    id: "tourismbureau30k",
+    name: "Tourism Bureau",
+    type: "Cultural",
+    resolution: "Instant",
+    text: "Gain 1 commodity for each wormhole, anomaly and legendary planet adjacent to this planet.",
+    flavorText:
+      "*Guided tours of the rift's edge sold out within the hour. Nobody asked what had happened to the last group.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Counts wormholes, anomalies and other legendary planets in and next to the system and gives that many commodities.",
+  },
+  {
     id: "tradeoffice",
     name: "Trade Office",
     type: "Cultural",
@@ -1500,6 +2876,27 @@ export const explorations: Exploration[] = [
     text: "ATTACH: Whenever you exhaust this planet, gain 1 commodity.",
     attachmentId: "lloyd_traderoute",
     source: "asteroid",
+  },
+  {
+    id: "unknownartifact",
+    name: "Unknown Artifact",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Place this card face up in your play area; this card may be exchanged as part of a transaction.\nAfter a player activates a system: Discard this card; until the end of this tactical action, the active player treats the move value of each of their ships as 1.",
+    source: "blue_reverie",
+  },
+  {
+    id: "unseendangerjmsc",
+    name: "Unseen Danger",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Destroy all of your ships in this system and place 1 asteroid field token in this system. If you destroyed at least 1 ship, you may gain Antimass Deflectors if you do not own it.",
+    flavorText:
+      "*The asteroid field was invisible to every sensor right up until the first hull breached.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Destroys your ships here, places an asteroid field token and offers Antimass Deflectors.",
   },
   {
     id: "urf1",
@@ -1560,7 +2957,7 @@ export const explorations: Exploration[] = [
     name: "Warfare Research Facility",
     type: "Hazardous",
     resolution: "Attach",
-    text: "This planet has a red technology specialty. If this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
+    text: "This planet has a red technology specialty; if this planet already has a technology specialty, this planet's resource and influence values are each increased by 1 instead.",
     attachmentId: "warfare",
     source: "pok",
   },
@@ -1575,6 +2972,19 @@ export const explorations: Exploration[] = [
     source: "uncharted_space",
   },
   {
+    id: "wastefulpirates30k",
+    name: "Wasteful Pirates",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "Roll 5 dice. For each result of 6 or greater, assign 1 hit to your ships in this system. Gain 1 trade good for each hit you assign.",
+    flavorText:
+      "*The raiders fired wildly, looted half of what they hit, and dumped the rest to make room for more.*",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "Rolls 5 dice, offers the assign-hits button for your ships here and gives 1 trade good per hit your ships can take.",
+  },
+  {
     id: "weaponsresearchfacility",
     name: "Weapons Research Facility",
     type: "Hazardous",
@@ -1582,6 +2992,21 @@ export const explorations: Exploration[] = [
     text: "ATTACH: This planet gains a unit technology specialty (exhaust this planet to ignore one prerequisite on any unit upgrade).",
     attachmentId: "weapon",
     source: "asteroid",
+  },
+  {
+    id: "werelostcaptainjmsc",
+    name: "We're Lost, Captain",
+    type: "Frontier",
+    resolution: "Instant",
+    text: "The speaker chooses a system that contains no planets and no other player's ships. Move all of your units in this system's space area to the chosen system, then place 1 command token from your reinforcements in that system, if able.",
+    flavorText:
+      "*The navigator swore the charts were correct. The stars, unfortunately, disagreed.*",
+    notes:
+      "Only the exploring player's units in the space area move, including fighters and ground forces in space. Other players' units stay where they are.",
+    source: "thirtyk",
+    automation: "FULL",
+    automationNotes:
+      "The speaker picks the system; your space units move there and your command token is placed.",
   },
   {
     id: "wormholegenerator1",
