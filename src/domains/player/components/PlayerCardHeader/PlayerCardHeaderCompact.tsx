@@ -39,10 +39,7 @@ function HeaderTokens({
   isTyrant = false,
   scs = [],
   exhaustedSCs = [],
-}: Pick<
-  Props,
-  "isSpeaker" | "isTyrant" | "scs" | "exhaustedSCs"
->) {
+}: Pick<Props, "isSpeaker" | "isTyrant" | "scs" | "exhaustedSCs">) {
   return (
     <>
       {isSpeaker && <SpeakerToken />}
@@ -86,6 +83,8 @@ export function PlayerCardHeaderCompact({
   factionDisplayName,
   color,
   factionImageUrl,
+  neighbors = [],
+  unfollowedSCs = [],
   isSpeaker,
   isTyrant,
   scs,
@@ -94,41 +93,59 @@ export function PlayerCardHeaderCompact({
   active = false,
 }: Props) {
   return (
-    <Group
-      gap={4}
-      px={4}
-      w="100%"
-      align="center"
-      wrap="nowrap"
-      justify="space-between"
-      style={{ minWidth: 0 }}
-    >
-      <Group gap={6} wrap="nowrap" className={styles.identityGroup}>
-        <Image
-          {...lowPriorityImageProps}
-          src={factionImageUrl}
-          alt={faction}
-          w={24}
-          h={24}
-          className={styles.factionIcon}
-        />
-        <PlayerIdentity
-          userName={userName}
-          factionDisplayName={factionDisplayName}
-          color={color}
-        />
-        <StatusIndicator passed={passed} active={active} />
-      </Group>
+    <>
+      <Group
+        gap={4}
+        px={4}
+        w="100%"
+        align="center"
+        wrap="nowrap"
+        justify="space-between"
+        style={{ minWidth: 0 }}
+      >
+        <Group gap={6} wrap="nowrap" className={styles.identityGroup}>
+          <Image
+            {...lowPriorityImageProps}
+            src={factionImageUrl}
+            alt={faction}
+            w={24}
+            h={24}
+            className={styles.factionIcon}
+          />
+          <PlayerIdentity
+            userName={userName}
+            factionDisplayName={factionDisplayName}
+            color={color}
+          />
+          <StatusIndicator passed={passed} active={active} />
+        </Group>
 
-      <Group gap={8} className={styles.rightGroup}>
-        <HeaderTokens
-          isSpeaker={isSpeaker}
-          isTyrant={isTyrant}
-          scs={scs}
-          exhaustedSCs={exhaustedSCs}
-        />
+        <Group gap={8} className={styles.rightGroup}>
+          <HeaderTokens
+            isSpeaker={isSpeaker}
+            isTyrant={isTyrant}
+            scs={scs}
+            exhaustedSCs={exhaustedSCs}
+          />
+        </Group>
       </Group>
-    </Group>
+      <Group
+        gap={4}
+        px={4}
+        w="100%"
+        align="center"
+        wrap="nowrap"
+        justify="space-between"
+        style={{ minWidth: 0 }}
+      >
+        <Group className={styles.leftGroup}>
+          {neighbors.length > 0 && <Neighbors neighbors={neighbors} />}
+        </Group>
+        <Group className={styles.rightGroup}>
+          {unfollowedSCs.length > 0 && <NeedsToFollow values={unfollowedSCs} />}
+        </Group>
+      </Group>
+    </>
   );
 }
 
@@ -175,7 +192,9 @@ export function PlayerCardHeaderFull({
         </Stack>
         <Stack gap={0}>
           <Box visibleFrom="sm" ml="xs">
-            {unfollowedSCs.length > 0 && <NeedsToFollow values={unfollowedSCs} />}
+            {unfollowedSCs.length > 0 && (
+              <NeedsToFollow values={unfollowedSCs} />
+            )}
           </Box>
           <Box visibleFrom="sm" ml="xs">
             {showNeighbors && <Neighbors neighbors={neighbors} />}

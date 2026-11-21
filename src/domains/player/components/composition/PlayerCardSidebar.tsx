@@ -19,6 +19,7 @@ import { PlayerCardUnitsArea } from "@/domains/player/components/PlayerCardUnits
 import { PlayerCardPlanetsArea } from "@/domains/player/components/PlayerCardPlanetsArea";
 import { ReinforcementTokensGroup } from "@/domains/player/components/ReinforcementTokensGroup";
 import { ResourceInfluenceCompact } from "@/domains/player/components/ResourceInfluenceTable";
+import { Nombox } from "@/domains/player/components/composition/Nombox";
 import { StoresStrip } from "@/domains/player/components/PlayerCardShared/StoresStrip";
 import { useSettingsStore } from "@/state/appStore";
 import styles from "./PlayerCardSidebar.module.css";
@@ -83,6 +84,15 @@ export default function PlayerCardSidebar(props: Props) {
     (sum, unit) => sum + (unit.deployedCount ?? 0),
     0,
   );
+  const capturedUnits = Object.values(player.nombox ?? {}).reduce(
+    (sum, capturedUnitEntries) =>
+      sum +
+      capturedUnitEntries.reduce(
+        (entrySum, entry) => entrySum + parseInt(entry.split(",")[1], 10),
+        0,
+      ),
+    0,
+  );
 
   return (
     <PlayerCardBox
@@ -96,6 +106,8 @@ export default function PlayerCardSidebar(props: Props) {
         factionDisplayName={player.factionDisplayName}
         color={player.color}
         factionImageUrl={factionUrl ?? ""}
+        unfollowedSCs={player.unfollowedSCs}
+        neighbors={settings.showPlayerAreaNeighborship ? player.neighbors : []}
         isSpeaker={player.isSpeaker}
         isTyrant={player.isTyrant}
         scs={player.scs}
@@ -186,6 +198,18 @@ export default function PlayerCardSidebar(props: Props) {
             />
           </div>
         </Block>
+        {capturedUnits > 0 && (
+          <Block label="Captures" meta={`${capturedUnits} captured`}>
+            <div className={styles.bays}>
+              <div className={styles.bays}>
+                <Nombox
+                  capturedUnits={player.nombox}
+                  orientation="horizontal"
+                />
+              </div>
+            </div>
+          </Block>
+        )}
 
         <Block label="Planets">
           <ResourceInfluenceCompact
@@ -202,13 +226,15 @@ export default function PlayerCardSidebar(props: Props) {
         </Block>
 
         {settings.showPlayerAreaReinforcements &&
-          ((player.breachTokensReinf ?? 0) > 0 ||
+          (player.hasSeverTokenReinf ||
+            (player.breachTokensReinf ?? 0) > 0 ||
             (player.sleeperTokensReinf ?? 0) > 0 ||
             (player.ghostWormholesReinf?.length ?? 0) > 0 ||
             (player.galvanizeTokensReinf ?? 0) > 0) && (
             <Block label="Tokens">
               <div className={styles.bays}>
                 <ReinforcementTokensGroup
+                  hasSeverTokenReinf={player.hasSeverTokenReinf}
                   breachTokensReinf={player.breachTokensReinf}
                   sleeperTokensReinf={player.sleeperTokensReinf}
                   ghostWormholesReinf={player.ghostWormholesReinf}

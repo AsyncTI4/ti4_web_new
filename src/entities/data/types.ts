@@ -763,6 +763,7 @@ export type PlayerData = {
   // ghost-specific properties
   sleeperTokensReinf?: number;
   ghostWormholesReinf?: string[];
+  hasSeverTokenReinf?: boolean;
   breachTokensReinf?: number;
   galvanizeTokensReinf?: number;
 

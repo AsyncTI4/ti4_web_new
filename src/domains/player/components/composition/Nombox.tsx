@@ -10,6 +10,7 @@ import { FactionIcon } from "@/shared/ui/FactionIcon";
 
 type Props = {
   capturedUnits?: CapturedUnitsData;
+  orientation?: "vertical" | "horizontal";
 };
 
 /** Parses a captured-unit entry like "dread,3" or "carrier,4". */
@@ -25,7 +26,7 @@ const parseUnitString = (unitString: string) => {
   };
 };
 
-export function Nombox({ capturedUnits }: Props) {
+export function Nombox({ capturedUnits, orientation = "vertical" }: Props) {
   const factionColorMap = useFactionColors();
 
   if (!capturedUnits || Object.keys(capturedUnits).length === 0) {
@@ -33,11 +34,13 @@ export function Nombox({ capturedUnits }: Props) {
   }
 
   return (
-    <Surface className={styles.compactNombox}>
+    <Surface className={styles.compactNombox} data-orientation={orientation}>
       <Text className={styles.compactTitle}>CAPTURED</Text>
       <Box className={styles.compactGrid}>
         {Object.entries(capturedUnits).map(([factionName, unitStrings]) => {
-          const colorAlias = getColorAlias(factionColorMap?.[factionName]?.color);
+          const colorAlias = getColorAlias(
+            factionColorMap?.[factionName]?.color,
+          );
           return (
             <Box key={factionName} className={styles.compactFaction}>
               <Box className={styles.compactFactionHeader}>
